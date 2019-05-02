@@ -116,5 +116,60 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 </tfoot>
 </table>', 'print', 'default');
 
+INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
+('circulation', 'ACCOUNT_DEBIT', '', 'Account fee', 0, 'Account fee', '<table>
+  [% IF ( LibraryName ) %]
+    <tr>
+      <th colspan="5" class="centerednames">
+        <h3>[% LibraryName | html %]</h3>
+      </th>
+    </tr>
+  [% END %]
+
+  <tr>
+    <th colspan="5" class="centerednames">
+      <h2><u>INVOICE</u></h2>
+    </th>
+  </tr>
+  <tr>
+    <th colspan="5" class="centerednames">
+      <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>
+    </th>
+  </tr>
+  <tr>
+    <th colspan="5" >
+      Bill to: [% patron.firstname | html %] [% patron.surname | html %] <br />
+      Card number: [% patron.cardnumber | html %]<br />
+    </th>
+  </tr>
+  <tr>
+    <th>Date</th>
+    <th>Description of charges</th>
+    <th>Note</th>
+    <th style="text-align:right;">Amount</th>
+    <th style="text-align:right;">Amount outstanding</th>
+  </tr>
+
+  [% FOREACH account IN accounts %]
+    <tr class="highlight">
+      <td>[% account.date | $KohaDates%]</td>
+      <td>
+        [% PROCESS account_type_description account=account %]
+        [%- IF account.description %], [% account.description | html %][% END %]
+      </td>
+      <td>[% account.note | html %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
+      [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding | $Price %]</td>
+    </tr>
+  [% END %]
+
+  <tfoot>
+    <tr>
+      <td colspan="4">Total outstanding dues as on date: </td>
+      [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
+    </tr>
+  </tfoot>
+</table>', 'print', 'default');
+
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
 ('circulation', 'SR_SLIP', '', 'Ticket de rotation automatique d\'exemplaires', 0, 'Rapport de rotation automatique d\'exemplaires', 'Rapport de rotation automatique d\'exemplaires pour [% branch.name %]:\r\n\r\n[% IF branch.items.size %][% branch.items.size %] exemplaires de cette bibliothèque à traiter.\r\n[% ELSE %]Aucun exemplaire de cette bibliothèque à traiter\r\n[% END %][% FOREACH item IN branch.items %][% IF item.reason != \'in-demand\' %]Titre : [% item.title %]\r\nAuteur : [% item.author %]\r\nCote : [% item.callnumber %]\r\nLocalisation : [% item.location %]\r\nCode-barres: [% item.barcode %]\r\nEn prêt? : [% item.onloan %]\r\nStatut : [% item.reason %]\r\nBibliothèque dépositaire : [% item.branch.branchname %] [% item.branch.branchcode %]\r\n\r\n[% END %][% END %]', 'email');
