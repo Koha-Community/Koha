@@ -61,8 +61,12 @@ specifying neither and so both get indexed.
 =item B<-bn|--bnumber>
 
 Only index the supplied biblionumber, mostly for testing purposes. May be
-repeated. This also applies to authorities via authid, so if you're using it,
-you probably only want to do one or the other at a time.
+repeated.
+
+=item B<-ai|--authid>
+
+Only index the supplied authority id, mostly for testing purposes. May be
+repeated.
 
 =item B<-p|--processes>
 
@@ -104,7 +108,7 @@ my $verbose = 0;
 my $commit = 5000;
 my ($delete, $help, $man, $processes);
 my ($index_biblios, $index_authorities);
-my (@record_numbers);
+my (@biblionumbers,@authids);
 
 $|=1; # flushes output
 
@@ -113,7 +117,8 @@ GetOptions(
     'd|delete'      => \$delete,
     'a|authorities' => \$index_authorities,
     'b|biblios'     => \$index_biblios,
-    'bn|bnumber=i'  => \@record_numbers,
+    'bn|bnumber=i' => \@biblionumbers,
+    'ai|authid=i'  => \@authids,
     'p|processes=i' => \$processes,
     'v|verbose+'    => \$verbose,
     'h|help'        => \$help,
@@ -125,8 +130,8 @@ unless ($index_authorities || $index_biblios) {
     $index_authorities = $index_biblios = 1;
 }
 
-if ($processes && @record_numbers) {
-    die "Argument p|processes cannot be combined with bn|bnumber";
+if ($processes && ( @biblionumbers || @authids) ) {
+    die "Argument p|processes cannot be combined with bn|bnumber or ai|authid";
 }
 
 pod2usage(1) if $help;
@@ -162,9 +167,9 @@ if ($slice_count > 1) {
 my $next;
 if ($index_biblios) {
     _log(1, "Indexing biblios\n");
-    if (@record_numbers) {
+    if (@biblionumbers) {
         $next = sub {
-            my $r = shift @record_numbers;
+            my $r = shift @biblionumbers;
             return () unless defined $r;
             return ($r, Koha::BiblioUtils->get_from_biblionumber($r, item_data => 1 ));
         };
@@ -178,12 +183,12 @@ if ($index_biblios) {
 }
 if ($index_authorities) {
     _log(1, "Indexing authorities\n");
-    if (@record_numbers) {
+    if (@authids) {
         $next = sub {
-            my $r = shift @record_numbers;
+            my $r = shift @authids;
             return () unless defined $r;
             my $a = Koha::MetadataRecord::Authority->get_from_authid($r);
-            return ($r, $a->record);
+            return ($r, $a);
         };
     } else {
         my $records = Koha::MetadataRecord::Authority->get_all_authorities_iterator(%iterator_options);
@@ -248,7 +253,7 @@ sub _do_reindex {
     my $commit_count = $commit;
     my ( @id_buffer, @commit_buffer );
     while ( my $record = $next->() ) {
-        my $id     = $record->id;
+        my $id     = $record->id // $record->authid;
         my $record = $record->record;
         $count++;
         if ( $verbose == 1 ) {
