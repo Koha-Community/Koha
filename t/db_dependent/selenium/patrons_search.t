@@ -40,7 +40,7 @@ my $builder       = t::lib::TestBuilder->new;
 
 our @cleanup;
 subtest 'Search patrons' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     my @patrons;
     my $borrowernotes           = q|<strong>just 'a" note</strong> \123 ❤|;
@@ -48,6 +48,7 @@ subtest 'Search patrons' => sub {
     my $branchname = q|<strong>just 'another" library</strong> \123 ❤|;
     my $firstname  = q|<strong>fir's"tname</strong> \123 ❤|;
     my $address    = q|<strong>add'res"s</strong> \123 ❤|;
+    my $email      = q|a<strong>bad_email</strong>@example\123 ❤.com|;
     my $patron_category = $builder->build_object(
         { class => 'Koha::Patron::Categories', category_type => 'A' } );
     my $library = $builder->build_object(
@@ -65,6 +66,7 @@ subtest 'Search patrons' => sub {
                     branchcode    => $library->branchcode,
                     borrowernotes => $borrowernotes,
                     address       => $address,
+                    email         => $email,
                 }
             }
           );
@@ -82,6 +84,9 @@ subtest 'Search patrons' => sub {
     );
     like ($td[2]->get_text, qr[\Q$address\E],
         'Column "Name" should be the 3rd and contain the address correctly filtered'
+    );
+    like ($td[2]->get_text, qr[\Q$email\E],
+        'Column "Name" should be the 3rd and contain the email address correctly filtered'
     );
     is( $td[5]->get_text, $branchname,
         'Column "Library" should be the 6th and contain the html tags - they have been html filtered'
