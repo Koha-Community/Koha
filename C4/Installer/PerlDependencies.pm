@@ -913,6 +913,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '1.15',
     },
+    'Array::Utils' => {
+        usage    => 'Elasticsearch integration',
+        required => '0',
+        min_ver  => '0.5',
+    },
 };
 
 1;
