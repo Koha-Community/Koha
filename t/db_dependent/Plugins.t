@@ -18,12 +18,14 @@ use Modern::Perl;
 
 use Archive::Extract;
 use CGI;
+use Cwd qw(abs_path);
 use File::Basename;
+use File::Spec;
 use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 51;
+use Test::More tests => 52;
 
 use C4::Context;
 use Koha::Database;
@@ -294,6 +296,24 @@ subtest 'Test _version_compare' => sub {
     is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ),    0, "1.01.001 is equal to 1.1.1" );
     is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ),    0, "1 is equal to 1.0.0" );
     is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ),    0, "1.0 is equal to 1.0.0" );
+};
+
+subtest 'bundle_path() tests' => sub {
+
+    plan tests => 1;
+
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
+    my @current_dir = File::Spec->splitdir(abs_path(__FILE__));
+    # remote Plugins.t
+    pop @current_dir;
+    # remove db_dependent
+    pop @current_dir;
+
+    my $plugin = Koha::Plugin::Test->new;
+
+    is( $plugin->bundle_path, File::Spec->catdir(@current_dir) . '/lib/Koha/Plugin/Test' );
+
 };
 
 subtest 'new() tests' => sub {
