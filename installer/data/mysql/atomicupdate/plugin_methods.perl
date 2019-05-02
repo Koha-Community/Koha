@@ -1,18 +1,19 @@
-$DBversion = 'XXX';  # will be replaced by the RM
+$DBversion = 'XXX';
 if( CheckVersion( $DBversion ) ) {
 
-    $dbh->do(q{
-        CREATE TABLE IF NOT EXISTS plugin_methods (
-          plugin_class varchar(255) NOT NULL,
-          plugin_method varchar(255) NOT NULL,
-          PRIMARY KEY ( `plugin_class` (191), `plugin_method` (191) )
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    });
+    unless ( TableExists('plugin_methods') ) {
+        $dbh->do(q{
+            CREATE TABLE plugin_methods (
+              plugin_class varchar(255) NOT NULL,
+              plugin_method varchar(255) NOT NULL,
+              PRIMARY KEY ( `plugin_class` (191), `plugin_method` (191) )
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        });
+    }
 
     require Koha::Plugins;
-    Koha::Plugins->new()->InstallPlugins;
+    Koha::Plugins->new({ enable_plugins => 1 })->InstallPlugins;
 
-    # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+    print "Upgrade to $DBversion done (Bug 21073 - Improve plugin performance)\n";
 }
