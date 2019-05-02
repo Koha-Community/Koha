@@ -117,15 +117,15 @@ sub update_index {
         };
         push @body, $document;
     }
+    my $response;
     if (@body) {
-        my $response = $elasticsearch->bulk(
+        $response = $elasticsearch->bulk(
             index => $conf->{index_name},
             type => 'data', # is just hard coded in Indexer.pm?
             body => \@body
         );
     }
-    # TODO: handle response
-    return 1;
+    return $response;
 }
 
 =head2 set_index_status_ok
