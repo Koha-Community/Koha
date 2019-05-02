@@ -42,8 +42,8 @@
 }
 [% BLOCK escape_address %]
 [%~ SET address = data.streetnumber _ ' ' %]
-[%~ IF data.streettype %][% address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' | html %][% END %]
-[%~ IF data.address %][% address = address _ data.address _ ' ' | html %][% END %]
-[%~ IF data.address2 %][% address = address _ data.address2 _ ' ' | html %][% END %]
-[%~ To.json( address ) | $raw ~%]
+[%~ IF data.streettype %][% SET address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' %][% END %]
+[%~ IF data.address %][% SET address = address _ data.address _ ' ' %][% END %]
+[%~ IF data.address2 %][% SET address = address _ data.address2 _ ' ' %][% END %]
+[%~ address | html | $To ~%]
 [% END %]
