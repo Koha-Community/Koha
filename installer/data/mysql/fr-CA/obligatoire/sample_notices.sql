@@ -60,10 +60,61 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 VALUES ('members','PASSWORD_RESET','','Récupération de mot de passe en ligne',1,'Récupération de mot de passe','<html>\r\n<p>Ce courriel vous a été envoyé suite à une demande de récupération de mot de passe pour le compte de <strong><<user>></strong>.\r\n</p>\r\n<p>\r\nVous pouvez créer un nouveau mot de passe en cliquant le lien suivant :\r\n<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>\r\n</p>\r\n<p>Ce lien sera valide pour 2 jours après la réception de ce courriel. Si vous ne changez pas votre mot de passe d\'ici deux jours, vous devrez faire une nouvelle demande de récuération de mot de passe..</p>\r\n<p>Merci.</p>\r\n</html>\r\n','email'),
 ('members','MEMBERSHIP_EXPIRY','','Expiration du compte',0,'Expitation prochaine de votre abonnement à la bibliothèque','Bonjour <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,.\r\n\r\nVotre carte de bibliothèque expirera prochainement, le :\r\n\r\n<<borrowers.dateexpiry>>\r\n\r\nMerci,\r\n\r\nVotre bibliothèque\r\n\r\n<<branches.branchname>>','email');
 
-INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`)
-    VALUES
-        ('circulation', 'ACCOUNT_PAYMENT', '', 'Paiement', 0, 'Paiement', '[%- USE Price -%]\r\nVous avez fait un paiement de [% credit.amount * -1 | $Price %].\r\n\r\nLes frais suivants ont été acquittés :\r\n[%- FOREACH o IN offsets %]\r\nDescription : [% o.debit.description %]\r\nMontant payé : [% o.amount * -1 | $Price %]\r\nMontant en souffrance : [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),
-            ('circulation', 'ACCOUNT_WRITEOFF', '', 'Amnistie', 0, 'Amnistie', '[%- USE Price -%]\r\nNous avons accordé une amnistie de [% credit.amount * -1 | $Price %] à votre compte.\r\n\r\nLes frais suivants ont été amnistiés :\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nMontant payé : [% o.amount * -1 | $Price %]\r\nMontant en souffrance : [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
+INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
+('circulation', 'ACCOUNT_PAYMENT', '', 'Paiement', 0, 'Paiement', '[%- USE Price -%]\r\nVous avez fait un paiement de [% credit.amount * -1 | $Price %].\r\n\r\nLes frais suivants ont été acquittés :\r\n[%- FOREACH o IN offsets %]\r\nDescription : [% o.debit.description %]\r\nMontant payé : [% o.amount * -1 | $Price %]\r\nMontant en souffrance : [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),
+('circulation', 'ACCOUNT_WRITEOFF', '', 'Amnistie', 0, 'Amnistie', '[%- USE Price -%]\r\nNous avons accordé une amnistie de [% credit.amount * -1 | $Price %] à votre compte.\r\n\r\nLes frais suivants ont été amnistiés :\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nMontant payé : [% o.amount * -1 | $Price %]\r\nMontant en souffrance : [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
+
+INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
+('circulation', 'ACCOUNT_CREDIT', '', 'Account payment', 0, 'Account payment', '<table>
+[% IF ( LibraryName ) %]
+ <tr>
+    <th colspan="4" class="centerednames">
+        <h3>[% LibraryName | html %]</h3>
+    </th>
+ </tr>
+[% END %]
+ <tr>
+    <th colspan="4" class="centerednames">
+        <h2><u>Fee receipt</u></h2>
+    </th>
+ </tr>
+ <tr>
+    <th colspan="4" class="centerednames">
+        <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>
+    </th>
+ </tr>
+ <tr>
+    <th colspan="4">
+        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />
+        Card number: [% patron.cardnumber | html %]<br />
+    </th>
+ </tr>
+  <tr>
+    <th>Date</th>
+    <th>Description of charges</th>
+    <th>Note</th>
+    <th>Amount</th>
+ </tr>
+
+  [% FOREACH account IN accounts %]
+    <tr class="highlight">
+      <td>[% account.date | $KohaDates %]</td>
+      <td>
+        [% PROCESS account_type_description account=account %]
+        [%- IF account.description %], [% account.description | html %][% END %]
+      </td>
+      <td>[% account.note | html %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
+    </tr>
+
+  [% END %]
+<tfoot>
+  <tr>
+    <td colspan="3">Total outstanding dues as on date: </td>
+    [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
+  </tr>
+</tfoot>
+</table>', 'print', 'default');
 
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
 ('circulation', 'SR_SLIP', '', 'Ticket de rotation automatique d\'exemplaires', 0, 'Rapport de rotation automatique d\'exemplaires', 'Rapport de rotation automatique d\'exemplaires pour [% branch.name %]:\r\n\r\n[% IF branch.items.size %][% branch.items.size %] exemplaires de cette bibliothèque à traiter.\r\n[% ELSE %]Aucun exemplaire de cette bibliothèque à traiter\r\n[% END %][% FOREACH item IN branch.items %][% IF item.reason != \'in-demand\' %]Titre : [% item.title %]\r\nAuteur : [% item.author %]\r\nCote : [% item.callnumber %]\r\nLocalisation : [% item.location %]\r\nCode-barres: [% item.barcode %]\r\nEn prêt? : [% item.onloan %]\r\nStatut : [% item.reason %]\r\nBibliothèque dépositaire : [% item.branch.branchname %] [% item.branch.branchcode %]\r\n\r\n[% END %][% END %]', 'email');

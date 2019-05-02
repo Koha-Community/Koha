@@ -178,9 +178,62 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'AR_SLIP', '', 'Artikelbestellung - Quittung', 0, 'Artikelbestellung', 'Artikelbestellung:\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nTitel: <<biblio.title>>\r\nBarcode: <<items.barcode>>\r\n\r\nBestellter Artikel:\r\nTitle: <<article_requests.title>>\r\nVerfasser: <<article_requests.author>>\r\nJahrgang/Band: <<article_requests.volume>>\r\nHeft: <<article_requests.issue>>\r\nJahr/Datum: <<article_requests.date>>\r\nSeiten: <<article_requests.pages>>\r\nKapitel: <<article_requests.chapters>>\r\nHinweise: <<article_requests.patron_notes>>\r\n', 'print'),
 ('circulation', 'AR_PROCESSING', '', 'Artikelbestellung - In Bearbeitung', 0, 'Artikelbestellung in Bearbeitung', 'Liebe/r <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nIhre Artikelbestellung aus <<biblio.title>> (<<items.barcode>>) wird zur Zeit bearbeitet.\r\n\r\nBestellter Artikel:\r\nTitel: <<article_requests.title>>\r\nVerfasser: <<article_requests.author>>\r\nBand/Jahrgang: <<article_requests.volume>>\r\nHeft: <<article_requests.issue>>\r\nJahr/Datum: <<article_requests.date>>\r\nSeiten: <<article_requests.pages>>\r\nKapitel: <<article_requests.chapters>>\r\nHinweise: <<article_requests.patron_notes>>\r\n\r\nVielen Dank!', 'email'),
 ('circulation', 'CHECKOUT_NOTE', '', 'Ausleihnotiz zu einem Exemplar', '0', 'Ausleihnotiz', '<<borrowers.firstname>> <<borrowers.surname>> hat eine Notiz zu folgendem Exemplar angegeben: <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
-INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`)
-    VALUES
-        ('circulation', 'ACCOUNT_PAYMENT', '', 'Zahlung', 0, 'Zahlungsquittung für Bibliothekskonto', '[%- USE Price -%]\r\nEine Zahlung in Höhe von [% credit.amount * -1 | $Price %] wurde auf Ihr Konto verbucht.\r\n\r\nDiese Zahlung wurde mit den folgenden Gebührenposten verrechnet:\r\n[%- FOREACH o IN offsets %]\r\nBeschreibung: [% o.debit.description %]\r\nGezahlter Betrag: [% o.amount * -1 | $Price %]\r\nOffener Betrag: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),
-            ('circulation', 'ACCOUNT_WRITEOFF', '', 'Erlass', 0, 'Erlassquittung für Bibliothekskonto', '[%- USE Price -%]\r\nEin Erlass in Höhe von [% credit.amount * -1 | $Price %] wurde auf Ihr Konto verbucht.\r\n\r\nDer Erlass wurde mit den folgenden Gebührenposten verrechnet:\r\n[%- FOREACH o IN offsets %]\r\nBeschreibung: [% o.debit.description %]\r\nErlassener Betrag: [% o.amount * -1 | $Price %]\r\nOffener Betrag: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
+
+INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
+('circulation', 'ACCOUNT_PAYMENT', '', 'Zahlung', 0, 'Zahlungsquittung für Bibliothekskonto', '[%- USE Price -%]\r\nEine Zahlung in Höhe von [% credit.amount * -1 | $Price %] wurde auf Ihr Konto verbucht.\r\n\r\nDiese Zahlung wurde mit den folgenden Gebührenposten verrechnet:\r\n[%- FOREACH o IN offsets %]\r\nBeschreibung: [% o.debit.description %]\r\nGezahlter Betrag: [% o.amount * -1 | $Price %]\r\nOffener Betrag: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),
+('circulation', 'ACCOUNT_WRITEOFF', '', 'Erlass', 0, 'Erlassquittung für Bibliothekskonto', '[%- USE Price -%]\r\nEin Erlass in Höhe von [% credit.amount * -1 | $Price %] wurde auf Ihr Konto verbucht.\r\n\r\nDer Erlass wurde mit den folgenden Gebührenposten verrechnet:\r\n[%- FOREACH o IN offsets %]\r\nBeschreibung: [% o.debit.description %]\r\nErlassener Betrag: [% o.amount * -1 | $Price %]\r\nOffener Betrag: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
+
+INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
+('circulation', 'ACCOUNT_CREDIT', '', 'Account payment', 0, 'Account payment', '<table>
+[% IF ( LibraryName ) %]
+ <tr>
+    <th colspan="4" class="centerednames">
+        <h3>[% LibraryName | html %]</h3>
+    </th>
+ </tr>
+[% END %]
+ <tr>
+    <th colspan="4" class="centerednames">
+        <h2><u>Fee receipt</u></h2>
+    </th>
+ </tr>
+ <tr>
+    <th colspan="4" class="centerednames">
+        <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>
+    </th>
+ </tr>
+ <tr>
+    <th colspan="4">
+        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />
+        Card number: [% patron.cardnumber | html %]<br />
+    </th>
+ </tr>
+  <tr>
+    <th>Date</th>
+    <th>Description of charges</th>
+    <th>Note</th>
+    <th>Amount</th>
+ </tr>
+
+  [% FOREACH account IN accounts %]
+    <tr class="highlight">
+      <td>[% account.date | $KohaDates %]</td>
+      <td>
+        [% PROCESS account_type_description account=account %]
+        [%- IF account.description %], [% account.description | html %][% END %]
+      </td>
+      <td>[% account.note | html %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
+    </tr>
+
+  [% END %]
+<tfoot>
+  <tr>
+    <td colspan="3">Total outstanding dues as on date: </td>
+    [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
+  </tr>
+</tfoot>
+</table>', 'print', 'default');
+
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
 ('circulation', 'SR_SLIP', '', 'Report über Bestandsrotation', 0, 'Report über Bestandsrotation', 'Report über Bestandsrotation für [% branch.name %]:\r\n\r\n[% IF branch.items.size %][% branch.items.size %] Exemplare wurden für diese Bibliothek bearbeitet.\r\n[% ELSE %]Es wurden keine Exemplare für diese Bibliothek bearbeitet\r\n[% END %][% FOREACH item IN branch.items %][% IF item.reason != \'in-demand\' %]Titel: [% item.title %]\r\nVerfasser: [% item.author %]\r\nSignatur: [% item.callnumber %]\r\nStandort: [% item.location %]\r\nBarcode: [% item.barcode %]\r\nAusgeliehen?: [% item.onloan %]\r\nStatus: [% item.reason %]\r\nAktuelle Bibliothek: [% item.branch.branchname %] [% item.branch.branchcode %]\r\n\r\n[% END %][% END %]', 'email');
