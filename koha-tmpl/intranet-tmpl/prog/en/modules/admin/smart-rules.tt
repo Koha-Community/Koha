@@ -411,15 +411,15 @@
                 <tr>
                     <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
                     <td>
-                        [% SET patron_maxissueqty = CirculationRules.Get( branchcode, undef, undef, 'patron_maxissueqty' ) %]
+                        [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty' ) %]
                         <input type="text" name="patron_maxissueqty" size="3" value="[% patron_maxissueqty | html %]"/>
                     </td>
                     <td>
-                        [% SET patron_maxonsiteissueqty = CirculationRules.Get( branchcode, undef, undef, 'patron_maxonsiteissueqty' ) %]
+                        [% SET patron_maxonsiteissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxonsiteissueqty' ) %]
                         <input type="text" name="patron_maxonsiteissueqty" size="3" value="[% patron_maxonsiteissueqty | html %]"/>
                     </td>
                     <td>
-                        [% SET rule_value = CirculationRules.Get( current_branch, '*', undef, 'max_holds' ) %]
+                        [% SET rule_value = CirculationRules.Search( current_branch, undef , undef, 'max_holds' ) %]
                         <input name="max_holds" size="3" value="[% rule_value | html %]" />
                     </td>
                     <td>
