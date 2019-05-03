@@ -46,6 +46,11 @@ sub delete {
         branchcode   => $branchcode,
         itemtype     => $itemtype,
         categorycode => $categorycode,
+        rule_name => [qw(
+            maxissueqty
+            maxonsiteissueqty
+            max_holds
+        )],
     })->delete;
 
     $self->SUPER::delete;

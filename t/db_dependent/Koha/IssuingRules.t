@@ -329,19 +329,28 @@ subtest 'delete' => sub {
     $builder->build_object({ class => 'Koha::CirculationRules', value => {
             categorycode => $category->categorycode,
             itemtype     => $itemtype->itemtype,
-            branchcode   => $library->branchcode
+            branchcode   => $library->branchcode,
+            rule_name    => 'maxissueqty',
         }
     });
     $builder->build_object({ class => 'Koha::CirculationRules', value => {
             categorycode => $category->categorycode,
             itemtype     => $itemtype->itemtype,
-            branchcode   => $library->branchcode
+            branchcode   => $library->branchcode,
+            rule_name    => 'maxonsiteissueqty',
+        }
+    });
+    $builder->build_object({ class => 'Koha::CirculationRules', value => {
+            categorycode => $category->categorycode,
+            itemtype     => $itemtype->itemtype,
+            branchcode   => $library->branchcode,
+            rule_name    => 'another_rule', # That must not be deleted
         }
     });
 
     # Now we delete the issuing rule
     $issue_rule->delete;
-    is( Koha::CirculationRules->search()->count ,$count, "We remove related circ rules with our issuing rule");
+    is( Koha::CirculationRules->search()->count ,$count +  1, "We remove related circ rules maxissueqty and maxonsiteissueqty with our issuing rule");
 
 };
 
