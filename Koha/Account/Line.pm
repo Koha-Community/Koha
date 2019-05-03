@@ -204,7 +204,7 @@ sub apply {
     my $schema = Koha::Database->new->schema;
 
     $schema->txn_do( sub {
-        while ( my $debit = $debits->next ) {
+        for my $debit ( @{$debits} ) {
 
             unless ( $debit->is_debit ) {
                 Koha::Exceptions::Account::IsNotDebit->throw(
