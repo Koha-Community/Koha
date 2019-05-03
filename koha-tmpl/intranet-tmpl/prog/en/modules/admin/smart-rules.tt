@@ -424,7 +424,7 @@
                     </td>
                     <td>
                         <select name="holdallowed">
-                            [% SET holdallowed = CirculationRules.Get( branchcode, undef, undef, 'holdallowed' ) %]
+                            [% SET holdallowed = CirculationRules.Search( current_branch, undef, undef, 'holdallowed' ) %]
                             <option value="">
                                 Not set
                             </option>
@@ -456,7 +456,7 @@
                     </td>
                     <td>
                         <select name="hold_fulfillment_policy">
-                            [% SET hold_fulfillment_policy = CirculationRules.Get( branchcode, undef, undef, 'hold_fulfillment_policy' ) %]
+                            [% SET hold_fulfillment_policy = CirculationRules.Search( current_branch, undef, undef, 'hold_fulfillment_policy' ) %]
 
                             <option value="">
                                 Not set
@@ -495,7 +495,7 @@
                     </td>
                     <td>
                         <select name="returnbranch">
-                            [% SET returnbranch = CirculationRules.Get( branchcode, undef, undef, 'returnbranch' ) %]
+                            [% SET returnbranch = CirculationRules.Search( current_branch, undef, undef, 'returnbranch' ) %]
 
                             <option value="">
                                 Not set
