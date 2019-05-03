@@ -55,7 +55,7 @@ sub get {
         );
 
         @plugins = grep { $_->api_namespace eq $namespace} @plugins;
-        warn scalar(@plugins);
+
         return $c->render({ status => 404, openapi => { error => 'File not found' } }) unless scalar(@plugins) > 0;
         return $c->render({ status => 500, openapi => { error => 'Namespace not unique' } }) unless scalar(@plugins) == 1;
 
@@ -63,13 +63,8 @@ sub get {
 
         my $basepath = $plugin->bundle_path;
 
-        warn $basepath;
-
         my $relpath = join ('/', splice (@$path, 5));
 
-        warn $relpath;
-
-        warn join('/', $basepath, $relpath);
         return try {
             my $asset = Mojo::Asset::File->new(path => join('/', $basepath, $relpath));
             return $c->render({ status => 404, openapi => { error => 'File not found' } }) unless $asset->is_file;
