@@ -64,7 +64,7 @@
 
         [% ELSE %]
             <p>This is the team who are responsible for the next release of Koha and the ongoing maintenance of your
-            currently installed Koha version. They will be in these roles up until <strong>DATE</strong>, when the next
+            currently installed Koha version. They will be in these roles up until <strong>[% t.release_date | $KohaDates %]</strong>, when the next
             team will be elected.</p>
 
             <li><strong>Release maintainer:</strong>

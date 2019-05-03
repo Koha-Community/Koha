@@ -560,7 +560,7 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
                 }
             }
         }
-        else {
+        elsif ( $role ne 'release_date' ) {
             my $name = $teams->{team}->{$version}->{$role}->{name};
             # Add role to contributors
             push @{ $contributors->{$name}->{roles}->{$normalized_role} },
@@ -570,6 +570,9 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
                 $teams->{team}->{$version}->{$role}->{openhub} =
                   $contributors->{$name}->{openhub};
             }
+        }
+        else {
+            $teams->{team}->{$version}->{$role} = DateTime->from_epoch( epoch => $teams->{team}->{$version}->{$role});
         }
     }
 }
