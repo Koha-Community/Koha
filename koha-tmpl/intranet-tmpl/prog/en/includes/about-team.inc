@@ -41,22 +41,41 @@
 [%- BLOCK team -%]
     <ul>
 
-        <li><strong>Release manager:</strong>
-            [% INCLUDE person p=t.manager %]
-        </li>
+        [% IF v == 'release' %]
+            <p>This is the team who were responsible for the initial release of your currently installed Koha version.</p>
 
-        [% IF t.manager_assistants %]
-        <li><strong>Release manager assistants:</strong>
-            <ul>
-                [% FOREACH a IN t.assistants %]
-                <li>[% INCLUDE person p=a %]</li>
-                [% END %]
-            </ul>
-        </li>
-        [% ELSIF t.manager_assistant %]
-        <li><strong>Release manager assistant:</strong>
-            [% INCLUDE person p=t.manager_assistant %]
-        </li>
+            <li><strong>Release manager:</strong>
+                [% INCLUDE person p=t.manager %]
+            </li>
+
+            [% IF t.manager_assistants %]
+            <li><strong>Release manager assistants:</strong>
+                <ul>
+                    [% FOREACH a IN t.manager_assistants %]
+                    <li>[% INCLUDE person p=a %]</li>
+                    [% END %]
+                </ul>
+            </li>
+            [% ELSIF t.manager_assistant %]
+            <li><strong>Release manager assistant:</strong>
+                [% INCLUDE person p=t.manager_assistant %]
+            </li>
+            [% END %]
+
+        [% ELSE %]
+            <p>This is the team who are responsible for the next release of Koha and the ongoing maintenance of your
+            currently installed Koha version. They will be in these roles up until <strong>DATE</strong>, when the next
+            team will be elected.</p>
+
+            <li><strong>Release maintainer:</strong>
+                <ul>
+                  [% FOREACH m IN t.maintainer %]
+                    [% IF m.version == v %]
+                      <li>[% INCLUDE person p=m %]</li>
+                    [% END %]
+                  [% END %]
+                </ul>
+            </li>
         [% END %]
 
         [% IF t.qa_manager %]
@@ -76,13 +95,13 @@
         [% END %]
 
         [% IF t.documentation %]
-        <li><strong>Documentation Manager:</strong>
+        <li><strong>Documentation manager:</strong>
             [% INCLUDE person p=t.documentation %]
         </li>
         [% END %]
 
         [% IF t.documentation_team %]
-        <li><strong>Documentation Team:</strong>
+        <li><strong>Documentation team:</strong>
             <ul>
                 [% FOREACH doc_member IN t.documentation_team %]
                 <li>[% INCLUDE person p=doc_member %]</li>
@@ -119,6 +138,27 @@
         </li>
         [% END %]
 
+        [% IF v != 'release' %]
+
+        <li><strong>Release manager:</strong>
+            [% INCLUDE person p=t.manager %]
+        </li>
+
+        [% IF t.manager_assistants %]
+        <li><strong>Release manager assistants:</strong>
+            <ul>
+                [% FOREACH a IN t.manager_assistants %]
+                <li>[% INCLUDE person p=a %]</li>
+                [% END %]
+            </ul>
+        </li>
+        [% ELSIF t.manager_assistant %]
+        <li><strong>Release manager assistant:</strong>
+            [% INCLUDE person p=t.manager_assistant %]
+        </li>
+        [% END %]
+
+        [% ELSE %]
         <li><strong>Release maintainers:</strong>
             <ul>
                 [% FOREACH m IN t.maintainer %]
@@ -126,6 +166,7 @@
                 [% END %]
             </ul>
         </li>
+        [% END %]
 
     </ul>
 [%- END -%]
