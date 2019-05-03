@@ -578,8 +578,8 @@ for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
 my @people = map {
     { name => $_, ( $contributors->{$_} ? %{ $contributors->{$_} } : () ) }
 } sort {
-    my ($alast) = $a =~ /(\S+)$/;
-    my ($blast) = $b =~ /(\S+)$/;
+    my ($alast) = ( split( /\s/, $a ) )[-1];
+    my ($blast) = ( split( /\s/, $b ) )[-1];
     lc($alast) cmp lc($blast)
 } keys %{$contributors};
 
