@@ -132,12 +132,12 @@ sub add_credit {
         my $outstanding_credit = $credit->amountoutstanding;
         if ($debits) {
             # pay them!
-            $outstanding_credit = $credit->apply({ debits => $debits, offset_type => 'payment' });
+            $outstanding_credit = $credit->apply({ debits => [ $debits->as_list ], offset_type => 'payment' });
         }
 
         if ($outstanding_credit) {
             my $outstanding_debits = $account->outstanding_debits;
-            $credit->apply({ debits => $outstanding_debits, offset_type => 'payment' });
+            $credit->apply({ debits => [ $outstanding_debits->as_list ], offset_type => 'payment' });
         }
 
         return $c->render( status => 200, openapi => { account_line_id => $credit->id } );

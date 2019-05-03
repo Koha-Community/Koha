@@ -242,7 +242,7 @@ subtest 'apply() tests' => sub {
     $debit_1->discard_changes;
 
     my $debits = Koha::Account::Lines->search({ accountlines_id => $debit_1->id });
-    my $remaining_credit = $credit->apply( { debits => $debits, offset_type => 'Manual Credit' } );
+    my $remaining_credit = $credit->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
     is( $remaining_credit * 1, 90, 'Remaining credit is correctly calculated' );
     $credit->discard_changes;
     is( $credit->amountoutstanding * -1, $remaining_credit, 'Remaining credit correctly stored' );
@@ -258,7 +258,7 @@ subtest 'apply() tests' => sub {
     is( $THE_offset->type, 'Manual Credit', 'Passed type stored correctly' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
-    $remaining_credit = $credit->apply( { debits => $debits } );
+    $remaining_credit = $credit->apply( { debits => [ $debits->as_list ] } );
     is( $remaining_credit, 0, 'No remaining credit left' );
     $credit->discard_changes;
     is( $credit->amountoutstanding * 1, 0, 'No outstanding credit' );
@@ -273,20 +273,20 @@ subtest 'apply() tests' => sub {
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_1->id });
     throws_ok
-        { $credit->apply({ debits => $debits }); }
+        { $credit->apply({ debits => [ $debits->as_list ] }); }
         'Koha::Exceptions::Account::NoAvailableCredit',
         '->apply() can only be used with outstanding credits';
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $credit->id });
     throws_ok
-        { $debit_1->apply({ debits => $debits }); }
+        { $debit_1->apply({ debits => [ $debits->as_list ] }); }
         'Koha::Exceptions::Account::IsNotCredit',
         '->apply() can only be used with credits';
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $credit->id });
     my $credit_3 = $account->add_credit({ amount => 1, interface => 'commandline' });
     throws_ok
-        { $credit_3->apply({ debits => $debits }); }
+        { $credit_3->apply({ debits => [ $debits->as_list ] }); }
         'Koha::Exceptions::Account::IsNotDebit',
         '->apply() can only be applied to credits';
 
@@ -303,7 +303,7 @@ subtest 'apply() tests' => sub {
 
     $debits = Koha::Account::Lines->search({ accountlines_id => { -in => [ $debit_1->id, $debit_2->id, $debit_3->id, $credit->id ] } });
     throws_ok {
-        $credit_2->apply( { debits => $debits, offset_type => 'Manual Credit' } ); }
+        $credit_2->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } ); }
         'Koha::Exceptions::Account::IsNotDebit',
         '->apply() rolls back if any of the passed lines is not a debit';
 
@@ -313,7 +313,7 @@ subtest 'apply() tests' => sub {
     is( $credit_2->discard_changes->amountoutstanding * -1, 20, 'No changes made' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => { -in => [ $debit_1->id, $debit_2->id, $debit_3->id ] } });
-    $remaining_credit = $credit_2->apply( { debits => $debits, offset_type => 'Manual Credit' } );
+    $remaining_credit = $credit_2->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
 
     is( $debit_1->discard_changes->amountoutstanding * 1,  0, 'No changes to already cancelled debit' );
     is( $debit_2->discard_changes->amountoutstanding * 1,  0, 'Debit cancelled' );
@@ -426,7 +426,7 @@ subtest 'adjust() tests' => sub {
 
     # Update fine to partially paid
     my $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
-    $credit->apply( { debits => $debits, offset_type => 'Manual Credit' } );
+    $credit->apply( { debits => [ $debits->as_list ], offset_type => 'Manual Credit' } );
 
     $debit_2->discard_changes;
     is( $debit_2->amount * 1, 150, 'Fine amount unaffected by partial payment' );

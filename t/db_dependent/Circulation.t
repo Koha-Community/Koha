@@ -2227,7 +2227,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 interface => 'test',
             }
         );
-        $credit->apply( { debits => $debts, offset_type => 'Writeoff' } );
+        $credit->apply( { debits => [ $debts->as_list ], offset_type => 'Writeoff' } );
 
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item->itemnumber, $patron->id );
         is( $credit_return_id, undef, 'No LOST_RETURN account line added' );
@@ -2289,7 +2289,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 interface => 'test',
             }
         );
-        $credit->apply( { debits => $debts, offset_type => 'Payment' } );
+        $credit->apply( { debits => [ $debts->as_list ], offset_type => 'Payment' } );
 
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item->itemnumber, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
@@ -2414,7 +2414,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             }
         );
 
-        $payment->apply( { debits => $lost_fee_lines->reset, offset_type => 'Payment' } );
+        $payment->apply( { debits => [ $lost_fee_line ], offset_type => 'Payment' } );
 
         # Partially write off fee
         my $write_off_amount = 25;
@@ -2424,7 +2424,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 interface => 'test',
             }
         );
-        $write_off->apply( { debits => $lost_fee_lines->reset, offset_type => 'Writeoff' } );
+        $write_off->apply( { debits => [ $lost_fee_line ], offset_type => 'Writeoff' } );
 
         is( $account->balance,
             $processfee_amount + $replacement_amount - $payment_amount - $write_off_amount,
@@ -2517,7 +2517,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 interface => 'test',
             }
         );
-        $payment->apply({ debits => $lost_fee_lines->reset, offset_type => 'Payment' });
+        $payment->apply({ debits => [ $lost_fee_line ], offset_type => 'Payment' });
 
         is( $account->balance,
             $replacement_amount - $payment_amount,

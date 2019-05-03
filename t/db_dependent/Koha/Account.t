@@ -391,7 +391,7 @@ subtest 'lines() tests' => sub {
 
     # Paid Off
     $account->add_credit( { amount => 1, interface => 'commandline' } )
-        ->apply( { debits => scalar $account->outstanding_debits } );
+        ->apply( { debits => [ $account->outstanding_debits->as_list ] } );
 
     my $lines = $account->lines;
     is( $lines->_resultset->count, 9, "All accountlines (debits, credits and paid off) were fetched");

@@ -677,7 +677,7 @@ sub reconcile_balance {
             and my $credit = $outstanding_credits->next )
     {
         # there's both outstanding debits and credits
-        $credit->apply( { debits => $outstanding_debits } );    # applying credit, no special offset
+        $credit->apply( { debits => [ $outstanding_debits->as_list ] } );    # applying credit, no special offset
 
         $outstanding_debits = $self->outstanding_debits;
 

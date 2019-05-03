@@ -2370,7 +2370,7 @@ sub _FixOverduesOnReturn {
                     }
                 );
 
-                $credit->apply({ debits => $accountlines->reset, offset_type => 'Forgiven' });
+                $credit->apply({ debits => [ $accountline ], offset_type => 'Forgiven' });
 
                 $accountline->status('FORGIVEN');
 
@@ -2459,8 +2459,7 @@ sub _FixAccountForLostAndReturned {
             }
         );
 
-        # TODO: ->apply should just accept the accountline
-        $credit->apply( { debits => $accountlines->reset } );
+        $credit->apply( { debits => [ $accountline ] } );
     }
 
     # Update the account status
