@@ -2471,8 +2471,6 @@ sub _FixAccountForLostAndReturned {
     $accountline->discard_changes->status('RETURNED');
     $accountline->store;
 
-    ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
-
     if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
         $account->reconcile_balance;
     }
@@ -3677,15 +3675,7 @@ sub DeleteBranchTransferLimits {
 
 sub ReturnLostItem{
     my ( $borrowernumber, $itemnum ) = @_;
-
     MarkIssueReturned( $borrowernumber, $itemnum );
-    my $patron = Koha::Patrons->find( $borrowernumber );
-    my $item = Koha::Items->find($itemnum);
-    my $old_note = ($item->paidfor && ($item->paidfor ne q{})) ? $item->paidfor.' / ' : q{};
-    my @datearr = localtime(time);
-    my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
-    my $bor = $patron->firstname . ' ' . $patron->surname . ' ' . $patron->cardnumber;
-    ModItem({ paidfor =>  $old_note."Paid for by $bor $date" }, undef, $itemnum);
 }
 
 

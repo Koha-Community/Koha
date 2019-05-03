@@ -393,7 +393,6 @@ sub _build_default_values_for_mod_marc {
         materials                => undef,
         new_status               => undef,
         notforloan               => 0,
-        # paidfor => undef, # commented, see bug 12817
         price                    => undef,
         replacementprice         => undef,
         replacementpricedate     => undef,
@@ -1576,7 +1575,6 @@ sub _koha_new_item {
             itemnotes           = ?,
             itemnotes_nonpublic = ?,
             holdingbranch       = ?,
-            paidfor             = ?,
             location            = ?,
             permanent_location  = ?,
             onloan              = ?,
@@ -1620,7 +1618,6 @@ sub _koha_new_item {
             $item->{'itemnotes'},
             $item->{'itemnotes_nonpublic'},
             $item->{'holdingbranch'},
-            $item->{'paidfor'},
             $item->{'location'},
             $item->{'permanent_location'},
             $item->{'onloan'},

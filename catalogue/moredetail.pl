@@ -174,6 +174,44 @@ foreach my $item (@items){
         $item->{status_advisory} = 1;
     }
 
+    # Add paidfor info
+    if ( $item->{itemlost} ) {
+        my $accountlines = Koha::Account::Lines->search(
+            {
+                itemnumber        => $item->{itemnumber},
+                accounttype       => 'LOST',
+                status            => [ undef, { '<>' => 'RETURNED' } ],
+                amountoutstanding => 0
+            },
+            {
+                order_by => { '-desc' => 'date' },
+                rows     => 1
+            }
+        );
+
+        if ( my $accountline = $accountlines->next ) {
+            my $payment_offsets = Koha::Account::Offsets->search(
+                {
+                    debit_id  => $accountline->id,
+                    credit_id => { '!=' => undef }, # it is not the debit itself
+                    type => { '!=' => [ 'Writeoff', 'Forgiven' ] },
+                    amount => { '<' => 0 }    # credits are negative on the DB
+                },
+                { order_by => { '-desc' => 'created_on' } }
+            );
+
+            if ($payment_offsets->count) {
+                my $patron = $accountline->patron;
+                my $payment_offset = $payment_offsets->next;
+                $item->{paidfor} =
+                    $patron->firstname . " "
+                  . $patron->surname . " "
+                  . $patron->cardnumber . " "
+                  . $payment_offset->created_on;
+            }
+        }
+    }
+
     if (C4::Context->preference("IndependentBranches")) {
         #verifying rights
         my $userenv = C4::Context->userenv();

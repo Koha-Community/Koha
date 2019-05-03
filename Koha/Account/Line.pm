@@ -41,6 +41,19 @@ Koha::Account::Line - Koha accountline Object class
 
 =cut
 
+=head3 patron
+
+Return the patron linked to this account line
+
+=cut
+
+sub patron {
+    my ( $self ) = @_;
+    my $rs = $self->_result->borrowernumber;
+    return unless $rs;
+    return Koha::Patron->_new_from_dbic( $rs );
+}
+
 =head3 item
 
 Return the item linked to this account line if exists
