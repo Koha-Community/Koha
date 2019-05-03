@@ -50,7 +50,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op       = $query->param('op')       || 'list';
 my $referer  = $query->param('referer')  || $op;
 my $category = $query->param('category') || 1;
-$category = 2 if $category ne "1";
 my ( $shelf, $shelfnumber, @messages );
 
 if ( $op eq 'add_form' ) {
