@@ -1,4 +1,8 @@
-.preference-url, .preference-multi, .preference-long, .preference-file {
+.preference-url,
+.preference-multi,
+.preference-long,
+.preference-file,
+.preference-modalselect {
     width: 20em;
 }
 
@@ -8,6 +12,14 @@
 
 .preference-integer, .preference-percent, .preference-date, .preference-currency {
     width: 5em;
+}
+
+input[type="text"].modalselect {
+    cursor: pointer;
+}
+
+input[type="text"].modalselect:hover {
+    background-color: #FFC;
 }
 
 textarea.preference {
@@ -152,6 +164,17 @@ span.overridden {
     resize:  vertical;
 }
 
+#prefModal label {
+    display: block;
+    font-weight: bold;
+    line-height: 1.5em;
+}
+
+.dbcolumn {
+    font-weight: normal;
+    font-family: monospace;
+    color: #666;
+}
 #menu ul li.active a.pref_sublink {
     background: #FFF none;
     border: 0;

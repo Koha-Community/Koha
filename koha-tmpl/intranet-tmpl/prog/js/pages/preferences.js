@@ -1,4 +1,4 @@
-/* global KOHA MSG_MADE_CHANGES CodeMirror MSG_CLICK_TO_EXPAND MSG_CLICK_TO_COLLAPSE to_highlight search_jumped humanMsg MSG_NOTHING_TO_SAVE MSG_MODIFIED MSG_SAVING MSG_SAVED_PREFERENCE dataTablesDefaults */
+/* global KOHA MSG_MADE_CHANGES CodeMirror MSG_CLICK_TO_EXPAND MSG_CLICK_TO_COLLAPSE to_highlight search_jumped humanMsg MSG_NOTHING_TO_SAVE MSG_MODIFIED MSG_SAVING MSG_SAVED_PREFERENCE dataTablesDefaults themelang */
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {
@@ -221,4 +221,63 @@ $( document ).ready( function () {
             email: true
         });
     });
+
+
+    $(".modalselect").on("click", function(){
+        var datasource = $(this).data("source");
+        var pref_name = this.id.replace(/pref_/, '');
+        var pref_value = this.value;
+        var prefs = pref_value.split("|");
+
+        $.getJSON( themelang + "/modules/admin/preferences/" + datasource + ".json", function( data ){
+            var items = [];
+            var checked = "";
+            $.each( data, function( key, val ){
+                if( prefs.indexOf( val ) >= 0 ){
+                    checked = ' checked="checked" ';
+                } else {
+                    checked = "";
+                }
+                items.push('<label><input class="dbcolumn_selection" type="checkbox" id="' + key + '"' + checked + ' name="pref" value="' + val + '" /> ' + key + '</label>');
+            });
+            $("<div/>", {
+                "class": "columns-2",
+                html: items.join("")
+            }).appendTo("#prefModalForm");
+        });
+        $("#saveModalPrefs").data("target", this.id );
+        $("#prefModalLabel").text( pref_name );
+        $("#prefModal").modal("show");
+    });
+
+    $("#saveModalPrefs").on("click", function(){
+        var formfieldid = $("#" + $(this).data("target") );
+        var prefs = [];
+        $("#prefModal input[type='checkbox']").each(function(){
+            if( $(this).prop("checked") ){
+                prefs.push( this.value );
+            }
+        });
+
+        formfieldid.val( prefs.join("|") )
+            .addClass("modified");
+        mark_modified.call( formfieldid );
+        KOHA.Preferences.Save( formfieldid.closest("form") );
+        $("#prefModal").modal("hide");
+    });
+
+    $("#prefModal").on("hide.bs.modal", function(){
+        $("#prefModalLabel,#prefModalForm").html("");
+        $("#saveModalPrefs").data("target", "" );
+    });
+
+    $("#select_all").on("click",function(e){
+        e.preventDefault();
+        $(".dbcolumn_selection").prop("checked", true);
+    });
+    $("#clear_all").on("click",function(e){
+        e.preventDefault();
+        $(".dbcolumn_selection").prop("checked", false);
+    });
+
 } );

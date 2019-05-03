@@ -834,18 +834,18 @@ OPAC:
         -
             - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
             - pref: PatronSelfRegistrationBorrowerMandatoryField
-              class: multi
-            - (separate columns with |)
+              type: modalselect
+              source: borrowers
         -
             - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
             - pref: PatronSelfRegistrationBorrowerUnwantedField
-              class: multi
-            - (separate columns with |)
+              type: modalselect
+              source: borrowers
         -
             - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
             - pref: PatronSelfModificationBorrowerUnwantedField
-              class: multi
-            - (separate columns with |)
+              type: modalselect
+              source: borrowers
         -
             - "Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
             - pref: PatronSelfRegistrationAdditionalInstructions

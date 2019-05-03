@@ -108,6 +108,8 @@
                         </option>
                         [% END %]
                     </select>
+                    [% ELSIF ( CHUNK.type_modalselect ) %]
+                        <input type="text" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="modalselect preference preference-[% CHUNK.type | html %]" data-source="[% CHUNK.source | html %]" readonly="readonly" value="[% CHUNK.value | html %]"/>
                     [% ELSIF ( CHUNK.type_multiple ) %]
                     <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]" multiple="multiple">
                         [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value | html %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value | html %]">[% END %][% CHOICE.text | html %]</option>[% END %]
@@ -179,6 +181,31 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
 
+<!-- Modal -->
+<div class="modal" id="prefModal" tabindex="-1" role="dialog" aria-labelledby="prefModalLabel">
+    <div class="modal-dialog modal-wide" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="prefModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    <a href="#" id="select_all"><i class="fa fa-check"></i> Select all</a>
+                    |
+                    <a href="#" id="clear_all"><i class="fa fa-remove"></i> Clear all</a>
+                </p>
+                <form action="#" id="prefModalForm">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="saveModalPrefs" data-target="" type="button" class="btn btn-default">Save</button>
+                <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
@@ -200,6 +227,7 @@
 
     <script>
         var Sticky;
+        var themelang = "[% themelang | html %]";
         $(document).ready(function(){
             [% UNLESS ( searchfield ) %]
                 Sticky = $("#toolbar");
@@ -219,7 +247,6 @@
                 e.preventDefault();
                 window.location.reload(true);
             });
-
         });
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
         var to_highlight = "[% To.json( searchfield ) | $raw %]";
