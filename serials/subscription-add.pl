@@ -377,7 +377,7 @@ sub redirect_add_subscription {
         $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate,
         $skip_serialseq, $itemtype, $previousitemtype, $mana_id
     );
-    if ( (C4::Context->preference('Mana')) and ( grep { $_ eq "subscription" } split(/,/, C4::Context->preference('AutoShareWithMana'))) ){
+    if ( (C4::Context->preference('Mana') == 1) and ( grep { $_ eq "subscription" } split(/,/, C4::Context->preference('AutoShareWithMana'))) ){
         my $result = Koha::SharedContent::send_entity( $query->param('mana_language') || '', $loggedinuser, $subscriptionid, 'subscription');
         $template->param( mana_msg => $result->{msg} );
     }
@@ -465,7 +465,7 @@ sub redirect_mod_subscription {
     my $skip_serialseq    = $query->param('skip_serialseq');
 
     my $mana_id;
-    if ( defined( $query->param('mana_id') ) ) {
+    if ( $query->param('mana_id') ne "" ) {
         $mana_id = $query->param('mana_id');
         Koha::SharedContent::increment_entity_value("subscription",$mana_id, "nbofusers");
     }
