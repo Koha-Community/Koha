@@ -111,17 +111,18 @@ is($request->method, 'POST', 'Share report - Method is post');
 is($request->uri->path, '/report.json', 'Path is report.json');
 
 # prepare shared data
-my $loggedinuser = $builder->build({
-    source => 'Borrower',
+my $library = $builder->build_object({
+    class => 'Koha::Libraries',
+});
+
+my $loggedinuser = $builder->build_object({
+    class => 'Koha::Patrons',
     value => {
         email => '',
         emailpro => '',
-        B_email => ''
+        B_email => '',
+        branchcode => $library->branchcode,
     }
-});
-
-my $library = $builder->build({
-    source => 'Branch',
 });
 
 my $biblio = $builder->build({
@@ -153,17 +154,12 @@ my $subscription = $builder->build({
     }
 });
 
-C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0,0,0,
-    $loggedinuser->{firstname},
-    $loggedinuser->{surname},
-    $library->{branchcode},
-    'Midway Public Library', '', '', '');
+t::lib::Mocks::mock_userenv({ patron => $loggedinuser});
 
 t::lib::Mocks::mock_preference('language', 'en');
 
 $post_request = 1;
-$result = Koha::SharedContent::send_entity('en', $loggedinuser->{borrowernumber}, $subscription->{subscriptionid}, 'subscription');
+$result = Koha::SharedContent::send_entity('en', $loggedinuser->borrowernumber, $subscription->{subscriptionid}, 'subscription');
 is($result->{code}, 200, 'send_entity success');
 
 my $s = Koha::Subscriptions->find($subscription->{subscriptionid});
@@ -171,14 +167,13 @@ is($s->mana_id, 5, 'Mana id is set');
 
 my $data = Koha::SharedContent::prepare_entity_data(
     '',
-    $loggedinuser->{borrowernumber},
+    $loggedinuser->borrowernumber,
     $subscription->{subscriptionid},
     'subscription'
 );
 
 is($data->{language}, 'en', 'Language is set to default');
-my $branch = Koha::Libraries->find($library->{branchcode});
-is($data->{exportemail}, $branch->branchemail, 'Email is set with the userenv branch one');
+is($data->{exportemail}, $library->branchemail, 'Email is set with the userenv branch one');
 is($data->{title}, $biblio->{title}, 'Shared title');
 is($data->{sfdescription}, $subscriptionFrequency->{description}, 'Shared sfdescription');
 is($data->{unit}, $subscriptionFrequency->{unit}, 'Shared unit');
