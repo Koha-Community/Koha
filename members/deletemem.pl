@@ -28,6 +28,7 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Members;
+use C4::Suggestions qw( SearchSuggestion );
 use Koha::Patrons;
 use Koha::Token;
 use Koha::Patron::Categories;
@@ -101,6 +102,15 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
     $template->param(
         op         => 'delete_confirm',
         csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
+    );
+
+    # Add warning if patron has pending suggestions
+    $template->param(
+        pending_suggestions => scalar @{
+        C4::Suggestions::SearchSuggestion(
+                { suggestedby => $member, STATUS => 'ASKED' }
+            )
+        }
     );
 } elsif ( $op eq 'delete_confirmed' ) {
     output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
