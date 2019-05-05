@@ -415,9 +415,15 @@ sub field_equals {
   my @field_numbers = ();
   my $current_field_number = 1;
   FIELDS: for my $field ( $record->field( $fieldName ) ) {
-    my @subfield_values = $subfieldName
-        ? $field->subfield( $subfieldName )
-        : map { $_->[1] } $field->subfields;
+    my @subfield_values;
+    if ( $field->is_control_field ) {
+        push @subfield_values, $field->data;
+    } else {
+        @subfield_values =
+            $subfieldName
+          ? $field->subfield($subfieldName)
+          : map { $_->[1] } $field->subfields;
+    }
 
     SUBFIELDS: for my $subfield_value ( @subfield_values ) {
       if (
