@@ -124,6 +124,11 @@ sub text_extract {
                         || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|checkbox)$/)); # FIXME
                     my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
                     $val = TmplTokenizer::trim $val;
+                    # for selected attributes replace '[%..%]' with '%s' globally
+                    if ( $a =~ /title|value|alt|content|placeholder/ ) {
+                        $val =~ s/\[\%.*?\%\]/\%s/g;
+                    }
+                    # save attribute text for translation
                     remember( $s, $val ) if $val =~ /\S/s;
                 }
             }
