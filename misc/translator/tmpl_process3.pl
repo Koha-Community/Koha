@@ -59,6 +59,7 @@ sub find_translation ($) {
 sub text_replace_tag ($$) {
     my($t, $attr) = @_;
     my $it;
+    my @ttvar;
 
     # value [tag=input], meta
     my $tag = lc($1) if $t =~ /^<(\S+)/s;
@@ -71,12 +72,27 @@ sub text_replace_tag ($$) {
 
         my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
         if ($val =~ /\S/s) {
-        my $s = find_translation($val);
-        if ($attr->{$a}->[1] ne $s) { #FIXME
-            $attr->{$a}->[1] = $s; # FIXME
-            $attr->{$a}->[2] = ($s =~ /"/s)? "'$s'": "\"$s\""; #FIXME
-            $translated_p = 1;
-        }
+            # for selected attributes replace '[%..%]' with '%s' and remember matches
+            if ( $a =~ /title|value|alt|content|placeholder/ ) {
+                while ( $val =~ s/(\[\%.*?\%\])/\%s/ ) {
+                    my $var = $1;
+                    push @ttvar, $1;
+                }
+            }
+            # find translation for transformed attributes
+            my $s = find_translation($val);
+            # replace '%s' with original content (in order) on translated string, this is fragile!
+            if ( $a =~ /title|value|alt|content|placeholder/ and @ttvar ) {
+                while ( @ttvar ) {
+                    my $var = shift @ttvar;
+                    $s =~ s/\%s/$var/;
+                }
+            }
+            if ($attr->{$a}->[1] ne $s) { #FIXME
+                $attr->{$a}->[1] = $s; # FIXME
+                $attr->{$a}->[2] = ($s =~ /"/s)? "'$s'": "\"$s\""; #FIXME
+                $translated_p = 1;
+            }
         }
     }
     }
