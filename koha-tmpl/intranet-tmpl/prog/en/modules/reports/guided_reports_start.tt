@@ -719,7 +719,11 @@ canned reports and writing custom SQL reports.</p>
 <h1>[% name | html %]</h1>
 [% IF ( notes ) %]<p><span class="label">Notes:</span> [% notes | html %]</p>[% END %]
 [% IF ( unlimited_total ) %]<p><span class="label">Total number of results:</span> [% unlimited_total | html %][% IF unlimited_total > limit %] ([% limit | html %] shown)[% END %].</p>[% END %]
-<div id="sql_output" style="display:none;"><span class="label">Report SQL:</span><pre>[% sql | html %]</pre></div>
+
+<div id="sql_output" style="display:none;">
+    <span class="label">Report SQL:</span>
+    <textarea id="sql" readonly="readonly">[% sql | html %]</textarea>
+</div>
 
 <div>
     <a href="#" id="toggle_chart_settings_hid" class="toggle_chart_settings" style="display:none"><i class="fa fa-eye-slash"></i> Hide chart</a>
@@ -1054,7 +1058,7 @@ canned reports and writing custom SQL reports.</p>
         }
 
         $(document).ready(function(){
-
+            var showsql;
             hide_bar_element();
 
             if ( $('.chart-column-conf').length == 1 ) {
@@ -1321,6 +1325,14 @@ canned reports and writing custom SQL reports.</p>
                 $("#sql_output").toggle();
                 $("#toggle_sql_hid").toggle();
                 $("#toggle_sql_vis").toggle();
+                if( !showsql ){
+                    showsql = CodeMirror.fromTextArea(sql, {
+                        lineNumbers: false,
+                        mode: "text/x-sql",
+                        lineWrapping: true,
+                        readOnly: true
+                    });
+                }
             });
 
             $(".toggle_chart_settings").click(function(){
