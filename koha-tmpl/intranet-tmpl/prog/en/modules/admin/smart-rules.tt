@@ -409,7 +409,7 @@
                     <th>Actions</th>
                 </tr>
                 <tr>
-                    <td><em>Defaults[% UNLESS ( default_rules ) %] (not set)[% END %]</em></td>
+                    <td><em>Defaults</em></td>
                     <td>
                         [% SET patron_maxissueqty = CirculationRules.Search( current_branch, undef, undef, 'patron_maxissueqty' ) %]
                         <input type="text" name="patron_maxissueqty" size="3" value="[% patron_maxissueqty | html %]"/>
