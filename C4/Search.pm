@@ -1531,10 +1531,26 @@ sub buildQuery {
             $q =~ s| and \( \( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:''\) and \(lost,st-numeric=0\) \)||;
             $original_q = $q;
         }
+        unless ( grep { /^only_component_parts$/ } @limits ) {
+            $q =~ s| and \(Bib-level,rk,r9="a" or Bib-level,rk,r9="b" or Bib-level,rk,r9="d" or Bib-level,rk,r2="c" or Bib-level,rk,r1="i"\)||;
+            $original_q = $q;
+        }
+        unless ( grep { /^only_host_items$/ } @limits ) {
+            $q =~ s| and \(Bib-level,rk,r1="m" or Bib-level,rk,r1="s"\)||;
+            $original_q = $q;
+        }
         if ( @limits ) {
             if ( grep { /^available$/ } @limits ) {
                 $q .= q| and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )|;
                 delete $limits['available'];
+            }
+            if ( grep { /^only_component_parts$/ } @limits ) {
+                $q .= q| and (Bib-level,rk,r9="a" or Bib-level,rk,r9="b" or Bib-level,rk,r9="d" or Bib-level,rk,r2="c" or Bib-level,rk,r1="i") |;
+                delete $limits['only_component_parts'];
+            }
+            elsif ( grep { /^only_host_items$/ } @limits ) {
+                $q .= q| and (Bib-level,rk,r1="m" or Bib-level,rk,r1="s") |;
+                delete $limits['only_host_items'];
             }
             $q .= ' and '.join(' and ', @limits) if @limits;
         }
