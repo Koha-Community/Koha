@@ -67,6 +67,8 @@ SKIP: {
         $patron->flags(1)->store; # superlibrarian permission
         $s->auth( $patron->userid, $password );
         like( $driver->get_title, qr(Koha staff client), 'Patron with flags superlibrarian should be able to login' );
+
+        push @data_to_cleanup, $patron, $patron->category, $patron->library;
     };
 
     subtest 'OPAC interface authentication' => sub {
