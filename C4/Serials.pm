@@ -1373,6 +1373,11 @@ sub NewSubscription {
     ) = @_;
     my $dbh = C4::Context->dbh;
 
+    $_ ||= undef # Set to undef for integer values, not empty string
+      for (
+        $aqbooksellerid, $lastvalue1, $innerloop1, $lastvalue2,
+        $innerloop2,     $lastvalue3, $innerloop3,
+      );
     #save subscription (insert into database)
     my $query = qq|
         INSERT INTO subscription
