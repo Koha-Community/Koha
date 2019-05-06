@@ -18,7 +18,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 46;
+use Test::More tests => 47;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -262,6 +262,8 @@ subtest 'test_updateClaim' => sub {
 };
 
 is(C4::Serials::check_routing(), undef, 'test checking route');
+is(C4::Serials::check_routing($subscriptionid), 0, 'There should not have any routing list for the subscription');
+# TODO really test this check_routing subroutine
 
 is(C4::Serials::addroutingmember(),undef, 'test adding route member');
 
