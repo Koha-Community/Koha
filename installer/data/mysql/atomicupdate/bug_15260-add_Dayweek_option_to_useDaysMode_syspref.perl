@@ -4,5 +4,5 @@ if( CheckVersion( $DBversion ) ) {
 
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+    print "Upgrade to $DBversion done (Bug 15260 - Option for extended loan with useDaysMode)\n";
 }
