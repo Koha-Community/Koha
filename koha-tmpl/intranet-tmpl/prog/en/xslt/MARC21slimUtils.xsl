@@ -396,6 +396,10 @@
 		 <xsl:with-param name="langNode" select="marc:subfield[@code='j']"/>
 		 <xsl:with-param name="langLabel">Subtitle language: </xsl:with-param>
 	       </xsl:call-template>
+               <xsl:call-template name="show-lang-node">
+		 <xsl:with-param name="langNode" select="marc:subfield[@code='p']"/>
+		 <xsl:with-param name="langLabel">Captions language: </xsl:with-param>
+	       </xsl:call-template>
              </span>
           </xsl:for-each>
        </xsl:if>
