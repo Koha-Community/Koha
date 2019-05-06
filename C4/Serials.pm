@@ -1884,7 +1884,7 @@ sub check_routing {
     my $sth              = $dbh->prepare(
         "SELECT count(routingid) routingids FROM subscription LEFT JOIN subscriptionroutinglist 
                               ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
-                              WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
+                              WHERE subscription.subscriptionid = ? GROUP BY routingid ORDER BY ranking ASC
                               "
     );
     $sth->execute($subscriptionid);
