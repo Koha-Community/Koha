@@ -91,19 +91,8 @@ if ($has_permission) {
     my ( $permission, $subpermission ) = split /\./, $has_permission;
     my @patrons_with_permission;
     for my $patron ( @{ $results->{patrons} } ) {
-        my $perms = haspermission( $patron->{userid}, undef );
-        if (   $perms->{superlibrarian} == 1
-            or $perms->{$permission} == 1 )
-        {
-            push @patrons_with_permission, $patron;
-            next;
-        }
-
-        if ($subpermission) {
-            my $subperms = get_user_subpermissions( $patron->{userid} );
-            push @patrons_with_permission, $patron
-              if $subperms->{$permission}->{$subpermission};
-        }
+        push @patrons_with_permission, $patron
+            if haspermission( $patron->{userid}, { $permission => $subpermission } );
     }
     $results->{patrons} = \@patrons_with_permission;
     $results->{iTotalDisplayRecords} = scalar( @patrons_with_permission );
