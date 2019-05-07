@@ -110,7 +110,7 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_parameters_manage_search_targets || CAN_user_parameters_manage_didyoumean || CAN_user_parameters_manage_column_config || CAN_user_parameters_manage_audio_alerts || ( CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) || CAN_user_parameters_manage_usage_stats || CAN_user_parameters_manage_additional_fields ) %]
+    [% IF ( CAN_user_parameters_manage_search_targets || CAN_user_parameters_manage_didyoumean || CAN_user_parameters_manage_column_config || CAN_user_parameters_manage_audio_alerts || ( CAN_user_parameters_manage_sms_providers && Koha.Preference('SMSSendDriver') == 'Email' ) || CAN_user_parameters_manage_usage_stats || CAN_user_parameters_manage_additional_fields || ( Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts ) ) %]
         <h5>Additional parameters</h5>
         <ul>
             <!-- <li><a href="/cgi-bin/koha/admin/printers.pl">Network Printers</a></li> -->
@@ -138,7 +138,7 @@
             [% IF ( CAN_user_parameters_manage_additional_fields ) %]
                 <li><a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a></li>
             [% END %]
-            [% IF ( CAN_user_parameters_manage_keyboard_shortcuts ) %]
+            [% IF ( Koha.Preference('EnableAdvancedCatalogingEditor') && CAN_user_parameters_manage_keyboard_shortcuts ) %]
                 <li><a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Keyboard shortcuts</a></li>
             [% END %]
         </ul>
