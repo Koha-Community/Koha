@@ -25,7 +25,7 @@ use Test::MockModule;
 use C4::Context;
 use C4::Biblio qw( AddBiblio );
 use C4::Circulation;
-use Koha::AuthUtils;
+use Koha::AuthUtils qw(hash_password);
 use t::lib::Selenium;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -187,8 +187,11 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     }
 
     my $password = Koha::AuthUtils::generate_password();
+    my $dbh   = C4::Context->dbh;
+    my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
-    $patron->set_password({ password => $password });
+    my $clave = hash_password( $password );
+    $sth->execute( $clave, $patron->borrowernumber );
     $s->opac_auth( $patron->userid, $password );
 
     my $public_lists = $s->opac_base_url . q|opac-shelves.pl?op=list&category=2|;
