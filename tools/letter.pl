@@ -265,6 +265,10 @@ sub add_form {
         if ( $module eq 'members' and $code and $code eq 'PROBLEM_REPORT' ) {
             push @{$field_selection}, add_fields('problem_reports');
         }
+
+        if ( $module eq 'ill' ) {
+            push @{$field_selection}, add_fields('illrequests');
+        }
     }
 
     my $preview_is_available = 0;

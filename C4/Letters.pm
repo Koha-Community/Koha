@@ -750,6 +750,7 @@ sub _parseletter_sth {
     ($table eq 'suggestions'  )    ? "SELECT * FROM $table WHERE   suggestionid = ?"                                  :
     ($table eq 'aqbooksellers')    ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'aqorders'     )    ? "SELECT * FROM $table WHERE    ordernumber = ?"                                  :
+    ($table eq 'illrequests'  )    ? "SELECT * FROM $table WHERE  illrequest_id = ?"                                  :
     ($table eq 'opac_news'    )    ? "SELECT * FROM $table WHERE          idnew = ?"                                  :
     ($table eq 'article_requests') ? "SELECT * FROM $table WHERE             id = ?"                                  :
     ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE verification_token = ?" :
