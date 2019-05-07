@@ -33,7 +33,7 @@
                                     </ul>
                                     <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' %].</p>
                                     <p class="tip">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
-                                    <p>Need help? For help with granting permissions, please search online for "[% dbms %] manual grant permissions"
+                                    <p>Need help? For help with granting permissions, please search online for "[% dbms | $HtmlTags tag=>'code' %] manual grant permissions"
                                     </p>
                                 [% END %]
                             [% ELSE %]
