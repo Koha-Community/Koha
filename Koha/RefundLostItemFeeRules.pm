@@ -136,6 +136,20 @@ sub _choose_branch {
     return $branch;
 }
 
+=head3 Koha::RefundLostItemFeeRules->find();
+
+Inherit from Koha::Objects->find(), but forces rule_name => 'refund'
+
+=cut
+
+sub find {
+    my ( $self, @pars ) = @_;
+
+    $pars[0]->{rule_name} = 'refund';
+
+    return $self->SUPER::find(@pars);
+}
+
 =head3 _default_rule (internal)
 
 This function returns the default rule defined for refunding lost

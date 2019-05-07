@@ -539,7 +539,8 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
     }
 }
 
-my $refundLostItemFeeRule = Koha::RefundLostItemFeeRules->find({ branchcode => $branch });
+my $refundLostItemFeeRule = Koha::RefundLostItemFeeRules->find({ branchcode => ($branch eq '*') ? undef:$branch });
+
 $template->param(
     refundLostItemFeeRule => $refundLostItemFeeRule,
     defaultRefundRule     => Koha::RefundLostItemFeeRules->_default_rule
