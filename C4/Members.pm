@@ -1253,6 +1253,11 @@ sub IssueSlip {
         );
     }
 
+    my %substitutes = ();
+    foreach my $subkey (keys(%repeat)) {
+        $substitutes{$subkey."_count"} = "".scalar(@{$repeat{$subkey}});
+    }
+
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',
         letter_code => $letter_code,
@@ -1263,6 +1268,7 @@ sub IssueSlip {
             'borrowers'   => $borrowernumber,
         },
         repeat => \%repeat,
+        substitute => \%substitutes,
     );
 }
 
