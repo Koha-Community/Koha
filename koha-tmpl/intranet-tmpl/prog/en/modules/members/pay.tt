@@ -3,6 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
+[% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% borrower.firstname %] [% borrower.surname %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -78,6 +79,7 @@ function enableCheckboxActions(){
     <th>&nbsp;</th>
     <th>Fines &amp; charges</th>
     <th>Description</th>
+    <th>Date</th>
     <th>Payment note</th>
     <th>Account type</th>
     <th>Notify id</th>
@@ -88,7 +90,7 @@ function enableCheckboxActions(){
 </thead>
 <tfoot>
 <tr>
-    <td class="total" colspan="8">Total due:</td>
+    <td class="total" colspan="9">Total due:</td>
     <td style="text-align: right;">[% total | $Price %]</td>
 </tr>
 </tfoot>
@@ -143,6 +145,7 @@ function enableCheckboxActions(){
         [%- IF line.description %], [% line.description %][% END %]
         [% IF line.title %]([% line.title %])[% END %]
     </td>
+    <td>[% line.date | $KohaDates %]</td>
     <td><input type="text" name="payment_note_[% line.accountlines_id %]" /></td>
     <td>[% line.accounttype %]</td>
     <td>[% line.notify_id %]</td>
@@ -154,7 +157,7 @@ function enableCheckboxActions(){
 [% IF ( account_grp.total ) %]
 <tr>
 
-    <td class="total" colspan="8" style="text-align: right;">Sub total:</td>
+    <td class="total" colspan="9" style="text-align: right;">Sub total:</td>
     <td style="text-align: right;">[% account_grp.total | $Price %]</td>
 </tr>
 [% END %]
