@@ -185,6 +185,28 @@
     });
     $("#info_digests").tooltip();
   });
+
+function normalizeSMS(value){
+  let has_plus = value.charAt(0) === '+';
+  let new_value = value.replace(/[^0-9]+/g, '');
+  if ( has_plus ) new_value = '+' + new_value;
+  return new_value;
+}
+
+var sms_input = document.getElementById('SMSnumber');
+
+sms_input.addEventListener('keyup', function(){
+  var field = sms_input.value;
+  sms_input.value = normalizeSMS(field);
+});
+
+sms_input.addEventListener('paste', function(event) {
+  let paste = (event.clipboardData || window.clipboardData).getData('text');
+  setTimeout(function () {
+    sms_input.value = normalizeSMS(paste);
+  }, 100);
+});
+
 //]]>
 </script>
 [% END %]
