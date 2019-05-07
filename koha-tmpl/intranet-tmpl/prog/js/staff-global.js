@@ -92,6 +92,7 @@ $.fn.selectTabByID = function (tabID) {
     });
 
     if (typeof $.cookie("lastborrowernumber") !== "undefined" && $("#hiddenborrowernumber").val() != $.cookie("lastborrowernumber")) {
+        $("#lastborrower-window").detach().appendTo("#breadcrumbs");
         $("#lastborrowerlink").show();
         $("#lastborrowerlink").prop("title", $.cookie("lastborrowername") + " (" + $.cookie("lastborrowercard") + ")");
         $("#lastborrowerlink").prop("href", "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + $.cookie("lastborrowernumber"));
