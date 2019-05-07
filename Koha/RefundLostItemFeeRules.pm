@@ -162,7 +162,7 @@ sub _default_rule {
     my $self = shift;
     my $default_rule = $self->search(
         {
-            branchcode   => '*',
+            branchcode   => undef,
             categorycode => undef,
             itemtype     => undef,
             rule_name    => 'refund',
