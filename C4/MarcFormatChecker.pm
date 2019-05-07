@@ -490,6 +490,7 @@ sub CheckMARC21FormatErrors {
 	$record->set_leader_lengths();
     }
 
+    my $skip_enclevels = "8"; # Record encoding levels (ldr/17) to skip
     my $formatdata = parse_MARC21_format_definition();
 
     my %mainf;
@@ -499,6 +500,10 @@ sub CheckMARC21FormatErrors {
 
     if (!defined($formatdata)) {
 	warn "No MARC21 format data available";
+	return \@errors;
+    }
+
+    if (index($skip_enclevels, substr($record->leader(),17,1)) != -1) {
 	return \@errors;
     }
 
