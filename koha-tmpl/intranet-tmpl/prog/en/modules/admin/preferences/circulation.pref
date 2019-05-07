@@ -931,6 +931,14 @@ Circulation:
             - pref: ILLHiddenRequestStatuses
               class: multi
             - (separated with |). If left empty, all ILL requests will be displayed.
+        -
+            - "Send these ILL notices to staff when appropriate"
+            - pref: ILLSendStaffNotices
+              class: multi
+            - (separated with |). e.g. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices will be sent
+        -
+            - Fallback email address for staff ILL notices to be sent to in the absence of a branch address
+            - pref: ILLDefaultStaffEmail
     Fines Policy:
         -
             - pref: finesCalendar

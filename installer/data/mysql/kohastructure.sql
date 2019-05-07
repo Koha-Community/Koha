@@ -265,6 +265,7 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchphone` LONGTEXT, -- the primary phone for your library or branch
   `branchfax` LONGTEXT, -- the fax number for your library or branch
   `branchemail` LONGTEXT, -- the primary email address for your library or branch
+  `branchillemail` LONGTEXT, -- the ILL staff email address for your library or branch
   `branchreplyto` LONGTEXT, -- the email to be used as a Reply-To
   `branchreturnpath` LONGTEXT, -- the email to be used as Return-Path
   `branchurl` LONGTEXT, -- the URL for your library or branch's website

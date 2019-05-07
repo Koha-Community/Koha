@@ -179,6 +179,7 @@ sub to_api_mapping {
         branchphone      => 'phone',
         branchfax        => 'fax',
         branchemail      => 'email',
+        branchillemail   => 'illemail',
         branchreplyto    => 'reply_to_email',
         branchreturnpath => 'return_path_email',
         branchurl        => 'url',

@@ -75,6 +75,7 @@ if ( $op eq 'add_form' ) {
       branchphone
       branchfax
       branchemail
+      branchillemail
       branchreplyto
       branchreturnpath
       branchurl

@@ -1312,7 +1312,7 @@ EOF
         my @address = map { $library->$_ }
             qw/ branchname branchaddress1 branchaddress2 branchaddress3
                 branchzip branchcity branchstate branchcountry branchphone
-                branchemail /;
+                branchillemail branchemail /;
         my $address = "";
         foreach my $line ( @address ) {
             $address .= $line . "\n" if $line;
