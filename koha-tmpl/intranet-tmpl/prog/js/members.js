@@ -315,6 +315,12 @@ $(document).ready(function(){
         function(value, element, phone) {
             var e164 = "^\\+?[1-9]\\d{1,14}$";
             var re = new RegExp(e164);
+
+            let has_plus = value.charAt(0) === '+';
+            value = value.replace(/\D/g,'');
+            if ( has_plus ) value = '+' + value;
+            element.value = value;
+
             return this.optional(element) || re.test(value);
         },
         jQuery.validator.messages.phone);
