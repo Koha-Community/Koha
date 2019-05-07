@@ -633,14 +633,14 @@
                         <select name="refund">
                           [#% Default branch %#]
                           [% IF ( current_branch == '*' ) %]
-                            [% IF ( refundLostItemFeeRule.rule_value ) %]
+                            [% IF ( defaultRefundRule ) %]
                             <option value="1" selected="selected">
                             [% ELSE %]
                             <option value="1">
                             [% END %]
                                 Yes
                             </option>
-                            [% IF ( not refundLostItemFeeRule.rule_value ) %]
+                            [% IF ( not defaultRefundRule ) %]
                             <option value="0" selected="selected">
                             [% ELSE %]
                             <option value="0">
