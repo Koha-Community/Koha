@@ -894,6 +894,14 @@ Circulation:
                   yes: Check
                   no: Don't check
             - external sources for availability during the request process
+        -
+            - "Send these ILL notices to staff when appropriate"
+            - pref: ILLSendStaffNotices
+              class: multi
+            - (separated with |). e.g. ILL_REQUEST_CANCEL|ILL_REQUEST_MODIFIED If left empty, no staff ILL notices will be sent
+        -
+            - Fallback email address for staff ILL notices to be sent to in the absence of a branch address
+            - pref: ILLDefaultStaffEmail
     Fines policy:
         -
             - pref: finesCalendar

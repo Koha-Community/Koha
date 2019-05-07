@@ -20,6 +20,8 @@
           [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold filled
           [% ELSIF ( messaging_preference.Item_Check_in ) %]Item check-in
           [% ELSIF ( messaging_preference.Item_Checkout ) %]Item checkout
+          [% ELSIF ( messaging_preference.Ill_ready ) %]Interlibrary loan ready
+          [% ELSIF ( messaging_preference.Ill_unavailable ) %]Interlibrary loan unavailable
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>
