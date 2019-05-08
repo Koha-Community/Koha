@@ -130,9 +130,9 @@
 </table>
 <fieldset class="action">
 <input type="submit" id="paycollect" name="paycollect"  value="Pay amount" class="submit" />
-[% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />[% END %]
 <input type="submit" id="payselected" name="payselected"  value="Pay selected" class="submit" />
-<input type="submit" id="writeoff-selected" name="writeoff_selected"  value="Write off selected" class="submit" />
+[% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="woall"  id="woall" value="Write off all" class="submit" />
+<input type="submit" id="writeoff-selected" name="writeoff_selected"  value="Write off selected" class="submit" />[% END %]
 <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
 </fieldset>
 </form>
