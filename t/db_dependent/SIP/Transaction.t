@@ -31,7 +31,7 @@ is( $transaction->patron( $sip_patron ), $sip_patron, "Patron assigned to transa
 isnt( $transaction->do_renew_all, undef, "RenewAll on zero items" );
 
 subtest fill_holds_at_checkout => sub {
-    plan tests => 5;
+    plan tests => 6;
 
 
     my $category = $builder->build({ source => 'Category' });
@@ -47,6 +47,7 @@ subtest fill_holds_at_checkout => sub {
     my $biblio = $builder->build({ source => 'Biblio' });
     my $biblioitem = $builder->build({ source => 'Biblioitem', value=>{biblionumber=>$biblio->{biblionumber}} });
     my $item1 = $builder->build({ source => 'Item', value => {
+        barcode       => 'barcode4test',
         homebranch    => $branch->{branchcode},
         holdingbranch => $branch->{branchcode},
         biblionumber  => $biblio->{biblionumber},
@@ -88,6 +89,9 @@ subtest fill_holds_at_checkout => sub {
     $transaction->do_checkout();
     is( $bib->holds->count(), 1, "Bib has 1 holds remaining");
 
-
+    t::lib::Mocks::mock_preference('itemBarcodeInputFilter', 'whitespace');
+    $sip_item   = C4::SIP::ILS::Item->new( ' barcode 4 test ');
+    $transaction = C4::SIP::ILS::Transaction::Checkout->new();
+    is( $sip_item->{barcode}, $item1->{barcode}, "Item assigned to transaction" );
 };
 $schema->storage->txn_rollback;
