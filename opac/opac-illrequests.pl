@@ -85,6 +85,8 @@ if ( $op eq 'list' ) {
         illrequest_id  => $params->{illrequest_id}
     });
     $request->notesopac($params->{notesopac})->store;
+    # Send a notice to staff alerting them of the update
+    $request->send_staff_notice('ILL_REQUEST_MODIFIED');
     print $query->redirect(
         '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id=' .
         $params->{illrequest_id} .

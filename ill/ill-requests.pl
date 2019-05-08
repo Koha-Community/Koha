@@ -23,6 +23,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Output;
+use Koha::Notice::Templates;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
 use Koha::Illrequests;
@@ -72,12 +73,28 @@ if ( $backends_available ) {
         # View the details of an ILL
         my $request = Koha::Illrequests->find($params->{illrequest_id});
 
+        # Get the details for notices that can be sent from here
+        my $notices = Koha::Notice::Templates->search(
+            {
+                module => 'ill',
+                code => { -in => [ 'ILL_PICKUP_READY' ,'ILL_REQUEST_UNAVAIL' ] },
+            },
+            {
+                columns => [ qw/code name/ ],
+                distinct => 1
+            }
+        )->unblessed;
+
         $template->param(
+            notices    => $notices,
             request    => $request,
             csrf_token => Koha::Token->new->generate_csrf({
                 session_id => scalar $cgi->cookie('CGISESSID'),
             }),
-            ( $params->{error} ? ( error => $params->{error} ) : () ),
+            ( $params->{tran_error} ?
+                ( tran_error => $params->{tran_error} ) : () ),
+            ( $params->{tran_success} ?
+                ( tran_success => $params->{tran_success} ) : () ),
         );
 
     } elsif ( $op eq 'create' ) {
@@ -380,6 +397,23 @@ if ( $backends_available ) {
         );
         exit;
 
+    } elsif ( $op eq "send_notice" ) {
+        my $illrequest_id = $params->{illrequest_id};
+        my $request = Koha::Illrequests->find($illrequest_id);
+        my $ret = $request->send_patron_notice($params->{notice_code});
+        my $append = '';
+        if ($ret->{result} && scalar @{$ret->{result}->{success}} > 0) {
+            $append .= '&tran_success=' . join(',', @{$ret->{result}->{success}});
+        }
+        if ($ret->{result} && scalar @{$ret->{result}->{fail}} > 0) {
+            $append .= '&tran_fail=' . join(',', @{$ret->{result}->{fail}}.join(','));
+        }
+        # Redirect to view the whole request
+        print $cgi->redirect(
+            "/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=".
+            scalar $params->{illrequest_id} . $append
+        );
+        exit;
     } else {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result = $request->custom_capability($op, $params);

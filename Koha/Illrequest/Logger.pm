@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Templates;
 use C4::Log qw( logaction );
 use Koha::ActionLogs;
+use Koha::Notice::Template;
 
 =head1 NAME
 
@@ -62,6 +63,9 @@ sub new {
     $self->{loggers} = {
         status => sub {
             $self->log_status_change(@_);
+        },
+        patron_notice => sub {
+            $self->log_patron_notice(@_);
         }
     };
 
@@ -70,7 +74,8 @@ sub new {
         C4::Templates::_get_template_file('ill/log/', 'intranet', $query);
 
     $self->{templates} = {
-        STATUS_CHANGE => $base . 'status_change.tt'
+        STATUS_CHANGE => $base . 'status_change.tt',
+        PATRON_NOTICE => $base . 'patron_notice.tt'
     };
 
     bless $self, $class;
@@ -100,6 +105,31 @@ sub log_maybe {
                 );
             }
         }
+    }
+}
+
+=head3 log_patron_notice
+
+    Koha::IllRequest::Logger->log_patron_notice($params);
+
+Receive a hashref containing a request object and params to log,
+and log it
+
+=cut
+
+sub log_patron_notice {
+    my ( $self, $params ) = @_;
+
+    if (defined $params->{request} && defined $params->{notice_code}) {
+        $self->log_something({
+            modulename   => 'ILL',
+            actionname   => 'PATRON_NOTICE',
+            objectnumber => $params->{request}->id,
+            infos        => to_json({
+                log_origin    => 'core',
+                notice_code => $params->{notice_code}
+            })
+        });
     }
 }
 
@@ -210,6 +240,14 @@ sub get_request_logs {
         { order_by => { -desc => "timestamp" } }
     )->unblessed;
 
+    # Populate a lookup table for all ILL notice types
+    my $notice_types = Koha::Notice::Templates->search({
+        module => 'ill'
+    })->unblessed;
+    my $notice_hash;
+    foreach my $notice(@{$notice_types}) {
+        $notice_hash->{$notice->{code}} = $notice;
+    }
     # Populate a lookup table for status aliases
     my $aliases = C4::Koha::GetAuthorisedValues('ILLSTATUS');
     my $alias_hash;
@@ -217,6 +255,7 @@ sub get_request_logs {
         $alias_hash->{$alias->{authorised_value}} = $alias;
     }
     foreach my $log(@{$logs}) {
+        $log->{notice_types} = $notice_hash;
         $log->{aliases} = $alias_hash;
         $log->{info} = from_json($log->{info});
         $log->{template} = $self->get_log_template({

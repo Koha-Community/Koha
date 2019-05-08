@@ -25,6 +25,8 @@ use Encode qw( encode );
 use Try::Tiny;
 use DateTime;
 
+use C4::Letters;
+use C4::Members;
 use Koha::Database;
 use Koha::DateUtils qw/ dt_from_string /;
 use Koha::Email;
@@ -248,6 +250,7 @@ sub status_alias {
 
 Overloaded getter/setter for request status,
 also nullifies status_alias and records the fact that the status has changed
+and sends a notice if appropriate
 
 =cut
 
@@ -281,6 +284,10 @@ sub status {
             });
         }
         delete $self->{previous_status};
+        # If status has changed to cancellation requested, send a notice
+        if ($new_status eq 'CANCREQ') {
+            $self->send_staff_notice('ILL_REQUEST_CANCEL');
+        }
         return $ret;
     } else {
         return $current_status;
@@ -1287,38 +1294,11 @@ sub generic_confirm {
     my $library = Koha::Libraries->find($params->{current_branchcode})
         || die "Invalid current branchcode. Are you logged in as the database user?";
     if ( !$params->{stage}|| $params->{stage} eq 'init' ) {
-        my $draft->{subject} = "ILL Request";
-        $draft->{body} = <<EOF;
-Dear Sir/Madam,
-
-    We would like to request an interlibrary loan for a title matching the
-following description:
-
-EOF
-
-        my $details = $self->metadata;
-        while (my ($title, $value) = each %{$details}) {
-            $draft->{body} .= "  - " . $title . ": " . $value . "\n"
-                if $value;
-        }
-        $draft->{body} .= <<EOF;
-
-Please let us know if you are able to supply this to us.
-
-Kind Regards
-
-EOF
-
-        my @address = map { $library->$_ }
-            qw/ branchname branchaddress1 branchaddress2 branchaddress3
-                branchzip branchcity branchstate branchcountry branchphone
-                branchillemail branchemail /;
-        my $address = "";
-        foreach my $line ( @address ) {
-            $address .= $line . "\n" if $line;
-        }
-
-        $draft->{body} .= $address;
+        # Get the message body from the notice definition
+        my $letter = $self->get_notice({
+            notice_code => 'ILL_PARTNER_REQ',
+            transport   => 'email'
+        });
 
         my $partners = Koha::Patrons->search({
             categorycode => $self->_config->partner_code
@@ -1330,7 +1310,10 @@ EOF
             method  => 'generic_confirm',
             stage   => 'draft',
             value   => {
-                draft    => $draft,
+                draft => {
+                    subject => $letter->{title},
+                    body    => $letter->{content}
+                },
                 partners => $partners,
             }
         };
@@ -1346,57 +1329,280 @@ EOF
             "No target email addresses found. Either select at least one partner or check your ILL partner library records.")
           if ( !$to );
         # Create the from, replyto and sender headers
-        my $from = $library->branchemail;
-        my $reply_to = $library->branchreplyto || $from;
+        my $from = $branch->branchillemail || $branch->branchemail;
+        my $replyto = $branch->branchreplyto || $from;
         Koha::Exceptions::Ill::NoLibraryEmail->throw(
             "Your library has no usable email address. Please set it.")
           if ( !$from );
 
-        # Create the email
-        my $email = Koha::Email->create(
-            {
-                to        => $to,
-                from      => $from,
-                reply_to  => $reply_to,
-                subject   => $params->{subject},
-                text_body => $params->{body},
+        # So we get a notice hashref, then substitute the possibly
+        # modified title and body from the draft stage
+        my $letter = $self->get_notice({
+            notice_code => 'ILL_PARTNER_REQ',
+            transport   => 'email'
+        });
+        $letter->{title} = $params->{subject};
+        $letter->{content} = $params->{body};
+
+        # Send the email
+        my $params = {
+            letter                 => $letter,
+            borrowernumber         => $self->borrowernumber,
+            message_transport_type => 'email',
+            to_address             => $to,
+            from_address           => $from
+        };
+
+        if ($letter) {
+            my $result = C4::Letters::EnqueueLetter($params);
+            if ( $result ) {
+                $self->status("GENREQ")->store;
+                $self->_backend_capability(
+                    'set_requested_partners',
+                    {
+                        request => $self,
+                        to => $to
+                    }
+                );
+                return {
+                    error   => 0,
+                    status  => '',
+                    message => '',
+                    method  => 'generic_confirm',
+                    stage   => 'commit',
+                    next    => 'illview',
+                };
             }
-        );
-
-        # Send it
-        try {
-
-            $email->send_or_die({ transport => $library->smtp_server->transport });
-
-            $self->status("GENREQ")->store;
-            $self->_backend_capability(
-                'set_requested_partners',
-                {
-                    request => $self,
-                    to => $to
-                }
-            );
-            return {
-                error   => 0,
-                status  => '',
-                message => '',
-                method  => 'generic_confirm',
-                stage   => 'commit',
-                next    => 'illview',
-            };
         }
-        catch {
-            return {
-                error   => 1,
-                status  => 'email_failed',
-                message => "$_",
-                method  => 'generic_confirm',
-                stage   => 'draft',
-            };
+        return {
+            error   => 1,
+            status  => 'email_failed',
+            message => 'Email queueing failed',
+            method  => 'generic_confirm',
+            stage   => 'draft',
         };
     } else {
         die "Unknown stage, should not have happened."
     }
+}
+
+=head3 get_staff_to_address
+
+    my $email = $request->get_staff_to_address();
+
+Get the email address to which staff notices should be sent
+
+=cut
+
+sub get_staff_to_address {
+    my ( $self ) = @_;
+
+    # The various places we can get an ILL staff email address from
+    # (In order of preference)
+    #
+    # Dedicated branch address
+    my $library = Koha::Libraries->find( $self->branchcode );
+    my $branch_ill_to = $library->branchillemail;
+    # General purpose ILL address from syspref
+    my $syspref = C4::Context->preference("ILLDefaultStaffEmail");
+    # Branch general email address
+    my $branch_to = $library->branchemail;
+    # Last resort
+    my $koha_admin = C4::Context->preference('KohaAdminEmailAddress');
+
+    my $to;
+    if ($branch_ill_to) {
+        $to = $branch_ill_to;
+    } elsif ($syspref) {
+        $to = $syspref;
+    } elsif ($branch_to) {
+        $to = $branch_to;
+    } elsif ($koha_admin) {
+        $to = $koha_admin;
+    }
+
+    # $to will not be defined if we didn't find a usable address
+    return $to;
+}
+
+=head3 send_patron_notice
+
+    my $result = $request->send_patron_notice($notice_code);
+
+Send a specified notice regarding this request to a patron
+
+=cut
+
+sub send_patron_notice {
+    my ( $self, $notice_code ) = @_;
+
+    # We need a notice code
+    if (!$notice_code) {
+        return {
+            error => 'notice_no_type'
+        };
+    }
+
+    # Map from the notice code to the messaging preference
+    my %message_name = (
+        ILL_PICKUP_READY   => 'Ill_ready',
+        ILL_REQUEST_UNAVAIL => 'Ill_unavailable'
+    );
+
+    # Get the patron's messaging preferences
+    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
+        borrowernumber => $self->borrowernumber,
+        message_name   => $message_name{$notice_code}
+    });
+    my @transports = keys %{ $borrower_preferences->{transports} };
+
+    # Send the notice to the patron via the chosen transport methods
+    # and record the results
+    my @success = ();
+    my @fail = ();
+    for my $transport (@transports) {
+        my $letter = $self->get_notice({
+            notice_code => $notice_code,
+            transport   => $transport
+        });
+        if ($letter) {
+            my $result = C4::Letters::EnqueueLetter({
+                letter                 => $letter,
+                borrowernumber         => $self->borrowernumber,
+                message_transport_type => $transport,
+            });
+            if ($result) {
+                push @success, $transport;
+            } else {
+                push @fail, $transport;
+            }
+        } else {
+            push @fail, $transport;
+        }
+    }
+    if (scalar @success > 0) {
+        my $logger = Koha::Illrequest::Logger->new;
+        $logger->log_patron_notice({
+            request => $self,
+            notice_code => $notice_code
+        });
+    }
+    return {
+        result => {
+            success => \@success,
+            fail    => \@fail
+        }
+    };
+}
+
+=head3 send_staff_notice
+
+    my $result = $request->send_staff_notice($notice_code);
+
+Send a specified notice regarding this request to staff
+
+=cut
+
+sub send_staff_notice {
+    my ( $self, $notice_code ) = @_;
+
+    # We need a notice code
+    if (!$notice_code) {
+        return {
+            error => 'notice_no_type'
+        };
+    }
+
+    # Get the staff notices that have been assigned for sending in
+    # the syspref
+    my $staff_to_send = C4::Context->preference('ILLSendStaffNotices');
+
+    # If it hasn't been enabled in the syspref, we don't want to send it
+    if ($staff_to_send !~ /\b$notice_code\b/) {
+        return {
+            error => 'notice_not_enabled'
+        };
+    }
+
+    my $letter = $self->get_notice({
+        notice_code => $notice_code,
+        transport   => 'email'
+    });
+
+    # Try and get an address to which to send staff notices
+    my $to_address = scalar $self->get_staff_to_address;
+
+    my $params = {
+        letter                 => $letter,
+        borrowernumber         => $self->borrowernumber,
+        message_transport_type => 'email',
+    };
+
+    if ($to_address) {
+        $params->{to_address} = $to_address;
+        $params->{from_address} = $to_address;
+    } else {
+        return {
+            error => 'notice_no_create'
+        };
+    }
+
+    if ($letter) {
+        C4::Letters::EnqueueLetter($params)
+            or warn "can't enqueue letter $letter";
+        return {
+            success => 'notice_queued'
+        };
+    } else {
+        return {
+            error => 'notice_no_create'
+        };
+    }
+}
+
+=head3 get_notice
+
+    my $notice = $request->get_notice($params);
+
+Return a compiled notice hashref for the passed notice code
+and transport type
+
+=cut
+
+sub get_notice {
+    my ( $self, $params ) = @_;
+
+    my $title = $self->illrequestattributes->find(
+        { type => 'title' }
+    );
+    my $author = $self->illrequestattributes->find(
+        { type => 'author' }
+    );
+    my $metahash = $self->metadata;
+    my @metaarray = ();
+    while (my($key, $value) = each %{$metahash}) {
+        push @metaarray, "- $key: $value" if $value;
+    }
+    my $metastring = join("\n", @metaarray);
+    my $letter = C4::Letters::GetPreparedLetter(
+        module                 => 'ill',
+        letter_code            => $params->{notice_code},
+        message_transport_type => $params->{transport},
+        lang                   => $self->patron->lang,
+        tables                 => {
+            illrequests => $self->illrequest_id,
+            borrowers   => $self->borrowernumber,
+            biblio      => $self->biblio_id,
+            branches    => $self->branchcode,
+        },
+        substitute  => {
+            ill_bib_title      => $title ? $title->value : 'N/A',
+            ill_bib_author     => $author ? $author->value : 'N/A',
+            ill_full_metadata  => $metastring
+        }
+    );
+
+    return $letter;
 }
 
 =head3 id_prefix

@@ -1,0 +1,6 @@
+[% USE KohaDates %]
+<p>
+[% log.timestamp | $KohaDates with_hours => 1 %] : <b>Patron notice sent: </b>
+[% notice_code = log.info.notice_code %]
+&quot;[% log.notice_types.$notice_code.name | html %]&quot;
+</p>
