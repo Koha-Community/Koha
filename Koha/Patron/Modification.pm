@@ -92,13 +92,17 @@ sub approve {
     delete $data->{verification_token};
     delete $data->{extended_attributes};
 
-    foreach my $key ( keys %$data ) {
-        delete $data->{$key} unless ( defined( $data->{$key} ) );
-    }
-
     my $patron = Koha::Patrons->find( $self->borrowernumber );
-
     return unless $patron;
+
+    foreach my $key ( keys %$data ) {
+        next # Unset it!
+          if $key eq 'dateofbirth'
+          && $patron->dateofbirth
+          && not defined $data->{$key};
+
+        delete $data->{$key} unless defined $data->{$key};
+    }
 
     $patron->set($data);
 

@@ -132,7 +132,11 @@ sub pending {
 
                 $row->{$key} = \@pending_attributes;
             }
-            delete $row->{$key} unless defined $row->{$key};
+            if ( $key eq 'dateofbirth' and not defined $row->{$key}) {
+                $row->{$key} = '';
+            } else {
+                delete $row->{$key} unless defined $row->{$key};
+            }
         }
 
         push( @m, $row );
