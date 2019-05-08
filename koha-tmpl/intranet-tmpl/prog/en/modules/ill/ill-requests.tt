@@ -99,6 +99,10 @@
                     </p>
                 [% END %]
 
+                [% IF whole.success %]
+                    <p>[% whole.success | html %]</p>
+                [% END %]
+
                 [% IF query_type == 'create' %]
                     <h1>New ILL request</h1>
                     [% PROCESS $whole.template %]
@@ -462,6 +466,31 @@
                       [% END %]
                     [% END %]
 
+                    [% IF tran_success %]
+                        [% succ_methods = [] %]
+                        [% IF tran_success.match('email') %]
+                            [% succ_methods.push('email') %]
+                        [% END %]
+                        [% IF tran_success.match('sms') %]
+                            [% succ_methods.push('SMS') %]
+                        [% END %]
+                        <div class="alert">
+                            The requested notice was queued for delivery by [% succ_methods.join(', ') | html %]
+                        </div>
+                    [% END %]
+                    [% IF tran_fail %]
+                        [% fail_methods = [] %]
+                        [% IF tran_fail.match('email') %]
+                            [% fail_methods.push('email') %]
+                        [% END %]
+                        [% IF tran_fail.match('sms') %]
+                            [% fail_methods.push('SMS') %]
+                        [% END %]
+                        <div class="alert">
+                            The requested notice was NOT queued for delivery by [% fail_methods.join(', ') | html %]
+                        </div>
+                    [% END %]
+
                     <h1>Manage ILL request</h1>
                     <div id="request-toolbar" class="btn-toolbar">
                         <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
@@ -523,6 +552,16 @@
                                 </a>
                             [% END %]
                         [% END %]
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="ill-notice-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa fa-envelope"></i> Send notice to patron <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="ill-notice-dropdown">
+                                [% FOREACH notice IN notices %]
+                                    <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=send_notice&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;notice_code=[% notice.code | uri %]">[% notice.name | html %]</a></li>
+                                [% END %]
+                            </ul>
+                        </div>
                         <a title="Display supplier metadata" id="ill-request-display-metadata" class="btn btn-default pull-right" href="#">
                             <span class="fa fa-eye"></span>
                             Display supplier metadata
