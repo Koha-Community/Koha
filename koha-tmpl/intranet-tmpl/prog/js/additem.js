@@ -154,7 +154,7 @@ function cloneItemBlock(index, unique_item_fields, callback) {
     }
     var dont_copy_fields = new Array();
     if(unique_item_fields) {
-        var dont_copy_fields = unique_item_fields.split(' ');
+        var dont_copy_fields = unique_item_fields.split('|');
         for(i in dont_copy_fields) {
             dont_copy_fields[i] = "items." + dont_copy_fields[i];
         }
@@ -247,7 +247,7 @@ function check_additem(unique_item_fields) {
     var data = new Object();
     data['field'] = new Array();
     data['value'] = new Array();
-    var array_fields = unique_item_fields.split(' ');
+    var array_fields = unique_item_fields.split('|');
     $(".order_error").empty(); // Clear error div
 
     // Check if a value is duplicated in form
