@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use utf8;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
 use t::lib::TestBuilder;
@@ -369,6 +369,45 @@ subtest 'pending_count() and pending() tests' => sub {
 
     is( Koha::Patron::Modifications->pending_count,
         0, 'pending_count() correctly returns 0' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'dateofbirth tests' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    # Cleaning the field
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { dateofbirth => '1980-01-01' } } );
+    my $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, dateofbirth => undef }
+    )->store;
+    $patron_modification->approve;
+
+    $patron->discard_changes;
+    is( $patron->dateofbirth, undef, 'dateofbirth must a been set to NULL if required' );
+
+    # FIXME ->approve must have been removed it, but it did not. There may be an hidden bug here.
+    Koha::Patron::Modifications->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # Adding a dateofbirth
+    $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, dateofbirth => '1980-02-02' }
+    )->store;
+    $patron_modification->approve;
+
+    $patron->discard_changes;
+    is( $patron->dateofbirth, '1980-02-02', 'dateofbirth must a been set' );
+
+    # FIXME ->approve must have been removed it, but it did not. There may be an hidden bug here.
+    Koha::Patron::Modifications->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # Modifying a dateofbirth
+    $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, dateofbirth => '1980-03-03' }
+    )->store;
+    $patron_modification->approve;
+
+    $patron->discard_changes;
+    is( $patron->dateofbirth, '1980-03-03', 'dateofbirth must a been updated' );
 
     $schema->storage->txn_rollback;
 };
