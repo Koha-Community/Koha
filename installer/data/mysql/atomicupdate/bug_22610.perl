@@ -40,6 +40,35 @@ if ( CheckVersion($DBversion) ) {
           accounttype = 'Pay02';
     });
 
+    my $sth = $dbh->prepare( qq{SELECT * FROM accountlines WHERE accounttype LIKE "Pay%" AND accounttype != "Pay" } );
+    $sth->execute();
+    my $seen = {};
+    while (my $row = $sth->fetchrow_hashref) {
+        my $type = $row->{accounttype};
+        my $sipcode = $type;
+        $sipcode =~ s/Pay/SIP/g;
+        unless ($seen->{$sipcode}) {
+            $dbh->do(qq{
+                INSERT INTO
+                  authorised_values (category,authorised_value,lib)
+                VALUES
+                  ('PAYMENT_TYPE',"$sipcode",'Unrecognised SIP2 payment type')
+            });
+
+             $dbh->do(qq{
+                UPDATE
+                  accountlines
+                SET
+                  accounttype  = 'Pay',
+                  payment_type = "$sipcode"
+                WHERE
+                  accounttype = "$type";
+            });
+
+            $seen->{$sipcode} = 1;
+        }
+    }
+
     SetVersion($DBversion);
     print "Upgrade to $DBversion done (Bug 22610 - Fix accounttypes for SIP2 payments)\n";
 }
