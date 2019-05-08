@@ -552,7 +552,9 @@ $(document).ready(function() {
             [% ELSE %]
             <input id="guarantorsearch" type="button" value="Set to patron" onclick="Dopopguarantor('guarantor_search.pl');" />
             [% END %]
+	    [% IF ( borrower_category_type != "C" ) %]
             <input id="guarantordelete" type="button" value="Delete" />
+	    [% END %]
         </li>
     [% IF guarantorid && Koha.Preference('AllowStaffToSetCheckoutsVisibilityForGuarantor') %]
         <li>

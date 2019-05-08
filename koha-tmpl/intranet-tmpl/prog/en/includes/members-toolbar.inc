@@ -208,7 +208,13 @@ function searchToHold(){
                         <li><a id="deletepatronremote" href="#">Delete remote</a></li>
                         <li><a id="deletepatronboth" href="#">Delete local and remote</a></li>
                     [% ELSE %]
+		      [% IF ( guarantor ) %]
+                         <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Cannot delete a patron with a guarantor" id="deletepatron" href="#">Delete</a></li>
+	              [% ELSIF ( guarantees ) %]
+                         <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Cannot delete a patron who is a guarantor" id="deletepatron" href="#">Delete</a></li>
+		      [% ELSE %]
                         <li><a id="deletepatron" href="#">Delete</a></li>
+	              [% END %]
                     [% END %]
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>

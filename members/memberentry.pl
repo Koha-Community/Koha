@@ -776,6 +776,7 @@ $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
   guarantorid => ($borrower_data->{'guarantorid'} || $guarantorid),
+  borrower_category_type => $borrower_data->{'category_type'} || '',
   relshiploop => \@relshipdata,
   btitle=> $default_borrowertitle,
   guarantorinfo   => $guarantorinfo,

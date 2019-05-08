@@ -57,6 +57,18 @@ my $cattype        = $input->param('cattype');
 my $catcode_multi = $input->param('catcode_multi');
 my $op             = $input->param('op');
 
+sub check_catcode_age {
+    my ($dateofbirth, $categorycode) = @_;
+    my $patron = Koha::Patron->new({ dateofbirth => $dateofbirth });
+    my $age = $patron->get_age;
+    my $borrowercategory = Koha::Patron::Categories->find($categorycode);
+    my ($low,$high) = ($borrowercategory->dateofbirthrequired, $borrowercategory->upperagelimit);
+    if (($high && ($age > $high)) or ($age < $low)) {
+	return 'ERROR_age_limitations';
+    }
+    return '';
+}
+
 if ( $op eq 'multi' ) {
     # FIXME - what are the possible upgrade paths?  C -> A , C -> S ...
     #   currently just allowing C -> A
@@ -72,7 +84,21 @@ if ( $op eq 'multi' ) {
 
 elsif ( $op eq 'update' ) {
     my $member = GetMember('borrowernumber'=>$borrowernumber);
+    my $error = check_catcode_age($member->{'dateofbirth'}, $catcode);
+    if ($error) {
+        $template->param(
+                ERROR        => $error,
+                borrowernumber => $borrowernumber,
+                );
+        output_html_with_http_headers $input, $cookie, $template->output;
+	exit;
+    }
+
     $member->{'guarantorid'}  = 0;
+    $member->{'relationship'} = 0;
+    $member->{'contactname'} = 0;
+    $member->{'contactfirstname'} = 0;
+    $member->{'contacttitle'} = 0;
     $member->{'categorycode'} = $catcode;
     my $borcat = Koha::Patron::Categories->find($catcode);
     $member->{'category_type'} = $borcat->category_type;
