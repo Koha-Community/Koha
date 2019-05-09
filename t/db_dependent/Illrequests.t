@@ -29,6 +29,9 @@ use Koha::Patrons;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::MessageAttributes;
+use Koha::MessageAttribute;
+use Koha::Notice::Templates;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
 use t::lib::Mocks;
@@ -515,7 +518,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 19;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -706,20 +709,13 @@ subtest 'Backend core methods' => sub {
     }) }
         "Generic confirm: missing to dies OK.";
 
-    dies_ok { $illrq->generic_confirm({
-        current_branchcode => $illbrn->{branchcode},
-        partners => $partner1->{email},
-        stage => 'draft'
-    }) }
-        "Generic confirm: missing from dies OK.";
-
     $schema->storage->txn_rollback;
 };
 
 
 subtest 'Helpers' => sub {
 
-    plan tests => 7;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -727,6 +723,16 @@ subtest 'Helpers' => sub {
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
     $backend->set_always('name', 'Mock');
+    $backend->mock(
+        'metadata',
+        sub {
+            my ( $self, $rq ) = @_;
+            return {
+                title => 'mytitle',
+                author => 'myauthor'
+            }
+        }
+    );
 
     my $config = Test::MockObject->new;
     $config->set_always('backend_dir', "/tmp");
@@ -735,9 +741,19 @@ subtest 'Helpers' => sub {
         source => 'Borrower',
         value => { categorycode => "A" }
     });
+    # Create a mocked branch with no email addressed defined
+    my $illbrn = $builder->build({
+        source => 'Branch',
+        value => {
+            branchcode => 'HDE',
+            branchemail => "",
+            branchillemail => "",
+            branchreplyto => ""
+        }
+    });
     my $illrq = $builder->build({
         source => 'Illrequest',
-        value => { branchcode => "CPL", borrowernumber => $patron->{borrowernumber} }
+        value => { branchcode => "HDE", borrowernumber => $patron->{borrowernumber} }
     });
     my $illrq_obj = Koha::Illrequests->find($illrq->{illrequest_id});
     $illrq_obj->_config($config);
@@ -745,12 +761,12 @@ subtest 'Helpers' => sub {
 
     # getPrefix
     $config->set_series('getPrefixes',
-                        { CPL => "TEST", TSL => "BAR", default => "DEFAULT" },
+                        { HDE => "TEST", TSL => "BAR", default => "DEFAULT" },
                         { A => "ATEST", C => "CBAR", default => "DEFAULT" });
-    is($illrq_obj->getPrefix({ brw_cat => "UNKNOWN", branch => "CPL" }), "TEST",
+    is($illrq_obj->getPrefix({ brw_cat => "UNKNOWN", branch => "HDE" }), "TEST",
        "getPrefix: branch");
     $config->set_series('getPrefixes',
-                        { CPL => "TEST", TSL => "BAR", default => "DEFAULT" },
+                        { HDE => "TEST", TSL => "BAR", default => "DEFAULT" },
                         { A => "ATEST", C => "CBAR", default => "DEFAULT" });
     is($illrq_obj->getPrefix({ branch => "UNKNOWN" }), "",
        "getPrefix: default");
@@ -760,11 +776,11 @@ subtest 'Helpers' => sub {
 
     # id_prefix
     $config->set_series('getPrefixes',
-                        { CPL => "TEST", TSL => "BAR", default => "DEFAULT" },
+                        { HDE => "TEST", TSL => "BAR", default => "DEFAULT" },
                         { AB => "ATEST", CD => "CBAR", default => "DEFAULT" });
     is($illrq_obj->id_prefix, "TEST-", "id_prefix: branch");
     $config->set_series('getPrefixes',
-                        { CPLT => "TEST", TSLT => "BAR", default => "DEFAULT" },
+                        { HDET => "TEST", TSLT => "BAR", default => "DEFAULT" },
                         { AB => "ATEST", CD => "CBAR", default => "DEFAULT" });
     is($illrq_obj->id_prefix, "", "id_prefix: default");
 
@@ -773,6 +789,148 @@ subtest 'Helpers' => sub {
     is($illrq_obj->requires_moderation, undef, "requires_moderation: No.");
     $illrq_obj->status('CANCREQ')->store;
     is($illrq_obj->requires_moderation, 'CANCREQ', "requires_moderation: Yes.");
+
+    #send_patron_notice
+    my $attr = Koha::MessageAttributes->find({ message_name => 'Ill_ready' });
+    C4::Members::Messaging::SetMessagingPreference({
+        borrowernumber => $patron->{borrowernumber},
+        message_attribute_id => $attr->message_attribute_id,
+        message_transport_types => ['email']
+    });
+    my $return_patron = $illrq_obj->send_patron_notice('ILL_PICKUP_READY');
+    my $notice = $schema->resultset('MessageQueue')->search({
+            letter_code => 'ILL_PICKUP_READY',
+            message_transport_type => 'email',
+            borrowernumber => $illrq_obj->borrowernumber
+        })->next()->letter_code;
+    is_deeply(
+        $return_patron,
+        { result => { success => ['email'], fail => [] } },
+        "Correct return when notice created"
+    );
+    is($notice, 'ILL_PICKUP_READY' ,"Notice is correctly created");
+
+    my $return_patron_fail = $illrq_obj->send_patron_notice();
+    is_deeply(
+        $return_patron_fail,
+        { error => 'notice_no_type' },
+        "Correct error when missing type"
+    );
+
+    #get_staff_to_address
+    # Mock a KohaAdminEmailAddress syspref
+    t::lib::Mocks::mock_preference(
+        'KohaAdminEmailAddress',
+        'kohaadmin@nowhere.com'
+    );
+    # No branch addresses defined and no ILLDefaultStaffEmail, so should
+    # fall back to Koha admin address
+    my $email_kohaadmin = $illrq_obj->get_staff_to_address;
+    ok(
+        $email_kohaadmin eq 'kohaadmin@nowhere.com',
+        'get_staff_to_address falls back to Koha admin in the absence of other alternatives'
+    );
+    # General branch address defined, should fall back to that
+    $builder->delete({ source => 'Branch', records => $illbrn });
+    $illbrn = $builder->build({
+        source => 'Branch',
+        value => {
+            branchcode => 'HDE',
+            branchemail => 'branch@nowhere.com',
+            branchillemail => "",
+            branchreplyto => ""
+        }
+    });
+    my $email_gen_branch = $illrq_obj->get_staff_to_address;
+    ok(
+        $email_gen_branch eq 'branch@nowhere.com',
+        'get_staff_to_address falls back to general branch address when defined'
+    );
+    # ILL staff syspref address defined, should fall back to that
+    t::lib::Mocks::mock_preference(
+        'ILLDefaultStaffEmail',
+        'illstaff@nowhere.com'
+    );
+    my $email_syspref = $illrq_obj->get_staff_to_address;
+    ok(
+        $email_syspref eq 'illstaff@nowhere.com',
+        'get_staff_to_address falls back to ILLDefaultStaffEmail when defined'
+    );
+    # Branch ILL address defined, should use that
+    $builder->delete({ source => 'Branch', records => $illbrn });
+    $illbrn = $builder->build({
+        source => 'Branch',
+        value => {
+            branchcode => 'HDE',
+            branchemail => 'branch@nowhere.com',
+            branchillemail => 'branchill@nowhere.com',
+            branchreplyto => ""
+        }
+    });
+    my $email_branch = $illrq_obj->get_staff_to_address;
+    ok(
+        $email_branch eq 'branchill@nowhere.com',
+        'get_staff_to_address uses branch ILL address when defined'
+    );
+
+    #send_staff_notice
+    # Specify that no staff notices should be send
+    t::lib::Mocks::mock_preference('ILLSendStaffNotices', '');
+    my $return_staff_cancel_fail =
+        $illrq_obj->send_staff_notice('ILL_REQUEST_CANCEL');
+    is_deeply(
+        $return_staff_cancel_fail,
+        { error => 'notice_not_enabled' },
+        "Does not send notices that are not enabled"
+    );
+    # Specify that the cancel notice can be sent
+    t::lib::Mocks::mock_preference('ILLSendStaffNotices', 'ILL_REQUEST_CANCEL');
+    my $return_staff_cancel = $illrq_obj->send_staff_notice(
+        'ILL_REQUEST_CANCEL'
+    );
+    my $cancel = $schema->resultset('MessageQueue')->search({
+            letter_code => 'ILL_REQUEST_CANCEL',
+            message_transport_type => 'email',
+            to_address => 'branchill@nowhere.com'
+        })->next()->letter_code;
+    is_deeply(
+        $return_staff_cancel,
+        { success => 'notice_queued' },
+        "Correct return when staff notice created"
+    );
+
+    my $return_staff_fail = $illrq_obj->send_staff_notice();
+    is_deeply(
+        $return_staff_fail,
+        { error => 'notice_no_type' },
+        "Correct error when missing type"
+    );
+
+    #get_notice
+    my $not = $illrq_obj->get_notice({
+        notice_code => 'ILL_REQUEST_CANCEL',
+        transport   => 'email'
+    });
+
+    # We test the properties of the hashref separately because the random
+    # hash ordering of the metadata means we can't test the entire thing
+    # with is_deeply
+    ok(
+        $not->{module} eq 'ill',
+        'Correct module return from get_notice'
+    );
+    ok(
+        $not->{name} eq 'ILL request cancelled',
+        'Correct name return from get_notice'
+    );
+    ok(
+        $not->{message_transport_type} eq 'email',
+        'Correct message_transport_type return from get_notice'
+    );
+    ok(
+        $not->{title} eq 'Interlibrary loan request cancelled',
+        'Correct title return from get_notice'
+    );
 
     $schema->storage->txn_rollback;
 };
