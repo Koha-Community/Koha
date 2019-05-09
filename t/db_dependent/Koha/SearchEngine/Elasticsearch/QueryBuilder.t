@@ -346,10 +346,10 @@ subtest 'build_query tests' => sub {
         "query of just '*' is unaltered when QueryAutoTruncate is enabled"
     );
 
-    ( undef, $query ) = $qb->build_query_compat( undef, ['"donald duck"'] );
+    ( undef, $query ) = $qb->build_query_compat( undef, ['"donald duck"'], undef, ['available'] );
     is(
         $query->{query}{query_string}{query},
-        '("donald duck")',
+        '("donald duck") AND onloan:false',
         "query with quotes is unaltered when QueryAutoTruncate is enabled"
     );
 
