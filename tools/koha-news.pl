@@ -144,7 +144,7 @@ elsif ( $op eq 'del' ) {
 
 else {
 
-    my ( $opac_news_count, $opac_news ) = &get_opac_news( undef, $lang, $branchcode );
+    my ( $opac_news_count, $opac_news ) = &get_opac_news( undef, undef, undef );
     
     foreach my $new ( @$opac_news ) {
         next unless $new->{'expirationdate'};
