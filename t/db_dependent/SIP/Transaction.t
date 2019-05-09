@@ -86,8 +86,9 @@ subtest fill_holds_at_checkout => sub {
     is( ref $transaction, "C4::SIP::ILS::Transaction::Checkout", "New transaction created" );
     is( $transaction->patron( $sip_patron ), $sip_patron, "Patron assigned to transaction" );
     is( $transaction->item( $sip_item ), $sip_item, "Item assigned to transaction" );
-    $transaction->do_checkout();
-    is( $bib->holds->count(), 1, "Bib has 1 holds remaining");
+    my $checkout = $transaction->do_checkout();
+    use Data::Printer colored => 1; # Temporary debug statement
+    is( $bib->holds->count(), 1, "Bib has 1 holds remaining") or diag p $checkout;
 
     t::lib::Mocks::mock_preference('itemBarcodeInputFilter', 'whitespace');
     $sip_item   = C4::SIP::ILS::Item->new( ' barcode 4 test ');
