@@ -79,6 +79,7 @@
         </div>
         <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
         <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
+        <button class="btn btn-default hide" id="set-keyboard-layout" data-target="#keyboard-layout" data-toggle="modal" title="Set virtual keyboard layout"><i class="fa fa-keyboard-o"></i> Keyboard layout </button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
@@ -266,6 +267,25 @@
 </div>
 </div>
 </div>
+</div>
+
+<div id="keyboard-layout" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Set virtual keyboard layout</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Filter layouts</label>
+                    <input type="search" class="form-control filter"/>
+                </div>
+                <hr/>
+                <div class="layouts"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="shortcuts-contents" style="display: none">

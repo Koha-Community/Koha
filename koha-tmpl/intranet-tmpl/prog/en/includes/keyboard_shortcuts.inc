@@ -11,5 +11,6 @@
     [%- CASE 'line_break' -%]<span>Insert line break</span>
     [%- CASE 'next_position' -%]<span>Move to next position</span>
     [%- CASE 'prev_position' -%]<span>Move to previous position</span>
+    [%- CASE 'toggle_keyboard' -%]<span>Toggle Keyboard</span>
     [%- END -%]
 [%- END -%]

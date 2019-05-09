@@ -241,6 +241,11 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
         cm.replaceRange( "‡", cur, null );
     }
 
+    _editorKeys[toggle_keyboard] = function( cm ) {
+       let keyboard = $(cm.getInputField()).getkeyboard();
+       keyboard.isVisible()?keyboard.close():keyboard.reveal();
+    }
+
     // The objects below are part of a field/subfield manipulation API, accessed through the base
     // editor object.
     //
@@ -493,6 +498,79 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
                 }
             }
         );
+        var inf = this.cm.getInputField();
+        var self = this;
+        var kb = $(inf).keyboard({
+            //keyBinding: "mousedown touchstart",
+            usePreview: false,
+            lockInput: false,
+            autoAccept: true,
+            autoAcceptOnEsc: true,
+            userClosed: true,
+            //alwaysOpen: true,
+            openOn : '',
+            position: {
+              of: $("#statusbar"), // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
+              my: 'center top',
+              at: 'center bottom',
+              at2: 'center bottom' // used when "usePreview" is false (centers keyboard at bottom of the input/textarea)
+            },
+            beforeInsert: function(evnt, keyboard, elem, txt) {
+              var position = self.cm.getCursor();
+              if (txt === "\b") {
+                self.cm.execCommand("delCharBefore");
+              }
+              if (txt === "\b" && position.ch === 0 && position.line !== 0) {
+                elem.value = self.cm.getLine(position.line) || "";
+                txt = "";
+              }
+              return txt;
+            },
+            visible: function() {
+                $('#set-keyboard-layout').removeClass('hide');
+            },
+            hidden: function(e, keyboard, el, accepted) {
+                inf.focus();
+                $('#set-keyboard-layout').addClass('hide');
+            }
+          }).getkeyboard();
+
+
+        Object.keys($.keyboard.layouts).forEach(function(layout) {
+            var div = $('#keyboard-layout .layouts').append('<div class="layout" data-layout="'+layout+'" data-name="'+($.keyboard.layouts[layout].name||layout)+'" >'+($.keyboard.layouts[layout].name||layout)+'</div>')
+            if(kb.layout == layout) {
+                div.addClass('active');
+            }
+        });
+        $('#keyboard-layout')
+            .on('show.bs.modal', function() {
+                kb.close();
+                $('#keyboard-layout .filter').focus();
+                $('#set-keyboard-layout').removeClass('hide');
+            })
+            .on('hide.bs.modal', function() {
+                !kb.isVisible() && kb.reveal();
+            });
+        $('#keyboard-layout .layout').click(function(event) {
+            $('#keyboard-layout .layout').removeClass('active');
+            $(this).addClass('active');
+            var layout = $(this).data().layout;
+            kb.redraw(layout);
+            $('#keyboard-layout').modal('hide');
+            $('#keyboard-layout .filter').val('');
+            $('#keyboard-layout .layout').show();
+        });
+        $('#keyboard-layout .filter').keyup(function() {
+            var val = $(this).val();
+            if(!val||!val.length) return $('#keyboard-layout .layout').show();
+            var filter = new RegExp(val, 'i');
+            $('#keyboard-layout .layout').hide();
+            $('#keyboard-layout .layout').each(function() {
+                var name = $(this).data().name;
+                if(filter.test(name)) $(this).show();
+            })
+        });
+
         this.cm.marceditor = this;
 
         this.cm.on( 'beforeChange', editorBeforeChange );

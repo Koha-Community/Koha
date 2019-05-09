@@ -2,6 +2,10 @@
 [% USE Koha %]
 [% Asset.js("lib/codemirror/codemirror-compressed.js") | $raw %]
 [% Asset.js("lib/filesaver.js") | $raw %]
+[% Asset.css("lib/keyboard/css/keyboard.min.css") | $raw %]
+[% Asset.js("lib/keyboard/js/jquery.keyboard.js") | $raw %]
+[% Asset.js("lib/keyboard/languages/all.min.js") | $raw %]
+[% Asset.js("lib/keyboard/layouts/all.min.js") | $raw %]
 [% Asset.js("lib/koha/cateditor/marc-mode.js") | $raw %]
 [% Asset.js("lib/require.js") | $raw %]
 <script>
