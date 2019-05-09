@@ -206,14 +206,12 @@ subtest 'add_credit() tests' => sub {
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
 
-    my $sip_code = "1";
     my $line_2 = $account->add_credit(
         {   amount      => 37,
             description => 'Payment of 37',
             library_id  => $patron->branchcode,
             note        => 'not really important',
             user_id     => $patron->id,
-            sip         => $sip_code,
             interface   => 'commandline'
         }
     );
@@ -221,7 +219,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -62, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'Action added to statistics' );
-    is( $line_2->accounttype, $Koha::Account::account_type_credit->{'payment'} . $sip_code, 'Account type is correctly set' );
+    is( $line_2->accounttype, $Koha::Account::account_type_credit->{'payment'}, 'Account type is correctly set' );
 
     # offsets have the credit_id set to accountlines_id, and debit_id is undef
     my $offset_1 = Koha::Account::Offsets->search({ credit_id => $line_1->id })->next;
@@ -332,7 +330,6 @@ subtest 'add_debit() tests' => sub {
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
 
-    my $sip_code = "1";
     my $line_2   = $account->add_debit(
         {
             amount      => 37,
