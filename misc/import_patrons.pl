@@ -137,6 +137,12 @@ Retain extended patron attributes for existing patrons being overwritten
 
 Be verbose
 
+Multiple -v options increase the verbosity
+
+2 repetitions or above will report lines in error
+
+3 repetitions or above will report feedback
+
 =back
 
 =cut
