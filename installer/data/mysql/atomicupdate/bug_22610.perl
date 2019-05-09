@@ -40,7 +40,7 @@ if ( CheckVersion($DBversion) ) {
           accounttype = 'Pay02';
     });
 
-    my $sth = $dbh->prepare( qq{SELECT * FROM accountlines WHERE accounttype LIKE "Pay%" AND accounttype != "Pay" } );
+    my $sth = $dbh->prepare( qq{SELECT * FROM accountlines WHERE accounttype REGEXP '^Pay[[:digit:]]{2}$' } );
     $sth->execute();
     my $seen = {};
     while (my $row = $sth->fetchrow_hashref) {
