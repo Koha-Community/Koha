@@ -32,6 +32,7 @@ sub get {
     my ( $self, $params ) = @_;
 
     my $display_location = $params->{location};
+    my $blocktitle = $params->{blocktitle};
     my $lang = $params->{lang};
     my $library = $params->{library} || "";
     my $news_lang;
@@ -44,7 +45,11 @@ sub get {
 
     my $content = &GetNewsToDisplay( $news_lang, $library );
 
-    return $content;
+    return {
+        content => $content,
+        location => $display_location,
+        blocktitle => $blocktitle
+    };
 }
 
 1;

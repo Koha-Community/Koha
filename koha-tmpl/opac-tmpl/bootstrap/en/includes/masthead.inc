@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]
+[% USE KohaNews %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 <div id="wrap">
     <div id="header-region" class="noprint">
@@ -143,15 +144,8 @@
             </div> <!-- /navbar-inner -->
         </div> <!-- /navbar -->
 
-        [% IF ( opacheader ) %]
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div id="opacheader">
-                        [% opacheader | $raw %]
-                    </div>
-                </div>
-            </div>
-        [% END %]
+        [% PROCESS koha_news_block news => KohaNews.get( location => "opacheader", lang => news_lang, library => branchcode, blocktitle => 0 ) %]
+
     </div> <!-- / header-region -->
 
     <div class="container-fluid">
