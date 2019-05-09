@@ -18422,6 +18422,16 @@ if ( CheckVersion($DBversion) ) {
 "Upgrade to $DBversion done (Bug 8000 - Add new preferences for SendAllEmailsTo)\n";
 }
 
+$DBversion = '18.12.00.068';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
+        ('AllowRenewalOnHoldOverride','0','','If on, allow items on hold to be renewed with a specified due date','YesNo');
+    });
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 7088: Cannot renew items on hold even with override)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
