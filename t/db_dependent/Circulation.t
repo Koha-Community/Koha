@@ -1985,7 +1985,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 
 
 subtest 'AddReturn | is_overdue' => sub {
-    plan tests => 8;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
     t::lib::Mocks::mock_preference('finesMode', 'production');
@@ -2044,49 +2044,62 @@ subtest 'AddReturn | is_overdue' => sub {
     my $ten_days_ago  = dt_from_string->subtract( days => 10 );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    # No date specify, today will be used
+    # No return date specified, today will be used => 10 days overdue charged
     AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
     AddReturn( $item->{barcode}, $library->{branchcode} );
     is( int($patron->account->balance()), 10, 'Patron should have a charge of 10 (10 days x 1)' );
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
 
-    # specify return date 5 days before => no overdue
+    # specify return date 5 days before => no overdue charged
     AddIssue( $patron->unblessed, $item->{barcode}, $five_days_ago ); # date due was 5d ago
     AddReturn( $item->{barcode}, $library->{branchcode}, undef, $ten_days_ago );
     is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue' );
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
 
-    # specify return date 5 days later => overdue
+    # specify return date 5 days later => 5 days overdue charged
     AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
     AddReturn( $item->{barcode}, $library->{branchcode}, undef, $five_days_ago );
     is( int($patron->account->balance()), 5, 'AddReturn: pass return_date => overdue' );
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
 
-    # specify dropbox date 5 days before => no overdue
-    AddIssue( $patron->unblessed, $item->{barcode}, $five_days_ago ); # date due was 5d ago
-    AddReturn( $item->{barcode}, $library->{branchcode}, $ten_days_ago );
+    # specify return date 5 days later, specify exemptfine => no overdue charge
+    AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
+    AddReturn( $item->{barcode}, $library->{branchcode}, 1, $five_days_ago );
     is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue' );
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
 
-    # specify dropbox date 5 days later => overdue, or... not
-    AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
-    AddReturn( $item->{barcode}, $library->{branchcode}, $five_days_ago );
-    is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the OVERDUE fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
-    Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+    subtest 'bug 22877' => sub {
 
-    # Checkout an item 10 days ago
-    my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
-    # Fake fines cronjob on this checkout
-    my ( $fine ) = CalcFine( $item , $patron->categorycode, $library->{branchcode}, $ten_days_ago, $now );
-    UpdateFine({ issue_id => $issue->issue_id, itemnumber => $item->{itemnumber}, borrowernumber => $patron->borrowernumber, amount => $fine, due => output_pref($ten_days_ago) });
-    is( int($patron->account->balance()),10, "Overdue fine of 10 days overdue");
-    # Fake longoverdue with charge and not marking returned
-    LostItem( $item->{itemnumber}, 'cronjob',0 );
-    is( int($patron->account->balance()),17, "Lost fine of 7 plus 10 days overdue");
-    # Now we return it today
-    AddReturn( $item->{barcode}, $library->{branchcode} );
-    is( int($patron->account->balance()),17, "Should have a single 10 days overdue fine and lost charge");
+        plan tests => 3;
 
+        my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago );    # date due was 10d ago
+
+        # Fake fines cronjob on this checkout
+        my ($fine) =
+          CalcFine( $item, $patron->categorycode, $library->{branchcode},
+            $ten_days_ago, $now );
+        UpdateFine(
+            {
+                issue_id       => $issue->issue_id,
+                itemnumber     => $item->{itemnumber},
+                borrowernumber => $patron->borrowernumber,
+                amount         => $fine,
+                due            => output_pref($ten_days_ago)
+            }
+        );
+        is( int( $patron->account->balance() ),
+            10, "Overdue fine of 10 days overdue" );
+
+        # Fake longoverdue with charge and not marking returned
+        LostItem( $item->{itemnumber}, 'cronjob', 0 );
+        is( int( $patron->account->balance() ),
+            17, "Lost fine of 7 plus 10 days overdue" );
+
+        # Now we return it today
+        AddReturn( $item->{barcode}, $library->{branchcode} );
+        is( int( $patron->account->balance() ),
+            17, "Should have a single 10 days overdue fine and lost charge" );
+      }
 };
 
 subtest '_FixAccountForLostAndReturned' => sub {
