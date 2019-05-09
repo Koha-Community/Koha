@@ -351,7 +351,10 @@
                 <caption>
                   <span class="actions">
                   <a href="#" id="hide_received_orders">Hide already received orders</a>
-                  | <a href="#" id="show_all_orders">Show all orders</a></span>
+                  | <a href="#" id="show_all_orders">Show all orders</a>
+                  | <a href="#" id="expand_all">Expand all</a>
+                  | <a href="#" id="collapse_all">Collapse all</a>
+                  </span>
                 </caption>
 
                 <thead>
@@ -498,9 +501,20 @@
 
             [% IF orders_grouped.size %]
                 $(table).treetable({
-                    expandable: true
+                    expandable: true,
+                    initialState: 'expanded',
                 });
                 $(table).treetable('expandAll');
+
+                $("#expand_all").click(function(e){
+                    e.preventDefault();
+                    $(table).treetable('expandAll');
+                });
+                $("#collapse_all").click(function(e){
+                    e.preventDefault();
+                    $(table).treetable('collapseAll');
+                });
+
             [% END %]
 
             $("#hide_received_orders").click(function(e){
