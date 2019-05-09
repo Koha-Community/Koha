@@ -18432,6 +18432,21 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 7088: Cannot renew items on hold even with override)\n";
 }
 
+$DBversion = '18.12.00.069';
+if( CheckVersion( $DBversion ) ) {
+
+    use Koha::Plugins;
+
+    my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({ all => 1 });
+    foreach my $plugin ( @plugins ) {
+        $plugin->enable;
+    }
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22053 - enable all plugins)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
