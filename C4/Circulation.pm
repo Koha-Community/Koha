@@ -1960,7 +1960,7 @@ sub AddReturn {
                 MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy );
             };
             unless ( $@ ) {
-                if ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue ) {
+                if ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue && !$item->itemlost ) {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed, return_date => $return_date } );
                 }
             } else {
