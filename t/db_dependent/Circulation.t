@@ -1985,7 +1985,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 
 
 subtest 'AddReturn | is_overdue' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
     t::lib::Mocks::mock_preference('finesMode', 'production');
@@ -1997,6 +1997,17 @@ subtest 'AddReturn | is_overdue' => sub {
     t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item_type          = $builder->build_object(
+        {   class => 'Koha::ItemTypes',
+            value => {
+                notforloan         => undef,
+                rentalcharge       => 0,
+                defaultreplacecost => undef,
+                processfee         => 0,
+                rentalcharge_daily => 0,
+            }
+        }
+    );
     my $item = $builder->build(
         {
             source => 'Item',
@@ -2007,6 +2018,8 @@ subtest 'AddReturn | is_overdue' => sub {
                 itemlost      => 0,
                 withdrawn     => 0,
                 biblionumber  => $biblioitem->{biblionumber},
+                replacementprice => 7,
+                itype         => $item_type->itemtype
             }
         }
     );
@@ -2025,6 +2038,7 @@ subtest 'AddReturn | is_overdue' => sub {
     );
     $rule->store();
 
+    my $now   = dt_from_string;
     my $one_day_ago   = dt_from_string->subtract( days => 1 );
     my $five_days_ago = dt_from_string->subtract( days => 5 );
     my $ten_days_ago  = dt_from_string->subtract( days => 10 );
@@ -2059,6 +2073,20 @@ subtest 'AddReturn | is_overdue' => sub {
     AddReturn( $item->{barcode}, $library->{branchcode}, $five_days_ago );
     is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the OVERDUE fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # Checkout an item 10 days ago
+    my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
+    # Fake fines cronjob on this checkout
+    my ( $fine ) = CalcFine( $item , $patron->categorycode, $library->{branchcode}, $ten_days_ago, $now );
+    UpdateFine({ issue_id => $issue->issue_id, itemnumber => $item->{itemnumber}, borrowernumber => $patron->borrowernumber, amount => $fine, due => output_pref($ten_days_ago) });
+    is( int($patron->account->balance()),10, "Overdue fine of 10 days overdue");
+    # Fake longoverdue with charge and not marking returned
+    LostItem( $item->{itemnumber}, 'cronjob',0 );
+    is( int($patron->account->balance()),17, "Lost fine of 7 plus 10 days overdue");
+    # Now we return it today
+    AddReturn( $item->{barcode}, $library->{branchcode} );
+    is( int($patron->account->balance()),17, "Should have a single 10 days overdue fine and lost charge");
+
 };
 
 subtest '_FixAccountForLostAndReturned' => sub {
