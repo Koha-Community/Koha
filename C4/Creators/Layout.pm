@@ -165,6 +165,7 @@ sub save {
     }
     else {                      # otherwise create a new record
         my @params;
+        delete $self->{layout_id}; # Could be an empty string
         my $query = "INSERT INTO creator_layouts (";
         foreach my $key (keys %{$self}) {
             push (@params, $self->{$key});
