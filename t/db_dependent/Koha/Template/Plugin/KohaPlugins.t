@@ -24,6 +24,16 @@ BEGIN {
     use_ok('Koha::Plugin::Test');
 }
 
+t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
+t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
+# Enable all plugins
+my @plugins = Koha::Plugins->new->GetPlugins({ all => 1, class => 'Koha::Plugin::Test' });
+map { $_->enable; } @plugins;
+
 my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
 $mock_plugin->mock( 'test_template', sub {
     my ( $self, $file ) = @_;
@@ -36,8 +46,6 @@ use_ok( 'Koha::Template::Plugin::KohaPlugins', 'Can use Koha::Template::Plugin::
 
 ok( my $plugin = Koha::Template::Plugin::KohaPlugins->new(), 'Able to instantiate template plugin' );
 
-t::lib::Mocks::mock_preference('UseKohaPlugins',1);
-t::lib::Mocks::mock_config('enable_plugins',1);
 ok( index( $plugin->get_plugins_opac_js, 'Koha::Plugin::Test::opac_js' ) != -1, 'Test plugin opac_js return value is part of code returned by get_plugins_opac_js' );
 ok( index( $plugin->get_plugins_opac_head, 'Koha::Plugin::Test::opac_head' ) != -1, 'Test plugin opac_head return value is part of code returned by get_plugins_opac_head' );
 ok( index( $plugin->get_plugins_intranet_js, 'Koha::Plugin::Test::intranet_js' ) != -1, 'Test plugin intranet_js return value is part of code returned by get_plugins_intranet_js' );
@@ -49,3 +57,5 @@ is( $plugin->get_plugins_opac_js, q{}, 'Test plugin opac_js return value is empt
 is( $plugin->get_plugins_opac_head, q{}, 'Test plugin opac_head return value is empty' );
 is( $plugin->get_plugins_intranet_js, q{}, 'Test plugin intranet_js return value is empty' );
 is( $plugin->get_plugins_intranet_head, q{}, 'Test plugin intranet_head return value is empty' );
+
+$schema->storage->txn_rollback;
