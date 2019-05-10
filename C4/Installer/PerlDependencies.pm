@@ -790,7 +790,7 @@ our $PERL_DEPS = {
     'Net::CIDR'    => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '0.15',
+        'min_ver'  => '0.17',
     },
     'Net::SFTP::Foreign' => {
         'usage'    => 'Edifact',
