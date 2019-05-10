@@ -188,7 +188,8 @@ $(document).ready(function() {
             <td>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
                 [% reserveloo.title |html %] [% IF (reserveloo.number) %][% reserveloo.number %][% END %] [% FOREACH s IN reserveloo.subtitle %] [% s %][% END %]</a><br/><br/>
-                [% IF ( reserveloo.author ) %]by [% reserveloo.author %]<br/><br/>[% END %]
+                [% IF ( reserveloo.author ) %]<b>by</b> [% reserveloo.author %]<br/><br/>[% END %]
+                [% IF ( reserveloo.collectiontitle ) %]<b>series</b> [% reserveloo.collectiontitle %][% IF ( reserveloo.collectionvolume ) %] [% reserveloo.collectionvolume %][% END %]<br/><br/>[% END %]
                 [% IF ( reserveloo.editionstatement ) %][%reserveloo.editionstatement %][% END %]
             </td>
         [% ELSE %]
