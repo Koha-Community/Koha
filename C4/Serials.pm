@@ -1373,37 +1373,50 @@ sub NewSubscription {
     ) = @_;
     my $dbh = C4::Context->dbh;
 
-    $_ ||= undef # Set to undef for integer values, not empty string
-      for (
-        $aqbooksellerid, $lastvalue1, $innerloop1, $lastvalue2,
-        $innerloop2,     $lastvalue3, $innerloop3,
-      );
-    #save subscription (insert into database)
-    my $query = qq|
-        INSERT INTO subscription
-            (librarian, branchcode, aqbooksellerid, cost, aqbudgetid,
-            biblionumber, startdate, periodicity, numberlength, weeklength,
-            monthlength, lastvalue1, innerloop1, lastvalue2, innerloop2,
-            lastvalue3, innerloop3, status, notes, letter, firstacquidate,
-            irregularity, numberpattern, locale, callnumber,
-            manualhistory, internalnotes, serialsadditems, staffdisplaycount,
-            opacdisplaycount, graceperiod, location, enddate, skip_serialseq,
-            itemtype, previousitemtype, mana_id)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?)
-        |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $auser, $branchcode, $aqbooksellerid, $cost, $aqbudgetid, $biblionumber,
-        $startdate, $periodicity, $numberlength, $weeklength,
-        $monthlength, $lastvalue1, $innerloop1, $lastvalue2, $innerloop2,
-        $lastvalue3, $innerloop3, $status, $notes, $letter,
-        $firstacquidate, $irregularity, $numberpattern, $locale, $callnumber,
-        $manualhistory, $internalnotes, $serialsadditems, $staffdisplaycount,
-        $opacdisplaycount, $graceperiod, $location, $enddate, $skip_serialseq,
-        $itemtype, $previousitemtype, $mana_id
-    );
-
-    my $subscriptionid = $dbh->{'mysql_insertid'};
+    my $subscription = Koha::Subscription->new(
+        {
+            librarian         => $auser,
+            branchcode        => $branchcode,
+            aqbooksellerid    => $aqbooksellerid,
+            cost              => $cost,
+            aqbudgetid        => $aqbudgetid,
+            biblionumber      => $biblionumber,
+            startdate         => $startdate,
+            periodicity       => $periodicity,
+            numberlength      => $numberlength,
+            weeklength        => $weeklength,
+            monthlength       => $monthlength,
+            lastvalue1        => $lastvalue1,
+            innerloop1        => $innerloop1,
+            lastvalue2        => $lastvalue2,
+            innerloop2        => $innerloop2,
+            lastvalue3        => $lastvalue3,
+            innerloop3        => $innerloop3,
+            status            => $status,
+            notes             => $notes,
+            letter            => $letter,
+            firstacquidate    => $firstacquidate,
+            irregularity      => $irregularity,
+            numberpattern     => $numberpattern,
+            locale            => $locale,
+            callnumber        => $callnumber,
+            manualhistory     => $manualhistory,
+            internalnotes     => $internalnotes,
+            serialsadditems   => $serialsadditems,
+            staffdisplaycount => $staffdisplaycount,
+            opacdisplaycount  => $opacdisplaycount,
+            graceperiod       => $graceperiod,
+            location          => $location,
+            enddate           => $enddate,
+            skip_serialseq    => $skip_serialseq,
+            itemtype          => $itemtype,
+            previousitemtype  => $previousitemtype,
+            mana_id           => $mana_id,
+        }
+    )->store;
+    $subscription->discard_changes;
+    my $subscriptionid = $subscription->subscriptionid;
+    my ( $query, $sth );
     unless ($enddate) {
         $enddate = GetExpirationDate( $subscriptionid, $startdate );
         $query = qq|
@@ -1425,7 +1438,7 @@ sub NewSubscription {
     $sth->execute( $biblionumber, $subscriptionid, $startdate);
 
     # reread subscription to get a hash (for calculation of the 1st issue number)
-    my $subscription = GetSubscription($subscriptionid);
+    $subscription = GetSubscription($subscriptionid); # We should not do that
     my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->{numberpattern});
 
     # calculate issue number

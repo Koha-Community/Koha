@@ -18,7 +18,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 47;
+use Test::More tests => 48;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -348,4 +348,17 @@ subtest "Do not generate an expected if one already exists" => sub {
     #try if create or not another serial with status is expected
     @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
     is( @serialsByStatus, 1, "ModSerialStatus delete corectly serial expected and not create another if exists" );
+};
+
+subtest "NewSubscription" => sub {
+    plan tests => 1;
+    my $subscriptionid = NewSubscription(
+        "",      "",     "", "", $budget_id, $biblionumber,
+        '2013-01-01', $frequency_id, "", "",  "",
+        "",      "",  "", "", "", "",
+        1,          $notes,"", '2013-01-01', "", $pattern_id,
+        "",       "",  0,    $internalnotes,  0,
+        "", "", 0,          "",         '2013-12-31', 0
+    );
+    ok($subscriptionid, "Sending empty string instead of undef to reflect use of the interface");
 };
