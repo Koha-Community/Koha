@@ -18447,6 +18447,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22053 - enable all plugins)\n";
 }
 
+$DBversion = '18.12.00.070';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences
+            ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES
+        ('SelfCheckAllowByIPRanges','',NULL,'(Leave blank if not used. Use ranges or simple ip addresses separated by spaces, like <code>192.168.1.1 192.168.0.0/24</code>.)','Short');
+    });
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 14407 - Limit web-based self-checkout to specific IP addresses)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
