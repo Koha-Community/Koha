@@ -3311,7 +3311,7 @@ CREATE TABLE `biblioimages` ( -- local cover images
 
 DROP TABLE IF EXISTS `social_data`;
 CREATE TABLE IF NOT EXISTS `social_data` (
-  `isbn` VARCHAR(30),
+  `isbn` VARCHAR(30) NOT NULL DEFAULT '',
   `num_critics` INT,
   `num_critics_pro` INT,
   `num_quotations` INT,
