@@ -41,7 +41,8 @@ GetOptions(
     'unless-exists=s' => \$unless_exists_field,
 ) || podusage(1);
 
-pod2usage(0) if $help;
+pod2usage(1) if $help;
+pod2usage("Parameter field is mandatory") unless @fields;
 
 my @fields_to_add;
 my $dt = dt_from_string;    # Could be an option of the script
@@ -99,6 +100,8 @@ Add some MARC fields to bibliographic records.
 
 The replacement tokens are the ones used by strftime.
 
+=head1 OPTIONS
+
 =over 8
 
 =item B<--help>
@@ -112,6 +115,7 @@ Verbose mode.
 =item B<--confirm>
 
 Confirmation flag, the script will be running in dry-run mode if set not.
+
 =item B<--where>
 
 Limits the search on bibliographic records with a user-specified WHERE clause.
