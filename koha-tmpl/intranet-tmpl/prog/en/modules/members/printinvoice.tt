@@ -17,7 +17,7 @@
 <body id="printinvoice" class="pat">
 
 <div id="receipt">
-    [% letter.content | evaltt %]
+    [% letter.content | $raw | evaltt %]
 </div>
 
 [% MACRO jsinclude BLOCK %]

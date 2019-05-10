@@ -57,5 +57,5 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 </table>', 'print', 'default');
     });
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 22809 - Move "INVOICE" from template to a slip)\n";
+    print "Upgrade to $DBversion done (Bug 22809 - Move 'INVOICE' from template to a slip)\n";
 }
