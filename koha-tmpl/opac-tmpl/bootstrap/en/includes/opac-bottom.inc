@@ -199,8 +199,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var biblionumber = $(this).data("biblionumber");
         delSingleRecord( biblionumber );
     });
-    $(".clearsh").on("click", function(e){
-        e.preventDefault();
+    $(".clearsh").on("click", function(){
         return confirmDelete(MSG_DELETE_SEARCH_HISTORY);
     });
     //]]>
