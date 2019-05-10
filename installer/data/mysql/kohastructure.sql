@@ -119,6 +119,7 @@ CREATE TABLE `authorised_values` ( -- stores values for authorized values catego
   KEY `name` (`category`),
   KEY `lib` (`lib` (191)),
   KEY `auth_value_idx` (`authorised_value`),
+  CONSTRAINT `category_code` UNIQUE (`category`,`authorised_value`),
   CONSTRAINT `authorised_values_authorised_values_category` FOREIGN KEY (`category`) REFERENCES `authorised_value_categories` (`category_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
