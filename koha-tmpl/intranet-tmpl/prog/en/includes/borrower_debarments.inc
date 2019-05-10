@@ -51,6 +51,7 @@
             <thead>
                 <tr>
                      <th>Type</th>
+                     <th>Date</th>
                      <th>Comment</th>
                      <th>Expiration</th>
                      [% IF CAN_user_borrowers && CAN_user_circulate_manage_restrictions %]
@@ -73,6 +74,7 @@
                                     Discharge
                             [% END %]
                         </td>
+                        <td>[% d.created | $KohaDates %]</td>
                         <td>
 			    [% IF d.comment.search('OVERDUES_PROCESS') %]
 				Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') %]
