@@ -75,8 +75,8 @@
             <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber %]" name="biblionumber" value="[% resultsloo.biblionumber %]" /></td>
             <td>
                 <p>
-                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber %]">[% resultsloo.title |html %]</a>
-                [% FOREACH subtitl IN resultsloo.subtitle %][% subtitl.subfield %][% END %]</p>
+                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber | uri %]">[% resultsloo.title | html %]</a>
+                [% FOREACH subtitl IN resultsloo.subtitle %][% subtitl.subfield | html %] [% END %]</p>
                 [% IF ( resultsloo.summary ) %]
                     <p>[% resultsloo.summary %]</p>
                 [% ELSE %]
