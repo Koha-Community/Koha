@@ -241,7 +241,7 @@
                         </xsl:call-template>
             </a>
                     <xsl:call-template name="part"/>
-        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+        <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
         <!-- 490 Series traced, Ind1 = 1 -->
         <xsl:if test="marc:datafield[@tag=490][@ind1=1]">
@@ -465,7 +465,7 @@
                    </xsl:with-param>
                </xsl:call-template>
                 </span>
-                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </span>
         </xsl:if>
@@ -492,7 +492,7 @@
                    </xsl:with-param>
                </xsl:call-template>
                 </span>
-                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </span>
        </xsl:if>
@@ -545,14 +545,7 @@
             <xsl:for-each select="marc:datafield[@tag=020]/marc:subfield[@code='a']">
               <span property="isbn">
                 <xsl:value-of select="."/>
-                <xsl:choose>
-                  <xsl:when test="position()=last()">
-                    <xsl:text>.</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
               </span>
             </xsl:for-each>
           </span>
@@ -564,14 +557,7 @@
             <xsl:for-each select="marc:datafield[@tag=022]/marc:subfield[@code='a']">
               <span property="issn">
                 <xsl:value-of select="."/>
-                <xsl:choose>
-                  <xsl:when test="position()=last()">
-                    <xsl:text>.</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
               </span>
             </xsl:for-each>
           </span>
@@ -641,7 +627,7 @@
                             </xsl:if>
                         </span>
                         <!-- #13386 added separator | -->
-                        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
+                        <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
                     </xsl:for-each>
                 </span>
             </xsl:if>
@@ -659,7 +645,7 @@
                    </xsl:with-param>
                </xsl:call-template>
                 </span>
-                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </span>
        </xsl:if>
@@ -731,7 +717,7 @@
                             </span>
                         </xsl:if>
                         <xsl:choose>
-                            <xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
+                            <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
                 </span>
@@ -773,7 +759,7 @@
                             </span>
                         </xsl:if>
                         <xsl:choose>
-                            <xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
+                            <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
                 </span>
@@ -1745,7 +1731,7 @@
                 </a>
             </xsl:if>
                 <xsl:choose>
-                    <xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
+                    <xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
         </h5>

@@ -339,14 +339,7 @@
             <xsl:for-each select="marc:datafield[@tag=$tag]/marc:subfield[@code=$code]">
               <span><xsl:attribute name="property"><xsl:value-of select="$class"/></xsl:attribute>
                 <xsl:value-of select="."/>
-                <xsl:choose>
-                  <xsl:when test="position()=last()">
-                    <xsl:text>.</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
               </span>
             </xsl:for-each>
           </span>
