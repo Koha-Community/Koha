@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 77;
+use Test::More tests => 78;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::Acquisition::Basket;
@@ -838,4 +838,42 @@ subtest 'Test for get_rounded_price' => sub {
     is( $rounded_result3,     $round_down_price, "Price ($down_price) was correctly rounded ($rounded_result3)" );
 
 };
+
+subtest 'GetHistory - managing library' => sub {
+
+    plan tests => 1;
+
+    my $orders = GetHistory(managing_library => 'CPL');
+
+    my $builder = t::lib::TestBuilder->new;
+
+    my $order_basket1 = $builder->build({ source => 'Aqbasket', value => { branch => 'CPL' } });
+    my $orderinfo1 ={
+        basketno => $order_basket1->{basketno},
+        rrp => 19.99,
+        replacementprice => undef,
+        quantity => 1,
+        quantityreceived => 0,
+        datereceived => undef,
+        datecancellationprinted => undef,
+    };
+    my $order1 = $builder->build({ source => 'Aqorder', value => $orderinfo1 });
+
+    my $order_basket2 = $builder->build({ source => 'Aqbasket', value => { branch => 'LIB' } });
+    my $orderinfo2 ={
+        basketno => $order_basket2->{basketno},
+        rrp => 19.99,
+        replacementprice => undef,
+        quantity => 1,
+        quantityreceived => 0,
+        datereceived => undef,
+        datecancellationprinted => undef,
+    };
+    my $order2 = $builder->build({ source => 'Aqorder', value => $orderinfo2 });
+
+    my $history = GetHistory(managing_library => 'CPL');
+    is( scalar( @$history), scalar ( @$orders ) +1, "GetHistory returns number of orders");
+
+};
+
 $schema->storage->txn_rollback();

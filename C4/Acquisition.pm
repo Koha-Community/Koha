@@ -2276,6 +2276,7 @@ params:
   budget
   orderstatus (note that orderstatus '' will retrieve orders
                of any status except cancelled)
+  managing_library
   biblionumber
   get_canceled_order (if set to a true value, cancelled orders will
                       be included)
@@ -2296,7 +2297,8 @@ returns:
                 'ordernumber'      => '1',
                 'quantity'         => 1,
                 'quantityreceived' => undef,
-                'title'            => 'The Adventures of Huckleberry Finn'
+                'title'            => 'The Adventures of Huckleberry Finn',
+                'managing_library' => 'CPL'
             }
 
 =cut
@@ -2322,6 +2324,7 @@ sub GetHistory {
     my $ordernumber = $params{ordernumber};
     my $search_children_too = $params{search_children_too} || 0;
     my $created_by = $params{created_by} || [];
+    my $managing_library = $params{managing_library};
     my $ordernumbers = $params{ordernumbers} || [];
     my $additional_fields = $params{additional_fields} // [];
 
@@ -2358,6 +2361,7 @@ sub GetHistory {
             aqbasket.basketgroupid,
             aqbasket.authorisedby,
             concat( borrowers.firstname,' ',borrowers.surname) AS authorisedbyname,
+            branch as managing_library,
             aqbasketgroups.name as groupname,
             aqbooksellers.name,
             aqbasket.creationdate,
@@ -2482,6 +2486,11 @@ sub GetHistory {
     if ( @$created_by ) {
         $query .= ' AND aqbasket.authorisedby IN ( ' . join( ',', ('?') x @$created_by ) . ')';
         push @query_params, @$created_by;
+    }
+
+    if ( $managing_library ) {
+        $query .= " AND aqbasket.branch = ? ";
+        push @query_params, $managing_library;
     }
 
     if ( @$ordernumbers ) {

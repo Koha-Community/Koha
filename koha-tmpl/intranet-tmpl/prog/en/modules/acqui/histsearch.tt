@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE ColumnsSettings %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( order_loop ) %]Orders search &rsaquo; Search results[% ELSE %]Order search[% END %]</title>
@@ -38,7 +39,8 @@
                 <th>Status</th>
 				<th>Basket</th>
                 <th>Basket creator</th>
-				<th>Basket group</th>
+                <th>Basket group</th>
+                <th>Managing library</th>
                 <th>Invoice number</th>
                 <th class="anti-the">Summary</th>
 				<th>Vendor</th>
@@ -75,6 +77,7 @@
                             &nbsp;
                         [% END %]
                     </td>
+                    <td>[% Branches.GetName(order.managing_library) | html %]</td>
                     <td>[% IF ( order.invoicenumber ) %]
                             <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
                         [% ELSE %]

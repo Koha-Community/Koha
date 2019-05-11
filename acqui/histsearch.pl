@@ -89,15 +89,17 @@ my $filters = {
     ordernumber             => scalar $input->param('ordernumber'),
     search_children_too     => scalar $input->param('search_children_too'),
     created_by              => [ $input->multi_param('created_by') ],
+    managing_library        => scalar $input->param('managing_library'),
 };
+
 my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || dt_from_string;
 my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
 unless ( $input->param('from') ) {
     # Fill the form with year-1
     $from_placed_on->set_time_zone('floating')->subtract( years => 1 );
 }
-$filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
-$filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } ),
+$filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } );
+$filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } );
 my @additional_fields = Koha::AdditionalFields->search( { tablename => 'aqbasket', searchable => 1 } );
 $template->param( available_additional_fields => \@additional_fields );
 my @additional_field_filters;

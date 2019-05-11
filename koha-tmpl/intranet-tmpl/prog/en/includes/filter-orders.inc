@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 <ol>
     <li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% filters.title | html %]" /></li>
@@ -14,6 +15,13 @@
         <div>
             <div id="basket_creators" style="float:left;"></div>
         </div>
+    </li>
+    <li>
+        <label for="managing_library">Managing library: </label>
+        <select name="managing_library" id="managing_library">
+            <option value="">Any library</option>
+            [% PROCESS options_for_libraries libraries => Branches.all(selected => '') %]
+        </select>
     </li>
     <li><label for="booksellerinvoicenumber ">Bookseller invoice no: </label> <input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" value="[% filters.booksellerinvoicenumber | html %]" /></li>
     <li>
