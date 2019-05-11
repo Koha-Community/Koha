@@ -138,7 +138,11 @@ For instance:
 
 =item B<--unless-exists>
 
-Will only create the new fields if this field does not exist
+Will only create the new fields if this field does not exist.
+
+For instance, if --field='905$a=0/%Y' and --unless-exists='905$a' are provided, a 905$a will be created unless there is already one.
+If --unless-exists is not passed, a new 905$a will be created in any case.
+
 
 =back
 
