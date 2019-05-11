@@ -90,7 +90,7 @@ sub search {
         borrowernumber => 'borrowernumber',
         userid => 'userid',
         phone => 'phone,phonepro,B_phone,altcontactphone,mobile',
-        address => 'streettype,address,address2,city,state,zipcode,country',
+        address => 'streetnumber,streettype,address,address2,city,state,zipcode,country',
         dateofbirth => 'dateofbirth',
         sort1 => 'sort1',
         sort2 => 'sort2',
