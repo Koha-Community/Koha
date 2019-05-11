@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 107;
+use Test::More tests => 109;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -26,7 +26,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 use C4::Letters;
-use C4::Budgets qw( AddBudgetPeriod AddBudget );
+use C4::Budgets qw( AddBudgetPeriod AddBudget GetBudget );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Libraries;
@@ -368,6 +368,12 @@ $search_suggestion = SearchSuggestion({
     budgetid => '__ANY__',
 });
 is( @$search_suggestion, 3, 'SearchSuggestion (budgetid = "__ANY__") returns the correct number of suggestions' );
+
+$search_suggestion = SearchSuggestion({ budgetid => $budget_id });
+is( @$search_suggestion[0]->{budget_name}, GetBudget($budget_id)->{budget_name}, 'SearchSuggestion returns the correct budget name');
+$search_suggestion = SearchSuggestion({ budgetid => "__NONE__" });
+is( @$search_suggestion[0]->{budget_name}, undef, 'SearchSuggestion returns the correct budget name');
+
 
 my $del_suggestion = {
     title => 'my deleted title',

@@ -138,13 +138,6 @@ my $suggestions_loop = SearchSuggestion(
     }
 );
 
-foreach my $suggestion (@$suggestions_loop) {
-            if ($suggestion->{budgetid}){
-                my $bud = GetBudget( $suggestion->{budgetid} );
-                $suggestion->{budget_name} = $bud->{budget_name} if $bud;
-            }
-}
-
 my $vendor = Koha::Acquisition::Booksellers->find( $booksellerid );
 $template->param(
     suggestions_loop        => $suggestions_loop,
