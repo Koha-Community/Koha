@@ -76,7 +76,7 @@
             <td>
                 <p>
                     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber | uri %]">[% resultsloo.title | html %]</a>
-                [% FOREACH subtitl IN resultsloo.subtitle %][% subtitl.subfield | html %][% END %]</p>
+                [% FOREACH subtitl IN resultsloo.subtitle %][% subtitl.subfield | html %] [% END %]</p>
                 [% IF ( resultsloo.summary ) %]
                     <p>[% resultsloo.summary | html %]</p>
                 [% ELSE %]
