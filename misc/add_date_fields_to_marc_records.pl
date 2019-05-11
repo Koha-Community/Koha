@@ -59,7 +59,7 @@ if ($verbose) {
     say "\t" . $_->as_formatted for @fields_to_add;
 }
 
-$where ||= "";
+$where = $where ? "WHERE $where" : '';
 my $sth =
   $dbh->prepare("SELECT biblionumber, frameworkcode FROM biblio $where");
 $sth->execute();
@@ -94,6 +94,8 @@ add_date_fields_to_marc_records.pl
 
   perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --unless-exists='905$a' --verbose --confirm
 
+  perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --unless-exists='905$a' --where "biblionumber=42" --verbose --confirm
+
 =head1 DESCRIPTION
 
 Add some MARC fields to bibliographic records.
@@ -119,6 +121,8 @@ Confirmation flag, the script will be running in dry-run mode if set not.
 =item B<--where>
 
 Limits the search on bibliographic records with a user-specified WHERE clause.
+
+Only the columns from the biblio table are available.
 
 =item B<--field>
 
