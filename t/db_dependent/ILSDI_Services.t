@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -593,6 +593,41 @@ subtest 'GetRecords' => sub {
     };
     is_deeply($reply->{record}->[0]->{items}->{item}->[0]->{transfer}, $expected,
         'GetRecords returns transfer informations');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'RenewHold' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $cgi    = new CGI;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item   = $builder->build_object( { class => 'Koha::Items' } );
+    $cgi->param( patron_id => $patron->borrowernumber );
+    $cgi->param( item_id   => $item->itemnumber );
+
+    t::lib::Mocks::mock_userenv( { patron => $patron } );    # For AddIssue
+    my $checkout = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+    # Everything is ok
+    my $reply = C4::ILSDI::Services::RenewLoan($cgi);
+    is( exists $reply->{date_due}, 1, 'If the item is checked out, the date_due key should exist' );
+
+    # The item is not checked out
+    $checkout->delete;
+    $reply = C4::ILSDI::Services::RenewLoan($cgi);
+    is( $reply, undef, 'If the item is not checked out, we should not explode.');    # FIXME We should return an error code instead
+
+    # The item does not exist
+    $item->delete;
+    $reply = C4::ILSDI::Services::RenewLoan($cgi);
+    is( $reply->{code}, 'RecordNotFound', 'If the item does not exist, RecordNotFound should be returned');
+
+    $patron->delete;
+    $reply = C4::ILSDI::Services::RenewLoan($cgi);
+    is( $reply->{code}, 'PatronNotFound', 'If the patron does not exist, PatronNotFound should be returned');
 
     $schema->storage->txn_rollback;
 };
