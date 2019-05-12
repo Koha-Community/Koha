@@ -1810,6 +1810,9 @@ VALUES ( 'VN', 'region', 'vi', 'Việt Nam');
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('et', 'language', 'en', 'Estonian');
 
+INSERT INTO language_descriptions (subtag, type, lang, description)
+VALUES ('et', 'language', 'et', 'Eesti');
+
 INSERT INTO language_subtag_registry (subtag, type, description, added)
 VALUES ('et', 'language', 'Estonian', now());
 
@@ -1820,6 +1823,9 @@ VALUES ('et', 'est');
 
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('lv', 'language', 'en', 'Latvian');
+
+INSERT INTO language_descriptions (subtag, type, lang, description)
+VALUES ('lv', 'language', 'lv', 'Latvija');
 
 INSERT INTO language_subtag_registry (subtag, type, description, added)
 VALUES ('lv', 'language', 'Latvian', now());
@@ -1832,6 +1838,9 @@ VALUES ('lv', 'lav');
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('lt', 'language', 'en', 'Lithuanian');
 
+INSERT INTO language_descriptions (subtag, type, lang, description)
+VALUES ('lt', 'language', 'lt', 'Lietuvių');
+
 INSERT INTO language_subtag_registry (subtag, type, description, added)
 VALUES ('lt', 'language', 'Lithuanian', now());
 
@@ -1843,6 +1852,9 @@ VALUES ('lt', 'lit');
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('iu', 'language', 'en', 'Inuktitut');
 
+INSERT INTO language_descriptions (subtag, type, lang, description)
+VALUES ('iu', 'language', 'iu', 'ᐃᓄᒃᑎᑐᑦ');
+
 INSERT INTO language_subtag_registry (subtag, type, description, added)
 VALUES ('iu', 'language', 'Inuktitut', now());
 
@@ -1853,6 +1865,9 @@ VALUES ('iu', 'iku');
 
 INSERT INTO language_descriptions (subtag, type, lang, description)
 VALUES ('ik', 'language', 'en', 'Inupiaq');
+
+INSERT INTO language_descriptions (subtag, type, lang, description)
+VALUES ('ik', 'language', 'ik', 'Iñupiaq');
 
 INSERT INTO language_subtag_registry (subtag, type, description, added)
 VALUES ('ik', 'language', 'Inupiaq', now());
