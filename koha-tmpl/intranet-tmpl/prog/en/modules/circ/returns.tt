@@ -221,6 +221,8 @@
                         <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                         <button type="submit" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
                         <button class="btn btn-default deny cancel-transfer" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
+                        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+                        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                     </div>
                 </form>
             </div>
@@ -385,17 +387,7 @@
                         </p>
                         <input type="hidden" name="tobranch" value="[% returnbranch | html %]" />
                         <input type="hidden" name="transferitem" value="[% itemnumber | html %]" />
-                        <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
-                        <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
-                        <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire | html %]" />
-                        [% FOREACH inputloo IN inputloop %]
-                        <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                        <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                        <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                        [% END %]
                         <input type="hidden" name="barcode" value="0" />
-                        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
-                        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                         [% END %]
                     </div>
                     <div class="modal-footer">
@@ -405,6 +397,16 @@
                         [% ELSE %]
                         <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
+                        [% END %]
+                        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+                        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
+                        <input type="hidden" name="exemptfine" value="[% exemptfine | html %]" />
+                        <input type="hidden" name="dropboxmode" value="[% dropboxmode | html %]" />
+                        <input type="hidden" name="forgivemanualholdsexpire" value="[% forgivemanualholdsexpire | html %]" />
+                        [% FOREACH inputloo IN inputloop %]
+                        <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                        <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                        <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                         [% END %]
                     </div>
                 </form>
