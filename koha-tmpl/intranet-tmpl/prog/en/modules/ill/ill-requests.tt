@@ -27,57 +27,64 @@
     [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
+<div class="main container-fluid">
+    <div class="row">
+
         [% IF query_type == 'illlist' %]
-        <div id="illfilter_yui_column" class="yui-b">
-            <form method="get" id="illfilter_form">
-                <fieldset class="brief">
-                    <h3>Filters</h3>
-                    <ol>
-                        <li>
-                            <label for="illfilter_status">Status:</label>
-                            <select name="illfilter_status" id="illfilter_status">
-                                <option value=""></option>
-                            </select>
-                        </li>
-                        <li>
-                            <label for="illfilter_dateplaced_start">Date placed between:</label>
-                            <input type="text" name="illfilter_dateplaced_start" id="illfilter_dateplaced_start" class="datepicker" />
-                        </li>
-                        <li>
-                            <label for="illfilter_dateplaced_end">and:</label>
-                            <input type="text" name="illfilter_dateplaced_end" id="illfilter_dateplaced_end" class="datepicker" />
-                        </li>
-                        <li>
-                            <label for="illfilter_datemodified_start">Updated between:</label>
-                            <input type="text" name="illfilter_datemodified_start" id="illfilter_datemodified_start" class="datepicker" />
-                        </li>
-                        <li>
-                            <label for="illfilter_datemodified_end">and:</label>
-                            <input type="text" name="illfilter_datemodified_end" id="illfilter_datemodified_end" class="datepicker" />
-                        </li>
-                        <li>
-                            <label for="illfilter_branchname">Library:</label>
-                            <select name="illfilter_branchname" id="illfilter_branchname">
-                                <option value=""></option>
-                            </select>
-                        </li>
-                        <li>
-                            <label for="illfilter_patron">Patron:</label>
-                            <input type="text" name="illfilter_patron" id="illfilter_patron" />
-                        </li>
-                    </ol>
-                    <fieldset class="action">
-                        <input type="submit" value="Search" />
-                        <input type="button" value="Clear" id="clear_search" />
-                    </fieldset>
-                </fieldset>
-            </form>
-        </div>
+            <div class="col-sm-2">
+                <aside>
+                    <form method="get" id="illfilter_form">
+                        <fieldset class="brief">
+                            <h3>Filters</h3>
+                            <ol>
+                                <li>
+                                    <label for="illfilter_status">Status:</label>
+                                    <select name="illfilter_status" id="illfilter_status">
+                                        <option value=""></option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="illfilter_dateplaced_start">Date placed between:</label>
+                                    <input type="text" name="illfilter_dateplaced_start" id="illfilter_dateplaced_start" class="datepicker" />
+                                </li>
+                                <li>
+                                    <label for="illfilter_dateplaced_end">and:</label>
+                                    <input type="text" name="illfilter_dateplaced_end" id="illfilter_dateplaced_end" class="datepicker" />
+                                </li>
+                                <li>
+                                    <label for="illfilter_datemodified_start">Updated between:</label>
+                                    <input type="text" name="illfilter_datemodified_start" id="illfilter_datemodified_start" class="datepicker" />
+                                </li>
+                                <li>
+                                    <label for="illfilter_datemodified_end">and:</label>
+                                    <input type="text" name="illfilter_datemodified_end" id="illfilter_datemodified_end" class="datepicker" />
+                                </li>
+                                <li>
+                                    <label for="illfilter_branchname">Library:</label>
+                                    <select name="illfilter_branchname" id="illfilter_branchname">
+                                        <option value=""></option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="illfilter_patron">Patron:</label>
+                                    <input type="text" name="illfilter_patron" id="illfilter_patron" />
+                                </li>
+                            </ol>
+                            <fieldset class="action">
+                                <input type="submit" value="Search" />
+                                <input type="button" value="Clear" id="clear_search" />
+                            </fieldset>
+                        </fieldset>
+                    </form> <!-- /#illfilter_form -->
+                </aside>
+            </div> <!-- /.col-sm-2 -->
+            <div class="col-sm-10">
+                <main>
+        [% ELSE %]
+            <div class="col-sm-10 col-sm-offset-2">
+                <main>
         [% END %]
-        <div id="yui-main">
-            <div id="interlibraryloans" class="yui-b">
+            <div id="interlibraryloans">
         [% IF !backends_available || !has_branch %]
             <div class="dialog message">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a></div>
         [% ELSE %]
@@ -510,16 +517,18 @@
                         <h3>Details for all requests</h3>
                         [% INCLUDE 'ill-list-table.inc' %]
 
-                    </div>
+                    </div> <!-- /#results -->
                 [% ELSE %]
                 <!-- Custom Backend Action -->
                 [% PROCESS $whole.template %]
 
                 [% END %]
         [% END %]
-            </div>
-        </div>
-    </div>
+                </div> <!-- /#interlibraryloans -->
+            </main>
+        </div> <!-- /.col-sm-10 -->
+    </div> <!-- /.row -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
