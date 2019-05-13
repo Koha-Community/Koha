@@ -305,6 +305,7 @@ my $target_map = {
   './clubs'                     => 'INTRANET_CGI_DIR',
   './course_reserves'           => 'INTRANET_CGI_DIR',
   './docs/history.txt'          => { target => 'DOC_DIR', trimdir => -1 },
+  './docs/contributors.yaml'    => { target => 'DOC_DIR', trimdir => -1 },
   './offline_circ'              => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
