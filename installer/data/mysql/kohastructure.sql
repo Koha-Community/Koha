@@ -2494,7 +2494,9 @@ CREATE TABLE `tmp_holdsqueue` (
   `holdingbranch` varchar(10) default NULL,
   `pickbranch` varchar(10) default NULL,
   `notes` MEDIUMTEXT,
-  `item_level_request` tinyint(4) NOT NULL default 0
+  `item_level_request` tinyint(4) NOT NULL default 0,
+  CONSTRAINT `tmp_holdsqueue_ibfk_1` FOREIGN KEY (`itemnumber`)
+    REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
