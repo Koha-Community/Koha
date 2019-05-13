@@ -91,7 +91,7 @@ if ( $type eq 'str8' && $borrower ) {
             if ( $item->{'biblionumber'} ne $biblionumber ) {
                 $biblionumber = $item->{'biblionumber'};
             }
-            if ( CanItemBeReserved($borrower->{'borrowernumber'}, $item->itemnumber, $branch)->{status} eq 'OK' ) {
+            if ( CanItemBeReserved($borrower->{'borrowernumber'}, $item->{'itemnumber'}, $branch)->{status} eq 'OK' ) {
                 AddReserve( $branch, $borrower->{'borrowernumber'},
                     $biblionumber, \@realbi, $rank[0], $startdate, $expirationdate, $notes, $title,
                     $checkitem, $found, $itemtype );
