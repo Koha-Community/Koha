@@ -138,7 +138,7 @@ _verify_index_state($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, $delete) 
 _verify_index_state($Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX, $delete) if ($index_authorities);
 
 my $slice_index = 0;
-my $slice_count = $processes // 1;
+my $slice_count = ( $processes //= 1 );
 my %iterator_options;
 
 if ($slice_count > 1) {
