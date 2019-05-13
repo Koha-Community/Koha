@@ -210,6 +210,7 @@ my $strsth =
         LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
         LEFT JOIN issues ON items.itemnumber=issues.itemnumber
         LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
+        LEFT JOIN default_branch_item_rules ON items.itype=default_branch_item_rules.itemtype
     WHERE
     reserves.found IS NULL
     $sqldatewhere
@@ -220,6 +221,7 @@ my $strsth =
     AND reserves.priority <> 0 
     AND reserves.suspend = 0
     AND notforloan = 0 AND itemlost = 0 AND withdrawn = 0
+    AND default_branch_item_rules.holdallowed != 0
     ";
     # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
     #    multiple patrons have a hold on an item
