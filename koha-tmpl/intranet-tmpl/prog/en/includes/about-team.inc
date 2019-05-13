@@ -70,7 +70,7 @@
             <li><strong>Release maintainer:</strong>
                 <ul>
                   [% FOREACH m IN t.maintainer %]
-                    [% IF m.version == v %]
+                    [% IF m.version == ( v - 0.01 ) %]
                       <li>[% INCLUDE person p=m %]</li>
                     [% END %]
                   [% END %]
@@ -123,9 +123,19 @@
         [% END %]
 
         [% IF t.ci %]
-        <li><strong>Jenkins maintainer:</strong>
-            [% INCLUDE person p=t.ci %]
-        </li>
+            [% IF t.ci.size == 1 %]
+            <li><strong>Jenkins maintainer:</strong>
+                [% INCLUDE person p=t.ci.0 %]
+            </li>
+            [% ELSE %]
+            <li><strong>Jenkins maintainers:</strong>
+                <ul>
+                    [% FOREACH j IN t.ci %]
+                    <li>[% INCLUDE person p=j %]
+                    [% END %]
+                </ul>
+            </li>
+            [% END %]
         [% END %]
 
         [% IF t.bugwrangler %]
