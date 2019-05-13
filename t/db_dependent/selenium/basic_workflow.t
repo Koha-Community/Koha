@@ -40,7 +40,7 @@ use C4::Biblio qw( AddBiblio ); # We shouldn't use it
 
 use Koha::CirculationRules;
 
-use Test::More tests => 20;
+use Test::More tests => 22;
 use MARC::Record;
 use MARC::Field;
 
@@ -77,6 +77,9 @@ our $sample_data = {
         issuelength   => '5',
         lengthunit    => 'days',
         renewalperiod => '5',
+        reservesallowed => '5',
+        onshelfholds  => '1',
+        opacitemholds => 'Y',
       },
 };
 our ( $borrowernumber, $start, $prev_time, $cleanup_needed );
@@ -85,7 +88,7 @@ $dbh->do(q|INSERT INTO itemtypes(itemtype) VALUES (?)|, undef, $sample_data->{it
 
 SKIP: {
     eval { require Selenium::Remote::Driver; };
-    skip "Selenium::Remote::Driver is needed for selenium tests.", 20 if $@;
+    skip "Selenium::Remote::Driver is needed for selenium tests.", 22 if $@;
 
     $cleanup_needed = 1;
 
@@ -155,12 +158,16 @@ SKIP: {
             categorycode => $issuing_rules->{categorycode},
             itemtype     => $issuing_rules->{itemtype},
             branchcode   => $issuing_rules->{branchcode},
-            rules        => {
-                maxissueqty => $issuing_rules->{maxissueqty},
-                issuelength => $issuing_rules->{issuelength},
-                lengthunit => $issuing_rules->{lengthunit},
-                renewalperiod => $issuing_rules->{renewalperiod},
-            }
+            rules => {
+                maxissueqty     => $issuing_rules->{maxissueqty},
+                issuelength     => $issuing_rules->{issuelength},
+                lengthunit      => $issuing_rules->{lengthunit},
+                renewalperiod   => $issuing_rules->{renewalperiod},
+                reservesallowed => $issuing_rules->{reservesallowed},
+                onshelfholds    => $issuing_rules->{onshelfholds},
+                opacitemholds   => $issuing_rules->{opacitemholds},
+
+              }
         }
     );
 
@@ -226,6 +233,19 @@ SKIP: {
     }
 
     time_diff("checkin");
+
+    #Place holds
+    $driver->get($base_url."/reserve/request.pl?borrowernumber=$borrowernumber&biblionumber=".$biblionumbers[0]);
+    $driver->find_element('//form[@id="hold-request-form"]//input[@type="submit"]')->click; # Biblio level
+    my $patron = Koha::Patrons->find($borrowernumber);
+    is( $patron->holds->count, 1, );
+
+    $driver->get($base_url."/reserve/request.pl?borrowernumber=$borrowernumber&biblionumber=".$biblionumbers[1]);
+    $driver->find_element('//form[@id="hold-request-form"]//input[@type="radio"]')->click; # Item level, there is only 1 item per bib so we are safe
+    $driver->find_element('//form[@id="hold-request-form"]//input[@type="submit"]')->click;
+    is( $patron->holds->count, 2, );
+
+    time_diff("holds");
 
     close $fh;
     $driver->quit();
