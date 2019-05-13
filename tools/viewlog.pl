@@ -132,9 +132,20 @@ if ($do_it) {
     $search_params{user} = $user if $user;
     $search_params{module} = { -in => [ @modules ] } if ( defined $modules[0] and $modules[0] ne '' ) ;
     $search_params{action} = { -in => [ @actions ] } if ( defined $actions[0] && $actions[0] ne '' );
-    $search_params{object} = $object if $object;
-    $search_params{info} = $info if $info;
     $search_params{interface} = { -in => [ @interfaces ] } if ( defined $interfaces[0] && $interfaces[0] ne '' );
+
+
+    if ( @modules == 1 && $modules[0] eq 'CATALOGUING' ) {
+        # Handle 'Modification log' from cataloguing
+        my @itemnumbers = Koha::Items->search({ biblionumber => $object })->get_column('itemnumber');
+        $search_params{'-or'} = [
+            { -and => { object => $object, info => { -like => 'biblio %' }}},
+            { -and => { object => \@itemnumbers, info => { -like => 'item %' }}},
+        ];
+    } else {
+        $search_params{info} = $info if $info;
+        $search_params{object} = $object if $object;
+    }
 
     my @logs = Koha::ActionLogs->search(\%search_params);
 
