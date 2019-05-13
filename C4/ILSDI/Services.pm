@@ -688,6 +688,9 @@ sub HoldTitle {
     my $patron = Koha::Patrons->find( $borrowernumber );
     return { code => 'PatronNotFound' } unless $patron;
 
+    # If borrower is debarred return an error code
+    return { code => 'PatronDebarred' } if $patron->is_debarred;
+
     # Get the biblio record, or return an error code
     my $biblionumber = $cgi->param('bib_id');
     my $biblio = Koha::Biblios->find( $biblionumber );
@@ -772,6 +775,9 @@ sub HoldItem {
     my $borrowernumber = $cgi->param('patron_id');
     my $patron = Koha::Patrons->find( $borrowernumber );
     return { code => 'PatronNotFound' } unless $patron;
+
+    # If borrower is debarred return an error code
+    return { code => 'PatronDebarred' } if $patron->is_debarred;
 
     # Get the biblio or return an error code
     my $biblionumber = $cgi->param('bib_id');
