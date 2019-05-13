@@ -98,14 +98,53 @@
             <tr>
                 [% IF ( show ) %]<th>&nbsp;</th>[% END %]
                 <th class="anti-the">Title</th>
+                <th class="holds_count" title="Item holds / Total holds">Holds</th>
                 [% FOREACH item_header_loo IN item_header_loop %]
                 <th> [% item_header_loo.header_value | html %] </th>
                 [% END %]
             </tr>
             </thead>
             <tbody>
-            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" /></td>[% END %][% END %]
-            <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
+            [% FOREACH item_loo IN item_loop %]
+              <tr>
+                [% IF show %]
+                  [% IF item_loo.nomod %]
+                    <td class="error">Cannot edit</td>
+                  [% ELSE %]
+                    <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" data-is-onloan="[% item_loo.onloan | html %]" /></td>
+                  [% END %]
+                [% ELSE %]
+                  <td>&nbsp;</td>
+                [% END %]
+                <td>
+                    <label for="row[% item_loo.itemnumber | html %]">
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">
+                            [% item_loo.title | html %]
+                        </a>
+                        [% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]
+                    </label>
+                </td>
+                <td class="holds_count">
+                    [% IF item_loo.holds %]
+                        [% IF item_loo.item_holds %]
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="Holds on this item: [% item_loo.item_holds | html %] / Total holds on this record: [% item_loo.holds | html -%]" >
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this item / Total holds on this record: [% item_loo.holds | html -%]" >
+                        [% END %]
+                    [% ELSE %]
+                        [% IF item_loo.holds %]
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="Holds on this record: [% item_loo.holds | html -%]" >
+                        [% ELSE %]
+                            <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="No holds on this record" >
+                        [% END %]
+                    [% END %]
+                                [% IF item_loo.holds %]
+                                    [% item_loo.item_holds | html %]/[% item_loo.holds | html %]
+                                [% ELSE %]
+                                    [% item_loo.holds | html %]
+                                [% END %]
+                            </a>
+                </td>
             [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
                     [% END %] </tr>
             [% END %]
