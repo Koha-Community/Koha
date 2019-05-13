@@ -531,7 +531,10 @@ if ( defined C4::Context->config('docdir') ) {
 }
 
 ## Contributors
-my $contributors = LoadFile("$docdir"."/contributors.yaml");
+my $contributors =
+  -e "$docdir" . "/contributors.yaml"
+  ? LoadFile( "$docdir" . "/contributors.yaml" )
+  : {};
 my @people = map {
     {
         name => $_,
