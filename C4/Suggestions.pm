@@ -544,11 +544,10 @@ sub ModSuggestion {
     }
 
     my $rs = Koha::Database->new->schema->resultset('Suggestion')->find($suggestion->{suggestionid});
-    my $status_update_table = 1;
-    eval {
+    eval { # FIXME Must raise an exception instead
         $rs->update($suggestion);
     };
-    $status_update_table = 0 if( $@ );
+    return 0 if $@;
 
     if ( $suggestion->{STATUS} ) {
 
@@ -584,7 +583,7 @@ sub ModSuggestion {
             ) or warn "can't enqueue letter $letter";
         }
     }
-    return $status_update_table;
+    return 1; # No useful if the exception is raised earlier
 }
 
 =head2 ConnectSuggestionAndBiblio
