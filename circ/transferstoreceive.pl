@@ -94,7 +94,7 @@ while ( my $library = $libraries->next ) {
 
             $getransf{'datetransfer'} = $num->{'datesent'};
             $getransf{'itemtype'} = $itemtype->description; # FIXME Should not it be translated_description?
-			foreach (qw(title author biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
+			foreach (qw(title author biblionumber enumchron itemnumber barcode homebranch holdingbranch itemcallnumber)) {
             	$getransf{$_} = $gettitle->{$_};
 			}
 
