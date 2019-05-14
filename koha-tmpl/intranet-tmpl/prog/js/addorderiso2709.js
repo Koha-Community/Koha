@@ -11,26 +11,11 @@ $(document).ready(function() {
         "aaSorting": []
     }) );
 
+    checkOrderBudgets();
     var all_budget_id = $("#all_budget_id");
 
-    if( !all_budget_id.val() ){
-        $(".fund label, .fund select").addClass("required").prop("required", true);
-        $(".fund span.required").show();
-    }
-
-    all_budget_id.on("change", function(){
-        if( $(this).val() != "" ){
-            $(".fund label, .fund select").removeClass("required").prop("required", false);
-            $(".fund select").each(function(){
-                if( $(this).val() == '' ){
-                    $(this).val( all_budget_id.val() );
-                }
-            });
-            $(".fund span.required").hide();
-        } else {
-            $(".fund label, .fund select").addClass("required").prop("required", true);
-            $(".fund span.required").show();
-        }
+    $("#all_budget_id,[name='budget_id'],.budget_code_item,[name='import_record_id']").on("change", function(){
+        checkOrderBudgets();
     });
 
     $("#records_to_import fieldset.rows div").hide();
@@ -80,18 +65,10 @@ $(document).ready(function() {
 
         }
 
-        if (! all_budget_id.val() ) {
-            // If there is no default fund
-            error = 0;
-            $(".selected [name='budget_id']").each(function(){
-                if (!$(this).val()) {
-                    error++;
-                }
-            });
-            if ( error > 0 ) {
-                alert( ERR_FUNDS_MISSING );
-                return false;
-            }
+        error = checkOrderBudgets();
+        if ( error > 0 ) {
+            alert( ERR_FUNDS_MISSING );
+            return false;
         }
 
         return disableUnchecked($(this));
@@ -117,4 +94,59 @@ function disableUnchecked(){
         $(this).remove();
     });
     return 1;
+}
+
+function checkOrderBudgets(){
+    var unset_funds = 0;
+    var all_budget_id = $("#all_budget_id");
+    // If we don't have an overarching default set we need to check each selected order
+    if ( !all_budget_id.val() ) {
+        $("fieldset.biblio.rows.selected").each(function(){
+            var default_order_fund = $(this).find("[name='budget_id']");
+            // For each order we see if budget is set for order
+            if( !default_order_fund.val() ){
+                $(this).find(".item_fund.required").show();
+                //If not we need to check each item on the order
+                var item_funds = $(this).find(".budget_code_item");
+                if( item_funds.length ){
+                    item_funds.each(function(){
+                        if( !$(this).val() ){
+                            $(this).addClass('required').prop("required", true);
+                            unset_funds++;
+                        } else {
+                            $(this).removeClass('required').prop("required", false);
+                        }
+                    });
+                } else {
+                    //If the order has no items defined then the order level fund is required
+                    default_order_fund.addClass('required').prop("required", true);
+                    $(this).find(".fund span.required").show();
+                    $(this).find(".item_fund.required").hide();
+                    unset_funds++;
+                }
+            } else {
+                $(this).find(".fund span.required").hide();
+                // If fund is set for order then none of the others are required
+                $(this).find(".budget_code_item").each(function(){
+                    if( !$(this).val() ){
+                        $(this).val( default_order_fund.val() );
+                        $(this).removeClass('required').prop("required", false);
+                    }
+                });
+                $(this).removeClass('required').prop("required", false);
+            }
+        });
+    } else {
+        // Default is set overall, we just need to populate it through
+        // to each order/item
+        $("[name='budget_id'],.budget_code_item").each(function(){
+            if( !$(this).val() ){
+                $(this).val( all_budget_id.val() );
+                $(this).removeClass('required').prop("required", false);
+                $(".item_fund.required").hide();
+                $(".fund span.required").hide();
+            }
+        });
+    }
+    return unset_funds;
 }

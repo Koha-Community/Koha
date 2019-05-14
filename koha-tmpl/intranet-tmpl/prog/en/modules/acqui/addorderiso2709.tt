@@ -129,7 +129,7 @@
                                 [% ELSE %]
                                     <label for="fund_record_[% biblio.import_record_id | html %]">Fund: </label>
                                     <select id="fund_record_[% biblio.import_record_id | html %]" size="1" name="budget_id">
-                                    <option value="">Select a fund</option>
+                                    <option value="">Select a fund (will use default if set)</option>
                                     [% FOREACH budget IN budget_loop %]
                                         [% IF ( budget.b_id == biblio.budget_id ) %]
                                           [% IF budget.b_active %]
@@ -225,14 +225,15 @@
                         </li>
                         <li><label for="uri_item_[% item.item_id | html %]">uri</label><input type="text" id="uri_item_[% item.item_id | html %]" name="uri_[% item.biblio_count | html %]" value="[% item.uri | html %]"></li>
                         <li><label for="copyno_item_[% item.item_id | html %]">copyno</label><input type="text" id="copyno_item_[% item.item_id | html %]" name="copyno_[% item.biblio_count | html %]" value="[% item.copyno | html %]"></li>
-                        <li><label for="budget_code_item_[% item.item_id | html %]">budget_code</label><select id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% item.biblio_count | html %]">
-                        <option value="">Select a fund</option>
+                        <li><label for="budget_code_item_[% item.item_id | html %]">budget_code</label><select class="budget_code_item" id="budget_code_item_[% item.item_id | html %]" name="budget_code_[% item.biblio_count | html %]">
+                        <option value="">Select a fund (will use default if set)</option>
                         [% FOREACH budget_loo IN budget_loop %]
                             [% IF ( budget_loo.b_id ) == ( item.budget_id ) %]<option value="[% budget_loo.b_id | html %]" selected="selected">[% budget_loo.b_txt | html %]</option>
                             [% ELSE %]<option value="[% budget_loo.b_id | html %]">[% budget_loo.b_txt | html %]</option>
                             [% END %]
                         [% END %]
                         </select>
+                        <span class="item_fund required">Required</span>
                         </li>
                         <li><label for="price_item_[% item.item_id | html %]">price</label><input type="text" id="price_item_[% item.item_id | html %]" name="itemprice_[% item.biblio_count | html %]" value="[% item.itemprice | html %]"></li>
                         <li><label for="replacementprice_item_[% item.item_id | html %]">replacement price</label><input type="text" id="replacementprice_item_[% item.item_id | html %]" name="replacementprice_[% item.biblio_count | html %]" value="[% item.replacementprice | html %]"></li>
@@ -339,7 +340,7 @@
                                         <li>
                                             <label for="all_budget_id">Fund: </label>
                                             <select id="all_budget_id" size="1" name="all_budget_id">
-                                              <option value="">Select a fund</option>
+                                              <option value="">Select a fund (will populate orders/items if set)</option>
                                             [% FOREACH budget_loo IN budget_loop %]
                                                 [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
                                                 [% ELSE %]<option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
