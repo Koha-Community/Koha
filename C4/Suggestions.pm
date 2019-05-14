@@ -453,8 +453,8 @@ sub NewSuggestion {
 
     $suggestion->{suggesteddate} = dt_from_string unless $suggestion->{suggesteddate};
 
-    my $rs = Koha::Database->new->schema->resultset('Suggestion');
-    return $rs->create($suggestion)->id;
+    my $suggestion_object = Koha::Suggestion->new( $suggestion )->store;
+    return $suggestion_object->suggestionid;
 }
 
 =head2 ModSuggestion
@@ -491,9 +491,9 @@ sub ModSuggestion {
             or $suggestion->{$field} eq '' );
     }
 
-    my $rs = Koha::Database->new->schema->resultset('Suggestion')->find($suggestion->{suggestionid});
+    my $suggestion_object = Koha::Suggestions->find( $suggestion->{suggestionid} );
     eval { # FIXME Must raise an exception instead
-        $rs->update($suggestion);
+        $suggestion_object->set($suggestion)->store;
     };
     return 0 if $@;
 
