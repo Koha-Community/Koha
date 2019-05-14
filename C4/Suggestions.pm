@@ -455,12 +455,12 @@ sub NewSuggestion {
 
     $suggestion->{suggesteddate} = dt_from_string unless $suggestion->{suggesteddate};
 
-    my $rs = Koha::Database->new->schema->resultset('Suggestion');
-    my $new_id = $rs->create($suggestion)->id;
+    my $suggestion_object = Koha::Suggestion->new( $suggestion )->store;
+    my $suggestion_id = $suggestion_object->suggestionid;
 
     my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
     if ($emailpurchasesuggestions) {
-        my $full_suggestion = GetSuggestion( $new_id );
+        my $full_suggestion = GetSuggestion( $suggestion_id); # We should not need to refetch it!
         if (
             my $letter = C4::Letters::GetPreparedLetter(
                 module      => 'suggestions',
@@ -506,7 +506,7 @@ sub NewSuggestion {
         }
     }
 
-    return $new_id;
+    return $suggestion_id;
 }
 
 =head2 ModSuggestion
@@ -543,9 +543,9 @@ sub ModSuggestion {
             or $suggestion->{$field} eq '' );
     }
 
-    my $rs = Koha::Database->new->schema->resultset('Suggestion')->find($suggestion->{suggestionid});
+    my $suggestion_object = Koha::Suggestions->find( $suggestion->{suggestionid} );
     eval { # FIXME Must raise an exception instead
-        $rs->update($suggestion);
+        $suggestion_object->set($suggestion)->store;
     };
     return 0 if $@;
 
