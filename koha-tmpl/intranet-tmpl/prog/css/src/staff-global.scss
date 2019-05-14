@@ -524,7 +524,7 @@ input {
 }
 
 label,
-.label:not(.label-primary):not(.label-default) {
+.label {
     color: #000;
     display: inline;
     font-size: inherit;
@@ -3757,6 +3757,14 @@ span {
         font-style: italic;
         margin-left: .5em;
     }
+
+    &[class*=" label-"] {
+        color: #FFF;
+        display: inline;
+        font-size: 75%;
+        font-weight: normal;
+        padding: .2em .6em .3em;
+    }
 }
 
 
@@ -4455,6 +4463,10 @@ input.renew {
     top: 0;
 }
 
+div#makechart ol li {
+    list-style: none;
+}
+
 @media (min-width: 200px) {
 
 }
@@ -4624,10 +4636,6 @@ input.renew {
     .loggedin-menu-label {
         display: none;
     }
-}
-
-div#makechart ol li {
-    list-style: none;
 }
 
 @media only screen and ( min-width: 1200px ) {

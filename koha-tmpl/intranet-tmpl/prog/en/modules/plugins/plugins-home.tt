@@ -78,12 +78,12 @@
                             [% FOREACH plugin IN plugins %]
                                 <tr>
                                     <td>
+                                        <strong>[% plugin.metadata.name | html %]</strong>
                                         [% IF ( plugin.enabled ) %]
                                             <span class="label label-primary">ENABLED</span>
                                         [% ELSE %]
                                             <span class="label label-default">DISABLED</span>
                                         [% END %]
-                                        <strong>[% plugin.metadata.name | html %]</strong>
                                     </td>
                                     <td>
                                         [% plugin.metadata.description | html %]
@@ -114,27 +114,27 @@
                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
                                                     [% IF ( CAN_user_plugins_report ) %]
                                                         [% IF plugin.can('report') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table"></i> Run report</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table fa-fw"></i> Run report</a></li>
                                                         [% END %]
                                                     [% END %]
 
                                                     [% IF ( CAN_user_plugins_tool ) %]
                                                         [% IF plugin.can('tool') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench"></i> Run tool</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench fa-fw"></i> Run tool</a></li>
                                                         [% END %]
                                                     [% END %]
 
                                                     [% IF ( CAN_user_plugins_configure ) %]
                                                         [% IF plugin.can('configure') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog"></i> Configure</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog fa-fw"></i> Configure</a></li>
                                                         [% END %]
                                                     [% END %]
                                                     [% IF ( CAN_user_plugins_manage ) %]
-                                                            <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash"></i> Uninstall</a></li>
+                                                            <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash fa-fw"></i> Uninstall</a></li>
                                                         [% IF ( plugin.enabled ) %]
-                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause"></i> Disable</a></li>
+                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause fa-fw"></i> Disable</a></li>
                                                         [% ELSE %]
-                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"><i class="fa fa-play"></i> Enable</a></li>
+                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"><i class="fa fa-play fa-fw"></i> Enable</a></li>
                                                         [% END %]
                                                     [% END %]
                                                 </ul>
