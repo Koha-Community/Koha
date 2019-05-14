@@ -661,9 +661,8 @@ foreach my $biblionumber (@biblionumbers) {
             }
         }
 
-        $reserve{'expirationdate'} = output_pref( { dt => dt_from_string( $res->expirationdate ), dateonly => 1 } )
-          unless ( !defined( $res->expirationdate ) || $res->expirationdate eq '0000-00-00' );
-        $reserve{'date'}           = output_pref( { dt => dt_from_string( $res->reservedate ), dateonly => 1 } );
+        $reserve{'expirationdate'} = $res->expirationdate;
+        $reserve{'date'}           = $res->reservedate;
         $reserve{'borrowernumber'} = $res->borrowernumber();
         $reserve{'biblionumber'}   = $res->biblionumber();
         $reserve{'patron'}         = $res->borrower;

@@ -906,6 +906,8 @@ sub ModReserve {
 
     my $rank = $params->{'rank'};
     my $reserve_id = $params->{'reserve_id'};
+    my $reservedate = $params->{reservedate} || undef;
+    my $expirationdate = $params->{expirationdate} || undef;
     my $branchcode = $params->{'branchcode'};
     my $itemnumber = $params->{'itemnumber'};
     my $suspend_until = $params->{'suspend_until'};
@@ -937,6 +939,8 @@ sub ModReserve {
         $hold->set(
             {
                 priority    => $rank,
+                reservedate => $reservedate,
+                expirationdate => $expirationdate,
                 branchcode  => $branchcode,
                 itemnumber  => $itemnumber,
                 found       => undef,

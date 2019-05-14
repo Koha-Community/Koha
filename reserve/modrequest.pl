@@ -44,6 +44,8 @@ my @reserve_id = $query->multi_param('reserve_id');
 my @rank = $query->multi_param('rank-request');
 my @biblionumber = $query->multi_param('biblionumber');
 my @borrower = $query->multi_param('borrowernumber');
+my @reservedates = $query->multi_param('reservedate');
+my @expirationdates = $query->multi_param('expirationdate');
 my @branch = $query->multi_param('pickup');
 my @itemnumber = $query->multi_param('itemnumber');
 my @suspend_until=$query->multi_param('suspend_until');
@@ -70,6 +72,8 @@ else {
         ModReserve({
             rank => $rank[$i],
             reserve_id => $reserve_id[$i],
+            reservedate => $reservedates[$i],
+            expirationdate => $expirationdates[$i],
             branchcode => $branch[$i],
             itemnumber => $itemnumber[$i],
             suspend_until => $suspend_until[$i]

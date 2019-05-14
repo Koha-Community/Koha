@@ -106,8 +106,8 @@
             </td>
 
             <td>[% hold.notes | html %]</td>
-            <td>[% hold.date | html %]</td>
-            <td>[% hold.expirationdate | html %]</td>
+            <td><input type="date" value="[% hold.date | html %]" required name="reservedate"></td>
+            <td><input type="date" value="[% hold.expirationdate | html %]" name="expirationdate"></td>
 
             <td>
                 [% IF ( hold.found ) %]
