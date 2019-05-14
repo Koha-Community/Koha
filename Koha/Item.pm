@@ -354,15 +354,15 @@ sub add_to_rota {
     return $self;
 }
 
-=head3 pending_hold
+=head3 has_pending_hold
 
-  my $is_pending_hold = $item->pending_hold();
+  my $is_pending_hold = $item->has_pending_hold();
 
 This method checks the tmp_holdsqueue to see if this item has been selected for a hold, but not filled yet and returns true or false
 
 =cut
 
-sub pending_hold {
+sub has_pending_hold {
     my ( $self ) = @_;
     my $pending_hold = $self->_result->tmp_holdsqueues;
     return !C4::Context->preference('AllowItemsOnHoldCheckout') && $pending_hold->count ? 1: 0;

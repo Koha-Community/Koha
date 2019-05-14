@@ -89,7 +89,7 @@
     <span class="item-status onorder">On order</span>
 [% END %]
 
-[% IF item.pending_hold %]
+[% IF item.has_pending_hold %]
     [% SET itemavailable = 0 %]
     <span class="item-status pendinghold">Pending hold</span>
 [% END %]

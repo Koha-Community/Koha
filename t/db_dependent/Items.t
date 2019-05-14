@@ -318,11 +318,11 @@ subtest 'GetItemsInfo tests' => sub {
     my $dbh = C4::Context->dbh;
     $dbh->do(q{INSERT INTO tmp_holdsqueue (biblionumber, itemnumber, surname, borrowernumber ) VALUES (?, ?, "Zorro", 42)}, undef, $item_bibnum, $itemnumber);
     @results = GetItemsInfo( $biblio->biblionumber );
-    is( $results[0]->{ pending_hold }, "1",
+    is( $results[0]->{ has_pending_hold }, "1",
         'Hold marked as pending/unavailable if not AllowItemsOnHoldCheckout' );
     t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 1 );
     @results = GetItemsInfo( $biblio->biblionumber );
-    is( $results[0]->{ pending_hold }, undef,
+    is( $results[0]->{ has_pending_hold }, undef,
         'Hold not marked as pending/unavailable if AllowItemsOnHoldCheckout' );
 
 
