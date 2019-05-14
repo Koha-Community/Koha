@@ -318,6 +318,12 @@ See CanItemBeReserved() for possible return values.
 sub CanBookBeReserved{
     my ($borrowernumber, $biblionumber, $pickup_branchcode, $params) = @_;
 
+    # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
+    if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
+        && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $biblio->biblionumber ) ) {
+        return { status =>'itemAlreadyOnLoan' };
+    }
+
     my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber})->get_column("itemnumber");
     #get items linked via host records
     my @hostitems = get_hostitemnumbers_of($biblionumber);
@@ -385,6 +391,12 @@ sub CanItemBeReserved {
     # Check that the patron doesn't have an item level hold on this item already
     return { status =>'itemAlreadyOnHold' }
       if Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count();
+
+    # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
+    if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
+        && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $biblio->biblionumber ) ) {
+        return { status =>'itemAlreadyOnLoan' };
+    }
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
 
