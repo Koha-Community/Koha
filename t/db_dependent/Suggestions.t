@@ -103,6 +103,7 @@ my $my_suggestion = {
     manageddate   => '',
     accepteddate  => dt_from_string,
     note          => 'my note',
+    quantity      => '', # Insert an empty string into int to catch strict SQL modes errors
 };
 
 my $budgetperiod_id = AddBudgetPeriod({
