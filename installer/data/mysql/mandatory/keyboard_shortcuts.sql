@@ -31,4 +31,5 @@ INSERT INTO keyboard_shortcuts (shortcut_name, shortcut_keys) VALUES
     ("new_line","Enter"),
     ("line_break","Shift-Enter"),
     ("next_position","Tab"),
-    ("prev_position","Shift-Tab");
+    ("prev_position","Shift-Tab"),
+    ("toggle_keyboard", "Shift-Ctrl-K");
