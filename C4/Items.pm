@@ -1008,7 +1008,7 @@ sub GetItemsInfo {
            holding.opac_info as holding_branch_opac_info,
            home.opac_info as home_branch_opac_info
     ";
-    $query .= ",IF(tmp_holdsqueue.itemnumber,1,0) AS pending_hold" if !C4::Context->preference('AllowItemsOnHoldCheckout');
+    $query .= ",IF(tmp_holdsqueue.itemnumber,1,0) AS has_pending_hold" if !C4::Context->preference('AllowItemsOnHoldCheckout');
     $query .= "
      FROM items
      LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
