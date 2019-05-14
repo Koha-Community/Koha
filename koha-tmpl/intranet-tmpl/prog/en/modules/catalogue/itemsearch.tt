@@ -422,7 +422,7 @@
       form_field.append(button_field_new);
 
             // If a field is linked to an authorised values list, display the list.
-            $('div.form-field-select-text select').change(function() {
+            $('div.form-field-select-text select[name="f"]').change(function() {
                 loadAuthorisedValuesSelect($(this));
             }).change();
 
