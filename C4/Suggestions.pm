@@ -437,20 +437,6 @@ Insert a new suggestion on database with value given on input arg.
 sub NewSuggestion {
     my ($suggestion) = @_;
 
-    for my $field ( qw(
-        suggestedby
-        managedby
-        manageddate
-        acceptedby
-        accepteddate
-        rejectedby
-        rejecteddate
-        budgetid
-    ) ) {
-        # Set the fields to NULL if not given.
-        $suggestion->{$field} ||= undef;
-    }
-
     $suggestion->{STATUS} = "ASKED" unless $suggestion->{STATUS};
 
     $suggestion->{suggesteddate} = dt_from_string unless $suggestion->{suggesteddate};
@@ -525,23 +511,6 @@ Note that there is no function to modify a suggestion.
 sub ModSuggestion {
     my ($suggestion) = @_;
     return unless( $suggestion and defined($suggestion->{suggestionid}) );
-
-    for my $field ( qw(
-        suggestedby
-        managedby
-        manageddate
-        acceptedby
-        accepteddate
-        rejectedby
-        rejecteddate
-        budgetid
-    ) ) {
-        # Set the fields to NULL if not given.
-        $suggestion->{$field} = undef
-          if exists $suggestion->{$field}
-          and ($suggestion->{$field} eq '0'
-            or $suggestion->{$field} eq '' );
-    }
 
     my $suggestion_object = Koha::Suggestions->find( $suggestion->{suggestionid} );
     eval { # FIXME Must raise an exception instead
