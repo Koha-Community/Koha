@@ -531,7 +531,10 @@ if ( defined C4::Context->config('docdir') ) {
 }
 
 ## Release teams
-my $teams = LoadFile("$docdir"."/teams.yaml");
+my $teams =
+  -e "$docdir" . "/teams.yaml"
+  ? LoadFile( "$docdir" . "/teams.yaml" )
+  : {};
 my $dev_team = (sort {$b <=> $a} (keys %{$teams->{team}}))[0];
 my $short_version = substr($versions{'kohaVersion'},0,5);
 my $minor = substr($versions{'kohaVersion'},3,2);
