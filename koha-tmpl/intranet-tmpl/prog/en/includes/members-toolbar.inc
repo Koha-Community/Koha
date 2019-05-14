@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE AuthorisedValues %]
+[% USE scalar %]
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( guarantor ) %]
