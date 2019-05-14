@@ -3,6 +3,13 @@
 [% USE Categories %]
 
 <script type="text/javascript">
+    var MSG_CONFIRM_RENEW_PATRON = _("Are you sure you want to renew this patron's registration?");
+    var MSG_CONFIRM_UPDATE_CHILD = _("Are you sure you want to update this child to an Adult category? This cannot be undone.");
+    var MSG_DATE_FORMAT_US = _("Dates of birth should be entered in the format 'MM/DD/YYYY'");
+    var MSG_DATE_FORMAT_ISO = _("Dates of birth should be entered in the format 'YYYY-MM-DD'");
+    var MSG_DATE_FORMAT_METRIC = _("Dates of birth should be entered in the format 'DD/MM/YYYY'");
+    var MSG_DATE_FORMAT_DMYDOT = _("Dates of birth should be entered in the format 'DD.MM.YYYY'");
+
     var advsearch = "[% advsearch | html %]";
     var destination = "[% destination | html %]";
 

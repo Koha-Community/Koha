@@ -1,4 +1,4 @@
-/* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination */
+/* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky MSG_DATE_FORMAT_US MSG_DATE_FORMAT_ISO MSG_DATE_FORMAT_METRIC MSG_DATE_FORMAT_DMYDOT MSG_CONFIRM_UPDATE_CHILD MSG_CONFIRM_RENEW_PATRON */
 
 $(document).ready(function(){
     $("#filteraction_off, #filteraction_on").on('click', function(e) {
@@ -16,13 +16,13 @@ $(document).ready(function(){
         var MSG_DATE_FORMAT = "";
         if ( $(this).val() == 'dateofbirth' ) {
             if( dateformat == 'us' ){
-                MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'MM/DD/YYYY'");
+                MSG_DATE_FORMAT = MSG_DATE_FORMAT_US;
             } else if( dateformat == 'iso' ){
-                MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'YYYY-MM-DD'");
+                MSG_DATE_FORMAT = MSG_DATE_FORMAT_ISO;
             } else if( dateformat == 'metric' ){
-                MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD/MM/YYYY'");
+                MSG_DATE_FORMAT = MSG_DATE_FORMAT_METRIC;
             } else if( dateformat == 'dmydot' ){
-                MSG_DATE_FORMAT = _("Dates of birth should be entered in the format 'DD.MM.YYYY'");
+                MSG_DATE_FORMAT = MSG_DATE_FORMAT_DMYDOT;
             }
             $('#searchmember').attr("title", MSG_DATE_FORMAT).tooltip('show');
         } else {
@@ -85,7 +85,7 @@ $(document).ready(function(){
 });
 
 function confirm_updatechild() {
-    var is_confirmed = window.confirm(_("Are you sure you want to update this child to an Adult category?  This cannot be undone."));
+    var is_confirmed = window.confirm( MSG_CONFIRM_UPDATE_CHILD );
     if (is_confirmed) {
         window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=' + borrowernumber;
     }
@@ -100,7 +100,7 @@ function update_child() {
 }
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm(_("Are you sure you want to renew this patron's registration?"));
+    var is_confirmed = window.confirm( MSG_CONFIRM_RENEW_PATRON );
     if (is_confirmed) {
         window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=' + borrowernumber + '&amp;destination=' + destination + '&amp;reregistration=y';
     }
