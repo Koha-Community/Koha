@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 <script type="text/javascript">
     $(document).ready(function() {
         $(".clickable").click(function() {
@@ -5,6 +6,7 @@
         });
         var table = $("#table_borrowers").dataTable($.extend(true, {}, dataTablesDefaults, {
             "aaSorting": [ 0, "asc" ],
+            "aoColumnDefs": [ { "sType": "title-string", "aTargets" : [ "title-string" ] } ],
             "sDom": "t",
             "iDisplayLength": 100
         }));
@@ -16,7 +18,7 @@
         <tr>
             <th>Name</th>
             <th>Card number</th>
-            <th>Date of birth</th>
+            <th class="title-string">Date of birth</th>
             <th>Category</th>
             <th>Library</th>
             <th>Address</th>
@@ -37,7 +39,7 @@
                 [% END %]
             [% END %]
                 <td>[% borrower.cardnumber %]</td>
-                <td>[% borrower.dateofbirth %]</td>
+                <td><span title="[% borrower.dateofbirth %]">[% borrower.dateofbirth | $KohaDates %]</span></td>
                 <td>[% Categories.GetName( borrower.categorycode ) %]</td>
                 <td>[% Branches.GetName( borrower.branchcode ) %]</td>
                 <td>[% borrower.address %]</td>
