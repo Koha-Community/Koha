@@ -144,7 +144,7 @@ sub get_elasticsearch_params {
 
     $es->{key_prefix} = 'es_';
     $es->{client} //= '5_0::Direct';
-    $es->{cxn_pool} //= 'Sniff';
+    $es->{cxn_pool} //= 'Static';
     $es->{request_timeout} //= 60;
 
     return $es;
