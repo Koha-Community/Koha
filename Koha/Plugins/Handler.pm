@@ -70,7 +70,7 @@ sub run {
         return $plugin->$plugin_method( $params );
     } else {
         warn "Plugin does not have method $plugin_method";
-        return undef;
+        return;
     }
 }
 

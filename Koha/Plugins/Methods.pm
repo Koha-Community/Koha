@@ -43,6 +43,10 @@ sub _type {
     return 'PluginMethod';
 }
 
+=head3 object_class
+
+=cut
+
 sub object_class {
     return 'Koha::Plugin::Method';
 }

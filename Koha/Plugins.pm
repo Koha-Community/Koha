@@ -112,7 +112,7 @@ sub GetPlugins {
     return @plugins;
 }
 
-=head2
+=head2 InstallPlugins
 
 Koha::Plugins::InstallPlugins()
 
