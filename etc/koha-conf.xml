@@ -161,6 +161,9 @@ __PAZPAR2_TOGGLE_XML_POST__
  <elasticsearch>
      <server>localhost:9200</server>
      <index_name>koha___DB_NAME__</index_name>
+
+     <!-- See https://metacpan.org/pod/Search::Elasticsearch#cxn_pool -->
+     <cxn_pool>Static</cxn_pool>
  </elasticsearch>
  <!-- Uncomment the following line if you want to override the Elasticsearch default index settings -->
  <!-- <elasticsearch_index_config>__KOHA_CONF_DIR__/searchengine/elasticsearch/index_config.yaml</elasticsearch_index_config> -->
