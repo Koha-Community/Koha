@@ -124,7 +124,7 @@ $(document).ready(function() {
       <input type="hidden" name="parentTransaction" value="[% relline %]" />
     [% END %]
    <td><span title="[% account.date %]">[% account.date |$KohaDates %]</span></td>
-   <td class="transactionnumber">[% IF account.transactionnumber %][% account.transactionnumber %][% ELSE %]-[% END %]</td>
+   <td class="transactionnumber">[% IF account.transactionnumber %][% account.transactionnumber %][% ELSIF account.payment %]<span class="accountlines_id">[% account.accountlines_id %]</span>[% END %]</td>
       <td>
         [% SWITCH account.accounttype %]
           [% CASE 'Pay' %]Payment, thanks
