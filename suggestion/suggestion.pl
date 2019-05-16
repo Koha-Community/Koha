@@ -223,7 +223,6 @@ elsif ($op eq "change" ) {
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
         $suggestion->{suggestionid} = $suggestionid;
-        use Data::Printer colored => 1; warn p $suggestion;
         &ModSuggestion($suggestion);
     }
     my $params = '';
