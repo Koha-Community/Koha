@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Exception;
 
 use C4::Circulation qw/AddIssue AddReturn/;
@@ -33,6 +33,35 @@ use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'patron() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron = $builder->build( { source => 'Borrower' } );
+
+    my $line = Koha::Account::Line->new(
+    {
+        borrowernumber => $patron->{borrowernumber},
+        accounttype    => "OVERDUE",
+        status         => "RETURNED",
+        amount         => 10,
+        interface      => 'commandline',
+    })->store;
+
+    my $account_line_patron = $line->patron;
+    is( ref( $account_line_patron ), 'Koha::Patron', 'Koha::Account::Line->patron should return a Koha::Patron' );
+    is( $line->borrowernumber, $account_line_patron->borrowernumber, 'Koha::Account::Line->patron should return the correct borrower' );
+
+    $line->borrowernumber(undef)->store;
+    is( $line->patron, undef, 'Koha::Account::Line->patron should return undef if no patron linked' );
+
+    $schema->storage->txn_rollback;
+};
+
 
 subtest 'item() tests' => sub {
 
