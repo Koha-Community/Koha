@@ -37,7 +37,10 @@ use Koha::Token;
 
 my $input = CGI->new();
 
-my $updatecharges_permissions = $input->param('writeoff_individual') ? 'writeoff' : 'remaining_permissions';
+my $writeoff_individual       = $input->param('writeoff_individual');
+my $type                      = scalar $input->param('type') || 'payment';
+
+my $updatecharges_permissions = ($writeoff_individual || $type eq 'writeoff') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/paycollect.tt',
         query           => $input,
@@ -63,19 +66,17 @@ my $total_due = $patron->account->outstanding_debits->total_outstanding;
 
 my $total_paid = $input->param('paid');
 
-my $individual   = $input->param('pay_individual');
-my $writeoff     = $input->param('writeoff_individual');
 my $select_lines = $input->param('selected');
+my $pay_individual   = $input->param('pay_individual');
 my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
-my $type         = scalar $input->param('type') || 'payment',
 my $accountlines_id;
 
-if ( $individual || $writeoff ) {
-    if ($individual) {
+if ( $pay_individual || $writeoff_individual ) {
+    if ($pay_individual) {
         $template->param( pay_individual => 1 );
-    } elsif ($writeoff) {
+    } elsif ($writeoff_individual) {
         $template->param( writeoff_individual => 1 );
     }
     my $accounttype       = $input->param('accounttype');
@@ -118,7 +119,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 token  => scalar $input->param('csrf_token'),
             });
 
-        if ($individual) {
+        if ($pay_individual) {
             my $line = Koha::Account::Lines->find($accountlines_id);
             Koha::Account->new( { patron_id => $borrowernumber } )->pay(
                 {
