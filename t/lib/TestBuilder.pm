@@ -76,6 +76,9 @@ sub build_object {
         return;
     }
 
+    my @unknowns = grep( !/^(class|value)$/, keys %{ $params });
+    carp "Unknown parameter(s): ", join( ', ', @unknowns ) if scalar @unknowns;
+
     load $class;
     my $source = $class->_type;
     my @pks = $self->schema->source( $class->_type )->primary_columns;

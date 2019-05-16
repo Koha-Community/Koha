@@ -351,7 +351,7 @@ subtest 'Default values' => sub {
 
 subtest 'build_object() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 5;
 
     $builder = t::lib::TestBuilder->new();
 
@@ -372,12 +372,6 @@ subtest 'build_object() tests' => sub {
         $categorycode, 'Category code correctly set' );
     is( $issuing_rule->itemtype, $itemtype, 'Item type correctly set' );
 
-    warning_is { $issuing_rule = $builder->build_object( {} ); }
-    { carped => 'Missing class param' },
-        'The class parameter is mandatory, raises a warning if absent';
-    is( $issuing_rule, undef,
-        'If the class parameter is missing, undef is returned' );
-
     subtest 'Test all classes' => sub {
         my $Koha_modules_dir = dirname(__FILE__) . '/../../Koha';
         my @koha_object_based_modules = `/bin/grep -rl -e '^sub object_class' $Koha_modules_dir`;
@@ -394,10 +388,25 @@ subtest 'build_object() tests' => sub {
             is( ref($object), $module->object_class, "Testing $module" );
         }
     };
+
+    subtest 'test parameters' => sub {
+        plan tests => 3;
+
+        warning_is { $issuing_rule = $builder->build_object( {} ); }
+        { carped => 'Missing class param' },
+            'The class parameter is mandatory, raises a warning if absent';
+        is( $issuing_rule, undef,
+            'If the class parameter is missing, undef is returned' );
+
+        warnings_like {
+            $builder->build_object(
+                { class => 'Koha::Patrons', categorycode => 'foobar' } );
+        } qr{Unknown parameter\(s\): categorycode}, "";
+    };
 };
 
 subtest '->build parameter' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     # Test to make sure build() warns user of unknown parameters.
     warnings_are {
@@ -421,6 +430,11 @@ subtest '->build parameter' => sub {
             zource     => 'Branch', # Intentional spelling error
         })
     } qr/Source parameter not specified/, "Catch warning on missing source";
+
+    warnings_like {
+        $builder->build(
+            { source => 'Borrower', categorycode => 'foobar' } );
+    } qr{Unknown parameter\(s\): categorycode}, "";
 };
 
 $schema->storage->txn_rollback;
