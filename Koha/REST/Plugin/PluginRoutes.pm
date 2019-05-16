@@ -48,13 +48,12 @@ sub register {
     if (   C4::Context->preference('UseKohaPlugins')
         && C4::Context->config("enable_plugins") )
     {
+        # plugin needs to define a namespace
         @plugins = Koha::Plugins->new()->GetPlugins(
             {
                 method => 'api_namespace',
             }
         );
-        # plugin needs to define a namespace
-        #@plugins = grep { $_->api_namespace } @plugins;
     }
 
     foreach my $plugin ( @plugins ) {
