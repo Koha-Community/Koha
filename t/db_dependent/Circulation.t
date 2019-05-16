@@ -53,6 +53,11 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
 
+# Prevent random failures by mocking ->now
+my $now_value       = DateTime->now();
+my $mocked_datetime = Test::MockModule->new('DateTime');
+$mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
+
 # Start transaction
 $dbh->{RaiseError} = 1;
 
@@ -1915,7 +1920,6 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             item            => $item_1,
             library         => $library,
             patron          => $patron,
-            due_date        => dt_from_string->add(minutes=> 1),
             return_date     => dt_from_string->add(days => 5),
             expiration_date => dt_from_string->add(days => 5 + (5 * 2 - 1) ),
         }
