@@ -28,6 +28,7 @@ use C4::Output;
 use C4::Debug;
 use C4::Letters;
 use Koha::DateUtils;
+use Koha::Suggestions;
 
 use List::MoreUtils qw(any);
 use base qw(Exporter);
