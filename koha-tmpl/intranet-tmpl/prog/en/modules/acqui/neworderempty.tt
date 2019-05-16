@@ -304,11 +304,11 @@ $(document).ready(function()
         <input type="hidden" name="suggestionid" value="[% suggestionid %]" />
         <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
         <!--KD-722-->
-        <input type="hidden" name="marcfield084a" value="[% commonMarcFieldRef.marc84a %]" />
-        <input type="hidden" name="marcfield100a" value="[% commonMarcFieldRef.marc100a %]" />
-        <input type="hidden" name="marcfield110a" value="[% commonMarcFieldRef.marc110a %]" />
-        <input type="hidden" name="marcfield130a" value="[% commonMarcFieldRef.marc130a %]" />
-        <input type="hidden" name="marcfield245a" value="[% commonMarcFieldRef.marc245a %]" />
+        <input type="hidden" name="marcfield084a" value="[% commonMarcFieldRef.marc84a | html %]" />
+        <input type="hidden" name="marcfield100a" value="[% commonMarcFieldRef.marc100a | html %]" />
+        <input type="hidden" name="marcfield110a" value="[% commonMarcFieldRef.marc110a | html %]" />
+        <input type="hidden" name="marcfield130a" value="[% commonMarcFieldRef.marc130a | html %]" />
+        <input type="hidden" name="marcfield245a" value="[% commonMarcFieldRef.marc245a | html %]" />
 
         [% FOREACH c IN currencies %]
             <input type="hidden" id="currency_rate_[% c.currency %]"  name="[% c.currency %]" value="[% c.rate %]" />
