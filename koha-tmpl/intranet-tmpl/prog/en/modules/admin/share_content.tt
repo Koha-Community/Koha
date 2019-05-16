@@ -91,7 +91,7 @@
                 [% UNLESS Koha.Preference('ManaToken') %]
                     <h3>Configure Mana KB</h3>
 
-                    <p>Once you have enabled Mana it must be configured. Type your first name, last name, and email address and submit. This will send a account creation request to Mana KB that will respond back with a Mana KB token (an encrypted ID that uniquely identifies your Koha installation). This token will automatically be saved in your database. After that you will receive an email. Read it and follow the instructions.</p>
+                    <p>Once you have enabled Mana it must be configured. Type your name, and email address and submit. This will send a account creation request to Mana KB that will respond back with a Mana KB token (an encrypted ID that uniquely identifies your Koha installation). This token will automatically be saved in your database. After that you will receive an email. Read it and follow the instructions.</p>
                 [% END %]
 
                 [% IF Koha.Preference('ManaToken') %]
@@ -116,12 +116,9 @@
                         <fieldset class="rows" id="mana_subscription">
                             <ol>
                                 <li>
-                                    <label for="firstname">First name: </label>
-                                    <input id="firstname" type="text" name="firstname" />
-                                </li>
-                                <li>
-                                    <label for="lastname">Last name: </label>
-                                    <input id="lastname" type="text" name="lastname" />
+                                    <label for="name">Your name: </label>
+                                    <input id="name" type="text" name="name" />
+                                    <div class="hint">Enter a personal or organization name.</div>
                                 </li>
                                 <li>
                                     <label for="email">Email: </label>
