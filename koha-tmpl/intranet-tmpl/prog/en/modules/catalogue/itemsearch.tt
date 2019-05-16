@@ -210,6 +210,7 @@
       var tr = ''
         + '    <tr>'
         + '      <th>' + _("Title") + '</th>'
+        + '      <th>' + _("Item type") + '</th>'
         + '      <th>' + _("Publication date") + '</th>'
         + '      <th>' + _("Publisher") + '</th>'
         + '      <th>' + _("Collection") + '</th>'
@@ -313,6 +314,7 @@
         'sDom': '<"top pager"ilp>t<"bottom pager"ip>r',
         'aoColumns': [
           { 'sName': 'title' },
+          { 'sName': 'itype' },
           { 'sName': 'publicationyear' },
           { 'sName': 'publishercode' },
           { 'sName': 'collectiontitle' },
@@ -330,6 +332,12 @@
       })).columnFilter({
         'sPlaceHolder': 'head:after',
         'aoColumns': [
+          { 'type': 'text' },
+          [% IF itemtypes.size %]
+              { 'type': 'select', 'values': [% itemtypes.json %] },
+          [% ELSE %]
+              null,
+          [% END %]
           { 'type': 'text' },
           { 'type': 'text' },
           { 'type': 'text' },

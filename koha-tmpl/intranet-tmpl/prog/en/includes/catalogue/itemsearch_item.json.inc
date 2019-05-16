@@ -6,6 +6,7 @@
   "[% FILTER escape_quotes = replace('"', '\"') ~%]
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]" title="Go to record detail page">[% biblio.title |html %]</a>[% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author |html %]
   [%~ END %]",
+  "[% item.itype |html %]",
   "[% (biblioitem.publicationyear || biblio.copyrightdate) |html %]",
   "[% biblioitem.publishercode |html %]",
   "[% biblioitem.collectiontitle |html %]",
