@@ -46,7 +46,7 @@ ok($success, "GetLogs returns results for an open search");
 
 eval {
     # FIXME: US formatted date hardcoded into test for now
-    my $date = output_pref( { dt => dt_from_string, datenonly => 1, dateformat => 'iso' } );
+    my $date = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
     $success = scalar(@{GetLogs( $date, $date, "", undef, undef, "", "") } );
 } or do {
     diag($@);
