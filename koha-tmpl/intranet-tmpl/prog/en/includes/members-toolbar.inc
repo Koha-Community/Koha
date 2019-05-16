@@ -75,7 +75,8 @@
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]
-                [% IF Categories.scalar.all(category_type => 'A').count > 0 %]
+                [% SET adult_categories = Categories.scalar.all(category_type => 'A') %]
+                [% IF adult_categories.count > 0 %]
                     [% IF patron.is_child %]
                         <li><a id="updatechild" href="#">Update child to adult patron</a></li>
                     [% ELSE %]
