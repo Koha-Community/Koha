@@ -1915,6 +1915,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             item            => $item_1,
             library         => $library,
             patron          => $patron,
+            due_date        => dt_from_string->add(minutes=> 1),
             return_date     => dt_from_string->add(days => 5),
             expiration_date => dt_from_string->add(days => 5 + (5 * 2 - 1) ),
         }
