@@ -68,7 +68,6 @@ sub get {
         return try {
             my $asset = Mojo::Asset::File->new(path => join('/', $basepath, $relpath));
             return $c->render({ status => 404, openapi => { error => 'File not found' } }) unless $asset->is_file;
-            # $c->res->headers->content_type("image/jpeg");
             return $c->reply->asset($asset);
         }
         catch {
