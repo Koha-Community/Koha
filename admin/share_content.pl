@@ -58,12 +58,10 @@ if ( $op eq 'reset' ) {
 }
 
 if ( $op eq 'send' ) {
-    my $name = $query->param('lastname');
-    my $firstname = $query->param('firstname');
+    my $name = $query->param('name');
     my $email = $query->param('email');
 
-    my $content = to_json({firstname => $firstname,
-                           lastname => $name,
+    my $content = to_json({name => $name,
                            email => $email});
 
     my $mana_ip = C4::Context->config('mana_config');
