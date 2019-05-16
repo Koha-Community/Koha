@@ -3000,7 +3000,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     # Check the item out
     AddIssue( $patron->unblessed, $item->barcode );
     t::lib::Mocks::mock_preference( 'RenewalLog', 0 );
-    my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
+    my $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     my %params_renewal = (
         timestamp => { -like => $date . "%" },
         module => "CIRCULATION",
@@ -3016,7 +3016,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     unlike ( $checkouts->next->lastreneweddate, qr/00:00:00/, 'AddRenewal should set the renewal date with the time part');
 
     t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
-    $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
+    $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     AddRenewal( $patron->id, $item->id, $library->id );
     $new_log_size = Koha::ActionLogs->count( \%params_renewal );
