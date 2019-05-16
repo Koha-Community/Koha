@@ -42,4 +42,24 @@ sub Get {
     return $rule->rule_value if $rule;
 }
 
+sub Search {
+    my ( $self, $branchcode, $categorycode, $itemtype, $rule_name ) = @_;
+
+    $branchcode   = undef if $branchcode eq q{}   or $branchcode eq q{*};
+    $categorycode = undef if $categorycode eq q{} or $branchcode eq q{*};
+    $itemtype     = undef if $itemtype eq q{}     or $branchcode eq q{*};
+
+    my $rule = Koha::CirculationRules->search(
+        {
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => $rule_name,
+        }
+    )->next;
+
+    return $rule->rule_value if $rule;
+}
+
+
 1;

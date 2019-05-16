@@ -399,7 +399,7 @@
                     <td><input type="text" name="maxissueqty" size="3" value="[% default_maxissueqty | html %]"/></td>
                     <td><input type="text" name="maxonsiteissueqty" size="3" value="[% default_maxonsiteissueqty | html %]"/></td>
                     <td>
-                        [% SET rule_value = CirculationRules.Get( current_branch, '*', undef, 'max_holds' ) %]
+                        [% SET rule_value = CirculationRules.Search( current_branch, undef, undef, 'max_holds' ) %]
                         <input name="max_holds" size="3" value="[% rule_value | html %]" />
                     </td>
                     <td>
