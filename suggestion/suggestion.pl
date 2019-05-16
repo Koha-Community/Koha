@@ -188,30 +188,43 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "change" ) {
+
+    my $suggestion;
     # set accepted/rejected/managed informations if applicable
     # ie= if the librarian has chosen some action on the suggestions
-    if ($suggestion_only->{"STATUS"} eq "ACCEPTED"){
-        $suggestion_only->{accepteddate} = dt_from_string;
-        $suggestion_only->{"acceptedby"}=C4::Context->userenv->{number};
-    } elsif ($suggestion_only->{"STATUS"} eq "REJECTED"){
-        $suggestion_only->{rejecteddate} = dt_from_string;
-        $suggestion_only->{"rejectedby"}=C4::Context->userenv->{number};
+    my $STATUS      = $input->param('STATUS');
+    my $accepted_by = $input->param('acceptedby');
+    if ( $STATUS eq "ACCEPTED" ) {
+        $suggestion = {
+            STATUS       => $STATUS,
+            accepteddate => dt_from_string,
+            acceptedby => C4::Context->userenv->{number},
+        };
     }
-    if ($suggestion_only->{"STATUS"}){
-        $suggestion_only->{manageddate} = dt_from_string;
-        $suggestion_only->{"managedby"}=C4::Context->userenv->{number};
+    elsif ( $STATUS eq "REJECTED" ) {
+        $suggestion = {
+
+            STATUS       => $STATUS,
+            rejecteddate => dt_from_string,
+            rejectedby   => C4::Context->userenv->{number},
+        };
     }
-    if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
+    if ($STATUS) {
+        $suggestion->{manageddate} = dt_from_string;
+        $suggestion->{managedby}   = C4::Context->userenv->{number};
+    }
+    if ( my $reason = $input->param("reason$tabcode") ) {
         if ( $reason eq "other" ) {
-            $reason = $$suggestion_ref{"other_reason$tabcode"};
+            $reason = $input->param("other_reason$tabcode");
         }
-        $suggestion_only->{reason}=$reason;
+        $suggestion->{reason} = $reason;
     }
 
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
-        $suggestion_only->{'suggestionid'}=$suggestionid;
-        &ModSuggestion($suggestion_only);
+        $suggestion->{suggestionid} = $suggestionid;
+        use Data::Printer colored => 1; warn p $suggestion;
+        &ModSuggestion($suggestion);
     }
     my $params = '';
     foreach my $key (
