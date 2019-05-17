@@ -172,8 +172,9 @@ sub get_template_and_user {
     }
 
     # If we enforce GDPR and the user did not consent, redirect
+    # Exceptions for consent page itself and SCI/SCO system
     if( $in->{type} eq 'opac' && $user &&
-        $in->{'template_name'} !~ /opac-patron-consent/ &&
+        $in->{'template_name'} !~ /^(opac-patron-consent|sc[io]\/)/ &&
         C4::Context->preference('GDPR_Policy') eq 'Enforced' )
     {
         my $consent = Koha::Patron::Consents->search({
