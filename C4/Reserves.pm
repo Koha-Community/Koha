@@ -906,8 +906,6 @@ sub ModReserve {
 
     my $rank = $params->{'rank'};
     my $reserve_id = $params->{'reserve_id'};
-    my $reservedate = $params->{reservedate} || undef;
-    my $expirationdate = $params->{expirationdate} || undef;
     my $branchcode = $params->{'branchcode'};
     my $itemnumber = $params->{'itemnumber'};
     my $suspend_until = $params->{'suspend_until'};
@@ -936,17 +934,21 @@ sub ModReserve {
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
             if C4::Context->preference('HoldsLog');
 
-        $hold->set(
-            {
-                priority    => $rank,
-                reservedate => $reservedate,
-                expirationdate => $expirationdate,
-                branchcode  => $branchcode,
-                itemnumber  => $itemnumber,
-                found       => undef,
-                waitingdate => undef
-            }
-        )->store();
+        my $properties = {
+            priority    => $rank,
+            branchcode  => $branchcode,
+            itemnumber  => $itemnumber,
+            found       => undef,
+            waitingdate => undef
+        };
+        if (exists $params->{reservedate}) {
+            $properties->{reservedate} = $params->{reservedate} || undef;
+        }
+        if (exists $params->{expirationdate}) {
+            $properties->{expirationdate} = $params->{expirationdate} || undef;
+        }
+
+        $hold->set($properties)->store();
 
         if ( defined( $suspend_until ) ) {
             if ( $suspend_until ) {

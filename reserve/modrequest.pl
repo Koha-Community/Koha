@@ -69,15 +69,19 @@ if ($CancelBorrowerNumber) {
 else {
     for (my $i=0;$i<$count;$i++){
         undef $itemnumber[$i] if !$itemnumber[$i];
-        ModReserve({
+        my $params = {
             rank => $rank[$i],
             reserve_id => $reserve_id[$i],
-            reservedate => $reservedates[$i],
             expirationdate => $expirationdates[$i],
             branchcode => $branch[$i],
             itemnumber => $itemnumber[$i],
             suspend_until => $suspend_until[$i]
-        });
+        };
+        if (C4::Context->preference('AllowHoldDateInFuture')) {
+            $params->{reservedate} = $reservedates[$i];
+        }
+
+        ModReserve($params);
     }
 }
 
