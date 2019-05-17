@@ -453,6 +453,14 @@ C<$offset> is a DateTime::Duration to add to it
 
 C<$return_by_hour> is an integer value representing the opening hour for the branch
 
+=head2 get_push_amt
+
+    my $amt = $calendar->get_push_amt($date)
+
+C<$date> is a DateTime object representing a closed return date
+
+Using the days_mode syspref value and the nature of the closed return
+date, return how many days we should jump forward to find another return date
 
 =head2 addDays
 
