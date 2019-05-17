@@ -290,11 +290,6 @@ __PACKAGE__->table("borrower_modifications");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 guarantorid
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 borrowernotes
 
   data_type: 'longtext'
@@ -548,8 +543,6 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "contacttitle",
   { data_type => "mediumtext", is_nullable => 1 },
-  "guarantorid",
-  { data_type => "integer", is_nullable => 1 },
   "borrowernotes",
   { data_type => "longtext", is_nullable => 1 },
   "relationship",
@@ -617,8 +610,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-19 09:06:10
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+nEG7YltIcgswwr2/5OSAw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-22 16:54:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jkZUTN+mGIdp8ySV0BYNTw
 
 sub koha_object_class {
     'Koha::Patron::Modification';

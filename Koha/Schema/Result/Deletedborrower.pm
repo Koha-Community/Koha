@@ -273,11 +273,6 @@ __PACKAGE__->table("deletedborrowers");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 guarantorid
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 borrowernotes
 
   data_type: 'longtext'
@@ -565,8 +560,6 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "contacttitle",
   { data_type => "mediumtext", is_nullable => 1 },
-  "guarantorid",
-  { data_type => "integer", is_nullable => 1 },
   "borrowernotes",
   { data_type => "longtext", is_nullable => 1 },
   "relationship",
@@ -649,8 +642,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-25 10:08:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hzKeGjtecf3VyEvaBhDmUg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-17 12:11:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:STNFbPgDGWmyrZUFj/n+MA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
