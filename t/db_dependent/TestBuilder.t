@@ -401,7 +401,7 @@ subtest 'build_object() tests' => sub {
         warnings_like {
             $builder->build_object(
                 { class => 'Koha::Patrons', categorycode => 'foobar' } );
-        } qr{Unknown parameter\(s\): categorycode}, "";
+        } qr{Unknown parameter\(s\): categorycode}, "Unknown parameter detected";
     };
 };
 
@@ -434,7 +434,7 @@ subtest '->build parameter' => sub {
     warnings_like {
         $builder->build(
             { source => 'Borrower', categorycode => 'foobar' } );
-    } qr{Unknown parameter\(s\): categorycode}, "";
+    } qr{Unknown parameter\(s\): categorycode}, "Unkown parameter detected";
 };
 
 $schema->storage->txn_rollback;
