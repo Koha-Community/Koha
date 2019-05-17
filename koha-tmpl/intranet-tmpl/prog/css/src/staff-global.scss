@@ -3224,6 +3224,78 @@ video {
 }
 
 // Bootstrap overrides
+
+nav {
+    background: #E6F0F2 none;
+    border: 0;
+}
+
+.navbar-collapse {
+    background: #E6F0F2 none;
+    box-shadow: none;
+}
+
+.navbar-nav {
+    li {
+        list-style: none;
+
+        &.open {
+            li {
+                a {
+                    font-weight: normal;
+                }
+            }
+        }
+
+        a {
+            font-weight: bold;
+            padding-bottom: .4em;
+            padding-top: .4em;
+        }
+    }
+}
+
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+    background-color: transparent;
+    border: 0;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.pagination {
+    margin:.5em .8em;
+
+    .active {
+        a {
+            background-color: #5A9EAA;
+            border-color: #5A9EAA;
+
+            &:hover,
+            &:focus {
+                background-color: #5A9EAA;
+                border-color: #5A9EAA;
+            }
+        }
+
+        span {
+            background-color: #5A9EAA;
+            border-color: #5A9EAA;
+
+            &:hover,
+            &:focus {
+                background-color: #5A9EAA;
+                border-color: #5A9EAA;
+            }
+        }
+    }
+}
+
 button,
 .btn {
     border-color: #ADADAD #ADADAD #949494;
