@@ -678,8 +678,8 @@
             [% FOREACH latestserial IN subscription.latestserials %]
                 <tr>
                     <td>[% latestserial.serialseq | html %]</td>
-                    <td>[% latestserial.planneddate | html %]</td>
-                    <td>[% latestserial.publisheddate | html %]</td>
+                    <td><span title="[% latestserial.planneddate | html %]">[% latestserial.planneddate | $KohaDates %]</span></td>
+                    <td><span title="[% latestserial.publisheddate | html %]">[% latestserial.publisheddate | $KohaDates %]</span></td>
                     <td>
                       [% IF ( latestserial.status1 ) %]Expected[% END %]
                       [% IF ( latestserial.status2 ) %]Arrived[% END %]
