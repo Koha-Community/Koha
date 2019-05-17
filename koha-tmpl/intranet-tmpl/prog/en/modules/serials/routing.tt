@@ -1,3 +1,4 @@
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; [% title | html %] &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]</title>
@@ -35,8 +36,12 @@
 	<ol>
 		<li><label for="date_selected">Issue: </label>
 <select name="date_selected" id="date_selected">
-[% FOREACH date IN dates %]
-[% IF ( date.selected ) %]<option value="[% date.serialseq | html %] ([% date.publisheddate | html %])" selected="selected">[% date.serialseq | html %] ([% date.publisheddate | html %])</option>[% ELSE %]<option value="[% date.serialseq | html %] ([% date.publisheddate | html %])">[% date.serialseq | html %] ([% date.publisheddate | html %])</option>[% END %]
+    [% FOREACH date IN dates %]
+        [% IF ( date.selected ) %]
+            <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])" selected="selected">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
+        [% ELSE %]
+            <option value="[% date.serialseq | html %] ([% date.publisheddate | html %])">[% date.serialseq | html %] ([% date.publisheddate | $KohaDates %])</option>
+        [% END %]
 [% END %]
 </select> [% issue | html %]</li>
 
