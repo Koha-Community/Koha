@@ -127,6 +127,14 @@
           [% END %]
             <span>Check to make this attribute staff_searchable in the staff patron search.</span>
        </li>
+       <li><label for="mandatory">Mandatory: </label>
+          [% IF attribute_type AND attribute_type.mandatory %]
+            <input type="checkbox" id="mandatory" name="mandatory" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" id="mandatory" name="mandatory" />
+          [% END %]
+            <span>Check to make this attribute mandatory when creating or editing a patron.</span>
+       </li>
        <li><label for="display_checkout">Display in patron's brief information: </label>
             [% IF attribute_type AND attribute_type.display_checkout %]
                 <input type="checkbox" id="display_checkout" name="display_checkout" checked="checked" />

@@ -98,7 +98,6 @@ sub error_add_attribute_type_form {
     my $template = shift;
 
     $template->param(description => scalar $input->param('description'));
-
     $template->param( category_code => scalar $input->param('category_code') );
     $template->param( class => scalar $input->param('class') );
 
@@ -120,7 +119,8 @@ sub add_update_attribute_type {
     my $opac_display              = $input->param('opac_display') ? 1 : 0;
     my $opac_editable             = $input->param('opac_editable') ? 1 : 0;
     my $staff_searchable          = $input->param('staff_searchable') ? 1 : 0;
-    my $keep_for_pseudonymization       = $input->param('keep_for_pseudonymization') ? 1 : 0;
+    my $keep_for_pseudonymization = $input->param('keep_for_pseudonymization') ? 1 : 0;
+    my $mandatory                 = $input->param('mandatory') ? 1 : 0;
     my $authorised_value_category = $input->param('authorised_value_category');
     my $display_checkout          = $input->param('display_checkout') ? 1 : 0;
     my $category_code             = $input->param('category_code') || undef;
@@ -153,7 +153,8 @@ sub add_update_attribute_type {
             opac_display              => $opac_display,
             opac_editable             => $opac_editable,
             staff_searchable          => $staff_searchable,
-            keep_for_pseudonymization       => $keep_for_pseudonymization,
+            keep_for_pseudonymization => $keep_for_pseudonymization,
+            mandatory                 => $mandatory,
             authorised_value_category => $authorised_value_category,
             display_checkout          => $display_checkout,
             category_code             => $category_code,
