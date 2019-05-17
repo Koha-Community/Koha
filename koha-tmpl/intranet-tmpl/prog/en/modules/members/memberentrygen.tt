@@ -1367,11 +1367,17 @@ legend:hover {
                                                     [% END %]
                                                     [% FOREACH patron_attribute IN pa_loo.items %]
                                                         <li data-category_code="[% patron_attribute.category_code | html %]">
-                                                            <label for="[% patron_attribute.form_id | html %]">
-                                                                [% patron_attribute.description | html %]:
-                                                            </label>
+                                                            [% IF patron_attribute.mandatory %]
+                                                                <label for="[% patron_attribute.form_id | html %]" class="required" required="required">[% patron_attribute.description | html %]: </label>
+                                                            [% ELSE %]
+                                                                <label for="[% patron_attribute.form_id | html %]">[% patron_attribute.description | html %]: </label>
+                                                            [% END %]
                                                             [% IF ( patron_attribute.use_dropdown ) %]
-                                                                <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">
+                                                                [% IF patron_attribute.mandatory %]
+                                                                    <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">
+                                                                [% ELSE %]
+                                                                    <select id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">
+                                                                [% END %]
                                                                     <option value=""></option>
                                                                     [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
                                                                         [% IF auth_val_loo.authorised_value == patron_attribute.value %]
@@ -1386,13 +1392,18 @@ legend:hover {
                                                                     [% END %]
                                                                 </select>
                                                             [% ELSE %]
+                                                                [% IF patron_attribute.mandatory %]
+                                                                <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]" required="required">[% patron_attribute.value | html %]</textarea>
+                                                                [% ELSE %]
                                                                 <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">[% patron_attribute.value | html %]</textarea>
+                                                                [% END %]
                                                             [% END # /IF ( patron_attribute.use_dropdown ) %]
                                                             <input type="hidden" id="[% patron_attribute.form_id | html %]_code" name="[% patron_attribute.form_id | html %]_code" value="[% patron_attribute.code | html %]" />
                                                             <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash"></i> Clear</a>
                                                             [% IF ( patron_attribute.repeatable ) %]
                                                                 <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
                                                             [% END %]
+                                                            [% IF patron_attribute.mandatory %]<span class="required">Required</span>[% END %]
                                                         </li>
                                                     [% END # /FOREACH patron_attribute %]
                                                     [% IF pa_loo.class %]</fieldset>[% END %]
