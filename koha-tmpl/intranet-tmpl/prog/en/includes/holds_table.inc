@@ -108,12 +108,12 @@
             <td>[% hold.notes | html %]</td>
             <td>
                 [% IF Koha.Preference('AllowHoldDateInFuture') %]
-                    <input type="date" value="[% hold.date | html %]" required name="reservedate">
+                    <input type="text" class="datepicker" value="[% hold.date | $KohaDates %]" required name="reservedate">
                 [% ELSE %]
                     [% hold.date | $KohaDates %]
                 [% END %]
             </td>
-            <td><input type="date" value="[% hold.expirationdate | html %]" name="expirationdate"></td>
+            <td><input type="text" class="datepicker" value="[% hold.expirationdate | $KohaDates %]" name="expirationdate"></td>
 
             <td>
                 [% IF ( hold.found ) %]

@@ -27,6 +27,7 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Reserves;
 use C4::Auth;
+use Koha::DateUtils qw( dt_from_string );
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -72,13 +73,13 @@ else {
         my $params = {
             rank => $rank[$i],
             reserve_id => $reserve_id[$i],
-            expirationdate => $expirationdates[$i],
+            expirationdate => $expirationdates[$i] ? dt_from_string($expirationdates[$i]) : undef,
             branchcode => $branch[$i],
             itemnumber => $itemnumber[$i],
             suspend_until => $suspend_until[$i]
         };
         if (C4::Context->preference('AllowHoldDateInFuture')) {
-            $params->{reservedate} = $reservedates[$i];
+            $params->{reservedate} = $reservedates[$i] ? dt_from_string($reservedates[$i]) : undef;
         }
 
         ModReserve($params);
