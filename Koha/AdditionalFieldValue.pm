@@ -1,6 +1,7 @@
 package Koha::AdditionalFieldValue;
 
 use Modern::Perl;
+use Koha::AdditionalField;
 
 use base 'Koha::Object';
 
@@ -17,7 +18,7 @@ values
 
 =head3 field
 
-Return the Koha:AdditionalField object for this AdditionalFeidlValue
+Return the Koha::AdditionalField object for this AdditionalFieldValue
 
 =cut
 
