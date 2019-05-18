@@ -368,6 +368,10 @@ sub _type {
     return 'Borrower';
 }
 
+=head3 object_class
+
+=cut
+
 sub object_class {
     return 'Koha::Patron';
 }

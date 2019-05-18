@@ -108,7 +108,8 @@ my $userenv = C4::Context->userenv;
 $template->param( relationships => scalar $patron->guarantor_relationships ) if $patron;
 
 my $guarantor_id = $input->param('guarantor_id');
-my $guarantor = Koha::Patrons->find( $guarantor_id ) if $guarantor_id;
+my $guarantor = undef;
+$guarantor = Koha::Patrons->find( $guarantor_id ) if $guarantor_id;
 $template->param( guarantor => $guarantor );
 
 my @delete_guarantor = $input->multi_param('delete_guarantor');

@@ -589,7 +589,7 @@ subtest 'Koha::Item(s) tests' => sub {
     is( ref($holdingbranch), 'Koha::Library', "Got Koha::Library from holding_branch method" );
     is( $holdingbranch->branchcode(), $library2->{branchcode}, "Home branch code matches holdingbranch" );
 
-    my $biblio = $item->biblio();
+    $biblio = $item->biblio();
     is( ref($biblio), 'Koha::Biblio', "Got Koha::Biblio from biblio method" );
     is( $biblio->title(), 'Silence in the library', 'Title matches biblio title' );
 

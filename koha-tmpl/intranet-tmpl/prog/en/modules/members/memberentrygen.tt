@@ -470,23 +470,23 @@
             </li>
         [% END %]
 
-		[% UNLESS norelationship %]
-			[% IF possible_relationships %]
+        [% UNLESS norelationship %]
+            [% IF possible_relationships %]
                 <li>
                     <label for="relationship">Relationship: </label>
                     <select class="relationship" name="relationship">
                         <option value=""></option>
                         [% FOREACH pr IN possible_relationships.split('\|') %]
                             [% IF pr == relationship %]
-                                <option value="[% pr %]" selected="selected">[% pr %]</option>
+                                <option value="[% pr | html %]" selected="selected">[% pr | html %]</option>
                             [% ELSE %]
-                                <option value="[% pr %]">[% pr %]</option>
+                                <option value="[% pr | html %]">[% pr | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
                 </li>
-			[% END %]
-		[% END %]
+            [% END %]
+        [% END %]
 
         [% UNLESS nophone %]
             <li>
@@ -1231,7 +1231,7 @@
             [% END %]
 
             [% IF guarantor %]
-                select_user( '[% guarantor.borrowernumber %]', [% To.json( guarantor.unblessed ) | $raw %] );
+                select_user( '[% guarantor.borrowernumber | html %]', [% To.json( guarantor.unblessed ) | $raw %] );
             [% END %]
 
             $("#cn_max").hide();

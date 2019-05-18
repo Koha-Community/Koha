@@ -82,8 +82,6 @@ sub guarantees {
     return wantarray ? $guarantees->as_list : $guarantees;
 }
 
-=cut
-
 =head3 type
 
 =cut
@@ -91,6 +89,10 @@ sub guarantees {
 sub _type {
     return 'BorrowerRelationship';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::Patron::Relationship';
