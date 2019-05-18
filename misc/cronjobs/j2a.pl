@@ -187,8 +187,8 @@ if ( not $noaction ) {
         $schema->storage->txn_begin;
 
         my $query = qq|
-            DELETE relationships FROM relationships
-            LEFT JOIN borrowers ON ( borrowers.borrowernumber = relationships.guarantee_id )
+            DELETE borrower_relationships FROM borrower_relationships
+            LEFT JOIN borrowers ON ( borrowers.borrowernumber = borrower_relationships.guarantee_id )
             $where
         |;
         my $sth = $dbh->prepare($query);
@@ -232,8 +232,8 @@ if ( not $noaction ) {
         |;
 
         my $query = qq|
-            DELETE relationships FROM relationships
-            LEFT JOIN borrowers ON ( borrowers.borrowernumber = relationships.guarantee_id )
+            DELETE borrower_relationships FROM borrower_relationships
+            LEFT JOIN borrowers ON ( borrowers.borrowernumber = borrower_relationships.guarantee_id )
             $where
         |;
         my $sth = $dbh->prepare($query);
