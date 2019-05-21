@@ -1,6 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
-<script type="text/javascript">
+<script>
     var GB_ROOT_DIR = "[% interface | html %]/lib/greybox/";
 </script>
 [% Asset.js("lib/greybox/AJS.js") | $raw %]
