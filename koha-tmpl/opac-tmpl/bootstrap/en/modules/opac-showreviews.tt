@@ -88,25 +88,28 @@
                                             [% FILTER html_break %]
                                                 [% review.review | html %]
                                             [% END %]
-                                        <span style="font-size:87%;font-color:#CCC;">
-                                        [% IF review.your_comment %]
-                                            Added [% review.datereviewed | $KohaDates %] by you
-                                        [% ELSE %]
-                                        [% IF ( review.borrowernumber && ShowReviewer != "none" ) %]
-                                            Added [% review.datereviewed | $KohaDates %] by
-                                            [% SWITCH ShowReviewer %]
-                                            [% CASE 'full' %]
-                                                [% review.borrtitle | html %] [% review.firstname | html %] [% review.surname | html %]
-                                            [% CASE 'first' %]
-                                                [% review.firstname | html %]
-                                            [% CASE 'surname' %]
-                                                [% review.surname | html %]
-                                            [% CASE 'firstandinitial' %]
-                                                [% review.firstname | html %] [% review.surname|truncate(2,'.') | html %]
-                                            [% CASE 'username' %]
-                                                [% review.userid | html %]
-                                            [% END %]
-                                        [% END %][% END %]</span></p>
+                                            <span class="commenter">
+                                                [% IF review.your_comment %]
+                                                    Added [% review.datereviewed | $KohaDates %] by you
+                                                [% ELSE %]
+                                                    [% IF ( review.borrowernumber && ShowReviewer != "none" ) %]
+                                                        Added [% review.datereviewed | $KohaDates %] by
+                                                        [% SWITCH ShowReviewer %]
+                                                            [% CASE 'full' %]
+                                                                [% review.borrtitle | html %] [% review.firstname | html %] [% review.surname | html %]
+                                                            [% CASE 'first' %]
+                                                                [% review.firstname | html %]
+                                                            [% CASE 'surname' %]
+                                                                [% review.surname | html %]
+                                                            [% CASE 'firstandinitial' %]
+                                                                [% review.firstname | html %] [% review.surname|truncate(2,'.') | html %]
+                                                            [% CASE 'username' %]
+                                                                [% review.userid | html %]
+                                                        [% END %]
+                                                    [% END %]
+                                                [% END %]
+                                            </span>
+                                        </p>
                                     </td>
                                     <td>
                                         [% IF ( review.BiblioDefaultViewmarc ) %]
