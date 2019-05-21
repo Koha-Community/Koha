@@ -341,8 +341,8 @@
                                                 [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
                                                     <td class="note">
                                                         <input type="text" name="note" data-issue_id="[% ISSUE.issue_id | html %]" data-origvalue="[% ISSUE.note | html %]" value="[% ISSUE.note | html %]" readonly>
-                                                        <a class="btn" name="js_submitnote" id="save_[% ISSUE.issue_id | html %]" style="display:none;">Submit note</a>
-                                                        <a class="btn" name="nonjs_submitnote" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | url %]">Edit / Create note</a>
+                                                        <a class="btn js_submitnote" id="save_[% ISSUE.issue_id | html %]" style="display:none;">Submit note</a>
+                                                        <a class="btn nonjs_submitnote" href="/cgi-bin/koha/opac-issue-note.pl?issue_id=[% ISSUE.issue_id | url %]">Edit / Create note</a>
                                                     </td>
                                                 [% END %]
                                             </tr>
@@ -979,7 +979,7 @@
             [% IF ( Koha.Preference('AllowCheckoutNotes') ) %]
 
                 /* If JS enabled, show button, otherwise show link to redirect to a page where note can be submitted */
-                $("a[name='nonjs_submitnote']").hide();
+                $(".nonjs_submitnote").hide();
 
                 $("input[name='note']").prop('readonly', false);
                 $("input[name='note']").keypress(function(e){
@@ -1004,7 +1004,7 @@
                     }
                 });
 
-                $("a[name='js_submitnote']").click(function(e){
+                $(".js_submitnote").click(function(e){
                     var $self = $(this);
                     var title = $(this).parent().siblings('.title').html();
                     var $noteinput = $(this).siblings('input[name="note"]').first();
