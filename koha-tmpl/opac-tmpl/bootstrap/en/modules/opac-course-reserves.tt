@@ -49,7 +49,7 @@
                                     <td>[% AuthorisedValues.GetByCode( 'TERM' c.term, 1 ) | html %]</td>
                                     <td>
                                       [% FOREACH i IN c.instructors %]
-                                          <div class="instructor"><span class"inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div>
+                                          <div class="instructor"><span class="inst_surname">[% i.surname | html %]</span>[% IF i.firstname %]<span class="instr_separator">, </span><span class="instr_firstname">[% i.firstname | html %]</span>[% END %]</div>
                                       [% END %]
                                     </td>
                                     <td>[% c.public_note | $raw %]</td>
