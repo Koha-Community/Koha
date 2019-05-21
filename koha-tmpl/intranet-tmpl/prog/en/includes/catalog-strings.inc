@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
     /* Strings for translation */
     var MSG_REPLACE_RECORD = _("Please note that this external search could replace the current record.");
     var MSG_DELETE_ALL_ITEMS = _("%s item(s) are attached to this record. You must delete all items before deleting this record.");

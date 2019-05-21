@@ -1,12 +1,10 @@
 [% INCLUDE 'blocking_errors.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-function confirm_deletion() {
-    if (confirm(_("Are you sure you want to delete this vendor?"))) {
-        window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&op=delete";
+<script>
+    function confirm_deletion() {
+        if (confirm(_("Are you sure you want to delete this vendor?"))) {
+            window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&op=delete";
+        }
     }
-}
-//]]>
 </script>
 <div id="toolbar" class="btn-toolbar">
     [% IF ( booksellerid ) %]
