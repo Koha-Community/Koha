@@ -567,7 +567,7 @@ subtest 'Koha::Item(s) tests' => sub {
 
     # Create a biblio and item for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->build_sample_biblio();
+    my $biblio = $builder->build_sample_biblio({title => 'Silence in the library'});
     my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
         {
             homebranch    => $library1->{branchcode},
