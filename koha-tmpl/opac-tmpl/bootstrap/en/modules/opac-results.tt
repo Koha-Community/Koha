@@ -474,13 +474,14 @@
                                                 [% IF Koha.Preference('virtualshelves') AND SEARCH_RESULT.shelves.count %]
                                                     <div class="results_summary shelves">
                                                         <span class="label">Lists:</span>
-                                                            <ul>
-                                                                [% FOREACH shelf IN SEARCH_RESULT.shelves %]
-                                                                    <li><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]">[% shelf.shelfname | html %]</a></li>
+                                                        <ul>
+                                                            [% FOREACH shelf IN SEARCH_RESULT.shelves %]
+                                                                <li>
+                                                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]">[% shelf.shelfname | html %]</a>
                                                                     [%~ UNLESS loop.last %], [% ELSE %].[% END ~%]
-                                                                [% END %]
-                                                            </ul>
-                                                        </span>
+                                                                </li>
+                                                            [% END %]
+                                                        </ul>
                                                     </div>
                                                 [% END %]
 
