@@ -90,7 +90,7 @@
 </ul>
 
 <!-- Dublin Core Modal Form -->
-<div class="modal hide" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_" aria-hidden="true">
+<div class="modal hide" id="exportModal_" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3 class="modal-title" id="exportModalLabel">Exporting to Dublin Core...</h3>
