@@ -141,7 +141,7 @@
                             [% IF ( SMSSendDriver == 'Email' ) %]
                                 <ol><li>
                                     <label for="sms_provider_id">SMS provider:</label>
-                                    <select id="sms_provider_id" name="sms_provider_id"/>
+                                    <select id="sms_provider_id" name="sms_provider_id">
                                         <option value="">Unknown</option>
                                         [% FOREACH s IN sms_providers %]
                                             [% IF s.id == sms_provider_id %]
