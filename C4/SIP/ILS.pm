@@ -222,6 +222,7 @@ sub checkin {
     } elsif( !$item->{patron} ) {
         if( $checked_in_ok ) { # Mark checkin ok although book not checked out
             $circ->ok( 1 );
+            $circ->alert( 0 );
             syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - using checked_in_ok");
         } else {
             $circ->screen_msg("Item not checked out");
