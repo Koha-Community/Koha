@@ -154,6 +154,7 @@ sub search_patrons_to_anonymise {
       ( C4::Context->preference('IndependentBranches') && C4::Context->userenv && !C4::Context->IsSuperLibrarian() && C4::Context->userenv->{branch} )
       ? C4::Context->userenv->{branch}
       : undef;
+    my $anonymous_patron = C4::Context->preference('AnonymousPatron') || undef;
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $rs = $class->_resultset->search(
@@ -161,6 +162,7 @@ sub search_patrons_to_anonymise {
             'old_issues.borrowernumber' => { 'not' => undef },
             privacy                     => { '<>'  => 0 },                  # Keep forever
             ( $library ? ( 'old_issues.branchcode' => $library ) : () ),
+            ( $anonymous_patron ? ( 'old_issues.borrowernumber' => { '!=' => $anonymous_patron } ) : () ),
         },
         {   join     => ["old_issues"],
             distinct => 1,
