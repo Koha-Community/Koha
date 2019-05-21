@@ -827,7 +827,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} );
 
     subtest 'patron privacy is 1 (default)' => sub {
-        plan tests => 8;
+        plan tests => 9;
 
         t::lib::Mocks::mock_preference('IndependentBranches', 0);
         my $patron = $builder->build(
@@ -877,6 +877,9 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
 
         my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2011-11-12' } )->anonymise_issue_history( { before => '2010-10-11' } );
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
+
+        $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } );
+        is( $patrons_to_anonymise->count, 0, 'search_patrons_to_anonymise should return 0 after anonymisation is done' );
 
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare(q|SELECT borrowernumber FROM old_issues where itemnumber = ?|);
@@ -935,7 +938,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
         my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
         my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->anonymise_issue_history( { before => '2010-10-11' } );
-        ok( $rows_affected > 0, 'AnonymiseIssueHistory should not return any error if success' );
+        is( $rows_affected, 0, 'AnonymiseIssueHistory should not return any error if success' );
 
         my $dbh = C4::Context->dbh;
         my ($borrowernumber_used_to_anonymised) = $dbh->selectrow_array(q|
