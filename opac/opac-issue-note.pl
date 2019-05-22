@@ -74,6 +74,7 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
                 module => 'circulation',
                 letter_code => 'CHECKOUT_NOTE',
                 branchcode => $branch,
+                lang => $patron->lang,
                 tables => {
                     'biblio' => $biblio->biblionumber,
                     'borrowers' => $borrowernumber,
