@@ -339,6 +339,19 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
     $template->param( relatives => \@relatives );
 }
 
+if (   C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor')
+    || C4::Context->preference('AllowStaffToSetFinesVisibilityForGuarantor') )
+{
+    my @relatives_with_fines;
+    # Filter out guarantees that don't want guarantor to see checkouts
+    foreach my $gr ( $patron->guarantee_relationships() ) {
+        my $g = $gr->guarantee;
+        push( @relatives_with_fines, $g ) if $g->privacy_guarantor_fines;
+    }
+    $template->param( relatives_with_fines => \@relatives_with_fines );
+}
+
+
 $template->param(
     patron_messages          => $patron_messages,
     opacnote                 => $borr->{opacnote},

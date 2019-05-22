@@ -116,6 +116,46 @@
     <h4>You have no fines or charges</h4>
 [% END %]
 
+[% FOREACH r IN relatives %]
+    <h3 id="g[% r.patron.id %]">[% r.patron.firstname %] [% r.patron.surname %]'s fines and charges</h3>
+
+    <table class="table table-bordered table-striped" id="finestable-[% r.id %]">
+        <thead>
+            <tr>
+                <th class="title-string">Date</th>
+                <th>Description</th>
+                <th>Fine amount</th>
+                <th>Amount outstanding</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            [% SET account_sum = 0 %]
+            [% FOREACH a IN r.accountlines %]
+                [% SET account_sum = account_sum + a.amountoutstanding %]
+                <tr>
+                    <td><span title="[% a.date %]">[% a.date | $KohaDates %]</span></td>
+                    <td>
+                        [% PROCESS account_type_description account=a %]
+                        [%- IF a.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', a.payment_type, 1) %][% END %]
+                        [%- IF a.description %], [% a.description %][% END %]
+                        [% IF a.itemnumber %]([% a.item.biblio.title %])[% END %]
+                    </td>
+                    [% IF ( a.amount < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amount | $Price %]</td>
+                    [% IF ( a.amountoutstanding < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amountoutstanding | $Price %]</td>
+                </tr>
+            [% END %]
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <th class="sum" colspan="3">Total due</th>
+                <td class="sum">[% account_sum | $Price %]</td>
+            </tr>
+        </tfoot>
+    </table>
+[% END %]
+
 [%- BLOCK account_type_description -%]
     [%- SWITCH account.accounttype -%]
         [%- CASE 'Pay'              -%]<span>Payment
