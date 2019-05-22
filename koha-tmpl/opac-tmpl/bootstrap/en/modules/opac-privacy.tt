@@ -71,18 +71,32 @@
                                         </select>
                                     </div>
 
-                                    [% IF borrower.guarantor_relationships && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                                    [% IF has_guarantor_flag && (Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') || Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') ) %]
                                         <div>
-                                            <label for="privacy_guarantor_checkouts">Allow your guarantor to view your current checkouts?</label>
-                                            <select name="privacy_guarantor_checkouts">
-                                                [% IF borrower.privacy_guarantor_checkouts %]
-                                                    <option value="0">No</option>
-                                                    <option value="1" selected>Yes</option>
-                                                [% ELSE %]
-                                                    <option value="0" selected>No</option>
-                                                    <option value="1">Yes</option>
-                                                [% END %]
-                                            </select>
+                                            [% IF Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                                                <label for="privacy_guarantor_checkouts">Allow your guarantor to view your current checkouts?</label>
+                                                <select name="privacy_guarantor_checkouts">
+                                                    [% IF borrower.privacy_guarantor_checkouts %]
+                                                        <option value="0">No</option>
+                                                        <option value="1" selected>Yes</option>
+                                                    [% ELSE %]
+                                                        <option value="0" selected>No</option>
+                                                        <option value="1">Yes</option>
+                                                    [% END %]
+                                                </select>
+                                            [% END %]
+                                            [% IF Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') %]
+                                                <label for="privacy_guarantor_fines">Allow your guarantor to view your current fines?</label>
+                                                <select name="privacy_guarantor_fines">
+                                                    [% IF borrower.privacy_guarantor_fines %]
+                                                        <option value="0">No</option>
+                                                        <option value="1" selected>Yes</option>
+                                                    [% ELSE %]
+                                                        <option value="0" selected>No</option>
+                                                        <option value="1">Yes</option>
+                                                    [% END %]
+                                                </select>
+                                            [% END %]
                                             <span class="hint">
                                                 Guaranteed by
                                                 [% FOREACH gr IN borrower.guarantor_relationships %]

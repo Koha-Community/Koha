@@ -399,6 +399,12 @@ __PACKAGE__->table("deletedborrowers");
   default_value: 1
   is_nullable: 0
 
+=head2 privacy_guarantor_fines
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 privacy_guarantor_checkouts
 
   data_type: 'tinyint'
@@ -604,6 +610,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "privacy",
   { data_type => "integer", default_value => 1, is_nullable => 0 },
+  "privacy_guarantor_fines",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "privacy_guarantor_checkouts",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "checkprevcheckout",
@@ -642,8 +650,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-17 12:11:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:STNFbPgDGWmyrZUFj/n+MA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-22 04:33:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zK1jC6Wawwj8B2ch9KFByw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

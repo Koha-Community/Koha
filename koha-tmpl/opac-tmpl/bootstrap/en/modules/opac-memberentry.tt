@@ -114,10 +114,11 @@
                     <div class="alert">You typed in the wrong characters in the box before submitting. Please try again.</div>
                 [% END %]
 
-                [% IF patron.guarantor_relationships && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                [% IF has_guarantor_flag && !Koha.Preference('OPACPrivacy') && ( Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') || Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') ) %]
                     <fieldset class="rows" id="memberentry_privacy">
                         <legend id="privacy_legend">Privacy</legend>
                         <ol>
+                            [% IF Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
                             <li>
                                 <label>Allow your guarantor to view your current checkouts?</label>
                                 <select id="privacy_guarantor_checkouts">
@@ -132,6 +133,28 @@
                                     <a id="update_privacy_guarantor_checkouts" href="#" class="btn">Update</a>
                                     <span id="update_privacy_guarantor_checkouts_message" class="alert" style="display:none"></span>
                                 </span>
+                            </li>
+                            [% END %]
+
+                            [% IF Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') %]
+                            <li>
+                                <label>Allow your guarantor to view your current fines?</label>
+                                <select id="privacy_guarantor_fines">
+                                    <option value="0">No</option>
+                                    [% IF borrower.privacy_guarantor_fines %]
+                                        <option value="1" selected="selected">Yes</option>
+                                    [% ELSE %]
+                                        <option value="1">Yes</option>
+                                    [% END %]
+                                </select>
+                                <span class="hint">
+                                    <a id="update_privacy_guarantor_fines" href="#" class="btn">Update</a>
+                                    <span id="update_privacy_guarantor_fines_message" class="alert" style="display:none"></span>
+                                </span>
+                            </li>
+                            [% END %]
+
+                            <li>
                                 <span class="hint">
                                     Guaranteed by
                                     [% FOREACH gr IN patron.guarantor_relationships %]
@@ -1024,20 +1047,39 @@
                 }
             });
 
-            [% IF patron.guarantor_relationships && !Koha.Preference('OPACPrivacy') && Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
-                $('#update_privacy_guarantor_checkouts').click( function() {
-                    $.post( "/cgi-bin/koha/svc/patron/show_checkouts_to_relatives", { privacy_guarantor_checkouts: $('#privacy_guarantor_checkouts').val() }, null, 'json')
-                     .done(function( data ) {
-                         var message;
-                         if ( data.success ) {
-                             message = _("Your setting has been updated!");
-                         } else {
-                             message = _("Unable to update your setting!");
-                         }
+            [% IF patron.guarantor_relationships && !Koha.Preference('OPACPrivacy') %]
 
-                         $('#update_privacy_guarantor_checkouts_message').fadeIn("slow").text( message ).delay( 5000 ).fadeOut("slow");
-                     });
-                });
+                [% IF Koha.Preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') %]
+                    $('#update_privacy_guarantor_checkouts').click( function() {
+                        $.post( "/cgi-bin/koha/svc/patron/show_checkouts_to_relatives", { privacy_guarantor_checkouts: $('#privacy_guarantor_checkouts').val() }, null, 'json')
+                         .done(function( data ) {
+                            var message;
+                            if ( data.success ) {
+                                message = _("Your setting has been updated!");
+                            } else {
+                                message = _("Unable to update your setting!");
+                            }
+
+                            $('#update_privacy_guarantor_checkouts_message').fadeIn("slow").text( message ).delay( 5000 ).fadeOut("slow");
+                        });
+                    });
+                [% END %]
+
+                [% IF Koha.Preference('AllowPatronToSetFinesVisibilityForGuarantor') %]
+                    $('#update_privacy_guarantor_fines').click( function() {
+                        $.post( "/cgi-bin/koha/svc/patron/show_fines_to_relatives", { privacy_guarantor_fines: $('#privacy_guarantor_fines').val() }, null, 'json')
+                         .done(function( data ) {
+                            var message;
+                            if ( data.success ) {
+                                message = _("Your setting has been updated!");
+                            } else {
+                                message = _("Unable to update your setting!");
+                            }
+
+                            $('#update_privacy_guarantor_fines_message').fadeIn("slow").text( message ).delay( 5000 ).fadeOut("slow");
+                        });
+                    });
+                [% END %]
             [% END %]
 
             $(".patron-attributes").on( 'click', '.clear-attribute', function() {

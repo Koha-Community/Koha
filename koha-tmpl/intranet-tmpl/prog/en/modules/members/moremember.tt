@@ -496,7 +496,16 @@
 
                                         <li id="patron-privacyguarantor">
                                             <span class="label">Show checkouts to guarantor</span>
-                                            [% IF privacy_guarantor_checkouts %]
+                                            [% IF patron.privacy_guarantor_checkouts %]
+                                                Yes
+                                            [% ELSE %]
+                                                No
+                                            [% END %]
+                                        </li>
+
+                                        <li>
+                                            <span class="label">Show fines to guarantor</span>
+                                            [% IF patron.privacy_guarantor_fines %]
                                                 Yes
                                             [% ELSE %]
                                                 No

@@ -329,11 +329,13 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
 }
 
 my $captcha = random_string("CCCCC");
+my $patron_param = scalar Koha::Patrons->find( $borrowernumber );
 
 $template->param(
     captcha        => $captcha,
     captcha_digest => md5_base64($captcha),
-    patron         => scalar Koha::Patrons->find( $borrowernumber ),
+    patron         => $patron_param,
+    has_guarantor_flag => $patron_param->guarantor_relationships->guarantors->_resultset->count
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output, undef, { force_no_caching => 1 };

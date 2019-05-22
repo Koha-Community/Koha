@@ -47,13 +47,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $op                         = $query->param("op");
 my $privacy                    = $query->param("privacy");
 my $privacy_guarantor_checkouts = $query->param("privacy_guarantor_checkouts");
+my $privacy_guarantor_fines     = $query->param("privacy_guarantor_fines");
 
 if ( $op eq "update_privacy" ) {
     my $patron = Koha::Patrons->find( $borrowernumber );
     if ( $patron ) {
         $patron->set({
             privacy                    => $privacy,
-            privacy_guarantor_checkouts => $privacy_guarantor_checkouts,
+            privacy_guarantor_checkouts => defined $privacy_guarantor_checkouts?$privacy_guarantor_checkouts:$patron->privacy_guarantor_checkouts,
+            privacy_guarantor_fines     => defined $privacy_guarantor_fines?$privacy_guarantor_fines:$patron->privacy_guarantor_fines,
         })->store;
         $template->param( 'privacy_updated' => 1 );
     }
@@ -83,6 +85,7 @@ $template->param(
     'borrower'                       => $borrower,
     'surname'                        => $borrower->surname,
     'firstname'                      => $borrower->firstname,
+    'has_guarantor_flag'             => $borrower->guarantor_relationships->guarantors->_resultset->count
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
