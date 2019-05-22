@@ -42,6 +42,8 @@ use Getopt::Long;
 use C4::Log;
 use Pod::Usage;
 use Koha::Patrons;
+use Koha::Patron::Categories;
+use Koha::ItemTypes;
 
 my  $lost;  #  key=lost value,  value=num days.
 my ($charge, $verbose, $confirm, $quiet);
@@ -103,13 +105,14 @@ if ( scalar @$itemtype && scalar @$skip_itemtype) {
 }
 
 if ( $list_categories ) {
-    my @categories = sort map { uc $_->[0] } @{ C4::Context->dbh->selectall_arrayref(q|SELECT categorycode FROM categories|) };
+
+    my @categories = Koha::Patron::Categories->search()->get_column('categorycode');
     print "\nBorrower Categories: " . join( " ", @categories ) . "\n\n";
     exit 0;
 }
 
 if ( $list_itemtypes ) {
-    my @itemtypes = sort map { uc $_->[0] } @{ C4::Context->dbh->selectall_arrayref(q|SELECT itemtype FROM itemtypes|) };
+    my @itemtypes = Koha::ItemTypes->search()->get_column('itemtype');
     print "\nItemtypes: " . join( " ", @itemtypes ) . "\n\n";
     exit 0;
 }
@@ -293,7 +296,7 @@ sub longoverdue_sth {
 
 my $dbh = C4::Context->dbh;
 
-my @available_categories = map { uc $_->[0] } @{ $dbh->selectall_arrayref(q|SELECT categorycode FROM categories|) };
+my @available_categories = Koha::Patron::Categories->search()->get_column('categorycode');
 $borrower_category = [ map { uc $_ } @$borrower_category ];
 $skip_borrower_category = [ map { uc $_} @$skip_borrower_category ];
 my %category_to_process;
@@ -321,7 +324,7 @@ if ( @$skip_borrower_category ) {
 
 my $filter_borrower_categories = ( scalar @$borrower_category || scalar @$skip_borrower_category );
 
-my @available_itemtypes = map { uc $_->[0] } @{ $dbh->selectall_arrayref(q|SELECT itemtype FROM itemtypes|) };
+my @available_itemtypes = Koha::ItemTypes->search()->get_column('itemtype');
 $itemtype = [ map { uc $_ } @$itemtype ];
 $skip_itemtype = [ map { uc $_} @$skip_itemtype ];
 my %itemtype_to_process;
