@@ -213,7 +213,7 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             var parcelst = $("#parcelst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [

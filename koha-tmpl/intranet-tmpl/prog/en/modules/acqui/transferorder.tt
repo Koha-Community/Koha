@@ -123,14 +123,14 @@
 
 [% MACRO jsinclude BLOCK %]
     [% IF transferred %]
-        <script type="text/javascript">
+        <script>
             opener.location.reload();
             window.close();
         </script>
     [% END %]
 
     [% IF ( bookselleridfrom ) %]
-        <script type="text/javascript">
+        <script>
             $(document).ready(function(){
                 $(".confirm_transfer").on("click",function(){
                     return confirm( _("Transfer order to this basket?") );
