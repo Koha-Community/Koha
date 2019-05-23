@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 use Test::MockModule;
 use Test::Exception;
 
@@ -583,6 +583,150 @@ subtest 'pay() tests' => sub {
     my $credit_2    = Koha::Account::Lines->find( $credit_2_id );
 
     is( $credit_2->branchcode, $library->id, 'branchcode set because library_id was passed' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'pay() handles lost items when paying a specific lost fee' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $account = $patron->account;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', { branch => $library->id } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item =
+      $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    my $checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date_due       => \'NOW()',
+            branchcode     => $patron->branchcode,
+            issuedate      => \'NOW()',
+        }
+    )->store();
+
+    $item->itemlost('1')->store();
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            issue_id       => $checkout->id,
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date           => \'NOW()',
+            accounttype    => 'L',
+            interface      => 'cli',
+            amount => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+
+    $account->pay(
+        {
+            amount     => "0.500000",
+            library_id => $library->id,
+            lines      => [$accountline],
+        }
+    );
+
+    $accountline = Koha::Account::Lines->find( $accountline->id );
+    is( $accountline->amountoutstanding, '0.500000', 'Account line was paid down by half' );
+
+    $checkout = Koha::Checkouts->find( $checkout->id );
+    ok( $checkout, 'Item still checked out to patron' );
+
+    $account->pay(
+        {
+            amount     => "0.500000",
+            library_id => $library->id,
+            lines      => [$accountline],
+        }
+    );
+
+    $accountline = Koha::Account::Lines->find( $accountline->id );
+    is( $accountline->amountoutstanding, '0.000000', 'Account line was paid down by half' );
+
+    $checkout = Koha::Checkouts->find( $checkout->id );
+    ok( !$checkout, 'Item was removed from patron account' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'pay() handles lost items when paying by amount ( not specifying the lost fee )' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $account = $patron->account;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', { branch => $library->id } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item =
+      $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    my $checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date_due       => \'NOW()',
+            branchcode     => $patron->branchcode,
+            issuedate      => \'NOW()',
+        }
+    )->store();
+
+    $item->itemlost('1')->store();
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            issue_id       => $checkout->id,
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date           => \'NOW()',
+            accounttype    => 'L',
+            interface      => 'cli',
+            amount => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+
+    $account->pay(
+        {
+            amount     => "0.500000",
+            library_id => $library->id,
+        }
+    );
+
+    $accountline = Koha::Account::Lines->find( $accountline->id );
+    is( $accountline->amountoutstanding, '0.500000', 'Account line was paid down by half' );
+
+    $checkout = Koha::Checkouts->find( $checkout->id );
+    ok( $checkout, 'Item still checked out to patron' );
+
+    $account->pay(
+        {
+            amount     => "0.500000",
+            library_id => $library->id,
+        }
+    );
+
+    $accountline = Koha::Account::Lines->find( $accountline->id );
+    is( $accountline->amountoutstanding, '0.000000', 'Account line was paid down by half' );
+
+    $checkout = Koha::Checkouts->find( $checkout->id );
+    ok( !$checkout, 'Item was removed from patron account' );
 
     $schema->storage->txn_rollback;
 };
