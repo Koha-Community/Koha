@@ -1,5 +1,4 @@
-<script type="text/javascript">
-//<![CDATA[
+<script>
 
     var MSG_CHOOSE_Z3950 = _("Please choose at least one external target");
 
@@ -24,5 +23,4 @@ function validate_goto_page(){
 }
 [% END %]
 
-//]]>
 </script>

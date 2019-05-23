@@ -1,5 +1,5 @@
 [% USE raw %]
-<script type="text/javascript">
+<script>
 [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
     [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
 [% ELSE %]

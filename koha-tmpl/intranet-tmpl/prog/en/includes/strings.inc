@@ -1,5 +1,4 @@
-<script type="text/javascript">
-//<![CDATA[
+<script>
     var CIRCULATION_RETURNED = _("Checked in");
     var CIRCULATION_NOT_RETURNED = _("Unable to check in");
     var NOT_RENEWABLE_OVERDUE = _("Not allowed: overdue");
@@ -47,5 +46,4 @@
     var CURRENT = _(" (current) ");
     var MSG_NO_ITEMTYPE = _("No itemtype");
     var MSG_CHECKOUTS_BY_ITEMTYPE = _("Number of checkouts by item type");
-//]]>
 </script>
