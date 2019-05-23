@@ -87,12 +87,12 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript">
+    <script>
         var index = "[% index | html %]";
         var authtypecode = "[% authtypecode | html %]";
     </script>
     [% Asset.js("js/auth-finder-search.js") | $raw %]
-    <script type="text/javascript">
+    <script>
 
         function jumpfull(page){
             window.open(page,'','width=100,height=100,resizable=yes,toolbar=false,scrollbars=yes,top');

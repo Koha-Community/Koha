@@ -6,8 +6,7 @@
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 [% Asset.js("js/cataloging.js") | $raw %]
 
-<script type="text/javascript">
-//<![CDATA[
+<script>
     $(window).load(function(){
         $("#loading").hide();
     });
@@ -157,7 +156,6 @@ function confirmnotdup(redirect){
     $("#confirm_not_duplicate").attr("value","1");
     Check();
 }
-//]]>
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 
