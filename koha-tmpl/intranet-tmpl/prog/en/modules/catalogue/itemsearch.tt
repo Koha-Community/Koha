@@ -220,7 +220,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var authorised_values = [% authorised_values_json | $raw %];
 
         function loadAuthorisedValuesSelect(select) {

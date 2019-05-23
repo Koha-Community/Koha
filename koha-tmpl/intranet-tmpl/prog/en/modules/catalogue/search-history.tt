@@ -193,8 +193,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    <script type="text/javascript">
-    //<![CDATA[
+    <script>
     $(document).ready(function() {
         // We show table ordered by descending dates by default
         // (so that the more recent query is shown first)
