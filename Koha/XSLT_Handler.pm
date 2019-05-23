@@ -318,8 +318,41 @@ sub _load {
         return;
     }
 
+    my $security = XML::LibXSLT::Security->new();
+    $security->register_callback( read_file  => sub {
+        warn "read_file called in XML::LibXSLT";
+        #i.e. when using the exsl:document() element or document() function (to read a XML file)
+        my ($tctxt,$value) = @_;
+        return 0;
+    });
+    $security->register_callback( write_file => sub {
+        warn "write_file called in XML::LibXSLT";
+        #i.e. when using the exsl:document element (or document() function?) (to write an output file of many possible types)
+        #e.g.
+        #<exsl:document href="file:///tmp/breached.txt">
+        #   <xsl:text>breached!</xsl:text>
+        #</exsl:document>
+        my ($tctxt,$value) = @_;
+        return 0;
+    });
+    $security->register_callback( read_net   => sub {
+        warn "read_net called in XML::LibXSLT";
+        #i.e. when using the document() function (to read XML from the network)
+        #e.g. <xsl:copy-of select="document('http://localhost')" />
+        my ($tctxt,$value) = @_;
+        return 0;
+    });
+    $security->register_callback( write_net  => sub {
+        warn "write_net called in XML::LibXSLT";
+        #NOTE: it's unknown how one would invoke this, but covering our bases anyway
+        my ($tctxt,$value) = @_;
+        return 0;
+    });
+
     #parse sheet
     my $xslt = XML::LibXSLT->new;
+    $xslt->security_callbacks( $security );
+
     $rv = $code? $digest.$codelen: $filename;
     $self->{xslt_hash}->{$rv} = eval { $xslt->parse_stylesheet($style_doc) };
     if ($@) {
