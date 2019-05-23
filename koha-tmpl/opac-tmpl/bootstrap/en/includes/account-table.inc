@@ -117,9 +117,9 @@
 [% END %]
 
 [% FOREACH r IN relatives %]
-    <h3 id="g[% r.patron.id %]">[% r.patron.firstname %] [% r.patron.surname %]'s fines and charges</h3>
+    <h3 id="g[% r.patron.id | html %]">[% r.patron.firstname | html %] [% r.patron.surname | html %]'s fines and charges</h3>
 
-    <table class="table table-bordered table-striped" id="finestable-[% r.id %]">
+    <table class="table table-bordered table-striped" id="finestable-[% r.id | html %]">
         <thead>
             <tr>
                 <th class="title-string">Date</th>
@@ -134,12 +134,12 @@
             [% FOREACH a IN r.accountlines %]
                 [% SET account_sum = account_sum + a.amountoutstanding %]
                 <tr>
-                    <td><span title="[% a.date %]">[% a.date | $KohaDates %]</span></td>
+                    <td><span title="[% a.date | html %]">[% a.date | $KohaDates %]</span></td>
                     <td>
                         [% PROCESS account_type_description account=a %]
-                        [%- IF a.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', a.payment_type, 1) %][% END %]
-                        [%- IF a.description %], [% a.description %][% END %]
-                        [% IF a.itemnumber %]([% a.item.biblio.title %])[% END %]
+                        [%- IF a.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', a.payment_type, 1) | html %][% END %]
+                        [%- IF a.description %], [% a.description | html %][% END %]
+                        [% IF a.itemnumber %]([% a.item.biblio.title | html %])[% END %]
                     </td>
                     [% IF ( a.amount < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amount | $Price %]</td>
                     [% IF ( a.amountoutstanding < 0 ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% a.amountoutstanding | $Price %]</td>

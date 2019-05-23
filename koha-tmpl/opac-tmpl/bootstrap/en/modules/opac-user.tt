@@ -424,8 +424,8 @@
                                         <tbody>
                                             [% FOREACH r IN relatives_with_fines %]
                                             <tr>
-                                                <td>[% r.firstname %] [% r.surname %] currently owes fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl#g[% r.id %]">[% r.account.balance | $Price %]</a></td>
+                                                <td>[% r.firstname | html %] [% r.surname | html %] currently owes fines and charges amounting to:</td>
+                                                <td><a href="/cgi-bin/koha/opac-account.pl#g[% r.id | uri %]">[% r.account.balance | $Price %]</a></td>
                                             </tr>
                                             [% END %]
                                         </tbody>
