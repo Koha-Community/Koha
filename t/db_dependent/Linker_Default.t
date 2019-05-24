@@ -56,8 +56,6 @@ subtest 'Test caching in get_link and update_cache' => sub {
 
 
     # Now test to see if C4::Linker can find it.
-    my $authmatch;
-    my $fuzzy;
     my $linker = C4::Linker::Default->new();
 
     $linker->get_link($subject_heading);
