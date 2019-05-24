@@ -71,6 +71,17 @@
                         </li>
 
                         <li>
+                            <label class="required" for="homebranch">Home library:</label>
+                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="homebranch" name="homebranch_enabled" id="homebranch_enabled" />
+                            <select id="homebranch" name="homebranch" disabled="disabled">
+                                <option value=""></option>
+                                [% FOREACH b IN Branches.all() %]
+                                    <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                                [% END %]
+                            </select>
+                        </li>
+
+                        <li>
                             <label class="required" for="holdingbranch">Holding library:</label>
                             <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" />
                             <select id="holdingbranch" name="holdingbranch" disabled="disabled">

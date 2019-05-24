@@ -37,6 +37,7 @@ my $barcodes  = $cgi->param('barcodes')  || q{};
 
 my $itype         = $cgi->param('itype');
 my $ccode         = $cgi->param('ccode');
+my $homebranch    = $cgi->param('homebranch');
 my $holdingbranch = $cgi->param('holdingbranch');
 my $location      = $cgi->param('location');
 my $staff_note    = $cgi->param('staff_note');
@@ -44,6 +45,7 @@ my $public_note   = $cgi->param('public_note');
 
 my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
 my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
+my $homebranch_enabled    = scalar $cgi->param('homebranch_enabled') ? 1 : 0;
 my $holdingbranch_enabled = scalar $cgi->param('holdingbranch_enabled') ? 1 : 0;
 my $location_enabled      = scalar $cgi->param('location_enabled') ? 1 : 0;
 
@@ -87,10 +89,12 @@ if ( $course_id && $course ) {
                 itype                 => $itype,
                 ccode                 => $ccode,
                 holdingbranch         => $holdingbranch,
+                homebranch            => $homebranch,
                 location              => $location,
                 itype_enabled         => $itype_enabled,
                 ccode_enabled         => $ccode_enabled,
                 holdingbranch_enabled => $holdingbranch_enabled,
+                homebranch_enabled    => $homebranch_enabled,
                 location_enabled      => $location_enabled,
             );
 
