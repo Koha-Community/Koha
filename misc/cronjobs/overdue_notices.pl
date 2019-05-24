@@ -574,10 +574,11 @@ END_SQL
                     next;
                 }
                 $borrowernumber = $data->{'borrowernumber'};
-                my $borr =
-                    $data->{'firstname'} . ', '
-                  . $data->{'surname'} . ' ('
-                  . $borrowernumber . ')';
+                my $borr = sprintf( "%s%s%s (%s)",
+                    $data->{'surname'} || '',
+                    $data->{'firstname'} && $data->{'surname'} ? ', ' : '',
+                    $data->{'firstname'} || '',
+                    $borrowernumber );
                 $verbose
                   and warn "borrower $borr has items triggering level $i.";
 
