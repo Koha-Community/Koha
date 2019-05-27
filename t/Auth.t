@@ -19,24 +19,24 @@ use Modern::Perl;
 use Test::More tests => 13;
 use Test::Warn;
 
-use C4::Auth qw / in_ipset /;
+use C4::Auth qw / in_iprange /;
 
 $ENV{REMOTE_ADDR} = '192.168.1.30';
 my $ipset1 = "192.168.1.30";
 
-ok(in_ipset("192.168.1.30"), 'simple single ip matching remote ip');
-ok(!in_ipset("192.168.1.31"), 'simple single ip not match remote ip');
-ok(in_ipset("192.168.1.1/24"), 'simple ip range/24 with remote ip in it');
-ok(!in_ipset("192.168.2.1/24"), 'simple ip range/24 with remote ip not in it');
-ok(in_ipset("192.168.2.1/16"), 'simple ip range/16 with remote ip in it');
-ok(!in_ipset("192.168.1.10-30"), 'invalidly represented IP range with remote ip in it');
-ok(in_ipset("192.168.1.10-192.168.1.30"), 'validly represented ip range with remote ip in it');
-ok(in_ipset("127.0.0.1 192.168.1.30 192.168.2.10-192.168.2.25"), 'multiple ips and ranges, including the remote ip');
-ok(!in_ipset("127.0.0.1 8.8.8.8 192.168.2.1/24 192.168.3.1/24 192.168.1.1-192.168.1.29"), "multiple ip and ip ranges, with the remote ip in none of them");
-ok(in_ipset(""), "blank list given, no preference set - implies everything goes through.");
-ok(in_ipset(), "no list given, no preference set - implies everything goes through.");
-ok(in_ipset("192.168.1.1/36"), 'simple invalid ip range/36 with remote ip in it');
+ok(in_iprange("192.168.1.30"), 'simple single ip matching remote ip');
+ok(!in_iprange("192.168.1.31"), 'simple single ip not match remote ip');
+ok(in_iprange("192.168.1.1/24"), 'simple ip range/24 with remote ip in it');
+ok(!in_iprange("192.168.2.1/24"), 'simple ip range/24 with remote ip not in it');
+ok(in_iprange("192.168.2.1/16"), 'simple ip range/16 with remote ip in it');
+ok(!in_iprange("192.168.1.10-30"), 'invalidly represented IP range with remote ip in it');
+ok(in_iprange("192.168.1.10-192.168.1.30"), 'validly represented ip range with remote ip in it');
+ok(in_iprange("127.0.0.1 192.168.1.30 192.168.2.10-192.168.2.25"), 'multiple ips and ranges, including the remote ip');
+ok(!in_iprange("127.0.0.1 8.8.8.8 192.168.2.1/24 192.168.3.1/24 192.168.1.1-192.168.1.29"), "multiple ip and ip ranges, with the remote ip in none of them");
+ok(in_iprange(""), "blank list given, no preference set - implies everything goes through.");
+ok(in_iprange(), "no list given, no preference set - implies everything goes through.");
+ok(in_iprange("192.168.1.1/36"), 'simple invalid ip range/36 with remote ip in it');
 $ENV{DEBUG} = 1;
-warning_like { in_ipset("192.168.1.1/36") }
+warning_like { in_iprange("192.168.1.1/36") }
     qr/cidrlookup failed for/,
     'noisy simple invalid ip range/36 with remote ip in it';

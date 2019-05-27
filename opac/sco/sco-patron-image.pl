@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Auth qw(in_ipset);
+use C4::Auth qw(in_iprange);
 use C4::Service;
 use C4::Members;
 use Koha::Patron::Images;
@@ -36,7 +36,7 @@ unless (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
     exit;
 }
 
-unless ( in_ipset(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
     print $query->header(status => '403 Forbidden - functionality not available from your location');
     exit;
 }
