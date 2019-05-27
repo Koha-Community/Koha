@@ -2297,7 +2297,7 @@ sub _debar_user_on_return {
 
             my $new_debar_dt;
             # Use the calendar or not to calculate the debarment date
-            if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+            if ( C4::Context->preference('SuspensionsCalendar') eq 'noSuspensionsWhenClosed' ) {
                 my $calendar = Koha::Calendar->new(
                     branchcode => $branchcode,
                     days_mode  => 'Calendar'

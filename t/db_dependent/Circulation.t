@@ -1854,6 +1854,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     $rule->suspension_chargeperiod(1)->store;
     $rule->firstremind(0)->store;
     t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
+    t::lib::Mocks::mock_preference('SuspensionsCalendar', 'noSuspensionsWhenClosed');
 
     # Adding a holiday 2 days ago
     my $calendar = C4::Calendar->new(branchcode => $library->{branchcode});
