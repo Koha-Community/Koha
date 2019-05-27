@@ -35,7 +35,7 @@ use C4::Members;
 use C4::Koha;
 
 my $input = new CGI;
-unless ( in_ipset(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
+unless ( in_iprange(C4::Context->preference('SelfCheckAllowByIPRanges')) ) {
     print $input->header(status => '403 Forbidden - functionality not available from your location');
     exit;
 }
