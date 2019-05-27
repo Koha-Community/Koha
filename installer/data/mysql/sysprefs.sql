@@ -600,6 +600,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('suggestion','1','','If ON, enables patron suggestions feature in OPAC','YesNo'),
 ('SuspendHoldsIntranet','1','Allow holds to be suspended from the intranet.',NULL,'YesNo'),
 ('SuspendHoldsOpac','1','Allow holds to be suspended from the OPAC.',NULL,'YesNo'),
+('SuspensionsCalendar','noSuspensionsWhenClosed','ignoreCalendar|noSuspensionsWhenClosed','Specify whether to use the Calendar in calculating suspension expiration','Choice'),
 ('SvcMaxReportRows','10',NULL,'Maximum number of rows to return via the report web service.','Integer'),
 ('SwitchOnSiteCheckouts','0',NULL,'Automatically switch an on-site checkout to a normal checkout','YesNo'),
 ('SyndeticsAuthorNotes','0','','Display Notes about the Author on OPAC from Syndetics','YesNo'),

@@ -840,7 +840,13 @@ Circulation:
               choices:
                   ignoreCalendar: directly.
                   noFinesWhenClosed: not including days the library is closed.
-            -
+        -
+            - Calculate suspension expiration based on days overdue
+            - pref: SuspensionsCalendar
+              type: choice
+              choices:
+                  ignoreCalendar: directly.
+                  noSuspensionsWhenClosed: not including days the library is closed.
         -
             - pref: finesMode
               type: choice
