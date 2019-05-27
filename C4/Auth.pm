@@ -63,7 +63,7 @@ BEGIN {
     @ISA       = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
-      &get_all_subpermissions &get_user_subpermissions track_login_daily &in_ipset
+      &get_all_subpermissions &get_user_subpermissions track_login_daily &in_iprange
     );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap      = C4::Context->config('useldapserver') || 0;
@@ -2120,20 +2120,20 @@ sub haspermission {
     #FIXME - This fcn should return the failed permission so a suitable error msg can be delivered.
 }
 
-=head2 in_ipset
+=head2 in_iprange
 
-  $flags = ($ipset);
+  $flags = ($iprange);
 
-C<$ipset> A space separated string describing an IP set. Can include single IPs or ranges
+C<$iprange> A space separated string describing an IP range. Can include single IPs or ranges
 
-Returns 1 if the remote address is in the provided ipset, or 0 otherwise.
+Returns 1 if the remote address is in the provided iprange, or 0 otherwise.
 
 =cut
 
-sub in_ipset {
-    my ($ipset) = @_;
+sub in_iprange {
+    my ($iprange) = @_;
     my $result = 1;
-    my @allowedipranges = $ipset ? split(' ', $ipset) : ();
+    my @allowedipranges = $iprange ? split(' ', $iprange) : ();
     if (scalar @allowedipranges > 0) {
         my @rangelist;
         eval { @rangelist = Net::CIDR::range2cidr(@allowedipranges); }; return 0 if $@;
