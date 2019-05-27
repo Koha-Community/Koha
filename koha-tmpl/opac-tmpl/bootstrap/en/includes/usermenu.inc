@@ -15,7 +15,7 @@
                 [% ELSE %]
                     <li>
                 [% END %]
-                <a href="/cgi-bin/koha/opac-account.pl">your fines</a></li>
+                <a href="/cgi-bin/koha/opac-account.pl">your charges</a></li>
             [% END %]
 
             [% IF ( userupdateview ) %]

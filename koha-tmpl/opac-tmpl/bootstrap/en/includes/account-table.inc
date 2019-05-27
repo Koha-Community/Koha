@@ -1,4 +1,4 @@
-<h3>Fines and charges</h3>
+<h3>Charges</h3>
 
 [% IF ( ACCOUNT_LINES ) %]
     <form method="post" action="opac-account-pay.pl" class="form-horizontal">
