@@ -108,6 +108,7 @@ sub pay {
         $fine->amountoutstanding($new_amountoutstanding)->store();
         $balance_remaining = $balance_remaining - $amount_to_pay;
 
+        # Same logic exists in Koha::Account::Line::apply
         if ( $new_amountoutstanding == 0 && $fine->itemnumber && $fine->accounttype && ( $fine->accounttype eq 'L' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
