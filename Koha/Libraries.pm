@@ -28,6 +28,7 @@ use Koha::Database;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Library;
+use Koha::Patrons;
 
 use base qw(Koha::Objects);
 
@@ -75,7 +76,7 @@ sub pickup_locations {
         );
     }
     unless (! defined $patron || ref($patron) eq 'Koha::Patron') {
-        $patron = Koha::Items->find($patron);
+        $patron = Koha::Patrons->find($patron);
     }
 
     # Select libraries that are configured as pickup locations

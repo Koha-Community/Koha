@@ -313,19 +313,19 @@ sub pickup_locations {
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
-    my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
-    my $library = $branch_control eq 'holdingbranch' ? $self->holding_branch : $self->home_branch;
-
     my @libs;
     if(defined $patron) {
-        return @libs if $branchitemrule->{holdallowed} == 3 && !$library->validate_hold_sibling( {branchcode => $patron->branchcode} );
-        return @libs if $branchitemrule->{holdallowed} == 1 && $library->branchcode ne $patron->branchcode;
+        return @libs if $branchitemrule->{holdallowed} == 3 && !$self->home_branch->validate_hold_sibling( {branchcode => $patron->branchcode} );
+        return @libs if $branchitemrule->{holdallowed} == 1 && $self->home_branch->branchcode ne $patron->branchcode;
     }
 
     if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
-        @libs  = $library->get_hold_libraries;
-        my $circ_control_library = Koha::Libraries->find($circ_control_branch);
-        push @libs, $circ_control_library unless scalar(@libs) > 0;
+        @libs  = $self->home_branch->get_hold_libraries;
+        push @libs, $self->home_branch unless scalar(@libs) > 0;
+    } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'patrongroup') {
+        my $plib = Koha::Libraries->find({ branchcode => $patron->branchcode});
+        @libs  = $plib->get_hold_libraries;
+        push @libs, $self->home_branch unless scalar(@libs) > 0;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'homebranch') {
         push @libs, $self->home_branch;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch') {

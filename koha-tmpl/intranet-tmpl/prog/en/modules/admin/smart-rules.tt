@@ -496,6 +496,16 @@
                                 </option>
                             [% END %]
 
+                            [% IF hold_fulfillment_policy == 'patrongroup' %]
+                                <option value="patrongroup" selected="selected">
+                                    patron's hold group
+                                </option>
+                            [% ELSE %]
+                                <option value="patrongroup">
+                                    patron's hold group
+                                </option>
+                            [% END %]
+
                             [% IF hold_fulfillment_policy == 'homebranch' %]
                                 <option value="homebranch" selected="selected">
                                     item's home library
@@ -774,6 +784,8 @@
                                     <span>item's home library</span>
                                 [% ELSIF hold_fulfillment_policy == 'holdgroup' %]
                                     <span>item's hold group</span>
+                                [% ELSIF hold_fulfillment_policy == 'patrongroup' %]
+                                    <span>patron's hold group</span>
                                 [% ELSIF hold_fulfillment_policy == 'holdingbranch' %]
                                     <span>item's holding library</span>
                                 [% END %]
@@ -817,6 +829,10 @@
 
                             <option value="holdgroup">
                                 item's hold group
+                            </option>
+
+                            <option value="patrongroup">
+                                patron's hold group
                             </option>
 
                             <option value="homebranch">

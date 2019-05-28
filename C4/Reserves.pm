@@ -509,6 +509,9 @@ sub CanItemBeReserved {
         unless ($branchitemrule->{hold_fulfillment_policy} ne 'holdgroup' || $item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
             return { status => 'pickupNotInHoldGroup' };
         }
+        unless ($branchitemrule->{hold_fulfillment_policy} ne 'patrongroup' || Koha::Libraries->find({branchcode => $borrower->{branchcode}})->validate_hold_sibling({branchcode => $pickup_branchcode})) {
+            return { status => 'pickupNotInHoldGroup' };
+        }
     }
 
     return { status => 'OK' };
