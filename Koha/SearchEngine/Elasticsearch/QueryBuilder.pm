@@ -376,11 +376,16 @@ sub build_authorities_query {
             my $query = $self->_join_queries( @tokens );
 
             if ($wh) {
-                push @query_parts, { query_string => { default_field => $wh, query => $query } };
+                push @query_parts, { query_string => {
+                    default_field => $wh,
+                    analyze_wildcard => JSON::true,
+                    query => $query
+                } };
             }
             else {
                 push @query_parts, {
                     query_string => {
+                        analyze_wildcard => JSON::true,
                         query => $query,
                         fields => $self->_search_fields(),
                     }
