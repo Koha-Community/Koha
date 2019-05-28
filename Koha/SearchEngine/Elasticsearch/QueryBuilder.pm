@@ -340,7 +340,11 @@ sub build_authorities_query {
                 );
             }
             my $query = $self->_join_queries( @tokens );
-            push @query_parts, { query_string => { default_field => $wh, query => $query } };
+            push @query_parts, { query_string => {
+                default_field => $wh,
+                analyze_wildcard => JSON::true,
+                query => $query
+            } };
         }
     }
 
