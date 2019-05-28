@@ -166,7 +166,8 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $lines_read=0;
     binmode($uploadbarcodes, ":encoding(UTF-8)");
     while (my $barcode=<$uploadbarcodes>) {
-        push @uploadedbarcodes, grep { /\S/ } split( /[\n\r,;|-]/, $barcode );
+        my $split_chars = C4::Context->preference('BarcodeSeparators');
+        push @uploadedbarcodes, grep { /\S/ } split( /[$split_chars]/, $barcode );
     }
     for my $barcode (@uploadedbarcodes) {
         next unless $barcode;

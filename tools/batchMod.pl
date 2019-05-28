@@ -244,16 +244,18 @@ if ($op eq "show"){
     my $filecontent = $input->param('filecontent');
     my ( @notfoundbarcodes, @notfounditemnumbers);
 
-    my @contentlist;
+    my $split_chars = C4::Context->preference('BarcodeSeparators');
     if ($filefh){
         binmode $filefh, ':encoding(UTF-8)';
+        my @contentlist;
         while (my $content=<$filefh>){
             $content =~ s/[\r\n]*$//;
             push @contentlist, $content if $content;
         }
 
-        @contentlist = uniq @contentlist;
         if ($filecontent eq 'barcode_file') {
+            @contentlist = grep /\S/, ( map { split /[$split_chars]/ } @contentlist );
+            @contentlist = uniq @contentlist;
             my $existing_items = Koha::Items->search({ barcode => \@contentlist });
             @itemnumbers = $existing_items->get_column('itemnumber');
             my %exists = map {lc($_)=>1} $existing_items->get_column('barcode');
@@ -264,6 +266,7 @@ if ($op eq "show"){
             @notfoundbarcodes = grep { !$exists{$_} } @contentlist;
         }
         elsif ( $filecontent eq 'itemid_file') {
+            @contentlist = uniq @contentlist;
             @itemnumbers = Koha::Items->search({ itemnumber => \@contentlist })->get_column('itemnumber');
             my %exists = map {$_=>1} @itemnumbers;
             @notfounditemnumbers = grep { !$exists{$_} } @contentlist;
@@ -275,8 +278,9 @@ if ($op eq "show"){
                 push @itemnumbers, $itm->{itemnumber};
             }
         }
-        if ( my $list=$input->param('barcodelist')){
-            push my @barcodelist, uniq( split(/\s\n/, $list) );
+        if ( my $list = $input->param('barcodelist') ) {
+            my @barcodelist = grep /\S/, ( split /[$split_chars]/, $list );
+            @barcodelist = uniq @barcodelist;
 
             my $existing_items = Koha::Items->search({ barcode => \@barcodelist });
             @itemnumbers = $existing_items->get_column('itemnumber');
