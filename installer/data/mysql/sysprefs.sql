@@ -85,6 +85,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
 ('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Free'),
 ('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Free'),
+('BarcodeSeparators','\\s\\r\\n','','Splitting characters for barcodes','Free'),
 ('BasketConfirmations','1','always ask for confirmation.|do not ask for confirmation.','When closing or reopening a basket,','Choice'),
 ('BatchCheckouts','0','','Enable or disable batch checkouts','YesNo'),
 ('BatchCheckoutsValidCategories','',NULL,'Patron categories allowed to checkout in a batch','Free'),
