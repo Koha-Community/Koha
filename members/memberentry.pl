@@ -740,7 +740,7 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     $template->param(ExtendedPatronAttributes => 1);
-    patron_attributes_form($template, $borrowernumber);
+    patron_attributes_form($template, $borrowernumber, $op);
 }
 
 $template->param(
@@ -855,6 +855,7 @@ sub  parse_extended_patron_attributes {
 sub patron_attributes_form {
     my $template = shift;
     my $borrowernumber = shift;
+    my $op = shift;
 
     my @types = C4::Members::AttributeTypes::GetAttributeTypes();
     if (scalar(@types) == 0) {
