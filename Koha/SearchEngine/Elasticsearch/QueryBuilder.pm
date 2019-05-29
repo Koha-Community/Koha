@@ -92,6 +92,7 @@ sub build_query {
             default_operator => 'AND',
             default_field    => '_all',
             lenient          => JSON::true,
+            analyze_wildcard => JSON::true,
             fields           => $options{fields} || [],
         }
     };
