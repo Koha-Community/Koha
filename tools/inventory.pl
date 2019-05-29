@@ -326,7 +326,7 @@ if ( $compareinv2barcd ) {
         my $barcode = $item->{barcode};
         if( !$barcode ) {
             $item->{problems}->{no_barcode} = 1;
-        } elsif ( grep /^$barcode$/, @scanned_barcodes ) {
+        } elsif ( grep { $_ eq $barcode } @scanned_barcodes ) {
             next;
         } else {
             $item->{problems}->{not_scanned} = 1;
