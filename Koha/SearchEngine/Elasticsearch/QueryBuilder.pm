@@ -352,6 +352,9 @@ sub build_authorities_query {
                      { must => \@query_parts  }
                  }
              };
+    if ( $search->{authtypecode} ) {
+        $query->{query}->{bool}->{filter} = { term => { 'authtype' => lc $search->{authtypecode} } };
+    }
 
     my %s;
     if ( exists $search->{sort} ) {
