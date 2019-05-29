@@ -175,7 +175,7 @@ sub can_be_transferred {
 @pickup_locations = $biblio->pickup_locations( {patron => $patron } )
 
 Returns possible pickup locations for this biblio items, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
-and if item can be transfered to each pickup location.
+and if item can be transferred to each pickup location.
 
 =cut
 

@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Exception;
 
 use C4::Circulation;
@@ -179,7 +179,7 @@ is( Koha::Items->search->count, $nb_of_items + 1, 'Delete should have deleted th
 $schema->storage->txn_rollback;
 
 subtest 'pickup_locations' => sub {
-    plan tests => 33;
+    plan tests => 60;
 
     $schema->storage->txn_begin;
 
@@ -219,8 +219,8 @@ subtest 'pickup_locations' => sub {
         biblioitemnumber => $biblioitem->{biblioitemnumber},
         homebranch       => $library1->branchcode,
         holdingbranch    => $library2->branchcode,
+        barcode          => '1',
         itype            => 'test',
-        barcode          => "item1barcode",
     })->store;
 
     my $item3  = Koha::Item->new({
@@ -228,371 +228,108 @@ subtest 'pickup_locations' => sub {
         biblioitemnumber => $biblioitem->{biblioitemnumber},
         homebranch       => $library3->branchcode,
         holdingbranch    => $library4->branchcode,
+        barcode          => '3',
         itype            => 'test',
-        barcode          => "item3barcode",
     })->store;
 
-    my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode } } );
-    my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode } } );
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode, firstname => '1' } } );
+    my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode, firstname => '4' } } );
 
-    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'homebranch');
+    my $results = {
+        "1-1-1-any" => 3,
+        "1-1-1-holdgroup" => 2,
+        "1-1-1-patrongroup" => 2,
+        "1-1-1-homebranch" => 1,
+        "1-1-1-holdingbranch" => 1,
+        "1-1-2-any" => 3,
+        "1-1-2-holdgroup" => 2,
+        "1-1-2-patrongroup" => 2,
+        "1-1-2-homebranch" => 1,
+        "1-1-2-holdingbranch" => 1,
+        "1-1-3-any" => 3,
+        "1-1-3-holdgroup" => 2,
+        "1-1-3-patrongroup" => 2,
+        "1-1-3-homebranch" => 1,
+        "1-1-3-holdingbranch" => 1,
+        "1-4-1-any" => 0,
+        "1-4-1-holdgroup" => 0,
+        "1-4-1-patrongroup" => 0,
+        "1-4-1-homebranch" => 0,
+        "1-4-1-holdingbranch" => 0,
+        "1-4-2-any" => 3,
+        "1-4-2-holdgroup" => 2,
+        "1-4-2-patrongroup" => 1,
+        "1-4-2-homebranch" => 1,
+        "1-4-2-holdingbranch" => 1,
+        "1-4-3-any" => 0,
+        "1-4-3-holdgroup" => 0,
+        "1-4-3-patrongroup" => 0,
+        "1-4-3-homebranch" => 0,
+        "1-4-3-holdingbranch" => 0,
+        "3-1-1-any" => 0,
+        "3-1-1-holdgroup" => 0,
+        "3-1-1-patrongroup" => 0,
+        "3-1-1-homebranch" => 0,
+        "3-1-1-holdingbranch" => 0,
+        "3-1-2-any" => 3,
+        "3-1-2-holdgroup" => 1,
+        "3-1-2-patrongroup" => 2,
+        "3-1-2-homebranch" => 0,
+        "3-1-2-holdingbranch" => 1,
+        "3-1-3-any" => 0,
+        "3-1-3-holdgroup" => 0,
+        "3-1-3-patrongroup" => 0,
+        "3-1-3-homebranch" => 0,
+        "3-1-3-holdingbranch" => 0,
+        "3-4-1-any" => 0,
+        "3-4-1-holdgroup" => 0,
+        "3-4-1-patrongroup" => 0,
+        "3-4-1-homebranch" => 0,
+        "3-4-1-holdingbranch" => 0,
+        "3-4-2-any" => 3,
+        "3-4-2-holdgroup" => 1,
+        "3-4-2-patrongroup" => 1,
+        "3-4-2-homebranch" => 0,
+        "3-4-2-holdingbranch" => 1,
+        "3-4-3-any" => 3,
+        "3-4-3-holdgroup" => 1,
+        "3-4-3-patrongroup" => 1,
+        "3-4-3-homebranch" => 0,
+        "3-4-3-holdingbranch" => 1
+    };
 
-    #Case 1: holdallowed any, hold_fulfillment_policy any
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 2,
-                hold_fulfillment_policy => 'any',
-                returnbranch => 'any'
+    sub _doTest {
+        my ( $item, $patron, $ha, $hfp, $results ) = @_;
+
+        Koha::CirculationRules->set_rules(
+            {
+                branchcode => undef,
+                itemtype   => undef,
+                categorycode => undef,
+                rules => {
+                    holdallowed => $ha,
+                    hold_fulfillment_policy => $hfp,
+                    returnbranch => 'any'
+                }
+            }
+        );
+        my @pl = $item->pickup_locations( { patron => $patron} );
+        my $ha_value=$ha==3?'holdgroup':($ha==2?'any':'homebranch');
+
+        ok(scalar(@pl) == $results->{$item->barcode.'-'.$patron->firstname.'-'.$ha.'-'.$hfp}, 'item'.$item->barcode.', patron'.$patron->firstname.', holdallowed: '.$ha_value.', hold_fulfillment_policy: '.$hfp.' should return '.$results->{$item->barcode.'-'.$patron->firstname.'-'.$ha.'-'.$hfp}.' but returns '.scalar(@pl));
+    }
+
+
+    foreach my $item ($item1, $item3) {
+        foreach my $patron ($patron1, $patron4) {
+            #holdallowed 1: homebranch, 2: any, 3: holdgroup
+            foreach my $ha (1, 2, 3) {
+                foreach my $hfp ('any', 'holdgroup', 'patrongroup', 'homebranch', 'holdingbranch') {
+                    _doTest($item, $patron, $ha, $hfp, $results);
+                }
             }
         }
-    );
-
-    my @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    my @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    my @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    my @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == scalar(@pl_1_4) && scalar(@pl_1_1) == scalar(@pl_3_1) && scalar(@pl_1_1) == scalar(@pl_3_4), 'All combinations of patron/item renders the same number of locations');
-
-    #Case 2: holdallowed homebranch, hold_fulfillment_policy any, HomeOrHoldingBranch 'homebranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'any',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 3, 'Pickup location for patron 1 and item 1 renders all libraries that are pickup_locations');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
-
-    #Case 3: holdallowed holdgroup, hold_fulfillment_policy any
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 3,
-                hold_fulfillment_policy => 'any',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 3, 'Pickup location for patron 1 and item 1 renders all libraries that are pickup_locations');
-    ok(scalar(@pl_3_4) == 3, 'Pickup location for patron 4 and item 3 renders all libraries that are pickup_locations');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0, 'Any other combination renders no locations');
-
-    #Case 4: holdallowed any, hold_fulfillment_policy holdgroup
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 2,
-                hold_fulfillment_policy => 'holdgroup',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 2 && scalar(@pl_1_4) == 2, 'Pickup locations for item 1 renders all libraries in items\'s holdgroup that are pickup_locations');
-    ok(scalar(@pl_3_1) == 1 && scalar(@pl_3_4) == 1, 'Pickup locations for item 3 renders all libraries in items\'s holdgroup that are pickup_locations');
-
-    #Case 5: holdallowed homebranch, hold_fulfillment_policy holdgroup, HomeOrHoldingBranch 'homebranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'holdgroup',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 2, 'Pickup location for patron 1 and item 1 renders all libraries in holdgroup that are pickup_locations');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
-
-    #Case 6: holdallowed holdgroup, hold_fulfillment_policy holdgroup
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 3,
-                hold_fulfillment_policy => 'holdgroup',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 2, 'Pickup location for patron 1 and item 1 renders all libraries that are pickup_locations');
-    ok(scalar(@pl_3_4) == 1, 'Pickup location for patron 4 and item 3 renders all libraries that are pickup_locations');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0, 'Any other combination renders no locations');
-
-    #Case 7: holdallowed any, hold_fulfillment_policy homebranch
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 2,
-                hold_fulfillment_policy => 'homebranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 1 && scalar(@pl_1_4) == 1 && $pl_1_1[0]->{branchcode} eq $library1->branchcode && $pl_1_4[0]->{branchcode} eq $library1->id, 'Pickup locations for item 1 renders item\'s homelibrary');
-    ok(scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations, because library3 is not pickup_location');
-
-    #Case 8: holdallowed homebranch, hold_fulfillment_policy homebranch, HomeOrHoldingBranch 'homebranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'homebranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 1 && $pl_1_1[0]->{branchcode} eq $library1->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s homebranch');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
-
-    #Case 9: holdallowed holdgroup, hold_fulfillment_policy homebranch
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 3,
-                hold_fulfillment_policy => 'homebranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 1, 'Pickup location for patron 1 and item 1 renders item\'s homebranch');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
-
-    #Case 10: holdallowed any, hold_fulfillment_policy holdingbranch
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 2,
-                hold_fulfillment_policy => 'holdingbranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 1 && scalar(@pl_1_4) == 1 && $pl_1_1[0]->{branchcode} eq $library2->branchcode && $pl_1_4[0]->{branchcode} eq $library2->branchcode, 'Pickup locations for item 1 renders item\'s holding branch');
-    ok(scalar(@pl_3_1) == 1 && scalar(@pl_3_4) == 1 && $pl_3_1[0]->{branchcode} eq $library4->branchcode && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup locations for item 3 renders item\'s holding branch');
-
-
-    #Case 11: holdallowed homebranch, hold_fulfillment_policy holdingbranch, HomeOrHoldingBranch 'homebranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'holdingbranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 1 && $pl_1_1[0]->{branchcode} eq $library2->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s holding branch');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
-
-    #Case 12: holdallowed holdgroup, hold_fulfillment_policy holdingbranch
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 3,
-                hold_fulfillment_policy => 'holdingbranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_1_1) == 1 && $pl_1_1[0]->{branchcode} eq $library2->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s holding branch');
-    ok(scalar(@pl_3_4) == 1 && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup location for patron 4 and item 3 renders item\'s holding branch');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0, 'Any other combination renders no locations');
-
-    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'holdingbranch');
-
-    #Case 13: holdallowed homebranch, hold_fulfillment_policy any, HomeOrHoldingBranch 'holdingbranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'any',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_3_4) == 3, 'Pickup location for patron 4 and item 3 renders all libraries that are pickup_locations');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any other combination renders no locations');
-
-    #Case 14: holdallowed homebranch, hold_fulfillment_policy holdgroup, HomeOrHoldingBranch 'holdingbranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'holdgroup',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_3_4) == 1, 'Pickup location for patron 4 and item 3 renders all libraries in holdgroup that are pickup_locations');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any other combination renders no locations');
-
-    #Case 15: holdallowed homebranch, hold_fulfillment_policy homebranch, HomeOrHoldingBranch 'holdingbranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'homebranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    #ok(scalar(@pl_3_4) == 1 && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup location for patron 4 and item 3 renders item\'s holding branch');
-    ok(scalar(@pl_3_4) == 0 && scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any combination of patron/item renders no locations');
-
-    #Case 16: holdallowed homebranch, hold_fulfillment_policy holdingbranch, HomeOrHoldingBranch 'holdingbranch'
-    Koha::CirculationRules->set_rules(
-        {
-            branchcode => undef,
-            itemtype   => undef,
-            categorycode => undef,
-            rules => {
-                holdallowed => 1,
-                hold_fulfillment_policy => 'holdingbranch',
-                returnbranch => 'any'
-            }
-        }
-    );
-
-    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
-    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
-    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
-    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
-
-    ok(scalar(@pl_3_4) == 1 && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s holding branch');
-    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any other combination renders no locations');
+    }
 
     $schema->storage->txn_rollback;
 };

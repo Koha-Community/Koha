@@ -564,8 +564,10 @@ foreach my $biblionumber (@biblionumbers) {
                     $num_available++;
                     if($branchitemrule->{'hold_fulfillment_policy'} eq 'any' ) {
                         $item->{pickup_locations} = 'Any library';
+                        $item->{pickup_locations_code} = 'all';
                     } else {
                         $item->{pickup_locations} = join (', ', map { $_->{branchname} } Koha::Items->find($itemnumber)->pickup_locations({ patron => $patron }));
+                        $item->{pickup_locations_code} = join (',', map { $_->{branchcode} } Koha::Items->find($itemnumber)->pickup_locations({ patron => $patron }));
                     }
 
                     push( @available_itemtypes, $item->{itype} );

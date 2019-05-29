@@ -27,6 +27,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 use C4::Context;
 use C4::Circulation;
+use C4::Reserves;
 use Koha::Checkouts;
 use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
@@ -299,7 +300,7 @@ sub can_be_transferred {
 @pickup_locations = $item->pickup_locations( {patron => $patron } )
 
 Returns possible pickup locations for this item, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
-and if item can be transfered to each pickup location.
+and if item can be transferred to each pickup location.
 
 =cut
 
@@ -309,7 +310,7 @@ sub pickup_locations {
     my $patron = $params->{patron};
 
     my $circ_control_branch =
-      C4::Circulation::_GetCircControlBranch( $self->unblessed(), $patron );
+      C4::Reserves::GetReservesControlBranch( $self->unblessed(), $patron->unblessed );
     my $branchitemrule =
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
 
@@ -344,6 +345,7 @@ sub pickup_locations {
             push @pickup_locations, $library->unblessed;
         }
     }
+
     return wantarray ? @pickup_locations : \@pickup_locations;
 }
 
