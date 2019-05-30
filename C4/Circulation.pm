@@ -2408,7 +2408,7 @@ sub _FixAccountForLostAndReturned {
     my $accountlines = Koha::Account::Lines->search(
         {
             itemnumber  => $itemnumber,
-            accounttype => { -in => [ 'L', 'W' ] },
+            accounttype => 'L',
         },
         {
             order_by => { -desc => [ 'date', 'accountlines_id' ] }
