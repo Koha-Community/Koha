@@ -99,6 +99,14 @@ $(document).ready(function() {
         return confirmDelete();
     });
 
+    $(".edit_action").on("click", function(){
+        var mmta_id = $(this).data("mmta_id");
+        var mmta = $.grep(mmtas, function(elt, id) {
+            return elt['mmta_id'] == mmta_id;
+        });
+        editAction( mmta[0] );
+        updateAllEvery();
+    });
 });
 
 function updateAllEvery(){
@@ -258,50 +266,47 @@ function confirmDelete() {
 var modaction_legend_innerhtml;
 var action_submit_value;
 
-function editAction( mmta_id, ordering, action, field_number, from_field, from_subfield, field_value, to_field,
-    to_subfield, to_regex_search, to_regex_replace, to_regex_modifiers, conditional, conditional_field, conditional_subfield,
-    conditional_comparison, conditional_value, conditional_regex, description
-) {
+function editAction( mmta ) {
     $("#add_action").show();
-    document.getElementById('mmta_id').value = mmta_id;
+    document.getElementById('mmta_id').value = mmta['mmta_id'];
 
-    setSelectByValue( 'action', action );
+    setSelectByValue( 'action', mmta['action'] );
     $('#action').change();
 
-    setSelectByValue( 'field_number', field_number );
+    setSelectByValue( 'field_number', mmta['field_number'] );
 
-    document.getElementById('from_field').value = from_field;
-    document.getElementById('from_subfield').value = from_subfield;
-    document.getElementById('field_value').value = field_value;
-    document.getElementById('to_field').value = to_field;
-    document.getElementById('to_subfield').value = to_subfield;
-    if ( to_regex_search == '' && to_regex_replace == '' && to_regex_modifiers == '' ) {
+    document.getElementById('from_field').value = mmta['from_field'];
+    document.getElementById('from_subfield').value = mmta['from_subfield'];
+    document.getElementById('field_value').value = mmta['field_value'];
+    document.getElementById('to_field').value = mmta['to_field'];
+    document.getElementById('to_subfield').value = mmta['to_subfield'];
+    if ( mmta['regex_search'] == '' && mmta['to_regex_replace'] == '' && mmta['to_regex_modifiers'] == '' ) {
         $('#to_field_regex').prop('checked', false).change();
     } else {
         $('#to_field_regex').prop('checked', true).change();
-        $("#to_regex_search").val(to_regex_search);
-        $("#to_regex_replace").val(to_regex_replace);
-        $("#to_regex_modifiers").val(to_regex_modifiers);
+        $("#to_regex_search").val(mmta['to_regex_search']);
+        $("#to_regex_replace").val(mmta['to_regex_replace']);
+        $("#to_regex_modifiers").val(mmta['to_regex_modifiers']);
     }
 
-    setSelectByValue( 'conditional', conditional );
+    setSelectByValue( 'conditional', mmta['conditional'] );
     $('#conditional').change();
 
-    document.getElementById('conditional_field').value = conditional_field;
-    document.getElementById('conditional_subfield').value = conditional_subfield;
+    document.getElementById('conditional_field').value = mmta['conditional_field'];
+    document.getElementById('conditional_subfield').value = mmta['conditional_subfield'];
 
-    setSelectByValue( 'conditional_comparison', conditional_comparison );
+    setSelectByValue( 'conditional_comparison', mmta['conditional_comparison'] );
     $('#conditional_comparison').change();
 
-    document.getElementById('conditional_value').value = conditional_value;
+    document.getElementById('conditional_value').value = mmta['conditional_value'];
 
-    document.getElementById('conditional_regex').checked = parseInt( conditional_regex );
+    document.getElementById('conditional_regex').checked = parseInt( mmta['conditional_regex'] );
     $('#conditional_regex').change();
 
-    document.getElementById('description').value = description;
+    document.getElementById('description').value = mmta['description'];
 
     window.modaction_legend_innerhtml = document.getElementById('modaction_legend').innerHTML;
-    document.getElementById('modaction_legend').innerHTML = MSG_MMT_EDIT_ACTION.format(ordering);
+    document.getElementById('modaction_legend').innerHTML = MSG_MMT_EDIT_ACTION.format(mmta['ordering']);
 
     window.action_submit_value = document.getElementById('action_submit').value;
     document.getElementById('action_submit').value = MSG_MMT_UPDATE_ACTION;
