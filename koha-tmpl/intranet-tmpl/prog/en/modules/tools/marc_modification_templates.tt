@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE JSON.Escape %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -162,27 +163,7 @@
                                         </td>
                                         <td>[% ActionsLoo.description | html %]</td>
                                         <td>
-                                            <a class="btn btn-default btn-xs" href="#modaction" onclick='editAction(
-                                                            "[% ActionsLoo.mmta_id |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.ordering |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.action |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.field_number |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.from_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.from_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.field_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.to_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.to_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.to_regex_search |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.to_regex_replace |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.to_regex_modifiers |replace('\\\\', '\\\\') |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.conditional |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.conditional_field |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.conditional_subfield |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.conditional_comparison |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.conditional_value |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.conditional_regex |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]",
-                                                            "[% ActionsLoo.description |replace('\\\\', '\\\\') |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]"
-                                                        );updateAllEvery();'><i class="fa fa-pencil"></i> Edit</a>
+                                            <a class="btn btn-default btn-xs edit_action" href="#modaction" data-mmta_id="[% ActionsLoo.mmta_id %]"><i class="fa fa-pencil"></i> Edit</a>
                                         </td>
                                         <td>
                                             <a class="btn btn-default btn-xs" href="marc_modification_templates.pl?template_id=[% ActionsLoo.template_id | html %]&op=delete_action&mmta_id=[% ActionsLoo.mmta_id | html %]" onclick="return confirmDeleteAction();"><i class="fa fa-trash"></i> Delete</a>
@@ -358,6 +339,7 @@
         var MSG_MMT_CONDITIONAL_COMPARISON_REQUIRED = _("The conditional comparison operator should be filled.");
         var MSG_MMT_CONDITIONAL_VALUE_REQUIRED = _("The conditional value should be filled.");
         var MSG_MMT_CONDITIONAL_VALUE_REGEX_REQUIRED = _("The conditional regular expression should be filled.");
+        var mmtas = [% ActionsLoop.json %]
     </script>
     [% Asset.js("js/marc_modification_templates.js") | $raw %]
 [% END %]
