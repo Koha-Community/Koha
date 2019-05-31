@@ -197,11 +197,8 @@ is( @$messages, 1, 'ModSuggestion sends an email if the status is updated' );
 
 is( CountSuggestion('CHECKED'), 1, 'CountSuggestion returns the correct number of suggestions' );
 
-
-$mod_suggestion4->{manageddate} = 'invalid date!';
-ModSuggestion($mod_suggestion4);
 $messages = C4::Letters::GetQueuedMessages({
-    borrowernumber => $borrowernumber2
+    borrowernumber => $borrowernumber
 });
 is (scalar(@$messages), 1, 'No new letter should have been generated if the update raised an error');
 
