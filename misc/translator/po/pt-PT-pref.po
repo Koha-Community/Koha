@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2019-03-01 17:58+0000\n"
+"PO-Revision-Date: 2019-05-20 10:09+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1551463092.719900\n"
+"X-POOTLE-MTIME: 1558346989.266001\n"
 "X-Pootle-Path: /pt/18.05/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2192,16 +2192,16 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "Códigos de barras são"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "gerados na forma &lt;branchcode&gt;yymm0001."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "gerados na forma &lt;year&gt;-0001, &lt;year&gt;-0002."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "gerados na forma 1, 2, 3."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr "gerados na forma <branchcode>yymm0001."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr "gerados na forma <year>-0001, <year>-0002."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2964,8 +2964,10 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "que as reservas expirem automaticamente se não foram levantadas dentro do tempo especificado na preferência de sistema ReservesMaxPickUpDelay. <br><strong>NOTA:</strong> Esta preferência de sistema necessita que a tarefa <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> esteja em funcionamento. Peça ao administrador do sistema para a configurar."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Se usar a preferência ExpireReservesMaxPickUpDelay, cobrar ao leitor que deixou a reserva expirar uma multa de"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"Se usar a preferência ExpireReservesMaxPickUpDelay, cobrar ao leitor que "
+"deixou a reserva expirar uma multa de"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3171,6 +3173,42 @@ msgstr "Evitar"
 msgid "circulation.pref#IssuingInProcess# patrons from checking out an item whose rental charge would take them over the limit."
 msgstr "que os técnicos emprestem um exemplar cuja taxa de empréstimo faça o leitor ultrapassar o limite."
 
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br /> Note: the word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
+msgstr ""
+"<br /> Nota: a palavra 'NULL' pode ser usada para bloquear a renovação em "
+"campos indefinidos, enquanto a expressão vazia \"\" vai bloquear as "
+"renovações num campo vazio (mas definido)."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />Can name any field in the items table followed by a colon then a space then"
+msgstr ""
+"<br />Pode introduzir qualquer campo da tabela items seguido de dois pontos, "
+"de um espaço em branco e"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,NULL,DVD]"
+msgstr "<br />ccode: [NEWFIC,NULL,DVD]"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />itype: [NEWBK,\"\"]"
+msgstr "<br />itype: [NEWBK,\"\"]"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# Define custom rules to deny specific items from renewal."
+msgstr ""
+"Definir regras personalizadas para negar a renovação de determinados "
+"exemplares."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# a bracketed list of values separated by commas."
+msgstr ""
+"uma lista de valores separados entre vírgulas e entre parêntesis rectos."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# e.g."
+msgstr "Exemplos"
+
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
 msgstr "Não fornecer"
@@ -3293,8 +3331,8 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "Se um leitor dever mais que o valor definido na preferência OPACFineNoRenewals,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr "as suas auto-renovações."
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
+msgstr "as suas auto renovações."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -6470,7 +6508,7 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Requer"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "quer os leitores auto registados façam a verificação via email."
 
 # OPAC > Payments
@@ -8380,4 +8418,3 @@ msgstr "Para apenas retornar"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório pedido via web service."
-

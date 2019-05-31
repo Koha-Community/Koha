@@ -2193,16 +2193,16 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "Códigos de barras são"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "gerados no formato &lt;branchcode&gt;aamm0001."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "gerados no formato &lt;year&gt;-0001, &lt;year&gt;-0002."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "gerados no formato 1, 2, 3."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr ""
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2965,8 +2965,8 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "mantém para expirar automaticamente se eles não foram escolhidos por dentro do período de tempo especificado em ReservesMaxPickUpDelay. <br><strong>NOTA:</strong> Esta preferência de sistema requer o <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Peça ao administrador do sistema para agendar."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Se usar ExpireReservesMaxPickUpDelay, cobre um usuário a permissão de espera de reserva uma taxa de"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3172,6 +3172,34 @@ msgstr "Prevenir"
 msgid "circulation.pref#IssuingInProcess# patrons from checking out an item whose rental charge would take them over the limit."
 msgstr "usuários de emprestar exemplares cujo aluguel ultrapasse o limite."
 
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br /> Note: the word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />Can name any field in the items table followed by a colon then a space then"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,NULL,DVD]"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />itype: [NEWBK,\"\"]"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# Define custom rules to deny specific items from renewal."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# a bracketed list of values separated by commas."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# e.g."
+msgstr ""
+
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
 msgstr "Não dê"
@@ -3294,8 +3322,8 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "Se um usuário deve mais do que o valor de OPACFineNoRenewals,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr "suas renovações automáticas."
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -6471,8 +6499,8 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Exigir"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
-msgstr "que um usuário que tenha se registrado via OPAC confirme seu registro por e-mail."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
+msgstr ""
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# The patron should see the charge description as "
@@ -8381,3 +8409,4 @@ msgstr "Retornar somente"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório solicitado através dos relatórios do serviço web."
+

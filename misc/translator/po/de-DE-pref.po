@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2019-02-20 14:04+0000\n"
+"PO-Revision-Date: 2019-05-30 07:31+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1550671487.243211\n"
+"X-POOTLE-MTIME: 1559201470.442001\n"
 "X-Pootle-Path: /de/18.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2194,16 +2194,16 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "Barcodes werden"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "in der Form &lt;Bibliothekscode&gt;jjmm0001 generiert."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "in der Form &lt;Jahr&gt;-0001, &lt;Jahr&gt;-0002 generiert."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "in der Form 1, 2, 3 generiert."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr "in der Form <Bibliothekskürzel>jjmm0001 generiert."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr "in der Form <Jahr>-0001, <Jahr>-0002 generiert."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2966,8 +2966,10 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "dass Vormerkungen automatisch ablaufen, wenn diese nicht innerhalb der in ReservesMaxPickUpDelay festgelegten Zeitspanne abgeholt wurden.<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronjob <code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Bitten Sie Ihren Systemadministrator darum diesen einzurichten."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Wenn ExpireReservesMaxPickUpDelay verwendet wird, beträgt die zu berechnende Gebühr je nicht abgeholter Vormerkung"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"Wenn ExpireReservesMaxPickUpDelay verwendet wird, berechne Benutzern für "
+"nicht abgeholte Vormerkungen eine Gebühr in Höhe von"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3173,6 +3175,40 @@ msgstr "Verhindere,"
 msgid "circulation.pref#IssuingInProcess# patrons from checking out an item whose rental charge would take them over the limit."
 msgstr "dass Benutzer ein Exemplar entleihen, dessen Leihgebühr Sie über das Gebührenlimit bringen würde."
 
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br /> Note: the word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
+msgstr ""
+"<br /> Hinweis: das Wort 'NULL' kann verwendet werden um Verlängerungen bei "
+"undefinierten Feldern zu verhindern, während eine leere Zeichenkette \"\" "
+"Verlängerungen bei einem leeren (aber definierten) Feld verhindert."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />Can name any field in the items table followed by a colon then a space then"
+msgstr ""
+"<br />Kann jedes Feld aus der Tabelle items gefolgt von einem Doppelpunkt "
+"und einem Leerzeichen dann"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />ccode: [NEWFIC,NULL,DVD]"
+msgstr "<br />ccode: [NEWFIC,NULL,DVD]"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# <br />itype: [NEWBK,\"\"]"
+msgstr "<br />itype: [NEWBK,\"\"]"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# Define custom rules to deny specific items from renewal."
+msgstr ""
+"Definieren Sie Regeln um die Verlängerung bestimmter Exemplare zu verhindern."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# a bracketed list of values separated by commas."
+msgstr "einer geklammerten Liste von komma-getrennten Werten."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#ItemsDeniedRenewal# e.g."
+msgstr "z.B."
+
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# Don't give"
 msgstr "Bevorzuge nicht"
@@ -3295,7 +3331,7 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "Wenn die offenen Gebühren eines Kontos den Betrag in 'OPACFineNoRenewals' überschreiten,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
 msgstr "die entsprechenden automatischen Verlängerungen."
 
 # Circulation > Holds Policy
@@ -6472,8 +6508,9 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Erfordere,"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
-msgstr "dass Benutzer, die online ein Konto eröffnen, sich über E-Mail verifizieren."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
+msgstr ""
+"dass Benutzer, die online ein Konto eröffnen, sich über E-Mail verifizieren."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# The patron should see the charge description as "
@@ -8382,4 +8419,3 @@ msgstr "Zeige maximal"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
-
