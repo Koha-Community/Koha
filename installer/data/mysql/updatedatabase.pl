@@ -17452,7 +17452,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '18.12.05.001';
+$DBversion = '18.11.05.001';
 if( CheckVersion( $DBversion ) ) {
 
     unless ( foreign_key_exists( 'tmp_holdsqueue', 'tmp_holdsqueue_ibfk_1' ) ) {
@@ -17469,6 +17469,12 @@ if( CheckVersion( $DBversion ) ) {
     }
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 22899 - Add items constraint to tmp_holdsqueue)\n";
+}
+
+$DBversion = "18.11.06.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (18.11.06 release)\n";
+    SetVersion($DBversion);
 }
 
 # SEE bug 13068
