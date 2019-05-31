@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2019-04-10 14:09+0000\n"
+"PO-Revision-Date: 2019-05-20 10:22+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1554905367.443447\n"
+"X-POOTLE-MTIME: 1558347763.579552\n"
 "X-Pootle-Path: /pt/18.05/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2236,16 +2236,16 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "Códigos de barras são"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "gerados na forma &lt;branchcode&gt;yymm0001."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "gerados na forma &lt;year&gt;-0001, &lt;year&gt;-0002."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "gerados na forma 1, 2, 3."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr "gerados na forma <branchcode>yymm0001."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr "gerados na forma <year>-0001, <year>-0002."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2536,8 +2536,13 @@ msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
 msgstr "Não permitir"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "empréstimos em exemplares reservados para alguém. Se permitir não deve gerar os avisos RESERVE_WAITING e RESERVED. Isto permite a auto requisição desses exemplares."
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"o empréstimo de exemplares reservados para outras pessoas. Se permitir não "
+"vai gerar os avisos RESERVE_WAITING e RESERVED. Permite também o auto-"
+"empréstimo desses exemplares. Se usar a lista de espera de reservas com "
+"reservas pendentes será marcada como \"não disponível\" se definir como \""
+"Não permitir\"."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
@@ -3040,8 +3045,10 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "que as reservas expirem automaticamente se não foram levantadas dentro do tempo especificado na preferência de sistema ReservesMaxPickUpDelay. <br><strong>NOTA:</strong> Esta preferência de sistema necessita que a tarefa <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> esteja em funcionamento. Peça ao administrador do sistema para a configurar."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Se usar a preferência ExpireReservesMaxPickUpDelay, cobrar ao leitor que deixou a reserva expirar uma multa de"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"Se usar a preferência ExpireReservesMaxPickUpDelay, cobrar ao leitor que "
+"deixou a reserva expirar uma multa de"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3453,8 +3460,8 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "Se um leitor dever mais que o valor definido na preferência OPACFineNoRenewals,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr "as suas auto-renovações."
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
+msgstr "as suas auto renovações."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -6754,7 +6761,7 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Requer"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
 msgstr "quer os leitores auto registados façam a verificação via email."
 
 # OPAC > Payments
@@ -7279,7 +7286,7 @@ msgstr "a cobrança da taxa quando um leitor passa para uma categoria com taxa d
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
-msgstr ""
+msgstr "<br><strong>NOTA:</strong> Se ativar esta preferência, deve também definir o URL para a sua política de privacidade na preferência de sistema PrivacyPolicyURL."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
@@ -7351,7 +7358,7 @@ msgstr "resultados por página no interface dos técnicos."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
-msgstr ""
+msgstr "<br><strong>NOTA:</strong> O URL apenas será mostrado se a preferência de sistema GDPR_Policy estiver ativa."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -8700,4 +8707,3 @@ msgstr "Para apenas retornar"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório pedido via web service."
-

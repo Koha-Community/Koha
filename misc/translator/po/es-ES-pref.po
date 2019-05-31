@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2015-04-15 09:32-0300\n"
-"PO-Revision-Date: 2019-04-26 16:36+0000\n"
+"PO-Revision-Date: 2019-05-28 20:27+0000\n"
 "Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha-"
 "community.org>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1556296591.448102\n"
+"X-POOTLE-MTIME: 1559075278.574602\n"
 "X-Pootle-Path: /es/18.05/es-ES-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2199,7 +2199,7 @@ msgstr "Utilizar el idioma (ISO 690-2)"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#UNIMARCField100Language# as default language in the UNIMARC field 100 when creating a new record or in the field plugin."
-msgstr "como idioma predeterminado en el campo UNIMARC 100 cuando cree un nuevo registro o en el plugin del campo."
+msgstr "como idioma predeterminado en el campo UNIMARC 100 cuando cree un nuevo registro o en el complemento del campo."
 
 # Cataloging > Display
 msgid "cataloguing.pref#URLLinkText# Show"
@@ -2238,16 +2238,16 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "Los códigos de barras son"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "son generados con la forma &lt;branchcode&gt;yymm0001."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "son generados con la forma &lt;year&gt;-0001, &lt;year&gt;-0002."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "son generados con la forma 1, 2, 3."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr "generados en la forma <branchcode> yymm0001."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr "generados en la forma <year>-0001, <year>-0002."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2538,8 +2538,13 @@ msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
 msgstr "No permitir"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "préstamo de ítems reservados para alguien más. Si se permite no generará RESERVE_WAITING ni advertencia RESERVED. Esto permite el auto-préstamo para estos ítems."
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"préstamos de ítems reservados a alguien más. Si se permite, no genera las "
+"advertencias RESERVE_WAITING y RESERVED. Esto permite auto-préstamos para "
+"estos ítems. Si se utiliza la cola de ítems en reserva con reservas "
+"pendientes, será marcado como \"no disponible\" si esto se establece a \"No "
+"permitir\"."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
@@ -3042,8 +3047,10 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "que las reservas caduquen automáticamente si no han sido seleccionadas dentro del período de tiempo especificado en ReservesMaxPickUpDelay. <br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Pídale al administrador del sistema que la programe."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Si utiliza ExpireReservesMaxPickUpDelay, aplique al usuario que permitió expirar su reserva una tarifa de"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"Si usa ExpireReservesMaxPickUpDelay, aplique a un usuario a quien se le "
+"permite que su reserva en espera expire una tarifa de"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3396,7 +3403,7 @@ msgstr "Calcule \"No renovar antes\" basado en"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Only relevant for loans calculated in days, hourly loans are not affected."
-msgstr "Solo relevante para préstamos calculados en días, prestamos por hora no se consideran."
+msgstr "Solo relevante para préstamos calculados en días, préstamos por hora no se consideran."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# date."
@@ -3455,8 +3462,8 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "Si un usuario debe más que el valor de OPACFineNoRenewals,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr "la auto renovación de él/ella."
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
+msgstr "sus auto renovaciones."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -3992,9 +3999,7 @@ msgstr "Esta es la lista de los pares de valores. Cuando se devuelve un ejemplar
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateNotForLoanStatusOnCheckin# it will be updated to the right-hand value. E.g. '-1: 0' will cause an item that was set to 'Ordered' to now be available for loan."
-msgstr ""
-"se actualizará al valor de la derecha. Ej. '-1: 0' producirá que un ejemplar "
-"que se configuró como 'Pedido' esté ahora disponible para préstamo."
+msgstr "se actualizará al valor de la derecha. Ej. '-1: 0' producirá que un ejemplar que se configuró como 'Pedido' esté ahora disponible para préstamo."
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# Do"
@@ -4394,7 +4399,7 @@ msgstr " "
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref Plugins"
-msgstr "Plugins"
+msgstr "Complementos"
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref RecordedBooks"
@@ -5027,9 +5032,7 @@ msgstr "."
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks availability information with the client secret"
-msgstr ""
-"Incluir información de disponibilidad de RecordedBooks con la clave del "
-"cliente"
+msgstr "Incluir información de disponibilidad de RecordedBooks con la clave del cliente"
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
@@ -5277,7 +5280,7 @@ msgstr "Habilitar"
 
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref#UseKohaPlugins# the ability to use Koha Plugins. Note, the plugin system must also be enabled in the Koha configuration file to be fully enabled."
-msgstr "la capacidad de Koha de utilizar plugins. Notar que el sistema de plugins debe estar habilitado también en la configuración de Koha para funcionar."
+msgstr "la capacidad de Koha de utilizar complementos. Note que el sistema de complementos debe estar habilitado también en la configuración de Koha para que funcione."
 
 # I18N/L10N
 msgid "i18n_l10n.pref"
@@ -5857,7 +5860,7 @@ msgstr "los detalles de adquisición en las páginas de detalles del OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# . This should be a complete URL, starting with <code>http://</code> or <code>https://</code>. Do not include a trailing slash in the URL. (This must be filled in correctly for RSS, unAPI, and search plugins to work.)"
-msgstr ". Esto debe ser una URL completa, comenzando con <code>http://</code> o <code>https://</code>. No incluya una barra diagonal en la URL. (Esto se debe rellenar correctamente para RSS, unAPI y plugins de búsqueda para que funcione.)"
+msgstr ". Esto debe ser una URL completa, comenzando con <code>http://</code> o <code>https://</code>. No incluya una barra diagonal en la URL. (Esto se debe rellenar correctamente para RSS, unAPI y complementos de búsqueda para que funcione.)"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACBaseURL# The OPAC is located at "
@@ -6253,10 +6256,7 @@ msgstr "la navegación y paginación de resultados de búsqueda desde la página
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowser# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
-"programada o cronjob <code>misc/cronjobs/build_browser_and_cloud.pl</code>. "
-"Pídale al administrador que la programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/build_browser_and_cloud.pl</code>. Pídale al administrador que la programe."
 
 # OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
@@ -6272,10 +6272,7 @@ msgstr "a los usuarios que busquen materias en las autoridades en el OPAC"
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
-"programada o cronjob <code>misc/cronjobs/build_browser_and_cloud.pl</code>. "
-"Pídale al administrador que la programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/build_browser_and_cloud.pl</code>. Pídale al administrador que la programe."
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# Don't show"
@@ -6311,9 +6308,7 @@ msgstr "Defina reglas personalizadas para ocultar ítems específicos de la bús
 
 # OPAC > Policy
 msgid "opac.pref#OpacHiddenItemsExceptions# List of borrower categories, separated by |, that can see items otherwise hidden by <tt>OpacHiddenItems</tt>"
-msgstr ""
-"Lista de categoría de usuarios, separados por |, que pueden ver los ítems de "
-"otra manera ocultos por <tt>OpacHiddenItems</tt>"
+msgstr "Lista de categoría de usuarios, separados por |, que pueden ver los ítems de otra manera ocultos por <tt>OpacHiddenItems</tt>"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -6469,10 +6464,7 @@ msgstr "Visualizar hasta"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacMaxItemsToDisplay# items on the bibliographic record detail page (if the bibliographic record has more items than this, a link is displayed instead that allows the user to choose to display all items)."
-msgstr ""
-"ítems en la página de detalles del registro bibliográfico (si el registro "
-"bibliográfico posee más items que estos, un enlace es mostrado en vez de "
-"ellos permitiendo al usuario seleccionar para visualizar todos los ítems)."
+msgstr "ítems en la página de detalles del registro bibliográfico (si el registro bibliográfico posee más items que estos, un enlace es mostrado en vez de ellos permitiendo al usuario seleccionar para visualizar todos los ítems)."
 
 # OPAC > Appearance
 msgid "opac.pref#OpacNav# Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
@@ -6668,10 +6660,7 @@ msgstr "La siguiente <a href='http://schema.koha-community.org/__VERSION__/table
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
-msgstr ""
-"<br><strong>NOTA:</strong> Esto necesita que "
-"PatronSelfRegistrationDefaultCategory esté establecido a un código de "
-"categoría de usuario válido."
+msgstr "<br><strong>NOTA:</strong> Esto necesita que PatronSelfRegistrationDefaultCategory esté establecido a un código de categoría de usuario válido."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# Allow"
@@ -6683,9 +6672,7 @@ msgstr "No permitir"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
-msgstr ""
-"que los usuarios de la biblioteca registren o modifiquen su cuenta a través "
-"del OPAC."
+msgstr "que los usuarios de la biblioteca registren o modifiquen su cuenta a través del OPAC."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -6729,11 +6716,7 @@ msgstr "el correo electrónico del usuario (borrowers.email) como único en el a
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_expired_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
-"programada o cronjob "
-"<code>misc/cronjobs/delete_expired_opac_registrations.pl</code>. Pídale al "
-"administrador que la programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/delete_expired_opac_registrations.pl</code>. Pídale al administrador que la programe."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
@@ -6769,10 +6752,7 @@ msgstr "la contraseña y formulario de inicio de sesión después de que un usua
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
-"programada o cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Pídale "
-"al administrador que la programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/cleanup_database.pl</code>. Pídale al administrador que la programe."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
@@ -6783,8 +6763,10 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Requerir"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
-msgstr "que un usuario auto-registrado verifique su identidad a través de un email."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
+msgstr ""
+"que un usuario auto-registrado verifique su identidad a través del correo "
+"electrónico."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# The patron should see the charge description as "
@@ -7152,9 +7134,7 @@ msgstr "(columnas separadas con |)"
 
 # Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr ""
-"<strong>NOTA:</strong> Si autoMemberNum esta habilitada, la preferencia de "
-"sistema BorrowerMandatoryField no debe contener el campo cardnumber."
+msgstr "<strong>NOTA:</strong> Si autoMemberNum esta habilitada, la preferencia de sistema BorrowerMandatoryField no debe contener el campo cardnumber."
 
 # Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
@@ -7242,18 +7222,11 @@ msgstr "la posibilidad de subir y adjuntar archivos arbitrarios al registro de u
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
-msgstr ""
-"<br><strong>NOTA:</strong> Esto solamente aplica a los avisos de cortesía. "
-"Para gestionar si un usuario tiene también acceso a estas configuraciones, "
-"utilice EnhancedMessagingPreferencesOPAC."
+msgstr "<br><strong>NOTA:</strong> Esto solamente aplica a los avisos de cortesía. Para gestionar si un usuario tiene también acceso a estas configuraciones, utilice EnhancedMessagingPreferencesOPAC."
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia del sistema requiere la tarea "
-"programada o cronjob <code>misc/cronjobs/process_message_queue.pl</code> y "
-"la <code>misc/cronjobs/advance_notices.pl</code>. Pídale al administrador "
-"del sistema que la programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia del sistema requiere la tarea programada o cronjob <code>misc/cronjobs/process_message_queue.pl</code> y la <code>misc/cronjobs/advance_notices.pl</code>. Pídale al administrador del sistema que la programe."
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
@@ -7265,15 +7238,11 @@ msgstr "No permitir"
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Staff to manage which notices patrons will receive and when they will receive them."
-msgstr ""
-"que el personal administre qué avisos recibirán los usuarios y cuándo los "
-"recibirán."
+msgstr "que el personal administre qué avisos recibirán los usuarios y cuándo los recibirán."
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
-msgstr ""
-"<br><strong>NOTA:</strong> EnhancedMessagingPreferences debe estar "
-"habilitada."
+msgstr "<br><strong>NOTA:</strong> EnhancedMessagingPreferences debe estar habilitada."
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -7321,9 +7290,7 @@ msgstr "el cargo de un importe cuando el usuario cambia a una categoría con un 
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
-msgstr ""
-"<br><strong>NOTA:</strong> Si lo habilita, también deberá configurar la URL "
-"de su política de privacidad pública con la configuración PrivacyPolicyURL."
+msgstr "<br><strong>NOTA:</strong> Si lo habilita, también deberá configurar la URL de su política de privacidad pública con la configuración PrivacyPolicyURL."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
@@ -7335,10 +7302,7 @@ msgstr "Hacer cumplir"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
-msgstr ""
-"GDPR es el Reglamento General de Protección de Datos de la UE. Cuando hace "
-"cumplir, los usuarios deben dar su consentimiento antes de usar el OPAC. Si "
-"lo configuras como permisiva, Koha avisará pero no hará cumplir."
+msgstr "GDPR es el Reglamento General de Protección de Datos de la UE. Cuando hace cumplir, los usuarios deben dar su consentimiento antes de usar el OPAC. Si lo configuras como permisiva, Koha avisará pero no hará cumplir."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Permissive"
@@ -7362,10 +7326,7 @@ msgstr "[% local_currency %]."
 
 # Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/membership_expiry.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea "
-"programada o cronjob <code>misc/cronjobs/membership_expiry.pl</code>. Pídale "
-"al administrador del sistema que la programe."
+msgstr "<br><strong>NOTA:</strong> Esta preferencia de sistema requiere la tarea programada o cronjob <code>misc/cronjobs/membership_expiry.pl</code>. Pídale al administrador del sistema que la programe."
 
 # Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
@@ -7401,9 +7362,7 @@ msgstr "resultados por página en la intranet."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
-msgstr ""
-"<br><strong>NOTA:</strong> La URL se mostrará solamente si GDPR_Policy está "
-"establecida."
+msgstr "<br><strong>NOTA:</strong> La URL se mostrará solamente si GDPR_Policy está establecida."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -7411,16 +7370,11 @@ msgstr "Utilice la siguiente URL"
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# to refer to your local privacy policy in messages about privacy and data protection. (If you enforce GDPR policy, make sure that this page is not blocked.)"
-msgstr ""
-"para consultar su política de privacidad local en los mensajes sobre "
-"privacidad y protección de datos. (Si aplica la política de GDPR, asegúrese "
-"de que esta página no esté bloqueada)."
+msgstr "para consultar su política de privacidad local en los mensajes sobre privacidad y protección de datos. (Si aplica la política de GDPR, asegúrese de que esta página no esté bloqueada)."
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# <br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
-msgstr ""
-"<br><strong>NOTA:</strong> Un usuario permitido necesita tener el indicador "
-"'permisos' (si no es superbibliotecario)."
+msgstr "<br><strong>NOTA:</strong> Un usuario permitido necesita tener el indicador 'permisos' (si no es superbibliotecario)."
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow all permitted users"
@@ -7452,9 +7406,7 @@ msgstr "una contraseña segura para staff y usuarios"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
-msgstr ""
-"<br>Si prefiere enviar SMS por correo electrónico, configure SMSSendDriver a:"
-" correo electrónico"
+msgstr "<br>Si prefiere enviar SMS por correo electrónico, configure SMSSendDriver a: correo electrónico"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
@@ -7478,9 +7430,7 @@ msgstr "y una contraseña"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendUsername# for emails sent using \"Email\" send driver."
-msgstr ""
-"para los correos electrónicos enviados utilizando el controlador de envío \""
-"Correo electrónico\"."
+msgstr "para los correos electrónicos enviados utilizando el controlador de envío \"Correo electrónico\"."
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
@@ -7512,9 +7462,7 @@ msgstr "No"
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the borrowers.lastseen will be updated with the current time."
-msgstr ""
-"Cada vez que un usuario se conecta, borrowers.lastseen se actualizará con la "
-"hora actual."
+msgstr "Cada vez que un usuario se conecta, borrowers.lastseen se actualizará con la hora actual."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -7530,14 +7478,11 @@ msgstr "Envíe"
 
 # Patrons > General
 msgid "patrons.pref#UseEmailReceipts# email receipts to patrons for payments and writeoffs."
-msgstr ""
-"los recibos por correo electrónico a los usuarios para pagos y cancelaciones."
+msgstr "los recibos por correo electrónico a los usuarios para pagos y cancelaciones."
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr ""
-"<strong>NOTA:</strong> Si autoMemberNum esta habilitada, la preferencia de "
-"sistema BorrowerMandatoryField no debe contener el campo cardnumber."
+msgstr "<strong>NOTA:</strong> Si autoMemberNum esta habilitada, la preferencia de sistema BorrowerMandatoryField no debe contener el campo cardnumber."
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
@@ -7665,9 +7610,7 @@ msgstr "Habilite"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# browsing search results from the bibliographic record detail page in staff client."
-msgstr ""
-"la exploración de los resultados de búsqueda de la página de detalles del "
-"registro bibliográfico en la intranet."
+msgstr "la exploración de los resultados de búsqueda de la página de detalles del registro bibliográfico en la intranet."
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"
@@ -8119,9 +8062,7 @@ msgstr "No agregar"
 
 # Serials
 msgid "serials.pref#RenewSerialAddsSuggestion# a suggestion for a bibliographic record when its attached serial is renewed."
-msgstr ""
-"una sugerencia para un registro bibliográfico cuando se renueva su "
-"publicación periódica adjunta."
+msgstr "una sugerencia para un registro bibliográfico cuando se renueva su publicación periódica adjunta."
 
 # Serials
 msgid "serials.pref#RoutingListAddReserves# Don't place"
@@ -8317,7 +8258,7 @@ msgstr "Muestre el siguiente HTML en su propio div al final de la página princi
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetSlipPrinterJS# Use the following JavaScript for printing slips. See detailed description on the <a href='https://wiki.koha-community.org/wiki/Setting_up_slip_printer_to_print_silently'>Koha Wiki</a> and eventually Firefox PlugIn <a href='https://github.com/edabg/jsprintsetup/wiki'>jsPrintSetup documentation</a>:"
-msgstr "Utilice el siguiente JavaScript para imprimir recibos. Vea los detalles de descripción en la <a href='https://wiki.koha-community.org/wiki/Setting_up_slip_printer_to_print_silently'>Wiki de Koha</a> y el eventual Plugin de Firefox <a href='https://github.com/edabg/jsprintsetup/wiki'>documentación jsPrintSetup</a>:"
+msgstr "Utilice el siguiente JavaScript para imprimir recibos. Vea los detalles de descripción en la <a href='https://wiki.koha-community.org/wiki/Setting_up_slip_printer_to_print_silently'>Wiki de Koha</a> y el eventual complemento de Firefox <a href='https://github.com/edabg/jsprintsetup/wiki'>documentación jsPrintSetup</a>:"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#IntranetUserCSS# Include the following CSS on all pages in the staff client:"
@@ -8717,15 +8658,11 @@ msgstr "registros a la vez en respuesta a una consulta ListRecords o ListIdentif
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# .  Please, insert prefix without ending colon (\":\") char. The archiveID should respect OAI specification. See "
-msgstr ""
-".  Por favor, ingrese el prefijo sin el carácter de finalización de dos "
-"puntos (\":\"). El arhiveID debe respetar la especificación OAI. Vea "
+msgstr ".  Por favor, ingrese el prefijo sin el carácter de finalización de dos puntos (\":\"). El arhiveID debe respetar la especificación OAI. Vea "
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# <a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\">Implementation guidelines</a>. "
-msgstr ""
-"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\""
-">Directrices de implementación</a>."
+msgstr "<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\">Directrices de implementación</a>."
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# Example: \"oai:example-library.org\""
@@ -8737,9 +8674,7 @@ msgstr "Identificar registros en este sitio con el prefijo"
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# <a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Basic authentication</a> for the REST API."
-msgstr ""
-"<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\""
-"_blank\">Autenticación básica</a> para el REST API."
+msgstr "<a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Autenticación básica</a> para el REST API."
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Disable"

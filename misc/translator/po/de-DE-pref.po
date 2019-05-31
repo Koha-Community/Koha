@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2019-04-24 07:37+0000\n"
+"PO-Revision-Date: 2019-05-30 08:58+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1556091470.758337\n"
+"X-POOTLE-MTIME: 1559206719.804482\n"
 "X-Pootle-Path: /de/18.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2238,16 +2238,16 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "Barcodes werden"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "in der Form &lt;Bibliothekscode&gt;jjmm0001 generiert."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "in der Form &lt;Jahr&gt;-0001, &lt;Jahr&gt;-0002 generiert."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "in der Form 1, 2, 3 generiert."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr "in der Form <Bibliothekskürzel>jjmm0001 generiert."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr "in der Form <Jahr>-0001, <Jahr>-0002 generiert."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2538,20 +2538,29 @@ msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
 msgstr "Erlaube nicht,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "die Ausleihe von Exemplaren, die für jemand anders vorgemerkt sind. Wenn erlaubt, generiere keine RESERVE_WAITING und RESERVED Warnungen. Erlaubt Selbstverbuchung dieser Exemplare."
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"dass Exemplare ausgeliehen werden, die bereits von jemand anderem vorgemerkt "
+"sind. Wenn erlaubt, erzeugt keine RESERVE_WAITING und RESERVED Warnungen. "
+"Dies erlaubt die Selbstverbuchung dieser Exemplare. Wenn die Liste der "
+"Vormerkungen verwendet wird und dies nicht erlaubt ist, werden Exemplare als "
+"\"Nicht verfügbar\" gekennzeichnet."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
-msgstr "Erlaube"
+msgstr "Erlaube,"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Don't allow"
-msgstr "Erlaube nicht"
+msgstr "Erlaube nicht,"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "die Ausleihe von Exemplaren in der Selbstausleihe wenn diese für jemand anderes vorgemerkt sind. Falls erlaubt, generiere nicht eine Warnung RESERVE_WAITING und RESERVED. Damit wird die Selbstausleihe für diese Exemplare erlaubt."
+msgstr ""
+"die Ausleihe von Exemplaren, die für jemand anderen vorgemerkt sind, in der "
+"webbasierten Selbstausleihe. Wenn erlaubt, generiere keine RESERVE_WAITING "
+"und RESERVED Warnungen. Damit wird die Selbstausleihe für diese Exemplare "
+"erlaubt."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3042,8 +3051,10 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "dass Vormerkungen automatisch ablaufen, wenn diese nicht innerhalb der in ReservesMaxPickUpDelay festgelegten Zeitspanne abgeholt wurden.<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronjob <code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Bitten Sie Ihren Systemadministrator darum diesen einzurichten."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "Wenn ExpireReservesMaxPickUpDelay verwendet wird, beträgt die zu berechnende Gebühr je nicht abgeholter Vormerkung"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"Wenn ExpireReservesMaxPickUpDelay verwendet wird, berechne Benutzern für "
+"nicht abgeholte Vormerkungen eine Gebühr in Höhe von"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3455,7 +3466,7 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "Wenn die offenen Gebühren eines Kontos den Betrag in 'OPACFineNoRenewals' überschreiten,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
 msgstr "die entsprechenden automatischen Verlängerungen."
 
 # Circulation > Holds Policy
@@ -6756,8 +6767,9 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "Erfordere,"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
-msgstr "dass Benutzer, die online ein Konto eröffnen, sich über E-Mail verifizieren."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
+msgstr ""
+"dass Benutzer, die online ein Konto eröffnen, sich über E-Mail verifizieren."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# The patron should see the charge description as "
@@ -7281,9 +7293,7 @@ msgstr "Benutzungsgebühr, wenn der Benutzertyp geändert wird und für den neue
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
-msgstr ""
-"<br><strong>Hinweis:</strong> Wenn Sie dies aktivieren, müssen Sie auch die "
-"URLf für Ihre Datenschutzerklärung unter PrivacyPolicyURL konfigurieren."
+msgstr "<br><strong>Hinweis:</strong> Wenn Sie dies aktivieren, müssen Sie auch die URLf für Ihre Datenschutzerklärung unter PrivacyPolicyURL konfigurieren."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
@@ -7355,9 +7365,7 @@ msgstr "Treffer pro Seite in der Dienstoberfläche."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
-msgstr ""
-"<br><strong>Hinweis:</strong> Die URL wird nur angezeigt, wenn GDPR_Policy "
-"aktiviert ist."
+msgstr "<br><strong>Hinweis:</strong> Die URL wird nur angezeigt, wenn GDPR_Policy aktiviert ist."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"

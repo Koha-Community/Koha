@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2019-04-10 02:47+0000\n"
+"PO-Revision-Date: 2019-05-29 14:18+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1554864425.114943\n"
+"X-POOTLE-MTIME: 1559139499.899248\n"
 "X-Pootle-Path: /hi/18.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2237,16 +2237,17 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "cataloguing.pref # autoBarcode # बारकोड हैं"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "cataloguing.pref # autoBarcode # प्रपत्र व एलटी में उत्पन्न; branchcode & gt; yymm0001।"
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "cataloguing.pref # autoBarcode # प्रपत्र व एलटी में उत्पन्न; साल & gt; -0001, और लेफ्टिनेंट; साल & gt; -0002।"
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "cataloguing.pref # autoBarcode # प्रपत्र 1, 2, 3 में उत्पन्न।"
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr "cataloguing.pref#autoBarcode# के रूप में उत्पन्न <branchcode>yymm0001."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr ""
+"cataloguing.pref#autoBarcode# के रूप में उत्पन्न <year>-0001, <year>-0002."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2537,8 +2538,13 @@ msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
 msgstr "circulation.pref # AllowItemsOnHoldCheckout # अनुमति न दें"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "मदों की circulation.pref # AllowItemsOnHoldCheckout # checkouts किसी और के लिए सुरक्षित रख लिया। अगर RESERVE_WAITING और आरक्षित चेतावनी उत्पन्न नहीं है की अनुमति दी। यह उन वस्तुओं के लिए स्वयं checkouts अनुमति देता है।"
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckout# किसी और के लिए आरक्षित वस्तुओं के "
+"चेकआउट। यदि अनुमत हो तो RESERVE_WAITING और RESERVED चेतावनी उत्पन्न न करें। "
+"यह उन वस्तुओं के लिए स्व-चेकआउट की अनुमति देता है। यदि लंबित होल्ड के साथ "
+"होल्ड क्यू आइटम का उपयोग करना \"अनुपलब्ध\" के रूप में चिह्नित किया जाएगा यदि "
+"यह \"अनुमति न दें\" के लिए सेट हो."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
@@ -3041,8 +3047,11 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# यदि वे ReservesMaxPickUpDelay में निर्दिष्ट समय अवधि के भीतर नहीं उठाए गए हैं, तो स्वचालित रूप से समाप्त करने के लिए धारण करता है.<br><strong>नोट:</strong> इस सिस्टम वरीयता के लिए आवश्यक है <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> क्रोन जॉब. इसे शेड्यूल करने के लिए अपने सिस्टम एडमिनिस्ट्रेटर से पूछें."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "circulation.pref # ExpireReservesMaxPickUpDelayCharge # अगर ExpireReservesMaxPickUpDelay का उपयोग कर, एक उधारकर्ता जो अपने या अपने इंतजार कर पकड़ के लिए एक शुल्क समाप्त करने के लिए अनुमति देता है चार्ज"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"circulation.pref#ExpireReservesMaxPickUpDelayCharge# यदि "
+"ExpireReservesMaxPickUpDelay का उपयोग कर रहे हैं, तो एक उधारकर्ता से शुल्क "
+"लें, जो अपनी प्रतीक्षा अवधि के शुल्क को समाप्त करने की अनुमति देता है"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3454,8 +3463,8 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# अगर एक संरक्षक OPACFineNoRenewals के मूल्य से अधिक बकाया है,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# अपने / उसके ऑटो नवीकरण"
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
+msgstr "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# उसके ऑटो नवीकरण"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -6755,8 +6764,10 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "opac.pref # PatronSelfRegistrationVerifyByEmail # आवश्यकता"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
-msgstr "opac.pref # PatronSelfRegistrationVerifyByEmail # कि एक आत्म दर्ज की संरक्षक अपने या अपने आप के माध्यम से ईमेल की पुष्टि करें।"
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
+msgstr ""
+"opac.pref#PatronSelfRegistrationVerifyByEmail# एक स्व-पंजीकृत संरक्षक को ईमे"
+"ल के माध्यम से सत्यापित करें."
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# The patron should see the charge description as "
@@ -7280,7 +7291,7 @@ msgstr "patrons.pref # FeeOnChangePatronCategory # एक शुल्क जब
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
-msgstr ""
+msgstr "patrons.pref#GDPR_Policy# <br><strong>नोट:</strong> यदि आप इसे सक्षम करते हैं, तो आपको PrivacyPolicyURL सेटिंग के साथ अपनी सार्वजनिक गोपनीयता नीति का URL भी सेट करना होगा."
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
@@ -7352,7 +7363,7 @@ msgstr "patrons.pref # PatronsPerPage # स्टाफ ग्राहक म�
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
-msgstr ""
+msgstr "patrons.pref#PrivacyPolicyURL# <br><strong>नोट:</strong> GDPR_Policy सेट होने पर ही URL प्रदर्शित किया जाएगा."
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -8701,4 +8712,3 @@ msgstr "web_services.pref # SvcMaxReportRows # केवल वापसी"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "web_services.pref # SvcMaxReportRows # एक रिपोर्ट रिपोर्टों वेब सेवा के माध्यम से अनुरोध किया की पंक्तियों।"
-

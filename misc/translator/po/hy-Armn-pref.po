@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2019-04-21 07:06+0000\n"
+"PO-Revision-Date: 2019-05-24 17:26+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1555830388.162175\n"
+"X-POOTLE-MTIME: 1558718788.497044\n"
 "X-Pootle-Path: /hy/18.05/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2238,16 +2238,19 @@ msgid "cataloguing.pref#autoBarcode# Barcodes are"
 msgstr "cataloguing.pref#autoBarcode# Շտրիխ կոդերն են"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;branchcode&gt;yymm0001."
-msgstr "cataloguing.pref#autoBarcode# գեներացված են ըստ ձևի &lt;branchcode&gt;տտաա0001."
-
-# Cataloging > Record Structure
-msgid "cataloguing.pref#autoBarcode# generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002."
-msgstr "cataloguing.pref#autoBarcode# գեներացված են ըստ ձևի &lt;տարի&gt;-0001, &lt;տարի&gt;-0002."
-
-# Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# generated in the form 1, 2, 3."
 msgstr "cataloguing.pref#autoBarcode# գեներացված են ըստ ձևի 1, 2, 3."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <branchcode>yymm0001."
+msgstr ""
+"cataloguing.pref#autoBarcode# գեներացվել է այս ձևով <branchcode>տտաա0001."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#autoBarcode# generated in the form <year>-0001, <year>-0002."
+msgstr ""
+"cataloguing.pref#autoBarcode# գեներացված է այս ձևաչափով <year>-0001, "
+"<year>-0002."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#autoBarcode# incremental EAN-13 barcodes"
@@ -2538,8 +2541,13 @@ msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
 msgstr "circulation.pref#AllowItemsOnHoldCheckout# Չթույլատրել"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
-msgstr "circulation.pref#AllowItemsOnHoldCheckout# նյութերի դւորս տրումը ռեզերվացված է մեկ ուրիշի համար։ եթե թույլատրված է մի գեներացրու RESERVE_WAITING և RESERVED զգուշացումը։ Սա թույլատրում է այդ նյութերի ինքնասպասարկում։"
+msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckout# նյութերի դուրս տրումները պահված "
+"են մեկ ուրիշի համար։ Եթե թույլատրված է, գեներացրու RESERVE_WAITING և "
+"RESERVED զգուշացումը։ Սա այդ նյութերի համար թույլ է տալիս ինքնատացք։ Եթե "
+"օգտագործվում է պահումների հերթը, սպասող պահումներով նյութերը կնշվեն որպես \""
+"անհասանելի\" եթե սա կարգաբերված է որպես \"Թույլ մի տուր\"։"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
@@ -3042,8 +3050,11 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatica
 msgstr "circulation.pref#ExpireReservesMaxPickUpDelay# պահումներ, որոնց ժամկետը ավտոմատ կզրոյացվի, եթե դրանք չեն վերցվել ReservesMaxPickUpDelay-ոմ սահմանված ժամկետում։<br><strong>ՆՇՈՒՄ:</strong> Համակարգի այս նախապատվությունը պահանջում է <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> կռոն աշխատանք։ Հարցրու համակարգի կառավարչին այն պլանավորելու համար։"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
-msgstr "circulation.pref#ExpireReservesMaxPickUpDelayCharge# Եթե օգտագործվում է ExpireReservesMaxPickUpDelay, գանձիր հաճախորդին ով թույլ է տալիս իր սպասումի ժամկետը լրանալ"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows their waiting hold to expire a fee of"
+msgstr ""
+"circulation.pref#ExpireReservesMaxPickUpDelayCharge# Եթե օգտագործվում է "
+"ExpireReservesMaxPickUpDelay, գանձիր փոխատուին, ով թույլ է տալիս իր սպասող "
+"պահումի ժամկետը լրանա վճարով"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesOnHolidays# Allow"
@@ -3455,8 +3466,9 @@ msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# If a patron owes more 
 msgstr "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# եթե հաճախորդը պարտք է ավելի քան այս արժեքից OPACFineNoRenewals,"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# his/her auto renewals."
-msgstr "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# իր ավտոմատ թարմացումները։"
+msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# their auto renewals."
+msgstr ""
+"circulation.pref#OPACFineNoRenewalsBlockAutoRenew# իրենց ինքնաթարմացումները։"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# Allow"
@@ -6756,8 +6768,10 @@ msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Require"
 msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# Պահանջվում է"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify his or herself via email."
-msgstr "opac.pref#PatronSelfRegistrationVerifyByEmail# ինքնագրանցվող օգտատերը ստուգել է իրեն էլ փոստով։"
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# that a self-registering patron verify themselves via email."
+msgstr ""
+"opac.pref#PatronSelfRegistrationVerifyByEmail# որպեսզի ինքնագրանցվող "
+"ընթերցողները էլ․ փոստով իրենց հաստատեն։"
 
 # OPAC > Payments
 msgid "opac.pref#PayPalChargeDescription# The patron should see the charge description as "
@@ -7281,10 +7295,7 @@ msgstr "patrons.pref#FeeOnChangePatronCategory# փոխիր գանձման գու
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
-msgstr ""
-"patrons.pref#GDPR_քաղաքականություն# <br><strong>ՆՇՈՒՄ:</strong> Եթե "
-"թույլատրես սա, դու պետք է նաև կարգաբերես քո հանրային գաղտնիության "
-"քաղաքականության URL -ը PrivacyPolicyURL կարգաբերումով։"
+msgstr "patrons.pref#GDPR_քաղաքականություն# <br><strong>ՆՇՈՒՄ:</strong> Եթե թույլատրես սա, դու պետք է նաև կարգաբերես քո հանրային գաղտնիության քաղաքականության URL -ը PrivacyPolicyURL կարգաբերումով։"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
@@ -7356,9 +7367,7 @@ msgstr "patrons.pref#PatronsPerPage# աշխատակազմի հաճախորդու
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
-msgstr ""
-"patrons.pref#PrivacyPolicyURL# <br><strong>ՆՇՈՒՄ:</strong> URL -ը միայն "
-"կարտածվի, եթե GDPR_քաղաքականությունը կարգաբերված է։"
+msgstr "patrons.pref#PrivacyPolicyURL# <br><strong>ՆՇՈՒՄ:</strong> URL -ը միայն կարտածվի, եթե GDPR_քաղաքականությունը կարգաբերված է։"
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
