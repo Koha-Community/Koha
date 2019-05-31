@@ -91,13 +91,13 @@ my $member2 = {
 my $borrowernumber = Koha::Patron->new($member)->store->borrowernumber;
 my $borrowernumber2 = Koha::Patron->new($member2)->store->borrowernumber;
 
-my $biblionumber1 = 1;
+my $biblio_1 = $builder->build_object({ class => 'Koha::Biblios' });
 my $my_suggestion = {
     title         => 'my title',
     author        => 'my author',
     publishercode => 'my publishercode',
     suggestedby   => $borrowernumber,
-    biblionumber  => $biblionumber1,
+    biblionumber  => $biblio_1->biblionumber,
     branchcode    => 'CPL',
     managedby     => '',
     manageddate   => '',
@@ -125,7 +125,7 @@ my $my_suggestion_with_budget = {
     author        => 'my author 2',
     publishercode => 'my publishercode 2',
     suggestedby   => $borrowernumber,
-    biblionumber  => $biblionumber1,
+    biblionumber  => $biblio_1->biblionumber,
     managedby     => '',
     manageddate   => '',
     accepteddate  => dt_from_string,
@@ -137,7 +137,7 @@ my $my_suggestion_with_budget2 = {
     author        => 'my author 3',
     publishercode => 'my publishercode 3',
     suggestedby   => $borrowernumber2,
-    biblionumber  => $biblionumber1,
+    biblionumber  => $biblio_1->biblionumber,
     managedby     => '',
     manageddate   => '',
     accepteddate  => dt_from_string,
@@ -273,12 +273,12 @@ is( $suggestion->{borrnumsuggestedby}, $my_suggestion->{suggestedby}, 'GetSugges
 
 is( GetSuggestionFromBiblionumber(), undef, 'GetSuggestionFromBiblionumber without the biblio number returns undef' );
 is( GetSuggestionFromBiblionumber(2), undef, 'GetSuggestionFromBiblionumber with an invalid biblio number returns undef' );
-is( GetSuggestionFromBiblionumber($biblionumber1), $my_suggestionid, 'GetSuggestionFromBiblionumber functions correctly' );
+is( GetSuggestionFromBiblionumber($biblio_1->biblionumber), $my_suggestionid, 'GetSuggestionFromBiblionumber functions correctly' );
 
 
 is( GetSuggestionInfoFromBiblionumber(), undef, 'GetSuggestionInfoFromBiblionumber without the biblio number returns undef' );
 is( GetSuggestionInfoFromBiblionumber(2), undef, 'GetSuggestionInfoFromBiblionumber with an invalid biblio number returns undef' );
-$suggestion = GetSuggestionInfoFromBiblionumber($biblionumber1);
+$suggestion = GetSuggestionInfoFromBiblionumber($biblio_1->biblionumber);
 is( $suggestion->{suggestionid}, $my_suggestionid, 'GetSuggestionInfoFromBiblionumber returns the suggestion id correctly' );
 is( $suggestion->{title}, $mod_suggestion1->{title}, 'GetSuggestionInfoFromBiblionumber returns the title correctly' );
 is( $suggestion->{author}, $mod_suggestion1->{author}, 'GetSuggestionInfoFromBiblionumber returns the author correctly' );
@@ -310,11 +310,11 @@ is( $suggestions->[0]->{categorycodesuggestedby}, $member->{categorycode}, 'GetS
 
 
 is( ConnectSuggestionAndBiblio(), '0E0', 'ConnectSuggestionAndBiblio without arguments returns 0E0' );
-my $biblionumber2 = 2;
-my $connect_suggestion_and_biblio = ConnectSuggestionAndBiblio($my_suggestionid, $biblionumber2);
+my $biblio_2 = $builder->build_object({ class => 'Koha::Biblios' });
+my $connect_suggestion_and_biblio = ConnectSuggestionAndBiblio($my_suggestionid, $biblio_2->biblionumber);
 is( $connect_suggestion_and_biblio, '1', 'ConnectSuggestionAndBiblio returns 1' );
 $suggestion = GetSuggestion($my_suggestionid);
-is( $suggestion->{biblionumber}, $biblionumber2, 'ConnectSuggestionAndBiblio updates the biblio number correctly' );
+is( $suggestion->{biblionumber}, $biblio_2->biblionumber, 'ConnectSuggestionAndBiblio updates the biblio number correctly' );
 
 my $search_suggestion = SearchSuggestion();
 is( @$search_suggestion, 3, 'SearchSuggestion without arguments returns all suggestions' );
