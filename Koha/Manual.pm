@@ -92,6 +92,7 @@ our $mapping = {
     'admin/patron-attr-types'                  => '/administration.html#patron-attribute-types',
     'admin/preferences'                        => '/systempreferences.html',
     'admin/smart-rules'                        => '/administration.html#circulation-and-fine-rules',
+    'admin/sms_providers'                      => '/administration.html#sms-cellular-providers',
     'admin/systempreferences'                  => '/systempreferences.html#local-use',
     'admin/transport-cost-matrix'              => '/administration.html#transport-cost-matrix',
     'admin/z3950servers'                       => '/administration.html#z39.50/sru-servers',
