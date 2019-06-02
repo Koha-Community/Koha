@@ -239,7 +239,7 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES ( 'el', 'language', 'fr', 'Grec Moderne (Après 1453)');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'el', 'language', 'de', 'Griechisch (Moern [1453- ]');
+VALUES ( 'el', 'language', 'de', 'Griechisch (Modern 1453-)');
 
 -- English
 INSERT INTO language_subtag_registry( subtag, type, description, added)
