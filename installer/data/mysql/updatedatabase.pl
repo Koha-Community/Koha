@@ -18682,6 +18682,11 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (19.05.00 release)\n";
 }
 
+$DBversion = '19.06.00.000';
+if( CheckVersion( $DBversion ) ) {
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Wingardium Leviosa!)\n";
+}
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
