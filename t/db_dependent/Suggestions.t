@@ -250,12 +250,22 @@ $messages = C4::Letters::GetQueuedMessages({
 });
 is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is email if the borrower has an email');
 
-$mod_suggestion4->{manageddate} = 'invalid date!';
-ModSuggestion($mod_suggestion4);
-$messages = C4::Letters::GetQueuedMessages({
-    borrowernumber => $borrowernumber2
-});
-is (scalar(@$messages), 1, 'No new letter should have been generated if the update raised an error');
+{
+    # Hiding the expected warning displayed by DBI
+    # DBD::mysql::st execute failed: Incorrect date value: 'invalid date!' for column 'manageddate'
+    my $stderr;
+    local *STDERR;
+    open STDERR, '>', '/dev/null';
+
+    $mod_suggestion4->{manageddate} = 'invalid date!';
+    ModSuggestion($mod_suggestion4);
+    $messages = C4::Letters::GetQueuedMessages({
+        borrowernumber => $borrowernumber2
+    });
+
+    close STDERR;
+    is (scalar(@$messages), 1, 'No new letter should have been generated if the update raised an error');
+}
 
 is( GetSuggestionInfo(), undef, 'GetSuggestionInfo without the suggestion id returns undef' );
 $suggestion = GetSuggestionInfo($my_suggestionid);

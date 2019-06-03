@@ -174,10 +174,18 @@ subtest 'Manually pass a return date' => sub {
 
     $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
-    throws_ok
-        { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 ); }
-        'Koha::Exceptions::Object::BadValue',
-        'An exception is thrown on bad date';
+    {
+        # Hiding the expected warning displayed by DBI
+        # DBD::mysql::st execute failed: Incorrect datetime value: 'bad_date' for column 'returndate'
+        my $stderr;
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+        throws_ok
+            { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 ); }
+            'Koha::Exceptions::Object::BadValue',
+            'An exception is thrown on bad date';
+        close STDERR;
+    }
 
     $schema->storage->txn_rollback;
 };
