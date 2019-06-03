@@ -41,7 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op = $query->param('op') || q||;
 
 if ( $op eq 'save' ) {
-    my $auto_share = $query->param('autosharewithmana');
+    my $auto_share = $query->param('autosharewithmana') || q||;
     my $mana = $query->param('mana');
 
     C4::Context->set_preference('Mana', $mana);
