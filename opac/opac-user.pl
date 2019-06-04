@@ -195,7 +195,7 @@ if ( $pending_checkouts->count ) { # Useless test
             {
                 borrowernumber    => $patron->borrowernumber,
                 amountoutstanding => { '>' => 0 },
-                accounttype       => 'Rent',
+                accounttype       => { 'LIKE' => 'RENT_%' },
                 itemnumber        => $issue->{itemnumber}
             }
         );
