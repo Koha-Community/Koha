@@ -282,6 +282,7 @@ require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widge
         },
         getMaterial: function () {
             const record = TextMarc.TextToRecord(this.editor.cm.getValue());
+
             const leader = record.leader();
             const leader6 = leader.substring(6, 7);
             let materialType = this.materialTypeMapping[leader6];
