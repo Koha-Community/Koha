@@ -48,10 +48,9 @@ define( [ 'marc-record' ], function( MARC ) {
         TextToRecord: function( text ) {
             var record = new MARC.Record();
             var errors = [];
-
             $.each( text.split('\n'), function( i, line ) {
+                if (line === "") {return};
                 var tagNumber = line.match( /^([A-Za-z0-9]{3}) / );
-
                 if ( !tagNumber ) {
                     errors.push( { type: 'noTag', line: i } );
                     return;
