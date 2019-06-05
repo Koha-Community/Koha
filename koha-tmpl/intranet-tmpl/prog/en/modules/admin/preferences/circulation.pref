@@ -488,6 +488,13 @@ Circulation:
                   no: Allow
             - their auto renewals.
         -
+            - If a patron pays off all fines on an overdue item that is accruing fines
+            - pref: RenewAccruingItemWhenPaid
+              choices:
+                  yes: Renew
+                  no: "Don't renew"
+            - the item automatically.
+        -
             - pref: ItemsDeniedRenewal
               type: textarea
               syntax: text/x-yaml
