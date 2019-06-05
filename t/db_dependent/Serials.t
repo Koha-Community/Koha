@@ -92,8 +92,8 @@ is( $subscriptioninformation->{notes}, $notes, 'NewSubscription should set notes
 is( $subscriptioninformation->{internalnotes}, $internalnotes, 'NewSubscription should set internalnotes' );
 
 my $subscription_history = C4::Serials::GetSubscriptionHistoryFromSubscriptionId($subscriptionid);
-is( $subscription_history->{opacnote}, '', 'NewSubscription should not set subscriptionhistory opacnotes' );
-is( $subscription_history->{librariannote}, '', 'NewSubscription should not set subscriptionhistory librariannotes' );
+is( $subscription_history->{opacnote}, undef, 'NewSubscription should not set subscriptionhistory opacnotes' );
+is( $subscription_history->{librariannote}, undef, 'NewSubscription should not set subscriptionhistory librariannotes' );
 
 my @subscriptions = SearchSubscriptions({string => $subscriptioninformation->{bibliotitle}, orderby => 'title' });
 isa_ok( \@subscriptions, 'ARRAY' );
