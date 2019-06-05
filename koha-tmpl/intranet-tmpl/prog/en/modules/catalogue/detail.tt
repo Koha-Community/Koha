@@ -191,6 +191,9 @@
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
 [% END %]
+[% FOREACH tab IN tabs %]
+    <li><a href="#[% tab.id %]">[% tab.title %]</a></li>
+[% END %]
 </ul>
 
 [% items_table_block_iter = 0 %]
@@ -719,6 +722,12 @@
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <div id="NovelistSelect" class="novelistSelect">
         <div data-novelist-novelistselect=[% normalized_isbn | html %]></div>
+    </div>
+[% END %]
+
+[% FOREACH tab IN tabs %]
+    <div id="[% tab.id | html %]">
+        [% tab.content | $raw %]
     </div>
 [% END %]
 

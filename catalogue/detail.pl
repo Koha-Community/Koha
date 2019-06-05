@@ -69,8 +69,23 @@ if ( C4::Context->preference('UseKohaPlugins') &&
     my @plugins = Koha::Plugins->new()->GetPlugins({
         method => 'intranet_catalog_biblio_enhancements_toolbar_button'
     });
+
+    my @tab_plugins = Koha::Plugins->new()->GetPlugins({
+        method => 'intranet_catalog_biblio_tab',
+    });
+    my @tabs;
+    foreach my $tab_plugin (@tab_plugins) {
+        my @biblio_tabs = $tab_plugin->intranet_catalog_biblio_tab();
+        foreach my $tab (@biblio_tabs) {
+            $tab->{id} = $tab->{title};
+            $tab->{id} =~ s/[^\w]+/-/g;
+            push @tabs, $tab,
+        }
+    }
+
     $template->param(
-        plugins => \@plugins
+        plugins => \@plugins,
+        tabs => \@tabs,
     );
 }
 
