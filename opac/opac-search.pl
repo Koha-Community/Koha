@@ -592,7 +592,7 @@ my $results_hashref;
 my @coins;
 
 if ($tag) {
-    $query_cgi = "tag=" .$tag . "&" . $query_cgi;
+    $query_cgi = "tag=" .  uri_escape_utf8( $tag ) . "&" . $query_cgi;
     my $taglist = get_tags({term=>$tag, approved=>1});
     $results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
     my @marclist = map { C4::Biblio::GetXmlBiblio( $_->{biblionumber} ) } @$taglist;
