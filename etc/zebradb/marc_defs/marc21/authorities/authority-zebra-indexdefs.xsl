@@ -53,7 +53,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
-    <z:index name="Local-Number:w Local-Number:n Local-Number:s">
+    <z:index name="Local-Number:w Local-Number:n Local-Number:s Local-Number:p">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
