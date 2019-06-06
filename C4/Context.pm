@@ -1099,6 +1099,26 @@ sub temporary_directory {
     return C4::Context->config('tmp_path') || File::Spec->tmpdir;
 }
 
+=head3 set_remote_address
+
+set_remote_address should be called at the beginning of every script
+that is *not* running under plack in order to the REMOTE_ADDR environment
+variable to be set correctly.
+
+=cut
+
+sub set_remote_address {
+    if ( C4::Context->config('koha_trusted_proxies') ) {
+        require CGI;
+        my $cgi    = CGI->new;
+        my $header = $cgi->http('HTTP_X_FORWARDED_FOR');
+
+        if ($header) {
+            require Koha::Middleware::RealIP;
+            $ENV{REMOTE_ADDR} = Koha::Middleware::RealIP::get_real_ip( $ENV{REMOTE_ADDR}, $header );
+        }
+    }
+}
 
 1;
 

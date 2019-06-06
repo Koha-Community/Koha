@@ -68,8 +68,10 @@ my $apiv1  = builder {
 builder {
     enable "ReverseProxy";
     enable "Plack::Middleware::Static";
+
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";
+    enable "+Koha::Middleware::RealIP";
 
     mount '/opac'          => $opac;
     mount '/intranet'      => $intranet;

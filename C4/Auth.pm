@@ -57,6 +57,8 @@ BEGIN {
         else            { exit }
     }
 
+    C4::Context->set_remote_address;
+
     $debug     = $ENV{DEBUG};
     @ISA       = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);

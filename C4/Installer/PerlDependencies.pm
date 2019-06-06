@@ -908,6 +908,11 @@ our $PERL_DEPS = {
         required => '1',
         min_ver  => '0.37',
     },
+    'Net::Netmask' => {
+        'usage'    => 'Koha X-Forwarded-For support',
+        'required' => '0',
+        'min_ver'  => '1.9022',
+    },
     'Net::Z3950::SimpleServer' => {
         'usage'    => 'Z39.50 responder',
         'required' => '0',
