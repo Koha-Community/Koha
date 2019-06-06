@@ -93,11 +93,9 @@ Share a Koha entity (i.e subscription or report) to Mana KB.
 =cut
 
 sub send_entity {
-    my ($lang, $loggedinuser, $resourceid, $resourcetype, $content) = @_;
+    my ($lang, $loggedinuser, $resourceid, $resourcetype) = @_;
 
-    unless ( $content ) {
-        $content = prepare_entity_data($lang, $loggedinuser, $resourceid, $resourcetype);
-    }
+    my $content = prepare_entity_data($lang, $loggedinuser, $resourceid, $resourcetype);
 
     my $result = process_request(build_request('post', $resourcetype, $content));
 
@@ -106,6 +104,23 @@ sub send_entity {
         my $resource = $packages->find($resourceid);
         eval { $resource->set( { mana_id => $result->{id} } )->store };
     }
+    return $result;
+}
+
+=head3 comment_entity
+
+my $result = Koha::SharedContent::comment_entity($resource_id, $resource_type, $comment);
+
+Send a comment about a Mana entity.
+
+=cut
+
+sub comment_entity {
+    my ($resourceid, $resourcetype, $comment) = @_;
+
+    my $result = process_request(build_request('post', 'resource_comment',
+            { resource_id => $resourceid, resource_type => $resourcetype, message => $comment }));
+
     return $result;
 }
 

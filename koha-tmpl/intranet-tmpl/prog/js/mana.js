@@ -29,16 +29,15 @@ function mana_comment( target_id, manamsg, resource_type ) {
         type: "POST",
         url: "/cgi-bin/koha/svc/mana/share",
         data: { message: manamsg, resource: resource_type, resource_id: target_id },
-        datatype: "json",
+        dataType: "json",
     })
-        .done(function() {
+        .done(function( data ) {
             $(".mana_comment_status").hide();
-            $("#mana_comment_success").show();
-        })
-        .fail(function( error ) {
-            $(".mana_comment_status").hide();
-            $("#mana_comment_errortext").html( error.status + " " + error.statusText );
-            $("#mana_comment_failed").show();
+            if (data.code == "201" || data.code == "200") {
+                $("#mana_comment_success").show();
+            } else {
+                $("#mana_comment_failed").show();
+            }
         })
         .always(function() {
             $("#selected_id").val("");

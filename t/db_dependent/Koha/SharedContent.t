@@ -23,7 +23,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 use Test::MockModule;
 use Test::MockObject;
-use Test::More tests => 44;
+use Test::More tests => 45;
 use Koha::Database;
 use Koha::Patrons;
 use Koha::Subscriptions;
@@ -164,6 +164,10 @@ is($result->{code}, 200, 'send_entity success');
 
 my $s = Koha::Subscriptions->find($subscription->{subscriptionid});
 is($s->mana_id, 5, 'Mana id is set');
+
+$content = { resource_id => $subscription->{mana_id}, resource_type => 'subscription', message => 'My comment'};
+$result = Koha::SharedContent::comment_entity('resource_comment', $content);
+is($result->{code}, 200, 'Comment success');
 
 my $data = Koha::SharedContent::prepare_entity_data(
     '',
