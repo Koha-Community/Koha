@@ -210,6 +210,7 @@ sub AddReserve {
             waitingdate    => $waitingdate,
             expirationdate => $expdate,
             itemtype       => $itemtype,
+            item_level_hold => $checkitem ? 1 : 0,
         }
     )->store();
     $hold->set_waiting() if $found eq 'W';
@@ -1894,6 +1895,8 @@ sub RevertWaitingStatus {
     $sth->execute( $itemnumber );
     my $reserve = $sth->fetchrow_hashref();
 
+    my $hold = Koha::Holds->find( $reserve->{reserve_id} ); # TODO Remove the next raw SQL statements and use this instead
+
     ## Increment the priority of all other non-waiting
     ## reserves for this bib record
     $query = "
@@ -1920,6 +1923,11 @@ sub RevertWaitingStatus {
     ";
     $sth = $dbh->prepare( $query );
     $sth->execute( $reserve->{'reserve_id'} );
+
+    unless ( $hold->item_level_hold ) {
+        $hold->itemnumber(undef)->store;
+    }
+
     _FixPriority( { biblionumber => $reserve->{biblionumber} } );
 }
 
