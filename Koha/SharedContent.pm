@@ -26,9 +26,9 @@ use Koha::Serials;
 use Koha::Reports;
 use C4::Context;
 
-=head1 SharedContent
+=head1 NAME
 
-Koha::SharedContent - Set of methods to quering Mana KB server
+Koha::SharedContent - Set of methods to querying Mana KB server
 
 =head1 DESCRIPTION
 
