@@ -67,7 +67,7 @@ subtest 'Testing Patron Info Request V2' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 27;
+    plan tests => 29;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -302,7 +302,8 @@ sub test_request_patron_info_v2 {
 
 sub test_checkin_v2 {
     my $builder = t::lib::TestBuilder->new();
-    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $branchcode  = $builder->build({ source => 'Branch' })->{branchcode};
+    my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
     my ( $response, $findpatron );
     my $mocks = create_mocks( \$response, \$findpatron, \$branchcode );
 
@@ -320,6 +321,7 @@ sub test_checkin_v2 {
         source => 'Item',
         value => { damaged => 0, withdrawn => 0, itemlost => 0, restricted => 0, homebranch => $branchcode, holdingbranch => $branchcode },
     });
+    my $item_object = Koha::Items->find( $item->{itemnumber} );
 
     my $mockILS = $mocks->{ils};
     my $server = { ils => $mockILS, account => {} };
@@ -370,9 +372,18 @@ sub test_checkin_v2 {
     is( substr($response,2,1), '1', 'OK flag is true now with checked_in_ok flag set when checking in an item that was not checked out' );
     is( substr($response,5,1), 'N', 'Alert flag no longer set' );
     check_field( $respcode, $response, FID_SCREEN_MSG, undef, 'No screen msg' );
-    $server->{account}->{checked_in_ok} = 0;
 
-    $server->{account}->{checked_in_ok} = 1;
+    # Move item to another holding branch to trigger CV of 04 with alert flag
+    t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
+    $item_object->holdingbranch( $branchcode2 )->store();
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    is( substr($response,5,1), 'Y', 'Alert flag is set with check_in_ok, item is checked in but needs transfer' );
+    check_field( $respcode, $response, FID_ALERT_TYPE, '04', 'Got FID_ALERT_TYPE (CV) field with value 04 ( needs transfer )' );
+    $item_object->holdingbranch( $branchcode )->store();
+    t::lib::Mocks::mock_preference( ' AllowReturnToBranch ', 'anywhere' );
+
     $server->{account}->{cv_send_00_on_success} = 0;
     undef $response;
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
