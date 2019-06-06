@@ -119,6 +119,7 @@ DROP TABLE IF EXISTS `accountlines`;
 CREATE TABLE `accountlines` (
   `accountlines_id` int(11) NOT NULL AUTO_INCREMENT,
   `issue_id` int(11) DEFAULT NULL,
+  `old_issue_id` int(11) DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
   `itemnumber` int(11) DEFAULT NULL,
   `date` timestamp NULL DEFAULT NULL,
@@ -143,6 +144,8 @@ CREATE TABLE `accountlines` (
   KEY `debit_type_code` (`debit_type_code`),
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`),
+  KEY `issue_id` (`issue_id`),
+  KEY `old_issue_id` (`old_issue_id`),
   KEY `manager_id` (`manager_id`),
   KEY `accountlines_ibfk_registers` (`register_id`),
   CONSTRAINT `accountlines_ibfk_borrowers` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -150,10 +153,13 @@ CREATE TABLE `accountlines` (
   CONSTRAINT `accountlines_ibfk_branches` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_credit_type` FOREIGN KEY (`credit_type_code`) REFERENCES `account_credit_types` (`code`) ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type_code`) REFERENCES `account_debit_types` (`code`) ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_ibfk_issues` FOREIGN KEY (`issue_id`) REFERENCES `issues` (`issue_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_ibfk_old_issues` FOREIGN KEY (`old_issue_id`) REFERENCES `old_issues` (`issue_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_registers` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `action_logs`
