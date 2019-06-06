@@ -1997,31 +1997,21 @@ sub RevertWaitingStatus {
     my $dbh = C4::Context->dbh;
 
     ## Get the waiting reserve we want to revert
-    my $query = "
-        SELECT * FROM reserves
-        WHERE itemnumber = ?
-        AND found IS NOT NULL
-    ";
-    my $sth = $dbh->prepare( $query );
-    $sth->execute( $itemnumber );
-    my $reserve = $sth->fetchrow_hashref();
-
-    my $hold = Koha::Holds->find( $reserve->{reserve_id} ); # TODO Remove the next raw SQL statements and use this instead
+    my $hold = Koha::Holds->search(
+        {
+            itemnumber => $itemnumber,
+            found => { not => undef },
+        }
+    )->next;
 
     ## Increment the priority of all other non-waiting
     ## reserves for this bib record
-    $query = "
-        UPDATE reserves
-        SET
-          priority = priority + 1
-        WHERE
-          biblionumber =  ?
-        AND
-          priority > 0
-    ";
-    $sth = $dbh->prepare( $query );
-    $sth->execute( $reserve->{'biblionumber'} );
+    my $holds = Koha::Holds->search({ biblionumber => $hold->biblionumber, priority => { '>' => 0 } });
+    while ( my $h = $holds->next ) {
+        $h->priority( $h->priority + 1 )->store;
+    }
 
+    ## Fix up the currently waiting reserve
     $hold->set(
         {
             priority    => 1,
@@ -2031,7 +2021,7 @@ sub RevertWaitingStatus {
         }
     )->store();
 
-    _FixPriority( { biblionumber => $reserve->{biblionumber} } );
+    _FixPriority( { biblionumber => $hold->biblionumber } );
 
     return $hold;
 }
