@@ -1,32 +1,5 @@
-$font-main: Arial, Verdana, Helvetica, sans-serif;
-$font-monospace: "Courier New", Courier, monospace;
-$language-footer-min-height: 20px;
-
-@mixin default-button {
-    background-image: linear-gradient(to bottom, #FFF 0, #E0E0E0 100%);
-    border-color: #ADADAD #ADADAD #949494;
-    border-radius: 4px;
-    border-width: 1px;
-    color: #333333;
-    display: inline-block;
-    font-size: inherit;
-    line-height: 1.42857143;
-    padding: .3em .8em;
-    text-align: center;
-    text-shadow: 0 1px 0 #fff;
-    vertical-align: middle;
-    white-space: nowrap;
-
-    &:hover {
-        background: #E0E0E0 none;
-    }
-}
-
-@mixin disabled-button {
-    background: #EEE none;
-    border: 1px solid #C0C0C0;
-    color: #999;
-}
+@import "mixins";
+@import "tables";
 
 ::selection {
     background: #538200;
@@ -252,102 +225,6 @@ main {
         clear: both;
         content: " ";
         display: table;
-    }
-}
-
-table {
-    border-collapse: collapse;
-    border-right: 1px solid #BCBCBC;
-    border-top: 1px solid #BCBCBC;
-
-    .btn-group {
-        white-space: nowrap;
-
-        .btn {
-            display: inline-block;
-            float: none;
-        }
-    }
-
-    &.indexes {
-        td {
-            vertical-align: middle;
-        }
-    }
-
-    > caption {
-        span {
-            &.actions {
-                font-size: 66%;
-                font-weight: normal;
-                margin: 0 .5em 0 0;
-            }
-        }
-    }
-
-    &.invis {
-        border: 0;
-
-        tr,
-        td {
-            border: 0;
-        }
-    }
-
-    + table {
-        margin-top: 1em;
-    }
-}
-
-td,
-th {
-    border-bottom: 1px solid #BCBCBC;
-    border-left: 1px solid #BCBCBC;
-    padding: .2em .3em;
-}
-
-td {
-    background-color: #FFFFFF;
-    vertical-align: top;
-
-    &.actions {
-        white-space: nowrap;
-    }
-
-    &.borderless {
-        border: 0 none;
-        border-collapse: separate;
-    }
-
-    &.data {
-        font-family: $font-monospace;
-        text-align: right;
-    }
-
-    &.total {
-        text-align: right;
-    }
-
-    input {
-        &.approve {
-            background-color: #FFC;
-        }
-    }
-}
-
-
-th {
-    background-color: #E8E8E8;
-    font-weight: bold;
-    text-align: center;
-
-    &[scope="row"] {
-        text-align: right;
-    }
-
-    &.data {
-        font-family: $font-monospace;
-        text-align: right;
     }
 }
 
@@ -719,29 +596,6 @@ ol {
     }
 }
 
-.highlighted-row,
-.highlighted-row td {
-    background-color: #FFD000 !important;
-}
-
-.warned-row,
-.warned-row td { background-color: #FF9000 !important }
-
-.high-warned-row,
-.high-warned-row td { background-color: #FF0000 !important }
-
-tbody {
-    tr {
-        &:nth-child(odd) {
-            td {
-                background-color: #F3F3F3;
-                border: 1px solid #BCBCBC;
-                border-right: 1px solid #BCBCBC;
-            }
-        }
-    }
-}
-
 .overdue,
 .debit {
     color: #CC0000;
@@ -750,121 +604,6 @@ tbody {
 
 .strong {
     font-weight: bold;
-}
-
-tr {
-    &.clickable {
-        cursor: pointer;
-    }
-
-    &.expired {
-        td {
-            color: #999999;
-        }
-    }
-
-    &.highlight {
-        td {
-            background-color: #F6F6F6;
-            border-color: #BCBCBC;
-        }
-
-        th {
-            &[scope="row"] {
-                background-color: #DDDDDD;
-                border-color: #BCBCBC;
-            }
-        }
-
-        table {
-            &.invis {
-                td {
-                    border: 0;
-                }
-            }
-        }
-    }
-
-    &.odd {
-        &.onissue {
-            td {
-                background-color: #FFFFE1;
-            }
-        }
-    }
-
-    &.ok {
-        td {
-            background-color: #FFFFCC;
-        }
-
-        &:nth-child(odd) {
-            td {
-                background-color: #FFFFCC;
-            }
-        }
-
-        &:nth-child(even) {
-            td {
-                background-color: #FFFFCC;
-            }
-        }
-    }
-
-    &.onissue {
-        td {
-            background-color: #FFFFCC;
-        }
-    }
-
-    &.reserved {
-        td {
-            background-color: #EEFFD4;
-        }
-    }
-
-    &.transfered {
-        td {
-            background-color: #E8F0F6;
-        }
-    }
-
-    &.warn {
-        td {
-            background-color: #FF9090;
-        }
-
-        &:nth-child(odd) {
-            td {
-                background-color: #FF9090;
-            }
-        }
-    }
-}
-
-.table_borrowers {
-    tr {
-        &:hover {
-            td {
-                background-color: #FFFF99;
-            }
-        }
-    }
-}
-
-tfoot {
-    td {
-        background-color: #F3F3F3;
-        font-weight: bold;
-        vertical-align: middle;
-    }
-}
-
-caption {
-    color: #000;
-    font-size: 133.9%;
-    font-weight: bold;
-    margin: .3em 0;
 }
 
 .problem {
@@ -2646,36 +2385,6 @@ li {
         &:hover {
             color: #CC0000;
         }
-    }
-}
-.pager {
-    background-color: #E8E8E8;
-    border: 1px solid #BCBCBC;
-    border-radius: 5px;
-    display: inline-block;
-    font-size: 85%;
-    margin: .4em 0;
-    padding: .3em .5em;
-
-    img {
-        vertical-align: middle;
-
-        &.last {
-            padding-right: 5px;
-        }
-    }
-
-    input {
-        &.pagedisplay {
-            background-color: transparent;
-            border: 0;
-            font-weight: bold;
-            text-align: center;
-        }
-    }
-
-    p {
-        margin: 0;
     }
 }
 

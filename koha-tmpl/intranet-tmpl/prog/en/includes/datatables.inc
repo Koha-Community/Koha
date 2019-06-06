@@ -1,12 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% INCLUDE 'format_price.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/dataTables.buttons.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/buttons.colVis.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/jszip.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/buttons.print.min.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/buttons.html5.min.js") | $raw %]
+[% Asset.js("lib/datatables/datatables.min.js") | $raw %]
 <script>
     var MSG_DT_FIRST = _("First");
     var MSG_DT_LAST = _("Last");
@@ -27,5 +22,6 @@
     var MSG_DT_COPY_KEYS = _("Press ctrl or ⌘ + C to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.");
     var MSG_DT_COPY_SUCCESS_ONE = _("Copied one row to clipboard");
     var MSG_DT_COPY_SUCCESS_X = _("Copied %d rows to clipboard");
+    var MSG_CLEAR_FILTER = _("Clear filter");
 </script>
 [% Asset.js("js/datatables.js") | $raw %]

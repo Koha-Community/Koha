@@ -1,0 +1,32 @@
+$font-main: Arial, Verdana, Helvetica, sans-serif;
+$font-monospace: "Courier New", Courier, monospace;
+$language-footer-min-height: 20px;
+$table-border-color: #BCBCBC;
+$table-header-background: #E8E8E8;
+$table-odd-row: #F9F9F9;
+
+@mixin default-button {
+    background-image: linear-gradient(to bottom, #FFF 0, #E0E0E0 100%);
+    border-color: #ADADAD #ADADAD #949494;
+    border-radius: 4px;
+    border-width: 1px;
+    color: #333333;
+    display: inline-block;
+    font-size: inherit;
+    line-height: 1.42857143;
+    padding: .3em .8em;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    &:hover {
+        background: #E0E0E0 none;
+    }
+}
+
+@mixin disabled-button {
+    background: #EEE none;
+    border: 1px solid #C0C0C0;
+    color: #999;
+}

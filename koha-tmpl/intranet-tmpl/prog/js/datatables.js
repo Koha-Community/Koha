@@ -31,13 +31,13 @@ var dataTablesDefaults = {
             }
         }
     },
-    "dom": '<"top pager"ilpfB>tr<"bottom pager"ip>',
+    "dom": '<"top pager"<"table_entries"ilp><"table_controls"fB>>tr<"bottom pager"ip>',
     "buttons": [{
         fade: 100,
         className: "dt_button_clear_filter",
-        titleAttr: _("Clear filter"),
+        titleAttr: MSG_CLEAR_FILTER,
         enabled: false,
-        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
+        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + MSG_CLEAR_FILTER + '</span>',
         available: function ( dt ) {
             // The "clear filter" button is made available if this test returns true
             if( dt.settings()[0].aanFeatures.f ){ // aanFeatures.f is null if there is no search form
@@ -212,108 +212,6 @@ function dt_overwrite_html_sorting_localeCompare() {
         return ((x < y) ?  1 : ((x > y) ? -1 : 0));
     };
 }
-
-$.fn.dataTableExt.oPagination.four_button = {
-    /*
-     * Function: oPagination.four_button.fnInit
-     * Purpose:  Initalise dom elements required for pagination with a list of the pages
-     * Returns:  -
-     * Inputs:   object:oSettings - dataTables settings object
-     *           node:nPaging - the DIV which contains this pagination control
-     *           function:fnCallbackDraw - draw function which must be called on update
-     */
-    "fnInit": function ( oSettings, nPaging, fnCallbackDraw )
-    {
-        nFirst = document.createElement( 'span' );
-        nPrevious = document.createElement( 'span' );
-        nNext = document.createElement( 'span' );
-        nLast = document.createElement( 'span' );
-
-        nFirst.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sFirst ) );
-        nPrevious.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sPrevious ) );
-        nNext.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sNext ) );
-        nLast.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sLast ) );
-
-        nFirst.className = "paginate_button first";
-        nPrevious.className = "paginate_button previous";
-        nNext.className="paginate_button next";
-        nLast.className = "paginate_button last";
-
-        nPaging.appendChild( nFirst );
-        nPaging.appendChild( nPrevious );
-        nPaging.appendChild( nNext );
-        nPaging.appendChild( nLast );
-
-        $(nFirst).click( function () {
-            oSettings.oApi._fnPageChange( oSettings, "first" );
-            fnCallbackDraw( oSettings );
-        } );
-
-        $(nPrevious).click( function() {
-            oSettings.oApi._fnPageChange( oSettings, "previous" );
-            fnCallbackDraw( oSettings );
-        } );
-
-        $(nNext).click( function() {
-            oSettings.oApi._fnPageChange( oSettings, "next" );
-            fnCallbackDraw( oSettings );
-        } );
-
-        $(nLast).click( function() {
-            oSettings.oApi._fnPageChange( oSettings, "last" );
-            fnCallbackDraw( oSettings );
-        } );
-
-        /* Disallow text selection */
-        $(nFirst).bind( 'selectstart', function () { return false; } );
-        $(nPrevious).bind( 'selectstart', function () { return false; } );
-        $(nNext).bind( 'selectstart', function () { return false; } );
-        $(nLast).bind( 'selectstart', function () { return false; } );
-    },
-
-    /*
-     * Function: oPagination.four_button.fnUpdate
-     * Purpose:  Update the list of page buttons shows
-     * Returns:  -
-     * Inputs:   object:oSettings - dataTables settings object
-     *           function:fnCallbackDraw - draw function which must be called on update
-     */
-    "fnUpdate": function ( oSettings, fnCallbackDraw )
-    {
-        if ( !oSettings.aanFeatures.p )
-        {
-            return;
-        }
-
-        /* Loop over each instance of the pager */
-        var an = oSettings.aanFeatures.p;
-        for ( var i=0, iLen=an.length ; i<iLen ; i++ )
-        {
-            var buttons = an[i].getElementsByTagName('span');
-            if ( oSettings._iDisplayStart === 0 )
-            {
-                buttons[0].className = "paginate_disabled_first";
-                buttons[1].className = "paginate_disabled_previous";
-            }
-            else
-            {
-                buttons[0].className = "paginate_enabled_first";
-                buttons[1].className = "paginate_enabled_previous";
-            }
-
-            if ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() )
-            {
-                buttons[2].className = "paginate_disabled_next";
-                buttons[3].className = "paginate_disabled_last";
-            }
-            else
-            {
-                buttons[2].className = "paginate_enabled_next";
-                buttons[3].className = "paginate_enabled_last";
-            }
-        }
-    }
-};
 
 $.fn.dataTableExt.oSort['num-html-asc']  = function(a,b) {
     var x = a.replace( /<.*?>/g, "" );

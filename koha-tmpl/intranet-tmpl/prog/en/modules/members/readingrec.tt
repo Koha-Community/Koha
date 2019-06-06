@@ -133,7 +133,7 @@
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
             var table = KohaTable("table_readingrec", {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "aaSorting": [[10, 'desc']],
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "aoColumnDefs": [

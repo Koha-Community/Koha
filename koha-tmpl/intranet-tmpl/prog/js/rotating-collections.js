@@ -19,7 +19,7 @@ $(document).ready(function(){
             "aoColumnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
             ],
-            "sPaginationType": "four_button"
+            "sPaginationType": "full"
         } ));
     }
 

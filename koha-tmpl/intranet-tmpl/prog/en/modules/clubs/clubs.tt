@@ -231,7 +231,7 @@
     <script>
         $(document).ready(function() {
             tTable = $('#club-templates-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
@@ -239,7 +239,7 @@
             } ));
 
             cTable = $('#clubs-table').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "sDom": 'C<"top pager"ilpf><"#filter_c">tr<"bottom pager"ip>',
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },

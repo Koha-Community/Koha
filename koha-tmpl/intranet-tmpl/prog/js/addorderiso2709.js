@@ -7,7 +7,7 @@ $(document).ready(function() {
             { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
             { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
-        "sPaginationType": "four_button",
+        "sPaginationType": "full",
         "aaSorting": []
     }) );
 

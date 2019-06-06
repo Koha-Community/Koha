@@ -33,7 +33,7 @@ $(document).ready(function() {
         "aaSorting": [
             [1, "asc"]
         ],
-        "sPaginationType": "four_button",
+        "sPaginationType": "full",
         "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12],
     }, columns_settings);
 

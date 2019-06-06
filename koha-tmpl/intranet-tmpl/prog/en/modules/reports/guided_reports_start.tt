@@ -1317,7 +1317,7 @@ canned reports and writing custom SQL reports.</p>
                 var rtable = KohaTable("table_reports", {
                     'iDisplayLength': [% Koha.Preference('NumSavedReports') | html %],
                     'bAutoWidth': false,
-                    'sPaginationType': 'four_button',
+                    'sPaginationType': 'full',
                     'aaSorting': [[ 1, "asc" ]],
                     'aoColumnDefs': [
                         { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1] },
@@ -1583,7 +1583,7 @@ canned reports and writing custom SQL reports.</p>
                         $("#mana_search_result_label").text(_("Results from Mana Knowledge Base"));
                         $("#mana-loading").hide();
                         $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults,{
-                            "sPaginationType":"four_button",
+                            "sPaginationType":"full",
                             "autoWidth": false,
                             "columnDefs": [
                                 { "width": "35%", "targets": 1 }

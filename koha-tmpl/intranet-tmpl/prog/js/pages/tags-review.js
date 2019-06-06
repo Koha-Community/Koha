@@ -66,7 +66,7 @@ $(document).ready(function() {
             { "sType": "title-string", "aTargets" : [ "title-string" ] }
         ],
         "aaSorting": [[ 4, "desc" ]],
-        "sPaginationType": "four_button"
+        "sPaginationType": "full"
     }));
     $('.ajax_buttons' ).css({visibility:"visible"});
     $("p.check").html("<div id=\"searchheader\"><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-check\"><\/i> "+ LABEL_SELECT_ALL +"<\/a> | <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\"><i class=\"fa fa-remove\"><\/i> "+ LABEL_CLEAR_ALL +"<\/a> | <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\"> "+ LABEL_SELECT_ALL_PENDING +"<\/a><\/div>");

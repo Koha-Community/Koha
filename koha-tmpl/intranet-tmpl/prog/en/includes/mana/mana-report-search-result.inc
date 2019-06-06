@@ -9,7 +9,6 @@
 <title>Koha &rsaquo; Reports &rsaquo; Mana Knowledge Base reports search</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/reports.css") | $raw %]
-[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="rep_mana_search" class="rep">

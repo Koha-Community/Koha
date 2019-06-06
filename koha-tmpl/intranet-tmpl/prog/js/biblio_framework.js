@@ -9,7 +9,7 @@
                 { "aTargets": [ 0, 1 ], "sType": "natural" },
             ],
             "bSort": true,
-            "sPaginationType": "four_button"
+            "sPaginationType": "full"
         }));
 
         $("body").css("cursor", "auto");

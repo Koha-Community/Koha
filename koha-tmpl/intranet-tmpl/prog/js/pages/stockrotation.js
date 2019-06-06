@@ -70,7 +70,7 @@ $(document).ready(function() {
             { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
             { "sType": "anti-the", "aTargets": [ "anti-the" ] }
         ],
-        "sPaginationType": "four_button",
+        "sPaginationType": "full",
         "autoWidth": false,
     }, stock_rotation_items_columns_settings);
 
@@ -79,7 +79,7 @@ $(document).ready(function() {
             { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
             { "sType": "anti-the", "aTargets": [ "anti-the" ] }
         ],
-        "sPaginationType": "four_button",
+        "sPaginationType": "full",
         "autoWidth": false,
     }, stock_rotation_columns_settings);
 

@@ -82,7 +82,7 @@
         var columns_settings = [% ColumnsSettings.GetColumns( 'coursereserves', 'courses', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function() {
             var ctable = KohaTable("course_reserves_table", {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "bAutoWidth": false
             }, columns_settings );
         });

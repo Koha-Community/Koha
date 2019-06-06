@@ -444,7 +444,7 @@
 
         $(document).ready(function() {
             var osrlt = $("#opened table").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "order": [[ 2, "asc" ]],
                 "aoColumnDefs": [
                     { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
@@ -456,7 +456,7 @@
             var csrlt = $("#closed table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 // FIXME sort function of additional_fields!
                 "order": [[ 2, "asc" ]],
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
                     { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
@@ -464,7 +464,7 @@
             }));
 
             var manarlt = $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "aoColumnDefs": [
                     { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] },

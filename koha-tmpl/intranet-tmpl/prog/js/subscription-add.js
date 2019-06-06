@@ -406,7 +406,7 @@ function mana_search() {
             $("#mana_search_result .modal-body").html(result);
             $("#mana_search_result_label").text( MSG_MANA_RESULTS );
             $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "four_button",
+                "sPaginationType": "full",
                 "order":[[4, "desc"], [5, "desc"]],
                 "autoWidth": false,
                 "columnDefs": [
