@@ -4,6 +4,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
@@ -44,7 +45,7 @@
     <li><a href="#readingrec" id="tab_onsite_checkout">On-site checkouts</a></li>
   </ul>
   [% END %]
-  <div id="readingrec" style="overflow:hidden">
+  <div id="readingrec">
     <table id="table_readingrec">
       <thead>
         <tr>
@@ -127,16 +128,20 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
-            var table = $("#table_readingrec").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var columns_settings = [% ColumnsSettings.GetColumns('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
+            var table = KohaTable("table_readingrec", {
                 "sPaginationType": "four_button",
-                "aaSorting": [],
+                "aaSorting": [[10, 'desc']],
+                "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 "aoColumnDefs": [
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ]
-            }));
+            }, columns_settings);
+
             var tabs = $("#tabs").tabs({
                 activate: function(e, ui) {
                     var active = tabs.tabs("option", "active" );

@@ -590,6 +590,33 @@ modules:
           columnname: itemtype
         -
           columnname: status
+
+    checkouthistory:
+      checkouthistory-table:
+        - columnname: type
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: date
+        -
+          columnname: title
+        -
+          columnname: author
+        -
+          columnname: call_number
+        -
+          columnname: barcode
+        -
+          columnname: number_of_renewals
+        -
+          columnname: checked_out_on
+        -
+          columnname: checked_out_from
+        -
+          columnname: date_due
+        -
+          columnname: return_date
+
     patron-lists:
       patron-list-table:
         -
