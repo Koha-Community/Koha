@@ -1882,6 +1882,7 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `suspend` BOOLEAN NOT NULL DEFAULT 0,
   `suspend_until` DATETIME NULL DEFAULT NULL,
   `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
+  `item_level_hold` BOOLEAN NOT NULL DEFAULT 0, -- Is the hpld placed at item level
   PRIMARY KEY (`reserve_id`),
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
@@ -1921,6 +1922,7 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `suspend` BOOLEAN NOT NULL DEFAULT 0, -- in this hold suspended (1 for yes, 0 for no)
   `suspend_until` DATETIME NULL DEFAULT NULL, -- the date this hold is suspended until (NULL for infinitely)
   `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
+  `item_level_hold` BOOLEAN NOT NULL DEFAULT 0, -- Is the hpld placed at item level
   PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
