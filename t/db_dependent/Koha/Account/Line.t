@@ -25,7 +25,7 @@ use Test::MockModule;
 
 use DateTime;
 
-use C4::Circulation qw( AddRenewal CanBookBeRenewed LostItem AddIssue AddReturn );
+use C4::Circulation qw( AddRenewal CanBookBeRenewed LostItem AddIssue AddReturn MarkIssueReturned );
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
@@ -448,9 +448,9 @@ subtest 'apply() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Keep account info when related patron, staff, item or cash_register is deleted' => sub {
+subtest 'Keep account info when related patron, staff, item, issue or cash_register is deleted' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -460,24 +460,36 @@ subtest 'Keep account info when related patron, staff, item or cash_register is 
     my $issue = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => { itemnumber => $item->itemnumber }
+            value => { itemnumber => $item->itemnumber, borrowernumber => $patron->borrowernumber }
         }
     );
     my $register = $builder->build_object({ class => 'Koha::Cash::Registers' });
 
     my $line = Koha::Account::Line->new(
-    {
-        borrowernumber => $patron->borrowernumber,
-        manager_id     => $staff->borrowernumber,
-        itemnumber     => $item->itemnumber,
-        debit_type_code    => "OVERDUE",
-        status         => "RETURNED",
-        amount         => 10,
-        interface      => 'commandline',
-        register_id    => $register->id
-    })->store;
+        {
+            borrowernumber  => $patron->borrowernumber,
+            manager_id      => $staff->borrowernumber,
+            itemnumber      => $item->itemnumber,
+            debit_type_code => "OVERDUE",
+            issue_id        => $issue->id,
+            old_issue_id    => undef,
+            status          => "RETURNED",
+            amount          => 10,
+            interface       => 'commandline',
+            register_id     => $register->id
+        }
+    )->store;
 
-    $issue->delete;
+    MarkIssueReturned($patron->borrowernumber, $item->itemnumber, undef, 0 );
+    $line = $line->get_from_storage;
+    is( $line->issue_id, undef, "The account line should not be deleted when the related issue is archived");
+    is( $line->old_issue_id, $issue->id, "The account line link to the archived issue");
+
+    my $old_issue = Koha::Old::Checkouts->find($issue->id);
+    $old_issue->delete;
+    $line = $line->get_from_storage;
+    is( $line->old_issue_id, undef, "The account line should not be deleted when the related old_issue is delete");
+
     $item->delete;
     $line = $line->get_from_storage;
     is( $line->itemnumber, undef, "The account line should not be deleted when the related item is delete");
