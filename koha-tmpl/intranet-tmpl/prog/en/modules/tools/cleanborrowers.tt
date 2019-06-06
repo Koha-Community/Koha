@@ -148,10 +148,10 @@
         <br />
             [% IF patrons_to_delete.size %]
                 <fieldset><legend>What do you want to do for deleted patrons?</legend>
-                <input id="delete" type="radio" name="radio" value="delete" />
+                <input id="delete" type="radio" name="radio" value="delete" title="Delete patrons directly from the database, not recoverable"/>
                 <label for="delete">Permanently delete these patrons</label>
 
-                <br /><input id="trash" type="radio" name="radio" value="trash" />
+                <br /><input id="trash" type="radio" name="radio" value="trash" title="Move patrons to the deleted borrowers table, they can be deleted permanently by the cleanup_database script"/>
                 <label for="trash">Move these patrons to the trash</label>
 
                 <br /><input id="testrun" type="radio" name="radio" value="testrun" checked="checked" />
@@ -230,6 +230,13 @@
 
             $('#branch').change(function() {
                 $('#selectlibrary').submit();
+            });
+            $("form[name='f2']").on('submit',function(){
+                if( $("#delete").attr("checked") ){
+                    if( !confirm(_("These patrons will be permanently removed from the database and cannot be recovered")) ){
+                        return false;
+                    }
+                }
             });
         });
 
