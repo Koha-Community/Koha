@@ -49,6 +49,7 @@ sub do_checkin {
     my $branch = shift;
     my $return_date = shift;
     my $cv_triggers_alert = shift;
+    my $checked_in_ok = shift;
 
     if (!$branch) {
         $branch = 'SIP2';
@@ -69,7 +70,12 @@ sub do_checkin {
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, dt_from_string($return_date));
-    $self->alert(!$return);
+    if ($checked_in_ok){
+        $debug and warn 'not raising alert when AddReturn() does not return a value for $return due to $checked_in_ok being set to true';
+    }
+    else {
+        $self->alert(!$return);
+    }
     # ignoring messages: NotIssued, WasLost, WasTransfered
 
     # biblionumber, biblioitemnumber, itemnumber
