@@ -706,7 +706,7 @@ subtest 'adjust() tests' => sub {
 };
 
 subtest 'checkout() tests' => sub {
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -718,14 +718,17 @@ subtest 'checkout() tests' => sub {
     t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
     my $checkout = AddIssue( $patron, $item->barcode );
 
-    my $line = $account->add_debit({
-        amount    => 10,
-        interface => 'commandline',
-        item_id   => $item->itemnumber,
-        issue_id  => $checkout->issue_id,
-        type      => 'OVERDUE',
-        status    => 'UNRETURNED'
-    });
+    my $line = $account->add_debit(
+        {
+            amount       => 10,
+            interface    => 'commandline',
+            item_id      => $item->itemnumber,
+            issue_id     => $checkout->issue_id,
+            old_issue_id => undef,
+            type         => 'OVERDUE',
+            status       => 'UNRETURNED'
+        }
+    );
 
     my $line_checkout = $line->checkout;
     is( ref($line_checkout), 'Koha::Checkout', 'Result type is correct' );
@@ -743,8 +746,14 @@ subtest 'checkout() tests' => sub {
     is( ref($old_line_checkout), 'Koha::Old::Checkout', 'Result type is correct' );
     is( $old_line_checkout->issue_id, $old_checkout->issue_id, 'Koha::Account::Line->checkout should return the correct old_checkout' );
 
-    $line->issue_id(undef)->store;
+    $old_line_checkout->delete;
+    $line->discard_changes; #NOTE: discard_changes refreshes the whole resultset, get_from_storage only refreshes the unjoined row
     is( $line->checkout, undef, 'Koha::Account::Line->checkout should return undef if no checkout linked' );
+
+    $line->old_issue_id(undef)->store;
+    $line->discard_changes; #NOTE: discard_changes refreshes the whole resultset, get_from_storage only refreshes the unjoined row
+    is( $line->checkout, undef, 'Koha::Account::Line->checkout should return undef if no checkout linked' );
+
 
     $schema->storage->txn_rollback;
 };

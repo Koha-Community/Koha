@@ -91,10 +91,17 @@ Return the checkout linked to this account line if exists
 
 sub checkout {
     my ($self) = @_;
-    return unless $self->issue_id;
 
-    return Koha::Checkouts->find( $self->issue_id )
-      || Koha::Old::Checkouts->find( $self->issue_id );
+    my $result;
+    if ( $self->issue_id ) {
+        my $issue_rs = $self->_result->issue;
+        $result = Koha::Checkout->_new_from_dbic($issue_rs) if $issue_rs;
+    } elsif ( $self->old_issue_id ) {
+        my $old_issue_rs = $self->_result->old_issue;
+        $result = Koha::Old::Checkout->_new_from_dbic($old_issue_rs) if $old_issue_rs;
+    }
+
+    return $result;
 }
 
 =head3 library
