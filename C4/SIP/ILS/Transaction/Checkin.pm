@@ -70,13 +70,12 @@ sub do_checkin {
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, dt_from_string($return_date));
-    if ($checked_in_ok){
-        $debug and warn 'not raising alert when AddReturn() does not return a value for $return due to $checked_in_ok being set to true';
+
+    if ( $checked_in_ok ) {
+        delete $messages->{NotIssued};
+        delete $messages->{LocalUse};
+        $return = 1 unless keys %$messages;
     }
-    else {
-        $self->alert(!$return);
-    }
-    # ignoring messages: NotIssued, WasLost, WasTransfered
 
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode
@@ -88,6 +87,9 @@ sub do_checkin {
         $self->alert_type('99');
     }
     if ($messages->{withdrawn}) {
+        $self->alert_type('99');
+    }
+    if ($messages->{ReturnOfLostItemBlocked}) {
         $self->alert_type('99');
     }
     if ($messages->{Wrongbranch}) {
@@ -126,12 +128,13 @@ sub do_checkin {
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
     }
+    # ignoring messages: NotIssued, WasLost, WasTransfered
 
-    my $alert = defined $self->alert_type;
-    if ( $cv_triggers_alert ) {
-        $self->alert($alert); # Overwrites existing alert value, should set to 0 if there is no alert type
-    } else {
-        $self->alert($alert) if $alert; # Doesn't affect alert value unless an alert type is set
+    if ($cv_triggers_alert) {
+        $self->alert( defined $self->alert_type ); # Overwrites existing alert value, should set to 0 if there is no alert type
+    }
+    else {
+        $self->alert( !$return || defined $self->alert_type );
     }
 
     $self->ok($return);

@@ -1944,6 +1944,7 @@ sub AddReturn {
     }
 
     if ( $item->itemlost and C4::Context->preference("BlockReturnOfLostItems") ) {
+        $messages->{'ReturnOfLostItemBlocked'};
         $doreturn = 0;
     }
 
