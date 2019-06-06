@@ -2649,6 +2649,11 @@ sub MarkIssueReturned {
         # Create the old_issues entry
         my $old_checkout = Koha::Old::Checkout->new($issue->unblessed)->store;
 
+        # Update accountlines
+        my $accountlines =
+          Koha::Account::Lines->search( { issue_id => $issue->issue_id } );
+        $accountlines->update({ old_issue_id => $issue->issue_id, issue_id => undef });
+
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy && $privacy == 2) {
             $old_checkout->anonymize;
