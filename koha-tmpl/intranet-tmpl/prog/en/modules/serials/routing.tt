@@ -59,8 +59,9 @@
                 <td>
                     <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid | html %]" data-routingid="[% member.routingid | html %]">
                     [% rankings = [1 .. m_loop.size] %]
+                    [% SET cur_rank = loop.count() %]
                     [% FOREACH r IN rankings %]
-                        [% IF r == member.ranking %]
+                        [% IF r == cur_rank %]
                           <option selected="selected" value="[% r | html %]">[% r | html %]</option>
                         [% ELSE %]
                           <option value="[% r | html %]">[% r | html %]</option>
