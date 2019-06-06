@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 60;
+use Test::More tests => 61;
 use Test::MockModule;
 use Test::Warn;
 
@@ -737,6 +737,66 @@ subtest 'ChargeReserveFee tests' => sub {
     is( $line->amountoutstanding, $fee , 'amountoutstanding set correctly');
     is( $line->description, "$title" , 'description is title of reserved item');
     is( $line->branchcode, $library->id , "Library id is picked from userenv and stored correctly" );
+};
+
+subtest 'reserves.item_level_hold' => sub {
+    plan tests => 2;
+
+    my $item   = $builder->build_sample_item;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $item->homebranch }
+        }
+    );
+
+    subtest 'item level hold' => sub {
+        plan tests => 2;
+        my $reserve_id =
+          AddReserve( $item->homebranch, $patron->borrowernumber,
+            $item->biblionumber, undef, 1, undef, undef, '', '',
+            $item->itemnumber );
+
+        my $hold = Koha::Holds->find($reserve_id);
+        is( $hold->item_level_hold, 1, 'item_level_hold should be set when AddReserve is called with a specific item' );
+
+        # Mark it waiting
+        ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 1 );
+
+        # Revert the waiting status
+        C4::Reserves::RevertWaitingStatus(
+            { itemnumber => $item->itemnumber } );
+
+        $hold = Koha::Holds->find($reserve_id);
+
+        is( $hold->itemnumber, $item->itemnumber, 'Itemnumber should not be removed when the waiting status is revert' );
+
+        $hold->delete;    # cleanup
+    };
+
+    subtest 'biblio level hold' => sub {
+        plan tests => 3;
+        my $reserve_id = AddReserve( $item->homebranch, $patron->borrowernumber,
+            $item->biblionumber, undef, 1 );
+
+        my $hold = Koha::Holds->find($reserve_id);
+        is( $hold->item_level_hold, 0, 'item_level_hold should not be set when AddReserve is called without a specific item' );
+
+        # Mark it waiting
+        ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 1 );
+
+        $hold = Koha::Holds->find($reserve_id);
+        is( $hold->itemnumber, $item->itemnumber, 'Itemnumber should be set on hold confirmation' );
+
+        # Revert the waiting status
+        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+
+        $hold = Koha::Holds->find($reserve_id);
+        is( $hold->itemnumber, undef, 'Itemnumber should be removed when the waiting status is revert' );
+
+        $hold->delete;
+    };
+
 };
 
 sub count_hold_print_messages {
