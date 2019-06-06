@@ -26,7 +26,6 @@ use C4::Auth qw(check_cookie_auth);
 use CGI;
 use JSON;
 
-
 my $input = new CGI;
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
@@ -40,30 +39,9 @@ if ( $auth_status ne "ok" ) {
 }
 
 
-my $content;
-$content->{resource_id} = $input->param("resource_id");
-$content->{resource_type} = $input->param("resource");
-$content->{message} = $input->param("message");
-Koha::SharedContent::send_entity('', undef, undef, 'resource_comment', $content);
-my $package = "Koha::".ucfirst($input->param('resource'));
-my $resource;
-my $result;
-eval{
-    $result = Koha::SharedContent::get_entity_by_id(
-        scalar $input->param('resource'),
-        scalar $input->param('id')
-    );
-};
-if ( $@ or $result->{code} == 500 ){
-    $resource->{errmsg} =  "Error: mana access got broken, please try again later\n\n ( error: $@ )";
-}
-else{
-    if ( $input->param( 'saveinbase' )) {
-        $resource = { id => $package->new_from_mana($result->{data})->id };
-    }
-    else{
-        $resource = $result->{data};
-    }
-}
+my $resource_id = $input->param("resource_id");
+my $resource_type = $input->param("resource");
+my $comment = $input->param("message");
+my $result = Koha::SharedContent::comment_entity($resource_id, $resource_type, $comment);
 
-print(to_json($resource));
+print(to_json($result));

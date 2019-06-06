@@ -6,5 +6,4 @@
 </div>
 <div id="mana_comment_failed" class="dialog alert mana_comment_status" style="display:none">
     Your comment could not be submitted. Please try again later.
-    <div id="mana_comment_errortext"></div>
 </div>
