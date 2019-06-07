@@ -148,7 +148,7 @@ if ( $op eq 'show' ) {
     # Construct drop-down list values
     my $branches = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;
     my @branches_option;
-    push @branches_option, { value => $_->{value}, lib => $_->{branchname} } for @$branches;
+    push @branches_option, { value => $_->{branchcode}, lib => $_->{branchname} } for @$branches;
     unshift @branches_option, { value => "", lib => "" };
     my @categories_option;
     push @categories_option, { value => $_->categorycode, lib => $_->description } for @patron_categories;
@@ -183,7 +183,7 @@ if ( $op eq 'show' ) {
             name => "branchcode",
             type => "select",
             option => \@branches_option,
-            mandatory => ( grep /branchcode/, @mandatoryFields ) ? 1 : 0,
+            mandatory => 1, #( grep /branchcode/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
