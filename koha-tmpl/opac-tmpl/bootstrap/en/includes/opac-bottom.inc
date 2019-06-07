@@ -301,11 +301,9 @@ $(document).ready(function() {
 });
 </script>
 [% PROCESS jsinclude %]
-[% IF ( OPACUserJS ) %]
+[% IF ( Koha.Preference('OPACUserJS') ) %]
     <script>
-        //<![CDATA[
-        [% OPACUserJS | $raw %]
-        //]]>
+        [% Koha.Preference('OPACUserJS') | $raw %]
     </script>
 [% END %]
 [% IF SCO_login %]
