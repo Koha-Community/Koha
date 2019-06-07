@@ -1,50 +1,53 @@
 [% USE raw %]
+[% USE Koha %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="shortcut icon" href="[% IF ( OpacFavicon ) %][% OpacFavicon | html %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
+<link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | url %]/[% theme | url %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% IF ( bidi ) %]
     [% Asset.css("lib/bootstrap/css/bootstrap-rtl.min.css") | $raw %]
+    [% Asset.css("lib/jquery/jquery-ui-rtl.css") | $raw %]
+    [% Asset.css("css/right-to-left.css") | $raw %]
 [% ELSE %]
     [% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
-[% END %]
-
-[% IF ( bidi ) %]
-    [% Asset.css("lib/jquery/jquery-ui-rtl.css") | $raw %]
-[% ELSE %]
     [% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
 [% END %]
-
-[% SET opaclayoutstylesheet='opac.css' UNLESS opaclayoutstylesheet %]
+[% IF ( Koha.Preference('opaclayoutstylesheet') ) %]
+    [% SET opaclayoutstylesheet = Koha.Preference('opaclayoutstylesheet') %]
+[% ELSE %]
+    [% SET opaclayoutstylesheet = 'opac.css' %]
+[% END %]
 [% IF (opaclayoutstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet | url %]" />
 [% ELSE %]
     [% Asset.css("css/" _ opaclayoutstylesheet) | $raw %]
 [% END %]
-[% IF ( OpacAdditionalStylesheet ) %]
+[% IF ( Koha.Preference('OpacAdditionalStylesheet') ) %]
+    [% SET OpacAdditionalStylesheet = Koha.Preference('OpacAdditionalStylesheet') %]
     [% IF (OpacAdditionalStylesheet.match('^https?:|^\/')) %]
         <link rel="stylesheet" type="text/css" href="[% OpacAdditionalStylesheet | url %]" />
     [% ELSE %]
-        <link rel="stylesheet" type="text/css" href="[% interface | html %]/[% theme | html %]/css/[% OpacAdditionalStylesheet | html %]" />
+        <link rel="stylesheet" type="text/css" href="[% interface | url %]/[% theme | url %]/css/[% OpacAdditionalStylesheet | url %]" />
     [% END %]
 [% END %]
 [% IF ( opac_css_override ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface | html %]/[% theme | html %]/css/[% opac_css_override | html %]" />
+    <link rel="stylesheet" type="text/css" href="[% interface | url %]/[% theme | url %]/css/[% opac_css_override | url %]" />
 [% END %]
 [% Asset.css("css/print.css", { media = "print" }) | $raw %]
-[% IF ( bidi ) %]
-    [% Asset.css("css/right-to-left.css") | $raw %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]
+    <style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>
 [% END %]
-[% IF ( OPACUserCSS ) %]<style>[% OPACUserCSS | $raw %]</style>[% END %]
 [% IF SCO_login %]
     [% SET SCOUserCSS = Koha.Preference('SCOUserCSS') %]
     [% IF SCOUserCSS %]
         <style>[% SCOUserCSS | $raw %]</style>
     [% END %]
 [% END %]
-<link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseURL | url %]/cgi-bin/koha/unapi" />
+[% IF ( Koha.Preference('OPACBaseURL') ) %]
+    <link rel="unapi-server" type="application/xml" title="unAPI" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/unapi" />
+[% END %]
 [% PROCESS cssinclude %]
 <!-- Respond.js brings responsive layout behavior to IE < v.9 -->
 <!--[if lt IE 9]>

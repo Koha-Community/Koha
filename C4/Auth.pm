@@ -549,7 +549,6 @@ sub get_template_and_user {
 
         my @search_groups = Koha::Library::Groups->get_search_groups({ interface => 'opac' });
         $template->param(
-            OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
             AnonSuggestions                       => "" . C4::Context->preference("AnonSuggestions"),
             LibrarySearchGroups                   => \@search_groups,
             opac_name                             => $opac_name,
@@ -582,7 +581,6 @@ sub get_template_and_user {
             'Version'                             => C4::Context->preference('Version'),
             hidelostitems                         => C4::Context->preference("hidelostitems"),
             mylibraryfirst                        => ( C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv ) ? C4::Context->userenv->{'branch'} : '',
-            opaclayoutstylesheet                  => "" . C4::Context->preference("opaclayoutstylesheet"),
             opacbookbag                           => "" . C4::Context->preference("opacbookbag"),
             opaccredits                           => "" . C4::Context->preference("opaccredits"),
             OpacFavicon                           => C4::Context->preference("OpacFavicon"),
