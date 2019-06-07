@@ -61,6 +61,7 @@ sub investigate {
         actionable     => 0,
         advanceable    => 0,
         initiable      => 0,
+        indemand       => 0,
         items_inactive => 0,
         repatriable    => 0,
         rotas_active   => 0,

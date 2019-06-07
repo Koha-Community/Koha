@@ -218,7 +218,7 @@ sub report_full {
     # Summary
     $header .= "STOCKROTATION REPORT\n";
     $header .= "--------------------\n";
-    $body .= sprintf "
+    $body   .= sprintf "
   Total number of rotas:         %5u
     Inactive rotas:              %5u
     Active rotas:                %5u
@@ -273,15 +273,19 @@ sub report_full {
 
 =head3 report_email
 
-  my $email_report = report_email($report);
+  my $email_report = report_email($report, [$branch]);
 
 Returns an arrayref containing a header string, with basic report information,
 and any number of 'per_branch' strings, containing a detailed report about the
 current state of the stockrotation subsystem, from the perspective of those
 individual branches.
 
-$REPORT should be the return value of `investigate`, and $BRANCH should be
-either 0 (to indicate 'all'), or a specific Koha::Library object.
+=over 2
+
+=item $report should be the return value of `investigate`
+=item $branch is optional and should be either 0 (to indicate 'all'), or a specific Koha::Library object.
+
+=back
 
 No data in the database is manipulated by this procedure.
 
@@ -321,7 +325,7 @@ sub report_email {
 
 =head3 _report_per_branch
 
-  my $branch_string = _report_per_branch($branch_details, $branchcode, $branchname);
+  my $branch_string = _report_per_branch($branch_details);
 
 return a string containing details about the stockrotation items and their
 status for the branch identified by $BRANCHCODE.
@@ -344,6 +348,7 @@ sub _report_per_branch {
         my $letter = C4::Letters::GetPreparedLetter(
             module                 => 'circulation',
             letter_code            => "SR_SLIP",
+            branchcode             => $branch->{code},
             message_transport_type => 'email',
             substitute             => $branch
         )
@@ -468,14 +473,14 @@ sub emit {
                 }
             }
             else {
-		$addressee ||= q{};
-                $params->{admin_email} ||= q{};
+                $addressee ||=
+                  defined( $params->{admin_email} )
+                  ? $params->{admin_email} . "\n"
+                  : 'No recipient found' . "\n";
                 my $email =
-                  "-------- Email message --------" . "\n\n" . "To: "
-                  . defined($addressee)               ? $addressee
-                  : defined( $params->{admin_email} ) ? $params->{admin_email}
-                  : '' . "\n"
-                  . "Subject: "
+                  "-------- Email message --------" . "\n\n";
+                $email .= "To: $addressee\n";
+                $email .= "Subject: "
                   . $part->{letter}->{title} . "\n\n"
                   . $part->{letter}->{content};
                 push @emails, $email;
