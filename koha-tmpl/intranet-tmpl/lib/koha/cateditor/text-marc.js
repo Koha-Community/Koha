@@ -95,7 +95,8 @@ define( [ 'marc-record' ], function( MARC ) {
                 }
             } );
 
-            return errors.length ? { errors: errors } : record;
+            if( errors.length ) { record.errors = errors; }
+            return record;
         }
     };
 } );
