@@ -15,7 +15,7 @@ $(document).ready(function() {
                 "sDom": "rt",
                 "columns": [
                     {
-                        "mDataProp": "reservedate_formatted"
+                        "data": { _: "reservedate_formatted", "sort": "reservedate" }
                     },
                     {
                         "mDataProp": function ( oObj ) {
@@ -91,7 +91,7 @@ $(document).ready(function() {
                             else { return oObj.branchcode.escapeHtml() || ""; }
                         }
                     },
-                    { "mDataProp": "expirationdate_formatted" },
+                    { "data": { _: "expirationdate_formatted", "sort": "expirationdate" } },
                     {
                         "mDataProp": function( oObj ) {
                             if ( oObj.priority && parseInt( oObj.priority ) && parseInt( oObj.priority ) > 0 ) {
