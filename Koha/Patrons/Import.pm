@@ -132,6 +132,7 @@ sub import_patrons {
                 }
             }
         }
+        $borrower{cardnumber} = undef unless $borrower{cardnumber};
 
         # Check if borrower category code exists and if it matches to a known category. Pushing error to missing_criticals otherwise.
         $self->check_borrower_category($borrower{categorycode}, $borrowerline, $line_number, \@missing_criticals);
