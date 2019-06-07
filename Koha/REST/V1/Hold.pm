@@ -153,6 +153,7 @@ sub edit {
         reserve_id => $reserve_id,
         branchcode => $branchcode,
         rank => $priority,
+        itemnumber => $reserve->{itemnumber},
     };
 
     C4::Reserves::ModReserve($params);
