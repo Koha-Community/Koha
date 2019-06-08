@@ -31,6 +31,7 @@ my $cgi= new CGI;
 
 checkauth($cgi, 0, {circulate => 'circulate_remaining_permissions'}, 'intranet');
 
+my $op = $cgi->param('op') || "";
 my $biblionumber=$cgi->param('biblionumber');
 my $itemnumber=$cgi->param('itemnumber');
 my $biblioitemnumber=$cgi->param('biblioitemnumber');
@@ -55,22 +56,22 @@ for ($damaged,$itemlost,$withdrawn) {
 
 # modify MARC item if input differs from items table.
 my $item_changes = {};
-if (defined $itemnotes_nonpublic) { # i.e., itemnotes_nonpublic parameter passed from form
+if ( $op eq "set_non_public_note" ) {
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes_nonpublic'}) or $itemnotes_nonpublic ne $item_data_hashref->{'itemnotes_nonpublic'}) {
         $item_changes->{'itemnotes_nonpublic'} = $itemnotes_nonpublic;
     }
 }
-elsif (defined $itemnotes) { # i.e., itemnotes parameter passed from form
+elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from form
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes'}) or $itemnotes ne $item_data_hashref->{'itemnotes'}) {
         $item_changes->{'itemnotes'} = $itemnotes;
     }
-} elsif ($itemlost ne $item_data_hashref->{'itemlost'}) {
+} elsif ( $op eq "set_lost" && $itemlost ne $item_data_hashref->{'itemlost'}) {
     $item_changes->{'itemlost'} = $itemlost;
-} elsif ($withdrawn ne $item_data_hashref->{'withdrawn'}) {
+} elsif ( $op eq "set_withdrawn" && $withdrawn ne $item_data_hashref->{'withdrawn'}) {
     $item_changes->{'withdrawn'} = $withdrawn;
-} elsif ($damaged ne $item_data_hashref->{'damaged'}) {
+} elsif ( $op eq "set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
     $item_changes->{'damaged'} = $damaged;
 } else {
     #nothings changed, so do nothing.
@@ -80,6 +81,6 @@ elsif (defined $itemnotes) { # i.e., itemnotes parameter passed from form
 
 ModItem($item_changes, $biblionumber, $itemnumber);
 
-LostItem($itemnumber, 'moredetail') if $itemlost;
+LostItem($itemnumber, 'moredetail') if $op eq "set_lost";
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");

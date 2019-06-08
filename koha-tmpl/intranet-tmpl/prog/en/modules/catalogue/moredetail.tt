@@ -113,8 +113,7 @@
                             [% END %]
                         [% END %]
                         </select>
-                        <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
-                        <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
+                        <input type="hidden" name="op" value="set_lost" />
                         <input type="submit" name="submit" class="submit" value="Set status" /></form>
                     [% ELSE %]
                         [% FOREACH itemlostloo IN itemlostloop %]
@@ -146,8 +145,7 @@
                 [% END %]
             [% END %]
                     </select>
-                    <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
-                    <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost | html %]" />
+                    <input type="hidden" name="op" value="set_damaged" />
                     <input type="submit" name="submit" class="submit" value="Set status" /></form>
                 [% ELSE %]
                     [% FOREACH itemdamagedloo IN itemdamagedloop %]
@@ -180,8 +178,7 @@
                                     [% END %]
                                 [% END %]
                             </select>
-                            <input type="hidden" name="itemlost" value="[% ITEM_DAT.itemlost | html %]" />
-                            <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
+                            <input type="hidden" name="op" value="set_withdrawn" />
                             <input type="submit" name="submit" class="submit" value="Set status" /></form>
                     [% ELSE %]
                         [% FOREACH itemwithdrawn IN itemwithdrawnloop %]
@@ -249,6 +246,7 @@
                     [% IF ( CAN_user_editcatalogue_edit_items ) %]
                     <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                         <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                        <input type="hidden" name="op" value="set_public_note" />
                         <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes | html %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
                     </form>
                     [% ELSE %]
@@ -262,6 +260,7 @@
                     [% IF ( CAN_user_editcatalogue_edit_items ) %]
                     <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                         <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                        <input type="hidden" name="op" value="set_non_public_note" />
                         <textarea name="itemnotes_nonpublic" rows="2" cols="30">[% ITEM_DAT.itemnotes_nonpublic | html %]</textarea><input type="submit" name="submit" class="submit" value="Update" />
                     </form>
                     [% ELSE %]
