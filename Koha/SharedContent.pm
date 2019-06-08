@@ -52,6 +52,13 @@ sub process_request {
 
     my $response = $userAgent->request($mana_request);
 
+    if ( $response->code != 200 ) {
+        return {
+            code => $response->code,
+            msg  => $response->message,
+        };
+    }
+
     eval { $result = from_json( $response->decoded_content, { utf8 => 1} ); };
     $result->{code} = $response->code;
     if ( $@ ){

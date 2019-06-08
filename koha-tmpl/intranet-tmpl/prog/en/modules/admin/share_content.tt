@@ -19,7 +19,7 @@
             <div class="col-sm-6">
                 [% IF result.code != 201 && result.msg %]
                     <div class="dialog alert" role="alert">
-                        [% result.msg | html %]
+                        Error trying to connect or read response from the Mana server (Code: [% result.code | html %]) [% result.msg | html %]
                     </div>
                 [% END %]
 
