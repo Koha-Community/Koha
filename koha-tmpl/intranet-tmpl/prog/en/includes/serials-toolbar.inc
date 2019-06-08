@@ -4,7 +4,7 @@
     <div id="toolbar" class="btn-toolbar">
         [% IF CAN_user_serials_create_subscription %]
             [% IF biblionumber_for_new_subscription %]
-                <div class="btn-group"><a id="newsubscription" class="btn btn-default btn-sm" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"><i class="fa fa-plus"></i> New subscription</a></div>
+                <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"><i class="fa fa-plus"></i> New subscription for this serial</a></div>
             [% ELSE %]
                 <div class="btn-group"><a id="newsubscription" class="btn btn-default btn-sm" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div>
             [% END %]
@@ -68,7 +68,7 @@
 [% ELSIF CAN_user_serials_create_subscription %]
     <div id="toolbar" class="btn-toolbar">
         [% IF ( biblionumber_for_new_subscription ) %]
-            <div class="btn-group"><a id="newsubscription" class="btn btn-default btn-sm" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"><i class="fa fa-plus"></i> New subscription</a></div>
+            <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription | html %]"><i class="fa fa-plus"></i> New subscription for this serial</a></div>
         [% ELSE %]
             <div class="btn-group"><a id="newsubscription" class="btn btn-default btn-sm" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div>
         [% END %]
