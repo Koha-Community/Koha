@@ -1,6 +1,7 @@
 /* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination Sticky MSG_DATE_FORMAT_US MSG_DATE_FORMAT_ISO MSG_DATE_FORMAT_METRIC MSG_DATE_FORMAT_DMYDOT MSG_CONFIRM_UPDATE_CHILD MSG_CONFIRM_RENEW_PATRON */
 
 $(document).ready(function(){
+
     $("#filteraction_off, #filteraction_on").on('click', function(e) {
         e.preventDefault();
         $('#filters').toggle();
@@ -16,9 +17,13 @@ $(document).ready(function(){
         $("#filteraction_off").toggle();
     }
 
-    searchfield_date_tooltip();
+    searchfield_date_tooltip("");
+    searchfield_date_tooltip('_filter');
     $("#searchfieldstype").change(function() {
-        searchfield_date_tooltip();
+        searchfield_date_tooltip("");
+    });
+    $("#searchfieldstype_filter").change(function() {
+        searchfield_date_tooltip('_filter');
     });
 
     if( CAN_user_borrowers_edit_borrowers ){
@@ -92,9 +97,11 @@ $(document).ready(function(){
     });
 });
 
-function searchfield_date_tooltip() {
-    var MSG_DATE_FORMAT = "";
-    if ( $("#searchfieldstype").val() == 'dateofbirth' ) {
+function searchfield_date_tooltip(filter) {
+    var field = "#searchmember" + filter;
+    var type = "#searchfieldstype" + filter;
+    if ( $(type).val() == 'dateofbirth' ) {
+        var MSG_DATE_FORMAT = "";
         if( dateformat == 'us' ){
             MSG_DATE_FORMAT = MSG_DATE_FORMAT_US;
         } else if( dateformat == 'iso' ){
@@ -104,9 +111,9 @@ function searchfield_date_tooltip() {
         } else if( dateformat == 'dmydot' ){
             MSG_DATE_FORMAT = MSG_DATE_FORMAT_DMYDOT;
         }
-        $('#searchmember').attr("title", MSG_DATE_FORMAT).tooltip('show');
+        $(field).attr("title", MSG_DATE_FORMAT).tooltip('show');
     } else {
-        $('#searchmember').tooltip('destroy');
+        $(field).tooltip('destroy');
     }
 }
 
