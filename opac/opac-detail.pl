@@ -918,7 +918,7 @@ if (C4::Context->preference("virtualshelves") ) {
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     eval {
         $template->param(
-            XISBNS => scalar get_xisbns($isbn)
+            XISBNS => scalar get_xisbns($isbn, $biblionumber)
         );
     };
     if ($@) { warn "XISBN Failed $@"; }
