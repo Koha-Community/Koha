@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
@@ -60,6 +60,24 @@ SKIP: {
     is( $results_thingisbn->[0]->{biblionumber},
         $biblionumber3,
         "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
+}
+
+eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1,$biblionumber1); };
+SKIP: {
+    skip "Problem retrieving ThingISBN", 1
+        unless $@ eq '';
+    is( $results_thingisbn->[0]->{biblionumber},
+        $biblionumber3,
+        "Gets correct biblionumber from a different book with a similar isbn using ThingISBN." );
+}
+
+eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1,$biblionumber3); };
+SKIP: {
+    skip "Problem retrieving ThingISBN", 1
+        unless $@ eq '';
+    is( $results_thingisbn->[0]->{biblionumber},
+        undef,
+        "Doesn't get biblionumber if the biblionumber matches the one passed to the sub." );
 }
 
 # Util subs

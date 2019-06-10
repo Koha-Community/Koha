@@ -72,14 +72,14 @@ sub _get_biblio_from_xisbn {
     return $biblio;
 }
 
-=head1 get_xisbns($isbn);
+=head1 get_xisbns($isbn, $biblionumber);
 
 =head2 $isbn is an ISBN string
 
 =cut
 
 sub get_xisbns {
-    my ( $isbn ) = @_;
+    my ( $isbn, $biblionumber ) = @_;
     my ($response,$thing_response,$syndetics_response,$errors);
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
@@ -107,7 +107,7 @@ sub get_xisbns {
         next if $unique_xisbns->{ $response_data->{content} };
         $unique_xisbns->{ $response_data->{content} }++;
         my $xbiblio= _get_biblio_from_xisbn($response_data->{content});
-        push @xisbns, $xbiblio if $xbiblio;
+        push @xisbns, $xbiblio if $xbiblio && $xbiblio->{biblionumber} ne $biblionumber;
     }
     if ( wantarray ) {
         return (\@xisbns, $errors);
