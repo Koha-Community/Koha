@@ -579,7 +579,10 @@ if [ "$op" = create ] || [ "$op" = request ] || [ "$op" = use ]
 then
     if [ "$mysqlpwd" = "" ]
     then
-        mysqlpwd="$(pwgen -s 16 1)"
+        # over-size, so when problematic chars are removed,
+        # still likely 16 characters left.
+        mysqlpwd="$(pwgen -s -y 32 1)"
+        mysqlpwd="$(echo $mysqlpwd | tr -d :\'\\\<\>\/ | cut -c1-16)"
     fi
 else
     mysqlpwd="$(getinstancemysqlpassword $name)"
