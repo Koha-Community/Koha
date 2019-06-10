@@ -104,7 +104,7 @@
                                     <p>Please choose against which one you would like to authenticate: </p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                            <li><a href="[% casServer.value | url %]">[% casServer.name | html %]</a></li>
+                                            <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
@@ -124,7 +124,7 @@
                                     <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                        <li><a href="[% casServer.value | url %]">[% casServer.name | html %]</a></li>
+                                        <li><a href="[% casServer.value | $raw %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
