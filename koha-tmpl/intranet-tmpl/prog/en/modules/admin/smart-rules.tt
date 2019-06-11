@@ -722,9 +722,9 @@
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH i IN itemtypeloop %]
-                    [% SET holdallowed = CirculationRules.Get( branchcode, undef, i.itemtype, 'holdallowed' ) %]
-                    [% SET hold_fulfillment_policy = CirculationRules.Get( branchcode, undef, i.itemtype, 'hold_fulfillment_policy' ) %]
-                    [% SET returnbranch = CirculationRules.Get( branchcode, undef, i.itemtype, 'returnbranch' ) %]
+                    [% SET holdallowed = CirculationRules.Search( branchcode, undef, i.itemtype, 'holdallowed' ) %]
+                    [% SET hold_fulfillment_policy = CirculationRules.Search( branchcode, undef, i.itemtype, 'hold_fulfillment_policy' ) %]
+                    [% SET returnbranch = CirculationRules.Search( branchcode, undef, i.itemtype, 'returnbranch' ) %]
 
                     [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
                         <tr>
