@@ -18217,7 +18217,7 @@ if( CheckVersion( $DBversion ) ) {
     |);
     if( $OpacNavRight ){
         # If there is a value in the OpacNavRight preference, insert it into opac_news
-        $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, 'OpacNavRight_$langs[0]', '', '$OpacNavRight')");
+        $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "OpacNavRight_$langs[0]", $OpacNavRight);
     }
     # Remove the OpacNavRight system preference
     $dbh->do("DELETE FROM systempreferences WHERE variable='OpacNavRight'");
