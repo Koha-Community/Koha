@@ -150,12 +150,22 @@
         }
     }
 
-    #toolbar .resort {
-        @include border-radius-all( 5px );
-        font-size: 14px;
-        margin: .5em 0;
-        max-width: 100%;
-        padding: 4px 6px;
+    .toolbar {
+        .resort {
+            @include border-radius-all( 5px );
+            font-size: 14px;
+            max-width: 100%;
+            padding: 4px 6px;
+        }
+
+        .pagination {
+            li {
+                a {
+                    font-size: 105%;
+                    padding: .3em .7em;
+                }
+            }
+        }
     }
 
     .mastheadsearch {
@@ -359,7 +369,6 @@
     }
 
     .breadcrumb,
-    #top-pages,
     .menu-collapse {
         display: none;
     }
@@ -453,6 +462,12 @@
             }
         }
     }
+
+    .toolbar {
+        select {
+            width: 220px;
+        }
+    }
 }
 
 @media only screen and ( min-width: 768px ) {
@@ -477,11 +492,19 @@
     }
 
     #didyoumean {
-        margin: 0;
+        margin: .5em 0;
     }
 
     .searchsuggestion {
         white-space: nowrap;
+    }
+
+    .pagination {
+        li {
+            &.page-num {
+                display: inline;
+            }
+        }
     }
 }
 
@@ -498,6 +521,28 @@
         width: 53%;
     }
 
+    .pagination {
+        li {
+            &.page-first,
+            &.page-last {
+                display: inline;
+            }
+
+            &.page-first {
+                a {
+                    border-left: 1px solid #DDD;
+                }
+            }
+
+            &.page-prev,
+            &.page-next {
+                a {
+                    border-left: 0;
+                    border-radius: 0;
+                }
+            }
+        }
+    }
 }
 
 @media only screen and ( max-width: 1040px ) {

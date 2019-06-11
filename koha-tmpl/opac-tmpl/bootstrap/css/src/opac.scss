@@ -722,6 +722,7 @@ input[type="text"]:focus {
 #toolbar.toolbar {
     background-color: #f0f3f3;
     border: 1px solid #f0f3f3;
+
     &.clearfix {
         background-color: #f0f3f3;
     }
@@ -1363,7 +1364,7 @@ div {
 #selections-toolbar,
 .selections-toolbar {
     background: linear-gradient( #B2B2B2 0%, #E0E0E0 14%, #E8E8E8 100% );
-    margin: 0 0 1em;
+    margin: 0;
     padding-left: 10px;
     padding-top: .5em;
 }
@@ -1544,6 +1545,21 @@ div {
 }
 
 /* pagination */
+
+.pagination {
+    display: inline-block;
+    margin: 10px 0 0 10px;
+}
+
+.pagination {
+    li {
+        &.page-first,
+        &.page-last {
+            display: none;
+        }
+    }
+}
+
 .results-pagination {
     background-color: #F3F3F3;
     display: none;

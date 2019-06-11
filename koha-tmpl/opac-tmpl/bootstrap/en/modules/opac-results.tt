@@ -119,8 +119,6 @@
                         <div id="didyoumean">Not what you expected? Check for <a href="/cgi-bin/koha/svc/suggestion?render=standalone&amp;q=[% querystring |uri %]">suggestions</a></div>
                     [% END %]
 
-                    <div id="top-pages">[% INCLUDE 'page-numbers.inc' %]</div>
-
                     [% IF ( koha_spsuggest ) %]
                         Did you mean:
                         <ul style="list-style: none;">
@@ -159,48 +157,52 @@
                                     [% END %]
                                 [% END # IF /searchdesc %]
 
-                                <div id="toolbar" class="toolbar clearfix">
-                                    [% IF ( OpacHighlightedWords ) %]
-                                        <div class="highlight_controls noprint">
-                                            <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
-                                            <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
-                                        </div>
-                                    [% END %]
-                                    [% UNLESS tag %]
-                                        <div class="sort_by pull-right">
-                                            <select id="sort_by" class="resort" name="sort_by"> [% INCLUDE 'resort_form.inc' %] </select>
-                                            <input type="submit" class="btn btn-small clearfix" id="sortsubmit" value="Go" />
-                                        </div>
-                                    [% END %]
-                                </div> <!-- / #toolbar -->
+                                <div id="floating">
+                                    <div id="toolbar" class="toolbar clearfix">
+                                        <div id="top-pages" class="pull-left">[% INCLUDE 'page-numbers.inc' %]</div>
+                                        [% UNLESS tag %]
+                                            <div class="sort_by pull-right">
+                                                <select id="sort_by" class="resort" name="sort_by"> [% INCLUDE 'resort_form.inc' %] </select>
+                                                <input type="submit" class="btn btn-small clearfix" id="sortsubmit" value="Go" />
+                                            </div>
+                                        [% END %]
+                                    </div> <!-- / #toolbar -->
 
-                                <div id="selections-toolbar" class="toolbar noprint">
-                                    <!-- checkall, clearall are now needed for placehold -->
-                                    <span class="checkall"></span>
-                                    <span class="clearall"></span> <span class="sep">|</span>
+                                    <div id="selections-toolbar" class="toolbar noprint">
+                                        [% IF ( OpacHighlightedWords ) %]
+                                            <div class="highlight_controls noprint">
+                                                <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+                                                <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+                                            </div>
+                                            <span class="sep">|</span>
+                                        [% END %]
+                                        <!-- checkall, clearall are now needed for placehold -->
+                                        <span class="checkall"></span>
+                                        <span class="clearall"></span> <span class="sep">|</span>
 
-                                        <span class="links">
-                                            [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                <span class="addto"></span>
-                                            [% END %]
-                                            <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
+                                            <span class="links">
+                                                [% IF ( ( Koha.Preference( 'opacbookbag' ) == 1 ) || ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
+                                                    <span class="addto"></span>
+                                                [% END %]
+                                                <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
 
-                                            [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                                <span id="tagsel_span">
-                                                    <input id="tagsel_tag" class="disabled" type="submit" value="Tag"/>
-                                                </span>
-                                                <span id="tagsel_form" style="display:none">
-                                                    <label for="tagsel_new">New tag:</label>
-                                                    <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
-                                                    <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-small" title="Add" type="submit" value="Add" />
-                                                    <a href="#" id="tagsel_cancel">(done)</a>
-                                                </span>
-                                                <span id="tagsel_status" class="tagsel_tatus" style="display:none;">
-                                                    Tag status here.
-                                                </span>
-                                            [% END %]
-                                        </span> <!-- / .links -->
-                                </div> <!-- / #selections-toolbar -->
+                                                [% IF ( TagsInputEnabled && loggedinusername ) %]
+                                                    <span id="tagsel_span">
+                                                        <input id="tagsel_tag" class="disabled" type="submit" value="Tag"/>
+                                                    </span>
+                                                    <div id="tagsel_form" style="display:none">
+                                                        <label for="tagsel_new">New tag:</label>
+                                                        <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
+                                                        <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-small" title="Add" type="submit" value="Add" />
+                                                        <a href="#" id="tagsel_cancel">(done)</a>
+                                                    </div>
+                                                    <div id="tagsel_status" class="tagsel_tatus" style="display:none;">
+                                                        Tag status here.
+                                                    </div>
+                                                [% END %]
+                                            </span> <!-- / .links -->
+                                    </div> <!-- / #selections-toolbar -->
+                                </div> <!-- /#floating -->
 
                                 <!-- TABLE RESULTS START -->
                                 <table class="table table-striped">
@@ -628,6 +630,7 @@
 [% IF ( RecordedBooksEnabled ) %][% Asset.js("js/recordedbooks.js") | $raw %][% END %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.js("js/authtoresults.js") | $raw %]
+[% Asset.js("lib/hc-sticky.js") | $raw %]
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %]
 [% END %]<script>
 //<![CDATA[
@@ -1040,6 +1043,12 @@ $(document).ready(function(){
 $("input.newtag").on('keydown', function(e){
     if (e.keyCode == 13) { e.preventDefault(); }
 });
+
+    Sticky = $("#floating");
+    Sticky.hcSticky({
+        stickTo: ".searchresults",
+        stickyClass: "floating"
+    });
 
 });
 //]]>
