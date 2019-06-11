@@ -11,7 +11,7 @@ if( CheckVersion( $DBversion ) ) {
         foreach my $lang ( @langs ) {
             print "Inserting opacheader contents into $lang news item...\n";
             # If there is a value in the opacheader preference, insert it into opac_news
-            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, 'opacheader $lang', ?)", undef, "opacheader_$lang", $opacheader);
+            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opacheader_$langs[0]", $opacheader);
         }
     }
     # Remove the opacheader system preference
