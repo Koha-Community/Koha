@@ -89,8 +89,8 @@ sub do_checkin {
     if ($messages->{withdrawn}) {
         $self->alert_type('99');
     }
-    if ($messages->{ReturnOfLostItemBlocked}) {
-        $self->alert_type('99');
+    if ($messages->{WasLost}) {
+        $self->alert_type('99') if C4::Context->preference("BlockReturnOfLostItems");
     }
     if ($messages->{Wrongbranch}) {
         $self->{item}->destination_loc($messages->{Wrongbranch}->{Rightbranch});
@@ -128,7 +128,7 @@ sub do_checkin {
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
     }
-    # ignoring messages: NotIssued, WasLost, WasTransfered
+    # ignoring messages: NotIssued, WasTransfered
 
     if ($cv_triggers_alert) {
         $self->alert( defined $self->alert_type ); # Overwrites existing alert value, should set to 0 if there is no alert type
