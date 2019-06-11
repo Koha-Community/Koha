@@ -191,7 +191,6 @@
 //<![CDATA[
     $(document).ready(function(){
         [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-            $('#sortsubmit').hide();
         $('#order').change(function() {
             $('#sortform').submit();
         });
