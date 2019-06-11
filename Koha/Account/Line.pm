@@ -21,6 +21,7 @@ use Carp;
 use Data::Dumper;
 
 use C4::Log qw(logaction);
+use C4::Overdues qw(GetFine);
 
 use Koha::Account::CreditType;
 use Koha::Account::DebitType;
@@ -452,6 +453,11 @@ sub apply {
 
     my $schema = Koha::Database->new->schema;
 
+    # Item numbers that have had a fine paid where the line has a accounttype
+    # of OVERDUE and a status of UNRETURNED. We might want to try and renew
+    # these items.
+    my $overdue_unreturned = {};
+
     $schema->txn_do( sub {
         for my $debit ( @{$debits} ) {
 
@@ -484,6 +490,19 @@ sub apply {
             $self->amountoutstanding( $available_credit * -1 )->store;
             $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
 
+            # If we need to make a note of the item associated with this line,
+            # in order that we can potentially renew it, do so.
+            # Same logic existing in Koha::Account::pay
+            if (
+                $debit->amountoutstanding == 0 &&
+                $debit->accounttype &&
+                $debit->accounttype eq 'OVERDUE' &&
+                $debit->status &&
+                $debit->status eq 'UNRETURNED'
+            ) {
+                $overdue_unreturned->{$debit->itemnumber} = $debit;
+            }
+
             # Same logic exists in Koha::Account::pay
             if (   $debit->amountoutstanding == 0
                 && $debit->itemnumber
@@ -495,6 +514,36 @@ sub apply {
 
         }
     });
+
+    # If we have overdue unreturned items that have had payments made
+    # against them, check whether the balance on those items is now zero
+    # and, if the syspref is set, renew them
+    # Same logic existing in Koha::Account::pay
+    if (
+        C4::Context->preference('RenewAccruingItemWhenPaid') &&
+        keys %{$overdue_unreturned}
+    ) {
+        foreach my $itemnumber (keys %{$overdue_unreturned}) {
+            # Only do something if this item has no fines left on it
+            my $fine = C4::Overdues::GetFine( $itemnumber, $self->borrowernumber );
+            next if $fine && $fine > 0;
+
+            my ( $renew_ok, $error ) =
+                C4::Circulation::CanBookBeRenewed(
+                    $self->borrowernumber, $itemnumber
+                );
+            if ( $renew_ok ) {
+                C4::Circulation::AddRenewal(
+                    $self->borrowernumber,
+                    $itemnumber,
+                    $overdue_unreturned->{$itemnumber}->{branchcode},
+                    undef,
+                    undef,
+                    1
+                );
+            }
+        }
+    }
 
     return $available_credit;
 }

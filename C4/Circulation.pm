@@ -2909,6 +2909,11 @@ C<$datedue> can be a DateTime object used to set the due date.
 C<$lastreneweddate> is an optional ISO-formatted date used to set issues.lastreneweddate.  If
 this parameter is not supplied, lastreneweddate is set to the current date.
 
+C<$skipfinecalc> is an optional boolean. There may be circumstances where, even if the
+CalculateFinesOnReturn syspref is enabled, we don't want to calculate fines upon renew,
+for example, when we're renewing as a result of a fine being paid (see RenewAccruingItemWhenPaid
+syspref)
+
 If C<$datedue> is the empty string, C<&AddRenewal> will calculate the due date automatically
 from the book's item type.
 
@@ -2920,6 +2925,7 @@ sub AddRenewal {
     my $branch          = shift;
     my $datedue         = shift;
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz);
+    my $skipfinecalc    = shift;
 
     my $item_object   = Koha::Items->find($itemnumber) or return;
     my $biblio = $item_object->biblio;
@@ -2945,7 +2951,7 @@ sub AddRenewal {
     my $schema = Koha::Database->schema;
     $schema->txn_do(sub{
 
-        if ( C4::Context->preference('CalculateFinesOnReturn') ) {
+        if ( !skipfinecalc && C4::Context->preference('CalculateFinesOnReturn') ) {
             _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
         }
         _FixOverduesOnReturn( $borrowernumber, $itemnumber, undef, 'RENEWED' );

@@ -24,10 +24,11 @@ use Data::Dumper;
 use List::MoreUtils qw( uniq );
 use Try::Tiny;
 
-use C4::Circulation qw( ReturnLostItem );
+use C4::Circulation qw( ReturnLostItem CanBookBeRenewed AddRenewal );
 use C4::Letters;
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
+use C4::Overdues qw(GetFine);
 
 use Koha::Patrons;
 use Koha::Account::Lines;
@@ -96,6 +97,10 @@ sub pay {
         && !defined($cash_register) );
 
     my @fines_paid; # List of account lines paid on with this payment
+    # Item numbers that have had a fine paid where the line has a accounttype
+    # of OVERDUE and a status of UNRETURNED. We might want to try and renew
+    # these items.
+    my $overdue_unreturned = {};
 
     my $balance_remaining = $amount; # Set it now so we can adjust the amount if necessary
     $balance_remaining ||= 0;
@@ -113,6 +118,18 @@ sub pay {
         my $new_amountoutstanding = $old_amountoutstanding - $amount_to_pay;
         $fine->amountoutstanding($new_amountoutstanding)->store();
         $balance_remaining = $balance_remaining - $amount_to_pay;
+
+        # If we need to make a note of the item associated with this line,
+        # in order that we can potentially renew it, do so.
+        if (
+            $new_amountoutstanding == 0 &&
+            $fine->accounttype &&
+            $fine->accounttype eq 'OVERDUE' &&
+            $fine->status &&
+            $fine->status eq 'UNRETURNED'
+        ) {
+            $overdue_unreturned->{$fine->itemnumber} = $fine;
+        }
 
         # Same logic exists in Koha::Account::Line::apply
         if (   $new_amountoutstanding == 0
@@ -173,6 +190,18 @@ sub pay {
         my $old_amountoutstanding = $fine->amountoutstanding;
         $fine->amountoutstanding( $old_amountoutstanding - $amount_to_pay );
         $fine->store();
+
+        # If we need to make a note of the item associated with this line,
+        # in order that we can potentially renew it, do so.
+        if (
+            $old_amountoutstanding - $amount_to_pay == 0 &&
+            $fine->accounttype &&
+            $fine->accounttype eq 'OVERDUE' &&
+            $fine->status &&
+            $fine->status eq 'UNRETURNED'
+        ) {
+            $overdue_unreturned->{$fine->itemnumber} = $fine;
+        }
 
         if (   $fine->amountoutstanding == 0
             && $fine->itemnumber
@@ -253,6 +282,36 @@ sub pay {
             borrowernumber => $self->{patron_id},
         }
     );
+
+    # If we have overdue unreturned items that have had payments made
+    # against them, check whether the balance on those items is now zero
+    # and, if the syspref is set, renew them
+    # Same logic exists in Koha::Account::Line::apply
+    if (
+        C4::Context->preference('RenewAccruingItemWhenPaid') &&
+        keys %{$overdue_unreturned}
+    ) {
+        foreach my $itemnumber (keys %{$overdue_unreturned}) {
+            # Only do something if this item has no fines left on it
+            my $fine = C4::Overdues::GetFine( $itemnumber, $self->{patron_id} );
+            next if $fine && $fine > 0;
+
+            my ( $renew_ok, $error ) =
+                C4::Circulation::CanBookBeRenewed(
+                    $self->{patron_id}, $itemnumber
+                );
+            if ( $renew_ok ) {
+                C4::Circulation::AddRenewal(
+                    $self->{patron_id},
+                    $itemnumber,
+                    $library_id,
+                    undef,
+                    undef,
+                    1
+                );
+            }
+        }
+    }
 
     if ( C4::Context->preference("FinesLog") ) {
         logaction(
