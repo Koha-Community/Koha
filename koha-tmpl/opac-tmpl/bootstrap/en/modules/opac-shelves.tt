@@ -159,6 +159,7 @@
                         </h3>
 
                          [% IF ( itemsloop ) %]
+                            <div id="floating">
                              <div id="toolbar" class="toolbar clearfix">
                                  <div class="list-actions">
                                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a> <span class="sep">|</span>
@@ -282,6 +283,7 @@
                                     [% END %]
                                 </span> <!-- / .links -->
                             </div> <!-- / #selections-toolbar -->
+                            </div> <!-- /#floating -->
 
                             <form action="/cgi-bin/koha/opac-shelves.pl" method="post" id="myform" name="myform" class="checkboxed">
                                 [% IF can_manage_shelf %]
@@ -764,6 +766,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+[% Asset.js("lib/hc-sticky.js") | $raw %]
 <script>
 //<![CDATA[
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
@@ -962,6 +965,13 @@ $(function() {
     [% END %]
 
     AdjustRemark();
+
+    Sticky = $("#floating");
+    Sticky.hcSticky({
+        stickTo: "#usershelves",
+        stickyClass: "floating"
+    });
+
 }); // document.ready
 
 function AdjustRemark() {
