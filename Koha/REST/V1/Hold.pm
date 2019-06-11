@@ -49,6 +49,7 @@ sub add {
     my $itemnumber = $body->{itemnumber};
     my $branchcode = $body->{branchcode};
     my $expirationdate = $body->{expirationdate};
+    my $reservenotes = $body->{reservenotes};
     my $borrower = Koha::Patrons->find($borrowernumber);
     unless ($borrower) {
         return $c->render( status  => 404,
@@ -102,7 +103,7 @@ sub add {
     }
 
     my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
-        $biblionumber, undef, $priority, undef, $expirationdate, undef,
+        $biblionumber, undef, $priority, undef, $expirationdate, $reservenotes,
         $biblio->{title}, $itemnumber);
 
     unless ($reserve_id) {
