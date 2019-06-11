@@ -65,7 +65,6 @@ do
     mysql_hostname="localhost"
     if [ "$keepmysql" != "1" ]
     then
-    # The grant creates the user in case it isn't, we don't want our loop to fail if it has already being deleted.
     mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 DROP USER IF EXISTS \`koha_$name\`@\`%\`;
 DROP USER IF EXISTS \`koha_$name\`@\`$mysql_hostname\`;
