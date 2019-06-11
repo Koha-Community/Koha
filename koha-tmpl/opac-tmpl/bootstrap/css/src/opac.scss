@@ -33,9 +33,11 @@ $footer-height: 45px;
     }
 }
 
-.fa.fa-icon-black,
-.fa.fa-icon-white {
-    color: #000;
+.fa {
+    &.fa-icon-black,
+    &.fa-icon-white {
+        color: #000;
+    }
 }
 
 .popup {
@@ -84,6 +86,7 @@ a {
     &.login-link {
         color: #005580;
         font-weight: bold;
+
         &.loginModal-trigger {
             color: #85ca11;
         }
@@ -268,9 +271,9 @@ a {
 }
 
 h1 {
+    color: #727272;
     font-size: 140%;
     line-height: 150%;
-    color: #727272;
 
     &#libraryname {
         background: transparent url( "../images/logo-koha.png" ) no-repeat scroll 0%;
@@ -311,8 +314,8 @@ h4 {
 }
 
 h5 {
-    font-size: 100%;
     color: #727272;
+    font-size: 100%;
 }
 
 caption {
@@ -333,9 +336,9 @@ textarea {
 }
 
 legend {
+    color: #727272;
     font-size: 110%;
     font-weight: bold;
-    color: #727272;
 }
 
 table {
@@ -383,7 +386,7 @@ th {
         text-align: right;
     }
 
-    &[scope=row] {
+    &[scope="row"] {
         background-color: transparent;
         text-align: right;
     }
@@ -414,6 +417,69 @@ th {
     }
 }
 
+.dropdown-menu-right {
+    left: auto;
+    right: 0;
+}
+
+.navbar {
+    .nav {
+        margin-right: 0;
+
+        & > li {
+            & > a {
+                color: #777777;
+                float: none;
+                padding: 10px 15px 10px;
+                text-decoration: none;
+                text-shadow: 0 1px 0 #FFFFFF;
+            }
+
+            & > .dropdown-menu {
+                &.dropdown-menu-right {
+                    &::after {
+                        left: unset;
+                        right: 10px;
+                    }
+
+                    &::before {
+                        left: unset;
+                        right: 9px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.navbar-inverse {
+    .navbar-inner {
+        #members {
+            ul {
+                &.dropdown-menu {
+                    a {
+                        &:hover {
+                            color: #005580;
+                            text-decoration: underline;
+
+                            &.logout {
+                                &:hover {
+                                    color: #E8583C;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .divider-vertical {
+                border-left-color: #CCC;
+                border-right-color: #FCF9FC;
+                margin: 0 5px;
+            }
+        }
+    }
+}
 
 #members {
     display: block;
@@ -426,9 +492,35 @@ th {
         &.logout {
             color: #E8583C;
             font-weight: bold;
-            padding: 0 .3em;
+
+            &:hover {
+                color: #E8583C;
+            }
         }
     }
+
+    .search_history {
+        a {
+            display: inline-block;
+            padding: 10px 0;
+
+            &.logout {
+                font-size: 80%;
+                font-weight: normal;
+            }
+        }
+
+        .divider-vertical {
+            border-left-color: #CCC;
+            border-right-color: #FCF9FC;
+            margin: 0 5px;
+        }
+    }
+}
+
+#loggedinuser-menu {
+    min-width: 300px;
+    padding: .5em 1em;
 }
 
 #moresearches {
@@ -2165,8 +2257,7 @@ input {
 
 #cartDetails,
 #cartUpdate,
-#holdDetails,
-#listsDetails {
+#holdDetails {
     background-color: #FFF;
     border: 1px solid rgba( 0, 0, 0, .2 );
     border-radius: 6px;

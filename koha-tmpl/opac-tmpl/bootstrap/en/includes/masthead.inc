@@ -80,44 +80,70 @@
                             </li> <!-- / .dropdown -->
                         [% END # / IF virtualshelves %]
                     </ul> <!-- / .nav -->
-                    [% IF Koha.Preference( 'virtualshelves' ) == 1 %]<div id="listsDetails"></div>[% END %]
-                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 || opaclanguagesdisplay || EnableOpacSearchHistory %]
-                        <a id="user-menu-trigger" class="pull-right" href="#"><i class="fa fa-user fa-icon-white"></i> <span class="caret"></span></a>
-                        <div id="members">
-                            <ul class="nav pull-right">
 
+                    [% IF Koha.Preference( 'opacuserlogin' ) == 1 ||  Koha.Preference( 'EnableOpacSearchHistory') || Koha.Preference( 'opaclanguagesdisplay' ) %]
+
+                        <div id="members" class="pull-right">
+                            [% IF ( Koha.Preference( 'opaclanguagesdisplay' ) ) %]
                                 [% INCLUDE 'masthead-langmenu.inc' %]
-
-                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    [% UNLESS ( loggedinusername ) %]
-                                        [% IF Koha.Preference('casAuthentication') %]
-                                            [%# CAS authentication is too complicated for modal window %]
-                                            <li><a class="login-link" href="/cgi-bin/koha/opac-user.pl">Log in to your account</a></li>
-                                        [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                                            <li><a class="login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal">Log in to your account</a></li>
+                            [% END %]
+                            <ul class="nav">
+                                <li class="dropdown">
+                                    [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
+                                        [% IF ( loggedinusername ) %]
+                                            <a href="#" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button">
+                                                <i class="fa fa-user fa-icon-white fa-fw"></i>
+                                                <span class="userlabel">Welcome, [% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span>
+                                                <b class="caret"></b>
+                                            </a>
                                         [% ELSE %]
-                                            <li><a href="/cgi-bin/koha/opac-user.pl" class="login-link loginModal-trigger" role="button" data-toggle="modal">Log in to your account</a></li>
+                                            [% IF Koha.Preference('casAuthentication') %]
+                                                [%# CAS authentication is too complicated for modal window %]
+                                                    <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                            [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
+                                                <a class="login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                            [% ELSE %]
+                                                <a href="/cgi-bin/koha/opac-user.pl" class="login-link loginModal-trigger" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                            [% END %]
                                         [% END %]
                                     [% END %]
-                                    [% IF ( loggedinusername ) %]
-                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber | html %]" data-branchcode="[% logged_in_user.branchcode | html %]" data-categorycode="[% logged_in_user.categorycode | html %]">[% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span></a></p></li>
-                                        <li class="divider-vertical"></li>
+
+                                    [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 && loggedinusername ) %]
+                                        <ul aria-labelledby="user-menu" role="menu" class="dropdown-menu dropdown-menu-right">
+                                            <li role="presentation">
+                                                <div id="loggedinuser-menu">
+                                                    <p>
+                                                        <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber | html %]" data-branchcode="[% logged_in_user.branchcode | html %]" >Your account</span></a>
+                                                    </p>
+                                                    [% IF Koha.Preference( 'EnableOpacSearchHistory' ) %]
+                                                        <p class="search_history">
+                                                            <a tabindex="-1" role="menuitem" class="login-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
+                                                            <span class="divider-vertical"></span>
+                                                            <a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash"></i> Clear</a>
+                                                        </p>
+                                                    [% END %]
+                                                    <p>
+                                                        <a tabindex="-1" role="menuitem" class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
+                                                        Log out</a>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     [% END %]
-                                [% END %]
-                                [% IF EnableOpacSearchHistory %]
-                                    <li><p class="navbar-text"><a class="login-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a> [<a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history">x</a>]</p></li>
-                                    <li class="divider-vertical"></li>
-                                [% END %]
-                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    [% IF ( loggedinusername ) %]
-                                        <li><p class="navbar-text">
-                                            <a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">
-                                            Log out</a></p></li>
+                                </li>
+                                [% IF ( !Koha.Preference( 'opacuserlogin') || !loggedinusername ) %]
+                                    [% IF Koha.Preference( 'EnableOpacSearchHistory' ) %]
+                                        <li class="search_history">
+                                            <a href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
+                                            <span class="divider-vertical"></span>
+                                            <a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash"></i> Clear</a>
+                                        </li>
                                     [% END %]
                                 [% END %]
                             </ul>
                         </div> <!-- /members -->
-                    [% END # IF opacuserlogin %]
+                    [% END # IF opacuserlogin || EnableOpacSearchHistory || opaclanguagesdisplay %]
+
                 </div> <!-- /container-fluid -->
             </div> <!-- /navbar-inner -->
         </div> <!-- /navbar -->

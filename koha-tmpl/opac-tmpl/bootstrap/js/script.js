@@ -1,3 +1,4 @@
+/* global enquire readCookie updateBasket delCookie */
 enquire.register("screen and (max-width:608px)", {
     match : function() {
         $("#masthead_search").insertAfter("#select_library");
@@ -58,23 +59,15 @@ $(document).ready(function(){
             return true;
         }
     });
-    $("#user-menu-trigger").on("click",function(){
-        var mem = $("#members");
-        if(mem.is(":hidden")){
-            mem.show();
-        } else {
-            mem.removeAttr("style");
-        }
+
+    $(".menu-collapse-toggle").on("click",function(e){
+        e.preventDefault();
+        $(this).toggleClass("menu-open");
+        $(".menu-collapse").toggle();
     });
 
     $(".loginModal-trigger").on("click",function(e){
         e.preventDefault();
         $("#loginModal").modal("show");
-        $("#members").removeAttr("style");
-    });
-    $("#loginModal").on("hide",function(){
-        if($("#user-menu-trigger").is(":hidden")){
-            $("#members").removeAttr("style");
-        }
     });
 });
