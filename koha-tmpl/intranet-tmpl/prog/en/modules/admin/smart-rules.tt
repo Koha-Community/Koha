@@ -538,7 +538,7 @@
                     [% SET patron_maxonsiteissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxonsiteissueqty' ) %]
                     [% SET max_holds = CirculationRules.Search( branchcode, c, undef, 'max_holds' ) %]
 
-                    [% IF patron_maxissueqty || patron_maxonsiteissueqty || max_holds %]
+                    [% IF  ( patron_maxissueqty.defined && patron_maxissueqty != '' ) || ( patron_maxonsiteissueqty.defined && patron_maxonsiteissueqty != '' ) || ( max_holds.defined && max_holds != '' ) %]
                     <tr>
                         <td>
                             [% IF c == '*'%]
