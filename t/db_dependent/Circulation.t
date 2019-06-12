@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -2431,6 +2431,47 @@ subtest '_FixOverduesOnReturn' => sub {
     is( $accountline->accounttype, 'F', 'Open fine ( account type FU ) has been closed out ( account type F )');
     is( ref $offset, "Koha::Account::Offset", "Found matching offset for fine reduction via dropbox" );
     is( $offset->amount, '-9.000000', "Amount of offset is correct" );
+};
+
+subtest '_FixAccountForLostAndReturned returns undef if patron is deleted' => sub {
+    plan tests => 1;
+
+    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
+
+    my $biblio = $builder->build_sample_biblio({ author => 'Hall, Kylie' });
+
+    my $branchcode  = $library2->{branchcode};
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $branchcode,
+            replacementprice => 99.00,
+            itype            => $itemtype,
+        }
+    );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    ## Start with basic call, should just close out the open fine
+    my $accountline = Koha::Account::Line->new(
+        {
+            borrowernumber => $patron->id,
+            accounttype    => 'L',
+            status         => undef,
+            itemnumber     => $item->itemnumber,
+            amount => 99.00,
+            amountoutstanding => 99.00,
+        }
+    )->store();
+
+    $patron->delete();
+
+    my $return_value = C4::Circulation::_FixAccountForLostAndReturned( $patron->id, $item->itemnumber );
+
+    is( $return_value, undef, "_FixAccountForLostAndReturned returns undef if patron is deleted" );
+
 };
 
 subtest 'Set waiting flag' => sub {
