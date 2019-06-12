@@ -293,7 +293,7 @@
                         [% END # /BLOCK all_checkin_messages %]
 
                         [% IF wrongbranch %]
-                            <div id="wrong-branch-modal" class="modal fade audio-alert-action">
+                            <div id="wrong-branch-modal" class="modal fade audio-alert-action block">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <form method="post" action="returns.pl" name="mainform" id="mainform">
@@ -331,51 +331,56 @@
                         [% END # /IF wrongbranch %]
 
                         <!-- case of a mistake in transfer loop -->
-
-                        [% IF WrongTransfer && !transfertodo %]
-                            <div id="wrong-transfer-modal" class="modal fade audio-alert-action">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3>
-                                                Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]
-                                            </h3>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                                    [% itembarcode | html %]: [% title | html %]
-                                                </a>
-                                            </p>
-                                            [% INCLUDE all_checkin_messages %]
-                                        </div>
-                                        <div class="modal-footer">
-                                            <!-- CONFIRM -->
-                                            <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                                            <!-- PRINT SLIP -->
-                                            <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
-                                            <!-- CANCEL TRANSFER -->
-                                            <form method="post" action="returns.pl" name="mainform">
-                                                <button class="btn btn-default deny" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
-                                                <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
-                                                <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
-                                                <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
-                                                <input type="hidden" name="canceltransfer" value="1" />
-                                                [% FOREACH inputloo IN inputloop %]
-                                                    <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                                                    <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                                                    <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-                                                [% END %]
-                                            </form> <!-- /mainform -->
-                                        </div> <!-- /.modal-footer -->
-                                    </div> <!-- /.modal-content -->
-                                </div> <!-- /.modal-dialog -->
-                            </div> <!-- /#wrong-transfer-modal -->
-                        [% END # /IF WrongTransfer && !transfertodo %]
+                        [% UNLESS ( hold_auto_filled && diffbranch ) %]
+                            [% IF WrongTransfer && !transfertodo %]
+                                [% IF Koha.Preference('TransfersBlockCirc') %]
+                                    <div id="wrong-transfer-modal" class="modal fade audio-alert-action block">
+                                [% ELSE %]
+                                    <div id="wrong-transfer-modal" class="modal fade audio-alert-action noblock">
+                                [% END %]
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3>
+                                                    Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]
+                                                </h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
+                                                        [% itembarcode | html %]: [% title | html %]
+                                                    </a>
+                                                </p>
+                                                [% INCLUDE all_checkin_messages %]
+                                            </div>
+                                            <div class="modal-footer">
+                                                <!-- CONFIRM -->
+                                                <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
+                                                <!-- PRINT SLIP -->
+                                                <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+                                                <!-- CANCEL TRANSFER -->
+                                                <form method="post" action="returns.pl" name="mainform">
+                                                    <button class="btn btn-default deny" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
+                                                    <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+                                                    <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
+                                                    <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+                                                    <input type="hidden" name="canceltransfer" value="1" />
+                                                    [% FOREACH inputloo IN inputloop %]
+                                                        <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                                                        <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                                                        <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                                                    [% END %]
+                                                </form> <!-- /mainform -->
+                                            </div> <!-- /.modal-footer -->
+                                        </div> <!-- /.modal-content -->
+                                    </div> <!-- /.modal-dialog -->
+                                </div> <!-- /#wrong-transfer-modal -->
+                            [% END # /IF WrongTransfer && !transfertodo %]
+                        [% END # /UNLESS hold_auto_filled && diffbranch %]
 
                         [% IF ( found ) %]
                             [% IF ( waiting ) %]
-                                <div id="hold-found1" class="modal fade audio-alert-action">
+                                <div id="hold-found1" class="modal fade audio-alert-action block">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" class="confirm">
@@ -468,7 +473,11 @@
                             [% END # /IF waiting %]
 
                             [% IF transfer || needstransfer %]
-                                <div id="item-transfer-modal" class="modal fade audio-alert-action">
+                                [% IF Koha.Preference('TransfersBlockCirc') %]
+                                    <div id="item-transfer-modal" class="modal fade audio-alert-action block">
+                                [% ELSE %]
+                                    <div id="item-transfer-modal" class="modal fade audio-alert-action noblock">
+                                [% END %]1
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="mainform" id="mainform">
@@ -522,7 +531,7 @@
                             <!-- case of simple return no issue or transfer but with a reservation  -->
                             [% IF ( reserved ) %]
                                 <!-- reserved -->
-                                <div id="hold-found2" class="modal fade audio-alert-action">
+                                <div id="hold-found2" class="modal fade audio-alert-action block">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" class="confirm">
@@ -885,9 +894,14 @@
             $("#barcode").focus();
         }
         $(document).ready(function () {
-            $(".modal").modal({ backdrop: 'static' }).on('shown.bs.modal', function() {
+            $(".modal.block").modal({ backdrop: 'static'}).on('shown.bs.modal', function() {
                 $("#barcode").prop("disabled", true);
                 $(".show_checkin_dialog").show();
+            }).on('hidden.bs.modal', function() {
+                $("#barcode").prop("disabled", false).focus();
+            });
+            $(".modal.noblock").modal({ backdrop: 'static'}).on('shown.bs.modal', function() {
+                $("#barcode").prop("disabled", false).focus();
             }).on('hidden.bs.modal', function() {
                 $("#barcode").prop("disabled", false).focus();
             });
