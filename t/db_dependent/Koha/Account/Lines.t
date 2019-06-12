@@ -21,6 +21,9 @@ use Modern::Perl;
 
 use Test::More tests => 4;
 use Test::Exception;
+use Test::MockModule;
+
+use DateTime;
 
 use Koha::Account;
 use Koha::Account::Lines;

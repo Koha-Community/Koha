@@ -23,10 +23,12 @@ use Test::More tests => 11;
 use Test::MockModule;
 use Test::Exception;
 
+use DateTime;
+
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
-
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -673,6 +675,9 @@ subtest 'pay() tests' => sub {
 
     $schema->storage->txn_begin;
 
+    # Disable renewing upon fine payment
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );
+
     my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
     my $account = $patron->account;
@@ -893,6 +898,70 @@ subtest 'pay() handles lost items when paying by amount ( not specifying the los
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( !$checkout, 'Item was removed from patron account' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'pay() renews items when appropriate' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $account = $patron->account;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', { branch => $library->id } );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item =
+      $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    my $now = dt_from_string();
+    my $seven_weeks = DateTime::Duration->new(weeks => 7);
+    my $five_weeks = DateTime::Duration->new(weeks => 5);
+    my $seven_weeks_ago = $now - $seven_weeks;
+    my $five_weeks_ago = $now - $five_weeks;
+
+    my $checkout = Koha::Checkout->new(
+        {
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date_due       => $five_weeks_ago,
+            branchcode     => $patron->branchcode,
+            issuedate      => $seven_weeks_ago
+        }
+    )->store();
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            issue_id       => $checkout->id,
+            borrowernumber => $patron->id,
+            itemnumber     => $item->id,
+            date           => \'NOW()',
+            accounttype    => 'OVERDUE',
+            status         => 'UNRETURNED',
+            interface      => 'cli',
+            amount => '1',
+            amountoutstanding => '1',
+        }
+    )->store();
+
+    # Enable renewing upon fine payment
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
+    my $called = 0;
+    my $module = new Test::MockModule('C4::Circulation');
+    $module->mock('AddRenewal', sub { $called = 1; });
+    $account->pay(
+        {
+            amount     => '1',
+            library_id => $library->id,
+        }
+    );
+
+    is( $called, 1, 'RenewAccruingItemWhenPaid causes C4::Circulation::AddRenew to be called when appropriate' );
 
     $schema->storage->txn_rollback;
 };

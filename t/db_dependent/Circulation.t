@@ -3419,6 +3419,15 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     is( $new_log_size, $old_log_size + 1, 'renew log successfully added' );
     is( $new_stats_size, $old_stats_size + 1, 'renew statistic successfully added with passed branch' );
 
+    AddReturn( $item->id, $library->id, undef, $date );
+    AddIssue( $patron->unblessed, $item->barcode, dt_from_string() );
+    AddRenewal( $patron->id, $item->id, $library->id, undef, undef, 1 );
+    my $lines_skipped = Koha::Account::Lines->search({
+        borrowernumber => $patron->id,
+        itemnumber     => $item->id
+    });
+    is( $lines_skipped->count, 5, 'Passing skipfinecalc causes fine calculation on renewal to be skipped' );
+
 };
 
 subtest 'ProcessOfflinePayment() tests' => sub {
