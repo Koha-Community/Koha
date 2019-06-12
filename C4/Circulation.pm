@@ -2418,7 +2418,12 @@ sub _FixAccountForLostAndReturned {
     return unless $accountlines->count > 0;
     my $accountline     = $accountlines->next;
     my $total_to_refund = 0;
-    my $account = Koha::Patrons->find( $accountline->borrowernumber )->account;
+
+    return unless $accountline->borrowernumber;
+    my $patron = Koha::Patrons->find( $accountline->borrowernumber );
+    return undef unless $patron; # Patron has been deleted, nobody to credit the return to
+
+    my $account = $patron->account;
 
     # Use cases
     if ( $accountline->amount > $accountline->amountoutstanding ) {
