@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use C4::Context;
 
 use C4::Members;
@@ -658,9 +658,29 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
         undef,
         'We are allowed one from the branch specifically now'
     );
+};
 
+subtest 'empty string means unlimited' => sub {
+    plan tests => 1;
 
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => '',
+                maxonsiteissueqty => 0,
+            }
+        },
+    );
+    is(
+        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        undef,
+        'maxissueqty="" should mean unlimited'
+    );
 
+    teardown();
 };
 
 $schema->storage->txn_rollback;
