@@ -1,7 +1,7 @@
 <h3>Charges</h3>
 
+<form method="post" action="opac-account-pay.pl" class="form-horizontal">
 [% IF ( ACCOUNT_LINES ) %]
-    <form method="post" action="opac-account-pay.pl" class="form-horizontal">
     <table class="table table-bordered table-striped" id="finestable">
         <thead>
             <tr>
@@ -79,39 +79,7 @@
 
     </table>
 
-        [% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
-            <fieldset class="pay-online hidden">
-                <legend>Pay selected fines and charges</legend>
-                    <span class="help-block"><h3>Payment method</h3></span>
 
-                    [% IF Koha.Preference('EnablePayPalOpacPayments') %]
-                        <div class="control-group">
-                            <label class="radio">
-                                <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
-                                <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" class="paypal"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
-                            </label>
-                        </div>
-                    [% END %]
-
-                    [% FOREACH p IN plugins %]
-                        <div class="control-group">
-                            <label class="radio">
-                                <input type="radio" name="payment_method" id="payment_method-[% p.class | html %]" value="[% p.class | html %]" checked="checked">
-                                [% p.get_metadata.name | html %]
-                            </label>
-                        </div>
-                    [% END %]
-
-                    <div class="control-group">
-                        <input type="hidden" id="payment-amount" name="payment_amount" value="0" />
-                        <button id="submit-pay" type="submit" class="btn" disabled="disabled">Make payment</button>
-                        <span id="amount-to-pay-label">
-                            Amount to pay: <span id="amount-to-pay">0.00</span>
-                        </span>
-                    </div>
-            </fieldset>
-        [% END %]
-    </form>
 [% ELSE %]
     <h4>You have no fines or charges</h4>
 [% END %]
@@ -122,6 +90,7 @@
     <table class="table table-bordered table-striped" id="finestable-[% r.id | html %]">
         <thead>
             <tr>
+                [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
                 <th class="title-string">Date</th>
                 <th>Description</th>
                 <th>Fine amount</th>
@@ -134,6 +103,15 @@
             [% FOREACH a IN r.accountlines %]
                 [% SET account_sum = account_sum + a.amountoutstanding %]
                 <tr>
+                    [% IF ENABLE_OPAC_PAYMENTS %]
+                        <td>
+                            [% IF a.amountoutstanding > 0 %]
+                                [% SET DISPLAY_PAYMENT_BLOCK = 1 %]
+                                <input class="checkbox-pay pay-online hidden" name="accountline" type="checkbox" id="checkbox-pay-[% a.accountlines_id | html %]" value="[% a.accountlines_id | html %]">
+                                <input type="hidden" id="amount-[% a.accountlines_id | html %]" value="[% a.amountoutstanding | html %]" />
+                            [% END %]
+                        </td>
+                    [% END %]
                     <td><span title="[% a.date | html %]">[% a.date | $KohaDates %]</span></td>
                     <td>
                         [% PROCESS account_type_description account=a %]
@@ -154,7 +132,40 @@
             </tr>
         </tfoot>
     </table>
+    [% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
+        <fieldset class="pay-online hidden">
+            <legend>Pay selected fines and charges</legend>
+                <span class="help-block"><h3>Payment method</h3></span>
+
+                [% IF Koha.Preference('EnablePayPalOpacPayments') %]
+                    <div class="control-group">
+                        <label class="radio">
+                            <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
+                            <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" class="paypal"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
+                        </label>
+                    </div>
+                [% END %]
+
+                [% FOREACH p IN plugins %]
+                    <div class="control-group">
+                        <label class="radio">
+                            <input type="radio" name="payment_method" id="payment_method-[% p.class | html %]" value="[% p.class | html %]" checked="checked">
+                            [% p.get_metadata.name | html %]
+                        </label>
+                    </div>
+                [% END %]
+
+                <div class="control-group">
+                    <input type="hidden" id="payment-amount" name="payment_amount" value="0" />
+                    <button id="submit-pay" type="submit" class="btn" disabled="disabled">Make payment</button>
+                    <span id="amount-to-pay-label">
+                        Amount to pay: <span id="amount-to-pay">0.00</span>
+                    </span>
+                </div>
+        </fieldset>
+    [% END %]
 [% END %]
+</form>
 
 [%- BLOCK account_type_description -%]
     [%- SWITCH account.accounttype -%]
