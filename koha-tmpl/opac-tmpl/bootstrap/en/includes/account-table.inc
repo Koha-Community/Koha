@@ -9,14 +9,14 @@
                 <th class="title-string">Date</th>
                 <th>Type</th>
                 <th>Description</th>
-                <th>Fine amount</th>
+                <th>Amount</th>
                 <th>Amount outstanding</th>
             </tr>
         </thead>
 
         <tbody>
             [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
-                <tr>
+                <tr [% IF ACCOUNT_LINE.amountoutstanding > 0 || ACCOUNT_LINE.amountoutstanding < 0 %]class="outstanding"[% END%]>
                     [% IF ENABLE_OPAC_PAYMENTS %]
                         <td>
                             [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
@@ -75,6 +75,52 @@
                 <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
                 <td class="sum">[% total | $Price %]</td>
             </tr>
+            [% IF outstanding_credits.total_outstanding < 0 %]
+            [% FOREACH outstanding_credit IN outstanding_credits %]
+                <tr [% IF outstanding_credit.amountoutstanding < 0 %]class="outstanding"[% END%]>
+                    [% IF ENABLE_OPAC_PAYMENTS %]<td></td>[% END %]
+                    <td><span title="[% outstanding_credit.date | html %]">[% outstanding_credit.date | $KohaDates %]</span></td>
+                    <td>
+                        [% SWITCH outstanding_credit.accounttype %]
+                        [% CASE 'Pay' %]Payment
+                        [% CASE 'Pay00' %]Payment (cash via SIP2)
+                        [% CASE 'Pay01' %]Payment (VISA via SIP2)
+                        [% CASE 'Pay02' %]Payment (credit card via SIP2)
+                        [% CASE 'VOID' %]Voided
+                        [% CASE 'N' %]New card
+                        [% CASE 'OVERDUE' %]Fine
+                        [% CASE 'A' %]Account management fee
+                        [% CASE 'M' %]Sundry
+                        [% CASE 'L' %]Lost item
+                        [% CASE 'W' %]Writeoff
+                        [% CASE 'HE' %]Hold waiting too long
+                        [% CASE 'Rent' %]Rental fee
+                        [% CASE 'FOR' %]Forgiven
+                        [% CASE 'LR' %]Lost item fee refund
+                        [% CASE 'PF' %]Lost item processing fee
+                        [% CASE 'PAY' %]Payment
+                        [% CASE 'WO' %]Writeoff
+                        [% CASE 'C' %]Credit
+                        [% CASE 'CR' %]Credit
+                        [%-CASE 'Res' %]Hold fee
+                        [% CASE %][% outstanding_credit.accounttype | html %]
+                        [%- END -%]
+                        [%- PROCESS account_status_description account=outstanding_credit -%]
+                    </td>
+                    <td>
+                        [%- IF outstanding_credit.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', outstanding_credit.payment_type, 1) | html %][% END %]
+                        [%- IF outstanding_credit.description %][% outstanding_credit.description | html %][% END %]
+                        [% IF outstanding_credit.itemnumber %]([% outstanding_credit.item.biblio.title | html %])[% END %]
+                    </td>
+                    <td class="credit">[% outstanding_credit.amount * -1 | $Price %]</td>
+                    <td class="credit">[% outstanding_credit.amountoutstanding * -1 | $Price %]</td>
+                </tr>
+            [% END %]
+            <tr>
+                <th class="sum" colspan="[% COLSPAN | html %]">Total due if credit(s) applied:</th>
+                <td class="sum">[% total + outstanding_credits.total_outstanding | $Price %]</td>
+            </tr>
+            [% END %]
         </tfoot>
 
     </table>

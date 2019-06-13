@@ -41,17 +41,19 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $account = $patron->account;
-my $total = $account->balance;
-my $accountlines = $account->lines;
+my $accountlines = $account->lines->search({ amountoutstanding => { '>=' => 0 }});
+my $total_outstanding = $accountlines->total_outstanding;
+my $outstanding_credits = $account->outstanding_credits;
 
 $template->param(
-    ACCOUNT_LINES => $accountlines,
-    total         => $total,
-    accountview   => 1,
-    message       => scalar $query->param('message') || q{},
-    message_value => scalar $query->param('message_value') || q{},
-    payment       => scalar $query->param('payment') || q{},
-    payment_error => scalar $query->param('payment-error') || q{},
+    ACCOUNT_LINES       => $accountlines,
+    total               => $total_outstanding,
+    outstanding_credits => $outstanding_credits,
+    accountview         => 1,
+    message             => scalar $query->param('message') || q{},
+    message_value       => scalar $query->param('message_value') || q{},
+    payment             => scalar $query->param('payment') || q{},
+    payment_error       => scalar $query->param('payment-error') || q{},
 );
 
 my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
