@@ -338,6 +338,10 @@ sub output_and_exit_if_error {
             elsif( not $logged_in_user->can_see_patron_infos( $current_patron ) ) {
                 $error = 'cannot_see_patron_infos';
             }
+        } elsif ( $params->{module} eq 'cataloguing' ) {
+            # We are testing the record to avoid additem to fetch the Koha::Biblio
+            # But in the long term we will want to get a biblio in parameter
+            $error = 'unknown_biblio' unless $params->{record};
         }
     }
 

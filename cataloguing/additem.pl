@@ -421,6 +421,10 @@ $restrictededition = 0 if ($restrictededition != 0 && $frameworkcode eq 'FA' && 
 
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record = GetMarcBiblio({ biblionumber => $biblionumber });
+
+output_and_exit_if_error( $input, $cookie, $template,
+    { module => 'cataloguing', record => $record } );
+
 my $oldrecord = TransformMarcToKoha($record);
 my $itemrecord;
 my $nextop="additem";
