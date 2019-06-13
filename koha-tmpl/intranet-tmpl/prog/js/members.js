@@ -181,6 +181,8 @@ function update_category_code(category_code) {
     $(mytables).find("li").hide();
     $(mytables).find(" li[data-category_code='"+category_code+"']").show();
     $(mytables).find(" li[data-category_code='']").show();
+    var new_category_type = $("#categorycode_entry").find("option:selected").attr("data-typename");
+    $("input[name*='category_type']").val(new_category_type);
 }
 
 function select_user(borrowernumber, borrower) {
