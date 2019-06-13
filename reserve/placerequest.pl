@@ -86,26 +86,33 @@ if ( $type eq 'str8' && $borrower ) {
             }
         }
 
+        my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
         if ( defined $checkitem && $checkitem ne '' ) {
-            my $item = GetItem($checkitem);
-            if ( $item->{'biblionumber'} ne $biblionumber ) {
-                $biblionumber = $item->{'biblionumber'};
+
+            my $item = Koha::Items->find($checkitem);
+
+            if ( $item->biblionumber ne $biblionumber ) {
+                $biblionumber = $item->biblionumber;
             }
-            if ( CanItemBeReserved($borrower->{'borrowernumber'}, $item->{'itemnumber'}, $branch)->{status} eq 'OK' ) {
+
+            my $can_item_be_reserved = CanItemBeReserved($borrower->{'borrowernumber'}, $item->itemnumber, $branch)->{status};
+
+            if ( $can_item_be_reserved eq 'OK' || ( $can_item_be_reserved ne 'itemAlreadyOnHold' && $can_override ) ) {
                 AddReserve( $branch, $borrower->{'borrowernumber'},
                     $biblionumber, \@realbi, $rank[0], $startdate, $expirationdate, $notes, $title,
                     $checkitem, $found, $itemtype );
             }
+
         } elsif ($multi_hold) {
             my $bibinfo = $bibinfos{$biblionumber};
-            if ( CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
+            if ( $can_override || CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
                 AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,[$biblionumber],
                            $bibinfo->{rank},$startdate,$expirationdate,$notes,$bibinfo->{title},$checkitem,$found);
             }
         } else {
             # place a request on 1st available
             for ( my $i = 0 ; $i < $holds_to_place_count ; $i++ ) {
-                if ( CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
+                if ( $can_override || CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
                     AddReserve( $branch, $borrower->{'borrowernumber'},
                         $biblionumber, \@realbi, $rank[0], $startdate, $expirationdate, $notes, $title,
                         $checkitem, $found, $itemtype );

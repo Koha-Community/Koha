@@ -492,8 +492,11 @@ foreach my $biblionumber (@biblionumbers) {
                 }
                 elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
                     # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
-                    $item->{override} = 1;
-                    $num_override++;
+                    # with the exception of itemAlreadyOnHold because, you know, the item is already on hold
+                    if ( $can_item_be_reserved ne 'itemAlreadyOnHold' ) {
+                        $item->{override} = 1;
+                        $num_override++;
+                    }
 
                     push( @available_itemtypes, $item->{itype} );
                 }
