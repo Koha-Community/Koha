@@ -661,7 +661,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
 };
 
 subtest 'empty string means unlimited' => sub {
-    plan tests => 1;
+    plan tests => 2;
 
     Koha::CirculationRules->set_rules(
         {
@@ -670,7 +670,7 @@ subtest 'empty string means unlimited' => sub {
             itemtype     => '*',
             rules        => {
                 maxissueqty       => '',
-                maxonsiteissueqty => 0,
+                maxonsiteissueqty => '',
             }
         },
     );
@@ -678,6 +678,12 @@ subtest 'empty string means unlimited' => sub {
         C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
         undef,
         'maxissueqty="" should mean unlimited'
+    );
+
+    is(
+        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        undef,
+        'maxonsiteissueqty="" should mean unlimited'
     );
 
     teardown();
