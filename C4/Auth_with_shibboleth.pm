@@ -54,18 +54,17 @@ sub shib_ok {
 sub logout_shib {
     my ($query) = @_;
     my $uri = _get_uri();
-    print $query->redirect( $uri . "/Shibboleth.sso/Logout?return=$uri" );
+    my $return = _get_return($query);
+    print $query->redirect( $uri . "/Shibboleth.sso/Logout?return=$return" );
 }
 
 # Returns Shibboleth login URL with callback to the requesting URL
 sub login_shib_url {
     my ($query) = @_;
 
-    my $param = _get_uri() . get_script_name();
-    if ( $query->query_string() ) {
-        $param = $param . '?' . $query->query_string();
-    }
-    my $uri = _get_uri() . "/Shibboleth.sso/Login?target=$param";
+    my $target = _get_return($query);
+    my $uri = _get_uri() . "/Shibboleth.sso/Login?target=" . $target;
+
     return $uri;
 }
 
@@ -192,6 +191,27 @@ sub _get_uri {
     }
     my $return = $protocol . $uri;
     return $return;
+}
+
+sub _get_return {
+    my ($query) = @_;
+
+    my $uri_base_part = _get_uri() . get_script_name();
+
+    my $uri_params_part = '';
+    foreach my $param ( $query->url_param() ) {
+        # url_param() always returns parameters that were deleted by delete()
+        # This additional check ensure that parameter was not deleted.
+        my $uriPiece = $query->param($param);
+        if ($uriPiece) {
+            $uri_params_part .= '&' if $uri_params_part;
+            $uri_params_part .= $param . '=';
+            $uri_params_part .= URI::Escape::uri_escape( $uriPiece );
+        }
+    }
+    $uri_base_part .= '%3F' if $uri_params_part;
+
+    return $uri_base_part . $uri_params_part;
 }
 
 sub _get_shib_config {
