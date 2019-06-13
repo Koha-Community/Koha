@@ -116,10 +116,18 @@
 </tbody>
 
 <tfoot>
+    <tr>
+        <td class="total" colspan="10">Total due:</td>
+        <td style="text-align: right;">[% total | $Price %]</td>
+    </tr>
     [% IF outstanding_credits.total_outstanding < 0 %]
         <tr>
             <td class="total" colspan="10">Outstanding credits could be applied: </td>
             <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="apply_credits" value="apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
+        </tr>
+        <tr>
+            <td class="total" colspan="10">Total due if credit applied:</td>
+            <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
         </tr>
     [% END %]
     [% IF ( account_grp.total ) %]
@@ -128,14 +136,6 @@
             <td style="text-align: right;">[% account_grp.total | $Price %]</td>
         </tr>
     [% END %]
-    <tr>
-        <td class="total" colspan="10">Total due:</td>
-        [% IF outstanding_credits.total_outstanding < 0 %]
-            <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
-        [% ELSE %]
-            <td style="text-align: right;">[% total | $Price %]</td>
-        [% END %]
-    </tr>
 </tfoot>
 
 </table>
