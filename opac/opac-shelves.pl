@@ -235,7 +235,7 @@ if ( $op eq 'view' ) {
         if ( $shelf->can_be_viewed( $loggedinuser ) ) {
             $category = $shelf->category;
             my $sortfield = $query->param('sortfield') || $shelf->sortfield;    # Passed in sorting overrides default sorting
-            $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber dateadded );
+            $sortfield = 'title' unless grep $_ eq $sortfield, qw( title author copyrightdate itemcallnumber dateadded );
             my $direction = $query->param('direction') || 'asc';
             $direction = 'asc' if $direction ne 'asc' and $direction ne 'desc';
             my ( $page, $rows );
