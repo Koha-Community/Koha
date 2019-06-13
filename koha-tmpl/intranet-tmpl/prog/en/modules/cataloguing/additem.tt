@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-sm-12">
             <main>
-
+                [% INCLUDE 'blocking_errors.inc' %]
 <h1>Items for [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</h1>
 
 [% IF ( barcode_not_unique ) %]<div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div>[% END %]
