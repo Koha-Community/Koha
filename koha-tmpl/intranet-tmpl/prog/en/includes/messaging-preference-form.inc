@@ -11,7 +11,6 @@
         <th>Email</th>
         <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
         <!-- <th>RSS</th> -->
-        [% UNLESS ( messaging_form_inactive ) %]<th>Do not notify</th>[% END %]
     </tr>
     [% FOREACH messaging_preference IN messaging_preferences %]
     <tr>
@@ -190,9 +189,6 @@
       <td>-</td>
       [% END %] -->
 
-      [% UNLESS ( messaging_form_inactive ) %]
-      <td><input type="checkbox" class="none" id="none[% messaging_preference.message_attribute_id | html %]" /></td>
-      [% END %]
     </tr>
     [% END %]
   </table>
