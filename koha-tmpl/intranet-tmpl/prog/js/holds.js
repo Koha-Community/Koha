@@ -109,7 +109,7 @@ $(document).ready(function() {
                                 for ( var i=0; i < oObj.branches.length; i++ ){
                                     var selectedbranch;
                                     var setbranch;
-                                    if ( oObj.branches[i].pickup_location == 0 ) { continue; }
+                                    if ( oObj.branches[i].pickup_location == 0 && !oObj.branches[i].selected ) { continue; }
                                     if( oObj.branches[i].selected ){
 
                                         selectedbranch = " selected='selected' ";
