@@ -33,7 +33,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { circulation => "manage_checkout_notes" },
+        flagsrequired   => { circulate => "manage_checkout_notes" },
     }
 );
 
