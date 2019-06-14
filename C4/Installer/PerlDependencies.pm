@@ -174,6 +174,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.3'
     },
+    'Class::Inspector' => {
+        'usage'    => 'Plugins',
+        'required' => '1',
+        'min_ver'  => '1.31'
+    },
     'HTTP::OAI' => {
         'usage'    => 'Core',
         'required' => '1',
