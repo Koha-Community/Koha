@@ -136,7 +136,7 @@ sub InstallPlugins {
 
             Koha::Plugins::Methods->search({ plugin_class => $plugin_class })->delete();
 
-            foreach my $method ( @{ Class::Inspector->methods($plugin_class) } ) {
+            foreach my $method ( @{ Class::Inspector->methods( $plugin_class, 'public' ) } ) {
                 Koha::Plugins::Method->new(
                     {
                         plugin_class  => $plugin_class,

@@ -182,3 +182,7 @@ sub api_routes {
 
     return decode_json($spec);
 }
+
+sub _private_sub {
+    return "";
+}

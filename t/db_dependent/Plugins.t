@@ -23,7 +23,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 49;
+use Test::More tests => 50;
 
 use C4::Context;
 use Koha::Database;
@@ -115,6 +115,7 @@ Koha::Plugins::Methods->delete;
 Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
 
 ok( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count, 'Test plugin methods added to database' );
+is( Koha::Plugins::Methods->search({ plugin_class => 'Koha::Plugin::Test', plugin_method => '_private_sub' })->count, 0, 'Private methods are skipped' );
 
 my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
 $mock_plugin->mock( 'test_template', sub {
