@@ -27,7 +27,7 @@ use Koha::Item::Transfers;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Deep;
 
 BEGIN {
@@ -96,6 +96,10 @@ ModItemTransfer(
     $branchcode_1,
     $branchcode_2
 );
+
+my $item_obj = Koha::Items->find({ itemnumber => $item_id1 });
+is( $item_obj->holdingbranch, $branchcode_1, "Item should be held at branch that initiates transfer");
+
 ModItemTransfer(
     $item_id2,
     $branchcode_1,
