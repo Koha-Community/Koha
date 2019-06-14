@@ -559,7 +559,7 @@ sub ModItemTransfer {
         VALUES (?, ?, NOW(), ?)");
     $sth->execute($itemnumber, $frombranch, $tobranch);
 
-    ModItem({ holdingbranch => $tobranch }, undef, $itemnumber, { log_action => 0 });
+    ModItem({ holdingbranch => $frombranch }, undef, $itemnumber, { log_action => 0 });
     ModDateLastSeen($itemnumber);
     return;
 }
