@@ -32,6 +32,8 @@ use Koha::Notice::Messages;
 use Koha::Notice::Templates;
 use Koha::DateUtils qw( dt_from_string );
 
+use C4::Circulation qw( MarkIssueReturned );
+
 BEGIN {
     use_ok('C4::Accounts');
     use_ok('Koha::Object');
@@ -569,12 +571,13 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
     my $cli_issue_id_2 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2 } })->{issue_id};
     my $cli_issue_id_3 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3 } })->{issue_id};
     my $cli_issue_id_4 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4 } })->{issue_id};
+    my $cli_issue_id_4X = undef;
 
     my $lostfine;
     my $procfee;
 
     subtest "fee application tests" => sub {
-        plan tests => 40;
+        plan tests => 44;
 
         t::lib::Mocks::mock_preference('item-level_itypes', '1');
         t::lib::Mocks::mock_preference('useDefaultReplacementCost', '0');
@@ -688,8 +691,20 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
         is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and default set");
         is( $procfee->amount, "2.040000",  "Processing fee if processing fee");
         is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
-        $lostfine->delete();
-        $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 6.12, "Perdedor");
+        my $lostfines = Koha::Account::Lines->search({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'LOST' });
+        my $procfees  = Koha::Account::Lines->search({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        ok( $lostfines->count == 1 , "Lost fine cannot be double charged for the same issue_id");
+        ok( $procfees->count == 1,  "Processing fee cannot be double charged for the same issue_id");
+        MarkIssueReturned($cli_borrowernumber, $cli_itemnumber4);
+        $cli_issue_id_4X = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4 } })->{issue_id};
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 6.12, "Perdedor");
+        $lostfines = Koha::Account::Lines->search({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'LOST' });
+        $procfees  = Koha::Account::Lines->search({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        ok( $lostfines->count == 2 , "Lost fine can be charged twice for the same item if they are distinct issue_id's");
+        ok( $procfees->count == 2,  "Processing fee can be charged twice for the same item if they are distinct issue_id's");
+        $lostfines->delete();
+        $procfees->delete();
     };
 
     subtest "basic fields tests" => sub {
@@ -702,7 +717,7 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
         $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'LOST' });
         ok($lostfine, "Lost fine created");
         is($lostfine->manager_id, $staff_id, "Lost fine manager_id set correctly");
-        is($lostfine->issue_id, $cli_issue_id_4, "Lost fine issue_id set correctly");
+        is($lostfine->issue_id, $cli_issue_id_4X, "Lost fine issue_id set correctly");
         is($lostfine->description, "Perdedor", "Lost fine issue_id set correctly");
         is($lostfine->note, '', "Lost fine does not contain a note");
         is($lostfine->branchcode, $branchcode, "Lost fine branchcode set correctly");
@@ -711,7 +726,7 @@ subtest "C4::Accounts::chargelostitem tests" => sub {
         $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
         ok($procfee, "Processing fee created");
         is($procfee->manager_id, $staff_id, "Processing fee manager_id set correctly");
-        is($procfee->issue_id, $cli_issue_id_4, "Processing fee issue_id set correctly");
+        is($procfee->issue_id, $cli_issue_id_4X, "Processing fee issue_id set correctly");
         is($procfee->description, "Perdedor", "Processing fee issue_id set correctly");
         is($procfee->note, C4::Context->preference("ProcessingFeeNote"), "Processing fee contains note matching ProcessingFeeNote");
         is($procfee->branchcode, $branchcode, "Processing fee branchcode set correctly");

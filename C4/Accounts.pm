@@ -71,7 +71,7 @@ FIXME : if no replacement price, borrower just doesn't get charged?
 
 =cut
 
-sub chargelostitem{
+sub chargelostitem {
     my $dbh = C4::Context->dbh();
     my ($borrowernumber, $itemnumber, $amount, $description) = @_;
     my $itype = Koha::ItemTypes->find({ itemtype => Koha::Items->find($itemnumber)->effective_itemtype() });
@@ -83,6 +83,8 @@ sub chargelostitem{
     if ($usedefaultreplacementcost && $amount == 0 && $defaultreplacecost){
         $replacementprice = $defaultreplacecost;
     }
+    my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
+    my $issue_id = $checkout ? $checkout->issue_id : undef;
 
     my $account = Koha::Account->new({ patron_id => $borrowernumber });
     # first make sure the borrower hasn't already been charged for this item
@@ -92,13 +94,12 @@ sub chargelostitem{
         {
             itemnumber     => $itemnumber,
             accounttype    => 'LOST',
+            issue_id       => $issue_id
         }
     )->count();
 
     # OK, they haven't
     unless ($existing_charges) {
-        my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
-        my $issue_id = $checkout ? $checkout->issue_id : undef;
         #add processing fee
         if ($processfee && $processfee > 0){
             my $accountline = $account->add_debit(
