@@ -457,7 +457,10 @@ my @indexes = $cgi->multi_param('idx');
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && !$indexes[1]) {
-    $template->param("ms_".$indexes[0] => 1);
+    my $idx = "ms_".$indexes[0];
+    $idx =~ s/\,/comma/g;  # template toolkit doesn't like variables with a , in it
+    $idx =~ s/-/dash/g;  # template toolkit doesn't like variables with a dash in it
+    $template->param($idx => 1);
 }
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands = $cgi->multi_param('q');
