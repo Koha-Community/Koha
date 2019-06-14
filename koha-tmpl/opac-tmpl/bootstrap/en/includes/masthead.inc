@@ -191,11 +191,11 @@
                                     <option value="se">Series</option>
                                 [% END # /ms_se %]
                                 [% IF ( Koha.Preference('OPACNumbersPreferPhrase') ) %]
-                                    [% IF ( ms_callnum ) %]
-                                            <option selected="selected" value="callnum,phr">Call number</option>
+                                    [% IF ( ms_callnumcommaphr ) %]
+                                        <option selected="selected" value="callnum,phr">Call number</option>
                                     [% ELSE %]
                                         <option value="callnum,phr">Call number</option>
-                                    [% END #/ms_callnum %]
+                                    [% END #/ms_callnumcommaphr %]
                                 [% ELSE %]
                                     [% IF ( ms_callnum ) %]
                                         <option selected="selected" value="callnum">Call number</option>
