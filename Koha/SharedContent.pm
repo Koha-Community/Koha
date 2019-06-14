@@ -28,12 +28,12 @@ use C4::Context;
 
 =head1 NAME
 
-Koha::SharedContent - Set of methods to querying Mana KB server
+Koha::SharedContent - Set of methods ofr querying Mana KB server
 
 =head1 DESCRIPTION
 
 Package for accessing shared content via Mana KB. Methods here are intended
-to build and process queries for requesting Mana KB server.
+to build and process queries for requesting from Mana KB server.
 
 =cut
 
@@ -82,8 +82,8 @@ sub process_request {
 
 Koha::SharedContent::increment_entity_value($entity_type, $mana_entity_id, $field);
 
-Increment of 1 the field $field of a Mana entity. I.e, this is used to count the number
-of Koha instance using a specific entity.
+Increment by 1 the field $field of a Mana entity. I.e, this is used to count the number
+of Koha instances using a specific entity.
 
 =cut
 
