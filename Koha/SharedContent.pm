@@ -28,7 +28,7 @@ use C4::Context;
 
 =head1 NAME
 
-Koha::SharedContent - Set of methods ofr querying Mana KB server
+Koha::SharedContent - Set of methods for querying Mana KB server
 
 =head1 DESCRIPTION
 
