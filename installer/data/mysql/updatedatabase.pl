@@ -18728,6 +18728,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22770 - Fix typo in language description for el in German)\n";
 }
 
+$DBversion = '19.06.00.005';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists( 'reserves', 'item_level_hold' ) ) {
+        $dbh->do( "ALTER TABLE reserves ADD COLUMN item_level_hold BOOLEAN NOT NULL DEFAULT 0 AFTER itemtype" );
+    }
+    unless ( column_exists( 'old_reserves', 'item_level_hold' ) ) {
+        $dbh->do( "ALTER TABLE old_reserves ADD COLUMN item_level_hold BOOLEAN NOT NULL DEFAULT 0 AFTER itemtype" );
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 9834 - Add the reserves.item_level_hold column)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
