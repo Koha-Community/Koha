@@ -87,9 +87,7 @@ sub chargelostitem {
     my $issue_id = $checkout ? $checkout->issue_id : undef;
 
     my $account = Koha::Account->new({ patron_id => $borrowernumber });
-    # first make sure the borrower hasn't already been charged for this item
-    # FIXME this should be more exact
-    #       there is no reason a user can't lose an item, find and return it, and lost it again
+    # first make sure the borrower hasn't already been charged for this item (for this issuance)
     my $existing_charges = $account->lines->search(
         {
             itemnumber     => $itemnumber,
@@ -156,6 +154,20 @@ sub manualinvoice {
 
     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
 
+    my $issue_id;
+    if ( $type eq 'LOST' && $itemnum ) {
+        my $checkouts = Koha::Checkouts->search(
+            { itemnumber => $itemnum, borrowernumber => $borrowernumber } );
+        my $checkout =
+            $checkouts->count
+          ? $checkouts->next
+          : Koha::Old::Checkouts->search(
+            { itemnumber => $itemnum, borrowernumber => $borrowernumber },
+            { order_by   => { 'DESC' => 'returndate' }, rows => 1 }
+        )->next;
+        $issue_id = $checkout ? $checkout->issue_id : undef;
+    }
+
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber    => $borrowernumber,
@@ -165,6 +177,7 @@ sub manualinvoice {
             accounttype       => $type,
             amountoutstanding => $amountleft,
             itemnumber        => $itemnum || undef,
+            issue_id          => $issue_id,
             note              => $note,
             manager_id        => $manager_id,
             interface         => C4::Context->interface,
