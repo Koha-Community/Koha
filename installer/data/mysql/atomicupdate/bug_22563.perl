@@ -51,7 +51,7 @@ if ( CheckVersion($DBversion) ) {
         UPDATE
           accountlines
         SET
-          accounttype = 'LOST',
+          accounttype = 'LOST'
         WHERE
           accounttype = 'L';
     });
@@ -60,7 +60,7 @@ if ( CheckVersion($DBversion) ) {
         UPDATE
           accountlines
         SET
-          accounttype = 'LOST_RETURNED',
+          accounttype = 'LOST_RETURNED'
         WHERE
           accounttype = 'CR';
     });
