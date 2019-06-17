@@ -134,11 +134,11 @@
                                                                 <td>[% borrowers.$borrowernumber.$key | $KohaDates %]</td>
                                                                 <td>[% pm.$key | $KohaDates %]</td>
                                                             [% ELSIF key == 'branchcode' %]
-                                                                <td>[% Branches.GetName( borrowers.$borrowernumber.$key )  %]</td>
-                                                                <td>[% Branches.GetName( pm.$key ) %]</td>
+                                                                <td>[% Branches.GetName( borrowers.$borrowernumber.$key ) |html %]</td>
+                                                                <td>[% Branches.GetName( pm.$key ) |html %]</td>
                                                             [% ELSE %]
-                                                                <td>[% borrowers.$borrowernumber.$key %]</td>
-                                                                <td>[% pm.$key %]</td>
+                                                                <td>[% borrowers.$borrowernumber.$key |html %]</td>
+                                                                <td>[% pm.$key |html %]</td>
                                                             [% END %]
                                                         </tr>
                                                     [% END %]
@@ -159,8 +159,8 @@
                                           [% FOREACH attribute_group IN borrowers.$borrowernumber.modified_attributes %]
                                             <tr>
                                                 <td>[% attribute_group.type.description %]</td>
-                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type %]</td>
-                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type %]</td>
+                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.before type=attribute_group.type |html %]</td>
+                                                <td>[% PROCESS display_extended_attributes attrs=attribute_group.after type=attribute_group.type |html %]</td>
                                             </tr>
                                           [% END %]
                                         </table>

@@ -852,9 +852,9 @@ function checkMultiHold() {
 	  [% END %]
 	  </a>
         </td>
-        <td>[% reserveloo.notes %]</td>
-        <td>[% reserveloo.date %]</td>
-        <td>[% reserveloo.expirationdate %]</td>
+        <td>[% reserveloo.notes |html %]</td>
+        <td>[% reserveloo.date |html %]</td>
+        <td>[% reserveloo.expirationdate |html %]</td>
         <td>
     [% IF ( reserveloo.found ) %]
     	[% IF ( reserveloo.atdestination ) %]
