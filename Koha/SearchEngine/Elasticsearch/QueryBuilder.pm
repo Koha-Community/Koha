@@ -675,6 +675,7 @@ our %index_field_convert = (
     'mc-ccode' => 'ccode',
     'branch' => 'homebranch',
     'mc-loc' => 'location',
+    'loc' => 'location',
     'stocknumber' => 'number-local-acquisition',
     'inv' => 'number-local-acquisition',
     'bc' => 'barcode',
