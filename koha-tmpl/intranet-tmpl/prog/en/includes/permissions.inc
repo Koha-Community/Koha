@@ -43,7 +43,7 @@
         <span class="main_permission reports_permission">Allow access to the reports module</span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'staffaccess' -%]
-        <span class="main_permission staffaccess_permission">Allow staff members to modify permissions for other staff members</span>
+        <span class="main_permission staffaccess_permission">Allow staff members to modify permissions and passwords for other staff members</span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'coursereserves' -%]
         <span class="main_permission coursereserves_permission">Course reserves</span>

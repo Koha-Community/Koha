@@ -13,7 +13,7 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (14,'editauthorities','Edit authorities',0),
 (15,'serials','Manage serial subscriptions',0),
 (16,'reports','Allow access to the reports module',0),
-(17,'staffaccess','Allow staff members to modify permissions for other staff members',0),
+(17,'staffaccess','Allow staff members to modify permissions and passwords for other staff members',0),
 (18,'coursereserves','Course reserves',0),
 (19, 'plugins', 'Koha plugins', '0'),
 (20, 'lists', 'Lists', 0),
