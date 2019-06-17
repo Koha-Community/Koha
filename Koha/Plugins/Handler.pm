@@ -66,7 +66,6 @@ sub run {
     if ( $has_method ) {
         load $plugin_class;
         my $plugin = $plugin_class->new( { cgi => $cgi, enable_plugins => $args->{'enable_plugins'} } );
-        my @return = $plugin->$plugin_method( $params );
         return $plugin->$plugin_method( $params );
     } else {
         warn "Plugin does not have method $plugin_method";
