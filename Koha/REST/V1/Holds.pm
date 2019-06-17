@@ -464,6 +464,7 @@ our $to_api_mapping = {
     suspend          => 'suspended',
     suspend_until    => 'suspended_until',
     itemtype         => 'item_type',
+    item_level_hold  => 'item_level',
 };
 
 =head3 $to_model_mapping
@@ -486,6 +487,7 @@ our $to_model_mapping = {
     suspended         => 'suspend',
     suspended_until   => 'suspend_until',
     item_type         => 'itemtype',
+    item_level        => 'item_level_hold',
 };
 
 1;

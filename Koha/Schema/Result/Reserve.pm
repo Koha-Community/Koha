@@ -349,8 +349,9 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->add_columns(
-    '+lowestPriority' => { is_boolean => 1 },
-    '+suspend' => { is_boolean => 1 }
+    '+item_level_hold' => { is_boolean => 1 },
+    '+lowestPriority'  => { is_boolean => 1 },
+    '+suspend'         => { is_boolean => 1 }
 );
 
 1;
