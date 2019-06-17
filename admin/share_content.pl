@@ -39,6 +39,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op = $query->param('op') || q{};
+my $mana_base = C4::Context->config('mana_config') || '';
+# Check the mana server actually exists at the other end
+my $bad_url;
+if ($mana_base) {
+    my $request = HTTP::Request->new( GET => $mana_base );
+    my $result = Koha::SharedContent::process_request($request);
+    $bad_url = 1 unless (exists($result->{version}));
+}
 
 if ( $op eq 'save' ) {
     my $auto_share = $query->param('autosharewithmana') || q{};
@@ -64,8 +72,7 @@ if ( $op eq 'send' ) {
     my $content = to_json({name => $name,
                            email => $email});
 
-    my $mana_ip = C4::Context->config('mana_config');
-    my $url = "$mana_ip/getsecuritytoken";
+    my $url = "$mana_base/getsecuritytoken";
     my $request = HTTP::Request->new( POST => $url );
     $request->content($content);
     my $result = Koha::SharedContent::process_request($request);
@@ -78,10 +85,9 @@ if ( $op eq 'send' ) {
 }
 
 
-my $mana_url = C4::Context->config('mana_config') || q{};
-
 $template->param(
-    mana_url    => $mana_url,
+    mana_url    => $mana_base,
+    bad_url     => $bad_url,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

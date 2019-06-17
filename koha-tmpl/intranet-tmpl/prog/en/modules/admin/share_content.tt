@@ -33,6 +33,10 @@
                     <div class="dialog alert" role="alert">
                         Mana configuration is currently empty. This feature will not work. Please contact your site administrator.
                     </div>
+                [% ELSIF (bad_url) %]
+                    <div class="dialog alert" role="alert">
+                        Cannot detect mana server at <strong>[% mana_url | url %]</strong>, please ask an administrator to check your configuration.
+                    </div>
                 [% END %]
 
                 <h1>Share content with the Koha community using Mana KB</h1>
