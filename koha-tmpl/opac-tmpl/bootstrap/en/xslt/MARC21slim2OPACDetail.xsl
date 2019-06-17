@@ -226,7 +226,7 @@
                         </xsl:call-template>
             </a>
             <xsl:call-template name="part"/>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text> ; </xsl:text></xsl:otherwise></xsl:choose>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text> ; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
 
         <!-- 490 Series not traced, Ind1 = 0 -->
