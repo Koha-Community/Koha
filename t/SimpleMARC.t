@@ -1728,7 +1728,7 @@ subtest 'field_equals' => sub {
                 field => '008',
                 subfield => '',
             });
-        is_deeply( $match, [], '008 control field not equal to "Donald"' );
+        is_deeply( $match, [], '008 control field not equal to "eng"' );
 
         $match = Koha::SimpleMARC::field_equals({
                 record => $record,
@@ -1737,6 +1737,6 @@ subtest 'field_equals' => sub {
                 subfield => '',
                 is_regex => 1,
             });
-        is_deeply( $match, [1], 'first 008 control field matches "Donald"' );
+        is_deeply( $match, [1], 'first 008 control field matches "eng"' );
     };
 };
