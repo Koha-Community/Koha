@@ -46,7 +46,7 @@
   [% END %]
   [% IF ( facets_loo.expandable ) %]
       <li class="showmore">
-          <a href="[% url | url %][% IF offset %]&amp;offset=[% offset | uri %][% END %]&amp;expand=[% facets_loo.expand | uri %]#[% facets_loo.type_id | uri %]">Show more</a>
+          <a href="[% url | $raw %][% IF offset %]&amp;offset=[% offset | uri %][% END %]&amp;expand=[% facets_loo.expand | uri %]#[% facets_loo.type_id | uri %]">Show more</a>
       </li>
   [% END %]
 </ul></li>
