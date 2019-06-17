@@ -23,7 +23,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 50;
+use Test::More tests => 51;
 
 use C4::Context;
 use Koha::Database;
@@ -105,6 +105,29 @@ subtest 'Version upgrade tests' => sub {
     my $version = $plugin->retrieve_data('__INSTALLED_VERSION__');
 
     is( $version, $plugin->get_metadata->{version}, 'Version has been populated correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_enabled() tests' => sub {
+
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    # Make sure there's no previous installs or leftovers on DB
+    Koha::Plugins::Methods->delete;
+    $schema->resultset('PluginData')->delete;
+
+    my $plugin = Koha::Plugin::Test->new({ enable_plugins => 1, cgi => CGI->new });
+    ok( $plugin->is_enabled, 'Plugins enabled by default' );
+
+    # disable
+    $plugin->disable;
+    ok( !$plugin->is_enabled, 'Calling ->disable disables the plugin' );
+
+    # enable
+    $plugin->enable;
+    ok( $plugin->is_enabled, 'Calling ->enable enabled the plugin' );
 
     $schema->storage->txn_rollback;
 };

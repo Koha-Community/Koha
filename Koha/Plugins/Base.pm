@@ -272,6 +272,20 @@ sub _version_compare {
     return 0;
 }
 
+=head2 is_enabled
+
+Method that returns wether the plugin is enabled or not
+
+$plugin->enable
+
+=cut
+
+sub is_enabled {
+    my ($self) = @_;
+
+    return $self->retrieve_data( '__ENABLED__' );
+}
+
 =head2 enable
 
 Method for enabling plugin
