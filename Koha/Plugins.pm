@@ -70,33 +70,33 @@ If you pass multiple keys in the metadata hash, all keys must match.
 
 sub GetPlugins {
     my ( $self, $params ) = @_;
-    my $method = $params->{method};
+
+    my $method       = $params->{method};
     my $req_metadata = $params->{metadata} // {};
 
-    my $dbh = C4::Context->dbh;
-    my $plugin_classes = $dbh->selectcol_arrayref('SELECT DISTINCT(plugin_class) FROM plugin_methods');
+    my $filter = ( $method ) ? { plugin_method => $method } : undef;
+
+    my $plugin_classes = Koha::Plugins::Methods->search(
+        $filter,
+        {   columns  => 'plugin_class',
+            distinct => 1
+        }
+    )->_resultset->get_column('plugin_class');
+
     my @plugins;
 
     # Loop through all plugins that implement at least a method
-    foreach my $plugin_class (@$plugin_classes) {
-        # filter the plugin out by method
-        next
-            if $method
-            && !Koha::Plugins::Methods->search(
-            { plugin_class => $plugin_class, plugin_method => $method } )->count;
+    while ( my $plugin_class = $plugin_classes->next ) {
 
         load $plugin_class;
-        my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
+        my $plugin = $plugin_class->new({
+            enable_plugins => $self->{'enable_plugins'}
+                # loads even if plugins are disabled
+                # FIXME: is this for testing without bothering to mock config?
+        });
 
-        my $plugin_enabled = $plugin->retrieve_data('__ENABLED__');
-        $plugin->{enabled} = $plugin_enabled;
-
-        # Want all plugins. Not only enabled ones.
-        if ( defined($params->{all}) && $params->{all} ) {
-            $plugin_enabled = 1;
-        }
-
-        next unless $plugin_enabled;
+        next unless $plugin->is_enabled or
+                    defined($params->{all}) && $params->{all};
 
         # filter the plugin out by metadata
         my $plugin_metadata = $plugin->get_metadata;
@@ -119,6 +119,9 @@ Koha::Plugins::InstallPlugins()
 This method iterates through all plugins physically present on a system.
 For each plugin module found, it will test that the plugin can be loaded,
 and if it can, will store its available methods in the plugin_methods table.
+
+NOTE: We re-load all plugins here as a protective measure in case someone
+has removed a plugin directly from the system without using the UI
 
 =cut
 
