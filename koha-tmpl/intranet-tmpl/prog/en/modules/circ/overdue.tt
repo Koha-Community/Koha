@@ -63,7 +63,7 @@
         <tr>
           <td><span title="[% overdueloo.duedate | html %]">[% overdueloo.duedate | $KohaDates %]</span></td>
           <td>
-            [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+            [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
                 [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>][% END %]
                 [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
