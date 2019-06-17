@@ -86,9 +86,9 @@ if ($plugins_enabled) {
                 $template->param( ERRORS => [ \%errors ] );
                 output_html_with_http_headers $input, $cookie, $template->output;
                 exit;
-            } else {
-                Koha::Plugins->new()->InstallPlugins();
             }
+
+            Koha::Plugins->new()->InstallPlugins();
         }
     } elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
         warn "Problem uploading file or no file uploaded.";
