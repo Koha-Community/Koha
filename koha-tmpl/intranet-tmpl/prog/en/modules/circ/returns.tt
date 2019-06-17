@@ -393,10 +393,10 @@
                     <div class="modal-footer">
                         [% IF !transfer %]
                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve"><i class="fa fa-check"></i> Yes</button>
-                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button><button type="submit" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
+                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button><button type="submit" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
                         [% ELSE %]
                         <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
+                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
                         [% END %]
                         <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
