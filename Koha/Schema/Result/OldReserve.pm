@@ -137,6 +137,12 @@ __PACKAGE__->table("old_reserves");
   is_nullable: 1
   size: 10
 
+=head2 item_level_hold
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -192,6 +198,8 @@ __PACKAGE__->add_columns(
   },
   "itemtype",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  "item_level_hold",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -289,8 +297,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ynb6NtiTN8ZZur2YCvxlNg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-06-17 07:24:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZgGAW7ODBby3hGNJ41eeMA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

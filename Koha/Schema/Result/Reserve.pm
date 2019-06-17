@@ -141,6 +141,12 @@ __PACKAGE__->table("reserves");
   is_nullable: 1
   size: 10
 
+=head2 item_level_hold
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -206,6 +212,8 @@ __PACKAGE__->add_columns(
   },
   "itemtype",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
+  "item_level_hold",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -313,8 +321,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2GCET9quFpUvzuN7MUWZNw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-06-17 07:24:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OMFqEWyKqFTcYj7vAFXy/g
 
 __PACKAGE__->belongs_to(
   "item",
