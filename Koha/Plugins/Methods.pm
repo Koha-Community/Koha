@@ -48,7 +48,7 @@ sub _type {
 =cut
 
 sub object_class {
-    return 'Koha::Plugin::Method';
+    return 'Koha::Plugins::Method';
 }
 
 1;
