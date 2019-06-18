@@ -95,7 +95,7 @@ $(document).ready(function() {
 <h1>Serial edition <i>[% bibliotitle | html %]</i>
     [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) | html %])[% END %]
     [% IF ( callnumber ) %] callnumber: [% callnumber | html %][% END %]</h1>
-[% IF internalnotes %]<p>Nonpublic note: [% internalnotes | html %]</p>[% END %]
+[% IF internalnotes %]<p>Nonpublic note: [% internalnotes | html | html_line_break %]</p>[% END %]
 <form method="post" name="f" class="noEnterSubmit" action="serials-edit.pl" id="serials_edit">
 
 [% IF ( Errors ) %]
