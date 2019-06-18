@@ -124,20 +124,25 @@ my $ok = GetOptions(
     'admin-email|a=s' => \$admin_email,
     'branchcode|b=s'  => sub {
         my ( $opt_name, $opt_value ) = @_;
-        my $branches = Koha::Libraries->search( {},
-            { order_by => { -asc => 'branchname' } } );
-        my $brnch = $branches->find($opt_value);
-        if ($brnch) {
-            $branch = $brnch;
-            return $brnch;
+        if ( $opt_value eq 'all' ) {
+            $branch = 0;
         }
         else {
-            printf("Option $opt_name should be one of (name -> code):\n");
-            while ( my $candidate = $branches->next ) {
-                printf( "  %-40s  ->  %s\n",
-                    $candidate->branchname, $candidate->branchcode );
+            my $branches = Koha::Libraries->search( {},
+                { order_by => { -asc => 'branchname' } } );
+            my $brnch = $branches->find($opt_value);
+            if ($brnch) {
+                $branch = $brnch;
+                return $brnch;
             }
-            exit 1;
+            else {
+                printf("Option $opt_name should be one of (name -> code):\n");
+                while ( my $candidate = $branches->next ) {
+                    printf( "  %-40s  ->  %s\n",
+                        $candidate->branchname, $candidate->branchcode );
+                }
+                exit 1;
+            }
         }
     },
     'execute|x'  => \$execute,
