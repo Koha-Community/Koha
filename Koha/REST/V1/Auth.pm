@@ -71,7 +71,13 @@ sub under {
                 "Configuration prevents the usage of this endpoint by unprivileged users");
         }
 
-        $status = authenticate_api_request($c);
+        if ( $c->req->url->to_string eq '/api/v1/oauth/token' ) {
+            # Requesting a token shouldn't go through the API authenticaction chain
+            $status = 1;
+        }
+        else {
+            $status = authenticate_api_request($c);
+        }
 
     } catch {
         unless (blessed($_)) {
