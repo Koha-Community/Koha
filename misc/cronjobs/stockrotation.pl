@@ -164,6 +164,11 @@ exit 1 unless ($ok);
 
 $send_email++ if ($send_all);    # if we send all, then we must want emails.
 
+if ( $send_email && !$admin_email && ($report eq 'full')) {
+    printf("Sending the full report by email requires --admin-email.\n");
+    exit 1;
+}
+
 =head2 Helpers
 
 =head3 execute
@@ -439,14 +444,12 @@ sub emit {
             # We have a report to send, or we want to send even empty
             # reports.
 
-            # Send to branch
+            # Select email address to send to
             my $addressee;
             if ( $part->{email_address} ) {
                 $addressee = $part->{email_address};
             }
             elsif ( !$part->{no_branch_email} ) {
-
-#push @emails, "***We tried to send a branch report, but we have no email address for this branch.***\n\n";
                 $addressee = C4::Context->preference('KohaAdminEmailAddress')
                   if ( C4::Context->preference('KohaAdminEmailAddress') );
             }
@@ -474,17 +477,15 @@ sub emit {
                         }
                       )
                       or warn
-"can't enqueue letter $part->{letter} for $params->{admin_email}";
+                      "can't enqueue letter $part->{letter} for $params->{admin_email}";
                 }
             }
             else {
-                $addressee ||=
-                  defined( $params->{admin_email} )
-                  ? $params->{admin_email} . "\n"
-                  : 'No recipient found' . "\n";
                 my $email =
                   "-------- Email message --------" . "\n\n";
                 $email .= "To: $addressee\n";
+                $email .= "Cc: " . $params->{admin_email} . "\n"
+                  if ( $params->{admin_email} );
                 $email .= "Subject: "
                   . $part->{letter}->{title} . "\n\n"
                   . $part->{letter}->{content};
