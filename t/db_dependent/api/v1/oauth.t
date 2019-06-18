@@ -21,6 +21,7 @@ use Test::More;
 use Test::MockModule;
 use Test::Mojo;
 
+use MIME::Base64;
 use Module::Load::Conditional qw(can_load);
 
 use Koha::ApiKeys;
@@ -43,16 +44,9 @@ else {
 
 subtest '/oauth/token tests' => sub {
 
-    plan tests => 27;
+    plan tests => 10;
 
-    $schema->storage->txn_begin;
-
-    my $patron = $builder->build_object({
-        class => 'Koha::Patrons',
-        value  => {
-            flags => 0 # no permissions
-        },
-    });
+    t::lib::Mocks::mock_preference('RESTOAuth2ClientCredentials', 0);
 
     # Missing parameter grant_type
     $t->post_ok('/api/v1/oauth/token')
@@ -70,60 +64,20 @@ subtest '/oauth/token tests' => sub {
         ->status_is(403)
         ->json_is({error => 'unauthorized_client'});
 
-    my $api_key = Koha::ApiKey->new({ patron_id => $patron->id, description => 'blah' })->store;
+    subtest 'Client credentials in body' => sub {
 
-    my $formData = {
-        grant_type    => 'client_credentials',
-        client_id     => $api_key->client_id,
-        client_secret => $api_key->secret
+        plan tests => 19;
+
+        run_oauth_tests( 'body' );
     };
-    $t->post_ok('/api/v1/oauth/token', form => $formData)
-        ->status_is(200)
-        ->json_is('/expires_in' => 3600)
-        ->json_is('/token_type' => 'Bearer')
-        ->json_has('/access_token');
 
-    my $access_token = $t->tx->res->json->{access_token};
+    subtest 'Client credentials in Authorization header' => sub {
 
-    # Without access token, it returns 401
-    $t->get_ok('/api/v1/patrons')->status_is(401);
 
-    # With access token, but without permissions, it returns 403
-    my $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
-    $tx->req->headers->authorization("Bearer $access_token");
-    $t->request_ok($tx)->status_is(403);
+        plan tests => 19;
 
-    # With access token and permissions, it returns 200
-    $patron->flags(2**4)->store;
-    $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
-    $tx->req->headers->authorization("Bearer $access_token");
-    $t->request_ok($tx)->status_is(200);
-
-    # expire token
-    my $token = Koha::OAuthAccessTokens->find($access_token);
-    $token->expires( time - 1 )->store;
-    $tx = $t->ua->build_tx( GET => '/api/v1/patrons' );
-    $tx->req->headers->authorization("Bearer $access_token");
-    $t->request_ok($tx)
-      ->status_is(401);
-
-    # revoke key
-    $api_key->active(0)->store;
-    $t->post_ok('/api/v1/oauth/token', form => $formData)
-        ->status_is(403)
-        ->json_is({ error => 'unauthorized_client' });
-
-    # disable client credentials grant
-    t::lib::Mocks::mock_preference('RESTOAuth2ClientCredentials', 0);
-
-    # enable API key
-    $api_key->active(1)->store;
-    # Wrong grant type
-    $t->post_ok('/api/v1/oauth/token', form => $formData )
-        ->status_is(400)
-        ->json_is({ error => 'Unimplemented grant type' });
-
-    $schema->storage->txn_rollback;
+        run_oauth_tests( 'header' );
+    };
 };
 
 subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
@@ -162,3 +116,105 @@ subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
       ->json_is( { error => 'Unimplemented grant type' } );
 
 };
+
+sub run_oauth_tests {
+    my ( $test_case ) = @_;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value  => {
+            flags => 0 # no permissions
+        },
+    });
+
+    my $api_key = Koha::ApiKey->new({ patron_id => $patron->id, description => 'blah' })->store;
+
+    t::lib::Mocks::mock_preference( 'RESTOAuth2ClientCredentials', 1 );
+
+    my $formData;
+    my $client_id     = $api_key->client_id;
+    my $client_secret = $api_key->secret;
+
+    if ( $test_case eq 'header' ) {
+
+        $formData = { grant_type => 'client_credentials' };
+
+        $t->post_ok("//$client_id:$client_secret@/api/v1/oauth/token", form => $formData)
+          ->status_is(200)
+          ->json_is('/expires_in' => 3600)
+          ->json_is('/token_type' => 'Bearer')
+          ->json_has('/access_token');
+    } else {
+
+        $formData = {
+            grant_type    => 'client_credentials',
+            client_id     => $api_key->client_id,
+            client_secret => $api_key->secret
+        };
+
+        $t->post_ok('/api/v1/oauth/token', form => $formData)
+          ->status_is(200)
+          ->json_is('/expires_in' => 3600)
+          ->json_is('/token_type' => 'Bearer')
+          ->json_has('/access_token');
+    }
+
+    my $access_token = $t->tx->res->json->{access_token};
+
+    # Without access token, it returns 401
+    $t->get_ok('/api/v1/patrons')->status_is(401);
+
+    # With access token, but without permissions, it returns 403
+    my $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
+    $tx->req->headers->authorization("Bearer $access_token");
+    $t->request_ok($tx)->status_is(403);
+
+    # With access token and permissions, it returns 200
+    $patron->flags(2**4)->store;
+    $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
+    $tx->req->headers->authorization("Bearer $access_token");
+    $t->request_ok($tx)->status_is(200);
+
+    # expire token
+    my $token = Koha::OAuthAccessTokens->find($access_token);
+    $token->expires( time - 1 )->store;
+    $tx = $t->ua->build_tx( GET => '/api/v1/patrons' );
+    $tx->req->headers->authorization("Bearer $access_token");
+    $t->request_ok($tx)
+      ->status_is(401);
+
+    # revoke key
+    $api_key->active(0)->store;
+
+    if ( $test_case eq 'header' ) {
+        $t->post_ok("//$client_id:$client_secret@/api/v1/oauth/token", form => $formData)
+          ->status_is(403)
+          ->json_is({ error => 'unauthorized_client' });
+    } else {
+        $t->post_ok('/api/v1/oauth/token', form => $formData)
+          ->status_is(403)
+          ->json_is({ error => 'unauthorized_client' });
+    }
+
+    # disable client credentials grant
+   t::lib::Mocks::mock_preference('RESTOAuth2ClientCredentials', 0);
+
+    # enable API key
+    $api_key->active(1)->store;
+
+    # Wrong grant type
+    if ( $test_case eq 'header' ) {
+        $t->post_ok("//$client_id:$client_secret@/api/v1/oauth/token", form => $formData )
+          ->status_is(400)
+          ->json_is({ error => 'Unimplemented grant type' });
+    }
+    else {
+        $t->post_ok('/api/v1/oauth/token', form => $formData )
+          ->status_is(400)
+          ->json_is({ error => 'Unimplemented grant type' });
+    }
+
+    $schema->storage->txn_rollback;
+}
