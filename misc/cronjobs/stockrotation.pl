@@ -276,9 +276,9 @@ sub report_full {
     ];
 }
 
-=head3 report_email
+=head3 report_by_branch
 
-  my $email_report = report_email($report, [$branch]);
+  my $email_report = report_by_branch($report, [$branch]);
 
 Returns an arrayref containing a header string, with basic report information,
 and any number of 'per_branch' strings, containing a detailed report about the
@@ -296,7 +296,7 @@ No data in the database is manipulated by this procedure.
 
 =cut
 
-sub report_email {
+sub report_by_branch {
     my ( $data, $branch ) = @_;
 
     my $out    = [];
@@ -335,7 +335,7 @@ sub report_email {
 return a string containing details about the stockrotation items and their
 status for the branch identified by $BRANCHCODE.
 
-This helper procedure is only used from within `report_email`.
+This helper procedure is only used from within `report_by_branch`.
 
 No data in the database is manipulated by this procedure.
 
@@ -518,7 +518,7 @@ execute($data) if ($execute);
 
 # Emit Reports
 my $out_report = {};
-$out_report = report_email( $data, $branch ) if $report eq 'email';
+$out_report = report_by_branch( $data, $branch ) if $report eq 'email';
 $out_report = report_full( $data, $branch ) if $report eq 'full';
 emit(
     {
