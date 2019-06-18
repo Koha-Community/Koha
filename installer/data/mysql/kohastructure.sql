@@ -3536,7 +3536,7 @@ CREATE TABLE patron_consent (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table 'plugin_data'
+-- Table structure for table 'plugin_methods'
 --
 
 DROP TABLE IF EXISTS plugin_methods;
