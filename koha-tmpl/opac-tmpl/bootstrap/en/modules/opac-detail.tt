@@ -832,7 +832,7 @@
                                     [% END %]
                                 </span>[% END %]
                                 [% IF ( subscription.missinglist ) %]
-                                    <p class="subscription_missing">Missing issues: [% subscription.missinglist | html %] </p>
+                                    <p class="subscription_missing">Missing issues: [% subscription.missinglist | html | html_line_break %] </p>
                                 [% END %]
                                 [% IF ( subscription.opacnote ) %]
                                     <p class="subscription_opacnote">[% subscription.opacnote | html | html_line_break %]</p>

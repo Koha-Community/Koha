@@ -429,9 +429,6 @@ sub GetSubscriptionsFromBiblionumber {
             $subs->{histenddate} = "";
         }
         $subs->{opacnote}     //= "";
-        $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
-        $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
-        $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
         $subs->{ "periodicity" . $subs->{periodicity} }     = 1;
         $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
         $subs->{ "status" . $subs->{'status'} }             = 1;

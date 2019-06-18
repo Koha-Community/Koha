@@ -71,9 +71,6 @@ if ( $selectview eq "full" ) {
     my $yearmin = $subscriptions->[0]->{year};
     my $yearmax = $subscriptions->[ -1 ]->{year};
 
-    # replace CR by <br> in librarian note
-    # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
-
     $template->param(
         biblionumber   => scalar $query->param('biblionumber'),
         years          => $subscriptioninformation,
@@ -105,9 +102,6 @@ else {
             $_->{hasalert} = 1 if $subscriber;
         }
     }
-
-    # replace CR by <br> in librarian note
-    # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
 
     my $title   = $subscriptions->[0]->{bibliotitle};
 
