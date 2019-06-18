@@ -360,7 +360,7 @@ sub _report_per_branch {
             letter_code            => "SR_SLIP",
             branchcode             => $branch->{code},
             message_transport_type => 'email',
-            substitute             => $branch
+            substitute             => { branch => $branch }
         )
       )
     {
