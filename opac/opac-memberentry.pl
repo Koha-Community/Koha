@@ -366,7 +366,6 @@ sub GetMandatoryFields {
       C4::Context->preference("PatronSelfRegistrationBorrowerMandatoryField");
 
     my @fields = split( /\|/, $BorrowerMandatoryField );
-    push @fields, 'gdpr_proc_consent' if C4::Context->preference('GDPR_Policy');
 
     foreach (@fields) {
         $mandatory_fields{$_} = 1;
