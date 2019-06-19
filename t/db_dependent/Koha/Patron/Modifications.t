@@ -374,12 +374,12 @@ subtest 'pending_count() and pending() tests' => sub {
 };
 
 subtest 'dateofbirth tests' => sub {
-    plan tests => 3;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
     # Cleaning the field
-    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { dateofbirth => '1980-01-01' } } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { dateofbirth => '1980-01-01', surname => 'a_surname' } } );
     my $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, dateofbirth => undef }
     )->store;
     $patron_modification->approve;
@@ -397,17 +397,31 @@ subtest 'dateofbirth tests' => sub {
 
     $patron->discard_changes;
     is( $patron->dateofbirth, '1980-02-02', 'dateofbirth must a been set' );
+    is( $patron->surname, 'a_surname', 'surname must not be updated' );
 
     # FIXME ->approve must have been removed it, but it did not. There may be an hidden bug here.
     Koha::Patron::Modifications->search({ borrowernumber => $patron->borrowernumber })->delete;
 
     # Modifying a dateofbirth
-    $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, dateofbirth => '1980-03-03' }
+    $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, dateofbirth => '1980-03-03', surname => undef }
     )->store;
     $patron_modification->approve;
 
     $patron->discard_changes;
     is( $patron->dateofbirth, '1980-03-03', 'dateofbirth must a been updated' );
+    is( $patron->surname, 'a_surname', 'surname must not be updated' );
+
+    # FIXME ->approve must have been removed it, but it did not. There may be an hidden bug here.
+    Koha::Patron::Modifications->search({ borrowernumber => $patron->borrowernumber })->delete;
+
+    # Modifying something else
+    $patron_modification = Koha::Patron::Modification->new( { borrowernumber => $patron->borrowernumber, surname => 'another_surname', dateofbirth => undef }
+    )->store;
+    $patron_modification->approve;
+
+    $patron->discard_changes;
+    is( $patron->surname, 'another_surname', 'surname must be updated' );
+    is( $patron->dateofbirth, '1980-03-03', 'dateofbirth should not have been updated if not needed' );
 
     $schema->storage->txn_rollback;
 };
