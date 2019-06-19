@@ -329,7 +329,10 @@ if ($patron) {
 if (@$barcodes) {
   my $checkout_infos;
   for my $barcode ( @$barcodes ) {
+
     my $template_params = { barcode => $barcode };
+    $template_params->{onsite_checkout} = $onsite_checkout;
+
     # always check for blockers on issuing
     my ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
         $patron,
@@ -412,7 +415,6 @@ if (@$barcodes) {
                 $template_params->{getTitleMessageIteminfo} = $biblio->title;
                 $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
                 $template_params->{NEEDSCONFIRMATION} = 1;
-                $template_params->{onsite_checkout} = $onsite_checkout;
                 $template_params->{auto_renew} = $session->param('auto_renew');
                 $confirm_required = 1;
             }
