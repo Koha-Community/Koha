@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 53;
+use Test::More tests => 73;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -110,6 +110,28 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id")
   ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
   ->json_hasnt('/2');
 
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&_per_page=1&_page=1")
+  ->status_is(200)
+  ->header_is('X-Total-Count', '2')
+  ->header_like('Link', qr|rel="next"|)
+  ->header_like('Link', qr|rel="first"|)
+  ->header_like('Link', qr|rel="last"|)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => $item1->itemnumber)
+  ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
+  ->json_hasnt('/1');
+
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&_per_page=1&_page=2")
+  ->status_is(200)
+  ->header_is('X-Total-Count', '2')
+  ->header_like('Link', qr|rel="prev"|)
+  ->header_like('Link', qr|rel="first"|)
+  ->header_like('Link', qr|rel="last"|)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => $item2->itemnumber)
+  ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
+  ->json_hasnt('/1');
+
 $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
   ->status_is(200)
   ->json_is('/patron_id' => $patron_id)
@@ -132,7 +154,10 @@ $dbh->do(q{
     VALUES (?, ?, ?, ?, ?)
 }, {}, '*', '*', '*', 7, 1);
 
-my $expected_datedue = DateTime->now->add(days => 14)->set(hour => 23, minute => 59, second => 0);
+my $expected_datedue = DateTime->now
+    ->set_time_zone('local')
+    ->add(days => 14)
+    ->set(hour => 23, minute => 59, second => 0);
 $t->post_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
   ->status_is(201)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) )
