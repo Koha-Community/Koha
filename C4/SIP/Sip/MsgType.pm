@@ -436,7 +436,12 @@ sub build_patron_status {
 
         $resp .= patron_status_string($patron);
         $resp .= $lang . timestamp();
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ), $server );
+        if ( defined $server->{account}->{ae_field_template} ) {
+            $resp .= add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template}, $server ) );
+        } else {
+            $resp .= add_field( FID_PERSONAL_NAME, $patron->name, $server );
+        }
+
 
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
@@ -459,6 +464,7 @@ sub build_patron_status {
           if ( $server->{account}->{send_patron_home_library_in_af} );
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line, $server );
 
+        $resp .= $patron->build_custom_field_string( $server );
         $resp .= $patron->build_patron_attributes_string( $server );
 
     } else {
@@ -972,7 +978,11 @@ sub handle_patron_info {
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
         $resp .= add_field( FID_PATRON_ID,     $patron->id, $server );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ), $server );
+        if ( defined $server->{account}->{ae_field_template} ) {
+            $resp .= add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template} ), $server );
+        } else {
+            $resp .= add_field( FID_PERSONAL_NAME, $patron->name, $server );
+        }
 
         # TODO: add code for the fields
         #   hold items limit
@@ -1027,6 +1037,7 @@ sub handle_patron_info {
         }
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line, $server );
 
+        $resp .= $patron->build_custom_field_string( $server );
         $resp .= $patron->build_patron_attributes_string( $server );
     } else {
 
@@ -1315,7 +1326,7 @@ sub handle_patron_enable {
         $resp .= $patron->language . timestamp();
 
         $resp .= add_field( FID_PATRON_ID,     $patron->id, $server );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ), $server );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->format( $server->{account}->{ae_field_template} ), $server );
         if ( defined($patron_pwd) ) {
             $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ), $server );
         }

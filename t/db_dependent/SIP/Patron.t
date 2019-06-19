@@ -4,7 +4,7 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Koha::Database;
 use Koha::Patrons;
@@ -114,6 +114,50 @@ subtest "Test build_patron_attribute_string" => sub {
     $server->{account}->{patron_attribute}->[1]->{field} = 'YZ';
     $attribute_string = $ils_patron->build_patron_attributes_string( $server );
     is( $attribute_string, "XYTest Attribute|YZAnother Test Attribute|", 'Attribute field generated correctly with multiple params' );
+};
+
+subtest "Test build_custom_field_string" => sub {
+
+    plan tests => 5;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons',value=>{surname => "Duck", firstname => "Darkwing"} } );
+
+
+    my $ils_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+
+    my $server = {};
+    $server->{account}->{custom_patron_field}->{field} = "DW";
+    my $attribute_string = $ils_patron->build_custom_field_string( $server );
+    is( $attribute_string, "", 'Custom field not generated if no value passed' );
+
+    $server = {};
+    $server->{account}->{custom_patron_field}->{template} = "[% patron.surname %]";
+    $attribute_string = $ils_patron->build_custom_field_string( $server );
+    is( $attribute_string, "", 'Custom field not generated if no field passed' );
+
+
+    $server = {};
+    $server->{account}->{custom_patron_field}->{field} = "DW";
+    $server->{account}->{custom_patron_field}->{template} = "[% patron.firstname %] [% patron.surname %], let's get dangerous!";
+    $attribute_string = $ils_patron->build_custom_field_string( $server );
+    is( $attribute_string, "DWDarkwing Duck, let's get dangerous!|", 'Custom field processed correctly' );
+
+    $server = {};
+    $server->{account}->{custom_patron_field}->[0]->{field} = "DW";
+    $server->{account}->{custom_patron_field}->[0]->{template} = "[% patron.firstname %] [% patron.surname %], let's get dangerous!";
+    $server->{account}->{custom_patron_field}->[1]->{field} = "LM";
+    $server->{account}->{custom_patron_field}->[1]->{template} = "Launchpad McQuack crashed on [% patron.dateexpiry %]";
+    $attribute_string = $ils_patron->build_custom_field_string( $server );
+    is( $attribute_string, "DWDarkwing Duck, let's get dangerous!|LMLaunchpad McQuack crashed on ".$patron->dateexpiry."|", 'Custom fields processed correctly when multiple exist' );
+
+    $server = {};
+    $server->{account}->{custom_patron_field}->[0]->{field} = "DW";
+    $server->{account}->{custom_patron_field}->[0]->{template} = "[% IF (patron.firstname) %] patron.surname, let's get dangerous!";
+    $server->{account}->{custom_patron_field}->[1]->{field} = "LM";
+    $server->{account}->{custom_patron_field}->[1]->{template} = "Launchpad McQuack crashed on [% patron.dateexpiry %]";
+    $attribute_string = $ils_patron->build_custom_field_string( $server );
+    is( $attribute_string, "LMLaunchpad McQuack crashed on ".$patron->dateexpiry."|", 'Custom fields processed correctly, bad template generate no text' );
+
 };
 
 subtest "update_lastseen tests" => sub {
