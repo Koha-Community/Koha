@@ -489,9 +489,9 @@
                                     <button type="submit" class="new" onclick="confirmnotdup('view'); return false;"><i class="fa fa-fw fa-save"></i> No, save as new record</button>
                                 [% END %]
                             </form>
-                        </div>
-                    [% END %]
-                [% END %]
+                        </div> <!-- /.dialog.alert -->
+                    [% END # /IF duplicatebiblionumber %]
+                [% END # /UNLESS number %]
 
                 [% IF ( done ) %]
                     <script>
@@ -528,7 +528,7 @@
                     [% ELSE %]
                         <!-- User cannot edit items - single button redirecting to view -->
                         <div class="btn-group"><a href="#" id="saveandview" class="btn btn-default"><i class="fa fa-save"></i> Save</a></div>
-                    [% END %]
+                    [% END # /IF CAN_user_editcatalogue_edit_items %]
 
                     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
                         <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
@@ -571,8 +571,8 @@
                                     </a>
                                 </li>
                             [% END %]
-                        </ul>
-                    </div>
+                        </ul> <!-- /#settings-menu -->
+                    </div> <!-- /.btn-group -->
                     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
                         [% IF (biblionumber) %]
                             [% IF ( BiblioDefaultViewmarc ) %]
@@ -595,7 +595,7 @@
                         [% ELSE %]
                             <a class="btn btn-default" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
                         [% END %]
-                    [% END %]
+                    [% END # /UNLESS circborrowernumber %]
                     <div class="toolbar-tabs-container">
                         [% IF ( BIG_LOOP.size > 1 ) %]
                             <ul class="toolbar-tabs">
@@ -697,7 +697,7 @@
                                                     size="1"
                                                     maxlength="1"
                                                     value="[% innerloo.indicator2 | html %]" />
-                                            [% END %] -
+                                            [% END # /IF innerloo.fixedfield %] -
 
                                             [% UNLESS advancedMARCEditor %]
                                                 <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib | html %]</a>
@@ -712,8 +712,8 @@
                                                 <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;" title="Delete this Tag">
                                                     <img src="[% interface | html %]/[% theme | html %]/img/delete-tag.png" alt="Delete this Tag" />
                                                 </a>
-                                            </span>
-                                        </div>
+                                            </span> <!-- /.field_controls -->
+                                        </div> <!-- /div.tag_title -->
 
                                         [% FOREACH subfield_loo IN innerloo.subfield_loop %]
                                             <!--  One line on the marc editor -->
@@ -789,7 +789,7 @@
                                                         [% END %]
                                                     [% END %]
                                                     </select>
-                                                [% END %]
+                                                [% END  # /IF (mv.type...) %]
                                                 [% IF ( subfield_loo.mandatory ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -803,15 +803,15 @@
                                                         </a>
                                                     [% END %]
                                                 </span>
-                                            </div>
+                                            </div> <!-- /.subfield_line -->
                                             <!-- End of the line -->
-                                            [% END %]
-                                    </div>
+                                        [% END # /FOREACH subfield_loop %]
+                                    </div> <!-- /.tag.clearfix -->
                                 [% END %]<!-- if innerloo.tag -->
-                            [% END %]<!-- BIG_LOO.innerloop -->
-                        </div>
-                    [% END %]<!-- BIG_LOOP -->
-                </div><!-- tabs -->
+                            [% END # /FOREACH BIG_LOO.innerloop %]
+                        </div> <!-- /#tabXXX -->
+                    [% END # /FOREACH BIG_LOOP %]
+                </div><!-- /#addbibliotabs -->
 
                 [%# Fields for fast cataloging %]
                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
@@ -820,8 +820,8 @@
                 <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
                 <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                 [%# End of fields for fast cataloging %]
-            </form>
-        </div>
-    </div>
+            </form> <!-- /name=f -->
+        </div> <!-- /.col-md-10.col-md-offset-1 -->
+    </div> <!-- /.row -->
 
 [% INCLUDE 'intranet-bottom.inc' %]
