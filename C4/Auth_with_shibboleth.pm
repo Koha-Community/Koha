@@ -206,12 +206,12 @@ sub _get_return {
         if ($uriPiece) {
             $uri_params_part .= '&' if $uri_params_part;
             $uri_params_part .= $param . '=';
-            $uri_params_part .= URI::Escape::uri_escape( $uriPiece );
+            $uri_params_part .= $uriPiece;
         }
     }
     $uri_base_part .= '%3F' if $uri_params_part;
 
-    return $uri_base_part . $uri_params_part;
+    return $uri_base_part . URI::Escape::uri_escape_utf8($uri_params_part);
 }
 
 sub _get_shib_config {

@@ -24,7 +24,8 @@ use Test::MockModule;
 use Test::Warn;
 use File::Temp qw(tempdir);
 
-use CGI;
+use utf8;
+use CGI qw(-utf8 );
 use C4::Context;
 
 BEGIN {
@@ -128,7 +129,9 @@ subtest "shib_ok tests" => sub {
 subtest "login_shib_url tests" => sub {
     plan tests => 2;
 
-    my $query_string = 'language=en-GB';
+    my $string = 'language=en-GB&param="heh❤"';
+    my $query_string = Encode::encode('UTF-8', $string);
+    my $query_string_uri_escaped = URI::Escape::uri_escape_utf8('?'.$string);
 
     local $ENV{REQUEST_METHOD} = 'GET';
     local $ENV{QUERY_STRING}   = $query_string;
@@ -138,8 +141,8 @@ subtest "login_shib_url tests" => sub {
         login_shib_url($query),
         'https://testopac.com'
           . '/Shibboleth.sso/Login?target='
-          . 'https://testopac.com/cgi-bin/koha/opac-user.pl' . '%3F'
-          . $query_string,
+          . 'https://testopac.com/cgi-bin/koha/opac-user.pl'
+          . $query_string_uri_escaped,
         "login shib url"
     );
 
