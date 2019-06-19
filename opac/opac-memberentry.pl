@@ -250,9 +250,8 @@ elsif ( $action eq 'update' ) {
     my %borrower = ParseCgiForBorrower($cgi);
     $borrower{borrowernumber} = $borrowernumber;
 
-    my %borrower_changes = DelEmptyFields(%borrower);
     my @empty_mandatory_fields =
-      CheckMandatoryFields( \%borrower_changes, $action );
+      CheckMandatoryFields( \%borrower, $action );
     my $invalidformfields = CheckForInvalidFields(\%borrower);
 
     # Send back the data to the template
@@ -273,6 +272,7 @@ elsif ( $action eq 'update' ) {
     }
     else {
         my %borrower_changes = DelUnchangedFields( $borrowernumber, %borrower );
+        $borrower_changes{'changed_fields'} = join ',', keys %borrower_changes;
         my $extended_attributes_changes = FilterUnchangedAttributes( $borrowernumber, $attributes );
 
         if ( %borrower_changes || scalar @{$extended_attributes_changes} > 0 ) {
