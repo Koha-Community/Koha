@@ -15,7 +15,7 @@ use Carp;
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
-use C4::SIP::Sip qw(add_field);
+use C4::SIP::Sip qw(add_field maybe_add);
 
 use C4::Debug;
 use C4::Context;
@@ -216,7 +216,14 @@ sub AUTOLOAD {
     }
 }
 
-sub name {
+=head2 format
+
+This method uses a template to build a string from a Koha::Patron object
+If errors are encountered in processing template we log them and return nothing
+
+=cut
+
+sub format {
     my ( $self, $template ) = @_;
 
     if ($template) {
@@ -228,11 +235,14 @@ sub name {
         my $patron = Koha::Patrons->find( $self->{borrowernumber} );
 
         my $output;
-        $tt->process( \$template, { patron => $patron }, \$output );
+        eval {
+            $tt->process( \$template, { patron => $patron }, \$output );
+        };
+        if ( $@ ){
+            syslog("LOG_DEBUG", "Error processing template: $template");
+            return "";
+        }
         return $output;
-    }
-    else {
-        return $self->{name};
     }
 }
 
@@ -528,7 +538,6 @@ sub build_patron_attributes_string {
     my ( $self, $server ) = @_;
 
     my $string = q{};
-
     if ( $server->{account}->{patron_attribute} ) {
         my @attributes_to_send =
           ref $server->{account}->{patron_attribute} eq "ARRAY"
@@ -550,6 +559,30 @@ sub build_patron_attributes_string {
         }
     }
 
+    return $string;
+}
+
+
+=head2 build_custom_field_string
+
+This method builds the part of the sip message for custom patron fields as defined in the sip config
+
+=cut
+
+sub build_custom_field_string {
+    my ( $self, $server ) = @_;
+
+    my $string = q{};
+
+    if ( $server->{account}->{custom_patron_field} ) {
+        my @custom_fields =
+            ref $server->{account}->{custom_patron_field} eq "ARRAY"
+            ? @{ $server->{account}->{custom_patron_field} }
+            : $server->{account}->{custom_patron_field};
+        foreach my $custom_field ( @custom_fields ) {
+            $string .= maybe_add( $custom_field->{field}, $self->format( $custom_field->{template} ) ) if defined $custom_field->{field};
+        }
+    }
     return $string;
 }
 

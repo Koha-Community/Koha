@@ -326,11 +326,14 @@ sub test_checkin_v2 {
     my $card1 = $patron1->{cardnumber};
     my $sip_patron1 = C4::SIP::ILS::Patron->new( $card1 );
     $findpatron = $sip_patron1;
-    my $item = $builder->build({
-        source => 'Item',
-        value => { damaged => 0, withdrawn => 0, itemlost => 0, restricted => 0, homebranch => $branchcode, holdingbranch => $branchcode },
+    my $item_object = $builder->build_sample_item({
+        damaged => 0,
+        withdrawn => 0,
+        itemlost => 0,
+        restricted => 0,
+        homebranch => $branchcode,
+        holdingbranch => $branchcode,
     });
-    my $item_object = Koha::Items->find( $item->{itemnumber} );
 
     my $mockILS = $mocks->{ils};
     my $server = { ils => $mockILS, account => {} };
@@ -364,7 +367,7 @@ sub test_checkin_v2 {
     $siprequest = CHECKIN . 'N' . 'YYYYMMDDZZZZHHMMSS' .
         siprequestdate( $today->clone->add( days => 1) ) .
         FID_INST_ID . $branchcode . '|'.
-        FID_ITEM_ID . $item->{barcode} . '|' .
+        FID_ITEM_ID . $item_object->barcode . '|' .
         FID_TERMINAL_PWD . 'ignored' . '|';
     undef $response;
     $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
@@ -443,7 +446,7 @@ sub test_checkin_v2 {
     $server->{account}->{ct_always_send} = 0;
 
     # Checkin at wrong branch: issue item and switch branch, and checkin
-    my $issue = Koha::Checkout->new({ branchcode => $branchcode, borrowernumber => $patron1->{borrowernumber}, itemnumber => $item->{itemnumber} })->store;
+    my $issue = Koha::Checkout->new({ branchcode => $branchcode, borrowernumber => $patron1->{borrowernumber}, itemnumber => $item_object->itemnumber })->store;
     $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
     undef $response;
@@ -452,7 +455,7 @@ sub test_checkin_v2 {
     is( substr($response,2,1), '0', 'OK flag is false when we check in at the wrong branch and we do not allow it' );
     is( substr($response,5,1), 'Y', 'Alert flag is set' );
     check_field( $respcode, $response, FID_SCREEN_MSG, 'Checkin failed', 'Check screen msg' );
-    $branchcode = $item->{homebranch};  # switch back
+    $branchcode = $item_object->homebranch;  # switch back
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
 
     # Data corrupted: add same issue_id to old_issues

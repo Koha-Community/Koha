@@ -50,25 +50,20 @@ subtest fill_holds_at_checkout => sub {
     t::lib::Mocks::mock_userenv({ branchcode => $branch->{branchcode}, flags => 1 });
 
     my $itype = $builder->build({ source => 'Itemtype', value =>{notforloan=>0} });
-    my $biblio = $builder->build({ source => 'Biblio' });
-    my $biblioitem = $builder->build({ source => 'Biblioitem', value=>{biblionumber=>$biblio->{biblionumber}} });
-    my $item1 = $builder->build({ source => 'Item', value => {
+    my $item1 = $builder->build_sample_item({
         barcode       => 'barcode4test',
         homebranch    => $branch->{branchcode},
         holdingbranch => $branch->{branchcode},
-        biblionumber  => $biblio->{biblionumber},
         itype         => $itype->{itemtype},
         notforloan       => 0,
-        }
-    });
-    my $item2 = $builder->build({ source => 'Item', value => {
+    })->unblessed;
+    my $item2 = $builder->build_sample_item({
         homebranch    => $branch->{branchcode},
         holdingbranch => $branch->{branchcode},
-        biblionumber  => $biblio->{biblionumber},
+        biblionumber  => $item1->{biblionumber},
         itype         => $itype->{itemtype},
         notforloan       => 0,
-        }
-    });
+    })->unblessed;
 
     Koha::IssuingRule->new({
         categorycode     => $borrower->{categorycode},
@@ -81,9 +76,9 @@ subtest fill_holds_at_checkout => sub {
         lengthunit       => 'days',
     })->store;
 
-    my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
-    my $reserve2 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
-    my $bib = Koha::Biblios->find( $biblio->{biblionumber} );
+    my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$item1->{biblionumber});
+    my $reserve2 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$item1->{biblionumber});
+    my $bib = Koha::Biblios->find( $item1->{biblionumber} );
     is( $bib->holds->count(), 2, "Bib has 2 holds");
 
     my $sip_patron = C4::SIP::ILS::Patron->new( $borrower->{cardnumber} );
