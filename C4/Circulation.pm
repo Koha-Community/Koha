@@ -2409,7 +2409,7 @@ sub _FixAccountForLostAndReturned {
 
     return unless $accountline->borrowernumber;
     my $patron = Koha::Patrons->find( $accountline->borrowernumber );
-    return undef unless $patron; # Patron has been deleted, nobody to credit the return to
+    return unless $patron; # Patron has been deleted, nobody to credit the return to
 
     my $account = $patron->account;
 
