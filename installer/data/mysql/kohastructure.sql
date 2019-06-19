@@ -3417,6 +3417,7 @@ CREATE TABLE borrower_attribute_types_branches( -- association table between bor
 CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `verification_token` varchar(255) NOT NULL DEFAULT '',
+  `changed_fields` MEDIUMTEXT NOT NULL DEFAULT '',
   `borrowernumber` int(11) NOT NULL DEFAULT '0',
   `cardnumber` varchar(32) DEFAULT NULL,
   `surname` LONGTEXT,
