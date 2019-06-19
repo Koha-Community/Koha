@@ -156,6 +156,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-10-20 16:27:04
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tPPrIug2c7PbDO7LCxCJAA
 
+sub koha_object_class {
+    'Koha::Account::Offset';
+}
+sub koha_objects_class {
+    'Koha::Account::Offsets';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

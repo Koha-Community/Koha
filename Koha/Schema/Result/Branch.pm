@@ -684,8 +684,11 @@ __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
 );
 
+sub koha_object_class {
+    'Koha::Library';
+}
 sub koha_objects_class {
-    'Koha::Libraries';
+    'Koha::Librarys';
 }
 
 1;

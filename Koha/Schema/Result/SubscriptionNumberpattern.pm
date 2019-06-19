@@ -231,6 +231,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UxpUui+IbCUkKDIJOpYyUA
 
+sub koha_object_class {
+    'Koha::Subscription::Numberpattern';
+}
+sub koha_objects_class {
+    'Koha::Subscription::Numberpatterns';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

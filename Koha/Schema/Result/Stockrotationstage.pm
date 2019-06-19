@@ -136,4 +136,11 @@ __PACKAGE__->load_components(qw( Ordered ));
 
 __PACKAGE__->grouping_column('rota_id'); # Our group_id
 
+sub koha_object_class {
+    'Koha::StockRotationStage';
+}
+sub koha_objects_class {
+    'Koha::StockRotationStages';
+}
+
 1;

@@ -141,6 +141,11 @@ __PACKAGE__->set_primary_key("export_format_id");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YSQshI3mJfO0LsOlwvdIdg
 
+sub koha_object_class {
+    'Koha::CsvProfile';
+}
+sub koha_objects_class {
+    'Koha::CsvProfiles';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

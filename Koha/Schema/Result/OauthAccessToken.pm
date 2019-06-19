@@ -67,6 +67,11 @@ __PACKAGE__->set_primary_key("access_token");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-05-09 12:50:58
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M6tueO6jmJwgmwMrqO1L0Q
 
+sub koha_object_class {
+    'Koha::OAuthAccessToken';
+}
+sub koha_objects_class {
+    'Koha::OAuthAccessTokens';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

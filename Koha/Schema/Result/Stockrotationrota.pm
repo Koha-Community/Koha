@@ -105,5 +105,11 @@ __PACKAGE__->add_columns(
   '+active' => { is_boolean => 1 }
 );
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::StockRotationRota';
+}
+sub koha_objects_class {
+    'Koha::StockRotationRotas';
+}
+
 1;

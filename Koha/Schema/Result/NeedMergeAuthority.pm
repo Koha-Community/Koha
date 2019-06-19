@@ -95,6 +95,11 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7LzwIYvExKvNgr8/HDZlsg
 
+sub koha_object_class {
+    'Koha::Authority::MergeRequest';
+}
+sub koha_objects_class {
+    'Koha::Authority::MergeRequests';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

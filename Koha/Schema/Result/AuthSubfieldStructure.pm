@@ -212,6 +212,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5Prv/DCQk32mTQaqtYhUuA
 
+sub koha_object_class {
+    'Koha::Authority::Subfield';
+}
+sub koha_objects_class {
+    'Koha::Authority::Subfields';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

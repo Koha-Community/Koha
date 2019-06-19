@@ -171,6 +171,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gApTRM/dF6uZSMYyvkt4OQ
 
+sub koha_object_class {
+    'Koha::NewsItem';
+}
+sub koha_objects_class {
+    'Koha::NewsItems';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

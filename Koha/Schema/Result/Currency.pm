@@ -162,5 +162,11 @@ __PACKAGE__->has_many(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PnJEcCgrM1Edf99phWFdyQ
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Acquisition::Currency';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Currencies';
+}
+
 1;

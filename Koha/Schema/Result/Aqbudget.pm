@@ -302,5 +302,11 @@ __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumbe
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zB7ox8a4KdDGq5fsbQfLGQ
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Acquisition::Fund';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Funds';
+}
+
 1;

@@ -354,4 +354,11 @@ __PACKAGE__->add_columns(
     '+suspend'         => { is_boolean => 1 }
 );
 
+sub koha_object_class {
+    'Koha::Hold';
+}
+sub koha_objects_class {
+    'Koha::Holds';
+}
+
 1;

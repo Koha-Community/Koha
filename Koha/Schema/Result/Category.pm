@@ -269,6 +269,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2019-04-12 02:43:58
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7rwTH9HuxcdRCBP/bj0d/A
 
+sub koha_object_class {
+    'Koha::Patron::Category';
+}
+sub koha_objects_class {
+    'Koha::Patron::Categorys';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

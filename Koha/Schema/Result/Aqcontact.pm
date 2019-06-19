@@ -172,6 +172,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R2x8Z9Db2oDULEODgLuw8Q
 
+sub koha_object_class {
+    'Koha::Acquisition::Bookseller::Contact';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Bookseller::Contacts';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

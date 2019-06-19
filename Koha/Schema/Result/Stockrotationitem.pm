@@ -113,5 +113,11 @@ __PACKAGE__->add_columns(
   '+fresh' => { is_boolean => 1 }
 );
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::StockRotationItem';
+}
+sub koha_objects_class {
+    'Koha::StockRotationItems';
+}
+
 1;

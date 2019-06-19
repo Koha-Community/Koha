@@ -202,6 +202,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-16 13:50:45
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mpdxTbkz/8WInG5Wp4q7Ug
 
+sub koha_object_class {
+    'Koha::Acquisition::Invoice';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Invoices';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

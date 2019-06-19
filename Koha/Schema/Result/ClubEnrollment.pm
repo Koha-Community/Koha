@@ -194,6 +194,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-12 17:59:47
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Ih/HQM4KIRDZ0ESXVR9FwA
 
+sub koha_object_class {
+    'Koha::Club::Enrollment';
+}
+sub koha_objects_class {
+    'Koha::Club::Enrollments';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

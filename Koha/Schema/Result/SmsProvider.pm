@@ -99,6 +99,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-12-31 16:48:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:U3LGi1zy3YN2Amin+bhXlA
 
+sub koha_object_class {
+    'Koha::SMS::Provider';
+}
+sub koha_objects_class {
+    'Koha::SMS::Providers';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

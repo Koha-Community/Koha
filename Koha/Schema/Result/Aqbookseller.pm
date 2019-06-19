@@ -392,6 +392,11 @@ __PACKAGE__->add_columns(
     '+invoiceincgst' => { is_boolean => 1 },
 );
 
+sub koha_object_class {
+    'Koha::Acquisition::Bookseller';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Booksellers';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

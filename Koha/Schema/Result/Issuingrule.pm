@@ -317,6 +317,11 @@ __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-05 20:49:11
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6bPX0BRWWQZrWFun3GP86Q
 
+sub koha_object_class {
+    'Koha::IssuingRule';
+}
+sub koha_objects_class {
+    'Koha::IssuingRules';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

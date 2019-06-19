@@ -92,6 +92,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-13 13:53:21
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Z43jqmURevaJeui7l8ThlQ
 
+sub koha_object_class {
+    'Koha::Serial::Item';
+}
+sub koha_objects_class {
+    'Koha::Serial::Items';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

@@ -82,6 +82,11 @@ __PACKAGE__->set_primary_key("variable");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QI7OL4VHrXe8FridIOCZ4A
 
+sub koha_object_class {
+    'Koha::Config::SysPref';
+}
+sub koha_objects_class {
+    'Koha::Config::SysPrefs';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

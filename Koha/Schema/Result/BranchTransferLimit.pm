@@ -102,6 +102,11 @@ __PACKAGE__->set_primary_key("limitId");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wKere4dleMGrs9RO59qx9Q
 
+sub koha_object_class {
+    'Koha::Item::Transfer::Limit';
+}
+sub koha_objects_class {
+    'Koha::Item::Transfer::Limits';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

@@ -300,6 +300,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-06-17 07:24:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZgGAW7ODBby3hGNJ41eeMA
 
+sub koha_object_class {
+    'Koha::Old::Hold';
+}
+sub koha_objects_class {
+    'Koha::Old::Holds';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

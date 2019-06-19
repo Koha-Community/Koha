@@ -125,6 +125,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-01-18 08:31:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4cvTasSpJ2c1vvVVe/R3UQ
 
+sub koha_object_class {
+    'Koha::Tags::Approval';
+}
+sub koha_objects_class {
+    'Koha::Tags::Approvals';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

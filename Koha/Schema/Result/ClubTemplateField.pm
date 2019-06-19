@@ -114,6 +114,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LRnLRjyMHuEd3KMRMHd3KA
 
+sub koha_object_class {
+    'Koha::Club::Template::Field';
+}
+sub koha_objects_class {
+    'Koha::Club::Template::Fields';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

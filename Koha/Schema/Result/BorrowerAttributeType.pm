@@ -165,6 +165,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-25 20:32:12
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gsPR8PuUUZHFUkr3MIbTpw
 
+sub koha_object_class {
+    'Koha::Patron::Attribute::Type';
+}
+sub koha_objects_class {
+    'Koha::Patron::Attribute::Types';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

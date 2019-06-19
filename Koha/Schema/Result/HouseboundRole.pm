@@ -85,6 +85,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-21 18:20:25
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SU7khVgiUf1OVvaFpKaFPA
 
+sub koha_object_class {
+    'Koha::Patron::HouseboundRole';
+}
+sub koha_objects_class {
+    'Koha::Patron::HouseboundRoles';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

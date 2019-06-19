@@ -328,5 +328,11 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Acquisition::Basket';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::Baskets';
+}
+
 1;

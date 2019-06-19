@@ -139,5 +139,11 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9cEWAMwcFKPYPEG1CaaD3w
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Acquisition::BasketGroup';
+}
+sub koha_objects_class {
+    'Koha::Acquisition::BasketGroups';
+}
+
 1;

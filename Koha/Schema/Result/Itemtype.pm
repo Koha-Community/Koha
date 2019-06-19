@@ -262,4 +262,11 @@ __PACKAGE__->has_many(
     }
 );
 
+sub koha_object_class {
+    'Koha::ItemType';
+}
+sub koha_objects_class {
+    'Koha::ItemTypes';
+}
+
 1;

@@ -613,6 +613,11 @@ __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-20 13:00:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qQ0BWngri+79YvK9S8zZPg
 
+sub koha_object_class {
+    'Koha::Patron::Modification';
+}
+sub koha_objects_class {
+    'Koha::Patron::Modifications';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

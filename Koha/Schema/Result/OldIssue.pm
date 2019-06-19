@@ -256,6 +256,9 @@ __PACKAGE__->belongs_to(
   },
 );
 
+sub koha_object_class {
+    'Koha::Old::Checkout';
+}
 sub koha_objects_class {
     'Koha::Old::Checkouts';
 }

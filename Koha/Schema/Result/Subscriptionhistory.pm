@@ -104,6 +104,11 @@ __PACKAGE__->set_primary_key("subscriptionid");
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-06-17 07:24:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SK33dc7lx/rDGX3tiR84ww
 
+sub koha_object_class {
+    'Koha::Subscription::History';
+}
+sub koha_objects_class {
+    'Koha::Subscription::Historys';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

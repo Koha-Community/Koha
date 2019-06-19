@@ -78,6 +78,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-09 10:38:33
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fEZWWtF4MRDwupI/27laDw
 
+sub koha_object_class {
+    'Koha::Library::OverDriveInfo';
+}
+sub koha_objects_class {
+    'Koha::Library::OverDriveInfos';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

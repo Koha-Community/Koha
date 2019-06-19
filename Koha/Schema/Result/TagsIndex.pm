@@ -103,6 +103,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-01-18 08:31:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ewTrnc9D1jcoyf65+MrSGQ
 
+sub koha_object_class {
+    'Koha::Tags::Index';
+}
+sub koha_objects_class {
+    'Koha::Tags::Indexs';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

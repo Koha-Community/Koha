@@ -113,6 +113,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-20 13:00:20
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:as3b13eS31zkIPr9uxP7+A
 
+sub koha_object_class {
+    'Koha::Patron::Consent';
+}
+sub koha_objects_class {
+    'Koha::Patron::Consents';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

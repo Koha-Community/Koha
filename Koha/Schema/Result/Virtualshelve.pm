@@ -184,6 +184,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-08 14:19:17
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xoq0lhLouCbkAp6F4ZyMGQ
 
+sub koha_object_class {
+    'Koha::Virtualshelf';
+}
+sub koha_objects_class {
+    'Koha::Virtualshelves';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;

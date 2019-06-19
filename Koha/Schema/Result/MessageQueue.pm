@@ -184,6 +184,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9u39S/GLtZwnZGp+xcZOBA
 
+sub koha_object_class {
+    'Koha::Notice::Message';
+}
+sub koha_objects_class {
+    'Koha::Notice::Messages';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
