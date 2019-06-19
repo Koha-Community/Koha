@@ -465,7 +465,21 @@ sub GetPatronInfo {
 
     # Issues management
     if ( $cgi->param('show_loans') && $cgi->param('show_loans') eq "1" ) {
+        my $per_page = $cgi->param('loans_per_page');
+        my $page = $cgi->param('loans_page');
+
         my $pending_checkouts = $patron->pending_checkouts;
+
+        if ($page || $per_page) {
+            $page ||= 1;
+            $per_page ||= 10;
+            $borrower->{total_loans} = $pending_checkouts->count();
+            $pending_checkouts = $pending_checkouts->search(undef, {
+                rows => $per_page,
+                page => $page,
+            });
+        }
+
         my @checkouts;
         while ( my $c = $pending_checkouts->next ) {
             # FIXME We should only retrieve what is needed in the template
@@ -476,7 +490,8 @@ sub GetPatronInfo {
         $borrower->{'loans'}->{'loan'} = \@checkouts;
     }
 
-    if ( $cgi->param('show_attributes') eq "1" ) {
+    my $show_attributes = $cgi->param('show_attributes');
+    if ( $show_attributes && $show_attributes eq "1" ) {
         my $attrs = GetBorrowerAttributes( $borrowernumber, 1 );
         $borrower->{'attributes'} = $attrs;
     }

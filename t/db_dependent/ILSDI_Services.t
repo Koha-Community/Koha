@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -336,4 +336,56 @@ subtest 'GetRecords' => sub {
     ok($result,'There is a result');
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest 'GetPatronInfo paginated loans' => sub {
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({
+        class => 'Koha::Libraries',
+    });
+
+    my $item1 = $builder->build_sample_item({ library => $library->branchcode });
+    my $item2 = $builder->build_sample_item({ library => $library->branchcode });
+    my $item3 = $builder->build_sample_item({ library => $library->branchcode });
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => {
+            branchcode => $library->branchcode,
+        },
+    });
+    my $module = new Test::MockModule('C4::Context');
+    $module->mock('userenv', sub { { branch => $library->branchcode } });
+    my $date_due = DateTime->now->add(weeks => 2);
+    my $issue1 = C4::Circulation::AddIssue($patron->unblessed, $item1->barcode, $date_due);
+    my $date_due1 = Koha::DateUtils::dt_from_string( $issue1->date_due );
+    my $issue2 = C4::Circulation::AddIssue($patron->unblessed, $item2->barcode, $date_due);
+    my $date_due2 = Koha::DateUtils::dt_from_string( $issue2->date_due );
+    my $issue3 = C4::Circulation::AddIssue($patron->unblessed, $item3->barcode, $date_due);
+    my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
+
+    my $cgi = new CGI;
+
+    $cgi->param( 'service', 'GetPatronInfo' );
+    $cgi->param( 'patron_id', $patron->borrowernumber );
+    $cgi->param( 'show_loans', '1' );
+    $cgi->param( 'loans_per_page', '2' );
+    $cgi->param( 'loans_page', '1' );
+    my $reply = C4::ILSDI::Services::GetPatronInfo($cgi);
+
+    is($reply->{total_loans}, 3, 'total_loans == 3');
+    is(scalar @{ $reply->{loans}->{loan} }, 2, 'GetPatronInfo returned only 2 loans');
+    is($reply->{loans}->{loan}->[0]->{itemnumber}, $item3->itemnumber);
+    is($reply->{loans}->{loan}->[1]->{itemnumber}, $item2->itemnumber);
+
+    $cgi->param( 'loans_page', '2' );
+    $reply = C4::ILSDI::Services::GetPatronInfo($cgi);
+
+    is($reply->{total_loans}, 3, 'total_loans == 3');
+    is(scalar @{ $reply->{loans}->{loan} }, 1, 'GetPatronInfo returned only 1 loan');
+    is($reply->{loans}->{loan}->[0]->{itemnumber}, $item1->itemnumber);
+
+    $schema->storage->txn_rollback;
+};
