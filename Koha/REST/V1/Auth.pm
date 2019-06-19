@@ -71,7 +71,7 @@ sub under {
                 "Configuration prevents the usage of this endpoint by unprivileged users");
         }
 
-        if ( $c->req->url->to_string eq '/api/v1/oauth/token' ) {
+        if ( $c->req->url->to_abs->path eq '/api/v1/oauth/token' ) {
             # Requesting a token shouldn't go through the API authenticaction chain
             $status = 1;
         }
