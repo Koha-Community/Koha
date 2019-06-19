@@ -386,6 +386,8 @@ subtest 'build_object() tests' => sub {
             eval "require $module";;
             my $object = $builder->build_object( { class => $module } );
             is( ref($object), $module->object_class, "Testing $module" );
+            eval {$object->get_from_storage};
+            is( $@, '', "Module $module should have koha_object[s]_class method if needed" );
         }
     };
 
