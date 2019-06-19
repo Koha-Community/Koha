@@ -188,7 +188,10 @@ subtest "RecordsFromMarcPlugin" => sub {
 
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
     t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
-    my ($plugin) = Koha::Plugins->new->GetPlugins({ all => 1, metadata => { name => 'MarcFieldValues' } });
+
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+    my ($plugin) = $plugins->GetPlugins({ all => 1, metadata => { name => 'MarcFieldValues' } });
     isnt( $plugin, undef, "Plugin found" );
     my $records = C4::ImportBatch::RecordsFromMarcPlugin( $name, ref $plugin, 'UTF-8' );
     is( @$records, 2, 'Two results returned' );

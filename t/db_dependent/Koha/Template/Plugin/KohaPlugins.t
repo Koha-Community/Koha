@@ -31,7 +31,9 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 # Enable all plugins
-my @plugins = Koha::Plugins->new->GetPlugins({ all => 1, class => 'Koha::Plugin::Test' });
+my $plugins = Koha::Plugins->new;
+$plugins->InstallPlugins;
+my @plugins = $plugins->GetPlugins({ all => 1, class => 'Koha::Plugin::Test' });
 map { $_->enable; } @plugins;
 
 my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );

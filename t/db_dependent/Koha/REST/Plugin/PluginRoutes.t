@@ -50,7 +50,10 @@ subtest 'Bad plugins tests' => sub {
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
     t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 
-    my @plugins = Koha::Plugins->new->GetPlugins( { all => 1 } );
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    my @plugins = $plugins->GetPlugins( { all => 1 } );
     foreach my $plugin (@plugins) {
         $plugin->enable;
     }
@@ -81,7 +84,10 @@ subtest 'Disabled plugins tests' => sub {
 
     my $good_plugin;
 
-    my @plugins = Koha::Plugins->new->GetPlugins( { all => 1 } );
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    my @plugins = $plugins->GetPlugins( { all => 1 } );
     foreach my $plugin (@plugins) {
         $plugin->disable;
         $good_plugin = $plugin
