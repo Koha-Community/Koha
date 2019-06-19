@@ -311,7 +311,7 @@
                         </div>
                     [% ELSE %]
                         <h4>Shibboleth login</h4>
-                        <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl | url %]">click here to login</a>.</p>
+                        <p>If you have a Shibboleth account, please <a href="[% shibbolethLoginUrl | $raw %]">click here to login</a>.</p>
                         <h4>Local Login</h4>
                     [% END %]
                 [% END %]

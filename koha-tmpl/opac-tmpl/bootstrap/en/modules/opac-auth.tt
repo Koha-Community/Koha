@@ -82,7 +82,7 @@
                                     </div>
                             [% ELSE %]
                                 <h4>Shibboleth Login</h4>
-                                <p><a href="[% shibbolethLoginUrl | url %]">If you have a Shibboleth account, please click here to log in.</a></p>
+                                <p><a href="[% shibbolethLoginUrl | $raw %]">If you have a Shibboleth account, please click here to log in.</a></p>
                             [% END %]
                             [% IF ( casAuthentication ) %]
                                 <h4>CAS login</h4>
