@@ -22,6 +22,7 @@ use Module::Load::Conditional qw/check_install/;
 use Test::More;
 use Test::MockModule;
 use Test::Warn;
+use File::Temp qw(tempdir);
 
 use CGI;
 use C4::Context;
@@ -124,18 +125,47 @@ subtest "shib_ok tests" => sub {
 #is(logout_shib($query),"https://".$opac."/Shibboleth.sso/Logout?return="."https://".$opac,"logout_shib");
 
 ## login_shib_url
-my $query_string = 'language=en-GB';
-$ENV{QUERY_STRING} = $query_string;
-$ENV{SCRIPT_NAME}  = '/cgi-bin/koha/opac-user.pl';
-my $query = CGI->new($query_string);
-is(
-    login_shib_url($query),
-    'https://testopac.com'
-      . '/Shibboleth.sso/Login?target='
-      . 'https://testopac.com/cgi-bin/koha/opac-user.pl?'
-      . $query_string,
-    "login shib url"
-);
+subtest "login_shib_url tests" => sub {
+    plan tests => 2;
+
+    my $query_string = 'language=en-GB';
+
+    local $ENV{REQUEST_METHOD} = 'GET';
+    local $ENV{QUERY_STRING}   = $query_string;
+    local $ENV{SCRIPT_NAME}    = '/cgi-bin/koha/opac-user.pl';
+    my $query = CGI->new($query_string);
+    is(
+        login_shib_url($query),
+        'https://testopac.com'
+          . '/Shibboleth.sso/Login?target='
+          . 'https://testopac.com/cgi-bin/koha/opac-user.pl' . '%3F'
+          . $query_string,
+        "login shib url"
+    );
+
+    my $post_params = 'user=bob&password=wideopen';
+    local $ENV{REQUEST_METHOD} = 'POST';
+    local $ENV{CONTENT_LENGTH} = length($post_params);
+
+    my $dir = tempdir( CLEANUP => 1 );
+    my $infile = "$dir/in.txt";
+    open my $fh_write, '>', $infile or die "Could not open '$infile' $!";
+    print $fh_write $post_params;
+    close $fh_write;
+
+    open my $fh_read, '<', $infile or die "Could not open '$infile' $!";
+
+    $query = CGI->new($fh_read);
+    is(
+        login_shib_url($query),
+        'https://testopac.com'
+          . '/Shibboleth.sso/Login?target='
+          . 'https://testopac.com/cgi-bin/koha/opac-user.pl',
+        "login shib url"
+    );
+
+    close $fh_read;
+};
 
 ## get_login_shib
 subtest "get_login_shib tests" => sub {
