@@ -493,6 +493,86 @@
       </xsl:if>
     </xsl:template>
 
+    <xsl:template name="performance-medium">
+      <xsl:if test="//marc:datafield[@tag=382]/marc:subfield[@code='a' or @code='b']">
+	<span class="results_summary performance-medium">
+	  <span class="label">Performance medium: </span>
+	  <span class="datablock">
+	    <xsl:for-each select="//marc:datafield[@tag=382]">
+	      <span><xsl:attribute name="class">ind1-<xsl:value-of select="@ind1"/></xsl:attribute>
+	      <xsl:for-each select="marc:subfield[@code = 'a' or @code='b' or @code='n']">
+		<xsl:choose>
+		  <xsl:when test="@code='a' or @code='b'">
+		    <xsl:value-of select="."/>
+		  </xsl:when>
+		  <xsl:when test="@code='n'">
+		    <xsl:text> (</xsl:text>
+		    <xsl:value-of select="."/>
+		    <xsl:text>)</xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="position()!=last()">
+			<xsl:text>, </xsl:text>
+                      </xsl:when>
+                    </xsl:choose>
+		  </xsl:when>
+		</xsl:choose>
+	      </xsl:for-each>
+	      <xsl:choose><xsl:when test="position()!=last()"><xsl:text>, </xsl:text></xsl:when></xsl:choose>
+	      </span>
+	    </xsl:for-each>
+	  </span>
+	</span>
+	</xsl:if>
+    </xsl:template>
+
+    <xsl:template name="producing-country">
+      <xsl:if test="//marc:datafield[@tag=257]/marc:subfield[@code='a']">
+	<span class="results_summary producing-country"><span class="label">Producing country: </span>
+        <xsl:for-each select="marc:datafield[@tag=257]">
+          <xsl:call-template name="chopPunctuation">
+            <xsl:with-param name="chopString">
+              <xsl:call-template name="subfieldSelect">
+                <xsl:with-param name="codes">a</xsl:with-param>
+              </xsl:call-template>
+            </xsl:with-param>
+          </xsl:call-template>
+          <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+        </xsl:for-each>
+	</span>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="creation-time">
+      <xsl:if test="//marc:datafield[@tag=388]/marc:subfield[@code='a']">
+	<span class="results_summary creation-time"><span class="label">Creation time: </span>
+          <xsl:for-each select="marc:datafield[@tag=388]">
+            <xsl:call-template name="chopPunctuation">
+	      <xsl:with-param name="chopString">
+		<xsl:call-template name="subfieldSelect">
+                  <xsl:with-param name="codes">a</xsl:with-param>
+		</xsl:call-template>
+	      </xsl:with-param>
+            </xsl:call-template>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+          </xsl:for-each>
+	</span>
+      </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="associated-place">
+      <xsl:if test="//marc:datafield[@tag=370]/marc:subfield[contains('cfg', @code)]">
+	<span class="results_summary associated-place"><span class="label">Associated place: </span>
+        <xsl:for-each select="marc:datafield[@tag=370]">
+	  <xsl:for-each select="marc:subfield[contains('cfg', @code)]">
+	    <xsl:value-of select="."/>
+            <xsl:choose><xsl:when test="position()!=last()"><xsl:text>, </xsl:text></xsl:when></xsl:choose>
+	  </xsl:for-each>
+          <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when></xsl:choose>
+	</xsl:for-each>
+	</span>
+      </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.

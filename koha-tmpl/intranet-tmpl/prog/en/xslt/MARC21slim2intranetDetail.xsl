@@ -520,6 +520,10 @@
         </span>
         </xsl:if>
 
+        <xsl:call-template name="producing-country"/>
+        <xsl:call-template name="associated-place"/>
+        <xsl:call-template name="creation-time"/>
+
         <!-- Description: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
             <xsl:call-template name="m880Select">
@@ -586,6 +590,8 @@
                 </xsl:if>
             </span>
         </xsl:if>
+
+        <xsl:call-template name="performance-medium"/>
 
         <xsl:call-template name="show-age-rating"/> <!-- koha-suomi: kielletty alle -->
 
