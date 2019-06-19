@@ -18761,6 +18761,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21073 - Improve plugin performance)\n";
 }
 
+$DBversion = '19.06.00.007';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "DELETE FROM systempreferences WHERE variable = 'RotationPreventTransfers'" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22653 - Remove unimplemented RotationPreventTransfers system preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
