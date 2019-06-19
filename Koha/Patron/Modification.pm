@@ -28,7 +28,7 @@ use Koha::Patron::Attributes;
 use Koha::Patron::Modifications;
 
 use JSON;
-use List::MoreUtils qw( uniq );
+use List::MoreUtils qw( uniq any );
 use Try::Tiny;
 
 use base qw(Koha::Object);
@@ -91,17 +91,17 @@ sub approve {
     delete $data->{timestamp};
     delete $data->{verification_token};
     delete $data->{extended_attributes};
+    my $changed_fields = $data->{changed_fields};
+    delete $data->{changed_fields};
 
     my $patron = Koha::Patrons->find( $self->borrowernumber );
     return unless $patron;
 
-    foreach my $key ( keys %$data ) {
-        next # Unset it!
-          if $key eq 'dateofbirth'
-          && $patron->dateofbirth
-          && not defined $data->{$key};
-
-        delete $data->{$key} unless defined $data->{$key};
+    my @keep_keys = split /,/, $changed_fields;
+    my @all_keys = keys %$data;
+    foreach my $key ( @all_keys ) {
+        next if (any { $_ eq $key } @keep_keys);
+        delete $data->{$key};
     }
 
     $patron->set($data);
