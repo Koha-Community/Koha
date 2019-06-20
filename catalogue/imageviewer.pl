@@ -90,7 +90,6 @@ $template->{VARS}->{'biblio'} = $biblio;
 my @allorders_using_biblio = GetOrdersByBiblionumber ($biblionumber);
 my @deletedorders_using_biblio;
 my @orders_using_biblio;
-my @baskets_orders;
 my @baskets_deletedorders;
 
 foreach my $myorder (@allorders_using_biblio) {
@@ -103,9 +102,6 @@ foreach my $myorder (@allorders_using_biblio) {
     }
     else {
         push @orders_using_biblio, $myorder;
-        unless (grep{ $_ eq $basket } @baskets_orders){
-            push @baskets_orders,$myorder->{'basketno'};
-            }
     }
 }
 
