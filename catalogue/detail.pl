@@ -552,26 +552,18 @@ if ($StaffDetailItemSelection) {
     }
 }
 
-my @allorders_using_biblio = GetOrdersByBiblionumber ($biblionumber);
-my @deletedorders_using_biblio;
-my @orders_using_biblio;
-
-foreach my $myorder (@allorders_using_biblio) {
-    my $basket = $myorder->{'basketno'};
-    if ((defined $myorder->{'datecancellationprinted'}) and  ($myorder->{'datecancellationprinted'} ne '0000-00-00') ){
-        push @deletedorders_using_biblio, $myorder;
-    }
-    else {
-        push @orders_using_biblio, $myorder;
-    }
-}
-
 $template->param(biblio => $biblio);
 
-my $count_orders_using_biblio = scalar @orders_using_biblio ;
-$template->param (countorders => $count_orders_using_biblio);
+my $orders =
+  Koha::Acquisition::Orders->search( { biblionumber => $biblionumber } );
 
-my $count_deletedorders_using_biblio = scalar @deletedorders_using_biblio ;
-$template->param (countdeletedorders => $count_deletedorders_using_biblio);
+$template->param(
+    countorders => $orders->search( {
+        datecancellationprinted => [ undef, '0000-00-00' ]
+    } )->count,
+    countdeletedorders => $orders->search( {
+        datecancellationprinted => [ { '!=' => [ -and => ( undef, '0000-00-00' ) ] } ]
+    } )->count,
+) if $orders->count;
 
 output_html_with_http_headers $query, $cookie, $template->output;
