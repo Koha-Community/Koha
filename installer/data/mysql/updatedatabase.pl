@@ -18435,12 +18435,16 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = '18.12.00.069';
 if( CheckVersion( $DBversion ) ) {
 
-    use Koha::Plugins;
-
-    my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({ all => 1 });
-    foreach my $plugin ( @plugins ) {
-        $plugin->enable;
-    }
+    $dbh->do(q{
+        INSERT INTO plugin_data
+            (plugin_class, plugin_key, plugin_value)
+        SELECT
+            plugin_class,
+            '__ENABLED__',
+            1
+        FROM plugin_data
+        WHERE plugin_key='__INSTALLED_VERSION__'
+    });
 
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
