@@ -265,7 +265,7 @@ sub store {
                     my $info;
                     my $from_storage = $self_from_storage->unblessed;
                     my $from_object  = $self->unblessed;
-                    my @skip_fields  = (qw/lastseen/);
+                    my @skip_fields  = (qw/lastseen updated_on/);
                     for my $key ( keys %{$from_storage} ) {
                         next if any { /$key/ } @skip_fields;
                         if (
