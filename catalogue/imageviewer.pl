@@ -90,15 +90,11 @@ $template->{VARS}->{'biblio'} = $biblio;
 my @allorders_using_biblio = GetOrdersByBiblionumber ($biblionumber);
 my @deletedorders_using_biblio;
 my @orders_using_biblio;
-my @baskets_deletedorders;
 
 foreach my $myorder (@allorders_using_biblio) {
     my $basket = $myorder->{'basketno'};
     if ((defined $myorder->{'datecancellationprinted'}) and  ($myorder->{'datecancellationprinted'} ne '0000-00-00') ){
         push @deletedorders_using_biblio, $myorder;
-        unless (grep{ $_ eq $basket } @baskets_deletedorders){
-            push @baskets_deletedorders,$myorder->{'basketno'};
-        }
     }
     else {
         push @orders_using_biblio, $myorder;
