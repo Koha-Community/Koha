@@ -23,7 +23,7 @@ use C4::CourseReserves qw/ModCourseItem ModCourseReserve DelCourseReserve GetCou
 use C4::Context;
 use Koha::Items;
 
-use Test::More tests => 27;
+use Test::More tests => 28;
 
 BEGIN {
     require_ok('C4::CourseReserves');
@@ -148,7 +148,17 @@ ModCourseReserve(
 );
 
 $item = Koha::Items->find($itemnumber);
-is($item->ccode, 'DVD', 'Item ccode should be BOOK');
+is($item->ccode, 'DVD', 'Item ccode should be DVD');
+
+ModCourseItem(
+    itemnumber    => $itemnumber,
+    itype         => 'BK',
+    ccode         => 'BOOK',
+    holdingbranch => '', # LEAVE UNCHANGED
+    location      => 'TH',
+);
+$item = Koha::Items->find($itemnumber);
+is($item->ccode, 'BOOK', 'Item ccode should be BOOK');
 
 $course_item2 = GetCourseItem( ci_id => $ci_id2 );
 is($course_item2->{ccode}, '', 'Course item ccode should be empty');
