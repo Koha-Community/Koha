@@ -712,7 +712,7 @@ sub _get_facets_data_from_record {
 
                 my $data = $field->as_string( $subfield_letters, $facet->{ sep } );
 
-                unless ( grep { /^\Q$data\E$/ } @used_datas ) {
+                unless ( grep { $_ eq $data } @used_datas ) {
                     push @used_datas, $data;
                     $facets_counter->{ $facet->{ idx } }->{ $data }++;
                 }
@@ -1470,12 +1470,12 @@ sub buildQuery {
         # this happens when selecting a subject on the opac-detail page
         @limits = grep {!/^$/} @limits;
         my $original_q = $q; # without available part
-        unless ( grep { /^available$/ } @limits ) {
+        unless ( grep { $_ eq 'available' } @limits ) {
             $q =~ s| and \( \(allrecords,AlwaysMatches=''\) and \(not-onloan-count,st-numeric >= 1\) and \(lost,st-numeric=0\) \)||;
             $original_q = $q;
         }
         if ( @limits ) {
-            if ( grep { /^available$/ } @limits ) {
+            if ( grep { $_ eq 'available' } @limits ) {
                 $q .= q| and ( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )|;
                 delete $limits['available'];
             }

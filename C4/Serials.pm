@@ -1605,7 +1605,7 @@ sub NewIssue {
         ### Would use substr and index But be careful to previous presence of ()
         $recievedlist .= "; $serialseq" unless ( index( $recievedlist, $serialseq ) > 0 );
     }
-    if ( grep { /^$status$/ } (MISSING_STATUSES) ) {
+    if ( grep { $_ eq $status } (MISSING_STATUSES) ) {
         $missinglist .= "; $serialseq" unless ( index( $missinglist, $serialseq ) > 0 );
     }
 

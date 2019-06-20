@@ -301,7 +301,7 @@ $borrower_category = [ map { uc $_ } @$borrower_category ];
 $skip_borrower_category = [ map { uc $_} @$skip_borrower_category ];
 my %category_to_process;
 for my $cat ( @$borrower_category ) {
-    unless ( grep { /^$cat$/ } @available_categories ) {
+    unless ( grep { $_ eq $cat } @available_categories ) {
         pod2usage(
             '-exitval' => 1,
             '-message' => "The category $cat does not exist in the database",
@@ -311,7 +311,7 @@ for my $cat ( @$borrower_category ) {
 }
 if ( @$skip_borrower_category ) {
     for my $cat ( @$skip_borrower_category ) {
-        unless ( grep { /^$cat$/ } @available_categories ) {
+        unless ( grep { $_ eq $cat } @available_categories ) {
             pod2usage(
                 '-exitval' => 1,
                 '-message' => "The category $cat does not exist in the database",
@@ -329,7 +329,7 @@ $itemtype = [ map { uc $_ } @$itemtype ];
 $skip_itemtype = [ map { uc $_} @$skip_itemtype ];
 my %itemtype_to_process;
 for my $it ( @$itemtype ) {
-    unless ( grep { /^$it$/ } @available_itemtypes ) {
+    unless ( grep { $_ eq $it } @available_itemtypes ) {
         pod2usage(
             '-exitval' => 1,
             '-message' => "The itemtype $it does not exist in the database",
@@ -339,7 +339,7 @@ for my $it ( @$itemtype ) {
 }
 if ( @$skip_itemtype ) {
     for my $it ( @$skip_itemtype ) {
-        unless ( grep { /^$it$/ } @available_itemtypes ) {
+        unless ( grep { $_ eq $it } @available_itemtypes ) {
             pod2usage(
                 '-exitval' => 1,
                 '-message' => "The itemtype $it does not exist in the database",

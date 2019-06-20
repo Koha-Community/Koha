@@ -435,7 +435,7 @@ my @allowed_sortby = qw /acqdate_asc acqdate_dsc author_az author_za call_number
 @sort_by = $cgi->multi_param('sort_by');
 $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
 foreach my $sort (@sort_by) {
-    if ( grep { /^$sort$/ } @allowed_sortby ) {
+    if ( grep { $_ eq $sort } @allowed_sortby ) {
         $template->param($sort => 1);
     }
 }

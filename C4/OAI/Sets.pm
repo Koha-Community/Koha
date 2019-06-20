@@ -554,12 +554,12 @@ sub _evalRule {
     }
 
     if ($operator eq 'notequal') {
-        if(0 == grep /^$value$/, @all_subfield_values) {
+        if(0 == grep { $_ eq $value } @all_subfield_values) {
             return 1;
         }
     }
     else {
-        if(0 < grep /^$value$/, @all_subfield_values) {
+        if(0 < grep { $_ eq $value } @all_subfield_values) {
             return 1;
         }
     }

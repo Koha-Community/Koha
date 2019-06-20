@@ -644,7 +644,7 @@ sub extract_messages {
             next if $entry =~ /^\./;
             my $relentry = File::Spec->catfile($dir, $entry);
             my $abspath = File::Spec->catfile($basedir, $relentry);
-            if (-d $abspath and not grep /^$relentry$/, @blacklist) {
+            if (-d $abspath and not grep { $_ eq $relentry } @blacklist) {
                 push @directories_to_scan, $relentry;
             } elsif (-f $abspath and $relentry =~ /\.(pl|pm)$/) {
                 push @files_to_scan, $relentry;

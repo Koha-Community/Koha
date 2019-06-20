@@ -59,7 +59,7 @@ sub get_fields {
         my @columns = $schema->source('Item')->columns;
 
         foreach my $fn ( @spfields ) {
-            push ( @ret, $fn ) if ( grep(/^$fn$/, @columns) );
+            push ( @ret, $fn ) if ( grep { $_ eq $fn } @columns );
         }
         $ret = join( '|', @ret);
     }

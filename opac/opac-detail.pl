@@ -721,7 +721,7 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     
     if ( C4::Context->preference('OPACAcquisitionDetails') ) {
         $itm->{on_order} = 1
-          if grep /^$itm->{itemnumber}$/, @itemnumbers_on_order;
+          if grep { $_ eq $itm->{itemnumber} } @itemnumbers_on_order;
     }
 
     my $itembranch = $itm->{$separatebranch};

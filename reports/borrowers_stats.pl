@@ -162,17 +162,17 @@ sub calculate {
         my $attribute_type = $1;
         return unless (grep {$attribute_type eq $_->{code}} @attribute_types);
     } else {
-        return unless (grep /^$line$/, @valid_names);
+        return unless (grep { $_ eq $line } @valid_names);
     }
     if ($column =~ /^patron_attr\.(.*)/) {
         my $attribute_type = $1;
         return unless (grep {$attribute_type eq $_->{code}} @attribute_types);
     } else {
-        return unless (grep /^$column$/, @valid_names);
+        return unless (grep { $_ eq $column } @valid_names);
     }
     return if ($digits and $digits !~ /^\d+$/);
-    return if ($status and (grep /^$status$/, qw(debarred gonenoaddress lost)) == 0);
-    return if ($activity and (grep /^$activity$/, qw(active nonactive)) == 0);
+    return if ($status and (grep { $_ eq $status } qw(debarred gonenoaddress lost)) == 0);
+    return if ($activity and (grep { $_ eq $activity } qw(active nonactive)) == 0);
 
     # Filters
     my $linefilter;

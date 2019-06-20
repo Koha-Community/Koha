@@ -327,7 +327,7 @@ if ( $op eq 'do' ) {
         for my $field ( qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile sort1 sort2 dateenrolled dateexpiry borrowernotes opacnote/ ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
-        $infos->{$field} = "" if grep { /^$field$/ } @disabled;
+        $infos->{$field} = "" if grep { $_ eq $field } @disabled;
     }
 
     for my $field ( qw( dateenrolled dateexpiry debarred ) ) {
@@ -384,7 +384,7 @@ if ( $op eq 'do' ) {
             # If this borrower is not in the category of this attribute, we don't want to modify this attribute
             ++$i and next if $attr_type->{category_code} and $attr_type->{category_code} ne $borrower_categorycode;
             my $valuename = "attr" . $i . "_value";
-            if ( grep { /^$valuename$/ } @disabled ) {
+            if ( grep { $_ eq $valuename } @disabled ) {
                 # The attribute is disabled, we remove it for this borrower !
                 eval {
                     C4::Members::Attributes::DeleteBorrowerAttribute( $borrowernumber, $attribute );

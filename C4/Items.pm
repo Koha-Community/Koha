@@ -2107,11 +2107,11 @@ sub _SearchItems_build_where_fragment {
         push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
         my @operators = qw(= != > < >= <= like);
         my $field = $filter->{field} // q{};
-        if ( (0 < grep /^$field$/, @columns) or (substr($field, 0, 5) eq 'marc:') ) {
+        if ( (0 < grep { $_ eq $field } @columns) or (substr($field, 0, 5) eq 'marc:') ) {
             my $op = $filter->{operator};
             my $query = $filter->{query};
 
-            if (!$op or (0 == grep /^$op$/, @operators)) {
+            if (!$op or (0 == grep { $_ eq $op } @operators)) {
                 $op = '='; # default operator
             }
 
@@ -2612,8 +2612,8 @@ sub ToggleNewStatus {
         |;
         for my $condition ( @$conditions ) {
             if (
-                 grep {/^$condition->{field}$/} @item_columns
-              or grep {/^$condition->{field}$/} @biblioitem_columns
+                 grep { $_ eq $condition->{field} } @item_columns
+              or grep { $_ eq $condition->{field} } @biblioitem_columns
             ) {
                 if ( $condition->{value} =~ /\|/ ) {
                     my @values = split /\|/, $condition->{value};

@@ -253,7 +253,7 @@ sub set {
     my @columns = @{$self->_columns()};
 
     foreach my $p ( keys %$properties ) {
-        unless ( grep {/^$p$/} @columns ) {
+        unless ( grep { $_ eq $p } @columns ) {
             Koha::Exceptions::Object::PropertyNotFound->throw( "No property $p for " . ref($self) );
         }
     }
@@ -661,7 +661,7 @@ sub AUTOLOAD {
 
     my @columns = @{$self->_columns()};
     # Using direct setter/getter like $item->barcode() or $item->barcode($barcode);
-    if ( grep {/^$method$/} @columns ) {
+    if ( grep { $_ eq $method } @columns ) {
         if ( @_ ) {
             $self->_result()->set_column( $method, @_ );
             return $self;
@@ -676,7 +676,7 @@ sub AUTOLOAD {
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
         error      => sprintf("The method %s->%s is not covered by tests!", ref($self), $method),
         show_trace => 1
-    ) unless grep { /^$method$/ } @known_methods;
+    ) unless grep { $_ eq $method } @known_methods;
 
 
     my $r = eval { $self->_result->$method(@_) };

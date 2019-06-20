@@ -54,7 +54,7 @@ my ($cmd, $lang) = @ARGV;
 $cmd = lc $cmd;
 if ( $cmd =~ /create|install|update/ ) {
     my $installer = LangInstaller->new( $lang, $pref, $verbose );
-    if ( $cmd ne 'create' and $lang and not grep( /^$lang$/, @{ $installer->{langs} } ) ) {
+    if ( $cmd ne 'create' and $lang and not grep( {$_ eq $lang} @{ $installer->{langs} } ) ) {
         print "Unsupported language: $lang\n";
         exit;
     }

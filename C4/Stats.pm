@@ -108,7 +108,7 @@ sub UpdateStats {
     }
     my @invalid_params = ();
     for my $myparam (keys %$params ) {
-        push @invalid_params, $myparam unless grep (/^$myparam$/, @allowed_keys);
+        push @invalid_params, $myparam unless grep { $_ eq $myparam } @allowed_keys;
     }
     if (scalar @invalid_params > 0 ) {
         croak ("UpdateStats received invalid param(s): ".join (", ",@invalid_params ));

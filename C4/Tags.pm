@@ -192,7 +192,7 @@ sub get_tag_rows {
 			carp "Empty argument key to get_tag_rows: ignoring!";
 			next;
 		}
-		unless (1 == scalar grep {/^ $key $/x} @ok_fields) {
+		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
 			carp "get_tag_rows received unreconized argument key '$key'.";
 			next;
 		}
@@ -233,7 +233,7 @@ sub get_tags {		# i.e., from tags_index
 			carp "Empty argument key to get_tags: ignoring!";
 			next;
 		}
-		unless (1 == scalar grep {/^ $key $/x} @ok_fields) {
+		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
 			carp "get_tags received unreconized argument key '$key'.";
 			next;
 		}
@@ -302,7 +302,7 @@ sub get_approval_rows {		# i.e., from tags_approval
 			carp "Empty argument key to get_approval_rows: ignoring!";
 			next;
 		}
-		unless (1 == scalar grep {/^ $key $/x} @ok_fields) {
+		unless (1 == scalar grep { $_ eq $key } @ok_fields) {
 			carp "get_approval_rows received unreconized argument key '$key'.";
 			next;
 		}

@@ -91,7 +91,7 @@ my @all_messages = @{ GetPrintMessages() };
 @all_messages = map {
     my $letter_code = $_->{letter_code};
     (
-        grep { /^$letter_code$/ } @letter_codes
+        grep { $_ eq $letter_code } @letter_codes
     ) ? $_ : ()
 } @all_messages if @letter_codes;
 exit unless @all_messages;

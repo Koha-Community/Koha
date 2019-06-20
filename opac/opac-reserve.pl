@@ -78,7 +78,7 @@ unless ( $can_place_hold_if_available_at_pickup ) {
     my @patron_categories = split '\|', C4::Context->preference('OPACHoldsIfAvailableAtPickupExceptions');
     if ( @patron_categories ) {
         my $categorycode = $patron->categorycode;
-        $can_place_hold_if_available_at_pickup = grep /^$categorycode$/, @patron_categories;
+        $can_place_hold_if_available_at_pickup = grep { $_ eq $categorycode } @patron_categories;
     }
 }
 

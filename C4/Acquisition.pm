@@ -1346,7 +1346,7 @@ sub ModOrder {
     foreach my $orderinfokey (grep(!/ordernumber/, keys %$orderinfo)){
         # ... and skip hash entries that are not in the aqorders table
         # FIXME : probably not the best way to do it (would be better to have a correct hash)
-        next unless grep(/^$orderinfokey$/, @$colnames);
+        next unless grep { $_ eq $orderinfokey } @$colnames;
             $query .= "$orderinfokey=?, ";
             push(@params, $orderinfo->{$orderinfokey});
     }
@@ -2702,7 +2702,7 @@ sub GetInvoices {
 
     if($args{order_by}) {
         my ($column, $direction) = split / /, $args{order_by};
-        if(grep /^$column$/, @columns) {
+        if(grep  { $_ eq $column } @columns) {
             $direction ||= 'ASC';
             $query .= " ORDER BY $column $direction";
         }
@@ -2826,7 +2826,7 @@ sub AddInvoice {
     my @set_strs;
     my @set_args;
     foreach my $key (keys %invoice) {
-        if(0 < grep(/^$key$/, @columns)) {
+        if(0 < grep { $_ eq $key } @columns) {
             push @set_strs, "$key = ?";
             push @set_args, ($invoice{$key} || undef);
         }
@@ -2876,7 +2876,7 @@ sub ModInvoice {
     my @set_strs;
     my @set_args;
     foreach my $key (keys %invoice) {
-        if(0 < grep(/^$key$/, @columns)) {
+        if(0 < grep { $_ eq $key } @columns) {
             push @set_strs, "$key = ?";
             push @set_args, ($invoice{$key} || undef);
         }

@@ -63,7 +63,7 @@ if (defined $format and $format eq 'json') {
                 push @f, $columns[$i];
                 push @c, 'and';
 
-                if ( grep /^$columns[$i]$/, qw( ccode homebranch holdingbranch location itype notforloan itemlost ) ) {
+                if ( grep { $_ eq $columns[$i] } qw( ccode homebranch holdingbranch location itype notforloan itemlost ) ) {
                     push @q, "$word";
                     push @op, '=';
                 } else {

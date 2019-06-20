@@ -86,7 +86,7 @@ my @ordernumbers = split ',', scalar $input->param('ordernumbers') || '';
 if ( $op eq 'select' ) {
     @result_order_loop = map {
         my $order = $_;
-        ( grep { /^$order->{ordernumber}$/ } @ordernumbers ) ? () : $order
+        ( grep {$_ eq $order->{ordernumber}} @ordernumbers ) ? () : $order
     } @{ C4::Acquisition::GetHistory(%$filters) };
 
     @selected_order_loop =
@@ -132,7 +132,7 @@ elsif ( $op eq 'do_duplicate' ) {
     for my $field (
         qw(currency budget_id order_internalnote order_vendornote sort1 sort2 ))
     {
-        next if grep { /^$field$/ } @fields_to_copy;
+        next if grep { $_ eq $field } @fields_to_copy;
         $default_values->{$field} = $input->param("all_$field");
     }
 

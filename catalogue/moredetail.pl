@@ -281,13 +281,13 @@ foreach my $myorder (@allorders_using_biblio) {
     my $basket = $myorder->{'basketno'};
     if ((defined $myorder->{'datecancellationprinted'}) and  ($myorder->{'datecancellationprinted'} ne '0000-00-00') ){
         push @deletedorders_using_biblio, $myorder;
-        unless (grep(/^$basket$/, @baskets_deletedorders)){
+        unless (grep{ $_ eq $basket } @baskets_deletedorders){
             push @baskets_deletedorders,$myorder->{'basketno'};
         }
     }
     else {
         push @orders_using_biblio, $myorder;
-        unless (grep(/^$basket$/, @baskets_orders)){
+        unless (grep { $_ eq $basket } @baskets_orders){
             push @baskets_orders,$myorder->{'basketno'};
             }
     }

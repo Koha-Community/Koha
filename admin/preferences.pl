@@ -117,7 +117,7 @@ sub _get_chunk {
                 {
                     text     => $options{multiple}->{$option_value},
                     value    => $option_value,
-                    selected => (grep /^$option_value$/, @values) ? 1 : 0,
+                    selected => (grep { $_ eq $option_value } @values) ? 1 : 0,
                 }
               }
               keys %{ $options{multiple} }

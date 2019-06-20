@@ -427,7 +427,7 @@ sub AUTOLOAD {
     $method =~ s/.*:://;
 
 
-    unless ( grep { /^$method$/ } @known_methods ) {
+    unless ( grep { $_ eq $method } @known_methods ) {
         my $class = ref($self) ? ref($self) : $self;
         Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
             error      => sprintf("The method %s->%s is not covered by tests!", $class, $method),

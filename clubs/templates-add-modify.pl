@@ -92,7 +92,7 @@ if ( $cgi->param('name') ) {    # Update or create club
           ? Koha::Club::Template::Fields->find($field_id)
           : Koha::Club::Template::Field->new();
 
-        if ( grep( /^$field_id$/, @field_delete ) ) {
+        if ( grep { $_ eq $field_id } @field_delete ) {
             $field->delete();
         }
         else {
@@ -126,7 +126,7 @@ if ( $cgi->param('name') ) {    # Update or create club
           ? Koha::Club::Template::EnrollmentFields->find($field_id)
           : Koha::Club::Template::EnrollmentField->new();
 
-        if ( grep( /^$field_id$/, @field_delete ) ) {
+        if ( grep { $_ eq $field_id } @field_delete ) {
             $field->delete();
         }
         else {

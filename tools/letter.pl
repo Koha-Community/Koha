@@ -266,7 +266,7 @@ sub add_form {
     my $preview_is_available = 0;
 
     if ($code) {
-        $preview_is_available = grep {/^$code$/} qw( CHECKIN CHECKOUT HOLD_SLIP );
+        $preview_is_available = grep {$_ eq $code } qw( CHECKIN CHECKOUT HOLD_SLIP );
     }
 
     $template->param(

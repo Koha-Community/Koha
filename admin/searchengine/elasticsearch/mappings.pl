@@ -135,7 +135,7 @@ if ( $op eq 'edit' ) {
             my $search_field_name   = $search_field_name[$i];
             my $mapping_marc_field  = $mapping_marc_field[$i];
             my $mapping_facet       = $mapping_facet[$i];
-            $mapping_facet = ( grep {/^$search_field_name$/} @facetable_field_names ) ? $mapping_facet : 0;
+            $mapping_facet = ( grep { $_ eq $search_field_name } @facetable_field_names ) ? $mapping_facet : 0;
             my $mapping_suggestible = $mapping_suggestible[$i];
             my $mapping_sort        = $mapping_sort[$i] eq 'undef' ? undef : $mapping_sort[$i];
             my $mapping_search      = $mapping_search[$i];
@@ -238,7 +238,7 @@ for my $index_name (@index_names) {
             suggestible        => $s->get_column('suggestible'),
             search             => $s->get_column('search'),
             facet              => $s->get_column('facet'),
-            is_facetable       => ( grep {/^$name$/} @facetable_field_names ) ? 1 : 0,
+            is_facetable       => ( grep { $_ eq $name } @facetable_field_names ) ? 1 : 0,
         };
     }
 
