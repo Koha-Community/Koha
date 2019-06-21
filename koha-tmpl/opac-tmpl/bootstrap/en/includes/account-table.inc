@@ -16,7 +16,7 @@
 
         <tbody>
             [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
-                <tr [% IF ACCOUNT_LINE.amountoutstanding > 0 || ACCOUNT_LINE.amountoutstanding < 0 %]class="outstanding"[% END%]>
+                [% IF ACCOUNT_LINE.amountoutstanding > 0 || ACCOUNT_LINE.amountoutstanding < 0 %]<tr class="outstanding">[% ELSE %]<tr>[% END%]
                     [% IF ENABLE_OPAC_PAYMENTS %]
                         <td>
                             [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
@@ -54,7 +54,7 @@
             </tr>
             [% IF outstanding_credits.total_outstanding < 0 %]
             [% FOREACH outstanding_credit IN outstanding_credits %]
-                <tr [% IF outstanding_credit.amountoutstanding < 0 %]class="outstanding"[% END%]>
+                [% IF outstanding_credit.amountoutstanding < 0 %]<tr class="outstanding">[% ELSE %]<tr>[% END%]
                     [% IF ENABLE_OPAC_PAYMENTS %]<td></td>[% END %]
                     <td><span title="[% outstanding_credit.date | html %]">[% outstanding_credit.date | $KohaDates %]</span></td>
                     <td>
