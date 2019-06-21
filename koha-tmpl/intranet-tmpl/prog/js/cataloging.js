@@ -12,7 +12,7 @@ function getFieldCode(tagDivId){
 
 //returns the field and subfieldcode based upon subfield div id
 function getFieldAndSubfieldCode(subfieldDivId){
- // format : subfield<tagnumber><subfieldnumber>...
+    // format : subfield<tagnumber><subfieldnumber>...
     return subfieldDivId.substr(8,3+1);
 }
 
@@ -76,23 +76,23 @@ function ExpandField(index) {
 }
 
 var Select2Utils = {
-  removeSelect2: function(element) {
-    if ($.fn.select2) {
-      var selects = element.getElementsByTagName('select');
-      for (var i=0; i < selects.length; i++) {
-        $(selects[i]).select2('destroy');
-      }
-    }
-  },
+    removeSelect2: function(element) {
+        if ($.fn.select2) {
+            var selects = element.getElementsByTagName('select');
+            for (var i=0; i < selects.length; i++) {
+                $(selects[i]).select2('destroy');
+            }
+        }
+    },
 
-  initSelect2: function(element) {
-    if ($.fn.select2) {
-      var selects = element.getElementsByTagName('select');
-      for (var i=0; i < selects.length; i++) {
-        $(selects[i]).select2();
-      }
+    initSelect2: function(element) {
+        if ($.fn.select2) {
+            var selects = element.getElementsByTagName('select');
+            for (var i=0; i < selects.length; i++) {
+                $(selects[i]).select2();
+            }
+        }
     }
-  }
 };
 
 /**
@@ -221,7 +221,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                                     buttonDotOnClick = buttonDotOnClick.replace(re2,",'"+inputs[1].getAttribute('id')+"')");
 
                                     if(buttonDotOnClick){
-                                            buttonDot.setAttribute('onclick',buttonDotOnClick);
+                                        buttonDot.setAttribute('onclick',buttonDotOnClick);
                                     }
                                 }
                             }
@@ -557,6 +557,6 @@ function CheckMandatorySubfields(p){
     return total;
 }
 
- $(document).ready(function() {
+$(document).ready(function() {
     $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');
 });
