@@ -3,6 +3,7 @@ package Koha::Plugin::Test;
 ## It's good practice to use Modern::Perl
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
 use Mojo::JSON qw(decode_json);
 
 ## Required for all plugins
@@ -122,6 +123,35 @@ sub test_output_html {
 
 sub api_namespace {
     return "testplugin";
+}
+
+sub after_biblio_action {
+    my ( $self, $params ) = @_;
+    my $action    = $params->{action} // '';
+    my $biblio    = $params->{biblio};
+    my $biblio_id = $params->{biblio_id};
+
+    if ( $action ne 'delete' ) {
+        Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action, ref: " . ref($biblio) );
+    }
+    else {
+        Koha::Exceptions::Exception->throw("after_biblio_action called with action: $action") if $biblio_id;
+    }
+}
+
+
+sub after_item_action {
+    my ( $self, $params ) = @_;
+    my $action  = $params->{action} // '';
+    my $item    = $params->{item};
+    my $item_id = $params->{item_id};
+
+    if ( $action ne 'delete' ) {
+        Koha::Exceptions::Exception->throw("after_item_action called with action: $action, ref: " . ref($item) );
+    }
+    else {
+        Koha::Exceptions::Exception->throw("after_item_action called with action: $action" ) if $item_id;
+    }
 }
 
 sub api_routes {
