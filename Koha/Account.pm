@@ -269,7 +269,7 @@ sub pay {
                 lang    => $patron->lang,
                 tables => {
                     borrowers       => $self->{patron_id},
-                    branches        => $self->{library_id},
+                    branches        => $library_id,
                 },
                 substitute => {
                     credit => $payment,
