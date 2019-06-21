@@ -231,6 +231,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('HTML5MediaExtensions','webm|ogg|ogv|oga|vtt','','Media file extensions','free'),
 ('HTML5MediaYouTube',0,'Embed|Don\'t embed','YouTube links as videos','YesNo'),
 ('IdRef','0','','Disable/enable the IdRef webservice from the OPAC detail page.','YesNo'),
+('IllCheckAvailability', 0, '', 'If ON, during the ILL request process third party sources will be checked for current availability', 'YesNo'),
 ('IllLog', 0, '', 'If ON, log information about ILL requests', 'YesNo'),
 ('ILLModule','0','If ON, enables the interlibrary loans module.','','YesNo'),
 ('ILLModuleCopyrightClearance','','70|10','Enter text to enable the copyright clearance stage of request creation. Text will be displayed','Textarea'),

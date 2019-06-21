@@ -863,6 +863,13 @@ Circulation:
                   yes: Enable
                   no: Disable
             - the circulation of ILL requested items
+        -
+            - pref: ILLCheckAvailability
+              default: 0
+              choices:
+                  yes: Check
+                  no: Don't check
+            - external sources for availability during the request process
     Fines Policy:
         -
             - pref: finesCalendar
