@@ -191,6 +191,17 @@ sub store {
     }
 }
 
+=head3 $object->update();
+
+A shortcut for set + store in one call.
+
+=cut
+
+sub update {
+    my ($self, $values) = @_;
+    return $self->set($values)->store();
+}
+
 =head3 $object->delete();
 
 Removes the object from storage.
@@ -491,7 +502,7 @@ sub AUTOLOAD {
         }
     }
 
-    my @known_methods = qw( is_changed id in_storage get_column discard_changes update make_column_dirty );
+    my @known_methods = qw( is_changed id in_storage get_column discard_changes make_column_dirty );
 
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
         error      => sprintf("The method %s->%s is not covered by tests!", ref($self), $method),
