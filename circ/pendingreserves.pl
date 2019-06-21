@@ -221,7 +221,7 @@ my $strsth =
     AND reserves.priority <> 0 
     AND reserves.suspend = 0
     AND notforloan = 0 AND itemlost = 0 AND withdrawn = 0
-    AND default_branch_item_rules.holdallowed != 0
+    AND ( default_branch_item_rules.holdallowed IS NULL OR default_branch_item_rules.holdallowed != 0 )
     ";
     # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
     #    multiple patrons have a hold on an item
