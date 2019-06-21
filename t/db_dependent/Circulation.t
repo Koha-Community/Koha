@@ -3042,7 +3042,6 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     plan tests => 13;
 
-    $schema->storage->txn_begin;
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
@@ -3129,14 +3128,12 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
     is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
 
-    $schema->storage->txn_rollback;
 };
 
 subtest 'ProcessOfflinePayment() tests' => sub {
 
     plan tests => 4;
 
-    $schema->storage->txn_begin;
 
     my $amount = 123;
 
@@ -3153,7 +3150,6 @@ subtest 'ProcessOfflinePayment() tests' => sub {
     is( $line->amount+0, $amount * -1, 'amount picked from params' );
     is( $line->branchcode, $library->id, 'branchcode set correctly' );
 
-    $schema->storage->txn_rollback;
 };
 
 subtest 'Incremented fee tests' => sub {
