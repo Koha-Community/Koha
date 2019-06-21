@@ -3037,9 +3037,6 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
     is( $item->onloan, undef, 'AddReturn did clear items.onloan' );
 };
 
-$schema->storage->txn_rollback;
-C4::Context->clear_syspref_cache();
-$cache->clear_from_cache('single_holidays');
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
@@ -3318,3 +3315,7 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
     is_deeply( $needsconfirmation, { RENTALCHARGE => '3' }, 'Item needs rentalcharge confirmation to be issued, increment' );
     $itemtype->rentalcharge_daily('0')->store;
 };
+
+$schema->storage->txn_rollback;
+C4::Context->clear_syspref_cache();
+$cache->clear_from_cache('single_holidays');
