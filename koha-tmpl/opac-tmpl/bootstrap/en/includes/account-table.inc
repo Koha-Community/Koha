@@ -28,30 +28,7 @@
                     [% END %]
                     <td><span title="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
                     <td>
-                        [% SWITCH ACCOUNT_LINE.accounttype %]
-                        [% CASE 'Pay' %]Payment
-                        [% CASE 'Pay00' %]Payment (cash via SIP2)
-                        [% CASE 'Pay01' %]Payment (VISA via SIP2)
-                        [% CASE 'Pay02' %]Payment (credit card via SIP2)
-                        [% CASE 'VOID' %]Voided
-                        [% CASE 'N' %]New card
-                        [% CASE 'OVERDUE' %]Fine
-                        [% CASE 'A' %]Account management fee
-                        [% CASE 'M' %]Sundry
-                        [% CASE 'L' %]Lost item
-                        [% CASE 'W' %]Writeoff
-                        [% CASE 'HE' %]Hold waiting too long
-                        [% CASE 'Rent' %]Rental fee
-                        [% CASE 'FOR' %]Forgiven
-                        [% CASE 'LR' %]Lost item fee refund
-                        [% CASE 'PF' %]Lost item processing fee
-                        [% CASE 'PAY' %]Payment
-                        [% CASE 'WO' %]Writeoff
-                        [% CASE 'C' %]Credit
-                        [% CASE 'CR' %]Credit
-                        [%-CASE 'Res' %]Hold fee
-                        [% CASE %][% ACCOUNT_LINE.accounttype | html %]
-                        [%- END -%]
+                        [% PROCESS account_type_description account=ACCOUNT_LINE %]
                         [%- PROCESS account_status_description account=ACCOUNT_LINE -%]
                     </td>
                     <td>
@@ -81,30 +58,7 @@
                     [% IF ENABLE_OPAC_PAYMENTS %]<td></td>[% END %]
                     <td><span title="[% outstanding_credit.date | html %]">[% outstanding_credit.date | $KohaDates %]</span></td>
                     <td>
-                        [% SWITCH outstanding_credit.accounttype %]
-                        [% CASE 'Pay' %]Payment
-                        [% CASE 'Pay00' %]Payment (cash via SIP2)
-                        [% CASE 'Pay01' %]Payment (VISA via SIP2)
-                        [% CASE 'Pay02' %]Payment (credit card via SIP2)
-                        [% CASE 'VOID' %]Voided
-                        [% CASE 'N' %]New card
-                        [% CASE 'OVERDUE' %]Fine
-                        [% CASE 'A' %]Account management fee
-                        [% CASE 'M' %]Sundry
-                        [% CASE 'L' %]Lost item
-                        [% CASE 'W' %]Writeoff
-                        [% CASE 'HE' %]Hold waiting too long
-                        [% CASE 'Rent' %]Rental fee
-                        [% CASE 'FOR' %]Forgiven
-                        [% CASE 'LR' %]Lost item fee refund
-                        [% CASE 'PF' %]Lost item processing fee
-                        [% CASE 'PAY' %]Payment
-                        [% CASE 'WO' %]Writeoff
-                        [% CASE 'C' %]Credit
-                        [% CASE 'CR' %]Credit
-                        [%-CASE 'Res' %]Hold fee
-                        [% CASE %][% outstanding_credit.accounttype | html %]
-                        [%- END -%]
+                        [% PROCESS account_type_description account=outstanding_credit %]
                         [%- PROCESS account_status_description account=outstanding_credit -%]
                     </td>
                     <td>
@@ -161,6 +115,33 @@
 [% ELSE %]
     <h4>You have no fines or charges</h4>
 [% END %]
+
+[%- BLOCK account_type_description -%]
+    [%- SWITCH account.accounttype -%]
+        [%- CASE 'Pay'     -%]<span>Payment
+        [%- CASE 'Pay00'   -%]<span>Payment (cash via SIP2)
+        [%- CASE 'Pay01'   -%]<span>Payment (VISA via SIP2)
+        [%- CASE 'Pay02'   -%]<span>Payment (credit card via SIP2)
+        [%- CASE 'N'       -%]<span>New card
+        [%- CASE 'OVERDUE' -%]<span>Fine
+        [%- CASE 'A'       -%]<span>Account management fee
+        [%- CASE 'M'       -%]<span>Sundry
+        [%- CASE 'L'       -%]<span>Lost item
+        [%- CASE 'W'       -%]<span>Writeoff
+        [%- CASE 'HE'      -%]<span>Hold waiting too long
+        [%- CASE 'Rent'    -%]<span>Rental fee
+        [%- CASE 'FOR'     -%]<span>Forgiven
+        [%- CASE 'LR'      -%]<span>Lost item fee refund
+        [%- CASE 'PF'      -%]<span>Lost item processing fee
+        [%- CASE 'PAY'     -%]<span>Payment
+        [%- CASE 'WO'      -%]<span>Writeoff
+        [%- CASE 'C'       -%]<span>Credit
+        [%- CASE 'CR'      -%]<span>Credit
+        [%- CASE 'Res'     -%]<span>Hold fee
+        [%- CASE           -%]<span>[% account.accounttype | html %]
+    [%- END -%]
+    [%- PROCESS account_status_description account=account -%]</span>
+[%- END -%]
 
 [%- BLOCK account_status_description -%]
     [%- SWITCH account.status -%]
