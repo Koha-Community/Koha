@@ -120,10 +120,6 @@ if (@subscriptionid){
     next unless $subs;
     $closed = 1 if $subs->{closed};
 
-    $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
-    $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
-    $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
-
     ##these are display information
     $subs->{'abouttoexpire'}=abouttoexpire($subs->{'subscriptionid'});
     $subs->{'subscriptionexpired'}=HasSubscriptionExpired($subs->{'subscriptionid'});
