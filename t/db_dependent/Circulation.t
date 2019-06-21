@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 130;
+use Test::More tests => 44;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -276,8 +276,9 @@ $dbh->do(
 );
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
-{
-# CanBookBeRenewed tests
+subtest "CanBookBeRenewed tests" => sub {
+    plan tests => 71;
+
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
     my $biblio = $builder->build_sample_biblio();
@@ -560,7 +561,7 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
 
     my $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
-    is( $fines->count, 2 );
+    is( $fines->count, 2, 'AddRenewal left both fines' );
     isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
     isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
     $fines->delete();
@@ -994,10 +995,11 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
             $item_3->itemcallnumber || '' ),
         "Account line description must not contain 'Lost Items ', but be title, barcode, itemcallnumber"
     );
-  }
+};
 
-{
-    # GetUpcomingDueIssues tests
+subtest "GetUpcomingDueIssues" => sub {
+    plan tests => 12;
+
     my $branch   = $library2->{branchcode};
 
     #Create another record
@@ -1075,9 +1077,9 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     $upcoming_dues = C4::Circulation::GetUpcomingDueIssues();
     is ( scalar ( @$upcoming_dues), 2, "days_in_advance is 7 in GetUpcomingDueIssues if not provided" );
 
-}
+};
 
-{
+subtest "Bug 13841 - Do not create new 0 amount fines" => sub {
     my $branch   = $library2->{branchcode};
 
     my $biblio = $builder->build_sample_biblio();
@@ -1117,9 +1119,9 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     my $count = $hr->{count};
 
     is ( $count, 0, "Calling UpdateFine on non-existant fine with an amount of 0 does not result in an empty fine" );
-}
+};
 
-{
+subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     $dbh->do('DELETE FROM issues');
     $dbh->do('DELETE FROM items');
     $dbh->do('DELETE FROM issuingrules');
@@ -1216,7 +1218,7 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower can not renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled but the only available item is notforloan' );
-}
+};
 
 {
     # Don't allow renewing onsite checkout
@@ -1340,7 +1342,7 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
     is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
-    is( $error->{branch_to_return},         $holdingbranch->{branchcode} );
+    is( $error->{branch_to_return},         $holdingbranch->{branchcode}, 'branch_to_return matched holdingbranch' );
     ## Can be issued from holdinbranch
     set_userenv($holdingbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
@@ -1351,7 +1353,7 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
     is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
-    is( $error->{branch_to_return},         $holdingbranch->{branchcode} );
+    is( $error->{branch_to_return},         $holdingbranch->{branchcode}, 'branch_to_return matches holdingbranch' );
 
     # AllowReturnToBranch == homebranch
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
@@ -1365,13 +1367,13 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
     is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
-    is( $error->{branch_to_return},         $homebranch->{branchcode} );
+    is( $error->{branch_to_return},         $homebranch->{branchcode}, 'branch_to_return matches homebranch' );
     ## Cannot be issued from holdinbranch
     set_userenv($otherbranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
     is( keys(%$question) + keys(%$alerts), 0, 'There should not be any errors or alerts (impossible)' . str($error, $question, $alerts) );
     is( exists $error->{RETURN_IMPOSSIBLE}, 1, 'RETURN_IMPOSSIBLE must be set' );
-    is( $error->{branch_to_return},         $homebranch->{branchcode} );
+    is( $error->{branch_to_return},         $homebranch->{branchcode}, 'branch_to_return matches homebranch' );
 
     # TODO t::lib::Mocks::mock_preference('AllowReturnToBranch', 'homeorholdingbranch');
 };
@@ -1410,42 +1412,42 @@ subtest 'AddIssue & AllowReturnToBranch' => sub {
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
     ## Can be issued from homebranch
     set_userenv($homebranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue, 'AllowReturnToBranch - anywhere | Can be issued from homebranch');
     set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
     ## Can be issued from holdinbranch
     set_userenv($holdingbranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue, 'AllowReturnToBranch - anywhere | Can be issued from holdingbranch');
     set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
     ## Can be issued from another branch
     set_userenv($otherbranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue, 'AllowReturnToBranch - anywhere | Can be issued from otherbranch');
     set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
 
     # AllowReturnToBranch == holdinbranch
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'holdingbranch' );
     ## Cannot be issued from homebranch
     set_userenv($homebranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '', 'AllowReturnToBranch - holdingbranch | Cannot be issued from homebranch');
     ## Can be issued from holdingbranch
     set_userenv($holdingbranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue, 'AllowReturnToBranch - holdingbranch | Can be issued from holdingbranch');
     set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
     ## Cannot be issued from another branch
     set_userenv($otherbranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '', 'AllowReturnToBranch - holdingbranch | Cannot be issued from otherbranch');
 
     # AllowReturnToBranch == homebranch
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'homebranch' );
     ## Can be issued from homebranch
     set_userenv($homebranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), $ref_issue, 'AllowReturnToBranch - homebranch | Can be issued from homebranch' );
     set_userenv($holdingbranch); AddIssue( $patron_1, $item->{barcode} ); # Reinsert the original issue
     ## Cannot be issued from holdinbranch
     set_userenv($holdingbranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '', 'AllowReturnToBranch - homebranch | Cannot be issued from holdingbranch' );
     ## Cannot be issued from another branch
     set_userenv($otherbranch);
-    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '' );
+    is ( ref( AddIssue( $patron_2, $item->{barcode} ) ), '', 'AllowReturnToBranch - homebranch | Cannot be issued from otherbranch' );
     # TODO t::lib::Mocks::mock_preference('AllowReturnToBranch', 'homeorholdingbranch');
 };
 
