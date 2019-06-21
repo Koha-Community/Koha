@@ -55,6 +55,7 @@ BEGIN {
 }
 
 use Carp;
+use Try::Tiny;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
@@ -223,6 +224,8 @@ sub AddItem {
 
     logaction( "CATALOGUING", "ADD", $itemnumber, "item" )
       if C4::Context->preference("CataloguingLog");
+
+    _after_item_action_hooks({ action => 'create', item_id => $itemnumber });
 
     return ( $item->{biblionumber}, $item->{biblioitemnumber}, $itemnumber );
 }
@@ -529,6 +532,8 @@ sub ModItem {
     # item status is possible
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
 
+    _after_item_action_hooks({ action => 'modify', item_id => $itemnumber });
+
     logaction( "CATALOGUING", "MODIFY", $itemnumber, "item " . Dumper($item) )
       if $log_action && C4::Context->preference("CataloguingLog");
 }
@@ -612,6 +617,8 @@ sub DelItem {
     my $deleted = _koha_delete_item( $itemnumber );
 
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+
+    _after_item_action_hooks({ action => 'delete', item_id => $itemnumber });
 
     #search item field code
     logaction("CATALOGUING", "DELETE", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
@@ -2638,5 +2645,38 @@ sub ToggleNewStatus {
     return $report;
 }
 
+=head2 _after_item_action_hooks
+
+Helper method that takes care of calling all plugin hooks
+
+=cut
+
+sub _after_item_action_hooks {
+    my ( $args ) = @_;
+
+    my $item_id = $args->{item_id};
+    my $action  = $args->{action};
+
+    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+
+        my @plugins = Koha::Plugins->new->GetPlugins({
+            method => 'after_item_action',
+        });
+
+        if (@plugins) {
+
+            my $item = Koha::Items->find( $item_id );
+
+            foreach my $plugin ( @plugins ) {
+                try {
+                    $plugin->after_item_action({ action => $action, item => $item, item_id => $item_id });
+                }
+                catch {
+                    warn "$_";
+                };
+            }
+        }
+    }
+}
 
 1;
