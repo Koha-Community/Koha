@@ -94,7 +94,7 @@ my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || 
 my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
 unless ( $input->param('from') ) {
     # Fill the form with year-1
-    $from_placed_on->subtract( years => 1 );
+    $from_placed_on->set_time_zone('floating')->subtract( years => 1 );
 }
 $filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
 $filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } ),
