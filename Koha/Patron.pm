@@ -657,7 +657,7 @@ sub is_going_to_expire {
     return 0 unless $delay;
     return 0 unless $self->dateexpiry;
     return 0 if $self->dateexpiry =~ '^9999';
-    return 1 if dt_from_string( $self->dateexpiry )->subtract( days => $delay ) < dt_from_string->truncate( to => 'day' );
+    return 1 if dt_from_string( $self->dateexpiry, undef, 'floating' )->subtract( days => $delay ) < dt_from_string(undef, undef, 'floating')->truncate( to => 'day' );
     return 0;
 }
 

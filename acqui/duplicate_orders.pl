@@ -74,7 +74,7 @@ my $to_placed_on =
 
 unless ( $input->param('from') ) {
     # Fill the form with year-1
-    $from_placed_on->subtract( years => 1 );
+    $from_placed_on->set_time_zone('floating')->subtract( years => 1 );
 }
 $filters->{from_placed_on} =
   output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
