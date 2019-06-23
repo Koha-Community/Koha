@@ -13,6 +13,8 @@
         <div class="dialog message">This basket does not exist.</div>
     [% CASE 'wrong_csrf_token' %]
         <div class="dialog message">The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</div>
+    [% CASE 'budget_is_locked' %]
+        <div class="dialog message">The budget is locked, fund creation is not possible.</div>
     [% CASE %][% blocking_error | html %]
     [% END %]
 

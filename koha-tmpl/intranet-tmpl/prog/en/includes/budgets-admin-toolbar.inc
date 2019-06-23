@@ -7,10 +7,13 @@
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New budget</a></li>
                     [% IF ( budget_period_locked || !CAN_user_acquisition_budget_add_del ) %]
                         <li class="disabled">
+                            <a data-toggle="tooltip" data-placement="left" title="The budget is locked" href="#">New fund for [% budget_period_description | html %]</a>
+                        </li>
                     [% ELSE %]
                         <li>
+                            <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% budget_period_id | uri %]">New fund for [% budget_period_description | html %]</a>
+                        </li>
                     [% END %]
-                    <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% budget_period_id | uri %]">New fund for [% budget_period_description | html %]</a></li>
                 </ul>
         </div>
 

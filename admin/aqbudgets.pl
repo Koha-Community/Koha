@@ -115,6 +115,8 @@ if ($op eq 'add_form') {
         }
         $dropbox_disabled = BudgetHasChildren($budget_id);
         $budget->{budget_owner} = Koha::Patrons->find( $budget->{budget_owner_id} );
+    } elsif ( $period->{budget_period_locked} ) {
+        output_and_exit( $input, $cookie, $template, 'budget_is_locked' );
     }
 
     # build budget hierarchy
