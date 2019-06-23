@@ -303,39 +303,54 @@ subtest 'is_expired' => sub {
 };
 
 subtest 'is_going_to_expire' => sub {
-    plan tests => 8;
+    plan tests => 9;
+
+    my $today = dt_from_string(undef, undef, 'floating');
     my $patron = $builder->build({ source => 'Borrower' });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     $patron->dateexpiry( undef )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is not set');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
-    $patron->dateexpiry( dt_from_string )->store->discard_changes;
+    $patron->dateexpiry( $today )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is today');
 
-    $patron->dateexpiry( dt_from_string )->store->discard_changes;
+    $patron->dateexpiry( $today )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is today and pref is 0');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
-    $patron->dateexpiry( dt_from_string->add( days => 11 ) )->store->discard_changes;
+    $patron->dateexpiry( $today->clone->add( days => 11 ) )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is 11 days ahead and pref is 10');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 0);
-    $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store->discard_changes;
+    $patron->dateexpiry( $today->clone->add( days => 10 ) )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days ahead and pref is 0');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
-    $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store->discard_changes;
+    $patron->dateexpiry( $today->clone->add( days => 10 ) )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is 10 days ahead and pref is 10');
     $patron->delete;
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 10);
-    $patron->dateexpiry( dt_from_string->add( days => 20 ) )->store->discard_changes;
+    $patron->dateexpiry( $today->clone->add( days => 20 ) )->store->discard_changes;
     is( $patron->is_going_to_expire, 0, 'Patron should not be considered going to expire if dateexpiry is 20 days ahead and pref is 10');
 
     t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 20);
-    $patron->dateexpiry( dt_from_string->add( days => 10 ) )->store->discard_changes;
+    $patron->dateexpiry( $today->clone->add( days => 10 ) )->store->discard_changes;
     is( $patron->is_going_to_expire, 1, 'Patron should be considered going to expire if dateexpiry is 10 days ahead and pref is 20');
+
+    { # Testing invalid is going to expiry date
+        t::lib::Mocks::mock_preference('NotifyBorrowerDeparture', 30);
+        # mock_config does not work here, because of tz vs timezone subroutines
+        my $context = new Test::MockModule('C4::Context');
+        $context->mock( 'tz', sub {
+            'America/Sao_Paulo';
+        });
+        $patron->dateexpiry(DateTime->new( year => 2019, month => 12, day => 3 ))->store;
+        eval { $patron->is_going_to_expire };
+        is( $@, '', 'On invalid "is going to expire" date, the method should not crash with "Invalid local time for date in time zone"');
+        $context->unmock('tz');
+    };
 
     $patron->delete;
 };
