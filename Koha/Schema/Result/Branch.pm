@@ -688,7 +688,7 @@ sub koha_object_class {
     'Koha::Library';
 }
 sub koha_objects_class {
-    'Koha::Librarys';
+    'Koha::Libraries';
 }
 
 1;
