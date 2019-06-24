@@ -62,6 +62,12 @@ __PACKAGE__->set_primary_key("plugin_class", "plugin_method");
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-07-13 12:37:57
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:koGk3Dh0wkslqYPUqUcK0w
 
+sub koha_objects_class {
+    'Koha::Plugins::Methods';
+}
+sub koha_object_class {
+    'Koha::Plugins::Method';
+}
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
