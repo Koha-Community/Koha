@@ -18772,7 +18772,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22653 - Remove unimplemented RotationPreventTransfers system preference)\n";
 }
 
-$DBversion = 'i19.06.00.008';
+$DBversion = '19.06.00.008';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "UPDATE userflags SET flagdesc = 'Allow staff members to modify permissions and passwords for other staff members' WHERE flag = 'staffaccess'" );
     SetVersion( $DBversion );
