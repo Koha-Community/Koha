@@ -75,13 +75,13 @@ my $pattern_id = AddSubscriptionNumberpattern({
     whenmorethan1 => 1,
 });
 
-my $notes = 'notes';
+my $notes = "a\nnote\non\nseveral\nlines";
 my $internalnotes = 'intnotes';
 my $subscriptionid = NewSubscription(
     undef,      "",     undef, undef, $budget_id, $biblionumber,
     '2013-01-01', $frequency_id, undef, undef,  undef,
     undef,      undef,  undef, undef, undef, undef,
-    1,          $notes,undef, '2013-01-01', undef, $pattern_id,
+    1,          $notes, ,undef, '2013-01-01', undef, $pattern_id,
     undef,       undef,  0,    $internalnotes,  0,
     undef, undef, 0,          undef,         '2013-12-31', 0
 );
@@ -193,7 +193,28 @@ if ($old_frequency) {
 is(C4::Serials::AddItem2Serial(), undef, 'test adding item to serial');
 is(C4::Serials::GetFullSubscription(), undef, 'test getting full subscription');
 is(C4::Serials::PrepareSerialsData(), undef, 'test preparing serial data');
-is(C4::Serials::GetSubscriptionsFromBiblionumber(), undef, 'test getting subscriptions form biblio number');
+
+subtest 'GetSubscriptionsFromBiblionumber' => sub {
+    plan tests => 4;
+
+    is( C4::Serials::GetSubscriptionsFromBiblionumber(),
+        undef, 'test getting subscriptions form biblio number' );
+
+    my $subscriptions = C4::Serials::GetSubscriptionsFromBiblionumber($biblionumber);
+    ModSubscriptionHistory( $subscriptions->[0]->{subscriptionid},
+        undef, undef, $notes, $notes, $notes );
+
+    $subscriptions = C4::Serials::GetSubscriptionsFromBiblionumber($biblionumber);
+    is( $subscriptions->[0]->{opacnote}, $notes,
+        'GetSubscriptionsFromBiblionumber should have returned the opacnote as it is in DB, ie. without br tags'
+    );
+    is( $subscriptions->[0]->{recievedlist}, $notes,
+        'GetSubscriptionsFromBiblionumber should have returned recievedlist as it is in DB, ie. without br tags'
+    );
+    is( $subscriptions->[0]->{missinglist}, $notes,
+        'GetSubscriptionsFromBiblionumber should have returned missinglist as it is in DB, ie. without br tags'
+    );
+};
 
 is(C4::Serials::GetSerials(), undef, 'test getting serials when you enter nothing');
 is(C4::Serials::GetSerials2(), undef, 'test getting serials when you enter nothing');
