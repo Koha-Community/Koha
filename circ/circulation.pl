@@ -330,8 +330,10 @@ if (@$barcodes) {
   my $checkout_infos;
   for my $barcode ( @$barcodes ) {
 
-    my $template_params = { barcode => $barcode };
-    $template_params->{onsite_checkout} = $onsite_checkout;
+    my $template_params = {
+        barcode         => $barcode,
+        onsite_checkout => $onsite_checkout,
+    };
 
     # always check for blockers on issuing
     my ( $error, $question, $alerts, $messages ) = CanBookBeIssued(
