@@ -73,7 +73,7 @@
             </ul>
             <div id="holdswaiting">
         [% IF ( reserveloop ) %]
-            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop %]
+            [% INCLUDE waiting_holds.inc table_name='holdst' reserveloop=reserveloop tab='holdwaiting' %]
         [% ELSE %]
             <div class="dialog message">No holds found.</div>
         [% END %]
@@ -96,7 +96,7 @@
                         Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)
                    [% END %]
                 </span>
-               [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop %]
+               [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' %]
             [% ELSE %]
                 <div class="dialog message">No holds found.</div>
             [% END %]
