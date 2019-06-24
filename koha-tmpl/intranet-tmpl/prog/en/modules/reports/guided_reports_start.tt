@@ -731,6 +731,104 @@ canned reports and writing custom SQL reports.</p>
 </div>
 <div id="chart" class="clearfix"></div>
 
+[% IF ( execute ) %]
+    [% UNLESS ( errors ) %]
+        <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_record_modification.pl" id="batch_record_modification">
+            <input type="hidden" name="recordtype" value="biblio" />
+            <input type="hidden" name="op" value="list" />
+            [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
+[% cells.cell | html %][% END %][% END %][% END %]</textarea>
+        </form>
+
+        <form method="POST" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="batch_record_deletion">
+            <input type="hidden" name="recordtype" value="biblio" />
+            <input type="hidden" name="op" value="list" />
+            [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
+            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
+[% cells.cell | html %][% END %][% END %][% END %]</textarea>
+        </form>
+
+        <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_modification">
+            <input type="hidden" name="op" value="show" />
+            [% FOREACH result IN results %]
+                [% FOREACH cells IN result.cells %]
+                    [% place = loop.index %]
+                    [% IF header_row.$place.cell == 'itemnumber' %]
+                        [% SET batch_itemnumbers = 1 %]
+                        <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                    [% END %]
+                [% END %]
+            [% END %]
+        </form>
+
+        <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="batch_item_deletion">
+            <input type="hidden" name="op" value="show" />
+            <input type="hidden" name="del" value="1" />
+            [% FOREACH result IN results %]
+                [% FOREACH cells IN result.cells %]
+                    [% place = loop.index %]
+                    [% IF header_row.$place.cell == 'itemnumber' %]
+                        [% SET batch_itemnumbers = 1 %]
+                        <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
+                    [% END %]
+                [% END %]
+            [% END %]
+        </form>
+
+        <form method="get" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" id="batch_add_to_list">
+            [% FOREACH result IN results %]
+                [% FOREACH cells IN result.cells %]
+                    [% place = loop.index %]
+                    [% IF header_row.$place.cell == 'biblionumber' %]
+                        [% SET batch_biblionumbers = 1 %]
+                        <input type="hidden" class="bib_to_list" name="biblionumber" value="[% cells.cell | html %]" />
+                    [% END %]
+                [% END %]
+            [% END %]
+        </form>
+
+        [% IF ( batch_biblionumbers || batch_itemnumbers ) %]
+            <p>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="batch_mod_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Batch operations with [% IF unlimited_total > limit %][% limit | html %][% ELSE %][% unlimited_total | html %][% END %] visible records
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
+                        [% FOREACH header_ro IN header_row %]
+                            [% IF header_ro.cell == 'biblionumber' %]
+                                <li class="dropdown-header">Bibliographic records</li>
+                                <li>
+                                    <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-submit="batch_record_deletion" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record deletion" class="batch_op send_to_record_del">Batch record deletion</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
+                                </li>
+                            [% END %]
+                            [% IF header_ro.cell == 'itemnumber' %]
+                                [% IF ( batch_biblionumbers ) %]
+                                    <li role="separator" class="divider"></li>
+                                [% END %]
+                                <li class="dropdown-header">Item records</li>
+                                <li>
+                                    <a href="#" data-submit="batch_item_modification" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item modification" class="batch_op send_to_item_mod">Batch item modification</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
+                                </li>
+                            [% END %]
+                        [% END %]
+                    </ul> <!-- /.dropdown-menu -->
+                </div> <!-- /.dropdown -->
+            </p>
+        [% END %]
+    [% END # UNLESS ( errors ) %]
+[% END # IF ( execute ) %]
+
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get" id="limitselect">
     <input type="hidden" name="phase" value="Run this report"/>
     <input type="hidden" name="reports" value="[% report_id | html %]"/>
@@ -757,34 +855,20 @@ canned reports and writing custom SQL reports.</p>
 
 <div class="pages">[% pagination_bar | $raw %]</div>
 [% UNLESS ( errors ) %]
-    <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="report_results">
-        <input type="hidden" name="op" value="show" />
-        <table>
+    <table>
+        <tr>
+            [% FOREACH header_ro IN header_row %]
+                <th>[% header_ro.cell | html %]</th>
+            [% END %]
+        </tr>
+        [% FOREACH result IN results %]
             <tr>
-                [% FOREACH header_ro IN header_row %]
-                    [% IF header_ro.cell == 'itemnumber' %]
-                        <th>
-                            [% header_ro.cell | html %] <button type="submit" data-toggle="tooltip" title="Send visible items to batch modification" id="batchModify" class="btn btn-xs btn-default send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</button>
-                        </th>
-                    [% ELSE %]
-                        <th>[% header_ro.cell | html %]</th>
-                    [% END %]
+                [% FOREACH cells IN result.cells %]
+                    <td>[% cells.cell | $raw %]</td>
                 [% END %]
             </tr>
-            [% FOREACH result IN results %]
-                <tr>
-                    [% FOREACH cells IN result.cells %]
-                        [% place = loop.index %]
-                        [% IF header_row.$place.cell == 'itemnumber' %]
-                            <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
-                        [% END %]
-                        <td>[% cells.cell | $raw %]</td>
-                    [% END %]
-                </tr>
-            [% END %]
-        </table>
-    </form>
-
+        [% END %]
+    </table>
 [% END %]
 
 [% INCLUDE 'chart.inc' %]
@@ -1426,6 +1510,17 @@ canned reports and writing custom SQL reports.</p>
                 $("#mana_result_content").html("");
                 $("#mana_search_field").val("");
             });
+
+            $(".batch_op").on("click", function(e){
+                e.preventDefault();
+                var target_form = $(this).data("submit");
+                $("#" + target_form ).submit();
+            });
+
+            $("#batch_add_to_list").on("submit", function(e){
+                e.preventDefault();
+                addToList();
+            });
         });
 
         function addColumn() {
@@ -1501,6 +1596,20 @@ canned reports and writing custom SQL reports.</p>
                         }
                     }
                 });
+        }
+
+        function addToList() {
+            var biblionumbers = [];
+            $(".bib_to_list").each(function() {
+                var biblionumber = Number( $(this).val() );
+                if( biblionumbers.indexOf( biblionumber ) < 0 ){
+                    biblionumbers.push( biblionumber );
+                }
+            });
+            bibs = biblionumbers.join("/");
+            var url = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumbers=" + bibs;
+            window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
+            return false;
         }
     </script>
 [% END %]
