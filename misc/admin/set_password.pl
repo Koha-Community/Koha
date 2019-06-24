@@ -25,6 +25,7 @@ use Pod::Usage;
 use String::Random;
 
 use Koha::Patrons;
+use Koha::Script;
 
 my ( $help, $password, $cardnumber, $patron_id, $userid );
 GetOptions(
