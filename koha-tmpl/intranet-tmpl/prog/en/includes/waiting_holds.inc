@@ -49,7 +49,7 @@
                         <input type="hidden" name="itemnumber" value="[% reserveloo.item.itemnumber | html %]" />
                         <input type="hidden" name="fbr" value="[% reserveloo.item.holdingbranch | html %]" />
                         <input type="hidden" name="tbr" value="[% reserveloo.item.homebranch | html %]" />
-                        <input type="hidden" name="tab" value="holdswaiting">
+                        <input type="hidden" name="tab" value="[% tab %]">
                         [% IF ( reserveloo.item.homebranch != reserveloo.item.holdingbranch ) %]
                             <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-remove"></i> Cancel hold and return to: [% Branches.GetName( reserveloo.item.homebranch ) | html %]</button>
                         [% ELSE %]
