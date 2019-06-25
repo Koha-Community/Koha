@@ -1337,7 +1337,7 @@
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]<td class="copynumber">[% ITEM_RESULT.copynumber | html %]</td>[% END %]
                     <td class="status">[% INCLUDE 'item-status-schema-org.inc' item = ITEM_RESULT %][% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
-                    [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes | html %]</td>[% END %]
+                    [% IF ( itemdata_itemnotes ) %]<td class="notes" property="description">[% ITEM_RESULT.itemnotes | $raw %]</td>[% END %]
                     <td class="date_due"><span title="[% ITEM_RESULT.datedue | html %]">[% ITEM_RESULT.datedue | $KohaDates  as_due_date => 1 %]</span></td>
                         <td class="barcode" property="serialNumber">[% ITEM_RESULT.barcode | html %]</td>
                     [% IF holds_count.defined || show_priority %]
