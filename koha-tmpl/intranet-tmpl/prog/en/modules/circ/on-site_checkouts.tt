@@ -41,7 +41,7 @@
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber | uri %]">[% item.firstname | html %] [% item.surname | html %]</a>
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]"><strong>[% item.title | html %]</strong></a>[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | html %]</span>[% END %]
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]"><strong>[% item.title | html %]</strong></a>[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | $raw %]</span>[% END %]
                   </td>
                   <td>[% item.itemcallnumber | html %]</td>
                   <td>

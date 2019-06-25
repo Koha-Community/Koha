@@ -520,7 +520,7 @@
                         <td class="materials"> [% item.materials | html %] </td>
                     [% END %]
                     [% IF ( itemdata_itemnotes ) %]
-                        <td><div class="itemnotes">[% item.itemnotes | html %]</div></td>
+                        <td><div class="itemnotes">[% item.itemnotes | $raw %]</div></td>
                     [% END %]
                     [% IF itemdata_nonpublicnotes %]
                         <td class="nonpublicnote">[% item.itemnotes_nonpublic | html %]</td>
