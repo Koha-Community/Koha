@@ -70,6 +70,10 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
 
 subtest 'OPAC - Remove from cart' => sub {
     plan tests => 4;
+   
+    # We need to prevent scrolling to prevent the floating toolbar from overlapping buttons we are testing
+    my $window_size = $driver->get_window_size();
+    $driver->set_window_size(1920,1080);
 
     $driver->get( $opac_base_url . "opac-search.pl?q=d" );
 
@@ -99,6 +103,9 @@ subtest 'OPAC - Remove from cart' => sub {
     $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
     is( $basket_count_elt->get_text(),
         2, '1 element should have been removed from the cart' );
+
+    # Reset window size
+    $driver->set_window_size($window_size->{'height'}, $window_size->{'width'});
 };
 
 subtest 'Play sound on the circulation page' => sub {
