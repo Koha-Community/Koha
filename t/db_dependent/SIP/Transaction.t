@@ -34,7 +34,7 @@ subtest fill_holds_at_checkout => sub {
     plan tests => 5;
 
 
-    my $category = $builder->build({ source => 'Category' });
+    my $category = $builder->build({ source => 'Category', value => { category_type => 'A' }});
     my $branch   = $builder->build({ source => 'Branch' });
     my $borrower = $builder->build({ source => 'Borrower', value =>{
         branchcode => $branch->{branchcode},
