@@ -193,6 +193,10 @@ sub store {
 
             $self->trim_whitespaces;
 
+            # Set surname to uppercase if uppercasesurname is true
+        $self->surname( uc($self->surname) )
+        if C4::Context->preference("uppercasesurname");
+
             unless ( $self->in_storage ) {    #AddMember
 
                 # Generate a valid userid/login if needed
