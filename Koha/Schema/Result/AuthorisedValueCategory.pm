@@ -100,6 +100,8 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07045 @ 2016-08-30 11:59:31
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6vToj9pUcIv8Jio38rNE4g
 
+sub koha_objects_class {
+    'Koha::AuthorisedValueCategories';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -381,11 +381,19 @@ subtest 'build_object() tests' => sub {
             $module =~ s|^.*/(Koha.*)\.pm$|$1|;
             $module =~ s|/|::|g;
             next if $module eq 'Koha::Objects';
-            eval "require $module";;
+            eval "require $module";
             my $object = $builder->build_object( { class => $module } );
             is( ref($object), $module->object_class, "Testing $module" );
             eval {$object->get_from_storage};
             is( $@, '', "Module $module should have koha_object[s]_class method if needed" );
+
+            # Testing koha_object_class and koha_objects_class
+            my $object_class =  Koha::Object::_get_object_class($object->_result->result_class);
+            eval "require $object_class";
+            is( $@, '', "Module $object_class should be defined");
+            my $objects_class = Koha::Objects::_get_objects_class($object->_result->result_class);
+            eval "require $objects_class";
+            is( $@, '', "Module $objects_class should be defined");
         }
     };
 

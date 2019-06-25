@@ -273,7 +273,7 @@ sub koha_object_class {
     'Koha::Patron::Category';
 }
 sub koha_objects_class {
-    'Koha::Patron::Categorys';
+    'Koha::Patron::Categories';
 }
 
 1;

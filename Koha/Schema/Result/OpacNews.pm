@@ -175,7 +175,7 @@ sub koha_object_class {
     'Koha::NewsItem';
 }
 sub koha_objects_class {
-    'Koha::NewsItems';
+    'Koha::News';
 }
 
 1;

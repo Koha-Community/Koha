@@ -129,7 +129,7 @@ sub koha_object_class {
     'Koha::Authority';
 }
 sub koha_objects_class {
-    'Koha::Authoritys';
+    'Koha::Authorities';
 }
 
 1;

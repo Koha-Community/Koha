@@ -115,7 +115,7 @@ sub koha_object_class {
     'Koha::Subscription::Frequency';
 }
 sub koha_objects_class {
-    'Koha::Subscription::Frequencys';
+    'Koha::Subscription::Frequencies';
 }
 
 1;

@@ -107,7 +107,7 @@ sub koha_object_class {
     'Koha::Tags::Index';
 }
 sub koha_objects_class {
-    'Koha::Tags::Indexs';
+    'Koha::Tags::Indexes';
 }
 
 1;

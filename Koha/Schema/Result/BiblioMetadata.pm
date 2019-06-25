@@ -136,6 +136,9 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FJk/YOw8Y/QRmmPPL3G5qQ
 
 sub koha_object_class {
+    'Koha::Biblio::Metadata';
+}
+sub koha_objects_class {
     'Koha::Biblio::Metadatas';
 }
 

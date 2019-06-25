@@ -108,7 +108,7 @@ sub koha_object_class {
     'Koha::Subscription::History';
 }
 sub koha_objects_class {
-    'Koha::Subscription::Historys';
+    'Koha::Subscription::Histories';
 }
 
 1;
