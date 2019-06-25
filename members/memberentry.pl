@@ -343,10 +343,6 @@ if ($op eq 'save' || $op eq 'insert'){
         }
     }
   
-    if($newdata{surname} && C4::Context->preference('uppercasesurnames')) {
-        $newdata{'surname'} = uc($newdata{'surname'});
-    }
-
   if (C4::Context->preference("IndependentBranches")) {
     unless ( C4::Context->IsSuperLibrarian() ){
       $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
