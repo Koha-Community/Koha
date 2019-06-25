@@ -293,6 +293,7 @@ individual branches.
 =over 2
 
 =item $report should be the return value of `investigate`
+
 =item $branch is optional and should be either 0 (to indicate 'all'), or a specific Koha::Library object.
 
 =back
