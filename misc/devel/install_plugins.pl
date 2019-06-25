@@ -39,9 +39,18 @@ unless ($plugins_enabled) {
     exit 1;
 }
 
-my @plugins = Koha::Plugins->new()->InstallPlugins();
 
-unless (@plugins) {
+my @existing_plugins = Koha::Plugins->new()->GetPlugins({
+    all    => 1,
+});
+my $existing_plugins;
+for my $existing_plugin (@existing_plugins) {
+    $existing_plugins->{ $existing_plugin->{metadata}->{name} } =
+      $existing_plugin->{metadata}->{version};
+}
+
+my @installed_plugins = Koha::Plugins->new()->InstallPlugins();
+unless (@installed_plugins) {
     my $plugins_dir = C4::Context->config("pluginsdir");
     if ( ref($plugins_dir) eq 'ARRAY' ) {
         print "No plugins found\n";
@@ -50,14 +59,30 @@ unless (@plugins) {
     else {
         print "No plugins found at $plugins_dir\n";
     }
+    exit 0;
 }
 
-for my $plugin (@plugins) {
-    print "Installed "
-      . $plugin->{metadata}->{name}
-      . " version "
-      . $plugin->{metadata}->{version} . "\n";
+for my $installed_plugin (@installed_plugins) {
+    if ( !exists( $existing_plugins->{ $installed_plugin->{metadata}->{name} } )
+      )
+    {
+        print "Installed "
+          . $installed_plugin->{metadata}->{name}
+          . " version "
+          . $installed_plugin->{metadata}->{version} . "\n";
+    }
+    elsif ( $existing_plugins->{ $installed_plugin->{metadata}->{name} } ne
+        $installed_plugin->{metadata}->{version} )
+    {
+        print "Upgraded "
+          . $installed_plugin->{metadata}->{name}
+          . " from version "
+          . $existing_plugins->{ $installed_plugin->{metadata}->{name} }
+          . " to version "
+          . $installed_plugin->{metadata}->{version} . "\n";
+    }
 }
+print "All plugins successfully re-initialised\n";
 
 =head1 NAME
 
