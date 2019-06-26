@@ -117,14 +117,16 @@
                                 None of the libraries are available for pickup location.
                             </li>
                         [% END %]
-                    [% ELSE %]
+                    </ul>
+                </div> <!-- /.message -->
+            [% ELSE # /IF message %]
 
                         [% IF ( none_available && multi_hold ) %]
                             <div id="none_available" class="alert">
                                 Sorry, none of these titles can be placed on hold.
                             </div>
                         [% END %]
-                </div>
+
             [% END # / IF message %]
 
                     [% UNLESS ( message ) %]
