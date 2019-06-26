@@ -17490,6 +17490,14 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 10215 - Increase the size of opacnote and librariannote for table subscriptionhistory)\n";
 }
 
+$DBversion = '18.11.06.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( 'UPDATE language_descriptions SET description = "Griechisch (Modern 1453-)"
+      WHERE subtag = "el" and type = "language" and lang ="de"' );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22770 - Fix typo in language description for el in German)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
