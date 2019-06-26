@@ -312,15 +312,7 @@
 
                     [% IF ( batch_list ) %]
                         [% IF ( pages ) %]
-                            <div class="pages">
-                                [% FOREACH page IN pages %]
-                                    [% IF ( page.current_page ) %]
-                                        <span class="current">[% page.page_number | html %]</span>
-                                    [% ELSE %]
-                                        <a href="[% page.script_name | url %]?offset=[% page.offset | uri %]">[% page.page_number | html %]</a>
-                                    [% END %]
-                                [% END %]
-                            </div>
+                            [% PROCESS pagination %]
                         [% END %]
 
                         <table>
@@ -381,15 +373,7 @@
                         </table>
 
                         [% IF ( pages ) %]
-                            <div class="pages">
-                                [% FOREACH page IN pages %]
-                                    [% IF ( page.current_page ) %]
-                                        <span class="current">[% page.page_number | html %]</span>
-                                    [% ELSE %]
-                                        <a href="[% page.script_name | url %]?offset=[% page.offset | uri %]">[% page.page_number | html %]</a>
-                                    [% END %]
-                                [% END %]
-                            </div>
+                            [% PROCESS pagination %]
                         [% END %]
                     [% END # /IF batch_lis %]
 
@@ -565,3 +549,31 @@
     </script>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
+[% BLOCK pagination %]
+    <nav>
+        <ul class="pagination">
+            [% FOREACH page IN pages %]
+                [% IF ( page.current_page && page.page_number > 1 ) %]
+                    <li><a href="[% page.script_name | url %]?offset=0" class="nav"><i class="fa fa-fw fa-angle-double-left"></i> First</a></li>
+                    <li><a href="[% page.script_name | url %]?offset=[% offset - results_per_page | uri %]"><i class="fa fa-fw fa-angle-left"></i> Previous</a></li>
+                [% END %]
+            [% END %]
+            [% FOREACH page IN pages %]
+                [% IF ( page.current_page ) %]
+                    [% SET current_page = page.page_number %]
+                    <li class="active"><span class="current">[% page.page_number | html %]</span></li>
+                [% ELSE %]
+                    <li><a class="nav" href="[% page.script_name | url %]?offset=[% page.offset | uri %]">[% page.page_number | html %]</a></li>
+                [% END %]
+            [% END %]
+            [% IF ( current_page < pages.size() ) %]
+                <li>
+                    <a href="[% page.script_name | url %]?offset=[% offset + results_per_page | uri %]" class="nav">Next <i class="fa fa-fw fa-angle-right"></i></a>
+                </li>
+                <li>
+                    <a href="[% page.script_name | url %]?offset=[% ( results_per_page * ( pages.size - 1 ) ) | uri %]" class="nav">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
+                </li>
+            [% END %]
+        </ul>
+    </nav>
+[% END %]
