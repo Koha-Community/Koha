@@ -24,6 +24,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 my $input = CGI->new;
 my $uploadbarcodes = $input->param('uploadbarcodes');
+my $barcodelist = $input->param('barcodelist');
 
 use C4::Auth;
 use C4::Context;
@@ -133,7 +134,7 @@ $template->param(
     branch                   => $branch,
     datelastseen             => $datelastseen,
     compareinv2barcd         => $compareinv2barcd,
-    uploadedbarcodesflag     => $uploadbarcodes ? 1 : 0,
+    uploadedbarcodesflag     => ($uploadbarcodes || $barcodelist) ? 1 : 0,
     ignore_waiting_holds     => $ignore_waiting_holds,
     class_sources            => \@class_sources,
     pref_class               => $pref_class
@@ -144,7 +145,7 @@ my $results = {};
 my @scanned_items;
 my @errorloop;
 my $moddatecount = 0;
-if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
+if ( ($uploadbarcodes && length($uploadbarcodes) > 0) || ($barcodelist && length($barcodelist) > 0) ) {
     my $dbh = C4::Context->dbh;
     my $date = dt_from_string( scalar $input->param('setdate') );
     $date = output_pref ( { dt => $date, dateformat => 'iso' } );
@@ -163,10 +164,15 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
     my $err_length=0;
     my $err_data=0;
     my $lines_read=0;
-    binmode($uploadbarcodes, ":encoding(UTF-8)");
-    while (my $barcode=<$uploadbarcodes>) {
-        my $split_chars = C4::Context->preference('BarcodeSeparators');
-        push @uploadedbarcodes, grep { /\S/ } split( /[$split_chars]/, $barcode );
+    if ($uploadbarcodes && length($uploadbarcodes) > 0) {
+        binmode($uploadbarcodes, ":encoding(UTF-8)");
+        while (my $barcode=<$uploadbarcodes>) {
+            my $split_chars = C4::Context->preference('BarcodeSeparators');
+            push @uploadedbarcodes, grep { /\S/ } split( /[$split_chars]/, $barcode );
+        }
+    } else {
+        push @uploadedbarcodes, split(/\s\n/, $input->param('barcodelist') );
+        $uploadbarcodes = $barcodelist;
     }
     for my $barcode (@uploadedbarcodes) {
         next unless $barcode;

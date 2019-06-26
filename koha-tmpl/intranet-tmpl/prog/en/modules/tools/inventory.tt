@@ -42,14 +42,28 @@
         <fieldset class="rows">
           <legend>Use a barcode file</legend>
           <ol>
-            <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepicker" disabled /></li>
-            <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
-            <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
-            <li><label for="out_of_order">Check barcodes list for items shelved out of order: </label><input type="checkbox" name="out_of_order" id="out_of_order" disabled /></li>
+            <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" />
+            <input type="button" id="resetuploadbarcodes" name="resetuploadbarcodes" value="Reset" /></li>
           </ol>
         </fieldset>
-
+        <fieldset class="rows">
+            <legend>Or scan items one by one</legend>
+            <ol>
+                <li>
+                  <label for="barcodelist">Barcode list (one barcode per line): </label>
+                  <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset class="rows">
+            <legend>Parameters</legend>
+            <ol>
+                <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepicker" disabled /></li>
+                <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
+                <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
+                <li><label for="out_of_order">Check barcodes list for items shelved out of order: </label><input type="checkbox" name="out_of_order" id="out_of_order" disabled /></li>
+            </ol>
+        </fieldset>
         <fieldset class="rows">
         <legend>Item location filters</legend>
         <ol><li>
@@ -276,7 +290,11 @@
     [% INCLUDE 'calendar.inc' %]
     <script type="text/javascript">
         function checkForm() {
-            if ( $('#uploadbarcodes').val() ) {
+            if ( $('#uploadbarcodes').val() && $('#barcodelist').val() ) {
+                alert(_("You have uploaded a barcode file and scanned barcodes at the same time. Please choose one of the options before."));
+                return false;
+            }
+            if ( $('#uploadbarcodes').val() || $('#barcodelist').val() ) {
                 if ( !(
                     $('#branchloop').val()   ||
                     $('#locationloop').val() ||
@@ -293,6 +311,32 @@
             }
 
             return true;
+        }
+
+        function barcodesProvided() {
+            if( $("#uploadbarcodes").val() || $("#barcodelist").val() ) {
+                $("#setdate").prop('disabled',false);
+                $("#compareinv2barcd").prop('disabled',false);
+                $("#compareinv2barcd").attr('checked',true); // default
+                $("#dont_checkin").prop('disabled',false);
+                $("#out_of_order").prop('disabled',false);
+                if( $("#compareinv2barcd").attr('checked') ) {
+                    $("fieldset#optionalfilters").show();
+                    $("#ignoreissued").attr('checked',true); // default
+                } else {
+                    $("fieldset#optionalfilters").hide();
+                    $("#ignoreissued").attr('checked',false);
+                }
+            } else {
+                $("#setdate").prop('disabled',true);
+                $("#compareinv2barcd").prop('disabled',true);
+                $("#compareinv2barcd").attr('checked',false);
+                $("#dont_checkin").prop('disabled',true);
+                $("#dont_checkin").attr('checked',false);
+                $("#out_of_order").prop('disabled',true);
+                $("#out_of_order").attr('checked',false);
+                $("fieldset#optionalfilters").show();
+            }
         }
 
         $(document).ready(function(){
@@ -367,33 +411,16 @@
                 return checkForm();
             });
 
+            $("#resetuploadbarcodes").click(function() {
+                $("#uploadbarcodes").val("");
+                barcodesProvided();
+            });
+
             // #uploadbarcodes and #compareinv2barcd determine the behavior of
             // the controls within the barcode fieldset and the optional filters
-            $("#uploadbarcodes").change(function() {
-                if( $("#uploadbarcodes").val() ) {
-                    $("#setdate").prop('disabled',false);
-                    $("#compareinv2barcd").prop('disabled',false);
-                    $("#compareinv2barcd").attr('checked',true); // default
-                    $("#dont_checkin").prop('disabled',false);
-                    $("#out_of_order").prop('disabled',false);
-                    if( $("#compareinv2barcd").attr('checked') ) {
-                        $("fieldset#optionalfilters").show();
-                        $("#ignoreissued").attr('checked',true); // default
-                    } else {
-                        $("fieldset#optionalfilters").hide();
-                        $("#ignoreissued").attr('checked',false);
-                    }
-                } else {
-                    $("#setdate").prop('disabled',true);
-                    $("#compareinv2barcd").prop('disabled',true);
-                    $("#compareinv2barcd").attr('checked',false);
-                    $("#dont_checkin").prop('disabled',true);
-                    $("#dont_checkin").attr('checked',false);
-                    $("#out_of_order").prop('disabled',true);
-                    $("#out_of_order").attr('checked',false);
-                    $("fieldset#optionalfilters").show();
-                }
-            });
+            $("#uploadbarcodes").change(barcodesProvided);
+            $("#barcodelist").on("change keyup paste", barcodesProvided);
+
             $("#compareinv2barcd").click(function() {
                 if( $("#compareinv2barcd").attr('checked') ) {
                     $("fieldset#optionalfilters").show();
