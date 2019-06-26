@@ -132,38 +132,40 @@
             </tr>
         </tfoot>
     </table>
-    [% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
-        <fieldset class="pay-online hidden">
-            <legend>Pay selected fines and charges</legend>
-                <span class="help-block"><h3>Payment method</h3></span>
+[% END %]
 
-                [% IF Koha.Preference('EnablePayPalOpacPayments') %]
-                    <div class="control-group">
-                        <label class="radio">
-                            <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
-                            <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" class="paypal"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
-                        </label>
-                    </div>
-                [% END %]
+[% IF ENABLE_OPAC_PAYMENTS && DISPLAY_PAYMENT_BLOCK %]
+    <fieldset class="pay-online hidden">
+        <legend>Pay selected fines and charges</legend>
+            <span class="help-block"><h3>Payment method</h3></span>
 
-                [% FOREACH p IN plugins %]
-                    <div class="control-group">
-                        <label class="radio">
-                            <input type="radio" name="payment_method" id="payment_method-[% p.class | html %]" value="[% p.class | html %]" checked="checked">
-                            [% p.get_metadata.name | html %]
-                        </label>
-                    </div>
-                [% END %]
-
+            [% IF Koha.Preference('EnablePayPalOpacPayments') %]
                 <div class="control-group">
-                    <input type="hidden" id="payment-amount" name="payment_amount" value="0" />
-                    <button id="submit-pay" type="submit" class="btn" disabled="disabled">Make payment</button>
-                    <span id="amount-to-pay-label">
-                        Amount to pay: <span id="amount-to-pay">0.00</span>
-                    </span>
+                    <label class="radio">
+                        <input type="radio" name="payment_method" id="payment_method-paypal" value="paypal" checked="checked">
+                        <!-- PayPal Logo --><a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" class="paypal"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_SbyPP_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark"></a><!-- PayPal Logo -->
+                    </label>
                 </div>
-        </fieldset>
-    [% END %]
+            [% END %]
+
+            [% FOREACH p IN plugins %]
+                <div class="control-group">
+                    <label class="radio">
+                        <input type="radio" data-threshold="[% p.opac_online_payment_threshold | html %]" name="payment_method" id="payment_method-[% p.class | html %]" value="[% p.class | html %]" checked="checked">
+                        [% p.get_metadata.name | html %]
+                    </label>
+                    <small class="help-block text-muted"></small>
+                </div>
+            [% END %]
+
+            <div class="control-group">
+                <input type="hidden" id="payment-amount" name="payment_amount" value="0" />
+                <button id="submit-pay" type="submit" class="btn" disabled="disabled">Make payment</button>
+                <span id="amount-to-pay-label">
+                    Amount to pay: <span id="amount-to-pay">0.00</span>
+                </span>
+            </div>
+    </fieldset>
 [% END %]
 </form>
 

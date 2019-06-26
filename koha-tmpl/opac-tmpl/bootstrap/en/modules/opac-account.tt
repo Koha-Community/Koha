@@ -81,6 +81,8 @@
 <script>
 $( document ).ready(function() {
 
+    var MSG_MIN_THRESHOLD = _("Minimum amount needed by this service is %s");
+
     $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
         "columnDefs": [
              { "type": "title-string", "targets" : [ "title-string" ] }
@@ -97,9 +99,9 @@ $( document ).ready(function() {
 
     $("#amount-to-pay-label").hide();
 
-    $(".checkbox-pay").change( function() {
+    $(".checkbox-pay, input[name='payment_method']").change( function() {
         // Disable the pay button if no fees are selected
-        $("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length );
+        //$("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length );
 
         // Calculate the total amount to be paid based on selected fees
         var total = 0;
@@ -110,12 +112,35 @@ $( document ).ready(function() {
             }
         });
 
+        var p = Promise.resolve();
         if ( total ) {
+            p = Promise.all(
+                $('input[name="payment_method"]').map(function() {
+                    var self = this;
+                    return new Promise(function(resolve, reject) {
+                        var threshold = $(self).data('threshold');
+                        var help = $(self).parent().siblings('.help-block');
+                        if(threshold == '' || threshold <= total) {
+                            $(self).prop('disabled', false);
+                            help.addClass('hide');
+                        } else {
+                            $(self).prop('disabled', true);
+                            help.html(MSG_MIN_THRESHOLD.format(parseInt(threshold,10).toFixed(2))).removeClass('hide');
+                        }
+                        resolve();
+                    })
+                }).toArray()
+            );
+
             $("#amount-to-pay").html( total.toFixed(2) );
             $("#amount-to-pay-label").show();
         } else {
+            $('input[name="payment_method"]').prop('disabled', false).parent().siblings('.help-block').addClass('hide');
             $("#amount-to-pay-label").hide();
         }
+        p.then(function() {
+            $("#submit-pay").prop("disabled", ! $(".checkbox-pay:checked").length || ! $('input[name="payment_method"]:checked:not(:disabled)').length);
+        })
     });
 });
 </script>
