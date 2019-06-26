@@ -203,7 +203,7 @@
                                     <fieldset class="action"><input type="submit" value="Apply different matching rules" class="button" /></fieldset>
                                 </form>
                             [% END %]
-                        </fieldset>
+                        </fieldset> <!-- /#staged-record-matching-rules -->
 
                         <div>
                             [% IF ( can_commit ) %]
@@ -225,12 +225,12 @@
                                         <br />
                                         <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" />
                                     </fieldset>
-                                </form>
+                                </form> <!-- /#import_batch_form -->
                                 <div id="jobpanel">
                                     <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
                                     <div id="jobfailed"></div>
                                 </div>
-                            [% END %]
+                            [% END # /IF can_commit %]
                             [% IF ( can_revert ) %]
                                 <form action="[% script_name | html %]" method="post" id="revert_batch_form">
                                     <input type="hidden" name="op" value="revert-batch" />
@@ -243,7 +243,7 @@
                                     <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
                                     <div id="jobfailed"></div>
                                 </div>
-                            [% END %]
+                            [% END # /IF can_revert %]
                         </div>
 
                         [% IF ( did_commit ) %]
@@ -276,7 +276,7 @@
                                     </tr>
                                 [% END %]
                             </table>
-                        [% END %]
+                        [% END #/ IF did_commit %]
 
                         [% IF ( did_revert ) %]
                             <div class="dialog message">Success: Import reversed</div>
@@ -304,9 +304,9 @@
                                     <td>[% num_ignored | html %]</td>
                                 </tr>
                             </table>
-                        [% END %]
+                        [% END  # /IF did_revert%]
 
-                    [% END %]
+                    [% END # /IF batch_info %]
 
                     <br style="clear:both;" />
 
@@ -377,7 +377,7 @@
                                         [% END %]
                                     </td>
                                 </tr>
-                            [% END %]
+                            [% END # /FOREACH batch_lis %]
                         </table>
 
                         [% IF ( pages ) %]
@@ -391,7 +391,7 @@
                                 [% END %]
                             </div>
                         [% END %]
-                    [% END %]
+                    [% END # /IF batch_lis %]
 
                     [% IF import_batch_id %]
                         <table id="records-table">
@@ -423,8 +423,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    [% END %]
+                        </div> <!-- /#marcPreview -->
+                    [% END # /IF import_batch_id %]
                 </main>
 
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
