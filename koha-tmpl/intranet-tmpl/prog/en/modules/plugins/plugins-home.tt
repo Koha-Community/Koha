@@ -79,7 +79,7 @@
                                 <tr>
                                     <td>
                                         <strong>[% plugin.metadata.name | html %]</strong>
-                                        [% IF ( plugin.enabled ) %]
+                                        [% IF ( plugin.is_enabled ) %]
                                             <span class="label label-primary">ENABLED</span>
                                         [% ELSE %]
                                             <span class="label label-default">DISABLED</span>
@@ -131,7 +131,7 @@
                                                     [% END %]
                                                     [% IF ( CAN_user_plugins_manage ) %]
                                                             <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash fa-fw"></i> Uninstall</a></li>
-                                                        [% IF ( plugin.enabled ) %]
+                                                        [% IF ( plugin.is_enabled ) %]
                                                                 <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause fa-fw"></i> Disable</a></li>
                                                         [% ELSE %]
                                                                 <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"><i class="fa fa-play fa-fw"></i> Enable</a></li>
