@@ -962,6 +962,7 @@
             });
 
             $('.cancel-transfer').on("click",function(e){
+                e.preventDefault();
                 window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber | html %]&amp;canceltransfer=1'
             });
 
