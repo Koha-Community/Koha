@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-05-20 02:12-0300\n"
-"PO-Revision-Date: 2018-10-16 02:48+0000\n"
-"Last-Translator: Frank Chou <frank@sris.com.tw>\n"
+"POT-Creation-Date: 2019-06-16 21:04-0300\n"
+"PO-Revision-Date: 2019-06-09 05:05+0000\n"
+"Last-Translator: jerryeast <haod.wu@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1539658121.356444\n"
+"X-POOTLE-MTIME: 1560056754.721847\n"
 "X-Pootle-Path: /zh_CN/18.05/zh-Hans-CN-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -120,7 +120,7 @@ msgstr ""
 "\", \"borrowernumber\": \"%s\" }%s,%s %s ] } %s %s %s%s%s %s%s%s %s%s%s %s "
 "%s "
 
-#. %1$s:  data.borrowernotes.replace('\\\\' , '\\\\') |html |html_line_break |collapse 
+#. %1$s:  data.borrowernotes | html_line_break | collapse | $To 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:31
 #, c-format
 msgid "\", \"dt_borrowernotes\": \"%s\", \"dt_action\": \""
@@ -407,11 +407,12 @@ msgstr ""
 #. %15$s: - END -
 #. %16$s:  INCLUDE 'doc-head-open.inc' 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %sCirculation %sCatalog %sPatrons %sAcquisitions "
 "%sAccounts %sSerials %s %s %s "
-msgstr "%s %s %s %s流通 %s编目 %s读者 %s采访 %s帐号 %s期刊 %s %s %s "
+msgstr ""
+"%s %s %s %s %s %s %s %s流通 %s编目 %s读者 %s采购 %s帐号 %s期刊 %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ar.biblio.biblioitem.publishercode 
@@ -633,7 +634,7 @@ msgstr "%s %s %s %s %s 日 %s 周 %s 月 %s 年 %s %s "
 #. %49$s:     END 
 #. %50$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:19
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %sCatalog %sAuthorities %sPatrons %sAcquisitions %sSerials "
 "%sHolds %sCirculation %sLetter %sFines %sSystem prefs %sCron jobs %sReports "
@@ -642,9 +643,10 @@ msgid ""
 "message %sDelete circulation message %sRun %s%s %s %s %s %s %sIntranet "
 "%sOPAC %sSIP %sCommand-line %s%s %s %s "
 msgstr ""
-"%s %s %s %s %s目录 %s权威 %s读者 %s采访 %s期刊 %s流通 %s信件 %s罚款 %s系统首"
-"选 %s工作调度 %s报表 %s%s %s %s %s %s %s新增 %s删除 %s修改 %s借出 %s还入 %s新"
-"增 %s%s %s %s "
+"%s %s %s %s %s编目 %s主题 %s读者 %s采购 %s期刊 %s馆藏 %s流通 %s信件 %s罚款s "
+"%s系统首选 %s工作调度 %s报表 %s%s %s %s %s %s %s新增 %s删除 %s修改 %s借出 %s"
+"归还n %s新增 %s取消 %s恢复 %s暂停 %s续借 %s修改密码 %s增加流通讯息 %s删除流通"
+"讯息 %s运行 %s%s %s %s %s %s %s管理网 %sOPAC %sSIP %s命令行 %s%s %s %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'circ-search.inc' 
@@ -662,7 +664,7 @@ msgstr ""
 msgid ""
 "%s %s %s %s %sCirculation %sCatalog %sPatrons %sAcquisitions %sAccounts %s "
 "%s "
-msgstr "%s %s %s %s %s流通 %s编目 %s读者 %s采访 %s帐号 %s %s "
+msgstr "%s %s %s %s %s流通 %s编目 %s读者 %s采购 %s帐号 %s %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'patron-search.inc' 
@@ -970,8 +972,8 @@ msgid ""
 "matching rule %s %s %s &rsaquo; Confirm deletion of record matching rule "
 "&quot;%s&quot; %s "
 msgstr ""
-"%s %s %s &rsaquo; 修改寻找纪录规则 %s &rsaquo; 新增寻找纪录规则 %s %s %s "
-"&rsaquo; 确认删除寻找纪录规则 &quot;%s&quot; %s "
+"%s %s %s &rsaquo; 修改符合规则的记录 %s &rsaquo; 新增符合规则的记录 %s %s %s "
+"&rsaquo; 确认符合规则的记录 &quot;%s&quot; %s "
 
 #. %1$s:  IF ( branchcode ) 
 #. %2$s:  Branches.GetName( branchcode ) 
@@ -2165,7 +2167,7 @@ msgid ""
 "for. %s Suggest that patrons expand their searches to include broader/"
 "narrower/related terms. %s "
 msgstr ""
-"%s %s 读者寻找用的采访推荐权威。%s 读者扩充其采访推荐，包括广义/狭义/相关词"
+"%s %s 与用户搜索相关的主题。%s 建议读者扩大搜索范围，包括广义/狭义/相关词"
 "汇。%s "
 
 #. %1$s:  END 
@@ -2238,7 +2240,7 @@ msgstr ""
 msgid ""
 "%s %s The suggestion has not been added. A suggestion with this title "
 "already exists ("
-msgstr "%s %s 未新增采访推荐。此题名的采访推荐已存在 ("
+msgstr "%s %s 未新增采购建议。此题名的采购建议已存在 ("
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -2346,9 +2348,9 @@ msgstr "%s %s 您无权查看此虚拟书架。%s 此虚拟书架不存在。%s 
 #. %2$s:  IF searchfield 
 #. %3$s:  searchfield |html 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:169
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s You searched for %s"
-msgstr "%s%s %s 您寻找的是 %s"
+msgstr "%s %s 您搜索的是 %s"
 
 #. %1$s:  IF added.branchcode 
 #. %2$s:  added.library.branchname | $KohaSpan class = 'name' 
@@ -2426,9 +2428,9 @@ msgstr "%s %s x %s%s(书目纪录 #%s)"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:183
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s days %s There is no age for this rule. %s "
-msgstr "%s 此寻找结果未排序。%s "
+msgstr "%s %s 天 %s 规则永不失效。%s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
@@ -3325,7 +3327,7 @@ msgstr "%s (如点选，即表示此分栏为可点选的 URL)"
 msgid ""
 "%s (if checked, items of this type will be hidden as filters in OPAC's "
 "advanced search) "
-msgstr "%s (勾选后，此类馆藏将被筛选器隐藏在 OPAC 的高级寻找内) "
+msgstr "%s (勾选后，此类馆藏将被隐藏为 OPAC 高级搜索内的筛选器) "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:229
@@ -3491,7 +3493,7 @@ msgstr "%s 新增书目记录至此框架："
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:28
 #, c-format
 msgid "%s Add new upload or search %s Results %s "
-msgstr "%s 新增上传或寻找 %s 结果 %s "
+msgstr "%s 新增上传或搜索 %s 结果 %s "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -3723,7 +3725,7 @@ msgstr "%s 关闭在 %s %s 打开 %s "
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:831
 #, c-format
 msgid "%s Confirm password: "
-msgstr "%s 确认口令："
+msgstr "%s 确认密码："
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -4458,7 +4460,7 @@ msgstr "%s分析上传文件 "
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:785
 #, c-format
 msgid "%s Password: "
-msgstr "%s 口令："
+msgstr "%s 密码："
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4635,7 +4637,7 @@ msgstr "扫瞄索引给："
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:132
 #, c-format
 msgid "%s Searching: %s %s %s "
-msgstr "%s 寻找：%s %s %s "
+msgstr "%s 搜索：%s %s %s "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:465
@@ -4834,7 +4836,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:66
 #, c-format
 msgid "%s There are no outstanding (accepted) suggestions. %s "
-msgstr "%s 无处理中 (接受) 的采访推荐。%s "
+msgstr "%s 无处理中 (接受) 的采购建议。%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4871,9 +4873,9 @@ msgstr "%s 未设置任何字段。%s %s %s "
 #. %2$s:  END 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:195
-#, fuzzy, c-format
+#, c-format
 msgid "%s There is no condition for this rule. %s %s "
-msgstr "%s 此寻找结果未排序。%s "
+msgstr "%s 此规则没有条件。%s %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4889,14 +4891,14 @@ msgstr "%s 未设置任何字段。%s %s %s "
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:751
 #, c-format
 msgid "%s There is no order for this biblio. %s "
-msgstr "%s 此寻找结果未排序。%s "
+msgstr "%s 此书目未排序。%s "
 
 #. %1$s:  ELSIF search_done 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:198
 #, c-format
 msgid "%s There is no order for this search. %s "
-msgstr "%s 此寻找结果未排序。%s "
+msgstr "%s 此搜索结果未排序。%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4913,9 +4915,9 @@ msgstr "%s 此模块无组态表单。%s %s %s 此模块无页面使用组态表
 #. %1$s:  IF msg == 'no_report' 
 #. %2$s:  ELSIF msg == 'can_be_updated' 
 #: intranet-tmpl/prog/en/modules/reports/convert_report.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "%s There is no valid report for this id. %s "
-msgstr "%s 此寻找结果未排序。%s "
+msgstr "%s 此ID没有可用的报告。%s "
 
 #. %1$s:  ELSE 
 #. %2$s:  field.name 
@@ -4999,7 +5001,7 @@ msgstr "使用于 "
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:756
 #, c-format
 msgid "%s Username: "
-msgstr "%s 用户名称："
+msgstr "%s 用户名："
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -5048,7 +5050,7 @@ msgstr "%s 是的%s, "
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:335
 #, c-format
 msgid "%s You Searched for %s"
-msgstr "%s 您寻找 %s"
+msgstr "%s 您搜索 %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -5062,7 +5064,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:136
 #, c-format
 msgid "%s You searched for %s"
-msgstr "%s 您寻找此 %s"
+msgstr "%s 您搜索 %s"
 
 #. %1$s:  IF id 
 #. %2$s:  id 
@@ -5072,7 +5074,7 @@ msgstr "%s 您寻找此 %s"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:156
 #, c-format
 msgid "%s You searched for record %s %s You searched for %s %s "
-msgstr "%s 您寻找的记录 %s %s 您寻找的 %s %s "
+msgstr "%s 您搜索的记录 %s %s 您搜索的 %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -5731,7 +5733,7 @@ msgstr "%s 结果找到 %s "
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:60
 #, c-format
 msgid "%s result(s) found in catalog, "
-msgstr "%s 结果于目录内找到，"
+msgstr "%s 结果于编目内找到，"
 
 #. %1$s:  breeding_count 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:62
@@ -5774,7 +5776,7 @@ msgstr "还有 %s 笔订阅"
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:54
 #, c-format
 msgid "%s suggestions waiting. "
-msgstr "%s 采访推荐处理中。"
+msgstr "%s 采购建议处理中。"
 
 #. %1$s:  resul.used 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:51
@@ -5946,7 +5948,7 @@ msgstr "%s%s 在 "
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:258
 #, c-format
 msgid "%s%s in %s Catalog%s. "
-msgstr "%s%s 在 %s 目录%s。"
+msgstr "%s%s 在 %s 编目%s。"
 
 #. For the first occurrence,
 #. %1$s:  IF ( batche.label_count == 1 ) 
@@ -6101,7 +6103,7 @@ msgstr "%s%s%s馆藏无转移纪录%s"
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:2
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Sending your cart"
-msgstr "%s%s%sKoha 联机%s 目录 &rsaquo; 送至您的采购单"
+msgstr "%s%s%sKoha 联机%s 编目 &rsaquo; 送至您的采购单"
 
 #. For the first occurrence,
 #. %1$s:  IF ( template_id ) 
@@ -6410,7 +6412,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:86
 #, c-format
 msgid "%s: Warning: XSLT error on search result %s"
-msgstr "%s: 警告：发生 XSLT 错误于寻找结果 %s"
+msgstr "%s: 警告：发生 XSLT 错误于搜索结果 %s"
 
 #. %1$s:  IF course.enabled == 'yes' 
 #. %2$s:  ELSE 
@@ -6864,7 +6866,7 @@ msgstr "%s馆藏类型 %s馆藏 %s书架位置 %s其它 %s "
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:1
 #, c-format
 msgid "%sKoha &rsaquo; Tools &rsaquo; Labels &rsaquo;: Search%s "
-msgstr "%sKoha &rsaquo; 工具 &rsaquo; 书标 &rsaquo;: 寻找%s "
+msgstr "%sKoha &rsaquo; 工具 &rsaquo; 书标 &rsaquo;: 搜索%s "
 
 #. %1$s: - BLOCK -
 #. %2$s:  sep | html 
@@ -7417,7 +7419,7 @@ msgstr "&#x010D;e&#353;tina (捷克文)"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:216
 #, c-format
 msgid "&lt;&lt; Back to suggestions"
-msgstr "&lt;&lt;回到采访推荐"
+msgstr "&lt;&lt; 返回采购建议"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:6
 #: intranet-tmpl/prog/en/modules/serials/result.tt:52
@@ -7935,7 +7937,7 @@ msgstr "&rsaquo; %s来自外部资源的订单%s"
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:14
 #, c-format
 msgid "&rsaquo; %sPassword Updated%sChange username and/or password%s"
-msgstr "&rsaquo; %s更新口令%s改变名称与口令%s"
+msgstr "&rsaquo; %s密码已更新%s改变用户名与密码%s"
 
 #. %1$s:  IF ( display_list ) 
 #. %2$s:  ELSE 
@@ -8005,9 +8007,9 @@ msgid "&rsaquo; Account for %s"
 msgstr "&rsaquo; 帐号 %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Acquisitions"
-msgstr "Koha&rsaquo; 采访"
+msgstr "Koha&rsaquo; 采购"
 
 #. %1$s:  ELSIF ( op_mod ) 
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:12
@@ -8097,7 +8099,7 @@ msgstr "&rsaquo; 管理"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:12
 #, c-format
 msgid "&rsaquo; Advanced search"
-msgstr "&rsaquo; 高级寻找"
+msgstr "&rsaquo; 高级搜索"
 
 #: intranet-tmpl/prog/en/modules/serials/viewalerts.tt:9
 #, c-format
@@ -8122,7 +8124,7 @@ msgstr "&rsaquo; 权威"
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:12
 #, c-format
 msgid "&rsaquo; Authority search results"
-msgstr "&rsaquo; 权威寻找结果"
+msgstr "&rsaquo; 主题搜索结果"
 
 #. %1$s:  basketno 
 #: intranet-tmpl/prog/en/modules/acqui/edi_ean.tt:10
@@ -8503,12 +8505,12 @@ msgstr "&rsaquo; 馆藏详情 "
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:114
 #, c-format
 msgid "&rsaquo; Item search "
-msgstr "&rsaquo; 馆藏寻找 "
+msgstr "&rsaquo; 馆藏搜索 "
 
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Item search fields "
-msgstr "&rsaquo; 馆藏寻找字段 "
+msgstr "&rsaquo; 馆藏搜索字段 "
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:13
 #, c-format
@@ -8733,7 +8735,7 @@ msgstr "&rsaquo; 删除打印机%s %s打印机%s"
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:18
 #, c-format
 msgid "&rsaquo; Purchase suggestions for %s "
-msgstr "&rsaquo; 采访推荐给 %s "
+msgstr "&rsaquo; %s 的采购建议 "
 
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:8
 #, c-format
@@ -8827,7 +8829,7 @@ msgstr "&rsaquo; 标签的结果 "
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:11
 #, c-format
 msgid "&rsaquo; Results%s &rsaquo; Acquisitions statistics %s"
-msgstr "&rsaquo; 结果%s &rsaquo; 采访统计 %s"
+msgstr "&rsaquo; 结果%s &rsaquo; 采购统计 %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -8862,7 +8864,7 @@ msgstr "&rsaquo; 结果%s 上传脱机流通文件%s"
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:12
 #, c-format
 msgid "&rsaquo; Results%s&rsaquo; Catalog statistics%s"
-msgstr "&rsaquo; 结果%s&rsaquo; 目录统计%s"
+msgstr "&rsaquo; 结果%s&rsaquo; 编目统计%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -8924,59 +8926,59 @@ msgstr "&rsaquo; 查看SQL %s"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:27
 #, c-format
 msgid "&rsaquo; Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s "
-msgstr "&rsaquo; 寻找 %s供 '%s'%s%s&nbsp;祗限于：&nbsp;'%s'%s "
+msgstr "&rsaquo; 搜索 %s供 '%s'%s%s&nbsp;限于：&nbsp;'%s'%s "
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:66
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Search engine configuration"
-msgstr "&rsaquo; 寻找既有的纪录"
+msgstr "&rsaquo; 搜索引擎设置"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:13
 #, c-format
 msgid "&rsaquo; Search existing records"
-msgstr "&rsaquo; 寻找既有的纪录"
+msgstr "&rsaquo; 搜索已有的纪录"
 
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:19
 #, c-format
 msgid "&rsaquo; Search for vendor "
-msgstr "&rsaquo; 寻找供应商 "
+msgstr "&rsaquo; 搜索供应商 "
 
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:17
 #, c-format
 msgid "&rsaquo; Search history "
-msgstr "&rsaquo; 寻找纪录 "
+msgstr "&rsaquo; 搜索纪录 "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:19
 #, c-format
 msgid "&rsaquo; Search results%s"
-msgstr "&rsaquo; 寻找结果%s"
+msgstr "&rsaquo; 搜索结果%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #, c-format
 msgid "&rsaquo; Search results%sOrder search%s"
-msgstr "&rsaquo; 寻找结果%s寻找订单%s"
+msgstr "&rsaquo; 搜索结果%s订单搜索%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/members/member.tt:17
 #, c-format
 msgid "&rsaquo; Search results%sPatrons%s"
-msgstr "&rsaquo; 寻找结果%s读者%s"
+msgstr "&rsaquo; 搜索结果%s读者%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:18
 #, c-format
 msgid "&rsaquo; Search results%sSerials %s "
-msgstr "&rsaquo; 寻找结果%s期刊 %s "
+msgstr "&rsaquo; 搜索结果%s期刊 %s "
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:13
 #, c-format
 msgid "&rsaquo; Search the Norwegian national patron database"
-msgstr "&rsaquo; 寻找挪威国家读者数据库"
+msgstr "&rsaquo; 搜索挪威国家读者数据库"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/members/notices.tt:21
@@ -9193,14 +9195,14 @@ msgid "') |html %%]"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'password' should be stored in plaintext, and will be converted to a Bcrypt "
 "hash (if your passwords are already encrypted, talk to your system "
 "administrator about options). "
 msgstr ""
-"'口令' 应以文字方式存储，且转换为 Bcrypt 随机数存储 (若口令已经被编码，洽您的"
-"系统管理员调整)。"
+"'密码' 应以文本方式存储，且转换为 Bcrypt 散列 (若口令已经被编码，联系您的系统"
+"管理员调整)。"
 
 #. For the first occurrence,
 #. %1$s:  rescardnumber 
@@ -9615,7 +9617,7 @@ msgstr "(是 %s)"
 #: intranet-tmpl/prog/en/includes/facets.inc:8
 #, c-format
 msgid "(related searches: %s%s%s)"
-msgstr "(相关寻找：%s%s%s)"
+msgstr "(相关搜索：%s%s%s)"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:453
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:455
@@ -9641,7 +9643,7 @@ msgstr "(第一次订阅的开始日期) "
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:215
 #, c-format
 msgid "(use * to do a fuzzy search) "
-msgstr "(以 * 做为馍糊寻找) "
+msgstr "(以 * 进行模糊搜索) "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
@@ -9962,7 +9964,7 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:74
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:150
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:158
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:119
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:121
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:96
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:65
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:72
@@ -10376,24 +10378,24 @@ msgstr "罚款"
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:105
 #, c-format
 msgid "Acquisition"
-msgstr "采访"
+msgstr "采购"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:12
 #, c-format
 msgid "Acquisition and/or suggestion management"
-msgstr "采访与/或推荐管理"
+msgstr "采购与/或采购建议管理"
 
 #: intranet-tmpl/prog/en/modules/labels/search.tt:64
 #: intranet-tmpl/prog/en/modules/labels/search.tt:65
 #, c-format
 msgid "Acquisition date"
-msgstr "采访日期"
+msgstr "采购日期"
 
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:181
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:183
 #, c-format
 msgid "Acquisition date (yyyy-mm-dd)"
-msgstr "采访日期(yyyy-mm-dd)"
+msgstr "采购日期(yyyy-mm-dd)"
 
 #: intranet-tmpl/prog/en/includes/resort_form.inc:63
 #: intranet-tmpl/prog/en/includes/resort_form.inc:65
@@ -10401,7 +10403,7 @@ msgstr "采访日期(yyyy-mm-dd)"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:224
 #, c-format
 msgid "Acquisition date: newest to oldest"
-msgstr "采访日期：最新至最旧"
+msgstr "采购日期：最新至最旧"
 
 #: intranet-tmpl/prog/en/includes/resort_form.inc:69
 #: intranet-tmpl/prog/en/includes/resort_form.inc:71
@@ -10409,31 +10411,31 @@ msgstr "采访日期：最新至最旧"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:230
 #, c-format
 msgid "Acquisition date: oldest to newest"
-msgstr "采访日期：最旧至最新"
+msgstr "采购日期：最旧至最新"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:306
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:338
 #, c-format
 msgid "Acquisition details"
-msgstr "采访详情"
+msgstr "采购详情"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:192
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:365
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:725
 #, c-format
 msgid "Acquisition information"
-msgstr "采访信息"
+msgstr "采购信息"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:45
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:98
 #, c-format
 msgid "Acquisition parameters"
-msgstr "采访参数"
+msgstr "采购参数"
 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:107
 #, c-format
 msgid "Acquisition tables"
-msgstr "采访表单"
+msgstr "采购表单"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:3
@@ -10474,23 +10476,23 @@ msgstr "采访表单"
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:97
 #, c-format
 msgid "Acquisitions"
-msgstr "采访"
+msgstr "采购"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:5
-#, fuzzy, c-format
+#, c-format
 msgid "Acquisitions home"
-msgstr "采访"
+msgstr "采购主页"
 
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:11
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:83
 #, c-format
 msgid "Acquisitions statistics"
-msgstr "采访统计"
+msgstr "采购统计"
 
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:21
 #, c-format
 msgid "Acquisitions statistics "
-msgstr "采访统计 "
+msgstr "采购统计 "
 
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:69
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:284
@@ -10594,8 +10596,8 @@ msgstr "动作"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:91
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:129
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:176
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:135
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:163
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:137
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:165
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:78
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:154
@@ -10971,7 +10973,7 @@ msgstr "新增馆藏"
 #, c-format
 msgid ""
 "Add items by using the text area above or leave empty to add via item search."
-msgstr "使用文字区上方或通过馆藏寻找空白均可新增馆藏。"
+msgstr "使用上方文字区域新增馆藏，或保留空白以通过馆藏搜索新增。"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:29
 #, c-format
@@ -11116,11 +11118,11 @@ msgid "Add patrons"
 msgstr "新增读者"
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Add patrons by borrowernumber using the text area above or leave empty to "
 "add via patron search."
-msgstr "通过文字区上方的读者号或寻找读者后空白均可新增馆藏。"
+msgstr "通过文字区上方的读者号可新增读者，或者保留空白以通过读者搜索来添加。"
 
 #: intranet-tmpl/prog/en/includes/quotes-toolbar.inc:2
 #, c-format
@@ -11212,7 +11214,7 @@ msgstr "新增至采购单"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:455
 #, c-format
 msgid "Add to cart"
-msgstr "新增到购物车"
+msgstr "添加到书目清单"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:111
 #, c-format
@@ -11634,7 +11636,7 @@ msgstr "高级预测模式"
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:55
 #, c-format
 msgid "Advanced search"
-msgstr "高级寻找"
+msgstr "高级搜索"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:180
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:257
@@ -11802,10 +11804,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:338
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:41
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:36
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:246
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:264
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:355
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:374
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:248
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:266
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:357
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:376
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:42
@@ -12022,9 +12024,9 @@ msgid "Allow access to the reports module"
 msgstr "允许近用报表模块"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Allow changes to contents from: "
-msgstr "图像都来自 "
+msgstr "允许修改来自："
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:392
 #, c-format
@@ -12295,7 +12297,7 @@ msgstr "总计："
 msgid ""
 "An authorized value attached to acquisitions, that can be used for stats "
 "purposes"
-msgstr "附属于采访的容许值，可供统计之用"
+msgstr "附属于采购的容许值，可供统计之用"
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:185
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:188
@@ -12622,9 +12624,9 @@ msgid "Any: "
 msgstr "任何："
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "Anyone seeing this list"
-msgstr "送出虚拟书架有问题..."
+msgstr "所有阅览书架的人"
 
 #: intranet-tmpl/prog/en/modules/about.tt:46
 #, c-format
@@ -12789,7 +12791,7 @@ msgstr "确定关闭此采购单群组吗？"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/serials-home.tt:28
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:403
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:405
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:382
 msgid "Are you sure you want to close this subscription?"
@@ -12850,9 +12852,8 @@ msgstr "确定删除此 %s 附加的馆藏吗？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:198
-#, fuzzy
 msgid "Are you sure you want to delete the %s selected search history entries?"
-msgstr "确定删除您选定的寻找记录吗？"
+msgstr "确定删除您选定的%s搜索记录吗？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:226
@@ -12899,9 +12900,8 @@ msgstr "确定删除指定的报表吗？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:198
-#, fuzzy
 msgid "Are you sure you want to delete the selected search history entry?"
-msgstr "确定删除您选定的寻找记录吗？"
+msgstr "确定删除您选定的搜索记录吗？"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:771
@@ -13088,7 +13088,7 @@ msgstr "确定删除此订阅期间吗？"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/serials-home.tt:28
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:403
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:405
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:382
 msgid "Are you sure you want to delete this subscription?"
@@ -13212,8 +13212,8 @@ msgstr "确定再打开此采购单吗？"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/serials-home.tt:28
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:403
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:410
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:405
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:412
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:271
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:382
 msgid "Are you sure you want to reopen this subscription?"
@@ -13716,13 +13716,13 @@ msgstr "权威纪录"
 #: intranet-tmpl/prog/en/modules/authorities/auth_finder.tt:11
 #, c-format
 msgid "Authority search"
-msgstr "权威寻找"
+msgstr "主题搜索"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:12
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:19
 #, c-format
 msgid "Authority search results"
-msgstr "权威寻找结果"
+msgstr "主题搜索结果"
 
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:71
 #, c-format
@@ -14090,9 +14090,9 @@ msgid "Barcode not found"
 msgstr "找不到条码号"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:429
-#, fuzzy, c-format
+#, c-format
 msgid "Barcode not found. The following items were found by searching:"
-msgstr "寻找找到以下馆藏：%s "
+msgstr "未找到条形码。以下是搜索到的馆藏："
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:968
 #, c-format
@@ -14315,7 +14315,7 @@ msgstr "采购单群组名称"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:101
 #, c-format
 msgid "Basket group search"
-msgstr "寻找采购单群组"
+msgstr "搜索采购单群组"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:43
@@ -14351,7 +14351,7 @@ msgstr "采购单名称："
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:100
 #, c-format
 msgid "Basket search"
-msgstr "寻找采购单"
+msgstr "搜索采购单"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:406
 #, fuzzy, c-format
@@ -15542,8 +15542,8 @@ msgid "Call number range"
 msgstr "索书号范围"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:110
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:232
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:341
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:234
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:343
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:103
 #, c-format
 msgid "Call number:"
@@ -15650,39 +15650,39 @@ msgstr "不能取消收条 "
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:196
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:518
 msgid "Can't delete catalog record or order, cancel holds first"
-msgstr "不能删除目录纪录或订单，先取消预约"
+msgstr "不能删除编目纪录或订单，先取消预约"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:509
 msgid ""
 "Can't delete catalog record, because of [% books_loo.items %] existing "
 "hold(s)"
-msgstr "不能删除目录纪录，因为 [% books_loo.items %] 已被预约"
+msgstr "不能删除编目纪录，因为 [% books_loo.items %] 已被预约"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:187
 msgid ""
 "Can't delete catalog record, because of [% loop_order.items %] existing "
 "item(s)"
-msgstr "不能删除目录纪录，因为 [% loop_order.items %] 已有馆藏"
+msgstr "不能删除编目纪录，因为 [% loop_order.items %] 已有馆藏"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:190
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:512
 msgid "Can't delete catalog record, delete other orders linked to it first"
-msgstr "不能删除目录纪录，先删除连结的其它订单"
+msgstr "不能删除编目纪录，先删除连结的其它订单"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:193
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:515
 msgid "Can't delete catalog record, delete subscriptions first"
-msgstr "不能删除目录纪录，先删除订阅"
+msgstr "不能删除编目纪录，先删除订阅"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:184
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:506
 msgid "Can't delete catalog record, see constraints below"
-msgstr "不能删除目录纪录，见以下的限制"
+msgstr "不能删除编目纪录，见以下的限制"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:8
@@ -16274,9 +16274,9 @@ msgstr "该读者证号码已经被使用。"
 #. %1$s:  maxlength_cardnumber 
 #. %2$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:536
-#, fuzzy, c-format
+#, c-format
 msgid "Card number can be up to %s characters. %s "
-msgstr "。口令至少应有 %s 字符。"
+msgstr "读者卡号应至少有 %s 个字符。%s "
 
 #: intranet-tmpl/prog/en/includes/onboarding_messages.inc:18
 #, fuzzy, c-format
@@ -16297,25 +16297,25 @@ msgstr "读者证号码清单(每个号码一列)："
 #. %2$s:  maxlength_cardnumber 
 #. %3$s:  ELSIF maxlength_cardnumber 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:532
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters. %s "
-msgstr "。口令至少应有 %s 字符。"
+msgstr "读者卡号应在 %s 到 %s 个字符之间。%s "
 
 #. %1$s:  minlength_cardnumber 
 #. %2$s:  ELSIF minlength_cardnumber && maxlength_cardnumber 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:528
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be exactly %s characters. %s "
-msgstr "。口令至少应有 %s 字符。"
+msgstr "读者卡号必须是 %s 个字符。%s "
 
 #. For the first occurrence,
 #. %1$s:  maxlength_cardnumber 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:527
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:531
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:535
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must not be more than %s characters."
-msgstr "。口令至少应有 %s 字符。"
+msgstr "读者卡号不能超过 %s 个字符。"
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:93
 #, fuzzy, c-format
@@ -16427,9 +16427,9 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:20
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "Cash register statistics"
-msgstr "目录统计"
+msgstr "收银机统计"
 
 #. %1$s:  beginDate | $KohaDates 
 #. %2$s:  endDate | $KohaDates 
@@ -16470,37 +16470,37 @@ msgstr "卡带录音"
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:50
 #, c-format
 msgid "Catalog"
-msgstr "目录"
+msgstr "编目"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:53
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:82
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:17
 #, c-format
 msgid "Catalog by item type"
-msgstr "目录依馆藏类型排序"
+msgstr "编目依馆藏类型排序"
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:32
 #, c-format
 msgid "Catalog details"
-msgstr "目录详情"
+msgstr "编目详情"
 
 #. %1$s:  IF ( biblionumber ) 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:98
 #, c-format
 msgid "Catalog details %s "
-msgstr "目录详情 %s "
+msgstr "编目详情 %s "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:9
 #, c-format
 msgid "Catalog search"
-msgstr "目录寻找"
+msgstr "编目搜索"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:12
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:22
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:69
 #, c-format
 msgid "Catalog statistics"
-msgstr "目录统计"
+msgstr "编目统计"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:6
@@ -16525,17 +16525,17 @@ msgstr "编目编辑器"
 #: intranet-tmpl/prog/en/includes/cataloging-search.inc:43
 #, c-format
 msgid "Cataloging search"
-msgstr "编目寻找"
+msgstr "编目搜索"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:207
 #, c-format
 msgid "Catalogs"
-msgstr "目录"
+msgstr "编目"
 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:125
 #, c-format
 msgid "Catalogue tables"
-msgstr "目录表单"
+msgstr "编目表单"
 
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:131
 #, c-format
@@ -16728,14 +16728,14 @@ msgstr "更改订单的供应商说明(订单编号 %s)"
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:22
 #, c-format
 msgid "Change password"
-msgstr "改变口令"
+msgstr "修改密码"
 
 #. %1$s:  patron.firstname 
 #. %2$s:  patron.surname 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:59
 #, c-format
 msgid "Change username and/or password for %s %s"
-msgstr "更改用户名称与口令 %s %s"
+msgstr "更改用户名与密码 %s %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:458
 #, c-format
@@ -16960,7 +16960,7 @@ msgstr "稍早的借出"
 msgid "Check previous checkouts: "
 msgstr "稍早的借出"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:51
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:47
 #, c-format
 msgid "Check that your database is running."
 msgstr "检查您的数据库在执行中。"
@@ -16984,7 +16984,7 @@ msgstr "检查期刊的到期日"
 #. %1$s:  INCLUDE txt_kohaconf_xml 
 #. %2$s:  '127.0.0.1' | $HtmlTags tag=>'code' 
 #. %3$s:  'localhost' | $HtmlTags tag=>'code' 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:53
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:49
 #, c-format
 msgid ""
 "Check the hostname setting in %s. Some database servers require %s rather "
@@ -17024,7 +17024,7 @@ msgstr "勾选以让读者纪录在此属性有多个值。设置属性后，不
 #, c-format
 msgid ""
 "Check to make this attribute staff_searchable in the staff patron search."
-msgstr "勾选以便在馆员读者寻找时，显示staff_searchable属性。"
+msgstr "勾选以便在馆员读者搜索时，显示staff_searchable属性。"
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:141
 #, c-format
@@ -17032,7 +17032,7 @@ msgid "Check to show this attribute in patron check-out."
 msgstr "勾选以便在读者借出页面显示此属性。"
 
 #. %1$s:  'koha-conf.xml' | $HtmlTags Tag=>'code' 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:52
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:48
 #, fuzzy, c-format
 msgid "Check your database settings in %s."
 msgstr "检查您的数据库设置 "
@@ -17477,7 +17477,7 @@ msgstr "选择时间"
 msgid ""
 "Choose whether patrons of this category be blocked from public catalog "
 "actions such as renewing and placing holds when their cards have expired. "
-msgstr "当此类型的读者到期时，选择是否封锁于公共目录的续借、预约。"
+msgstr "当此类型的读者到期时，选择是否封锁于公共编目的续借、预约。"
 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:208
 #, c-format
@@ -17489,7 +17489,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:122
 #, c-format
 msgid "Choose which plugins to use to suggest searches to patrons and staff."
-msgstr "选择供读者与馆员推荐寻找用的外挂程序。"
+msgstr "选择给读者与馆员进行搜索推荐的插件。"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:41
 #, c-format
@@ -17757,7 +17757,7 @@ msgstr "县市别名"
 #: intranet-tmpl/prog/en/includes/cities-admin-search.inc:6
 #, c-format
 msgid "City search:"
-msgstr "寻找县市："
+msgstr "县市搜索："
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:106
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:113
@@ -18018,7 +18018,7 @@ msgstr "清除画面"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:48
 #, c-format
 msgid "Clear search form"
-msgstr "清除寻找表单"
+msgstr "清除搜索表单"
 
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:38
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:75
@@ -18342,7 +18342,7 @@ msgid "Closed"
 msgstr "已关闭"
 
 #. %1$s:  closedsubscriptions.size || 0 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:288
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:290
 #, c-format
 msgid "Closed (%s)"
 msgstr "关闭 (%s)"
@@ -18881,12 +18881,12 @@ msgstr "确认预约"
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:73
 #, c-format
 msgid "Confirm new password:"
-msgstr "确认新口令"
+msgstr "确认新密码"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm password: "
-msgstr "%s 确认口令："
+msgstr "确认密码： "
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:25
 #, c-format
@@ -19055,8 +19055,8 @@ msgstr "继续登录Koha"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:49
 #: intranet-tmpl/prog/en/modules/installer/step1.tt:90
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:60
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:67
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:56
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:63
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:73
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:210
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:221
@@ -19730,12 +19730,12 @@ msgstr "新增读者"
 #: intranet-tmpl/prog/en/includes/permissions.inc:76
 #, c-format
 msgid "Create printable labels and barcodes from catalog and patron data"
-msgstr "从目录与读者数据新增可打印的书标与条码"
+msgstr "从编目与读者数据新增可打印的书标与条码"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:181
 #, c-format
 msgid "Create printable labels and barcodes from catalog data"
-msgstr "从目录数据新增可打印的书标与条码"
+msgstr "从编目数据新增可打印的书标与条码"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:53
 #, c-format
@@ -19893,7 +19893,7 @@ msgstr "币别与汇率"
 #: intranet-tmpl/prog/en/includes/currencies-admin-search.inc:6
 #, c-format
 msgid "Currencies search:"
-msgstr "币别寻找："
+msgstr "币别搜索："
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:145
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:179
@@ -20047,7 +20047,7 @@ msgstr "课程"
 #. OPTGROUP
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:72
 msgid "Custom search fields"
-msgstr "客制化寻找字段"
+msgstr "定制搜索字段"
 
 #: intranet-tmpl/prog/en/modules/about.tt:538
 #, c-format
@@ -20736,9 +20736,9 @@ msgid "Default: ReplyToDefault system preference"
 msgstr "整体系统首选"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:143
-#, fuzzy, c-format
+#, c-format
 msgid "Default: ReturnpathDefault system preference"
-msgstr "寻找系统首选"
+msgstr "默认：ReturnpathDefault系统首选"
 
 #. %1$s:  UNLESS ( default_rules ) 
 #. %2$s:  END 
@@ -20790,7 +20790,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:101
 #, c-format
 msgid "Define currencies and exchange rates used for acquisitions."
-msgstr "设置币别与汇率供采访使用。"
+msgstr "设置币别与汇率供采购使用。"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:64
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:88
@@ -21859,7 +21859,7 @@ msgstr "字典定义"
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:50
 #, c-format
 msgid "Did not check for matches with existing records in catalog"
-msgstr "不要检查目录内既有纪录的映射"
+msgstr "没有检查编目内符合的既有纪录"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:42
 #, c-format
@@ -22073,7 +22073,7 @@ msgstr "盘点时间不要扫瞄还入的馆藏："
 msgid ""
 "Do not create a duplicate record. Add an order from the existing record in "
 "your catalog."
-msgstr "不要新增重复的纪录。从目录内的既有纪录新增订阅。"
+msgstr "不要新增重复的纪录。从编目内的既有纪录新增订阅。"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:121
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:152
@@ -22489,8 +22489,8 @@ msgstr "EAN："
 
 #: intranet-tmpl/prog/en/includes/serials-search.inc:15
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:18
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:227
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:336
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:229
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:338
 #, c-format
 msgid "EAN:"
 msgstr "EAN："
@@ -22795,7 +22795,7 @@ msgstr "编辑预算 %s"
 #: intranet-tmpl/prog/en/includes/permissions.inc:43
 #, c-format
 msgid "Edit catalog (Modify bibliographic/holdings data)"
-msgstr "编辑目录 (修改书目/馆藏数据)"
+msgstr "修改编目 (修改书目/馆藏数据)"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:91
 #, c-format
@@ -22895,7 +22895,7 @@ msgstr "编辑预算 %s"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:240
 #, c-format
 msgid "Edit purchase suggestion #%s"
-msgstr "编辑采访推荐 #%s"
+msgstr "编辑采购建议 #%s"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:112
 #, c-format
@@ -22942,7 +22942,7 @@ msgid "Edit routing list "
 msgstr "编辑传阅清单 "
 
 #. %1$s:  subscription.routingedit 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:172
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:174
 #, c-format
 msgid "Edit routing list (%s)"
 msgstr "编辑传阅清单 (%s)"
@@ -22960,7 +22960,7 @@ msgstr "编辑虚拟书架"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
 msgid "Edit search"
-msgstr "编辑寻找"
+msgstr "编辑搜索"
 
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:44
 #, fuzzy, c-format
@@ -23002,7 +23002,7 @@ msgstr "隐藏于 OPAC："
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
 msgid "Editing catalog record #{ID}"
-msgstr "编辑目录记录 #{ID}"
+msgstr "编辑编目记录 #{ID}"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
@@ -23017,7 +23017,7 @@ msgstr "编辑新增纪录"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
 msgid "Editing search result"
-msgstr "编辑寻找结果"
+msgstr "编辑搜索结果"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -23067,9 +23067,9 @@ msgid "Eivin Giske Skaaren"
 msgstr "Eivin Giske Skaaren"
 
 #: intranet-tmpl/prog/en/modules/about.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid "Elasticsearch: "
-msgstr "读者寻找："
+msgstr "弹性搜索："
 
 #: intranet-tmpl/prog/en/modules/about.tt:590
 #, c-format
@@ -23320,14 +23320,14 @@ msgstr "键入逗号区隔打印的字段。您可包括任何 "
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:243
 #, c-format
 msgid "Enter a new purchase suggestion"
-msgstr "键入新的采访推荐"
+msgstr "键入新的采购建议"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:280
 #, c-format
 msgid ""
 "Enter a summary that will overwrite the default one in search results lists. "
 "Example, for a website itemtype : "
-msgstr "键入摘要覆盖寻找结果清单的缺省值。如网站的馆藏类型："
+msgstr "键入摘要覆盖搜索结果清单的缺省值。如网站的馆藏类型："
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:223
 #, c-format
@@ -23453,13 +23453,13 @@ msgstr "键入读者号："
 #: intranet-tmpl/prog/en/includes/letters-search.inc:15
 #, c-format
 msgid "Enter search keywords:"
-msgstr "键入寻找键词："
+msgstr "键入搜索关键词："
 
 #. INPUT type=text name=q
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:85
 #: intranet-tmpl/prog/en/modules/labels/search.tt:68
 msgid "Enter search terms"
-msgstr "键入寻找术语"
+msgstr "键入搜索词"
 
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:104
 #, c-format
@@ -23491,7 +23491,7 @@ msgstr "键入批次馆藏的条码"
 #: intranet-tmpl/prog/en/includes/currencies-admin-search.inc:18
 #: intranet-tmpl/prog/en/includes/letters-search.inc:18
 msgid "Enter the terms you wish to search for."
-msgstr "键入寻找的术语。"
+msgstr "键入搜索的词组。"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:33
 #, c-format
@@ -23932,8 +23932,8 @@ msgstr "到期日："
 msgid "Expired? / Closed?"
 msgstr "逾期? / 关闭?"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:256
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:365
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:258
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:367
 #, c-format
 msgid "Expires before:"
 msgstr "到期日："
@@ -24493,6 +24493,12 @@ msgstr "字段 2"
 msgid "Field 3"
 msgstr "字段 3"
 
+#. SPAN
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:688
+#, fuzzy
+msgid "Field autofilled by plugin"
+msgstr "查看所有图书馆"
+
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:39
 #, fuzzy, c-format
 msgid "Field created."
@@ -24576,9 +24582,8 @@ msgstr "找不到馆藏。"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:116
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:204
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
-#, fuzzy
 msgid "File already exists"
-msgstr "用户帐号/口令已存在。"
+msgstr "文件已存在。"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:197
 #, fuzzy, c-format
@@ -25055,7 +25060,7 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:257
 msgid "For large catalogs this can result in unexpected behavior"
-msgstr "对大型的目录可能产生未预期的行为"
+msgstr "对大型的编目可能产生不可预期的行为"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:209
 #, c-format
@@ -25562,7 +25567,7 @@ msgstr "基金余额"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:108
 #, c-format
 msgid "Fund search"
-msgstr "寻找基金"
+msgstr "基金搜索"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:53
 #, c-format
@@ -25829,7 +25834,7 @@ msgstr "Koha 映射至 MARC"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
 #, c-format
 msgid "Go to advanced search"
-msgstr "进入高级寻找"
+msgstr "进入高级搜索"
 
 #. A
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:14
@@ -25839,7 +25844,7 @@ msgstr "进入馆藏详情"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:22
 #, c-format
 msgid "Go to item search"
-msgstr "进入馆藏寻找"
+msgstr "进入馆藏搜索"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:146
@@ -26107,13 +26112,13 @@ msgstr "Henri-Damien Laurent (3.0 释出维护者)"
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:13
 #, c-format
 msgid "Here is your cart, sent from our online catalog."
-msgstr "从您的联机目录寄来的采购单。"
+msgstr "这是从您的联机编目寄来的采购单。"
 
 #. %1$s:  shelfname 
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:11
 #, c-format
 msgid "Here is your list called %s, sent from our online catalog."
-msgstr "这是从您的联机目录寄来的虚拟书架 %s。"
+msgstr "这是从您的联机编目寄来的虚拟书架 %s。"
 
 #: intranet-tmpl/prog/en/modules/basket/sendbasket.tt:11
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:9
@@ -27265,8 +27270,8 @@ msgstr "ISSN"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:236
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:131
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:31
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:218
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:327
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:220
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:329
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:25
 #, c-format
 msgid "ISSN:"
@@ -27781,7 +27786,7 @@ msgstr "输入结果："
 #. INPUT type=submit name=mainformsubmit
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:216
 msgid "Import this batch into the catalog"
-msgstr "输入此批次进入目录"
+msgstr "将这个批次导入编目"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:169
@@ -27835,7 +27840,7 @@ msgstr "月："
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelf.tt:141
 #, c-format
 msgid "In online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
-msgstr "在联机目录：%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
+msgstr "在联机编目：%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:70
 #, c-format
@@ -27997,9 +28002,9 @@ msgstr "一般设置"
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:197
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:201
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:205
-#, fuzzy, c-format
+#, c-format
 msgid "Inherit from system preferences"
-msgstr "寻找系统首选"
+msgstr "从系统首选继承"
 
 #: intranet-tmpl/prog/en/columns.def:6
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:23
@@ -28059,7 +28064,7 @@ msgstr "指示"
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:87
 #, c-format
 msgid "Instructor search:"
-msgstr "寻找教师："
+msgstr "导师搜索："
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:60
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:45
@@ -28136,9 +28141,8 @@ msgstr "内部说明："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
-#, fuzzy
 msgid "Internal search error"
-msgstr "<h3>内部寻找错误</h3>"
+msgstr "内部搜索错误"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:9
@@ -28233,7 +28237,7 @@ msgstr "无效的栏号"
 #: intranet-tmpl/prog/en/modules/auth.tt:48
 #, c-format
 msgid "Invalid username or password"
-msgstr "不合法用户名称或口令"
+msgstr "无效用户名或密码"
 
 #. %1$s:  e 
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:36
@@ -28437,8 +28441,8 @@ msgstr "期 "
 msgid "Issue #"
 msgstr "期 #"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:149
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:183
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:151
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:185
 #, c-format
 msgid "Issue history"
 msgstr "发行版纪录"
@@ -28821,26 +28825,26 @@ msgstr "馆藏还入至借出图书馆"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:122
 #, c-format
 msgid "Item search"
-msgstr "馆藏寻找"
+msgstr "馆藏搜索"
 
 #. %1$s:  field.label |html 
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "Item search field: %s"
-msgstr "馆藏寻找字段：%s"
+msgstr "馆藏搜索字段：%s"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:39
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:14
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:57
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "Item search fields"
-msgstr "馆藏寻找字段"
+msgstr "馆藏搜索字段"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
 msgid "Item search results"
-msgstr "馆藏寻找结果"
+msgstr "馆藏搜索结果"
 
 #. %1$s:  reqbrchname 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:101
@@ -28921,9 +28925,9 @@ msgid "Item type "
 msgstr "馆藏类型 "
 
 #: intranet-tmpl/prog/en/includes/onboarding_messages.inc:24
-#, fuzzy, c-format
+#, c-format
 msgid "Item type already exists!"
-msgstr "用户帐号/口令已存在。"
+msgstr "类型已存在。"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:30
 #, fuzzy, c-format
@@ -29749,8 +29753,7 @@ msgstr "Koha &rsaquo; 采访 &rsaquo; %s最新消息 %s采购单 %s (%s) 给 %s"
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; %sOrder from external source%sOrder from "
 "external source &rsaquo; Search results%s"
-msgstr ""
-"Koha &rsaquo; 采访 &rsaquo; %s外来的订单%s外来的订单 &rsaquo; 寻找结果%s"
+msgstr "Koha &rsaquo; 采购 &rsaquo; %s外部订单%s外部订单 &rsaquo; 搜索结果%s"
 
 #. %1$s:  IF ( order_loop ) 
 #. %2$s:  ELSE 
@@ -29760,7 +29763,7 @@ msgstr ""
 msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; %sOrders search &rsaquo; Search results"
 "%sOrder search%s"
-msgstr "Koha &rsaquo; 采访 &rsaquo; %s订单寻找 &rsaquo; 寻找结果%s订单寻找%s"
+msgstr "Koha &rsaquo; 采购 &rsaquo; %s订单搜索 &rsaquo; 搜索结果%s订单搜索%s"
 
 #. %1$s:  IF ( booksellername ) 
 #. %2$s:  booksellername 
@@ -29899,7 +29902,7 @@ msgstr "Koha &rsaquo; 采访 &rsaquo; 从代理商收到发货单 %s"
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:4
 #, c-format
 msgid "Koha &rsaquo; Acquisitions &rsaquo; Search existing records"
-msgstr "Koha &rsaquo; 采访 &rsaquo; 寻找既有纪录"
+msgstr "Koha &rsaquo; 采购 &rsaquo; 搜索现有纪录"
 
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:7
 #, c-format
@@ -30239,15 +30242,14 @@ msgstr "Koha &rsaquo; 管理 &rsaquo; 您的意思是？"
 #. %6$s:  IF delete_confirm 
 #. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; EDI accounts %s %s &rsaquo; Modify "
 "account %s &rsaquo; Add new account %s %s %s &rsaquo; Confirm deletion of "
 "account %s "
 msgstr ""
-"Koha &rsaquo; 管理 &rsaquo; 纪录配对规则 %s %s &rsaquo; 修改纪录配对规则 %s "
-"&rsaquo; 新增纪录配对规则 %s %s %s &rsaquo; 确认删除寻找纪录规则 &quot;"
-"%s&quot; %s "
+"Koha &rsaquo; 管理 &rsaquo; EDI accounts %s %s &rsaquo; 修改账号 %s &rsaquo; "
+"新增账号 %s %s %s &rsaquo; 确认删除账号 %s "
 
 #. %1$s:  IF op == 'add_form' 
 #. %2$s:  IF ( budget_id ) 
@@ -30272,9 +30274,9 @@ msgstr "Koha &rsaquo; 管理 &rsaquo; 馆藏流通报警"
 
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:5
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Item search fields"
-msgstr "Koha &rsaquo; 管理 &rsaquo; 馆藏寻找字段"
+msgstr "Koha &rsaquo; 管理 &rsaquo; 馆藏搜索字段"
 
 #. %1$s:  IF op == 'add_form' 
 #. %2$s:  IF ( itemtype ) 
@@ -30457,9 +30459,9 @@ msgid ""
 "Modify record matching rule %s &rsaquo; Add record matching rule %s %s %s "
 "&rsaquo; Confirm deletion of record matching rule &quot;%s&quot; %s "
 msgstr ""
-"Koha &rsaquo; 管理 &rsaquo; 纪录配对规则 %s %s &rsaquo; 修改纪录配对规则 %s "
-"&rsaquo; 新增纪录配对规则 %s %s %s &rsaquo; 确认删除寻找纪录规则 &quot;"
-"%s&quot; %s "
+"Koha &rsaquo; 管理 &rsaquo; 符合规则的记录 %s %s &rsaquo; 修改符合规则的记录 "
+"%s &rsaquo; 新增符合规则的记录 %s %s %s &rsaquo; 确认删除符合规则的记录 "
+"&quot;%s&quot; %s "
 
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:4
 #, fuzzy, c-format
@@ -30467,9 +30469,9 @@ msgid "Koha &rsaquo; Administration &rsaquo; SMS cellular providers"
 msgstr "Koha &rsaquo; 管理 &rsaquo; 系统首选"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Search engine configuration"
-msgstr "Koha &rsaquo; 管理 &rsaquo; 馆藏寻找字段"
+msgstr "Koha &rsaquo; 管理 &rsaquo; 搜索引擎设置"
 
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:5
 #, c-format
@@ -30557,7 +30559,7 @@ msgstr "Koha &rsaquo; 权威 &rsaquo; %s修改权威 #%s (%s)%s新增权威 (%s)
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:4
 #, c-format
 msgid "Koha &rsaquo; Authorities &rsaquo; Authority search results"
-msgstr "Koha &rsaquo; 权威 &rsaquo; 权威寻找结果"
+msgstr "Koha &rsaquo; 权威 &rsaquo; 主题搜索结果"
 
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:3
 #, c-format
@@ -30567,7 +30569,7 @@ msgstr "Koha &rsaquo; 权威详情"
 #: intranet-tmpl/prog/en/modules/labels/result.tt:3
 #, c-format
 msgid "Koha &rsaquo; Barcodes and labels &rsaquo; Search results"
-msgstr "Koha &rsaquo; 条码与书标 &rsaquo; 寻找结果"
+msgstr "Koha &rsaquo; 条码与书标 &rsaquo; 搜索结果"
 
 #. %1$s:  booksellername |html 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:5
@@ -30587,15 +30589,15 @@ msgstr "Koha &rsaquo; 采购单群组 %s"
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Details for %s %s %s%s "
 "%s "
-msgstr "Koha &rsaquo; 目录 &rsaquo; %s 不明纪录 %s 详情 %s %s %s%s %s "
+msgstr "Koha &rsaquo; 编目 &rsaquo; %s 不明纪录 %s 详情 %s %s %s%s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/ISBDdetail.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s ISBD details %s "
-msgstr "Koha &rsaquo; 目录 &rsaquo; %s 不明纪录 %s ISBD 详情 %s %s "
+msgstr "Koha &rsaquo; 编目 &rsaquo; %s 不明纪录 %s ISBD详情 %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -30606,7 +30608,7 @@ msgstr "Koha &rsaquo; 目录 &rsaquo; %s 不明纪录 %s ISBD 详情 %s %s "
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s Labeled MARC details for "
 "%s %s "
-msgstr "Koha &rsaquo; 目录 &rsaquo; %s 不明纪录 %s 标记 MARC 详情%s %s "
+msgstr "Koha &rsaquo; 编目 &rsaquo; %s 不明纪录 %s 标记 MARC 详情%s %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -30616,7 +30618,7 @@ msgstr "Koha &rsaquo; 目录 &rsaquo; %s 不明纪录 %s 标记 MARC 详情%s %s
 #, c-format
 msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s MARC details for %s %s "
-msgstr "Koha &rsaquo; 目录 &rsaquo; %s 不明纪录 %s MARC 详情 %s %s "
+msgstr "Koha &rsaquo; 编目 &rsaquo; %s 不明纪录 %s MARC 详情 %s %s "
 
 #. %1$s:  IF ( searchdesc ) 
 #. %2$s:  IF ( query_desc ) 
@@ -30633,19 +30635,19 @@ msgid ""
 "Koha &rsaquo; Catalog &rsaquo; %sResults of search %sfor '%s'%s%s&nbsp;with "
 "limit(s):&nbsp;'%s'%s%sYou did not specify any search criteria%s"
 msgstr ""
-"Koha &rsaquo; 目录 &rsaquo; %s寻找结果 %s给 '%s'%s%s&nbsp;限制：&nbsp;'%s'%s"
-"%s不能指定寻找范围%s"
+"Koha &rsaquo; 编目 &rsaquo; %s搜索结果 %s符合 '%s'%s%s&nbsp;限于："
+"&nbsp;'%s'%s%s没有指定搜索范围%s"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:5
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Advanced search"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 高级寻找"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 高级搜索"
 
 #. %1$s:  biblio.title |html 
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:7
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Checkout history for %s"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 借出纪录 %s"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 借出纪录 %s"
 
 #. %1$s:  biblio.title |html 
 #. %2$s:  FOREACH subtitl IN subtitle 
@@ -30654,7 +30656,7 @@ msgstr "Koha &rsaquo; 目录 &rsaquo; 借出纪录 %s"
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:4
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Details for %s %s %s%s"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 详情 %s %s %s%s"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 详情 %s %s %s%s"
 
 #. %1$s:  title | html 
 #. %2$s:  FOREACH subtitl IN subtitle 
@@ -30663,17 +30665,17 @@ msgstr "Koha &rsaquo; 目录 &rsaquo; 详情 %s %s %s%s"
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:6
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Item details for %s %s %s%s"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 馆藏详情 %s %s %s%s"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 馆藏详情 %s %s %s%s"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:104
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Item search"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 馆藏寻找"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 馆藏搜索"
 
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:6
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Search history"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 寻找纪录"
+msgstr "Koha &rsaquo; 编目 &rsaquo; 搜索纪录"
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:27
 #, fuzzy, c-format
@@ -30954,9 +30956,9 @@ msgstr "Koha &rsaquo; 错误"
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Housebound &rsaquo; Details for %s"
-msgstr "Koha &rsaquo; 目录 &rsaquo; 详情 %s %s %s%s"
+msgstr "Koha &rsaquo; 馆内阅览 &rsaquo; 详情 %s"
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:7
 #, fuzzy, c-format
@@ -30981,14 +30983,14 @@ msgstr "Koha &rsaquo; 在地化"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:6
 #, c-format
 msgid "Koha &rsaquo; Patron search"
-msgstr "Koha &rsaquo; 寻找读者"
+msgstr "Koha &rsaquo; 读者搜索"
 
 #. %1$s:  IF ( searching ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/members/member.tt:8
 #, c-format
 msgid "Koha &rsaquo; Patrons %s&rsaquo; Search results%s"
-msgstr "Koha &rsaquo; 读者 %s&rsaquo; 寻找结果%s"
+msgstr "Koha &rsaquo; 读者 %s&rsaquo; 搜索结果%s"
 
 #. %1$s:  title 
 #: intranet-tmpl/prog/en/modules/circ/printslip.tt:11
@@ -31065,7 +31067,7 @@ msgstr "Koha &rsaquo; 读者 &rsaquo; %s读者不存在%s离馆 %s %s (%s)%s"
 msgid ""
 "Koha &rsaquo; Patrons &rsaquo; %sPassword updated %sUpdate password for %s, "
 "%s%s"
-msgstr "Koha &rsaquo; 读者 &rsaquo; %s更新口令 %s更新口令 %s, %s%s"
+msgstr "Koha &rsaquo; 读者 &rsaquo; %s密码已更新 %s更新 %s 的密码, %s%s"
 
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:5
 #, fuzzy, c-format
@@ -31158,12 +31160,12 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Reports %s&rsaquo; Cash register statistics &rsaquo; Results"
 "%s&rsaquo; Cash register statistics%s"
 msgstr ""
-"Koha &rsaquo; 报表 %s&rsaquo; 目录统计 &rsaquo; 结果%s&rsaquo; 目录统计%s"
+"Koha &rsaquo; 报表 %s&rsaquo; 收银统计 &rsaquo; 结果%s&rsaquo; 收银统计%s"
 
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  ELSE 
@@ -31174,7 +31176,7 @@ msgid ""
 "Koha &rsaquo; Reports %s&rsaquo; Catalog statistics &rsaquo; Results"
 "%s&rsaquo; Catalog statistics%s"
 msgstr ""
-"Koha &rsaquo; 报表 %s&rsaquo; 目录统计 &rsaquo; 结果%s&rsaquo; 目录统计%s"
+"Koha &rsaquo; 报表 %s&rsaquo; 编目统计 &rsaquo; 结果%s&rsaquo; 编目统计%s"
 
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  ELSE 
@@ -31195,7 +31197,7 @@ msgstr "Koha &rsaquo; 报表 &rsaquo; 平均借出时间"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:6
 #, c-format
 msgid "Koha &rsaquo; Reports &rsaquo; Catalog by item types"
-msgstr "Koha &rsaquo; 报表 &rsaquo; 馆藏类型目录"
+msgstr "Koha &rsaquo; 报表 &rsaquo; 馆藏类型编目"
 
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  END 
@@ -31294,15 +31296,15 @@ msgid "Koha &rsaquo; Reports &rsaquo; Serials subscriptions stats"
 msgstr "Koha &rsaquo; 报表 &rsaquo; 期刊订阅统计"
 
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; SRU search fields mapping"
-msgstr "Koha &rsaquo; SRU 寻找映射字段"
+msgstr "Koha &rsaquo; SRU 搜索映射字段"
 
 #. %1$s:  supplier 
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:5
 #, c-format
 msgid "Koha &rsaquo; Search for vendor %s"
-msgstr "Koha &rsaquo; 寻找代理商 %s"
+msgstr "Koha &rsaquo; 搜索代理商 %s"
 
 #. For the first occurrence,
 #. %1$s:  biblionumber 
@@ -31342,14 +31344,14 @@ msgid "Koha &rsaquo; Serials &rsaquo; Alert subscribers for %s"
 msgstr "Koha &rsaquo; 期刊 &rsaquo; 给 %s 的订阅报警"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Batch edit"
-msgstr "Koha &rsaquo; 期刊 &rsaquo; 寻找结果"
+msgstr "Koha &rsaquo; 期刊 &rsaquo; 批量修改"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:2
 #, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Catalog search"
-msgstr "Koha &rsaquo; 期刊 &rsaquo; 寻找目录"
+msgstr "Koha &rsaquo; 期刊 &rsaquo; 编目搜索"
 
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:5
 #, c-format
@@ -31406,12 +31408,12 @@ msgstr "Koha &rsaquo; 期刊 &rsaquo; 查看传阅收条"
 #: intranet-tmpl/prog/en/modules/serials/acqui-search.tt:2
 #, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Search for vendor"
-msgstr "Koha &rsaquo; 期刊 &rsaquo; 寻找代理商"
+msgstr "Koha &rsaquo; 期刊 &rsaquo; 搜索代理商"
 
 #: intranet-tmpl/prog/en/modules/serials/result.tt:3
 #, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Search results"
-msgstr "Koha &rsaquo; 期刊 &rsaquo; 寻找结果"
+msgstr "Koha &rsaquo; 期刊 &rsaquo; 搜索结果"
 
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:3
 #, c-format
@@ -31998,19 +32000,19 @@ msgid "Koha &rsaquo; Web installer &rsaquo; Database settings"
 msgstr "Koha &rsaquo; 网页安装 &rsaquo; 步骤 1"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Z39.50 authority search points"
-msgstr "Z39.50 权威寻找项"
+msgstr "Koha &rsaquo; Z39.50 主题搜索项"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Z39.50 authority search results"
-msgstr "Koha &rsaquo; Z39.50 寻找结果"
+msgstr "Koha &rsaquo; Z39.50 搜索结果"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:4
 #, c-format
 msgid "Koha &rsaquo; Z39.50/SRU search results"
-msgstr "Koha &rsaquo; Z39.50/SRU 寻找结果"
+msgstr "Koha &rsaquo; Z39.50/SRU 搜索结果"
 
 #: intranet-tmpl/prog/en/modules/about.tt:575
 #, c-format
@@ -32028,7 +32030,7 @@ msgstr "Koha管理"
 msgid ""
 "Koha cannot display existing passwords. Leave the field blank to leave "
 "password unchanged."
-msgstr "Koha不能显示既有的口令。保留该字段空白，即未改变口令。"
+msgstr "Koha不能显示既有的密码。保留该字段空白，即保留原密码。"
 
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:15
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:84
@@ -32363,7 +32365,7 @@ msgstr "Lao Anousak Anthony Souphavanh"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:192
 #, c-format
 msgid "Large print"
-msgstr "大字印刷"
+msgstr "大幅印刷"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:54
 #, c-format
@@ -32572,9 +32574,9 @@ msgid "Leave blank for auto calc during registration %s %s "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:238
-#, fuzzy, c-format
+#, c-format
 msgid "Leave empty to add via item search (itemnumber)."
-msgstr "通过馆藏寻找(馆藏号)新增空白。"
+msgstr "保留空白以通过馆藏搜索(馆藏号)新增。"
 
 #: intranet-tmpl/prog/en/modules/about.tt:460
 #: intranet-tmpl/prog/en/modules/about.tt:686
@@ -32877,8 +32879,8 @@ msgstr "图书馆使用"
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:516
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:34
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:114
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:244
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:353
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:246
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:355
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:81
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: intranet-tmpl/prog/en/modules/members/member.tt:212
@@ -33364,8 +33366,8 @@ msgid "Location(s)"
 msgstr "位置"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:154
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:252
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:361
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:254
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:363
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:102
 #, c-format
 msgid "Location:"
@@ -33443,7 +33445,7 @@ msgstr "纪录"
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:149
 #, c-format
 msgid "Look for existing records in catalog?"
-msgstr "寻找目录里的既有纪录吗？"
+msgstr "搜索编目里的已有纪录吗？"
 
 #: intranet-tmpl/prog/en/modules/about.tt:912
 #, fuzzy, c-format
@@ -34009,9 +34011,9 @@ msgid "Manage contracts"
 msgstr "管理合约"
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid "Manage custom fields for item search."
-msgstr "管理客制化字段供馆藏寻找"
+msgstr "管理客制化字段供馆藏搜索"
 
 #: intranet-tmpl/prog/en/includes/serials-menu.inc:24
 #, c-format
@@ -34831,7 +34833,7 @@ msgstr "Koha 精简版"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:825
 #, c-format
 msgid "Minimum password length: %s"
-msgstr "口令最短长度：%s"
+msgstr "密码最短长度：%s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/timepicker.inc:1
@@ -35008,9 +35010,9 @@ msgid "Modify %s server"
 msgstr "修改 %s 服务器"
 
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "Modify SRU search fields mapping"
-msgstr "修改 SRU 寻找字段的映射"
+msgstr "修改 SRU 搜索字段的映射"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:102
 #, fuzzy, c-format
@@ -35407,11 +35409,6 @@ msgstr "我的借出"
 msgid "My library"
 msgstr "我的图书馆"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:37
-#, c-format
-msgid "MySQL"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:165
 #, fuzzy, c-format
 msgid "MySQL data added"
@@ -35683,10 +35680,12 @@ msgstr "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 
-#. %1$s:  IF ( mysql ) 
+#. %1$s:  dbms | $HtmlTags tag=>'code' 
 #: intranet-tmpl/prog/en/modules/installer/step2.tt:36
 #, c-format
-msgid "Need help? See manual for %s "
+msgid ""
+"Need help? For help with granting permissions, please search online for \"%s "
+"manual grant permissions\" "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:915
@@ -36052,7 +36051,7 @@ msgstr "新编期模式"
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:68
 #, c-format
 msgid "New password:"
-msgstr "新口令："
+msgstr "新密码："
 
 #: intranet-tmpl/prog/en/includes/patron-toolbar.inc:9
 #, c-format
@@ -36113,7 +36112,7 @@ msgstr "新增报表 "
 msgid "New request"
 msgstr "预约"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:176
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:178
 #, c-format
 msgid "New routing list"
 msgstr "新增传阅清单"
@@ -36121,12 +36120,12 @@ msgstr "新增传阅清单"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:144
 #, c-format
 msgid "New search"
-msgstr "新增寻找"
+msgstr "新的搜索"
 
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "New search field"
-msgstr "馆藏寻找字段"
+msgstr "馆藏搜索字段"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:59
 #, c-format
@@ -36156,7 +36155,7 @@ msgstr "书标模板"
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:61
 #, c-format
 msgid "New username:"
-msgstr "新增用户名称："
+msgstr "新增用户名："
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:121
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:154
@@ -36406,8 +36405,7 @@ msgstr "%s %s %s 未指定 MARC 修改模板。您有 "
 msgid ""
 "No SRU search field mappings have been defined. This means that all field "
 "searches will go through the whole record. Continue?"
-msgstr ""
-"未设置 SRU 寻找映射的字段。就是所有的字段寻找都是寻找整笔纪录。继续吗？"
+msgstr "未设置 SRU 搜索映射的字段。将在整个纪录内搜索所有的字段。继续吗？"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:284
 #, c-format
@@ -36552,7 +36550,7 @@ msgid "No data available in table"
 msgstr "表单内无可用的数据"
 
 #. %1$s:  dbname | $HtmlTags tag=>'code' 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:44
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:40
 #, fuzzy, c-format
 msgid "No database named %s detected."
 msgstr "无数据库被命名 "
@@ -36588,7 +36586,7 @@ msgstr "找不到基金"
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:173
 #, c-format
 msgid "No funds to display for this search criteria"
-msgstr "此寻找类型内无基金"
+msgstr "没有符合搜索条件的基金"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:308
 #, c-format
@@ -36709,9 +36707,9 @@ msgid "No items found."
 msgstr "找不到馆藏。"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:324
-#, fuzzy, c-format
+#, c-format
 msgid "No items were found by searching."
-msgstr "寻找无结果。%s %s "
+msgstr "无搜索结果。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
@@ -36921,7 +36919,6 @@ msgstr "未安装可用的外挂程序"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:240
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:376
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:301
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:688
 msgid "No popup"
 msgstr "阻止弹出"
 
@@ -36940,7 +36937,7 @@ msgstr "无引句可用。请使用 '新增引句' 钮以新增引句。"
 msgid ""
 "No record have been imported because they all match an existing record in "
 "your catalog."
-msgstr "全部符合目录内现有的记录所以未输入任何记录。"
+msgstr "全部符合编目内已有的记录，所以未导入任何记录。"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:115
 #, fuzzy, c-format
@@ -36982,7 +36979,7 @@ msgstr "不能在 %s 之前续借"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:121
 #, c-format
 msgid "No results for your query"
-msgstr "您的寻找未找到结果"
+msgstr "未找到符合您搜索条件的结果"
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:38
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:255
@@ -37013,12 +37010,12 @@ msgstr "未找到结果。"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:257
 #, c-format
 msgid "No results match your search %sfor "
-msgstr "您寻找 %s 没有结果 "
+msgstr "没有结果符合您搜索 %s "
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:29
 #, c-format
 msgid "No results match your search for "
-msgstr "无结果匹配您的寻找 "
+msgstr "无结果匹配您的搜索 "
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:598
 #, c-format
@@ -37038,9 +37035,9 @@ msgid "No saved reports match your criteria. "
 msgstr "无存储的纪录匹配您的范畴。"
 
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid "No system preferences matched your search for: "
-msgstr "无系统首选匹配您的寻找 "
+msgstr "无系统首选匹配您的搜索 "
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:337
 #, c-format
@@ -37052,7 +37049,7 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:252
 msgid "No temporary directory found."
-msgstr "未找到暂存目录。"
+msgstr "未找到临时目录。"
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:80
 #, c-format
@@ -37166,7 +37163,7 @@ msgstr "不：存储为新的威权"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:18
 #, c-format
 msgid "Nobody"
-msgstr ""
+msgstr "无人"
 
 #: intranet-tmpl/prog/en/modules/about.tt:56
 #, fuzzy, c-format
@@ -37829,7 +37826,7 @@ msgstr "显示在馆员界面的期数："
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:203
 #, c-format
 msgid "Number of issues to display to the public: "
-msgstr "显示在联机公共目录的期数："
+msgstr "显示在联机公共编目的期数："
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:194
 #, c-format
@@ -37941,9 +37938,9 @@ msgid "Number of students:"
 msgstr "学生数："
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:305
-#, fuzzy, c-format
+#, c-format
 msgid "Number of subscriptions: "
-msgstr "寻找订阅："
+msgstr "订阅数量："
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:195
 #, c-format
@@ -38173,7 +38170,7 @@ msgstr "查看 OPAC："
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:750
 #, c-format
 msgid "OPAC/Staff login"
-msgstr "登录联机公共目录/馆员界面"
+msgstr "登录联机公共编目/馆员界面"
 
 #: intranet-tmpl/prog/en/modules/about.tt:920
 #, c-format
@@ -38423,7 +38420,7 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:12
 msgid "Online Public Access Catalog"
-msgstr "联机公共目录"
+msgstr "联机公共编目"
 
 #: intranet-tmpl/prog/en/includes/help-top.inc:3
 #, c-format
@@ -38493,8 +38490,7 @@ msgid ""
 "permission if granular permissions are enabled) are returned in the search "
 "results"
 msgstr ""
-"拥有超级馆员或采访权限 (或取得 order_manage 权限) 的馆员，才能在寻找结果由退"
-"回原址"
+"拥有超级馆员或采访权限 (或取得 order_manage 权限) 的馆员，才能显示在搜索结果"
 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:150
 #, fuzzy, c-format
@@ -38514,7 +38510,7 @@ msgid "Open"
 msgstr "打开"
 
 #. %1$s:  openedsubscriptions.size || 0 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:287
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:289
 #, c-format
 msgid "Open (%s)"
 msgstr "打开 (%s)"
@@ -38659,7 +38655,7 @@ msgstr "订单成本"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:107
 #, c-format
 msgid "Order cost search"
-msgstr "订单成本寻找"
+msgstr "订单成本搜索"
 
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:60
 #, c-format
@@ -38692,7 +38688,7 @@ msgstr "订单顺序(上层)"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:102
 #, c-format
 msgid "Order line search"
-msgstr "订单顺序寻找"
+msgstr "订单顺序搜索"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:414
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:47
@@ -38806,7 +38802,7 @@ msgstr "订单来自："
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:15
 #, c-format
 msgid "Orders search"
-msgstr "订单寻找"
+msgstr "订单搜索"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:59
 #, c-format
@@ -39085,9 +39081,9 @@ msgstr "拥有者"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:21
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Owner only"
-msgstr "拥有者："
+msgstr "创建者"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:54
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:251
@@ -39206,33 +39202,32 @@ msgstr "Pasi Kallinen"
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:251
 #, c-format
 msgid "Password"
-msgstr "口令"
+msgstr "密码"
 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:24
 #, c-format
 msgid "Password Updated"
-msgstr "更新口令"
+msgstr "密码已更新"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/password_check.inc:3
-#, fuzzy
 msgid "Password contains leading and/or trailing spaces"
-msgstr "口令含前缀与后置空格。"
+msgstr "密码的开头或结尾包含空格。"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:824
-#, fuzzy, c-format
+#, c-format
 msgid "Password has leading or trailing whitespaces"
-msgstr "口令含前缀与后置空格。"
+msgstr "密码的开头或结尾包含空格。"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:822
 #, c-format
 msgid "Password is too short"
-msgstr "口令太短"
+msgstr "密码太短"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:823
-#, fuzzy, c-format
+#, c-format
 msgid "Password is too weak"
-msgstr "口令太短"
+msgstr "密码太简单"
 
 #. For the first occurrence,
 #. %1$s:  minPasswordLength 
@@ -39240,21 +39235,19 @@ msgstr "口令太短"
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:40
 #, c-format
 msgid "Password must be at least %s characters long."
-msgstr "口令至少应有 %s 字符。"
+msgstr "密码至少应有 %s 个字符。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/password_check.inc:3
-#, fuzzy
 msgid "Password must contain at least %s characters"
-msgstr "。口令至少应有 %s 字符。"
+msgstr "密码至少应有 %s 个字符。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/password_check.inc:3
-#, fuzzy
 msgid ""
 "Password must contain at least %s characters, including UPPERCASE, lowercase "
 "and numbers"
-msgstr "口令至少应有 %s 字符。"
+msgstr "密码至少应有 %s 个字符，包括大写、小写字母和数字"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:90
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:43
@@ -39265,16 +39258,16 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:93
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid "Password must not contain leading or trailing whitespaces."
-msgstr "口令含前缀与后置空格。"
+msgstr "密码的开头或结尾不能包含空格。"
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:54
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:119
 #: intranet-tmpl/prog/en/modules/auth.tt:60
 #, c-format
 msgid "Password:"
-msgstr "口令："
+msgstr "密码："
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:440
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:90
@@ -39282,23 +39275,23 @@ msgstr "口令："
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:124
 #, c-format
 msgid "Password: "
-msgstr "口令："
+msgstr "密码："
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:867
 #, c-format
 msgid "Passwords do not match"
-msgstr "口令不符"
+msgstr "密码不符"
 
 #: intranet-tmpl/prog/en/includes/onboarding_messages.inc:20
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:96
 #, c-format
 msgid "Passwords do not match."
-msgstr "口令不符。"
+msgstr "密码不符。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:95
 msgid "Passwords will be displayed as text"
-msgstr "口令将以纯文本显示"
+msgstr "密码将以纯文本显示"
 
 #: intranet-tmpl/prog/en/modules/about.tt:618
 #, c-format
@@ -39800,7 +39793,7 @@ msgstr "读者限制"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:69
 #, c-format
 msgid "Patron search: "
-msgstr "读者寻找："
+msgstr "读者搜索："
 
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:2
 #, c-format
@@ -40299,7 +40292,7 @@ msgstr "待决标签"
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:35
 #, c-format
 msgid "Perform a new search"
-msgstr "执行新的寻找"
+msgstr "执行新的搜索"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:73
 #, c-format
@@ -40328,9 +40321,9 @@ msgstr "执行批次修改记录 (书目或权威)"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:72
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:176
-#, fuzzy, c-format
+#, c-format
 msgid "Perform inventory of your catalog"
-msgstr "执行目录的盘点 (登录簿)"
+msgstr "执行编目的盘点 (登录簿)"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:119
 #, c-format
@@ -40565,9 +40558,9 @@ msgstr "放置与修改读者的预约"
 #. %3$s:  patron.surname 
 #. %4$s:  patron.cardnumber 
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "Place article request from %s for %s %s ( %s )"
-msgstr "寻找结果来自 %s 至 %s 的 %s"
+msgstr "向%s发出%s %s ( %s )的文献请求"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:128
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:133
@@ -40737,7 +40730,7 @@ msgstr "新增读者类型"
 msgid ""
 "Please add barcodes using either the direct entry text area or the item "
 "search."
-msgstr "请新增条码，可直接取用文字区内容或寻找馆藏。"
+msgstr "请新增条码，可直接取用文字区内容或搜索馆藏。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:221
@@ -40839,12 +40832,12 @@ msgstr "请确认是否为重复的读者"
 msgid "Please contact your system administrator"
 msgstr "请连系系统管理器"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:56
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:52
 #, fuzzy, c-format
 msgid "Please correct these errors. "
 msgstr "请更正这些错误，且 "
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:45
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:41
 #, c-format
 msgid "Please create the database before continuing."
 msgstr "继续前，请新增数据库。"
@@ -40915,7 +40908,7 @@ msgstr "请键入馆藏号以新增。"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:265
 msgid "Please enter a search term."
-msgstr "请键入寻找字词。"
+msgstr "请键入搜索词。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
@@ -41004,9 +40997,8 @@ msgstr "请键入新宏的名称："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/password_check.inc:3
-#, fuzzy
 msgid "Please enter the same password as above"
-msgstr "。请再键入新口令。"
+msgstr "请再次输入密码"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
@@ -41014,9 +41006,9 @@ msgid "Please enter the same value again."
 msgstr "请再键入相同的值。"
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid "Please enter your username and password"
-msgstr "请键入用户名称与口令："
+msgstr "请输入用户名与密码："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:478
@@ -41067,14 +41059,14 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:8
 msgid "Please note that this Z39.50 search could replace the current record."
-msgstr "请注意此 Z39.50 寻找可能取代现有的纪录。"
+msgstr "请注意此 Z39.50 搜索可能取代现有的纪录。"
 
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/catalog-strings.inc:1
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:10
 msgid "Please note that this external search could replace the current record."
-msgstr "请注意此外部寻找寻找可能取代现在的纪录。"
+msgstr "请注意此外部搜索可能取代现在的纪录。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/installer-strings.inc:1
@@ -41491,11 +41483,6 @@ msgstr "张贴在 %s "
 msgid "Posted on %s%s by "
 msgstr "张贴在 %s %s "
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:39
-#, c-format
-msgid "PostgreSQL"
-msgstr ""
-
 #: intranet-tmpl/prog/en/includes/delimiter_text.inc:2
 #, fuzzy, c-format
 msgid "Pound (#) separated text (.csv)"
@@ -41557,7 +41544,7 @@ msgstr "预选"
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:78
 #, c-format
 msgid "Preselected (searched by default): "
-msgstr "预选(寻找缺省值)："
+msgstr "预选(搜索缺省值)："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
@@ -42329,8 +42316,8 @@ msgstr "出版者编号："
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:11
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:23
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:36
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:236
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:345
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:238
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:347
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:271
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:91
@@ -42451,7 +42438,7 @@ msgstr "签收数量："
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:105
 #, c-format
 msgid "Quantity search"
-msgstr "数量寻找"
+msgstr "数量搜索"
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:178
 #, c-format
@@ -42876,12 +42863,12 @@ msgstr "缩小结果"
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:108
 #, c-format
 msgid "Refine results:"
-msgstr "缩小寻找："
+msgstr "缩小搜索："
 
 #: intranet-tmpl/prog/en/includes/facets.inc:5
 #, c-format
 msgid "Refine your search"
-msgstr "缩小您的寻找"
+msgstr "缩小您的搜索"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:549
 #, fuzzy, c-format
@@ -43371,7 +43358,7 @@ msgid "Rental discount (%%)"
 msgstr "借阅折扣 (%%)"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:61
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:143
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:145
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:372
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:84
 #, c-format
@@ -43965,9 +43952,9 @@ msgstr "需要取代预约政策"
 
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:116
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid "Research"
-msgstr "新增寻找"
+msgstr "研究"
 
 #: intranet-tmpl/prog/en/modules/members/notices.tt:69
 #, fuzzy, c-format
@@ -44599,7 +44586,7 @@ msgstr "SQL："
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:133
 #, c-format
 msgid "SRU Search fields mapping: "
-msgstr "匹配 SRU 寻找字段："
+msgstr "匹配 SRU 搜索字段："
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:166
 #, c-format
@@ -44872,7 +44859,7 @@ msgstr "存储订阅纪录"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
 msgid "Save to catalog"
-msgstr "存储至目录"
+msgstr "存储至编目"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:603
 #, c-format
@@ -45039,8 +45026,8 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:122
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:33
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:49
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:277
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:391
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:279
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:393
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:49
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:47
 #: intranet-tmpl/prog/en/modules/members/member.tt:223
@@ -45059,95 +45046,100 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:104
 #, c-format
 msgid "Search"
-msgstr "寻找"
+msgstr "搜索"
 
 #: intranet-tmpl/prog/en/includes/header.inc:9
-#, fuzzy, c-format
+#, c-format
 msgid "Search "
-msgstr "寻找"
+msgstr "搜索"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:109
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:70
 msgid "Search ISSN"
-msgstr "寻找 ISSN"
+msgstr "搜索 ISSN"
 
 #: intranet-tmpl/prog/en/includes/z3950-admin-search.inc:26
 #, c-format
 msgid "Search Z39.50/SRU servers"
-msgstr "寻找 Z39.50/SRU 服务器"
+msgstr "搜索 Z39.50/SRU 服务器"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:116
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:80
 msgid "Search [% field.name %]"
-msgstr "寻找 [% field.name %]"
+msgstr "搜索 [% field.name %]"
+
+#. INPUT type=text
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:82
+#, fuzzy
+msgid "Search [% field.name | html %]"
+msgstr "搜索 [% field.name %]"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:230
 #, c-format
 msgid "Search all headings"
-msgstr "寻找所有标题"
+msgstr "搜索所有标题"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:70
-#, fuzzy, c-format
+#, c-format
 msgid "Search all headings: "
-msgstr "寻找所有标题"
+msgstr "搜索所有标题："
 
 #: intranet-tmpl/prog/en/includes/contracts-admin-search.inc:7
 #, c-format
 msgid "Search by contract name or/and description:"
-msgstr "寻找合约名称与说明："
+msgstr "搜索合约名称与说明："
 
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid "Search by keyword:"
-msgstr "键入寻找键词："
+msgstr "键入搜索词："
 
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:6
 #, c-format
 msgid "Search by patron category name:"
-msgstr "寻找读者类型名称："
+msgstr "通过读者类型搜索："
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:31
 #, c-format
 msgid "Search call number:"
-msgstr "寻找索书号："
+msgstr "搜索索书号："
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:75
 msgid "Search callnumber"
-msgstr "寻找索书号"
+msgstr "搜索索书号"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:331
 #, c-format
 msgid "Search category"
-msgstr "寻找类型"
+msgstr "类型搜索"
 
 #: intranet-tmpl/prog/en/includes/cities-admin-search.inc:25
 #, c-format
 msgid "Search cities"
-msgstr "寻找县市"
+msgstr "县市搜索"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:113
 msgid "Search claim count"
-msgstr "寻找要求次数"
+msgstr "搜索请求次数"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:114
 msgid "Search claim date"
-msgstr "寻找要求日期"
+msgstr "搜索请求日期"
 
 #: intranet-tmpl/prog/en/includes/contracts-admin-search.inc:27
 #, c-format
 msgid "Search contracts"
-msgstr "寻找合约"
+msgstr "合约搜索"
 
 #: intranet-tmpl/prog/en/includes/currencies-admin-search.inc:23
 #, c-format
 msgid "Search currencies"
-msgstr "寻找币别"
+msgstr "币别搜索"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:41
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:90
@@ -45157,80 +45149,80 @@ msgid "Search engine configuration"
 msgstr "存储组态"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:231
-#, fuzzy, c-format
+#, c-format
 msgid "Search entire record"
-msgstr "寻找纪录"
+msgstr "搜索整个编目"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:94
-#, fuzzy, c-format
+#, c-format
 msgid "Search entire record: "
-msgstr "寻找纪录"
+msgstr "搜索整个编目："
 
 #: intranet-tmpl/prog/en/includes/letters-search.inc:6
 #, c-format
 msgid "Search existing notices:"
-msgstr "寻找既有的通知："
+msgstr "搜索现有的通知："
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:21
 #, c-format
 msgid "Search existing records"
-msgstr "寻找既有纪录"
+msgstr "搜索现有纪录"
 
 #. INPUT type=text
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:77
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:78
 msgid "Search expiration date"
-msgstr "寻找有效日期"
+msgstr "搜索失效日期"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
 msgid "Search expired, please try again"
-msgstr "寻找时间到，请再登录"
+msgstr "搜索超时，请再试一次"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid "Search field"
-msgstr "寻找字段："
+msgstr "搜索字段："
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:115
-#, fuzzy, c-format
+#, c-format
 msgid "Search fields"
-msgstr "寻找字段："
+msgstr "搜索字段："
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:19
 #: intranet-tmpl/prog/en/modules/members/member.tt:131
 #, c-format
 msgid "Search fields:"
-msgstr "寻找字段："
+msgstr "搜索字段："
 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:209
 #, c-format
 msgid "Search filters"
-msgstr "寻找筛选器"
+msgstr "搜索筛选器"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:72
 #, c-format
 msgid "Search for "
-msgstr "寻找 "
+msgstr "搜索 "
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:54
 #, c-format
 msgid "Search for a vendor"
-msgstr "寻找供应商"
+msgstr "供应商搜索"
 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:20
 #, c-format
 msgid "Search for a vendor to transfer from"
-msgstr "寻找供应商"
+msgstr "搜索供应商用以取得"
 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:11
 #, c-format
 msgid "Search for a vendor to transfer to"
-msgstr "寻找代理商"
+msgstr "搜索供应商用以送出"
 
 #: intranet-tmpl/prog/en/modules/serials/result.tt:59
 #, c-format
 msgid "Search for another record"
-msgstr "寻找另个纪录"
+msgstr "搜索另一个纪录"
 
 #. %1$s:  IF ( batch_id ) 
 #. %2$s:  batch_id 
@@ -45238,156 +45230,156 @@ msgstr "寻找另个纪录"
 #: intranet-tmpl/prog/en/modules/labels/search.tt:11
 #, c-format
 msgid "Search for items %s to add to Batch %s %s "
-msgstr "寻找馆藏%s 新增至批次 %s %s "
+msgstr "搜索馆藏%s 以新增至批次 %s %s "
 
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:18
 #, c-format
 msgid "Search for patron"
-msgstr "寻找读者"
+msgstr "读者搜索"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "Search for patrons"
-msgstr "寻找读者"
+msgstr "读者搜索"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:60
 #, c-format
 msgid "Search for record"
-msgstr "寻找纪录"
+msgstr "搜索纪录"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:148
 #, c-format
 msgid "Search for tag:"
-msgstr "寻找标签"
+msgstr "搜索标签"
 
 #. A
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:412
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:420
 msgid "Search for this Author"
-msgstr "寻找此著者"
+msgstr "搜索此著者"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:39
 #, c-format
 msgid "Search funds"
-msgstr "寻找基金"
+msgstr "基金搜索"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-search.inc:8
 #, c-format
 msgid "Search funds:"
-msgstr "寻找基金："
+msgstr "基金搜索："
 
 #: intranet-tmpl/prog/en/includes/header.inc:117
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:25
 #, c-format
 msgid "Search history"
-msgstr "寻找记录"
+msgstr "搜索记录"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:221
 #, c-format
 msgid "Search in the calendar the day you want to set as holiday."
-msgstr "寻找打算设为假日的日子。"
+msgstr "在日历内搜索用于设定为假日的日期。"
 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:137
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:205
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:478
 #, c-format
 msgid "Search index: "
-msgstr "寻找索引："
+msgstr "索引搜索："
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:110
 msgid "Search issue number"
-msgstr "寻找期号"
+msgstr "期号搜索"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:107
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:73
 msgid "Search library"
-msgstr "寻找图书馆"
+msgstr "图书馆搜索"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:74
 msgid "Search location"
-msgstr "寻找位置"
+msgstr "位置搜索"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:229
 #, c-format
 msgid "Search main heading"
-msgstr "寻找主要款目"
+msgstr "搜索主题目"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:228
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading ($a only)"
-msgstr "寻找主要款目"
+msgstr "搜索主题目 (仅$a)"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:19
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading ($a only): "
-msgstr "寻找主要款目"
+msgstr "搜索主题目："
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:45
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading: "
-msgstr "寻找主要款目"
+msgstr "搜索主题目："
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:72
 msgid "Search notes"
-msgstr "寻找说明"
+msgstr "笔记搜索"
 
 #: intranet-tmpl/prog/en/includes/letters-search.inc:23
 #, c-format
 msgid "Search notices"
-msgstr "寻找说明"
+msgstr "说明搜索"
 
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:12
 #, c-format
 msgid "Search on"
-msgstr "寻找"
+msgstr "搜索"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:84
 msgid "Search on [% subfiel.marc_value %]"
-msgstr "寻找 [% subfiel.marc_value %]"
+msgstr "搜索 [% subfiel.marc_value %]"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:82
 msgid "Search on [% subfiel.marc_value |html %]"
-msgstr "寻找 [% subfiel.marc_value |html %]"
+msgstr "搜索 [% subfiel.marc_value |html %]"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:12
 #, c-format
 msgid "Search options"
-msgstr "寻找选项"
+msgstr "搜索选项"
 
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:25
 #, c-format
 msgid "Search orders"
-msgstr "寻找顺序"
+msgstr "搜索顺序"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:11
 #, c-format
 msgid "Search orders:"
-msgstr "寻找顺序："
+msgstr "搜索顺序："
 
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:24
 #, c-format
 msgid "Search patron categories"
-msgstr "寻找读者类型"
+msgstr "读者类型搜索"
 
 #: intranet-tmpl/prog/en/includes/home-search.inc:47
 #: intranet-tmpl/prog/en/includes/adv-search.inc:46
 #: intranet-tmpl/prog/en/includes/patron-search.inc:145
 #, c-format
 msgid "Search patrons"
-msgstr "寻找读者"
+msgstr "读者搜索"
 
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:84
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:125
 #: intranet-tmpl/prog/en/modules/labels/result.tt:54
 #, c-format
 msgid "Search results"
-msgstr "寻找结果"
+msgstr "搜索结果"
 
 #. %1$s:  from 
 #. %2$s:  to 
@@ -45395,63 +45387,63 @@ msgstr "寻找结果"
 #: intranet-tmpl/prog/en/modules/serials/result.tt:12
 #, c-format
 msgid "Search results from %s to %s of %s"
-msgstr "寻找结果来自 %s 至 %s 的 %s"
+msgstr "搜索结果：%s 至 %s，共 %s"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:112
 msgid "Search since"
-msgstr "寻找始于"
+msgstr "搜索开始于"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:111
 msgid "Search status"
-msgstr "寻找状态"
+msgstr "搜索状态"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:205
 #, c-format
 msgid "Search string matches: "
-msgstr "寻找匹配的符串："
+msgstr "搜索匹配的字符："
 
 #: intranet-tmpl/prog/en/includes/serials-search.inc:33
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:215
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:324
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:217
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:326
 #, c-format
 msgid "Search subscriptions"
-msgstr "寻找订阅"
+msgstr "搜索订阅"
 
 #: intranet-tmpl/prog/en/includes/serials-search.inc:6
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:24
 #, c-format
 msgid "Search subscriptions:"
-msgstr "寻找订阅："
+msgstr "搜索订阅："
 
 #: intranet-tmpl/prog/en/includes/suggestions-add-search.inc:29
 #, c-format
 msgid "Search suggestions"
-msgstr "寻找推荐"
+msgstr "搜索推荐"
 
 #: intranet-tmpl/prog/en/includes/prefs-admin-search.inc:26
 #, c-format
 msgid "Search system preferences"
-msgstr "寻找系统首选"
+msgstr "搜索系统首选项"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:50
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "Search targets"
-msgstr "寻找标的 "
+msgstr "搜索目标"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:105
 #, c-format
 msgid "Search term: "
-msgstr "寻找词语："
+msgstr "搜索词："
 
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:6
 #: intranet-tmpl/prog/en/modules/members/nl-search.tt:20
 #, c-format
 msgid "Search the Norwegian national patron database"
-msgstr "寻找挪威国家读者数据库"
+msgstr "搜索挪威国家读者数据库"
 
 #: intranet-tmpl/prog/en/includes/prefs-admin-search.inc:28
 #: intranet-tmpl/prog/en/includes/home-search.inc:48
@@ -45471,49 +45463,49 @@ msgstr "寻找挪威国家读者数据库"
 #: intranet-tmpl/prog/en/includes/letters-search.inc:25
 #, c-format
 msgid "Search the catalog"
-msgstr "寻找目录"
+msgstr "编目搜索"
 
 #: intranet-tmpl/prog/en/includes/cataloging-search.inc:6
 #, c-format
 msgid "Search the catalog and the reservoir:"
-msgstr "寻找目录与典藏所："
+msgstr "编目与馆藏搜索："
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:108
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:71
 msgid "Search title"
-msgstr "寻找题名"
+msgstr "搜索题名"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:42
 #, c-format
 msgid "Search to hold"
-msgstr "寻找以预约"
+msgstr "搜索以预约"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:75
 #: intranet-tmpl/prog/en/modules/members/member.tt:186
 #, c-format
 msgid "Search type:"
-msgstr "寻找类型："
+msgstr "搜索类型："
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:33
 msgid "Search unavailable"
-msgstr "寻找不能使用"
+msgstr "搜索功能不可用"
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:102
 #, c-format
 msgid "Search uploads by name or hashvalue"
-msgstr "以名称或散列值寻找上传"
+msgstr "以名称或散列值搜索上传"
 
 #: intranet-tmpl/prog/en/modules/labels/label-bib-search.tt:18
 #, c-format
 msgid "Search value: "
-msgstr "寻找值："
+msgstr "搜索值："
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:106
 msgid "Search vendor"
-msgstr "寻找代理商"
+msgstr "代理商搜索"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:5
 #, c-format
@@ -45713,7 +45705,7 @@ msgstr "寻找 MARC 框架："
 msgid ""
 "Select a MARC file to stage in the import reservoir. It will be parsed, and "
 "each valid record staged for later import into the catalog."
-msgstr "选定 MARC 文件送至输入存储库待处理。分析后且纪录无误，就可输入目录。"
+msgstr "选定 MARC 文件送至输入存储库待处理。分析后且纪录无误，就可导入编目。"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:336
 #, c-format
@@ -46268,7 +46260,7 @@ msgstr "新增期刊收条为馆藏纪录。"
 msgid "Serial receipt does not create an item record."
 msgstr "期刊收条并未成为馆藏纪录。"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:159
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:161
 #, c-format
 msgid "Serial receive"
 msgstr "收到期刊"
@@ -46336,12 +46328,12 @@ msgid "Serials subscriptions"
 msgstr "期刊订阅"
 
 #. %1$s:  total 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:206
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:208
 #, c-format
 msgid "Serials subscriptions (%s found)"
 msgstr "期刊订阅 (%s 找到)"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:208
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:210
 #, fuzzy, c-format
 msgid "Serials subscriptions search"
 msgstr "期刊订阅"
@@ -47097,7 +47089,7 @@ msgstr ""
 msgid ""
 "Some records have not been automatically added because they match an "
 "existing record in your catalog:"
-msgstr "部份记录未自动加入因为他们符合目录内现有的记录："
+msgstr "部份记录未自动加入因为他们符合编目内现有的记录："
 
 # pattern是指？式样或其它意思？
 #. SCRIPT
@@ -47203,7 +47195,7 @@ msgstr "排序常规遗失"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:286
 #, c-format
 msgid "Sort this list by: "
-msgstr "排序此虚拟书架："
+msgstr "排序方法："
 
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:217
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:159
@@ -47420,7 +47412,7 @@ msgstr "内部说明"
 #: intranet-tmpl/prog/en/includes/permissions.inc:5
 #, c-format
 msgid "Staff access, allows viewing of catalogue in staff client."
-msgstr "馆员近用，允许查看馆员界面的目录。"
+msgstr "馆员可用，允许查看馆员界面的编目。"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:16
@@ -49218,9 +49210,8 @@ msgstr "暂时"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:116
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:204
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:73
-#, fuzzy
 msgid "Temporary directory for uploads not defined"
-msgstr "未找到暂存目录。"
+msgstr "未选择上传的临时目录。"
 
 #. A
 #: intranet-tmpl/prog/en/includes/authorities.inc:13
@@ -49692,9 +49683,8 @@ msgstr "终止日遗失况不合法。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/installer-strings.inc:1
-#, fuzzy
 msgid "The entered passwords do not match"
-msgstr "口令不符"
+msgstr "密码不符"
 
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:41
 #, fuzzy, c-format
@@ -50025,12 +50015,12 @@ msgstr "页数应为数字，1至 %s之间。"
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:52
 #, c-format
 msgid "The passwords entered do not match"
-msgstr "口令不符"
+msgstr "密码不符"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:29
-#, fuzzy, c-format
+#, c-format
 msgid "The patron category you create will be used by the "
-msgstr "寻找读者类型名称："
+msgstr "您创建的读者类型将用于 "
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:33
 #, fuzzy, c-format
@@ -50306,7 +50296,7 @@ msgstr "上传的文件不是 ZIP 文件。它的扩展文件名不是'.zip'。"
 msgid "Themes"
 msgstr "主题"
 
-#: intranet-tmpl/prog/en/modules/installer/step2.tt:56
+#: intranet-tmpl/prog/en/modules/installer/step2.tt:52
 #, fuzzy, c-format
 msgid "Then start the installer again."
 msgstr "开始安装"
@@ -51440,8 +51430,8 @@ msgstr "题名片语"
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:91
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:135
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:28
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:222
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:331
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:224
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:333
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:19
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:25
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:263
@@ -52591,7 +52581,7 @@ msgstr "没有定义"
 #. INPUT type=submit name=mainformsubmit
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:228
 msgid "Undo import into catalog"
-msgstr "恢复输入目录"
+msgstr "撤销导入编目"
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:243
 #: intranet-tmpl/prog/en/modules/tools/export.tt:269
@@ -53418,25 +53408,25 @@ msgstr "用户帐号："
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:250
 #, c-format
 msgid "Username"
-msgstr "用户名称"
+msgstr "用户名"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:62
 #, c-format
 msgid "Username/password already exists."
-msgstr "用户帐号/口令已存在。"
+msgstr "用户名/密码已存在。"
 
 #: intranet-tmpl/prog/en/modules/installer/auth.tt:50
 #: intranet-tmpl/prog/en/modules/auth.tt:57
 #, c-format
 msgid "Username:"
-msgstr "用户名称："
+msgstr "用户名："
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:436
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:85
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:120
 #, c-format
 msgid "Username: "
-msgstr "用户名称："
+msgstr "用户名："
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:279
 #, c-format
@@ -53682,8 +53672,8 @@ msgstr "寻找代理商结果"
 #: intranet-tmpl/prog/en/includes/acquisitions-search.inc:15
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:27
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:203
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:240
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:349
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:242
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:351
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:73
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:31
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:216
@@ -54962,15 +54952,16 @@ msgstr ""
 "在 koha-conf.xml 文件内的款目。请新增它，指向 Koha 样例内上传数据夹的组态档。"
 
 #: intranet-tmpl/prog/en/modules/about.tt:412
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You are missing the &lt;upload_path&gt; entry in your koha-conf.xml file. "
 "Please add it, pointing to the configured file upload directory for your "
 "Koha instance. Also note that you need to properly set the OPACBaseURL "
 "preference for the file upload plugin to work. "
 msgstr ""
-"键入您的 koha-conf.xml 文件。请新增它，指向 Koha 样例上传目录的组态档。请注意"
-"必须适当的设置 "
+"您的 koha-conf.xml 文件内缺少&lt;上传路径&gt。请为您的Koha实例添加指向文件上"
+"传目录的路径 。请注意，为了让上传插件能够工作，必须设置适当的 OPACBaseURL 偏"
+"好。"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:43
 #, c-format
@@ -55133,7 +55124,7 @@ msgid "You cannot change your branch or logout while using offline circulation"
 msgstr "您必须设置到期日才能使用脱机流通！"
 
 #. INPUT type=checkbox name=subscriptionid
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:93
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:95
 #, fuzzy
 msgid "You cannot edit this subscription"
 msgstr "续订"
@@ -55229,13 +55220,13 @@ msgstr "您已选择删除所有未签收的订单从 '%s' 至 '%s'。"
 msgid ""
 "You have deleted item(s) in the order, don't forget to delete it(them) in "
 "the catalog"
-msgstr "请依序删除订单，别忘了删除目录里的馆藏"
+msgstr "您的订单有删除的物品，别忘了同样在编目内删除它们"
 
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:37
 #, c-format
 msgid ""
 "You have entered a username that already exists. Please choose another one."
-msgstr "登录的用户名称已经存在。请选择另一个。"
+msgstr "您输入的用户名称已经存在，请选择另一个。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:160
@@ -55254,7 +55245,7 @@ msgstr "您已修改高级预测模式。请存储您的工作或取消修改。
 msgid ""
 "You have not selected any catalog filters and are about to compare a file of "
 "barcodes to your entire catalog."
-msgstr "未选择目录筛选器且将条码文件与整个目录比较。"
+msgstr "未选择编目筛选器，将条码文件与整个目录比较。"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/member.tt:236
@@ -55377,9 +55368,9 @@ msgid "You must pay a value less than or equal to %s. "
 msgstr "您的付款必须少于或等于 %s。"
 
 #: intranet-tmpl/prog/en/modules/auth.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "You must reset your password"
-msgstr "不合法用户名称或口令"
+msgstr "您需要重置密码"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:526
@@ -55478,7 +55469,7 @@ msgstr "您寻找给：%s"
 msgid ""
 "You selected a record from an external source that matches an existing "
 "record in your catalog: %s"
-msgstr "您从外部资源选择匹配现有的目录纪录：%s"
+msgstr "您从外部资源选择的记录匹配编目内的现有记录：%s"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:54
@@ -55564,7 +55555,7 @@ msgstr "您的采购单是空的。"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:107
 #, c-format
 msgid "Your catalog search history is empty."
-msgstr "您的目录寻找记录是空的。"
+msgstr "您的编目搜索记录是空的。"
 
 #: intranet-tmpl/prog/en/modules/about.tt:326
 #: intranet-tmpl/prog/en/modules/about.tt:344
@@ -55658,17 +55649,17 @@ msgstr "以下列 SQL 语句产生您的报表。"
 msgid "Your request gave the following results:"
 msgstr "您的请求得到以下结果："
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:304
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:306
 #, c-format
 msgid "Your search returned no closed subscriptions."
 msgstr "您的寻找结果没有关闭的订阅。"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:295
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:297
 #, c-format
 msgid "Your search returned no open subscriptions."
 msgstr "您的寻找结果没有打开的订阅。"
 
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:311
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:313
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:13
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:30
 #, c-format
@@ -56662,9 +56653,9 @@ msgid "display detail for this librarian."
 msgstr "显示这个馆员的详情。"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:556
-#, fuzzy, c-format
+#, c-format
 msgid "do a catalog search"
-msgstr "目录寻找"
+msgstr "编目搜索"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:76
 #, c-format
@@ -57958,7 +57949,7 @@ msgid "subscribers"
 msgstr "订阅者"
 
 #. A
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:100
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:46
 msgid "subscription detail"
 msgstr "订阅详情"
