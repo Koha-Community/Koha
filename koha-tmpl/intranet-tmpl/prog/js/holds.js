@@ -78,8 +78,9 @@ $(document).ready(function() {
 
                                         selectedbranch = " selected='selected' ";
                                         setbranch = CURRENT;
-                                    }
-                                    else{
+                                    } else if ( oObj.branches[i].pickup_location == 0 ) {
+                                        continue;
+                                    } else{
                                         selectedbranch = '';
                                         setbranch = '';
                                     }
