@@ -669,91 +669,116 @@
         </div>
 [% END%]
 
-    <div id="exemptfines" class="dialog message" style="display:none;">
-        <p>Fines for returned items are forgiven.</p>
-    </div>
-    <div id="forgivemanualholdsexpire-alert" class="dialog message" style="display:none;">
-        <p>Fines are not charged for manually cancelled holds.</p>
-    </div>
-    <div id="dropboxmode" class="dialog message" style="display:none;">
-        <p>Book drop mode.  (Effective checkin date is [% dropboxdate | $KohaDates %] ).</p>
-    </div>
-
-<div class="row">
     <form id="checkin-form" method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
-    <div class="col-sm-6">
-            <fieldset>
-            <legend>Check in</legend>
-            <label for="barcode">Enter item barcode: </label>
+        <fieldset id="circ_returns_checkin">
+            <h3>Check in</h3>
+            <div class="row">
+        <div class="col-sm-6">
+            <div class="hint">Enter item barcode:</div>
+                <div class="form-control-group">
+                    [% IF ( exemptfine ) %]
+                        <input name="barcode" id="barcode" size="14" class="focus input-warning" type="text" />
+                    [% ELSIF ( dropboxmode ) %]
+                        <input name="barcode" id="barcode" size="14" class="barcode focus input-warning" />
+                    [% ELSE %]
+                        <input name="barcode" id="barcode" size="14" class="barcode focus" />
+                    [% END %]
+                    <button type="submit" class="btn btn-default">Check in</button>
+                    [% FOREACH inputloo IN inputloop %]
+                        <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                        <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                        <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                    [% END %]
+                </div>
+            <div id="show-circ-settings">
+                <a href="#"><i class="fa circ-settings-icon fa-caret-down"></i> Checkin settings</a>
+            </div>
+        </div>
+        <div class="col-sm-6">
             [% IF ( exemptfine ) %]
-            <input name="barcode" id="barcode" size="14" class="focus alert" type="text" />
-            [% ELSIF ( dropboxmode ) %]
-            <input name="barcode" id="barcode" size="14" class="focus alert" type="text" />
+                <div id="exemptfines" class="checkin-active-setting">
             [% ELSE %]
-            <input name="barcode" id="barcode" size="14" class="focus" type="text" />
+                <div id="exemptfines" class="checkin-active-setting" style="display:none;">
             [% END %]
-            <input type="submit" class="submit" value="Submit" />
+                <p><i class="fa fa-check"></i> Fines for returned items are forgiven.</p>
+            </div>
 
+            [% IF ( forgivemanualholdsexpire ) %]
+                <div id="forgivemanualholdsexpire-alert" class="checkin-active-setting">
+            [% ELSE %]
+                <div id="forgivemanualholdsexpire-alert" class="checkin-active-setting" style="display:none;">
+            [% END %]
+                    <p><i class="fa fa-check"></i> Fines are not charged for manually cancelled holds.</p>
+                </div>
+
+                [% IF ( dropboxmode ) %]
+                    <div id="dropboxmode" class="checkin-active-setting">
+                [% ELSE %]
+                    <div id="dropboxmode" class="checkin-active-setting" style="display:none;">
+                [% END %]
+                    <p><i class="fa fa-check"></i> Book drop mode. <span class="single-line">( Effective checkin date is [% dropboxdate | $KohaDates with_hours => 1 %] )</span></p>
+                </div>
+                [% IF ( return_date_override_remember ) %]
+                    <div id="return_date_remember" class="checkin-active-setting">
+                [% ELSE %]
+                    <div id="return_date_remember" class="checkin-active-setting" style="display:none;">
+                [% END %]
+                    <p><i class="fa fa-check"></i> Saved check-in date: <span id="saved_return_date" class="single-line">[% return_date_override | html %]</span></p>
+                </div>
+            </div>
+        </div>
+
+            <div class="circ-settings">
             [% IF Koha.Preference('SpecifyReturnDate') %]
                 <div class="date-select" id="return_date_override_fields">
                     <div class="hint">Specify return date [% INCLUDE 'date-format.inc' %]: </div>
 
                     <input type="text" size="13" id="return_date_override" name="return_date_override" value="[% return_date_override | html %]" />
 
-                    <label for="return_date_override_remember"> Remember for next check in:</label>
-                    [% IF ( return_date_override_remember ) %]
-                        <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" checked="checked" />
-                    [% ELSE %]
-                        <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" />
-                    [% END %]
 
-                    <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" />
+
+                    <button type="button" class="action btn btn-default btn-xs" id="cleardate" name="cleardate">Clear</button>
+                    <div class="circ-setting">
+                        [% IF ( return_date_override_remember ) %]
+                            <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" />
+                        [% END %]
+                        <label for="return_date_override_remember"> Remember due date for next check in</label>
+                    </div>
             </div>
         [% END %]
-            [% FOREACH inputloo IN inputloop %]
-                <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
-                <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
-                <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
-            [% END %]
-
-
-            </fieldset>
-            </div>
-            <div class="col-sm-6">
-            <fieldset id="checkin_options">
-                <legend>Options</legend>
                     [% IF ( CAN_user_updatecharges_writeoff && overduecharges ) %]
-                    <p>
+                        <div id="forgive-overdue-fines" class="circ-setting">
                         [% IF ( exemptfine ) %]
                         <input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" checked="checked" />
                         [% ELSE %]
                         <input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" />
                         [% END %]
                         <label for="exemptcheck">Forgive overdue charges</label>
-                    </p>
+                        </div>
                     [% END %] <!-- overduecharges -->
-                    <p>
+                        <div id="book-drop-mode" class="circ-setting">
                         [% IF ( dropboxmode ) %]
                         <input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" checked="checked" />
                         [% ELSE %]
                         <input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" />
                         [% END %]
                         <label for="dropboxcheck">Book drop mode</label>
-                    </p>
+                        </div>
                     [% IF Koha.Preference('ExpireReservesMaxPickUpDelayCharge') %]
-                    <p>
+                        <div class="forgive-manual-hold-fees circ-setting">
                         [% IF ( forgivemanualholdsexpire ) %]
                         <input type="checkbox" id="forgivemanualholdsexpire" name="forgivemanualholdsexpire" value="forgivemanualholdsexpire" checked="checked" />
                         [% ELSE %]
                         <input type="checkbox" id="forgivemanualholdsexpire" name="forgivemanualholdsexpire" value="forgivemanualholdsexpire" />
                         [% END %]
                         <label for="forgivemanualholdsexpire">Forgive fees for manually expired holds</label>
-                    </p>
+                        </div>
                     [% END %] <!-- overduecharges -->
-            </fieldset>
-        </div>
-    </form>
-</div>
+                </div> <!-- /.circ-settings -->
+            </fieldset> <!-- /#circ_returns_checkin -->
+        </form> <!-- /#checkin-form -->
 
 [% IF ( riloop ) %]
     <h2>Checked-in items</h2>
@@ -809,15 +834,18 @@
     </table>
 [% END %]
 
-                    [% IF Koha.Preference('CircSidebar') %]
-                            </div> <!-- /.col-sm-10.col-sm-push-2 -->
-                            <div class="col-sm-2 col-sm-pull-10">
-                                <aside>
-                                    [% INCLUDE 'circ-nav.inc' %]
-                                </aside>
-                            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-                        </div> <!-- /.row -->
-                    [% END %]
+                [% IF Koha.Preference('CircSidebar') %]
+                        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                        <div class="col-sm-2 col-sm-pull-10">
+                            <aside>
+                                [% INCLUDE 'circ-nav.inc' %]
+                            </aside>
+                        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                    </div> <!-- /.row -->
+                [% ELSE %]
+                        </div> <!-- /.col-md-10.col-md-offset-1.col-lg-8.col-lg-offset-2 -->
+                    </div> <!-- /.row -->
+                [% END %]
 
             </main>
         </div> <!-- /.col-sm-12 -->
@@ -828,6 +856,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
+    [% Asset.js("js/pages/circulation.js") | $raw %]
     [% INCLUDE 'timepicker.inc' %]
 
     <script>
@@ -894,28 +923,31 @@
                         return false;
                     }
                 }
+                // Add saved date information to onscreen message, which
+                // may or may not be hidden
+                $("#saved_return_date").text( $("#return_date_override").val() );
                 return true;
             }
 
             $("#exemptcheck").change(function () {
                 if (this.checked == true) {
-                    $("#barcode").addClass("alert");
+                    $("#barcode").addClass("input-warning");
                     $("#exemptfines").show();
                 } else {
-                    $("#barcode").removeClass("alert");
+                    $("#barcode").removeClass("input-warning");
                     $("#exemptfines").hide();
                 }
                 $("#barcode").focus();
             });
             $("#dropboxcheck").change(function () {
                 if (this.checked == true) {
-                    $("#barcode").addClass("alert");
+                    $("#barcode").addClass("input-warning");
                     $("#dropboxmode").show();
 
                     $("#return_date_override_fields :input").prop('disabled', true);
                     $("#return_date_override").datetimepicker("disable");
                 } else {
-                    $("#barcode").removeClass("alert");
+                    $("#barcode").removeClass("input-warning");
                     $("#dropboxmode").hide();
 
                     $("#return_date_override_fields :input").prop('disabled', false);
@@ -925,10 +957,10 @@
             });
             $("#forgivemanualholdsexpire").change(function () {
                 if (this.checked == true) {
-                    $("#barcode").addClass("alert");
+                    $("#barcode").addClass("input-warning");
                     $("#forgivemanualholdsexpire-alert").show();
                 } else {
-                    $("#barcode").removeClass("alert");
+                    $("#barcode").removeClass("input-warning");
                     $("#forgivemanualholdsexpire-alert").hide();
                 }
                 $("#barcode").focus();
@@ -937,13 +969,13 @@
             [% IF(overduecharges) %]
                 $("#barcode").focus(function () {
                     if (($("#exemptcheck").prop("checked") == true) || ($("#dropboxcheck").prop("checked") == true)) {
-                        $("#barcode").addClass("alert");
+                        $("#barcode").addClass("input-warning");
                     } else {
-                        $("#barcode").removeClass("alert");
+                        $("#barcode").removeClass("input-warning");
                     }
                 });
                 $("#barcode").blur(function () {
-                    $("#barcode").removeClass("alert");
+                    $("#barcode").removeClass("input-warning");
                 });
             [% END %]
 
@@ -971,7 +1003,21 @@
                 this.form.return_date_override.value = '';
                 this.form.return_date_override_remember.checked = false;
                 this.form.barcode.focus();
+                $("#return_date_remember").hide();
                 return false;
+            });
+
+            $("#return_date_override_remember").on("change", function(){
+                if( $(this).prop("checked" ) ){
+                    if( $("#return_date_override").val() == "" ){
+                        $("#saved_return_date").text( _("No date selected") );
+                    } else {
+                        $("#saved_return_date").text( $("#return_date_override").val() );
+                    }
+                    $("#return_date_remember").show();
+                } else {
+                    $("#return_date_remember").hide();
+                }
             });
         });
     </script>

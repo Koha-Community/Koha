@@ -546,15 +546,15 @@
 
                                                 <button type="submit" class="btn btn-default">Check out</button>
 
-                                                <div id="show-checkout-settings">
-                                                    <a href="#"><i class="fa fa-caret-right checkout-settings-icon"></i> Checkout settings</a>
+                                                <div id="show-circ-settings">
+                                                    <a href="#"><i class="fa fa-caret-right circ-settings-icon"></i> Checkout settings</a>
                                                 </div>
 
-                                                <div class="checkout-settings">
+                                                <div class="circ-settings">
 
                                                     [% UNLESS ( noissues && Koha.Preference('OnSiteCheckoutsForce') ) %]
                                                         [% IF ( SpecifyDueDate ) %]
-                                                            <div id="specify-due-date" class="checkout-setting">
+                                                            <div id="specify-due-date" class="circ-setting">
                                                                 <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
                                                                 [% IF ( duedatespec ) %]
                                                                     <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" />
@@ -573,7 +573,7 @@
                                                     [% END %]
 
                                                     [% UNLESS ( noissues ) %]
-                                                        <div id="set-automatic-renewal" class="checkout-setting">
+                                                        <div id="set-automatic-renewal" class="circ-setting">
                                                             [% IF NEEDSCONFIRMATION %]
                                                                 <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
                                                             [% ELSE %]
@@ -583,7 +583,7 @@
                                                             <label for="auto_renew">Automatic renewal</label>
                                                         </div>
                                                         [% IF Koha.Preference('decreaseLoanHighHolds') %]
-                                                            <div id="set_high_holds_overrride" class="checkout-setting">
+                                                            <div id="set_high_holds_overrride" class="circ-setting">
                                                                 [% IF NEEDSCONFIRMATION %]
                                                                     [% IF override_high_holds %]
                                                                         <input type="checkbox" name="override_high_holds" id="override_high_holds" value="1" disabled="disabled" checked="checked"/>
@@ -603,7 +603,7 @@
                                                     [% END %]
 
                                                     [% IF Koha.Preference('OnSiteCheckouts') %]
-                                                        <div id="onsite_checkout-select" class="checkout-setting">
+                                                        <div id="onsite_checkout-select" class="circ-setting">
                                                             [% IF noissues %]
                                                                 <div class="onsite-checkout-only">
                                                                     <input type="checkbox" id="onsite_checkout" name="onsite_checkout_forced" checked="checked" disabled="disabled" /> <label for="onsite_checkout">On-site checkouts only. Automatic due date: </label>
@@ -616,7 +616,7 @@
                                                         </div>
                                                     [% END %]
 
-                                                </div> <!-- /.checkout-settings -->
+                                                </div> <!-- /.circ-settings -->
 
                                                 <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                                 <input type="hidden" name="branch" value="[% branch | html %]" />
