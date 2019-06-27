@@ -1,0 +1,457 @@
+<h1 id="releasenotesforkoha18.11.07">RELEASE NOTES FOR KOHA 18.11.07</h1>
+
+<p>27 Jun 2019</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 18.11.07 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-18.11.07.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 18.11.07 is a bugfix/maintenance release.</p>
+
+<p>It includes 30 bugfixes.</p>
+
+<h2 id="criticalbugsfixed">Critical bugs fixed</h2>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22585">[22585]</a> Fix remaining double-escaped CAS links</li>
+</ul>
+
+<h3 id="marcauthoritydatasupport">MARC Authority data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23053">[23053]</a> Local-Number cannot be used for authority matching due to non-existence of 'phrase' index</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23082">[23082]</a> Fatal error editing a restricted patron</li>
+</ul>
+
+<h2 id="otherbugsfixed">Other bugs fixed</h2>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16750">[16750]</a> Redirect from selectbranchprinter.pl to additem.pl causes software error</li>
+</ul>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7890">[7890]</a> Required fields in the MARC editor should be highlighted</li>
+</ul>
+
+<blockquote>
+  <p>This bugfix modifies the basic MARC editor so that required fields have the standard "Required" label on them instead of a small red asterisk.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21887">[21887]</a> 856$u link problem in XSLT result lists and detail page</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18344">[18344]</a> Overdue fines 'cap at replacement price' and 'cap by amount' should work together</li>
+</ul>
+
+<h3 id="database">Database</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23022">[23022]</a> Koha is not compatible with MySQL >= 8.0.11 because of NO_AUTO_CREATE_USER mode</li>
+</ul>
+
+<h3 id="ill">ILL</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22099">[22099]</a> "List requests" button displays when listing requests</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by Catalyst IT</p>
+</blockquote>
+
+<h3 id="installationandupgradeweb-basedinstaller">Installation and upgrade (web-based installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22770">[22770]</a> Typo in German translation for Greek in language pull down</li>
+</ul>
+
+<h3 id="lists">Lists</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22941">[22941]</a> Giving malformed sortfield to list results in Internal Server Error</li>
+</ul>
+
+<h3 id="marcauthoritydatasupport">MARC Authority data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22919">[22919]</a> Authorities MARC Structure not inserted with SQL strict modes</li>
+</ul>
+
+<h3 id="marcbibliographicdatasupport">MARC Bibliographic data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20986">[20986]</a> MARC21 Supplement and Index Textual Holdings don't display</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22945">[22945]</a> Markup error in OPAC search results around lists display</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22948">[22948]</a> Markup error in OPAC bibliographic detail template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22950">[22950]</a> Markup error in OPAC recent comment template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22952">[22952]</a> Markup error in OPAC suggestions template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22953">[22953]</a> Markup warning in OPAC user summary template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22954">[22954]</a> Minor markup error in OPAC messaging template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22955">[22955]</a> Markup error in OPAC lists template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23076">[23076]</a> Include OpacUserJS on OPAC maintenance page</li>
+</ul>
+
+<blockquote>
+  <p>This fix allows the OPAC maintenance page to use JavaScript included in the OPACUserJS system preference.</p>
+</blockquote>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22910">[22910]</a> Unique attributes should not be copied when duplicating a patron</li>
+</ul>
+
+<h3 id="sip2">SIP2</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19457">[19457]</a> If CheckPrevCheckout is set to "Do", then checkouts are blocked at the SIPServer</li>
+</ul>
+
+<h3 id="searching">Searching</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14794">[14794]</a> Searching patron by birthday returns no results if format incorrect</li>
+</ul>
+
+<h3 id="serials">Serials</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10215">[10215]</a> Increase the size of opacnote and librariannote for table subscriptionhistory</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11492">[11492]</a> Receiving a serial item causes routing list notes to be lost</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by Plant and Food Research Limited</p>
+</blockquote>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22958">[22958]</a> The Help link on SMS providers page should link to the correct chapter in the manual</li>
+</ul>
+
+<h3 id="systemadministration">System Administration</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=8558">[8558]</a> Better confirmation message for importing frameworks</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by Catalyst IT</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22947">[22947]</a> Markup error in OPAC preferences file</li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23006">[23006]</a> Can't use inventory tool with barcodes that contain regex relevant characters ($,...)</li>
+</ul>
+
+<h2 id="systemrequirements">System requirements</h2>
+
+<p>Important notes:</p>
+
+<ul>
+<li>Perl 5.10 is required</li>
+<li>Zebra is required</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha 
+documentation is </p>
+
+<ul>
+<li><a href="http://koha-community.org/documentation/">Koha Documentation</a></li>
+</ul>
+
+<p>As of the date of these release notes, only the English version of the
+Koha manual is available:</p>
+
+<ul>
+<li><a href="http://koha-community.org/manual/18.11/en/html/">Koha Manual</a></li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<ul>
+<li>Arabic (98.4%)</li>
+<li>Armenian (100%)</li>
+<li>Basque (65.9%)</li>
+<li>Chinese (China) (64%)</li>
+<li>Chinese (Taiwan) (99.6%)</li>
+<li>Czech (93.4%)</li>
+<li>Danish (55.3%)</li>
+<li>English (New Zealand) (88.2%)</li>
+<li>English (USA)</li>
+<li>Finnish (84.4%)</li>
+<li>French (98.4%)</li>
+<li>French (Canada) (99.6%)</li>
+<li>German (100%)</li>
+<li>German (Switzerland) (91.7%)</li>
+<li>Greek (78.6%)</li>
+<li>Hindi (100%)</li>
+<li>Italian (93.7%)</li>
+<li>Norwegian Bokmål (94.8%)</li>
+<li>Occitan (post 1500) (59.5%)</li>
+<li>Polish (86.7%)</li>
+<li>Portuguese (100%)</li>
+<li>Portuguese (Brazil) (87.5%)</li>
+<li>Slovak (90.1%)</li>
+<li>Spanish (100%)</li>
+<li>Swedish (90.7%)</li>
+<li>Turkish (98.2%)</li>
+<li>Ukrainian (62.1%)</li>
+<li>Vietnamese (54.6%)</li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 18.11.07 is</p>
+
+<ul>
+<li>Release Manager: Nick Clemens</li>
+<li>Release Manager assistants:
+<ul>
+<li>Tomás Cohen Arazi</li>
+<li>Jonathan Druart</li>
+</ul></li>
+<li>QA Manager: Katrin Fischer</li>
+<li>QA Team:
+<ul>
+<li>Tomás Cohen Arazi</li>
+<li>Alex Arnaud</li>
+<li>Chris Cormack</li>
+<li>Jonathan Druart</li>
+<li>Kyle Hall</li>
+<li>Julian Maurice</li>
+<li>Josef Moravec</li>
+<li>Martin Renvoize</li>
+<li>Marcel de Rooy</li>
+</ul></li>
+<li>Topic Experts:
+<ul>
+<li>REST API -- Tomás Cohen Arazi</li>
+<li>SIP2 -- Colin Campbell</li>
+<li>EDI -- Colin Campbell</li>
+<li>UI Design -- Owen Leonard</li>
+<li>Elasticsearch -- Ere Maijala</li>
+</ul></li>
+<li>Bug Wranglers:
+<ul>
+<li>Indranil Das Gupta</li>
+<li>Jon Knight</li>
+<li>Luis Moises Rojas</li>
+</ul></li>
+<li>Packaging Manager: Mirko Tietgen</li>
+<li>Documentation Manager: Caroline Cyr-La-Rose</li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>David Nind</li>
+<li>Lucy Vaux-Harvey</li>
+</ul></li>
+<li><p>Translation Managers: </p>
+
+<ul>
+<li>Indranil Das Gupta</li>
+<li>Bernardo González Kriegel</li>
+</ul></li>
+<li><p>Wiki curators: </p>
+
+<ul>
+<li>Caroline Cyr-La-Rose</li>
+</ul></li>
+<li>Release Maintainers:
+<ul>
+<li>18.05 -- Lucas Gass</li>
+<li>18.05 -- Jesse Maseto</li>
+<li>18.11 -- Martin Renvoize</li>
+<li>17.11 -- Fridolin Somers</li>
+</ul></li>
+<li>Release Maintainer assistants:
+<ul>
+<li>18.05 -- Kyle Hall</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries who are known to have sponsored
+new features in Koha 18.11.07:</p>
+
+<ul>
+<li>Catalyst IT</li>
+<li>Plant and Food Research Limited</li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 18.11.07.</p>
+
+<ul>
+<li>Aleisha Amohia (3)</li>
+<li>Nick Clemens (4)</li>
+<li>Jonathan Druart (6)</li>
+<li>Katrin Fischer (3)</li>
+<li>Lucas Gass (4)</li>
+<li>Kyle Hall (4)</li>
+<li>Pasi Kallinen (1)</li>
+<li>Owen Leonard (10)</li>
+<li>Hayley Mapley (1)</li>
+<li>Joy Nelson (1)</li>
+<li>Liz Rea (1)</li>
+<li>Martin Renvoize (2)</li>
+<li>Justin Rittenhouse (1)</li>
+<li>Marcel de Rooy (1)</li>
+<li>Koha translators (1)</li>
+<li>Nazlı Çetin (2)</li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 18.11.07</p>
+
+<ul>
+<li>ACPL (10)</li>
+<li>BSZ BW (3)</li>
+<li>ByWater-Solutions (13)</li>
+<li>Catalyst (1)</li>
+<li>Devinim (2)</li>
+<li>Independant Individuals (4)</li>
+<li>Koha Community Developers (6)</li>
+<li>koha-suomi.fi (1)</li>
+<li>nd.edu (1)</li>
+<li>PTFS-Europe (2)</li>
+<li>Rijks Museum (1)</li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha.</p>
+
+<ul>
+<li>Arthur Bousquet (2)</li>
+<li>Nick Clemens (8)</li>
+<li>Chris Cormack (3)</li>
+<li>Jonathan Druart (1)</li>
+<li>Magnus Enger (1)</li>
+<li>Katrin Fischer (25)</li>
+<li>Lucas Gass (44)</li>
+<li>Claire Gravely (1)</li>
+<li>Kyle Hall (1)</li>
+<li>Pasi Kallinen (1)</li>
+<li>David Kuhn (1)</li>
+<li>Owen Leonard (1)</li>
+<li>Josef Moravec (1)</li>
+<li>nabila (1)</li>
+<li>David Nind (1)</li>
+<li>Nadine Pierre (2)</li>
+<li>Liz Rea (10)</li>
+<li>Martin Renvoize (43)</li>
+<li>Marcel de Rooy (6)</li>
+<li>Maryse Simard (9)</li>
+<li>Fridolin Somers (39)</li>
+<li>Mark Tompsett (3)</li>
+<li>Ed Veal (1)</li>
+<li>Marc Véron (1)</li>
+<li>Bin Wen (2)</li>
+<li>Nazlı Çetin (2)</li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="git://git.koha-community.org/koha.git">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is new-security-release-18.11.07.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 27 Jun 2019 17:59:52.</p>
