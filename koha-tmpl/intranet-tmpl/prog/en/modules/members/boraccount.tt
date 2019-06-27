@@ -120,6 +120,10 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
+            [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
+                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id %]&borrowernumber=[% patron.borrowernumber %]', '_blank');
+            [% END %]
+
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') | $raw %];

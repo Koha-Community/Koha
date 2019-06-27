@@ -277,6 +277,10 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
+            [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
+                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id %]&borrowernumber=[% patron.borrowernumber %]', '_blank');
+            [% END %]
+
             var forms = $('#payindivfine, #payfine');
             var change = $('#change')[0];
 

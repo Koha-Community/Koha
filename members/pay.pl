@@ -63,6 +63,8 @@ if ( !$borrowernumber ) {
     $borrowernumber = $input->param('borrowernumber0');
 }
 
+my $payment_id = $input->param('payment_id');
+
 # get borrower details
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 our $patron         = Koha::Patrons->find($borrowernumber);
@@ -131,7 +133,8 @@ for (@names) {
 }
 
 $template->param(
-    finesview => 1,
+    finesview  => 1,
+    payment_id => $payment_id,
 );
 
 add_accounts_to_template();

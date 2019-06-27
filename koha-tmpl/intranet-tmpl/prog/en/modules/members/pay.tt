@@ -179,7 +179,11 @@
             }
         }
         $(document).ready(function(){
-        $('#pay-fines-form').preventDoubleFormSubmit();
+            [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
+                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id %]&borrowernumber=[% patron.borrowernumber %]', '_blank');
+            [% END %]
+
+            $('#pay-fines-form').preventDoubleFormSubmit();
             $("#woall").click(function(event){
                 var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | $Price %]" );
                 var answer = confirm(msg);

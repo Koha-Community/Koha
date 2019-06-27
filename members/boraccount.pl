@@ -48,7 +48,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 );
 
 my $borrowernumber = $input->param('borrowernumber');
-my $action = $input->param('action') || '';
+my $payment_id     = $input->param('payment_id');
+my $action         = $input->param('action') || '';
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 my $patron = Koha::Patrons->find( $borrowernumber );
@@ -84,6 +85,7 @@ $template->param(
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
     accounts            => \@accountlines,
+    payment_id          => $payment_id,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -183,6 +183,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('FeeOnChangePatronCategory','1','','If set, when a patron changes to a category with enrolment fee, a fee is charged','YesNo'),
 ('FilterBeforeOverdueReport','0','','Do not run overdue report until filter selected','YesNo'),
 ('FineNotifyAtCheckin','0',NULL,'If ON notify librarians of overdue fines on the items they are checking in.','YesNo'),
+('FinePaymentAutoPopup','0',NULL,'If enabled, automatically display a print dialog for a payment receipt when making a payment.','YesNo'),
 ('finesCalendar','noFinesWhenClosed','ignoreCalendar|noFinesWhenClosed','Specify whether to use the Calendar in calculating duedates and fines','Choice'),
 ('FinesIncludeGracePeriod','1',NULL,'If enabled, fines calculations will include the grace period.','YesNo'),
 ('FinesLog','1',NULL,'If ON, log fines','YesNo'),
