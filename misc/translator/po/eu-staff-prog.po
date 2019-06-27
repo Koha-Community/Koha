@@ -2,9 +2,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-05-20 00:21-0300\n"
-"PO-Revision-Date: 2019-05-29 15:15+0000\n"
-"Last-Translator: Ubik <ubik@tabakalera.eu>\n"
+"POT-Creation-Date: 2019-06-16 19:55-0300\n"
+"PO-Revision-Date: 2019-06-12 08:56+0000\n"
+"Last-Translator: Tabakalera (Ubik) <lmitxelena@tabakalera.eu>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /eu/18.05/eu-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1559142946.584699\n"
+"X-POOTLE-MTIME: 1560329797.665721\n"
 
 #: intranet-tmpl/prog/en/modules/about.tt:977
 #, c-format
@@ -93,22 +93,24 @@ msgstr ""
 #. %5$s:  BLOCK escape_address 
 #. %6$s: ~ SET address = data.streetnumber _ ' ' 
 #. %7$s: ~ IF data.streettype 
-#. %8$s:  address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' | html 
+#. %8$s:  SET address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' '
 #. %9$s:  END 
 #. %10$s: ~ IF data.address 
-#. %11$s:  address = address _ data.address _ ' ' | html 
+#. %11$s:  SET address = address _ data.address _ ' '
 #. %12$s:  END 
 #. %13$s: ~ IF data.address2 
-#. %14$s:  address = address _ data.address2 _ ' ' | html 
+#. %14$s:  SET address = address _ data.address2 _ ' '
 #. %15$s:  END 
-#. %16$s: ~ To.json( address ) | $raw ~
+#. %16$s: ~ address | html | $To ~
 #. %17$s:  END 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"borrowernumber\": \"%s\" }%s,%s %s ] } %s %s %s%s%s %s%s%s %s%s%s %s "
 "%s "
-msgstr "] %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
+msgstr ""
+"\", \"borrowernumber\": \"%s\" }%s,%s %s ] } %s %s %s%s%s %s%s%s %s%s%s %s "
+"%s "
 
 #. %1$s:  data.borrowernotes | html_line_break | collapse | $To 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:32
@@ -153,11 +155,13 @@ msgstr ""
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"dt_count\": \"%s item(s)\", \"dt_is_shared\": \"%sPublic%sShared"
 "%sPrivate%s\", \"dt_owner\": \""
-msgstr "\", \"dt_count\": \"%s item(s)\", \"dt_owner\": \""
+msgstr ""
+"\", \"dt_count\": \"%s item(s)\", \"dt_is_shared\": \"%sPublic%sShared"
+"%sPrivate%s\", \"dt_owner\": \""
 
 #. %1$s:  IF data.sortby == "author" 
 #. %2$s:  ELSIF data.sortby == "copyrightdate" 
@@ -178,18 +182,18 @@ msgstr "\", \"dt_count\": \"%s item(s)\", \"dt_owner\": \""
 #. %17$s: ~ type        = type | html ~
 #. %18$s: ~ IF can_manage_shelf ~
 #: intranet-tmpl/prog/en/modules/virtualshelves/tables/shelves_results.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\", \"dt_sortby\": %s\"Author\"%s\"Year\"%s\"Call number\"%s\"Date added\"%s"
 "\"Title\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s\", "
 "\"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ action_block = '"
 msgstr ""
-"\", \"dt_sortby\": %s\"Egilea\"%s\"Urtea\"%s\"Signatura topografikoa\"%s"
-"\"Izenburua\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s"
-"\", \"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s [%%~ action_block = '"
+"\", \"dt_sortby\": %s\"Author\"%s\"Year\"%s\"Call number\"%s\"Date added\"%s"
+"\"Title\"%s, \"dt_created_on\": \"%s\", \"dt_modification_time\": \"%s\", "
+"\"dt_action\": \"%s\" }%s,%s %s ] } %s %s %s %s %s %s [%%~ action_block = '"
 
 #. %1$s:  END 
-#. %2$s:  data.cardnumber | html 
+#. %2$s:  data.cardnumber | html | $To
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:15
 #, c-format
 msgid "\", %s \"dt_cardnumber\": \"%s\", \"dt_name\": \""
@@ -210,9 +214,9 @@ msgid "\"Date to\" is not a legal value (\"%s\"). %s"
 msgstr "\"data bukatu\" ez dauka balore baimendua (\"%s\"). %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:489
-#, fuzzy, c-format
+#, c-format
 msgid "# Bibliographic records"
-msgstr "Registro bibliográfico"
+msgstr "# Erregistro bibliografikoak"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
 #, c-format
@@ -231,9 +235,8 @@ msgstr "# Subs"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:164
-#, fuzzy
 msgid "# of % selected"
-msgstr "Aukeratutako guztiak"
+msgstr "# tik % aukeratutako guztiak"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-reserves.tt:44
 #, fuzzy, c-format
@@ -271,11 +274,11 @@ msgstr "%% edozein karaktere-kopururekin bat dator"
 #. %18$s:  item.status | html 
 #. %19$s:  (item.issues || 0) | html 
 #: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.csv.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s \"%s %sby %s%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s"
 "\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" "
-msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
+msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s"
 
 #. %1$s: - USE Koha -
 #. %2$s: - SET delimiter = Koha.Preference( 'delimiter' ) || ',' -
@@ -316,14 +319,15 @@ msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
 #. %37$s: - delimiter | html -
 #. %38$s:  orders.size | html 
 #: intranet-tmpl/prog/en/modules/acqui/csv/lateorders.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s \"%s (%s days)\"%s \"%s\"%s \"%s\"%s \"%s %sAuthor: %s.%s"
 "%sPublished by: %s.%s\"%s \"%s x %s = %s (%s)\"%s \"%s (%s)\"%s \"%s\"%s \"%s"
 "\" %s %s %s %s \"Total orders in late\"%s %s "
 msgstr ""
-"%s %s %s &nbsp; %s %s - %s %s %s - %s%s %s- %s%s %s - %s%s %sEdizioa: %s%s "
-"%s ; %s%s %s - %s%s %s ; %s%s %s  "
+"%s %s %s %s %s %s \"%s (%s days)\"%s \"%s\"%s \"%s\"%s \"%s %sAuthor: %s.%s"
+"%sPublished by: %s.%s\"%s \"%s x %s = %s (%s)\"%s \"%s (%s)\"%s \"%s\"%s \"%s"
+"\" %s %s %s %s \"Total orders in late\"%s %s "
 
 #. %1$s: - USE raw -
 #. %2$s: - USE Koha -
@@ -361,13 +365,13 @@ msgstr ""
 #. %34$s: - span_end   = '' 
 #. %35$s: - ELSE 
 #: intranet-tmpl/prog/en/includes/patron-title.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 "%s %s %s %s %s %s %s %s %s %s [%%- span_start = '"
 msgstr ""
-"%s %s %s &nbsp; %s %s - %s %s %s - %s%s %s- %s%s %s - %s%s %sEdizioa: %s%s "
-"%s ; %s%s %s - %s%s %s ; %s%s %s  "
+"%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
+"%s %s %s %s %s %s %s %s %s %s [%%- span_start = ' "
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -388,13 +392,13 @@ msgstr ""
 #. %17$s: - END -
 #. %18$s:  INCLUDE 'doc-head-open.inc' 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %s %sCirculation %sCatalog %sPatrons %sAcquisitions "
 "%sAccounts %sSerials %s %s %s "
 msgstr ""
-"%s %s %s %sZirkulazioa %sKatalogoa %sErabiltzaileak %sEskurapenak %sKontuak "
-"%sAldizkako argitalpenak %s %s %s "
+"%s %s %s %s %s %s %s %s %s %sZirkulazioa %sKatalogoa %sErabiltzaileak "
+"%sEskurapenak %sKontuak %sAldizkako argitalpenak %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  ar.biblio.biblioitem.publishercode | html 
@@ -412,9 +416,9 @@ msgstr ""
 #. %13$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:140
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:248
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
-msgstr "%s%s%s %s, %s %s, %s%s %s: %s %s %s%s%s %sISBN: %s%s"
+msgstr "%s %s %s %s %s %s %s : %s %s %s %s ISBN: %s %s "
 
 #. %1$s: - USE ItemTypes -
 #. %2$s: - INCLUDE csv_headers/reports/cash_register_stats.tt -
@@ -494,13 +498,13 @@ msgstr ""
 #. %34$s: - END -
 #. %35$s: - IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -
 #: intranet-tmpl/prog/en/includes/patron-title.inc:55
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
 "(%s)%s %s %s%s %s %s %s A patron from library %s %s %s "
 msgstr ""
-"%s %s %s &nbsp; %s %s - %s %s %s - %s%s %s- %s%s %s - %s%s %sEdizioa: %s%s "
-"%s ; %s%s %s - %s%s %s ; %s%s %s  "
+"%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
+"(%s)%s %s %s%s %s %s %s Liburutegiko erabiltzailea %s %s %s  "
 
 #. %1$s:  USE raw 
 #. %2$s:  USE Asset 
@@ -512,9 +516,9 @@ msgstr ""
 #. %8$s:  END 
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s %s %s SRU %s Z39.50 %s %s "
-msgstr "%s %s %s SRU %s Z39.50 %s %s "
+msgstr "%s %s %s %s %s %s SRU %s Z39.50 %s %s "
 
 #. %1$s: - INCLUDE csv_headers/reports/orders_by_budget.tt -
 #. %2$s: - INCLUDE empty_line.inc -
@@ -569,13 +573,13 @@ msgstr ""
 #. %15$s:  END 
 #. %16$s:  INCLUDE 'doc-head-open.inc' 
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s %slayout %sLayouts %stemplate %sTemplates %sprofile "
 "%sProfiles %sbatch %sBatches %s %s %s "
 msgstr ""
-"%s %s %sdiseinua %sDiseinuak %stxantiloia %sTxantiloiak %sprofil %sProfilak "
-"%slotea %sLoteak %s %s %s "
+"%s %s %s %s %s %sdiseinuak %sDiseinuak %stxantiloia %sTxantiloiak %sprofila "
+"%sProfilak %slotea %sLoteak %s %s %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'serials-search.inc' 
@@ -603,12 +607,12 @@ msgstr "%s %s %s %s %s eguna %s astea %s hilabetea %s urtea %s %s "
 #. %9$s:  FOREACH data IN aaData 
 #. %10$s:  IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords"
 "\": %s, \"aaData\": [ %s { %s \"dt_borrowernumber\": \""
 msgstr ""
-"%s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords"
+"%s %s %s %s %s { \"sEcho\": %s, \"iTotalRecords\": %s, \"iTotalDisplayRecords"
 "\": %s, \"aaData\": [ %s { %s \"dt_borrowernumber\": \""
 
 #. %1$s:  USE raw 
@@ -624,13 +628,13 @@ msgstr ""
 #. %11$s:  END 
 #. %12$s:  INCLUDE 'doc-head-open.inc' 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %sBiblio %sBarcode/Biblio %sBiblio/Barcode %sAlternating "
 "%sBarcode %s %s %s "
 msgstr ""
-"%s %s %sBiblio %sBarra-kodea/Biblio %sBiblio/Barra-kodea %sTartekatu %sBarra-"
-"kodea %s %s %s "
+"%s %s %s %s %sBiblio %sBarra-kodea/Biblio %sBiblio/Barra-kodea %sTartekatu "
+"%sBarra-kodea %s %s %s "
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'cat-search.inc' 
@@ -787,13 +791,13 @@ msgstr ""
 #. %23$s:  END 
 #. %24$s:  INCLUDE 'doc-head-open.inc' 
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %slayout %sLayouts %stemplate %sTemplates %sprofile %sProfiles "
 "%sbatch %sBatches %sActions %s %s %s %s %slayouts %stemplates %sprofiles "
 "%sbatches %s %s %s "
 msgstr ""
-"%s %s %s %sdiseinua %sDiseinuak %stxantiloia %sTxantiloiak %sprofila "
+"%s %s %s %s %sdiseinua %sDiseinuak %stxantiloia %sTxantiloiak %sprofila "
 "%sProfilak %slotea %sLoteak %sAkzioak %s %s %s %s %sdiseinuak %stxantiloiak "
 "%sprofilak %sloteak%s %s %s "
 
@@ -832,6 +836,9 @@ msgid ""
 "serial issues claims %s Basket export in acquisition %s Export lost items in "
 "report %s Unknown usage %s %s %s %s "
 msgstr ""
+"%s %s %s %s MARC %s SQL %s Unknown type %s %s %s %s Export records %s Late "
+"serial issues claims %s Basket export in acquisition %s Export lost items in "
+"report %s Unknown usage %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -875,13 +882,13 @@ msgstr "%s %s %s %s %s "
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
 "%s matches %s %s does not match %s %s RegEx m/%s"
 msgstr ""
-"%s %s %s &nbsp; %s %s - %s %s %s - %s%s %s- %s%s %s - %s%s %sEdizioa: %s%s "
-"%s ; %s%s %s - %s%s %s ; %s%s %s  "
+"%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
+"%s matches %s %s does not match %s %s RegEx m/%s"
 
 #. %1$s:  USE raw 
 #. %2$s:  USE To 
@@ -917,9 +924,9 @@ msgstr ""
 #. %9$s:  END 
 #. %10$s: - END 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:47
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s&amp;sql_params=%s%s %s&amp;param_name=%s%s %s "
-msgstr "%s nork: %s%s %s &ndash; %s%s %s"
+msgstr "%s %s %s %s&amp;sql_params=%s%s %s&amp;param_name=%s%s %s "
 
 #. %1$s:  INCLUDE 'doc-head-close.inc' 
 #. %2$s:  BLOCK norms_text 
@@ -938,11 +945,13 @@ msgstr "%s nork: %s%s %s &ndash; %s%s %s"
 #. %15$s:     FOREACH norm IN valid_norms 
 #. %16$s:         IF ( norm == selected_norm ) 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default %s"
 "%s %s %s %s %s %s %s "
-msgstr "%s %s (%s) %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s ["
+msgstr ""
+"%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default %s"
+"%s %s %s %s %s %s %s "
 
 #. %1$s:  IF ( resultsloo.author ) 
 #. %2$s:  resultsloo.author | html 
@@ -1064,10 +1073,10 @@ msgid ""
 "this order line because at least one reservation exists on the records. %s "
 "%s "
 msgstr ""
-"%s %s No se puede cancelar la recepción de esta orden de  línea  porque fue "
-"creado a partir de una recepción parcial de la línea de no. de la orden %s, "
-"que está ya recibido. Intentar cancelar este una primera vez y reintentar. "
-"%s "
+"%s %s %s No se puede cancelar la recepción de esta orden de  línea  porque "
+"fue creado a partir de una recepción parcial de la línea de no. de la orden "
+"%s %s %s %s %s , que está ya recibido. Intentar cancelar este una primera "
+"vez y reintentar. %s %s "
 
 #. %1$s:  IF ccode_label 
 #. %2$s:  ccode_label | html 
@@ -1076,7 +1085,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:164
 #, c-format
 msgid "%s %s %s Collection %s "
-msgstr "%s %s %s Collección %s "
+msgstr "%s %s %s Bilduma %s "
 
 #. %1$s:  IF ( hold.found ) 
 #. %2$s:  IF ( hold.atdestination ) 
@@ -1307,7 +1316,7 @@ msgstr "%s %s%s (ez aktiboa)%s "
 #. %28$s:  delimiter | html 
 #. %29$s: - END -
 #: intranet-tmpl/prog/en/includes/csv_headers/acqui/basketgroup.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %sAccount number%sBasket name%sOrder number%sAuthor%sTitle%sPublisher"
 "%sPublication year%sCollection title%sISBN%sQuantity%sRRP tax included%sRRP "
@@ -1317,11 +1326,13 @@ msgid ""
 "group delivery place%sBasket group billing place%sBasket delivery place"
 "%sBasket billing place%s "
 msgstr ""
-"Account number,Basket name,Order number,Author,Title,Publisher,Publication "
-"year,Collection title,ISBN,Quantity,RRP,Discount,Estimated cost,Note for "
-"vendor,Entry date,Bookseller name,Bookseller physical address,Bookseller "
-"postal address,Contract number,Contract name,Basket group delivery place,"
-"Basket group billing place,Basket delivery place,Basket billing place "
+"%s %s %sAccount number%sBasket name%sOrder number%sAuthor%sTitle%sPublisher"
+"%sPublication year%sCollection title%sISBN%sQuantity%sRRP tax included%sRRP "
+"tax excluded%sDiscount%sEstimated cost tax included%sEstimated cost tax "
+"excluded%sNote for vendor%sEntry date%sBookseller name%sBookseller physical "
+"address%sBookseller postal address%sContract number%sContract name%sBasket "
+"group delivery place%sBasket group billing place%sBasket delivery place"
+"%sBasket billing place%s "
 
 #. %1$s: - USE Koha -
 #. %2$s: - SET delimiter = Koha.Preference( 'delimiter' ) || ',' -
@@ -1567,9 +1578,9 @@ msgstr "%s %s antes %s"
 #. %4$s:  END 
 #. %5$s:  IF !item.rota.active 
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:52
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Active %s Inactive %s %s "
-msgstr "%s Aktibo %s Inaktibo %s"
+msgstr "%s %s Aktibo %s Inaktibo %s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'error_on_update' 
@@ -2007,9 +2018,9 @@ msgstr ""
 #. %6$s:  IF Koha.Preference('intranetbookbag') == 1 
 #. %7$s:  IF ( SEARCH_RESULT.incart ) 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:452
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Holds (%s) %s %s %s %s | "
-msgstr "%s %s %s%s %s %s%s %s "
+msgstr "%s %s Erreserbak (%s) %s %s %s %s | "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -2055,8 +2066,8 @@ msgid ""
 "%s %s Item type %s Collection code %s Shelving location %s Home library %s "
 "Holding library %s %s %s "
 msgstr ""
-"%s%sTipo de ítem %sCódigo Colección %sUbicación en estante %s Biblioteca "
-"Origen %s Biblioteca propietaria %s %s %s "
+"%s%sItem mota %sBildumaren kodea %sSignatura %s Jatorrizko liburutegia %s "
+"Liburutegi jabea %s %s %s "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:86
@@ -2099,9 +2110,9 @@ msgstr "%s %s Eskuliburua %s Atzerapenak %s Etenaldia %s Zor librea sortu %s "
 #. %2$s:  IF ( LoginBranchname == 'NO_LIBRARY_SET' ) 
 #. %3$s:  ELSE 
 #: intranet-tmpl/prog/en/includes/header.inc:95
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s NO LIBRARY SET %s Location: "
-msgstr "%s NO SE ESTABLECIÓ BIBLIOTECA %s %s %s "
+msgstr "%s %s EZ DA LIBURUTEGIRIK AUKERATU %s Kokalekua: "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -2134,9 +2145,9 @@ msgstr ""
 #. %4$s: # display the search results 
 #. %5$s:  IF ( total ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s No results found %s %s %s "
-msgstr "%s %s Ez da emaitzarik aurkitu %s %s "
+msgstr "%s %s Ez da emaitzik aurkitu %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.notforloancount ) 
@@ -2152,9 +2163,9 @@ msgstr "%s %s Ez da mailegurako (%s)%s "
 #. %3$s:  END 
 #. %4$s:  IF itemloo.item_level_holds == "N" 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:411
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Not on hold %s %s "
-msgstr "%s %s Ez dago erreserbatuta %s"
+msgstr "%s %s Ez dago erreserbatuta %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( resultsloo.orderedcount ) 
@@ -2187,8 +2198,8 @@ msgid ""
 "%s %s Pending %s %s Accepted %s %s Checked %s %s Rejected %s %s %s %s %s %s "
 "%s %s %s "
 msgstr ""
-"%s %s Pendiente %s %s Aceptada %s %s Comprobada %s %s Rechazada %s %s %s %s "
-"%s %s %s %s %s "
+"%s %s Egiteke %s %s Onartua %s %s Ziurtatua %s %s Ezeztatua %s %s %s %s %s "
+"%s %s %s %s "
 
 #. %1$s:  SWITCH loopfilte.crit 
 #. %2$s:  CASE '0' 
@@ -2354,7 +2365,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:612
 #, c-format
 msgid "%s %s Use default (Yes) %s Use default (No) %s "
-msgstr ""
+msgstr "%s %s Lehenetsia (Bai) %s Lehenetsia (Ez) %s "
 
 #. %1$s:  END 
 #. %2$s:  SET expires_on = w.expirationdate 
@@ -2458,9 +2469,9 @@ msgstr "%s %s limitaciones sede %s %s limitacion sede %s %s No limitatción %s "
 #. %2$s:  IF shared_by_other 
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:55
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s by "
-msgstr "%s %s nork: %s%s"
+msgstr "%s %s nork: "
 
 #. For the first occurrence,
 #. %1$s:  biblio.title | html 
@@ -2579,9 +2590,9 @@ msgstr "%s %s a %s%s$%s%s %s Adierazpen erregularrak erabiltzen"
 #. %1$s:  count | html 
 #. %2$s:  PROCESS display_names rs = name 
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:121
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s transferred."
-msgstr "Transferentzia"
+msgstr "%s %s transferentzia"
 
 #. %1$s:  r.budget.budget_id | html 
 #. %2$s:  r.budget.budget_amount | $Price 
@@ -2622,9 +2633,9 @@ msgstr "%s %s %s%s%sIzenbururik gabe%s %s %s%s "
 #. %6$s:  END 
 #. %7$s:  IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:490
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s%s, %s available:%s, None available%s %s "
-msgstr "%s %s %sitems%sitem%s%s, %s erabilgarria(k):%s, Ez erabilgarria%s %s "
+msgstr "%s %s%s, %s erabilgarri:%s, Ez erabilgarri%s %s "
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -2654,9 +2665,9 @@ msgstr ""
 #. %2$s:  IF ( !budget.b_active ) 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s(inactive)%s"
-msgstr "%s %s%s (ez aktiboa)%s "
+msgstr "%s %s(ez aktiboa)%s"
 
 #. %1$s:  record.recordid | html 
 #. %2$s:  IF record.reference 
@@ -2719,9 +2730,9 @@ msgstr "%s %sHeldua %sHaurra %sProf. %sOrg. %sPersonal %sEstatistikak %s "
 #. %1$s:  END 
 #. %2$s:  IF ( errornoitem ) 
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sERROR: Unable to get the item."
-msgstr "%s %s %s %sERROR: ezin da elementua lortu."
+msgstr "%s %sERROR: Ezin da elementua lortu."
 
 #. %1$s:  IF ( use_heading_flags_p ) 
 #. %2$s:  IF ( heading_edit_subfields_p ) 
@@ -2814,7 +2825,7 @@ msgstr "%s %sISBN :"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:35
 #, c-format
 msgid "%s %sItems%sItem%s overdue as of %s%s "
-msgstr "%s %sItems%sItem%s fecha de vencimiento %s%s "
+msgstr "%s %sItem%sItem%s Iraungitze data %s%s "
 
 #. %1$s:  SWITCH order.orderstatus 
 #. %2$s:  CASE 'new' 
@@ -2847,15 +2858,15 @@ msgstr "%s %sBerria %sEskatua %sPartzialki jasoa %sJasoa %sBertan behera %s "
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:143
 #, c-format
 msgid "%s %sNone specified"
-msgstr "%s %sSin especificación"
+msgstr "%s %sZehaztu gabe"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:765
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:767
+#, c-format
 msgid "%s %sNot checked out%s"
-msgstr "%sMailegatu gabe%s"
+msgstr "%s %sMailegatu gabe%s"
 
 #. %1$s:  SWITCH line.accounttype 
 #. %2$s:  CASE 'Pay' 
@@ -2928,7 +2939,7 @@ msgid ""
 "%s %sPending %sAccepted %sChecked %sRejected %sAvailable %sOrdered %sStatus "
 "unknown %s%s%s %s %s %s %s No name %s %s (%s)"
 msgstr ""
-"%s %sPendiente %sOnartua %sBaieztatzen %sEzeztatua %sErabilgarri %sOrdenatua "
+"%s %sEgiteke %sOnartua %sBaieztatzen %sEzeztatua %sErabilgarri %sOrdenatua "
 "%sEgoera ezezaguna %s%s%s %s %s %s %s Izenik gabe %s %s (%s)"
 
 #. %1$s:  SWITCH basket.create_items 
@@ -3023,9 +3034,9 @@ msgstr "%s %sTxosten honek SQL gako hitza du"
 #. %4$s:  END 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:911
-#, fuzzy, c-format
+#, c-format
 msgid "%s %sYes%sNo%s %s "
-msgstr "%s %s %sBai%sEz%s %s "
+msgstr "%s %sBai%sEz%s %s "
 
 #. %1$s:  SWITCH m.code 
 #. %2$s:  CASE 'no_data_for_preview' 
@@ -3093,9 +3104,9 @@ msgid ""
 "&rsaquo; %sModify filing rule%sAdd filing rule%s %s &rsaquo; %sModify "
 "splitting rule%sAdd splitting rule%s %s "
 msgstr ""
-"%s &rsaquo; %sAldatu sailkapen iturria%sGehitu sailkapen iturria%s %s %s "
+"%s &rsaquo; %sAldatu sailkapen iturria%sGehitu sailkapen iturria%s %s "
 "&rsaquo; %sAldatu artxibatze araua%sGehitu artxibatze araua%s %s %s &rsaquo; "
-"Berretsi sailkapen iturria ezabatzea"
+"Berretsi sailkapen iturria ezabatzea%s %s"
 
 #. %1$s:  IF op == 'add_form' 
 #. %2$s:  IF framework 
@@ -3297,9 +3308,9 @@ msgstr "%s (%s). Data amaitu %s"
 #. %1$s:  item.itemnumber.biblio.title | html 
 #. %2$s:  item.itemnumber.barcode | html 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:308
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Barcode: %s)"
-msgstr "Barra kodea: %s"
+msgstr "%s (Barra kodea: %s)"
 
 #. %1$s:  item_on_other.biblio.title | html 
 #. %2$s:  item_on_other.stockrotationitem.stage.rota.title | html 
@@ -3329,9 +3340,9 @@ msgstr "%s (itxita)"
 
 #. %1$s:  class_source.description | html 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid "%s (default)"
-msgstr "%s %s (lehenetsia)"
+msgstr "%s (lehenetsia)"
 
 #. %1$s:  r.budget.budget_name | html 
 #. %2$s:  r.budget.budget_id | html 
@@ -3406,7 +3417,7 @@ msgid "%s (inactive) %s %s %s "
 msgstr "%s (ez aktibo) %s %s %s "
 
 #. %1$s:  riloo.duedate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:733
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:735
 #, c-format
 msgid "%s (overdue)"
 msgstr "%s (atzeratuta)"
@@ -3421,9 +3432,9 @@ msgstr "%s (ziurrenik ez da arazorik izango hutsik badago)"
 #. %2$s:  END 
 #. %3$s:  IF books_loo.title 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:476
-#, fuzzy, c-format
+#, c-format
 msgid "%s (rcvd)%s %s "
-msgstr "%s (rcvd)%s "
+msgstr "%s (rcvd)%s %s "
 
 #. %1$s:  IF ( order.order_received ) 
 #. %2$s:  END 
@@ -3434,9 +3445,9 @@ msgstr "%s (rcvd)%s "
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:604
-#, fuzzy, c-format
+#, c-format
 msgid "%s (rcvd)%s %s %s%s by %s%s %s "
-msgstr "%s (rcbd)%s %s %s by %s"
+msgstr "%s (rcvd)%s %s %s%s by %s%s %s "
 
 #. %1$s:  report.total_success | html 
 #. %2$s:  report.total_records | html 
@@ -3469,9 +3480,9 @@ msgstr "%s 0 %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "%s 0 records %s "
-msgstr "%s erregistroak %s: %s"
+msgstr "%s erregistroak 0 %s "
 
 #. %1$s:  UNLESS ( routinglists ) 
 #. %2$s:  ELSIF ( routinglists.count == 1 ) 
@@ -3480,12 +3491,13 @@ msgstr "%s erregistroak %s: %s"
 #. %5$s:  routinglists.count | html 
 #. %6$s:  END 
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s 0 subscription routing lists %s %s subscription routing list %s %s "
 "subscription routing lists %s "
 msgstr ""
-"%s %s Suscripción originando lista(s) %s 0 Suscripción originando listas %s "
+"%s Harpidetzak zerrenda(k) sortzen %s %s harpidetza zerrendara zuzentzen %s "
+"%s harpidetza zerrendetara zuzentzen %s "
 
 #. %1$s:  IF !rota.active 
 #. %2$s:  ELSE 
@@ -3799,7 +3811,7 @@ msgstr "%s Itxita %s %s Irekia %s "
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:846
 #, c-format
 msgid "%s Confirm password: "
-msgstr "%s Confirmar contraseña: "
+msgstr "%s Pasahitza baieztatu:"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -3835,18 +3847,18 @@ msgstr "%s Herrialdea:"
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:22
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "%s Create a new "
-msgstr "Hiri berri bat sortu"
+msgstr "%s Berri bat sortu "
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "%s Create a new club template %s "
-msgstr "Txantiloi berria sortu"
+msgstr "%s Kluben txantiloi berria sortu %s "
 
 #. %1$s:  IF tablename == 'currencies-table' 
 #. %2$s:  ELSIF pagename == 'additem' AND tablename == 'itemst' 
@@ -3865,9 +3877,9 @@ msgstr "%s Jaiotze data:"
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:505
-#, fuzzy, c-format
+#, c-format
 msgid "%s Default "
-msgstr "Lehenetsia"
+msgstr "%s Lehenetsia "
 
 #. %1$s:  IF humanbranch 
 #. %2$s:  Branches.GetName( humanbranch ) | html 
@@ -4190,15 +4202,15 @@ msgstr "%s Aldatu autoritate mota %s Autoritate mota berria %s"
 
 #. %1$s:  IF club 
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "%s Modify club "
-msgstr "%s%sAldatu etiketa"
+msgstr "%sAldatu kluba"
 
 #. %1$s:  IF club_template 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:38
-#, fuzzy, c-format
+#, c-format
 msgid "%s Modify club template "
-msgstr "Editar plantillas de etiquetas"
+msgstr "%s Editatu cluben txantiloia "
 
 #. %1$s:  IF currency 
 #. %2$s:  ELSE 
@@ -4630,8 +4642,8 @@ msgid ""
 "%s Pending %s Accepted %s Ordered %s Rejected %s Checked %s %s %s Status "
 "unknown %s %s "
 msgstr ""
-"%s Pendiente %s Onartua %s Eskatua %s Errefusatuta %s Baieztatua %s %s %s "
-"Egoera ezezaguna %s %s "
+"%s Egiteke %s Onartua %s Eskatua %s Ezeztatua %s Onartua %s %s %s Egoera "
+"ezezaguna %s %s "
 
 #. For the first occurrence,
 #. %1$s:  IF ar.status == 'PENDING' 
@@ -5022,9 +5034,9 @@ msgstr "%sEz da eskaerarik jaso.%s"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:277
-#, fuzzy, c-format
+#, c-format
 msgid "%s There is no CSV profile defined. "
-msgstr "Ez dago liburutegirik definituta."
+msgstr "%s Ez dago CSV profilik zehaztua. "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -5089,9 +5101,9 @@ msgstr "%s  No hay valores definidos para  %s %s %s %s "
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:233
-#, fuzzy, c-format
+#, c-format
 msgid "%s This CSV Profile does not exist. %s "
-msgstr "%s Este número  no existe. %s "
+msgstr "%s CSV profil hau  ez dago. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -5641,13 +5653,13 @@ msgstr "%s atxikitutako elementua(k)."
 #. %2$s:  FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers 
 #. %3$s:  not_deleted_itemnumber.itemnumber | html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:174
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:213
 #, c-format
 msgid "%s item(s) could not be deleted: %s%s%s"
 msgstr "%s elementu ezin izan d(ir)a borratu: %s%s%s"
 
 #. %1$s:  deleted_items | html 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:162
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:201
 #, c-format
 msgid "%s item(s) deleted."
 msgstr "%s elementu ezabatu dira."
@@ -5898,7 +5910,7 @@ msgid "%s record(s)"
 msgstr "%s erregistroa(k)"
 
 #. %1$s:  deleted_records | html 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:163
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:202
 #, c-format
 msgid "%s record(s) deleted."
 msgstr "%s registros eliminados."
@@ -6099,10 +6111,10 @@ msgstr "%s |%s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  data.dateofbirth | $KohaDates 
-#. %3$s:  data.category_description | html 
-#. %4$s:  data.category_type | html 
-#. %5$s:  data.branchname | html 
-#. %6$s:  data.dateexpiry | html 
+#. %3$s:  data.category_description | html | $To
+#. %4$s:  data.category_type | html | $To
+#. %5$s:  data.branchname | html | $To
+#. %6$s:  data.dateexpiry | html | $To
 #. %7$s:  IF data.overdues 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
 #, fuzzy, c-format
@@ -6118,7 +6130,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:733
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:735
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sEz dago mailegatuta %s "
@@ -6544,7 +6556,7 @@ msgid "%s(deleted patron)%s "
 msgstr "%s(socio eliminado)%s "
 
 #. For the first occurrence,
-#. %1$s:  IF (listincgst == 1) 
+#. %1$s:  IF (invoiceincgst == 1)
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:297
@@ -6592,17 +6604,11 @@ msgstr ""
 "%s, %s %sErrepikagarria, %sErrepikaezina, %s %sNahitaezkoa, %sAukerakoa, %s "
 "%sezkutatuta, %s %sURL bat da, %s %s | "
 
+#. For the first occurrence,
 #. %1$s:  IF ( item_loo.author ) 
 #. %2$s:  item_loo.author | html 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:108
-#, c-format
-msgid "%s, by %s%s"
-msgstr "%s, nork %s%s"
-
-#. %1$s:  IF ( item_loo.author ) 
-#. %2$s:  item_loo.author | html 
-#. %3$s:  END 
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:123
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:183
 #, fuzzy, c-format
 msgid "%s, by %s%s "
@@ -7070,7 +7076,7 @@ msgstr ""
 #. %1$s:  IF ( not_deleted_loo.book_on_loan ) 
 #. %2$s:  ELSIF ( not_deleted_loo.book_reserved ) 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:228
 #, c-format
 msgid "%sItem is checked out%sItem has a waiting hold%s"
 msgstr "%sElementua maileguan hartu da%sElementuak erreserba bat du hartzeko%s"
@@ -7091,9 +7097,9 @@ msgstr ""
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:107
-#, c-format
+#, fuzzy, c-format
 msgid "%sItem type %sCollection %sShelving location %sSomething else %s "
-msgstr "%sItem type %sCollection %sShelving location %sSomething else %s "
+msgstr "%sItem mota %sBilduma %sKokalekua % Gehiago %s "
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  INCLUDE 'doc-head-close.inc' 
@@ -7753,13 +7759,13 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Tema y téminos generales "
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:87
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and narrower terms"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Tema y términos específicos"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Gai eta termino espezifikoak"
 
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:90
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:92
 #, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Subject and related terms"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Temas y términos relacionados"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Gai eta termino erlazionatuak"
 
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:74
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:76
@@ -7905,15 +7911,15 @@ msgstr "&rsaquo; %s Editatu berria%sGehitu berria%s%sBerriak%s"
 
 #. %1$s:  IF club 
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; %s Modify club "
-msgstr "&rsaquo; Aldatu abisua%s"
+msgstr "&rsaquo; %s Editatu kluba "
 
 #. %1$s:  IF club_template 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; %s Modify club template "
-msgstr "&rsaquo; Editatu etiketa txantiloia"
+msgstr "&rsaquo; %s Editatu klubaren txantiloia "
 
 #. %1$s:  IF list.patron_list_id 
 #. %2$s:  ELSE 
@@ -8038,7 +8044,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:14
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:15
 #, fuzzy, c-format
 msgid "&rsaquo; %sCreate routing list%sEdit routing list%s %s "
 msgstr "&rsaquo; %sSortu banabide zerrenda%sEditatu banabide zerrenda%s"
@@ -8219,7 +8225,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
 #, c-format
 msgid "&rsaquo; %sRecord matching rules%s"
-msgstr "&rsaquo; %sErregistroen bat etortze arauak%s"
+msgstr "&rsaquo; %sErregistroen bateratze arauak%s"
 
 #. %1$s:  UNLESS blocking_error 
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 
@@ -8451,9 +8457,9 @@ msgid "&rsaquo; Checkout history for "
 msgstr "&rsaquo; Honen mailegu historia:"
 
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:19
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Checkout notes "
-msgstr "&rsaquo; Itzuli"
+msgstr "&rsaquo; Itzuli "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:12
 #, c-format
@@ -8740,9 +8746,9 @@ msgstr "&rsaquo; Erreserba erlazioak"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Holds history for %s"
-msgstr "&rsaquo; Honen zirkulazio historia: %s "
+msgstr "&rsaquo; Honen zirkulazio historia: %s"
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:21
 #, c-format
@@ -8782,7 +8788,7 @@ msgstr "&rsaquo; Itema bilatu"
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:15
 #, c-format
 msgid "&rsaquo; Item search fields "
-msgstr "&rsaquo; Item bilaketa-eremuak "
+msgstr "&rsaquo; Itemen bilaketa-eremuak"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:13
 #, c-format
@@ -8970,9 +8976,9 @@ msgid "&rsaquo; Pending discharge requests"
 msgstr "&rsaquo; Plugins deshabilitados"
 
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:18
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Pending on-site checkouts"
-msgstr "&rsaquo; Ezer mailegatu ez duten bazkideak"
+msgstr "&rsaquo; Maileguen inguruko oharrak"
 
 #. %1$s:  title | html 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:26
@@ -9183,7 +9189,7 @@ msgstr "&rsaquo; Txandakako bildumak"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:16
 #, fuzzy, c-format
 msgid "&rsaquo; Rules %s Automatic item modifications by age %s "
-msgstr "Itemen moldaketa automatikoa adina bidez"
+msgstr "Adin bidezko item moldaketa automatikoa"
 
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
 #, fuzzy, c-format
@@ -9328,9 +9334,9 @@ msgstr "&rsaquo; Harpidetza-historiala"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "&rsaquo; Subscription routing lists for %s"
-msgstr "&rsaquo; Las listas de suscripción de enrutamiento para %s"
+msgstr "&rsaquo; Zirkulazio-zerrendetara harpidetza, honentzat %s"
 
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:17
 #, c-format
@@ -9648,18 +9654,18 @@ msgid ""
 "(Inclusive, default is %s days ago to %s days ahead. Set other date ranges "
 "as needed.)"
 msgstr ""
-"(Horrez gain, balio lehenetsia duela %s egun eta gaur bitartean da; "
-"beharrezkoa izanez gero, ezarri beste bitarte batzuk.)"
+"(Balio lehenetsia duela %s egun eta gaur bitartekoa da; beharrezkoa izanez "
+"gero, ezarri beste epe batzuk)"
 
 #. %1$s:  HoldsToPullStartDate | html 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:227
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "(Inclusive, default is %s days ago to today. Set other date ranges as "
 "needed.)"
 msgstr ""
-"(Horrez gain, balio lehenetsia duela %s egun eta gaur bitartean da; "
-"beharrezkoa izanez gero, ezarri beste bitarte batzuk.)"
+"(Horrez gain, balio lehenetsia duela %s egun eta gaur bitartean da. "
+"Beharrezkoa izanez gero, ezarri beste bitarte batzuk.)"
 
 #: intranet-tmpl/prog/en/modules/about.tt:1092
 #, c-format
@@ -9739,7 +9745,7 @@ msgstr ""
 "errenkadak Textarearentzat)"
 
 #. %1$s:  cur_active | html 
-#. %2$s:  IF (listincgst == 1) 
+#. %2$s:  IF (invoiceincgst == 1)
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:292
@@ -10419,9 +10425,9 @@ msgstr "%s izeneko zerrenda badago jada!"
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:116
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:166
-#, fuzzy, c-format
+#, c-format
 msgid "A field name is required"
-msgstr "Este campo es obligatorio."
+msgstr "Eremu hau bete beharrekoa da"
 
 #. %1$s:  error_duplicate_title | $KohaSpan class = 'name' | $raw 
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:38
@@ -10457,7 +10463,7 @@ msgstr ""
 msgid "A pattern with this name already exists."
 msgstr "%s izeneko zerrenda badago jada!"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:596
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:598
 #, fuzzy, c-format
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr "%s-ren zure ordainketa zure kontura aplikatu da"
@@ -10664,7 +10670,7 @@ msgstr "Kontu kudeaketaren kuota"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:296
 #, c-format
 msgid "Account number: "
-msgstr "Número del cuenta: "
+msgstr "Kontu korronte zenbakia: "
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
@@ -10808,7 +10814,7 @@ msgid "Acquisitions"
 msgstr "Eskurapenak"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:5
-#, fuzzy, c-format
+#, c-format
 msgid "Acquisitions home"
 msgstr "Eskurapenak"
 
@@ -11095,10 +11101,10 @@ msgstr "Hiztegira gehitu definizioa"
 msgid "Add a mapping"
 msgstr "Gehitu mapaketa bat"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:106
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:107
 #, c-format
 msgid "Add a message for:"
-msgstr "Gehitu honentzako mezu bat:"
+msgstr "Gehitu mezu bat:"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:23
 #, c-format
@@ -11233,7 +11239,7 @@ msgstr "Bazkide-kopuru bidez gehitu:"
 msgid "Add checked"
 msgstr "Gehitu hautatutakoa"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:19
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:20
 #, c-format
 msgid "Add child"
 msgstr "Gehitu haurra"
@@ -11388,10 +11394,10 @@ msgstr "Gehitu bat etortzearen egiaztapena"
 msgid "Add match point"
 msgstr "Agregar punto de coincidencia"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:45
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:46
+#, c-format
 msgid "Add message"
-msgstr "Gehitu mezu berri bat"
+msgstr "Gehitu mezu bat"
 
 #. INPUT type=button name=add_multiple_copies
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:347
@@ -11462,7 +11468,7 @@ msgstr "Gehitu eskaera"
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:2
 #, c-format
 msgid "Add order to basket"
-msgstr "Agregar pedido a la cesta"
+msgstr "Gehitu eskaera saski honetara"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:194
@@ -11513,7 +11519,7 @@ msgstr ""
 msgid "Add quote"
 msgstr "Agregar cita"
 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:73
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:78
 #, c-format
 msgid "Add recipients"
 msgstr "Gehitu hartzaileak"
@@ -11933,7 +11939,7 @@ msgstr "Administrazioa"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:33
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "Administration "
 msgstr "Administrazioa"
 
@@ -12283,7 +12289,7 @@ msgstr "%s osteko maileguak dituzten bazkideak anonimizatu egin dira"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:25
 #, c-format
 msgid "All collection codes"
-msgstr "Bildumen kode guztiak"
+msgstr "Bilduma kode guztiak"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:190
 #, c-format
@@ -12345,7 +12351,7 @@ msgstr "Liburutegi guztiak"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:21
 #, c-format
 msgid "All locations"
-msgstr "Todas las ubicaciones"
+msgstr "Kokaleku guztiak"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:121
 #, c-format
@@ -12425,9 +12431,9 @@ msgid "Allow access to the reports module"
 msgstr "Utzi txostenen modulura sartzen"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:16
-#, fuzzy, c-format
+#, c-format
 msgid "Allow changes to contents from: "
-msgstr "Todas las imágenes vienen desde"
+msgstr "Utzi edukietan editatzen:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:415
 #, c-format
@@ -12441,9 +12447,9 @@ msgid "Allow public downloads:"
 msgstr "Utzi deskarga publikoak:"
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "Allow public enrollment:"
-msgstr "Utzi deskarga publikoak:"
+msgstr "Utzi izenemate publikoak:"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:17
 #, c-format
@@ -12635,7 +12641,7 @@ msgstr "Ordezko telefonoa:"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:37
 #, c-format
 msgid "Always show checkouts immediately"
-msgstr "Mostrar siempre los préstamos de inmediato"
+msgstr "Erakutsi maileguak azkar"
 
 #: intranet-tmpl/prog/en/modules/about.tt:686
 #, c-format
@@ -12731,20 +12737,20 @@ msgstr "Akats bat gertatu da. Faktura ezin da sortu."
 
 #. %1$s:  batch_id | html 
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:45
-#, fuzzy, c-format
+#, c-format
 msgid "An error has occurred and no items have been added to batch %s. "
-msgstr "Akats bat gertatu da. Faktura ezin da sortu."
+msgstr "Akats bat gertatu da eta ez da itemik lotu lotera %s. "
 
 #. %1$s:  batch_id | html 
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:49
-#, fuzzy, c-format
+#, c-format
 msgid "An error has occurred and the item(s) was not removed from batch %s. "
-msgstr "Akats bat gertatu da. Faktura ezin da sortu."
+msgstr "Akats bat gertatu da eta itemak ez dira lotetik atera %s. "
 
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:37
-#, fuzzy, c-format
+#, c-format
 msgid "An error has occurred while attempting to upload the image file. "
-msgstr "%s Errore bat jazo da zure eskaera prozesatzerakoan."
+msgstr "Akats bat gertatu da irudiaren fitxategia kargatzerakoan."
 
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:17
 #, c-format
@@ -12990,9 +12996,9 @@ msgid "Any changes will not be saved. Continue?"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:96
-#, fuzzy, c-format
+#, c-format
 msgid "Any collection"
-msgstr "bilduma"
+msgstr "Edozein bilduma"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:182
 #, c-format
@@ -13033,7 +13039,7 @@ msgstr ""
 msgid "Any library"
 msgstr "Cualquier biblioteca"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:601
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:603
 #, fuzzy, c-format
 msgid "Any lost item fees for this item will remain on the patron's account."
 msgstr ""
@@ -13072,9 +13078,9 @@ msgid "Any: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "Anyone seeing this list"
-msgstr "Ezabatu zerrenda hau"
+msgstr "Edonork"
 
 #: intranet-tmpl/prog/en/modules/about.tt:46
 #, c-format
@@ -13230,7 +13236,7 @@ msgstr "Ziur zaude zerrenda hau ezabatu nahi duzula?"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:682
 #, c-format
 msgid "Are you sure you want to close basket %s?"
-msgstr "Ziru zaude %s saskia itxi nahi duzula?"
+msgstr "Ziur zaude %s saskia itxi nahi duzula?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:851
@@ -13254,9 +13260,9 @@ msgid "Are you sure you want to close this subscription?"
 msgstr "¿Está seguro de querer cerrar esta suscripción?"
 
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:202
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete "
-msgstr "Ziur al zaude ezabatu nahi duzula %s %s?"
+msgstr "Ziur al zaude ezabatu nahi duzula "
 
 #. For the first occurrence,
 #. SCRIPT
@@ -13273,9 +13279,8 @@ msgstr "Ziur al zaude ezabatu nahi duzula %s %s?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:104
-#, fuzzy
 msgid "Are you sure you want to delete %s?"
-msgstr "Ziur al zaude ezabatu nahi duzula %s %s?"
+msgstr "Ziur al zaude ezabatu nahi duzula %s?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:104
@@ -13297,9 +13302,8 @@ msgstr "Ziur al zaude irudi hau(ek) ezabatu nahi d(it)uzula: %s?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:212
-#, fuzzy
 msgid "Are you sure you want to delete server %s?"
-msgstr "Ziur al zaude ezabatu nahi duzula %s %s?"
+msgstr "Ziur al zaude zerbitzaria ezabatu nahi duzula %s?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/catalog-strings.inc:1
@@ -13633,9 +13637,9 @@ msgstr "¿Está seguro de que quiere cancelar sus cambios?"
 
 #. %1$s:  basketname | html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:706
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to generate an EDIFACT order and close basket %s?"
-msgstr "Ziru zaude %s saskia itxi nahi duzula?"
+msgstr "Ziur zaude %s saskia itxi nahi duzula?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:183
@@ -13702,6 +13706,12 @@ msgid "Are you sure you want to remove this list?"
 msgstr "¿Está seguro de querer eliminar esta lista? "
 
 #. SCRIPT
+#: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
+#, fuzzy
+msgid "Are you sure you want to renew this patron's registration?"
+msgstr "Ziur al zaude bilduma hau ezabatu nahi duzula?"
+
+#. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:878
 msgid "Are you sure you want to reopen this basket?"
 msgstr "Ziur zaude saski hau berriro ireki nahi duzula?"
@@ -13736,6 +13746,14 @@ msgstr "Está seguro de querer eliminar la etiqueta de este título?"
 #, fuzzy
 msgid "Are you sure you want to uninstall the plugin %s?"
 msgstr "Ziur al zaude zerrenda hau ezabatu nahi duzula %s?"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
+#, fuzzy
+msgid ""
+"Are you sure you want to update this child to an Adult category? This cannot "
+"be undone."
+msgstr "Ziur zaude bazkide hau ezabatu nahi duzula? Hau ezin da desegin."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:112
@@ -13994,7 +14012,7 @@ msgstr "Autoritatea"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:174
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
@@ -14545,7 +14563,7 @@ msgstr "Mar"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:80
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:101
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:182
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:180
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:219
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:365
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:280
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
@@ -14570,7 +14588,7 @@ msgstr "Mar"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:175
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:94
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:112
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:220
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
@@ -14685,9 +14703,9 @@ msgid "Barcode: %s "
 msgstr "Barra kodea: %s"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:205
-#, fuzzy, c-format
+#, c-format
 msgid "Barcodes file"
-msgstr "Barra kodearen fitxategia:"
+msgstr "Barra kodearen fitxategia"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:38
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:98
@@ -14743,7 +14761,7 @@ msgstr "Nivel-base gastado"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:63
 #, c-format
 msgid "Basic constraints"
-msgstr "Restricciones básicas"
+msgstr "Oinarrizko murrizketak"
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:182
 #, fuzzy, c-format
@@ -15433,7 +15451,7 @@ msgid "Billing place:"
 msgstr "Fakturazio lekua:"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "Billing place: "
 msgstr "Fakturazio lekua:"
 
@@ -15471,13 +15489,13 @@ msgstr "Blokeatuta!"
 msgid "Bonnie Crawford"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:707
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:709
 #, c-format
 msgid "Book drop mode"
 msgstr "Buzoi modua"
 
 #. %1$s:  dropboxdate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:645
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:647
 #, c-format
 msgid "Book drop mode. (Effective checkin date is %s )."
 msgstr "Buzoi modua. (Itzulpen data %s da)."
@@ -15528,13 +15546,13 @@ msgstr "Bazkide zenbakia "
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:65
 #, c-format
 msgid "Borrowernumber: "
-msgstr "Bazkidezenbakia: "
+msgstr "Bazkide zenbakia: "
 
 #. %1$s:  patron.borrowernumber | html 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:75
-#, fuzzy, c-format
+#, c-format
 msgid "Borrowernumber: %s"
-msgstr "Bazkidezenbakia: "
+msgstr "Bazkide zenbakia: %s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
@@ -16001,14 +16019,14 @@ msgstr "Kargu mota"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:191
 #, c-format
 msgid "Cache expiry (seconds)"
-msgstr "Caché expira (sergundos)"
+msgstr "Caché-aren iraungitzea (sergunduak)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:787
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
 #, c-format
 msgid "Cache expiry:"
-msgstr "Caché de caducidad: "
+msgstr "Caché-aren iraungitze data: "
 
 #: intranet-tmpl/prog/en/modules/about.tt:607
 #, c-format
@@ -16094,7 +16112,7 @@ msgstr "Katalogo zk."
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:177
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:52
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:109
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:217
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:161
@@ -16123,7 +16141,7 @@ msgstr "Signatura topográfica (9-0 a A-Z)"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:209
 #, c-format
 msgid "Call number (Z-A to 9-0)"
-msgstr "Signatura topográfica (Z-A a 9-0)"
+msgstr "Signatura topografikoa (Z-A a 9-0)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:15
 #, fuzzy, c-format
@@ -16162,9 +16180,9 @@ msgid "Callnumber"
 msgstr "Katalogo zenbakia"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "Callnumber classification scheme"
-msgstr "Sailkapen iturri berria"
+msgstr "Sailkapenaren eskema"
 
 #. %1$s:  subscription.callnumber | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:664
@@ -16312,7 +16330,7 @@ msgstr "Erregistro hau ezin da gorde eremu hauetan ezer idatzi ez delako:"
 #: intranet-tmpl/prog/en/includes/holds_table.inc:187
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:172
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:133
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:134
 #: intranet-tmpl/prog/en/includes/modals/serials_multi_receiving.inc:26
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:133
@@ -16338,7 +16356,7 @@ msgstr "Erregistro hau ezin da gorde eremu hauetan ezer idatzi ez delako:"
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:150
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:181
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:148
@@ -16548,7 +16566,7 @@ msgstr "Ezeztatuta"
 msgid "Cancel hold"
 msgstr "Ezeztatu erreserba"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:314
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:316
 #, fuzzy, c-format
 msgid "Cancel hold "
 msgstr "Ezeztatu erreserba"
@@ -16711,8 +16729,8 @@ msgstr "Ezin du izan konmutatua"
 msgid "Cannot cancel receipt. Possible reasons : "
 msgstr "No se puede cancelar el recibo. Posibles razones:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:598
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:606
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:600
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:608
 #, c-format
 msgid "Cannot check in"
 msgstr "No se puede devolver "
@@ -16768,7 +16786,7 @@ msgstr "No se puede eliminar moneda "
 msgid "Cannot delete patron"
 msgstr "No se puede eliminar socio"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:107
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:112
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:172
 #, c-format
 msgid "Cannot edit"
@@ -16927,9 +16945,9 @@ msgstr "Lista de número de tarjeta (uno por cada línea):  "
 #. %2$s:  maxlength_cardnumber | html 
 #. %3$s:  ELSIF maxlength_cardnumber 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:559
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters. %s "
-msgstr "Txartel zenbakia %s eta %s karaktere artean egon behar du."
+msgstr "Txartel zenbakia %s eta %s karaktere artean egon behar du.%s "
 
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  ELSIF minlength_cardnumber && maxlength_cardnumber 
@@ -17364,10 +17382,10 @@ msgstr "Aldatu eskaeraren oharrak (eskaera zk. %s)"
 msgid "Change order vendor note (order no. %s)"
 msgstr "Aldatu eskaeraren oharrak (eskaera zk. %s)"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:22
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:23
 #, c-format
 msgid "Change password"
-msgstr "Cambiar contraseña"
+msgstr "Aldatu pasahitza"
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
@@ -17473,9 +17491,9 @@ msgid "Chart settings"
 msgstr "Estado de préstamo:"
 
 #: intranet-tmpl/prog/en/includes/chart.inc:13
-#, fuzzy, c-format
+#, c-format
 msgid "Chart type: "
-msgstr "Inprimatu"
+msgstr "Mota"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:213
@@ -17535,7 +17553,7 @@ msgstr "Aurreko maileguak"
 #: intranet-tmpl/prog/en/includes/circ-search.inc:36
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:26
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:47
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:652
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:654
 #, c-format
 msgid "Check in"
 msgstr "Itzultzea"
@@ -17548,7 +17566,7 @@ msgstr "Itzultzea"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:554
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:556
 #, c-format
 msgid "Check in message"
 msgstr "Mensaje de devolución"
@@ -17818,7 +17836,7 @@ msgid "Checked out: "
 msgstr "Maileguan hartuta "
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:105
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:725
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
 #, c-format
 msgid "Checked-in items"
 msgstr "Itzulitako elementuak"
@@ -17860,7 +17878,7 @@ msgstr "Nori mailegatua"
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:63
 #, c-format
 msgid "Checking out to %s"
-msgstr "Nori maileguan uzten a %s"
+msgstr "Mailegua uzten zaio %s"
 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:194
 #, fuzzy, c-format
@@ -17945,14 +17963,13 @@ msgstr "Noiz mailegatuta"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:274
-#, fuzzy
 msgid "Checkout or renew"
-msgstr "Noiz mailegatuta"
+msgstr "Mailegatu edo berritu"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:535
-#, fuzzy, c-format
+#, c-format
 msgid "Checkout settings"
-msgstr "Estado de préstamo:"
+msgstr "Maileguaren egoera"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:82
 #, c-format
@@ -17984,7 +18001,7 @@ msgstr "Los préstamos estan BLOQUEADOS porque el socio tiene items con retraso"
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "Los préstamos estan BLOQUEADOS porque el socio tiene items con retraso"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:763
 #, fuzzy, c-format
 msgid "Checkouts:"
 msgstr "Maileguak "
@@ -18343,7 +18360,7 @@ msgstr "Zirkulazio eta isunen arauak"
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:26
 #, c-format
 msgid "Circulation history"
-msgstr "Historial de circulación"
+msgstr "Zirkulazio historia"
 
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:6
 #, fuzzy, c-format
@@ -18616,7 +18633,7 @@ msgstr "Inportatze sorta garbitu da #%s"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:205
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:555
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:137
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:676
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:678
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -18690,17 +18707,17 @@ msgid "Clear field"
 msgstr "Garbitu eremua"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid "Clear fields"
-msgstr "Garbitu eremua"
+msgstr "Garbitu eremuak"
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid "Clear filter"
-msgstr "Garbitu iragazkiak"
+msgstr "Garbitu iragazkia"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:146
-#, c-format
+#, fuzzy, c-format
 msgid "Clear on loan"
 msgstr "Garbitu mailegua"
 
@@ -18713,20 +18730,20 @@ msgstr "Garbitu pantaila"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:35
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:46
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid "Clear search form"
-msgstr "Bilaketa-terminuak sartu"
+msgstr "Garbitu bilaketa-terminuak"
 
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:38
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:75
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:118
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:155
-#, fuzzy, c-format
+#, c-format
 msgid "Clear selection on visible rows"
 msgstr "Mesedez, bat besterik ez aukeratu"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:128
-#, c-format
+#, fuzzy, c-format
 msgid "Clear used authorities"
 msgstr "Garbitu erabilitako autoritateak"
 
@@ -18735,7 +18752,7 @@ msgstr "Garbitu erabilitako autoritateak"
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:75
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:86
 msgid "Click ID to select/deselect quote"
-msgstr "Clicar ID para seleccionar/deseleccionar quote"
+msgstr "Egin klik IDan aukeratu eta kentzeko quote-a"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:227
 #, c-format
@@ -18749,9 +18766,9 @@ msgid "Click here to define a printer profile."
 msgstr "Egin klik hemen inprimagailu profil bat zehazteko."
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:186
-#, fuzzy, c-format
+#, c-format
 msgid "Click here to go back to booksellers page"
-msgstr "Sakatu hemen linean sartzeko "
+msgstr "Sakatu hemen linean sartzeko"
 
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:49
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:42
@@ -18762,7 +18779,7 @@ msgstr "Egin klik hemen erregistro konbinatua ikusteko."
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:815
 #, c-format
 msgid "Click on an image to view it in the image viewer"
-msgstr "Egin klik irudi batetan bisualizadorean ikusteko"
+msgstr "Egin klik irudi batetan bisorean ikusteko"
 
 #: intranet-tmpl/prog/en/modules/tools/quotes.tt:31
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:37
@@ -18771,13 +18788,13 @@ msgid ""
 "Click on any field to edit the contents; Press the &lt;Enter&gt; key to save "
 "edit."
 msgstr ""
-"Seleccionar en algún campo para editar contenidos; presionar  &lt;Enter&gt; "
-"tecla para salvar edición."
+"Aukera ezazu eremu bat edukiak editatzeko; Klik egin &lt;Enter&gt; teklan "
+"edizioa gordetzeko."
 
 #: intranet-tmpl/prog/en/modules/admin/transport-cost-matrix.tt:48
 #, c-format
 msgid "Click on individual cells to edit."
-msgstr "Haga clic en celdas individuales para editar."
+msgstr "Egin klik zelda indibidualetan editatzeko."
 
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:38
 #, c-format
@@ -19080,47 +19097,47 @@ msgstr "Noiz itxita:"
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:39
 #, c-format
 msgid "Club "
-msgstr ""
+msgstr "Kluba"
 
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:23
-#, fuzzy, c-format
+#, c-format
 msgid "Club enrollments for "
-msgstr "Izen-ematea:"
+msgstr "Kluban izen-ematea "
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Club fields:"
-msgstr "Azpieremuak:"
+msgstr "Klubaren eremuak:"
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:29
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:31
-#, fuzzy, c-format
+#, c-format
 msgid "Club template "
-msgstr "Txantiloi berria"
+msgstr "Klubaren txantiloia"
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Club templates"
-msgstr "Etiketa txantiloiak"
+msgstr "Klubaren txantiloiak"
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:104
 #, c-format
 msgid "Clubs"
-msgstr ""
+msgstr "Klubak"
 
 #. For the first occurrence,
 #. %1$s:  enrollments.count | html 
 #. %2$s:  enrollable.count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:676
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:838
-#, fuzzy, c-format
+#, c-format
 msgid "Clubs (%s/%s) "
-msgstr "%s %s/%s "
+msgstr "Klubak (%s/%s) "
 
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Clubs currently enrolled in"
-msgstr ") murriztua dago."
+msgstr "Egun, izena emanda zauden klubak"
 
 #: intranet-tmpl/prog/en/modules/clubs/patron-clubs-tab.tt:37
 #, c-format
@@ -19203,7 +19220,7 @@ msgstr "Cobrar a socio: "
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:146
 #, c-format
 msgid "Collection"
-msgstr "Material mota"
+msgstr "Bilduma"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:13
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:27
@@ -19226,18 +19243,18 @@ msgstr "Bilduma"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:179
 #, c-format
 msgid "Collection code"
-msgstr "Bilduma kodeak"
+msgstr "Bilduma kodea"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:57
 #: intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:49
 #, c-format
 msgid "Collection code:"
-msgstr "Bilduma kodeak:"
+msgstr "Bilduma kodea:"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:123
-#, fuzzy, c-format
+#, c-format
 msgid "Collection code: "
-msgstr "Bilduma kodeak:"
+msgstr "Bilduma kodea:"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:58
 #, c-format
@@ -19247,24 +19264,24 @@ msgstr "Bilduma ondo ezabatu da"
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:62
 #, c-format
 msgid "Collection failed to be deleted"
-msgstr "Bilduma ezabatzerakoan eten da"
+msgstr "Bilduma ezabatzerakoan eten egin da"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:103
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:257
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:653
 #, c-format
 msgid "Collection title:"
-msgstr "Bilduma izenburua:"
+msgstr "Bildumaren izenburua:"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:24
 #, c-format
 msgid "Collection transferred successfully"
-msgstr "Colección transferida exitosamente"
+msgstr "Bilduma ondo ezabatu da"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:66
 #, c-format
 msgid "Collection:"
-msgstr "Bilduma:"
+msgstr "Bilduma: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:242
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:96
@@ -19281,9 +19298,9 @@ msgid "Collection: %s "
 msgstr "Bilduma: %s "
 
 #: intranet-tmpl/prog/en/includes/facets.inc:25
-#, fuzzy, c-format
+#, c-format
 msgid "Collections"
-msgstr "Material mota"
+msgstr "Bildumak"
 
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:72
 #, c-format
@@ -19314,7 +19331,7 @@ msgstr "Zutabearen izena"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 msgid "Column visibility"
-msgstr "Zutabearen ikusgarritasuna"
+msgstr "Zutabea ikusgarri"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:180
 #, c-format
@@ -19422,7 +19439,7 @@ msgstr "Comentarios esperando moderación"
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:151
 #, c-format
 msgid "Comments pending approval"
-msgstr "Comentarios con aprobación pendiente"
+msgstr "Onarpenaren zain dauden iritziak"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:99
 #, c-format
@@ -19517,7 +19534,7 @@ msgstr ""
 #. INPUT type=submit name=submitbutton
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:344
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:346
 #, c-format
 msgid "Confirm"
 msgstr "Baieztatu"
@@ -19591,13 +19608,13 @@ msgstr "Berretsi etiketa ezabatzea"
 msgid "Confirm deletion of this vendor ?"
 msgstr "Berretsi hornitzaile hau ezabatzea?"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:305
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:534
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:307
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:536
 #, fuzzy, c-format
 msgid "Confirm hold "
 msgstr "Berretsi erreserba"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:527
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:529
 #, fuzzy, c-format
 msgid "Confirm hold and transfer "
 msgstr "Berretsi erreserba eta transferitzea"
@@ -19613,9 +19630,9 @@ msgid "Confirm new password:"
 msgstr "Confirmar nueva contraseña: "
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm password: "
-msgstr "Pasahitza baieztatu"
+msgstr "Pasahitza baieztatu:"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:22
 #, c-format
@@ -20198,9 +20215,9 @@ msgid "Count total items"
 msgstr "Zenbatu elementuak, guztira"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:318
-#, fuzzy, c-format
+#, c-format
 msgid "Count total items:"
-msgstr "Zenbatu elementuak, guztira"
+msgstr "Zenbatu elementuak, guztira:"
 
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:251
 #, fuzzy, c-format
@@ -20210,9 +20227,9 @@ msgstr "Exportar registros bibliográficos"
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:251
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:326
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:255
-#, fuzzy, c-format
+#, c-format
 msgid "Count unique bibliographic records:"
-msgstr "Exportar registros bibliográficos"
+msgstr "Zenbatu erregistro bibliografiko bakarrak:"
 
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:251
 #, c-format
@@ -20370,14 +20387,14 @@ msgid "Create analytics"
 msgstr "Sortu analitika"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:139
-#, fuzzy, c-format
+#, c-format
 msgid "Create and edit club templates"
-msgstr "Txantiloi berria sortu"
+msgstr "Sortu eta editatu klubaren txantiloiak"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:138
-#, fuzzy, c-format
+#, c-format
 msgid "Create and edit clubs"
-msgstr "Sortu zerrenda berri bat"
+msgstr "Sortu eta editatu klubak"
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:112
 #, c-format
@@ -20411,9 +20428,9 @@ msgid "Create authority framework for %s using "
 msgstr "Sortu lan orrien autoritatea honentzat: %s, hau erabilita"
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:73
-#, fuzzy, c-format
+#, c-format
 msgid "Create chart"
-msgstr "Erregistroa sortu"
+msgstr "Grafikoa sortu"
 
 #. %1$s:  framework.frameworkcode | html 
 #. %2$s:  framework.frameworktext | html 
@@ -20429,9 +20446,9 @@ msgid "Create from SQL"
 msgstr "Sortu SQLtik abiatuta"
 
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid "Create guided report"
-msgstr "Nuevo informe guiado"
+msgstr "Sortu txosten gidatua"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:42
 #, fuzzy, c-format
@@ -20445,9 +20462,9 @@ msgstr "Txantiloia sortu"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:115
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:298
-#, fuzzy, c-format
+#, c-format
 msgid "Create items when:"
-msgstr "Txantiloia sortu"
+msgstr "Itema sortu kasu hauetan:"
 
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:40
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:30
@@ -20470,7 +20487,7 @@ msgstr "Sortu eskuzko faktura"
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:5
 #, c-format
 msgid "Create new authority"
-msgstr "Sorte autoritate berria"
+msgstr "Sortu autoritate berria"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:55
@@ -20533,7 +20550,7 @@ msgstr "Sortu txostenak SQLtik abiatuta"
 msgid "Create routing list"
 msgstr "Sortu banabide zerrenda"
 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:26
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:27
 #, c-format
 msgid "Create routing list for "
 msgstr "Crear lista de ruteo para "
@@ -21099,7 +21116,7 @@ msgid "Date accessioned"
 msgstr "Jasotze-data"
 
 #: intranet-tmpl/prog/en/columns.def:70
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #, c-format
 msgid "Date acquired"
 msgstr "Jasotze-data"
@@ -21333,6 +21350,26 @@ msgstr "Datak"
 #, fuzzy
 msgid "Dates cannot be empty"
 msgstr "Izenburua ezin da hutsik egon"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
+msgid "Dates of birth should be entered in the format 'DD.MM.YYYY'"
+msgstr ""
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
+msgid "Dates of birth should be entered in the format 'DD/MM/YYYY'"
+msgstr ""
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
+msgid "Dates of birth should be entered in the format 'MM/DD/YYYY'"
+msgstr ""
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/str/members-menu.inc:5
+msgid "Dates of birth should be entered in the format 'YYYY-MM-DD'"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:509
 #, c-format
@@ -21604,7 +21641,7 @@ msgstr "Definitu bazkideak bizi diren hiri eta herriak"
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:116
 #, fuzzy, c-format
 msgid ""
-"Define classification sources (i.e., call number schemes) used by your "
+"Define classification sources (i.e. call number schemes) used by your "
 "collection. Also define filing rules used for sorting call numbers and "
 "splitting rules for splitting them."
 msgstr ""
@@ -21638,9 +21675,9 @@ msgid "Define funds within your budgets"
 msgstr "Definitu funtsak zure aurrekontuen barruan"
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:40
-#, fuzzy, c-format
+#, c-format
 msgid "Define hierarchical library groups."
-msgstr "Definitu liburutegiak eta taldeak."
+msgstr "Definitu liburutegien arteko hierarkiak."
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:44
 #, c-format
@@ -21806,8 +21843,8 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:15
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:74
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:76
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:75
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:77
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:50
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:80
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:323
@@ -21831,8 +21868,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:221
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:712
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:49
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:66
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:54
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:71
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:203
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:205
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:351
@@ -21925,7 +21962,7 @@ msgid "Delete "
 msgstr "Ezabatu"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:145
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:184
 msgid "Delete ALL submitted items"
 msgstr "Ezabatu bidalitako elementu GUZTIAK"
 
@@ -21962,7 +21999,7 @@ msgstr "Ezabatu elementu sorta bat"
 msgid "Delete a batch of records (bibliographic or authority)"
 msgstr "Ezabatu erregistro loteak (bibliografikoak edo autoritateetan)"
 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:75
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:80
 #, c-format
 msgid "Delete all"
 msgstr "Ezabatu guztia"
@@ -22040,15 +22077,15 @@ msgstr "Ezabatu momentuko azpieremua"
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:212
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:239
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field"
-msgstr "Ezabatu azpieremua "
+msgstr "Ezabatu eremua "
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:119
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:164
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field:"
-msgstr "Ezabatu azpieremua "
+msgstr "Ezabatu eremua "
 
 #. %1$s:  framework.frameworktext | html 
 #. %2$s:  framework.frameworkcode | html 
@@ -22145,7 +22182,7 @@ msgstr "Eliminar Comilla(s)"
 msgid "Delete record"
 msgstr "Ezabatu erregistroa"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:143
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:182
 #, c-format
 msgid "Delete records if no items remain."
 msgstr "Ezabatu erregistroak item-ik ez badago"
@@ -22171,7 +22208,7 @@ msgid "Delete selected alerts"
 msgstr "Ezabatu aukeratutako erregistroak"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:147
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:186
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:344
 #, c-format
 msgid "Delete selected items"
@@ -22368,7 +22405,7 @@ msgstr "Entregatze-epea: "
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:355
 #, c-format
 msgid "Delivery place"
-msgstr "Entregatze-lekua"
+msgstr "Entrega-lekua"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:223
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:231
@@ -22376,12 +22413,12 @@ msgstr "Entregatze-lekua"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:219
 #, c-format
 msgid "Delivery place:"
-msgstr "Entregatze-lekua:"
+msgstr "Entrega-lekua:"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid "Delivery place: "
-msgstr "Entregatze-lekua:"
+msgstr "Entrega-lekua:"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:270
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:320
@@ -22720,7 +22757,7 @@ msgstr "Jatorrizko bibliografia eta inportatutakoaren arteko ezberdintasunak"
 #: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:12
 #, c-format
 msgid "Digests only "
-msgstr "Laburpenak soilik?"
+msgstr "Laburpenak soilik "
 
 #: intranet-tmpl/prog/en/modules/about.tt:484
 #, c-format
@@ -22762,7 +22799,7 @@ msgstr "Ez gaitua %s -rentzat"
 msgid "Disabled for all"
 msgstr "Desgaituta guztientzat"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:62
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:63
 #: intranet-tmpl/prog/en/modules/members/discharge.tt:26
 #, c-format
 msgid "Discharge"
@@ -22789,7 +22826,7 @@ msgstr "Diskografiak"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:222
 #, c-format
 msgid "Discount: "
-msgstr "Diskontua:"
+msgstr "Deskontua:"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:110
 #, c-format
@@ -22960,17 +22997,6 @@ msgstr "Ziur zaude eskaera hau ezabatu nahi duzula?"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:282
 msgid "Do you really want to generate next serial?"
 msgstr "Ziur zaude hurrengo aldizkako argitalpena sortu nahi duzula?"
-
-#. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:291
-msgid ""
-"Do you really want to import the framework fields and subfields? This will "
-"overwrite the current configuration. For safety reasons please use the "
-"export option to make a backup"
-msgstr ""
-"¿Realmente quiere importar los campos y subcampos de la plantilla? Esto "
-"sustituirá la actual configuración. Por razones de seguridad por favor use "
-"la opción de exportar para hacer una copia de seguridad"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorder.tt:28
 #, c-format
@@ -23198,7 +23224,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/chart.inc:99
 #, c-format
 msgid "Draw"
-msgstr ""
+msgstr "Marraztu"
 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:122
 #, c-format
@@ -23227,7 +23253,7 @@ msgstr "Itzulketak %s"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:50
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:154
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:172
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #, c-format
 msgid "Due date"
 msgstr "Itzultze data"
@@ -23253,7 +23279,7 @@ msgstr "Itzulketak %s"
 msgid "Duncan Tyler"
 msgstr "Duncan Tyler"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:24
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:25
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
@@ -23363,9 +23389,9 @@ msgid "Duy Tinh Nguyen"
 msgstr "Duy Tinh Nguyen"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "E-mail order"
-msgstr "Eskaera eskatua"
+msgstr "E-mail eskaera"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:139
 #, c-format
@@ -23492,7 +23518,7 @@ msgstr "Ed Summers (zenbait Perl pakete eta kode, MARC::Record kasu)"
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/includes/rotating-collections-toolbar.inc:12
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:14
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:15
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:199
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:49
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:206
@@ -23638,9 +23664,9 @@ msgid "Edit actions"
 msgstr "Editatu akzioa %s"
 
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "Edit alert"
-msgstr "Editar cesta"
+msgstr "Saskia editatu"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:119
 #, c-format
@@ -23667,7 +23693,7 @@ msgstr "Editatu autoritatea"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:62
 #, c-format
 msgid "Edit basket"
-msgstr "Editar cesta"
+msgstr "Saskia editatu"
 
 #. %1$s:  basketname | html 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:38
@@ -23702,7 +23728,7 @@ msgstr "Editar Cataálogo (Modificar datos bibliográficos / de fondos)"
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:92
 #, c-format
 msgid "Edit collection "
-msgstr "Editatu bilduma"
+msgstr "Editatu bilduma "
 
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:41
 #, c-format
@@ -23835,9 +23861,9 @@ msgstr "Editatu ezabatzea"
 
 #: intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:7
 #: intranet-tmpl/prog/en/includes/stockrotation-toolbar.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "Edit rota"
-msgstr "Editar cesta"
+msgstr "Saskia editatu"
 
 #: intranet-tmpl/prog/en/includes/serials-menu.inc:7
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:70
@@ -23848,7 +23874,7 @@ msgstr "Editatu banabide zerrenda"
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:64
 #, c-format
 msgid "Edit routing list "
-msgstr "Editar lista de enrutamiento "
+msgstr "Editatu zirkulazio-zerrenda"
 
 #. %1$s:  subscription.routingedit | html 
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:175
@@ -23856,10 +23882,10 @@ msgstr "Editar lista de enrutamiento "
 msgid "Edit routing list (%s)"
 msgstr "Editatu zirkulazio-zerrenda (%s)"
 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:28
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:29
 #, c-format
 msgid "Edit routing list for "
-msgstr "Editar lista de enrutamiento para "
+msgstr "Editatatu zirkulazio-zerrenda, honentzat"
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:46
 #, fuzzy, c-format
@@ -24323,7 +24349,7 @@ msgstr "Idatzi elementuaren barra kodea:"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:161
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:96
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:655
 #, c-format
 msgid "Enter item barcode: "
 msgstr "Idatzi elementuaren barra kodea:"
@@ -24357,7 +24383,7 @@ msgstr "Idatzi txostenaren parametroak %s:"
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:78
 #, c-format
 msgid "Enter patron card number or partial name:"
-msgstr "Idatzi bazkidearen txartel zenbakia edo izenaren atal bat"
+msgstr "Idatzi bazkidearen txartel zenbakia edo izenaren zati bat"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
@@ -24784,7 +24810,7 @@ msgstr "Salbuespenak"
 #: intranet-tmpl/prog/en/includes/chart.inc:42
 #, c-format
 msgid "Exclude last line (Rollup): "
-msgstr ""
+msgstr "Kanpoan utzi azken linea"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:126
 #, c-format
@@ -25070,9 +25096,8 @@ msgstr "Esportatu CSV"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
-#, fuzzy
 msgid "Export results to barcodes file"
-msgstr "Erabili barra kodearen fitxategia"
+msgstr "Esportatu barra kodearen fitxategia"
 
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:103
 #, fuzzy, c-format
@@ -25140,11 +25165,11 @@ msgstr ""
 msgid "Export to OpenDocument spreadsheet format"
 msgstr "Esportatu OpenDocument kalkulu-orri formatuan"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:87
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:89
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:88
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:90
 #, c-format
 msgid "Export today's checked in barcodes"
-msgstr "Exportar los préstamos del día en códigos de barras "
+msgstr "Esportatu eguneko maileguak kode barretan"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:154
 #, c-format
@@ -25264,7 +25289,7 @@ msgstr "Makroa ejekutatzerakoan huts egin du:"
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:29
 #, c-format
 msgid "Failed to transfer collection"
-msgstr "Akatsa bildumara pasatzerakoan"
+msgstr "Akatsa bilduma pasatzerakoan"
 
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:31
 #, c-format
@@ -25437,6 +25462,12 @@ msgstr "Eremua 2"
 #, c-format
 msgid "Field 3"
 msgstr "Eremua 3"
+
+#. SPAN
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:684
+#, fuzzy
+msgid "Field autofilled by plugin"
+msgstr "Ikusi liburutegi guztiak"
 
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:41
 #, fuzzy, c-format
@@ -25842,12 +25873,12 @@ msgstr "Isunak eta Karguak"
 msgid "Fines &amp; charges"
 msgstr "Isunak eta karguak"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:642
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
 #, fuzzy, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr "Isunak barkatu eskuz iraungitako maileguentzat"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:639
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr "Itzulitako elementuengatiko isunak barkatzen dira."
@@ -25888,9 +25919,9 @@ msgid "First arrival:"
 msgstr "Lehenego iristea:"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:84
-#, fuzzy, c-format
+#, c-format
 msgid "First indicator default value: "
-msgstr "Lehen zenbakiaren argitalpen-data:"
+msgstr "Lehen indikadorea:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:221
 #, c-format
@@ -25994,9 +26025,9 @@ msgid "Font: "
 msgstr "Fuente:"
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid "For all collection codes: "
-msgstr "Bildumen kode guztiak"
+msgstr "Bildumaren kode guztiak:"
 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:32
 #, fuzzy, c-format
@@ -26074,7 +26105,7 @@ msgstr "Betiko"
 msgid "Forget %s %s (%s)"
 msgstr "Olvida %s %s (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:716
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:718
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr "Isunak barkatu eskuz iraungitako maileguentzat"
@@ -26084,7 +26115,7 @@ msgstr "Isunak barkatu eskuz iraungitako maileguentzat"
 msgid "Forgive fines on return: "
 msgstr "Barkatu isunak itzultzerakoan"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:698
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:700
 #, c-format
 msgid "Forgive overdue charges"
 msgstr "Barkatu atzerapenapenagatiko karguak"
@@ -26331,9 +26362,9 @@ msgid "From a new (empty) record"
 msgstr "Erregistro berri (huts) batean"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:20
-#, fuzzy, c-format
+#, c-format
 msgid "From a new file"
-msgstr "Prestatutako fitxategi batean"
+msgstr "Fitxategi berri batetik"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:21
 #, c-format
@@ -26343,12 +26374,12 @@ msgstr "Prestatutako fitxategi batean"
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:16
 #, c-format
 msgid "From a subscription"
-msgstr "Desde una suscripción"
+msgstr "Harpidetza batetik"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:15
 #, c-format
 msgid "From a suggestion"
-msgstr "Desde una sugerencia"
+msgstr "Proposamen batetik"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:7
 #, c-format
@@ -26393,9 +26424,9 @@ msgid "From date:"
 msgstr "Desde fecha:"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-add-to-basket.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "From existing orders (copy)"
-msgstr "Existitzen den erregistro batean:"
+msgstr "Existitzen den erregistro batetik"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:696
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:735
@@ -27299,9 +27330,9 @@ msgid "Hold"
 msgstr "Erreserbatua"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:97
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:279
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:500
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:281
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:342
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:502
 #, c-format
 msgid "Hold at"
 msgstr "Erreserbatu hemen"
@@ -27340,19 +27371,19 @@ msgstr "Erreserba kostua:"
 msgid "Hold filled for:"
 msgstr "Noren erreserba:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:252
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:422
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:463
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:254
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:465
 #, c-format
 msgid "Hold for:"
 msgstr "Noren erreserba:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:328
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:330
 #, c-format
 msgid "Hold for: "
 msgstr "Noren erreserba:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:238
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:240
 #, c-format
 msgid "Hold found (item is already waiting): "
 msgstr "Reserva encontrada (el ítem está en espera): "
@@ -27363,7 +27394,7 @@ msgstr "Reserva encontrada (el ítem está en espera): "
 msgid "Hold found for (%s), please transfer"
 msgstr "Honentzako erreserba aurkitu da: (%s), mesedez, transferitu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:451
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:453
 #, c-format
 msgid "Hold found: "
 msgstr "Erreserba aurkituta: "
@@ -27378,7 +27409,7 @@ msgstr "Mailegua <strong>etena</strong> geratu da"
 msgid "Hold must be record level "
 msgstr "Erabilera lokala gordeta"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:326
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:328
 #, c-format
 msgid "Hold needing transfer found"
 msgstr "Maileguak transferentzia aurkitu behar du"
@@ -27455,7 +27486,7 @@ msgstr "Alearen liburutegiak"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:263
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:172
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:252
 #, c-format
@@ -27481,6 +27512,7 @@ msgstr "Aleak:"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:26
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:106
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:101
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:73
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:120
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:261
@@ -27528,13 +27560,13 @@ msgstr "Hartzeko prest dauden erreserbak"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:29
 #, c-format
 msgid "Holds awaiting pickup for your library on: %s %s "
-msgstr "Hartzeko prest dauden zure liburutegiarentzako erreserbak: %s %s"
+msgstr "Hartzeko prest dauden zure liburutegiarentzako erreserbak: %s %s "
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:102
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:27
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history"
-msgstr "Editatu historia"
+msgstr "Zirkulazio-historia"
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:11
@@ -27548,9 +27580,10 @@ msgstr "Mailegu historia, norena %s"
 msgid "Holds listed here have been awaiting pickup for more than %s days."
 msgstr ""
 "Hemen zerrendatutako erreserbak %s egun baino gehiago daramatzate hartzeko "
-"prest"
+"prest."
 
 #. A
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:190
 msgid ""
 "Holds on this item: [% item_loo.item_holds | html %] / Total holds on this "
@@ -27558,6 +27591,7 @@ msgid ""
 msgstr ""
 
 #. A
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:136
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:196
 msgid "Holds on this record: [% item_loo.holds | html -%]"
 msgstr ""
@@ -27597,16 +27631,16 @@ msgstr "Hartzeko prest dauden erreserbak"
 #. %1$s:  from | $KohaDates 
 #. %2$s:  to | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:47
-#, fuzzy, c-format
+#, c-format
 msgid "Holds to pull placed between %s and %s"
-msgstr "Reservas a retirar%s colocadas entre %s y %s%s"
+msgstr "%s eta %s artean egindako prestatzeko erreserbak"
 
 #. %1$s:  Koha.Preference('ReservesMaxPickUpDelay') | html 
 #. %2$s:  overcount | html 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:65
-#, fuzzy, c-format
+#, c-format
 msgid "Holds waiting over %s days: %s "
-msgstr "Hartzeko prest dauden zure liburutegiarentzako erreserbak: %s %s"
+msgstr "%s Egunetik gora itxaroten dauden erreserbak: %s "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:744
 #, c-format
@@ -27615,9 +27649,9 @@ msgstr "Hartzeko prest dauden erreserbak:"
 
 #. %1$s:  reservecount | html 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:63
-#, fuzzy, c-format
+#, c-format
 msgid "Holds waiting: %s"
-msgstr "Hartzeko prest dauden erreserbak:"
+msgstr "Hartzeko prest dauden erreserbak: %s"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:117
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:296
@@ -27751,7 +27785,7 @@ msgstr "Feriados de repetición anual en un rango"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:8
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:11
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:12
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:13
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:87
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:21
@@ -27964,7 +27998,7 @@ msgstr "Jatorri-liburutegia"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:262
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:39
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
@@ -28306,7 +28340,7 @@ msgstr "ISO 8859-1"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:197
 #, c-format
 msgid "ISO Format (YYYY-MM-DD)"
-msgstr "ISO Format (YYYY-MM-DD)"
+msgstr "ISO Formatua (UUUU-HH-EE)"
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:183
 #, c-format
@@ -28608,7 +28642,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ezikusi"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:542
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:544
 #, fuzzy, c-format
 msgid "Ignore "
 msgstr "Ezikusi"
@@ -29013,7 +29047,7 @@ msgstr "Presupuestos inactivos"
 #: intranet-tmpl/prog/en/includes/chart.inc:37
 #, c-format
 msgid "Include all rows (ignore pagination):"
-msgstr ""
+msgstr "Kontuan izan errenkada guztiak (paginazioak kontuan ez hartu)"
 
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:91
 #, c-format
@@ -29070,14 +29104,14 @@ msgid "Indexes"
 msgstr "Aurkibideak"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:181
-#, fuzzy, c-format
+#, c-format
 msgid "Indicator 1"
-msgstr "Nahitaezkoa:"
+msgstr "Indikatzailea 1"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:182
-#, fuzzy, c-format
+#, c-format
 msgid "Indicator 2"
-msgstr "Nahitaezkoa:"
+msgstr "Indikatzailea 2"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:242
 #, c-format
@@ -29319,9 +29353,9 @@ msgid "Invalid barcodes"
 msgstr "Ezeztatu fitxategia"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid collection id"
-msgstr "Editatu bilduma"
+msgstr "Ezeztatu bildumaren id-a"
 
 #: intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:16
 #: intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:20
@@ -29602,7 +29636,7 @@ msgstr "Mailegu zenbakia"
 msgid "Issue:"
 msgstr "Alea:"
 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:36
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:37
 #, c-format
 msgid "Issue: "
 msgstr "Alea:"
@@ -29629,9 +29663,9 @@ msgid "Issues per unit: "
 msgstr "Zenbakiak unitateka:"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:177
-#, fuzzy, c-format
+#, c-format
 msgid "Issuing library"
-msgstr "Biblioteca principal"
+msgstr "Mailegu lekua"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:64
 #, c-format
@@ -29711,7 +29745,7 @@ msgstr "Código de barras del ítem:"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:211
 #, c-format
 msgid "Item call number"
-msgstr "Signatura topográfica del ítem"
+msgstr "Itemaren signatura"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:81
 #, c-format
@@ -29740,7 +29774,7 @@ msgstr "Ítem prestado"
 msgid "Item circulation alerts"
 msgstr "Elementu zirkulazioaren abisuak"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:418
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
 #, c-format
 msgid "Item consigned:"
 msgstr "Ítem consignado:"
@@ -29791,9 +29825,10 @@ msgstr "Elementua ez da transferitu, noizitik %s"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:174
 #, c-format
 msgid "Item holding library:"
-msgstr "Biblioteca de préstamo:"
+msgstr "Maileguko liburutegia:"
 
 #. TH
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:101
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:232
 #, fuzzy
@@ -29803,7 +29838,7 @@ msgstr "Item erreserbatua"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:166
 #, c-format
 msgid "Item home library:"
-msgstr "Biblioteca de origen del ítem:"
+msgstr "Itemaren jatorrizko liburutegia:"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:363
@@ -29839,7 +29874,7 @@ msgstr "Itema <strong>zain</strong> dago"
 msgid "Item is already at destination library."
 msgstr "Elementua helburu-liburutegian dago jada."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:590
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:592
 #, fuzzy, c-format
 msgid "Item is lost, cannot be checked in."
 msgstr "Ítem no prestado."
@@ -29872,7 +29907,7 @@ msgstr "Itema murriztua dago (dena den transakzioa murriztua)"
 msgid "Item is restricted."
 msgstr "Itema murriztua dago."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:611
 #, c-format
 msgid "Item is withdrawn."
 msgstr "Elementua kenduta dago."
@@ -30162,7 +30197,7 @@ msgid ""
 "books, CDs, or DVDs."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:592
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:594
 #, c-format
 msgid "Item was lost, now found."
 msgstr "Elementua galduta zegoen, eta aurkitu da."
@@ -30200,7 +30235,7 @@ msgstr "Item hau zure zerrendan gehitu da."
 msgid "Item(s) not removed from batch %s."
 msgstr "Item hau zure zurrendatik ezabatu da."
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:179
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:218
 #, c-format
 msgid "Itemnumber"
 msgstr "Elementu zenbakia"
@@ -30912,8 +30947,8 @@ msgid ""
 "Koha &rsaquo; Acquisitions &rsaquo; %s %sEdit basket '%s' %sAdd a basket to "
 "%s %s %s "
 msgstr ""
-"Koha &rsaquo; Adquisiciones &rsaquo; %s %sEditar cesta '%s' %sAñadir una "
-"cesta a %s %s %s "
+"Koha &rsaquo; Eskurapenak &rsaquo; %s %sSaskia editatu '%s' %sGehitu sakia "
+"honera %s %s %s "
 
 #. %1$s:  UNLESS blocking_error 
 #. %2$s:  basket.basketno | html 
@@ -31346,15 +31381,15 @@ msgstr ""
 #. %7$s:  END 
 #. %8$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Authorized values %s %s &rsaquo; "
 "Modify authorized value%s %s &rsaquo; New authorized value%s %s &rsaquo; New "
 "category%s %s "
 msgstr ""
-"Koha &rsaquo; Administrazioa &rsaquo; Balio baimenduak %s &rsaquo; %sAldatu "
+"Koha &rsaquo; Administrazioa &rsaquo; Balio baimenduak %s %s &rsaquo; Aldatu "
 "balio baimenduak %s %s &rsaquo; Balio baimendu berria %s %s &rsaquo; "
-"Kategoria berria%s%s %s &rsaquo; Berretsi ezabatzea %s %sBalio baimenduak%s"
+"Kategoria berria%s%s "
 
 #. %1$s:  IF ( add_form ) 
 #. %2$s:  IF ( budget_period_id ) 
@@ -32050,7 +32085,7 @@ msgstr "Koha &rsaquo; Zirkulazioa"
 #. %2$s:  INCLUDE 'patron-title.inc' invert_name = 1 no_html = 1 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Circulation %s &rsaquo; Batch check out &rsaquo; Issuing items "
 "to %s %s "
@@ -32152,7 +32187,7 @@ msgstr "Koha &rsaquo; Zirkulazioa &rsaquo; Atzerapenak %s"
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:9
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Pending on-site checkouts"
-msgstr "In-situ maileguak zain"
+msgstr "Koha &rsaquo; Zirkulazioa &rsaquo; In-situ maileguak zain"
 
 #. %1$s:  title | html 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:6
@@ -32586,9 +32621,9 @@ msgstr ""
 "Emaitzak%s"
 
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Reports &rsaquo; Orders by fund"
-msgstr "&rsaquo; Emaitzak%s &rsaquo; Funtsaren arabera eskatuak%s"
+msgstr "Koha &rsaquo; Txostenak &rsaquo; Funtsaren arabera eskatuak"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_out.tt:3
 #, c-format
@@ -32636,7 +32671,7 @@ msgstr "Koha &rsaquo; Aldizkako argitalpenak %s"
 #. %2$s:  IF ( op ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:3
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:4
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Serials &rsaquo; %s &rsaquo; %sCreate routing list%sEdit "
@@ -32715,11 +32750,9 @@ msgstr ""
 "gehitu da%s%s &rsaquo; Berretsi ezabatzea%s"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Numbering patterns"
-msgstr ""
-"Koha &rsaquo; Aldizkako argitalpenak &rsaquo; Aldizkako argitalpenaren "
-"edizioa %s"
+msgstr "Koha &rsaquo; Aldizkako argitalpenak &rsaquo; Numbering patterns"
 
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:3
 #, c-format
@@ -32766,15 +32799,14 @@ msgstr ""
 "edizioa %s"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-history.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Serials &rsaquo; Subscription history"
-msgstr ""
-"Koha &rsaquo; Aldizkako argitalpenak &rsaquo; Harpidetza informazioa %s"
+msgstr "Koha &rsaquo; Aldizkako argitalpenak &rsaquo; Harpidetza historiala"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Serials subscription renew"
-msgstr "Koha &rsaquo; Aldizkako argitalpena berritzea #%s"
+msgstr "Koha &rsaquo; Aldizkako argitalpenen harpidetza berritzea"
 
 #. %1$s:  subscription.subscriptionid | html 
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:4
@@ -32905,22 +32937,22 @@ msgstr "Koha &rsaquo; Tresnak &rsaquo; Etiketak"
 
 #. %1$s:  PROCESS translate_label_element element=label_element_title 
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; %s"
-msgstr "Koha &rsaquo; Tresnak &rsaquo; Etiketak &rsaquo; Txantiloiak"
+msgstr "Koha &rsaquo; Tresnak &rsaquo; Etiketak sortu &rsaquo; %s"
 
 #. %1$s:  IF batch_id 
 #. %2$s:  batch_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Batches &rsaquo; %sEdit "
 "(%s)%sNew%s"
 msgstr ""
-"Koha &rsaquo; Herramientas &rsaquo; Etiquetas &rsaquo;%sRevisar &rsaquo; "
-"%sRevisar etiquetas%s"
+"Koha &rsaquo; Tresnak &rsaquo; Etiquetak sortu &rsaquo; Batches &rsaquo; "
+"%sEditatu (%s)%sBerriak%s"
 
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:4
 #, fuzzy, c-format
@@ -32935,37 +32967,39 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; %sEdit "
 "(%s)%sNew%s"
 msgstr ""
-"Koha &rsaquo; Herramientas &rsaquo; Etiquetas &rsaquo;%sRevisar &rsaquo; "
-"%sRevisar etiquetas%s"
+"Koha &rsaquo; Tresnak &rsaquo; Etiketak sortu &rsaquo; Txantiloiak &rsaquo; "
+"%sEditatu (%s)%sBerriak%s"
 
 #. %1$s:  IF ( profile_id ) 
 #. %2$s:  profile_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Profiles &rsaquo; %sEdit "
 "(%s)%sNew%s"
 msgstr ""
-"Koha &rsaquo; Herramientas &rsaquo; Etiquetas &rsaquo;%sRevisar &rsaquo; "
-"%sRevisar etiquetas%s"
+"Koha &rsaquo; Tresnak &rsaquo; Etiketak sortu &rsaquo; Txantiloiak &rsaquo; "
+"%sEditatu (%s)%sBerriak%s"
 
 #. %1$s:  IF ( template_id ) 
 #. %2$s:  template_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:4
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Templates &rsaquo; "
 "%sEdit (%s)%sNew%s"
-msgstr "Koha &rsaquo; Tresnak &rsaquo; Etiketak &rsaquo; Txantiloiak"
+msgstr ""
+"Koha &rsaquo; Tresnak &rsaquo; Etiketak sortu &rsaquo; Txantiloiak &rsaquo; "
+"%sEditatu (%s)%sBerriak%s"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:5
 #, c-format
@@ -33029,24 +33063,22 @@ msgstr "Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea"
 
 #. %1$s:  PROCESS translate_card_element element=card_element_title 
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; %s"
-msgstr ""
-"Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; "
-"Txantiloiak"
+msgstr "Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea; %s"
 
 #. %1$s:  IF batch_id 
 #. %2$s:  batch_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Batches &rsaquo; "
 "%sEdit (%s)%sNew%s"
 msgstr ""
 "Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; "
-"Txantiloiak"
+"Txantiloiak; %sEditatu(%s)%sBerriak%s"
 
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:3
 #, fuzzy, c-format
@@ -33060,39 +33092,39 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Layout &rsaquo; "
 "%sEdit (%s)%sNew%s"
 msgstr ""
 "Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; "
-"Txantiloiak"
+"Txantiloiak&rsaquo; %sEditatu (%s)%sBerria%s"
 
 #. %1$s:  IF ( profile_id ) 
 #. %2$s:  profile_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Profiles &rsaquo; "
 "%sEdit (%s)%sNew%s"
 msgstr ""
 "Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; "
-"Txantiloiak"
+"Profilak &rsaquo; %sEditatu (%s)%sBerria%s"
 
 #. %1$s:  IF (template_id) 
 #. %2$s:  template_id | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Templates &rsaquo; "
 "%sEdit (%s)%sNew%s"
 msgstr ""
 "Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; "
-"Txantiloiak"
+"Txantiloiak &rsaquo; %sEditatu (%s)%sBerria%s"
 
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:4
 #, c-format
@@ -33149,24 +33181,24 @@ msgstr "Koha &rsaquo; Tresnak &rsaquo; Bazkide-zerrendak"
 
 #. %1$s:  list.name | html 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; %s &rsaquo; Add patrons"
 msgstr ""
-"Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; "
-"Txantiloiak"
+"Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelen sortzailea &rsaquo; %s "
+"&rsaquo; Gehitu bazkidea"
 
 #. %1$s:  IF list.patron_list_id 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; %s Modify patron list %s "
 "New patron list %s "
 msgstr ""
-"Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelak &rsaquo; Kudeatu bazkide "
-"txartelen elementuak"
+"Koha &rsaquo; Tresnak &rsaquo; Bazkide txartelak &rsaquo; %s Kudeatu bazkide "
+"txartelen zerrenda %s Bazkide zerrenda berria %s "
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:6
 #, c-format
@@ -33213,22 +33245,23 @@ msgstr "Koha &rsaquo; Tresnak &rsaquo; Txandakako bildumak"
 #. %3$s:  editColTitle | html 
 #. %4$s:  END -
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; %s Add a new "
 "collection %s Edit collection %s %s "
 msgstr ""
-"Koha &rsaquo; Tresnak &rsaquo; Txandakako bildumak &rsaquo; Editatu bildumak"
+"Koha &rsaquo; Tresnak &rsaquo; Txandakatu bildumak &rsaquo; %s Gehitu "
+"bilduma berria %s Editatu bilduma %s %s "
 
 #. %1$s:  colTitle | html 
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection %s "
 "&rsquo; Add or remove items"
 msgstr ""
-"Koha &rsaquo; Tresnak &rsaquo; Txandakako bildumak &rsaquo; Gehitu/kendu "
-"elementuak"
+"Koha &rsaquo; Tresnak &rsaquo; Txandakatu bildumak &rsaquo; Bilduma %s "
+"&rsquo; Gehitu/kendu elementuak"
 
 #: intranet-tmpl/prog/en/modules/rotating_collections/transferCollection.tt:6
 #, c-format
@@ -33310,11 +33343,13 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Koha &rsaquo; Web installer &rsaquo; %s Complete %s Create circulation rule "
 "%s "
-msgstr "Koha &rsaquo; Administrazioa &rsaquo; Elementu zirkulazioaren abisuak"
+msgstr ""
+"Koha &rsaquo; Administrazioa &rsaquo; %s Osatu %s Elementu zirkulazioaren "
+"abisuak %s "
 
 #. %1$s:  IF ( proposeimport ) 
 #. %2$s:  END 
@@ -33495,7 +33530,7 @@ msgstr "Koha pluginak"
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:14
 #, c-format
 msgid "Koha report library"
-msgstr "Biblioteca de reportes Koha"
+msgstr "Kohako txostenen liburutegia"
 
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:86
 #, c-format
@@ -33805,9 +33840,9 @@ msgid "Last displayed"
 msgstr "Azken erakutsita"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:186
-#, fuzzy, c-format
+#, c-format
 msgid "Last edit"
-msgstr "Ezin da editatu"
+msgstr "Azken edizioa"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:131
 #, fuzzy, c-format
@@ -33937,7 +33972,7 @@ msgstr "Diseinuak"
 msgid "Leaflet"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:102
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:103
 #, c-format
 msgid "Leave a message"
 msgstr "Utzi mezu bat"
@@ -34190,9 +34225,9 @@ msgstr "Liburutegia ezabatu da"
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:18
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:56
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid "Library groups"
-msgstr "Liburutegiaren erabilera"
+msgstr "Liburutegi taldeak"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:90
 #, c-format
@@ -34536,7 +34571,7 @@ msgstr "Zerrenda prezioak:"
 msgid "List prices:"
 msgstr "Zerrenda prezioak:"
 
-#: intranet-tmpl/prog/en/includes/ill-toolbar.inc:27
+#: intranet-tmpl/prog/en/includes/ill-toolbar.inc:32
 #, fuzzy, c-format
 msgid "List requests "
 msgstr "Oraindik %s eskaera gelditzen dira"
@@ -34626,9 +34661,8 @@ msgstr ""
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
-#, fuzzy
 msgid "Loading page %s, please wait..."
-msgstr "Erregistroak jaisten, mesedez itxaron..."
+msgstr "Erregistroak %s jaisten, mesedez itxaron..."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
@@ -34715,7 +34749,7 @@ msgid "Local use preferences"
 msgstr "Preferencias de uso locales"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:310
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:586
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:588
 #, c-format
 msgid "Local use recorded"
 msgstr "Erabilera lokala gordeta"
@@ -35111,9 +35145,9 @@ msgstr "MARC modifikazio txantiloiak"
 
 #. %1$s:  template_id | html 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "MARC modification templates %s"
-msgstr "MARC modifikazio txantiloiak"
+msgstr "MARC modifikazio txantiloiak %s"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:147
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:193
@@ -35367,18 +35401,18 @@ msgstr "Kudeatzailea"
 
 #. %1$s:  rota.title | html 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:331
-#, fuzzy, c-format
+#, c-format
 msgid "Manage %s items"
-msgstr "OAI kudeaketa"
+msgstr "Kudeatu %s itemak"
 
 #. %1$s:  rota.title | html 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:166
-#, fuzzy, c-format
+#, c-format
 msgid "Manage %s stages"
-msgstr "Kudeatu prestatutako erregistroak"
+msgstr "Kudeatu %s prestatutako erregistroak"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:67
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:69
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:68
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:70
 #, fuzzy, c-format
 msgid "Manage API keys"
 msgstr "OAI kudeaketa"
@@ -35535,7 +35569,7 @@ msgstr "Monetak eta kanbio-tasak"
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:128
 #, c-format
 msgid "Manage custom fields for item search."
-msgstr ""
+msgstr "Kudeatu eremuak itemen bilaketarako."
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:45
 #, fuzzy, c-format
@@ -35826,9 +35860,9 @@ msgstr ""
 "eta alderantzikatzea"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:711
-#, fuzzy, c-format
+#, c-format
 msgid "Management date from:"
-msgstr "Kudeaketa data:"
+msgstr "Kudeaketa data noiztik:"
 
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:178
 #, fuzzy, c-format
@@ -35836,9 +35870,9 @@ msgid "Manager name"
 msgstr "Kudeatu irudiak"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:248
-#, fuzzy, c-format
+#, c-format
 msgid "Managing library:"
-msgstr "Biblioteca principal"
+msgstr "Liburutegi nagusia:"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:198
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:179
@@ -36133,15 +36167,13 @@ msgstr "Mota bilatu:"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
-#, fuzzy
 msgid "Matches authority %s (score=%s):%s"
-msgstr "Coincide ccon autoridad %s (puntaje= %s): "
+msgstr "Autoritatearekin bat dator %s (puntuazioa = %s):%s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
-#, fuzzy
 msgid "Matches bibliographic record %s (score=%s):%s"
-msgstr "%s erregistroarekin bat dator (puntuazioa = %s):"
+msgstr "Erregistroarekin bat dator %s (puntuazioa = %s):%s"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:133
 #, c-format
@@ -36222,7 +36254,7 @@ msgstr "Matthias Meusburger"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:122
 #, c-format
 msgid "Max length:"
-msgstr "Longitud máxima:"
+msgstr "Gehienezko luzeera:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:86
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:358
@@ -36304,9 +36336,9 @@ msgstr "Konbinatu"
 
 #. %1$s:  error | html 
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:102
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed! The following error was reported: %s."
-msgstr "Errore hau gertatu da:"
+msgstr "Errore hau gertatu da: %s."
 
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:100
 #, c-format
@@ -36361,9 +36393,8 @@ msgstr "Erregistroak konbinatzen"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/authorities_js.inc:1
-#, fuzzy
 msgid "Merging with authority: "
-msgstr "Autoritatea gehitzen %s"
+msgstr "Autoritateekin konbinatzen:"
 
 #: intranet-tmpl/prog/en/modules/about.tt:693
 #, c-format
@@ -36565,9 +36596,8 @@ msgstr "Galdutako aleak:  %s "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
-#, fuzzy
 msgid "Missing mandatory subfield: ‡"
-msgstr "%s elementu hutseko beharrezko eremuak"
+msgstr "Beharrezko azpisaila falta: ‡"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
@@ -36634,9 +36664,9 @@ msgstr "Aldatu"
 
 #. %1$s:  PROCESS ServerType 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:56
-#, fuzzy, c-format
+#, c-format
 msgid "Modify %s server"
-msgstr "Aldatu Z39.50 zerbitzaria"
+msgstr "Moldatu %s zerbitzaria"
 
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:12
 #, fuzzy, c-format
@@ -36677,9 +36707,9 @@ msgstr "Aldatu aurrekontua"
 
 #. %1$s:  budget_period_description | html 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:88
-#, fuzzy, c-format
+#, c-format
 msgid "Modify budget '%s'"
-msgstr "Aldatu aurrekontua"
+msgstr "Moldatu aurrekontua '%s'"
 
 #. %1$s:  categorycode | html 
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:58
@@ -36877,16 +36907,16 @@ msgstr ""
 msgid "More"
 msgstr "Gehiago"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:48
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:49
 #: intranet-tmpl/prog/en/includes/header.inc:26
 #, c-format
 msgid "More "
 msgstr "Gehiago"
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:105
-#, fuzzy, c-format
+#, c-format
 msgid "More &rsaquo; Set permissions"
-msgstr "&rsaquo; Ezarri pribilegioak honentzat: %s %s"
+msgstr "Gehiago &rsaquo; Baimenak eman"
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:46
 #, c-format
@@ -37038,9 +37068,8 @@ msgstr "harri preziatuak"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#, fuzzy
 msgid "Move unreceived orders"
-msgstr "%sEz da eskaerarik jaso.%s"
+msgstr "Mugi itzazu eskatu gabeko eskaerak"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:380
 #, fuzzy, c-format
@@ -37075,9 +37104,9 @@ msgid "My library"
 msgstr "Nire liburutegia"
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:168
-#, fuzzy, c-format
+#, c-format
 msgid "MySQL data added"
-msgstr "%s datu gehitu dira"
+msgstr "MySQL datuak gehitu dira"
 
 #: intranet-tmpl/prog/en/modules/about.tt:45
 #, c-format
@@ -37105,8 +37134,8 @@ msgstr "IZENIK GABE"
 msgid "NORMARC"
 msgstr "NORMARC"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:599
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:607
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:601
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
 #, c-format
 msgid "NOT CHECKED IN"
 msgstr "ITZULI GABE"
@@ -37164,7 +37193,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:59
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:86
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:34
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:47
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:52
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:67
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:268
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:27
@@ -37405,9 +37434,9 @@ msgstr "Berria: "
 
 #. %1$s:  PROCESS ServerType 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid "New %s server"
-msgstr "SRU zerbitzari berria"
+msgstr "%s zerbitzari berria"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:105
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:243
@@ -37421,9 +37450,9 @@ msgid "New EAN "
 msgstr "Berria: "
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:347
-#, fuzzy, c-format
+#, c-format
 msgid "New ILL request"
-msgstr "Nuevo informe SQL"
+msgstr "SQL txosten berria"
 
 #: intranet-tmpl/prog/en/includes/ill-toolbar.inc:8
 #: intranet-tmpl/prog/en/includes/ill-toolbar.inc:18
@@ -37441,7 +37470,7 @@ msgstr "SMS hornitzailea:"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:301
 #, c-format
 msgid "New SQL report"
-msgstr "Nuevo informe SQL"
+msgstr "SQL txosten berria"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:156
 #, c-format
@@ -37479,9 +37508,9 @@ msgid "New alert"
 msgstr "Nuevo lote"
 
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:8
-#, fuzzy, c-format
+#, c-format
 msgid "New authority "
-msgstr "Autoritate mota berria"
+msgstr "Autoritate berria"
 
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:131
 #, c-format
@@ -37574,14 +37603,14 @@ msgstr "Sailkapen iturri berria"
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:110
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:112
-#, fuzzy, c-format
+#, c-format
 msgid "New club "
-msgstr "Ikastaro berria"
+msgstr "Erabiltzaile zerrenda berria"
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:190
-#, fuzzy, c-format
+#, c-format
 msgid "New club field"
-msgstr "Azpieremua"
+msgstr "Eremu berria"
 
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:49
 #, fuzzy, c-format
@@ -37669,7 +37698,7 @@ msgstr "Nuevo fondo para %s"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:296
 #, c-format
 msgid "New guided report"
-msgstr "Nuevo informe guiado"
+msgstr "Gidatutako txosten berria"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:14
 #, c-format
@@ -37782,7 +37811,7 @@ msgstr "Erregistroen bat etortze arau berria"
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:5
 #, c-format
 msgid "New report "
-msgstr "Nuevo informe "
+msgstr "Txosten berria"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
@@ -37855,7 +37884,7 @@ msgstr "Gelaxka-balioa"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:570
 #, fuzzy, c-format
 msgid "New value: %s %s. %s Available for loan. %s "
 msgstr "%s %s %s Ez da mailegatzen %s"
@@ -37929,9 +37958,9 @@ msgstr "Eskuragarri dagoen hurrengoa"
 #. %1$s:  ItemTypes.GetDescription( hold.itemtype ) | html 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:159
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "Next available %s item"
-msgstr "Urrengo item eskuragarria"
+msgstr "Eskuragarri dagoen %s itema"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:496
@@ -37998,7 +38027,7 @@ msgstr "(3.x Documentation Manager)"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:411
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:404
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:396
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:117
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:120
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:62
@@ -38073,9 +38102,9 @@ msgstr "Balio baimendu berriak honentzat: %s"
 #. %1$s:  booksellername | html 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:301
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:383
-#, fuzzy, c-format
+#, c-format
 msgid "No EDIFACT configuration for %s"
-msgstr "konfigurazio fitxategia."
+msgstr "No EDIFACT %s rentzat konfiguratua"
 
 #. %1$s:  errmsgloo.msg | html 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:112
@@ -38093,10 +38122,9 @@ msgstr ""
 "lan-orriak lehenetsiko dira"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:223
-#, fuzzy, c-format
+#, c-format
 msgid "No MARC modification template is defined. You have "
-msgstr ""
-"%s %s %s Ez dago definitua inungo MARC modifikazio txantiloirik. Zuk daukazu "
+msgstr "Ez dago MARC modifikazio txantiloirik definitua. Zuk daukazu "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:212
@@ -38325,6 +38353,7 @@ msgid "No holds found."
 msgstr "Ez da erreserbarik aurkitu."
 
 #. A
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:132
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:192
 msgid ""
 "No holds on this item / Total holds on this record: [% item_loo.holds | html "
@@ -38332,6 +38361,7 @@ msgid ""
 msgstr ""
 
 #. A
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:138
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:198
 #, fuzzy
 msgid "No holds on this record"
@@ -38396,7 +38426,7 @@ msgid ""
 msgstr "Itema galdu egin da (dena den transakzioa murriztua)"
 
 #. %1$s:  errmsgloo.msg | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:577
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:579
 #, c-format
 msgid "No item with barcode: %s"
 msgstr "No hay un ítem con código de barras: %s"
@@ -38495,25 +38525,23 @@ msgstr "Bazkide-kopuru bidez gehitu:"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:6
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:164
-#, fuzzy
 msgid "No matches found"
-msgstr "No se encontraron registros coincidentes"
+msgstr "Ez da erregistrorik aurkitu"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:481
-#, fuzzy
 msgid "No matching notices found"
-msgstr "No se encontraron registros coincidentes"
+msgstr "Ez da erregistrorik aurkitu"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
 msgid "No matching records found"
-msgstr "No se encontraron registros coincidentes"
+msgstr "Ez da erregistrorik aurkitu"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
 msgid "No matching reports found"
-msgstr "No se encontraron registros coincidentes"
+msgstr "Ez da artikulorik aurkitu"
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:38
 #, c-format
@@ -38609,9 +38637,9 @@ msgid "No pending baskets"
 msgstr "Ez dago saskirik egiteko"
 
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "No pending on-site checkout."
-msgstr "Maileguak lekuan bertan"
+msgstr "Ez dago mailegurik zain"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:59
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
@@ -38664,7 +38692,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:271
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:374
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:299
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:684
 #, fuzzy
 msgid "No popup"
 msgstr "Ospetsuenak"
@@ -38828,7 +38855,7 @@ msgstr "No, no cerrar(N) "
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:232
 msgid "No, do not Delete"
-msgstr "Ez, ez Ezabatu"
+msgstr "Ez, ez ezabatu"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:454
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:501
@@ -38859,9 +38886,9 @@ msgid "No, do not delete"
 msgstr "Ez, ez ezabatu"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:138
-#, fuzzy, c-format
+#, c-format
 msgid "No, do not reset mappings"
-msgstr "Ez, ez Ezabatu"
+msgstr "Ez, ez ezabatu"
 
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:44
 #, fuzzy, c-format
@@ -38914,12 +38941,12 @@ msgstr "Mailegatutako elementu kopurua"
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:197
 #, c-format
 msgid "No: Save as new authority"
-msgstr "No: Salvar como nueva autoridad"
+msgstr "Ez: Gorde autoritate berri moduan"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:19
 #, c-format
 msgid "Nobody"
-msgstr ""
+msgstr "Inork ez"
 
 #: intranet-tmpl/prog/en/modules/about.tt:56
 #, fuzzy, c-format
@@ -38937,9 +38964,9 @@ msgid "Non-musical recording"
 msgstr "Grabazio ez-musikala"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "Non-public note"
-msgstr "Ohar ez-publikoa:"
+msgstr "Ohar ez-publikoa"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:258
 #, c-format
@@ -39118,7 +39145,7 @@ msgstr ""
 "'ezikusi' bezala markatuta)."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:87
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:88
 msgid "Not allowed by patron's privacy settings"
 msgstr ""
 
@@ -39152,7 +39179,7 @@ msgstr "Ez eskuragarria"
 msgid "Not checked out since: "
 msgstr "Mailegatu zen azken data:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:583
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:585
 #, c-format
 msgid "Not checked out."
 msgstr "Ez dago mailegatuta."
@@ -39172,7 +39199,7 @@ msgstr "Ezin da mailegatu"
 msgid "Not for loan status"
 msgstr "Ezin da mailegatu (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:560
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:562
 #, fuzzy, c-format
 msgid "Not for loan status updated. "
 msgstr "Ezin da mailegatu (%s)"
@@ -39190,9 +39217,8 @@ msgstr "Argitalpen-data"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Not renewable"
-msgstr "%s Ezin da berriztatu%s"
+msgstr "Ezin da berriztu"
 
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:81
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:121
@@ -39209,7 +39235,7 @@ msgstr "Azken aldiz ikusia"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:106
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:64
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:73
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:126
@@ -39407,7 +39433,7 @@ msgstr "Oharrak/Iruzkinak"
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:250
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:42
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:587
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:80
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:85
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:32
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:181
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:372
@@ -39438,8 +39464,8 @@ msgstr "Oharrak:"
 #. For the first occurrence,
 #. %1$s:  reservenotes | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:58
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:249
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:461
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:251
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:463
 #, c-format
 msgid "Notes: %s"
 msgstr "Oharrak: %s"
@@ -39595,9 +39621,8 @@ msgstr "Mailegu kopurua:"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Number of checkouts by item type"
-msgstr "Mailegu kopurua:"
+msgstr "Mailegu kopurua item motaka"
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:106
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:107
@@ -39752,9 +39777,9 @@ msgid "Number of students:"
 msgstr "Número de estudiantes:"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:339
-#, fuzzy, c-format
+#, c-format
 msgid "Number of subscriptions: "
-msgstr "Bilatu harpidetzak:"
+msgstr "Harpidetza zenbakiak:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:206
 #, c-format
@@ -39873,8 +39898,8 @@ msgstr "ITZALITA"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:194
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:221
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:406
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:426
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:398
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:428
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:30
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:318
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:249
@@ -39933,7 +39958,7 @@ msgstr "OPAC (%s)"
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:109
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:110
 #, fuzzy, c-format
 msgid "OPAC - %s %s"
 msgstr "%s - %s %s "
@@ -40111,7 +40136,7 @@ msgstr "Gelaxka-balioa"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:562
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #, fuzzy, c-format
 msgid "Old value: %s %s. %s Available for loan. %s "
 msgstr "%s %s %s Ez da mailegatzen %s"
@@ -40405,7 +40430,7 @@ msgstr "Aukerako modulua falta da"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:95
 #: intranet-tmpl/prog/en/modules/tools/export.tt:119
 #: intranet-tmpl/prog/en/modules/tools/export.tt:202
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:690
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:692
 #, c-format
 msgid "Options"
 msgstr "Aukerak"
@@ -40417,9 +40442,9 @@ msgid "Or enter a list of record numbers"
 msgstr "Sartu bazkidearen txartel-zenbakia:"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "Or list barcodes one by one"
-msgstr "O listar los números de tarjeta uno por uno"
+msgstr "Edo zerrendatu barra kodeak banaka"
 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:57
 #, c-format
@@ -40605,7 +40630,7 @@ msgstr "Eskaerak"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:294
 #, c-format
 msgid "Orders are standing:"
-msgstr ""
+msgstr "Eskaera aktibatuak:"
 
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:52
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:82
@@ -40751,7 +40776,7 @@ msgstr "%s Beste izenak:"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:164
 #, c-format
 msgid "Other options (choose one)"
-msgstr "Otras opciones (elegir una)"
+msgstr "Beste aukerak (bat aukeratu)"
 
 #: intranet-tmpl/prog/en/columns.def:21
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:35
@@ -40801,7 +40826,7 @@ msgstr "Irteera formatua:"
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:51
 #, c-format
 msgid "Output format:"
-msgstr "Formato de salida:"
+msgstr "Formatua aukeratu:"
 
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
 #, c-format
@@ -40927,9 +40952,9 @@ msgstr "Jabea"
 
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:22
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Owner only"
-msgstr "Jabea:"
+msgstr "Jabeak bakarrik"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:65
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:251
@@ -41169,7 +41194,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:51
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:99
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:221
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
@@ -41205,7 +41230,7 @@ msgstr "Bazkidea #:"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:890
 #, c-format
 msgid "Patron account flags"
-msgstr "Indicadores de cuenta de socio"
+msgstr "Erabiltzailearen kontuan oharrak"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:96
 #, c-format
@@ -41231,12 +41256,12 @@ msgstr "Bazkide atributu motak"
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:207
 #, c-format
 msgid "Patron attributes"
-msgstr "Atributos de socios "
+msgstr "Bazkidearen atributoak"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:201
-#, fuzzy, c-format
+#, c-format
 msgid "Patron attributes: "
-msgstr "Atributos de socios "
+msgstr "Bazkideen atributoak:"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:32
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:53
@@ -41310,14 +41335,14 @@ msgstr "Bazkide kategoria:"
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:16
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Patron clubs"
-msgstr "Socio multas"
+msgstr "Bazkide zerrendak"
 
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:69
-#, fuzzy, c-format
+#, c-format
 msgid "Patron count"
-msgstr "Indicadores de cuenta de socio"
+msgstr "Erabiltzailearen kontuan oharrak"
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:113
 #, c-format
@@ -41327,7 +41352,7 @@ msgstr "Detalles del socio"
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:75
 #, c-format
 msgid "Patron does not belong to any subscription routing lists."
-msgstr " El socio no pertenece a ninguna lista de suscripción de enrutamiento."
+msgstr "Patron does not belong to any subscription routing lists."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
@@ -41390,7 +41415,7 @@ msgid ""
 msgstr "Bazkideak azteratutako %s elementu d(it)u. Mailegatu hala ere?"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:407
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:618
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:620
 #, fuzzy, c-format
 msgid "Patron has an indefinite restriction."
 msgstr "Bazkideak %s du isunetan."
@@ -41486,15 +41511,15 @@ msgstr "Imagen(es) de socio cargadas con algunos errores"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:87
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:268
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:334
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:490
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:270
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:492
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr "Bazkidea BLOKEATU egin da"
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:82
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:83
 #, fuzzy
 msgid "Patron is an adult"
 msgstr "Bazkideak eta zirkulazioa"
@@ -41522,9 +41547,9 @@ msgid "Patron is restricted."
 msgstr "Bazkidea blokeatu egin da"
 
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:262
-#, fuzzy, c-format
+#, c-format
 msgid "Patron library"
-msgstr "Biblioteca principal"
+msgstr "Bazkidearen liburutegia"
 
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:3
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:44
@@ -41680,7 +41705,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  errmsgloo.prevdebarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:615
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:617
 #, fuzzy, c-format
 msgid "Patron was earlier restricted until %s."
 msgstr "El socio está restringido%s hasta %s %s(%s)%s%s"
@@ -41718,9 +41743,9 @@ msgstr "Bazkidearen helbidea zalantzazkoa da"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:363
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:91
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:272
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:335
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:494
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:274
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:337
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:496
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr "Bazkidearen helbidea zalantzazkoa da"
@@ -41813,9 +41838,9 @@ msgstr ""
 #. %1$s:  Branches.GetName(patron.branchcode) | html 
 #. %2$s:  patron.branchcode | html 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:147
-#, fuzzy, c-format
+#, c-format
 msgid "Patron's home library: (%s / %s )"
-msgstr " jatorri liburutegikoa (%s / %s )"
+msgstr "Bazkidearen jatorrizko liburutegia: (%s / %s )"
 
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:32
 #, c-format
@@ -42050,7 +42075,7 @@ msgid "Pay fines for %s %s"
 msgstr "Pagar multas para %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:134
+#: intranet-tmpl/prog/en/modules/members/pay.tt:133
 msgid "Pay selected"
 msgstr "Pagar seleccionados"
 
@@ -42145,9 +42170,9 @@ msgstr "Egiteke dauden offline zirkulazioaren ekintzak"
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:40
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:50
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Pending on-site checkouts"
-msgstr "Maileguak lekuan bertan"
+msgstr "&rsaquo; Maileguen inguruko oharrak"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:152
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:273
@@ -42169,7 +42194,7 @@ msgstr "Egin gabeko proposamenak"
 #: intranet-tmpl/prog/en/modules/tags/list.tt:78
 #, c-format
 msgid "Pending tags"
-msgstr "Etiquetas pendientes"
+msgstr "Onarpenaren zain dauden etiketak"
 
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:35
 #, c-format
@@ -43022,7 +43047,7 @@ msgid "Please return item to home library: %s"
 msgstr "Mesedez, itzuli elementua jatorri-liburutegira: %s"
 
 #. %1$s:  Branches.GetName( errmsgloo.msg ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:580
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:582
 #, fuzzy, c-format
 msgid "Please return item to: %s"
 msgstr "Mesedez, itzuli hona %s"
@@ -43034,7 +43059,7 @@ msgid "Please return item to: %s "
 msgstr "Mesedez, itzuli hona %s"
 
 #. %1$s:  Branches.GetName( returnbranch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:372
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:374
 #, fuzzy, c-format
 msgid "Please return this item to %s "
 msgstr "Mesedez, itzuli hona %s"
@@ -43391,7 +43416,7 @@ msgstr "No hay descripciones "
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:288
 #, c-format
 msgid "Postal address: "
-msgstr "Dirección postal: "
+msgstr "Helbidea:"
 
 #. %1$s:  koha_new.newdate | html 
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:68
@@ -43421,7 +43446,7 @@ msgstr "Aurrenerabea"
 msgid "Precedence"
 msgstr "Lehentasuna"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:115
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:116
 #, c-format
 msgid "Predefined notes: "
 msgstr "Aurrez definitutako oharrak:"
@@ -43445,9 +43470,9 @@ msgstr "Lehentasunak eta parametroak"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:659
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:512
-#, fuzzy, c-format
+#, c-format
 msgid "Preferred language for notices: "
-msgstr "Forma lehenetsia:"
+msgstr "Lehenetsitako hizkuntza:"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:145
 #, fuzzy, c-format
@@ -43602,14 +43627,14 @@ msgid "Primary"
 msgstr "Lehen hezkuntza"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "Primary acquisitions contact"
-msgstr "Eskurapen erreklamazioa"
+msgstr "Eskurapen nagusiaren kontaktua"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:21
-#, fuzzy, c-format
+#, c-format
 msgid "Primary acquisitions contact:"
-msgstr "Eskurapen erreklamazioa"
+msgstr "Eskurapen nagusiaren kontaktua"
 
 #: intranet-tmpl/prog/en/columns.def:22
 #, fuzzy, c-format
@@ -43635,9 +43660,9 @@ msgid "Primary phone: "
 msgstr "Teléfono principal: "
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:77
-#, fuzzy, c-format
+#, c-format
 msgid "Primary serials contact"
-msgstr "Eduki partzialak"
+msgstr "Aldizkako argitalpenen kontaktua"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:28
 #, fuzzy, c-format
@@ -43654,7 +43679,7 @@ msgstr "Eduki partzialak"
 msgid "Print"
 msgstr "Inprimatu"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:29
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:30
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:101
 #, c-format
 msgid "Print "
@@ -43694,10 +43719,10 @@ msgstr "Inprimatu etiketa"
 msgid "Print list"
 msgstr "Inprimatu zerrenda"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:35
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:36
+#, c-format
 msgid "Print overdues"
-msgstr "Inprimagailuak"
+msgstr "Atzerapenak inprimatu"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:70
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:101
@@ -43705,10 +43730,10 @@ msgstr "Inprimagailuak"
 msgid "Print patron cards"
 msgstr "Exportar carnés de socio"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:33
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:34
 #, c-format
 msgid "Print quick slip"
-msgstr "Recibo rápido"
+msgstr "Egiaztagiri azkarra"
 
 #. For the first occurrence,
 #. %1$s:  patron.cardnumber | html 
@@ -43718,9 +43743,9 @@ msgstr "Recibo rápido"
 msgid "Print receipt for %s"
 msgstr "Imprimir recibo para %s"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:32
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:33
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:123
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:407
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:399
 #, c-format
 msgid "Print slip"
 msgstr "Inprimatu egiaztagiria"
@@ -43730,26 +43755,26 @@ msgstr "Inprimatu egiaztagiria"
 msgid "Print slip "
 msgstr "Inprimatu egiaztagiria"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:310
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:537
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:312
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:539
 #, fuzzy, c-format
 msgid "Print slip and confirm "
 msgstr "Inprimatu egiaztagiria eta egiaztatu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:348
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:350
 #, fuzzy, c-format
 msgid "Print slip and continue"
 msgstr "Inprimatu egiaztagiria eta egiaztatu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:530
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:532
 #, fuzzy, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Imprimir recibo, transferir, y confirmar"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:31
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:32
 #, c-format
 msgid "Print summary"
-msgstr "Resumen"
+msgstr "Laburpena"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:149
 #, fuzzy, c-format
@@ -44399,9 +44424,9 @@ msgid "Quick add"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/patron-toolbar.inc:16
-#, fuzzy, c-format
+#, c-format
 msgid "Quick add new patron "
-msgstr "Ezin da erabiltzaile berri bat gehitu."
+msgstr "Erabiltzaile berri bat gehitu "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:79
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:186
@@ -44500,7 +44525,7 @@ msgid "Rafal Kopaczka"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:48
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:53
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:62
 #, c-format
@@ -44533,7 +44558,7 @@ msgstr "Tasa:"
 msgid "Raw (any): "
 msgstr "Gordina (edozein):"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:181
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:220
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:107
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:321
 #, c-format
@@ -44675,14 +44700,14 @@ msgid "Received with thanks from %s %s "
 msgstr "Jasota, eskerrik asko %s %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:86
-#, fuzzy, c-format
+#, c-format
 msgid "Receives claims for late issues"
-msgstr "Jasotako aleak"
+msgstr "Atzeratutako aleen erreklamazioak"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:83
-#, fuzzy, c-format
+#, c-format
 msgid "Receives claims for late orders"
-msgstr "Ez dago berandututako eskaerarik."
+msgstr "Atzeratutako eskaeren erreklamazioak"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:80
 #, fuzzy, c-format
@@ -44700,7 +44725,7 @@ msgstr "Atzerapenen jakinarazpenak jasotzea:"
 msgid "Recheck dependencies"
 msgstr "Egin klik mendekotasunak berriro egiaztatzeko"
 
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:44
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:49
 #, c-format
 msgid "Recipients:"
 msgstr "Hartzaileak:"
@@ -44821,6 +44846,11 @@ msgstr "Zehaztu zure bilaketa"
 #, c-format
 msgid "Refine your search"
 msgstr "Zehaztu zure bilaketa"
+
+#: intranet-tmpl/prog/en/includes/ill-toolbar.inc:28
+#, c-format
+msgid "Refresh "
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:585
 #, fuzzy, c-format
@@ -44962,7 +44992,7 @@ msgstr "Gestionar socios. multas y deudas"
 msgid "Remaining system parameters permissions"
 msgstr "Mantener permisos sobre parámetros del sistema"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:669
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:671
 #, c-format
 msgid "Remember for next check in:"
 msgstr "Gogoratu hurrengo mailegurako:"
@@ -44988,8 +45018,8 @@ msgstr ""
 msgid "Reminder date"
 msgstr "Gogorarazte data"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:615
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:618
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:617
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:620
 #, fuzzy, c-format
 msgid "Reminder: "
 msgstr "Gogorarazte data"
@@ -45221,12 +45251,12 @@ msgid "Renew failed:"
 msgstr "Renovación fallida"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:49
-#, fuzzy, c-format
+#, c-format
 msgid "Renew or check in selected items"
-msgstr "Berritu edo itzuli markatutako elementuak"
+msgstr "Berritu edo itzuli aukeratutako elementuak"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:51
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:53
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:52
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:54
 #, c-format
 msgid "Renew patron"
 msgstr "Berritu erabiltzailea"
@@ -45487,7 +45517,7 @@ msgstr "Informe de grupo"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
 #, c-format
 msgid "Report is public:"
-msgstr "Informe es público:"
+msgstr "Txostena publikoa da:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:179
 #, c-format
@@ -45516,7 +45546,7 @@ msgstr "Plugins-en txostena"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1390
 #, c-format
 msgid "Report subgroup:"
-msgstr "Informe de subgrupo:"
+msgstr "Azpitaldearen txostena:"
 
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:39
 #, c-format
@@ -45652,9 +45682,9 @@ msgid "Requested item type"
 msgstr "Item mota espezifiko bat eskatu:"
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:71
-#, fuzzy, c-format
+#, c-format
 msgid "Require valid email address:"
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "sar ezazu helbide elektroniko bat"
 
 #: intranet-tmpl/prog/en/modules/about.tt:1032
 #: intranet-tmpl/prog/en/modules/about.tt:1033
@@ -46126,9 +46156,9 @@ msgstr "Itzultze data"
 msgid "Return policy"
 msgstr "Política de devolución"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:154
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:169
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:204
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:193
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:208
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:243
 #, c-format
 msgid "Return to batch item deletion"
 msgstr "Regresar a eliminación de ítems en lote"
@@ -46220,8 +46250,8 @@ msgstr "Itzuli zure erregistrora"
 msgid "Return to the basket without making a new order."
 msgstr "Itzuli saskira eskara berri bat egin gabe."
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:165
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:200
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:204
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:239
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:80
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:319
 #, fuzzy, c-format
@@ -46233,8 +46263,8 @@ msgstr "Itzuli zure erregistrora"
 msgid "Return to tools"
 msgstr "Regresar a herramientas"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:167
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:202
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:206
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:241
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:82
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:321
 #, fuzzy, c-format
@@ -46442,7 +46472,7 @@ msgstr "Banabide zerrenda"
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:93
 #, c-format
 msgid "Routing lists"
-msgstr "Lista de enrutamiento"
+msgstr "Zirkulazio-zerrendak"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:122
 #, c-format
@@ -46462,7 +46492,7 @@ msgstr "Errenkada"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
 #, c-format
 msgid "Rows per page: "
-msgstr "Resultados por página :"
+msgstr "Orri bakoitzeko emaitzak:"
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:71
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:132
@@ -46504,7 +46534,7 @@ msgstr "Ejecutar informe"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:110
 #, c-format
 msgid "Run report"
-msgstr "Ejecutar informe"
+msgstr "Exekutatu txostena"
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:40
 #, fuzzy, c-format
@@ -46514,7 +46544,7 @@ msgstr "Ejecutar informe"
 #: intranet-tmpl/prog/en/includes/guided-reports-view.inc:4
 #, c-format
 msgid "Run reports"
-msgstr "Ejecutar informes"
+msgstr "Exekutatu txostenak"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:693
@@ -46700,7 +46730,7 @@ msgstr "Larunbata"
 msgid "Saturdays"
 msgstr "Larunbatak"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:132
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:133
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:130
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:114
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:63
@@ -46723,7 +46753,7 @@ msgstr "Larunbatak"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:461
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:465
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:478
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:84
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:89
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:428
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:89
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:134
@@ -47013,9 +47043,9 @@ msgid "Scan index:"
 msgstr "Eskaneatu indizea:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:93
-#, fuzzy, c-format
+#, c-format
 msgid "Scan indexes:"
-msgstr "Eskaneatu indizeak"
+msgstr "Aurkibideetan bilatu:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:270
 #, c-format
@@ -47054,9 +47084,9 @@ msgid "Score: "
 msgstr "Puntuazioa:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:203
-#, fuzzy, c-format
+#, c-format
 msgid "Screen"
-msgstr "monitorizatua"
+msgstr "Pantaila"
 
 #: intranet-tmpl/prog/en/modules/about.tt:621
 #, fuzzy, c-format
@@ -47146,9 +47176,9 @@ msgid "Search by contract name or/and description:"
 msgstr "Buscar por nombre del contrato y/o descripción:"
 
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:37
-#, fuzzy, c-format
+#, c-format
 msgid "Search by keyword:"
-msgstr "Idatzi bilaketarako gako hitzak:"
+msgstr "Bilatu hitz gako bidez:"
 
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:6
 #, c-format
@@ -47206,14 +47236,14 @@ msgid "Search engine configuration"
 msgstr "Bilaketaren konfigurazioa"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:231
-#, fuzzy, c-format
+#, c-format
 msgid "Search entire record"
-msgstr "Bilatu existitzen diren erregistroak"
+msgstr "Bilatu erregistro osoak"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:94
-#, fuzzy, c-format
+#, c-format
 msgid "Search entire record: "
-msgstr "Bilatu existitzen diren erregistroak"
+msgstr "Bilatu erregistro osoak"
 
 #: intranet-tmpl/prog/en/includes/letters-search.inc:6
 #, c-format
@@ -47368,19 +47398,19 @@ msgid "Search main heading"
 msgstr "Bilatu izenburu nagusia"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:228
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading ($a only)"
-msgstr "Sartu goiburu nagusia ($a soilik):"
+msgstr "Sartu goiburu nagusia ($a soilik)"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:19
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading ($a only): "
 msgstr "Sartu goiburu nagusia ($a soilik):"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:45
-#, fuzzy, c-format
+#, c-format
 msgid "Search main heading: "
-msgstr "Bilatu izenburu nagusia"
+msgstr "Bilatu izenburu nagusia:"
 
 #. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:73
@@ -47530,7 +47560,7 @@ msgstr "Bilatu katalogoan eta biltegian:"
 msgid "Search title"
 msgstr "Buscar título"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:42
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:43
 #, c-format
 msgid "Search to hold"
 msgstr "Bilatu erreserbatzeko"
@@ -47623,9 +47653,9 @@ msgid "Second"
 msgstr "Bigarrena"
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:87
-#, fuzzy, c-format
+#, c-format
 msgid "Second indicator default value: "
-msgstr "Balio lehenetsiak"
+msgstr "Bigarren indikadorea:"
 
 #: intranet-tmpl/prog/en/columns.def:23
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:37
@@ -47784,9 +47814,9 @@ msgid "Select a chooser"
 msgstr "Aukeratu zerrenda bat  "
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid "Select a day"
-msgstr "Seleccionar día: "
+msgstr "Aukeratu eguna"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:292
 #, fuzzy, c-format
@@ -47945,7 +47975,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:125
 #, c-format
 msgid "Select day: "
-msgstr "Seleccionar día: "
+msgstr "Aukeratu eguna:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:861
 #, c-format
@@ -47975,7 +48005,7 @@ msgstr "Aukeratu datu base lokalak"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:135
 #, c-format
 msgid "Select month:"
-msgstr "Seleccionar mes:"
+msgstr "Aukeratu hila:"
 
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:97
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:134
@@ -47988,10 +48018,10 @@ msgstr "Seleccionar nota"
 msgid "Select none to see all libraries"
 msgstr "Ez aukeratu liburutegi guztiak ikusteko"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:117
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:118
 #, c-format
 msgid "Select note"
-msgstr "Seleccionar nota"
+msgstr "Aukeratu oharra"
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:185
 #, c-format
@@ -48352,7 +48382,7 @@ msgstr "Serie: %s "
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:15
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:24
 #: intranet-tmpl/prog/en/includes/header.inc:40
-#: intranet-tmpl/prog/en/modules/serials/routing.tt:12
+#: intranet-tmpl/prog/en/modules/serials/routing.tt:13
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:13
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:87
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:22
@@ -48542,8 +48572,8 @@ msgid "Set notice/status triggers for overdue items"
 msgstr ""
 "Ezarri jakinarazpenen/egoeren disparadoreak atzeratutako elementuentzat"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:56
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:58
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:57
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:59
 #, c-format
 msgid "Set permissions"
 msgstr "Ezarri baimenak"
@@ -48612,13 +48642,13 @@ msgstr "Partekatu erabiltzaile ezezagunen estatistikak"
 #, c-format
 msgid ""
 "Share with the Koha community the usage statistics of your Koha installation."
-msgstr ""
+msgstr "Partekatu Koha komunitatearekin zure Kohako estatistikak."
 
 # Administration > Share anonymous usage statistics
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:187
-#, fuzzy, c-format
+#, c-format
 msgid "Share your usage statistics"
-msgstr "Partekatu erabiltzaile ezezagunen estatistikak"
+msgstr "Partekatu zure estatistikak"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:36
 #, c-format
@@ -48663,7 +48693,7 @@ msgstr "Bilatu indizean: kontrol zenbakia"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:176
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:204
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:199
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:134
@@ -48816,9 +48846,9 @@ msgid "Show MARC tag documentation links"
 msgstr "Erakutsi MARC etiketa dokumentazioko loturak"
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:69
-#, fuzzy, c-format
+#, c-format
 msgid "Show SQL code"
-msgstr "Gehiago erakutsi"
+msgstr "Erakutsi SQL kodea"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
@@ -48985,9 +49015,9 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:76
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "Show inactive budgets"
-msgstr "Presupuestos inactivos"
+msgstr "Erakutsi aurrekontu ez aktiboak"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:323
 #, fuzzy, c-format
@@ -49045,7 +49075,7 @@ msgstr "Erakutsi/ezkutatu zutabeak:"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
 msgid "Showing _START_ to _END_ of _TOTAL_"
-msgstr "Erakutsi_START_ (e)tik _END_ (e)ra _TOTAL_"
+msgstr "Erakutsi_START_ (e)tik _END_ (e)ra _(e)etik"
 
 #: intranet-tmpl/prog/en/includes/facets.inc:8
 #, c-format
@@ -49452,7 +49482,7 @@ msgid "Specify how the holiday should repeat."
 msgstr "Zehaztu jai eguna errepikatzeko modua."
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:665
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:667
 #, c-format
 msgid "Specify return date %s: "
 msgstr "Zehaztu itzultze data %s: "
@@ -49543,7 +49573,7 @@ msgstr "Langilea"
 msgid "Staff "
 msgstr "Langilea"
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:108
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:109
 #, fuzzy, c-format
 msgid "Staff - Internal note"
 msgstr "Barne oharra:"
@@ -49721,7 +49751,7 @@ msgstr "Ez aukeratu liburutegi guztiak ikusteko"
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:111
 #, c-format
 msgid "Standing orders do not close when received."
-msgstr ""
+msgstr "Irekita dauden eskaerak ez dira isten jasotzen direnean."
 
 #: intranet-tmpl/prog/en/columns.def:147
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:133
@@ -49988,13 +50018,13 @@ msgstr "Paso 1 de 5: Nombre la nueva definición"
 #. %1$s:  IF (usecache) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:332
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Step 1 of 6: Choose a module to report on,%s Set cache expiry, %s and choose "
 "report visibility "
 msgstr ""
-"Paso 1 de 6: Elija un módulo para ser informado, %s Set cache expiry, %s and "
-"cambiar la visibilidad del informe"
+"1etik 6rako urratsak: Aukera ezazu informatzeko modulu bat, %s Caché-aren "
+"iraungitze data aukeratu, %s eta txostenaren bisibilitatea aldatu"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:114
 #, c-format
@@ -50004,7 +50034,7 @@ msgstr "Paso 2 de 5: elegir el área"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
 #, c-format
 msgid "Step 2 of 6: Pick a report type"
-msgstr "Urratsa, 6tik 2: aukeratu txosten mota bat"
+msgstr "Urratsa, 6tik 2.na: aukeratu txosten mota bat"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:24
 #, c-format
@@ -50034,7 +50064,7 @@ msgstr "Paso 4 de 5: Especifique un valor"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:451
 #, c-format
 msgid "Step 4 of 6: Select criteria to limit on"
-msgstr "Urratsa, 6tik 4: aukeratu muga ezartzeko irizpideak"
+msgstr "Urratsa, 6tik 4.na: aukeratu muga ezartzeko irizpideak"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:26
 #, c-format
@@ -50049,7 +50079,7 @@ msgstr "Paso 5 de 5: Confirme detalles"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:516
 #, c-format
 msgid "Step 5 of 6: Pick which columns to total"
-msgstr "Urratsa, 5etik 6: aukeratu batura egiteko erabiliko diren zutabeak"
+msgstr "Urratsa, 6tik 5.na: aukeratu batura egiteko erabiliko diren zutabeak"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:27
 #, c-format
@@ -50059,7 +50089,7 @@ msgstr "Paso 5: Confirme definición"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:548
 #, c-format
 msgid "Step 6 of 6: Choose how you want the report ordered"
-msgstr "Urratsa, 6tik 6: aukeratu txostena antolatzeko modua"
+msgstr "Urratsa, 6tik 6.na: aukeratu txostena antolatzeko modua"
 
 #: intranet-tmpl/prog/en/modules/about.tt:639
 #, c-format
@@ -50243,17 +50273,17 @@ msgstr "Azpieremuak:"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:182
 #, c-format
 msgid "Subgroup"
-msgstr "Subgrupo"
+msgstr "Azpitaldea"
 
 #. INPUT type=text name=subgroup
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1413
 msgid "Subgroup code"
-msgstr "Código de subgrupo"
+msgstr "Azpitaldearen kodea"
 
 #. INPUT type=text name=subgroupdesc
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1414
 msgid "Subgroup name"
-msgstr "Nombre de subgrupo"
+msgstr "Azpitaldearen izena"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:167
 #, c-format
@@ -50399,7 +50429,7 @@ msgstr "Gaiak:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:98
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:155
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:184
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:661
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:663
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:35
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
@@ -50567,9 +50597,9 @@ msgstr "%s Harpidetza berritu da."
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: intranet-tmpl/prog/en/modules/members/routing-lists.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "Subscription routing lists for %s"
-msgstr "Suscripción de la lista de enrutamiento para %s"
+msgstr "Zirkulazio zerrendetara harpidetza, honentzat %s"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-history.tt:28
 #, c-format
@@ -50712,9 +50742,9 @@ msgid "Suggested by: %s%s, %s %s ("
 msgstr "Nork proposatuta: %s%s, %s %s ("
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:700
-#, fuzzy, c-format
+#, c-format
 msgid "Suggested date from:"
-msgstr "Baieztapen data noiztik:"
+msgstr "Proposamen data noiztik:"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:230
 #, fuzzy, c-format
@@ -51178,9 +51208,9 @@ msgstr "Tabular"
 
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:74
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Tabulation (\\t)"
-msgstr "Tabulazioa (\t)"
+msgstr "Tabulazioa (\\t)"
 
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:195
@@ -51286,7 +51316,7 @@ msgstr "Etiketak"
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:158
 #, c-format
 msgid "Tags pending approval"
-msgstr "Etiquetas con aprobación pendiente"
+msgstr "Onarpenaren zain dauden etiketak"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:102
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:283
@@ -51513,7 +51543,7 @@ msgstr "Testu eremuak"
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:88
 #, c-format
 msgid "Text for OPAC: "
-msgstr "OPACentzako testua:"
+msgstr "OPACerako testua:"
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:72
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:87
@@ -51972,14 +52002,14 @@ msgstr "Errore hauek gertatu dira. Mesedez, konpondu itzazu eta berriz bidali:"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:74
 #, c-format
 msgid "The following fields are wrong. Please fix them."
-msgstr "Eremu hauek oker daude. Mesedez, konpondu itzazu."
+msgstr "Eremu hauek oker daude. Mesedez, errebisa itzazu."
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:49
 #, c-format
 msgid ""
 "The following holds have not been filled. Please retrieve them and check "
 "them in."
-msgstr "Erreserba hauek ez dira egin. Mesedez, berreskuratu eta itzuli itzazu."
+msgstr "Erreserba hauek ez dira egin. Mesedez, berreskura eta itzul itzazu."
 
 #. For the first occurrence,
 #. %1$s:  "borrowers" | $HtmlTags tag="strong" 
@@ -52108,7 +52138,7 @@ msgstr "Item hau zure zurrendatik ezabatu da."
 msgid "The item has been removed from your cart"
 msgstr "Item hau zure saskitik ezabatu da"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:622
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
 #, c-format
 msgid ""
 "The item has not been checked in due to a configuration issue in your "
@@ -52640,9 +52670,9 @@ msgstr "%s Une honetan ez dago bildumarik zehaztuta. %s"
 
 #. %1$s:  IF active 
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:167
-#, fuzzy, c-format
+#, c-format
 msgid "There are no contracts with this vendor. %s "
-msgstr "Ez duzu kontraturik hornitzaile honekin. "
+msgstr "Ez dago kontraturik hornitzaile honentzat. %s "
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
 #, fuzzy, c-format
@@ -52855,7 +52885,7 @@ msgstr "Ez dago mapaketarik honentzat %s"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:567
 #, c-format
 msgid "There is no minimum or maximum character length. %s %s %s "
-msgstr ""
+msgstr "Ez dago gutxieneko edo gehienezko luzeera karaktere kopurua. %s %s %s "
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:36
 #, c-format
@@ -53034,7 +53064,7 @@ msgstr "Eremu hau nahitaezkoa da"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/validator-strings.inc:1
 msgid "This field is required."
-msgstr "Este campo es obligatorio."
+msgstr "Eremu hau bete beharrekoa da"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:254
@@ -53472,7 +53502,7 @@ msgstr ""
 #. %1$s:  IF ( too_many_items ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:140
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:179
 #, c-format
 msgid "This will delete %sall the%sthe selected%s items."
 msgstr "Horrek%saukeratutako%selementu guztiak%sezabatuko ditu."
@@ -53710,7 +53740,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:173
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:49
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:105
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
@@ -54133,7 +54163,7 @@ msgid "Too many holds: "
 msgstr "Erreserba gehiegi:"
 
 #. %1$s:  too_many_items | html 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:170
 #, c-format
 msgid "Too many items (%s) to display individually."
 msgstr "Elementu gehiegi dago (%s) banan banan bistaratzeko."
@@ -54337,7 +54367,7 @@ msgstr "Monto total pagadero:"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:231
 #, c-format
 msgid "Total amount: "
-msgstr "Suma total:"
+msgstr "Totala:"
 
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:90
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:76
@@ -54417,9 +54447,9 @@ msgid "Total must be a number"
 msgstr "Guztizkoa zenbaki bat izan behar da"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
-#, fuzzy, c-format
+#, c-format
 msgid "Total number of results:"
-msgstr "Erregistratutako zerga zenbakia:"
+msgstr "Emaitza totala:"
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:72
 #, fuzzy, c-format
@@ -54563,7 +54593,7 @@ msgstr "Transferentzia %s egun berandu"
 msgid "Transfer is not allowed for: "
 msgstr "Transferentziak"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:383
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:385
 #, fuzzy, c-format
 msgid "Transfer now? "
 msgstr "Transferitu orain?"
@@ -54575,9 +54605,9 @@ msgid "Transfer order to this basket?"
 msgstr "Agregar pedido a la cesta"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:277
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:338
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:498
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:279
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:500
 #, c-format
 msgid "Transfer to:"
 msgstr "Hona transferitu:"
@@ -54745,7 +54775,7 @@ msgstr "Tümer Garip"
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:36
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:346
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:159
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:147
@@ -54966,7 +54996,7 @@ msgstr "Aldaketarik gabe"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:465
 #, c-format
 msgid "Uncheck all"
-msgstr "Desautatu guztiak"
+msgstr "Desaktibatu guztiak"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:246
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:248
@@ -55079,9 +55109,8 @@ msgstr "Unitate prezio "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:171
-#, fuzzy
 msgid "Units per issue is required"
-msgstr "Este campo es obligatorio."
+msgstr "Eremu hau beharrezkoa da"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:75
 #, fuzzy, c-format
@@ -55282,8 +55311,8 @@ msgstr "Beste ekintza bat"
 msgid "Update all child funds with this owner "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:80
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:82
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:81
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:83
 #, c-format
 msgid "Update child to adult patron"
 msgstr "Eguneratu bazkide haurra bazkide heldura"
@@ -55649,9 +55678,9 @@ msgstr ""
 "jakinarazi gabe ezabatuko dira!"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:53
-#, fuzzy, c-format
+#, c-format
 msgid "Use default values"
-msgstr "Balio lehenetsiak"
+msgstr "Erabili balio lehenetsiak"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:29
 #, c-format
@@ -56391,7 +56420,7 @@ msgstr "Vincent Danjean"
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:124
 #, c-format
 msgid "Visibility: "
-msgstr "Visibilidad:"
+msgstr "Ikusgarri:"
 
 #: intranet-tmpl/prog/en/modules/about.tt:587
 #, c-format
@@ -57073,7 +57102,7 @@ msgid "Write off"
 msgstr "Ezeztatu"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:133
+#: intranet-tmpl/prog/en/modules/members/pay.tt:134
 msgid "Write off all"
 msgstr "Cancelar todo"
 
@@ -57199,7 +57228,7 @@ msgstr "Urtero - jai egun errepikagarria"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:403
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:395
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:121
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:61
@@ -57345,16 +57374,16 @@ msgid "Yes, delete this subfield"
 msgstr "Sí, eliminar este subcampo "
 
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:114
-#, fuzzy, c-format
+#, c-format
 msgid "Yes, delete this tag"
-msgstr "Bai, ezabatu etiketa hau"
+msgstr "Bai, ezabatu"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:432
 #, fuzzy, c-format
 msgid "Yes, edit existing items"
 msgstr "Bai: editatu existitzen diren elementuak"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:404
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:396
 #, fuzzy, c-format
 msgid "Yes, print slip"
 msgstr "Si, imprimir recibo"
@@ -57469,9 +57498,9 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "You are not allowed to use batch checkout for this patron"
-msgstr "Ez zaizu uzten orri honetara zuzenean sartzen."
+msgstr "Ez duzu erabiltzailearen maileguetarako sarrera"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:50
 #, fuzzy, c-format
@@ -57479,13 +57508,13 @@ msgid "You are not authorised to manage this basket."
 msgstr "Ez zaude baimendua orri hau ikustera."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:76
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:77
 #, fuzzy
 msgid "You are not authorized to delete patrons"
 msgstr "Ez zaude baimendua orri hau ikustera."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:69
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:70
 #, fuzzy
 msgid "You are not authorized to manage API keys"
 msgstr "Ez zaude baimendua orri hau ikustera."
@@ -57496,13 +57525,13 @@ msgid "You are not authorized to modify this fund"
 msgstr "No está autorizado para modificar este fondo"
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:53
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:54
 #, fuzzy
 msgid "You are not authorized to renew patrons"
 msgstr "Ez zaude erregistro hau ikustera baimenduta."
 
 #. A
-#: intranet-tmpl/prog/en/includes/members-toolbar.inc:58
+#: intranet-tmpl/prog/en/includes/members-toolbar.inc:59
 #, fuzzy
 msgid "You are not authorized to set permissions"
 msgstr "Ez zaude baimendua pendiente dauden erosketa-proposamenak ikustera."
@@ -58525,7 +58554,7 @@ msgid "a an the"
 msgstr "a an the"
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:622
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
 #, fuzzy, c-format
 msgid "about page"
 msgstr "ure kontuaren orria"
@@ -58606,7 +58635,7 @@ msgstr "eta itzuli egin da."
 msgid "and mark one currency as active."
 msgstr "Mesedez, editatu moneta bat eta markatu aktibo bezala."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:622
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
 #, c-format
 msgid "and search for the \"data problems\" section"
 msgstr ""
@@ -59411,9 +59440,9 @@ msgid "handle to drag and drop them to their new position "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:188
-#, fuzzy, c-format
+#, c-format
 msgid "has "
-msgstr "- "
+msgstr "dauka"
 
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:95
 #, c-format
@@ -59641,7 +59670,7 @@ msgid "is not"
 msgstr "Zirkulazio oharra"
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:612
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:614
 #, fuzzy, c-format
 msgid "is now debarred until %s."
 msgstr "está ahora congelado hasta %s "
@@ -59696,9 +59725,9 @@ msgid "item's holding library "
 msgstr "Biblioteca de préstamo:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:704
-#, fuzzy, c-format
+#, c-format
 msgid "item's home library"
-msgstr "Biblioteca de origen del ítem:"
+msgstr "Itemaren jatorrizko liburutegia:"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:443
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:447
@@ -59929,9 +59958,9 @@ msgid "lost"
 msgstr "galduta"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
-#, fuzzy, c-format
+#, c-format
 msgid "m/"
-msgstr "/"
+msgstr "m/"
 
 #: intranet-tmpl/prog/en/modules/about.tt:970
 #, c-format
@@ -60203,9 +60232,9 @@ msgid "patron category "
 msgstr "bazkide kategoria"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:203
-#, fuzzy, c-format
+#, c-format
 msgid "patron_attributes"
-msgstr "Atributos de socios "
+msgstr "patron_attributes"
 
 #: intranet-tmpl/prog/en/modules/members/member.tt:27
 #, fuzzy, c-format
@@ -60384,9 +60413,9 @@ msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "aukeratzea deskribatzaile zerrenda baten artean"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:234
-#, fuzzy, c-format
+#, c-format
 msgid "s/"
-msgstr "/"
+msgstr "s/"
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:35
 #, fuzzy, c-format
@@ -60810,19 +60839,19 @@ msgstr "f- 35 mm."
 
 # Acquisitions > Policy
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "use default (cataloging the record)"
-msgstr "erregistroa katalogatzean."
+msgstr "Lehenetsia (erregistroa katalogatzean)."
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:120
-#, fuzzy, c-format
+#, c-format
 msgid "use default (placing an order)"
-msgstr "Eskaera bat egitea"
+msgstr "Lehenetsia (eskaera bat egitea)"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:118
 #, c-format
 msgid "use default (receiving an order)"
-msgstr ""
+msgstr "Lehenetsia (eskaera bat jasoa)"
 
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:106
 #, c-format
@@ -60966,9 +60995,9 @@ msgid "written and maintained by Jörn Zaefferer is licensed under the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/chart.inc:27
-#, fuzzy, c-format
+#, c-format
 msgid "x column:"
-msgstr "Zutabea: "
+msgstr "X zutabea: "
 
 #: intranet-tmpl/prog/en/modules/tools/export.tt:216
 #, c-format
@@ -61035,9 +61064,9 @@ msgstr ""
 
 #. %1$s:  IF elasticsearch_status.running 
 #: intranet-tmpl/prog/en/modules/about.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "| Status: %s "
-msgstr "%s |%s %s %s %s "
+msgstr "| Status: %s "
 
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:136
 #, c-format
