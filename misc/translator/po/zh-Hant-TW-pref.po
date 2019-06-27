@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2019-05-28 22:15+0000\n"
+"PO-Revision-Date: 2019-06-26 02:17+0000\n"
 "Last-Translator: Anthony MAO <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1559081728.635947\n"
+"X-POOTLE-MTIME: 1561515477.296536\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2109,8 +2109,8 @@ msgid "cataloguing.pref#RisExportAdditionalFields# All values of repeating tags 
 msgstr "以 RIS 欄號列印所有重複的欄號與分欄。"
 
 # Cataloging > Exporting
-msgid "cataloguing.pref#RisExportAdditionalFields# Include following fields when exporting RIS,"
-msgstr "匯出 RIS 時包括以下的欄位，"
+msgid "cataloguing.pref#RisExportAdditionalFields# Include following fields when exporting RIS"
+msgstr "匯出至 RIS 時包括以下欄位"
 
 # Cataloging > Exporting
 msgid "cataloguing.pref#RisExportAdditionalFields# To specificy multiple marc tags/subfields as targets for a repeating RIS tag, use the following format: RIS_TAG: [TAG2$SUBFIELD1, TAG2$SUBFIELD2] ( e.g. NT: [501$a, 505$g] )"
@@ -4051,37 +4051,35 @@ msgstr "通則：若在冒號 (:) 左邊的位置值就是館藏現在的位置�
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# Note: PROC and CART are special values, for these locations only can location and permanent_location differ, in all other cases an update will affect both. Items in the CART location will be returned to their permanent location on checkout.<br/>"
-msgstr ""
-"說明：PROC 和 CART 是特別的值，location 不同於 permanent_location，更新的時候，兩者都受影響。借出後，在 CART "
-"位置的館藏將被標記送回永久典藏地。<br/>"
+msgstr "說明：PROC 和 CART 是特別的值，location 不同於 permanent_location，更新的時候，兩者都受影響。借出後，在 CART 位置的館藏將被標記送回永久典藏地。<br/>"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# PROC: FIC - causes an item in the Processing Center location to be updated into the Fiction location on check in.<br/>"
-msgstr ""
+msgstr "PROC: FIC - 原來在處理中心的館藏，還入時將被更新至小說位置。<br/>"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# PROC: _PERM_ - causes an item that is in the Processing Center to be updated to it's permanent location.<br/><br/>"
-msgstr ""
+msgstr "PROC: _PERM_ - 把處理中心的館藏更新至其永久位置。<br/><br/>"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# The special term _ALL_ is used on the left side of the colon (:) to affect all items, <strong>and overrides all other rules.</strong>"
-msgstr ""
+msgstr "此特別術語 _ALL_ 使用於冒號 (:) 的左方，影響所有的館藏，<strong>並且取代其他規則。</strong>"
 
 # Circulation > Checkin Policy
-msgid "circulation.pref#UpdateItemLocationOnCheckin# The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no locaiton assigned.<br/>"
-msgstr ""
+msgid "circulation.pref#UpdateItemLocationOnCheckin# The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no location assigned.<br/>"
+msgstr "術語 _BLANK_ 可置於前方或後面，用以更新或移除沒有指定位置的館藏。<br/>"
 
 # Circulation > Checkin Policy
-msgid "circulation.pref#UpdateItemLocationOnCheckin# This a list of value pairs. the first value is followed immediately by colon space then the second value.<br/><br/>"
-msgstr ""
+msgid "circulation.pref#UpdateItemLocationOnCheckin# This is a list of value pairs. The first value is followed immediately by colon space then the second value.<br/><br/>"
+msgstr "這是值的清單。兩個值以冒號分隔。<br/><br/>"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# _ALL_: FIC - causes all items to be updated into the Fiction location on check in.<br/>"
-msgstr ""
+msgstr "_ALL_: FIC - 將還入的館藏更新至小說位置。<br/>"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#UpdateItemLocationOnCheckin# _BLANK_: FIC - causes an item that has no location to be updated into the Fiction location on check in.<br/>"
-msgstr ""
+msgstr "_BLANK_: FIC - 還入時，將未指定位置的館藏更新至小說位置。<br/>"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#UpdateItemWhenLostFromHoldList# Example: \"itemlost: 1\" to set items.itemlost to 1 when the item is marked as lost"
@@ -5758,7 +5756,7 @@ msgstr "特色"
 
 # OPAC > OpenURL
 msgid "opac.pref OpenURL"
-msgstr ""
+msgstr "opac.pref OpenURL"
 
 # OPAC > Payments
 msgid "opac.pref Payments"
@@ -5857,12 +5855,15 @@ msgid "opac.pref#BlockExpiredPatronOpacActions# expired patrons from OPAC action
 msgstr "到期讀者在 OPAC 辦理預約或續借作業。  注意，讀者類型設定的權限優於此系統偏好。"
 
 # OPAC > Appearance
-msgid "opac.pref#COinSinOPACResults# <br/><code>OpenURLResolverURL</code>, <code>OPACShowOpenURL</code>, <code>OPACOpenURLItemTypes</code>, <code>OpenURLText<code>, <code>OpenURLImageLocation</code>"
+msgid "opac.pref#COinSinOPACResults# <br/><code>OpenURLResolverURL</code>, <code>OPACShowOpenURL</code>, <code>OPACOpenURLItemTypes</code>, <code>OpenURLText</code>, <code>OpenURLImageLocation</code>"
 msgstr ""
+"<br/><code>OpenURLResolverURL</code>, <code>OPACShowOpenURL</code>, "
+"<code>OPACOpenURLItemTypes</code>, <code>OpenURLText</code>, "
+"<code>OpenURLImageLocation</code>"
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# <br/>If you want to display a link to an OpenURL resolver, look at the following system preferences:"
-msgstr ""
+msgstr "<br/>想要顯示至 OpenURL 方案的連結，查看以下的系統偏好："
 
 # OPAC > Appearance
 msgid "opac.pref#COinSinOPACResults# COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
@@ -6098,11 +6099,11 @@ msgstr "OPAC 找不到結果時，顯示下列HTML："
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACOpenURLItemTypes# <br />"
-msgstr ""
+msgstr "<br />"
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
-msgstr ""
+msgstr "供顯示 OpenURL 連結使用的館藏類型代碼 (以空格區隔) 清單："
 
 # OPAC > Features
 msgid "opac.pref#OPACPatronDetails# Allow"
@@ -6214,15 +6215,15 @@ msgstr "OPAC 的讀者。"
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACShowOpenURL# Disable"
-msgstr ""
+msgstr "停用"
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACShowOpenURL# Enable"
-msgstr ""
+msgstr "啟用"
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACShowOpenURL# display of OpenURL link in OPAC search results and detail page."
-msgstr ""
+msgstr "在 OPAC 搜尋結果與詳情頁面顯示 OpenURL 連結。"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACShowUnusedAuthorities# Do not show"
@@ -6457,8 +6458,8 @@ msgid "opac.pref#OpacHiddenItems# Define custom rules to hide specific items fro
 msgstr "以客製化規則隱藏館藏不必搜尋也不顯示於 OPAC。參見 <a href=\"http://wiki.koha-community.org/wiki/OpacHiddenItems\" target=\"_blank\">Koha wiki</a>。"
 
 # OPAC > Policy
-msgid "opac.pref#OpacHiddenItemsExceptions# List of borrower categories, separated by |, that can see items otherwise hidden by <tt>OpacHiddenItems</tt>"
-msgstr "借閱者的類型，以 | 區隔，也可用 <tt>OpacHiddenItems</tt> 隱藏"
+msgid "opac.pref#OpacHiddenItemsExceptions# List of borrower categories, separated by |, that can see items otherwise hidden by <code>OpacHiddenItems</code>"
+msgstr "借閱者範疇清單，以直線 | 區隔，可查看被 <code>OpacHiddenItems</code> 隱藏的館藏"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
@@ -6802,35 +6803,35 @@ msgstr "讀者從 OPAC 近用至借出最多的館藏。此功能還在實驗中
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <br />- <code>/opac-tmpl/bootstrap/images/OpenURL.png</code>"
-msgstr ""
+msgstr "<br />- <code>/opac-tmpl/bootstrap/images/OpenURL.png</code>"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <br />- <code>http://www.example.com/img/openurl.png</code>"
-msgstr ""
+msgstr "<br />- <code>http://www.example.com/img/openurl.png</code>"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <br />Can be an absolute URL starting with <code>http://</code> or"
-msgstr ""
+msgstr "<br />絕對 URL 以 <code>http://</code> 或其他開頭"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <br />Examples:"
-msgstr ""
+msgstr "<br />範例："
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# <code>https://</code> or a relative URL"
-msgstr ""
+msgstr "<code>https://</code> 或相對 URL"
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLImageLocation# Location of image for OpenURL links:"
-msgstr ""
+msgstr "圖像位置的 OpenURL 連結："
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLResolverURL# Complete URL of OpenURL resolver (starting with <code>http://</code> or <code>https://</code>):"
-msgstr ""
+msgstr "OpenURL 解析器的完整 URL (以 <code>http://</code> 或 <code>https://</code>) 開頭："
 
 # OPAC > OpenURL
 msgid "opac.pref#OpenURLText# Text of OpenURL links (or image title if OpenURLImageLocation is defined):"
-msgstr ""
+msgstr "OpenURL 連結的文字 (若已在 OpenURLImageLocation 內設定則為影像題名)："
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
@@ -7674,7 +7675,7 @@ msgstr "天數、匿名鎖定/失效帳號"
 
 # Patrons > Privacy
 msgid "patrons.pref#UnsubscribeReflectionDelay# days.<br>IMPORTANT: No action is performed when these delays are empty (no text). But a zero value ('0') is interpreted as no delay (do it now)! The actions are performed by the cleanup database cron job."
-msgstr ""
+msgstr "日數。<br>重要：若空白 (沒有文字) 則沒有回應。若插入的值為零 ('0') 則無延遲！此工作係清除資料庫的工作排程。"
 
 # Patrons > General
 msgid "patrons.pref#UseEmailReceipts# Don't send"
@@ -7774,7 +7775,7 @@ msgstr "檢索"
 
 # Searching > Did you Mean/Spell checking
 msgid "searching.pref Did you Mean/Spell checking"
-msgstr ""
+msgstr "您的意思/拚字檢查"
 
 # Searching > Features
 msgid "searching.pref Features"
@@ -7898,23 +7899,23 @@ msgstr "使用"
 
 # Searching > Did you Mean/Spell checking
 msgid "searching.pref#LibrisKey# Can be obtained at http://api.libris.kb.se/bibspell."
-msgstr ""
+msgstr "可能從 http://api.libris.kb.se/bibspell 取得。"
 
 # Searching > Did you Mean/Spell checking
 msgid "searching.pref#LibrisKey# LIBRIS Spellchecking API key"
-msgstr ""
+msgstr "LIBRIS Spellchecking API 鍵"
 
 # Searching > Did you Mean/Spell checking
 msgid "searching.pref#LibrisKey# Swedish service for spellchecking.<br/>"
-msgstr ""
+msgstr "瑞典提供的拚字檢查服務。<br/>"
 
 # Searching > Did you Mean/Spell checking
 msgid "searching.pref#LibrisURL# LIBRIS base URL"
-msgstr ""
+msgstr "LIBRIS 的 URL"
 
 # Searching > Did you Mean/Spell checking
 msgid "searching.pref#LibrisURL# Please only change this if you are sure it needs changing."
-msgstr ""
+msgstr "祗有在確定的情況下才改變它。"
 
 # Searching > Search Form
 msgid "searching.pref#LoadSearchHistoryToTheFirstLoggedUser# Don't load"
@@ -8558,7 +8559,7 @@ msgstr "WYSIWYG 編輯器供編輯部份 HTML 系統偏好。"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>Put a path to define a xslt file</li><li>Put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr ""
+msgstr "<br />選擇：<ul><li>鍵入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTDetailsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>給路徑供 xslt 檔案使用</li><li>給 URL 供外部的樣式表使用。</li></ul>{langcode} 將取代現在的介面語言"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTDetailsDisplay# Display details in the staff client using XSLT stylesheet at: "
@@ -8574,7 +8575,7 @@ msgstr "在館員介面顯示虛擬書架時，使用以下的 XSLT 樣式表：
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTResultsDisplay# <br />Options:<ul><li>Enter \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"default\">default</a>\" for the default one</li><li>Put a path to define a xslt file</li><li>Put an URL for an external specific stylesheet.</li></ul>{langcode} will be replaced with current interface language"
-msgstr ""
+msgstr "<br />選擇：<ul><li>鍵入 \"<a href=\"#\" class=\"set_syspref\" data-syspref=\"XSLTResultsDisplay\" data-value=\"default\">預設</a>\" 供預設使用</li><li>給路徑供 xslt 檔案使用</li><li>給 URL 供外部的樣式表使用。</li></ul>{langcode} 將取代現在的介面語言"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#XSLTResultsDisplay# Display results in the staff client using XSLT stylesheet at: "
