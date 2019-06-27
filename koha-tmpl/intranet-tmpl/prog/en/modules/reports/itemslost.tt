@@ -192,7 +192,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/table_filters.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    <script type='text/javascript'>
+    <script>
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
             var lostitems_table = KohaTable("lostitems-table", {
