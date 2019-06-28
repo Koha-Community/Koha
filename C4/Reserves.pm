@@ -664,9 +664,9 @@ sub GetReserveStatus {
 
 =head2 CheckReserves
 
-  ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber);
-  ($status, $reserve, $all_reserves) = &CheckReserves(undef, $barcode);
-  ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber,undef,$lookahead);
+  ($status, $matched_reserve, $possible_reserves) = &CheckReserves($itemnumber);
+  ($status, $matched_reserve, $possible_reserves) = &CheckReserves(undef, $barcode);
+  ($status, $matched_reserve, $possible_reserves) = &CheckReserves($itemnumber,undef,$lookahead);
 
 Find a book in the reserves.
 
@@ -1511,6 +1511,13 @@ C<@results> is an array of references-to-hash whose keys are mostly
 fields from the reserves table of the Koha database, plus
 C<biblioitemnumber>.
 
+This routine with either return:
+1 - Item specific holds from the holds queue
+2 - Title level holds from the holds queue
+3 - All holds for this biblionumber
+
+All return values will respect any borrowernumbers passed as arrayref in $ignore_borrowers
+
 =cut
 
 sub _Findgroupreserve {
@@ -1779,7 +1786,7 @@ sub MoveReserve {
     my ( $itemnumber, $borrowernumber, $cancelreserve ) = @_;
 
     my $lookahead = C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
-    my ( $restype, $res, $all_reserves ) = CheckReserves( $itemnumber, undef, $lookahead );
+    my ( $restype, $res, undef ) = CheckReserves( $itemnumber, undef, $lookahead );
     return unless $res;
 
     my $biblionumber     =  $res->{biblionumber};
