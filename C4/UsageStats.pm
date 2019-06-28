@@ -134,7 +134,7 @@ sub BuildReport {
         AgeRestrictionOverride
         AllFinesNeedOverride
         AllowFineOverride
-        AllowItemsOnHoldCheckout
+        AllowItemsOnHoldCheckoutSIP
         AllowItemsOnHoldCheckoutSCO
         AllowNotForLoanOverride
         AllowRenewalLimitOverride
