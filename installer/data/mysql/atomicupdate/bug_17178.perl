@@ -1,7 +1,7 @@
 $DBversion = 'XXX';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
-        INSERT INTO keyboard_shortcuts (shortcut_name, shortcut_keys)
+        INSERT IGNORE INTO keyboard_shortcuts (shortcut_name, shortcut_keys)
             VALUES ("toggle_keyboard", "Shift-Ctrl-K")
     });
 
