@@ -382,7 +382,7 @@ This method checks the tmp_holdsqueue to see if this item has been selected for 
 sub has_pending_hold {
     my ( $self ) = @_;
     my $pending_hold = $self->_result->tmp_holdsqueues;
-    return !C4::Context->preference('AllowItemsOnHoldCheckout') && $pending_hold->count ? 1: 0;
+    return !C4::Context->preference('AllowItemsOnHoldCheckoutSIP') && $pending_hold->count ? 1: 0;
 }
 
 =head3 as_marc_field
