@@ -209,7 +209,11 @@ sub hidden_in_opac {
 
     my $rules = $params->{rules} // {};
 
-    return !(any { !$_->hidden_in_opac({ rules => $rules }) } $self->items->as_list);
+    my @items = $self->items->as_list;
+
+    return 0 unless @items; # Do not hide if there is no item
+
+    return !(any { !$_->hidden_in_opac({ rules => $rules }) } @items);
 }
 
 =head3 article_request_type
