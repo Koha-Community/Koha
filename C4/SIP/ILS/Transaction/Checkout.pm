@@ -57,7 +57,7 @@ sub do_checkout {
     my $borrower = $patron->unblessed;
 	$debug and warn "do_checkout borrower: . " . Dumper $borrower;
     my ($issuingimpossible, $needsconfirmation) = _can_we_issue($patron, $barcode,
-        C4::Context->preference("AllowItemsOnHoldCheckout")
+        C4::Context->preference("AllowItemsOnHoldCheckoutSIP")
     );
 
     my $noerror=1;  # If set to zero we block the issue
