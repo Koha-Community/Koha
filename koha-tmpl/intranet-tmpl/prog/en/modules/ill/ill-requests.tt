@@ -540,8 +540,10 @@
         // Set column settings
         var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
     </script>
+    [% IF query_type == 'illlist' %]
     [% INCLUDE 'ill-list-table-strings.inc' %]
     [% Asset.js("js/ill-list-table.js") | $raw %]
+    [% END %]
 [% END %]
 
 [% TRY %]
