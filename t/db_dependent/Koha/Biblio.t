@@ -62,11 +62,14 @@ subtest 'metadata() tests' => sub {
 
 subtest 'hidden_in_opac() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
+
+    ok( !$biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio not hidden if there is no item attached' );
+
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
