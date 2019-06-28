@@ -35,17 +35,10 @@
         [% END %]
     </div>
 
-    [% IF ( $borrowers ) %]
-        <div id="doc" class="yui-t7">
-            <div id="bd">
-                <div id="yui-main">
-                    <div class="yui-g">
-    [% ELSE %]
-        <div id="doc3" class="yui-t2">
-            <div id="bd">
-                <div id="yui-main">
-                    <div class="yui-b">
-    [% END %]
+    <div class="main container-fluid">
+                <main>
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-push-2">
 
                     [% IF patron %]
                         [% INCLUDE 'members-toolbar.inc' %]
@@ -87,7 +80,6 @@
                     [% END %]
 
                     [% IF ( NEEDSCONFIRMATION ) %]
-                        <div class="yui-g">
                             <div id="circ_needsconfirmation" class="dialog alert audio-alert-action">
                                 [% IF CAN_user_circulate_force_checkout %]
                                     <h3>Please confirm checkout</h3>
@@ -307,11 +299,9 @@
                                     [% END %]
                                 [% END %]
                             </div> <!-- /#circ_needsconfirmation -->
-                        </div> <!-- /.yui-g -->
                     [% END # /NEEDSCONFIRMATION %]
 
                     [% IF ( IMPOSSIBLE ) %]
-                        <div class="yui-g">
                             <div id="circ_impossible" class="dialog alert audio-alert-warning">
                                 [% IF ( UNKNOWN_BARCODE ) %]
                                     <h3>Barcode not found</h3>
@@ -428,7 +418,6 @@
                                     [% END %]
                                 </ul>
                             </div> <!-- /#circ_impossible -->
-                        </div> <!-- /.yui-g -->
 
                         [% IF ( FALLBACK ) %]
                             [% IF options %]
@@ -505,7 +494,6 @@
                         <!-- BARCODE ENTRY -->
 
                         [% IF patron %]
-                            <div class="yui-g">
 
                                 [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
                                     <div class="dialog alert">
@@ -513,8 +501,9 @@
                                     </div>
                                 [% END %]
 
+                                <div class="row">
                                 [% IF ( !noissues ) || ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') )%]
-                                    <div class="yui-u first">
+                                        <div class="col-sm-6">
                                         <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
                                             <input type="hidden" name="restoreduedatespec" />
                                             [% IF ( issue ) %]
@@ -633,18 +622,18 @@
                                                 </div>
                                             [% END %]
                                         </form> <!-- /#mainform -->
-                                    </div> <!-- /yui-u.first -->
+                                        </div> <!-- /.col-sm-6 -->
 
                                 [% END #/IF !noissues %]
 
                                 [% IF ( noissues ) %]
                                     [% IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) %]
-                                        <div class="yui-u">
+                                        <div class="col-sm-6">
                                     [% ELSE %]
                                         <div>
                                     [% END %]
                                 [% ELSE %]
-                                    <div class="yui-u">
+                                    <div class="col-sm-6">
                                 [% END %]
 
                                 [% IF ( noissues ) %]
@@ -764,7 +753,6 @@
                                     [% END %]
 
                                 </ul>
-                            </div> <!-- /.yui-g -->
 
                             [% IF WaitingHolds.count %]
                                 <div id="holdswaiting" class="circmessage">
@@ -821,11 +809,10 @@
                                 </ul>
                                 <a id="addnewmessageLabel" href="#add_message_form" class="btn btn-link" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
                             </div> <!-- /.messages -->
+                            </div> <!-- /#circmessages -->
+                        </div> <!-- /div or div.col-sm-6 -->
+                    </div> <!-- /.row -->
 
-                        </div> <!-- /div or div.yui-u -->
-                    </div> <!-- /.yui-g -->
-
-                    <div class="yui-g">
                         <div id="patronlists" class="toptabs">
                             <ul>
                                 <li>
@@ -963,34 +950,39 @@
                                 [% INCLUDE 'patron-article-requests.inc' %]
                             [% END %]
 
+                    </div> <!-- /#patronlists -->
                     [% ELSIF borrowernumber # IF patron %]
                         <div class="dialog message">Patron not found. <a href="/cgi-bin/koha/members/members-home.pl">Return to search</a></div>
                     [% END # /IF patron %]
 
-                    </div> <!-- /#patronlists -->
-                </div> <!-- /.yui-g -->
-            [% END %]
+            [% END #/IF borrowers %]
+
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
             [% IF Koha.Preference('CircSidebar') %]
                 [% UNLESS ( borrowers ) %]
                     [% IF not( borrowernumber and patron ) %]
-                        <div class="yui-b noprint">
+                    <div class="col-sm-2 col-sm-pull-10">
+                        <aside>
                             [% INCLUDE 'circ-nav.inc' %]
-                        </div>
-                    [% END %]
+                        </aside>
+                    </div> <!-- /.col-sm-2.col-sm-pull-10 -->
                 [% END %]
             [% END %]
-        </div> <!-- /.yui-b -->
-    </div> <!-- /.yui-main -->
+        [% END %]
 
     [% UNLESS ( borrowers ) %]
         [% IF borrowernumber and patron %]
-            <div class="yui-b">
+                <div class="col-sm-2 col-sm-pull-10">
+                    <aside>
                 [% INCLUDE 'circ-menu.inc' %]
-            </div>
+                    </aside>
+                </div> <!-- /.col-sm-2 col-sm-pull-10 -->
         [% END %]
     [% END %]
-</div> <!-- /#bd -->
+
+    </div> <!-- /.row -->
+</main>
 
 <!-- Modal -->
 <div id="barcodeSubmittedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="barcodeSubmittedModalLabel" aria-hidden="true">
