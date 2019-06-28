@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 61;
+use Test::More tests => 62;
 use Test::MockModule;
 use Test::Warn;
 
@@ -804,6 +804,34 @@ subtest 'reserves.item_level_hold' => sub {
 
         $hold->delete;
     };
+
+};
+
+subtest 'MoveReserve additional test' => sub {
+
+    plan tests => 4;
+
+    # Create the items and patrons we need
+    my $biblio = $builder->build_sample_biblio();
+    my $itype = $builder->build_object({ class => "Koha::ItemTypes", value => { notforloan => 0 } });
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber,notforloan => 0, itype => $itype->itemtype });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, notforloan => 0, itype => $itype->itemtype });
+    my $patron_1 = $builder->build_object({ class => "Koha::Patrons" });
+    my $patron_2 = $builder->build_object({ class => "Koha::Patrons" });
+
+    # Place a hold on the title for both patrons
+    my $reserve_1 = AddReserve( $item_1->homebranch, $patron_1->borrowernumber, $biblio->biblionumber, undef, 1 );
+    my $reserve_2 = AddReserve( $item_2->homebranch, $patron_2->borrowernumber, $biblio->biblionumber, undef, 1 );
+    is($patron_1->holds->next()->reserve_id, $reserve_1, "The 1st patron has a hold");
+    is($patron_2->holds->next()->reserve_id, $reserve_2, "The 2nd patron has a hold");
+
+    # Fake the holds queue
+    $dbh->do(q{INSERT INTO hold_fill_targets VALUES (?, ?, ?, ?, ?)},undef,($patron_1->borrowernumber,$biblio->biblionumber,$item_1->itemnumber,$item_1->homebranch,0));
+
+    # The 2nd hold should be filed even if the item is preselected for the first hold
+    MoveReserve($item_1->itemnumber,$patron_2->borrowernumber);
+    is($patron_2->holds->count, 0, "The 2nd patrons no longer has a hold");
+    is($patron_2->old_holds->next()->reserve_id, $reserve_2, "The 2nd patrons hold was filled and moved to old holds");
 
 };
 
