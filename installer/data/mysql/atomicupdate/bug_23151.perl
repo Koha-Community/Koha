@@ -1,6 +1,4 @@
-use C4::Installer;
-
-my $DBVersion = 'XXX';
+$DBversion = 'XXX';
 if ( CheckVersion( $DBversion ) ) {
     print "Running... ";
     unless ( column_exists( 'borrower_modifications', 'changed_fields' ) ) {
