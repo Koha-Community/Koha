@@ -737,11 +737,9 @@ sub CheckReserves {
     }
     # note: we get the itemnumber because we might have started w/ just the barcode.  Now we know for sure we have it.
     my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item, $itemnumber, $damaged, $item_homebranch, $item_holdingbranch ) = $sth->fetchrow_array;
-
     return if ( $damaged && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
     return unless $itemnumber; # bail if we got nothing.
-
     # if item is not for loan it cannot be reserved either.....
     # except where items.notforloan < 0 :  This indicates the item is holdable.
     return if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
@@ -979,7 +977,6 @@ sub ModReserveFill {
     my $reserve_id = $res->{'reserve_id'};
 
     my $hold = Koha::Holds->find($reserve_id);
-
     # get the priority on this record....
     my $priority = $hold->priority;
 
@@ -1795,18 +1792,16 @@ sub MoveReserve {
         # The item is reserved by someone else.
         # Find this item in the reserves
 
-        my $borr_res;
-        foreach (@$all_reserves) {
-            $_->{'borrowernumber'} == $borrowernumber or next;
-            $_->{'biblionumber'}   == $biblionumber   or next;
-
-            $borr_res = $_;
-            last;
-        }
+        my $borr_res  = Koha::Holds->search({
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblionumber,
+        },{
+            order_by       => 'priority'
+        })->next();
 
         if ( $borr_res ) {
             # The item is reserved by the current patron
-            ModReserveFill($borr_res);
+            ModReserveFill($borr_res->unblessed);
         }
 
         if ( $cancelreserve eq 'revert' ) { ## Revert waiting reserve to priority 1
