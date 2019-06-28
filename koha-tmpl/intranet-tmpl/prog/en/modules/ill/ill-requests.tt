@@ -703,6 +703,22 @@
         </div>
     </div>
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    <script>
+        var prefilters = '[% prefilters | $raw %]';
+        // Set column settings
+        var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+    </script>
+    [% IF query_type == 'illlist' %]
+    [% INCLUDE 'ill-list-table-strings.inc' %]
+    [% Asset.js("js/ill-list-table.js") | $raw %]
+    [% END %]
+[% END %]
+
 [% TRY %]
 [% PROCESS backend_jsinclude %]
 [% CATCH %]
