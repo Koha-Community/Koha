@@ -34,8 +34,6 @@ our $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 our $builder;
 
-$schema->resultset('DefaultCircRule')->delete; # Is a singleton table
-
 subtest 'Start with some trivial tests' => sub {
     plan tests => 7;
 
