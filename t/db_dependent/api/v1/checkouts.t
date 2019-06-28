@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 73;
+use Test::More tests => 79;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
