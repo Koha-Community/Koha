@@ -306,6 +306,7 @@ if ( $op eq 'do' ) {
         my $borrower_categorycode = Koha::Patrons->find( $borrowernumber )->categorycode;
         my $i=0;
         for ( @attributes ) {
+            next unless $_;
             my $attribute;
             $attribute->{code} = $_;
             $attribute->{attribute} = $attr_values[$i];
