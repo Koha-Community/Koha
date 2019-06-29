@@ -119,6 +119,32 @@ sub retrieve_data {
 get_template returns a Template object. Eventually this will probably be calling
 C4:Template, but at the moment, it does not.
 
+The returned template contains 3 variables that can be used in the plugin
+templates:
+
+=over 8
+
+=item B<CLASS>
+
+The name of the plugin class.
+
+=item B<METHOD>
+
+Then name of the plugin method used. For example 'tool' or 'report'.
+
+=item B<PLUGIN_PATH>
+
+The URL path to the plugin. It can be used in templates in order to localize
+ressources like images in html tags, or other templates.
+
+=item B<PLUGN_DIR>
+
+The absolute pathname to the plugin directory. Necessary to include other
+templates from a template with the [% INCLUDE %] directive.
+
+=over
+
+
 =cut
 
 sub get_template {
@@ -142,6 +168,7 @@ sub get_template {
         CLASS       => $self->{'class'},
         METHOD      => scalar $self->{'cgi'}->param('method'),
         PLUGIN_PATH => $self->get_plugin_http_path(),
+        PLUGIN_DIR  => $self->get_plugin_dir(),
     );
 
     return $template;
@@ -150,7 +177,10 @@ sub get_template {
 sub get_metadata {
     my ( $self, $args ) = @_;
 
-    return $self->{'metadata'};
+    #FIXME: Why another encoding issue? For metadata containg non latin characters.
+    my $metadata = $self->{metadata};
+    utf8::decode($metadata->{$_}) for keys %$metadata;
+    return $metadata;
 }
 
 =head2 get_qualified_table_name
@@ -183,6 +213,22 @@ sub get_plugin_http_path {
     my ($self) = @_;
 
     return "/plugin/" . join( '/', split( '::', $self->{'class'} ) );
+}
+
+=head2 get_plugin_dir
+
+To [% INCLUDE %] another TT template from a template, an absolute path to the
+template is required. This method returns that absolute file system path.
+
+usage: my $path = $self->get_plugin_dir();
+
+=cut
+
+sub get_plugin_dir {
+    my ($self) = @_;
+
+    my $base = C4::Context->config('pluginsdir');
+    return "$base/" . join( '/', split( '::', $self->{'class'} ) );
 }
 
 =head2 go_home
