@@ -390,8 +390,8 @@
                                                             <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
                                                             <img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />
                                                         [% ELSIF ( !LocalCoverImages ) %]
-                                                            <a class="p1 no-amazon-cover" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
-                                                            <img src="https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" />
+                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                                            <span class="no-image">No cover image available</span>
                                                         [% END %]
                                                         </a>
                                                     [% END # /IF AmazonCoverImages %]
@@ -653,9 +653,9 @@
                         w = this.width;
                         h = this.height;
                         if ((w == 1) || (h == 1)) {
-                            this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                            $(this).parent().html('<span class="no-image">No cover image available</span>');
                         } else if ((this.complete != null) && (!this.complete)) {
-                            this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+                            $(this).parent().html('<span class="no-image">No cover image available</span>');
                         }
                     }
                 });
