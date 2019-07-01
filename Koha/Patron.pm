@@ -977,15 +977,15 @@ sub get_age {
     return $age;
 }
 
-=head3 is_category_valid
+=head3 is_valid_age
 
-my $is_valid = $patron->is_category_valid
+my $is_valid = $patron->is_valid_age
 
 Return 1 if patron's age is between allowed limits, returns 0 if it's not.
 
 =cut
 
-sub is_category_valid {
+sub is_valid_age {
     my ($self) = @_;
     my $age = $self->get_age;
 

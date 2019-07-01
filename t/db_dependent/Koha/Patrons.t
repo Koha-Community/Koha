@@ -639,7 +639,7 @@ subtest 'get_age' => sub {
     $patron->delete;
 };
 
-subtest 'is_category_valid' => sub {
+subtest 'is_valid_age' => sub {
     plan tests => 10;
 
     my $today = dt_from_string;
@@ -664,34 +664,34 @@ subtest 'is_category_valid' => sub {
 
 
     $patron->dateofbirth( undef );
-    is( $patron->is_category_valid, 1, 'Patron with no dateofbirth is always valid for any category');
+    is( $patron->is_valid_age, 1, 'Patron with no dateofbirth is always valid for any category');
 
     $patron->dateofbirth( $today->clone->add( years => -12, months => -6, days => -1 ) );
-    is( $patron->is_category_valid, 0, 'Patron is 12, so the age is above allowed range 5-10 years');
+    is( $patron->is_valid_age, 0, 'Patron is 12, so the age is above allowed range 5-10 years');
 
     $patron->dateofbirth( $today->clone->add( years => -3, months => -6, days => -1 ) );
-    is( $patron->is_category_valid, 0, 'Patron is 3, so the age is below allowed range 5-10 years');
+    is( $patron->is_valid_age, 0, 'Patron is 3, so the age is below allowed range 5-10 years');
 
     $patron->dateofbirth( $today->clone->add( years => -7, months => -6, days => -1 ) );
-    is( $patron->is_category_valid, 1, 'Patron is 7, so the age perfectly suits allowed range 5-10 years');
+    is( $patron->is_valid_age, 1, 'Patron is 7, so the age perfectly suits allowed range 5-10 years');
 
     $patron->dateofbirth( $today->clone->add( years => -5, months => 0, days => 0 ) );
-    is( $patron->is_category_valid, 1, 'Patron celebrates the 5th birthday today, so the age is allowed for this category');
+    is( $patron->is_valid_age, 1, 'Patron celebrates the 5th birthday today, so the age is allowed for this category');
 
     $patron->dateofbirth( $today->clone->add( years => -5, months => 0, days => 1 ) );
-    is( $patron->is_category_valid, 0, 'Patron will celebrate the 5th birthday tomorrow, so the age is NOT allowed for this category');
+    is( $patron->is_valid_age, 0, 'Patron will celebrate the 5th birthday tomorrow, so the age is NOT allowed for this category');
 
     $patron->dateofbirth( $today->clone->add( years => -5, months => 0, days => -1 ) );
-    is( $patron->is_category_valid, 1, 'Patron celebrated the 5th birthday yesterday, so the age is allowed for this category');
+    is( $patron->is_valid_age, 1, 'Patron celebrated the 5th birthday yesterday, so the age is allowed for this category');
 
     $patron->dateofbirth( $today->clone->add( years => -11, months => 0, days => 0 ) );
-    is( $patron->is_category_valid, 0, 'Patron celebrate the 11th birthday today, so the age is NOT allowed for this category');
+    is( $patron->is_valid_age, 0, 'Patron celebrate the 11th birthday today, so the age is NOT allowed for this category');
 
     $patron->dateofbirth( $today->clone->add( years => -11, months => 0, days => 1 ) );
-    is( $patron->is_category_valid, 1, 'Patron will celebrate the 11th birthday tomorrow, so the age is allowed for this category');
+    is( $patron->is_valid_age, 1, 'Patron will celebrate the 11th birthday tomorrow, so the age is allowed for this category');
 
     $patron->dateofbirth( $today->clone->add( years => -11, months => 0, days => -1 ) );
-    is( $patron->is_category_valid, 0, 'Patron celebrated the 11th birthday yesterday, so the age is NOT allowed for this category');
+    is( $patron->is_valid_age, 0, 'Patron celebrated the 11th birthday yesterday, so the age is NOT allowed for this category');
 
     $patron->delete;
     $category->delete;

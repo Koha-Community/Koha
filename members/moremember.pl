@@ -120,7 +120,7 @@ my $relatives_issues_count =
     Koha::Checkouts->count({ borrowernumber => \@relatives });
 
 # Calculate and display patron's age
-if ( !$patron->is_category_valid ) {
+if ( !$patron->is_valid_age ) {
     $template->param( age_limitations => 1 );
     $template->param( age_low => $patron->category->dateofbirthrequired );
     $template->param( age_high => $patron->category->upperagelimit );
