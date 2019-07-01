@@ -313,18 +313,16 @@ subtest 'GetItemsInfo tests' => sub {
     is( $results[0]->{ restrictedvalueopac }, "Restricted Access OPAC",
         'GetItemsInfo returns a restricted value description (OPAC)' );
 
-    t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 0 );
     #place item into holds queue
     my $dbh = C4::Context->dbh;
+    @results = GetItemsInfo( $biblio->biblionumber );
+    is( $results[0]->{ has_pending_hold }, "0",
+        'Hold not marked as pending/unavailable if nothing in tmp_holdsqueue for item' );
+
     $dbh->do(q{INSERT INTO tmp_holdsqueue (biblionumber, itemnumber, surname, borrowernumber ) VALUES (?, ?, "Zorro", 42)}, undef, $item_bibnum, $itemnumber);
     @results = GetItemsInfo( $biblio->biblionumber );
     is( $results[0]->{ has_pending_hold }, "1",
         'Hold marked as pending/unavailable if not AllowItemsOnHoldCheckout' );
-    t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 1 );
-    @results = GetItemsInfo( $biblio->biblionumber );
-    is( $results[0]->{ has_pending_hold }, undef,
-        'Hold not marked as pending/unavailable if AllowItemsOnHoldCheckout' );
-
 
     $schema->storage->txn_rollback;
 };
