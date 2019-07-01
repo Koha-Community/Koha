@@ -193,7 +193,7 @@
         </li>
     [% END %]
 [% END %]
-[% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
+[% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li id="media_tab"><a href="#html5media">Play media</a></li>[% END %][% END %]
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
 [% END %]
@@ -937,7 +937,7 @@
         $(document).ready(function() {
             $('#bibliodetails').tabs();
         [% IF count == 0 and ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) %]
-            $('#bibliodetails').tabs("option", "active", 3);
+            $('#bibliodetails').tabs("option", "active", $('#media_tab').index() );
         [% END %]
             $('#search-form').focus();
             $('.thumbnails > li > .remove').click(function() {
