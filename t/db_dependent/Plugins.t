@@ -288,14 +288,23 @@ subtest 'output and output_html tests' => sub {
 
 subtest 'Test _version_compare' => sub {
 
-    plan tests => 6;
+    plan tests => 12;
 
-    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '2.2.2' ),   -1, "1.1.1 is less then 2.2.2" );
-    is( Koha::Plugins::Base::_version_compare( '2.2.2',    '1.1.1' ),    1, "1.1.1 is greater then 2.2.2" );
-    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '1.1.1' ),    0, "1.1.1 is equal to 1.1.1" );
-    is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ),    0, "1.01.001 is equal to 1.1.1" );
-    is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ),    0, "1 is equal to 1.0.0" );
-    is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ),    0, "1.0 is equal to 1.0.0" );
+    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '2.2.2' ), -1, "1.1.1 is less then 2.2.2" );
+    is( Koha::Plugins::Base::_version_compare( '2.2.2',    '1.1.1' ),  1, "1.1.1 is greater then 2.2.2" );
+    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '1.1.1' ),  0, "1.1.1 is equal to 1.1.1" );
+    is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ),  0, "1.01.001 is equal to 1.1.1" );
+    is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ),  0, "1 is equal to 1.0.0" );
+    is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ),  0, "1.0 is equal to 1.0.0" );
+
+    # OO tests
+    my $plugin = Koha::Plugin::Test->new;
+    is( $plugin->_version_compare( '1.1.1',    '2.2.2' ), -1, "1.1.1 is less then 2.2.2" );
+    is( $plugin->_version_compare( '2.2.2',    '1.1.1' ),  1, "1.1.1 is greater then 2.2.2" );
+    is( $plugin->_version_compare( '1.1.1',    '1.1.1' ),  0, "1.1.1 is equal to 1.1.1" );
+    is( $plugin->_version_compare( '1.01.001', '1.1.1' ),  0, "1.01.001 is equal to 1.1.1" );
+    is( $plugin->_version_compare( '1',        '1.0.0' ),  0, "1 is equal to 1.0.0" );
+    is( $plugin->_version_compare( '1.0',      '1.0.0' ),  0, "1.0 is equal to 1.0.0" );
 };
 
 subtest 'bundle_path() tests' => sub {
