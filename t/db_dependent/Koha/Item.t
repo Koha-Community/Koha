@@ -66,7 +66,7 @@ subtest 'hidden_in_opac() tests' => sub {
 
 subtest 'has_pending_hold() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
@@ -75,12 +75,8 @@ subtest 'has_pending_hold() tests' => sub {
     my $itemnumber = $item->itemnumber;
 
     # disable AllowItemsOnHoldCheckout as it ignores pending holds
-    t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 0 );
     $dbh->do("INSERT INTO tmp_holdsqueue (surname,borrowernumber,itemnumber) VALUES ('Clamp',42,$itemnumber)");
     ok( $item->has_pending_hold, "Yes, we have a pending hold");
-    t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 1 );
-    ok( !$item->has_pending_hold, "We don't consider a pending hold if hold items can be checked out");
-    t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 0 );
     $dbh->do("DELETE FROM tmp_holdsqueue WHERE itemnumber=$itemnumber");
     ok( !$item->has_pending_hold, "We don't have a pending hold if nothing in the tmp_holdsqueue");
 
