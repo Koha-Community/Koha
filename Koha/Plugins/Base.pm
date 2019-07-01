@@ -249,8 +249,14 @@ if ( _version_compare( '2.6.26', '2.6.0' ) == 1 ) {
 =cut
 
 sub _version_compare {
-    my $ver1 = shift || 0;
-    my $ver2 = shift || 0;
+    my @args = @_;
+
+    if ( $args[0]->isa('Koha::Plugins::Base') ) {
+        shift @args;
+    }
+
+    my $ver1 = shift @args || 0;
+    my $ver2 = shift @args || 0;
 
     my @v1 = split /[.+:~-]/, $ver1;
     my @v2 = split /[.+:~-]/, $ver2;
