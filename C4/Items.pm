@@ -948,10 +948,8 @@ sub GetItemsInfo {
            holding.branchcode,
            holding.branchname,
            holding.opac_info as holding_branch_opac_info,
-           home.opac_info as home_branch_opac_info
-    ";
-    $query .= ",IF(tmp_holdsqueue.itemnumber,1,0) AS has_pending_hold" if !C4::Context->preference('AllowItemsOnHoldCheckoutSIP');
-    $query .= "
+           home.opac_info as home_branch_opac_info,
+           IF(tmp_holdsqueue.itemnumber,1,0) AS has_pending_hold
      FROM items
      LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
      LEFT JOIN branches AS home ON items.homebranch=home.branchcode
@@ -963,9 +961,8 @@ sub GetItemsInfo {
      LEFT JOIN serial USING (serialid)
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
-    $query .= "
-    LEFT JOIN tmp_holdsqueue USING (itemnumber)" if !C4::Context->preference('AllowItemsOnHoldCheckoutSIP');
     $query .= q|
+    LEFT JOIN tmp_holdsqueue USING (itemnumber)
     LEFT JOIN localization ON itemtypes.itemtype = localization.code
         AND localization.entity = 'itemtypes'
         AND localization.lang = ?
