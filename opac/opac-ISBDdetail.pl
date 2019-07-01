@@ -76,8 +76,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-
 my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata', 'items' ] } );
+unless ( $biblio ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
+
 my $patron = Koha::Patrons->find($loggedinuser);
 
 my $opachiddenitems_rules;
