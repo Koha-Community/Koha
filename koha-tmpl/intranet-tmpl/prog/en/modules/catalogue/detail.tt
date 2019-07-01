@@ -936,9 +936,9 @@
 
         $(document).ready(function() {
             $('#bibliodetails').tabs();
-            [% IF count == 0 %]
-                $('#bibliodetails').tabs("option", "active", 3);
-            [% END %]
+        [% IF count == 0 and ( Koha.Preference('HTML5MediaEnabled') == 'staff' or Koha.Preference('HTML5MediaEnabled') == 'both' ) %]
+            $('#bibliodetails').tabs("option", "active", 3);
+        [% END %]
             $('#search-form').focus();
             $('.thumbnails > li > .remove').click(function() {
                 var result = confirm(_("Are you sure you want to delete this cover image?"));
