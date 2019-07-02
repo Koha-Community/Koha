@@ -40,6 +40,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
+t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
 
