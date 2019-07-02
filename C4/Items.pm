@@ -2560,7 +2560,7 @@ sub PrepareItemrecordDisplay {
                     # oversize field (textarea)
                     $subfield_data{marc_value} = qq(<textarea tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength">$defaultvalue</textarea>\n");
                 } else {
-                    $subfield_data{marc_value} = "<input type=\"text\" name=\"field_value\" value=\"$defaultvalue\" size=\"50\" maxlength=\"$maxlength\" />";
+                    $subfield_data{marc_value} = qq(<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
                 }
                 push( @loop_data, \%subfield_data );
             }
