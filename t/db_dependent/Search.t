@@ -347,12 +347,12 @@ sub run_marc21_search_tests {
     my $results_hashref;
     my $facets_loop;
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('kw:book', 'book', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+        getRecords('kw:book', 'book', [], [ 'biblioserver' ], '19', 0, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 101, "getRecords keyword search for 'book' matched right number of records");
     is(scalar @{$results_hashref->{biblioserver}->{RECORDS}}, 19, "getRecords returned requested number of records");
     my $record5 = $results_hashref->{biblioserver}->{RECORDS}->[5];
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('kw:book', 'book', [], [ 'biblioserver' ], '20', 5, undef, \%branches, \%itemtypes, 'ccl', undef);
+        getRecords('kw:book', 'book', [], [ 'biblioserver' ], '20', 5, \%branches, \%itemtypes, 'ccl', undef);
     ok(!defined $results_hashref->{biblioserver}->{RECORDS}->[0] &&
         !defined $results_hashref->{biblioserver}->{RECORDS}->[1] &&
         !defined $results_hashref->{biblioserver}->{RECORDS}->[2] &&
@@ -361,50 +361,50 @@ sub run_marc21_search_tests {
         $results_hashref->{biblioserver}->{RECORDS}->[5] eq $record5, "getRecords cursor works");
 
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('ti:book', 'ti:book', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+        getRecords('ti:book', 'ti:book', [], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 11, "getRecords title search for 'book' matched right number of records");
 
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('au:Lessig', 'au:Lessig', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+        getRecords('au:Lessig', 'au:Lessig', [], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords title search for 'Australia' matched right number of records");
 
 ( undef, $results_hashref, $facets_loop ) =
-    getRecords('salud', 'salud', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    getRecords('salud', 'salud', [], [ 'biblioserver' ], '19', 0, \%branches, \%itemtypes, 'ccl', undef);
 ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/^Efectos del ambiente/ &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() eq 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies' &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/
     , "Simple relevance sorting in getRecords matches old behavior");
 
 ( undef, $results_hashref, $facets_loop ) =
-    getRecords('salud', 'salud', [ 'author_az' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    getRecords('salud', 'salud', [ 'author_az' ], [ 'biblioserver' ], '38', 0, \%branches, \%itemtypes, 'ccl', undef);
 ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/la enfermedad laboral\^ies$/ &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[6],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/ &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() eq 'World health statistics 2009^ien'
     , "Simple ascending author sorting in getRecords matches old behavior");
 
 ( undef, $results_hashref, $facets_loop ) =
-    getRecords('salud', 'salud', [ 'author_za' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    getRecords('salud', 'salud', [ 'author_za' ], [ 'biblioserver' ], '38', 0, \%branches, \%itemtypes, 'ccl', undef);
 ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() eq 'World health statistics 2009^ien' &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[12],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/ &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/la enfermedad laboral\^ies$/
     , "Simple descending author sorting in getRecords matches old behavior");
 
 ( undef, $results_hashref, $facets_loop ) =
-    getRecords('salud', 'salud', [ 'pubdate_asc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    getRecords('salud', 'salud', [ 'pubdate_asc' ], [ 'biblioserver' ], '38', 0, \%branches, \%itemtypes, 'ccl', undef);
 ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() eq 'Manual de higiene industrial^ies' &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() =~ m/seguridad e higiene del trabajo\^ies$/ &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() =~ m/^Indicadores de resultados identificados/
     , "Simple ascending publication date sorting in getRecords matches old behavior");
 
 ( undef, $results_hashref, $facets_loop ) =
-    getRecords('salud', 'salud', [ 'pubdate_dsc' ], [ 'biblioserver' ], '38', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+    getRecords('salud', 'salud', [ 'pubdate_dsc' ], [ 'biblioserver' ], '38', 0, \%branches, \%itemtypes, 'ccl', undef);
 ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper() =~ m/^Estado de salud/ &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[7],'UTF-8')->title_proper() eq 'World health statistics 2009^ien' &&
     MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[18],'UTF-8')->title_proper() eq 'Manual de higiene industrial^ies'
     , "Simple descending publication date sorting in getRecords matches old behavior");
 
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('books', 'books', [ 'relevance' ], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, undef, 1);
+        getRecords('books', 'books', [ 'relevance' ], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, undef, 1);
     $record = MARC::Record::new_from_usmarc($results_hashref->{biblioserver}->{RECORDS}->[0]);
     is($record->title_proper(), 'Books', "Scan returned requested item");
     is($record->subfield('100', 'a'), 2, "Scan returned correct number of records matching term");
@@ -418,7 +418,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_type ) = buildQuery([], [ 'salud' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud/, "Built CCL keyword query");
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 19, "getRecords generated keyword search for 'salud' matched right number of records");
 
     my @newresults = searchResults({'interface' => 'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 18, 0, 0,
@@ -430,7 +430,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_type ) = buildQuery([ 'and' ], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud\W.*and.*kw\W.*higiene/, "Built composed explicit-and CCL keyword query");
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 3, "getRecords generated composed keyword search for 'salud' explicit-and 'higiene' matched right number of records");
 
     ( $error, $query, $simple_query, $query_cgi,
@@ -438,7 +438,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_type ) = buildQuery([ 'or' ], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud\W.*or.*kw\W.*higiene/, "Built composed explicit-or CCL keyword query");
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 20, "getRecords generated composed keyword search for 'salud' explicit-or 'higiene' matched right number of records");
 
     ( $error, $query, $simple_query, $query_cgi,
@@ -446,7 +446,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_type ) = buildQuery([], [ 'salud', 'higiene' ], [], [], [], 0, 'en');
     like($query, qr/kw\W.*salud\W.*and.*kw\W.*higiene/, "Built composed implicit-and CCL keyword query");
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 3, "getRecords generated composed keyword search for 'salud' implicit-and 'higiene' matched right number of records");
 
     ( $error, $query, $simple_query, $query_cgi,
@@ -455,7 +455,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     like($query, qr/kw\W.*salud\W*and\W*su-to\W.*Laboratorios/, "Faceted query generated correctly");
     unlike($query_desc, qr/Laboratorios/, "Facets not included in query description");
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated faceted search matched right number of records");
 
 
@@ -463,7 +463,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'mc-itype:MP', 'mc-itype:MU' ], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated mc-faceted search matched right number of records");
 
 
@@ -471,13 +471,13 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'mc-loc:GEN', 'branch:FFL' ], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 2, "getRecords generated multi-faceted search matched right number of records");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'NEKLS' ], [ 'Code-institution' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 12,
        'search using index whose name contains "ns" returns expected results (bug 10271)');
 
@@ -485,12 +485,12 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'book' ], [ 'kw' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 101, "Search for 'book' with index set to 'kw' returns 101 hits");
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([ 'and' ], [ 'book', 'another' ], [ 'kw', 'kw' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'kw:book && kw:another' returns 1 hit");
     $UseQueryParser = 0;
 
@@ -500,7 +500,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'available' ], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 26, "getRecords generated availability-limited search matched right number of records");
 
     @newresults = searchResults({'interface'=>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
@@ -516,28 +516,28 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'pqf=@attr 1=_ALLRECORDS @attr 2=103 ""' ], [], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 180, "getRecords on _ALLRECORDS PQF returned all records");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'pqf=@attr 1=1016 "Lessig"' ], [], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords PQF author search for Lessig returned proper number of matches");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'ccl=au:Lessig' ], [], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords CCL author search for Lessig returned proper number of matches");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'cql=dc.author any lessig' ], [], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 4, "getRecords CQL author search for Lessig returned proper number of matches");
 
     $QueryStemming = $QueryAutoTruncate = $QueryFuzzy = 0;
@@ -546,7 +546,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'salud' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 19, "Weighted query returned correct number of results");
     is(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'UTF-8')->title_proper(), 'Salud y seguridad de los trabajadores del sector salud: manual para gerentes y administradores^ies', "Weighted query returns best match first");
 
@@ -556,14 +556,14 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic' returns matches  with automatic truncation on");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'medic*' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic*' returns matches with automatic truncation on");
 
     $QueryStemming = $QueryFuzzy = $QueryAutoTruncate = 0;
@@ -571,13 +571,13 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'web application' ], [ 'kw' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'web application' returns one hit with QueryWeightFields on");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'web "application' ], [ 'kw' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'web \"application' returns one hit with QueryWeightFields on (bug 7518)");
 
     $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryAutoTruncate = 0;
@@ -585,14 +585,14 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'medic' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, undef, "Search for 'medic' returns no matches with automatic truncation off");
 
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'medic*' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 5, "Search for 'medic*' returns matches with automatic truncation off");
 
     $QueryStemming = $QueryWeightFields = 1;
@@ -601,7 +601,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'pressed' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, 7, "Search for 'pressed' returns matches when stemming (and query weighting) is on");
 
     $QueryStemming = $QueryWeightFields = $QueryFuzzy = $QueryAutoTruncate = 0;
@@ -609,7 +609,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ 'pressed' ], [ 'kw' ], [], [], 0, 'en');
 
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     is($results_hashref->{biblioserver}->{hits}, undef, "Search for 'pressed' returns no matches when stemming is off");
 
     ( $error, $query, $simple_query, $query_cgi,
@@ -631,16 +631,16 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     isnt($error, undef, "SimpleSearch returns an error when passed gibberish");
 
     warning_like {( undef, $results_hashref, $facets_loop ) =
-        getRecords('kw:book', 'book', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'nonsense', undef) }
+        getRecords('kw:book', 'book', [], [ 'biblioserver' ], '19', 0, \%branches, \%itemtypes, 'nonsense', undef) }
         qr/Unknown query_type/, "getRecords warns about unknown query type";
 
     warning_like {( undef, $results_hashref, $facets_loop ) =
-        getRecords('pqf=@attr 1=4 "title"', 'pqf=@attr 1=4 "title"', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, '', undef) }
+        getRecords('pqf=@attr 1=4 "title"', 'pqf=@attr 1=4 "title"', [], [ 'biblioserver' ], '19', 0, \%branches, \%itemtypes, '', undef) }
         qr/WARNING: query problem/, "getRecords warns when query type is not specified for non-CCL query";
 
     # Let's just test a few other bits and bobs, just for fun
 
-    ($error, $results_hashref, $facets_loop) = getRecords("Godzina pąsowej róży","Godzina pąsowej róży",[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords("Godzina pąsowej róży","Godzina pąsowej róży",[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     is($newresults[0]->{'alternateholdings_count'}, 1, 'Alternate holdings filled in correctly');
@@ -659,14 +659,14 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         }
     });
 
-    ($error, $results_hashref, $facets_loop) = getRecords("TEST12121212","TEST12121212",[ ], [ 'biblioserver' ],20,0,undef,\%branches,\%itemtypes,$query_type,0);
+    ($error, $results_hashref, $facets_loop) = getRecords("TEST12121212","TEST12121212",[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
     @newresults = searchResults({'interface'=>'intranet'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 17, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
     ok(!exists($newresults[0]->{norequests}), 'presence of a transit does not block hold request action (bug 10741)');
 
     ## Regression test for bug 10684
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('ti:punctuation', 'punctuation', [], [ 'biblioserver' ], '19', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+        getRecords('ti:punctuation', 'punctuation', [], [ 'biblioserver' ], '19', 0, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 1, "search for ti:punctuation returned expected number of records");
     warning_like { @newresults = searchResults({'intranet' => 'intranet'}, $query_desc,
                     $results_hashref->{'biblioserver'}->{'hits'}, 20, 0, 0,
@@ -814,7 +814,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
 
     # retrieve records that are larger than the MARC limit of 99,999 octets
     ( undef, $results_hashref, $facets_loop ) =
-        getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef);
+        getRecords('ti:marc the large record', '', [], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, 'ccl', undef);
     is($results_hashref->{biblioserver}->{hits}, 1, "Can do a search that retrieves an over-large bib record (bug 11096)");
     @newresults = searchResults({'interface' =>'opac'}, $query_desc, $results_hashref->{'biblioserver'}->{'hits'}, 10, 0, 0,
         $results_hashref->{'biblioserver'}->{"RECORDS"});
@@ -831,7 +831,7 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     # verify that we don't attempt to sort if no results were returned
     # because of a query error
     warning_like {( undef, $results_hashref, $facets_loop ) =
-        getRecords('ccl=( AND )', '', ['title_az'], [ 'biblioserver' ], '20', 0, undef, \%branches, \%itemtypes, 'ccl', undef)
+        getRecords('ccl=( AND )', '', ['title_az'], [ 'biblioserver' ], '20', 0, \%branches, \%itemtypes, 'ccl', undef)
     } qr/WARNING: query problem with/, 'got warning instead of crash when attempting to run invalid query (bug 9578)';
     
     # Test facet calculation
@@ -862,24 +862,15 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     # Test _get_facets_info
     my $facets_info = C4::Search::_get_facets_info( $facets );
     my $expected_facets_info_marc21 = {
-                   'au' => { 'expanded'    => undef,
-                             'label_value' => "Authors" },
-                'ccode' => { 'expanded'    => undef,
-                             'label_value' => "CollectionCodes" },
-        'holdingbranch' => { 'expanded'    => undef,
-                             'label_value' => "HoldingLibrary" },
-                'itype' => { 'expanded'    => undef,
-                             'label_value' => "ItemTypes" },
-             'location' => { 'expanded'    => undef,
-                             'label_value' => "Location" },
-                   'se' => { 'expanded'    => undef,
-                             'label_value' => "Series" },
-               'su-geo' => { 'expanded'    => undef,
-                             'label_value' => "Places" },
-                'su-to' => { 'expanded'    => undef,
-                             'label_value' => "Topics" },
-                'su-ut' => { 'expanded'    => undef,
-                             'label_value' => "Titles" }
+                   'au' => { 'label_value' => "Authors" },
+                'ccode' => { 'label_value' => "CollectionCodes" },
+        'holdingbranch' => { 'label_value' => "HoldingLibrary" },
+                'itype' => { 'label_value' => "ItemTypes" },
+             'location' => { 'label_value' => "Location" },
+                   'se' => { 'label_value' => "Series" },
+               'su-geo' => { 'label_value' => "Places" },
+                'su-to' => { 'label_value' => "Topics" },
+                'su-ut' => { 'label_value' => "Titles" }
     };
     delete $expected_facets_info_marc21->{holdingbranch}
         if Koha::Libraries->count == 1;
@@ -961,22 +952,14 @@ sub run_unimarc_search_tests {
     my $facets      = C4::Koha::getFacets();
     my $facets_info = C4::Search::_get_facets_info( $facets );
     my $expected_facets_info_unimarc = {
-                   'au' => { 'expanded'    => undef,
-                             'label_value' => "Authors" },
-                'ccode' => { 'expanded'    => undef,
-                             'label_value' => "CollectionCodes" },
-        'holdingbranch' => { 'expanded'    => undef,
-                             'label_value' => "HoldingLibrary" },
-             'location' => { 'expanded'    => undef,
-                             'label_value' => "Location" },
-                   'se' => { 'expanded'    => undef,
-                             'label_value' => "Series" },
-               'su-geo' => { 'expanded'    => undef,
-                             'label_value' => "Places" },
-                'su-to' => { 'expanded'    => undef,
-                             'label_value' => "Topics" },
-                'su-ut' => { 'expanded'    => undef,
-                             'label_value' => "Titles" }
+                   'au' => { 'label_value' => "Authors" },
+                'ccode' => { 'label_value' => "CollectionCodes" },
+        'holdingbranch' => { 'label_value' => "HoldingLibrary" },
+             'location' => { 'label_value' => "Location" },
+                   'se' => { 'label_value' => "Series" },
+               'su-geo' => { 'label_value' => "Places" },
+                'su-to' => { 'label_value' => "Topics" },
+                'su-ut' => { 'label_value' => "Titles" }
     };
     delete $expected_facets_info_unimarc->{holdingbranch}
         if Koha::Libraries->count == 1;

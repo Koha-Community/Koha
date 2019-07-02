@@ -132,8 +132,8 @@ sub count {
 
     my ( $error, $results, $facets ) = $search->search_compat(
         $query,            $simple_query, \@sort_by,       \@servers,
-        $results_per_page, $offset,       $expanded_facet, $branches,
-        $query_type,       $scan
+        $results_per_page, $offset,       $branches,       $query_type,
+        $scan
       )
 
 A search interface somewhat compatible with L<C4::Search->getRecords>. Anything
@@ -145,15 +145,14 @@ get ignored here, along with some other things (like C<@servers>.)
 sub search_compat {
     my (
         $self,     $query,            $simple_query, $sort_by,
-        $servers,  $results_per_page, $offset,       $expanded_facet,
-        $branches, $query_type,       $scan
+        $servers,  $results_per_page, $offset,       $branches,
+        $query_type,       $scan
     ) = @_;
     my %options;
     if ( !defined $offset or $offset < 0 ) {
         $offset = 0;
     }
     $options{offset} = $offset;
-    $options{expanded_facet} = $expanded_facet;
     my $results = $self->search($query, undef, $results_per_page, %options);
 
     # Convert each result into a MARC::Record
@@ -171,7 +170,7 @@ sub search_compat {
     my %result;
     $result{biblioserver}{hits} = $hits->{'total'};
     $result{biblioserver}{RECORDS} = \@records;
-    return (undef, \%result, $self->_convert_facets($results->{aggregations}, $expanded_facet));
+    return (undef, \%result, $self->_convert_facets($results->{aggregations}));
 }
 
 =head2 search_auth_compat
@@ -418,14 +417,11 @@ sub max_result_window {
 
 =head2 _convert_facets
 
-    my $koha_facets = _convert_facets($es_facets, $expanded_facet);
+    my $koha_facets = _convert_facets($es_facets);
 
 Converts elasticsearch facets types to the form that Koha expects.
 It expects the ES facet name to match the Koha type, for example C<itype>,
 C<au>, C<su-to>, etc.
-
-C<$expanded_facet> is the facet that we want to show FacetMaxCount entries for, rather
-than just 5 like normal.
 
 =cut
 
@@ -476,12 +472,9 @@ sub _convert_facets {
         next if !exists( $type_to_label{$type} );
 
         # We restrict to the most popular $limit !results
-        my $limit = ( $type eq $exp_facet ) ? C4::Context->preference('FacetMaxCount') : 5;
+        my $limit = C4::Context->preference('FacetMaxCount');
         my $facet = {
             type_id    => $type . '_id',
-            expand     => $type,
-            expandable => ( $type ne $exp_facet )
-              && ( @{ $data->{buckets} } > $limit ),
             "type_label_$type_to_label{$type}{label}" => 1,
             type_link_value                    => $type,
             order      => $type_to_label{$type}{order},

@@ -224,7 +224,6 @@ if ($session->param('busc')) {
     {
         my ($arrParamsBusc, $offset, $results_per_page) = @_;
 
-        my $expanded_facet = $arrParamsBusc->{'expand'};
         my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
         my @servers;
         @servers = @{$arrParamsBusc->{'server'}} if $arrParamsBusc->{'server'};
@@ -236,7 +235,7 @@ if ($session->param('busc')) {
         $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
         my ($error, $results_hashref, $facets);
         eval {
-            ($error, $results_hashref, $facets) = getRecords($arrParamsBusc->{'query'},$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
+            ($error, $results_hashref, $facets) = getRecords($arrParamsBusc->{'query'},$arrParamsBusc->{'simple_query'},\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes,$arrParamsBusc->{'query_type'},$arrParamsBusc->{'scan'});
         };
         my $hits;
         my @newresults;

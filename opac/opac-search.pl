@@ -532,7 +532,6 @@ $offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 $offset = ($page-1)*$results_per_page if $page>1;
 my $hits;
-my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
 my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
@@ -553,7 +552,6 @@ if (C4::Context->preference('OpacSuppression')) {
 }
 
 my $build_params = {
-    expanded_facet => $expanded_facet,
     suppress => $suppress
 };
 
@@ -619,7 +617,7 @@ if ($tag) {
     # FIXME: No facets for tags search.
 } elsif ($build_grouped_results) {
     eval {
-        ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,undef,$query_type,$scan);
+        ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,undef,$query_type,$scan);
     };
 } else {
     $pasarParams .= '&amp;query=' . uri_escape_utf8($query);
@@ -628,7 +626,7 @@ if ($tag) {
     $pasarParams .= '&amp;query_type=' . uri_escape_utf8($query_type) if ($query_type);
     my $itemtypes_nocategory = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     eval {
-        ($error, $results_hashref, $facets) = $searcher->search_compat($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,undef,$itemtypes_nocategory,$query_type,$scan,1);
+        ($error, $results_hashref, $facets) = $searcher->search_compat($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,undef,$itemtypes_nocategory,$query_type,$scan,1);
 };
 }
 

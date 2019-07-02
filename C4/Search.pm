@@ -312,22 +312,22 @@ sub SimpleSearch {
 ( undef, $results_hashref, \@facets_loop ) = getRecords (
 
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $expanded_facet, $branches,$itemtypes,
-        $query_type,       $scan
+        $results_per_page, $offset,       $branches,       $itemtypes,
+        $query_type,       $scan,         $opac
     );
 
 The all singing, all dancing, multi-server, asynchronous, scanning,
 searching, record nabbing, facet-building
 
-See verbse embedded documentation.
+See verbose embedded documentation.
 
 =cut
 
 sub getRecords {
     my (
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $expanded_facet, $branches,
-        $itemtypes,        $query_type,   $scan,           $opac
+        $results_per_page, $offset,       $branches,         $itemtypes,
+        $query_type,       $scan,         $opac
     ) = @_;
 
     my @servers = @$servers_ref;
@@ -516,8 +516,6 @@ sub getRecords {
                         keys %$facets_counter
                       )
                     {
-                        my $expandable;
-                        my $number_of_facets;
                         my @this_facets_array;
                         for my $one_facet (
                             sort {
@@ -527,94 +525,80 @@ sub getRecords {
                             } keys %{ $facets_counter->{$link_value} }
                           )
                         {
-                            $number_of_facets++;
-                            if (   ( $number_of_facets <= 5 )
-                                || ( $expanded_facet eq $link_value )
-                                || ( $facets_info->{$link_value}->{'expanded'} )
-                              )
-                            {
-
 # Sanitize the link value : parenthesis, question and exclamation mark will cause errors with CCL
-                                my $facet_link_value = $one_facet;
-                                $facet_link_value =~ s/[()!?¡¿؟]/ /g;
+                            my $facet_link_value = $one_facet;
+                            $facet_link_value =~ s/[()!?¡¿؟]/ /g;
 
-                                # fix the length that will display in the label,
-                                my $facet_label_value = $one_facet;
-                                my $facet_max_length  = C4::Context->preference(
-                                    'FacetLabelTruncationLength')
-                                  || 20;
-                                $facet_label_value =
-                                  substr( $one_facet, 0, $facet_max_length )
-                                  . "..."
-                                  if length($facet_label_value) >
-                                      $facet_max_length;
+                            # fix the length that will display in the label,
+                            my $facet_label_value = $one_facet;
+                            my $facet_max_length  = C4::Context->preference(
+                                'FacetLabelTruncationLength')
+                              || 20;
+                            $facet_label_value =
+                              substr( $one_facet, 0, $facet_max_length )
+                              . "..."
+                              if length($facet_label_value) >
+                                  $facet_max_length;
 
-                            # if it's a branch, label by the name, not the code,
-                                if ( $link_value =~ /branch/ ) {
-                                    if (   defined $branches
-                                        && ref($branches) eq "HASH"
-                                        && defined $branches->{$one_facet}
-                                        && ref( $branches->{$one_facet} ) eq
-                                        "HASH" )
-                                    {
-                                        $facet_label_value =
-                                          $branches->{$one_facet}
-                                          ->{'branchname'};
-                                    }
-                                    else {
-                                        $facet_label_value = "*";
-                                    }
+                        # if it's a branch, label by the name, not the code,
+                            if ( $link_value =~ /branch/ ) {
+                                if (   defined $branches
+                                    && ref($branches) eq "HASH"
+                                    && defined $branches->{$one_facet}
+                                    && ref( $branches->{$one_facet} ) eq
+                                    "HASH" )
+                                {
+                                    $facet_label_value =
+                                      $branches->{$one_facet}
+                                      ->{'branchname'};
                                 }
-
-                          # if it's a itemtype, label by the name, not the code,
-                                if ( $link_value =~ /itype/ ) {
-                                    if (   defined $itemtypes
-                                        && ref($itemtypes) eq "HASH"
-                                        && defined $itemtypes->{$one_facet}
-                                        && ref( $itemtypes->{$one_facet} ) eq
-                                        "HASH" )
-                                    {
-                                        $facet_label_value =
-                                          $itemtypes->{$one_facet}
-                                          ->{translated_description};
-                                    }
+                                else {
+                                    $facet_label_value = "*";
                                 }
-
-               # also, if it's a location code, use the name instead of the code
-                                if ( $link_value =~ /location/ ) {
-                                    # TODO Retrieve all authorised values at once, instead of 1 query per entry
-                                    my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $one_facet });
-                                    $facet_label_value = $av->count ? $av->next->opac_description : '';
-                                }
-
-                                # also, if it's a collection code, use the name instead of the code
-                                if ( $link_value =~ /ccode/ ) {
-                                    # TODO Retrieve all authorised values at once, instead of 1 query per entry
-                                    my $av = Koha::AuthorisedValues->search({ category => 'CCODE', authorised_value => $one_facet });
-                                    $facet_label_value = $av->count ? $av->next->opac_description : '';
-                                }
-
-                # but we're down with the whole label being in the link's title.
-                                push @this_facets_array,
-                                  {
-                                    facet_count =>
-                                      $facets_counter->{$link_value}
-                                      ->{$one_facet},
-                                    facet_label_value => $facet_label_value,
-                                    facet_title_value => $one_facet,
-                                    facet_link_value  => $facet_link_value,
-                                    type_link_value   => $link_value,
-                                  }
-                                  if ($facet_label_value);
                             }
+
+                      # if it's a itemtype, label by the name, not the code,
+                            if ( $link_value =~ /itype/ ) {
+                                if (   defined $itemtypes
+                                    && ref($itemtypes) eq "HASH"
+                                    && defined $itemtypes->{$one_facet}
+                                    && ref( $itemtypes->{$one_facet} ) eq
+                                    "HASH" )
+                                {
+                                    $facet_label_value =
+                                      $itemtypes->{$one_facet}
+                                      ->{translated_description};
+                                }
+                            }
+
+           # also, if it's a location code, use the name instead of the code
+                            if ( $link_value =~ /location/ ) {
+                                # TODO Retrieve all authorised values at once, instead of 1 query per entry
+                                my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $one_facet });
+                                $facet_label_value = $av->count ? $av->next->opac_description : '';
+                            }
+
+                            # also, if it's a collection code, use the name instead of the code
+                            if ( $link_value =~ /ccode/ ) {
+                                # TODO Retrieve all authorised values at once, instead of 1 query per entry
+                                my $av = Koha::AuthorisedValues->search({ category => 'CCODE', authorised_value => $one_facet });
+                                $facet_label_value = $av->count ? $av->next->opac_description : '';
+                            }
+
+            # but we're down with the whole label being in the link's title.
+                            push @this_facets_array,
+                              {
+                                facet_count =>
+                                  $facets_counter->{$link_value}
+                                  ->{$one_facet},
+                                facet_label_value => $facet_label_value,
+                                facet_title_value => $one_facet,
+                                facet_link_value  => $facet_link_value,
+                                type_link_value   => $link_value,
+                              }
+                              if ($facet_label_value);
                         }
 
-                        # handle expanded option
-                        unless ( $facets_info->{$link_value}->{'expanded'} ) {
-                            $expandable = 1
-                              if ( ( $number_of_facets > 5 )
-                                && ( $expanded_facet ne $link_value ) );
-                        }
                         push @facets_loop,
                           {
                             type_link_value => $link_value,
@@ -623,8 +607,6 @@ sub getRecords {
                               . $facets_info->{$link_value}->{'label_value'} =>
                               1,
                             facets     => \@this_facets_array,
-                            expandable => $expandable,
-                            expand     => $link_value,
                           }
                           unless (
                             (
@@ -852,7 +834,6 @@ sub _get_facets_info {
 
     for my $facet ( @$facets ) {
         $facets_info->{ $facet->{ idx } }->{ label_value } = $facet->{ label };
-        $facets_info->{ $facet->{ idx } }->{ expanded }    = $facet->{ expanded };
     }
 
     return $facets_info;
@@ -861,8 +842,8 @@ sub _get_facets_info {
 sub pazGetRecords {
     my (
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
-        $results_per_page, $offset,       $expanded_facet, $branches,
-        $query_type,       $scan
+        $results_per_page, $offset,       $branches,       $query_type,
+        $scan
     ) = @_;
     #NOTE: Parameter $branches is not used here !
 

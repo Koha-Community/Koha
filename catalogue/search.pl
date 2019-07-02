@@ -459,7 +459,6 @@ my $offset = $params->{'offset'} || 0;
 $offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 #my $offset = ($page-1)*$results_per_page;
-my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
 my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
@@ -536,8 +535,8 @@ eval {
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
     ( $error, $results_hashref, $facets ) = $searcher->search_compat(
         $query,            $simple_query, \@sort_by,       \@servers,
-        $results_per_page, $offset,       $expanded_facet, undef,
-        $itemtypes,        $query_type,   $scan
+        $results_per_page, $offset,       undef,           $itemtypes,
+        $query_type,       $scan
     );
 };
 

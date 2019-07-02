@@ -42,7 +42,11 @@
                             [% FOREACH facet IN facets_loo.facets %]
                             [% IF facets_loo.type_label_CollectionCodes %][% SET facet.facet_label_value = AuthorisedValues.GetByCode('CCODE',facet.facet_label_value,1) || facet.facet_label_value %][% END %]
                             [% IF facets_loo.type_label_Language %][% SET facet.facet_label_value = Languages.GetByISOCode(lang,facet.facet_label_value) || facet.facet_label_value %][% END %]
+                            [% IF loop.count > 5 && !facet.active %]
+                                <li class="collapsible-facet" style="display:none">
+                            [% ELSE %]
                                 <li>
+                            [% END %]
                                   [% IF facet.active %]
                                     [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
                                     <span class="facet-label">[% facet.facet_label_value | html %]</span>
@@ -56,9 +60,12 @@
                                   [% END %]
                                 </li>
                             [% END %]
-                            [% IF ( facets_loo.expandable ) %]
-                                <li class="showmore">
-                                    <a href="[% url | $raw %][% IF offset %]&amp;offset=[% offset | uri %][% END %]&amp;expand=[% facets_loo.expand | uri %]#[% facets_loo.type_id | uri %]">Show more</a>
+                            [% IF facets_loo.facets.size > 5 %]
+                                <li class="moretoggle">
+                                    Show more
+                                </li>
+                                <li class="moretoggle" style="display:none">
+                                    Show less
                                 </li>
                             [% END %]
                         </ul>

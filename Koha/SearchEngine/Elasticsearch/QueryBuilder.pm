@@ -111,15 +111,16 @@ sub build_query {
 
     # See _convert_facets in Search.pm for how these get turned into
     # things that Koha can use.
+    my $size = C4::Context->preference('FacetMaxCount');
     $res->{aggregations} = {
-        author         => { terms => { field => "author__facet" } },
-        subject        => { terms => { field => "subject__facet" } },
-        itype          => { terms => { field => "itype__facet" } },
-        location       => { terms => { field => "location__facet" } },
-        'su-geo'       => { terms => { field => "su-geo__facet" } },
-        'title-series' => { terms => { field => "title-series__facet" } },
-        ccode          => { terms => { field => "ccode__facet" } },
-        ln             => { terms => { field => "ln__facet" } },
+        author         => { terms => { field => "author__facet" , size => $size } },
+        subject        => { terms => { field => "subject__facet", size => $size } },
+        itype          => { terms => { field => "itype__facet", size => $size} },
+        location       => { terms => { field => "location__facet", size => $size } },
+        'su-geo'       => { terms => { field => "su-geo__facet", size => $size} },
+        'title-series' => { terms => { field => "title-series__facet", size => $size } },
+        ccode          => { terms => { field => "ccode__facet", size => $size } },
+        ln             => { terms => { field => "ln__facet", size => $size } },
     };
 
     my $display_library_facets = C4::Context->preference('DisplayLibraryFacets');
@@ -131,9 +132,6 @@ sub build_query {
         or $display_library_facets eq 'holding' ) {
         $res->{aggregations}{holdingbranch} = { terms => { field => "holdingbranch__facet" } };
     }
-    if ( my $ef = $options{expanded_facet} ) {
-        $res->{aggregations}{$ef}{terms}{size} = C4::Context->preference('FacetMaxCount');
-    };
     return $res;
 }
 
@@ -243,7 +241,6 @@ sub build_query_compat {
     my %options;
     $options{fields} = \@fields;
     $options{sort} = \@sort_params;
-    $options{expanded_facet} = $params->{expanded_facet};
     my $query = $self->build_query( $query_str, %options );
 
     # We roughly emulate the CGI parameters of the zebra query builder

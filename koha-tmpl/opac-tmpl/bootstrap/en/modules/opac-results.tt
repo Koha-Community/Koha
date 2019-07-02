@@ -740,6 +740,13 @@ function highlightOn() {
 }
 [% END %]
 $(document).ready(function(){
+
+    $(".moretoggle").click(function(){
+        $(this).siblings(".collapsible-facet").toggle();
+        $(this).siblings(".moretoggle").toggle();
+        $(this).toggle();
+    });
+
     [% IF ( OpacHighlightedWords ) %]
         $('a.title').each(function() {
             $(this).attr("href", $(this).attr("href") + "&query_desc=[% query_desc | uri %]");
