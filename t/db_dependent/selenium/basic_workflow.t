@@ -218,7 +218,7 @@ SKIP: {
     for my $biblionumber ( @biblionumbers ) {
         $driver->get($base_url."/circ/returns.pl");
         $driver->find_element('//input[@id="barcode"]')->send_keys('t_value_bib'.$biblionumber);
-        $driver->find_element('//form[@id="checkin-form"]/div/fieldset/input[@type="submit"]')->click;
+        $driver->find_element('//*[@id="circ_returns_checkin"]/div[1]/div[1]/div[2]/button')->click;
         like( $driver->get_title(), qr(Check in test biblio \d+) );
     }
 
