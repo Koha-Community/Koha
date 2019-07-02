@@ -1489,7 +1489,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 3;
+    plan tests => 5;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -1511,6 +1511,17 @@ subtest '->store' => sub {
     my $digest = $patron_1->password;
     $patron_1->surname('xxx')->store;
     is( $patron_1->password, $digest, 'Password should not have changed on ->store');
+
+    # Test uppercasesurname
+    t::lib::Mocks::mock_preference( 'uppercasesurname', 1 );
+    my $surname = lc $patron_1->surname;
+    $patron_1->surname($surname)->store;
+    isnt( $patron_1->surname, $surname,
+        'Surname converts to uppercase on store.');
+    t::lib::Mocks::mock_preference( 'uppercasesurname', 0 );
+    $patron_1->surname($surname)->store;
+    is( $patron_1->surname, $surname,
+        'Surname remains unchanged on store.');
 
     $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
