@@ -354,7 +354,7 @@ sub cancel {
     my ( $self, $params ) = @_;
     $self->_result->result_source->schema->txn_do(
         sub {
-            $self->cancellationdate(dt_from_string);
+            $self->cancellationdate( dt_from_string->strftime( '%Y-%m-%d %H:%M:%S' ) );
             $self->priority(0);
             $self->_move_to_old;
             $self->SUPER::delete(); # Do not add a DELETE log

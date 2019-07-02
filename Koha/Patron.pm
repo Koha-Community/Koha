@@ -328,8 +328,11 @@ sub delete {
     my $deleted;
     $self->_result->result_source->schema->txn_do(
         sub {
-            # Delete Patron's holds
-            $self->holds->delete;
+            # Cancel Patron's holds
+            my $holds = $self->holds;
+            while( my $hold = $holds->next ){
+                $hold->cancel;
+            }
 
             # Delete all lists and all shares of this borrower
             # Consistent with the approach Koha uses on deleting individual lists

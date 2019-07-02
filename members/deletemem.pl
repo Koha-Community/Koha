@@ -85,6 +85,7 @@ if (C4::Context->preference("IndependentBranches")) {
 my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
+my $countholds = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE borrowernumber=?", undef, $member);
 if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor ) {
 
     $template->param(
@@ -99,7 +100,9 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor ) 
     if ($is_guarantor) {
         $template->param(guarantees => 1);
     }
-
+    if($countholds > 0){
+        $template->param(ItemsOnHold => $countholds);
+    }
     # This is silly written but reflect the same conditions as above
     if ( not $countissues > 0 and not $charges and not $is_guarantor ) {
         $template->param(
