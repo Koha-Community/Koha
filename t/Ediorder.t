@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 BEGIN { use_ok('Koha::Edifact::Order') }
 
@@ -54,6 +54,17 @@ $data_to_encode .= '??';
 @segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
 cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
     'IMD segment deals with quoted character at end' );
+
+# special case for text ending in apostrophe e.g. nuthin'
+$data_to_encode .= q{?'};
+@segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
+cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC???''},
+    'IMD segment deals with quoted apostrophe at end' );
+
+$data_to_encode =~s/\?'$//;
+@segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
+cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
+    'IMD segment deals with apostrophe preceded by quoted ?  at end' );
 
 my $isbn = '3540556753';
 my $ean  = '9783540556756';

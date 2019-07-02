@@ -512,7 +512,7 @@ sub imd_segment {
         }
         $odd = !$odd;
     }
-    if ( @segs && $segs[-1] !~ m/$seg_terminator$/o ) {
+    if ( @segs && $segs[-1] !~ m/[^?]$seg_terminator$/o ) {
         $segs[-1] .= $seg_terminator;
     }
     return @segs;
