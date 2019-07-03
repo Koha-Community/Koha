@@ -4277,28 +4277,42 @@ sub prepare_host_field {
     my $field;
     my $host_field;
     if ( $marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC' ) {
-        if ( $field = $host->field('100') || $host->field('110') || $host->field('11') ) {
+        if ( $field = $host->field('100') || $host->field('110') || $host->field('111') ) {
             my $s = $field->as_string('ab');
             if ($s) {
                 $sfd{a} = $s;
             }
         }
-        if ( $field = $host->field('245') ) {
+        if ( $field = $host->field('300') ) {
             my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{h} = $s;
+            }
+        }
+        if ( $field = $host->field('245') ) {
+            my $s = $field->as_string('abnpc');
             if ($s) {
                 $sfd{t} = $s;
             }
         }
-        if ( $field = $host->field('260') ) {
+        if ( $field = $host->field('260') || $host->field('264') ) {
             my $s = $field->as_string('abc');
             if ($s) {
                 $sfd{d} = $s;
             }
         }
-        if ( $field = $host->field('240') ) {
-            my $s = $field->as_string();
+        if ( $field = $host->field('250') ) {
+            my $s = $field->as_string('a');
             if ($s) {
                 $sfd{b} = $s;
+            }
+        }
+        if ( $field = $host->field('028') ) {
+            my $s = ($field->as_string('b') || '')." ".($field->as_string('a') || '');
+            $s =~ s/^ +//;
+            $s =~ s/ +$//;
+            if ($s ne '') {
+                $sfd{o} = $s;
             }
         }
         if ( $field = $host->field('022') ) {
@@ -4314,7 +4328,7 @@ sub prepare_host_field {
             }
         }
         if ( $field = $host->field('001') ) {
-            $sfd{w} = $field->data(),;
+            $sfd{w} = $field->data();
         }
         $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
         return $host_field;
