@@ -28,7 +28,7 @@ use t::lib::TestBuilder;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
-    my $path = dirname(__FILE__) . '/../lib';
+    my $path = dirname(__FILE__) . '/../../lib';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
