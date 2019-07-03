@@ -62,10 +62,10 @@
                             [% END %]
                             [% IF facets_loo.facets.size > 5 %]
                                 <li class="moretoggle">
-                                    Show more
+                                    <a href="#"><strong>Show more</strong></a>
                                 </li>
                                 <li class="moretoggle" style="display:none">
-                                    Show less
+                                    <a href="#"><strong>Show less</strong></a>
                                 </li>
                             [% END %]
                         </ul>

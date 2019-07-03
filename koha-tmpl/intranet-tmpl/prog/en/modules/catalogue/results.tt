@@ -668,7 +668,8 @@
         var Sticky;
         $(document).ready(function() {
 
-            $(".moretoggle").click(function() {
+            $(".moretoggle").click(function(e) {
+                e.preventDefault();
                 $(this).siblings(".collapsible-facet").toggle();
                 $(this).siblings(".moretoggle").toggle();
                 $(this).toggle();
