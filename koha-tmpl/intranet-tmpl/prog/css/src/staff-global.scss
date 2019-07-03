@@ -1,16 +1,25 @@
-@import url("../../lib/yui/reset-fonts-grids.css") screen;
-
 $font-main: Arial, Verdana, Helvetica, sans-serif;
 $font-monospace: "Courier New", Courier, monospace;
 $language-footer-min-height: 20px;
 
 @mixin default-button {
-    background: linear-gradient(to bottom, #FFFFFF 0%, #F7F7F7 35%, #E0E0E0 100%);
-    border: 1px outset #999999;
-    border-left-color: #666;
-    border-top-color: #666;
+    background-image: linear-gradient(to bottom, #FFF 0, #E0E0E0 100%);
+    border-color: #ADADAD #ADADAD #949494;
+    border-radius: 4px;
+    border-width: 1px;
     color: #333333;
-    padding: .25em;
+    display: inline-block;
+    font-size: inherit;
+    line-height: 1.42857143;
+    padding: .3em .8em;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    vertical-align: middle;
+    white-space: nowrap;
+
+    &:hover {
+        background: #E0E0E0 none;
+    }
 }
 
 @mixin disabled-button {
@@ -163,7 +172,8 @@ aside {
                 padding: .5em 0;
 
                 legend {
-                    font-size: 85%;
+                    font-size: 95%;
+                    margin: 0;
                 }
             }
 
@@ -206,7 +216,6 @@ aside {
             }
 
             ol {
-                font-size: 85%;
                 margin: 0;
                 padding: 0;
             }
@@ -243,17 +252,6 @@ main {
         clear: both;
         content: " ";
         display: table;
-    }
-
-    .yui-b {
-        fieldset {
-            &.brief {
-                [type="text"],
-                select {
-                    width: auto;
-                }
-            }
-        }
     }
 }
 
@@ -355,6 +353,8 @@ th {
 
 body {
     font-family: $font-main;
+    font-size: 13px;
+    line-height: 1.22;
     padding: 0 0 4em;
     text-align: left;
 }
@@ -452,13 +452,9 @@ cite {
 
 input,
 textarea {
-    line-height: normal;
-    padding: 2px 4px;
-
     &:focus {
         border-color: #538200;
         border-radius: 4px;
-        border-style: solid;
     }
 }
 
@@ -580,13 +576,6 @@ label,
             }
         }
     }
-}
-
-#doc,
-#doc1,
-#doc2,
-#doc3 {
-    padding-top: 1em;
 }
 
 .main {
@@ -1185,46 +1174,6 @@ fieldset {
     }
 }
 
-.yui-u {
-    div {
-        &.hint {
-            margin-bottom: .4em;
-        }
-    }
-
-    fieldset {
-        &.rows {
-            div {
-                &.hint {
-                    margin-left: 7.5em;
-                }
-            }
-
-            label {
-                width: 10em;
-            }
-
-            span {
-                &.label {
-                    width: 10em;
-                }
-            }
-        }
-    }
-
-    .rows {
-        li {
-            p {
-                label {
-                    &.widelabel {
-                        width: auto;
-                    }
-                }
-            }
-        }
-    }
-}
-
 legend {
     background-color: #FFFFFF;
     border: 2px solid #B9D8D9;
@@ -1274,7 +1223,6 @@ details[open] {
 #breadcrumbs {
     background-color: #E6F0F2;
     clear: both;
-    font-size: 90%;
     margin: 0;
     padding: .2em .5em .4em 10px;
 }
@@ -1395,7 +1343,8 @@ div {
         }
 
         input {
-            font-size: 80%;
+            font-size: 90%;
+            padding: .2em .6em;
         }
     }
 
@@ -1513,10 +1462,9 @@ div {
     margin: .3em 0 .5em;
 
     input {
-        font-size: 1.3em;
-
-        &.submit {
-            font-size: 1em;
+        &[type="submit"] {
+            border-radius: 3px;
+            padding: .2em .8em;
         }
     }
 
@@ -1578,11 +1526,11 @@ div {
             display: block;
         }
     }
-}
 
-
-.head-searchbox {
-    width: 30em;
+    .head-searchbox {
+        font-size: 1.3em;
+        width: 30em;
+    }
 }
 
 #reserves,
@@ -1593,7 +1541,6 @@ div {
 
 .tip {
     color: #808080;
-    font-size: 93%;
 }
 
 .single-line {
@@ -1753,125 +1700,6 @@ dd {
 .hint {
     color: #666;
     font-size: 95%;
-}
-
-.yui-b {
-    fieldset {
-        &.brief {
-            padding: .4em .7em;
-
-            fieldset {
-                margin: 0 .3em;
-                padding: .5em;
-
-                legend {
-                    font-size: 85%;
-                }
-            }
-
-            li {
-
-                &.checkbox {
-
-                    input {
-                        #tools_holidays & {
-                            margin-left: 0;
-                        }
-                    }
-
-                    label {
-                        display: inline;
-
-                        #tools_holidays & {
-                            margin-left: 20px;
-                        }
-                    }
-                }
-
-                &.dateinsert {
-                    label {
-                        display: inline;
-                    }
-
-                    span {
-                        &.label {
-                            display: inline;
-                        }
-                    }
-                }
-
-                &.radio {
-                    padding: .7em 0;
-
-                    input {
-                        padding: .3em 0;
-
-                        #tools_holidays & {
-                            margin-left: 0;
-                        }
-                    }
-
-                    label {
-                        display: inline;
-
-                        #tools_holidays & {
-                            margin-left: 20px;
-                        }
-
-                        span {
-                            &.label {
-                                display: inline;
-                            }
-                        }
-                    }
-                }
-            }
-
-            ol {
-                font-size: 85%;
-                margin: 0;
-                padding: 0;
-            }
-
-            select,
-            [type=text] {
-                width: 100%;
-            }
-        }
-
-        &.rows {
-            div {
-                &.hint {
-                    margin-left: 10.5em;
-                }
-            }
-
-            td {
-                label {
-                    width: auto;
-                }
-
-                span {
-                    &.label {
-                        width: auto;
-                    }
-                }
-            }
-        }
-    }
-}
-
-#yui-main {
-    .yui-b {
-        fieldset {
-            &.brief {
-                select,
-                [type=text] {
-                    width: auto;
-                }
-            }
-        }
-    }
 }
 
 .dropdown-menu {
