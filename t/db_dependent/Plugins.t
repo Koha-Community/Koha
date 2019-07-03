@@ -290,6 +290,8 @@ subtest 'Test _version_compare' => sub {
 
     plan tests => 12;
 
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
     is( Koha::Plugins::Base::_version_compare( '1.1.1',    '2.2.2' ), -1, "1.1.1 is less then 2.2.2" );
     is( Koha::Plugins::Base::_version_compare( '2.2.2',    '1.1.1' ),  1, "1.1.1 is greater then 2.2.2" );
     is( Koha::Plugins::Base::_version_compare( '1.1.1',    '1.1.1' ),  0, "1.1.1 is equal to 1.1.1" );
