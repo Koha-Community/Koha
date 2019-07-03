@@ -152,7 +152,6 @@ subtest 'Koha::RefundLostItemFeeRules::_default_rule() tests' => sub {
             rule_name    => 'refund',
         }
     )->next();
-    use Data::Printer colored => 1;
     ok( !Koha::RefundLostItemFeeRules->_default_rule, 'Default rule is set to not refund' );
 
     $default_rule->delete;
