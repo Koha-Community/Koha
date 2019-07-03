@@ -529,7 +529,7 @@ sub _status_graph_union {
         $status_graph->{$backend_status_key} = $backend_status;
         # Update all core methods' next_actions.
         foreach my $prev_action ( @{$backend_status->{prev_actions}} ) {
-            if ( grep $prev_action, @core_status_ids ) {
+            if ( grep { $prev_action eq $_ } @core_status_ids ) {
                 my @next_actions =
                      @{$status_graph->{$prev_action}->{next_actions}};
                 push @next_actions, $backend_status_key;
@@ -539,7 +539,7 @@ sub _status_graph_union {
         }
         # Update all core methods' prev_actions
         foreach my $next_action ( @{$backend_status->{next_actions}} ) {
-            if ( grep $next_action, @core_status_ids ) {
+            if ( grep { $next_action eq $_ } @core_status_ids ) {
                 my @prev_actions =
                      @{$status_graph->{$next_action}->{prev_actions}};
                 push @prev_actions, $backend_status_key;
