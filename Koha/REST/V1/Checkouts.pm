@@ -51,7 +51,7 @@ sub list {
         if ( $checked_in ) {
             $checkouts_set = Koha::Old::Checkouts->new;
         } else {
-            my $checkouts_set = Koha::Checkouts->new;
+            $checkouts_set = Koha::Checkouts->new;
         }
         my $checkouts = $c->objects->search( $checkouts_set, \&_to_model, \&_to_api );
         return $c->render( status => 200, openapi => $checkouts );
