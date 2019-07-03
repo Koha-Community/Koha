@@ -503,17 +503,21 @@
 	      <xsl:for-each select="marc:subfield[@code = 'a' or @code='b' or @code='n']">
 		<xsl:choose>
 		  <xsl:when test="@code='a' or @code='b'">
+		    <span><xsl:attribute name="class">sf-<xsl:value-of select="@code"/></xsl:attribute>
 		    <xsl:value-of select="."/>
+		    </span>
 		  </xsl:when>
 		  <xsl:when test="@code='n'">
+		    <span class="number-sf">
 		    <xsl:text> (</xsl:text>
 		    <xsl:value-of select="."/>
 		    <xsl:text>)</xsl:text>
                     <xsl:choose>
                       <xsl:when test="position()!=last()">
-			<xsl:text>, </xsl:text>
+			<span class="sep"><xsl:text>, </xsl:text></span>
                       </xsl:when>
                     </xsl:choose>
+		    </span>
 		  </xsl:when>
 		</xsl:choose>
 	      </xsl:for-each>
