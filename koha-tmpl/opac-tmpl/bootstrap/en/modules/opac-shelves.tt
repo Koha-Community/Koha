@@ -482,9 +482,9 @@
 
                                                         [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
                                                             [% IF ( itemsloo.incart ) %]
-                                                                <span class="actions"><a class="addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#" onclick="addRecord('[% itemsloo.biblionumber | html %]'); return false;">In your cart</a> <a class="cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber | html %]'); return false;">(remove)</a></span>
+                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#">In your cart</a> <a data-biblionumber="[% itemsloo.biblionumber | html %]" class="cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
                                                             [% ELSE %]
-                                                                <span class="actions"><a class="addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#" onclick="addRecord('[% itemsloo.biblionumber | html %]'); return false;">Add to cart</a> <a style="display:none;" class="cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#" onclick="delSingleRecord('[% itemsloo.biblionumber | html %]'); return false;">(remove)</a></span>
+                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#">Add to cart</a> <a style="display:none;" data-biblionumber="[% itemsloo.biblionumber | html %]" class="cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
                                                             [% END %]
                                                         [% END # / IF opacbookbag %]
                                                     </span> <!-- / .results_summary .actions -->
