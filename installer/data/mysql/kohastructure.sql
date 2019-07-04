@@ -4287,6 +4287,18 @@ shortcut_keys varchar(80) NOT NULL,
 PRIMARY KEY (shortcut_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table itemtypes_branches
+--
+
+DROP TABLE IF EXISTS itemtypes_branches;
+CREATE TABLE itemtypes_branches( -- association table between authorised_values and branches
+    itemtype VARCHAR(10) NOT NULL,
+    branchcode VARCHAR(10) NOT NULL,
+    FOREIGN KEY (itemtype) REFERENCES itemtypes(itemtype) ON DELETE CASCADE,
+    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
