@@ -412,6 +412,7 @@
         [% IF code.search('DGST') %] <span class="overdue">Warning, this is a template for a Digest, as such, any references to branch data ( e.g. branches.branchname ) will refer to the borrower's home branch.</span> [% END %]
 
         <input type="hidden" id="redirect" name="redirect" value="" />
+        <input type="hidden" id="section" name="section" value="[% section | html %]" />
         <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
     </form>
 [% END %]

@@ -130,7 +130,19 @@ $(document).ready(function() {
         }
     });
 
-    $( ".transport-types" ).accordion({ collapsible: true, active:false, animate: 200 });
+    $( ".transport-types" ).accordion({
+        collapsible: true,
+        active: parseInt( $("#section").val(), 10),
+        animate: 200,
+        activate: function() {
+            var active = $( ".transport-types" ).accordion( "option", "active" );
+            if( active === false ){
+                $("#section").val("");
+            } else {
+                $("#section").val( active );
+            }
+        }
+    });
 
     $(".insert").on("click",function(){
         var containerid = $(this).data("containerid");
