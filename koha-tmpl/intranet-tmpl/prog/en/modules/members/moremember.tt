@@ -807,7 +807,7 @@
 
                                                 [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                                                     <label for="suspend_until">until</label>
-                                                    <input type="text" size="10" id="suspend_until" name="suspend_until" class="datepicker"/>
+                                                    <input type="text" size="10" id="suspend_until" name="suspend_until" class="datepicker futuredate"/>
                                                     <span class="hint">Specify date on which to resume [% INCLUDE 'date-format.inc' %]: </span>
                                                 [% END %]
                                             </fieldset>
@@ -921,14 +921,6 @@
                 "bPaginate": false
             }));
 
-            $("#suspend_until").datepicker({
-                onClose: function(dateText, inst) {
-                    validate_date(dateText, inst);
-                },
-                minDate: 1, // require that hold suspended until date is after today
-            }).on("change", function(e, value) {
-                if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
-            });
 
             $("#view_restrictions").on("click",function(){
                 $('#debarments-tab-link').click();
