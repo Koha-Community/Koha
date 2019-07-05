@@ -163,7 +163,7 @@ sub manualinvoice {
           ? $checkouts->next
           : Koha::Old::Checkouts->search(
             { itemnumber => $itemnum, borrowernumber => $borrowernumber },
-            { order_by   => { 'DESC' => 'returndate' }, rows => 1 }
+            { order_by   => { -desc => 'returndate' }, rows => 1 }
         )->next;
         $issue_id = $checkout ? $checkout->issue_id : undef;
     }
