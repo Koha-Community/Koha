@@ -59,11 +59,12 @@ use Koha::Biblios;
 
 my $query = CGI->new();
 my $biblionumber = $query->param('biblionumber');
-if ( !$biblionumber ) {
+my $biblio;
+$biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata', 'items' ] } ) if $biblionumber;
+if( !$biblio ) {
     print $query->redirect('/cgi-bin/koha/errors/404.pl');
     exit;
 }
-$biblionumber = int($biblionumber);
 
 #open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -75,12 +76,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-
-my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata', 'items' ] } );
-unless ( $biblio ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
 
 my $patron = Koha::Patrons->find($loggedinuser);
 
