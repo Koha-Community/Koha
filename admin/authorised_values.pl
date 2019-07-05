@@ -20,6 +20,8 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use List::MoreUtils qw(any);
+
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
@@ -49,22 +51,21 @@ our ($template, $borrowernumber, $cookie)= get_template_and_user({
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
-    my ( $selected_branches, $category, $av );
+    my ( @selected_branches, $category, $av );
     if ($id) {
         $av = Koha::AuthorisedValues->new->find( $id );
-        $selected_branches = $av->branch_limitations;
+        @selected_branches = $av->library_limits->as_list;
     } else {
         $category = $input->param('category');
     }
 
-    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } );
     my @branches_loop;
-    foreach my $branch ( @$branches ) {
-        my $selected = ( grep {$_ eq $branch->{branchcode}} @$selected_branches ) ? 1 : 0;
+    while ( my $branch = $branches->next ) {
         push @branches_loop, {
-            branchcode => $branch->{branchcode},
-            branchname => $branch->{branchname},
-            selected   => $selected,
+            branchcode => $branch->branchcode,
+            branchname => $branch->branchname,
+            selected   => any {$_->branchcode eq $branch->branchcode} @selected_branches,
         };
     }
 
@@ -126,7 +127,7 @@ if ($op eq 'add_form') {
         $av->imageurl( $imageurl );
         eval{
             $av->store;
-            $av->replace_branch_limitations( \@branches );
+            $av->replace_library_limits( \@branches );
         };
         if ( $@ ) {
             push @messages, {type => 'error', code => 'error_on_update' };
@@ -145,7 +146,7 @@ if ($op eq 'add_form') {
 
         eval {
             $av->store;
-            $av->replace_branch_limitations( \@branches );
+            $av->replace_library_limits( \@branches );
         };
 
         if ( $@ ) {
@@ -230,7 +231,7 @@ if ( $op eq 'list' ) {
         $row_data{lib}                   = $av->lib;
         $row_data{lib_opac}              = $av->lib_opac;
         $row_data{imageurl}              = getitemtypeimagelocation( 'intranet', $av->imageurl );
-        $row_data{branches}              = $av->branch_limitations;
+        $row_data{branches}              = $av->library_limits->as_list;
         $row_data{id}                    = $av->id;
         push(@loop_data, \%row_data);
     }

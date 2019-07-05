@@ -95,7 +95,7 @@ is( @authorised_values, 3, "Get correct number of values" );
 my $branchcode1 = $builder->build({ source => 'Branch' })->{branchcode};
 my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
 
-$av1->add_branch_limitation( $branchcode1 );
+$av1->add_library_limit( $branchcode1 );
 
 @authorised_values = Koha::AuthorisedValues->new()->search( { category => 'av_for_testing', branchcode => $branchcode1 } );
 is( @authorised_values, 3, "Search including value with a branch limit ( branch can use the limited value ) gives correct number of results" );
@@ -103,15 +103,15 @@ is( @authorised_values, 3, "Search including value with a branch limit ( branch 
 @authorised_values = Koha::AuthorisedValues->new()->search( { category => 'av_for_testing', branchcode => $branchcode2 } );
 is( @authorised_values, 2, "Search including value with a branch limit ( branch *cannot* use the limited value ) gives correct number of results" );
 
-$av1->del_branch_limitation( $branchcode1 );
+$av1->del_library_limit( $branchcode1 );
 @authorised_values = Koha::AuthorisedValues->new()->search( { category => 'av_for_testing', branchcode => $branchcode2 } );
 is( @authorised_values, 3, "Branch limitation deleted successfully" );
 
-$av1->add_branch_limitation( $branchcode1 );
-$av1->branch_limitations( [ $branchcode1, $branchcode2 ] );
+$av1->add_library_limit( $branchcode1 );
+$av1->library_limits( [ $branchcode1, $branchcode2 ] );
 
-my $limits = $av1->branch_limitations;
-is( @$limits, 2, 'branch_limitations functions correctly both as setter and getter' );
+my $limits = $av1->library_limits->as_list;
+is( @$limits, 2, 'library_limits functions correctly both as setter and getter' );
 
 my @categories = Koha::AuthorisedValues->new->categories;
 is( @categories, 3, 'There should have 2 categories inserted' );
