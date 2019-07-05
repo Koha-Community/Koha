@@ -66,7 +66,9 @@ my $code        = $input->param('code');
 my $module      = $input->param('module') || '';
 my $content     = $input->param('content');
 my $op          = $input->param('op') || '';
-my $redirect      = $input->param('redirect');
+my $redirect    = $input->param('redirect');
+my $section     = $input->param('section');
+
 my $dbh = C4::Context->dbh;
 
 our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
@@ -90,13 +92,14 @@ $template->param(
 	script_name => $script_name,
   searchfield => $searchfield,
     branchcode => $branchcode,
+    section => $section,
 	action => $script_name
 );
 
 if ( $op eq 'add_validate' or $op eq 'copy_validate' ) {
     add_validate();
     if( $redirect eq "just_save" ){
-        print $input->redirect("/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=$branchcode&module=$module&code=$code&redirect=done");
+        print $input->redirect("/cgi-bin/koha/tools/letter.pl?op=add_form&branchcode=$branchcode&module=$module&code=$code&redirect=done&section=$section");
         exit;
     } else {
         $op = q{}; # we return to the default screen for the next operation
