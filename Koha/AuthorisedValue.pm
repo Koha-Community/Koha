@@ -23,7 +23,7 @@ use Carp;
 
 use Koha::Database;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Limit::Library);
 
 =head1 NAME
 
@@ -31,105 +31,9 @@ Koha::AuthorisedValue - Koha Authorised value Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
-
-=head3 branch_limitations
-
-my $limitations = $av->branch_limitations();
-
-$av->branch_limitations( \@branchcodes );
-
-=cut
-
-sub branch_limitations {
-    my ( $self, $branchcodes ) = @_;
-
-    if ($branchcodes) {
-        return $self->replace_branch_limitations($branchcodes);
-    }
-    else {
-        return $self->get_branch_limitations();
-    }
-
-}
-
-=head3 get_branch_limitations
-
-my $limitations = $av->get_branch_limitations();
-
-=cut
-
-sub get_branch_limitations {
-    my ($self) = @_;
-
-    my @branchcodes =
-      $self->_avb_resultset->search( { av_id => $self->id() } )
-      ->get_column('branchcode')->all();
-
-    return \@branchcodes;
-}
-
-=head3 add_branch_limitation
-
-$av->add_branch_limitation( $branchcode );
-
-=cut
-
-sub add_branch_limitation {
-    my ( $self, $branchcode ) = @_;
-
-    croak("No branchcode passed in!") unless $branchcode;
-
-    my $limitation = $self->_avb_resultset->update_or_create(
-        { av_id => $self->id(), branchcode => $branchcode } );
-
-    return $limitation ? 1 : undef;
-}
-
-=head3 del_branch_limitation
-
-$av->del_branch_limitation( $branchcode );
-
-=cut
-
-sub del_branch_limitation {
-    my ( $self, $branchcode ) = @_;
-
-    croak("No branchcode passed in!") unless $branchcode;
-
-    my $limitation =
-      $self->_avb_resultset->find(
-        { av_id => $self->id(), branchcode => $branchcode } );
-
-    unless ($limitation) {
-        my $id = $self->id();
-        carp(
-"No branch limit for branch $branchcode found for av_id $id to delete!"
-        );
-        return;
-    }
-
-    return $limitation->delete();
-}
-
-=head3 replace_branch_limitations
-
-$av->replace_branch_limitations( \@branchcodes );
-
-=cut
-
-sub replace_branch_limitations {
-    my ( $self, $branchcodes ) = @_;
-
-    $self->_avb_resultset->search( { av_id => $self->id() } )->delete();
-
-    my @return_values =
-      map { $self->add_branch_limitation($_) } @$branchcodes;
-
-    return \@return_values;
-}
 
 =head3 opac_description
 
@@ -143,27 +47,26 @@ sub opac_description {
     return $self->lib_opac() || $self->lib();
 }
 
-=head3 _avb_resultset
+=head2 Internal methods
 
-Returns the internal resultset or creates it if undefined
-
-=cut
-
-sub _avb_resultset {
-    my ($self) = @_;
-
-    $self->{_avb_resultset} ||=
-      Koha::Database->new()->schema()->resultset('AuthorisedValuesBranch');
-
-    $self->{_avb_resultset};
-}
-
-=head3 type
+=head3 _type
 
 =cut
 
 sub _type {
     return 'AuthorisedValue';
+}
+
+=head3 _library_limits
+
+=cut
+
+sub _library_limits {
+    return {
+        class   => 'AuthorisedValuesBranch',
+        id      => 'av_id',
+        library => 'branchcode'
+    };
 }
 
 =head1 AUTHOR
