@@ -104,16 +104,16 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
         <form id="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl">
                 <table id="newst">
                    <thead> <tr>
-                        <th>&nbsp;</th>
+                        <th class="NoSort">&nbsp;</th>
                         <th>Location</th>
                         <th>Library</th>
                         <th>Number</th>
                         <th class="title-string">Publication date</th>
                         <th class="title-string">Expiration date</th>
-                        <th>Title</th>
+                        <th class="anti-the">Title</th>
                         <th>Author</th>
-                        <th>News</th>
-                        <th>Actions</th>
+                        <th class="anti-the">News</th>
+                        <th class="NoSort">Actions</th>
                     </tr></thead>
                     <tbody>[% FOREACH opac_new IN opac_news %]
                          [% IF ( opac_new.expired ) %]
@@ -240,10 +240,11 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 
             $(document).ready(function() {
                 var newst = $("#newst").DataTable($.extend(true, {}, dataTablesDefaults, {
+                    "order": [[ 4, "desc" ]],
                     "aoColumnDefs": [
-                        { "aTargets": [ 0,-1,-2 ], "bSortable": false },
-                        { "aTargets": [ 0, -1 ], "bSearchable": false },
-                        { 'sType': "title-string", 'aTargets' : [ 'title-string'] }
+                        { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                        { "type": "anti-the", "targets": [ "anti-the" ] },
+                        { "type": "title-string", "targets" : [ "title-string"] }
                     ],
                     "sPaginationType": "full_numbers"
                 }));
