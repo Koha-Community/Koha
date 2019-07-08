@@ -342,3 +342,4 @@ subtest 'new() tests' => sub {
 };
 
 $schema->storage->txn_rollback;
+Koha::Plugins::Methods->delete;
