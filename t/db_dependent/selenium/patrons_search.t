@@ -50,7 +50,11 @@ subtest 'Search patrons' => sub {
     my $address    = q|<strong>add'res"s</strong> \123 ❤|;
     my $email      = q|a<strong>bad_email</strong>@example\123 ❤.com|;
     my $patron_category = $builder->build_object(
-        { class => 'Koha::Patron::Categories', category_type => 'A' } );
+        {
+            class => 'Koha::Patron::Categories',
+            value => { category_type => 'A' }
+        }
+    );
     my $library = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => $branchname } }
     );
