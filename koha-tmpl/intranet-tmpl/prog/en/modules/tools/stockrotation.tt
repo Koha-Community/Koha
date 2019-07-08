@@ -133,11 +133,11 @@
                                     <label for="cyclical">Cyclical:</label>
                                     <select name="cyclical" id="cyclical">
                                         [% IF rota.cyclical %]
-                                            <option value="1" selected>Yes</option>
+                                            <option value="1" selected="selected">Yes</option>
                                             <option value="0">No</option>
                                         [% ELSE %]
                                             <option value="1">Yes</option>
-                                            <option value="0" selected>No</option>
+                                            <option value="0" selected="selected">No</option>
                                         [% END %]
                                     </select>
                                 </li>
@@ -167,7 +167,7 @@
                     </div>
                     [% END %]
 
-                    <h2>Manage [% rota.title | html %] stages</h2>
+                    <h2>Manage <em>[% rota.title | html %]</em> stages</h2>
                     <div id="ajax_status"
                         data-saving-msg="Saving changes..."
                         data-success-msg=""
@@ -180,37 +180,50 @@
                         <span id="ajax_failed_msg"></span>
                     </div>
 
-                    <form id="stage_form" method="post" enctype="multipart/form-data" class="validated">
-                        <fieldset class="rows">
-                            <legend>Add stage</legend>
-                            <ol>
-                                <li>
-                                    <label class="required" for="branch">Library:</label>
-                                    <select name="branchcode" id="branch">
-                                        [% FOREACH branch IN branches %]
-                                            [% IF branch.branchcode == stage.branchcode_id %]
-                                                <option value="[% branch.branchcode | html %]" selected>[% Branches.GetName(branch.branchcode) | html %]</option>
-                                            [% ELSE %]
-                                                <option value="[% branch.branchcode | html %]">[% Branches.GetName(branch.branchcode) | html %]</option>
-                                            [% END %]
-                                        [% END %]
-                                    </select>
-                                    <span class="required">Required</span>
-                                </li>
-                                <li>
-                                    <label class="required" for="duration">Duration:</label>
-                                    <input type="text" id="duration" name="duration" value="[% stage.duration | html %]" required="required" placeholder="Duration (days)">
-                                    <span class="required">Required</span>
-                                </li>
-                            </ol>
-                        </fieldset>
-                        <fieldset class="action">
-                            <input type="submit" value="Submit">
-                        </fieldset>
-                        <input type="hidden" name="stage_id" value="[% stage.id | html %]">
-                        <input type="hidden" name="rota_id" value="[% rota_id | html %]">
-                        <input type="hidden" name="op" value="process_stage">
-                    </form>
+                    <!-- Add stage modal -->
+                    <div class="modal" id="addStageModal" tabindex="-1" role="dialog" aria-labelledby="addStageLabel">
+                        <form id="stage_form" method="post" enctype="multipart/form-data" class="validated">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="addStageLabel">Add stage to <em>[% rota.title | html %]</em></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset class="rows">
+                                            <ol>
+                                                <li>
+                                                    <label class="required" for="branch">Library:</label>
+                                                    <select name="branchcode" id="branch">
+                                                        [% FOREACH branch IN branches %]
+                                                            [% IF branch.branchcode == stage.branchcode_id %]
+                                                                <option value="[% branch.branchcode | html %]" selected="selected">[% Branches.GetName(branch.branchcode) | html %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% branch.branchcode | html %]">[% Branches.GetName(branch.branchcode) | html %]</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                    </select>
+                                                    <span class="required">Required</span>
+                                                </li>
+                                                <li>
+                                                    <label class="required" for="duration">Duration:</label>
+                                                    <input type="text" id="duration" name="duration" value="[% stage.duration | html %]" required="required" placeholder="Duration (days)">
+                                                    <span class="required">Required</span>
+                                                </li>
+                                            </ol>
+                                        </fieldset> <!-- /.rows -->
+                                    </div> <!-- /.modal-body -->
+                                    <div class="modal-footer">
+                                        <input type="hidden" name="stage_id" value="[% stage.id | html %]">
+                                        <input type="hidden" name="rota_id" value="[% rota_id | html %]">
+                                        <input type="hidden" name="op" value="process_stage">
+                                        <button type="submit" class="btn btn-default">Save</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div> <!-- /.modal-footer -->
+                                </div> <!-- /.modal-content -->
+                            </div> <!-- /.modal-dialog -->
+                        </form> <!-- /#stage_form -->
+                    </div> <!-- /#addStageModal -->
 
                     [% IF existing_stages.size > 0 %]
                         <div id="manage_stages">
@@ -243,6 +256,13 @@
                                 [% END %]
                             </ul>
                         </div>
+                    [% ELSE %]
+
+                        <div class="dialog message">
+                            <h4>This rota has no stages.</h4>
+                            <p><button type="button" data-toggle="modal" data-target="#addStageModal"><i class="fa fa-plus"></i> Add a stage</button></p>
+                        </div>
+
                     [% END %]
 
                     <p><a href="stockrotation.pl">Return to rotas</a></p>
@@ -269,7 +289,7 @@
                                     <select name="branchcode" id="branch">
                                         [% FOREACH branch IN branches %]
                                             [% IF branch.branchcode == stage.branchcode_id %]
-                                                <option value="[% branch.branchcode | html %]" selected>[% Branches.GetName(branch.branchcode) | html %]</option>
+                                                <option value="[% branch.branchcode | html %]" selected="selected">[% Branches.GetName(branch.branchcode) | html %]</option>
                                             [% ELSE %]
                                                 <option value="[% branch.branchcode | html %]">[% Branches.GetName(branch.branchcode) | html %]</option>
                                             [% END %]
@@ -332,38 +352,49 @@
                         </div>
                     [% END %]
 
-                    <h2>Manage [% rota.title | html %] items</h2>
+                    <h2>Manage items assigned to <em>[% rota.title | html %]</em></h2>
 
-                    <div>
+                    <!-- Add items modal -->
+                    <div class="modal" id="addItemsModal" tabindex="-1" role="dialog" aria-labelledby="addItemsLabel">
                         <form id="add_rota_item_form" method="post" enctype="multipart/form-data" class="validated">
-                            <fieldset class="rows">
-                                <legend>Add item to &quot;[% rota.title | html %]&quot;</legend>
-                                <ol>
-                                    <li>
-                                        <label for="barcode">Barcode:</label>
-                                        <input type="text" id="barcode" name="barcode" placeholder="Item barcode" autofocus>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <fieldset class="rows">
-                                <legend>Use a barcode file</legend>
-                                <ol>
-                                    <li>
-                                        <label for="barcodefile">Barcode file:</label>
-                                        <input type="file" id="barcodefile" name="barcodefile">
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="submit" value="Save">
-                            </fieldset>
-                            <input type="hidden" name="rota_id" value="[% rota.id | html %]">
-                            <input type="hidden" name="op" value="add_items_to_rota">
-                        </form>
-                    </div>
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="addItemsLabel">Add item to <em>[% rota.title | html %]</em></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <fieldset class="rows">
+                                            <legend>Add an item by barcode</legend>
+                                            <ol>
+                                                <li>
+                                                    <label for="barcode">Barcode:</label>
+                                                    <input type="text" id="barcode" name="barcode" placeholder="Item barcode" autofocus>
+                                                </li>
+                                            </ol>
+                                        </fieldset>
+                                        <fieldset class="rows">
+                                            <legend>Use a barcode file</legend>
+                                            <ol>
+                                                <li>
+                                                    <label for="barcodefile">Barcode file:</label>
+                                                    <input type="file" id="barcodefile" name="barcodefile">
+                                                </li>
+                                            </ol>
+                                        </fieldset> <!-- /.rows -->
+                                    </div> <!-- /.modal-body -->
+                                    <div class="modal-footer">
+                                        <input type="hidden" name="rota_id" value="[% rota.id | html %]">
+                                        <input type="hidden" name="op" value="add_items_to_rota">
+                                        <button type="submit" class="btn btn-default">Save</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div> <!-- /.modal-footer -->
+                                </div> <!-- /.modal-content -->
+                            </div> <!-- /.modal-dialog -->
+                        </form> <!-- /#dd_rota_item_form -->
+                    </div> <!-- /#addItemsModal -->
 
                     [% IF items.count > 0 %]
-                        <h3>Manage items assigned to &quot;[% rota.title | html %]&quot;</h3>
                         <table id="stock_rotation_manage_items" class="items_table" role="grid">
                             <thead>
                                 <tr>
@@ -434,6 +465,13 @@
                                 [% END %]
                             </tbody>
                         </table>
+                    [% ELSE %]
+
+                        <div class="dialog message">
+                            <h4>There are no items assigned to this rota.</h4>
+                            <p><button type="button" data-toggle="modal" data-target="#addItemsModal"><i class="fa fa-plus"></i> Add items</button></p>
+                        </div>
+
                     [% END %]
 
                     <p><a href="stockrotation.pl">Return to rotas</a></p>
@@ -504,6 +542,26 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
+                [% IF ( op == 'manage_stages' || op == 'manage_items' ) %]
+                    <div id="menu">
+                        <ul>
+                            [% IF op == 'manage_stages' %]
+                                <li class="active">
+                            [% ELSE %]
+                                <li>
+                            [% END %]
+                                    <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_stages&amp;rota_id=[% rota_id | uri %]">Manage stages</a>
+                                </li>
+                            [% IF op == 'manage_items' %]
+                                <li class="active">
+                            [% ELSE %]
+                                <li>
+                            [% END %]
+                                    <a href="/cgi-bin/koha/tools/stockrotation.pl?op=manage_items&amp;rota_id=[% rota_id | uri %]">Manage items</a>
+                            </li>
+                        </ul>
+                    </div>
+                [% END %]
                 [% INCLUDE 'tools-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
@@ -517,6 +575,9 @@
     <script>
         var stock_rotation_items_columns_settings = [% ColumnsSettings.GetColumns( 'tools', 'stockrotation', 'stock_rotation_manage_items', 'json' ) | $raw %];
         var stock_rotation_columns_settings = [% ColumnsSettings.GetColumns( 'tools', 'stockrotation', 'stock_rotation', 'json' ) | $raw %];
+        $("#addStageModal, #addItemsModal").on("shown.bs.modal", function(){
+            $("#branch, #barcode").focus();
+        });
     </script>
 [% END %]
 
