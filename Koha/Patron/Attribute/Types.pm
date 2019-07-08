@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Koha::Patron::Attribute::Type;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Limit::Library);
 
 =head1 NAME
 

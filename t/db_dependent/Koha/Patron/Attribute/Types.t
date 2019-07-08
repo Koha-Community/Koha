@@ -287,7 +287,7 @@ subtest 'replace_library_limits() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'search() with branch limits tests' => sub {
+subtest 'search_with_library_limits() tests' => sub {
 
     plan tests => 3;
 
@@ -322,16 +322,10 @@ subtest 'search() with branch limits tests' => sub {
     $object_code_2->library_limits( [$branch_2] );
     $object_code_3->library_limits( [ $branch_1, $branch_2 ] );
 
-    is( Koha::Patron::Attribute::Types->search( { branchcode => $branch_1 } )
-            ->count,
-        3,
-        '3 attribute types are available for the specified branch'
-    );
-    is( Koha::Patron::Attribute::Types->search( { branchcode => $branch_2 } )
-            ->count,
-        3,
-        '3 attribute types are available for the specified branch'
-    );
+    is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $branch_1 )->count,
+        3, '3 attribute types are available for the specified branch' );
+    is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $branch_2 )->count,
+        3, '3 attribute types are available for the specified branch' );
 
     $schema->storage->txn_rollback;
 };
