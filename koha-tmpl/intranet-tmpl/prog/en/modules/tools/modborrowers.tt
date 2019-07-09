@@ -149,8 +149,8 @@
                                                 <th class="title-string">Expiry date</th>
                                                 <th>Circulation note</th>
                                                 <th>Opac Note</th>
-                                                <th>Debarred till</th>
-                                                <th>Debarred comment</th>
+                                                <th>Restriction expiration</th>
+                                                <th>Restriction comment</th>
                                                 [% FOREACH attrh IN attributes_header %]
                                                     <th>[% attrh.attribute | html %]</th>
                                                 [% END %]
@@ -234,9 +234,9 @@
                                                 [% CASE 'opacnote' %]
                                                 OPAC note:
                                                 [% CASE 'debarred' %]
-                                                Debarred till:
+                                                Restriction expiration:
                                                 [% CASE 'debarredcomment' %]
-                                                Debarred comment:
+                                                Restriction comment:
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]

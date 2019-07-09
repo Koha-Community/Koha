@@ -38,6 +38,7 @@ use Koha::DateUtils qw( dt_from_string );
 use Koha::List::Patron;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use Koha::Patron::Debarments;
 use Koha::Patrons;
 
 my $input = new CGI;
@@ -306,6 +307,27 @@ if ( $op eq 'do' ) {
     for my $borrowernumber ( @borrowernumbers ) {
         # If at least one field are filled, we want to modify the borrower
         if ( defined $infos ) {
+            # If a debarred date or debarred comment has been submitted make a new debarment
+            if ( $infos->{debarred} || $infos->{debarredcomment} ) {
+                AddDebarment(
+                    {
+                        borrowernumber => $borrowernumber,
+                        type           => 'MANUAL',
+                        comment        => $infos->{debarredcomment},
+                        expiration     => $infos->{debarred},
+                    });
+            }
+
+            # If debarment date or debarment comment are disabled then remove all debarrments
+            if ( grep { /debarred/ } @disabled ) {
+                eval {
+                   my $debarrments = GetDebarments( { borrowernumber => $borrowernumber } );
+                   foreach my $debarment (@$debarrments) {
+                      DelDebarment( $debarment->{'borrower_debarment_id'} );
+                   }
+                };
+            }
+
             $infos->{borrowernumber} = $borrowernumber;
             eval { Koha::Patrons->find( $borrowernumber )->set($infos)->store; };
             if ( $@ ) { # FIXME We could provide better error handling here
