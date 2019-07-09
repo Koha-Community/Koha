@@ -1,15 +1,16 @@
 [% USE raw %]
+[% USE Koha %]
 [% USE Asset %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self checkout help</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
-<link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
+<link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon')  ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
  [% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
 [% Asset.css("css/sco.css") | $raw %]
-[% IF ( OPACUserCSS ) %]<style>[% OPACUserCSS | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( SCOUserCSS ) %]<style>[% SCOUserCSS | $raw %]</style>[% END %]
 <!--[if lt IE 9]>
     <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
