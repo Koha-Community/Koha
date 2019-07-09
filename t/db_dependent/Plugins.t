@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 52;
+use Test::More tests => 51;
 
 use C4::Context;
 use Koha::Database;
@@ -65,27 +65,6 @@ subtest 'GetPlugins() tests' => sub {
     @plugins = $plugins->GetPlugins({ metadata => { my_example_tag  => 'find_me' }, all => 1 });
     @names = map { $_->get_metadata()->{'name'} } @plugins;
     is( scalar @names, 2, "Only two plugins found via a metadata tag" );
-
-    $schema->storage->txn_rollback;
-};
-
-subtest 'Version upgrade tests' => sub {
-
-    plan tests => 1;
-
-    $schema->storage->txn_begin;
-
-    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
-
-    # make sure there's no version on the DB
-    $schema->resultset('PluginData')
-        ->search( { plugin_class => $plugin->{class}, plugin_key => '__INSTALLED_VERSION__' } )
-        ->delete;
-
-    $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
-    my $version = $plugin->retrieve_data('__INSTALLED_VERSION__');
-
-    is( $version, $plugin->get_metadata->{version}, 'Version has been populated correctly' );
 
     $schema->storage->txn_rollback;
 };
