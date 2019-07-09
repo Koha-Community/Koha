@@ -32,6 +32,7 @@ use C4::Biblio;
 use C4::Auth qw(checkpw_hash);
 
 use Koha::Holds;
+use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Database;
@@ -369,7 +370,7 @@ subtest "move_to_deleted" => sub {
 };
 
 subtest "delete" => sub {
-    plan tests => 5;
+    plan tests => 6;
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     my $patron           = $builder->build( { source => 'Borrower' } );
     my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
@@ -388,6 +389,8 @@ subtest "delete" => sub {
     is( $deleted, 1, 'Koha::Patron->delete should return 1 if the patron has been correctly deleted' );
 
     is( Koha::Patrons->find( $patron->{borrowernumber} ), undef, 'Koha::Patron->delete should have deleted the patron' );
+
+    is (Koha::Old::Holds->search( { reserve_id => $hold->{ reserve_id } } )->count, 1, q|Koha::Patron->delete should have cancelled patron's holds| );
 
     is( Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's holds| );
 
