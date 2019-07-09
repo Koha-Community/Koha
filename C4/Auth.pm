@@ -1237,8 +1237,6 @@ sub checkauth {
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
     my $template = C4::Templates::gettemplate( $template_name, $type, $query );
     $template->param(
-        OpacAdditionalStylesheet                   => C4::Context->preference("OpacAdditionalStylesheet"),
-        opaclayoutstylesheet                  => C4::Context->preference("opaclayoutstylesheet"),
         login                                 => 1,
         INPUTS                                => \@inputs,
         script_name                           => get_script_name(),
