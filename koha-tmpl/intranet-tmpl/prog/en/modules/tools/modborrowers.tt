@@ -149,6 +149,8 @@
                                                 <th class="title-string">Expiry date</th>
                                                 <th>Circulation note</th>
                                                 <th>Opac Note</th>
+                                                <th>Debarred till</th>
+                                                <th>Debarred comment</th>
                                                 [% FOREACH attrh IN attributes_header %]
                                                     <th>[% attrh.attribute | html %]</th>
                                                 [% END %]
@@ -173,6 +175,8 @@
                                                     <td><span title="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
                                                     <td>[% borrower.borrowernotes | html %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
+                                                    <td><span title="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</span></td>
+                                                    <td>[% borrower.debarredcomment | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
                                                         [% IF ( pa.code ) %]
                                                             <td>[% pa.code | html %]=[% pa.value | html %]</td>
@@ -229,6 +233,10 @@
                                                 Circulation note:
                                                 [% CASE 'opacnote' %]
                                                 OPAC note:
+                                                [% CASE 'debarred' %]
+                                                Debarred till:
+                                                [% CASE 'debarredcomment' %]
+                                                Debarred comment:
                                             [% END %]
                                             </label>
                                             [% IF ( field.type == 'text' ) %]
