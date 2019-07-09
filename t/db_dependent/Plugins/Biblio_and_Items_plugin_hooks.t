@@ -51,7 +51,7 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;
 
-    my $plugin = Koha::Plugin::Test->new;
+    my $plugin = Koha::Plugin::Test->new->enable;
 
     my $biblio_id;
 
