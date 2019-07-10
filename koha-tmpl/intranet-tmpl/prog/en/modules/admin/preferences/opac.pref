@@ -626,6 +626,12 @@ OPAC:
               class: currency
             - '[% local_currency %] in fines (leave blank to disable).'
         -
+            - pref: OPACFineNoRenewalsIncludeCredits
+              choices:
+                  yes: Include
+                  no: "Don't include"
+            - outstanding/unapplied credits when applying the OPACFineNoRenewals rule to users
+        -
             - pref: OPACViewOthersSuggestions
               choices:
                   yes: Show

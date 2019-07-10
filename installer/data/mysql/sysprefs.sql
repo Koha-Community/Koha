@@ -457,6 +457,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpenURLResolverURL', '', NULL, 'URL of OpenURL Resolver', 'Free'),
 ('OpenURLText', '', NULL, 'Text of OpenURL links (or image title if OpenURLImageLocation is defined)', 'Free'),
 ('OpenURLImageLocation', '', NULL, 'Location of image for OpenURL links', 'Free'),
+('OPACFineNoRenewalsIncludeCredits','1',NULL,'If enabled the value specified in OPACFineNoRenewals should include any unapplied account credits in the calculation','YesNo'),
 ('OPACShowOpenURL', '', NULL, 'Enable display of OpenURL links in OPAC search results and detail page', 'YesNo'),
 ('OPACOpenURLItemTypes', '', NULL, 'Show the OpenURL link only for these item types', 'Free'),
 ('OrderPdfFormat','pdfformat::layout3pages','Controls what script is used for printing (basketgroups)','','free'),
