@@ -516,43 +516,44 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 $(this).parent().find(".hint").toggle(); return false;
             });
             $("#dateofrange").datepicker({
-              beforeShow: function() {
-                var startdate = $("#jcalendar-container").datepicker("getDate");
-                if (startdate !== null) {
-                   var sd = new Date(startdate);
-                   var ed = new Date($(this).datepicker("getDate"));
-                   if (ed < sd) {
-                     $(this).datepicker("setDate", startdate);
-                     $(this).datepicker("option", "defaultDate", startdate);
-                   }
+                beforeShow: function() {
+                    var startdate = $("#jcalendar-container").datepicker("getDate");
+                    if (startdate !== null) {
+                        var sd = new Date(startdate);
+                        var ed = new Date($(this).datepicker("getDate"));
+                        if (ed < sd) {
+                            $(this).datepicker("setDate", startdate);
+                            $(this).datepicker("option", "defaultDate", startdate);
+                        }
+                    }
                 }
-              }
             });
             $("#datecancelrange").datepicker();
             $("#dateofrange").each(function () { this.value = "" });
             $("#datecancelrange").each(function () { this.value = "" });
             $("#jcalendar-container").datepicker({
-              beforeShowDay: function(thedate) {
-                var day = thedate.getDate();
-                var month = thedate.getMonth() + 1;
-                var year = thedate.getFullYear();
-                var dateString = year + '/' + month + '/' + day;
-                return dateStatusHandler(dateString);
+                beforeShowDay: function(thedate) {
+                    var day = thedate.getDate();
+                    var month = thedate.getMonth() + 1;
+                    var year = thedate.getFullYear();
+                    var dateString = year + '/' + month + '/' + day;
+                    return dateStatusHandler(dateString);
                 },
-            onSelect: function(dateText, inst) {
-                dateChanged($(this).datepicker("getDate"));
-                var enddate = $("#dateofrange").datepicker("getDate");
-                $("#dateofrange").datepicker("option", "defaultDate", $(this).datepicker("getDate"));
-                if (enddate !== null) {
-                   var ed = new Date(enddate);
-                   var sd = new Date($(this).datepicker("getDate"));
-                   if (ed < sd) {
-                     $("#dateofrange").datepicker("setDate", $(this).datepicker("getDate"));
-                     $("#dateofrange").datepicker("option", "defaultDate", enddate);
-                   }
-                }
-            },
-            defaultDate: new Date("[% keydate | html %]")
+                onSelect: function(dateText, inst) {
+                    dateChanged($(this).datepicker("getDate"));
+                    var enddate = $("#dateofrange").datepicker("getDate");
+                    $("#dateofrange").datepicker("option", "defaultDate", $(this).datepicker("getDate"));
+                    $("#dateofrange").datepicker( "option", "minDate", $(this).datepicker("getDate")); //ensure end date can't be before start date
+                    if (enddate !== null) {
+                        var ed = new Date(enddate);
+                        var sd = new Date($(this).datepicker("getDate"));
+                        if (ed < sd) {
+                            $("#dateofrange").datepicker("setDate", $(this).datepicker("getDate"));
+                            $("#dateofrange").datepicker("option", "defaultDate", enddate);
+                        }
+                    }
+                },
+                defaultDate: new Date("[% keydate | html %]")
             });
             $(".hidePanel").on("click",function(){
                 if( $(this).hasClass("showHoliday") ){
