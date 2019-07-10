@@ -1036,7 +1036,7 @@
 [% END # IF step_7 %]
 
 [% IF ( step_4 ) %]
-[% IF ( ExtendedPatronAttributes ) %][% UNLESS ( no_patron_attribute_types ) %]
+[% IF ( Koha.Preference('ExtendedPatronAttributes') ) %][% UNLESS ( no_patron_attribute_types ) %]
   <fieldset class="rows" id="memberentry_patron_attributes">
     <legend id="patron_attributes_lgd">Additional attributes and identifiers</legend>
     <input type="hidden" name="setting_extended_patron_attributes" value="1" />
