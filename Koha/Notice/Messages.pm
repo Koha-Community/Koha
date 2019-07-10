@@ -19,7 +19,6 @@ use Modern::Perl;
 
 
 use Koha::Database;
-
 use Koha::Notice::Message;
 
 use base qw(Koha::Objects);
@@ -33,6 +32,27 @@ Koha::Notice::Message - Koha notice message Object class, related to the message
 =head2 Class Methods
 
 =cut
+
+=head3 get_failed_notices
+
+    my $failed_notices = Koha::Notice::Messages->get_failed_notices({ days => 7 });
+
+Returns a hashref of all notices that have failed to send in the last X days, as specified in the 'days' parameter.
+If not specified, will default to the last 7 days.
+
+=cut
+
+sub get_failed_notices {
+    my ( $self, $params ) = @_;
+    my $days = $params->{days} ? $params->{days} : 7;
+
+    return $self->search(
+        {
+            time_queued => { -between => \"DATE_SUB(NOW(), INTERVAL $days DAY) AND NOW()" },
+            status      => "failed",
+        }
+    );
+}
 
 =head3 type
 

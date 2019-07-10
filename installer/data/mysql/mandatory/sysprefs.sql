@@ -678,6 +678,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RestrictedPageLocalIPs','',NULL,'Beginning of IP addresses considered as local (comma separated ex: "127.0.0,127.0.2")','Free'),
 ('RestrictedPageTitle','',NULL,'Title of the restricted page (breadcrumb and header)','Free'),
 ('RestrictionBlockRenewing','0',NULL,'If patron is restricted, should renewal be allowed or blocked','YesNo'),
+('RestrictPatronsWithFailedNotices', '0', NULL, 'If enabled then when SMS and email notices fail sending at the Koha level then a debarment will be applied to a patrons account', 'YesNo'),
 ('RetainCatalogSearchTerms', '1', NULL, 'If enabled, searches entered into the catalog search bar will be retained', 'YesNo'),
 ('RetainPatronsSearchTerms', '1', NULL, 'If enabled, searches entered into the checkout and patrons search bar will be retained', 'YesNo'),
 ('ReturnBeforeExpiry','0',NULL,'If ON, checkout will be prevented if returndate is after patron card expiry','YesNo'),

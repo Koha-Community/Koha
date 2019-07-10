@@ -407,6 +407,13 @@ Patrons:
                1: "must have"
                0: "doesn't need"
          - a guarantor when adding the patron.
+     -
+         - pref: RestrictPatronsWithFailedNotices
+           choices:
+               1: Apply
+               0: "Don't apply"
+         - "a restriction to a patron when their email and SMS messages fail to send at the Koha level."
+         - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/restrict_patrons_with_failed_notices.pl</code> cronjob. Ask your system administrator to schedule it."
 
     Privacy:
      -

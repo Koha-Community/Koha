@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 9;
 
 use Koha::Notice::Templates;
 use Koha::Database;
@@ -66,6 +66,104 @@ is( $retrieved_template->name, $new_template->name,
 $retrieved_template->delete;
 is( Koha::Notice::Templates->search->count,
     $nb_of_templates, 'Delete should have deleted the template' );
+
+## Tests for Koha::Notice::Messages->get_failed_notices
+
+# Remove all existing messages in the message_queue
+Koha::Notice::Messages->delete;
+
+# Make a patron
+my $patron_category = $builder->build( { source => 'Category' } )->{categorycode};
+my $patron          = Koha::Patron->new(
+    {
+        firstname      => 'Jane',
+        surname        => 'Smith',
+        categorycode   => $patron_category,
+        branchcode     => $library->{branchcode},
+        smsalertnumber => '123',
+    }
+)->store;
+my $borrowernumber = $patron->borrowernumber;
+
+# With all notices removed from the message_queue table confirm get_failed_notices() returns 0
+my @failed_notices = Koha::Notice::Messages->get_failed_notices->as_list;
+is( @failed_notices, 0, 'No failed notices currently exist' );
+
+# Add a failed notice to the message_queue table
+my $message = Koha::Notice::Message->new(
+    {
+        borrowernumber         => $borrowernumber,
+        subject                => 'subject',
+        content                => 'content',
+        message_transport_type => 'sms',
+        status                 => 'failed',
+        letter_code            => 'just_a_code',
+        time_queued            => \"NOW()",
+    }
+)->store;
+
+# With one failed notice in the message_queue table confirm get_failed_notices() returns 1
+my @failed_notices2 = Koha::Notice::Messages->get_failed_notices->as_list;
+is( @failed_notices2, 1, 'One failed notice currently exists' );
+
+# Change failed notice status to 'pending'
+$message->update( { status => 'pending' } );
+
+# With the 1 failed notice in the message_queue table marked 'pending' confirm get_failed_notices() returns 0
+my @failed_notices3 = Koha::Notice::Messages->get_failed_notices->as_list;
+is( @failed_notices3, 0, 'No failed notices currently existing, now the notice has been marked pending' );
+
+## Tests for Koha::Notice::Message::restrict_patron_when_notice_fails
+
+# Empty the borrower_debarments table
+my $dbh = C4::Context->dbh;
+$dbh->do(q|DELETE FROM borrower_debarments|);
+
+# Change the status of the notice back to 'failed'
+$message->update( { status => 'failed' } );
+
+my @failed_notices4 = Koha::Notice::Messages->get_failed_notices->as_list;
+
+# There should be one failed notice
+if (@failed_notices4) {
+
+    # Restrict the borrower who has the failed notice
+    foreach my $failed_notice (@failed_notices4) {
+        if ( $failed_notice->message_transport_type eq 'sms' || $failed_notice->message_transport_type eq 'email' ) {
+            $failed_notice->restrict_patron_when_notice_fails;
+        }
+    }
+}
+
+# Confirm that the restrict_patron_when_notice_fails() has added a restriction to the patron
+is(
+    $patron->restrictions->search( { comment => 'SMS number invalid' } )->count, 1,
+    "Patron has a restriction placed on them"
+);
+
+# Restrict the borrower who has the failed notice
+foreach my $failed_notice (@failed_notices4) {
+    if ( $failed_notice->message_transport_type eq 'sms' || $failed_notice->message_transport_type eq 'email' ) {
+
+        # If the borrower already has a debarment for failed SMS or email notice then don't apply
+        # a new debarment to their account
+        if ( $patron->restrictions->search( { comment => 'SMS number invalid' } )->count > 0 ) {
+            next;
+        } elsif ( $patron->restrictions->search( { comment => 'Email address invalid' } )->count > 0 ) {
+            next;
+        }
+
+        # Place the debarment if the borrower doesn't already have one for failed SMS or email
+        # notice
+        $failed_notice->restrict_patron_when_notice_fails;
+    }
+}
+
+# Confirm that no new debarment is added to the borrower
+is(
+    $patron->restrictions->search( { comment => 'SMS number invalid' } )->count, 1,
+    "No new restriction has been placed on the patron"
+);
 
 subtest 'find_effective_template' => sub {
     plan tests => 7;
@@ -135,4 +233,3 @@ subtest 'find_effective_template' => sub {
 };
 
 $schema->storage->txn_rollback;
-

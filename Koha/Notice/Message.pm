@@ -18,6 +18,7 @@ package Koha::Notice::Message;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Patron::Debarments qw( AddDebarment );
 
 use base qw(Koha::Object);
 
@@ -86,6 +87,41 @@ EOS
         $wrapped .= "</div>";
     }
     return $wrapped;
+}
+
+=head3 restrict_patron_when_notice_fails
+
+    $failed_notice->restrict_patron_when_notice_fails;
+
+Places a restriction (debarment) on patrons with failed SMS and email notices.
+
+=cut
+
+sub restrict_patron_when_notice_fails {
+    my ($self) = @_;
+
+    # Set the appropriate restriction (debarment) comment depending if the failed
+    # message is a SMS or email notice. If the failed notice is neither then
+    # return without placing a restriction
+    my $comment;
+    if ( $self->message_transport_type eq 'email' ) {
+        $comment = 'Email address invalid';
+    } elsif ( $self->message_transport_type eq 'sms' ) {
+        $comment = 'SMS number invalid';
+    } else {
+        return;
+    }
+
+    AddDebarment(
+        {
+            borrowernumber => $self->borrowernumber,
+            type           => 'SUSPENSION',
+            comment        => $comment,
+            expiration     => undef,
+        }
+    );
+
+    return $self;
 }
 
 =head3 type
