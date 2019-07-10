@@ -124,16 +124,20 @@ if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
 my $amountoutstanding = $patron->account->balance;
 my $no_renewal_amt = C4::Context->preference( 'OPACFineNoRenewals' );
 $no_renewal_amt = undef unless looks_like_number( $no_renewal_amt );
+my $amountoutstandingfornewal =
+  C4::Context->preference("OPACFineNoRenewalsIncludeCredit")
+  ? $amountoutstanding
+  : $patron->account->outstanding_debits->total_outstanding;
 
 if (   C4::Context->preference('OpacRenewalAllowed')
     && defined($no_renewal_amt)
-    && $amountoutstanding > $no_renewal_amt )
+    && $amountoutstandingfornewal > $no_renewal_amt )
 {
     $borr->{'flagged'} = 1;
     $canrenew = 0;
     $template->param(
         renewal_blocked_fines => $no_renewal_amt,
-        renewal_blocked_fines_amountoutstanding => $amountoutstanding,
+        renewal_blocked_fines_amountoutstanding => $amountoutstandingfornewal,
     );
 }
 
