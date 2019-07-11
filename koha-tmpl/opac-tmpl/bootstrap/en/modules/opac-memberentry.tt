@@ -7,6 +7,20 @@
 [% USE KohaDates %]
 [% USE Math %]
 [% SET userupdateview = 1 %]
+[% BLOCK streetnumber %]
+    [% UNLESS hidden.defined('streetnumber') %]
+        <li>
+            [% IF mandatory.defined('streetnumber') %]
+                <label for="borrower_streetnumber" class="required">Street number:</label>
+            [% ELSE %]
+                <label for="borrower_streetnumber">Street number:</label>
+            [% END %]
+
+            <input type="text" id="borrower_streetnumber" name="borrower_streetnumber" value="[% borrower.streetnumber | html %]" />
+            [% IF mandatory.defined('streetnumber') %]<span class="required">Required</span>[% END %]
+        </li>
+    [% END %]
+[% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
     <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; [% IF action == 'edit' %]Update your personal details[% ELSE %]Register a new account[% END %]</title>
@@ -370,18 +384,7 @@
                         <legend id="mainaddress_legend">Main address</legend>
 
                         <ol>
-                            [% UNLESS hidden.defined('streetnumber') %]
-                                <li>
-                                    [% IF mandatory.defined('streetnumber') %]
-                                        <label for="borrower_streetnumber" class="required">Street number:</label>
-                                    [% ELSE %]
-                                        <label for="borrower_streetnumber">Street number:</label>
-                                    [% END %]
-
-                                    <input type="text" id="borrower_streetnumber" name="borrower_streetnumber" value="[% borrower.streetnumber | html %]" />
-                                    [% IF mandatory.defined('streetnumber') %]<span class="required">Required</span>[% END %]
-                                </li>
-                            [% END %]
+                            [% IF Koha.Preference('AddressFormat') != 'de' %][% INCLUDE streetnumber %][% END %]
 
                             [% UNLESS hidden.defined('address') %]
                                 <li>
@@ -395,6 +398,8 @@
                                     [% IF mandatory.defined('address') %]<span class="required">Required</span>[% END %]
                                 </li>
                             [% END %]
+
+                            [% IF Koha.Preference('AddressFormat') == 'de' %][% INCLUDE streetnumber %][% END %]
 
                             [% UNLESS hidden.defined('address2') %]
                                 <li>
