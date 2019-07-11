@@ -224,6 +224,37 @@
                                 <span class="cancel"><a href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a></span>
                             </fieldset>
                         </form>
+                    [% ELSIF method == 'availability' %]
+                        <h2>Interlibrary loan item availability</h2>
+                        <div id="results">
+                            <h3>Displaying availability results</h3>
+                            <form method="POST" action="/cgi-bin/koha/opac-illrequests.pl">
+                                [% FOREACH key IN whole.keys %]
+                                    [% value = whole.$key %]
+                                    [% IF key != 'custom_key' && key != 'custom_value' %]
+                                    <input type="hidden" name="[% key | html %]" value="[% value | html %]">
+                                    [% END %]
+                                [% END %]
+                                [% custom_keys = whole.custom_key.split('\0') %]
+                                [% custom_values = whole.custom_value.split('\0') %]
+                                [% i = 0 %]
+                                [% FOREACH custom_key IN custom_keys %]
+                                    <input type="hidden" name="custom_key" value="[% custom_key %]">
+                                    <input type="hidden" name="custom_value" value="[% custom_values.$i %]">
+                                [% i = i + 1 %]
+                                [% END %]
+                                <input type="hidden" name="checked_availability" value="1">
+                                <div id="continue-request-row" class="alert">
+                                    If you can't find what you are looking for, you can
+                                    <button class="button" type="submit">continue creating your request</button> or
+                                    <a href="/cgi-bin/koha/opac-illrequests.pl">cancel your request</a>
+                                </div>
+                            </form>
+                            [% FOR service IN services %]
+                                <h4 class="ill_availability_sourcename">[% service.plugin %]</h4>
+                                [% INCLUDE 'ill-availability-table.inc' service=service %]
+                            [% END %]
+                        </div>
                     [% END %]
                 </div> <!-- / .maincontent -->
           [% END %]
@@ -247,8 +278,24 @@
             "deferRender": true
         }));
         $("#backend-dropdown-options").removeClass("nojs");
+        [% IF services_json.length > 0 %]
+        var services = [% services_json | $raw %];
+        [% ELSE %]
+        var services = [];
+        [% END %]
+        [% IF metadata.length > 0 %]
+        var metadata = "[% metadata | $raw %]";
+        [% END %]
     //]]>
 </script>
+[% IF method == 'availability' %]
+    [% Asset.js("js/ill-availability.js") | $raw %]
+    <script>
+        $(document).ready(function() {
+            window.doSearch();
+        })
+    </script>
+[% END %]
 [% TRY %]
 [% PROCESS backend_jsinclude %]
 [% CATCH %]

@@ -291,13 +291,15 @@
                                         <select size="5" multiple="true" id="partners" name="partners" required="required">
                                             [% FOREACH partner IN whole.value.partners %]
                                                 [% IF partner.email && partner.email.length > 0 %]
-                                                    <option value="[% partner.email | html %]">
+                                                    <option data-partner-id="[% partner.id | html %]" value=[% partner.email | html %]>
                                                         [% partner.branchcode _ " - " _ partner.surname %]
                                                     </option>
                                                 [% END %]
                                             [% END %]
                                         </select>
-
+                                        [% IF Koha.Preference('ILLCheckAvailability') %]
+                                            <button type="button" id="generic_confirm_search">Search selected partners</button>
+                                        [% END %]
                                     </li>
                                     <li>
                                         <label for="subject" class="required">Subject line:</label>
@@ -317,6 +319,29 @@
                                 <span><a href="[% ill_url | url %]" title="Return to request details">Cancel</a></span>
                             </fieldset>
                         </form>
+                        [% IF Koha.Preference('ILLCheckAvailability') %]
+                            <div id="partnerSearch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="partnerSearchLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h3 id="partnerSearchLabel"> Search partners</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            [% FOR service IN services %]
+                                                <h4 class="ill_availability_sourcename">[% service.plugin %]</h4>
+                                                [% INCLUDE 'ill-availability-table.inc' service=service %]
+                                            [% END %]
+                                            <span id="service_id_restrict" data-service_id_restrict_plugin="ILL availability - z39.50" data-service_id_restrict_ids=""></span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        [% END %]
+
                     [% ELSE %]
                         <fieldset class="rows">
                             <legend>Interlibrary loan request details</legend>
@@ -689,6 +714,40 @@
                         [% INCLUDE 'ill-list-table.inc' %]
 
                     </div> <!-- /#results -->
+                [% ELSIF query_type == 'availability' %]
+                    <!-- availability -->
+                    <h1>Availability</h1>
+                    <div id="results">
+                        <h3>Displaying availability results</h3>
+                        <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                            [% FOREACH key IN whole.keys %]
+                                [% value = whole.$key %]
+                                [% IF key != 'method' && key != 'custom_key' && key != 'custom_value' %]
+                                <input type="hidden" name="[% key | html %]" value="[% value | html %]">
+                                [% END %]
+                            [% END %]
+                            [% custom_keys = whole.custom_key.split('\0') %]
+                            [% custom_values = whole.custom_value.split('\0') %]
+                            [% i = 0 %]
+                            [% FOREACH custom_key IN custom_keys %]
+                                <input type="hidden" name="custom_key" value="[% custom_key %]">
+                                <input type="hidden" name="custom_value" value="[% custom_values.$i %]">
+                            [% i = i + 1 %]
+                            [% END %]
+                            <input type="hidden" name="method" value="create">
+                            <input type="hidden" name="stage" value="form">
+                            <input type="hidden" name="checked_availability" value="1">
+                            <div id="continue-request-row" class="alert">
+                                If you can't find what you are looking for, you can
+                                <button class="button" type="submit">continue creating your request</button> or
+                                <a href="/cgi-bin/koha/ill/ill-requests.pl">cancel your request</a>
+                            </div>
+                        </form>
+                        [% FOR service IN services %]
+                            <h4 class="ill_availability_sourcename">[% service.plugin %]</h4>
+                            [% INCLUDE 'ill-availability-table.inc' service=service %]
+                        [% END %]
+                    </div>
                 [% ELSE %]
                 <!-- Custom Backend Action -->
                 [% PROCESS $whole.template %]
@@ -717,6 +776,14 @@
         }).on("change", function(e, value) {
             if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
         });
+        [% IF services_json.length > 0 %]
+        var services = [% services_json | $raw %];
+        [% ELSE %]
+        var services = [];
+        [% END %]
+        [% IF metadata.length > 0 %]
+        var metadata = "[% metadata | $raw %]";
+        [% END %]
     </script>
     <script>
         $('#ill_checkout_inhouse_select').on('change', function() {
@@ -729,6 +796,19 @@
     </script>
     [% INCLUDE 'ill-list-table-strings.inc' %]
     [% Asset.js("js/ill-list-table.js") | $raw %]
+    [% IF (query_type == 'availability' || query_type == 'generic_confirm') && Koha.Preference('ILLCheckAvailability') %]
+        [% Asset.js("js/ill-availability.js") | $raw %]
+    [% END %]
+    [% IF query_type == 'availability' && Koha.Preference('ILLCheckAvailability') %]
+        <script>
+            $(document).ready(function() {
+                window.doSearch();
+            });
+        </script>
+    [% END %]
+    [% IF query_type == 'generic_confirm' && Koha.Preference('ILLCheckAvailability') %]
+        [% Asset.js("js/ill-availability-partner.js") | $raw %]
+    [% END %]
 [% END %]
 
 [% TRY %]

@@ -19,6 +19,8 @@
 
 use Modern::Perl;
 
+use JSON qw( encode_json );
+
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Koha;
@@ -28,6 +30,7 @@ use Koha::Illrequest::Config;
 use Koha::Illrequests;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Illrequest::Availability;
 
 my $query = new CGI;
 
@@ -110,6 +113,46 @@ if ( $op eq 'list' ) {
     } else {
         my $request = Koha::Illrequest->new
             ->load_backend($params->{backend});
+
+        # Does this backend enable us to insert an availability stage and should
+        # we? If not, proceed as normal.
+        if (
+            C4::Context->preference("ILLCheckAvailability") &&
+            $request->_backend_capability(
+                'should_display_availability',
+                $params
+            ) &&
+            # If the user has elected to continue with the request despite
+            # having viewed availability info, this flag will be set
+            !$params->{checked_availability}
+        ) {
+            # Establish which of the installed availability providers
+            # can service our metadata, if so, jump in
+            my $availability = Koha::Illrequest::Availability->new($params);
+            my $services = $availability->get_services({
+                ui_context => 'opac'
+            });
+            if (scalar @{$services} > 0) {
+                # Modify our method so we use the correct part of the
+                # template
+                $op = 'availability';
+                # Prepare the metadata we're sending them
+                my $metadata = $availability->prep_metadata($params);
+                $template->param(
+                    metadata        => $metadata,
+                    services_json   => encode_json($services),
+                    services        => $services,
+                    illrequestsview => 1,
+                    message         => $params->{message},
+                    method          => $op,
+                    whole           => $params
+                );
+                output_html_with_http_headers $query, $cookie,
+                    $template->output, undef, { force_no_caching => 1 };
+                exit;
+            }
+        }
+
         $params->{cardnumber} = Koha::Patrons->find({
             borrowernumber => $loggedinuser
         })->cardnumber;

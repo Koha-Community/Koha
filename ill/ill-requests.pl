@@ -26,11 +26,13 @@ use C4::Output;
 use Koha::AuthorisedValues;
 use Koha::Illcomment;
 use Koha::Illrequests;
+use Koha::Illrequest::Availability;
 use Koha::Libraries;
 use Koha::Token;
 
 use Try::Tiny;
 use URI::Escape;
+use JSON;
 
 our $cgi = CGI->new;
 my $illRequests = Koha::Illrequests->new;
@@ -81,12 +83,55 @@ if ( $backends_available ) {
     } elsif ( $op eq 'create' ) {
         # We're in the process of creating a request
         my $request = Koha::Illrequest->new->load_backend( $params->{backend} );
-        my $backend_result = $request->backend_create($params);
-        $template->param(
-            whole   => $backend_result,
-            request => $request
-        );
-        handle_commit_maybe($backend_result, $request);
+        # Does this backend enable us to insert an availability stage and should
+        # we? If not, proceed as normal.
+        if (
+            C4::Context->preference("ILLCheckAvailability") &&
+            $request->_backend_capability(
+                'should_display_availability',
+                $params
+            ) &&
+            # If the user has elected to continue with the request despite
+            # having viewed availability info, this flag will be set
+            !$params->{checked_availability}
+        ) {
+            # Establish which of the installed availability providers
+            # can service our metadata
+            my $availability = Koha::Illrequest::Availability->new($params);
+            my $services = $availability->get_services({
+                ui_context => 'staff'
+            });
+            if (scalar @{$services} > 0) {
+                # Modify our method so we use the correct part of the
+                # template
+                $op = 'availability';
+                $params->{method} = 'availability';
+                delete $params->{stage};
+                # Prepare the metadata we're sending them
+                my $metadata = $availability->prep_metadata($params);
+                $template->param(
+                    whole         => $params,
+                    metadata      => $metadata,
+                    services_json => scalar encode_json($services),
+                    services      => $services
+                );
+            } else {
+                # No services can process this metadata, so continue as normal
+                my $backend_result = $request->backend_create($params);
+                $template->param(
+                    whole   => $backend_result,
+                    request => $request
+                );
+                handle_commit_maybe($backend_result, $request);
+            }
+        } else {
+            my $backend_result = $request->backend_create($params);
+            $template->param(
+                whole   => $backend_result,
+                request => $request
+            );
+            handle_commit_maybe($backend_result, $request);
+        }
 
     } elsif ( $op eq 'migrate' ) {
         # We're in the process of migrating a request
@@ -239,10 +284,35 @@ if ( $backends_available ) {
             $request = Koha::Illrequests->find($params->{illrequest_id});
             $params->{current_branchcode} = C4::Context->mybranch;
             $backend_result = $request->generic_confirm($params);
+
             $template->param(
                 whole => $backend_result,
                 request => $request,
             );
+
+            # Prepare availability searching, if required
+            # Get the definition for the z39.50 plugin
+            my $availability = Koha::Illrequest::Availability->new($request->metadata);
+            my $services = $availability->get_services({
+                ui_context => 'partners',
+                metadata => {
+                    name => 'ILL availability - z39.50'
+                }
+            });
+            # Only pass availability searching stuff to the template if
+            # appropriate
+            if (
+                C4::Context->preference('ILLCheckAvailability') &&
+                scalar @{$services} > 0
+            ) {
+                my $metadata = $availability->prep_metadata($request->metadata);
+                $template->param( metadata => $metadata );
+                $template->param(
+                    services_json => scalar encode_json($services)
+                );
+                $template->param( services => $services );
+            }
+
             $template->param( error => $params->{error} )
                 if $params->{error};
         }
