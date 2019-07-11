@@ -18881,6 +18881,24 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18928 - Move holdallowed, hold_fulfillment_policy, returnbranch to circulation_rules)\n";
 }
 
+$DBversion = '19.06.00.011';
+if( CheckVersion( $DBversion ) ) {
+
+    if ( TableExists('refund_lost_item_fee_rules') ) {
+        if ( column_exists( 'refund_lost_item_fee_rules', 'refund' ) ) {
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT NULL, IF(branchcode='*', NULL, branchcode), NULL, 'refund', refund
+                FROM refund_lost_item_fee_rules
+            ");
+            $dbh->do("DROP TABLE refund_lost_item_fee_rules");
+        }
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18930 - Move lost item refund rules to circulation_rules table)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
