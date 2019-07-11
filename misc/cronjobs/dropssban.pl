@@ -30,6 +30,8 @@
 use utf8;
 use strict;
 use C4::Context;
+use YAML::XS;
+use Data::Dumper;
 
 my $confirm;
 my $notaccepted;
@@ -44,14 +46,11 @@ foreach (@ARGV) {
 
 # Get age from system preference
 my $dbh=C4::Context->dbh();
-my $sth_ssrules=$dbh->prepare ( "SELECT value FROM systempreferences WHERE variable='SSRules'" );
-$sth_ssrules->execute();
+my $ssrules = C4::Context->preference('SSRules');
+my $rules = YAML::XS::Load($ssrules);
 
-my @ssrules = $sth_ssrules->fetchrow_array();
-$sth_ssrules->finish();
-
-@ssrules=split (':', $ssrules[0]);
-my $age=$ssrules[0];
+print Dumper $rules if $ENV{'DEBUG'};
+my $age = $rules->{MinimumAge}; 
 
 my @lt        = localtime();
 my $year      = $lt[5] + 1900;
@@ -69,7 +68,7 @@ while ( my @borrowernumber = $sth_modify->fetchrow_array ) {
             $dbh->do( "UPDATE borrower_attributes SET attribute='NOTACCEPTED' WHERE borrowernumber='$borrowernumber[0]' AND code='SSBAN' AND attribute='NOPERMISSION';" );
         }
         else {
-            $dbh->do( "DELETE FROM borrower_attributes WHERE borrowernumber='$borrowernumber[0]' AND code='SSBAN' AND attribute='NOPERMISSION');" );
+            $dbh->do( "DELETE FROM borrower_attributes WHERE borrowernumber='$borrowernumber[0]' AND code='SSBAN' AND attribute='NOPERMISSION';" );
         }
     }
 }
