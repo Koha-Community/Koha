@@ -141,6 +141,12 @@
           [% ELSIF ( STATUS == 'REJECTED' ) %]
               Rejected
               [% SET status_found = 1 %]
+          [% ELSIF ( STATUS == 'ORDERED' ) %]
+              Ordered
+              [% SET status_found = 1 %]
+          [% ELSIF ( STATUS == 'AVAILABLE' ) %]
+              Available
+              [% SET status_found = 1 %]
           [% ELSE %]
               [% FOREACH s IN SuggestionStatuses %]
                   [% IF STATUS == s.authorised_value %]
@@ -514,6 +520,8 @@
                         Rejected
                     [% ELSIF ( suggestions_loo.CHECKED ) %]
                         Checked
+                    [% ELSIF ( suggestions_loo.AVAILABLE ) %]
+                        Available
                     [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) %]
                         [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestions_loo.STATUS ) | html %]
                     [% ELSE %]
