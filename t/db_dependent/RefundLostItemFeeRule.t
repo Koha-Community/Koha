@@ -374,7 +374,7 @@ subtest 'Koha::RefundLostItemFeeRules::should_refund() tests' => sub {
 
 subtest 'Koha::RefundLostItemFeeRules::find() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     # Start transaction
     $schema->storage->txn_begin;
@@ -395,6 +395,9 @@ subtest 'Koha::RefundLostItemFeeRules::find() tests' => sub {
             }
         }
     );
+
+    ok(defined Koha::RefundLostItemFeeRules->find($default_non_refund->{id}), 'Find should continue to work when passed an id');
+
     my $specific_non_refund = $builder->build(
         {
             source => 'CirculationRule',

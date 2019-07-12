@@ -36,7 +36,7 @@ Koha::RefundLostItemFeeRules - Koha RefundLostItemFeeRules object set class
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
@@ -145,7 +145,9 @@ Inherit from Koha::Objects->find(), but forces rule_name => 'refund'
 sub find {
     my ( $self, @pars ) = @_;
 
-    $pars[0]->{rule_name} = 'refund';
+    if ( ref($pars[0]) eq 'HASH' ) {
+        $pars[0]->{rule_name} = 'refund';
+    }
 
     return $self->SUPER::find(@pars);
 }
