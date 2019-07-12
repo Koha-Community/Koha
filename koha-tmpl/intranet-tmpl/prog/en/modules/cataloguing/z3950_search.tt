@@ -47,8 +47,8 @@
                             </ol>
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
-                        </fieldset>
-                    </div>
+                        </fieldset> <!-- /.rows -->
+                    </div> <!-- /.col-xs-6 -->
 
                     <div class="col-xs-6">
                         <h2>Search targets</h2>
@@ -67,18 +67,18 @@
                                     <label for="z3950_[% serverloo.id | html %]">[% serverloo.servername | html %]</label>
                                 </p>
                             [% END %]
-                        </div>
-                    </div>
-                </div>
+                        </div> <!-- /#z3950_search_targets -->
+                    </div> <!-- /.col-xs-6 -->
+                </div> <!-- /.row -->
 
                 <nav class="navbar navbar-default navbar-fixed-bottom">
                     <div class="container-fluid">
                         <fieldset class="action"><input type="submit"  class="submit" value="Search" /> <a class="cancel close" href="#">Cancel</a></fieldset>
                     </div>
                 </nav>
-            </form>
+            </form> <!-- /.checkboxed -->
 
-        [% ELSE %]
+        [% ELSE # IF opsearch %]
 
             <div class="row">
                 <div class="col-xs-12">
@@ -166,7 +166,7 @@
                                     [% END %]
                                 [% END %]
                             </tbody>
-                        </table>
+                        </table> <!-- /#resultst -->
 
                         <div id="dataPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -209,11 +209,11 @@
                                 <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
                             [% END %]
                             <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /><input type="submit" name="changepage_goto" value="Go" />
-                        </form>
+                        </form> <!-- /#page_form -->
 
                     [% ELSE %]
                         <div class="dialog message">Nothing found.</div>
-                    [% END %]
+                    [% END  # /IF breeding_loop %]
 
                     <form method="get" action="/cgi-bin/koha/cataloguing/z3950_search.pl">
                         <p>
@@ -222,9 +222,9 @@
                             <input type="submit" value="Try another search"/>
                         </p>
                     </form>
-                </div>
-            </div>
-        [% END %]
+                </div> <!-- /.col-xs-12 -->
+            </div> <!-- /.row -->
+        [% END # /IF opsearch %]
 
         [% IF ( numberpending ) %]
             <h3 align="center">Still [% numberpending | html %] servers to search</h3>
@@ -234,7 +234,7 @@
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function(){
 
             $(".dropdown").on("hidden.bs.dropdown", function(){
