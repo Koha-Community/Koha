@@ -17498,7 +17498,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22770 - Fix typo in language description for el in German)\n";
 }
 
-$DBversion = "18.11.07.00";
+$DBversion = "18.11.07.000";
 if ( CheckVersion($DBversion) ) {
         print "Upgrade to $DBversion done (18.11.07 release)\n";
             SetVersion ($DBversion);
