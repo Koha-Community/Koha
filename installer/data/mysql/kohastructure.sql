@@ -837,17 +837,6 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `refund_lost_item_fee_rules`
---
-
-DROP TABLE IF EXISTS `refund_lost_item_fee_rules`;
-CREATE TABLE `refund_lost_item_fee_rules` ( -- refund lost item fee rules tbale
-  `branchcode` varchar(10) NOT NULL default '', -- the branch this rule is for (branches.branchcode)
-  `refund` tinyint(1) NOT NULL default 0, -- control wether to refund lost item fees on return
-  PRIMARY KEY  (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `items`
 --
 
