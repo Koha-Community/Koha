@@ -351,7 +351,9 @@
                         <th scope="col">Description</th>
                         <th scope="col" class="title-string">Start date</th>
                         <th scope="col" class="title-string">End date</th>
-                        <th scope="col">Actions</th>
+                        [% IF CAN_user_acquisition_contracts_manage %]
+                            <th scope="col">Actions</th>
+                        [% END %]
                     </tr>
                   </thead>
                   <tbody>
@@ -363,10 +365,12 @@
                         <td>[% contract.contractdescription | html %]</td>
                         <td><span title="[% contract.contractstartdate | html %]">[% contract.contractstartdate | $KohaDates %]</span></td>
                         <td><span title="[% contract.contractenddate | html %]">[% contract.contractenddate | $KohaDates %]</span></td>
-                        <td class="actions">
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-trash"></i> Delete</a>
-                        </td>
+                        [% IF CAN_user_acquisition_contracts_manage %]
+                            <td class="actions">
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                            </td>
+                        [% END %]
                         </tr>
                     [% END %]
                   </tbody>
@@ -426,7 +430,11 @@
          $(document).ready(function() {
             var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
+                    [% IF CAN_user_acquisition_contracts_manage %]
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    [% ELSE %]
+                    { "bSortable": false, "bSearchable": false },
+                    [% END %]
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
                 'sDom': 't'
