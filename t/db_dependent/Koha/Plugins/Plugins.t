@@ -35,7 +35,7 @@ use t::lib::Mocks;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
-    my $path = dirname(__FILE__) . '/../lib';
+    my $path = dirname(__FILE__) . '/../../../lib';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
@@ -296,6 +296,10 @@ subtest 'bundle_path() tests' => sub {
 
     my @current_dir = File::Spec->splitdir(abs_path(__FILE__));
     # remote Plugins.t
+    pop @current_dir;
+    # remove /Plugins
+    pop @current_dir;
+    # remove /Koha
     pop @current_dir;
     # remove db_dependent
     pop @current_dir;
