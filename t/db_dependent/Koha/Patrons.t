@@ -392,7 +392,7 @@ subtest "delete" => sub {
 
     is (Koha::Old::Holds->search( { reserve_id => $hold->{ reserve_id } } )->count, 1, q|Koha::Patron->delete should have cancelled patron's holds| );
 
-    is( Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's holds| );
+    is( Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have cancelled patron's holds 2| );
 
     is( Koha::Virtualshelves->search( { owner => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's lists| );
 
