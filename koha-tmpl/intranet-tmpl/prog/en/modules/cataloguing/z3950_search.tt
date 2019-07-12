@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE Koha %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50/SRU search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -204,7 +205,7 @@
                             [% IF ( show_prevbutton ) %]
                                 <input type="button" name="changepage_prev" value="Previous page" data-currentpage="[% current_page | html %]" />
                             [% END %]
-                            Page [% current_page | html %] / [% total_pages | html %]
+                            <span id="result_pagenumbers">Showing page [% current_page | html %] of [% total_pages | html %]</span>
                             [% IF ( show_nextbutton ) %]
                                 <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
                             [% END %]
@@ -234,6 +235,7 @@
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/z3950_search.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function(){
 
@@ -248,15 +250,16 @@
                 });
             });
 
-            $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
+            var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
+            var thetable = KohaTable("resultst", {
                 "aoColumnDefs": [
-                    { "aTargets": [ -1,-2,-3 ], "bSortable": false, "bSearchable": false },
+                    { "targets": [ "NoSort" ],"sortable": false,"searchable": false },
                     { "aTargets": [ 1 ], "sType": "nsb-nse" },
                 ],
                 "aaSorting": [[ 1, "asc" ]],
                 "bPaginate": false
-            }));
+            }, columns_settings );
+
 
             /* Display actions menu anywhere the table is clicked */
             $("td").click(function(event){
@@ -284,6 +287,11 @@
                }
             });
         });
+
+        function columnsInit(){
+            $(".dataTables_info").text( $("#result_pagenumbers").text() );
+            $("#result_pagenumbers").hide();
+        }
     </script>
     [% INCLUDE 'z3950_search.inc' %]
 [% END %]

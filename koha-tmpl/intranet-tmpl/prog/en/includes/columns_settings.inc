@@ -102,11 +102,16 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         thead_row.before(clone);
     }
 
-    table.dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
+    table.DataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
 
-    $(hidden_ids).each(function(index, value) {
-        table.fnSetColumnVis( value, false );
-    });
+    table.DataTable().on("column-visibility.dt", function(){
+        if( typeof columnsInit == 'function' ){
+            // This function can be created separately and used to trigger
+            // an event after the DataTable has loaded AND column visibility
+            // has been updated according to the table's configuration
+            columnsInit();
+        }
+    }).columns( hidden_ids ).visible( false );
 
     if ( add_filters ) {
         // show a link to activate filtering
