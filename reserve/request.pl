@@ -341,10 +341,6 @@ foreach my $biblionumber (@biblionumbers) {
           }
     };
 
-    my $frameworkcode = GetFrameworkCode( $biblionumber );
-    my @notforloan_avs = Koha::AuthorisedValues->search_by_koha_field({ kohafield => 'items.notforloan', frameworkcode => $frameworkcode });
-    my $notforloan_label_of = { map { $_->authorised_value => $_->lib } @notforloan_avs };
-
     my @bibitemloop;
 
     my @available_itemtypes;
@@ -420,18 +416,10 @@ foreach my $biblionumber (@biblionumbers) {
             # Management of the notforloan document
             if ( $item->{notforloan} ) {
                 $item->{backgroundcolor} = 'other';
-                $item->{notforloanvalue} =
-                  $notforloan_label_of->{ $item->{notforloan} };
             }
 
             # Management of lost or long overdue items
             if ( $item->{itemlost} ) {
-
-                # FIXME localized strings should never be in Perl code
-                $item->{message} =
-                  $item->{itemlost} == 1 ? "(lost)"
-                    : $item->{itemlost} == 2 ? "(long overdue)"
-                      : "";
                 $item->{backgroundcolor} = 'other';
                 if ($logged_in_patron->category->hidelostitems && !$showallitems) {
                     $item->{hide} = 1;

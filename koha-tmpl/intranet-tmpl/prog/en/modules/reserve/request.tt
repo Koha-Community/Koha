@@ -383,46 +383,47 @@
                     </td>
                 [% END %]
                     <td>
-                [% IF ( itemloo.onloan ) %]
-                    <span title="[% itemloo.date_due | html %]" class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
-                [% ELSE %]
-                    <span title="0000-00-00">
-                        [% IF ( itemloo.transfertwhen ) %]
-                            In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
-                            to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
+                        [% IF ( itemloo.onloan ) %]
+                            <span title="[% itemloo.date_due | html %]" class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
+                        [% ELSE %]
+                            <span title="0000-00-00">
+                                [% IF ( itemloo.transfertwhen ) %]
+                                    In transit from [% Branches.GetName( itemloo.transfertfrom ) | html %],
+                                    to [% Branches.GetName( itemloo.transfertto ) | html %], since [% itemloo.transfertwhen | html %]
+                                [% END %]
+                            </span>
                         [% END %]
-                    </span>
-                [% END %]
-                [% IF ( itemloo.message ) %]
-                   Unavailable (lost or missing)
-                [% END %]
 
-                [% IF ( itemloo.notforloan ) %]
-                   Not for loan ([% itemloo.notforloanvalue | html %])
-                [% END %]
+                        [% IF ( itemloo.reservedate ) %]
+                            [% IF ( itemloo.nocancel ) %]
+                                    Can't be cancelled when item is in transit
+                            [% ELSE %]
+                            [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
+                            [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %]
+                            since
+                            [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate | html %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
+                            [% END %]
+                        [% ELSE %]
+                            Not on hold
+                        [% END %]
 
-                [% IF ( itemloo.reservedate ) %]
-                    [% IF ( itemloo.nocancel ) %]
-                            Can't be cancelled when item is in transit
-                    [% ELSE %]
-                    [% IF ( itemloo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %]
-                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedFor.borrowernumber | uri %]">[% itemloo.ReservedFor.firstname | html %] [% itemloo.ReservedFor.surname | html %]</a>[% END %] [% IF ( itemloo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% Branches.GetName( itemloo.ExpectedAtLibrary ) | html %]
-                    since
-                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate | $KohaDates %][% ELSE %][% IF ( itemloo.reservedate ) %][% itemloo.reservedate | html %][% END %][% END %]. <a class="info" href="modrequest.pl?CancelBiblioNumber=[% itemloo.biblionumber | html %]&amp;CancelBorrowerNumber=[% itemloo.ReservedFor.borrowernumber | html %]&amp;CancelItemnumber=[% itemloo.itemnumber | html %]"  onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);">Cancel hold</a>
+                        [% IF itemloo.item_level_holds == "N" %]
+                            <br/>Item level hold not allowed from OPAC
+                        [% ELSIF itemloo.item_level_holds == "F" %]
+                            <br/>Item level hold forced from OPAC
+                        [% END %]
 
-                    [% END %]
-                [% ELSE %]
-                    Not on hold
-                [% END %]
+                        [% IF ( itemloo.itemlost ) %]
+                           <span class="lost">[% AuthorisedValues.GetByCode( 'LOST', itemloo.itemlost ) | html %]</span>
+                        [% END %]
 
-                [% IF itemloo.item_level_holds == "N" %]
-                    <br/>Item level hold not allowed from OPAC
-                [% ELSIF itemloo.item_level_holds == "F" %]
-                    <br/>Item level hold forced from OPAC
-                [% END %]
-                [% IF ( itemloo.damaged ) %]
-                    <br />Damaged
-                [% END %]
+                        [% IF ( itemloo.damaged ) %]
+                            <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', itemloo.damaged ) | html %]</span>
+                        [% END %]
+
+                        [% IF ( itemloo.notforloan ) %]
+                           <span class="nfl">Not for loan ([% AuthorisedValues.GetByCode( 'NOT_LOAN', itemloo.notforloan ) | html %])</span>
+                        [% END %]
                     </td>
                 </tr>
             [% END %] <!--UNLESS item hide-->
