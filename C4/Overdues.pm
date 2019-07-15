@@ -637,7 +637,7 @@ sub GetFine {
     my ( $itemnum, $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh();
     my $query = q|SELECT sum(amountoutstanding) as fineamount FROM accountlines
-    where accounttype like 'F%'
+    where accounttype like 'OVERDUE'
   AND amountoutstanding > 0 AND borrowernumber=?|;
     my @query_param;
     push @query_param, $borrowernumber;
