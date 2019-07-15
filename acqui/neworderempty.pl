@@ -60,8 +60,6 @@ if this order comes from a suggestion.
 =item breedingid
 the item's id in the breeding reservoir
 
-=item close
-
 =back
 
 =cut
@@ -106,7 +104,6 @@ my $ordernumber          = $input->param('ordernumber') || '';
 our $biblionumber    = $input->param('biblionumber');
 our $basketno        = $input->param('basketno');
 my $suggestionid    = $input->param('suggestionid');
-my $close           = $input->param('close');
 my $uncertainprice  = $input->param('uncertainprice');
 my $import_batch_id = $input->param('import_batch_id'); # if this is filled, we come from a staged file, and we will return here after saving the order !
 my $from_subscriptionid  = $input->param('from_subscriptionid');
@@ -338,11 +335,6 @@ foreach my $r (@{$budgets}) {
     };
 }
 
-if ($close) {
-    $budget_id      =  $data->{'budget_id'};
-    $budget_name    =   $budget->{'budget_name'};
-
-}
 
 $template->param( sort1 => $data->{'sort1'} );
 $template->param( sort2 => $data->{'sort2'} );
@@ -394,12 +386,6 @@ if ( defined $from_subscriptionid ) {
 # Find the items.barcode subfield for barcode validations
 my (undef, $barcode_subfield) = GetMarcFromKohaField( 'items.barcode' );
 
-# fill template
-$template->param(
-    close        => $close,
-    budget_id    => $budget_id,
-    budget_name  => $budget_name
-) if ($close);
 
 # get option values for gist syspref
 my @gst_values = map {
@@ -411,6 +397,7 @@ my $quantity = $input->param('rr_quantity_to_order') ?
       $data->{'quantity'};
 $quantity //= 0;
 
+# fill template
 $template->param(
     existing         => $biblionumber,
     ordernumber           => $ordernumber,

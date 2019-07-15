@@ -299,28 +299,23 @@
         <legend>Accounting details</legend>
         <ol>
             <li>
-                [% IF ( close ) %]
-                    <span class="label required">Quantity: </span>
-                    <input type="hidden" name="quantity" value="[% quantity | html %]" />[% quantity | html %]
-                [% ELSE %]
-                    <label class="required" for="quantity">Quantity: </label>
-                    [% IF subscriptionid %]
-                        <input type="text" size="20" id="quantity" name="quantity" value="1" onchange="updateCosts();" />
-                    [% ELSIF AcqCreateItemOrdering %]
-                        [% IF basket.is_standing %]
-                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
-                        [% ELSE %]
-                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
-                        [% END %]
+                <label class="required" for="quantity">Quantity: </label>
+                [% IF subscriptionid %]
+                    <input type="text" size="20" id="quantity" name="quantity" value="1" onchange="updateCosts();" />
+                [% ELSIF AcqCreateItemOrdering %]
+                    [% IF basket.is_standing %]
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
                     [% ELSE %]
-                        [% IF basket.is_standing %]
-                            <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
-                        [% ELSE %]
-                            <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" onchange="updateCosts();" />
-                        [% END %]
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
                     [% END %]
-                    <span class="required">Required</span>
+                [% ELSE %]
+                    [% IF basket.is_standing %]
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
+                    [% ELSE %]
+                        <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" onchange="updateCosts();" />
+                    [% END %]
                 [% END %]
+                <span class="required">Required</span>
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
                 <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
 
@@ -335,10 +330,6 @@
                 [% END %]
             </li>
             <li>
-                [% IF ( close ) %]
-            <span class="label required">Fund: </span>
-                    <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
-                [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
                 [% active_count = 0 %]
                 [% IF !ordernumber %]
@@ -364,20 +355,15 @@
                                 style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% END %]
-                    [% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                        [% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
                     </option>
                 [% END %]
                 </select>
                 <span class="required">Required</span>
                 <label for="showallbudgets" style="float:none;">&nbsp;Show inactive:</label>
                 <input type="checkbox" id="showallbudgets" />
-                [% END %]
             </li>
 		<li>
-                [% IF ( close ) %]
-			<span class="label">Currency: </span>
-            <input type="hidden" name="currency" id="currency" value="[% currency | html %]" />[% currency | html %]
-                [% ELSE %]
 			<label for="currency">Currency:</label>
             <select name="currency" id="currency" onchange="updateCosts();">
                 [% FOREACH c IN currencies %]
@@ -388,18 +374,11 @@
                     [% END %]
                 [% END %]
             </select>
-		[% END %]
                 </li>
             <li>
-                [% IF ( close ) %]
-                    <span class="label">Vendor price: </span>
-                    <input type="hidden" name="listprice" id="listprice" value="[% listprice | html %]" />[% listprice | html %] [% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
-                [% ELSE %]
                 <label for="listprice">Vendor price: </label>
                     <input type="text" size="20" name="listprice" id="listprice" value="[% listprice | html %]" onchange="updateCosts()" /> [% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
-                [% END %]
             </li>
-            [% UNLESS ( close ) %]
             <li>
                     <label for="uncertainprice">Uncertain price: </label>
                     [% IF ( uncertainprice ) %]
@@ -408,52 +387,33 @@
                     <input type="checkbox" name="uncertainprice" id="uncertainprice" value="1" />
                 [% END %]
             </li>
-            [% END %]
             [% IF ( gst_values ) %]
                 <li>
-                    [% IF ( close ) %]
-                        <span class="label">Tax rate: </span>
-                        <input type="hidden" name="tax_rate" id="tax_rate" value="[% tax_rate | html %]" />[% tax_rate | html %]%
-                    [% ELSE %]
-                        <label for="tax_rate">Tax rate: </label>
-                        <select name="tax_rate" id="tax_rate" onchange="updateCosts();">
-                        [% FOREACH gst IN gst_values %]
-                          [% IF ( gst.option == tax_rate ) %]
-                            <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
-                          [% ELSE %]
-                            <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
-                          [% END %]
-                        [% END %]
-                        </select>
+                    <label for="tax_rate">Tax rate: </label>
+                    <select name="tax_rate" id="tax_rate" onchange="updateCosts();">
+                    [% FOREACH gst IN gst_values %]
+                      [% IF ( gst.option == tax_rate ) %]
+                        <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
+                      [% ELSE %]
+                        <option value="[% gst.option | html %]">[% gst.option * 100 | html %]%</option>
+                      [% END %]
                     [% END %]
-                [% ELSE %]
+                    </select>
+            [% ELSE %]
                     <input type="hidden" name="tax_rate" value="0" />
                 </li>
             [% END %]
             <li>
                 <label for="discount">Discount: </label>
-                [% IF ( close ) %]
-                    [% IF ( orderdiscount ) %]
-                        <input type="hidden" name="discount" id="discount" value="[% orderdiscount | html %]" />[% orderdiscount_2dp | html %]%
-                    [% ELSE %]
-                        <input type="hidden" name="discount" id="discount" value="[% discount | html %]" />[% discount_2dp | html %]%
-                    [% END %]
+                [% IF ( orderdiscount ) %]
+                    <input type="text" size="6" name="discount" id="discount" value="[% orderdiscount | html %]" onchange="updateCosts();" />%
                 [% ELSE %]
-                    [% IF ( orderdiscount ) %]
-                        <input type="text" size="6" name="discount" id="discount" value="[% orderdiscount | html %]" onchange="updateCosts();" />%
-                    [% ELSE %]
-                        <input type="text" size="6" name="discount" id="discount" value="[% discount | html %]" onchange="updateCosts();" />%
-                    [% END %]
+                    <input type="text" size="6" name="discount" id="discount" value="[% discount | html %]" onchange="updateCosts();" />%
                 [% END %]
             </li>
             <li>
-                [% IF ( close ) %]
-                    <span class="label">Retail price: </span>
-                    <input type="hidden" name="rrp" id="rrp" value="[% rrp | html %]" />[% rrp | html %]  (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])
-                [% ELSE %]
-                    <label for="rrp">Retail price: </label>
-                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp | html %]" /> (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])
-                [% END %]
+                <label for="rrp">Retail price: </label>
+                <input type="text" size="20" name="rrp" id="rrp" value="[% rrp | html %]" /> (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])
             </li>
             <li>
                 <label for="replacementprice">Replacement cost: </label>
