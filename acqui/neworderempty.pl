@@ -138,6 +138,9 @@ my $basketobj = Koha::Acquisition::Baskets->find( $basketno );
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
 
+output_and_exit( $input, $cookie, $template, 'unknown_basket') unless $basketobj;
+output_and_exit( $input, $cookie, $template, 'unknown_vendor') unless $bookseller;
+
 my $contract = GetContract({
     contractnumber => $basket->{contractnumber}
 });
