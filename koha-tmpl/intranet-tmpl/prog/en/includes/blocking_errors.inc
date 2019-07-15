@@ -11,6 +11,8 @@
         <div class="dialog message">Subscription not found.</div>
     [% CASE 'unknown_basket' %]
         <div class="dialog message">Basket not found.</div>
+    [% CASE 'unknown_vendor' %]
+        <div class="dialog message">Vendor not found.</div>
     [% CASE 'wrong_csrf_token' %]
         <div class="dialog message">The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</div>
     [% CASE %][% blocking_error | html %]

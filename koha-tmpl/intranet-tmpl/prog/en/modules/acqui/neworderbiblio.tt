@@ -12,6 +12,8 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; Search existing records</div>
 
+[% INCLUDE 'blocking_errors.inc' %]
+
 <div class="main container-fluid">
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">

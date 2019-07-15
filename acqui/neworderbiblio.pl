@@ -97,6 +97,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+output_and_exit( $input, $cookie, $template, 'unknown_vendor') unless $bookseller;
+
 # Searching the catalog.
 
 my @operands = $query;
