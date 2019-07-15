@@ -192,7 +192,7 @@
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
 [% END %]
 [% FOREACH tab IN tabs %]
-    <li><a href="#[% tab.id %]">[% tab.title %]</a></li>
+    <li><a href="#[% tab.id | uri %]">[% tab.title | html %]</a></li>
 [% END %]
 </ul>
 
