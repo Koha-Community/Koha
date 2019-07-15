@@ -466,6 +466,11 @@
                 <label for="total">Total: </label>
                 <input type="text" id="total" size="20" name="total" value="[% total | html %]" readonly="readonly" /> (budgeted cost * quantity)
             </li>
+            <li class="ordering_unitprice">
+                <label for="unitprice">Actual cost: </label>
+                <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice | html %]" />
+                [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+            </li>
             <li>
                 <label for="order_internalnote">Internal note: </label>
                 <textarea id="order_internalnote" cols="30" rows="3" name="order_internalnote" >[% IF ( order_internalnote ) %][% order_internalnote | html %][% END %]</textarea>

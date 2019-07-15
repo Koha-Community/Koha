@@ -372,6 +372,7 @@ if ( defined $from_subscriptionid ) {
         $data->{replacementprice} = $lastOrderReceived->{replacementprice};
         $data->{ecost}          = $lastOrderReceived->{ecost};
         $data->{quantity}       = $lastOrderReceived->{quantity};
+        $data->{unitprice}       = $lastOrderReceived->{unitprice};
         $data->{order_internalnote} = $lastOrderReceived->{order_internalnote};
         $data->{order_vendornote}   = $lastOrderReceived->{order_vendornote};
         $data->{sort1}          = $lastOrderReceived->{sort1};
@@ -462,6 +463,7 @@ $template->param(
     listprice        => sprintf( "%.2f", $data->{listprice} || $data->{price} || $listprice),
     total            => sprintf( "%.2f", ($data->{ecost} || 0) * ($data->{'quantity'} || 0) ),
     ecost            => sprintf( "%.2f", $data->{ecost} || 0),
+    unitprice        => sprintf( "%.2f", $data->{unitprice} || 0),
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
     import_batch_id  => $import_batch_id,
