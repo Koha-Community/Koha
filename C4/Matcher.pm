@@ -659,7 +659,7 @@ sub get_matches {
             }
             else {
                 my $phr = ( C4::Context->preference('AggressiveMatchOnISBN') || C4::Context->preference('AggressiveMatchOnISSN') )  ? ',phr' : q{};
-                $query = join( " or ",
+                $query = join( " OR ",
                     map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys );
                     #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
             }
