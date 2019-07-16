@@ -18,6 +18,7 @@ package Koha::Util::Normalize;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+use Business::ISBN;
 
 use parent qw( Exporter );
 
@@ -26,6 +27,7 @@ our @EXPORT = qw(
   remove_spaces
   upper_case
   lower_case
+  ISBN
 );
 
 =head1 NAME
@@ -95,6 +97,25 @@ sub lower_case {
     return if !defined( $string );
 
     $string = lc $string;
+
+    return $string;
+}
+
+=head2 ISBN
+
+Normalization function converting ISBN strings to ISBN13
+If string is not a valid ISBN we pass it through unaltered
+
+=cut
+
+sub ISBN {
+    my ( $string ) = @_;
+    return if !defined( $string );
+
+    my $isbn = Business::ISBN->new($string);
+    if (defined $isbn && $isbn->is_valid) {
+        $string = $isbn->as_isbn13->as_string([]);
+    }
 
     return $string;
 }

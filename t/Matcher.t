@@ -82,7 +82,7 @@ is( $testmatcher->description(), 'match on ISSN', 'testing code accessor' );
 
 subtest '_get_match_keys() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 20;
 
     my $matchpoint = get_title_matchpoint({
         length => 0,
@@ -92,6 +92,12 @@ subtest '_get_match_keys() tests' => sub {
 
     my $record = MARC::Record->new();
     $record->append_fields(
+        MARC::Field->new('020', '1', ' ',
+                            a => '978-1451697216 (alk. paper)'),
+        MARC::Field->new('020', '1', ' ',
+                            a => '145169721X (alk. paper)'),
+        MARC::Field->new('020', '1', ' ',
+                            a => '1NOTISBN3'),
         MARC::Field->new('100', '1', ' ',
                             a => 'King, Stephen',
                             d => 'd1947-'),
@@ -242,6 +248,20 @@ subtest '_get_match_keys() tests' => sub {
 
     is( $keys[0], '  .; THE T[]:,ALIS(M)/AN\'" STEPHEN KING, PETER STRAUB.',
         'Match key correctly normalized if invalid normalization routine specified' );
+
+    $matchpoint = get_isbn_matchpoint({
+        length => 0,
+        norms  => [ 'ISBN' ],
+        offset => 0
+    });
+    @keys = C4::Matcher::_get_match_keys( $record, $matchpoint );
+    is( $keys[0], '9781451697216',
+        'Match key correctly calculated as ISBN13 when ISBN normalizer used');
+    is( $keys[1], '9781451697216',
+        'Match key correctly calculated as ISBN13 when ISBN normalizer used');
+    is( $keys[2], '1NOTISBN3',
+        'Match key passed through if not an isbn when ISBN normalizer used');
+
 };
 
 sub get_title_matchpoint {
@@ -311,3 +331,30 @@ sub get_authors_matchpoint {
     return $matchpoint;
 }
 
+sub get_isbn_matchpoint {
+
+    my $params = shift;
+
+    my $length = $params->{length} // 0;
+    my $norms  = $params->{norms}  // [];
+    my $offset = $params->{offset} // 0;
+
+    my $matchpoint = {
+        components =>  [
+            {
+                length    => $length,
+                norms     => $norms,
+                offset    => $offset,
+                subfields =>
+                    {
+                        a => 1
+                    },
+                tag => '020'
+            },
+        ],
+        index => "isbn",
+        score => 1000
+    };
+
+    return $matchpoint;
+}
