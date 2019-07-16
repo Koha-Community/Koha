@@ -208,27 +208,51 @@
     <div id="wrong-transfer-modal" class="modal fade audio-alert-action">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post" action="returns.pl" name="mainform" id="mainform">
-                    <div class="modal-header">
-                        <h3>
-                            Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]
-                        </h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                                [% itembarcode | html %]: [% title | html %]
-                            </a>
-                        </p>
-                    </div>
-                    <div class="modal-footer">
+                <div class="modal-header">
+                    <h3>
+                        Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
+                            [% itembarcode | html %]: [% title | html %]
+                        </a>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <!-- CONFIRM -->
+                    <form method="post" action="returns.pl" name="mainform">
                         <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
+                        [% FOREACH inputloo IN inputloop %]
+                            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                        [% END %]
+                    </form>
+                    <!-- PRINT SLIP -->
+                    <form method="post" action="returns.pl" name="mainform">
                         <button type="submit" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
-                        <button class="btn btn-default deny cancel-transfer" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
+                        [% FOREACH inputloo IN inputloop %]
+                            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                        [% END %]
+                    </form>
+                    <!-- CANCEL TRANSFER -->
+                    <form method="post" action="returns.pl" name="mainform">
+                        <button class="btn btn-default deny" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
                         <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
-                    </div>
-                </form>
+                        <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
+                        <input type="hidden" name="canceltransfer" value="1" />
+                        [% FOREACH inputloo IN inputloop %]
+                            <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
+                            <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
+                            <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
+                        [% END %]
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -991,11 +1015,6 @@
             $('.cancel-hold').on("click",function(e){
                 this.form.cancel_reserve.value = 1;
                 this.form.submit();
-            });
-
-            $('.cancel-transfer').on("click",function(e){
-                e.preventDefault();
-                window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber | html %]&amp;canceltransfer=1'
             });
 
             $('.action').on("click",function(e){
