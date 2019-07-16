@@ -130,7 +130,8 @@ sub edit {
 
     if (my $problem = _opac_patron_restrictions($c, $c->stash('koha.user'))) {
         return $c->render( status => 403, openapi => {
-            error => "Reserve cannot be modified. Reason: $problem"} );
+            error => "Reserve cannot be modified. Reason: $problem"} )
+            if ($problem ne 'maximumholdsreached');
     }
 
     my $body = $c->req->json;
