@@ -48,6 +48,8 @@ use_ok('Koha::SearchEngine::Elasticsearch');
 
 my $schema = Koha::Database->new->schema;
 
+$schema->storage->txn_begin;
+
 Koha::SearchFields->search->delete;
 Koha::SearchMarcMaps->search->delete;
 $schema->resultset('SearchMarcToField')->search->delete;
@@ -63,4 +65,4 @@ is($match_sf->weight, '15.00', 'Match search field is weighted with 15');
 my $title_sf = Koha::SearchFields->search({ name => 'title' })->next;
 is($title_sf->weight, '20.00', 'Title search field is weighted with 20');
 
-$schema->storage->txn_begin;
+$schema->storage->txn_rollback;
