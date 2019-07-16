@@ -24,7 +24,7 @@ use MARC::Record;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
-use Koha::Util::Normalize qw/legacy_default remove_spaces upper_case lower_case/;
+use Koha::Util::Normalize qw/legacy_default remove_spaces upper_case lower_case ISBN/;
 
 =head1 NAME
 
@@ -876,6 +876,9 @@ sub _get_match_keys {
                     elsif ( $norm eq 'legacy_default' ) {
                         $key = legacy_default($key);
                     }
+                    elsif ( $norm eq 'ISBN' ) {
+                        $key = ISBN($key);
+                    }
                 } else {
                     warn "Invalid normalization routine required ($norm)"
                         unless $norm eq 'none';
@@ -912,7 +915,8 @@ sub valid_normalization_routines {
         'remove_spaces',
         'upper_case',
         'lower_case',
-        'legacy_default'
+        'legacy_default',
+        'ISBN'
     );
 }
 
