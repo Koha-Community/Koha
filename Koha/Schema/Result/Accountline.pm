@@ -105,6 +105,12 @@ __PACKAGE__->table("accountlines");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 register_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 interface
 
   data_type: 'varchar'
@@ -153,6 +159,8 @@ __PACKAGE__->add_columns(
   "note",
   { data_type => "mediumtext", is_nullable => 1 },
   "manager_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "register_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "interface",
   { data_type => "varchar", is_nullable => 0, size => 16 },
@@ -276,6 +284,26 @@ __PACKAGE__->belongs_to(
   "manager",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "manager_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 register
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::CashRegister>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "register",
+  "Koha::Schema::Result::CashRegister",
+  { id => "register_id" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
