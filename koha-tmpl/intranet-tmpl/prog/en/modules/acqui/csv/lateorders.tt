@@ -13,7 +13,10 @@
 "[% o.unitpricesupplier | html %] x [% o.quantity_to_receive | html %] = [% o.subtotal | html %] ([% o.budget | html %])"[%- delimiter | html -%]
 "[% o.basketname | html %] ([% o.basketno | html %])"[%- delimiter | html -%]
 "[% o.claims_count | html %]"[%- delimiter | html -%]
-"[% o.claimed_date | html %]"
+"[% o.claimed_date | html %]"[%- delimiter | html -%]
+"[% o.internalnote | html %]"[%- delimiter | html -%]
+"[% o.vendornote | html %]"[%- delimiter | html -%]
+"[% o.isbn | html %]"
 [%- INCLUDE empty_line.inc -%]
 [%- END -%]
 [%- delimiter | html -%]

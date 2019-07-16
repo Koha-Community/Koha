@@ -138,8 +138,34 @@
                     <span title="0000-00-00"></span>
                 [% END %]
             </td>
-            <td><input name="internalnote" id="internalnote" type="text" value="[% lateorder.internalnote | html %]"></td>
-            <td><input name="vendornote" id="vendornote" type="text" value="[% lateorder.vendornote | html %]"></td>
+            <td>
+                [% IF ( lateorder.internalnote ) %]
+                    <p class="ordernote">
+                        <span id="internal-note-[% lateorder.ordernumber | html %]">[% lateorder.internalnote | html %]</span>
+                        <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Edit internal note">
+                            <i class="fa fa-pencil"></i> Edit internal note
+                        </a>
+                    </p>
+                [% ELSE %]
+                    <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Add internal note">
+                        <i class="fa fa-plus"></i> Add internal note
+                    </a>
+                [% END %]
+            </td>
+            <td>
+                [% IF ( lateorder.vendornote ) %]
+                    <p class="ordernote">
+                        <span id="vendor-note-[% lateorder.ordernumber | html %]">[% lateorder.vendornote | html %]</span>
+                        <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Edit vendor note">
+                            <i class="fa fa-pencil"></i> Edit vendor note
+                        </a>
+                    </p>
+                [% ELSE %]
+                    <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Add vendor note">
+                        <i class="fa fa-plus"></i> Add vendor note
+                    </a>
+                [% END %]
+            </td>
             <td>[% lateorder.isbn | $raw %]</td>
         </tr>
       [% END %]
@@ -204,6 +230,30 @@
 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
 </div>
 
+<!-- Modal for editing vendor and internal notes -->
+<div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">
+    <div class="modal-dialog" role="document">
+        <form id="modify_order_notes" action="/cgi-bin/koha/acqui/modordernotes.pl" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="noteEditorLabel">Order note</h4>
+                </div>
+                <div class="modal-body">
+                <textarea id="ordernotes" name="ordernotes" rows="3" cols="30" class="focus">[% ordernotes | html %]</textarea>
+                <input type="hidden" id="ordernumber" name="ordernumber" value="" />
+                <input type="hidden" name="op" value="save" />
+                <input type="hidden" id="type" name="type" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-default">Save</button>
+                <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
@@ -263,37 +313,27 @@
                 location.href = url;
                 return false;
             });
-            // Update all notes
-            $("#savenotes").click(function(){
-                $("#savenotes").after("<span id=\"loading\" style=\"margin:4px;\"><img src=\"[% interface | html %]/[% theme | html %]/img/loading-small.gif\" alt=\"\" /> "+_("Loading")+"</span>");
-                var all_nodes = $(late_orderst.fnGetNodes());
-                var req = new XMLHttpRequest();
-                var url = '/cgi-bin/koha/acqui/lateorders.pl';
-                var data = new FormData();
-                data.append("op","save");
-                for (var i = 0; i < all_nodes.length; i++) {
-                    var order = $(all_nodes[i]).find("input[name='ordernumber']");
-                    var internalnote = $(all_nodes[i]).find("input[name='internalnote']")[0].value;
-                    var vendornote = $(all_nodes[i]).find("input[name='vendornote']")[0].value;
-                    var internalnote_key = order[0].value + "_i";
-                    var vendornote_key = order[0].value + "_v";
-                    data.append(internalnote_key, internalnote);
-                    data.append(vendornote_key, vendornote);
-                }
 
-                req.open("POST",url);
-                req.send(data);
-                req.onreadystatechange = function () {
-                    $("#loading").remove();
-                    if (req.readyState == '4' ){
-                        if ( req.status == 200 ){
-                            alert(_("Notes successfully saved"));
-                        }
-                        else {
-                            alert(_("Error while saving the notes. Please try again"));
-                        }
-                    }
-                }
+            $(".edit_note").on("click", function(e) {
+                e.preventDefault();
+                var ordernumber = $(this).data("ordernumber");
+                var note_type = $(this).data("note_type");
+                var modalTitle = $(this).attr("title") + " (order number " + ordernumber + ")";
+                var note_text = $( "#" + note_type + "-note-" + ordernumber ).html();
+                $("#noteEditor .modal-title").text(modalTitle);
+                $("#ordernumber").val( ordernumber );
+                $("#ordernotes").html( note_text );
+                $("#type").val( note_type );
+                $("#noteEditor").modal("show");
+                $("#ordernotes").focus();
+            });
+
+             $("#noteEditor").on('hidden.bs.modal', function (e) {
+                $("#noteEditorLabel").html("");
+                $("#noteEditor .modal-title").text("");
+                $("#ordernotes").html( "" );
+                $("#ordernumber").val("");
+                $("#type").val("");
             });
         });
     </script>

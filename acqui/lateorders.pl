@@ -123,28 +123,6 @@ if ($op and $op eq "send_alert"){
     }
 }
 
-if ($op && $op eq "save"){
-    my $listorders;
-    my @orders = $input->param;
-
-    foreach my $order (@orders){
-        if ( $order ne "op"){
-            my @split = split (/_/,$order);
-            $listorders->{$split[0]}->{$split[1]} = $input->param($order);
-        }
-    }
-
-    my $orders_rs = Koha::Acquisition::Orders->search({ ordernumber => [ keys %$listorders ] });
-    while ( my $order = $orders_rs->next ) {
-        my $internalnote = $listorders->{$order->ordernumber}->{i};
-        my $vendornote   = $listorders->{$order->ordernumber}->{v};
-
-        $order->order_internalnote($internalnote) if defined $internalnote;
-        $order->order_vendornote($vendornote)     if defined $vendornote;
-        $order->store;
-    }
-}
-
 my @parameters = ( $delay );
 push @parameters, $estimateddeliverydatefrom_dt
     ? $estimateddeliverydatefrom_dt->ymd()
