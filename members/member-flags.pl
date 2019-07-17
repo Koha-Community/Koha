@@ -178,6 +178,7 @@ if ($input->param('newflags')) {
         if ($#sub_perm_loop > -1) {
             $row{sub_perm_loop} = \@sub_perm_loop;
         }
+        next if ( ( $row{flag} eq 'cash_management' ) && !C4::Context->preference('UseCashRegisters') );
         push @loop, \%row;
     }
 

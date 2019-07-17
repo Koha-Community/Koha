@@ -66,6 +66,9 @@
     [%- CASE 'stockrotation' -%]
         <span class="main_permission self_check_permission">Manage stockrotation operations</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'cash_management' -%]
+        <span class="main_permission cash_management_permission">Cash management</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
@@ -665,6 +668,12 @@
     [%- CASE 'manage_rotas' -%]
         <span class="sub_permission manage_rotas_subpermission">
             Create, edit and delete rotas
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+  [%# cash_management %]
+    [%- CASE 'manage_cash_registers' -%]
+        <span class="sub_permission manage_cash_registers_subpermission">
+            Add, edit and archive cash registers
         </span>
         <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
