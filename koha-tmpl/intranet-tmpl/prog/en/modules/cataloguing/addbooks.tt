@@ -37,18 +37,18 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li id="" class="z3950searchFw"><a href="#">Default framework</a></li>
+                                    <li class="z3950searchFw"><a href="#">Default framework</a></li>
                                     [% FOREACH framework IN frameworks %]
                                         <li id="[% framework.frameworkcode | html %]" class="z3950searchFw"><a href="#">[% framework.frameworktext | html %]</a></li>
                                     [% END %]
                                 </ul>
                             </div>
-                        [% END %]
+                        [% END # /IF servers.count %]
                         [% IF ( total ) %]
                             <div class="btn-group"><button type="submit" class="btn btn-default merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>
                         [% END %]
-                    </div>
-                [% END %]
+                    </div> <!-- /#toolbar -->
+                [% END # /IF CAN_user_editcatalogue_edit_catalogue %]
 
                 [% IF ( noitemsfound ) %]
                     No results found
@@ -137,22 +137,22 @@
                                                     <li><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-plus"></i> Add/Edit items</a></li>
                                                 [% END %]
                                             </ul>
-                                        </div>
+                                        </div> <!-- /.dropup -->
                                     </td>
                                 </tr>
-                            [% END %]
+                            [% END # /FOREACH resultsloo %]
                         </table>
                         <div class="pages">[% pagination_bar | $raw %]</div>
                         <hr />
-                    </div>
-                [% ELSE %]
+                    </div> <!-- /.searchresults -->
+                [% ELSE # IF total %]
                     [% IF ( query ) %]
                         [% IF ( error ) %]<div class="dialog alert">[% END %]<b>No results found</b>
                         [% IF ( error ) %]
                             Error: <span class="error">[% error | html %]</span></div>
                         [% END %]
                     [% END %]
-                [% END %]
+                [% END # /IF total %]
 
                 [% IF ( query ) %]
                     <div id="searchresult-breeding">
@@ -192,13 +192,13 @@
                                             </div>
                                         </td>
                                     </tr>
-                                [% END %]
+                                [% END # /IF breeding_loo %]
                             </table>
                         [% ELSE %]
                             <p>None</p>
-                        [% END %]
+                        [% END # /IF breeding_loop %]
                     </div>
-                [% END %]
+                [% END # /IF query %]
 
                 <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -213,11 +213,11 @@
                             <div class="modal-footer">
                                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </div> <!-- /.modal-content -->
+                    </div> <!-- /.modal-dialog -->
+                </div> <!-- /#dataPreview -->
+            </div> <!-- /.col-md-10.col-md-offset-1.col-lg-8.col-lg-offset-2 -->
+        </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     <script>
