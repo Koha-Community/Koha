@@ -158,14 +158,6 @@ Circulation:
                   no: "Don't allow"
             - patrons to submit notes about checked out items.
 
-    Accounts:
-        -
-            - pref: AccountAutoReconcile
-              choices:
-                  yes: "Do"
-                  no: "Do not"
-            - reconcile patron balances automatically on each transaction adding debits or credits.
-
     Checkout Policy:
         -
             - pref: AutoReturnCheckedOutItems
@@ -889,12 +881,6 @@ Circulation:
             - pref: ProcessingFeeNote
               type: textarea
               class: code
-        -
-            - pref: FinePaymentAutoPopup
-              choices:
-                  yes: "Do"
-                  no: "Don't"
-            - automatically display a print dialog for a payment receipt when making a payment..
     Self check-in module:
         -
             - "Include the following HTML on the self check-in screen:"

@@ -646,6 +646,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UseACQFrameworkForBiblioRecords','0','','Use the ACQ framework for the catalog details','YesNo'),
 ('UseAuthoritiesForTracings','1','0','Use authority record numbers for subject tracings instead of heading strings.','YesNo'),
 ('UseBranchTransferLimits','0','','If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.','YesNo'),
+('UseCashRegisters','0','','Use cash registers with the accounting system and assign patron transactions to them.','YesNo'),
 ('UseControlNumber','0','','If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','YesNo'),
 ('UseCourseReserves','0',NULL,'Enable the course reserves feature.','YesNo'),
 ('useDaysMode','Calendar','Calendar|Days|Datedue','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Choice'),

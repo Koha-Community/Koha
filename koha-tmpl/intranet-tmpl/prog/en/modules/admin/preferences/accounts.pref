@@ -1,0 +1,21 @@
+Accounts:
+    Policy:
+        -
+            - pref: UseCashRegisters
+              default: no
+              choices:
+                yes: "Use"
+                no: "Don't use"
+            - " cash registers with the accounting system to track payments."
+        -
+            - pref: AccountAutoReconcile
+              choices:
+                  yes: "Do"
+                  no: "Do not"
+            - reconcile patron balances automatically on each transaction adding debits or credits.
+        -
+            - pref: FinePaymentAutoPopup
+              choices:
+                  yes: "Do"
+                  no: "Don't"
+            - automatically display a print dialog for a payment receipt when making a payment..
