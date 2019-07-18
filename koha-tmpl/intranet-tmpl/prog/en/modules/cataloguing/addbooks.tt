@@ -7,211 +7,217 @@
 </head>
 
 <body id="cat_addbooks" class="cat">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'cataloging-search.inc' %]
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cataloging-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Cataloging</div>
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Cataloging</div>
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
-[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-  <div id="toolbar" class="btn-toolbar">
-        [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
-            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
-        [% END %]
-        <div class="btn-group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
-                [% FOREACH framework IN frameworks %]
-                    <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% framework.frameworktext | html %]</a></li>
+                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                    <div id="toolbar" class="btn-toolbar">
+                        [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
+                            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
+                        [% END %]
+                        <div class="btn-group">
+                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
+                                [% FOREACH framework IN frameworks %]
+                                    <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% framework.frameworktext | html %]</a></li>
+                                [% END %]
+                            </ul>
+                        </div>
+                        [% IF servers.count > 0 %]
+                            <div class="btn-group">
+                                <button class="btn btn-default" id="z3950search"><i class="fa fa-search"></i> New from Z39.50/SRU</button>
+                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li id="" class="z3950searchFw"><a href="#">Default framework</a></li>
+                                    [% FOREACH framework IN frameworks %]
+                                        <li id="[% framework.frameworkcode | html %]" class="z3950searchFw"><a href="#">[% framework.frameworktext | html %]</a></li>
+                                    [% END %]
+                                </ul>
+                            </div>
+                        [% END %]
+                        [% IF ( total ) %]
+                            <div class="btn-group"><button type="submit" class="btn btn-default merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>
+                        [% END %]
+                    </div>
                 [% END %]
-            </ul>
-        </div>
-        [% IF servers.count > 0 %]
-        <div class="btn-group">
-            <button class="btn btn-default" id="z3950search"><i class="fa fa-search"></i> New from Z39.50/SRU</button>
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li id="" class="z3950searchFw"><a href="#">Default framework</a></li>
-                [% FOREACH framework IN frameworks %]
-                <li id="[% framework.frameworkcode | html %]" class="z3950searchFw"><a href="#">[% framework.frameworktext | html %]</a></li>
+
+                [% IF ( noitemsfound ) %]
+                    No results found
                 [% END %]
-            </ul>
-        </div>
-        [% END %]
-    [% IF ( total ) %]
-        <div class="btn-group"><button type="submit" class="btn btn-default merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>
-    [% END %]
-  </div>
-[% END %]
 
-     [% IF ( noitemsfound ) %]
-          No results found
-     [% END %]
+                [%# display the search results %]
 
-[%# display the search results %]
-
-[% IF ( total ) %]
-<div>
-    [% total | html %] result(s) found in catalog,
-    <a href="#searchresult-breeding">[% breeding_count | html %] result(s) found in reservoir</a>
-</div>
-<div class="pages">[% pagination_bar | $raw %]</div>
-<div class="searchresults">
-    <table>
-        <tr>
-            <th>&nbsp;</th>
-            <th>Title</th>
-            <th>Location</th>
-            <th>&nbsp;</th>
-        </tr>
-      [% FOREACH resultsloo IN resultsloop %]
-        <tr>
-            <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber | html %]" name="biblionumber" value="[% resultsloo.biblionumber | html %]" /></td>
-            <td>
-                <p>
-                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=resultsloo %]</a>
-                [% IF ( resultsloo.summary ) %]
-                    <p>[% resultsloo.summary | html %]</p>
+                [% IF ( total ) %]
+                    <div>
+                        [% total | html %] result(s) found in catalog,
+                        <a href="#searchresult-breeding">[% breeding_count | html %] result(s) found in reservoir</a>
+                    </div>
+                    <div class="pages">[% pagination_bar | $raw %]</div>
+                    <div class="searchresults">
+                        <table>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Title</th>
+                                <th>Location</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            [% FOREACH resultsloo IN resultsloop %]
+                                <tr>
+                                    <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber | html %]" name="biblionumber" value="[% resultsloo.biblionumber | html %]" /></td>
+                                    <td>
+                                        <p>
+                                            <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=resultsloo %]</a>
+                                        </p>
+                                        [% IF ( resultsloo.summary ) %]
+                                            <p>[% resultsloo.summary | html %]</p>
+                                        [% ELSE %]
+                                            <p>
+                                                [% IF ( resultsloo.author ) %]
+                                                    [% resultsloo.author | html %]
+                                                [% ELSE %]
+                                                    &nbsp;
+                                                [% END %]
+                                                [% IF ( resultsloo.isbn ) %] - [% resultsloo.isbn | html %] [% END %]
+                                                [% IF ( resultsloo.publicationyear ) %] - [% resultsloo.publicationyear | html %][% END %]
+                                                [% IF ( resultsloo.publishercode ) %]- [% resultsloo.publishercode | html %][% END %]
+                                                [% IF ( resultsloo.copyrightdate ) %] - [% resultsloo.copyrightdate | html %][% END %]
+                                                [% IF ( resultsloo.edition ) %]Edition: [% resultsloo.edition | html %][% END %]
+                                                [% IF ( resultsloo.place ) %] ; [% resultsloo.place | html %][% END %]
+                                                [% IF ( resultsloo.pages ) %] - [% resultsloo.pages | html %][% END %]
+                                                [% IF ( resultsloo.item('size') ) %] ; [% resultsloo.item('size') | html %][% END %]
+                                                [% IF ( resultsloo.timestamp ) %] <i>(modified on [% resultsloo.timestamp | html %])</i>[% END %]
+                                            </p>
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF ( resultsloo.available_items_loop ) %]
+                                            <span class="available">
+                                                [% FOREACH items_loo IN resultsloo.available_items_loop %]
+                                                    [% items_loo.count | html %] [% items_loo.branchname | html %]
+                                                    [% IF ( items_loo.location ) %]<span class="shelvingloc">[% items_loo.location | html %]</span>[% END %]
+                                                    [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
+                                                    [% IF ( items_loo.classification ) %]
+                                                        <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% items_loo.classification |url %]">
+                                                            [% items_loo.classification | html %]
+                                                        </a>
+                                                    [% END %]
+                                                    <br />
+                                                [% END %]
+                                            </span>
+                                        [% END %]
+                                        <span class="unavailable">
+                                            [% IF ( resultsloo.onloancount ) %] Checked out ([% resultsloo.onloancount | html %]),<br /> [% END %]
+                                            [% IF ( resultsloo.withdrawncount ) %] Withdrawn ([% resultsloo.withdrawncount | html %]),<br /> [% END %]
+                                            [% IF ( resultsloo.itemlostcount ) %] Lost ([% resultsloo.itemlostcount | html %])<br />[% END %]
+                                            [% IF ( resultsloo.orderedcount ) %] On order ([% resultsloo.orderedcount | html %])<br/>[% END %]
+                                            [% IF ( resultsloo.notforloancount ) %] Not for loan ([% resultsloo.notforloancount | html %])[% END %]
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="dropup">
+                                            <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% resultsloo.biblionumber | html %]" role="button" data-toggle="dropdown" href="#">
+                                                Actions <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% resultsloo.biblionumber | html %]">
+                                                <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                                                <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                                                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                                                    <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-pencil"></i> Edit biblio</a></li>
+                                                [% END %]
+                                                [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                                                    <li><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-plus"></i> Add/Edit items</a></li>
+                                                [% END %]
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </table>
+                        <div class="pages">[% pagination_bar | $raw %]</div>
+                        <hr />
+                    </div>
                 [% ELSE %]
-                    <p>
-                        [% IF ( resultsloo.author ) %]
-                            [% resultsloo.author | html %]
-                        [% ELSE %]
-                            &nbsp;
+                    [% IF ( query ) %]
+                        [% IF ( error ) %]<div class="dialog alert">[% END %]<b>No results found</b>
+                        [% IF ( error ) %]
+                            Error: <span class="error">[% error | html %]</span></div>
                         [% END %]
-               [% IF ( resultsloo.isbn ) %] - [% resultsloo.isbn | html %] [% END %]
-                        [% IF ( resultsloo.publicationyear ) %] - [% resultsloo.publicationyear | html %][% END %]
-                        [% IF ( resultsloo.publishercode ) %]- [% resultsloo.publishercode | html %][% END %]
-                        [% IF ( resultsloo.copyrightdate ) %] - [% resultsloo.copyrightdate | html %][% END %]
-                        [% IF ( resultsloo.edition ) %]Edition: [% resultsloo.edition | html %][% END %]
-                        [% IF ( resultsloo.place ) %] ; [% resultsloo.place | html %][% END %]
-                        [% IF ( resultsloo.pages ) %] - [% resultsloo.pages | html %][% END %]
-                        [% IF ( resultsloo.item('size') ) %] ; [% resultsloo.item('size') | html %][% END %]
-                        [% IF ( resultsloo.timestamp ) %] <i>(modified on [% resultsloo.timestamp | html %])</i>[% END %]
-                    </p>
-                [% END %]
-                </td>
-                <td>
-                    [% IF ( resultsloo.available_items_loop ) %]
-                        <span class="available">
-                        [% FOREACH items_loo IN resultsloo.available_items_loop %]
-                            [% items_loo.count | html %] [% items_loo.branchname | html %]
-                            [% IF ( items_loo.location ) %]<span class="shelvingloc">[% items_loo.location | html %]</span>[% END %]
-                            [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
-                            [% IF ( items_loo.classification ) %]
-                            <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% items_loo.classification |url %]">
-                                [% items_loo.classification | html %]
-                            </a>
-                        [% END %]
-                            <br />
-                        [% END %]
-                        </span>
                     [% END %]
-                    <span class="unavailable">
-                        [% IF ( resultsloo.onloancount ) %] Checked out ([% resultsloo.onloancount | html %]),<br /> [% END %]
-                        [% IF ( resultsloo.withdrawncount ) %] Withdrawn ([% resultsloo.withdrawncount | html %]),<br /> [% END %]
-                        [% IF ( resultsloo.itemlostcount ) %] Lost ([% resultsloo.itemlostcount | html %])<br />[% END %]
-                        [% IF ( resultsloo.orderedcount ) %] On order ([% resultsloo.orderedcount | html %])<br/>[% END %]
-                        [% IF ( resultsloo.notforloancount ) %] Not for loan ([% resultsloo.notforloancount | html %])[% END %]
-                    </span>
-                </td>
-                <td>
-                  <div class="dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% resultsloo.biblionumber | html %]" role="button" data-toggle="dropdown" href="#">
-                      Actions <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% resultsloo.biblionumber | html %]">
-                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
-                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% resultsloo.biblionumber | uri %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
-                      [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-pencil"></i> Edit biblio</a></li>[% END %]
-                      [% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% resultsloo.biblionumber | uri %]"><i class="fa fa-plus"></i> Add/Edit items</a></li>[% END %]
-                    </ul>
-                  </div>
-                </td>
-            </tr>
-    [% END %]
-    </table>
-    <div class="pages">[% pagination_bar | $raw %]</div>
-    <hr />
-</div>
-[% ELSE %]
-    [% IF ( query ) %]
-        [% IF ( error ) %]<div class="dialog alert">[% END %]<b>No results found</b>
-        [% IF ( error ) %]
-            Error: <span class="error">[% error | html %]</span></div>
-        [% END %]
-    [% END %]
-[% END %]
+                [% END %]
 
-[% IF ( query ) %]
-<div id="searchresult-breeding">
-    <h3>Biblios in reservoir</h3>
-    [% IF ( breeding_loop ) %]
-        <table>
-            <tr>
-                <th>Title</th>
-                <th>ISBN</th>
-                <th>Date</th>
-                <th>Edition</th>
-                <th>Coming from</th>
-                <th>&nbsp;</th>
-            </tr>
-            [% FOREACH breeding_loo IN breeding_loop %]
-               <tr>
-                <td>[% breeding_loo.title | html %]
-                [% breeding_loo.author | html %]</td>
-                <td>[% breeding_loo.isbn | html %]</td>
-                <td>[% breeding_loo.copyrightdate | html %]</td>
-                <td>[% breeding_loo.edition | html %]</td>
-                <td>[% breeding_loo.file | html %]</td>
-                <td>
-                  <div class="dropup">
-                    <a class="btn btn-default btn-xs dropdown-toggle" id="reservoirsearchactions[% breeding_loo.id | html %]" role="button" data-toggle="dropdown" href="#">
-                      Actions <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reservoirsearchactions[% breeding_loo.id | html %]">
-                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
-                      <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
-                      [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id | uri %]"><i class="fa fa-plus"></i> Add biblio</a></li>
-                      [% END %]
-                    </ul>
-                  </div>
-               </td>
-               </tr>
-            [% END %]
-        </table>
-    [% ELSE %]
-    <p>None</p>
-    [% END %]
-</div>
-[% END %]
+                [% IF ( query ) %]
+                    <div id="searchresult-breeding">
+                        <h3>Biblios in reservoir</h3>
+                        [% IF ( breeding_loop ) %]
+                            <table>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>ISBN</th>
+                                    <th>Date</th>
+                                    <th>Edition</th>
+                                    <th>Coming from</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                [% FOREACH breeding_loo IN breeding_loop %]
+                                    <tr>
+                                        <td>
+                                            [% breeding_loo.title | html %]
+                                            [% breeding_loo.author | html %]
+                                        </td>
+                                        <td>[% breeding_loo.isbn | html %]</td>
+                                        <td>[% breeding_loo.copyrightdate | html %]</td>
+                                        <td>[% breeding_loo.edition | html %]</td>
+                                        <td>[% breeding_loo.file | html %]</td>
+                                        <td>
+                                            <div class="dropup">
+                                                <a class="btn btn-default btn-xs dropdown-toggle" id="reservoirsearchactions[% breeding_loo.id | html %]" role="button" data-toggle="dropdown" href="#">
+                                                    Actions <b class="caret"></b>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reservoirsearchactions[% breeding_loo.id | html %]">
+                                                    <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                                                    <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id | uri %]" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                                                    [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                                                        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id | uri %]"><i class="fa fa-plus"></i> Add biblio</a></li>
+                                                    [% END %]
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                [% END %]
+                            </table>
+                        [% ELSE %]
+                            <p>None</p>
+                        [% END %]
+                    </div>
+                [% END %]
 
-<div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="dataPreviewLabel">Preview</h3>
-    </div>
-    <div class="modal-body">
-        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-    </div>
-    </div>
-    </div>
-</div>
-
-</div>
-</div>
+                <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h3 id="dataPreviewLabel">Preview</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 [% MACRO jsinclude BLOCK %]
     <script>
@@ -252,7 +258,7 @@
                 $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
 
-         });
+        });
 
         /* this function open a popup to search on z3950 server.  */
         function PopupZ3950(fw) {
@@ -274,18 +280,18 @@
          * This function checks if the adequate number of records are checked for merging
          */
         function MergeItems() {
-         var checkboxes = $("input:checkbox:checked");
-         if (checkboxes.length < 2) {
-             alert(_("At least two records must be selected for merging."));
-         } else {
-             var params = [];
-             $(checkboxes).each(function() {
-                 params.push('biblionumber=' + $(this).val());
-             });
-             var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
-             location.href = url;
-         }
-         return false;
+            var checkboxes = $("input:checkbox:checked");
+            if (checkboxes.length < 2) {
+                alert(_("At least two records must be selected for merging."));
+            } else {
+                var params = [];
+                $(checkboxes).each(function() {
+                    params.push('biblionumber=' + $(this).val());
+                });
+                var url = '/cgi-bin/koha/cataloguing/merge.pl?' + params.join('&');
+                location.href = url;
+            }
+            return false;
         }
 
     </script>
