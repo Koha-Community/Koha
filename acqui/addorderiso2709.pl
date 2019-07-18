@@ -140,6 +140,7 @@ if ($op eq ""){
     my @import_record_id_selected = $input->multi_param("import_record_id");
     my @quantities = $input->multi_param('quantity');
     my @prices = $input->multi_param('price');
+    my @orderreplacementprices = $input->multi_param('replacementprice');
     my @budgets_id = $input->multi_param('budget_id');
     my @discount = $input->multi_param('discount');
     my @sort1 = $input->multi_param('sort1');
@@ -317,6 +318,7 @@ if ($op eq ""){
                 order_internalnote => $cgiparams->{'all_order_internalnote'},
                 order_vendornote   => $cgiparams->{'all_order_vendornote'},
                 currency           => $cgiparams->{'all_currency'},
+                replacementprice   => shift( @orderreplacementprices ),
             );
             # get the price if there is one.
             my $price= shift( @prices ) || GetMarcPrice($marcrecord, C4::Context->preference('marcflavour'));
