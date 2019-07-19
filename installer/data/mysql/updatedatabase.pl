@@ -18979,6 +18979,15 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 22563 - Fix accounttypes for 'L', 'LR' and 'CR')\n";
 }
 
+$DBversion = '19.06.00.013';
+if ( CheckVersion( $DBversion ) ) {
+    unless ( column_exists( 'borrower_modifications', 'changed_fields' ) ) {
+        $dbh->do("ALTER TABLE borrower_modifications ADD changed_fields MEDIUMTEXT AFTER verification_token;");
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23151 - Add borrower_modifications.changed_fields column)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
