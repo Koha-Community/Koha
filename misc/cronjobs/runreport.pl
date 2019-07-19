@@ -67,7 +67,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --to=s          e-mail address to send report to
    --from=s        e-mail address to send report from
    --subject=s     subject for the e-mail
-   --params=s      parameters for the report
+   --param=s      parameters for the report
    --store-results store the result of the report
    --csv-header    add column names as first line of csv output
 
@@ -123,9 +123,11 @@ E-mail address to send report from. Defaults to KohaAdminEmailAddress.
 
 Subject for the e-mail message. Defaults to "Koha Saved Report"
 
-=item B<--params>
+=item B<--param>
 
-Repeatable, should provide one param per param requested for the report
+Repeatable, should provide one param per param requested for the report.
+Report params are not combined as on the staff side, so you may need to repeat
+params.
 
 =item B<--store-results>
 
@@ -263,7 +265,8 @@ foreach my $report_id (@ARGV) {
     }
 
     # convert SQL parameters to placeholders
-    $sql =~ s/(<<.*?>>)/\?/g;
+    my $params_needed = ( $sql =~ s/(<<.*?>>)/\?/g );
+    die("You supplied ". scalar @params . " parameter(s) and $params_needed are required by the report") if scalar @params != $params_needed;
 
     my ($sth) = execute_query( $sql, undef, undef, \@params, $report_id );
     my $count = scalar($sth->rows);
