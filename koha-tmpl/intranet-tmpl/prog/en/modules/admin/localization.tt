@@ -4,37 +4,68 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Localization</title>
 [% INCLUDE 'doc-head-close.inc' popup => 1 %]
+<style>#localization { margin-top: 1em; }</style>
 </head>
 
 <body id="admin_localization" class="admin">
-<div id="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
 <form id="add_translation" method="post">
     <input type="hidden" name="entity" value="[% entity | html %]" />
     <input type="hidden" name="code" value="[% code | html %]" />
-    Lang: <select name="lang">
-        [% FOR language IN languages %]
-            [% FOR sublanguage IN language.sublanguages_loop %]
-                [% IF language.plural %]
-                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                [% ELSE %]
-                    <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
-                [% END %]
-            [% END %]
-        [% END %]
-    </select>
-    Translation: <input type="text" name="translation" />
-    <input type="submit" value="Add" />
+    <input type="hidden" name="interface" value="[% interface_side | html %]" />
+    <fieldset class="rows clearfix">
+        <ol>
+            <li>
+                <span class="label">Authorized value:</span>
+                [% code | html %]
+            </li>
+            <li>
+                <label for="lang">Language:</label>
+                <select name="lang" id="lang">
+                    [% FOR language IN languages %]
+                        [% FOR sublanguage IN language.sublanguages_loop %]
+                            [% IF language.plural %]
+                                <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] [% sublanguage.region_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                            [% ELSE %]
+                                <option value="[% sublanguage.rfc4646_subtag | html %]">[% sublanguage.native_description | html %] ([% sublanguage.rfc4646_subtag | html %])</option>
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                </select>
+            </li>
+            <li>
+                <label for="translation">Translation:</label>
+                <input type="text" size="40" name="translation" id="translation" />
+            </li>
+            <li>
+                <span class="label">&nbsp;</span>
+                <input type="submit" value="Add" />
+            </li>
+        </ol>
+    </fieldset>
 </form>
+            </div> <!-- /.col-sm-12 -->
+        </div> <!-- /.row -->
+
+        <div class="row">
+            <div class="col-sm-12">
 <div id="messages"></div>
+            </div> <!-- /.col-sm-12 -->
+        </div> <!-- /.row -->
+
+        <div class="row">
+            <div class="col-sm-12">
 <table id="localization">
     <thead>
         <tr>
             <th>Id</th>
             <th>Entity</th>
             <th>Code</th>
-            <th>Lang</th>
+            <th>Language</th>
             <th>Translation</th>
-            <th></th>
+            <th class="NoSort">&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -50,7 +81,9 @@
         [% END %]
     </tbody>
 </table>
-</div>
+            </div> <!-- /.col-sm-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container-fluid -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -117,7 +150,7 @@
                     }
                 },
                 error: function (data) {
-                    $(cell).css('background-color', '#FF0000');
+                    $(cell).css('background-color', '#FF9090');
                     if ( $(cell).hasClass('lang') ) {
                         $(cell).text(data.lang)
                     } else if ( $(cell).hasClass('translation') ) {
@@ -137,7 +170,7 @@
                     show_message({ type: 'success_on_delete', data: data });
                 },
                 error: function (data) {
-                    $(cell).css('background-color', '#FF0000');
+                    $(cell).css('background-color', '#FF9090');
                     show_message({ type: 'error_on_delete', data: data });
                 },
             });
@@ -147,10 +180,15 @@
             $(".dialog").hide();
 
             var table = $("#localization").DataTable($.extend(true, {}, dataTablesDefaults, {
+                "dom": 't',
+                "columnDefs": [
+                    { 'sortable': false, 'targets': [ 'NoSort' ] }
+                ],
                 'bPaginate': false,
+                'autoWidth': false,
             }));
 
-            var languages_select = $('<select name="lang"></select>');
+            var languages_select = $('<select name="lang" id="lang"></select>');
             [% FOR language IN languages %]
                 [% FOR sublanguage IN language.sublanguages_loop %]
                     var option;
@@ -197,7 +235,7 @@
                 send_update_request( data, this );
             });
 
-            $("a.delete").on('click', function(e){
+            $("body").on("click", "a.delete", function(e){
                 e.preventDefault();
                 if ( confirm(_("Are you sure you want to delete this translation?")) ) {
                     var td = $(this).parent();
@@ -222,8 +260,8 @@
                         if ( data.error ) {
                             show_message({ type: 'error_on_insert', data: data });
                         } else {
-                            // FIXME Should append the delete link
-                            table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "" ] ).draw();
+                            var new_row = table.row.add( [ data.id, data.entity, data.code, data.lang, data.translation, "<a href=\"#\" class=\"delete\"><i class=\"fa fa-trash\"></i> Delete</a>" ] ).draw().node();
+                            $( new_row ).attr("id", "row_id_" + data.id ).data("id", data.id );
                             show_message({ type: 'success_on_insert', data: data });
                         }
                     },
