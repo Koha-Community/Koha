@@ -47,6 +47,7 @@ $scriptname -h|--help
     --quiet|-q            Make the script avoid printing to STDOUT
                           (useful for calling from another scripts).
     --help|-h             Display this help message
+    --without-db-name     Do not include database name
 
 EOF
 }
@@ -69,7 +70,9 @@ dump_instance()
     [ -z "$backupdir" ] && backupdir="/var/spool/koha/$name"
     dbdump="$backupdir/$name-$date.sql.gz"
     [ "$quiet" = "no" ] && echo "* DB to $dbdump"
-    mysqldump --databases --host="$mysqlhost" \
+    dbflag="--databases"
+    [ "$without_db_name" = "yes" ] && dbflag=""
+    mysqldump $dbflag --host="$mysqlhost" \
         --user="$mysqluser" --password="$mysqlpass" "$mysqldb" |
         gzip > "$dbdump"
     chown "root:$name-koha" "$dbdump"
@@ -99,12 +102,16 @@ dump_instance()
 # Default values
 quiet="no"
 exclude_indexes="no"
+without_db_name="no"
 
 while [ $# -gt 0 ]; do
 
     case "$1" in
         --exclude-indexes)
             exclude_indexes="yes"
+            shift ;;
+        --without-db-name)
+            without_db_name="yes"
             shift ;;
         -h|--help)
             usage ; exit 0 ;;
