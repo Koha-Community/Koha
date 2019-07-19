@@ -47,6 +47,8 @@ sub do_checkin {
     my $self = shift;
     my $branch = shift;
     my $return_date = shift;
+    my $checked_in_ok = shift;
+
     if (!$branch) {
         $branch = 'SIP2';
     }
@@ -69,6 +71,12 @@ sub do_checkin {
     $self->alert(!$return);
     # ignoring messages: NotIssued, WasLost, WasTransfered
 
+    if ( $checked_in_ok ) {
+        delete $messages->{NotIssued};
+        delete $messages->{LocalUse};
+        $return = 1 unless keys %$messages;
+    }
+
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode
     # cancellationdate, found, reservenotes, priority, timestamp
@@ -80,6 +88,9 @@ sub do_checkin {
     }
     if ($messages->{withdrawn}) {
         $self->alert_type('99');
+    }
+    if ($messages->{WasLost}) {
+        $self->alert_type('99') if C4::Context->preference("BlockReturnOfLostItems");
     }
     if ($messages->{Wrongbranch}) {
         $self->{item}->destination_loc($messages->{Wrongbranch}->{Rightbranch});
@@ -117,7 +128,9 @@ sub do_checkin {
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
     }
-    $self->alert(1) if defined $self->alert_type;  # alert_type could be "00", hypothetically
+
+    $self->alert( !$return || defined $self->alert_type );
+
     $self->ok($return);
 }
 
