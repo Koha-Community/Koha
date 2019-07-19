@@ -107,7 +107,7 @@ Update patron only if they are below the minimum age range specified for the 'fr
 
 Supply a number and only account with fines over this number will be updated.
 
-=item B<==fineunder=X | -fu=X>
+=item B<--fineunder=X | -fu=X>
 
 Supply a number and only account with fines under this number will be updated.
 
@@ -179,24 +179,21 @@ GetOptions(
     'ra|regafter=s'   => \$reg_aft,
     'b|branch=s'      => \$branch_lim,
     'd|field=s'       => \%fields
-) or pod2usage(2);
+);
+
 pod2usage(1) if $help;
+
 pod2usage( -verbose => 2 ) if $man;
 
-warn "v $verbose c $doit f $fromcat t $tocat";
-exit;
-
 if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
-    print
-"Must supply category from and to (-f & -t) please specify -help for usage tips.\n";
+    print "Must supply category from and to (-f & -t) please specify -help for usage tips.\n";
+    pod2usage(1);
     exit;
 }
 
 ( $verbose && !$doit ) and print "No actions will be taken (test mode)\n";
 
-$verbose
-  and print
-"Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
+$verbose and print "Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
 
 my %params;
 
@@ -206,15 +203,13 @@ if ( $reg_bef || $reg_aft ) {
     if ( defined $reg_bef ) {
         eval { $date_bef = dt_from_string( $reg_bef, 'iso' ); };
     }
-    die
-"$reg_bef is not a valid date before, aborting! Use a date in format YYYY-MM-DD.$@"
-      if $@;
+    die "$reg_bef is not a valid date before, aborting! Use a date in format YYYY-MM-DD.$@"
+        if $@;
     if ( defined $reg_aft ) {
         eval { $date_aft = dt_from_string( $reg_aft, 'iso' ); };
     }
-    die
-"$reg_bef is not a valid date after, aborting! Use a date in format YYYY-MM-DD.$@"
-      if $@;
+    die "$reg_bef is not a valid date after, aborting! Use a date in format YYYY-MM-DD.$@"
+        if $@;
     $params{dateenrolled}{'<='} = $reg_bef if defined $date_bef;
     $params{dateenrolled}{'>='} = $reg_aft if defined $date_aft;
 }
@@ -243,8 +238,7 @@ while ( my ( $key, $value ) = each %fields ) {
     $verbose and print "    Borrower column $key is equal to $value\n";
     $params{ "me." . $key } = $value;
 }
-
-my $target_patrons = Koha::Patrons->search({ search_params => \%params })->search_patrons_to_update(
+my $target_patrons = Koha::Patrons->search(\%params)->search_patrons_to_update_category(
     {
         from          => $fromcat,
         search_params => \%params,
@@ -270,7 +264,7 @@ if ($verbose) {
     $target_patrons->reset;
 }
 if ($doit) {
-    $actually_updated = $target_patrons->update_category( { to => $tocat } );
+    $actually_updated = $target_patrons->update_category_to( { category => $tocat } );
 }
 
 $verbose and print "$patrons_found found, $actually_updated updated\n";

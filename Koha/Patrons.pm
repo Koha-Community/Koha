@@ -390,21 +390,14 @@ sub search_patrons_to_update_category {
     my $cat_from = Koha::Patron::Categories->find($params->{from});
     $search_params->{categorycode}=$params->{from};
     if ($params->{too_young} || $params->{too_old}){
+        my $dtf = Koha::Database->new->schema->storage->datetime_parser;
         if( $cat_from->dateofbirthrequired && $params->{too_young} ) {
-            my $date_after = output_pref({
-                dt         => dt_from_string()->subtract( years => $cat_from->dateofbirthrequired),
-                dateonly   => 1,
-                dateformat => 'sql'
-            });
-            $search_params->{dateofbirth}{'>'} = $date_after;
+            my $date_after = dt_from_string()->subtract( years => $cat_from->dateofbirthrequired);
+            $search_params->{dateofbirth}{'>'} = $dtf->format_datetime( $date_after );
         }
         if( $cat_from->upperagelimit && $params->{too_old} ) {
-            my $date_before = output_pref({
-                dt         => dt_from_string()->subtract( years => $cat_from->upperagelimit),
-                dateonly   => 1,
-                dateformat => 'sql'
-            });
-            $search_params->{dateofbirth}{'<'} = $date_before;
+            my $date_before = dt_from_string()->subtract( years => $cat_from->upperagelimit);
+            $search_params->{dateofbirth}{'<'} = $dtf->format_datetime( $date_before );
         }
     }
     if ($params->{fine_min} || $params->{fine_max}) {
