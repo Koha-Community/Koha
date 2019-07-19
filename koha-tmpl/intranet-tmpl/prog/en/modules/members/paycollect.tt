@@ -61,6 +61,12 @@
 [% END %]
 
 [% IF ( pay_individual ) %]
+    [% IF ( error_registers ) %]
+    <div id="error_message" class="dialog alert">
+        You must have at least one cash register associated with this branch before you can record payments.
+    </div>
+    [% ELSE %]
+
     <form name="payindivfine" id="payindivfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
@@ -144,6 +150,7 @@
             <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
         </div>
     </form>
+    [% END %]
 [% ELSIF ( writeoff_individual ) %]
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
@@ -190,6 +197,11 @@
         </div>
     </form>
 [% ELSE %]
+    [% IF ( error_registers && type != 'writeoff' ) %]
+    <div id="error_message" class="dialog alert">
+        You must have at least one cash register associated with this branch before you can record payments.
+    </div>
+    [% ELSE %]
 
     <form name="payfine" id="payfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
@@ -231,6 +243,7 @@
         <span id="change">0.00</span>
     </li>
 
+    [% IF type != 'writeoff' %]
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
         <li>
@@ -258,6 +271,7 @@
         </select>
     </li>
     [% END %]
+    [% END %]
 
     <li>
         <label for="selected_accts_notes">Note: </label>
@@ -270,6 +284,7 @@
         <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
     </div>
     </form>
+    [% END %]
 [% END %]
 </div></div>
 

@@ -75,20 +75,32 @@ my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
 
-my $registerid = $input->param('registerid');
-if ( !$registerid ) {
-    $registerid = Koha::Cash::Registers->find(
-        { branch => $library_id, branch_default => 1 },
-    )->id;
+my $registerid;
+if ( C4::Context->preference('UseCashRegisters') ) {
+    $registerid = $input->param('registerid');
+    my $registers  = Koha::Cash::Registers->search(
+        { branch   => $library_id, archived => 0 },
+        { order_by => { '-asc' => 'name' } }
+    );
+
+    if ( !$registers->count ) {
+        $template->param( error_registers => 1 );
+    }
+    else {
+
+        if ( !$registerid ) {
+            my $default_register = Koha::Cash::Registers->find(
+                { branch => $library_id, branch_default => 1 } );
+            $registerid = $default_register->id if $default_register;
+        }
+        $registerid = $registers->next->id if !$registerid;
+
+        $template->param(
+            registerid => $registerid,
+            registers  => $registers,
+        );
+    }
 }
-my $registers = Koha::Cash::Registers->search(
-    { branch   => $library_id, archived => 0 },
-    { order_by => { '-asc' => 'name' } }
-);
-$template->param(
-    registerid => $registerid,
-    registers  => $registers,
-);
 
 if ( $pay_individual || $writeoff_individual ) {
     if ($pay_individual) {
