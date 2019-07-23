@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-06-16 20:03-0300\n"
-"PO-Revision-Date: 2019-03-18 16:32+0000\n"
+"POT-Creation-Date: 2019-07-19 09:03-0300\n"
+"PO-Revision-Date: 2019-07-15 10:35+0000\n"
 "Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1552926758.679993\n"
+"X-POOTLE-MTIME: 1563186919.059811\n"
 "X-Poedit-Basepath: ../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/18.05/it-IT-staff-prog.po\n"
@@ -100,13 +100,13 @@ msgstr "\") simbolo di the Noun Project ; Autority (\""
 #. %5$s:  BLOCK escape_address 
 #. %6$s: ~ SET address = data.streetnumber _ ' ' 
 #. %7$s: ~ IF data.streettype 
-#. %8$s:  SET address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' '
+#. %8$s:  SET address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' 
 #. %9$s:  END 
 #. %10$s: ~ IF data.address 
-#. %11$s:  SET address = address _ data.address _ ' '
+#. %11$s:  SET address = address _ data.address _ ' ' 
 #. %12$s:  END 
 #. %13$s: ~ IF data.address2 
-#. %14$s:  SET address = address _ data.address2 _ ' '
+#. %14$s:  SET address = address _ data.address2 _ ' ' 
 #. %15$s:  END 
 #. %16$s: ~ address | html | $To ~
 #. %17$s:  END 
@@ -201,7 +201,7 @@ msgstr ""
 "%s %s %s %s [%%~ action_block = '"
 
 #. %1$s:  END 
-#. %2$s:  data.cardnumber | html | $To
+#. %2$s:  data.cardnumber | html | $To 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:15
 #, c-format
 msgid "\", %s \"dt_cardnumber\": \"%s\", \"dt_name\": \""
@@ -696,7 +696,7 @@ msgstr ""
 #. %50$s:     END 
 #. %51$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:20
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %s %s %s %sCatalog %sAuthorities %sPatrons %sAcquisitions %sSerials "
 "%sHolds %sCirculation %sLetter %sFines %sSystem prefs %sCron jobs %sReports "
@@ -709,9 +709,9 @@ msgstr ""
 "%sPrenotazioni %sCircolazione %sSolleciti %sMulte %sPreferenze di sistema "
 "%sCron jobs %sReportistica %s%s %s %s %s %s %sAggiungi %sCancella %sModifica "
 "%sPresta %sRestituisci %sCrea %sCancella %sRiprendi %sSospendi %sRinnova "
-"%sCambia password %sAggiungi messaggio di circolazione %sCancella messaggio "
-"di circolazione %sLancia %s%s %s %s %s %s %sIntranet %sOPAC %sSIP %sLinea di "
-"comando %s%s %s %s"
+"%sRinnova %sCambia password %sAggiungi messaggio di circolazione %sCancella "
+"messaggio di circolazione %sLancia %s%s %s %s %s %s %sIntranet %sOPAC %sSIP "
+"%sLinea di comando %s%s %s %s"
 
 #. %1$s:  INCLUDE 'header.inc' 
 #. %2$s:  INCLUDE 'circ-search.inc' 
@@ -6289,10 +6289,10 @@ msgstr "%s | Status: %s %s "
 
 #. %1$s:  END 
 #. %2$s:  data.dateofbirth | $KohaDates 
-#. %3$s:  data.category_description | html | $To
-#. %4$s:  data.category_type | html | $To
-#. %5$s:  data.branchname | html | $To
-#. %6$s:  data.dateexpiry | html | $To
+#. %3$s:  data.category_description | html | $To 
+#. %4$s:  data.category_type | html | $To 
+#. %5$s:  data.branchname | html | $To 
+#. %6$s:  data.dateexpiry | html | $To 
 #. %7$s:  IF data.overdues 
 #: intranet-tmpl/prog/en/modules/members/tables/members_results.tt:20
 #, c-format
@@ -6735,7 +6735,7 @@ msgid "%s(deleted patron)%s "
 msgstr "%s(utente cancellato)%s "
 
 #. For the first occurrence,
-#. %1$s:  IF (invoiceincgst == 1)
+#. %1$s:  IF (invoiceincgst == 1) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:297
@@ -7310,14 +7310,15 @@ msgstr "%sKoha &rsaquo; Strumenti &rsaquo; Etichette &rsaquo;: Cerca%s "
 #. %11$s:  sep | html 
 #. %12$s: - END -
 #: intranet-tmpl/prog/en/includes/csv_headers/reports/cash_register_stats.tt:1
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sManager name%sPatron cardnumber%sPatron name%sTransaction library"
 "%sTransaction date%sTransaction type%sNotes%sAmount%sTitle%sBarcode%sItem "
 "type%s "
 msgstr ""
-"%smfirstname%scard number%sfirstname%sbranchname%sdate%saccounttype%samount"
-"%stitle%sbarcode%sitype%s "
+"%sManager name%sNumero tessera utente%sNome utente%sBiblioteca della "
+"transazione%sData della transazione%sTipo di transazione%sNote%sAmmontare"
+"%sTitolo%sBarcode%sTipo di copia%s "
 
 #. %1$s:  IF ( modify ) 
 #. %2$s:  ELSE 
@@ -9635,7 +9636,7 @@ msgstr "&rsaquo; %s Commenti approvati%sCommenti in attesa di moderazione%s"
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:12
 #, fuzzy, c-format
 msgid "&rsaquo;%s Edit %s Reserve %s"
-msgstr "&rsaquo; Modifica %s "
+msgstr "&rsaquo;%s Modifica %s Reserve %s"
 
 #. %1$s:  END 
 #. %2$s:  IF op == 'list' 
@@ -9943,7 +9944,7 @@ msgstr ""
 "(una lista di scelte per Choice (separate da |) o colonne|righe per Texarea)"
 
 #. %1$s:  cur_active | html 
-#. %2$s:  IF (invoiceincgst == 1)
+#. %2$s:  IF (invoiceincgst == 1) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:292
@@ -11779,11 +11780,6 @@ msgstr "Aggiungi un ordine al raccoglitore"
 msgid "Add sub-group "
 msgstr "Aggiungi un nuovo sotto-gruppo "
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:33
-#, c-format
-msgid "Add subscription fields"
-msgstr "Aggiungi campi negli abbonamenti"
-
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:104
 #, c-format
 msgid "Add to "
@@ -12063,7 +12059,7 @@ msgstr "Indirizzo: "
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:104
 #, fuzzy, c-format
 msgid "Adjustment cost for invoice "
-msgstr "Costi di spedizione per la fattura %s"
+msgstr "Costi di spedizione per la fattura"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:97
 #, c-format
@@ -17722,7 +17718,7 @@ msgstr "Controlla la lista dei barcode per le copie fuori posto: "
 msgid "Check boxes to duplicate the original values"
 msgstr "Spunta le caselle per duplicare i valori originali"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:21
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:23
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:20
 #, c-format
 msgid "Check expiration"
@@ -18721,7 +18717,7 @@ msgstr "Sollecitato"
 msgid "Claimed date"
 msgstr "Data di sollecito"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:18
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:20
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:23
 #, c-format
 msgid "Claims"
@@ -19144,7 +19140,7 @@ msgstr "Id cliente"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:295
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:392
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:324
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:709
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:710
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:257
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:403
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:59
@@ -19160,7 +19156,7 @@ msgstr "Clona queste regole in:"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:295
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:392
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:324
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:709
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:710
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:257
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:403
 msgid "Clone this subfield"
@@ -20743,7 +20739,7 @@ msgstr "Crea nuovo record"
 msgid "Create report from SQL"
 msgstr "Crea un report da SQL"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:9
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:11
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:72
 #, c-format
 msgid "Create routing list"
@@ -22071,7 +22067,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:122
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:221
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:712
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:71
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:203
@@ -22492,7 +22488,7 @@ msgstr "Cancella questo report salvato"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:712
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
 msgid "Delete this subfield"
 msgstr "Cancella questo sottocampo"
 
@@ -24065,7 +24061,7 @@ msgstr "Modifica la richiesta "
 msgid "Edit rota"
 msgstr "Modifica avviso"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:7
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:70
 #, c-format
 msgid "Edit routing list"
@@ -25656,7 +25652,7 @@ msgid "Field 3"
 msgstr "Field 3"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:684
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:683
 #, fuzzy
 msgid "Field autofilled by plugin"
 msgstr "Vedi tutti i plugin"
@@ -32510,9 +32506,10 @@ msgstr "Koha &rsaquo; Testi per i corsi &rsaquo; Dettagli del corso per %s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Course reserves &rsaquo;%s Edit item%s Add items%s"
-msgstr "Koha &rsaquo; Testi per i corsi &rsaquo; Aggiungi copie"
+msgstr ""
+"Koha &rsaquo; Testi per i corsi &rsaquo; %s Modifica copia%s Aggiungi copie%s"
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
@@ -35857,7 +35854,7 @@ msgstr "Gestisci campi proprietati per la ricerca delle copie"
 msgid "Manage extended patron attributes"
 msgstr "Sostituisci solo gli attributi utente inclusi"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:24
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:26
 #, c-format
 msgid "Manage frequencies "
 msgstr "Gestisci le frequenze "
@@ -35956,7 +35953,7 @@ msgstr "Gestisci le liste degli utenti"
 msgid "Manage marc modification templates"
 msgstr "Gestire i templates per la modifica del MARC"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:29
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:31
 #, c-format
 msgid "Manage numbering patterns "
 msgstr "Gestisci lo schema di numerazione"
@@ -38109,13 +38106,17 @@ msgstr "Nuovo set"
 msgid "New splitting rule"
 msgstr "Nuove regole di normalizzazione"
 
-#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:7
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:9
-#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:71
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:73
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:17
 #, c-format
 msgid "New subscription"
+msgstr "Nuovo abbonamento"
+
+#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:7
+#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:71
+#, fuzzy, c-format
+msgid "New subscription for this serial"
 msgstr "Nuovo abbonamento"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:173
@@ -46062,6 +46063,7 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:327
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:705
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:260
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:406
@@ -47678,6 +47680,11 @@ msgstr "Cerca avvisi"
 msgid "Search on"
 msgstr "Cerca"
 
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
+#, fuzzy, c-format
+msgid "Search on Mana"
+msgstr "Cerca"
+
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:85
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:81
@@ -48555,7 +48562,7 @@ msgstr "Serhij Dubyk"
 msgid "Serial"
 msgstr "Risorsa in continuazione"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:3
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:5
 #, c-format
 msgid "Serial collection"
 msgstr "Informazioni globali"
@@ -49036,9 +49043,9 @@ msgid "Shipment date: All until %s "
 msgstr "Data di spedizione: tutto fino al %s "
 
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:91
-#, fuzzy, c-format
+#, c-format
 msgid "Shipping cost for invoice "
-msgstr "Costi di spedizione per la fattura %s"
+msgstr "Costi di spedizione per la fattura"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:49
 #, c-format
@@ -51500,8 +51507,8 @@ msgstr "Tag cancellato"
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:376
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:291
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:301
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:678
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:686
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:677
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:685
 #, c-format
 msgid "Tag editor"
 msgstr "Editor di tag"
@@ -53354,7 +53361,6 @@ msgstr "Questo corso ha già questa copia tra quelle riservate ad esso"
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:254
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:352
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:665
 msgid "This field is mandatory"
 msgstr "Questo campo è obbligatorio"
 
