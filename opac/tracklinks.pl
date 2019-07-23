@@ -25,6 +25,7 @@ use C4::Biblio;
 use Koha::Items;
 use Koha::Linktracker;
 use CGI qw ( -utf8 );
+use List::MoreUtils qw(any);
 
 my $cgi = new CGI;
 my $uri = $cgi->param('uri') || '';
@@ -55,7 +56,7 @@ if ($uri && ($biblionumber || $itemnumber) ) {
 
     my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     my $marc_urls = C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour'));
-    if ( ( grep { $_ eq $uri } map { $_->{MARCURL} } @$marc_urls )
+    if ( ( any { $_ eq $uri } map { $_->{MARCURL} } @$marc_urls )
         || Koha::Items->search( { itemnumber => $itemnumber, uri => $uri } )->count )
     {
         $tracker->trackclick(
