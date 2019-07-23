@@ -119,7 +119,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
 
 my $total = $subtotal;
 $query = qq{
-    SELECT invoicenumber, shipmentcost
+    SELECT invoiceid, invoicenumber, shipmentcost
     FROM aqinvoices
     WHERE shipmentcost_budgetid = ?
 };
@@ -129,7 +129,8 @@ my @shipmentcosts;
 while (my $data = $sth->fetchrow_hashref) {
     push @shipmentcosts, {
         shipmentcost => sprintf("%.2f", $data->{shipmentcost}),
-        invoicenumber => $data->{invoicenumber}
+        invoiceid => $data->{invoiceid},
+	invoicenumber => $data->{invoicenumber}
     };
     $total += $data->{shipmentcost};
 }
