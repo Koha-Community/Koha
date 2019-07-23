@@ -3,8 +3,11 @@
 use Modern::Perl;
 
 use Test::More tests => 3;
+use Test::WWW::Mechanize;
 use t::lib::Mocks qw(mock_preference);
 
+use File::Basename;
+use XML::LibXML;
 use YAML;
 use ZOOM;
 
@@ -17,7 +20,7 @@ our $child;
 
 subtest 'test_search' => sub {
 
-    plan tests => 9;
+    plan tests => 20;
 
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
 
@@ -51,7 +54,8 @@ subtest 'test_search' => sub {
             biblios => {
                 use => {
                     1 => 'author',
-                    4 => 'title'
+                    4 => 'title',
+                    1003 => 'author'
                 }
             }
         };
@@ -68,7 +72,7 @@ subtest 'test_search' => sub {
     $search->mock('simple_search_compat', sub {
         my ( $self, $query ) = @_;
 
-        return (1, undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(another))))';
+        return ('unexpected query', undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(another))))';
 
         my @records = ($marc_record_1, $marc_record_2);
         return (undef, \@records, 2);
@@ -76,16 +80,16 @@ subtest 'test_search' => sub {
 
     $child = fork();
     if ($child == 0) {
-        my @yaz_options = ( '@:42111' );
+        my $config_dir = dirname(__FILE__) . '/';
         my $z = Koha::Z3950Responder->new( {
-            config_dir => '',
-            yaz_options => [ @yaz_options ]
+            config_dir => $config_dir
         });
         $z->start();
         exit;
     }
     sleep(1);
 
+    # Z39.50 protocol tests
     my $o = new ZOOM::Options();
     $o->option(preferredRecordSyntax => 'xml');
     $o->option(elementSetName => 'marcxml');
@@ -94,7 +98,7 @@ subtest 'test_search' => sub {
     my $Zconn = ZOOM::Connection->create($o);
     ok($Zconn, 'ZOOM connection created');
 
-    $Zconn->connect('127.0.0.1:42111', 0);
+    $Zconn->connect('localhost:42111', 0);
     is($Zconn->errcode(), 0, 'Connection is successful: ' . $Zconn->errmsg());
 
     my $rs = $Zconn->search_pqf('@and @attr 1=1 @attr 4=1 author @or @attr 1=4 title(s) @attr 1=4 another');
@@ -103,14 +107,45 @@ subtest 'test_search' => sub {
     is($rs->size(), 2, 'Two results returned');
 
     my $returned1 = MARC::Record->new_from_xml($rs->record(0)->raw());
-    ok ($returned1, 'Record 1 returned as MARCXML');
+    ok($returned1, 'Record 1 returned as MARCXML');
     is($returned1->as_xml, $marc_record_1->as_xml, 'Record 1 returned properly');
 
     my $returned2= MARC::Record->new_from_xml($rs->record(1)->raw());
-    ok ($returned2, 'Record 2 returned as MARCXML');
+    ok($returned2, 'Record 2 returned as MARCXML');
     is($returned2->as_xml, $marc_record_2->as_xml, 'Record 2 returned properly');
 
     is($rs->record(2), undef, 'Record 3 does not exist');
+
+    # SRU protocol tests
+    my $base = 'http://localhost:42111';
+    my $ns = 'http://docs.oasis-open.org/ns/search-ws/sruResponse';
+    my $marc_ns = 'http://www.loc.gov/MARC21/slim';
+    my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
+
+    $agent->get_ok("$base", 'Retrieve explain response');
+    my $dom = XML::LibXML->load_xml(string => $agent->content());
+    my @nodes = $dom->getElementsByTagNameNS($ns, 'explainResponse');
+    is(scalar(@nodes), 1, 'explainResponse returned');
+
+    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=", 'Try bad search query');
+    $dom = XML::LibXML->load_xml(string => $agent->content());
+    @nodes = $dom->getElementsByTagNameNS($ns, 'diagnostics');
+    is(scalar(@nodes), 1, 'diagnostics returned for bad query');
+
+    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=(dc.author%3dauthor AND (dc.title%3d\"title(s)\" OR dc.title%3danother))", 'Retrieve search results');
+    $dom = XML::LibXML->load_xml(string => $agent->content());
+    @nodes = $dom->getElementsByTagNameNS($ns, 'searchRetrieveResponse');
+    is(scalar(@nodes), 1, 'searchRetrieveResponse returned');
+    my @records = $nodes[0]->getElementsByTagNameNS($marc_ns, 'record');
+    is(scalar(@records), 2, 'Two results returned');
+
+    $returned1 = MARC::Record->new_from_xml($records[0]->toString());
+    ok($returned1, 'Record 1 returned as MARCXML');
+    is($returned1->as_xml, $marc_record_1->as_xml, 'Record 1 returned properly');
+
+    $returned2= MARC::Record->new_from_xml($records[1]->toString());
+    ok($returned2, 'Record 2 returned as MARCXML');
+    is($returned2->as_xml, $marc_record_2->as_xml, 'Record 2 returned properly');
 
     cleanup();
 };
@@ -122,8 +157,7 @@ sub cleanup {
     }
 }
 
-# Fall back to make sure that the Zebra process
-# and files get cleaned up
+# Fall back to make sure that the server process gets cleaned up
 END {
     cleanup();
 }
