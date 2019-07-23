@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-06-16 19:45-0300\n"
-"PO-Revision-Date: 2019-06-21 07:43+0000\n"
+"POT-Creation-Date: 2019-07-19 08:44-0300\n"
+"PO-Revision-Date: 2019-07-20 12:08+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1561102986.834529\n"
+"X-POOTLE-MTIME: 1563624531.028875\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -899,7 +899,7 @@ msgstr "%s %s %s %s немає %s "
 #. %19$s:  END 
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:145
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:146
 #, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
@@ -966,6 +966,20 @@ msgid ""
 "%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default %s"
 "%s %s %s %s %s %s %s "
 msgstr ""
+
+#. %1$s:  FOREACH location IN [ '', 'OpacNavRight' ] 
+#. %2$s:  IF ( location == '' ) 
+#. %3$s:  SET location_lang = lang_lis.language 
+#. %4$s:  location = BLOCK 
+#. %5$s:  END 
+#. %6$s:  ELSE 
+#. %7$s:  SET location_lang = location _ "_" _ lang_lis.language 
+#. %8$s:  END 
+#. %9$s:  IF ( location_lang == language ) 
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:280
+#, fuzzy, c-format
+msgid "%s %s %s %sOPAC news%s %s %s %s %s "
+msgstr "%s %s %s %s %s %s %s ЗАГАЛОМ %s %s "
 
 #. %1$s:  IF ( resultsloo.author ) 
 #. %2$s:  resultsloo.author | html 
@@ -1471,6 +1485,16 @@ msgid ""
 "maintainer %sVirtual machine maintainer %sDocumentation specialist %sLive CD "
 "maintainer %s %s %s %s"
 msgstr ""
+"%s %s %s Відповідальний за випуск %s Помічник відповідального за випуск %s "
+"Відповідальний із забезпечення якості %s Команда з контролю якості %s "
+"Відповідальний за документування %s Команда документування %s Відповідальний "
+"за переклади %s Помічник відповідального за переклад %s Тематичний експерт "
+"%s Диспутант помилок %s Координатор випуску %s Помічник координатора випуску "
+"%s Вікі-куратор %s Відповідальний за безперервну інтеграцію %s "
+"Відповідальний за підготовку пакунків %s Помічник відповідального за "
+"підготовку пакунків %s Голова засідань %s Редактор бюлетеня %s  Координатор "
+"модулів %s Координатор віртуальної машини %s Фахівець з документації %s "
+"Координатор підготовки Live CD %s %s %s %s"
 
 #. %1$s:  IF ( test_term ) 
 #. %2$s:  IF ( verdict_ok ) 
@@ -2630,7 +2654,7 @@ msgstr "%s %s %sрезервування, що очікують на отрим�
 #: intranet-tmpl/prog/en/modules/members/pay.tt:151
 #, c-format
 msgid "%s %s has no outstanding fines."
-msgstr "%s %s не має несплачених штрафів."
+msgstr "%s %s не має жодних несплачених штрафів."
 
 #. %1$s:  END 
 #. %2$s:  IF ( suggestions_loo.place ) 
@@ -2691,7 +2715,7 @@ msgstr ""
 #. %5$s:  ActionsLoo.to_subfield | html 
 #. %6$s:  END 
 #. %7$s:  IF ( ActionsLoo.to_regex_search ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:138
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:139
 #, c-format
 msgid "%s %s to %s%s$%s%s %s using RegEx s"
 msgstr ""
@@ -3990,7 +4014,7 @@ msgstr ""
 #. %19$s:  ActionsLoo.from_subfield | html 
 #. %20$s:  END 
 #. %21$s:  IF ( ActionsLoo.field_value ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:120
 #, c-format
 msgid ""
 "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
@@ -4229,9 +4253,9 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:349
-#, fuzzy, c-format
+#, c-format
 msgid "%s Last value: %s Begins with: %s "
-msgstr "%s Останнє значення %s Починається з %s "
+msgstr "%s Останнє значення: %s Починається з: %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4402,9 +4426,9 @@ msgstr "%s Немає штрих-коду %s"
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:281
-#, fuzzy, c-format
+#, c-format
 msgid "%s No basket group %s "
-msgstr ") %s Немає групи кошиків замовлень %s "
+msgstr "%s Немає групи кошиків замовлень %s "
 
 #. %1$s:  IF failureMessage == "NO_ID" 
 #. %2$s:  ELSIF failureMessage == "DUPLICATE_TITLE" 
@@ -4432,10 +4456,11 @@ msgstr "%s резервування не дозволені "
 #. %2$s:  END 
 #. %3$s:  IF ( CAN_user_tools_upload_local_cover_images ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:670
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s No images have been uploaded for this bibliographic record yet. %s %s "
-msgstr "Ще немає зображень, вивантажених для цього бібліографічного запису. "
+msgstr ""
+"%s На цей бібліографічний запис ще не завантажено жодного зображення. %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4614,6 +4639,8 @@ msgid ""
 "%s Only items that need not be transferred will be cancelled "
 "(TransferWhenCancelAllWaitingHolds syspref) %s "
 msgstr ""
+"%s Будуть скасовані лише примірники, які не потрібно переміщувати (системний "
+"параметр „TransferWhenCancelAllWaitingHolds“) %s "
 
 #. %1$s:  IF ( total ) 
 #. %2$s:  total | html 
@@ -5949,9 +5976,9 @@ msgstr "%s відвідувачів були успішно переміщені
 
 #. %1$s:  patrons_to_delete.size || 0 | html 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:144
-#, fuzzy, c-format
+#, c-format
 msgid "%s patrons will be deleted"
-msgstr "%s відвідувачі буде видалений"
+msgstr "%s відвідувачів буде видалено"
 
 #. %1$s:  TotalDel | html 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:189
@@ -6593,9 +6620,9 @@ msgstr "%s &rsaquo; Статистика з обігу щодо „%s“%s "
 #. %2$s:  subscriptionid | html 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "%s&rsaquo; Details for subscription #%s%s "
-msgstr "%s Коха &rsaquo; Серіальні видання &rsaquo; Подробиці підписки № %s%s "
+msgstr "%s &rsaquo; Подробиці підписки № %s%s "
 
 #. %1$s:  IF op == 'edit' 
 #. %2$s:  PROCESS ServerType 
@@ -7945,7 +7972,7 @@ msgstr "&rsaquo; %s %s Confirm %s %sЗавершено%s "
 #. %1$s:  template_name | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:28
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "&rsaquo; %s %s MARC modification templates %s "
 msgstr ""
@@ -8082,7 +8109,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:48
 #, c-format
 msgid "&rsaquo; %s Unknown record %s Details for "
-msgstr "&rsaquo; %s Невідомий запис %s Подробиці щодо: "
+msgstr "&rsaquo; %s Невідомий запис %s Подробиці: "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -8337,7 +8364,7 @@ msgstr "&rsaquo; %s Види атрибутів відвідувача %s"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:33
 #, c-format
 msgid "&rsaquo; %sPatron details for %s%s "
-msgstr "&rsaquo; %s Дані відвідувача — %s%s "
+msgstr "&rsaquo; %s Дані відвідувача: %s%s "
 
 #. %1$s:  IF    ( pay_individual )      
 #. %2$s:  ELSIF ( writeoff_individual ) 
@@ -8618,7 +8645,7 @@ msgid "&rsaquo; Circulation and fine rules"
 msgstr "&rsaquo; Правила обігу та нарахування пені"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #, c-format
 msgid "&rsaquo; Circulation history for %s"
 msgstr "&rsaquo; Історія обігу відвідувача: %s"
@@ -9899,9 +9926,9 @@ msgid "(Unknown)"
 msgstr "невідомо"
 
 #: intranet-tmpl/prog/en/includes/accounts.inc:47
-#, fuzzy, c-format
+#, c-format
 msgid "(Voided)"
-msgstr "Анульовано"
+msgstr "(Анульовано)"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:195
 #, c-format
@@ -10321,7 +10348,7 @@ msgstr "-- виберіть формат --"
 msgid "-- Choose one -- "
 msgstr "-- Виберіть один --"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:314
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:295
 #, c-format
 msgid "-- None --"
 msgstr ""
@@ -10454,7 +10481,7 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:149
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:157
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:122
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:98
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:99
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:69
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:76
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:83
@@ -10479,7 +10506,7 @@ msgstr "0; url=/cgi-bin/koha/installer/onboarding.pl?step=3"
 msgid "1/2"
 msgstr "1/8 закриття"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:197
 #, fuzzy, c-format
 msgid "1st"
 msgstr "pst"
@@ -10511,9 +10538,9 @@ msgid ": Barcode must be unique."
 msgstr ": штрих-код повинен бути унікальний."
 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid ": The items do not belong to your library."
-msgstr "Увійдіть до інформації мав відношення до навантаження, яке ви додаєте"
+msgstr ": Примірники не належать до вашої бібліотеки."
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:25
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:89
@@ -10571,7 +10598,7 @@ msgid "<< Delete"
 msgstr "&lt;&lt; Вилучити"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "A control field cannot be used with a regular field."
 msgstr ""
 
@@ -11022,7 +11049,7 @@ msgstr "Статистика щодо надходжень "
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:67
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:313
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:352
@@ -11064,7 +11091,7 @@ msgstr "Дія, якщо відповідності не знайдено: "
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:162
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:258
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:103
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:64
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:83
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:61
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
@@ -11147,7 +11174,7 @@ msgstr "Дії"
 msgid "Actions "
 msgstr "Дії "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:82
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:83
 #, fuzzy, c-format
 msgid "Actions for "
 msgstr "Дії "
@@ -11277,9 +11304,9 @@ msgid "Add a condition"
 msgstr "Додати умову"
 
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:170
-#, fuzzy, c-format
+#, c-format
 msgid "Add a contract"
-msgstr "Договір"
+msgstr "Додати договір"
 
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:87
 #, c-format
@@ -11301,7 +11328,7 @@ msgstr "Кому надіслати повідомлення: "
 msgid "Add a new OAI set"
 msgstr "Додавання нового набору OAI"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:182
 #, fuzzy, c-format
 msgid "Add a new action"
 msgstr "Додаємо нового відвідувача: "
@@ -11309,7 +11336,7 @@ msgstr "Додаємо нового відвідувача: "
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:255
 #, c-format
 msgid "Add a new authorized value"
-msgstr ""
+msgstr "Додати нове допустиме значення"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:410
 #, fuzzy, c-format
@@ -11355,7 +11382,7 @@ msgid "Add a substitution"
 msgstr "Подробиці передплати"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:281
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
 #, fuzzy
 msgid "Add action"
 msgstr "Запис відвідувачів"
@@ -11615,7 +11642,7 @@ msgstr "Додати декілька примірників"
 msgid "Add multiple items"
 msgstr "Додати кілька примірників"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:206
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:187
 #, fuzzy, c-format
 msgid "Add new"
 msgstr "Додати у "
@@ -11641,9 +11668,9 @@ msgstr "Додавання нового колективного відвіду�
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:128
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:173
-#, fuzzy, c-format
+#, c-format
 msgid "Add new field "
-msgstr "Додати інше поле"
+msgstr "Додати нове поле "
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:358
 #, fuzzy, c-format
@@ -11908,7 +11935,7 @@ msgstr "Додати/редагувати примірники"
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:412
 #, c-format
 msgid "Add: "
-msgstr ""
+msgstr "Додати:"
 
 #: intranet-tmpl/prog/en/modules/members/member.tt:25
 #, c-format
@@ -12210,7 +12237,7 @@ msgstr "Агати Adobe, 1/14 дюйма, 1.814 мм"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:174
 #, c-format
 msgid "Adolescent"
-msgstr "для дітей старшого шкільного віку (14-17 років)"
+msgstr "підлітковий"
 
 # advsearch.tt: „для дорослих“ 008.22=e (http://marc21.rsl.ru/index.php?doc=1050)
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:175
@@ -12241,14 +12268,14 @@ msgid "Advanced editor"
 msgstr "Розширений редактор"
 
 #: intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Advanced editor keyboard shortcuts"
-msgstr "Підтримувані поєднання клавіш"
+msgstr "Клавіатурні скорочення розширеного редактора"
 
 #: intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:17
-#, fuzzy, c-format
+#, c-format
 msgid "Advanced editor shortcuts"
-msgstr "Розширений редактор"
+msgstr "Клавіатурні скорочення розширеного редактора"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:388
 #, fuzzy, c-format
@@ -12370,8 +12397,8 @@ msgstr "Публічна бібліотека Алінгсоса {Alingsås}, Ш
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:150
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:265
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:196
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:42
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:35
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:250
@@ -12379,7 +12406,7 @@ msgstr "Публічна бібліотека Алінгсоса {Alingsås}, Ш
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:379
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:42
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:43
 #: intranet-tmpl/prog/en/modules/members/member.tt:235
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:40
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:51
@@ -12479,6 +12506,7 @@ msgstr "Усі зображення отримані з бібліотеки "
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 msgid "All invoices for merging must be from the same vendor"
 msgstr ""
+"Усі рахунки-фактури для об'єднання повинні бути від одного постачальника"
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:51
 #, c-format
@@ -12607,9 +12635,9 @@ msgid "Allow public downloads:"
 msgstr "Дозволити загальнодоступні звантаження: "
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:61
-#, fuzzy, c-format
+#, c-format
 msgid "Allow public enrollment:"
-msgstr "Непублічна нотатка: "
+msgstr "Дозволити відкрите зарахування:"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:46
 #, c-format
@@ -13893,13 +13921,13 @@ msgid "Are you sure you wish to delete this request?"
 msgstr "Чи Ви справді хочете вилучити цей примірник?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "Are you sure you wish to delete this template action?"
 msgstr "Чи Ви справді хочете вилучити цей примірник?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "Are you sure you wish to delete this template?"
 msgstr "Чи Ви справді хочете вилучити цей примірник?"
@@ -14029,6 +14057,8 @@ msgstr "Приєднати примірник"
 #, c-format
 msgid "Attach this basket to a new basket group with the same name"
 msgstr ""
+"Прикріпити цей кошик замовлень до нової групи кошиків замовлень з тією ж "
+"назвою"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:64
 #, fuzzy, c-format
@@ -14120,7 +14150,7 @@ msgstr "Авторитетне значення"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:310
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:100
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:41
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:82
@@ -14444,7 +14474,7 @@ msgstr "Допустиме значення: "
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:71
 #, c-format
 msgid "Authorized value: "
-msgstr "Авторизоване значення: "
+msgstr "Допустиме значення: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:24
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:29
@@ -14696,7 +14726,7 @@ msgstr "Смуга"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:205
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:31
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:49
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:771
@@ -15322,9 +15352,9 @@ msgid "Begins with"
 msgstr "Починається з"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:406
-#, fuzzy, c-format
+#, c-format
 msgid "Begins with: "
-msgstr "Починається з"
+msgstr "Починається з:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:279
 #, c-format
@@ -15458,7 +15488,7 @@ msgstr "бібліографічні покажчики"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:208
 #, c-format
 msgid "Bibliographies"
-msgstr "бібліографічні покажчики"
+msgstr "бібліографії"
 
 #: intranet-tmpl/prog/en/columns.def:121
 #, c-format
@@ -15647,7 +15677,7 @@ msgid "Borrowernumber: %s"
 msgstr "Номер користувача АБІС: %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Both subfield values should be filled or empty."
 msgstr ""
 
@@ -16095,7 +16125,7 @@ msgstr "Шифр зберігання (від 0-9 до A-Z,А-Я)"
 msgid "Call no"
 msgstr "Шифр для замовлення"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:311
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:44
 #, c-format
@@ -16370,8 +16400,8 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:314
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:152
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:289
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:281
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:221
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:223
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:104
@@ -16614,9 +16644,9 @@ msgid "Cancel merge"
 msgstr "Скасувати злиття"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:465
-#, fuzzy, c-format
+#, c-format
 msgid "Cancel modifications"
-msgstr "Класифікація"
+msgstr "Скасувати зміни"
 
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:103
 #, fuzzy, c-format
@@ -16944,9 +16974,9 @@ msgid "Card number list (one barcode per line):"
 msgstr "Використовуєм файл зі штрих-кодами"
 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid "Card number list (one cardnumber per line): "
-msgstr "Використовуєм файл зі штрих-кодами"
+msgstr "Список номерів карток (в рядку один номер картки):"
 
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
@@ -17356,7 +17386,7 @@ msgstr ""
 "Змінити налаштування щодо надсилання повідомлень за умовчанням для цієї "
 "категорії?"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:89
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:87
 #, c-format
 msgid "Change order"
@@ -17514,7 +17544,7 @@ msgstr ""
 msgid "Check boxes to duplicate the original values"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:21
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:23
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:20
 #, c-format
 msgid "Check expiration"
@@ -17766,7 +17796,7 @@ msgstr "Повернуті примірники"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:85
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:105
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:106
 #, c-format
 msgid "Checked out"
 msgstr "Видано"
@@ -17797,7 +17827,7 @@ msgstr "Видавалося %s раз(и,ів)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:39
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:60
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:732
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:156
@@ -17807,7 +17837,7 @@ msgid "Checked out from"
 msgstr "Звідки видано "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:731
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:880
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:155
@@ -17872,6 +17902,8 @@ msgid ""
 "Checking the box right next to the label will disable the entry and delete "
 "the values of that field on all selected patrons"
 msgstr ""
+"Вибране поле (позначене прапорцем справа) буде вимкнуте та вилучено усі "
+"значення цього поля для усіх обраних відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:243
 #, c-format
@@ -17962,7 +17994,7 @@ msgstr "Стан видачі: "
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:147
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:43
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:32
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:34
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:142
@@ -18077,9 +18109,9 @@ msgstr ""
 "Вибираємо постачальника зі списку, щоб відразу перейти у потрібне місце. "
 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:98
-#, fuzzy, c-format
+#, c-format
 msgid "Choose a vendor to transfer from"
-msgstr "Ігнорувати та повернутися до переміщень: "
+msgstr "Виберіть постачальника для передачі від"
 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:96
 #, fuzzy, c-format
@@ -18258,7 +18290,7 @@ msgid "Circulation (\""
 msgstr "Обіг („"
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:9
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:10
 #, c-format
 msgid "Circulation History for %s"
 msgstr "Історія обігу для відвідувача: %s"
@@ -18281,7 +18313,7 @@ msgid "Circulation and fines rules"
 msgstr "Правила обігу та штрафи"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:102
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:25
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:26
 #, c-format
 msgid "Circulation history"
 msgstr "Історія обігу"
@@ -18444,7 +18476,7 @@ msgstr "Є претензія"
 msgid "Claimed date"
 msgstr "Заголовок"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:18
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:20
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:22
 #, c-format
 msgid "Claims"
@@ -18617,9 +18649,9 @@ msgstr "Очистити поля"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "Clear filter"
-msgstr "Очистити поля"
+msgstr "Зняти фільтрування"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:144
 #, c-format
@@ -18844,7 +18876,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:765
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:766
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:69
@@ -18860,7 +18892,7 @@ msgstr "Дублювати ці правила для:"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:765
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:766
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 msgid "Clone this subfield"
@@ -19908,13 +19940,13 @@ msgstr "Примірників: "
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:140
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:209
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:180
 #, c-format
 msgid "Copy"
 msgstr "Копіювати"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:210
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:191
 #, c-format
 msgid "Copy and replace"
 msgstr ""
@@ -20307,7 +20339,7 @@ msgstr ""
 msgid "Create a new subscription "
 msgstr "Створення нової підписки"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:298
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:279
 #, fuzzy, c-format
 msgid "Create a new template"
 msgstr "Створюємо новий список"
@@ -20487,7 +20519,7 @@ msgstr "створити запис"
 msgid "Create report from SQL"
 msgstr "Створюємо звіт з коду SQL"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:9
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:11
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:71
 #, c-format
 msgid "Create routing list"
@@ -20533,9 +20565,9 @@ msgid "Creation date"
 msgstr "Дата створення"
 
 #: intranet-tmpl/prog/en/modules/acqui/showorder.tt:11
-#, fuzzy, c-format
+#, c-format
 msgid "Creation date: "
-msgstr "Дата створення"
+msgstr "Дата створення: "
 
 #: intranet-tmpl/prog/en/modules/about.tt:559
 #, c-format
@@ -20978,7 +21010,7 @@ msgstr "База даних: "
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:166
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:161
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:46
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:43
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:383
@@ -21050,7 +21082,7 @@ msgstr "Дата вилучення (примірник)"
 
 # --Дата повернення (конфлікт з Return date)
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:24
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:60
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:44
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:72
@@ -21707,9 +21739,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:272
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:307
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:149
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:74
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:169
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:186
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:63
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:98
@@ -21721,7 +21753,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:158
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:97
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:768
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:769
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:71
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
@@ -21783,7 +21815,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:245
@@ -22012,12 +22044,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:65
 #, c-format
 msgid "Delete patrons"
-msgstr ""
+msgstr "Вилучення відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
 #, c-format
 msgid "Delete patrons who meet the following criteria:"
-msgstr ""
+msgstr "Вилучити відвідувачів, які відповідають таким умовам:"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:615
 #, fuzzy, c-format
@@ -22151,7 +22183,7 @@ msgstr "Вилучити цей збережений звіт"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:768
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:769
 msgid "Delete this subfield"
 msgstr "Вилучити це підполе"
 
@@ -22327,7 +22359,7 @@ msgstr "Факультет"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:253
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:93
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:65
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:131
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:268
@@ -22409,7 +22441,7 @@ msgstr "Опис стягнень"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:83
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:151
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:277
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
 #: intranet-tmpl/prog/en/modules/members/files.tt:72
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:56
@@ -22643,7 +22675,7 @@ msgstr "Лише підбірки "
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:223
 #, c-format
 msgid "Directories"
-msgstr "довідники-покажчики"
+msgstr "довідники (адресні)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -22893,12 +22925,12 @@ msgid "Document type:"
 msgstr "Тип документу: "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:98
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation manager:"
-msgstr "Команда документування: "
+msgstr "Відповідальний за документування: "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:104
-#, fuzzy, c-format
+#, c-format
 msgid "Documentation team:"
 msgstr "Команда документування: "
 
@@ -23146,7 +23178,7 @@ msgid "Due on %s"
 msgstr "Повернення %s"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:25
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
@@ -23159,7 +23191,7 @@ msgstr "Здублювати"
 msgid "Duplicate "
 msgstr "Здублювати "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:312
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:293
 #, c-format
 msgid "Duplicate a template:"
 msgstr ""
@@ -23381,7 +23413,7 @@ msgstr "Дата резервування "
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:169
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:271
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:146
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:185
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:406
@@ -23429,7 +23461,6 @@ msgstr "Дата резервування "
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:95
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:178
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:244
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:109
@@ -23505,11 +23536,11 @@ msgid "Edit SQL report"
 msgstr "Редагуємо звіт з коду SQL"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Edit action %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
 #, fuzzy, c-format
 msgid "Edit actions"
 msgstr "Редагувати запис"
@@ -23742,7 +23773,7 @@ msgstr "Редагувати правила"
 msgid "Edit rota"
 msgstr "Редагувати ротацію"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:7
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:69
 #, c-format
 msgid "Edit routing list"
@@ -23787,6 +23818,8 @@ msgstr "Редагувати серіальні видання"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:305
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#, c-format
 msgid "Edit subfields"
 msgstr "Редагувати підполя"
 
@@ -23794,6 +23827,11 @@ msgstr "Редагувати підполя"
 #, c-format
 msgid "Edit subscription"
 msgstr "Редагувати підписку"
+
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#, fuzzy, c-format
+msgid "Edit tag"
+msgstr "Редагувати ротацію"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:57
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:111
@@ -23917,7 +23955,7 @@ msgstr "Електронічна пошта: "
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:582
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:127
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:124
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:141
 #, c-format
 msgid "Email: "
@@ -24142,6 +24180,11 @@ msgstr "Введіть новий коментар (максимум 35 симв
 #, c-format
 msgid "Enter a new purchase suggestion"
 msgstr "Вносимо нову пропозицію на придбання"
+
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:121
+#, fuzzy, c-format
+msgid "Enter a personal or organization name."
+msgstr "Ввести номер квитка відвідувача або частину прізвища: "
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:289
 #, c-format
@@ -24497,7 +24540,7 @@ msgstr "Помилка: сервер з ідентифікатором „%s“ 
 msgid "Error: Two or more patrons need to be selected for merging"
 msgstr "Для об’єднання потрібно вибрати принаймні два записи."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:49
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:50
 #, c-format
 msgid "Error: no field value specified."
 msgstr ""
@@ -24590,16 +24633,16 @@ msgstr "Значення"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:95
 #, c-format
 msgid "Every"
 msgstr "Кожен"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:418
-#, fuzzy, c-format
+#, c-format
 msgid "Every: "
-msgstr "Кожен"
+msgstr "Кожен:"
 
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:64
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:67
@@ -25315,7 +25358,7 @@ msgid "Field 3"
 msgstr "Поле № 3"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:740
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:739
 #, fuzzy
 msgid "Field autofilled by plugin"
 msgstr "Перегляд усіх додатків"
@@ -25784,7 +25827,6 @@ msgstr "Ім’я та по батькові"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:374
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:619
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:33
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:119
 #, c-format
 msgid "First name: "
 msgstr "Ім’я та по батькові: "
@@ -26021,9 +26063,9 @@ msgid "Formatting"
 msgstr "Форматування"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:453
-#, fuzzy, c-format
+#, c-format
 msgid "Formatting:"
-msgstr "Форматування"
+msgstr "Форматування:"
 
 #: intranet-tmpl/prog/en/modules/about.tt:475
 #, c-format
@@ -26276,9 +26318,9 @@ msgid "From titles with highest hold ratios"
 msgstr "із заголовків з найбільшими співвідношеннями резервування"
 
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:14
-#, fuzzy, c-format
+#, c-format
 msgid "From vendor: "
-msgstr "Постачальник: "
+msgstr "Від постачальника: "
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:70
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:235
@@ -26740,12 +26782,12 @@ msgid "Group"
 msgstr "Група"
 
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:193
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Group attributes types with a block title (based on authorized values "
 "category 'PA_CLASS')"
 msgstr ""
-"Групувати типи атрибутів у блоці з назвою (на основі категорії авторитетних "
+"Групувати типи атрибутів у блоці з назвою (на основі категорії допустимих "
 "значень „PA_CLASS“)"
 
 #. INPUT type=text name=group
@@ -26850,7 +26892,7 @@ msgstr "Бібліотека округу Халлан, Швеція"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:212
 #, c-format
 msgid "Handbooks"
-msgstr "довідники"
+msgstr "посібники"
 
 # --Дата повернення (бо=return date)
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:88
@@ -27370,10 +27412,11 @@ msgstr "Історія видач для „%s“"
 
 #. %1$s:  ReservesMaxPickUpDelay | html 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:82
-#, fuzzy, c-format
+#, c-format
 msgid "Holds listed here have been awaiting pickup for more than %s days."
 msgstr ""
-"Резервування, що очікують на отримання у Вашій бібліотеці станом на: %s"
+"Резервування, що очікують на отримання у Вашій бібліотеці станом на: %s день "
+"(-і/-ів)."
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:129
@@ -27540,7 +27583,7 @@ msgstr "Ряд святкових днів повторюється щорічн
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:17
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:60
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:18
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:25
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
 #: intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:19
@@ -27591,7 +27634,7 @@ msgstr "Ряд святкових днів повторюється щорічн
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:16
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:21
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:15
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:21
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:23
@@ -28368,7 +28411,7 @@ msgstr ""
 "зможуть змінити цей шаблон товариства."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "If the field is a control field, the subfield should be empty"
 msgstr ""
 
@@ -28425,14 +28468,14 @@ msgstr ""
 "будуть показані негайно."
 
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:157
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you change an authorized value code, existing records using it won't be "
 "updated. Changes to value descriptions will show immediately. "
 msgstr ""
-"При зміні коду авторитетного значення, існуючі записи, в яких воно "
-"використовуються, не будуть оновлені. Зміни у описах авторитетних значень "
-"будуть показані негайно."
+"При зміні коду допустимого значення, існуючі записи, в яких воно "
+"використовуються, не будуть оновлені. Зміни у описах допустимих значень "
+"будуть показані негайно. "
 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:373
 #, c-format
@@ -29053,14 +29096,14 @@ msgid "Inner counter "
 msgstr "Внутрішній лічильник"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:361
-#, fuzzy, c-format
+#, c-format
 msgid "Inner counter:"
-msgstr "Внутрішній лічильник"
+msgstr "Внутрішній лічильник:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:436
-#, fuzzy, c-format
+#, c-format
 msgid "Inner counter: "
-msgstr "Внутрішній лічильник"
+msgstr "Внутрішній лічильник:"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:390
 #, c-format
@@ -30305,9 +30348,9 @@ msgid "Jenkins maintainer:"
 msgstr "Супроводжуючий Jenkins:"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:131
-#, fuzzy, c-format
+#, c-format
 msgid "Jenkins maintainers:"
-msgstr "Супроводжуючий Jenkins:"
+msgstr "Супроводжуючі Jenkins:"
 
 #: intranet-tmpl/prog/en/modules/about.tt:537
 #, c-format
@@ -30959,9 +31002,10 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:6
-#, fuzzy, c-format
+#, c-format
 msgid "Koha &rsaquo; Administration &rsaquo; Advanced editor shortcuts"
-msgstr "Коха &rsaquo; Керування &rsaquo; Звукові оповіщення"
+msgstr ""
+"Коха &rsaquo; Керування &rsaquo; Клавіатурні скорочення розширеного редактора"
 
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:6
 #, c-format
@@ -32690,7 +32734,7 @@ msgstr ""
 "Коха &rsaquo; Інструменти &rsaquo; Створювач етикеток &rsaquo; Шаблони "
 "&rsaquo; %s Редагування (%s)%s Новий %s"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:5
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:6
 #, fuzzy, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; MARC modification templates"
 msgstr "Коха &rsaquo; Інструменти &rsaquo; Пакетна зміна примірників"
@@ -33531,11 +33575,6 @@ msgstr "Встановити дату інвентаризації на: "
 msgid "Last location"
 msgstr "Останнє розташування"
 
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:123
-#, c-format
-msgid "Last name: "
-msgstr "Прізвище: "
-
 #: intranet-tmpl/prog/en/includes/last-borrower.inc:2
 #, c-format
 msgid "Last patron"
@@ -33664,7 +33703,7 @@ msgstr "Leaflet"
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:43
 #, c-format
 msgid "Learn more about Mana KB on the "
-msgstr ""
+msgstr "Дізнайтеся більше про базу знань Mana на "
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:104
 #, c-format
@@ -33708,7 +33747,7 @@ msgstr "юридичні статті"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:226
 #, c-format
 msgid "Legal cases and case notes"
-msgstr "судові справи та документи по справі"
+msgstr "судові справи та записи справ"
 
 #: intranet-tmpl/prog/en/modules/admin/item_circulation_alerts.tt:68
 #, c-format
@@ -33852,9 +33891,9 @@ msgstr "Бібліотека № 2"
 #. %1$s:  branchcode | html 
 #. %2$s:  Branches.GetName( branchcode ) | html 
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:22
-#, fuzzy, c-format
+#, c-format
 msgid "Library %s - %s Checkin and transfer policy"
-msgstr "Бібліотека %s - %s — правила бібліотечних повернень та переміщень"
+msgstr "Бібліотека (%s) „%s“ — правила повернень та переміщень"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:101
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:27
@@ -34339,9 +34378,8 @@ msgstr "Завантаження даних…"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:6
-#, fuzzy
 msgid "Loading more results…"
-msgstr "Результати пошуку"
+msgstr "Завантаження додаткових результатів…"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1089
 #, c-format
@@ -34843,13 +34881,13 @@ msgid "MARC frameworks: %s"
 msgstr "МАРК-структури: %s"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:28
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "MARC modification templates"
 msgstr "Шаблони модифікації MARC-записів"
 
 #. %1$s:  template_id | html 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:57
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:58
 #, fuzzy, c-format
 msgid "MARC modification templates %s"
 msgstr "Шаблони модифікації MARC-записів %s"
@@ -35287,9 +35325,9 @@ msgid "Manage audio alerts "
 msgstr "Керування звуковими сповіщеннями"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:140
-#, fuzzy, c-format
+#, c-format
 msgid "Manage authorized value categories and authorized values "
-msgstr "Керування категоріями авторитетних значень та авторитетними значеннями"
+msgstr "Керування категоріями допустимих значень та допустимими значеннями"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:345
 #, fuzzy, c-format
@@ -35364,7 +35402,7 @@ msgstr "Керування спеціальними полями для пошу
 msgid "Manage extended patron attributes "
 msgstr "Керування розширеними атрибутами відвідувачів"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:24
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:26
 #, c-format
 msgid "Manage frequencies "
 msgstr "Керування періодичностями"
@@ -35469,7 +35507,7 @@ msgstr "Керування списками відвідувачів."
 msgid "Manage marc modification templates "
 msgstr "Керування шаблонами перебудови MARC-записів"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:29
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:31
 #, c-format
 msgid "Manage numbering patterns "
 msgstr "Керування схемами нумерації "
@@ -36421,9 +36459,9 @@ msgid "Modify patrons in batch"
 msgstr "Редагування групи відвідувачів"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:463
-#, fuzzy, c-format
+#, c-format
 msgid "Modify pattern"
-msgstr "Змінити друкарку"
+msgstr "Редагувати схему"
 
 #. %1$s:  label | html 
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:38
@@ -36546,9 +36584,9 @@ msgstr "Місяць: "
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:232
-#, fuzzy, c-format
+#, c-format
 msgid "More"
-msgstr "Більше "
+msgstr "Більше"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:49
 #: intranet-tmpl/prog/en/includes/header.inc:31
@@ -36564,7 +36602,7 @@ msgstr "Більше &rsaquo; Встановити привілеї"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:46
 #, c-format
 msgid "More details"
-msgstr "Подробиці"
+msgstr "Детальніше"
 
 #: intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:32
 #, c-format
@@ -36601,7 +36639,7 @@ msgstr "Увага: "
 msgid "Most-circulated items"
 msgstr "Найбільш видавані одиниці"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:189
 #, fuzzy, c-format
 msgid "Move"
 msgstr "Перемістити вище"
@@ -36615,25 +36653,25 @@ msgid "Move Up"
 msgstr "Перемістити вище"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:113
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:114
 #, fuzzy
 msgid "Move action down"
 msgstr "Перемістити резервування нижче"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:109
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:110
 #, fuzzy
 msgid "Move action to bottom"
 msgstr "Перемістити резервування на самий низ"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:105
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:106
 #, fuzzy
 msgid "Move action to top"
 msgstr "Перемістити резервування на самий верх"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
 #, fuzzy
 msgid "Move action up"
 msgstr "кадри з природнім рухом; зображення реальності"
@@ -36949,7 +36987,7 @@ msgstr "Назва:"
 #: intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:304
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:212
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:107
@@ -37116,7 +37154,7 @@ msgstr "Бібліотека Міністерства освіти Нової З
 msgid "New account "
 msgstr "Новий обліковий запис"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:43
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:44
 #, fuzzy, c-format
 msgid "New action"
 msgstr "Новий відвідувач "
@@ -37475,13 +37513,17 @@ msgstr "Новий набір"
 msgid "New splitting rule"
 msgstr "Нове правило розщеплення"
 
-#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:7
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:9
-#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:96
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:98
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:17
 #, c-format
 msgid "New subscription"
+msgstr "Нова підписка"
+
+#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:7
+#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:96
+#, fuzzy, c-format
+msgid "New subscription for this serial"
 msgstr "Нова підписка"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:172
@@ -37490,7 +37532,7 @@ msgstr "Нова підписка"
 msgid "New tag"
 msgstr "Нова ознака"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:41
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:42
 #, fuzzy, c-format
 msgid "New template"
 msgstr "Редагуємо шаблон наклейки"
@@ -37726,9 +37768,10 @@ msgstr ""
 
 #. %1$s:  IF ( CAN_user_parameters ) 
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid "No DEPARTMENT authorized values found! %s Please "
-msgstr "Нове авторитетне значення для „%s“"
+msgstr ""
+"Не знайдено допустимих значень для категорії „DEPARTMENT“! %s Будь ласка "
 
 #. For the first occurrence,
 #. %1$s:  booksellername | html 
@@ -37778,6 +37821,8 @@ msgid ""
 "No TERM authorised values found! Please create one or more authorised values "
 "with the category TERM."
 msgstr ""
+"Не знайдено допустимих значень для категорії „TERM“! Будь ласка, створіть "
+"одне або кілька допустимих значень у категорії „TERM“."
 
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:269
 #, fuzzy, c-format
@@ -38027,7 +38072,7 @@ msgstr "Лише одиниці доступні зараз "
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
 msgid "No images have been uploaded for this bibliographic record yet."
-msgstr "Ще немає зображень, вивантажених для цього бібліографічного запису. "
+msgstr "На цей бібліографічний запис ще не завантажено жодного зображення."
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step1.tt:20
 #, c-format
@@ -38499,7 +38544,6 @@ msgstr "Ні, я не підтверджую"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:232
-#, fuzzy
 msgid "No, do not Delete"
 msgstr "Ні, не вилучати"
 
@@ -38532,14 +38576,14 @@ msgid "No, do not delete"
 msgstr "Ні, не вилучати"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:141
-#, fuzzy, c-format
+#, c-format
 msgid "No, do not reset mappings"
-msgstr "Ні, не вилучати"
+msgstr "Ні, не скидати зіставлення"
 
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "No, don't cancel (N)"
-msgstr "Ні, не вилучати"
+msgstr "Ні, не скасовувати (N)"
 
 # оформляти
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:297
@@ -38555,14 +38599,14 @@ msgid "No, don't close (N)"
 msgstr "Ні, не закривати (N)"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:57
-#, fuzzy, c-format
+#, c-format
 msgid "No, don't delete (N)"
-msgstr "Ні, не вилучати"
+msgstr "Ні, не вилучати (N)"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:295
-#, fuzzy, c-format
+#, c-format
 msgid "No, don't renew (N)"
-msgstr "Ні, не вилучати"
+msgstr "Ні, не продовжувати (N)"
 
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:67
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:69
@@ -39035,13 +39079,13 @@ msgid "Note: For temporary uploads do not select a category."
 msgstr "Примітка: для тимчасових вивантажень не вибирайте категорію."
 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Note: No upload categories are defined. Add values to the UPLOAD authorized "
 "value category otherwise all uploads will be marked as temporary."
 msgstr ""
-"Примітка: категорії вивантаження не визначено. Додайте авторитетне значення "
-"в категорію UPLOAD, інакше усі вивантаження будуть позначені як тимчасові."
+"Примітка: категорії вивантаження не визначено. Додайте допустиме значення в "
+"категорію „UPLOAD“, інакше усі вивантаження будуть позначені як тимчасові."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1146
@@ -39463,7 +39507,7 @@ msgstr "Кількість записів, що не були вилучені �
 msgid "Number of records updated"
 msgstr "Кількість поновленних записів"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:57
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #, c-format
 msgid "Number of renewals"
 msgstr "Кількість продовжень"
@@ -39907,7 +39951,7 @@ msgstr "Щодо заголовку  "
 msgid "On-site checkout"
 msgstr "Не видано."
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:44
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:45
 #, c-format
 msgid "On-site checkouts"
 msgstr "Видач по місцю"
@@ -39925,12 +39969,12 @@ msgstr "Від: "
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:94
 #, c-format
 msgid ""
-"Once you have enabled Mana it must be configured. Type your first name, last "
-"name, and email address and submit. This will send a account creation "
-"request to Mana KB that will respond back with a Mana KB token (an encrypted "
-"ID that uniquely identifies your Koha installation). This token will "
-"automatically be saved in your database. After that you will receive an "
-"email. Read it and follow the instructions."
+"Once you have enabled Mana it must be configured. Type your name, and email "
+"address and submit. This will send an account creation request to Mana KB "
+"that will respond back with a Mana KB token (an encrypted ID that uniquely "
+"identifies your Koha installation). This token will automatically be saved "
+"in your database. After that you will receive an email. Read it and follow "
+"the instructions."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:52
@@ -39957,7 +40001,7 @@ msgstr "Один або декілька вибраних примірників
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/js_includes.inc:37
 msgid "One or more selected items cannot be reserved."
-msgstr "Одна чи декілька вибраних одиниць не можуть бути зарезервовані."
+msgstr "Один або кілька вибраних примірників не можна зарезервувати."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/select2.inc:6
@@ -40130,10 +40174,10 @@ msgid "Options"
 msgstr "Параметри"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:140
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Options are defined as the authorized values for the ITEMTYPECAT category."
-msgstr "(варіанти визначені як авторизовані значення категорії „ITEMTYPECAT“) "
+msgstr "Варіанти визначені як допустимі значення категорії „ITEMTYPECAT“."
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:110
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:114
@@ -40149,7 +40193,7 @@ msgstr "Або вкажіть штрих-коди по одному"
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:56
 #, c-format
 msgid "Or list cardnumbers one by one"
-msgstr ""
+msgstr "Або введіть номери читацьких квитків один за одним"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:41
 #, c-format
@@ -40310,15 +40354,15 @@ msgid "Ordered amount:"
 msgstr "Дата замовлення"
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:81
-#, fuzzy, c-format
+#, c-format
 msgid "Ordered by the library"
-msgstr "Поточна бібліотека"
+msgstr "Замовлено бібліотекою"
 
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:232
 #: intranet-tmpl/prog/en/modules/acqui/showorder.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid "Ordered by: "
-msgstr "Створено ким: "
+msgstr "Замовник:"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:299
@@ -41591,7 +41635,7 @@ msgstr "Список відвідувачів з імпортованими ві
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:120
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:265
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:267
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:22
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:23
@@ -41999,9 +42043,9 @@ msgid "Permanently delete checkout history older than"
 msgstr "Анонімізувати історію видач, старішу ніж"
 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:152
-#, fuzzy, c-format
+#, c-format
 msgid "Permanently delete these patrons"
-msgstr "Постійно видаліть ці відвідувачів"
+msgstr "Остаточно вилучити цих відвідувачів"
 
 #. %1$s:  library.branchphone | html 
 #. %2$s:  END 
@@ -43099,7 +43143,7 @@ msgstr "Текст, розділений дієзами „#“ (*.csv)"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:173
 #, c-format
 msgid "Pre-adolescent"
-msgstr "для дітей середнього шкільного віку (9-13 років)"
+msgstr "середній шкільний"
 
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:86
 #, c-format
@@ -43143,7 +43187,7 @@ msgstr "Налаштування та параметри"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:171
 #, c-format
 msgid "Preschool"
-msgstr "для дітей ясельного віку від 0 до 5 років"
+msgstr "дошкільний вік"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:160
 #, c-format
@@ -43294,7 +43338,7 @@ msgstr "Ціна: "
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:172
 #, c-format
 msgid "Primary"
-msgstr "для дітей молодшого віку від 6 до 8 років"
+msgstr "молодший шкільний"
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:74
 #, c-format
@@ -44192,7 +44236,7 @@ msgstr ""
 "Рейчел Гамільтон-Вільямс {Rachel Hamilton-Williams} (Каітіакі {Kaitiaki, на "
 "маорі — піклувальник}, з 2004 по теперішній час)"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:53
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:160
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:62
@@ -44483,9 +44527,9 @@ msgid "Red cells signify no transfer allowed."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:273
-#, fuzzy, c-format
+#, c-format
 msgid "Redefine shortcuts"
-msgstr "Уточнення результатів"
+msgstr "Перевизначення клавіатурних скорочень"
 
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:169
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:365
@@ -44523,8 +44567,8 @@ msgstr ""
 msgid "Refund lost item fee"
 msgstr "Повернутися до пакетного вилучення примірників"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:231
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 #, c-format
 msgid "RegEx"
 msgstr ""
@@ -44615,9 +44659,9 @@ msgid "Relatives' checkouts"
 msgstr "Видачі родичів"
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:70
-#, fuzzy, c-format
+#, c-format
 msgid "Release maintainer:"
-msgstr "Координатори випуску: "
+msgstr "Координатор випуску: "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:172
 #, c-format
@@ -44626,15 +44670,15 @@ msgstr "Координатори випуску: "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:60
 #: intranet-tmpl/prog/en/includes/about-team.inc:166
-#, fuzzy, c-format
+#, c-format
 msgid "Release manager assistant:"
 msgstr "Помічник відповідального за випуск: "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:52
 #: intranet-tmpl/prog/en/includes/about-team.inc:158
-#, fuzzy, c-format
+#, c-format
 msgid "Release manager assistants:"
-msgstr "Помічник відповідального за випуск: "
+msgstr "Помічники відповідального за випуск: "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:47
 #: intranet-tmpl/prog/en/includes/about-team.inc:153
@@ -45499,9 +45543,10 @@ msgstr "Модульна система Require.js JS"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:203
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:278
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:283
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:493
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:204
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:761
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:405
@@ -45870,7 +45915,7 @@ msgstr "Відновити усі призупинені резервуванн�
 msgid "Retail price: "
 msgstr "Роздрібна ціна: "
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:61
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:62
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:51
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:47
 #: intranet-tmpl/prog/en/modules/members/pay.tt:53
@@ -46568,9 +46613,9 @@ msgid "Save record"
 msgstr "Зберегти запис"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:291
-#, fuzzy, c-format
+#, c-format
 msgid "Save record (cannot be remapped)"
-msgstr "Не вдалося прочитати файл."
+msgstr "Зберегти запис (не можна перевизначити)"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
@@ -47075,7 +47120,7 @@ msgstr "Пошук сповіщень"
 msgid "Search on"
 msgstr "Пошук за"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:34
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
 #, c-format
 msgid "Search on Mana"
 msgstr "Пошук по Mana"
@@ -47933,7 +47978,7 @@ msgid "Send to"
 msgstr "Вислати список"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:133
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:130
 msgid "Send to Mana KB"
 msgstr "Надіслати до бази знань Mana"
 
@@ -48002,7 +48047,7 @@ msgstr "Вересень"
 msgid "Serial"
 msgstr "Серіальне видання"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:3
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:5
 #, c-format
 msgid "Serial collection"
 msgstr "Зібрання серіального видання"
@@ -49309,7 +49354,7 @@ msgstr ""
 msgid "Staff client"
 msgstr "Клієнт для бібліотекарів"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:28
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:29
 #, c-format
 msgid "Staff members are not allowed to access patron's checkout history"
 msgstr "Співробітники бібліотеки не мають доступу до історії видач відвідувача"
@@ -49925,7 +49970,6 @@ msgid "Subfield: %s"
 msgstr "Підполе: %s"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:215
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
 #, c-format
 msgid "Subfields"
 msgstr "Підполя"
@@ -50084,7 +50128,7 @@ msgstr "Теми: "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:161
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:216
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:208
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:324
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:253
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:498
@@ -50945,8 +50989,8 @@ msgstr "Ознаку вилучено"
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:379
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:168
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:734
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:742
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:733
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:741
 #, c-format
 msgid "Tag editor"
 msgstr "Редактор ознаки"
@@ -51065,7 +51109,7 @@ msgstr "Податкова ставка: "
 msgid "Technical reports"
 msgstr "технічні звіти"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:62
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:127
 #, c-format
 msgid "Template"
@@ -51557,24 +51601,24 @@ msgid ""
 msgstr "Допис у вказівках „поле Коха“ показує зв’язок підполя з полем Коха."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The conditional comparison operator should be filled."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional field should be filled."
 msgstr "Здається, завантажений файл порожній."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional regular expression should be filled."
 msgstr "Здається, завантажений файл порожній."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional value should be filled."
 msgstr "Здається, завантажений файл порожній."
@@ -51631,7 +51675,7 @@ msgid "The database returned an error while saving %s %s. "
 msgstr "База даних повернула помилку при збереженні „%s“ %s. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The destination should be filled."
 msgstr ""
 
@@ -52289,13 +52333,13 @@ msgid "The secondary email is invalid."
 msgstr "Додаткова електронна пошта недійсна."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The source field should be filled."
 msgstr "Здається, завантажений файл порожній."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The source subfield should be filled for update."
 msgstr ""
 
@@ -52466,12 +52510,12 @@ msgstr "Наразі не визначено жодного зібрання."
 msgid "There are no contracts with this vendor. %s "
 msgstr "З цим постачальником немає жодного договору. %s "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:176
 #, fuzzy, c-format
 msgid "There are no defined actions for this template."
 msgstr "Немає зображень для цього запису."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:289
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:270
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr ""
@@ -52793,7 +52837,7 @@ msgstr "Ці елементи мають Співвідношення резер
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:218
 #, c-format
 msgid "Theses"
-msgstr "тези"
+msgstr "дисертації"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:165
@@ -52871,7 +52915,6 @@ msgstr ""
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:253
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:355
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:721
 msgid "This field is mandatory"
 msgstr "Це поле є обов’язковим"
 
@@ -52936,7 +52979,7 @@ msgstr ""
 msgid "This is a serial subscription"
 msgstr "Це підписка серіального видання"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:30
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:31
 #, c-format
 msgid ""
 "This is the anonymous patron, so no circulation history is displayed. To get "
@@ -52959,6 +53002,8 @@ msgid ""
 "ongoing maintenance of your currently installed Koha version. They will be "
 "in these roles up until "
 msgstr ""
+"Це команда, яка відповідає за наступний випуск Koha і поточне обслуговування "
+"Вашої поточної версії Koha. Вони будуть в цих ролях аж до "
 
 #: intranet-tmpl/prog/en/includes/about-team.inc:45
 #, c-format
@@ -52966,6 +53011,8 @@ msgid ""
 "This is the team who were responsible for the initial release of your "
 "currently installed Koha version."
 msgstr ""
+"Це команда, яка відповідальна за початковий випуск Вашої поточної версії "
+"Koha."
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( itemhomebranch ) | html 
@@ -53147,7 +53194,7 @@ msgstr ""
 msgid "This patron does not exist. "
 msgstr "Цей відвідувач не існує. "
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:34
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:35
 #, c-format
 msgid "This patron has no circulation history."
 msgstr "У цього відвідувача немає історії обігу."
@@ -53185,7 +53232,7 @@ msgstr ""
 "Цей відвідувач вимагає анонімізувати свою історію обігу під час повернення, "
 "однак  системний параметр AnonymousPatron пустий чи неправильний."
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:32
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:33
 #, c-format
 msgid ""
 "This patron has set the privacy rules to never keeping a circulation history."
@@ -53377,7 +53424,7 @@ msgid "This will delete %sall the%sthe selected%s items."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:150
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:147
 msgid "This will delete the Mana KB token from Koha. Do you want to continue?"
 msgstr ""
 
@@ -53574,7 +53621,7 @@ msgstr "Редактор TinyMCE WYSIWYG вер. 3.5.8"
 #: intranet-tmpl/prog/en/modules/serials/result.tt:15
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:54
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:35
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:43
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:22
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:728
@@ -54107,7 +54154,7 @@ msgstr "Додатки для інструментів"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:17
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:19
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:27
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:14
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:14
@@ -54503,9 +54550,9 @@ msgid "Transferred from basket: "
 msgstr "Переміщені одиниці"
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:175
-#, fuzzy, c-format
+#, c-format
 msgid "Transferred items"
-msgstr "Переміщені одиниці"
+msgstr "Переміщені примірники"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:628
 #, fuzzy, c-format
@@ -54644,7 +54691,7 @@ msgstr "Бібліотечна допомога, Філіппіни"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:278
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:51
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: intranet-tmpl/prog/en/modules/members/files.tt:39
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
@@ -55157,7 +55204,7 @@ msgid "Update SQL"
 msgstr "Поновити SQL"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "Update action"
 msgstr "Інша дія"
@@ -55184,7 +55231,7 @@ msgstr "Перевести дитину у повнолітнього відві
 msgid "Update errors :"
 msgstr "Помилки при оновленні: "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
 #, fuzzy, c-format
 msgid "Update existing or add new"
 msgstr "на основі існуючого бібліотечного запису:"
@@ -55311,15 +55358,14 @@ msgstr "Вивантаження зображень відвідувачів п�
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:81
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
-#, fuzzy, c-format
+#, c-format
 msgid "Upload an image file: "
-msgstr "Вивантаження будь-якого файлу"
+msgstr "Вивантажте файл зображення: "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
-#, fuzzy
 msgid "Upload an image file: %sUpload%s"
-msgstr "Вивантаження будь-якого типу файлу, керування завантаженнями"
+msgstr "Вивантажте файл зображення: %s Вивантажити %s"
 
 #: intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:26
 #, fuzzy, c-format
@@ -56329,6 +56375,11 @@ msgstr "Переглянути обмеження"
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:27
 msgid "View spine label"
 msgstr "Перегляд наклейки на корінці"
+
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#, fuzzy, c-format
+msgid "View subfields"
+msgstr "Редагувати підполя"
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:35
 #, c-format
@@ -57676,7 +57727,7 @@ msgstr ""
 "Ви вже надіслали штрих-код, будь ласка, зачекайте, поки процес книговидачі "
 "не буде оброблений…"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:202
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:183
 #, c-format
 msgid ""
 "You have chosen a condition on the same field as the original field. If your "
@@ -58094,6 +58145,11 @@ msgstr "Ваші списки"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:449
 msgid "Your lists:"
 msgstr "Ваші списки: "
+
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:119
+#, fuzzy, c-format
+msgid "Your name: "
+msgstr "Прізвище: "
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:40
 #, fuzzy, c-format
@@ -59243,12 +59299,12 @@ msgstr "Пошук у каталозі"
 msgid "doXulting"
 msgstr "Маршрутизація"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:255
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:236
 #, fuzzy, c-format
 msgid "doesn't exist"
 msgstr "Цей відвідувач не існує."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:238
 #, fuzzy, c-format
 msgid "doesn't match"
 msgstr " повинні відповідати "
@@ -59318,7 +59374,7 @@ msgstr "Напр.: barcode, itemcallnumber, title, \"675a 942v\", 215a"
 msgid "exchange"
 msgstr "обмін"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:254
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
 #, fuzzy, c-format
 msgid "exists"
 msgstr " існує."
@@ -59358,12 +59414,12 @@ msgstr "справедлива торгівля"
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:249
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:230
 #, fuzzy, c-format
 msgid "field "
 msgstr " підполе "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:199
 #, fuzzy, c-format
 msgid "field(s) "
 msgstr "Підполя: "
@@ -59534,7 +59590,7 @@ msgstr "домашній підрозділ НЕ спроектований"
 msgid "homebranch defined"
 msgstr "джерельну бібліотеку/підрозділ („homebranch“) означено"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:245
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
 #, c-format
 msgid "if"
 msgstr ""
@@ -59555,7 +59611,7 @@ msgid "if you wish to enable this feature."
 msgstr " якщо бажаєте увімкнути цю можливість."
 
 #. INPUT type=text name=to_regex_modifiers
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 msgid "ig"
 msgstr ""
 
@@ -59923,8 +59979,8 @@ msgid "last on: %s"
 msgstr "востаннє на: %s"
 
 #. INPUT type=text name=from_subfield
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
 msgid "let blank for the entire field"
 msgstr ""
 
@@ -59973,7 +60029,7 @@ msgstr "Заблоковано!"
 msgid "lost"
 msgstr "втрачено квиток"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
 #, fuzzy, c-format
 msgid "m/"
 msgstr "/"
@@ -59988,7 +60044,7 @@ msgstr "збільшувальне скло"
 msgid "marc"
 msgstr "Марк"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:256
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:237
 #, fuzzy, c-format
 msgid "matches"
 msgstr "Партії"
@@ -60376,13 +60432,13 @@ msgid "records in various format. Choose one): "
 msgstr " записи у різних форматах. Виберіть один): "
 
 #. INPUT type=text name=to_regex_search
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 #, fuzzy
 msgid "regex pattern"
 msgstr "Скинути схему"
 
 #. INPUT type=text name=to_regex_replace
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 #, fuzzy
 msgid "regex replacement"
 msgstr "страхова копія"
@@ -60436,7 +60492,7 @@ msgstr "працює"
 msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "відбір за допомогою списку укладачів опису"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:234
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
 #, fuzzy, c-format
 msgid "s/"
 msgstr "/"
@@ -60820,7 +60876,7 @@ msgstr " для встановлення резервування"
 msgid "to create"
 msgstr "або ж створити"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
 #, fuzzy, c-format
 msgid "to field "
 msgstr "Поле в Коха"
@@ -60846,7 +60902,7 @@ msgstr "не визначено"
 msgid "unknown"
 msgstr "невідомо"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
 #, c-format
 msgid "unless"
 msgstr ""
@@ -61018,7 +61074,7 @@ msgstr ""
 msgid "with this reason:"
 msgstr "з таким поясненням: "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:222
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:203
 #, fuzzy, c-format
 msgid "with value "
 msgstr "Авторитетне джерело"
@@ -61113,7 +61169,7 @@ msgstr "| Стан: %s "
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:361
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:165
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:297
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:445
