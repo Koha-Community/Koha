@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-16 19:41-0300\n"
+"POT-Creation-Date: 2019-07-19 08:40-0300\n"
 "PO-Revision-Date: 2019-05-28 11:02+0000\n"
 "Last-Translator: UlrikaFroberg <Ulrika.froberg@ub.gu.se>\n"
 "Language-Team: \n"
@@ -905,7 +905,7 @@ msgstr "%s %s %s %s Inget %s "
 #. %19$s:  END 
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:145
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:146
 #, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
@@ -976,6 +976,20 @@ msgid ""
 msgstr ""
 "%s %s %s %sIngen %sRadera mellanslag %sVersaler %sGemener %sTidigare "
 "standard %s%s %s %s %s %s %s %s "
+
+#. %1$s:  FOREACH location IN [ '', 'OpacNavRight' ] 
+#. %2$s:  IF ( location == '' ) 
+#. %3$s:  SET location_lang = lang_lis.language 
+#. %4$s:  location = BLOCK 
+#. %5$s:  END 
+#. %6$s:  ELSE 
+#. %7$s:  SET location_lang = location _ "_" _ lang_lis.language 
+#. %8$s:  END 
+#. %9$s:  IF ( location_lang == language ) 
+#: intranet-tmpl/prog/en/modules/tools/koha-news.tt:280
+#, fuzzy, c-format
+msgid "%s %s %s %sOPAC news%s %s %s %s %s "
+msgstr "%s %s %s %s %s %s %s TOTAL%s %s "
 
 #. %1$s:  IF ( resultsloo.author ) 
 #. %2$s:  resultsloo.author | html 
@@ -2814,7 +2828,7 @@ msgstr "%s %s till %s %s "
 #. %5$s:  ActionsLoo.to_subfield | html 
 #. %6$s:  END 
 #. %7$s:  IF ( ActionsLoo.to_regex_search ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:138
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:139
 #, c-format
 msgid "%s %s to %s%s$%s%s %s using RegEx s"
 msgstr "%s %s till %s%s$%s%s %s med reguljära uttryck (regex)"
@@ -4127,7 +4141,7 @@ msgstr ""
 #. %19$s:  ActionsLoo.from_subfield | html 
 #. %20$s:  END 
 #. %21$s:  IF ( ActionsLoo.field_value ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:120
 #, c-format
 msgid ""
 "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
@@ -8093,7 +8107,7 @@ msgstr "&rsaquo; %s %s Bekräfta %s %s Slutförd %s "
 #. %1$s:  template_name | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:28
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "&rsaquo; %s %s MARC modification templates %s "
 msgstr "&rsaquo; %s %s Mallar för MARC-modifiering %s "
@@ -8763,7 +8777,7 @@ msgid "&rsaquo; Circulation and fine rules"
 msgstr "&rsaquo; Regler för utlåning och böter"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #, c-format
 msgid "&rsaquo; Circulation history for %s"
 msgstr "&rsaquo; Lånehistorik för %s"
@@ -10443,7 +10457,7 @@ msgstr "-- Välj format --"
 msgid "-- Choose one -- "
 msgstr "-- Välj ett --"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:314
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:295
 #, c-format
 msgid "-- None --"
 msgstr "-- Ingen --"
@@ -10576,7 +10590,7 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:149
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:157
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:122
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:98
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:99
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:69
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:76
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:83
@@ -10601,7 +10615,7 @@ msgstr "0; url=/cgi-bin/koha/installer/onboarding.pl?step=3"
 msgid "1/2"
 msgstr "1/2"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:197
 #, c-format
 msgid "1st"
 msgstr "1st"
@@ -10695,7 +10709,7 @@ msgid "<< Delete"
 msgstr "<< Radera"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "A control field cannot be used with a regular field."
 msgstr "Ett kontrollfält kan inte användas med ett vanligt fält."
 
@@ -11143,7 +11157,7 @@ msgstr "Inköpsstatistik "
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:67
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:313
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:352
@@ -11185,7 +11199,7 @@ msgstr "Åtgärd om ingen post hittas: "
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:162
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:258
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:103
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:64
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:83
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:61
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
@@ -11268,7 +11282,7 @@ msgstr "Åtgärder"
 msgid "Actions "
 msgstr "Åtgärder"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:82
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:83
 #, c-format
 msgid "Actions for "
 msgstr "Åtgärder för"
@@ -11421,7 +11435,7 @@ msgstr "Lägg till ett meddelande för:"
 msgid "Add a new OAI set"
 msgstr "Lägg till en nu OAI-uppsättning"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:182
 #, c-format
 msgid "Add a new action"
 msgstr "Lägga till en ny åtgärd"
@@ -11475,7 +11489,7 @@ msgid "Add a substitution"
 msgstr "Lägg till en ersättning"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:281
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
 msgid "Add action"
 msgstr "Lägg till åtgärd"
 
@@ -11732,7 +11746,7 @@ msgstr "Lägg till flera exemplar"
 msgid "Add multiple items"
 msgstr "Lägg till flera exemplar"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:206
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:187
 #, c-format
 msgid "Add new"
 msgstr "Lägg till ny"
@@ -12483,8 +12497,8 @@ msgstr "Alingsås bibliotek, Sverige"
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:150
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:265
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:196
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:42
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:35
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:250
@@ -12492,7 +12506,7 @@ msgstr "Alingsås bibliotek, Sverige"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:379
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:25
 #: intranet-tmpl/prog/en/modules/serials/subscription-bib-search.tt:37
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:42
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:43
 #: intranet-tmpl/prog/en/modules/members/member.tt:235
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:40
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:51
@@ -13991,12 +14005,12 @@ msgid "Are you sure you wish to delete this request?"
 msgstr "Är du säker på att du vill radera denna förfrågan?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Are you sure you wish to delete this template action?"
 msgstr "Är du säker på att du vill ta bort denna mallåtgärd?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Are you sure you wish to delete this template?"
 msgstr "Är du säker på att du vill ta bort denna mall?"
 
@@ -14212,7 +14226,7 @@ msgstr "Authname"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:310
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:100
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:41
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:82
@@ -14785,7 +14799,7 @@ msgstr "Mar"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:205
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:31
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:49
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:771
@@ -15724,7 +15738,7 @@ msgid "Borrowernumber: %s"
 msgstr "Låntagarnummer: %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Both subfield values should be filled or empty."
 msgstr ""
 "Båda värdena för de underliggande fälten måste fyllas i eller vara tomma."
@@ -16188,7 +16202,7 @@ msgstr "Hyllsignatur (0-9 till A-Z)"
 msgid "Call no"
 msgstr "Hyllsig"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:311
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:44
 #, c-format
@@ -16476,8 +16490,8 @@ msgstr "Kan inte spara denna post eftersom följande fält inte är ifyllt:"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:314
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:152
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:289
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:281
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:221
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:223
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:104
@@ -17446,7 +17460,7 @@ msgid "Change messaging preferences to default for this category?"
 msgstr ""
 "Ändra inställningarna för meddelanden till standard för denna kategori?"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:89
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:87
 #, c-format
 msgid "Change order"
@@ -17607,7 +17621,7 @@ msgstr "Kontrollera om exemplar står i oordning: "
 msgid "Check boxes to duplicate the original values"
 msgstr "Markera rutorna för att kopiera ursprungliga värden"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:21
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:23
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:20
 #, c-format
 msgid "Check expiration"
@@ -17853,7 +17867,7 @@ msgstr "Återlämnat exemplar."
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:85
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:105
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:106
 #, c-format
 msgid "Checked out"
 msgstr "Utlånad"
@@ -17884,7 +17898,7 @@ msgstr "Utlånad %s gånger"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:39
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:60
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:732
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:156
@@ -17894,7 +17908,7 @@ msgid "Checked out from"
 msgstr "Utlånad från"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:731
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:880
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:155
@@ -18050,7 +18064,7 @@ msgstr "Utlåningsstatus:"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:147
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:43
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:44
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:32
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:34
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:142
@@ -18345,7 +18359,7 @@ msgid "Circulation (\""
 msgstr "Utlåning (\""
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:9
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:10
 #, c-format
 msgid "Circulation History for %s"
 msgstr "Utlåningshistorik för %s"
@@ -18368,7 +18382,7 @@ msgid "Circulation and fines rules"
 msgstr "Regler för utlån och avgifter"
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:102
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:25
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:26
 #, c-format
 msgid "Circulation history"
 msgstr "Utlåningshistorik"
@@ -18530,7 +18544,7 @@ msgstr "Reklamerad"
 msgid "Claimed date"
 msgstr "Reklamationsdatum"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:18
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:20
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:22
 #, c-format
 msgid "Claims"
@@ -18927,7 +18941,7 @@ msgstr "Klient-ID"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:765
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:766
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:69
@@ -18943,7 +18957,7 @@ msgstr "Klona dessa regler till:"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:765
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:766
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 msgid "Clone this subfield"
@@ -19987,13 +20001,13 @@ msgstr "Kopior:"
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:213
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:140
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:209
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:180
 #, c-format
 msgid "Copy"
 msgstr "Kopiera"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:210
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:191
 #, c-format
 msgid "Copy and replace"
 msgstr "Kopiera och ersätt"
@@ -20386,7 +20400,7 @@ msgstr "Skapa en ny post genom att importera den externa (duplicerade) posten."
 msgid "Create a new subscription "
 msgstr "Påbörja en ny prenumeration "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:298
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:279
 #, c-format
 msgid "Create a new template"
 msgstr "Skapa en ny mall"
@@ -20562,7 +20576,7 @@ msgstr "Skapa post"
 msgid "Create report from SQL"
 msgstr "Skapa rapport från SQL"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:9
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:11
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:71
 #, c-format
 msgid "Create routing list"
@@ -21053,7 +21067,7 @@ msgstr "Databas: "
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:166
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:161
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:46
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:43
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:383
@@ -21123,7 +21137,7 @@ msgid "Date deleted (item)"
 msgstr "Raderingsdatum (exemplar)"
 
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:24
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:60
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:61
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:44
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:72
@@ -21770,9 +21784,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:272
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:307
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:149
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:74
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:169
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:186
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:63
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:98
@@ -21784,7 +21798,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:158
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:97
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:768
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:769
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:71
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
@@ -21846,7 +21860,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:245
@@ -22211,7 +22225,7 @@ msgstr "Radera denna sparade rapport"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:768
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:769
 msgid "Delete this subfield"
 msgstr "Radera detta underliggande fält"
 
@@ -22388,7 +22402,7 @@ msgstr "Avd."
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:317
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:253
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:65
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:93
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:65
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:131
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:268
@@ -22469,7 +22483,7 @@ msgstr "Avgiftsmotivering"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:83
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:151
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:145
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:277
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
 #: intranet-tmpl/prog/en/modules/members/files.tt:72
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:56
@@ -23204,7 +23218,7 @@ msgid "Due on %s"
 msgstr "Återlämningsdatum %s"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:25
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:283
@@ -23217,7 +23231,7 @@ msgstr "Duplicera"
 msgid "Duplicate "
 msgstr "Duplicera "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:312
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:293
 #, c-format
 msgid "Duplicate a template:"
 msgstr "Dubblera en mall:"
@@ -23438,7 +23452,7 @@ msgstr "Tidigaste reservationsdatum"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:169
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:271
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:146
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:185
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:406
@@ -23486,7 +23500,6 @@ msgstr "Tidigaste reservationsdatum"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:95
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:178
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:244
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:109
@@ -23562,11 +23575,11 @@ msgid "Edit SQL report"
 msgstr "Redigera SQL-rapport"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Edit action %s"
 msgstr "Redigera åtgärd %s"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
 #, c-format
 msgid "Edit actions"
 msgstr "Redigera åtgärd"
@@ -23795,7 +23808,7 @@ msgstr "Redigera begäran "
 msgid "Edit rota"
 msgstr "Redigera schema"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:7
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:9
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:69
 #, c-format
 msgid "Edit routing list"
@@ -23840,6 +23853,8 @@ msgstr "Redigera periodika"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:305
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#, c-format
 msgid "Edit subfields"
 msgstr "Redigera underliggande fält"
 
@@ -23847,6 +23862,11 @@ msgstr "Redigera underliggande fält"
 #, c-format
 msgid "Edit subscription"
 msgstr "Redigera prenumeration"
+
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
+#, fuzzy, c-format
+msgid "Edit tag"
+msgstr "Redigera schema"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:57
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:111
@@ -23969,7 +23989,7 @@ msgstr "E-post:"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:582
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:17
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:68
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:127
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:124
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:141
 #, c-format
 msgid "Email: "
@@ -24194,6 +24214,11 @@ msgstr "Skriv en ny kommentar (max 35 tecken)"
 #, c-format
 msgid "Enter a new purchase suggestion"
 msgstr "Ange ett nytt inköpsförslag"
+
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:121
+#, fuzzy, c-format
+msgid "Enter a personal or organization name."
+msgstr "Ange låntagarens kortnummer eller en del av namnet:"
 
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:289
 #, c-format
@@ -24545,7 +24570,7 @@ msgstr "Fel: Server med id %s hittas inte"
 msgid "Error: Two or more patrons need to be selected for merging"
 msgstr "Fel: två eller flera låntagare måste väljas för sammanslagning"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:49
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:50
 #, c-format
 msgid "Error: no field value specified."
 msgstr "Fel: inget fältvärde angivet."
@@ -24637,7 +24662,7 @@ msgstr "Kväll "
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:95
 #, c-format
 msgid "Every"
@@ -25353,7 +25378,7 @@ msgid "Field 3"
 msgstr "Fält 3"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:740
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:739
 msgid "Field autofilled by plugin"
 msgstr "Fältet autofyllt av en plugin"
 
@@ -25823,7 +25848,6 @@ msgstr "Förnamn"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:374
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:619
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:33
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:119
 #, c-format
 msgid "First name: "
 msgstr "Förnamn: "
@@ -27576,7 +27600,7 @@ msgstr "Helger som upprepas årligen i ett intervall"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:17
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:60
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:18
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:25
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
 #: intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:19
@@ -27627,7 +27651,7 @@ msgstr "Helger som upprepas årligen i ett intervall"
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:16
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:21
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:15
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:21
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:23
@@ -28404,7 +28428,7 @@ msgstr ""
 "modifiera denna klubb-mallen."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "If the field is a control field, the subfield should be empty"
 msgstr "Om fältet är ett kontrollfält, ska det underliggande fältet vara tomt"
 
@@ -32675,7 +32699,7 @@ msgstr ""
 "Koha &rsaquo; Verktyg &rsaquo; Etikettverktyg &rsaquo; Mallar &rsaquo; "
 "%sRedigera (%s)%sNy%s"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:5
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:6
 #, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; MARC modification templates"
 msgstr "Koha &rsaquo; Verktyg &rsaquo; Mallar för MARC-modifiering"
@@ -33502,11 +33526,6 @@ msgstr "Senaste inventeringsdatum:"
 #, c-format
 msgid "Last location"
 msgstr "Senaste plats"
-
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:123
-#, c-format
-msgid "Last name: "
-msgstr "Efternamn: "
 
 #: intranet-tmpl/prog/en/includes/last-borrower.inc:2
 #, c-format
@@ -34806,13 +34825,13 @@ msgid "MARC frameworks: %s"
 msgstr "MARC ramverk: %s"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:28
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, c-format
 msgid "MARC modification templates"
 msgstr "Mallar för MARC-modifiering"
 
 #. %1$s:  template_id | html 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:57
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:58
 #, c-format
 msgid "MARC modification templates %s"
 msgstr "Mallar för MARC-modifiering %s"
@@ -35324,7 +35343,7 @@ msgstr "Hantera anpassade fält för exemplarsökning."
 msgid "Manage extended patron attributes "
 msgstr "Hantera utökade låntagarattribut "
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:24
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:26
 #, c-format
 msgid "Manage frequencies "
 msgstr "Hantera frekvenser"
@@ -35427,7 +35446,7 @@ msgstr "Hantera låntagarlistor."
 msgid "Manage marc modification templates "
 msgstr "Hantera mallar för marc-modifiering "
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:29
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:31
 #, c-format
 msgid "Manage numbering patterns "
 msgstr "Hantera numreringsmönster"
@@ -36541,7 +36560,7 @@ msgstr "Morgon"
 msgid "Most-circulated items"
 msgstr "Mest lånade exemplar"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:189
 #, c-format
 msgid "Move"
 msgstr "Flytta"
@@ -36555,22 +36574,22 @@ msgid "Move Up"
 msgstr "Flytta upp"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:113
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:114
 msgid "Move action down"
 msgstr "Flytta åtgärd nedåt"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:109
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:110
 msgid "Move action to bottom"
 msgstr "Flytta åtgärd längst ned"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:105
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:106
 msgid "Move action to top"
 msgstr "Flytta åtgärd längst upp"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
 msgid "Move action up"
 msgstr "Flytta åtgärd uppåt"
 
@@ -36883,7 +36902,7 @@ msgstr "Namn:"
 #: intranet-tmpl/prog/en/includes/mana/mana-share-report.inc:21
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:304
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:212
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:107
@@ -37048,7 +37067,7 @@ msgstr "New Zealand Ministry of Education Library, New Zealand"
 msgid "New account "
 msgstr "Nytt konto "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:43
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:44
 #, c-format
 msgid "New action"
 msgstr "Ny åtgärd"
@@ -37405,13 +37424,17 @@ msgstr "Ny uppsättning"
 msgid "New splitting rule"
 msgstr "Ny klassificeringsregel"
 
-#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:7
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:9
-#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:96
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:98
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:17
 #, c-format
 msgid "New subscription"
+msgstr "Ny prenumeration"
+
+#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:7
+#: intranet-tmpl/prog/en/includes/serials-toolbar.inc:96
+#, fuzzy, c-format
+msgid "New subscription for this serial"
 msgstr "Ny prenumeration"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:172
@@ -37420,7 +37443,7 @@ msgstr "Ny prenumeration"
 msgid "New tag"
 msgstr "Ny tagg"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:41
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:42
 #, c-format
 msgid "New template"
 msgstr "Ny mall"
@@ -39368,7 +39391,7 @@ msgstr "Antal poster som inte tagits bort på grund av att exemplar är utlånad
 msgid "Number of records updated"
 msgstr "Antal poster som uppdaterats"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:57
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
 #, c-format
 msgid "Number of renewals"
 msgstr "Antal omlån"
@@ -39814,7 +39837,7 @@ msgstr "På titel "
 msgid "On-site checkout"
 msgstr "Lån på plats"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:44
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:45
 #, c-format
 msgid "On-site checkouts"
 msgstr "Lån på plats"
@@ -39832,12 +39855,12 @@ msgstr "På:"
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:94
 #, c-format
 msgid ""
-"Once you have enabled Mana it must be configured. Type your first name, last "
-"name, and email address and submit. This will send a account creation "
-"request to Mana KB that will respond back with a Mana KB token (an encrypted "
-"ID that uniquely identifies your Koha installation). This token will "
-"automatically be saved in your database. After that you will receive an "
-"email. Read it and follow the instructions."
+"Once you have enabled Mana it must be configured. Type your name, and email "
+"address and submit. This will send an account creation request to Mana KB "
+"that will respond back with a Mana KB token (an encrypted ID that uniquely "
+"identifies your Koha installation). This token will automatically be saved "
+"in your database. After that you will receive an email. Read it and follow "
+"the instructions."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:52
@@ -41492,7 +41515,7 @@ msgstr "Låntagarlista med importerade låntagare: %s"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:120
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:265
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:267
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:18
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:22
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:23
@@ -44035,7 +44058,7 @@ msgstr "RT"
 msgid "Rachel Hamilton-Williams (Kaitiaki from 2004 to present)"
 msgstr "Rachel Hamilton-Williams (Kaitiaki från 2004 till nu)"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:53
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:160
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:62
@@ -44360,8 +44383,8 @@ msgstr ""
 msgid "Refund lost item fee"
 msgstr "Återbetala avgift för borttappat exemplar"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:231
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 #, c-format
 msgid "RegEx"
 msgstr "RegEx"
@@ -45331,9 +45354,10 @@ msgstr "Kräver .js JS modulsystem"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:203
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:278
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:283
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:493
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:204
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:761
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:405
@@ -45700,7 +45724,7 @@ msgstr "Återuppta alla pausade reservationer"
 msgid "Retail price: "
 msgstr "Försäljningspris: "
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:61
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:62
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:51
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:47
 #: intranet-tmpl/prog/en/modules/members/pay.tt:53
@@ -46886,7 +46910,7 @@ msgstr "Sök meddelanden"
 msgid "Search on"
 msgstr "Sök på"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:34
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
 #, c-format
 msgid "Search on Mana"
 msgstr "Sök i Mana"
@@ -47733,7 +47757,7 @@ msgid "Send to"
 msgstr "Skicka till"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:133
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:130
 #, fuzzy
 msgid "Send to Mana KB"
 msgstr "Skicka till"
@@ -47803,7 +47827,7 @@ msgstr "September"
 msgid "Serial"
 msgstr "Periodika"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:3
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:5
 #, c-format
 msgid "Serial collection"
 msgstr "Periodikasamling"
@@ -49098,7 +49122,7 @@ msgstr "Personalåtkomst, tillåter katalogåtkomst i personalklienten."
 msgid "Staff client"
 msgstr "Personalklient"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:28
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:29
 #, c-format
 msgid "Staff members are not allowed to access patron's checkout history"
 msgstr "Personalen har inte rätt att komma åt låntagares lånehistorik"
@@ -49706,7 +49730,6 @@ msgid "Subfield: %s"
 msgstr "Underliggande fält: %s"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:215
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:210
 #, c-format
 msgid "Subfields"
 msgstr "Underliggande fält"
@@ -49864,7 +49887,7 @@ msgstr "Ämnen:"
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:161
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:216
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:208
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:324
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:88
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:253
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:498
@@ -50721,8 +50744,8 @@ msgstr "Tagg raderad"
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:379
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:168
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:734
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:742
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:733
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:741
 #, c-format
 msgid "Tag editor"
 msgstr "Taggredigerare"
@@ -50841,7 +50864,7 @@ msgstr "Momssats: "
 msgid "Technical reports"
 msgstr "Technical reports"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:62
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:127
 #, c-format
 msgid "Template"
@@ -51321,25 +51344,25 @@ msgid ""
 msgstr "Kolumnen 'Koha field' visar att delfältet är länkat med ett Koha-fält."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional comparison operator should be filled."
 msgstr "Destinationen måste fyllas i."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional field should be filled."
 msgstr "Källfältet ska vara ifyllt."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional regular expression should be filled."
 msgstr "Destinationen måste fyllas i."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional value should be filled."
 msgstr "Destinationen måste fyllas i."
@@ -51400,7 +51423,7 @@ msgid "The database returned an error while saving %s %s. "
 msgstr "Databasen returnerade ett fel vid försök att spara %s %s. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The destination should be filled."
 msgstr "Destinationen måste fyllas i."
 
@@ -52059,12 +52082,12 @@ msgid "The secondary email is invalid."
 msgstr "Den sekundära e-postadressen är ogiltig."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The source field should be filled."
 msgstr "Källfältet ska vara ifyllt."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The source subfield should be filled for update."
 msgstr "Det underliggande källfältet ska vara ifyllt för uppdatering."
 
@@ -52242,12 +52265,12 @@ msgstr "Inga samlingar är för närvarande definierade."
 msgid "There are no contracts with this vendor. %s "
 msgstr "Det finns inga avtal med denna leverantör. %s "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:176
 #, c-format
 msgid "There are no defined actions for this template."
 msgstr "Det finns inga definierade åtgärder för denna mall."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:289
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:270
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr "Inga mallar har definierats. Skapa först en mall."
@@ -52646,7 +52669,6 @@ msgstr ""
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:253
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:355
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:721
 msgid "This field is mandatory"
 msgstr "Detta fält är obligatoriskt"
 
@@ -52709,7 +52731,7 @@ msgstr ""
 msgid "This is a serial subscription"
 msgstr "Detta är en periodikaprenumeration"
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:30
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:31
 #, c-format
 msgid ""
 "This is the anonymous patron, so no circulation history is displayed. To get "
@@ -52919,7 +52941,7 @@ msgstr ""
 msgid "This patron does not exist. "
 msgstr "Denna låntagare finns inte. "
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:34
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:35
 #, c-format
 msgid "This patron has no circulation history."
 msgstr "Denna låntagare har ingen lånehistorik."
@@ -52957,7 +52979,7 @@ msgstr ""
 "Denna låntagare har begärt att deras låntagarhistorik anonymiseras vid "
 "återlämning, men systeminställningen AnonymousPatron är tom eller felaktig."
 
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:32
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:33
 #, c-format
 msgid ""
 "This patron has set the privacy rules to never keeping a circulation history."
@@ -53159,7 +53181,7 @@ msgid "This will delete %sall the%sthe selected%s items."
 msgstr "Detta raderar %salla%svalda%s exemplar."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/share_content.tt:150
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:147
 msgid "This will delete the Mana KB token from Koha. Do you want to continue?"
 msgstr ""
 
@@ -53355,7 +53377,7 @@ msgstr "TinyMCE WYSIWYG-redigerare v3.5.8 "
 #: intranet-tmpl/prog/en/modules/serials/result.tt:15
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:54
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:35
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:43
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:22
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:728
@@ -53877,7 +53899,7 @@ msgstr "Verktygspluginer"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:17
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:19
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:27
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:14
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:14
@@ -54408,7 +54430,7 @@ msgstr "Tulong Aklatan, Filippinerna"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:17
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:278
-#: intranet-tmpl/prog/en/modules/members/readingrec.tt:51
+#: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: intranet-tmpl/prog/en/modules/members/files.tt:39
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
@@ -54915,7 +54937,7 @@ msgid "Update SQL"
 msgstr "Uppdatera SQL"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Update action"
 msgstr "Uppdateringsåtgärd"
 
@@ -54941,7 +54963,7 @@ msgstr "Uppdatera barn till vuxen låntagare"
 msgid "Update errors :"
 msgstr "Uppdateringsfel :"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
 #, c-format
 msgid "Update existing or add new"
 msgstr "Uppdatera befintliga eller lägga till nya"
@@ -56073,6 +56095,11 @@ msgstr "Visa begränsningar"
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-home.tt:27
 msgid "View spine label"
 msgstr "Visa ryggetikett"
+
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#, fuzzy, c-format
+msgid "View subfields"
+msgstr "Redigera underliggande fält"
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:35
 #, c-format
@@ -57432,7 +57459,7 @@ msgid ""
 msgstr ""
 "Du har redan skickat en streckkod, vänta tills utlåningen genomförts..."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:202
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:183
 #, c-format
 msgid ""
 "You have chosen a condition on the same field as the original field. If your "
@@ -57858,6 +57885,11 @@ msgstr "Dina listor"
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:449
 msgid "Your lists:"
 msgstr "Dina listor:"
+
+#: intranet-tmpl/prog/en/modules/admin/share_content.tt:119
+#, fuzzy, c-format
+msgid "Your name: "
+msgstr "Efternamn: "
 
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:40
 #, c-format
@@ -58970,12 +59002,12 @@ msgstr "sök i katalogen"
 msgid "doXulting"
 msgstr "Mottagarlista"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:255
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:236
 #, c-format
 msgid "doesn't exist"
 msgstr "finns inte"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:238
 #, c-format
 msgid "doesn't match"
 msgstr "matchar inte"
@@ -59043,7 +59075,7 @@ msgstr "exempel: streckkod, exemplarhyllsignum, titel, \"050a 050b\", 300a "
 msgid "exchange"
 msgstr "Förändring"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:254
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
 #, c-format
 msgid "exists"
 msgstr "finns"
@@ -59083,12 +59115,12 @@ msgstr "fair-trade"
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:249
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:230
 #, c-format
 msgid "field "
 msgstr "fält"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:199
 #, c-format
 msgid "field(s) "
 msgstr "fält"
@@ -59263,7 +59295,7 @@ msgstr "homebranch INTE mappad"
 msgid "homebranch defined"
 msgstr "homebranch definierad"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:245
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
 #, c-format
 msgid "if"
 msgstr "om"
@@ -59284,7 +59316,7 @@ msgid "if you wish to enable this feature."
 msgstr "om du vill aktivera denna funktion."
 
 #. INPUT type=text name=to_regex_modifiers
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 msgid "ig"
 msgstr "ig"
 
@@ -59648,8 +59680,8 @@ msgid "last on: %s"
 msgstr "senast den: %s"
 
 #. INPUT type=text name=from_subfield
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
 msgid "let blank for the entire field"
 msgstr "lämna tomt för hela fältet"
 
@@ -59698,7 +59730,7 @@ msgstr "loc"
 msgid "lost"
 msgstr "förlorad"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
 #, c-format
 msgid "m/"
 msgstr "m/"
@@ -59713,7 +59745,7 @@ msgstr "förstoringsglas"
 msgid "marc"
 msgstr "marc"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:256
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:237
 #, c-format
 msgid "matches"
 msgstr "matchningar"
@@ -60091,12 +60123,12 @@ msgid "records in various format. Choose one): "
 msgstr "poster i olika format. Välj ett): "
 
 #. INPUT type=text name=to_regex_search
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 msgid "regex pattern"
 msgstr "reguljärt uttryck"
 
 #. INPUT type=text name=to_regex_replace
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 msgid "regex replacement"
 msgstr "ersättning med reguljärt uttryck"
 
@@ -60148,7 +60180,7 @@ msgstr "igång"
 msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "s&eacute;lection au moyen d'une liste de descripteurs"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:234
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
 #, c-format
 msgid "s/"
 msgstr "s/"
@@ -60517,7 +60549,7 @@ msgstr "att reserveras."
 msgid "to create"
 msgstr "skapa"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
 #, c-format
 msgid "to field "
 msgstr "till fält"
@@ -60543,7 +60575,7 @@ msgstr "odefinierad"
 msgid "unknown"
 msgstr "okänd"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
 #, c-format
 msgid "unless"
 msgstr "om inte"
@@ -60716,7 +60748,7 @@ msgstr ""
 msgid "with this reason:"
 msgstr "med detta skäl:"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:222
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:203
 #, c-format
 msgid "with value "
 msgstr "med värde"
@@ -60809,7 +60841,7 @@ msgstr "| Status: %s "
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:361
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:165
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:297
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:445
