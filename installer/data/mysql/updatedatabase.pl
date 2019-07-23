@@ -17513,6 +17513,12 @@ if ( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23151 - Add borrower_modifications.changed_fields column)\n";
 }
 
+$DBversion = "18.11.08.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (18.11.08 release)\n";
+            SetVersion ($DBversion);
+ }
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
