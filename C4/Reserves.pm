@@ -320,7 +320,7 @@ sub CanBookBeReserved{
 
     # Check that patron have not checked out this biblio (if AllowHoldsOnPatronsPossessions set)
     if ( !C4::Context->preference('AllowHoldsOnPatronsPossessions')
-        && C4::Circulation::CheckIfIssuedToPatron( $patron->borrowernumber, $biblio->biblionumber ) ) {
+        && C4::Circulation::CheckIfIssuedToPatron( $borrowernumber, $biblionumber ) ) {
         return { status =>'itemAlreadyOnLoan' };
     }
 
