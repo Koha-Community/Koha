@@ -267,6 +267,14 @@ if ( $backends_available ) {
 
         # handle special commit rules & update type
         handle_commit_maybe($backend_result, $request);
+    } elsif ( $op eq 'check_out') {
+        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $backend_result = $request->check_out($params);
+        $template->param(
+            params  => $params,
+            whole   => $backend_result,
+            request => $request
+        );
     } elsif ( $op eq 'illlist') {
 
         # If we receive a pre-filter, make it available to the template

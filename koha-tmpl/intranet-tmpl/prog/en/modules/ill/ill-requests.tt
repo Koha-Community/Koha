@@ -111,6 +111,152 @@
                     <h1>Cancel a confirmed request</h1>
                     [% PROCESS $whole.template %]
 
+                [% ELSIF query_type == 'check_out' and !whole.error %]
+                    [% IF !whole.stage || whole.stage == 'form' %]
+                        <h1 id="ill-issue-title">Issue requested item to [% request.patron.firstname %] [% request.patron.surname %]</h1>
+                        [% IF !request.biblio_id || request.biblio_id.length == 0 %]
+                        <div class="alert">This item cannot be issued as it has no biblio record associated with it</div>
+                        [% END %]
+                        [% IF whole.value.errors.itemcount %]
+                        <div class="alert">The bibliographic record for this request has multiple items, it should only have one. Please fix this then try again.</div>
+                        [% END %]
+                        [% IF whole.value.errors.item_creation %]
+                        <div class="alert">An unknown error occurred while trying to add an item</div>
+                        [% END %]
+                        [% IF whole.value.errors.item_check_out %]
+                        <div class="alert">An unknown error occurred while trying to check out the item</div>
+                        [% END %]
+                        [% IF whole.value.check_out_errors %]
+                            [% IF whole.value.check_out_errors.error.STATS %]
+                            <div class="alert">
+                                Local use recorded
+                            </div>
+                            [% ELSE %]
+                            <div class="alert">
+                                There was a problem checking this item out, please check for problems with the <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% whole.value.patron.borrowernumber %]">patron's account</a>
+                            </div>
+                            [% END %]
+                        [% END %]
+                        [% IF request.biblio_id && request.biblio_id.length > 0  && !whole.value.check_out_errors.error.STATS %]
+                            <form method="POST" action="/cgi-bin/koha/ill/ill-requests.pl">
+                                <fieldset class="rows">
+                                    <legend>Check out details</legend>
+                                    [% items = whole.value.biblio.items.unblessed %]
+                                    [% IF items.size == 1 %]
+                                        <p>The bibliographic record for this request already has an item attached to it, you are about to check it out</p>
+                                    [% ELSE %]
+                                        <p>A bibliographic record for this request exists, but no item. You are about to create an item and check it out</p>
+                                    [% END %]
+                                    <ol>
+                                        <li class="ill_checkout_inhouse">
+                                            <label for="inhouse" class="ill_checkout_inhouse_label">Statistical patron:</label>
+                                            <select id="ill_checkout_inhouse_select" name="inhouse" class="ill_checkout_inhouse_select">
+                                                <option value=""></option>
+                                                [% FOREACH stat IN whole.value.statistical %]
+                                                    [% IF stat.borrowernumber == params.inhouse %]
+                                                        <option value="[% stat.cardnumber %]" selected>[% stat.firstname %] [% stat.surname %]</option>
+                                                    [% ELSE %]
+                                                        <option value="[% stat.cardnumber %]">[% stat.firstname %] [% stat.surname %]</option>
+                                                    [% END %]
+                                                [% END %]
+                                            </select>
+                                            [% IF whole.value.errors.inhouse %]
+                                            <span class="required">You must choose a valid patron</span>
+                                            [% END %]
+                                            <div class="hint">If you do not wish to check out the item to [% request.patron.firstname | html %] [% request.patron.surname | html %] and would rather issue it to an in-house statistical patron, choose the patron here</div>
+                                        </li>
+                                        <li class="ill_checkout_item_type">
+                                            <label for="item_type" class="ill_checkout_item_type_label required">Item type:</label>
+                                            [% IF items.size != 1 %]
+                                                <select id="ill_checkout_item_type_select" name="item_type" required>
+                                                    [% FOREACH type IN whole.value.itemtypes %]
+                                                        [% IF type.itemtype == params.item_type %]
+                                                        <option value="[% type.itemtype | html %]" selected>
+                                                        [% ELSE %]
+                                                        <option value="[% type.itemtype | html %]">
+                                                        [% END %]
+                                                            [% type.description | html %]
+                                                        </option>
+                                                    [% END %]
+                                                </select>
+                                            [% ELSE %]
+                                                [% FOREACH type IN whole.value.itemtypes %]
+                                                    [% IF type.itemtype == items.0.itype %]
+                                                        [% type.description | html %]
+                                                    [% END %]
+                                                [% END %]
+                                            [% END %]
+                                            [% IF whole.value.errors.item_type %]
+                                            <span class="required">You must choose an item type</span>
+                                            [% END %]
+                                        </li>
+                                        [% IF items.size == 1 %]
+                                            <li>
+                                                <label for="barcode" class="ill_checkout_barcode_label">Item barcode:</label>
+                                                [% items.0.barcode %]
+                                            </li>
+                                        [% END %]
+                                        <li class="ill_checkout_branchcode">
+                                            <label for="branchcode" class="ill_checkout_branchcode_label required">Library:</label>
+                                            [% branchcode = items.size == 1 ? items.0.homebranch : params.branchcode ? params.branchcode : request.branchcode %]
+                                            [% IF items.size != 1 %]
+                                                <select name="branchcode" id="ill_checkout_branchcode_select" required>
+                                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                                                </select>
+                                            [% ELSE %]
+                                                [% FOREACH branch IN whole.value.libraries.unblessed %]
+                                                    [% IF branch.branchcode == branchcode %]
+                                                        [% branch.branchname %]
+                                                    [% END %]
+                                                [% END %]
+                                            [% END %]
+                                            [% IF whole.value.errors.branchcode %]
+                                            <span class="required">You must choose a branch</span>
+                                            [% END %]
+                                        </li>
+                                        <li class="ill_checkout_due_date">
+                                            <label for="duedate" class="ill_checkout_duedate_label">Due date:</label>
+                                            <input name="duedate" id="ill_checkout_duedate_input" type="text" value="[% params.duedate | html %]"> [% INCLUDE 'date-format.inc' %]
+                                            <div class="hint">If you do not specify a due date, it will be set according to circulation rules</p>
+                                        </li>
+                                    </ol>
+                                </fieldset>
+                                <fieldset class="action">
+                                    <input type="hidden" value="check_out" name="method">
+                                    <input type="hidden" value="form" name="stage">
+                                    [% IF items.size == 1 %]
+                                        <input name="branchcode" type="hidden" value="[% branchcode  %]">
+                                        <input name="item_type" type="hidden" value="[% items.0.itype %]">
+                                    [% END %]
+                                    <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
+                                    <input type="submit" value="Submit">
+                                    <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
+                                </fieldset>
+                            </form>
+                        [% END %]
+                        [% IF whole.value.check_out_errors.error.STATS %]
+                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Return to request</a>
+                        [% END %]
+                    [% ELSIF whole.stage == 'done_check_out' %]
+                        <h1>Item checked out</h1>
+                        <fieldset class="rows">
+                            <legend>Check out details</legend>
+                            <ol>
+                                <li>
+                                    <label>Checked out to:</label>
+                                    [% whole.value.patron.firstname | html %] [% whole.value.patron.surname | html %]
+                                </li>
+                                <li>
+                                    <label>Due date:</label>
+                                    [% whole.value.check_out.date_due | $KohaDates with_hours => 1 %]
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Return to request</a>
+                        </fieldset>
+                    [% END %]
+
                 [% ELSIF query_type == 'generic_confirm' %]
                     <h1>Place request with partner libraries</h1>
                   [% IF error %]
@@ -534,14 +680,31 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
+    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         var prefilters = '[% prefilters | $raw %]';
         // Set column settings
         var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+        $("#ill_checkout_duedate_input").datetimepicker({
+            hour: 23,
+            minute: 59
+        }).on("change", function(e, value) {
+            if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
+        });
+    </script>
+    <script>
+        $('#ill_checkout_inhouse_select').on('change', function() {
+            if ($(this).val().length > 0) {
+                $('.ill_checkout_due_date').hide();
+            } else {
+                $('.ill_checkout_due_date').show();
+            }
+        });
     </script>
     [% INCLUDE 'ill-list-table-strings.inc' %]
     [% Asset.js("js/ill-list-table.js") | $raw %]
+    [% Asset.js("js/ill-check-out.js") | $raw %]
 [% END %]
 
 [% TRY %]

@@ -35,6 +35,12 @@ use Koha::AuthorisedValue;
 use Koha::Illrequest::Logger;
 use Koha::Patron;
 use Koha::AuthorisedValues;
+use Koha::Biblios;
+use Koha::Items;
+use Koha::ItemTypes;
+use Koha::Libraries;
+use C4::Items qw( AddItem );
+use C4::Circulation qw( CanBookBeIssued AddIssue  );
 
 use base qw(Koha::Object);
 
@@ -425,7 +431,7 @@ sub _core_status_graph {
             name           => 'Requested',
             ui_method_name => 'Confirm request',
             method         => 'confirm',
-            next_actions   => [ 'REQREV', 'COMP' ],
+            next_actions   => [ 'REQREV', 'COMP', 'CHK' ],
             ui_method_icon => 'fa-check',
         },
         GENREQ => {
@@ -434,7 +440,7 @@ sub _core_status_graph {
             name           => 'Requested from partners',
             ui_method_name => 'Place request with partners',
             method         => 'generic_confirm',
-            next_actions   => [ 'COMP' ],
+            next_actions   => [ 'COMP', 'CHK' ],
             ui_method_icon => 'fa-send-o',
         },
         REQREV => {
@@ -470,7 +476,7 @@ sub _core_status_graph {
             name           => 'Completed',
             ui_method_name => 'Mark completed',
             method         => 'mark_completed',
-            next_actions   => [ ],
+            next_actions   => [ 'CHK' ],
             ui_method_icon => 'fa-check',
         },
         KILL => {
@@ -482,6 +488,15 @@ sub _core_status_graph {
             next_actions   => [ ],
             ui_method_icon => 'fa-trash',
         },
+        CHK => {
+            prev_actions   => [ 'REQ', 'GENREQ', 'COMP' ],
+            id             => 'CHK',
+            name           => 'Checked out',
+            ui_method_name => 'Check out',
+            method         => 'check_out',
+            next_actions   => [ ],
+            ui_method_icon => 'fa-upload',
+        }
     };
 }
 
@@ -1021,6 +1036,207 @@ sub requires_moderation {
         'CANCREQ' => 'CANCREQ',
     };
     return $require_moderation->{$self->status};
+}
+
+=head3 check_out
+
+    my $stage_summary = $request->check_out;
+
+Handle the check_out method. The first stage involves gathering the required
+data from the user via a form, the second stage creates an item and tries to
+issue it to the patron. If successful, it notifies the patron, then it
+returns a summary of how things went
+
+=cut
+
+sub check_out {
+    my ( $self, $params ) = @_;
+
+    # Objects required by the template
+    my $itemtypes = Koha::ItemTypes->search(
+        {},
+        { order_by => ['description'] }
+    );
+    my $libraries = Koha::Libraries->search(
+        {},
+        { order_by => ['branchcode'] }
+    );
+    my $biblio = Koha::Biblios->find({
+        biblionumber => $self->biblio_id
+    });
+    # Find all statistical patrons
+    my $statistical_patrons = Koha::Patrons->search(
+        { 'category_type' => 'x' },
+        { join => { 'categorycode' => 'borrowers' } }
+    );
+
+    if (!$params->{stage} || $params->{stage} eq 'init') {
+        # Present a form to gather the required data
+        #
+        # We may be viewing this page having previously tried to issue
+        # the item (in which case, we may already have created an item)
+        # so we pass the biblio for this request
+        return {
+            method  => 'check_out',
+            stage   => 'form',
+            value   => {
+                itemtypes   => $itemtypes,
+                libraries   => $libraries,
+                statistical => $statistical_patrons,
+                biblio      => $biblio
+            }
+        };
+    } elsif ($params->{stage} eq 'form') {
+        # Validate what we've got and return with an error if we fail
+        my $errors = {};
+        if (!$params->{item_type} || length $params->{item_type} == 0) {
+            $errors->{item_type} = 1;
+        }
+        if ($params->{inhouse} && length $params->{inhouse} > 0) {
+            my $patron_count = Koha::Patrons->search({
+                cardnumber => $params->{inhouse}
+            })->count();
+            if ($patron_count != 1) {
+                $errors->{inhouse} = 1;
+            }
+        }
+
+        # Check we don't have more than one item for this bib,
+        # if we do, something very odd is going on
+        # Having 1 is OK, it means we're likely trying to issue
+        # following a previously failed attempt, the item exists
+        # so we'll use it
+        my @items = $biblio->items->as_list;
+        my $item_count = scalar @items;
+        if ($item_count > 1) {
+            $errors->{itemcount} = 1;
+        }
+
+        # Failed validation, go back to the form
+        if (%{$errors}) {
+            return {
+                method  => 'check_out',
+                stage   => 'form',
+                value   => {
+                    params      => $params,
+                    statistical => $statistical_patrons,
+                    itemtypes   => $itemtypes,
+                    libraries   => $libraries,
+                    biblio      => $biblio,
+                    errors      => $errors
+                }
+            };
+        }
+
+        # Passed validation
+        #
+        # Create an item if one doesn't already exist,
+        # if one does, use that
+        my $itemnumber;
+        if ($item_count == 0) {
+            my $item_hash = {
+                homebranch    => $params->{branchcode},
+                holdingbranch => $params->{branchcode},
+                location      => $params->{branchcode},
+                itype         => $params->{item_type},
+                barcode       => 'ILL-' . $self->illrequest_id
+            };
+            my (undef, undef, $item_no) =
+                AddItem($item_hash, $self->biblio_id);
+            $itemnumber = $item_no;
+        } else {
+            $itemnumber = $items[0]->itemnumber;
+        }
+        # Check we have an item before going forward
+        if (!$itemnumber) {
+            return {
+                method  => 'check_out',
+                stage   => 'form',
+                value   => {
+                    params      => $params,
+                    itemtypes   => $itemtypes,
+                    libraries   => $libraries,
+                    statistical => $statistical_patrons,
+                    errors      => { item_creation => 1 }
+                }
+            };
+        }
+
+        # Do the check out
+        #
+        # Gather what we need
+        my $target_item = Koha::Items->find( $itemnumber );
+        # Determine who we're issuing to
+        my $patron = $params->{inhouse} && length $params->{inhouse} > 0 ?
+            Koha::Patrons->find({ cardnumber => $params->{inhouse} }) :
+            $self->patron;
+
+        my @issue_args = (
+            $patron,
+            scalar $target_item->barcode
+        );
+        if ($params->{duedate} && length $params->{duedate} > 0) {
+            push @issue_args, $params->{duedate};
+        }
+        # Check if we can check out
+        my ( $error, $confirm, $alerts, $messages ) =
+            C4::Circulation::CanBookBeIssued(@issue_args);
+
+        # If we got anything back saying we can't check out,
+        # return it to the template
+        my $problems = {};
+        if ( $error && %{$error} ) { $problems->{error} = $error };
+        if ( $confirm && %{$confirm} ) { $problems->{confirm} = $confirm };
+        if ( $alerts && %{$alerts} ) { $problems->{alerts} = $alerts };
+        if ( $messages && %{$messages} ) { $problems->{messages} = $messages };
+
+        if (%{$problems}) {
+            return {
+                method  => 'check_out',
+                stage   => 'form',
+                value   => {
+                    params           => $params,
+                    itemtypes        => $itemtypes,
+                    libraries        => $libraries,
+                    statistical      => $statistical_patrons,
+                    patron           => $patron,
+                    biblio           => $biblio,
+                    check_out_errors => $problems
+                }
+            };
+        }
+
+        # We can allegedly check out, so make it so
+        # For some reason, AddIssue requires an unblessed Patron
+        $issue_args[0] = $patron->unblessed;
+        my $issue = C4::Circulation::AddIssue(@issue_args);
+
+        if ($issue && %{$issue}) {
+            # Update the request status
+            $self->status('CHK')->store;
+            return {
+                method  => 'check_out',
+                stage   => 'done_check_out',
+                value   => {
+                    params    => $params,
+                    patron    => $patron,
+                    check_out => $issue
+                }
+            };
+        } else {
+            return {
+                method  => 'check_out',
+                stage   => 'form',
+                value   => {
+                    params    => $params,
+                    itemtypes => $itemtypes,
+                    libraries => $libraries,
+                    errors    => { item_check_out => 1 }
+                }
+            };
+        }
+    }
+
 }
 
 =head3 generic_confirm
