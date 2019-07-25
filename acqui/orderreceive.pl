@@ -89,30 +89,26 @@ my $freight      = $invoice->{shipmentcost};
 my $ordernumber  = $input->param('ordernumber');
 
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
-my $results;
-$results = SearchOrders({
-    ordernumber => $ordernumber
-}) if $ordernumber;
+my $order = Koha::Acquisition::Orders->find( $ordernumber );
 
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
         template_name   => "acqui/orderreceive.tt",
         query           => $input,
         type            => "intranet",
+        authnotrequired => 0,
         flagsrequired   => {acquisition => 'order_receive'},
         debug           => 1,
     }
 );
 
-unless ( $results and @$results) {
+unless ( $order ) {
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
 # prepare the form for receiving
-my $order = $results->[0];
-my $order_object = Koha::Acquisition::Orders->find( $ordernumber );
-my $basket = $order_object->basket;
+my $basket = $order->basket;
 my $currencies = Koha::Acquisition::Currencies->search;
 my $active_currency = $currencies->get_active;
 
@@ -130,87 +126,61 @@ if ($AcqCreateItem eq 'receiving') {
     );
 } elsif ($AcqCreateItem eq 'ordering') {
     my $fw = ($acq_fw) ? 'ACQ' : '';
-    my $items = $order_object->items;
-    my @items;
-    while ( my $i = $items->next ) {
-        my $item = $i->unblessed;
-        my $descriptions;
-        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
-        $item->{notforloan} = $descriptions->{lib} // '';
-
-        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->{restricted} });
-        $item->{restricted} = $descriptions->{lib} // '';
-
-        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
-        $item->{location} = $descriptions->{lib} // '';
-
-        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.ccode', authorised_value => $item->{ccode} });
-        $item->{collection} = $descriptions->{lib} // '';
-
-        $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
-        $item->{materials} = $descriptions->{lib} // '';
-
-        my $itemtype = Koha::ItemTypes->find($i->effective_itemtype);
-        if (defined $itemtype) {
-            # We should not do that here, but call ->itemtype->description when needed instead
-            $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
-        }
-        push @items, $item;
-    }
-    $template->param(items => \@items);
+    my $items = $order->items;
+    $template->param(items => $items);
 }
 
-$order->{quantityreceived} = '' if $order->{quantityreceived} == 0;
+$order->quantityreceived = '' if $order->quantityreceived == 0;
 
-my $unitprice = $order->{unitprice};
+my $unitprice = $order->unitprice;
 my ( $rrp, $ecost );
 if ( $bookseller->invoiceincgst ) {
-    $rrp = $order->{rrp_tax_included};
-    $ecost = $order->{ecost_tax_included};
+    $rrp = $order->rrp_tax_included;
+    $ecost = $order->ecost_tax_included;
     unless ( $unitprice != 0 and defined $unitprice) {
-        $unitprice = $order->{ecost_tax_included};
+        $unitprice = $order->ecost_tax_included;
     }
 } else {
-    $rrp = $order->{rrp_tax_excluded};
-    $ecost = $order->{ecost_tax_excluded};
+    $rrp = $order->rrp_tax_excluded;
+    $ecost = $order->ecost_tax_excluded;
     unless ( $unitprice != 0 and defined $unitprice) {
-        $unitprice = $order->{ecost_tax_excluded};
+        $unitprice = $order->ecost_tax_excluded;
     }
 }
 
 my $tax_rate;
-if( defined $order->{tax_rate_on_receiving} ) {
-    $tax_rate = $order->{tax_rate_on_receiving} + 0.0;
+if( defined $order->tax_rate_on_receiving ) {
+    $tax_rate = $order->tax_rate_on_receiving + 0.0;
 } else {
-    $tax_rate = $order->{tax_rate_on_ordering} + 0.0;
+    $tax_rate = $order->tax_rate_on_ordering + 0.0;
 }
 
-my $creator = Koha::Patrons->find( $order->{created_by} );
+my $creator = Koha::Patrons->find( $order->created_by );
 
-my $budget = GetBudget( $order->{budget_id} );
+my $budget = GetBudget( $order->budget_id );
 
-my $datereceived = $order->{datereceived} ? dt_from_string( $order->{datereceived} ) : dt_from_string;
+my $datereceived = $order->datereceived ? dt_from_string( $order->datereceived ) : dt_from_string;
 
 # get option values for gist syspref
 my @gst_values = map {
     option => $_ + 0.0
 }, split( '\|', C4::Context->preference("gist") );
 
-my $order_internalnote = $order->{order_internalnote};
-my $order_vendornote   = $order->{order_vendornote};
-if ( $order->{subscriptionid} ) {
+my $order_internalnote = $order->order_internalnote;
+my $order_vendornote   = $order->order_vendornote;
+if ( $order->subscriptionid ) {
     # Order from a subscription, we will display an history of what has been received
     my $orders = Koha::Acquisition::Orders->search(
         {
-            subscriptionid     => $order->{subscriptionid},
-            parent_ordernumber => $order->{ordernumber},
-            ordernumber        => { '!=' => $order->{ordernumber} }
+            subscriptionid     => $order->subscriptionid,
+            parent_ordernumber => $order->ordernumber,
+            ordernumber        => { '!=' => $order->ordernumber }
         }
     );
-    if ( $order->{parent_ordernumber} != $order->{ordernumber} ) {
-        my $parent_order = Koha::Acquisition::Orders->find($order->{parent_ordernumber});
-        $order_internalnote = $parent_order->{order_internalnote};
-        $order_vendornote   = $parent_order->{order_vendornote};
+    if ( $order->parent_ordernumber != $order->ordernumber ) {
+        my $parent_order = Koha::Acquisition::Orders->find($order->parent_ordernumber);
+        $order_internalnote = $parent_order->order_internalnote;
+        $order_vendornote   = $parent_order->order_vendornote;
     }
     $template->param(
         orders => $orders,
@@ -220,29 +190,15 @@ if ( $order->{subscriptionid} ) {
 $template->param(
     AcqCreateItem         => $AcqCreateItem,
     count                 => 1,
-    biblionumber          => $order->{'biblionumber'},
-    ordernumber           => $order->{'ordernumber'},
-    subscriptionid        => $order->{subscriptionid},
-    booksellerid          => $order->{'booksellerid'},
+    order                 => $order,
     freight               => $freight,
     name                  => $bookseller->name,
     active_currency       => $active_currency,
     currencies            => scalar $currencies->search({ rate => { '!=' => 1 } }),
     invoiceincgst         => $bookseller->invoiceincgst,
-    title                 => $order->{'title'},
-    author                => $order->{'author'},
-    copyrightdate         => $order->{'copyrightdate'},
-    isbn                  => $order->{'isbn'},
-    seriestitle           => $order->{'seriestitle'},
     bookfund              => $budget->{budget_name},
-    quantity              => $order->{'quantity'},
-    quantityreceivedplus1 => $order->{'quantityreceived'} + 1,
-    quantityreceived      => $order->{'quantityreceived'},
     rrp                   => $rrp,
-    replacementprice      => $order->{'replacementprice'},
     ecost                 => $ecost,
-    unitprice             => $unitprice,
-    tax_rate              => $tax_rate,
     creator               => $creator,
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},

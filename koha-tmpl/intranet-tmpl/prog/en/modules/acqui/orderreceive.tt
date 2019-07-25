@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% USE ItemTypes %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -14,14 +15,14 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]][% END %] (order #[% ordernumber | html %])</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.basket.booksellerid | html %]">[% name | html %]</a> &rsaquo; Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]][% END %] (order #[% order.ordernumber | html %])</div>
 
 <div class="main container-fluid">
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% ordernumber | html %])</h1>
+<h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% order.ordernumber | html %])</h1>
 
 [% IF ( count ) %]
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" class="noEnterSubmit" method="post" onsubmit="return Check(this);">
@@ -31,15 +32,15 @@
 
     <fieldset class="rows">
     <legend>Catalog details</legend>
-    <ol><li><span class="label">Title: </span><span class="title">[% title | html %]</span></li>
+    <ol><li><span class="label">Title: </span><span class="title">[% order.biblio.title | html %]</span></li>
     <li> <span class="label">Author: </span>
-        [% author | html %]</li>
+        [% order.biblio.author | html %]</li>
     <li><span class="label">Copyright: </span>
-        [% copyrightdate | html %]</li>
+        [% order.biblio.copyrightdate | html %]</li>
     <li> <span class="label">ISBN: </span>
-        [% isbn | html %]</li>
+        [% order.biblio.biblioitem.isbn | html %]</li>
     <li> <span class="label">Series: </span>
-        [% seriestitle | html %]</li>
+        [% order.biblio.seriestitle | html %]</li>
     </ol>
 	</fieldset>
 
@@ -85,7 +86,7 @@
         </fieldset>
     [% END %]
 
-    [% IF subscriptionid and orders.count %]
+    [% IF order.subscriptionid and orders.count %]
         <fieldset class="rows">
             <legend>Receipt history for this subscription</legend>
             <table id="orders">
@@ -169,7 +170,7 @@
             </div>
         </div>
 
-        [% UNLESS subscriptionid %]
+        [% UNLESS order.subscriptionid %]
           <fieldset class="rows" id="itemfieldset">
               <legend>Item</legend>
               [% IF ( NoACQframework ) %]
@@ -183,7 +184,7 @@
           </fieldset>
         [% END %]
     [% ELSIF (AcqCreateItem == 'ordering') %]
-        [% IF (items.size) %]
+        [% IF (items.count) %]
             <h5>Items</h5>
             <div style="width:100%;overflow:auto">
                 <table>
@@ -214,15 +215,15 @@
                                 <td>[% item.barcode | html %]</td>
                                 <td>[% Branches.GetName( item.homebranch ) | html %]</td>
                                 <td>[% Branches.GetName( item.holdingbranch ) | html %]</td>
-                                <td>[% item.notforloan | html %]</td>
-                                <td>[% item.restricted | html %]</td>
-                                <td><span class="shelvingloc">[% item.location | html %]</span></td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.restricted', authorised_value => item.restricted ) | html %]</td>
+                                <td><span class="shelvingloc">[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]</span></td>
                                 <td>[% item.itemcallnumber | html %]</td>
                                 <td>[% item.copynumber | html %]</td>
                                 <td>[% item.stocknumber | html %]</td>
-                                <td>[% item.collection | html %]</td>
-                                <td>[% item.itemtype | html %]</td>
-                                <td>[% item.materials | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.ccode', authorised_value => item.ccode ) | html %]</td>
+                                <td>[% ItemTypes.GetDescription( item.itype ) | html %]</td>
+                                <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.materials', authorised_value => item.materials ) | html %]</td>
                                 <td>[% item.itemnotes | html %]</td>
                             </tr>
                         [% END %]
@@ -231,10 +232,10 @@
             </div>
         [% END %]
     [% END %]
-    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+    <input type="hidden" name="biblionumber" value="[% order.biblionumber | html %]" />
     <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
-    <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
-    <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
+    <input type="hidden" name="ordernumber" value="[% order.ordernumber | html %]" />
+    <input type="hidden" name="booksellerid" value="[% order.basket.booksellerid | html %]" />
 	</div>
     <div class="col-sm-6">
     <fieldset class="rows">
@@ -245,7 +246,7 @@
                 <input type="text" size="10" id="datereceived" name="datereceived" value="[% datereceived | $KohaDates %]" class="datepicker" />
             </li>
        <li><label for="bookfund">Fund: </label><select id="bookfund" name="bookfund">
-            <option value="">Keep current ([% budget_period_description | html %] - [% bookfund | html %])</option>
+            <option value="">Keep current ([% budget_period_description | html %] - [% order.fund.budget_name | html %])</option>
             [% FOREACH period IN budget_loop %]
                 <optgroup label="[% period.description | html %]">
                 [% FOREACH fund IN period.funds %]
@@ -266,30 +267,30 @@
         </span>
        </li>
        <li><label for="quantity_to_receive">Quantity ordered: </label><span class="label">
-           [% IF edit or subscriptionid %]
-               <input type="text" id="quantity_to_receive" name="quantity" value="[% quantity | html %]" />
+           [% IF edit or order.subscriptionid %]
+               <input type="text" id="quantity_to_receive" name="quantity" value="[% order.quantity | html %]" />
            [% ELSE%]
-               <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" value="[% quantity | html %]" />
+               <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" value="[% order.quantity | html %]" />
            [% END %]
            </span></li>
         <li><label for="quantity">Quantity received: </label>
-          [% IF subscriptionid %]
-              <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantity | html %]" />
-              <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived | html %]" />
+          [% IF order.subscriptionid %]
+              <input type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantity | html %]" />
+              <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
           [% ELSIF AcqCreateItemReceiving %]
               <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
           [% ELSE %]
-            [% IF ( quantityreceived ) %]
+            [% IF ( order.quantityreceived ) %]
                 [% IF ( edit ) %]
-                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived | html %]" />
-                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived | html %]" />
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived | html %]" />
+                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
                 [% ELSE %]
                     [% IF ( items ) %]
-                        <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 | html %]" />
+                        <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived + 1 | html %]" />
                     [% ELSE %]
-                        <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 | html %]" />
+                        <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived + 1 | html %]" />
                     [% END %]
-                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived | html %]" />
+                    <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
                 [% END %]
             [% ELSE %]
                 <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
@@ -299,13 +300,14 @@
                 <p class="error">Warning, you have entered more items than expected.
                 Items will not be created.</p>
             </div>
-          [% END %][%# IF (subscriptionid) ELSIF (AcqCreateItemReceiving) %]
+          [% END %][%# IF (order.subscriptionid) ELSIF (AcqCreateItemReceiving) %]
 		</li>
 
         [% IF ( gst_values ) %]
             <li>
                 <label for="tax_rate">Tax rate: </label>
                 <select name="tax_rate" id="tax_rate">
+                [% tax_rate = order.tax_rate_on_receiving || order.tax_rate_on_ordering %]
                 [% FOREACH gst IN gst_values %]
                     [% IF gst.option == tax_rate %]
                         <option value="[% gst.option | html %]" selected="selected">[% gst.option * 100 | html %]%</option>
@@ -319,16 +321,30 @@
             <input type="hidden" name="tax_rate" value="0" />
         [% END %]
 
-        <li><label for="rrp">Retail price: </label>[% rrp | $Price %] <span class="hint">(adjusted for [% active_currency.currency | html %], [% IF (invoiceincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])</span></li>
+        <li><label for="rrp">Retail price: </label>
+            [% IF (invoiceincgst == 1) %]
+                [% order.rrp_tax_included | $Price %]<span class="hint">(adjusted for [% active_currency.currency | html %],tax inclusive)</span></li>
+            [% ELSE %]
+                [% order.rrp_tax_excluded | $Price %]<span class="hint">(adjusted for [% active_currency.currency | html %],tax exclusive)</span></li>
+            [% END %]
         <li>
             <label for="replacementprice">Replacement price:</label>
-            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price on_editing => 1 %]" />
+            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% order.replacementprice | $Price on_editing => 1 %]" />
         </li>
-        <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %] <span class="hint">[% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span></li>
+        <li>
+            [% IF (invoiceincgst) %]
+                <label for="ecost">Budgeted cost: </label>[% order.ecost_tax_included | $Price %] <span class="hint">(tax inclusive)</span>
+            [% ELSE %]
+                <label for="ecost">Budgeted cost: </label>[% order.ecost_tax_excluded | $Price %] <span class="hint">(tax exclusive)</span>
+            [% END %]
+            </li>
         <li>
             <label for="unitprice">Actual cost:</label>
-            <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 %]" />
-            <span class="hint">[% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span>
+            [% IF (invoiceincgst) %]
+                <input type="text" size="20" name="unitprice" id="unitprice" value="[% order.unitprice_tax_included | $Price on_editing => 1 %]" /> <span class="hint">(tax inclusive)</span>
+            [% ELSE %]
+                <input type="text" size="20" name="unitprice" id="unitprice" value="[% order.unitprice_tax_excluded | $Price on_editing => 1 %]" /> <span class="hint">(tax exclusive)</span>
+            [% END %]
             <label style="font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
         </li>
         <li id="select_currency">
@@ -464,7 +480,7 @@
         $(document).ready(function() {
             [% IF (AcqCreateItemReceiving) %]
                 cloneItemBlock(0, '[% UniqueItemFields | html %]');
-            [% ELSIF (AcqCreateItem == 'ordering') && not subscriptionid %]
+            [% ELSIF (AcqCreateItem == 'ordering') && not order.subscriptionid %]
                 $("input[name='items_to_receive']").change(function() {
                     CalcQtyToReceive();
                 });
