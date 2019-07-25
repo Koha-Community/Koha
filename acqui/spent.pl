@@ -130,7 +130,7 @@ while (my $data = $sth->fetchrow_hashref) {
     push @shipmentcosts, {
         shipmentcost => sprintf("%.2f", $data->{shipmentcost}),
         invoiceid => $data->{invoiceid},
-	invoicenumber => $data->{invoicenumber}
+        invoicenumber => $data->{invoicenumber}
     };
     $total += $data->{shipmentcost};
 }
