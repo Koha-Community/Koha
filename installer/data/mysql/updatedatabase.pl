@@ -18988,6 +18988,56 @@ if ( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23151 - Add borrower_modifications.changed_fields column)\n";
 }
 
+$DBversion = '19.06.00.014';
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'RENT_DAILY_RENEW'
+        WHERE
+          accounttype = 'Rent'
+        AND
+          description LIKE 'Renewal of Daily Rental Item%';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'RENT_DAILY'
+        WHERE
+          accounttype = 'Rent'
+        AND
+          description LIKE 'Daily rental';
+    });
+
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'RENT_RENEW'
+        WHERE
+          accounttype = 'Rent'
+        AND
+          description LIKE 'Renewal of Rental Item%';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'RENT'
+        WHERE
+          accounttype = 'Rent';
+    });
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 11573 - Fix accounttypes for 'Rent')\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
