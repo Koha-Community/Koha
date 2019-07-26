@@ -159,9 +159,12 @@
         </fieldset>
 
         <fieldset class="rows">
-            <legend>Default values</legend>
+            <legend>
+                <a class="expand_defaults">Click to enter default values</a>
+                <a class="expand_defaults" style="display:none;">Hide default value fields</a>
+            </legend>
 
-            <ol>
+            <ol class="default_values" style="display:none;">
                 [% FOREACH borrower_field IN borrower_fields %]
 
                     [% SWITCH borrower_field.field %]
@@ -303,6 +306,11 @@ you can supply dates in ISO format (e.g., '2010-10-28').
         $(document).ready(function() {
             [%# Make date fields have the datepicker %]
             $("#dateenrolled, #dateexpiry, #dateofbirth").datepicker();
+
+            $(".expand_defaults").click(function(){
+                $(".default_values").toggle();
+                $(".expand_defaults").toggle();
+            });
         });
     </script>
 [% END %]
