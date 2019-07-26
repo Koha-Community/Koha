@@ -855,6 +855,13 @@ Circulation:
                   yes: Enable
                   no: Disable
             - unmediated Interlibrary loan requests. If enabled and the ILL backend supports it, the newly created requests are immediately requested by backend.
+		-
+			- pref: CirculateILL
+			  default: 0
+			  choices:
+			      yes: Enable
+			      no: Disable
+			- the circulation of ILL requested items
     Fines Policy:
         -
             - pref: finesCalendar
