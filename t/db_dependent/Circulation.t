@@ -3160,7 +3160,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     is( $lines->count, 2 );
 
     my $line = $lines->next;
-    is( $line->accounttype, 'RENT',       'The issue of item with issueing charge generates an accountline of the correct type' );
+    is( $line->accounttype, 'RENT',       'The issue of item with issuing charge generates an accountline of the correct type' );
     is( $line->branchcode,  $library->id, 'AddIssuingCharge correctly sets branchcode' );
     is( $line->description, '',     'AddIssue does not set a hardcoded description for the accountline' );
 
