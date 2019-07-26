@@ -52,7 +52,18 @@ if( CheckVersion( $DBversion ) ) {
         });
     }
 
-    $dbh->do( "DROP TABLE IF EXISTS fieldmapping" );
+    $dbh->do("UPDATE marc_subfield_structure JOIN fieldmapping ON tagfield = fieldcode AND subfieldcode=tagsubfield SET kohafield='biblio.subtitle' WHERE fieldmapping.frameworkcode=''");
+    $sth = $dbh->prepare("SELECT * FROM fieldmapping WHERE frameworkcode != '' OR field != 'subtitle'");
+    $sth->execute;
+    print "Keyword to MARC mappings below cannot be preserved: \n" if $sth->rows;
+    while ( my $value = $sth->fetchrow_hashref() ){
+        my $framework = $value->{frameworkcode} eq "" ? "Default" : $value->{frameworkcode};
+        print "    keyword: " . $value->{'field'} . " to field: " . $value->{fieldcode} . "\$" . $value->{subfieldcode} . " for $framework framework\n";
+    }
+    print "You will need to remap using Koha to MARC mappings in administration\n" if $sth->rows;
+
+
+#    $dbh->do( "DROP TABLE IF EXISTS fieldmapping" );
 
     $dbh->do( "DELETE FROM user_permissions WHERE code='manage_keywords2koha_mappings'" );
 
