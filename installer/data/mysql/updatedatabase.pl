@@ -18735,6 +18735,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (19.05.02 release)\n";
 }
 
+$DBversion = '19.05.02.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE `search_field` SET `name` = 'date-time-last-modified', `label` = 'date-time-last-modified' WHERE `name` = 'date/time-last-modified'" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22524 - Fix date/time-last-modified search with Elasticsearch)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
