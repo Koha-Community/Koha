@@ -5,6 +5,29 @@ if ( CheckVersion($DBversion) ) {
         UPDATE
           accountlines
         SET
+          accounttype = 'RENT_DAILY_RENEW'
+        WHERE
+          accounttype = 'Rent'
+        AND
+          description LIKE 'Renewal of Daily Rental Item%';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'RENT_DAILY'
+        WHERE
+          accounttype = 'Rent'
+        AND
+          description LIKE 'Daily rental';
+    });
+
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
           accounttype = 'RENT_RENEW'
         WHERE
           accounttype = 'Rent'
