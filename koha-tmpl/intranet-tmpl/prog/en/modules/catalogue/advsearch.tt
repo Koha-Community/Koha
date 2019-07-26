@@ -7,6 +7,23 @@
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
+[%- BLOCK language_limit_select -%]
+<select name="limit" id="[% ln_id | html %]">
+    <option value="">No limit</option>
+    [% FOREACH ln_loo IN ln_loop %]
+        [% IF ( ln_loo.selected ) %]
+            <option value="[% ln_index | html %],rtrn:[% ln_loo.iso639_2_code | html %]" selected="selected">
+                [% ln_loo.language_description | html %]
+            </option>
+        [% ELSE %]
+            <option value="[% ln_index | html %],rtrn:[% ln_loo.iso639_2_code | html %]">
+                [% ln_loo.language_description | html %]
+            </option>
+        [% END %]
+    [% END %]
+</select>
+[%- END -%]
+
 <body id="catalog_advsearch" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'adv-search.inc' %]
@@ -140,18 +157,12 @@
 </fieldset>
 <fieldset id="language">
 <!-- LANGUAGE LIMIT -->
-		<p><label for="language-limit">Language: </label>                                        
-		<select name="limit" id="language-limit">
-        <option value="">No limit</option>
-		[% FOREACH search_languages_loo IN search_languages_loop %]
-		[% IF ( search_languages_loo.selected ) %]
-		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code | html %]" selected="selected">[% search_languages_loo.language_description | html %]</option>
-		[% ELSE %]
-		<option value="ln,rtrn:[% search_languages_loo.iso639_2_code | html %]">[% search_languages_loo.language_description | html %]</option>
-		[% END %]
-		
-		[% END %]
-		</select></p><!-- <a href="">Show all languages</a>-->
+    <p>
+        <label for="language-limit">Language: </label>
+        [% PROCESS language_limit_select ln_loop=search_languages_loop ln_id='language-limit' ln_index='ln' %]
+        <label for="language-original-limit">Language of original: </label>
+        [% PROCESS language_limit_select ln_loop=search_languages_loop ln_id='language-original-limit' ln_index='language-original' %]
+    </p>
 <!-- /LANGUAGE LIMIT -->
 </fieldset>
 </fieldset>
