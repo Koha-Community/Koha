@@ -383,7 +383,7 @@
                 </xsl:if>
               </xsl:for-each>
             </a>
-            <xsl:if test="$IdRef">
+            <xsl:if test="$IdRef = '1'">
               <xsl:if test="marc:subfield[@code=3]">
                 <xsl:text> </xsl:text>
                 <a>
