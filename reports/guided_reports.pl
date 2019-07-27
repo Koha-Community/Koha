@@ -825,7 +825,8 @@ elsif ($phase eq 'Run this report'){
                             'reports'      => $report_id,
                             );
         } else {
-            my $sql = get_prepped_report( $sql, \@param_names, \@sql_params);
+            my ($sql,$header_types) = get_prepped_report( $sql, \@param_names, \@sql_params);
+            $template->param(header_types => $header_types);
             my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
             my ($sth2, $errors2) = execute_query($sql);
             my $total = nb_rows($sql) || 0;
@@ -1076,6 +1077,17 @@ sub create_non_existing_group_and_subgroup {
 # pass $sth and sql_params, get back an executable query
 sub get_prepped_report {
     my ($sql, $param_names, $sql_params ) = @_;
+
+    # First we split out the placeholders
+    my @split = split /\[\[|\]\]/,$sql;
+    my $headers;
+    for(my $i=0;$i<$#split/2;$i++){ #The placeholders are always the odd elements of the array
+        my ($type,$name) = split /\|/,$split[$i*2+1]; # We split them on '|'
+        $headers->{$name} = $type; # Store as a lookup for the template
+        $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g; #Quote any special characters so we can replace the placeholders
+        $sql =~ s/\[\[$split[$i*2+1]\]\]/$type AS $name/; # Remove placeholders from SQL
+    }
+
     my %lookup;
     @lookup{@$param_names} = @$sql_params;
     my @split = split /<<|>>/,$sql;
@@ -1090,5 +1102,5 @@ sub get_prepped_report {
         $quoted = C4::Context->dbh->quote($quoted);
         $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
     }
-    return $sql;
+    return $sql,$headers;
 }

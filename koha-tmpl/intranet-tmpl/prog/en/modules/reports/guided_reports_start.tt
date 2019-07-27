@@ -737,7 +737,7 @@ canned reports and writing custom SQL reports.</p>
             <input type="hidden" name="recordtype" value="biblio" />
             <input type="hidden" name="op" value="list" />
             [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
+            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
 [% cells.cell | html %][% END %][% END %][% END %]</textarea>
         </form>
 
@@ -745,7 +745,7 @@ canned reports and writing custom SQL reports.</p>
             <input type="hidden" name="recordtype" value="biblio" />
             <input type="hidden" name="op" value="list" />
             [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
+            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
 [% cells.cell | html %][% END %][% END %][% END %]</textarea>
         </form>
 
@@ -754,7 +754,7 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 [% FOREACH cells IN result.cells %]
                     [% place = loop.index %]
-                    [% IF header_row.$place.cell == 'itemnumber' %]
+                    [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
                         [% SET batch_itemnumbers = 1 %]
                         <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                     [% END %]
@@ -768,7 +768,7 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 [% FOREACH cells IN result.cells %]
                     [% place = loop.index %]
-                    [% IF header_row.$place.cell == 'itemnumber' %]
+                    [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
                         [% SET batch_itemnumbers = 1 %]
                         <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                     [% END %]
@@ -780,7 +780,7 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 [% FOREACH cells IN result.cells %]
                     [% place = loop.index %]
-                    [% IF header_row.$place.cell == 'biblionumber' %]
+                    [% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
                         [% SET batch_biblionumbers = 1 %]
                         <input type="hidden" class="bib_to_list" name="biblionumber" value="[% cells.cell | html %]" />
                     [% END %]
@@ -791,7 +791,7 @@ canned reports and writing custom SQL reports.</p>
         <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification">
             <input type="hidden" name="op" value="show" />
             [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-            <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'cardnumber' %][% SET batch_cardnumbers = 1 %]
+            <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %][% SET batch_cardnumbers = 1 %]
 [% cells.cell | html %][% END %][% END %][% END %]</textarea>
         </form>
 
@@ -804,7 +804,7 @@ canned reports and writing custom SQL reports.</p>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
                         [% FOREACH header_ro IN header_row %]
-                            [% IF header_ro.cell == 'biblionumber' %]
+                            [% IF header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' %]
                                 <li class="dropdown-header">Bibliographic records</li>
                                 <li>
                                     <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
@@ -816,7 +816,7 @@ canned reports and writing custom SQL reports.</p>
                                     <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
                                 </li>
                             [% END %]
-                            [% IF header_ro.cell == 'itemnumber' %]
+                            [% IF header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' %]
                                 [% IF ( batch_biblionumbers ) %]
                                     <li role="separator" class="divider"></li>
                                 [% END %]
@@ -828,7 +828,7 @@ canned reports and writing custom SQL reports.</p>
                                     <a href="#" data-submit="batch_item_deletion" data-toggle="tooltip" data-placement="right" title="Send visible items to batch item deletion" class="batch_op send_to_item_del">Batch item deletion</a>
                                 </li>
                             [% END %]
-                            [% IF header_ro.cell == 'cardnumber' %]
+                            [% IF header_ro.cell == 'cardnumber' || header_types.item( header_ro.cell ) == 'cardnumber' %]
                                 [% IF ( batch_biblionumbers || batch_itemnumbers ) %]
                                     <li role="separator" class="divider"></li>
                                 [% END %]

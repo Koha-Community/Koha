@@ -66,6 +66,7 @@ unless ($json_text) {
 
     # convert SQL parameters to placeholders
     $sql =~ s/(<<.*?>>)/\?/g;
+    $sql =~ s/\[\[(.*?)\|(.*?)\]\]/$1 AS $2/g;
 
     my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, \@sql_params, $report_id );
     if ($sth) {
