@@ -26,7 +26,7 @@ use MARC::Record;
 use C4::Biblio;
 
 subtest 'GetMarcNotes MARC21' => sub {
-    plan tests => 4;
+    plan tests => 11;
     t::lib::Mocks::mock_preference( 'NotesBlacklist', '520' );
 
     my $record = MARC::Record->new;
@@ -34,12 +34,23 @@ subtest 'GetMarcNotes MARC21' => sub {
         MARC::Field->new( '500', '', '', a => 'Note1' ),
         MARC::Field->new( '505', '', '', a => 'Note2', u => 'http://someserver.com' ),
         MARC::Field->new( '520', '', '', a => 'Note3 skipped' ),
+        MARC::Field->new( '541', '0', '', a => 'Note4 skipped on opac' ),
+        MARC::Field->new( '541', '', '', a => 'Note5' ),
     );
     my $notes = C4::Biblio::GetMarcNotes( $record, 'MARC21' );
     is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
     is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
     is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
-    is( @$notes, 3, 'No more notes' );
+    is( $notes->[3]->{marcnote}, 'Note4 skipped on opac',"Not shows if not opac" );
+    is( $notes->[4]->{marcnote}, 'Note5', 'Fifth note' );
+    is( @$notes, 5, 'No more notes' );
+    $notes = C4::Biblio::GetMarcNotes( $record, 'MARC21', 1 );
+    is( $notes->[0]->{marcnote}, 'Note1', 'First note' );
+    is( $notes->[1]->{marcnote}, 'Note2', 'Second note' );
+    is( $notes->[2]->{marcnote}, 'http://someserver.com', 'URL separated' );
+    is( $notes->[3]->{marcnote}, 'Note5', 'Fifth note shows after fourth skipped' );
+    is( @$notes, 4, 'No more notes' );
+
 };
 
 subtest 'GetMarcNotes UNIMARC' => sub {

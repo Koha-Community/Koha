@@ -81,7 +81,7 @@ foreach my $biblionumber ( @bibs ) {
     });
     $record_processor->process($record);
     next unless $record;
-    my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
+    my $marcnotesarray   = GetMarcNotes( $record, $marcflavour, 1 );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);

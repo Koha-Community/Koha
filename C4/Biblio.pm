@@ -1495,7 +1495,7 @@ sub GetMarcISSN {
 =cut
 
 sub GetMarcNotes {
-    my ( $record, $marcflavour ) = @_;
+    my ( $record, $marcflavour, $opac ) = @_;
     if (!$record) {
         carp 'GetMarcNotes called on undefined record';
         return;
@@ -1503,11 +1503,22 @@ sub GetMarcNotes {
 
     my $scope = $marcflavour eq "UNIMARC"? '3..': '5..';
     my @marcnotes;
+
+    #MARC21 specs indicate some notes should be private if first indicator 0
+    my %maybe_private = (
+        541 => 1,
+        542 => 1,
+        561 => 1,
+        583 => 1,
+        590 => 1
+    );
+
     my %blacklist = map { $_ => 1 }
         split( /,/, C4::Context->preference('NotesBlacklist'));
     foreach my $field ( $record->field($scope) ) {
         my $tag = $field->tag();
         next if $blacklist{ $tag };
+        next if $opac && $maybe_private{$tag} && !$field->indicator(1);
         if( $marcflavour ne 'UNIMARC' && $field->subfield('u') ) {
             # Field 5XX$u always contains URI
             # Examples: 505u, 506u, 510u, 514u, 520u, 530u, 538u, 540u, 542u, 552u, 555u, 561u, 563u, 583u
