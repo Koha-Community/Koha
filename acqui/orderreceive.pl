@@ -118,42 +118,6 @@ unless($acq_fw) {
     $template->param('NoACQframework' => 1);
 }
 
-my $AcqCreateItem = $basket->effective_create_items;
-if ($AcqCreateItem eq 'receiving') {
-    $template->param(
-        AcqCreateItemReceiving => 1,
-        UniqueItemFields => C4::Context->preference('UniqueItemFields'),
-    );
-} elsif ($AcqCreateItem eq 'ordering') {
-    my $fw = ($acq_fw) ? 'ACQ' : '';
-    my $items = $order->items;
-    $template->param(items => $items);
-}
-
-$order->quantityreceived = '' if $order->quantityreceived == 0;
-
-my $unitprice = $order->unitprice;
-my ( $rrp, $ecost );
-if ( $bookseller->invoiceincgst ) {
-    $rrp = $order->rrp_tax_included;
-    $ecost = $order->ecost_tax_included;
-    unless ( $unitprice != 0 and defined $unitprice) {
-        $unitprice = $order->ecost_tax_included;
-    }
-} else {
-    $rrp = $order->rrp_tax_excluded;
-    $ecost = $order->ecost_tax_excluded;
-    unless ( $unitprice != 0 and defined $unitprice) {
-        $unitprice = $order->ecost_tax_excluded;
-    }
-}
-
-my $tax_rate;
-if( defined $order->tax_rate_on_receiving ) {
-    $tax_rate = $order->tax_rate_on_receiving + 0.0;
-} else {
-    $tax_rate = $order->tax_rate_on_ordering + 0.0;
-}
 
 my $creator = Koha::Patrons->find( $order->created_by );
 
@@ -188,7 +152,6 @@ if ( $order->subscriptionid ) {
 }
 
 $template->param(
-    AcqCreateItem         => $AcqCreateItem,
     count                 => 1,
     order                 => $order,
     freight               => $freight,
@@ -197,8 +160,6 @@ $template->param(
     currencies            => scalar $currencies->search({ rate => { '!=' => 1 } }),
     invoiceincgst         => $bookseller->invoiceincgst,
     bookfund              => $budget->{budget_name},
-    rrp                   => $rrp,
-    ecost                 => $ecost,
     creator               => $creator,
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
@@ -225,6 +186,9 @@ foreach my $period (@$periods) {
     my @funds;
     foreach my $r ( @{$budget_hierarchy} ) {
         next unless ( CanUserUseBudget( $patron, $r, $userflags ) );
+        if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
+            next;
+        }
         push @funds,
           {
             b_id  => $r->{budget_id},

@@ -19,6 +19,7 @@
 
 <div class="main container-fluid">
     <div class="row">
+    [% AcqCreateItem = order.basket.effective_create_items %]
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
@@ -141,7 +142,7 @@
                 </tbody>
             </table>
         </fieldset>
-    [% ELSIF (AcqCreateItemReceiving) %]
+    [% ELSIF (AcqCreateItem == 'receiving') %]
         <div id="items_list" style="display:none">
             <p><strong>Items list</strong></p>
             <div style="width:100%;overflow:auto;">
@@ -184,7 +185,7 @@
           </fieldset>
         [% END %]
     [% ELSIF (AcqCreateItem == 'ordering') %]
-        [% IF (items.count) %]
+        [% IF (order.items.size) %]
             <h5>Items</h5>
             <div style="width:100%;overflow:auto">
                 <table>
@@ -208,7 +209,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        [% FOREACH item IN items %]
+                        [% FOREACH item IN order.items %]
                             <tr id="item_[% item.itemnumber | html %]">
                                 <td style="text-align:center"><input type="checkbox" name="items_to_receive" value="[% item.itemnumber | html %]" /></td>
                                 <td><a style="cursor:pointer" onclick="PopupEditPage([% item.biblionumber | html %],[% item.itemnumber | html %]);">Edit</a></td>
@@ -277,7 +278,7 @@
           [% IF order.subscriptionid %]
               <input type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantity | html %]" />
               <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
-          [% ELSIF AcqCreateItemReceiving %]
+          [% ELSIF AcqCreateItem == 'receiving' %]
               <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
           [% ELSE %]
             [% IF ( order.quantityreceived ) %]
@@ -285,7 +286,7 @@
                     <input type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived | html %]" />
                     <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% order.quantityreceived | html %]" />
                 [% ELSE %]
-                    [% IF ( items ) %]
+                    [% IF ( order.items.count ) %]
                         <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="[% order.quantityreceived + 1 | html %]" />
                     [% ELSE %]
                         <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived + 1 | html %]" />
@@ -300,7 +301,7 @@
                 <p class="error">Warning, you have entered more items than expected.
                 Items will not be created.</p>
             </div>
-          [% END %][%# IF (order.subscriptionid) ELSIF (AcqCreateItemReceiving) %]
+          [% END %][%# IF (order.subscriptionid) ELSIF (AcqCreateItem == 'receiving' ) %]
 		</li>
 
         [% IF ( gst_values ) %]
@@ -391,7 +392,7 @@
     [% Asset.js("js/cataloging.js") | $raw %]
     <script>
         function Check(form) {
-            [% IF (AcqCreateItemReceiving) %]
+            [% IF (AcqCreateItem == 'receiving') %]
                 var total_errors = CheckMandatorySubfields(form);
                 if (total_errors != 0) {
                     var alertString = _("Form not submitted because of the following problem(s)");
@@ -401,7 +402,7 @@
                     return false;
                 }
 
-                if(check_additem('[% UniqueItemFields | html %]') == false){
+                if(check_additem('[% Koha.Preference("UniqueItemFields") | html %]') == false){
                     alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
                     return false;
                 };
@@ -419,7 +420,7 @@
                     $(lastitemblock).remove();
                 }
 
-                if(check_additem('[% UniqueItemFields | html %]') == false){
+                if(check_additem('[% Koha.Preference("UniqueItemFields") | html %]') == false){
                     alert(_("Duplicate values detected. Please correct the errors and resubmit.") );
                     if(tobedeleted) {
                         $(lastitemblock).appendTo("#outeritemblock");
@@ -478,7 +479,7 @@
         [% END %]
 
         $(document).ready(function() {
-            [% IF (AcqCreateItemReceiving) %]
+            [% IF (AcqCreateItem == 'receiving') %]
                 cloneItemBlock(0, '[% UniqueItemFields | html %]');
             [% ELSIF (AcqCreateItem == 'ordering') && not order.subscriptionid %]
                 $("input[name='items_to_receive']").change(function() {
