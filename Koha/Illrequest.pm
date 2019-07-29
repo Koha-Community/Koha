@@ -498,7 +498,16 @@ sub _core_status_graph {
             method         => 'check_out',
             next_actions   => [ ],
             ui_method_icon => 'fa-upload',
-        }
+        },
+		RET => {
+			prev_actions   => [ 'CHK' ],
+			id             => 'RET',
+			name           => 'Returned to library',
+			ui_method_name => 'Check in',
+			method         => 'check_in',
+			next_actions   => [ 'COMP' ],
+			ui_method_icon => 'fa-download',
+		}
     };
 }
 

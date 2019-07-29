@@ -44,6 +44,7 @@ use Koha::Biblioitems;
 use Koha::DateUtils;
 use Koha::Calendar;
 use Koha::Checkouts;
+use Koha::Illrequests;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Debarments;
@@ -2129,6 +2130,15 @@ sub AddReturn {
     ) {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
+
+	# Check if this item belongs to a biblio record that is attached to an
+	# ILL request, if it is we need to update the ILL request's status
+	if (C4::Context->preference('CirculateILL')) {
+		my $request = Koha::Illrequests->find(
+			{ biblio_id => $item->biblio->biblionumber }
+		);
+		$request->status('RET') if $request;
+	}
 
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
     if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'}){
