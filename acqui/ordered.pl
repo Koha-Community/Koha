@@ -58,7 +58,7 @@ SELECT
     ecost_tax_included, budgetdate, entrydate,
     aqbasket.booksellerid,
     aqbooksellers.name as vendorname,
-    itype,
+    GROUP_CONCAT(DISTINCT itype),
     title
 FROM (aqorders, aqbasket)
 LEFT JOIN biblio ON
@@ -80,7 +80,6 @@ WHERE
              ecost_tax_included, budgetdate, entrydate,
              aqbasket.booksellerid,
              aqbooksellers.name,
-             itype,
              title
 EOQ
 
