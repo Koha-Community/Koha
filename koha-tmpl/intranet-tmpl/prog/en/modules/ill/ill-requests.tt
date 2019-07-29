@@ -439,6 +439,22 @@
                         Edit request
                         </a>
                         [% FOREACH action IN request.available_actions %]
+                            [% needs_prefs = action.needs_prefs.size ? action.needs_prefs : [] %]
+                            [% needs_perms = action.needs_perms.size ? action.needs_perms : [] %]
+                            [% has_prefs_count = 0 %]
+                            [% has_perms_count = 0 %]
+                            [% FOREACH pref IN needs_prefs %]
+                                [% IF Koha.Preference(pref) %]
+                                    [% has_prefs_count = has_prefs_count + 1 %]
+                                [% END %]
+                            [% END %]
+                            [% FOREACH perm IN needs_perms %]
+                                [% perm_name = 'CAN_' _ perm %]
+                                [% IF ($perm_name) %]
+                                    [% has_perms_count = has_perms_count + 1 %]
+                                [% END %]
+                            [% END %]
+                            [% NEXT IF has_prefs_count < needs_prefs.size || has_perms_count < needs_perms.size %]
                             [% IF action.method == 'migrate' %]
                                 [% IF backends.size > 2 %]
                                     <div class="dropdown btn-group">

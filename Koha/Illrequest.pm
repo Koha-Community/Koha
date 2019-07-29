@@ -493,6 +493,8 @@ sub _core_status_graph {
             id             => 'CHK',
             name           => 'Checked out',
             ui_method_name => 'Check out',
+            needs_prefs    => [ 'CirculateILL' ],
+            needs_perms    => [ 'user_circulate_circulate_remaining_permissions' ],
             method         => 'check_out',
             next_actions   => [ ],
             ui_method_icon => 'fa-upload',
