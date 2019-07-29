@@ -152,7 +152,6 @@ if ( $order->subscriptionid ) {
 }
 
 $template->param(
-    count                 => 1,
     order                 => $order,
     freight               => $freight,
     name                  => $bookseller->name,

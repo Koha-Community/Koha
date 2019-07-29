@@ -25,7 +25,7 @@
 
 <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% order.ordernumber | html %])</h1>
 
-[% IF ( count ) %]
+[% IF ( order ) %]
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" class="noEnterSubmit" method="post" onsubmit="return Check(this);">
 <div class="row">
 <div class="col-sm-6">
