@@ -21,7 +21,11 @@ use File::Basename qw/basename/;
 use Koha::Database;
 use Koha::Illrequestattributes;
 use Koha::Illrequest::Config;
+use Koha::Biblios;
 use Koha::Patrons;
+use Koha::ItemTypes;
+use Koha::Items;
+use Koha::Libraries;
 use Koha::AuthorisedValueCategories;
 use Koha::AuthorisedValues;
 use t::lib::Mocks;
@@ -30,7 +34,7 @@ use Test::MockObject;
 use Test::MockModule;
 use Test::Exception;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -347,7 +351,6 @@ subtest 'Backend testing (mocks)' => sub {
     my $patron = $builder->build({ source => 'Borrower' });
     my $illrq = $builder->build_object({
         class => 'Koha::Illrequests',
-        value => { borrowernumber => $patron->{borrowernumber} }
     });
 
     $illrq->_backend($backend);
@@ -408,7 +411,7 @@ subtest 'Backend testing (mocks)' => sub {
                   name           => 'Completed',
                   ui_method_name => 'Mark completed',
                   method         => 'mark_completed',
-                  next_actions   => [ ],
+                  next_actions   => [ 'CHK' ],
                   ui_method_icon => 'fa-check',
               },
               "Dummy status graph for COMP.");
@@ -769,6 +772,143 @@ subtest 'Censorship' => sub {
         foo => 'bar', baz => 564, censor_notes_staff => 1,
         display_reply_date => 1, opac => 1
     }, "_censor: notes_staff = 0, reply_date = 0");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Checking out' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { category_type => 'x' }
+    });
+    my $request = $builder->build_object({
+        class => 'Koha::Illrequests',
+        value => {
+            borrowernumber => $patron->borrowernumber,
+            biblio_id      => $biblio->biblionumber
+        }
+    });
+
+    # First test that calling check_out without a stage param returns
+    # what's required to build the form
+    my $no_stage = $request->check_out();
+    is($no_stage->{method}, 'check_out');
+    is($no_stage->{stage}, 'form');
+    isa_ok($no_stage->{value}, 'HASH');
+    isa_ok($no_stage->{value}->{itemtypes}, 'Koha::ItemTypes');
+    isa_ok($no_stage->{value}->{libraries}, 'Koha::Libraries');
+    isa_ok($no_stage->{value}->{statistical}, 'Koha::Patrons');
+    isa_ok($no_stage->{value}->{biblio}, 'Koha::Biblio');
+
+    # Now test that form validation works when we supply a 'form' stage
+    #
+    # No item_type
+    my $form_stage_missing_params = $request->check_out({
+        stage => 'form'
+    });
+    is_deeply($form_stage_missing_params->{value}->{errors}, {
+        item_type => 1
+    });
+    # inhouse passed but not a valid patron
+    my $form_stage_bad_patron = $request->check_out({
+        stage     => 'form',
+        item_type => $itemtype->itemtype,
+        inhouse   => 'I_DONT_EXIST'
+    });
+    is_deeply($form_stage_bad_patron->{value}->{errors}, {
+        inhouse => 1
+    });
+    # Too many items attached to biblio
+    my $item1 = $builder->build_object({
+        class => 'Koha::Items',
+        value => {
+            biblionumber => $biblio->biblionumber,
+            biblioitemnumber => 1
+        }
+    });
+    my $item2 = $builder->build_object({
+        class => 'Koha::Items',
+        value => {
+            biblionumber => $biblio->biblionumber,
+            biblioitemnumber => 2
+        }
+    });
+    my $form_stage_two_items = $request->check_out({
+        stage     => 'form',
+        item_type => $itemtype->itemtype,
+    });
+    is_deeply($form_stage_two_items->{value}->{errors}, {
+        itemcount => 1
+    });
+
+    # Passed validation
+    #
+    # Delete the items we created, so we can test that we can create one
+    Koha::Items->find({ itemnumber => $item1->itemnumber })->delete;
+    Koha::Items->find({ itemnumber => $item2->itemnumber })->delete;
+    # Create a biblioitem
+    my $biblioitem = $builder->build_object({
+        class => 'Koha::Biblioitems',
+        value => {
+            biblionumber => $biblio->biblionumber
+        }
+    });
+    # First we pass bad parameters to the item creation to test we're
+    # catching the failure of item creation
+    # Note: This will generate a DBD::mysql error when running this test!
+    my $form_stage_bad_branchcode = $request->check_out({
+        stage     => 'form',
+        item_type => $itemtype->itemtype,
+        branchcode => '---'
+    });
+    is_deeply($form_stage_bad_branchcode->{value}->{errors}, {
+        item_creation => 1
+    });
+    # Now create a proper item
+    my $form_stage_good_branchcode = $request->check_out({
+        stage      => 'form',
+        item_type  => $itemtype->itemtype,
+        branchcode => $library->branchcode
+    });
+    # By default, this item should not be loanable, so check that we're
+    # informed of that fact
+    is_deeply(
+        $form_stage_good_branchcode->{value}->{check_out_errors},
+        {
+            error => {
+                NOT_FOR_LOAN => 1,
+                itemtype_notforloan => $itemtype->itemtype
+            }
+        }
+    );
+    # Delete the item that was created
+    $biblio->items->delete;
+    # Now create an itemtype that is loanable
+    my $itemtype_loanable = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            notforloan => 0
+        }
+    });
+    # We need to mock the user environment for AddIssue
+    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+    my $form_stage_loanable = $request->check_out({
+        stage      => 'form',
+        item_type  => $itemtype_loanable->itemtype,
+        branchcode => $library->branchcode
+    });
+    is($form_stage_loanable->{stage}, 'done_check_out');
+    isa_ok($patron->checkouts, 'Koha::Checkouts');
+    is($patron->checkouts->count, 1);
+    is($request->status, 'CHK');
 
     $schema->storage->txn_rollback;
 };
