@@ -681,6 +681,7 @@ canned reports and writing custom SQL reports.</p>
                 [% ELSE %]
                     <li><label for="sql_params_[% sql_param.labelid | html %]">[% sql_param.entry | html %]:</label>
                         <select name="[%- sql_param.input.name | html -%]" tabindex="1"  size="1" id="[%- sql_param.input.id | html -%]">
+                        [% IF (sql_param.include_all) %]<option value="%">All</option>[% END %]
                         [% FOREACH value IN sql_param.input.values %]
                             <option value="[%- value | html -%]">[%- sql_param.input.labels.$value | html -%]</option>
                         [% END %]

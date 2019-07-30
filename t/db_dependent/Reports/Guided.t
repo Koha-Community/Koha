@@ -145,13 +145,15 @@ subtest 'GetParametersFromSQL+ValidateSQLParameters' => sub  {
         FROM old_issues
         WHERE YEAR(timestamp) = <<Year|custom_list>> AND
               branchcode = <<Branch|branches>> AND
-              borrowernumber = <<Borrower>>
+              borrowernumber = <<Borrower>> AND
+              itemtype = <<Item type|itemtypes:all>>
     ";
 
     my @test_parameters_with_custom_list = (
         { 'name' => 'Year', 'authval' => 'custom_list' },
         { 'name' => 'Branch', 'authval' => 'branches' },
-        { 'name' => 'Borrower', 'authval' => undef }
+        { 'name' => 'Borrower', 'authval' => undef },
+        { 'name' => 'Item type', 'authval' => 'itemtypes' }
     );
 
     is_deeply( GetParametersFromSQL($test_query_1), \@test_parameters_with_custom_list,

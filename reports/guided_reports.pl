@@ -701,11 +701,12 @@ elsif ($phase eq 'Run this report'){
             my @authval_errors;
             my %uniq_params;
             for(my $i=0;$i<($#split/2);$i++) {
-                my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
-                my $sep = $authorised_value ? "|" : "";
-                if( defined $uniq_params{$text.$sep.$authorised_value} ){
+                my ($text,$authorised_value_all) = split /\|/,$split[$i*2+1];
+                my $sep = $authorised_value_all ? "|" : "";
+                if( defined $uniq_params{$text.$sep.$authorised_value_all} ){
                     next;
-                } else { $uniq_params{$text.$sep.$authorised_value} = "$i"; }
+                } else { $uniq_params{$text.$sep.$authorised_value_all} = "$i"; }
+                my ($authorised_value, $all) = split /:/, $authorised_value_all;
                 my $input;
                 my $labelid;
                 if ( not defined $authorised_value ) {
@@ -797,7 +798,7 @@ elsif ($phase eq 'Run this report'){
                     };
                 }
 
-                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid, 'name' => $text.$sep.$authorised_value };
+                push @tmpl_parameters, {'entry' => $text, 'input' => $input, 'labelid' => $labelid, 'name' => $text.$sep.$authorised_value_all, 'include_all' => $all };
             }
             $template->param('sql'         => $sql,
                             'name'         => $name,
