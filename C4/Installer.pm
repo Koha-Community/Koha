@@ -325,6 +325,7 @@ sub load_sql_in_order {
         "$global_mandatory_dir/message_transport_types.sql",
         "$global_mandatory_dir/sample_notices_message_attributes.sql",
         "$global_mandatory_dir/sample_notices_message_transports.sql",
+        "$global_mandatory_dir/keyboard_shortcuts.sql",
     );
 
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userflags.sql";
