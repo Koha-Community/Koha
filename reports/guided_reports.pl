@@ -1090,7 +1090,7 @@ sub get_prepped_report {
 
     my %lookup;
     @lookup{@$param_names} = @$sql_params;
-    my @split = split /<<|>>/,$sql;
+    @split = split /<<|>>/,$sql;
     my @tmpl_parameters;
     for(my $i=0;$i<$#split/2;$i++) {
         my $quoted = @$param_names ? $lookup{ $split[$i*2+1] } : @$sql_params[$i];
