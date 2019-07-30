@@ -95,7 +95,7 @@
                                     [% IF ( patron.gonenoaddress ) %]
                                         <li class="error">Patron's address is in doubt</li>
                                     [% END %]
-                                </li>
+                                </ul>
 
                                 [% IF ( transfertodo ) %]
                                     <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
@@ -106,8 +106,8 @@
                                 <a href="#" class="btn btn-default print print-slip">
                                     <i class="fa fa-print"></i> Print
                                 </a>
-                            </div>
-                        [% END %]
+                            </div> <!-- /.hold-auto-filled -->
+                        [% END # /IF hold_auto_filled %]
 
                         [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
                             <div class="dialog alert">
@@ -202,15 +202,15 @@
                                                         [% Branches.GetName( rightbranch ) | html %]
                                                     </strong>
                                                 </p>
-                                            </div>
+                                            </div> <!-- /.modal-body -->
                                             <div class="modal-footer">
                                                 <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                                             </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        [% END %]
+                                        </form> <!-- /#mainform -->
+                                    </div> <!-- /.modal-content -->
+                                </div> <!-- /.modal-dialog -->
+                            </div> <!-- /#wrong-branch-modal -->
+                        [% END # /IF wrongbranch %]
 
                         <!-- case of a mistake in transfer loop -->
                         [% IF WrongTransfer && !transfertodo %]
@@ -246,12 +246,12 @@
                                                     <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
                                                     <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                                 [% END %]
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        [% END %]
+                                            </form> <!-- /mainform -->
+                                        </div> <!-- /.modal-footer -->
+                                    </div> <!-- /.modal-content -->
+                                </div> <!-- /.modal-dialog -->
+                            </div> <!-- /#wrong-transfer-modal -->
+                        [% END # /IF WrongTransfer && !transfertodo %]
 
                         [% IF ( found ) %]
                             [% IF ( waiting ) %]
@@ -322,7 +322,7 @@
 
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
-                                                </div>
+                                                </div> <!-- /.modal-body -->
 
                                                 <div class="modal-footer">
                                                     <input type="hidden" name="cancel_reserve" value="0" />
@@ -339,12 +339,12 @@
                                                     <button type="submit" class="btn btn-default deny cancel-hold">
                                                         <i class="fa fa-times"></i> Cancel hold
                                                     </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            [% END %]
+                                                </div> <!-- /.modal-footer -->
+                                            </form> <!-- /.confirm -->
+                                        </div> <!-- /.modal-content -->
+                                    </div> <!-- /.modal-dialog -->
+                                </div> <!-- /#hold-found1 -->
+                            [% END # /IF waiting %]
 
                             [% IF ( diffbranch ) %]
                                 <!-- diffbranch -->
@@ -402,9 +402,9 @@
 
                                         <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
-                                    </form>
-                                </div>
-                            [% END %]
+                                    </form> <!-- /.confirm -->
+                                </div> <!-- /#transfer-needed -->
+                            [% END # /IF diffbranch %]
 
                             [% IF transfer || needstransfer %]
                                 <div id="item-transfer-modal" class="modal fade audio-alert-action">
@@ -424,7 +424,7 @@
                                                     </p>
                                                     [% IF !transfer %]
                                                         <p>
-                                                        Transfer now?
+                                                            Transfer now?
                                                         </p>
                                                     [% END %]
                                                     <input type="hidden" name="tobranch" value="[% returnbranch | html %]" />
@@ -450,12 +450,12 @@
                                                         <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
                                                         <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                                                     [% END %]
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            [% END %]
+                                                </div> <!-- /.modal-footer -->
+                                            </form> <!-- /#mainform -->
+                                        </div> <!-- /.modal-content -->
+                                    </div> <!-- /.modal-dialog -->
+                                </div> <!-- /#item-transfer-modal -->
+                            [% END # /IF transfer || needstransfer %]
 
                             [% IF ( diffbranch ) %]
                                 <!-- diffbranch -->
@@ -481,7 +481,7 @@
                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                                     <input type="hidden" name="barcode" value="0" />
                                 </form>
-                            [% END %]
+                            [% END # /IF diffbranch %]
 
                             <!-- case of simple return no issue or transfer but with a reservation  -->
                             [% IF ( reserved ) %]
@@ -496,7 +496,7 @@
                                                         <br/>
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
                                                         <div class="hold-found-barcode">
-                                                            (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | html %]">[% itembarcode | html %]</a>)
+                                                            (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% itembarcode | html %]</a>)
                                                         </div>
                                                     </h3>
                                                 </div>
@@ -589,13 +589,13 @@
                                                     <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-default deny">
                                                         <i class="fa fa-times"></i> Ignore
                                                     </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            [% END %]
-                        [% END %]
+                                                </div> <!-- /.modal-footer -->
+                                            </form> <!-- /.confirm -->
+                                        </div> <!-- /.modal-content -->
+                                    </div> <!-- /.modal-dialog -->
+                                </div> <!-- /#hold-found2 -->
+                            [% END #/IF reserved %]
+                        [% END # /IF found %]
 
                         [% IF ( errmsgloop ) %]
                             <div class="dialog alert audio-alert-warning">
@@ -697,9 +697,9 @@
                                     [% IF errmsgloo.data_corrupted %]
                                         <p class="problem">The item has not been checked in due to a configuration issue in your system. You must ask an administrator to take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a> and search for the "data problems" section</p>
                                     [% END %]
-                                [% END %]
-                            </div>
-                        [% END %]
+                                [% END # /FOREACH errmsgloo %]
+                            </div> <!-- /.dialog.dialog-alert -->
+                        [% END #/IF errmsgloop %]
 
                         [% IF ( checkinmsg ) %]
                             [% IF ( checkinmsgtype == 'alert' ) %]
@@ -709,7 +709,7 @@
                             [% END %]
                                     <p class="problem">[% checkinmsg | html_line_break %]</p>
                                 </div>
-                        [% END%]
+                        [% END # /IF checkinmsg %]
 
                         <form id="checkin-form" method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
                             <fieldset id="circ_returns_checkin">
@@ -788,7 +788,7 @@
                                                 [% END %]
                                                 <label for="return_date_override_remember"> Remember due date for next check in</label>
                                             </div>
-                                        </div>
+                                        </div> <!-- /.date-select -->
                                     [% END %]
 
                                     [% IF ( CAN_user_updatecharges_writeoff && overduecharges ) %]
@@ -909,19 +909,19 @@
                                         </td>
                                         <td class="ci-note">
                                             [% IF ( riloo.patron.borrowernotes ) %]
-                                                <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | html %]</p></span>
+                                                <p><span class="circ-hlt patron-note">[% riloo.patron.borrowernotes | html %]</span></p>
                                             [% END %]
                                             [% IF ( riloo.itemnote ) %]
-                                                <p><span class="circ-hlt item-note-public">[% riloo.itemnote | html %]</p></span>
+                                                <p><span class="circ-hlt item-note-public">[% riloo.itemnote | html %]</span></p>
                                             [% END %]
                                             [% IF ( riloo.itemnotes_nonpublic ) %]
-                                                <p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic | html %]</p></span>
+                                                <p><span class="circ-hlt item-note-nonpublic">[% riloo.itemnotes_nonpublic | html %]</span></p>
                                             [% END %]
                                         </td>
                                     </tr>
-                                [% END %]
-                            </table>
-                        [% END %]
+                                [% END # /FOREACH riloo %]
+                            </table> <!-- /#checkedintable -->
+                        [% END # /IF riloop %]
 
                     [% IF Koha.Preference('CircSidebar') %]
                             </div> <!-- /.col-sm-10.col-sm-push-2 -->
