@@ -137,12 +137,12 @@ Then name of the plugin method used. For example 'tool' or 'report'.
 The URL path to the plugin. It can be used in templates in order to localize
 ressources like images in html tags, or other templates.
 
-=item B<PLUGN_DIR>
+=item B<PLUGIN_DIR>
 
 The absolute pathname to the plugin directory. Necessary to include other
 templates from a template with the [% INCLUDE %] directive.
 
-=over
+=back
 
 
 =cut
@@ -177,7 +177,7 @@ sub get_template {
 sub get_metadata {
     my ( $self, $args ) = @_;
 
-    #FIXME: Why another encoding issue? For metadata containg non latin characters.
+    #FIXME: Why another encoding issue? For metadata containing non latin characters.
     my $metadata = $self->{metadata};
     utf8::decode($metadata->{$_}) for keys %$metadata;
     return $metadata;
