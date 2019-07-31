@@ -242,7 +242,12 @@ sub XSLTParse4Display {
 
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
-    my $itemsxml  = buildKohaItemsNamespace($biblionumber, $hidden_items);
+    my $itemsxml;
+    if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" || $xslsyspref eq "XSLTResultsDisplay" ) {
+        $itemsxml = ""; #We don't use XSLT for items display on these pages
+    } else {
+        $itemsxml = buildKohaItemsNamespace($biblionumber, $hidden_items);
+    }
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
     $variables ||= {};
