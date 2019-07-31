@@ -374,8 +374,7 @@ sub transferbook {
 
 sub TooMany {
     my $borrower        = shift;
-    my $biblionumber = shift;
-	my $item		= shift;
+	my $item_object = shift;
     my $params = shift;
     my $onsite_checkout = $params->{onsite_checkout} || 0;
     my $switch_onsite_checkout = $params->{switch_onsite_checkout} || 0;
@@ -383,11 +382,9 @@ sub TooMany {
     my $dbh             = C4::Context->dbh;
 	my $branch;
 	# Get which branchcode we need
-	$branch = _GetCircControlBranch($item,$borrower);
-	my $type = (C4::Context->preference('item-level_itypes')) 
-  			? $item->{'itype'}         # item-level
-			: $item->{'itemtype'};     # biblio-level
- 
+    $branch = _GetCircControlBranch($item_object->unblessed,$borrower);
+    my $type = $item_object->effective_itemtype;
+
     # given branch, patron category, and item type, determine
     # applicable issuing rule
     my $maxissueqty_rule = Koha::CirculationRules->get_effective_rule(
@@ -905,7 +902,7 @@ sub CanBookBeIssued {
       and $issue
       and $issue->onsite_checkout
       and $issue->borrowernumber == $patron->borrowernumber ? 1 : 0 );
-    my $toomany = TooMany( $patron_unblessed, $item_object->biblionumber, $item_unblessed, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
+    my $toomany = TooMany( $patron_unblessed, $item_object, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany && not exists $needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
