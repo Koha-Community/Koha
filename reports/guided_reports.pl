@@ -1085,6 +1085,7 @@ sub get_prepped_report {
         my ($type,$name) = split /\|/,$split[$i*2+1]; # We split them on '|'
         $headers->{$name} = $type; # Store as a lookup for the template
         $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g; #Quote any special characters so we can replace the placeholders
+        $name = C4::Context->dbh->quote($name);
         $sql =~ s/\[\[$split[$i*2+1]\]\]/$type AS $name/; # Remove placeholders from SQL
     }
 
