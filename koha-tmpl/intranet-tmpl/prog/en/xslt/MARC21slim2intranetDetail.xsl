@@ -61,8 +61,11 @@
                 <xsl:when test="$leader6='o' or $leader6='p'">MX</xsl:when>
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">VM</xsl:when>
-                <xsl:when test="$leader6='i' or $leader6='j'">MU</xsl:when>
+                <xsl:when test="$leader6='g'">VM</xsl:when>
+                <xsl:when test="$leader6='k'">PK</xsl:when>
+                <xsl:when test="$leader6='r'">OB</xsl:when>
+                <xsl:when test="$leader6='i'">SO</xsl:when>
+                <xsl:when test="$leader6='j'">MU</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">PR</xsl:when>
             </xsl:choose>
         </xsl:variable>
@@ -82,11 +85,13 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">Book</xsl:when>
-                <xsl:when test="$leader6='o'">Kit</xsl:when>				
+                <xsl:when test="$leader6='o'">Kit</xsl:when>
                 <xsl:when test="$leader6='p'">Mixed materials</xsl:when>
                 <xsl:when test="$leader6='m'">Computer file</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">Map</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">Visual material</xsl:when>
+                <xsl:when test="$leader6='g'">Film</xsl:when>
+                <xsl:when test="$leader6='k'">Picture</xsl:when>
+                <xsl:when test="$leader6='r'">Object</xsl:when>
                 <xsl:when test="$leader6='j'">Music</xsl:when>
                 <xsl:when test="$leader6='i'">Sound</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">Score</xsl:when>
