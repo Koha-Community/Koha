@@ -81,6 +81,7 @@ my $item = $builder->build({
 });
 
 my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
+my $item_object = Koha::Items->find( $item->{itemnumber} );
 t::lib::Mocks::mock_userenv( { patron => $patron_object });
 
 # TooMany return ($current_loan_count, $max_loans_allowed) or undef
@@ -90,12 +91,12 @@ t::lib::Mocks::mock_userenv( { patron => $patron_object });
 subtest 'no rules exist' => sub {
     plan tests => 2;
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         { reason => 'NO_RULE_DEFINED', max_allowed => 0 },
         'CO should not be allowed, in any cases'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         { reason => 'NO_RULE_DEFINED', max_allowed => 0 },
         'OSCO should not be allowed, in any cases'
     );
@@ -116,7 +117,7 @@ subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
     );
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 0,
@@ -125,7 +126,7 @@ subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_ONSITE_CHECKOUTS',
             count => 0,
@@ -136,7 +137,7 @@ subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 0,
@@ -145,7 +146,7 @@ subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_ONSITE_CHECKOUTS',
             count => 0,
@@ -175,7 +176,7 @@ subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
     my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode}, dt_from_string() );
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -184,14 +185,14 @@ subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'OSCO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -200,7 +201,7 @@ subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -228,24 +229,24 @@ subtest '1 Issuingrule exist 1 1: issue is allowed' => sub {
     );
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         undef,
         'CO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'OSCO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         undef,
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'OSCO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
@@ -272,7 +273,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -281,14 +282,14 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'OSCO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -297,7 +298,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed. Do a CO' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -328,12 +329,12 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         undef,
         'CO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_ONSITE_CHECKOUTS',
             count => 1,
@@ -344,7 +345,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -353,7 +354,7 @@ subtest '1 Issuingrule exist: 1 CO allowed, 1 OSCO allowed, Do a OSCO' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_ONSITE_CHECKOUTS',
             count => 1,
@@ -387,7 +388,7 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -396,14 +397,14 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
         'CO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'OSCO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -412,7 +413,7 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -428,12 +429,12 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         undef,
         'CO should be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 0'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_ONSITE_CHECKOUTS',
             count => 1,
@@ -444,7 +445,7 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
 
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 1);
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -453,7 +454,7 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
         'CO should not be allowed if ConsiderOnSiteCheckoutsAsNormalCheckouts == 1'
     );
     is_deeply(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         {
             reason => 'TOO_MANY_ONSITE_CHECKOUTS',
             count => 1,
@@ -530,7 +531,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     my $issue = C4::Circulation::AddIssue( $patron, $issue_item->barcode, dt_from_string() );
     # We checkout one item
     is_deeply(
-        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        C4::Circulation::TooMany( $patron, $branch_item ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -545,7 +546,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     $branch_item->biblio->biblioitem->itemtype($itemtype->{itemtype})->store;
     # We checkout one item
     is_deeply(
-        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        C4::Circulation::TooMany( $patron, $branch_item ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -569,7 +570,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     );
 
     is(
-        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        C4::Circulation::TooMany( $patron, $branch_item ),
         undef,
         'We are allowed one from the branch specifically now'
     );
@@ -577,7 +578,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     # If circcontrol is PatronLibrary we count all the patron's loan, regardless of branch
     t::lib::Mocks::mock_preference('CircControl', 'PatronLibrary');
     is_deeply(
-        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        C4::Circulation::TooMany( $patron, $branch_item ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -596,7 +597,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
         holdingbranch => $branch->{branchcode}
     });
     is_deeply(
-        C4::Circulation::TooMany( $patron, $branch_item_2->biblionumber, $branch_item_2->unblessed ),
+        C4::Circulation::TooMany( $patron, $branch_item_2 ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 1,
@@ -610,7 +611,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
         itype => $itemtype->{itemtype},
     });
     is_deeply(
-        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        C4::Circulation::TooMany( $patron, $item_2 ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 2,
@@ -620,7 +621,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     );
     t::lib::Mocks::mock_preference('CircControl', 'PatronLibrary');
     is_deeply(
-        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        C4::Circulation::TooMany( $patron, $item_2 ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 2,
@@ -631,7 +632,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
 
     t::lib::Mocks::mock_preference('CircControl', 'PickupLibrary');
     is_deeply(
-        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        C4::Circulation::TooMany( $patron, $item_2 ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 2,
@@ -643,7 +644,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     my $branch2   = $builder->build({source => 'Branch',});
     t::lib::Mocks::mock_userenv({ branchcode => $branch2->{branchcode} });
     is_deeply(
-        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        C4::Circulation::TooMany( $patron, $item_2 ),
         {
             reason => 'TOO_MANY_CHECKOUTS',
             count => 2,
@@ -665,7 +666,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     );
 
     is(
-        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        C4::Circulation::TooMany( $patron, $branch_item ),
         undef,
         'We are allowed one from the branch specifically now'
     );
@@ -686,13 +687,13 @@ subtest 'empty string means unlimited' => sub {
         },
     );
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item ),
+        C4::Circulation::TooMany( $patron, $item_object ),
         undef,
         'maxissueqty="" should mean unlimited'
     );
 
     is(
-        C4::Circulation::TooMany( $patron, $biblio->{biblionumber}, $item, { onsite_checkout => 1 } ),
+        C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'maxonsiteissueqty="" should mean unlimited'
     );
