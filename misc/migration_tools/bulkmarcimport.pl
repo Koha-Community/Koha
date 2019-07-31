@@ -159,15 +159,8 @@ if ((not defined $sourcesubfield) && (not defined $sourcetag)){
 
 # Disable logging for the biblios and authorities import operation. It would unnecessarily
 # slow the import
-
-# Disable the syspref cache so we can change logging settings
-C4::Context->disable_syspref_cache();
-# Save current CataloguingLog and AuthoritiesLog sysprefs values
-my $CataloguingLog = C4::Context->preference( 'CataloguingLog' );
-my $AuthoritiesLog = C4::Context->preference( 'AuthoritiesLog' );
-# Disable logging for both
-C4::Context->set_preference( 'CataloguingLog', 0 );
-C4::Context->set_preference( 'AuthoritiesLog', 0 );
+$ENV{SYSPREF_OVERRIDE_CataloguingLog} = 0;
+$ENV{SYSPREF_OVERRIDE_AuthoritiesLog} = 0;
 
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
@@ -565,10 +558,9 @@ if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
 
-# Restore CataloguingLog
-C4::Context->set_preference( 'CataloguingLog', $CataloguingLog );
-# Restore AuthoritiesLog
-C4::Context->set_preference( 'AuthoritiesLog', $AuthoritiesLog );
+# Restore CataloguingLog and AuthoritiesLog
+delete $ENV{SYSPREF_OVERRIDE_CataloguingLog};
+delete $ENV{SYSPREF_OVERRIDE_AuthoritiesLog};
 
 my $timeneeded = gettimeofday - $starttime;
 print "\n$i MARC records done in $timeneeded seconds\n";
