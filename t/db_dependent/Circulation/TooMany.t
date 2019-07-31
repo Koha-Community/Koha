@@ -466,7 +466,7 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
 };
 
 subtest 'General vs specific rules limit quantity correctly' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference('CircControl', 'ItemHomeLibrary');
     my $branch   = $builder->build({source => 'Branch',});
@@ -516,7 +516,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     );
 
     # Create an item
-    my $item = $builder->build_sample_item({
+    my $issue_item = $builder->build_sample_item({
         itype => $itemtype->{itemtype}
     });
     my $branch_item = $builder->build_sample_item({
@@ -527,7 +527,7 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
 
 
     t::lib::Mocks::mock_userenv({ branchcode => $branch->{branchcode} });
-    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string() );
+    my $issue = C4::Circulation::AddIssue( $patron, $issue_item->barcode, dt_from_string() );
     # We checkout one item
     is_deeply(
         C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
@@ -536,9 +536,24 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
             count => 1,
             max_allowed => 1,
         },
-        'We are only allowed one, and we have one'
+        'We are only allowed one, and we have one (itemtype on item)'
     );
 
+    # Check itemtype on biblio level
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    $issue_item->biblio->biblioitem->itemtype($itemtype->{itemtype})->store;
+    $branch_item->biblio->biblioitem->itemtype($itemtype->{itemtype})->store;
+    # We checkout one item
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 1,
+            max_allowed => 1,
+        },
+        'We are only allowed one, and we have one (itemtype on biblioitem)'
+    );
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
     # Set a branch specific rule
     Koha::CirculationRules->set_rules(
