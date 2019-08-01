@@ -682,28 +682,7 @@
 
                         [% INCLUDE "checkouts-table.inc" %]
 
-                        [% IF ( relatives_issues_count ) %]
-                            <div id="relatives-issues">
-                                <table id="relatives-issues-table" style="width: 100% !Important;">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Due date hidden not formatted</th>
-                                            <th scope="col">Due date</th>
-                                            <th scope="col">Title</th>
-                                            <th scope="col">Item type</th>
-                                            <th scope="col">Location</th>
-                                            <th scope="col">Checked out on</th>
-                                            <th scope="col">Checked out from</th>
-                                            <th scope="col">Call no</th>
-                                            <th scope="col">Charge</th>
-                                            <th scope="col">Fine</th>
-                                            <th scope="col">Price</th>
-                                            <th scope="col">Patron</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        [% END %]
+                        [% INCLUDE "relatives-issues-table.inc" %]
 
                         <div id="finesandcharges">
                             [% IF ( totaldue_raw ) %]

@@ -531,6 +531,12 @@ No patron matched <span class="ex">[% message | html %]</span>
     [% END %]
     <button type="submit" class="btn btn-default">Check out</button>
 
+                            <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
+
+                            [% INCLUDE "checkouts-table.inc" %]
+
+                            [% INCLUDE "relatives-issues-table.inc" %]
+
     <div id="show-checkout-settings">
         <a href="#"><i class="fa fa-caret-right checkout-settings-icon"></i> Checkout settings</a>
     </div>
