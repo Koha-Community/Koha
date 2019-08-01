@@ -126,6 +126,23 @@ sub checkout {
     return Koha::Checkout->_new_from_dbic( $checkout_rs );
 }
 
+=head3 holds
+
+my $transfer = $item->holds();
+my $transfer = $item->holds($params);
+my $transfer = $item->holds({ found => 'W'});
+
+Return reserves attached to an item, optionally accept a hashref of params to pass to search
+
+=cut
+
+sub holds {
+    my ( $self,$params ) = @_;
+    my $transfer_rs = $self->_result->reserves->search($params);
+    return unless $transfer_rs->count;
+    return Koha::Holds->_new_from_dbic( $transfer_rs );
+}
+
 =head3 get_transfer
 
 my $transfer = $item->get_transfer;

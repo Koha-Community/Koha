@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 
 use C4::Circulation;
@@ -79,6 +79,25 @@ subtest 'get_transfer' => sub {
     is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfers object' );
 
     is( $transfer->itemnumber, $new_item_1->itemnumber, 'Koha::Item->get_transfer should return a valid Koha::Item::Transfers object' );
+};
+
+subtest 'holds' => sub {
+    plan tests => 5;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item({
+        biblionumber => $biblio->biblionumber,
+    });
+    $nb_of_items++;
+    is($item->holds(), undef, "Nothing returned if no holds");
+    my $hold1 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'T' }});
+    my $hold2 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
+    my $hold3 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
+
+    is($item->holds()->count,3,"Three holds found");
+    is($item->holds({found => 'W'})->count,2,"Two waiting holds found");
+    is_deeply($item->holds({found => 'T'})->next->unblessed,$hold1,"Found transit holds matches the hold");
+    is($item->holds({found => undef}),undef,"Nothing returned if no matching holds");
 };
 
 subtest 'biblio' => sub {
