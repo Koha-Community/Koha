@@ -47,8 +47,18 @@
             [% FOREACH LINE IN TAB.LINES %]
             [% IF ( LINE.is_group_title ) %]
             [% UNLESS ( loop.first ) %]</tbody></table>[% END %]
-            <h3>[% LINE.title | html %]</h3>
-            <table class="preferences">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3 id="[% LINE.title | replace('\s+', '_') | html %]"><i class="fa fa-caret-down"></i> [% LINE.title | html %]</h3>
+                </div>
+                <div class="col-sm-6">
+                    [% IF ( searchfield ) %]
+                        <div class="pull-right"><a class="btn btn-link" href="/cgi-bin/koha/admin/preferences.pl?tab=[% TAB.tab_id | html %]#[% LINE.title | replace('\s+', '_') | html %]"><i class="fa fa-list-ul"></i> View all [% LINE.title | html %] preferences</a></div>
+                    [% END %]
+                </div>
+            </div>
+
+            <table class="preferences" id="collapse_[% LINE.title | replace('\s+', '_') | html %]">
             <thead><tr><th>Preference</th><th>Value</th></tr></thead>
             [% UNLESS ( loop.last ) %]<tbody>[% END %]
             [% ELSE %]

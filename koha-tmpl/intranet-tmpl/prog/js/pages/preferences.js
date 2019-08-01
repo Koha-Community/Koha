@@ -150,12 +150,25 @@ $( document ).ready( function () {
     var collapsible = $(".collapsed,.expanded");
 
     $(collapsible).on("click",function(){
-        var panel = $(this).next("div");
+        var h3Id = $(this).attr("id");
+        var panel = $("#collapse_" + h3Id);
         if(panel.is(":visible")){
             $(this).addClass("collapsed").removeClass("expanded").attr("title",MSG_CLICK_TO_EXPAND);
             panel.hide();
         } else {
             $(this).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
+            panel.show();
+        }
+    });
+
+    $(".pref_sublink").on("click", function(){
+        /* If the user clicks a sub-menu link in the sidebar,
+           check to see if it is collapsed. If so, expand it */
+        var href = $(this).attr("href");
+        href = href.replace("#","");
+        var panel = $("#collapse_" + href );
+        if( panel.is(":hidden") ){
+            $("#" + href ).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
             panel.show();
         }
     });

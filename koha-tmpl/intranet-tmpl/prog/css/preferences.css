@@ -47,19 +47,35 @@ caption {
 h3 {
 	color : #003366;
 	margin : .4em 0;
-    width : 40%;
 }
 
-h3.expanded {
-    background: transparent url("../img/collapse.gif") 0 6px no-repeat;
-	cursor : pointer;
-	padding-left : 12px;
+/* https://css-tricks.com/hash-tag-links-padding/#article-header-id-4 */
+h3:target {
+    margin-top: -12px;
+    padding-top: 50px;
 }
 
+h3:target::before {
+    padding: 0 5px;
+    position: absolute;
+    top: 25px;
+}
+
+h3 i {
+    color: #336699;
+}
+
+h3.expanded,
 h3.collapsed {
-    background: transparent url("../img/expand.gif") 0 6px no-repeat;
-	cursor : pointer;
-	padding-left : 12px;
+    cursor: pointer;
+}
+
+h3.expanded i.fa.fa-caret-down::before {
+    content: "\f0d7";
+}
+
+h3.collapsed i.fa.fa-caret-down::before {
+    content: "\f0da";
 }
 
 .humanMsg strong {
@@ -134,4 +150,19 @@ span.overridden {
     border: 1px solid #EEE;
     margin: 1em 1em 1em 0;
     resize:  vertical;
+}
+
+#menu ul li.active a.pref_sublink {
+    background: #FFF none;
+    border: 0;
+    color: #004D99;
+    font-size: 100%;
+    hyphens:  auto;
+    margin: 0;
+    padding: .2em .5em;
+    text-align: right;
+}
+
+#menu ul ul {
+    padding-left: 0;
 }
