@@ -293,14 +293,14 @@ sub buildKohaItemsNamespace {
     my ($biblionumber, $hidden_items) = @_;
 
     my $search_params;
-    $search_params->{biblionumber} = $biblionumber;
-    $search_params->{itemnumber} = { not_in => $hidden_items } if $hidden_items;
-    my @items = Koha::Items->search($search_params);
+    $search_params->{'me.biblionumber'} = $biblionumber;
+    $search_params->{'me.itemnumber'} = { not_in => $hidden_items } if $hidden_items;
+    my @items = Koha::Items->search($search_params,{prefetch=>['branchtransfers','reserves']});
 
     my $shelflocations =
-      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => GetFrameworkCode($biblionumber), kohafield => 'items.location' } ) };
+      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => "", kohafield => 'items.location' } ) };
     my $ccodes =
-      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => GetFrameworkCode($biblionumber), kohafield => 'items.ccode' } ) };
+      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => "", kohafield => 'items.ccode' } ) };
 
     my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
 
@@ -311,40 +311,36 @@ sub buildKohaItemsNamespace {
     for my $item (@items) {
         my $status;
 
-        my ( $transfertwhen, $transfertfrom, $transfertto ) = C4::Circulation::GetTransfers($item->itemnumber);
-
         my $reservestatus = C4::Reserves::GetReserveStatus( $item->itemnumber );
 
-        if ( ( $item->itype && $itemtypes->{ $item->itype }->{notforloan} ) || $item->notforloan || $item->onloan || $item->withdrawn || $item->itemlost || $item->damaged ||
-             (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} || (defined $reservestatus && $reservestatus eq "Waiting") || $item->has_pending_hold ){
-            if ( $item->notforloan < 0) {
-                $status = "On order";
-            }
-            if ( $item->notforloan && $item->notforloan > 0 || $item->itype && $itemtypes->{ $item->itype }->{notforloan} && $itemtypes->{ $item->itype }->{notforloan} == 1 ) {
-                $status = "reference";
-            }
-            if ($item->onloan) {
-                $status = "Checked out";
-            }
-            if ( $item->withdrawn) {
-                $status = "Withdrawn";
-            }
-            if ($item->itemlost) {
-                $status = "Lost";
-            }
-            if ($item->damaged) {
-                $status = "Damaged";
-            }
-            if (defined $transfertwhen && $transfertwhen ne '') {
-                $status = 'In transit';
-            }
-            if (defined $reservestatus && $reservestatus eq "Waiting") {
-                $status = 'Waiting';
-            }
-            if ($item->has_pending_hold) {
-                $status = 'Pending hold';
-            }
-        } else {
+        if ($item->has_pending_hold) {
+            $status = 'Pending hold';
+        }
+        elsif ( $item->holds->waiting->count ) {
+            $status = 'Waiting';
+        }
+        elsif ($item->get_transfer) {
+            $status = 'In transit';
+        }
+        elsif ($item->damaged) {
+            $status = "Damaged";
+        }
+        elsif ($item->itemlost) {
+            $status = "Lost";
+        }
+        elsif ( $item->withdrawn) {
+            $status = "Withdrawn";
+        }
+        elsif ($item->onloan) {
+            $status = "Checked out";
+        }
+        elsif ( $item->notforloan && $item->notforloan > 0 || $item->itype && $itemtypes->{ $item->itype }->{notforloan} && $itemtypes->{ $item->itype }->{notforloan} == 1 ) {
+            $status = "reference";
+        }
+        elsif ( $item->notforloan < 0) {
+            $status = "On order";
+        }
+        else {
             $status = "available";
         }
         my $homebranch = $item->homebranch? xml_escape($branches{$item->homebranch}):'';
