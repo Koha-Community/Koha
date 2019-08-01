@@ -699,8 +699,8 @@ END_SQL
                                                 'count'         => $itemcount,
                                                },
                             # If there is no template defined for the requested letter
-                            # Fallback on email
-                            message_transport_type => $letter_exists ? $effective_mtt : 'email',
+                            # Fallback on the original type
+                            message_transport_type => $letter_exists ? $effective_mtt : $mtt,
                         }
                     );
                     unless ($letter) {
