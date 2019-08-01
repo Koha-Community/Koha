@@ -531,15 +531,15 @@
 
                                         [% IF ( patron.borrowernotes ) %]
                                             <li id="patron-borrowernotes">
-                                                <span class="label">Circulation note: </span>
-                                                [% patron.borrowernotes | $raw %]
+                                                <span class="label">Circulation note: </span><br />
+                                                [% patron.borrowernotes | html | html_line_break %]
                                             </li>
                                         [% END %]
 
                                         [% IF ( patron.opacnote ) %]
                                             <li id="patron-opacnote">
-                                                <span class="label">OPAC note:</span>
-                                                [% patron.opacnote | html %]
+                                                <span class="label">OPAC note:</span><br />
+                                                [% patron.opacnote | html | html_line_break %]
                                             </li>
                                         [% END %]
 
