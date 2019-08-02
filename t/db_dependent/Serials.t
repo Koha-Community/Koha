@@ -18,7 +18,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 48;
+use Test::More tests => 49;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -369,6 +369,23 @@ subtest "Do not generate an expected if one already exists" => sub {
     #try if create or not another serial with status is expected
     @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
     is( @serialsByStatus, 1, "ModSerialStatus delete corectly serial expected and not create another if exists" );
+};
+
+subtest "PreserveSerialNotes preference" => sub {
+    plan tests => 2;
+    my ($expected_serial) = GetSerials2( $subscriptionid, [1] );
+
+    t::lib::Mocks::mock_preference( 'PreserveSerialNotes', 1 );
+
+    C4::Serials::ModSerialStatus( $expected_serial->{serialid}, 'NO.20', $publisheddate, $publisheddate, $publisheddate, '1', 'an useless note' );
+    @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
+    is( $serialsByStatus[0]->{note},$expected_serial->{note}, "note passed through if supposed to");
+
+    t::lib::Mocks::mock_preference( 'PreserveSerialNotes', 0 );
+    $expected_serial = $serialsByStatus[0];
+    C4::Serials::ModSerialStatus( $expected_serial->{serialid}, 'NO.20', $publisheddate, $publisheddate, $publisheddate, '1', 'an useless note' );
+    is( $serialsByStatus[0]->{note},$expected_serial->{note}, "note not passed through if not supposed to");
+
 };
 
 subtest "NewSubscription" => sub {
