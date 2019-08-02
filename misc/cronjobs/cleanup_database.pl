@@ -83,13 +83,13 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --temp-uploads-days DAYS Override the corresponding preference value.
    --uploads-missing FLAG Delete upload records for missing files when FLAG is true, count them otherwise
    --oauth-tokens     Delete expired OAuth2 tokens
-   --statistics DAYS       Purge entries from statistics older than DAYS days.
-   --deleted-catalog  DAYS Purge deleted catalog older than DAYS
-                           in tables deleteditems, deletedbiblioitems, deletedbiblio_metadata and deletedbiblio
-   --deleted-patrons DAYS  Purge deleted patrons older than DAYS days.
-   --old-issues DAYS       Purge old issues older than DAYS days.
-   --old-reserves DAYS     Purge old reserves older than DAYS days.
-   --transfers DAYS        Purge arrived items transfers older than DAYS days.
+   --statistics DAYS       Purge statistics entries more than DAYS days old.
+   --deleted-catalog  DAYS Purge catalog records deleted more then DAYS days ago
+                           (from tables deleteditems, deletedbiblioitems, deletedbiblio_metadata and deletedbiblio).
+   --deleted-patrons DAYS  Purge patrons deleted more than DAYS days ago.
+   --old-issues DAYS       Purge checkouts (old_issues) returned more than DAYS days ago.
+   --old-reserves DAYS     Purge reserves (old_reserves) more than DAYS old.
+   --transfers DAYS        Purge transfers completed more than DAYS day ago.
 USAGE
     exit $_[0];
 }
