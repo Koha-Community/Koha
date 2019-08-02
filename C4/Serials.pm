@@ -1161,7 +1161,8 @@ sub ModSerialStatus {
                     WHERE  subscriptionid = ?";
         $sth = $dbh->prepare($query);
         $sth->execute( $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3, $subscriptionid );
-        NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextpubdate, $nextpubdate, undef, $notes, $routingnotes );
+        my $newnote = C4::Context->preference('PreserveSerialNotes') ? $notes : "";
+        NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextpubdate, $nextpubdate, undef, $newnote, $routingnotes );
         # check if an alert must be sent... (= a letter is defined & status became "arrived"
         if ( $subscription->{letter} && $status == ARRIVED && $oldstatus != ARRIVED ) {
             require C4::Letters;

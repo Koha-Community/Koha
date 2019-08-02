@@ -480,6 +480,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PayPalSignature',  '', NULL ,  'Your PayPal API signature',  'Free'),
 ('PayPalUser',  '', NULL ,  'Your PayPal API username ( email address )',  'Free'),
 ('PrefillItem','0','','When a new item is added, should it be prefilled with last created item values?','YesNo'),
+('PreserveSerialNotes','1','','When a new "Expected" issue is generated, should it be prefilled with last created issue notes?','YesNo'),
 ('previousIssuesDefaultSortOrder','asc','asc|desc','Specify the sort order of Previous Issues on the circulation page','Choice'),
 ('printcirculationslips','1','','If ON, enable printing circulation receipts','YesNo'),
 ('PrintNoticesMaxLines','0','','If greater than 0, sets the maximum number of lines an overdue notice will print. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.','Integer'),
