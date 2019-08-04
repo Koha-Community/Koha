@@ -68,11 +68,14 @@ sub record {
 
     if ( $self->format eq 'marcxml' ) {
         $record = eval { MARC::Record::new_from_xml( $self->metadata, 'utf-8', $self->schema ); };
+        my $marcxml_error = $@;
+        chomp $marcxml_error;
         unless ($record) {
             Koha::Exceptions::Metadata::Invalid->throw(
                 id     => $self->id,
                 format => $self->format,
-                schema => $self->schema
+                schema => $self->schema,
+                marcxml_error => $marcxml_error,
             );
         }
     }
