@@ -30,6 +30,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use Koha::Database;
+use Koha::Z3950Servers;
 
 # Initialize CGI, template, database
 
@@ -56,7 +57,7 @@ my $schema = Koha::Database->new()->schema();
 # First process a confirmed delete, or save a validated record
 
 if( $op eq 'delete_confirmed' && $id ) {
-    my $server = $schema->resultset('Z3950server')->find($id);
+    my $server = Koha::Z3950Servers->find($id);
     if ( $server ) {
         $server->delete;
         $template->param( msg_deleted => 1, msg_add => $server->servername );
@@ -70,16 +71,16 @@ if( $op eq 'delete_confirmed' && $id ) {
         add_xslt/;
     my $formdata = _form_data_hashref( $input, \@fields );
     if( $id ) {
-        my $server = $schema->resultset('Z3950server')->find($id);
+        my $server = Koha::Z3950Servers->find($id);
         if ( $server ) {
-            $server->update( $formdata );
+            $server->set( $formdata )->store;
             $template->param( msg_updated => 1, msg_add => $formdata->{servername} );
         } else {
             $template->param( msg_notfound => 1, msg_add => $id );
         }
         $id = 0;
     } else {
-        $schema->resultset('Z3950server')->create( $formdata );
+        Koha::Z3950Server->new( $formdata )->store;
         $template->param( msg_added => 1, msg_add => $formdata->{servername} );
     }
 } else {
@@ -106,11 +107,10 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub ServerSearch  { #find server(s) by id or name
     my ( $schema, $id, $searchstring )= @_;
-    my $rs = $schema->resultset('Z3950server')->search(
-        $id ? { id => $id }: { servername => { like => $searchstring.'%' } },
-        { result_class => 'DBIx::Class::ResultClass::HashRefInflator' }
-    );
-    return [ $rs->all ];
+
+    return Koha::Z3950Servers->search(
+        $id ? { id => $id } : { servername => { like => $searchstring . '%' } },
+    )->unblessed;
 }
 
 sub _form_data_hashref {
