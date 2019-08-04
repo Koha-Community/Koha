@@ -157,24 +157,24 @@
                         [% SET show_rule = maxissueqty || maxonsiteissueqty || issuelength || lengthunit || hardduedate || hardduedatebefore || hardduedateexact || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || renewalsallowed || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || article_requests %]
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
-                            <tr row_countd="row_[% row_count %]">
+                            <tr row_countd="row_[% row_count | html %]">
                                     <td>
                                         [% IF c == undef %]
                                             <em>All</em>
                                         [% ELSE %]
-                                            [% Categories.GetName(c) %]
+                                            [% Categories.GetName(c) | html %]
                                         [% END %]
                                     </td>
                                     <td>
                                         [% IF i == undef %]
                                             <em>All</em>
                                         [% ELSE %]
-                                            [% ItemTypes.GetDescription(i) %]
+                                            [% ItemTypes.GetDescription(i) | html %]
                                         [% END %]
                                     </td>
                                     <td class="actions">
                                       <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' %]&amp;categorycode=[% rule.categorycode || '*' %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' | html %]&amp;categorycode=[% rule.categorycode || '*' | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
                                     <td>
                                         [% IF note.defined %]
@@ -183,19 +183,19 @@
                                     </td>
                                     <td>
                                         [% IF maxissueqty.defined && maxissueqty != '' %]
-                                            [% maxissueqty %]
+                                            [% maxissueqty | html %]
                                         [% ELSE %]
                                             <span>Unlimited</span>
                                         [% END %]
                                     </td>
                                     <td>
                                         [% IF maxonsiteissueqty.defined && maxonsiteissueqty != ''  %]
-                                            [% maxonsiteissueqty %]
+                                            [% maxonsiteissueqty | html %]
                                         [% ELSE %]
                                             <span>Unlimited</span>
                                         [% END %]
                                     </td>
-                                    <td>[% issuelength %]</td>
+                                    <td>[% issuelength | html %]</td>
                                     <td>
                                         [% IF ( lengthunit == 'days' ) %]
                                             Days
@@ -221,10 +221,10 @@
                                         <span>None defined</span>
                                       [% END %]
                                     </td>
-                                    <td>[% fine %]</td>
-                                    <td>[% chargeperiod %]</td>
+                                    <td>[% fine | html %]</td>
+                                    <td>[% chargeperiod | html %]</td>
                                     <td>[% IF chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
-                                    <td>[% firstremind %]</td>
+                                    <td>[% firstremind | html %]</td>
                                     <td>[% overduefinescap FILTER format("%.2f") %]</td>
                                     <td>
                                         [% IF cap_fine_to_replacement_price %]
@@ -233,12 +233,12 @@
                                             <input type="checkbox" disabled="disabled" />
                                         [% END %]
                                     </td>
-                                    <td>[% finedays %]</td>
-                                    <td>[% maxsuspensiondays %]</td>
-                                    <td>[% suspension_chargeperiod %]</td>
-                                    <td>[% renewalsallowed %]</td>
-                                    <td>[% renewalperiod %]</td>
-                                    <td>[% norenewalbefore %]</td>
+                                    <td>[% finedays | html %]</td>
+                                    <td>[% maxsuspensiondays | html %]</td>
+                                    <td>[% suspension_chargeperiod | html %]</td>
+                                    <td>[% renewalsallowed | html %]</td>
+                                    <td>[% renewalperiod | html %]</td>
+                                    <td>[% norenewalbefore | html %]</td>
                                     <td>
                                         [% IF auto_renew %]
                                             <span>Yes</span>
@@ -246,17 +246,17 @@
                                             <span>No</span>
                                         [% END %]
                                     </td>
-                                    <td>[% no_auto_renewal_after %]</td>
-                                    <td>[% no_auto_renewal_after_hard_limit %]</td>
-                                    <td>[% reservesallowed %]</td>
+                                    <td>[% no_auto_renewal_after | html %]</td>
+                                    <td>[% no_auto_renewal_after_hard_limit | html %]</td>
+                                    <td>[% reservesallowed | html %]</td>
                                     <td>
                                         [% IF holds_per_day.defined && holds != '' %]
-                                            [% holds_per_day %]
+                                            [% holds_per_day | html %]
                                         [% ELSE %]
                                             <span>Unlimited</span>
                                         [% END %]
                                     </td>
-                                    <td>[% holds_per_record %]</td>
+                                    <td>[% holds_per_record | html %]</td>
                                     <td>
                                         [% IF onshelfholds == 1 %]
                                             <span>Yes</span>
@@ -286,7 +286,7 @@
                                             <span>Item only</span>
                                         [% END %]
                                     </td>
-                                    <td>[% rentaldiscount %]</td>
+                                    <td>[% rentaldiscount | html %]</td>
                                     <td class="actions">
                                       <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                                       <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' | uri %]&amp;categorycode=[% rule.categorycode || '*' | uri %]&amp;branch=[% rule.current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
