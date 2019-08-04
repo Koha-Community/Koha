@@ -6,6 +6,7 @@ if( CheckVersion( $DBversion ) ) {
         fine
         finedays
         maxsuspensiondays
+        suspension_chargeperiod
         firstremind
         chargeperiod
         chargeperiod_charge_at
@@ -22,20 +23,20 @@ if( CheckVersion( $DBversion ) ) {
         no_auto_renewal_after_hard_limit
         reservesallowed
         holds_per_record
-        overduefinescap
-        cap_fine_to_replacement_price
+        holds_per_day
         onshelfholds
         opacitemholds
+        overduefinescap
+        cap_fine_to_replacement_price
         article_requests
-        maxissueqty
-        maxonsiteissueqty
+        note
     );
 
     if ( column_exists( 'issuingrules', 'categorycode' ) ) {
         foreach my $column ( @columns ) {
             $dbh->do("
                 INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
-                SELECT categorycode, branchcode, itemtype, \'$column\', COALESCE( $column, '' )
+                SELECT IF(categorycode='*', NULL, categorycode), IF(branchcode='*', NULL, branchcode), IF(itemtype='*', NULL, itemtype), \'$column\', COALESCE( $column, '' )
                 FROM issuingrules
             ");
         }
