@@ -84,7 +84,7 @@ SKIP: {
         $elt = $driver->find_elements('//table[@id="default-circulation-rules"]/tbody/tr/td[contains(text(),"'.$itype->description.'")]/following-sibling::td/span[text() = "Unlimited"]');
         is( @$elt,2,"We have unlimited checkouts");
         #Clean up
-        Koha::IssuingRules->find({itemtype=>$itype->itemtype})->delete();
+        Koha::CirculationRules->search( { itemtype => $itype->itemtype } )->delete;
         $itype->delete;
                # TODO Create more smart rules navigation here
     };

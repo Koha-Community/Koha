@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Test::Deep qw( cmp_methods );
 use Test::Exception;
 
@@ -54,6 +54,7 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype     => undef,
             rule_name    => 'fine',
+            rule_value   => 1,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule by'
            .' providing undefined values, then undef is returned.');
@@ -62,6 +63,7 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype => undef,
             rule_name => 'fine',
+            rule_value => 2,
         })->store, 'Given I added an issuing rule branchcode => undef,'
            .' categorycode => undef, itemtype => undef,');
         $rule = Koha::CirculationRules->get_effective_rule({
@@ -69,6 +71,7 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype     => undef,
             rule_name    => 'fine',
+            rule_value => 3,
         });
         _is_row_match(
             $rule,
@@ -94,6 +97,7 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 4,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule, then undef'
                         .' is returned.');
@@ -103,12 +107,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype => undef,
             rule_name => 'fine',
+            rule_value   => 5,
         })->store, 'Given I added an issuing rule branchcode => undef, categorycode => undef, itemtype => undef,');
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 6,
         });
         _is_row_match(
             $rule,
@@ -126,12 +132,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype => $itemtype,
             rule_name => 'fine',
+            rule_value   => 7,
         })->store, "Given I added an issuing rule branchcode => undef, categorycode => undef, itemtype => $itemtype,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 8,
         });
         _is_row_match(
             $rule,
@@ -149,12 +157,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype => undef,
             rule_name => 'fine',
+            rule_value   => 9,
         })->store, "Given I added an issuing rule branchcode => undef, categorycode => $categorycode, itemtype => undef,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 10,
         });
         _is_row_match(
             $rule,
@@ -172,12 +182,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype => $itemtype,
             rule_name => 'fine',
+            rule_value   => 11,
         })->store, "Given I added an issuing rule branchcode => undef, categorycode => $categorycode, itemtype => $itemtype,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 12,
         });
         _is_row_match(
             $rule,
@@ -195,12 +207,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype => undef,
             rule_name => 'fine',
+            rule_value   => 13,
         })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => undef, itemtype => undef,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 14,
         });
         _is_row_match(
             $rule,
@@ -218,12 +232,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => undef,
             itemtype => $itemtype,
             rule_name => 'fine',
+            rule_value   => 15,
         })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => undef, itemtype => $itemtype,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 16,
         });
         _is_row_match(
             $rule,
@@ -241,12 +257,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype => undef,
             rule_name => 'fine',
+            rule_value   => 17,
         })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => undef,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 18,
         });
         _is_row_match(
             $rule,
@@ -264,12 +282,14 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype => $itemtype,
             rule_name => 'fine',
+            rule_value   => 19,
         })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => $itemtype,");
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
+            rule_value   => 20,
         });
         _is_row_match(
             $rule,
@@ -458,53 +478,6 @@ subtest 'set_rule' => sub {
             } );
         }, qr/categorycode/, 'setting holdallowed with categorycode fails' );
     };
-};
-
-subtest 'delete' => sub {
-    plan tests => 1;
-
-    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
-    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
-    my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
-
-    # We make an issuing rule
-    my $issue_rule = $builder->build_object({ class => 'Koha::IssuingRules', value => {
-            categorycode => $category->categorycode,
-            itemtype     => $itemtype->itemtype,
-            branchcode   => $library->branchcode
-        }
-    });
-
-    my $count = Koha::CirculationRules->search()->count;
-    # Note how many circulation rules we start with
-
-    # We make some circulation rules for the same thing
-    $builder->build_object({ class => 'Koha::CirculationRules', value => {
-            categorycode => $category->categorycode,
-            itemtype     => $itemtype->itemtype,
-            branchcode   => $library->branchcode,
-            rule_name    => 'maxissueqty',
-        }
-    });
-    $builder->build_object({ class => 'Koha::CirculationRules', value => {
-            categorycode => $category->categorycode,
-            itemtype     => $itemtype->itemtype,
-            branchcode   => $library->branchcode,
-            rule_name    => 'maxonsiteissueqty',
-        }
-    });
-    $builder->build_object({ class => 'Koha::CirculationRules', value => {
-            categorycode => $category->categorycode,
-            itemtype     => $itemtype->itemtype,
-            branchcode   => $library->branchcode,
-            rule_name    => 'another_rule', # That must not be deleted
-        }
-    });
-
-    # Now we delete the issuing rule
-    $issue_rule->delete;
-    is( Koha::CirculationRules->search()->count ,$count +  1, "We remove related circ rules maxissueqty and maxonsiteissueqty with our issuing rule");
-
 };
 
 sub _is_row_match {

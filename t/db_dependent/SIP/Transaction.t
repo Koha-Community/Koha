@@ -16,7 +16,6 @@ use C4::SIP::ILS::Transaction::FeePayment;
 use C4::SIP::ILS::Transaction::Hold;
 
 use C4::Reserves;
-use Koha::IssuingRules;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;

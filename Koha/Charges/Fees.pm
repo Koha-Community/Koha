@@ -22,7 +22,6 @@ use Modern::Perl;
 use Carp qw( carp confess );
 
 use Koha::Calendar;
-use Koha::IssuingRules;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 
@@ -90,17 +89,18 @@ sub new {
 sub accumulate_rentalcharge {
     my ($self) = @_;
 
-    my $itemtype     = Koha::ItemTypes->find( $self->item->effective_itemtype );
-    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+    my $itemtype        = Koha::ItemTypes->find( $self->item->effective_itemtype );
+    my $lengthunit_rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $self->patron->categorycode,
             itemtype     => $itemtype->id,
-            branchcode   => $self->library->id
+            branchcode   => $self->library->id,
+            rule_name    => 'lengthunit',
         }
     );
-    return 0 unless $issuing_rule;
+    return 0 unless $lengthunit_rule;
 
-    my $units = $issuing_rule->lengthunit;
+    my $units = $lengthunit_rule->rule_value;
     my $rentalcharge_increment =
       ( $units eq 'days' )
       ? $itemtype->rentalcharge_daily

@@ -500,18 +500,19 @@ subtest 'General vs specific rules limit quantity correctly' => sub {
     });
 
     # Set up an issuing rule
-    my $rule = $builder->build({
-        source => 'Issuingrule',
-        value => {
+    Koha::CirculationRules->set_rules(
+        {
             categorycode => '*',
             itemtype     => $itemtype->{itemtype},
             branchcode   => '*',
-            issuelength  => 1,
-            firstremind  => 1,        # 1 day of grace
-            finedays     => 2,        # 2 days of fine per day of overdue
-            lengthunit   => 'days',
+            rules        => {
+                issuelength => 1,
+                firstremind => 1,        # 1 day of grace
+                finedays    => 2,        # 2 days of fine per day of overdue
+                lengthunit  => 'days',
+            }
         }
-    });
+    );
 
     # Set an All->All for an itemtype
     Koha::CirculationRules->set_rules(

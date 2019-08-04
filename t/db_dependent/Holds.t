@@ -460,7 +460,7 @@ subtest 'Test max_holds per library/patron category' => sub {
     $dbh->do('DELETE FROM reserves');
     $dbh->do('DELETE FROM circulation_rules');
 
-    $biblio = $builder->build_sample_biblio({ itemtype => 'TEST' });
+    $biblio = $builder->build_sample_biblio;
     ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
       AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 },
         $biblio->biblionumber );
@@ -468,7 +468,7 @@ subtest 'Test max_holds per library/patron category' => sub {
         {
             categorycode => undef,
             branchcode   => undef,
-            itemtype     => $testitemtype,
+            itemtype     => $biblio->itemtype,
             rules        => {
                 reservesallowed  => 99,
                 holds_per_record => 99,
@@ -535,11 +535,17 @@ subtest 'Pickup location availability tests' => sub {
     my ( $item_bibnum, $item_bibitemnum, $itemnumber )
     = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
     #Add a default rule to allow some holds
-    $dbh->do(
-        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
-          VALUES (?, ?, ?, ?, ?)},
-        {},
-        '*', '*', '*', 25, 99
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                reservesallowed  => 25,
+                holds_per_record => 99,
+            }
+        }
     );
     my $item = Koha::Items->find($itemnumber);
     my $branch_to = $builder->build({ source => 'Branch' })->{ branchcode };
@@ -641,7 +647,16 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     );
 
     # Raise reservesallowed to avoid tooManyReserves from it
-    $issuingrule->set( { reservesallowed => 3 } )->store;
+    Koha::CirculationRules->set_rule(
+        {
+
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => $itemtype->itemtype,
+            rule_name  => 'reservesallowed',
+            rule_value => 3,
+        }
+    );
 
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_2 ),
@@ -669,7 +684,17 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     );
 
     # Set holds_per_day to 0
-    $issuingrule->set( { holds_per_day => 0 } )->store;
+    Koha::CirculationRules->set_rule(
+        {
+
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => $itemtype->itemtype,
+            rule_name  => 'holds_per_day',
+            rule_value => 0,
+        }
+    );
+
 
     # Delete existing holds
     Koha::Holds->search->delete;
@@ -679,7 +704,17 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         'Patron cannot reserve if holds_per_day is 0 (i.e. 0 is 0)'
     );
 
-    $issuingrule->set( { holds_per_day => undef } )->store;
+    Koha::CirculationRules->set_rule(
+        {
+
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => $itemtype->itemtype,
+            rule_name  => 'holds_per_day',
+            rule_value => undef,
+        }
+    );
+
     Koha::Holds->search->delete;
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_2 ),

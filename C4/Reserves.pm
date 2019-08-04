@@ -1218,7 +1218,7 @@ sub IsAvailableForItemLevelRequest {
         $item->withdrawn        ||
         ($item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
-    my $on_shelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
+    my $on_shelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
 
     if ($pickup_branchcode) {
         my $destination = Koha::Libraries->find($pickup_branchcode);

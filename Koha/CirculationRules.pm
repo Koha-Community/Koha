@@ -154,6 +154,9 @@ our $RULE_KINDS = {
     suspension_chargeperiod => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    note => { # This is not really a rule. Maybe we will want to separate this later.
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     # Not included (deprecated?):
     #   * accountsent
     #   * reservecharge
@@ -180,8 +183,9 @@ sub get_effective_rule {
     my $itemtype     = $params->{itemtype};
     my $branchcode   = $params->{branchcode};
 
+    my @c = caller;
     Koha::Exceptions::MissingParameter->throw(
-        "Required parameter 'rule_name' missing")
+        "Required parameter 'rule_name' missing" . "@c")
       unless $rule_name;
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
@@ -372,7 +376,7 @@ sub get_opacitemholds_policy {
 
     return unless $item or $patron;
 
-    my $rule = Koha::CirculationRules->get_effective_issuing_rule(
+    my $rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $patron->categorycode,
             itemtype     => $item->effective_itemtype,

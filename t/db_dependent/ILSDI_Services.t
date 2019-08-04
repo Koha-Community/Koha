@@ -379,20 +379,21 @@ subtest 'Holds test' => sub {
         source => 'Item',
         value => {
             biblionumber => $biblio2->{biblionumber},
-            damaged => 0
+            damaged => 0,
+            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
         }
     });
 
     t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
+    Koha::CirculationRules->set_rule(
+        {
             categorycode => $patron->{categorycode},
-            itemtype => $item2->{itype},
-            branchcode => $patron->{branchcode},
-            reservesallowed => 0,
+            itemtype     => $item2->{itype},
+            branchcode   => $patron->{branchcode},
+            rule_name    => 'reservesallowed',
+            rule_value   => 0,
         }
-    });
+    );
 
     $query = new CGI;
     $query->param( 'patron_id', $patron->{borrowernumber});
@@ -419,6 +420,7 @@ subtest 'Holds test' => sub {
         value => {
             biblionumber => $biblio3->{biblionumber},
             damaged => 0,
+            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
         }
     });
 
@@ -427,18 +429,19 @@ subtest 'Holds test' => sub {
         value => {
             biblionumber => $biblio3->{biblionumber},
             damaged => 1,
+            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
         }
     });
 
-    my $issuingrule2 = $builder->build({
-        source => 'Issuingrule',
-        value => {
+    Koha::CirculationRules->set_rule(
+        {
             categorycode => $patron->{categorycode},
-            itemtype => $item3->{itype},
-            branchcode => $patron->{branchcode},
-            reservesallowed => 10,
+            itemtype     => $item3->{itype},
+            branchcode   => $patron->{branchcode},
+            rule_name    => 'reservesallowed',
+            rule_value   => 10,
         }
-    });
+    );
 
     $query = new CGI;
     $query->param( 'patron_id', $patron->{borrowernumber});
@@ -499,19 +502,19 @@ subtest 'Holds test for branch transfer limits' => sub {
             biblionumber => $biblio->{biblionumber},
             damaged => 0,
             itemlost => 0,
+            itype => $builder->build_object({ class => 'Koha::ItemTypes' })->itemtype,
         }
     });
 
-    Koha::IssuingRules->search()->delete();
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
-            categorycode => '*',
-            itemtype => '*',
-            branchcode => '*',
-            reservesallowed => 99,
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rule_name    => 'reservesallowed',
+            rule_value   => 99,
         }
-    });
+    );
 
     my $limit = Koha::Item::Transfer::Limit->new({
         toBranch => $pickup_branch->{branchcode},

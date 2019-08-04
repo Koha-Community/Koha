@@ -24,7 +24,6 @@ use C4::Auth qw( haspermission );
 use C4::Context;
 use C4::Circulation;
 use Koha::Checkouts;
-use Koha::IssuingRules;
 use Koha::Old::Checkouts;
 
 use Try::Tiny;
@@ -209,7 +208,7 @@ sub allows_renewal {
     my $renewable = Mojo::JSON->false;
     $renewable = Mojo::JSON->true if $can_renew;
 
-    my $rule = Koha::IssuingRules->get_effective_issuing_rule(
+    my $rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $checkout->patron->categorycode,
             itemtype     => $checkout->item->effective_itemtype,

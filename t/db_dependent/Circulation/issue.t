@@ -87,16 +87,15 @@ my $categorycode = $builder->build({
     })->{categorycode};
 
 # A default issuingrule should always be present
-my $issuingrule = $builder->build(
+Koha::CirculationRules->set_rules(
     {
-        source => 'Issuingrule',
-        value  => {
-            itemtype      => '*',
-            categorycode  => '*',
-            branchcode    => '*',
-            lengthunit    => 'days',
-            issuelength   => 0,
-            renewalperiod => 0,
+        itemtype     => '*',
+        categorycode => '*',
+        branchcode   => '*',
+        rules        => {
+            lengthunit      => 'days',
+            issuelength     => 0,
+            renewalperiod   => 0,
             renewalsallowed => 0
         }
     }
