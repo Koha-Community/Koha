@@ -80,6 +80,9 @@ if (
               C4::Context->preference(
                 'PatronSelfRegistrationAdditionalInstructions')
         );
+
+        my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-registration-confirmation.tt','opac',$cgi);
+        $template->param( news_lang => $news_lang );
     }
 
 }
