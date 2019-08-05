@@ -484,13 +484,17 @@ sub ParseCgiForBorrower {
 
 sub DelUnchangedFields {
     my ( $borrowernumber, %new_data ) = @_;
-
+    # get the mandatory fields so we can get the hidden fields
+    my $mandatory = GetMandatoryFields('edit');
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $current_data = $patron->unblessed;
+    # get the hidden fields so we don't obliterate them should they have data patrons aren't allowed to modify
+    my $hidden_fields = GetHiddenFields($mandatory, 'edit');
+
 
     foreach my $key ( keys %new_data ) {
-        if ( $current_data->{$key} eq $new_data{$key} ) {
-            delete $new_data{$key};
+        if ( ($current_data->{$key} eq $new_data{$key}) || $hidden_fields->{$key} ) {
+           delete $new_data{$key};
         }
     }
 
