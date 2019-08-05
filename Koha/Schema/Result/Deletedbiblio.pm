@@ -46,6 +46,26 @@ __PACKAGE__->table("deletedbiblio");
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 medium
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+=head2 subtitle
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+=head2 part_number
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+=head2 part_name
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 unititle
 
   data_type: 'longtext'
@@ -100,6 +120,14 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "title",
   { data_type => "longtext", is_nullable => 1 },
+  "medium",
+  { data_type => "longtext", is_nullable => 1 },
+  "subtitle",
+  { data_type => "longtext", is_nullable => 1 },
+  "part_number",
+  { data_type => "longtext", is_nullable => 1 },
+  "part_name",
+  { data_type => "longtext", is_nullable => 1 },
   "unititle",
   { data_type => "longtext", is_nullable => 1 },
   "notes",
@@ -153,8 +181,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dP0HOIp/+I93Y/u92TDI1g
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-08-05 13:53:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FQaznWmkfR2Ge5NG8lDmSw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

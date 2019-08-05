@@ -95,7 +95,7 @@ __PACKAGE__->table("biblio");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: 'current_timestamp()'
+  default_value: current_timestamp
   is_nullable: 0
 
 =head2 datecreated
@@ -142,7 +142,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => "current_timestamp()",
+    default_value => \"current_timestamp",
     is_nullable => 0,
   },
   "datecreated",
@@ -391,8 +391,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-03-15 16:45:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:61+Di/Fke60nCaASGeXbvw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-08-05 13:53:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AzvuQItPPs5WeC4tdtS/NQ
 
 
 __PACKAGE__->has_one(
