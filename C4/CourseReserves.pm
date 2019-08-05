@@ -590,6 +590,7 @@ sub _RevertFields {
 
     my $mod_item_params;
     foreach my $field ( @FIELDS ) {
+        next unless defined $course_item->{$field};
         $mod_item_params->{$field} = $course_item->{$field};
     }
 
