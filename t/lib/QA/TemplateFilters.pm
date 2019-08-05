@@ -11,6 +11,7 @@ our @tt_directives = (
     qr{^\s*ELSIF},
     qr{^\s*END},
     qr{^\s*SET},
+    qr{^\s*WHILE},
     qr{^\s*FOR},
     qr{^\s*FOREACH},
     qr{^\s*MACRO},
