@@ -67,6 +67,7 @@ if (
     $patron_attrs->{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
     delete $patron_attrs->{timestamp};
     delete $patron_attrs->{verification_token};
+    delete $patron_attrs->{changed_fields};
     my $patron = Koha::Patron->new( $patron_attrs )->store;
 
     Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
