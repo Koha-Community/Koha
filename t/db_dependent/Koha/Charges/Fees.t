@@ -34,7 +34,9 @@ BEGIN {
     use_ok('Koha::Charges::Fees');
 }
 
+my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
+$schema->storage->txn_begin;
 
 my $patron_category = $builder->build_object(
     {
@@ -59,10 +61,11 @@ my $itemtype = $builder->build_object(
     {
         class => 'Koha::ItemTypes',
         value => {
-            rentalcharge_daily => '0.00',
-            rentalcharge       => '0.00',
-            processfee         => '0.00',
-            defaultreplacecost => '0.00',
+            rentalcharge_daily  => '0.00',
+            rentalcharge_hourly => '0.00',
+            rentalcharge        => '0.00',
+            processfee          => '0.00',
+            defaultreplacecost  => '0.00',
         },
     }
 );
@@ -304,7 +307,7 @@ subtest 'from_date accessor' => sub {
 };
 
 subtest 'accumulate_rentalcharge tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     my $fees = Koha::Charges::Fees->new(
         {
@@ -316,6 +319,7 @@ subtest 'accumulate_rentalcharge tests' => sub {
         }
     );
 
+    # Daily tests
     $itemtype->rentalcharge_daily(1.00);
     $itemtype->store();
     is( $itemtype->rentalcharge_daily,
@@ -343,6 +347,34 @@ subtest 'accumulate_rentalcharge tests' => sub {
     is( $charge, 5.00,
 'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays'
     );
+
+    # Hourly tests
+    my $issuingrule = Koha::IssuingRules->get_effective_issuing_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $itemtype->id,
+            branchcode   => $library->id
+        }
+    );
+    $issuingrule->lengthunit('hours');
+    $issuingrule->store();
+    $itemtype->rentalcharge_hourly("2.50");
+    $itemtype->store();
+    $dt_from = dt_from_string();
+    $dt_to   = dt_from_string()->add( hours => 4 );
+    $fees    = Koha::Charges::Fees->new(
+        {
+            patron    => $patron,
+            library   => $library,
+            item      => $item,
+            to_date   => $dt_to,
+            from_date => $dt_from,
+        }
+    );
+
+    $charge = $fees->accumulate_rentalcharge();
+    is( $charge, 10.00, 'Hourly rental charge calculated correctly' );
 };
 
+$schema->storage->txn_rollback;
 Time::Fake->reset;
