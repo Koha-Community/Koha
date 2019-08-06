@@ -32,7 +32,6 @@ BEGIN {
         Item2Marc
         ModDateLastSeen
         ModItemTransfer
-        DelItem
         CheckItemPreSave
         GetItemsForInventory
         GetItemsInfo
@@ -423,40 +422,6 @@ sub ModDateLastSeen {
     $item->datelastseen($today);
     $item->itemlost(0) unless $leave_item_lost;
     $item->store({ log_action => 0 });
-}
-
-=head2 DelItem
-
-  DelItem({ itemnumber => $itemnumber, [ biblionumber => $biblionumber ] } );
-
-Exported function (core API) for deleting an item record in Koha.
-
-=cut
-
-sub DelItem {
-    my ( $params ) = @_;
-
-    my $itemnumber   = $params->{itemnumber};
-    my $biblionumber = $params->{biblionumber};
-
-    unless ($biblionumber) {
-        my $item = Koha::Items->find( $itemnumber );
-        $biblionumber = $item ? $item->biblio->biblionumber : undef;
-    }
-
-    # If there is no biblionumber for the given itemnumber, there is nothing to delete
-    return 0 unless $biblionumber;
-
-    # FIXME check the item has no current issues
-    my $deleted = _koha_delete_item( $itemnumber );
-
-    ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
-
-    _after_item_action_hooks({ action => 'delete', item_id => $itemnumber });
-
-    #search item field code
-    logaction("CATALOGUING", "DELETE", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
-    return $deleted;
 }
 
 =head2 CheckItemPreSave
@@ -1480,12 +1445,9 @@ sub DelItemCheck {
     my $status = ItemSafeToDelete( $biblionumber, $itemnumber );
 
     if ( $status == 1 ) {
-        DelItem(
-            {
-                biblionumber => $biblionumber,
-                itemnumber   => $itemnumber
-            }
-        );
+        my $item = Koha::Items->find($itemnumber);
+        $item->move_to_deleted;
+        $item->delete;
     }
     return $status;
 }
@@ -1516,43 +1478,6 @@ sub _mod_item_dates { # date formatting for date fields in item hash
         }
         $item->{$key} = $newstr; # might be undef to clear garbage
     }
-}
-
-=head2 _koha_delete_item
-
-  _koha_delete_item( $itemnum );
-
-Internal function to delete an item record from the koha tables
-
-=cut
-
-sub _koha_delete_item {
-    my ( $itemnum ) = @_;
-
-    my $dbh = C4::Context->dbh;
-    # save the deleted item to deleteditems table
-    my $sth = $dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
-    $sth->execute($itemnum);
-    my $data = $sth->fetchrow_hashref();
-
-    # There is no item to delete
-    return 0 unless $data;
-
-    my $query = "INSERT INTO deleteditems SET ";
-    my @bind  = ();
-    foreach my $key ( keys %$data ) {
-        next if ( $key eq 'timestamp' ); # timestamp will be set by db
-        $query .= "$key = ?,";
-        push( @bind, $data->{$key} );
-    }
-    $query =~ s/\,$//;
-    $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-
-    # delete from items table
-    $sth = $dbh->prepare("DELETE FROM items WHERE itemnumber=?");
-    my $deleted = $sth->execute($itemnum);
-    return ( $deleted == 1 ) ? 1 : 0;
 }
 
 =head2 _marc_from_item_hash

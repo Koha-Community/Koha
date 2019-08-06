@@ -90,7 +90,7 @@ subtest 'General Add, Get and Del tests' => sub {
     cmp_ok($moditem->barcode, '==', '987654321', 'Modified item barcode successfully to: '.$moditem->barcode . '.');
 
     # Delete item.
-    DelItem({ biblionumber => $biblio->biblionumber, itemnumber => $itemnumber });
+    $moditem->delete;
     my $getdeleted = Koha::Items->find($itemnumber);
     is($getdeleted, undef, "Item deleted as expected.");
 

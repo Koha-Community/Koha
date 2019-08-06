@@ -1,5 +1,7 @@
 use Modern::Perl;
 
+# FIXME This file must be removed and the test moved to Koha::Item->delete
+
 use MARC::Record;
 use C4::Items;
 use C4::Biblio;
@@ -8,7 +10,7 @@ use Koha::Items;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 6;
+use Test::More tests => 2;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -20,31 +22,14 @@ my $library = $builder->build({
 
 my $biblio = $builder->build_sample_biblio();
 
-my $itemnumber = $builder->build_sample_item(
+my $item = $builder->build_sample_item(
     {
         biblionumber => $biblio->biblionumber,
         library      => $library->{branchcode}
     }
-)->itemnumber;
+);
 
-my $deleted = DelItem( { biblionumber => $biblio->biblionumber, itemnumber => $itemnumber } );
+my $deleted = $item->delete;
 is( $deleted, 1, "DelItem should return 1 if the item has been deleted" );
-my $deleted_item = Koha::Items->find($itemnumber);
+my $deleted_item = Koha::Items->find($item->itemnumber);
 is( $deleted_item, undef, "DelItem with biblionumber parameter - the item should be deleted." );
-
-$itemnumber = $builder->build_sample_item(
-    {
-        biblionumber => $biblio->biblionumber,
-        library      => $library->{branchcode}
-    }
-)->itemnumber;
-$deleted = DelItem( { biblionumber => $biblio->biblionumber, itemnumber => $itemnumber } );
-is( $deleted, 1, "DelItem should return 1 if the item has been deleted" );
-$deleted_item = Koha::Items->find($itemnumber);
-is( $deleted_item, undef, "DelItem without biblionumber parameter - the item should be deleted." );
-
-$deleted = DelItem( { itemnumber => $itemnumber + 1} );
-is ( $deleted, 0, "DelItem should return 0 if no item has been deleted" );
-
-$deleted = DelItem( { itemnumber => $itemnumber + 1, biblionumber => $biblio->biblionumber } );
-is ( $deleted, 0, "DelItem should return 0 if no item has been deleted" );

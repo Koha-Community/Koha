@@ -156,6 +156,43 @@ sub store {
     return $self->SUPER::store;
 }
 
+=head3 delete
+
+=cut
+
+sub delete {
+    my ( $self ) = @_;
+
+    # FIXME check the item has no current issues
+    # i.e. raise the appropriate exception
+
+    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
+
+    $self->_after_item_action_hooks({ action => 'delete' });
+
+    logaction( "CATALOGUING", "DELETE", $self->itemnumber, "item" )
+      if C4::Context->preference("CataloguingLog");
+
+    return $self->SUPER::delete;
+}
+
+=head3 move_to_deleted
+
+my $is_moved = $item->move_to_deleted;
+
+Move an item to the deleteditems table.
+This can be done before deleting an item, to make sure the data are not completely deleted.
+
+=cut
+
+sub move_to_deleted {
+    my ($self) = @_;
+    my $item_infos = $self->unblessed;
+    delete $item_infos->{timestamp}; #This ensures the timestamp date in deleteditems will be set to the current timestamp
+    return Koha::Database->new->schema->resultset('Deleteditem')->create($item_infos);
+}
+
+
 =head3 effective_itemtype
 
 Returns the itemtype for the item based on whether item level itemtypes are set or not.
