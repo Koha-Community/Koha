@@ -14348,32 +14348,40 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '16.12.00.032';
 if( CheckVersion( $DBversion ) ) {
     require Koha::Calendar;
-    require Koha::Holds;
 
     $dbh->do(q{
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) 
         VALUES ('ExcludeHolidaysFromMaxPickUpDelay', '0', 'If ON, reserves max pickup delay takes into account the closed days.', NULL, 'Integer');
     });
 
-    my $waiting_holds = Koha::Holds->search({ found => 'W', priority => 0 });
+    my $waiting_holds = $dbh->selectall_arrayref(q|
+        SELECT expirationdate, waitingdate, branchcode
+        FROM reserves
+        WHERE found = 'W' AND priority = 0
+    |);
+    my $update_sth = $dbh->prepare(q|
+        UPDATE reserves
+        SET expirationdate = ?
+        WHERE reserve_id = ?
+    |);
     my $max_pickup_delay = C4::Context->preference("ReservesMaxPickUpDelay");
-    while ( my $hold = $waiting_holds->next ) {
+    for my $hold ( @$waiting_holds ) {
 
         my $requested_expiration;
-        if ($hold->expirationdate) {
-            $requested_expiration = dt_from_string($hold->expirationdate);
+        if ($hold->{expirationdate}) {
+            $requested_expiration = dt_from_string($hold->{expirationdate});
         }
 
-        my $expirationdate = dt_from_string($hold->waitingdate);
+        my $expirationdate = dt_from_string($hold->{waitingdate});
         if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
-            my $calendar = Koha::Calendar->new( branchcode => $hold->branchcode );
+            my $calendar = Koha::Calendar->new( branchcode => $hold->{branchcode} );
             $expirationdate = $calendar->days_forward( $expirationdate, $max_pickup_delay );
         } else {
             $expirationdate->add( days => $max_pickup_delay );
         }
 
         my $cmp = $requested_expiration ? DateTime->compare($requested_expiration, $expirationdate) : 0;
-        $hold->expirationdate($cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd)->store;
+        $update_sth->execute($cmp == -1 ? $requested_expiration->ymd : $expirationdate->ymd, $hold->{reserve_id});
     }
 
     SetVersion( $DBversion );
