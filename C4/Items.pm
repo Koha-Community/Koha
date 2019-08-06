@@ -1554,40 +1554,6 @@ sub DelItemCheck {
     return $status;
 }
 
-=head2 _koha_modify_item
-
-  my ($itemnumber,$error) =_koha_modify_item( $item );
-
-Perform the actual update of the C<items> row.  Note that this
-routine accepts a hashref specifying the columns to update.
-
-=cut
-
-sub _koha_modify_item {
-    my ( $item ) = @_;
-    my $dbh=C4::Context->dbh;  
-    my $error;
-
-    my $query = "UPDATE items SET ";
-    my @bind;
-    _mod_item_dates( $item );
-    for my $key ( keys %$item ) {
-        next if ( $key eq 'itemnumber' );
-        $query.="$key=?,";
-        push @bind, $item->{$key};
-    }
-    $query =~ s/,$//;
-    $query .= " WHERE itemnumber=?";
-    push @bind, $item->{'itemnumber'};
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    if ( $sth->err ) {
-        $error.="ERROR in _koha_modify_item $query: ".$sth->errstr;
-        warn $error;
-    }
-    return ($item->{'itemnumber'},$error);
-}
-
 sub _mod_item_dates { # date formatting for date fields in item hash
     my ( $item ) = @_;
     return if !$item || ref($item) ne 'HASH';
