@@ -99,7 +99,7 @@ foreach my $m (@metadatas) {
         foreach my $item ( @items ) {
             my $itemnumber = $item->itemnumber();
 
-            my $error = $test ? "Test mode enabled" : DelItemCheck( $biblionumber, $itemnumber );
+            my $error = $test ? "Test mode enabled" : $item->safe_delete;
             $error = undef if $error eq '1';
 
             if ($error) {

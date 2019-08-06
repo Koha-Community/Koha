@@ -176,6 +176,56 @@ sub delete {
     return $self->SUPER::delete;
 }
 
+=head3 safe_delete
+
+=cut
+
+sub safe_delete {
+    my ($self) = @_;
+
+    my $safe_to_delete = $self->safe_to_delete;
+    return $safe_to_delete unless $safe_to_delete eq '1';
+
+    $self->move_to_deleted;
+
+    return $self->delete;
+}
+
+=head3 safe_to_delete
+
+returns 1 if the item is safe to delete,
+
+"book_on_loan" if the item is checked out,
+
+"not_same_branch" if the item is blocked by independent branches,
+
+"book_reserved" if the there are holds aganst the item, or
+
+"linked_analytics" if the item has linked analytic records.
+
+=cut
+
+sub safe_to_delete {
+    my ($self) = @_;
+
+    return "book_on_loan" if $self->checkout;
+
+    return "not_same_branch"
+      if defined C4::Context->userenv
+      and !C4::Context->IsSuperLibrarian()
+      and C4::Context->preference("IndependentBranches")
+      and ( C4::Context->userenv->{branch} ne $self->homebranch );
+
+    # check it doesn't have a waiting reserve
+    return "book_reserved"
+      if $self->holds->search( { found => [ 'W', 'T' ] } )->count;
+
+    return "linked_analytics"
+      if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
+
+    return 1;
+}
+
 =head3 move_to_deleted
 
 my $is_moved = $item->move_to_deleted;
@@ -543,6 +593,16 @@ sub current_holds {
         ],
     };
     my $hold_rs = $self->_result->reserves->search( $params, $attributes );
+    return Koha::Holds->_new_from_dbic($hold_rs);
+}
+
+=head3 holds
+
+=cut
+
+sub holds {
+    my ( $self ) = @_;
+    my $hold_rs = $self->_result->reserves->search;
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
 

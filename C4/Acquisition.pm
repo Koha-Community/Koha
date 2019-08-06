@@ -1926,9 +1926,9 @@ sub DelOrder {
     my $order = Koha::Acquisition::Orders->find($ordernumber);
     my $items = $order->items;
     while ( my $item = $items->next ) { # Should be moved to Koha::Acquisition::Order->delete
-        my $delcheck = C4::Items::DelItemCheck( $bibnum, $item->itemnumber );
+        my $delcheck = $item->safe_delete;
 
-        if($delcheck != 1) {
+        if($delcheck ne '1') {
             $error->{'delitem'} = 1;
         }
     }

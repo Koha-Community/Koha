@@ -175,10 +175,10 @@ if ( $op eq 'form' ) {
             }
 
             # Delete items
-            my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber })->get_column('itemnumber');
-            ITEMNUMBER: for my $itemnumber ( @itemnumbers ) {
-                my $error = eval { C4::Items::DelItemCheck( $biblionumber, $itemnumber ) };
-                if ( $error != 1 or $@ ) {
+            my $items = Koha::Items->search({ biblionumber => $biblionumber });
+            while ( my $item = $items->next ) {
+                my $error = eval { $item->safe_delete };
+                if ( $error ne '1' or $@ ) {
                     push @messages, {
                         type => 'error',
                         code => 'item_not_deleted',

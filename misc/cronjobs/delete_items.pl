@@ -54,18 +54,20 @@ my $where_clause = ' where ' . join ( " and ", @where );
 
 verbose "Where statement: $where_clause";
 
+# FIXME Use Koha::Items instead
 $GLOBAL->{sth}->{target_items} = $dbh->prepare( $query->{target_items} . $where_clause  );
 $GLOBAL->{sth}->{target_items}->execute();
 
 DELITEM: while ( my $item = $GLOBAL->{sth}->{target_items}->fetchrow_hashref() ) {
 
-    my $status = C4::Items::ItemSafeToDelete( $item->{biblionumber}, $item->{itemnumber} );
-    if( $status eq '1' )  {
-        C4::Items::DelItemCheck( $item->{biblionumber}, $item->{itemnumber} )
+    my $item_object = Koha::Items->find($item->{itemnumber});
+    my $safe_to_delete = $item_object->safe_to_delete;
+    if( $safe_to_delete eq '1' )  {
+        $item->safe_delete
             if $OPTIONS->{flags}->{commit};
         verbose "Deleting '$item->{itemnumber}'";
     } else {
-        verbose "Item '$item->{itemnumber}' not deletd: $status";
+        verbose "Item '$item->{itemnumber}' not deleted: $safe_to_delete";
     }
 }
 

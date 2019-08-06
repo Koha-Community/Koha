@@ -404,8 +404,9 @@ is($new_count, $hold_notice_count + 1, 'patron not notified a second time (bug 1
 
 # avoiding the not_same_branch error
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
+my $item = Koha::Items->find($itemnumber);
 is(
-    DelItemCheck( $bibnum, $itemnumber),
+    $item->safe_delete,
     'book_reserved',
     'item that is captured to fill a hold cannot be deleted',
 );
@@ -431,7 +432,6 @@ AddReserve(
     }
 );
 
-my $item = Koha::Items->find( $itemnumber );
 $holds = $item->current_holds;
 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
 my $future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );

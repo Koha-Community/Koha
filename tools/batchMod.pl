@@ -186,11 +186,11 @@ if ($op eq "action") {
 	foreach my $itemnumber(@itemnumbers){
 
 		$job->progress($i) if $runinbackground;
-        my $itemdata = Koha::Items->find($itemnumber);
-        next unless $itemdata; # Should have been tested earlier, but just in case...
-        $itemdata = $itemdata->unblessed;
+        my $item = Koha::Items->find($itemnumber);
+        next unless $item; # Should have been tested earlier, but just in case...
+        my $itemdata = $item->unblessed;
         if ( $del ){
-            my $return = DelItemCheck( $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
+            my $return = $item->safe_delete;
 			if ($return == 1) {
 			    $deleted_items++;
 			} else {

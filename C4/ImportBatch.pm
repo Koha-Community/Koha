@@ -910,8 +910,9 @@ sub BatchRevertItems {
     $sth->bind_param(1, $import_record_id);
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref()) {
-        my $error = DelItemCheck( $biblionumber, $row->{'itemnumber'});
-        if ($error == 1){
+        my $item = Koha::Items->find($row->{itemnumber});
+        my $error = $item->safe_delete;
+        if ($error eq '1'){
             my $updsth = $dbh->prepare("UPDATE import_items SET status = ? WHERE import_items_id = ?");
             $updsth->bind_param(1, 'reverted');
             $updsth->bind_param(2, $row->{'import_items_id'});

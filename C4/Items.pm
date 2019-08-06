@@ -39,8 +39,6 @@ BEGIN {
         GetHostItemsInfo
         get_hostitemnumbers_of
         GetHiddenItemnumbers
-        ItemSafeToDelete
-        DelItemCheck
         MoveItemFromBiblio
         CartToShelf
         GetAnalyticsCount
@@ -1365,91 +1363,6 @@ sub MoveItemFromBiblio {
         return $tobiblio;
 	}
     return;
-}
-
-=head2 ItemSafeToDelete
-
-   ItemSafeToDelete( $biblionumber, $itemnumber);
-
-Exported function (core API) for checking whether an item record is safe to delete.
-
-returns 1 if the item is safe to delete,
-
-"book_on_loan" if the item is checked out,
-
-"not_same_branch" if the item is blocked by independent branches,
-
-"book_reserved" if the there are holds aganst the item, or
-
-"linked_analytics" if the item has linked analytic records.
-
-=cut
-
-sub ItemSafeToDelete {
-    my ( $biblionumber, $itemnumber ) = @_;
-    my $status;
-    my $dbh = C4::Context->dbh;
-
-    my $error;
-
-    my $countanalytics = GetAnalyticsCount($itemnumber);
-
-    my $item = Koha::Items->find($itemnumber) or return;
-
-    if ($item->checkout) {
-        $status = "book_on_loan";
-    }
-    elsif ( defined C4::Context->userenv
-        and !C4::Context->IsSuperLibrarian()
-        and C4::Context->preference("IndependentBranches")
-        and ( C4::Context->userenv->{branch} ne $item->homebranch ) )
-    {
-        $status = "not_same_branch";
-    }
-    else {
-        # check it doesn't have a waiting reserve
-        my $sth = $dbh->prepare(
-            q{
-            SELECT COUNT(*) FROM reserves
-            WHERE (found = 'W' OR found = 'T')
-            AND itemnumber = ?
-        }
-        );
-        $sth->execute($itemnumber);
-        my ($reserve) = $sth->fetchrow;
-        if ($reserve) {
-            $status = "book_reserved";
-        }
-        elsif ( $countanalytics > 0 ) {
-            $status = "linked_analytics";
-        }
-        else {
-            $status = 1;
-        }
-    }
-    return $status;
-}
-
-=head2 DelItemCheck
-
-   DelItemCheck( $biblionumber, $itemnumber);
-
-Exported function (core API) for deleting an item record in Koha if there no current issue.
-
-DelItemCheck wraps ItemSafeToDelete around DelItem.
-
-=cut
-
-sub DelItemCheck {
-    my ( $biblionumber, $itemnumber ) = @_;
-    my $status = ItemSafeToDelete( $biblionumber, $itemnumber );
-
-    if ( $status == 1 ) {
-        my $item = Koha::Items->find($itemnumber);
-        $item->move_to_deleted;
-        $item->delete;
-    }
-    return $status;
 }
 
 sub _mod_item_dates { # date formatting for date fields in item hash

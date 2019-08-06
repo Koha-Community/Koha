@@ -68,7 +68,7 @@ AddIssue($borrower, $item->barcode);
 is ( IsItemIssued( $item->itemnumber ), 1, "item is now on loan" );
 
 is(
-    DelItemCheck( $biblionumber, $item->itemnumber),
+    $item->safe_delete,
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
@@ -77,7 +77,7 @@ AddReturn($item->barcode, $library->{branchcode});
 is ( IsItemIssued( $item->itemnumber ), 0, "item has been returned" );
 
 is(
-    DelItemCheck( $biblionumber, $item->itemnumber),
+    $item->safe_delete,
     1,
     'item that is not on loan can be deleted',
 );

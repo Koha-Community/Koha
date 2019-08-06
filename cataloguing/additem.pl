@@ -669,8 +669,9 @@ if ($op eq "additem") {
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
-    $error = &DelItemCheck( $biblionumber,$itemnumber);
-    if($error == 1){
+    my $item = Koha::Items->find($itemnumber);
+    $error = $item->safe_to_delete;
+    if($error ne '1'){
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&searchid=$searchid");
     }else{
         push @errors,$error;
@@ -679,10 +680,10 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delallitems") {
 #-------------------------------------------------------------------------------
-    my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber })->get_column('itemnumber');
-    foreach my $itemnumber ( @itemnumbers ) {
-        $error = C4::Items::DelItemCheck( $biblionumber, $itemnumber );
-        next if $error == 1; # Means ok
+    my $items = Koha::Items->search({ biblionumber => $biblionumber });
+    while ( my $item = $items->next ) {
+        $error = $item->safe_delete;
+        next if $error eq '1'; # Means ok
         push @errors,$error;
     }
     if ( @errors ) {

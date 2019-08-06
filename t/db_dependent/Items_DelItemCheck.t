@@ -98,13 +98,13 @@ my $item = $builder->build_object(
 AddIssue( $patron, $item->barcode );
 
 is(
-    ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
+    $item->safe_to_delete,
     'book_on_loan',
-    'ItemSafeToDelete reports item on loan',
+    'Koha::Item->safe_to_delete reports item on loan',
 );
 
 is(
-    DelItemCheck( $biblio->{biblionumber}, $item->itemnumber ),
+    $item->safe_delete,
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
@@ -118,13 +118,13 @@ t::lib::Mocks::mock_preference('IndependentBranches', 1);
 $item->set( { homebranch => $branch2->{branchcode}, holdingbranch => $branch2->{branchcode} })->store;
 
 is(
-    ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
+    $item->safe_to_delete,
     'not_same_branch',
-    'ItemSafeToDelete reports IndependentBranches restriction',
+    'Koha::Item->safe_to_delete reports IndependentBranches restriction',
 );
 
 is(
-    DelItemCheck( $biblio->{biblionumber}, $item->itemnumber ),
+    $item->safe_delete,
     'not_same_branch',
     'IndependentBranches prevents deletion at another branch',
 );
@@ -139,13 +139,13 @@ $item->set( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{br
     $module->mock( GetAnalyticsCount => sub { return 1 } );
 
     is(
-        ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
+        $item->safe_to_delete,
         'linked_analytics',
-        'ItemSafeToDelete reports linked analytics',
+        'Koha::Item->safe_to_delete reports linked analytics',
     );
 
     is(
-        DelItemCheck( $biblio->{biblionumber}, $item->itemnumber ),
+        $item->safe_delete,
         'linked_analytics',
         'Linked analytics prevents deletion of item',
     );
@@ -153,17 +153,17 @@ $item->set( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{br
 }
 
 is(
-    ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
+    $item->safe_to_delete,
     1,
-    'ItemSafeToDelete shows item safe to delete'
+    'Koha::Item->safe_to_delete shows item safe to delete'
 );
 
-DelItemCheck( $biblio->{biblionumber}, $item->itemnumber );
+$item->safe_delete,
 
 my $test_item = Koha::Items->find( $item->itemnumber );
 
 is( $test_item, undef,
-    "DelItemCheck should delete item if ItemSafeToDelete returns true"
+    "Koha::Item->safe_delete should delete item if safe_to_delete returns true"
 );
 
 $schema->storage->txn_rollback;
