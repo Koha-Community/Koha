@@ -414,44 +414,6 @@ If log_action is true or undefined, the action will be logged.
 sub ModItem {
     my ( $item, $biblionumber, $itemnumber, $additional_params ) = @_;
     my $log_action = $additional_params->{log_action} // 1;
-    my $unlinked_item_subfields = $additional_params->{unlinked_item_subfields};
-
-    return unless %$item;
-    $item->{'itemnumber'} = $itemnumber or return;
-
-    # if $biblionumber is undefined, get it from the current item
-    unless (defined $biblionumber) {
-        $biblionumber = _get_single_item_column('biblionumber', $itemnumber);
-    }
-
-    if ($unlinked_item_subfields) {
-        $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
-    };
-
-    my @fields = qw( itemlost withdrawn damaged );
-
-    # Only retrieve the item if we need to set an "on" date field
-    if ( $item->{itemlost} || $item->{withdrawn} || $item->{damaged} ) {
-        my $pre_mod_item = Koha::Items->find( $item->{'itemnumber'} );
-        for my $field (@fields) {
-            if (    defined( $item->{$field} )
-                and not $pre_mod_item->$field
-                and $item->{$field} )
-            {
-                $item->{ $field . '_on' } =
-                  DateTime::Format::MySQL->format_datetime( dt_from_string() );
-            }
-        }
-    }
-
-    # If the field is defined but empty, we are removing and,
-    # and thus need to clear out the 'on' field as well
-    for my $field (@fields) {
-        if ( defined( $item->{$field} ) && !$item->{$field} ) {
-            $item->{ $field . '_on' } = undef;
-        }
-    }
-
 
     _set_derived_columns_for_mod($item);
     _do_column_fixes_for_mod($item);
@@ -1305,53 +1267,6 @@ sub _set_derived_columns_for_add {
             $source_values->{$source_column} = $item->{$source_column};
         }
         $builder->($item, $source_values);
-    }
-}
-
-=head2 _set_derived_columns_for_mod 
-
-  _set_derived_column_for_mod($item);
-
-Given an item hash representing a new item to be modified.
-calculate any derived columns.  Currently the only
-such column is C<items.cn_sort>.
-
-This routine differs from C<_set_derived_columns_for_add>
-in that it needs to handle partial item records.  In other
-words, the caller of C<ModItem> may have supplied only one
-or two columns to be changed, so this function needs to
-determine whether any of the columns to be changed affect
-any of the derived columns.  Also, if a derived column
-depends on more than one column, but the caller is not
-changing all of then, this routine retrieves the unchanged
-values from the database in order to ensure a correct
-calculation.
-
-=cut
-
-sub _set_derived_columns_for_mod {
-    my $item = shift;
-
-    foreach my $column (keys %derived_columns) {
-        my $builder = $derived_columns{$column}->{'BUILDER'};
-        my $source_values = {};
-        my %missing_sources = ();
-        my $must_recalc = 0;
-        foreach my $source_column (keys %{ $derived_columns{$column} }) {
-            next if $source_column eq 'BUILDER';
-            if (exists $item->{$source_column}) {
-                $must_recalc = 1;
-                $source_values->{$source_column} = $item->{$source_column};
-            } else {
-                $missing_sources{$source_column} = 1;
-            }
-        }
-        if ($must_recalc) {
-            foreach my $source_column (keys %missing_sources) {
-                $source_values->{$source_column} = _get_single_item_column($source_column, $item->{'itemnumber'});
-            }
-            $builder->($item, $source_values);
-        }
     }
 }
 
