@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 8;
+use Test::Exception;
+use Test::Warn;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Data::Dumper;
-
+use Time::Fake;
 use C4::Calendar;
 use Koha::DateUtils qw(dt_from_string);
 
@@ -59,9 +60,9 @@ my $itemtype = $builder->build_object(
         class => 'Koha::ItemTypes',
         value => {
             rentalcharge_daily => '0.00',
-            rentalcharge        => '0.00',
-            processfee          => '0.00',
-            defaultreplacecost  => '0.00',
+            rentalcharge       => '0.00',
+            processfee         => '0.00',
+            defaultreplacecost => '0.00',
         },
     }
 );
@@ -86,21 +87,234 @@ my $patron = $builder->build_object(
     }
 );
 
-my $dt_from = dt_from_string();
-my $dt_to = dt_from_string()->add( days => 6 );
+my $dt = dt_from_string();
+Time::Fake->offset( $dt->epoch );
 
-my $fees = Koha::Charges::Fees->new(
-    {
-        patron    => $patron,
-        library   => $library,
-        item      => $item,
-        to_date   => $dt_to,
-        from_date => $dt_from,
+my $dt_from = dt_from_string()->subtract( days => 2 );
+my $dt_to = dt_from_string()->add( days => 4 );
+
+subtest 'new' => sub {
+    plan tests => 9;
+
+    # Mandatory parameters missing
+    throws_ok {
+        Koha::Charges::Fees->new(
+            {
+                library => $library,
+                item    => $item,
+                to_date => $dt_to,
+            }
+          )
     }
-);
+    'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for patron';
+    throws_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => $patron,
+                item    => $item,
+                to_date => $dt_to,
+            }
+          )
+    }
+    'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for library';
+    throws_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => $patron,
+                library => $library,
+                to_date => $dt_to,
+            }
+          )
+    }
+    'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for item';
+    throws_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => $patron,
+                library => $library,
+                item    => $item,
+            }
+          )
+    }
+    'Koha::Exceptions::MissingParameter', 'MissingParameter thrown for to_date';
+
+    # Mandatory parameter bad
+    dies_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => '12345',
+                library => $library,
+                item    => $item,
+                to_date => $dt_to,
+            }
+          )
+    }
+    'dies for bad patron';
+    dies_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => $patron,
+                library => '12345',
+                item    => $item,
+                to_date => $dt_to,
+            }
+          )
+    }
+    'dies for bad library';
+    dies_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => $patron,
+                library => $library,
+                item    => '12345',
+                to_date => $dt_to,
+            }
+          )
+    }
+    'dies for bad item';
+    dies_ok {
+        Koha::Charges::Fees->new(
+            {
+                patron  => $patron,
+                library => $library,
+                item    => $item,
+                to_date => 12345
+            }
+          )
+    }
+    'dies for bad to_date';
+
+    # Defaults
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron  => $patron,
+            library => $library,
+            item    => $item,
+            to_date => $dt_to,
+        }
+    );
+    is( $fees->from_date, dt_from_string(),
+        'from_date default set correctly to today' );
+};
+
+subtest 'patron accessor' => sub {
+    plan tests => 2;
+
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron  => $patron,
+            library => $library,
+            item    => $item,
+            to_date => $dt_to,
+        }
+    );
+
+    ok(
+        $fees->patron->isa('Koha::Patron'),
+        'patron accessor returns a Koha::Patron'
+    );
+    warning_is { $fees->patron('12345') }
+    { carped =>
+"Setting 'patron' to something other than a Koha::Patron is not supported!"
+    }, "Warning thrown when attempting to set patron to string";
+
+};
+
+subtest 'library accessor' => sub {
+    plan tests => 2;
+
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron  => $patron,
+            library => $library,
+            item    => $item,
+            to_date => $dt_to,
+        }
+    );
+
+    ok(
+        $fees->library->isa('Koha::Library'),
+        'library accessor returns a Koha::Library'
+    );
+    warning_is { $fees->library('12345') }
+    { carped =>
+"Setting 'library' to something other than a Koha::Library is not supported!"
+    }, "Warning thrown when attempting to set library to string";
+};
+
+subtest 'item accessor' => sub {
+    plan tests => 2;
+
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron  => $patron,
+            library => $library,
+            item    => $item,
+            to_date => $dt_to,
+        }
+    );
+
+    ok( $fees->item->isa('Koha::Item'), 'item accessor returns a Koha::Item' );
+    warning_is { $fees->item('12345') }
+    { carped =>
+"Setting 'item' to something other than a Koha::Item is not supported!"
+    }, "Warning thrown when attempting to set item to string";
+};
+
+subtest 'to_date accessor' => sub {
+    plan tests => 2;
+
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron  => $patron,
+            library => $library,
+            item    => $item,
+            to_date => $dt_to,
+        }
+    );
+
+    ok( $fees->to_date->isa('DateTime'),
+        'to_date accessor returns a DateTime' );
+    warning_is { $fees->to_date(12345) }
+    { carped =>
+"Setting 'to_date' to something other than a DateTime is not supported!"
+    }, "Warning thrown when attempting to set to_date to integer";
+};
+
+subtest 'from_date accessor' => sub {
+    plan tests => 2;
+
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron  => $patron,
+            library => $library,
+            item    => $item,
+            to_date => $dt_to,
+        }
+    );
+
+    ok(
+        $fees->from_date->isa('DateTime'),
+        'from_date accessor returns a DateTime'
+    );
+    warning_is { $fees->from_date(12345) }
+    { carped =>
+"Setting 'from_date' to something other than a DateTime is not supported!"
+    }, "Warning thrown when attempting to set from_date to integer";
+};
 
 subtest 'accumulate_rentalcharge tests' => sub {
     plan tests => 4;
+
+    my $fees = Koha::Charges::Fees->new(
+        {
+            patron    => $patron,
+            library   => $library,
+            item      => $item,
+            to_date   => $dt_to,
+            from_date => $dt_from,
+        }
+    );
 
     $itemtype->rentalcharge_daily(1.00);
     $itemtype->store();
@@ -109,11 +323,15 @@ subtest 'accumulate_rentalcharge tests' => sub {
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
     my $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 6.00, 'Daily rental charge calculated correctly with finesCalendar = ignoreCalendar' );
+    is( $charge, 6.00,
+'Daily rental charge calculated correctly with finesCalendar = ignoreCalendar'
+    );
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 6.00, 'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed' );
+    is( $charge, 6.00,
+'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed'
+    );
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
     $calendar->insert_week_day_holiday(
@@ -122,5 +340,9 @@ subtest 'accumulate_rentalcharge tests' => sub {
         description => 'Test holiday'
     );
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 5.00, 'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays' );
+    is( $charge, 5.00,
+'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays'
+    );
 };
+
+Time::Fake->reset;
