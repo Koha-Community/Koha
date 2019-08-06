@@ -26,11 +26,13 @@ use Test::MockModule;
 use Time::Fake;
 use DateTime;
 use JSON;
+use Data::Dumper;
 
 use C4::Circulation;
 use C4::Biblio;
 use C4::Auth qw(checkpw_hash);
 
+use Koha::ActionLogs;
 use Koha::Holds;
 use Koha::Old::Holds;
 use Koha::Patrons;
@@ -1587,7 +1589,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 5;
+    plan tests => 6;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -1624,6 +1626,17 @@ subtest '->store' => sub {
 
     $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
+
+    subtest 'skip updated_on for BorrowersLog' => sub {
+        plan tests => 1;
+        $schema->storage->txn_begin;
+        t::lib::Mocks::mock_preference('BorrowersLog', 1);
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        $patron->updated_on(dt_from_string($patron->updated_on)->add( seconds => 1 ))->store;
+        my $logs = Koha::ActionLogs->search({ module =>'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber });
+        is($logs->count, 0, '->store should not have generated a log for updated_on') or diag 'Log generated:'.Dumper($logs->unblessed);
+        $schema->storage->txn_rollback;
+    };
 };
 
 subtest '->set_password' => sub {
