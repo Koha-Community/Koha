@@ -273,6 +273,7 @@ sub raw_elasticsearch_mappings {
             $mappings->{ $marc_map->index_name }{ $search_field->name }{label} = $search_field->label;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight || undef;
 
             push (@{ $mappings->{ $marc_map->index_name }{ $search_field->name }{mappings} },
                 {
