@@ -19,7 +19,7 @@ package Koha::Charges::Fees;
 
 use Modern::Perl;
 
-use Carp qw( confess );
+use Carp qw( carp confess );
 
 use Koha::Calendar;
 use Koha::IssuingRules;
@@ -82,7 +82,7 @@ sub new {
 
     my $fee = $self->accumulate_rentalcharge();
 
-    This method calculates the daily rental fee for a given itemtype for a given
+    This method calculates the daily/hourly rental fee for a given itemtype for a given
     period of time passed in as a pair of DateTime objects.
 
 =cut
@@ -138,7 +138,10 @@ my $patron = $fees->patron( $patron );
 sub patron {
     my ( $self, $patron ) = @_;
 
-    $self->{patron} = $patron if $patron && $patron->isa('Koha::Patron');
+    Carp::carp("Setting 'patron' to something other than a Koha::Patron is not supported!")
+      if ($patron && !$patron->isa('Koha::Patron'));
+
+    $self->{patron} = $patron if $patron;
 
     return $self->{patron};
 }
@@ -152,7 +155,10 @@ my $library = $fees->library( $library );
 sub library {
     my ( $self, $library ) = @_;
 
-    $self->{library} = $library if $library && $library->isa('Koha::Library');
+    Carp::carp("Setting 'library' to something other than a Koha::Library is not supported!")
+      if ($library && !$library->isa('Koha::Library'));
+
+    $self->{library} = $library if $library;
 
     return $self->{library};
 }
@@ -166,7 +172,10 @@ my $item = $fees->item( $item );
 sub item {
     my ( $self, $item ) = @_;
 
-    $self->{item} = $item if $item && $item->isa('Koha::Item');
+    Carp::carp("Setting 'item' to something other than a Koha::Item is not supported!")
+      if ($item && !$item->isa('Koha::Item'));
+
+    $self->{item} = $item if $item;
 
     return $self->{item};
 }
@@ -180,7 +189,10 @@ my $to_date = $fees->to_date( $to_date );
 sub to_date {
     my ( $self, $to_date ) = @_;
 
-    $self->{to_date} = $to_date if $to_date && $to_date->isa('DateTime');
+    Carp::carp("Setting 'to_date' to something other than a DateTime is not supported!")
+      if ($to_date && !$to_date->isa('DateTime'));
+
+    $self->{to_date} = $to_date if $to_date;
 
     return $self->{to_date};
 }
@@ -194,14 +206,18 @@ my $from_date = $fees->from_date( $from_date );
 sub from_date {
     my ( $self, $from_date ) = @_;
 
+    Carp::carp("Setting 'from_date' to something other than a DateTime is not supported!")
+      if ($from_date && !$from_date->isa('DateTime'));
+
     $self->{from_date} = $from_date if $from_date && $from_date->isa('DateTime');
 
     return $self->{from_date};
 }
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Kyle M Hall <kyle.m.hall@gmail.com>
+Martin Renvoize <martin.renvoize@ptfs-europe.com>
 
 =cut
 
