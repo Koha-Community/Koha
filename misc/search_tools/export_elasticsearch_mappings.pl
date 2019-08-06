@@ -56,6 +56,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
+use Koha::SearchEngine::Elasticsearch;
 
 use YAML;
 use Getopt::Long;
@@ -76,34 +77,6 @@ if ( $type && $type !~ /^(marc21|unimarc|normarc)$/ ) {
     pod2usage(1);
 }
 
-my $schema = Koha::Database->new()->schema();
+my $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings( $type );
 
-my $search_fields = Koha::SearchFields->search();
-
-my $yaml = {};
-while ( my $search_field = $search_fields->next ) {
-
-    my $marc_to_fields = $schema->resultset('SearchMarcToField')->search( { search_field_id => $search_field->id } );
-
-    while ( my $marc_to_field = $marc_to_fields->next ) {
-        my $marc_map = Koha::SearchMarcMaps->find( $marc_to_field->search_marc_map_id );
-
-        next if $type && $marc_map->marc_type ne $type;
-
-        $yaml->{ $marc_map->index_name }{ $search_field->name }{label} = $search_field->label;
-        $yaml->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
-        $yaml->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order;
-
-        push (@{ $yaml->{ $marc_map->index_name }{ $search_field->name }{mappings} },
-            {
-                facet   => $marc_to_field->facet || '',
-                marc_type => $marc_map->marc_type,
-                marc_field => $marc_map->marc_field,
-                sort        => $marc_to_field->sort,
-                suggestible => $marc_to_field->suggestible || ''
-            });
-
-    }
-}
-
-print Dump($yaml);
+print Dump($mappings);

@@ -244,6 +244,51 @@ sub get_elasticsearch_mappings {
     return $all_mappings{$self->index};
 }
 
+=head2 raw_elasticsearch_mappings
+
+Return elasticsearch mapping as it is in database.
+marc_type: marc21|unimarc|normarc
+
+$raw_mappings = raw_elasticsearch_mappings( $marc_type )
+
+=cut
+
+sub raw_elasticsearch_mappings {
+    my ( $marc_type ) = @_;
+
+    my $schema = Koha::Database->new()->schema();
+
+    my $search_fields = Koha::SearchFields->search();
+
+    my $mappings = {};
+    while ( my $search_field = $search_fields->next ) {
+
+        my $marc_to_fields = $schema->resultset('SearchMarcToField')->search( { search_field_id => $search_field->id } );
+
+        while ( my $marc_to_field = $marc_to_fields->next ) {
+            my $marc_map = Koha::SearchMarcMaps->find( $marc_to_field->search_marc_map_id );
+
+            next if $marc_type && $marc_map->marc_type ne $marc_type;
+
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{label} = $search_field->label;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order;
+
+            push (@{ $mappings->{ $marc_map->index_name }{ $search_field->name }{mappings} },
+                {
+                    facet   => $marc_to_field->facet || '',
+                    marc_type => $marc_map->marc_type,
+                    marc_field => $marc_map->marc_field,
+                    sort        => $marc_to_field->sort,
+                    suggestible => $marc_to_field->suggestible || ''
+                });
+
+        }
+    }
+
+    return $mappings;
+}
+
 =head2 _get_elasticsearch_field_config
 
 Get the Elasticsearch field config for the given purpose and data type.
