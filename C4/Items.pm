@@ -30,7 +30,6 @@ BEGIN {
         AddItemBatchFromMarc
         ModItemFromMarc
         Item2Marc
-        ModItem
         ModDateLastSeen
         ModItemTransfer
         DelItem
@@ -372,69 +371,6 @@ sub ModItemFromMarc {
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
 
     return $item_object->get_from_storage->unblessed;
-}
-
-=head2 ModItem
-
-ModItem(
-    { column => $newvalue },
-    $biblionumber,
-    $itemnumber,
-    {
-        [ unlinked_item_subfields => $unlinked_item_subfields, ]
-        [ log_action => 1, ]
-    }
-);
-
-Change one or more columns in an item record.
-
-The first argument is a hashref mapping from item column
-names to the new values.  The second and third arguments
-are the biblionumber and itemnumber, respectively.
-The fourth, optional parameter (additional_params) may contain the keys
-unlinked_item_subfields and log_action.
-
-C<$unlinked_item_subfields> contains an arrayref containing
-subfields present in the original MARC
-representation of the item (e.g., from the item editor) that are
-not mapped to C<items> columns directly but should instead
-be stored in C<items.more_subfields_xml> and included in 
-the biblio items tag for display and indexing.
-
-If one of the changed columns is used to calculate
-the derived value of a column such as C<items.cn_sort>, 
-this routine will perform the necessary calculation
-and set the value.
-
-If log_action is set to false, the action will not be logged.
-If log_action is true or undefined, the action will be logged.
-
-=cut
-
-sub ModItem {
-    my ( $item, $biblionumber, $itemnumber, $additional_params ) = @_;
-    my $log_action = $additional_params->{log_action} // 1;
-
-    _set_derived_columns_for_mod($item);
-    _do_column_fixes_for_mod($item);
-    # FIXME add checks
-    # duplicate barcode
-    # attempt to change itemnumber
-    # attempt to change biblionumber (if we want
-    # an API to relink an item to a different bib,
-    # it should be a separate function)
-
-    # update items table
-    _koha_modify_item($item);
-
-    # request that bib be reindexed so that searching on current
-    # item status is possible
-    ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
-
-    _after_item_action_hooks({ action => 'modify', item_id => $itemnumber });
-
-    logaction( "CATALOGUING", "MODIFY", $itemnumber, "item " . Dumper($item) )
-      if $log_action && C4::Context->preference("CataloguingLog");
 }
 
 =head2 ModItemTransfer
