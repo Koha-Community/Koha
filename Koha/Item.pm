@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 use List::MoreUtils qw(any);
 use Data::Dumper;
+use Try::Tiny;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -38,6 +39,7 @@ use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
 use Koha::Patrons;
+use Koha::Plugins;
 use Koha::Libraries;
 use Koha::StockRotationItem;
 use Koha::StockRotationRotas;
@@ -145,7 +147,6 @@ sub store {
 
         logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
           if $log_action && C4::Context->preference("CataloguingLog");
-
     }
 
     unless ( $self->dateaccessioned ) {
@@ -654,6 +655,37 @@ sub to_api_mapping {
 }
 
 =head2 Internal methods
+
+=head3 _after_item_action_hooks
+
+Helper method that takes care of calling all plugin hooks
+
+=cut
+
+sub _after_item_action_hooks {
+    my ( $self, $params ) = @_;
+
+    my $action = $params->{action};
+
+    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+
+        my @plugins = Koha::Plugins->new->GetPlugins({
+            method => 'after_item_action',
+        });
+
+        if (@plugins) {
+
+            foreach my $plugin ( @plugins ) {
+                try {
+                    $plugin->after_item_action({ action => $action, item => $self, item_id => $self->itemnumber });
+                }
+                catch {
+                    warn "$_";
+                };
+            }
+        }
+    }
+}
 
 =head3 _type
 

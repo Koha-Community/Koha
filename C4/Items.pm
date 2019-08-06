@@ -2526,38 +2526,4 @@ sub ToggleNewStatus {
     return $report;
 }
 
-=head2 _after_item_action_hooks
-
-Helper method that takes care of calling all plugin hooks
-
-=cut
-
-sub _after_item_action_hooks {
-    my ( $args ) = @_;
-
-    my $item_id = $args->{item_id};
-    my $action  = $args->{action};
-
-    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
-
-        my @plugins = Koha::Plugins->new->GetPlugins({
-            method => 'after_item_action',
-        });
-
-        if (@plugins) {
-
-            my $item = Koha::Items->find( $item_id );
-
-            foreach my $plugin ( @plugins ) {
-                try {
-                    $plugin->after_item_action({ action => $action, item => $item, item_id => $item_id });
-                }
-                catch {
-                    warn "$_";
-                };
-            }
-        }
-    }
-}
-
 1;
