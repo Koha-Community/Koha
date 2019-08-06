@@ -1270,52 +1270,6 @@ sub _set_derived_columns_for_add {
     }
 }
 
-=head2 _do_column_fixes_for_mod
-
-  _do_column_fixes_for_mod($item);
-
-Given an item hashref containing one or more
-columns to modify, fix up certain values.
-Specifically, set to 0 any passed value
-of C<notforloan>, C<damaged>, C<itemlost>, or
-C<withdrawn> that is either undefined or
-contains the empty string.
-
-=cut
-
-sub _do_column_fixes_for_mod {
-    my $item = shift;
-
-    if (exists $item->{'notforloan'} and
-        (not defined $item->{'notforloan'} or $item->{'notforloan'} eq '')) {
-        $item->{'notforloan'} = 0;
-    }
-    if (exists $item->{'damaged'} and
-        (not defined $item->{'damaged'} or $item->{'damaged'} eq '')) {
-        $item->{'damaged'} = 0;
-    }
-    if (exists $item->{'itemlost'} and
-        (not defined $item->{'itemlost'} or $item->{'itemlost'} eq '')) {
-        $item->{'itemlost'} = 0;
-    }
-    if (exists $item->{'withdrawn'} and
-        (not defined $item->{'withdrawn'} or $item->{'withdrawn'} eq '')) {
-        $item->{'withdrawn'} = 0;
-    }
-    if (
-        exists $item->{location}
-        and ( !defined $item->{location}
-            || ( $item->{location} ne 'CART' and $item->{location} ne 'PROC' ) )
-        and not $item->{permanent_location}
-      )
-    {
-        $item->{'permanent_location'} = $item->{'location'};
-    }
-    if (exists $item->{'timestamp'}) {
-        delete $item->{'timestamp'};
-    }
-}
-
 =head2 _get_single_item_column
 
   _get_single_item_column($column, $itemnumber);
