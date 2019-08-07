@@ -33,7 +33,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 16;
+use Test::More tests => 14;
 
 use Test::Warn;
 
@@ -802,138 +802,6 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     $schema->storage->txn_rollback;
 };
 
-
-subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
-    plan tests => 4;
-
-    $schema->storage->txn_begin();
-
-    my $builder = t::lib::TestBuilder->new;
-    my $framework = $builder->build({ source => 'BiblioFramework' });
-
-    # Link biblio.biblionumber and biblioitems.biblioitemnumber to avoid _koha_marc_update_bib_ids to fail with 'no biblio[item]number tag for framework"
-    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '999', tagsubfield => [ 'c', 'd' ] })->delete;
-    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '999', tagsubfield => 'c', kohafield => 'biblio.biblionumber' })->store;
-    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '999', tagsubfield => 'd', kohafield => 'biblioitems.biblioitemnumber' })->store;
-
-    # Same for item fields: itemnumber, barcode, itype
-    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => [ '9', 'p', 'y' ] })->delete;
-    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => '9', kohafield => 'items.itemnumber' })->store;
-    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'p', kohafield => 'items.barcode' })->store;
-    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'y', kohafield => 'items.itype' })->store;
-    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
-
-    my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
-
-    # Create a record with a barcode
-    my $biblio = $builder->build_sample_biblio({ frameworkcode => $framework->{frameworkcode} });
-    my $item_record = new MARC::Record;
-    my $a_barcode = 'a barcode';
-    my $barcode_field = MARC::Field->new(
-        '952', ' ', ' ',
-        p => $a_barcode,
-        y => $itemtype
-    );
-    my $itemtype_field = MARC::Field->new(
-        '952', ' ', ' ',
-        y => $itemtype
-    );
-    $item_record->append_fields( $barcode_field );
-    my (undef, undef, $item_itemnumber) = AddItemFromMarc($item_record, $biblio->biblionumber);
-
-    # Make sure everything has been set up
-    my $item = Koha::Items->find($item_itemnumber);
-    is( $item->barcode, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
-
-    # Delete the barcode field and save the record
-    $item_record->delete_fields( $barcode_field );
-    $item_record->append_fields( $itemtype_field ); # itemtype is mandatory
-    ModItemFromMarc($item_record, $biblio->biblionumber, $item_itemnumber);
-    $item = Koha::Items->find($item_itemnumber);
-    is( $item->barcode, undef, 'The default value should have been set to the barcode, the field is mapped to a kohafield' );
-
-    # Re-add the barcode field and save the record
-    $item_record->append_fields( $barcode_field );
-    ModItemFromMarc($item_record, $biblio->biblionumber, $item_itemnumber);
-    $item = Koha::Items->find($item_itemnumber);
-    is( $item->barcode, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
-
-    # Remove the mapping for barcode
-    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'p' })->delete;
-
-    # And make sure the caches are cleared
-    my $cache = Koha::Caches->get_instance();
-    $cache->clear_from_cache("default_value_for_mod_marc-");
-    $cache->clear_from_cache("MarcSubfieldStructure-");
-
-    # Update the MARC field with another value
-    $item_record->delete_fields( $barcode_field );
-    my $another_barcode = 'another_barcode';
-    my $another_barcode_field = MARC::Field->new(
-        '952', ' ', ' ',
-        p => $another_barcode,
-    );
-    $item_record->append_fields( $another_barcode_field );
-    # The DB value should not have been updated
-    ModItemFromMarc($item_record, $biblio->biblionumber, $item_itemnumber);
-    $item = Koha::Items->find($item_itemnumber);
-    is ( $item->barcode, $a_barcode, 'items.barcode is not mapped anymore, so the DB column has not been updated' );
-
-    $cache->clear_from_cache("default_value_for_mod_marc-");
-    $cache->clear_from_cache( "MarcSubfieldStructure-" );
-    $schema->storage->txn_rollback;
-};
-
-subtest '_mod_item_dates' => sub {
-    plan tests => 11;
-
-    is( C4::Items::_mod_item_dates(), undef, 'Call without parameters' );
-    is( C4::Items::_mod_item_dates(1), undef, 'Call without hashref' );
-
-    my $orgitem;
-    my $item = {
-        itemcallnumber  => 'V II 149 1963',
-        barcode         => '109304',
-    };
-    $orgitem = { %$item };
-    C4::Items::_mod_item_dates($item);
-    is_deeply( $item, $orgitem, 'No dates passed to _mod_item_dates' );
-
-    # add two correct dates
-    t::lib::Mocks::mock_preference('dateformat', 'us');
-    $item->{dateaccessioned} = '01/31/2016';
-    $item->{onloan} =  $item->{dateaccessioned};
-    $orgitem = { %$item };
-    C4::Items::_mod_item_dates($item);
-    is( $item->{dateaccessioned}, '2016-01-31', 'dateaccessioned is fine' );
-    is( $item->{onloan}, '2016-01-31', 'onloan is fine too' );
-
-
-    # add some invalid dates
-    $item->{notexistingcolumndate} = '13/1/2015'; # wrong format
-    $item->{anotherdate} = 'tralala'; # even worse
-    $item->{myzerodate} = '0000-00-00'; # wrong too
-    C4::Items::_mod_item_dates($item);
-    is( $item->{notexistingcolumndate}, undef, 'Invalid date became NULL' );
-    is( $item->{anotherdate}, undef, 'Second invalid date became NULL too' );
-    is( $item->{myzerodate}, undef, '0000-00-00 became NULL too' );
-
-    # check if itemlost_on was not touched
-    $item->{itemlost_on} = '12345678';
-    $item->{withdrawn_on} = '12/31/2015 23:59:00';
-    $item->{damaged_on} = '01/20/2017 09:00:00';
-    $orgitem = { %$item };
-    C4::Items::_mod_item_dates($item);
-    is_deeply( $item, $orgitem, 'Colums with _on are not touched' );
-
-    t::lib::Mocks::mock_preference('dateformat', 'metric');
-    $item->{dateaccessioned} = '01/31/2016'; #wrong
-    $item->{yetanotherdatetime} = '20/01/2016 13:58:00'; #okay
-    C4::Items::_mod_item_dates($item);
-    is( $item->{dateaccessioned}, undef, 'dateaccessioned wrong format' );
-    is( $item->{yetanotherdatetime}, '2016-01-20 13:58:00',
-        'yetanotherdatetime is ok' );
-};
 
 subtest 'get_hostitemnumbers_of' => sub {
     plan tests => 3;

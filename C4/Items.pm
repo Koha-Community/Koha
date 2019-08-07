@@ -246,15 +246,12 @@ sub AddItemBatchFromMarc {
             next ITEMFIELD;
         }
 
-        _set_derived_columns_for_add($item);
-        my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
-        warn $error if $error;
-        push @itemnumbers, $itemnumber; # FIXME not checking error
-        $item->{'itemnumber'} = $itemnumber;
+        my $item_object = Koha::Item->new($item)->store;
+        push @itemnumbers, $item_object->itemnumber; # FIXME not checking error
 
-        logaction("CATALOGUING", "ADD", $itemnumber, "item") if C4::Context->preference("CataloguingLog"); 
+        logaction("CATALOGUING", "ADD", $item->itemnumber, "item") if C4::Context->preference("CataloguingLog");
 
-        my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
+        my $new_item_marc = _marc_from_item_hash($item->unblessed, $frameworkcode, $unlinked_item_subfields);
         $item_field->replace_with($new_item_marc->field($itemtag));
     }
 
@@ -269,83 +266,6 @@ sub AddItemBatchFromMarc {
     return (\@itemnumbers, \@errors);
 }
 
-=head2 ModItemFromMarc
-
-  ModItemFromMarc($item_marc, $biblionumber, $itemnumber);
-
-This function updates an item record based on a supplied
-C<MARC::Record> object containing an embedded item field.
-This API is meant for the use of C<additem.pl>; for 
-other purposes, C<ModItem> should be used.
-
-This function uses the hash %default_values_for_mod_from_marc,
-which contains default values for item fields to
-apply when modifying an item.  This is needed because
-if an item field's value is cleared, TransformMarcToKoha
-does not include the column in the
-hash that's passed to ModItem, which without
-use of this hash makes it impossible to clear
-an item field's value.  See bug 2466.
-
-Note that only columns that can be directly
-changed from the cataloging and serials
-item editors are included in this hash.
-
-Returns item record
-
-=cut
-
-sub _build_default_values_for_mod_marc {
-    # Has no framework parameter anymore, since Default is authoritative
-    # for Koha to MARC mappings.
-
-    my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "default_value_for_mod_marc-";
-    my $cached    = $cache->get_from_cache($cache_key);
-    return $cached if $cached;
-
-    my $default_values = {
-        barcode                  => undef,
-        booksellerid             => undef,
-        ccode                    => undef,
-        'items.cn_source'        => undef,
-        coded_location_qualifier => undef,
-        copynumber               => undef,
-        damaged                  => 0,
-        enumchron                => undef,
-        holdingbranch            => undef,
-        homebranch               => undef,
-        itemcallnumber           => undef,
-        itemlost                 => 0,
-        itemnotes                => undef,
-        itemnotes_nonpublic      => undef,
-        itype                    => undef,
-        location                 => undef,
-        permanent_location       => undef,
-        materials                => undef,
-        new_status               => undef,
-        notforloan               => 0,
-        price                    => undef,
-        replacementprice         => undef,
-        replacementpricedate     => undef,
-        restricted               => undef,
-        stack                    => undef,
-        stocknumber              => undef,
-        uri                      => undef,
-        withdrawn                => 0,
-    };
-    my %default_values_for_mod_from_marc;
-    while ( my ( $field, $default_value ) = each %$default_values ) {
-        my $kohafield = $field;
-        $kohafield =~ s|^([^\.]+)$|items.$1|;
-        $default_values_for_mod_from_marc{$field} = $default_value
-            if C4::Biblio::GetMarcFromKohaField( $kohafield );
-    }
-
-    $cache->set_in_cache($cache_key, \%default_values_for_mod_from_marc);
-    return \%default_values_for_mod_from_marc;
-}
-
 sub ModItemFromMarc {
     my $item_marc = shift;
     my $biblionumber = shift;
@@ -358,16 +278,17 @@ sub ModItemFromMarc {
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
     my $default_values = _build_default_values_for_mod_marc();
+    my $item_object = Koha::Items->find($itemnumber);
     foreach my $item_field ( keys %$default_values ) {
-        $item->{$item_field} = $default_values->{$item_field}
+        $item_object->$item_field($default_values->{$item_field})
           unless exists $item->{$item_field};
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
 
-    my $item_object = Koha::Items->find($itemnumber);
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
+    $item_object->store;
 
-    return $item_object->get_from_storage->unblessed;
+    return $item_object->unblessed;
 }
 
 =head2 ModItemTransfer
@@ -1120,201 +1041,6 @@ the inner workings of C<C4::Items>.
 
 =cut
 
-=head2 %derived_columns
-
-This hash keeps track of item columns that
-are strictly derived from other columns in
-the item record and are not meant to be set
-independently.
-
-Each key in the hash should be the name of a
-column (as named by TransformMarcToKoha).  Each
-value should be hashref whose keys are the
-columns on which the derived column depends.  The
-hashref should also contain a 'BUILDER' key
-that is a reference to a sub that calculates
-the derived value.
-
-=cut
-
-my %derived_columns = (
-    'items.cn_sort' => {
-        'itemcallnumber' => 1,
-        'items.cn_source' => 1,
-        'BUILDER' => \&_calc_items_cn_sort,
-    }
-);
-
-=head2 _set_derived_columns_for_add 
-
-  _set_derived_column_for_add($item);
-
-Given an item hash representing a new item to be added,
-calculate any derived columns.  Currently the only
-such column is C<items.cn_sort>.
-
-=cut
-
-sub _set_derived_columns_for_add {
-    my $item = shift;
-
-    foreach my $column (keys %derived_columns) {
-        my $builder = $derived_columns{$column}->{'BUILDER'};
-        my $source_values = {};
-        foreach my $source_column (keys %{ $derived_columns{$column} }) {
-            next if $source_column eq 'BUILDER';
-            $source_values->{$source_column} = $item->{$source_column};
-        }
-        $builder->($item, $source_values);
-    }
-}
-
-=head2 _get_single_item_column
-
-  _get_single_item_column($column, $itemnumber);
-
-Retrieves the value of a single column from an C<items>
-row specified by C<$itemnumber>.
-
-=cut
-
-sub _get_single_item_column {
-    my $column = shift;
-    my $itemnumber = shift;
-    
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT $column FROM items WHERE itemnumber = ?");
-    $sth->execute($itemnumber);
-    my ($value) = $sth->fetchrow();
-    return $value; 
-}
-
-=head2 _calc_items_cn_sort
-
-  _calc_items_cn_sort($item, $source_values);
-
-Helper routine to calculate C<items.cn_sort>.
-
-=cut
-
-sub _calc_items_cn_sort {
-    my $item = shift;
-    my $source_values = shift;
-
-    $item->{'items.cn_sort'} = GetClassSort($source_values->{'items.cn_source'}, $source_values->{'itemcallnumber'}, "");
-}
-
-=head2 _koha_new_item
-
-  my ($itemnumber,$error) = _koha_new_item( $item, $barcode );
-
-Perform the actual insert into the C<items> table.
-
-=cut
-
-sub _koha_new_item {
-    my ( $item, $barcode ) = @_;
-    my $dbh=C4::Context->dbh;  
-    my $error;
-    $item->{permanent_location} //= $item->{location};
-    _mod_item_dates( $item );
-    my $query =
-           "INSERT INTO items SET
-            biblionumber        = ?,
-            biblioitemnumber    = ?,
-            barcode             = ?,
-            dateaccessioned     = ?,
-            booksellerid        = ?,
-            homebranch          = ?,
-            price               = ?,
-            replacementprice    = ?,
-            replacementpricedate = ?,
-            datelastborrowed    = ?,
-            datelastseen        = ?,
-            stack               = ?,
-            notforloan          = ?,
-            damaged             = ?,
-            itemlost            = ?,
-            withdrawn           = ?,
-            itemcallnumber      = ?,
-            coded_location_qualifier = ?,
-            restricted          = ?,
-            itemnotes           = ?,
-            itemnotes_nonpublic = ?,
-            holdingbranch       = ?,
-            location            = ?,
-            permanent_location  = ?,
-            onloan              = ?,
-            issues              = ?,
-            renewals            = ?,
-            reserves            = ?,
-            cn_source           = ?,
-            cn_sort             = ?,
-            ccode               = ?,
-            itype               = ?,
-            materials           = ?,
-            uri                 = ?,
-            enumchron           = ?,
-            more_subfields_xml  = ?,
-            copynumber          = ?,
-            stocknumber         = ?,
-            new_status          = ?
-          ";
-    my $sth = $dbh->prepare($query);
-    my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-   $sth->execute(
-            $item->{'biblionumber'},
-            $item->{'biblioitemnumber'},
-            $barcode,
-            $item->{'dateaccessioned'},
-            $item->{'booksellerid'},
-            $item->{'homebranch'},
-            $item->{'price'},
-            $item->{'replacementprice'},
-            $item->{'replacementpricedate'} || $today,
-            $item->{datelastborrowed},
-            $item->{datelastseen} || $today,
-            $item->{stack},
-            $item->{'notforloan'},
-            $item->{'damaged'},
-            $item->{'itemlost'},
-            $item->{'withdrawn'},
-            $item->{'itemcallnumber'},
-            $item->{'coded_location_qualifier'},
-            $item->{'restricted'},
-            $item->{'itemnotes'},
-            $item->{'itemnotes_nonpublic'},
-            $item->{'holdingbranch'},
-            $item->{'location'},
-            $item->{'permanent_location'},
-            $item->{'onloan'},
-            $item->{'issues'},
-            $item->{'renewals'},
-            $item->{'reserves'},
-            $item->{'items.cn_source'},
-            $item->{'items.cn_sort'},
-            $item->{'ccode'},
-            $item->{'itype'},
-            $item->{'materials'},
-            $item->{'uri'},
-            $item->{'enumchron'},
-            $item->{'more_subfields_xml'},
-            $item->{'copynumber'},
-            $item->{'stocknumber'},
-            $item->{'new_status'},
-    );
-
-    my $itemnumber;
-    if ( defined $sth->errstr ) {
-        $error.="ERROR in _koha_new_item $query".$sth->errstr;
-    }
-    else {
-        $itemnumber = $dbh->{'mysql_insertid'};
-    }
-
-    return ( $itemnumber, $error );
-}
-
 =head2 MoveItemFromBiblio
 
   MoveItemFromBiblio($itenumber, $frombiblio, $tobiblio);
@@ -1363,34 +1089,6 @@ sub MoveItemFromBiblio {
         return $tobiblio;
 	}
     return;
-}
-
-sub _mod_item_dates { # date formatting for date fields in item hash
-    my ( $item ) = @_;
-    return if !$item || ref($item) ne 'HASH';
-
-    my @keys = grep
-        { $_ =~ /^onloan$|^date|date$|datetime$/ }
-        keys %$item;
-    # Incl. dateaccessioned,replacementpricedate,datelastborrowed,datelastseen
-    # NOTE: We do not (yet) have items fields ending with datetime
-    # Fields with _on$ have been handled already
-
-    foreach my $key ( @keys ) {
-        next if !defined $item->{$key}; # skip undefs
-        my $dt = eval { dt_from_string( $item->{$key} ) };
-            # eval: dt_from_string will die on us if we pass illegal dates
-
-        my $newstr;
-        if( defined $dt  && ref($dt) eq 'DateTime' ) {
-            if( $key =~ /datetime/ ) {
-                $newstr = DateTime::Format::MySQL->format_datetime($dt);
-            } else {
-                $newstr = DateTime::Format::MySQL->format_date($dt);
-            }
-        }
-        $item->{$key} = $newstr; # might be undef to clear garbage
-    }
 }
 
 =head2 _marc_from_item_hash
