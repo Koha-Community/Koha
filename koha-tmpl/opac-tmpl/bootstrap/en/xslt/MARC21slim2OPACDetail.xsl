@@ -1174,7 +1174,7 @@
                     </span>
 
                     <xsl:if test="marc:subfield[@code='n']">
-                        <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+                        <span class="results_summary in_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
                     </xsl:if>
 
                 </xsl:if>
@@ -1351,7 +1351,7 @@
         </span>
 
         <xsl:if test="marc:subfield[@code='n']">
-            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+            <span class="results_summary preceeding_entry_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
         </xsl:if>
 
         </xsl:if>
@@ -1415,7 +1415,7 @@
         </span>
 
         <xsl:if test="marc:subfield[@code='n']">
-            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+            <span class="results_summary succeeding_entry_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
         </xsl:if>
 
         </xsl:if>
