@@ -1058,7 +1058,7 @@
                     </span>
 
                     <xsl:if test="marc:subfield[@code='n']">
-                        <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+                        <span class="results_summary in_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
                     </xsl:if>
 
                 </xsl:if>
@@ -1208,7 +1208,7 @@
         </span>
  
         <xsl:if test="marc:subfield[@code='n']">
-            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+            <span class="results_summary preceeding_entry_note"><xsl:value-of select="marc:subfield[@code='n']"/></span>
         </xsl:if>
 
         </xsl:if>
@@ -1273,7 +1273,7 @@
         </xsl:if>
 
         <xsl:if test="$OPACBaseURL!=''">
-        <span class="results_summary"><span class="label">OPAC view: </span>
+        <span class="results_summary succeeding_entry_note"><span class="label">OPAC view: </span>
             <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
         </span>
         </xsl:if>
