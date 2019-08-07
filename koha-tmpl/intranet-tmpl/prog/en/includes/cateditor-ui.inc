@@ -236,6 +236,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         },
         'duplicate': {
             titleForRecord: _("Editing duplicate record of #{ID}"),
+            saveLabel: _("Duplicate"),
             get: function( id, callback ) {
                 if ( !id ) return false;
 
