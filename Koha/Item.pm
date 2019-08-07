@@ -135,8 +135,13 @@ sub store {
             }
         }
 
-        if ( defined $self->location and $self->location ne 'CART' and $self->location ne 'PROC' and not $self->permanent_location ) {
-            $self->permanent_location($self->location);
+        my %updated_columns = $self->_result->get_dirty_columns;
+        if (    defined $self->location
+            and $self->location ne 'CART'
+            and $self->location ne 'PROC'
+            and not exists $updated_columns{permanent_location} )
+        {
+            $self->permanent_location( $self->location );
         }
 
         $self->timestamp(undef) if $self->timestamp; # Maybe move this to Koha::Object->store?

@@ -394,8 +394,8 @@ ok( $item2->location eq 'FIC', 'UpdateItemLocationOnCheckin does not modify valu
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', 'FIC: GEN' );
 AddReturn( 'barcode_4', $branchcode_1 );
 $item2 = Koha::Items->find( $itemnumber2 );
-ok( $item2->location eq 'GEN', q{UpdateItemLocationOnCheckin updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
-ok( $item2->permanent_location eq 'GEN', q{UpdateItemLocationOnCheckin updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
+is( $item2->location, 'GEN', q{UpdateItemLocationOnCheckin updates location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
+is( $item2->permanent_location, 'GEN', q{UpdateItemLocationOnCheckin updates permanent_location value from 'FIC' to 'GEN' with setting "FIC: GEN"} );
 AddReturn( 'barcode_4', $branchcode_1 );
 $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'GEN', q{UpdateItemLocationOnCheckin does not update location value from 'GEN' with setting "FIC: GEN"} );

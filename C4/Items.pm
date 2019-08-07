@@ -276,15 +276,10 @@ sub ModItemFromMarc {
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
-    my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
-    my $default_values = _build_default_values_for_mod_marc();
     my $item_object = Koha::Items->find($itemnumber);
-    foreach my $item_field ( keys %$default_values ) {
-        $item_object->$item_field($default_values->{$item_field})
-          unless exists $item->{$item_field};
-    }
+    my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    $item_object->set($item);
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
-
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
     $item_object->store;
 
