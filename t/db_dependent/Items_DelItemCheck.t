@@ -117,6 +117,7 @@ AddReturn( $item->barcode, $branch->{branchcode} );
 t::lib::Mocks::mock_preference('IndependentBranches', 1);
 $item->set( { homebranch => $branch2->{branchcode}, holdingbranch => $branch2->{branchcode} })->store;
 
+$item->discard_changes;
 is(
     $item->safe_to_delete,
     'not_same_branch',
