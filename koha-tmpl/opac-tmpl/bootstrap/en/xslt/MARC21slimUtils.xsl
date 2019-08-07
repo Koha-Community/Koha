@@ -253,7 +253,7 @@
         <xsl:param name="field"/>
         <xsl:param name="url"/>
         <xsl:variable name="ind2" select="$field/@ind2"/>
-        <span class="results_summary">
+        <span class="results_summary rda264">
             <xsl:choose>
                 <xsl:when test="$ind2='0'">
                     <span class="label">Producer: </span>
