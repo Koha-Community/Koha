@@ -82,7 +82,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 });
 
 subtest 'build_authorities_query_compat() tests' => sub {
-    plan tests => 36;
+    plan tests => 37;
 
     my $qb;
 
@@ -158,6 +158,14 @@ subtest 'build_authorities_query_compat() tests' => sub {
             }
         ],
         "descending sort parameter properly formed"
+    );
+
+    # Authorities type
+    $query = $qb->build_authorities_query_compat( [ 'mainentry' ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
+    is_deeply(
+        $query->{query}->{bool}->{filter},
+        { term => { 'authtype' => 'auth_type' } },
+        "authorities type code is used as filter"
     );
 
     # Failing case
