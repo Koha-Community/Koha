@@ -137,7 +137,7 @@ sub store {
 
         my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
-        if (    defined $self->location
+        if (    exists $updated_columns{location}
             and $self->location ne 'CART'
             and $self->location ne 'PROC'
             and not exists $updated_columns{permanent_location} )

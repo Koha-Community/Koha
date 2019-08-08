@@ -107,15 +107,16 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->location, $location, "The location should not have been modified" );
     is( $getitem->permanent_location, 'my permanent location', "The permanent_location should not have modified" );
 
-    $getitem->location($location)->store;
+    my $new_location = "New location";
+    $getitem->location($new_location)->store;
     $getitem = Koha::Items->find($itemnumber);
-    is( $getitem->location, $location, "The location should have been set to correct location" );
-    is( $getitem->permanent_location, $location, "The permanent_location should have been set to location" );
+    is( $getitem->location, $new_location, "The location should have been set to correct location" );
+    is( $getitem->permanent_location, $new_location, "The permanent_location should have been set to location" );
 
     $getitem->location('CART')->store;
     $getitem = Koha::Items->find($itemnumber);
     is( $getitem->location, 'CART', "The location should have been set to CART" );
-    is( $getitem->permanent_location, $location, "The permanent_location should not have been set to CART" );
+    is( $getitem->permanent_location, $new_location, "The permanent_location should not have been set to CART" );
 
     t::lib::Mocks::mock_preference('item-level_itypes', '1');
     $getitem = Koha::Items->find($itemnumber);
@@ -879,7 +880,7 @@ subtest 'Test logging for ModItem' => sub {
 
     # True means logging
     $schema->resultset('ActionLog')->search()->delete();
-    $item->location($location)->store({ log_action => 1 });
+    $item->location('new location')->store({ log_action => 1 });
     is( $schema->resultset('ActionLog')->count(), 1, 'True value does trigger logging' );
 
     # Undefined defaults to true
