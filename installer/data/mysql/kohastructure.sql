@@ -1148,7 +1148,7 @@ CREATE TABLE `marc_subfield_structure` (
   `authtypecode` varchar(20) default NULL,
   `value_builder` varchar(80) default NULL,
   `isurl` tinyint(1) default NULL,
-  `hidden` tinyint(1) default NULL,
+  `hidden` tinyint(1) NOT NULL default 8,
   `frameworkcode` varchar(4) NOT NULL default '',
   `seealso` varchar(1100) default NULL,
   `link` varchar(80) default NULL,
