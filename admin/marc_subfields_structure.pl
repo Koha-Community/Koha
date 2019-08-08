@@ -233,14 +233,6 @@ if ( $op eq 'add_form' ) {
 elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
-#     my $sth = $dbh->prepare(
-# "replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue)
-#                                     values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-#     );
-    my $sth_insert = $dbh->prepare(qq{
-        insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue,maxlength)
-        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-    });
     my $sth_update = $dbh->prepare(qq{
         update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?, maxlength=?
         where tagfield=? and tagsubfield=? and frameworkcode=?
@@ -312,30 +304,31 @@ elsif ( $op eq 'add_validate' ) {
                      my $rec = Koha::MarcSubfieldStructures->find( q{}, $tagfield, $tagsubfield );
                     $kohafield = $rec->kohafield if $rec;
                 }
-                $sth_insert->execute(
-                    $tagfield,
-                    $tagsubfield,
-                    $liblibrarian,
-                    $libopac,
-                    $repeatable,
-                    $mandatory,
-                    $kohafield,
-                    $tab,
-                    $seealso,
-                    $authorised_value,
-                    $authtypecode,
-                    $value_builder,
-                    $hidden,
-                    $isurl,
-                    $frameworkcode,
-                    $link,
-                    $defaultvalue,
-                    $maxlength,
-                );
+                Koha::MarcSubfieldStructure->new(
+                    {
+                        tagfield         => $tagfield,
+                        tagsubfield      => $tagsubfield,
+                        liblibrarian     => $liblibrarian,
+                        libopac          => $libopac,
+                        repeatable       => $repeatable,
+                        mandatory        => $mandatory,
+                        kohafield        => $kohafield,
+                        tab              => $tab,
+                        seealso          => $seealso,
+                        authorised_value => $authorised_value,
+                        authtypecode     => $authtypecode,
+                        value_builder    => $value_builder,
+                        hidden           => $hidden,
+                        isurl            => $isurl,
+                        frameworkcode    => $frameworkcode,
+                        link             => $link,
+                        defaultvalue     => $defaultvalue,
+                        maxlength        => $maxlength,
+                    }
+                )->store;
             }
         }
     }
-    $sth_insert->finish;
     $sth_update->finish;
     $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
