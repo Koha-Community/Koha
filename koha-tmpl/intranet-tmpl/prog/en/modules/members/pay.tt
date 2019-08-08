@@ -180,7 +180,7 @@
         }
         $(document).ready(function(){
             [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
-                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id %]&borrowernumber=[% patron.borrowernumber %]', '_blank');
+                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id | html %]&borrowernumber=[% patron.borrowernumber | html %]', '_blank');
             [% END %]
 
             $('#pay-fines-form').preventDoubleFormSubmit();
