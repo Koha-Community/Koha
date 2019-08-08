@@ -143,15 +143,9 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
         "item-level itype recorded on statistics for return");
     warning_like { AddIssue( $borrower, $item_without_itemtype->{ barcode } ) }
                  [qr/^item-level_itypes set but no itemtype set for item/,
-                 qr/^item-level_itypes set but no itemtype set for item/,
-                 qr/^item-level_itypes set but no itemtype set for item/,
-                 qr/^item-level_itypes set but no itemtype set for item/,
-                 qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/],
                  'Item without itemtype set raises warning on AddIssue';
-    warning_like { AddReturn( $item_without_itemtype->{ barcode }, $branch ) }
-                 qr/^item-level_itypes set but no itemtype set for item/,
-                 'Item without itemtype set raises warning on AddReturn';
+    AddReturn( $item_without_itemtype->{ barcode }, $branch );
     # Test biblio-level itemtype was recorded on the 'statistics' table
     $stat = $schema->resultset('Statistic')->search({
         branch     => $branch,
