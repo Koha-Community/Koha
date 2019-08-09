@@ -128,11 +128,11 @@ sub checkout {
 
 =head3 holds
 
-my $transfer = $item->holds();
-my $transfer = $item->holds($params);
-my $transfer = $item->holds({ found => 'W'});
+my $holds = $item->holds();
+my $holds = $item->holds($params);
+my $holds = $item->holds({ found => 'W'});
 
-Return reserves attached to an item, optionally accept a hashref of params to pass to search
+Return holds attached to an item, optionally accept a hashref of params to pass to search
 
 =cut
 
