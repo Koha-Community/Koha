@@ -18758,8 +18758,7 @@ if( CheckVersion( $DBversion ) ) {
             ("new_line","Enter"),
             ("line_break","Shift-Enter"),
             ("next_position","Tab"),
-            ("prev_position","Shift-Tab"),
-            ("toggle_keyboard", "Shift-Ctrl-K")
+            ("prev_position","Shift-Tab")
     ;|);
 
     SetVersion( $DBversion );
