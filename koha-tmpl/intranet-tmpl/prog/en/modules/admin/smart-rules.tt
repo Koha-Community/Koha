@@ -154,7 +154,13 @@
                             </td>
                             <td>[% rule.issuelength | html %]</td>
                             <td>
-                                [% rule.lengthunit | html %]
+                                [% IF ( rule.lengthunit == 'days' ) %]
+                                    Days
+                                [% ELSIF ( rule.lengthunit == 'hours') %]
+                                    Hours
+                                [% ELSE %]
+                                    Undefined
+                                [% END %]
                             </td>
                             <td>
                               [% IF ( rule.hardduedate ) %]
