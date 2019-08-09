@@ -836,7 +836,9 @@ sub _isbn_cleanup {
   to be of the specified format.
 
   If the string cannot be validated as an isbn,
-  it returns nothing.
+  it returns nothing unless return_invalid param is passed.
+
+  #FIXME This routine (and others?) should be moved to Koha::Util::Normalize
 
 =cut
 
@@ -846,6 +848,7 @@ sub NormalizeISBN {
     my $string        = $params->{isbn};
     my $strip_hyphens = $params->{strip_hyphens};
     my $format        = $params->{format};
+    my $return_invalid = $params->{return_invalid};
 
     return unless $string;
 
@@ -854,7 +857,7 @@ sub NormalizeISBN {
     if ( $isbn && $isbn->is_valid() ) {
 
         if ( $format eq 'ISBN-10' ) {
-            $isbn = $isbn->as_isbn10();
+        $isbn = $isbn->as_isbn10();
         }
         elsif ( $format eq 'ISBN-13' ) {
             $isbn = $isbn->as_isbn13();
@@ -868,7 +871,10 @@ sub NormalizeISBN {
         }
 
         return $string;
+    } elsif ( $return_invalid ) {
+        return $string;
     }
+
 }
 
 =head2 GetVariationsOfISBN
