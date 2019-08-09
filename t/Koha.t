@@ -25,7 +25,7 @@ use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 38;
+        plan tests => 39;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -81,6 +81,8 @@ eval {
     $isbn = C4::Koha::NormalizeISBN({ isbn => '0788893777 (2 DVD 45th ed)', format => 'ISBN-10', strip_hyphens => 1 });
 };
 ok($@ eq '', 'NormalizeISBN does not throw exception when parsing invalid ISBN (bug 12243)');
+$isbn = C4::Koha::NormalizeISBN({ isbn => '0788893777 (2 DVD 45th ed)', format => 'ISBN-10', strip_hyphens => 1, return_invalid =>1 });
+is($isbn, '0788893777 (2 DVD 45th ed)', 'NormalizeISBN returns original string when converting to ISBN10 an ISBN starting with 979 (bug 13167)');
 
 eval {
     $isbn = C4::Koha::NormalizeISBN({ isbn => '979-10-90085-00-8', format => 'ISBN-10', strip_hyphens => 1 });
