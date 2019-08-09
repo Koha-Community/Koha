@@ -265,7 +265,7 @@ foreach my $report_id (@ARGV) {
     }
 
     # convert SQL parameters to placeholders
-    my $params_needed = ( $sql =~ s/(<<.*?>>)/\?/g );
+    my $params_needed = ( $sql =~ s/(<<[^>]+>>)/\?/g );
     die("You supplied ". scalar @params . " parameter(s) and $params_needed are required by the report") if scalar @params != $params_needed;
 
     my ($sth) = execute_query( $sql, undef, undef, \@params, $report_id );
