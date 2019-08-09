@@ -284,6 +284,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
         my @itemid       = $query->multi_param('itemid');
         my @ind_tag      = $query->multi_param('ind_tag');
         my @indicator    = $query->multi_param('indicator');
+        my @num_copies   = $query->multi_param('number_of_copies');
 
         #Rebuilding ALL the data for items into a hash
         # parting them on $itemid.
@@ -310,6 +311,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
               $field_values[$i];
             push @{ $itemhash{ $itemid[$i] }->{'ind_tag'} },   $ind_tag[$i];
             push @{ $itemhash{ $itemid[$i] }->{'indicator'} }, $indicator[$i];
+            push @{ $itemhash{ $itemid[$i] }->{'num_copies'} }, $num_copies[$i];
         }
         foreach my $item ( keys %itemhash ) {
 
@@ -333,11 +335,15 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     $itemhash{$item}->{'ind_tag'}
                 );
 
-                #           warn $xml;
+                # warn $xml;
                 my $bib_record = MARC::Record::new_from_xml( $xml, 'UTF-8' );
                 if ( $item =~ /^N/ ) {
 
-                    #New Item
+                $itemhash{$item}->{'num_copies'} //= 1;
+
+                for (my $copy = 0; $copy < $itemhash{$item}->{'num_copies'}[$index];){
+
+                # New Item
 
                   # if autoBarcode is set to 'incremental', calculate barcode...
                     my ( $barcodetagfield, $barcodetagsubfield ) = GetMarcFromKohaField( 'items.barcode' );
@@ -356,21 +362,24 @@ if ( $op and $op eq 'serialchangestatus' ) {
                             $sth_barcode->execute;
                             my ($newbarcode) = $sth_barcode->fetchrow;
 
-# OK, we have the new barcode, add the entry in MARC record # FIXME -> should be  using barcode plugin here.
-                            $bib_record->field($barcodetagfield)
-                              ->update( $barcodetagsubfield => ++$newbarcode );
+                            # OK, we have the new barcode, add the entry in MARC record # FIXME -> should be  using barcode plugin here.
+                            $bib_record->field($barcodetagfield)->update( $barcodetagsubfield => ++$newbarcode );
                         }
                     }
 
                     # check for item barcode # being unique
                     my $exists;
-                    if (
-                        $bib_record->subfield(
-                            $barcodetagfield, $barcodetagsubfield
-                        )
-                      )
-                    {
+                    if ( $bib_record->subfield( $barcodetagfield, $barcodetagsubfield ) ) {
                         my $barcode = $bib_record->subfield( $barcodetagfield, $barcodetagsubfield );
+
+                        if ($copy > 0){
+                            use C4::Barcodes;
+                            my $barcodeobj = C4::Barcodes->new;
+                            my $newbarcode = $barcodeobj->next_value($barcode);
+                            $barcode = $newbarcode;
+                            $bib_record->field($barcodetagfield)->update($barcodetagsubfield => $barcode);
+                        }
+
                         $exists = Koha::Items->find({barcode => $barcode});
                     }
 
@@ -387,7 +396,11 @@ if ( $op and $op eq 'serialchangestatus' ) {
                         AddItem2Serial( $itemhash{$item}->{serial},
                             $itemnumber );
                     }
+                    $copy++;
                 }
+
+                } # num_copies for loop
+
                 else {
 
                     #modify item

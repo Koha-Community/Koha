@@ -258,8 +258,14 @@ $(document).ready(function() {
                 [% END %]
                 [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
             </div></li>
+
         [% END %]</ol></div><!-- /iteminformation -->
-        
+
+        <hr>
+        <div class="subfield_line">
+            <label for="number_of_copies">Number of copies to be made of this item </label> <input type="text" id="number_of_copies[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]" name="number_of_copies" value="1" size="2"> <span class="hint">The barcode you enter will be incremented for each additional item.</p>
+        </div>
+
         <input type="hidden" name="moditem" value="" /> 
         <input type="hidden" name="tag" value="[% item.itemtagfield | html %]" />
         <input type="hidden" name="subfield" value="[% item.itemtagsubfield | html %]" />
@@ -405,7 +411,12 @@ $(document).ready(function() {
                 [% IF ( iteminformatio.mandatory ) %] <span class="required">Required</span>[% END %]
         </div>
        </li>[% END %]</ol>
-        
+
+        <hr>
+        <div class="subfield_line">
+            <label for="number_of_copies">Number of copies to be made of this item </label> <input type="text" id="number_of_copies[% newserialloo.serialid | html %][% newserialloo.countitems | html %][% iteminformatio.subfield | html %][% iteminformatio.random | html %]" name="number_of_copies" value="1" size="2"> <span class="hint">The barcode you enter will be incremented for each additional item.</p>
+        </div>
+
         <input type="hidden" name="moditem" value="" /> 
         <input type="hidden" name="tag" value="[% newserialloo.itemtagfield | html %]" />
         <input type="hidden" name="subfield" value="[% newserialloo.itemtagsubfield | html %]" />
