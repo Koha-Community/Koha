@@ -591,6 +591,9 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         # FIXME pass $item to the template and we are done here...
         $ri{itembiblionumber}    = $biblio->biblionumber;
         $ri{itemtitle}           = $biblio->title;
+        $ri{subtitle}            = $biblio->subtitle;
+        $ri{part_name}           = $biblio->part_name;
+        $ri{part_number}         = $biblio->part_number;
         $ri{itemauthor}          = $biblio->author;
         $ri{itemcallnumber}      = $item->itemcallnumber;
         $ri{dateaccessioned}     = $item->dateaccessioned;
