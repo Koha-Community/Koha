@@ -1,7 +1,7 @@
 <div id="navmenu">
     <div id="navmenulist">
+        <ul>
         [% IF ( subscriptionid ) %]
-            <ul>
                 <li><a href="serials-collection.pl?subscriptionid=[% subscriptionid | uri %]">Serial collection</a></li>
                 [% UNLESS closed %]
                     [% IF ( routing && CAN_user_serials_routing ) %]
@@ -12,10 +12,8 @@
                         [% END %]
                     [% END %]
                 [% END %]
-            </ul>
         [% END %]
 
-        <ul>
             [% IF ( CAN_user_serials_claim_serials ) %]
                 <li><a href="/cgi-bin/koha/serials/claims.pl">Claims</a></li>
             [% END %]
