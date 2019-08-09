@@ -82,7 +82,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 });
 
 subtest 'build_authorities_query_compat() tests' => sub {
-    plan tests => 37;
+    plan tests => 45;
 
     my $qb;
 
@@ -102,6 +102,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
             is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
                 "a*");
         }
+        is( $query->{query}->{bool}->{must}[0]->{query_string}->{analyze_wildcard}, JSON::true, 'Set analyze_wildcard true' );
     }
 
     $search_term = 'Donald Duck';
