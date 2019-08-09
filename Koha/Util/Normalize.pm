@@ -112,12 +112,14 @@ sub ISBN {
     my ( $string ) = @_;
     return if !defined( $string );
 
-    my $isbn = Business::ISBN->new($string);
-    if (defined $isbn && $isbn->is_valid) {
-        $string = $isbn->as_isbn13->as_string([]);
-    }
+    my $isbn = C4::Koha::NormalizeISBN({
+        isbn => $string,
+        format => 'ISBN-13',
+        strip_hyphens  => 1,
+        return_invalid => 1,
+    });
 
-    return $string;
+    return $isbn;
 }
 
 1;
