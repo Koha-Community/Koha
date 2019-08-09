@@ -56,8 +56,14 @@ if ($uri && ($biblionumber || $itemnumber) ) {
 
     my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     my $marc_urls = C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour'));
+    my $search_crit = { uri => $uri };
+    if( $itemnumber ) { # itemnumber is leading over biblionumber
+        $search_crit->{itemnumber} = $itemnumber;
+    } elsif( $biblionumber ) {
+        $search_crit->{biblionumber} = $biblionumber;
+    }
     if ( ( any { $_ eq $uri } map { $_->{MARCURL} } @$marc_urls )
-        || Koha::Items->search( { itemnumber => $itemnumber, uri => $uri } )->count )
+        || Koha::Items->search( $search_crit )->count )
     {
         $tracker->trackclick(
             {
