@@ -140,7 +140,7 @@
                                                 <th>Surname</th>
                                                 <th>First name</th>
                                                 <th>Library</th>
-                                                <th>Category</th>
+                                                <th>Patron category</th>
                                                 <th>City</th>
                                                 <th>State</th>
                                                 <th>ZIP/Postal code</th>
@@ -148,7 +148,7 @@
                                                 <th class="title-string">Registration date</th>
                                                 <th class="title-string">Expiry date</th>
                                                 <th>Circulation note</th>
-                                                <th>Opac Note</th>
+                                                <th>OPAC note</th>
                                                 <th>Restriction expiration</th>
                                                 <th>Restriction comment</th>
                                                 [% FOREACH attrh IN attributes_header %]
@@ -212,15 +212,15 @@
                                                 [% CASE 'branchcode' %]
                                                 Library:
                                                 [% CASE 'categorycode' %]
-                                                Category
+                                                Patron category:
                                                 [% CASE 'city' %]
-                                                City
+                                                City:
                                                 [% CASE 'state' %]
-                                                State
+                                                State:
                                                 [% CASE 'zipcode' %]
-                                                ZIP/Postal code
+                                                ZIP/Postal code:
                                                 [% CASE 'country' %]
-                                                Country
+                                                Country:
                                                 [% CASE 'sort1' %]
                                                 Sort 1:
                                                 [% CASE 'sort2' %]
@@ -267,7 +267,7 @@
                                         [% END %]
                                         [% IF ( patron_attributes_codes ) %]
                                             <li class="attributes">
-                                                <label style="width:auto;">Attribute:
+                                                <label style="width:auto;">Patron attribute:
                                                     <select name="patron_attributes">
                                                         <option value=""></option>
                                                         [% FOREACH pac IN patron_attributes_codes %]
