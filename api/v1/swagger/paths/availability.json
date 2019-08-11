@@ -76,6 +76,13 @@
           "description": "Check only first n available items.",
           "required": false,
           "type": "integer"
+        },
+        {
+          "name": "query_pickup_locations",
+          "in": "query",
+          "description": "Check available pickup location(s) for each item. 1 = yes, 0 or no parameter = no",
+          "required": false,
+          "type": "integer"
         }
       ],
       "consumes": ["application/json"],
@@ -286,7 +293,14 @@
       "parameters": [
         { "$ref": "../parameters.json#/itemnumbersQueryParam" },
         { "$ref": "../parameters.json#/borrowernumberQueryParam" },
-        { "$ref": "../parameters.json#/branchcodeQueryParam"}
+        { "$ref": "../parameters.json#/branchcodeQueryParam"},
+        {
+          "name": "query_pickup_locations",
+          "in": "query",
+          "description": "Check available pickup location(s) for this item. 1 = yes, 0 or no parameter = no",
+          "required": false,
+          "type": "integer"
+        }
       ],
       "consumes": ["application/json"],
       "produces": ["application/json"],

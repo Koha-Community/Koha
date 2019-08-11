@@ -262,6 +262,21 @@
         }
       }
     },
+    "Item::PickupLocations": {
+      "description": "Item has these valid pickup locations for hold.",
+      "type": "object",
+      "properties": {
+        "from_library": {
+          "$ref": "../../x-primitives.json#/branchcode"
+        },
+        "to_libraries": {
+          "type": ["array", "null"],
+          "items": {
+            "$ref": "../../x-primitives.json#/branchcode"
+          }
+        }
+      }
+    },
     "Item::Restricted": {
       "description": "Item is restricted.",
       "type": "object",
