@@ -31,6 +31,7 @@ use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Items;
 use Koha::Item::Transfers;
+use Koha::Libraries;
 
 use Koha::Exceptions::Item;
 use Koha::Exceptions::ItemType;
@@ -343,6 +344,31 @@ sub onloan {
     if ($self->item->onloan) {
         return Koha::Exceptions::Item::CheckedOut->new;
     }
+}
+
+=head3 pickup_locations
+
+Gets list of available pickup locations for item hold.
+
+Returns Koha::Exceptions::Item::PickupLocations.
+
+=cut
+
+sub pickup_locations {
+    my ($self) = @_;
+
+    my $pickup_locations = [];
+    foreach my $library (Koha::Libraries->search({ pickup_location => 1 })->as_list) {
+        if (!$self->transfer_limit($library->branchcode)) {
+            push @{$pickup_locations}, $library->branchcode;
+        }
+    }
+
+    @$pickup_locations = sort { $a cmp $b } @$pickup_locations;
+    return Koha::Exceptions::Item::PickupLocations->new(
+        from_library => $self->item->holdingbranch,
+        to_libraries => $pickup_locations,
+    );
 }
 
 =head3 restricted

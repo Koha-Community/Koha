@@ -70,6 +70,11 @@ use Exception::Class (
         description => "Item is being transferred.",
         fields => ["datesent", "from_library", "to_library"],
     },
+    'Koha::Exceptions::Item::PickupLocations' => {
+        isa => 'Koha::Exceptions::Item',
+        description => "Item can only be transferred to following libraries",
+        fields => ["from_library", "to_libraries"],
+    },
     'Koha::Exceptions::Item::UnknownBarcode' => {
         isa => 'Koha::Exceptions::Item',
         description => "Item has unknown barcode, or no barcode at all.",

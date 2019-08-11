@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -258,6 +258,50 @@ sub t_onloan {
        .'on loan.');
     is(ref($itemcalc->onloan), $expecting, "When I check availability "
        ."calculation for item onloan, then exception $expecting is given.");
+};
+
+subtest 'pickup_locations' => \&t_pickup_locations;
+sub t_pickup_locations {
+    plan tests => 7;
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+    my $item = build_a_test_item();
+    $item = Koha::Items->find($item->itemnumber);
+    my $itemcalc = Koha::Availability::Checks::Item->new($item);
+    my $expecting = 'Koha::Exceptions::Item::PickupLocations';
+
+    # Generate a bunch of libraries
+    my $valid_pickup_locations = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+    for (my $i = 0; $i < 10; $i++) {
+        my $branch = $builder->build({ source => 'Branch', value => {
+            'pickup_location' => 1,
+        } });
+        if ($i % 2 == 0) {
+            is(C4::Circulation::CreateBranchTransferLimit(
+                $branch->{branchcode},
+                $item->holdingbranch,
+                $item->effective_itemtype,
+            ), 1, 'We added a branch transfer limit to ' . $branch->{branchcode});
+        } else {
+            push @{$valid_pickup_locations}, { branchcode => $branch->{branchcode} };
+        }
+    }
+
+    # push just the branchcodes in array for easy comparasion
+    my @valid_pickup_branchcodes = ();
+    foreach my $branch (@{$valid_pickup_locations}) {
+        push @valid_pickup_branchcodes, $branch->{branchcode};
+    }
+    @valid_pickup_branchcodes = sort @valid_pickup_branchcodes;
+
+    my $pickup_locations = $itemcalc->pickup_locations;
+    my @returned_branchcodes = sort @{$pickup_locations->to_libraries};
+    is(ref($pickup_locations), $expecting, "When I check availability "
+        ."calculation for item pickup_locations, then exception $expecting is given.");
+    is(@valid_pickup_branchcodes, @returned_branchcodes,
+        scalar @valid_pickup_branchcodes . ' valid pickup locations!');
 };
 
 subtest 'restricted' => \&t_restricted;
