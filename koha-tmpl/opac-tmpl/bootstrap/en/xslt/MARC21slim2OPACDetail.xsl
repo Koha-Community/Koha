@@ -226,7 +226,14 @@
                         </xsl:call-template>
             </a>
             <xsl:call-template name="part"/>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text> ; </xsl:text></xsl:otherwise></xsl:choose>
+            <xsl:choose>
+                <xsl:when test="position()=last()">
+                    <xsl:if test="../marc:datafield[@tag=490][@ind1!=1]">
+                        <xsl:text>; </xsl:text>
+                    </xsl:if>
+                </xsl:when>
+                <xsl:otherwise><xsl:text> ; </xsl:text></xsl:otherwise>
+            </xsl:choose>
         </xsl:for-each>
 
         <!-- 490 Series not traced, Ind1 = 0 -->
