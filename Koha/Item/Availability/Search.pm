@@ -52,6 +52,9 @@ sub in_opac {
     }
 
     if (!$params->{'ignore_holds'}) {
+        # TODO: Should an item be available in search interface if item is held?
+        # See KD-4059
+        # And commit 0f8be8570c716ea34f83909eb4818cd417fe4e24
         $self->unavailable($reason) if $reason = $itemcalc->held;
     }
     if (!$params->{'ignore_transfer'}) {
