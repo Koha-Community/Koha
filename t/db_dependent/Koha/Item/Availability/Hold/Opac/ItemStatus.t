@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 14;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -348,6 +348,57 @@ sub t_more_than_maxreserves {
     my $ex = $availability->unavailabilities->{$expecting};
     is($ex->max_holds_allowed, 1, 'Then, from the status, I can see the maximum holds allowed.');
     is($ex->current_hold_count, 2, 'Then, from the status, I can see my current hold count.');
+};
+
+subtest 'Pickup locations' => \&t_pickup_locations;
+sub t_pickup_locations {
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    $item = Koha::Items->find($item->itemnumber);
+    my $expecting = 'Koha::Exceptions::Item::PickupLocations';
+
+    # Generate a bunch of libraries
+    my $valid_pickup_locations = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+    for (my $i = 0; $i < 10; $i++) {
+        my $branch = $builder->build({ source => 'Branch', value => {
+            'pickup_location' => 1,
+        } });
+        if ($i % 2 == 0) {
+            is(C4::Circulation::CreateBranchTransferLimit(
+                $branch->{branchcode},
+                $item->holdingbranch,
+                $item->effective_itemtype,
+            ), 1, 'We added a branch transfer limit to ' . $branch->{branchcode});
+        } else {
+            push @{$valid_pickup_locations}, { branchcode => $branch->{branchcode} };
+        }
+    }
+
+    # push just the branchcodes in array for easy comparasion
+    my @valid_pickup_branchcodes = ();
+    foreach my $branch (@{$valid_pickup_locations}) {
+        push @valid_pickup_branchcodes, $branch->{branchcode};
+    }
+    @valid_pickup_branchcodes = sort @valid_pickup_branchcodes;
+
+    my $availability = Koha::Item::Availability::Hold->new({
+        item                    => $item,
+        patron                  => $patron,
+        query_pickup_locations  => 1,
+    })->in_opac;
+
+    ok($availability->available, 'When I request availability, then the item is available.');
+    is(ref($availability->notes->{$expecting}), $expecting, 'Then there is an availability'
+        .' note that contains valid pickup locations.');
+
+    my @returned_branchcodes = @{$availability->notes->{'Koha::Exceptions::Item::PickupLocations'}->to_libraries};
+    is_deeply(\@valid_pickup_branchcodes, \@returned_branchcodes,
+        scalar @valid_pickup_branchcodes . ' valid pickup locations!');
 };
 
 $schema->storage->txn_rollback;

@@ -80,6 +80,11 @@ sub new {
 
     my $self = $class->SUPER::new($params);
 
+    # Optionally, query ALL possible transfer limits for every item in order
+    # to generate a list of available pickup locations.
+    # Don't provide the following parameter if you want to skip this step.
+    $self->{'query_pickup_locations'} = $params->{'query_pickup_locations'};
+    $self->{'pickup_locations'} = [];
     # Additionally, consider any transfer limits to pickup library by
     # providing to_branch parameter with branchcode of pickup library
     $self->{'to_branch'} = $params->{'to_branch'};
@@ -266,6 +271,9 @@ sub common_item_checks {
     }
 
     $self->unavailable($reason) if $reason = $itemcalc->from_another_library;
+    if ($self->query_pickup_locations && ($reason = $itemcalc->pickup_locations)) {
+        $self->note($reason);
+    }
     if ($self->to_branch && ($reason = $itemcalc->transfer_limit($self->to_branch))) {
         $self->unavailable($reason);
     }
