@@ -121,6 +121,7 @@ sub hold {
     my @availabilities;
     my $user = $c->stash('koha.user');
     my $borrowernumber = $c->validation->param('borrowernumber');
+    my $query_pickup_locations = $c->validation->param('query_pickup_locations');
     my $to_branch = $c->validation->param('branchcode');
     my $patron;
     my $librarian;
@@ -132,6 +133,9 @@ sub hold {
         my $params = {
             patron => $patron,
         };
+        if ($query_pickup_locations) {
+            $params->{'query_pickup_locations'} = 1;
+        }
         if ($to_branch) {
             $params->{'to_branch'} = $to_branch;
         }

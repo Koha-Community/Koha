@@ -51,7 +51,7 @@ subtest '/availability/biblio' => sub {
     plan tests => 2;
 
     subtest '/hold' => sub {
-        plan tests => 34;
+        plan tests => 35;
 
         $schema->storage->txn_begin;
 
@@ -148,6 +148,91 @@ subtest '/availability/biblio' => sub {
                 from_library => $item->holdingbranch,
                 to_library => $branch->branchcode,});
 
+        subtest 'Test pickup locations search' => sub {
+            plan tests => 15;
+
+            t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+            t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+            my $pl_item1 = build_a_test_item();
+            my $pl_item2 = build_a_test_item(
+                scalar Koha::Biblios->find($pl_item1->biblionumber),
+                scalar Koha::Biblioitems->find($pl_item1->biblioitemnumber)
+            );
+            my $pl_item3 = build_a_test_item(
+                scalar Koha::Biblios->find($pl_item1->biblionumber),
+                scalar Koha::Biblioitems->find($pl_item1->biblioitemnumber)
+            );
+
+            # Generate a bunch of libraries
+            my $valid_pickup_locations = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+            for (my $i = 0; $i < 10; $i++) {
+                my $branch = $builder->build({ source => 'Branch', value => {
+                    'pickup_location' => 1,
+                } });
+                if ($i % 2 == 0) {
+                    is(C4::Circulation::CreateBranchTransferLimit(
+                        $branch->{branchcode},
+                        $pl_item1->holdingbranch,
+                        $pl_item1->effective_itemtype,
+                    ), 1, 'We added a branch transfer limit to ' . $branch->{branchcode});
+                } else {
+                    push @{$valid_pickup_locations}, { branchcode => $branch->{branchcode} };
+                }
+            }
+
+            # Get list of available pickup locations
+            my $all_pickup_libraries = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+            my $pickup_locations = []; # pickup locations for $pl_item1
+            foreach my $branch (@$all_pickup_libraries) {
+                if (C4::Circulation::IsBranchTransferAllowed(
+                    $branch->{branchcode},
+                    $pl_item1->holdingbranch,
+                    $pl_item1->effective_itemtype,
+                )) {
+                    push @{$pickup_locations}, $branch->{branchcode};
+                }
+
+                # for $pl_item3, limit all branch transfers
+                C4::Circulation::CreateBranchTransferLimit(
+                    $branch->{branchcode},
+                    $pl_item3->holdingbranch,
+                    $pl_item3->effective_itemtype,
+                );
+            }
+
+            # just a helper array
+            my @all_pickup_locations = ();
+            foreach my $branch (@$all_pickup_libraries) {
+                push @all_pickup_locations, $branch->{branchcode};
+            }
+            @all_pickup_locations = sort { $a cmp $b } @all_pickup_locations;
+            @$pickup_locations = sort { $a cmp $b } @$pickup_locations;
+
+            $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$pl_item1->biblionumber.'&query_pickup_locations=1' );
+            $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+            $tx->req->env( { REMOTE_ADDR => $remote_address } );
+            $t->request_ok($tx)
+                ->status_is(200)
+                ->json_has('/0/availability')
+                ->json_is('/0/availability/available' => Mojo::JSON->true)
+                ->json_has('/0/item_availabilities/0/availability/notes/Item::PickupLocations')
+                ->json_is('/0/item_availabilities/0/availability/notes/Item::PickupLocations' => {
+                    from_library => $pl_item1->holdingbranch,
+                    to_libraries => $pickup_locations
+                })
+                ->json_has('/0/item_availabilities/1/availability/notes/Item::PickupLocations')
+                ->json_is('/0/item_availabilities/1/availability/notes/Item::PickupLocations' => {
+                    from_library => $pl_item2->holdingbranch,
+                    to_libraries => \@all_pickup_locations
+                })
+                ->json_has('/0/item_availabilities/2/availability/notes/Item::PickupLocations')
+                ->json_is('/0/item_availabilities/2/availability/notes/Item::PickupLocations' => {
+                    from_library => $pl_item3->holdingbranch,
+                    to_libraries => []
+                });
+        };
+
         $schema->storage->txn_rollback;
     };
 
@@ -214,7 +299,7 @@ subtest '/availability/item' => sub {
     plan tests => 3;
 
     subtest '/hold' => sub {
-        plan tests => 21;
+        plan tests => 22;
 
         $schema->storage->txn_begin;
 
@@ -285,6 +370,66 @@ subtest '/availability/item' => sub {
           ->json_is('/0/availability/unavailabilities/Item::CannotBeTransferred' => {
                 from_library => $item->holdingbranch,
                 to_library => $branch->branchcode,});
+
+        subtest 'Test pickup locations search' => sub {
+            plan tests => 11;
+
+            t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+            t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+            my $pl_item = build_a_test_item();
+
+            # Generate a bunch of libraries
+            my $valid_pickup_locations = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+            for (my $i = 0; $i < 10; $i++) {
+                my $branch = $builder->build({ source => 'Branch', value => {
+                    'pickup_location' => 1,
+                } });
+                if ($i % 2 == 0) {
+                    is(C4::Circulation::CreateBranchTransferLimit(
+                        $branch->{branchcode},
+                        $pl_item->holdingbranch,
+                        $pl_item->effective_itemtype,
+                    ), 1, 'We added a branch transfer limit to ' . $branch->{branchcode});
+                } else {
+                    push @{$valid_pickup_locations}, { branchcode => $branch->{branchcode} };
+                }
+            }
+
+            # Get list of available pickup locations
+            my $all_pickup_libraries = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+            my $pickup_locations = []; # pickup locations for $pl_item1
+            foreach my $branch (@$all_pickup_libraries) {
+                if (C4::Circulation::IsBranchTransferAllowed(
+                    $branch->{branchcode},
+                    $pl_item->holdingbranch,
+                    $pl_item->effective_itemtype,
+                )) {
+                    push @{$pickup_locations}, $branch->{branchcode};
+                }
+            }
+
+            # just a helper array
+            my @all_pickup_locations = ();
+            foreach my $branch (@$all_pickup_libraries) {
+                push @all_pickup_locations, $branch->{branchcode};
+            }
+            @all_pickup_locations = sort { $a cmp $b } @all_pickup_locations;
+            @$pickup_locations = sort { $a cmp $b } @$pickup_locations;
+
+            $tx = $t->ua->build_tx( GET => $route . '?itemnumber='.$pl_item->itemnumber.'&query_pickup_locations=1' );
+            $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+            $tx->req->env( { REMOTE_ADDR => $remote_address } );
+            $t->request_ok($tx)
+                ->status_is(200)
+                ->json_has('/0/availability')
+                ->json_is('/0/availability/available' => Mojo::JSON->true)
+                ->json_has('/0/availability/notes/Item::PickupLocations')
+                ->json_is('/0/availability/notes/Item::PickupLocations' =>{
+                from_library => $pl_item->holdingbranch,
+                to_libraries => $pickup_locations
+            });
+        };
 
         $schema->storage->txn_rollback;
     };
