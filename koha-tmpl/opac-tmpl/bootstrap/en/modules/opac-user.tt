@@ -149,7 +149,7 @@
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count | html %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                            [% IF ( amountoutstanding > 0 ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                            [% IF ( amountoutstanding > 0 ) %]<li><a href="#opac-user-fines">Charges ([% amountoutstanding | $Price %])</a></li>[% END %]
                                 [% IF ( amountoutstanding < 0 ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding * -1 | $Price %])</a></li>[% END %]
                             [% END %]
 
