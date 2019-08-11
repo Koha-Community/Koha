@@ -46,6 +46,9 @@
                                     [% IF ( expanded_options ) %][% left_content | html %][% END %]
                                     <select name="idx" id="search-field_[% loop.index | html %]">
                                         <option value="kw">Keyword</option>
+                                        [% IF ( expanded_options ) %]
+                                            <option value="kw,phr">&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase</option>
+                                        [% END %]
                                         <option value="su,wrdl">Subject</option>
                                         [% IF ( expanded_options ) %]
                                             <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject phrase</option>
