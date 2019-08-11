@@ -41,6 +41,12 @@ t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
+# We are using this auth value in multiple tests, so lets define it here for
+# reusability
+my $nfl_code = Koha::AuthorisedValues->find({
+    category => 'NOT_LOAN', authorised_value => 1,
+})->lib;
+
 subtest '/availability/biblio' => sub {
     plan tests => 2;
 
@@ -106,7 +112,7 @@ subtest '/availability/biblio' => sub {
           ->json_is('/0/item_availabilities/1/itemnumber' => $item2->itemnumber)
           ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->false)
           ->json_is('/0/item_availabilities/1/availability/unavailabilities/Item::NotForLoan' => {
-            code => "Not For Loan",
+            code => $nfl_code,
             status => 1,
             });
         $patron->gonenoaddress('0')->store;
@@ -196,7 +202,7 @@ subtest '/availability/biblio' => sub {
           ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true)
           ->json_is('/0/hold_queue_length' => 2)
           ->json_is('/0/item_availabilities/2/availability/unavailabilities/Item::NotForLoan' => {
-            code => "Not For Loan",
+            code => $nfl_code,
             status => 1,
             });
 
@@ -247,7 +253,7 @@ subtest '/availability/item' => sub {
           ->json_is('/0/itemcallnumber_display' => $item->cn_sort)
           ->json_is('/0/availability/unavailabilities/Patron::GoneNoAddress' => {})
           ->json_is('/0/availability/unavailabilities/Item::NotForLoan' => {
-            code => "Not For Loan",
+            code => $nfl_code,
             status => 1,
             });
         $patron->gonenoaddress('0')->store;
@@ -313,7 +319,7 @@ subtest '/availability/item' => sub {
           ->json_is('/0/availability/available' => Mojo::JSON->false)
           ->json_is('/0/itemnumber' => $item->itemnumber)
           ->json_is('/0/availability/unavailabilities/Item::NotForLoan' => {
-            code => "Not For Loan",
+            code => $nfl_code,
             status => 1,
             });
         $item->notforloan('0')->store;
@@ -363,7 +369,7 @@ subtest '/availability/item' => sub {
           ->json_is('/0/item_availabilities/1/itemnumber' => $item2->itemnumber)
           ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->false)
           ->json_is('/0/item_availabilities/1/availability/unavailabilities/Item::NotForLoan' => {
-            code => "Not For Loan",
+            code => $nfl_code,
             status => 1,
             });
 
