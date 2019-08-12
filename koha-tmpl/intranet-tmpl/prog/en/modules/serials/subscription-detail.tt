@@ -61,7 +61,7 @@
                             <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't delete (N)</button>
                         </form>
                     </div>
-                [% END %] <!-- NEEDSCONFIRMATION -->
+                [% END # /IF NEEDSCONFIRMATION %]
 
                 [% IF mana_code.defined %]
                     <div id="alert-community" class="dialog message">
@@ -117,8 +117,8 @@
                                         </li>
                                         <li><span class="label">Grace period:</span> [% graceperiod | html %]</li>
                                     </ol>
-                                </div>
-                            </div>
+                                </div> <!-- /.rows -->
+                            </div> <!-- /.col-sm-6 -->
                             <div class="col-sm-6">
                                 <div class="rows">
                                     <ol>
@@ -134,9 +134,9 @@
                                         [% END %]
                                         [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
                                     </ol>
-                                </div>
-                            </div>
-                        </div>
+                                </div> <!-- /.rows -->
+                            </div> <!-- /.col-sm-6 -->
+                        </div> <!-- /.row -->
 
                         [% IF available_additional_fields %]
                             <hr>
@@ -147,11 +147,11 @@
                                         <ol>
                                             [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
                                         </ol>
-                                    </div>
-                                </div>
-                            </div>
+                                    </div> <!-- /.rows -->
+                                </div> <!-- /.col-sm-6 -->
+                            </div> <!-- /.row -->
                         [% END %]
-                    </div>
+                    </div> <!-- /#subscription_info -->
 
                     <div id="subscription_planning">
                         <div class="row">
@@ -229,10 +229,10 @@
                                             [% monthlength | html %]</li>
                                         [% END %]
                                     </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                </div> <!-- /.rows -->
+                            </div> <!-- /.col-sd-12 -->
+                        </div> <!-- /.row -->
+                    </div> <!-- /#subscription_planning -->
 
                     <div id="subscription_numbering" style="display:none;">
                         <h3>Numbering calculation</h3>
@@ -294,7 +294,8 @@
                                 <td>[% lastvalue3 | html %]</td>
                             </tr>
                         </table>
-                    </div>
+                    </div> <!-- /#subscription_numbering -->
+
                     <div id="subscription_issues">
                         <table>
                             <tr>
@@ -346,9 +347,9 @@
                                         [% IF ( serialslis.status8 ) %]Stopped[% END %]
                                     </td>
                                 </tr>
-                            [% END %]
+                            [% END # /FOREACH serialslist %]
                         </table>
-                    </div>
+                    </div> <!-- /#subscription_issues -->
 
                     <div id="subscription_summary">
                         <div class="row">
@@ -366,10 +367,10 @@
                                         <li><span class="label">History staff note:</span>[% librariannote | html | html_line_break %]</li>
                                         <li><span class="label">History OPAC note:</span>[% opacnote | html | html_line_break %]</li>
                                     </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                </div> <!-- /.rows -->
+                            </div> <!-- /.col-sm-12 -->
+                        </div> <!-- /.row -->
+                    </div> <!-- /#subscription_summary -->
 
                     [% IF orders_grouped.size %]
                         <div id="acquisition_details">
@@ -433,52 +434,52 @@
                                         </tr>
                                         [% FOR order IN parent_order.orders %]
                                             <tr data-tt-id="0" data-tt-parent-id="[% parent_tree_id | html %]">
-                                            <td>
-                                            [% IF order.invoice %]
-                                                [% IF CAN_user_acquisition %]
-                                                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
-                                                       [% order.invoice.invoicenumber | html %]</a>
-                                                [% ELSE %]
-                                                    [% order.invoice.invoicenumber | html %]
+                                                <td>
+                                                [% IF order.invoice %]
+                                                    [% IF CAN_user_acquisition %]
+                                                        <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
+                                                           [% order.invoice.invoicenumber | html %]</a>
+                                                    [% ELSE %]
+                                                        [% order.invoice.invoicenumber | html %]
+                                                    [% END %]
                                                 [% END %]
-                                            [% END %]
-                                            </td>
-                                            <td></td> [%# basket %]
-                                            <td>[% order.ordernumber | html %]</td>
-                                            <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
-                                            <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
-                                            <td>
-                                                [% SWITCH order.orderstatus %]
-                                                    [% CASE 'new' %]<span title="status_1">New</span>
-                                                    [% CASE 'ordered' %]<span title="status_2">Ordered</span>
-                                                    [% CASE 'partial' %]<span title="status_3">Partial</span>
-                                                    [% CASE 'complete' %]<span title="status_4">Complete</span>
-                                                    [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
-                                                [% END %]
-                                            </td>
-                                            <td>[% order.order_internalnote | html %]</td>
-                                            <td>[% order.order_vendornote | html %]</td>
-                                            <td>[% order.fund.budget_name | html %]</td>
-                                            <td>[% order.quantity | html %]</td>
-                                            <td>
-                                                [% UNLESS order.datereceived %]
-                                                    [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% IF order.datereceived %]
-                                                    [%# FIXME What if unitprice has not been filled? %]
-                                                    [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
-                                                [% END %]
-                                            </td>
-                                        </tr>
-                                        [% END %]
-                                    [% END %]
+                                                </td>
+                                                <td></td> [%# basket %]
+                                                <td>[% order.ordernumber | html %]</td>
+                                                <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
+                                                <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
+                                                <td>
+                                                    [% SWITCH order.orderstatus %]
+                                                        [% CASE 'new' %]<span title="status_1">New</span>
+                                                        [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                                                        [% CASE 'partial' %]<span title="status_3">Partial</span>
+                                                        [% CASE 'complete' %]<span title="status_4">Complete</span>
+                                                        [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
+                                                    [% END %]
+                                                </td>
+                                                <td>[% order.order_internalnote | html %]</td>
+                                                <td>[% order.order_vendornote | html %]</td>
+                                                <td>[% order.fund.budget_name | html %]</td>
+                                                <td>[% order.quantity | html %]</td>
+                                                <td>
+                                                    [% UNLESS order.datereceived %]
+                                                        [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
+                                                    [% END %]
+                                                </td>
+                                                <td>
+                                                    [% IF order.datereceived %]
+                                                        [%# FIXME What if unitprice has not been filled? %]
+                                                        [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END # /FOR order %]
+                                    [% END # /FOR ordernumber %]
                                 </tbody>
-                            </table>
-                        </div>
-                    [% END %]
-                </div>
+                            </table> <!-- /#orders -->
+                        </div> <!-- /#acquisition_details -->
+                    [% END # IF orders_grouped.size %]
+                </div> <!-- /#subscription_description -->
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
