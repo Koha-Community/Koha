@@ -28,431 +28,457 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-    [% INCLUDE 'serials-toolbar.inc' %]
-    [% INCLUDE 'mana/mana-comment-status.inc' %]
+                [% INCLUDE 'serials-toolbar.inc' %]
+                [% INCLUDE 'mana/mana-comment-status.inc' %]
 
-    <h1>Subscription for [% bibliotitle | html %] [% IF closed %](closed)[% END %]</h1>
-    [% IF ( abouttoexpire ) %]
-      [% UNLESS closed %]
-        <div class="dialog message">Subscription will expire [% enddate | html %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>
-      [% END %]
-    [% END %]
-    [% IF ( NEEDSCONFIRMATION ) %]
-    <div id="circ_needsconfirmation" class="dialog alert">
-        <h3>Please confirm subscription deletion</h3>
+                <h1>Subscription for [% bibliotitle | html %] [% IF closed %](closed)[% END %]</h1>
 
-			<ul>
-			[% IF ( NOTEXPIRED ) %] <li>The subscription has not expired yet</li> [% END %] 
-			[% IF ( LINKEDISSUES ) %] <li>The subscription has linked issues</li> [% END %]
-			[% IF ( LINKEDITEMS ) %] <li>The subscription has linked items<br /> Those items won't be deleted</li> [% END %]
-			</ul>
-			<form method="post" action="/cgi-bin/koha/serials/subscription-detail.pl">
-			<input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-			<input type="hidden" name="issueconfirmed" value="1" />
-			<input type="hidden" name="op" value="del" />
-            <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, delete (Y)</button>
-			</form>
-			<form method="get" action="/cgi-bin/koha/serials/subscription-detail.pl">
-			<input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-            <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't delete (N)</button>
-			</form>
-
-	</div>
-    [% END %] <!-- NEEDSCONFIRMATION -->
-    [% IF mana_code.defined %]
-        <div id="alert-community" class="dialog message">
-            <p>
-                [% mana_code | html %]
-            </p>
-        </div>
-    [% END %]
-
-<div id="subscription_description" class="toptabs">
-<ul class="ui-tabs-nav">
-    <li><a href="#subscription_info">Information</a></li>
-    <li><a href="#subscription_planning">Planning</a></li>
-    <li><a href="#subscription_issues">Issues</a></li>
-    <li><a href="#subscription_summary">Summary</a></li>
-    [% IF orders_grouped.size %]
-        <li>
-            <a href="#acquisition_details">Acquisition details</a>
-        </li>
-    [% END %]
-</ul>
-
-<div id="subscription_info">
-    <div class="row">
-    <div class="col-sm-6">
-    <div class="rows">
-		<ol>
-		<li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
-        <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
-        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
-        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% bibnum | uri %]">[% bibliotitle | html %]</a> <i>([% bibnum | html %])</i></li>
-        [% IF ( OPACBaseURL ) %]
-            <li>
-                <span class="label">OPAC view:</span>
-                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Open in new window.</a>
-            </li>
-        [% END %]
-[% IF ( branchcode ) %]<li><span class="label">Library:</span> [% Branches.GetName( branchcode ) | html %]</li>[% END %]
-        [% IF ( serialsadditems ) %]
-            <li><span class="label">Items:</span> Serial receipt creates an item record.</li>
-        [% ELSE %]
-            <li><span class="label">Items:</span> Serial receipt does not create an item record.</li>
-        [% END %]
-        <li>
-            <span class="label">Serial number:</span>
-            [% IF skip_serialseq %]
-                Serial number is skipped when an irregularity is found.
-            [% ELSE %]
-                Serial number is kept when an irregularity is found.
-            [% END %]
-        </li>
-        <li><span class="label">Grace period:</span> [% graceperiod | html %]</li>
-        </ol>
-    </div>
-    </div>
-    <div class="col-sm-6">
-    <div class="rows">
-        <ol>
-        [% IF ( location ) %]<li><span class="label">Location:</span> [% location | html %]</li>[% END %]
-        [% IF ( callnumber ) %]<li><span class="label">Call number:</span> [% callnumber | html %]</li>[% END %]
-		[% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff:</span>[% staffdisplaycount | html %]</li>[% END %]
-        [% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display in OPAC:</span>[% opacdisplaycount | html %]</li>[% END %]
-        [% IF ( letter ) %]
-            <li>
-                <span class="label">Patron notification:</span> [% letter | html %]
-                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid | uri %]">subscribers</a>)
-            </li>
-        [% END %]
-        [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
-     </ol>
-     </div>
-     </div>
-     </div>
-
-    [% IF available_additional_fields %]
-    <hr>
-    <div class="row">
-      <div class="col-sm-6">
-        <h3>Additional fields:</h3>
-        <div class="rows">
-          <ol>
-            [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
-          </ol>
-        </div>
-      </div>
-      </div>
-     [% END %]
-</div>
-
-    <div id="subscription_planning">
-    <div class="row">
-    <div class="col-sm-12">
-    <div class="rows">
-        <ol>
-            <li><span class="label">Beginning date:</span> [% startdate | html %]
-            </li>
-            <li><span class="label">Frequency:</span>
-                [% frequency.description | html %]
-            </li>
-            <li>
-              <span class="label">Manual history: </span>
-                [% IF ( manualhistory ) %]
-                    Enabled <a href="/cgi-bin/koha/serials/subscription-history.pl?subscriptionid=[% subscriptionid | uri %]">Edit history</a>
-                [% ELSE %]
-                    Disabled
-                [% END %]
-            </li>
-            <li><span class="label">Number pattern:</span>
-                [% numberpattern.label | html %]
-            </li>
-            <li><table>
-            <tr>
-                <td>Starting with:</td>
-                [% IF (has_X) %]
-                    <td align="center">[% lastvalue1 | html %]</td>
-                [% END %]
-                [% IF (has_Y) %]
-                    <td align="center">[% lastvalue2 | html %]</td>
-                [% END %]
-                [% IF (has_Z) %]
-                    <td align="center">[% lastvalue3 | html %]</td>
-                [% END %]
-            </tr>
-            <tr>
-                <td>Rollover:</td>
-                [% IF (has_X) %]
-                    <td align="center">[% numberpattern.whenmorethan1 | html %]</td>
-                [% END %]
-                [% IF (has_Y) %]
-                    <td align="center">[% numberpattern.whenmorethan2 | html %]</td>
-                [% END %]
-                [% IF (has_Z) %]
-                    <td align="center">[% numberpattern.whenmorethan3 | html %]</td>
-                [% END %]
-            </tr>
-            </table></li>
-            [% IF ( irregular_issues ) %]
-            <li><span class="label">Irregularity:</span> [% irregular_issues | html %] issues
-            </li>
-            [% END %]
-            <li><span class="label">First arrival:</span> [% firstacquidate | html %]
-            </li>
-        [% IF ( numberlength ) %]<li><span class="label">Number of issues:</span> [% numberlength | html %]</li>[% END %]
-        [% IF ( weeklength ) %]<li><span class="label">Number of weeks:</span> [% weeklength | html %]</li>[% END %]
-        [% IF ( monthlength ) %]<li><span class="label">Number of months:</span> [% monthlength | html %]</li>[% END %]
-        </ol>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div id="subscription_numbering" style="display:none;">
-        <h3>Numbering calculation</h3>
-        <p><label>Numbering formula:</label> [% numberingmethod | html %]</p>
-        <table>
-            <tr>
-                <th>&nbsp;</th>
-                <th>X</th>
-                <th>Y</th>
-                <th>Z</th>
-                </tr>
-                <tr>
-                    <td>Add</td>
-                    <td>
-                        [% add1 | html %]
-                    </td>
-                    <td>
-                        [% add2 | html %]
-                    </td>
-                    <td>
-                        [% add3 | html %]
-                    </td>
-                </tr>
-                <tr>
-                    <td>once every</td>
-                    <td>[% every1 | html %]</td>
-                    <td>[% every2 | html %]</td>
-                    <td>[% every3 | html %]</td>
-                </tr>
-                <tr>
-                    <td>When more than</td>
-                    <td>[% whenmorethan1 | html %] [% IF ( innerloop1 ) %]<br />
-                        <i>(is [% innerloop1 | html %])</i>[% END %]</td>
-                    <td>[% whenmorethan2 | html %] [% IF ( innerloop2 ) %]<br />
-                        <i>(is [% innerloop2 | html %])</i>[% END %]</td>
-                    <td>[% whenmorethan3 | html %] [% IF ( innerloop3 ) %]<br />
-                        <i>(is [% innerloop3 | html %])</i>[% END %]</td>
-                </tr>
-                <tr>
-                    <td>Set back to</td>
-                    <td>[% setto1 | html %]</td>
-                    <td>[% setto2 | html %]</td>
-                    <td>[% setto3 | html %]</td>
-                </tr>
-                <tr>
-                    <td>
-                            Inner counter
-                    </td>
-                    <td>[% innerloop1 | html %]</td>
-                    <td>[% innerloop2 | html %]</td>
-                    <td>[% innerloop3 | html %]</td>
-                </tr>
-                <tr>
-                    <td>
-                            Last value
-                    </td>
-                    <td>[% lastvalue1 | html %]</td>
-                    <td>[% lastvalue2 | html %]</td>
-                    <td>[% lastvalue3 | html %]</td>
-                </tr>
-            </table>
-    </div>
-    <div id="subscription_issues">
-        <table>
-        <tr>
-            <th>Issue number</th>
-            <th>Planned date</th>
-            <th>Published date</th>
-            <th>Published date (text)</th>
-            <th>Status</th>
-        </tr>
-        [% FOREACH serialslis IN serialslist %]
-            <tr>
-                <td>
-                    [% serialslis.serialseq | html %]
-                </td>
-                <td>
-                    [% IF serialslis.planneddate %]
-                      [% serialslis.planneddate | html %]
-                    [% ELSE %]
-                      Unknown
+                [% IF ( abouttoexpire ) %]
+                    [% UNLESS closed %]
+                        <div class="dialog message">Subscription will expire [% enddate | html %]. <a href="#" id="renewsub">Renew this subscription</a>.</div>
                     [% END %]
-                </td>
-                <td>
-                    [% IF serialslis.publisheddate %]
-                      [% serialslis.publisheddate | html %]
-                    [% ELSE %]
-                      Unknown
-                    [% END %]
-                </td>
-                <td>
-                    [% serialslis.publisheddatetext | html %]
-                </td>
-                <td>
-                    [% IF ( serialslis.status1 ) %]Expected[% END %]
-                    [% IF ( serialslis.status2 ) %]Arrived[% END %]
-                    [% IF ( serialslis.status3 ) %]Late[% END %]
-                    [% IF ( serialslis.status4 ) %]Missing[% END %]
-                    [% IF ( serialslis.status41 ) %]Missing (never received)[% END %]
-                    [% IF ( serialslis.status42 ) %]Missing (sold out)[% END %]
-                    [% IF ( serialslis.status43 ) %]Missing (damaged)[% END %]
-                    [% IF ( serialslis.status44 ) %]Missing (lost)[% END %]
-                    [% IF ( serialslis.status5 ) %]Not issued[% END %]
-                    [% IF ( serialslis.status6 ) %]Delete[% END %]
-                    [% IF ( serialslis.status7 ) %]
-                      Claimed
-                      [% IF ( serialslis.claimdate ) %]
-                        [% serialslis.claimdate | html %]
-                      [% END %]
-                    [% END %]
-                    [% IF ( serialslis.status8 ) %]Stopped[% END %]
-                </td>
-            </tr>
-        [% END %]
-        </table>
-    </div>
-    <div id="subscription_summary">
-    <div class="row">
-    <div class="col-sm-12">
-    <div class="rows">
-        <ol>
-            <li><span class="label">Start date:</span> [% startdate | html %] </li>
-            <li><span class="label">End date:</span> [% enddate | html %]</li>
-            <li><span class="label">History start date:</span> [% histstartdate | html %] </li>
-            <li><span class="label">History end date:</span> [% histenddate | html %]</li>
-            <li><span class="label">Received issues:</span>[% recievedlist | html | html_line_break %]</li>
-            <li><span class="label">Missing issues:</span>[% missinglist | html | html_line_break %]</li>
-            <li><span class="label">Nonpublic note:</span>[% internalnotes | html | html_line_break %]</li>
-            <li><span class="label">Public note:</span>[% notes | html | html_line_break %]</li>
-            <li><span class="label">History staff note:</span>[% librariannote | html | html_line_break %]</li>
-            <li><span class="label">History OPAC note:</span>[% opacnote | html | html_line_break %]</li>
-        </ol>
-    </div>
-    </div>
-    </div>
-    </div>
+                [% END %]
 
-    [% IF orders_grouped.size %]
-        <div id="acquisition_details">
-            <h2>Acquisition details</h2>
-            <table id="orders">
-                <caption>
-                  <span class="actions">
-                  <a href="#" id="hide_received_orders">Hide already received orders</a>
-                  | <a href="#" id="show_all_orders">Show all orders</a>
-                  | <a href="#" id="expand_all">Expand all</a>
-                  | <a href="#" id="collapse_all">Collapse all</a>
-                  </span>
-                </caption>
+                [% IF ( NEEDSCONFIRMATION ) %]
+                    <div id="circ_needsconfirmation" class="dialog alert">
+                        <h3>Please confirm subscription deletion</h3>
 
-                <thead>
-                    <tr>
-                        <th>Invoice</th>
-                        <th>Basket</th>
-                        <th>Order number</th>
-                        <th class="title-string">Creation date</th>
-                        <th class="title-string">Receive date</th>
-                        <th class="title-string">Status</th>
-                        <th>Internal note</th>
-                        <th>Vendor note</th>
-                        <th>Fund</th>
-                        <th>Quantity</th>
-                        <th title="ecost tax exc. / ecost tax inc.">Ordered</th>
-                        <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
-                    </tr>
-                </thead>
-                <tbody>
-                [% FOR ordernumber IN orders_grouped.keys %]
-                    [% SET parent_tree_id = loop.count %]
-                    [% SET parent_order = orders_grouped.$ordernumber %]
-                    <tr data-tt-id="[% parent_tree_id | html %]" class="highlighted-row">
-                        <td></td> [%# invoice %]
-                        <td>
-                            [% IF CAN_user_acquisition_order_manage %]
-                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basket.basketno | uri %]">[% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])</a>
-                            [% ELSE %]
-                                [% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])
-                            [% END %]
-                        </td>
-                        <td></td> [%# ordernumber %]
-                        <td>[% parent_order.basket.creationdate | $KohaDates %]</td>
-                        <td>[% parent_order.datereceived | $KohaDates %]</td>
-                        <td>
-                          [% SWITCH parent_order.orderstatus %]
-                            [% CASE 'new' %]<span title="status_1">New</span>
-                            [% CASE 'ordered' %]<span title="status_2">Ordered</span>
-                            [% CASE 'partial' %]<span title="status_3">Partial</span>
-                            [% CASE 'complete' %]<span title="status_4">Complete</span>
-                            [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
-                          [% END %]
-                        </td>
-                        <td></td> [%# internalnote %]
-                        <td></td> [%# vendornote %]
-                        <td></td> [%# fund %]
-                        <td>[% parent_order.quantity | html %]</td>
-                        <td>[% parent_order.ecost_tax_excluded | $Price %] / [% parent_order.ecost_tax_included | $Price %]</td>
-                        <td>[% parent_order.unitprice_tax_excluded | $Price %] / [% parent_order.unitprice_tax_included | $Price %]</td>
-                    </tr>
-                    [% FOR order IN parent_order.orders %]
-                        <tr data-tt-id="0" data-tt-parent-id="[% parent_tree_id | html %]">
-                        <td>
-                        [% IF order.invoice %]
-                            [% IF CAN_user_acquisition %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
-                                   [% order.invoice.invoicenumber | html %]</a>
-                            [% ELSE %]
-                                [% order.invoice.invoicenumber | html %]
-                            [% END %]
+                        <ul>
+                            [% IF ( NOTEXPIRED ) %] <li>The subscription has not expired yet</li> [% END %]
+                            [% IF ( LINKEDISSUES ) %] <li>The subscription has linked issues</li> [% END %]
+                            [% IF ( LINKEDITEMS ) %] <li>The subscription has linked items<br /> Those items won't be deleted</li> [% END %]
+                        </ul>
+
+                        <form method="post" action="/cgi-bin/koha/serials/subscription-detail.pl">
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                            <input type="hidden" name="issueconfirmed" value="1" />
+                            <input type="hidden" name="op" value="del" />
+                            <button type="submit" class="approve" accesskey="y"><i class="fa fa-fw fa-check"></i> Yes, delete (Y)</button>
+                        </form>
+
+                        <form method="get" action="/cgi-bin/koha/serials/subscription-detail.pl">
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                            <button type="submit" class="deny" accesskey="n"><i class="fa fa-fw fa-remove"></i> No, don't delete (N)</button>
+                        </form>
+                    </div>
+                [% END %] <!-- NEEDSCONFIRMATION -->
+
+                [% IF mana_code.defined %]
+                    <div id="alert-community" class="dialog message">
+                        <p>
+                            [% mana_code | html %]
+                        </p>
+                    </div>
+                [% END %]
+
+                <div id="subscription_description" class="toptabs">
+                    <ul class="ui-tabs-nav">
+                        <li><a href="#subscription_info">Information</a></li>
+                        <li><a href="#subscription_planning">Planning</a></li>
+                        <li><a href="#subscription_issues">Issues</a></li>
+                        <li><a href="#subscription_summary">Summary</a></li>
+                        [% IF orders_grouped.size %]
+                            <li>
+                                <a href="#acquisition_details">Acquisition details</a>
+                            </li>
                         [% END %]
-                        </td>
-                        <td></td> [%# basket %]
-                        <td>[% order.ordernumber | html %]</td>
-                        <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
-                        <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
-                        <td>
-                          [% SWITCH order.orderstatus %]
-                            [% CASE 'new' %]<span title="status_1">New</span>
-                            [% CASE 'ordered' %]<span title="status_2">Ordered</span>
-                            [% CASE 'partial' %]<span title="status_3">Partial</span>
-                            [% CASE 'complete' %]<span title="status_4">Complete</span>
-                            [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
-                          [% END %]
-                        </td>
-                        <td>[% order.order_internalnote | html %]</td>
-                        <td>[% order.order_vendornote | html %]</td>
-                        <td>[% order.fund.budget_name | html %]</td>
-                        <td>[% order.quantity | html %]</td>
-                        <td>
-                            [% UNLESS order.datereceived %]
-                                [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
-                            [% END %]
-                        </td>
-                        <td>
-                            [% IF order.datereceived %]
-                                [%# FIXME What if unitprice has not been filled? %]
-                                [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
-                            [% END %]
-                        </td>
-                    </tr>
-                    [% END %]
-                [% END %]
-                </tbody>
-            </table>
-          </div>
-      [% END %]
+                    </ul>
 
+                    <div id="subscription_info">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="rows">
+                                    <ol>
+                                        <li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
+                                        <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
+                                        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
+                                        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% bibnum | uri %]">[% bibliotitle | html %]</a> <i>([% bibnum | html %])</i></li>
+                                        [% IF ( OPACBaseURL ) %]
+                                            <li>
+                                                <span class="label">OPAC view:</span>
+                                                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Open in new window.</a>
+                                            </li>
+                                        [% END %]
+                                        [% IF ( branchcode ) %]
+                                            <li><span class="label">Library:</span> [% Branches.GetName( branchcode ) | html %]</li>
+                                        [% END %]
+                                        [% IF ( serialsadditems ) %]
+                                            <li><span class="label">Items:</span> Serial receipt creates an item record.</li>
+                                        [% ELSE %]
+                                            <li><span class="label">Items:</span> Serial receipt does not create an item record.</li>
+                                        [% END %]
+                                        <li>
+                                            <span class="label">Serial number:</span>
+                                            [% IF skip_serialseq %]
+                                                Serial number is skipped when an irregularity is found.
+                                            [% ELSE %]
+                                                Serial number is kept when an irregularity is found.
+                                            [% END %]
+                                        </li>
+                                        <li><span class="label">Grace period:</span> [% graceperiod | html %]</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="rows">
+                                    <ol>
+                                        [% IF ( location ) %]<li><span class="label">Location:</span> [% location | html %]</li>[% END %]
+                                        [% IF ( callnumber ) %]<li><span class="label">Call number:</span> [% callnumber | html %]</li>[% END %]
+                                        [% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff:</span>[% staffdisplaycount | html %]</li>[% END %]
+                                        [% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display in OPAC:</span>[% opacdisplaycount | html %]</li>[% END %]
+                                        [% IF ( letter ) %]
+                                            <li>
+                                                <span class="label">Patron notification:</span> [% letter | html %]
+                                                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid | uri %]">subscribers</a>)
+                                            </li>
+                                        [% END %]
+                                        [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        [% IF available_additional_fields %]
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h3>Additional fields:</h3>
+                                    <div class="rows">
+                                        <ol>
+                                            [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        [% END %]
+                    </div>
+
+                    <div id="subscription_planning">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="rows">
+                                    <ol>
+                                        <li>
+                                            <span class="label">Beginning date:</span>
+                                            [% startdate | html %]
+                                        </li>
+                                        <li>
+                                            <span class="label">Frequency:</span>
+                                            [% frequency.description | html %]
+                                        </li>
+                                        <li>
+                                            <span class="label">Manual history: </span>
+                                            [% IF ( manualhistory ) %]
+                                                Enabled <a href="/cgi-bin/koha/serials/subscription-history.pl?subscriptionid=[% subscriptionid | uri %]">Edit history</a>
+                                            [% ELSE %]
+                                                Disabled
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            <span class="label">Number pattern:</span>
+                                            [% numberpattern.label | html %]
+                                        </li>
+                                        <li>
+                                            <table>
+                                                <tr>
+                                                    <td>Starting with:</td>
+                                                    [% IF (has_X) %]
+                                                        <td>[% lastvalue1 | html %]</td>
+                                                    [% END %]
+                                                    [% IF (has_Y) %]
+                                                        <td>[% lastvalue2 | html %]</td>
+                                                    [% END %]
+                                                    [% IF (has_Z) %]
+                                                        <td>[% lastvalue3 | html %]</td>
+                                                    [% END %]
+                                                </tr>
+                                                <tr>
+                                                    <td>Rollover:</td>
+                                                    [% IF (has_X) %]
+                                                        <td>[% numberpattern.whenmorethan1 | html %]</td>
+                                                    [% END %]
+                                                    [% IF (has_Y) %]
+                                                        <td>[% numberpattern.whenmorethan2 | html %]</td>
+                                                    [% END %]
+                                                    [% IF (has_Z) %]
+                                                        <td>[% numberpattern.whenmorethan3 | html %]</td>
+                                                    [% END %]
+                                                </tr>
+                                            </table>
+                                        </li>
+                                        [% IF ( irregular_issues ) %]
+                                            <li>
+                                                <span class="label">Irregularity:</span>
+                                                [% irregular_issues | html %] issues
+                                            </li>
+                                        [% END %]
+                                        <li>
+                                            <span class="label">First arrival:</span>
+                                            [% firstacquidate | html %]
+                                        </li>
+                                        [% IF ( numberlength ) %]<li>
+                                            <span class="label">Number of issues:</span>
+                                            [% numberlength | html %]</li>
+                                        [% END %]
+                                        [% IF ( weeklength ) %]<li>
+                                            <span class="label">Number of weeks:</span>
+                                            [% weeklength | html %]</li>
+                                        [% END %]
+                                        [% IF ( monthlength ) %]<li>
+                                            <span class="label">Number of months:</span>
+                                            [% monthlength | html %]</li>
+                                        [% END %]
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="subscription_numbering" style="display:none;">
+                        <h3>Numbering calculation</h3>
+                        <p><label>Numbering formula:</label> [% numberingmethod | html %]</p>
+                        <table>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>X</th>
+                                <th>Y</th>
+                                <th>Z</th>
+                            </tr>
+                            <tr>
+                                <td>Add</td>
+                                <td>
+                                    [% add1 | html %]
+                                </td>
+                                <td>
+                                    [% add2 | html %]
+                                </td>
+                                <td>
+                                    [% add3 | html %]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>once every</td>
+                                <td>[% every1 | html %]</td>
+                                <td>[% every2 | html %]</td>
+                                <td>[% every3 | html %]</td>
+                            </tr>
+                            <tr>
+                                <td>When more than</td>
+                                <td>[% whenmorethan1 | html %] [% IF ( innerloop1 ) %]<br />
+                                    <i>(is [% innerloop1 | html %])</i>[% END %]</td>
+                                <td>[% whenmorethan2 | html %] [% IF ( innerloop2 ) %]<br />
+                                    <i>(is [% innerloop2 | html %])</i>[% END %]</td>
+                                <td>[% whenmorethan3 | html %] [% IF ( innerloop3 ) %]<br />
+                                    <i>(is [% innerloop3 | html %])</i>[% END %]</td>
+                            </tr>
+                            <tr>
+                                <td>Set back to</td>
+                                <td>[% setto1 | html %]</td>
+                                <td>[% setto2 | html %]</td>
+                                <td>[% setto3 | html %]</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                        Inner counter
+                                </td>
+                                <td>[% innerloop1 | html %]</td>
+                                <td>[% innerloop2 | html %]</td>
+                                <td>[% innerloop3 | html %]</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                        Last value
+                                </td>
+                                <td>[% lastvalue1 | html %]</td>
+                                <td>[% lastvalue2 | html %]</td>
+                                <td>[% lastvalue3 | html %]</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="subscription_issues">
+                        <table>
+                            <tr>
+                                <th>Issue number</th>
+                                <th>Planned date</th>
+                                <th>Published date</th>
+                                <th>Published date (text)</th>
+                                <th>Status</th>
+                            </tr>
+                            [% FOREACH serialslis IN serialslist %]
+                                <tr>
+                                    <td>
+                                        [% serialslis.serialseq | html %]
+                                    </td>
+                                    <td>
+                                        [% IF serialslis.planneddate %]
+                                            [% serialslis.planneddate | html %]
+                                        [% ELSE %]
+                                            Unknown
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF serialslis.publisheddate %]
+                                            [% serialslis.publisheddate | html %]
+                                        [% ELSE %]
+                                            Unknown
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% serialslis.publisheddatetext | html %]
+                                    </td>
+                                    <td>
+                                        [% IF ( serialslis.status1 ) %]Expected[% END %]
+                                        [% IF ( serialslis.status2 ) %]Arrived[% END %]
+                                        [% IF ( serialslis.status3 ) %]Late[% END %]
+                                        [% IF ( serialslis.status4 ) %]Missing[% END %]
+                                        [% IF ( serialslis.status41 ) %]Missing (never received)[% END %]
+                                        [% IF ( serialslis.status42 ) %]Missing (sold out)[% END %]
+                                        [% IF ( serialslis.status43 ) %]Missing (damaged)[% END %]
+                                        [% IF ( serialslis.status44 ) %]Missing (lost)[% END %]
+                                        [% IF ( serialslis.status5 ) %]Not issued[% END %]
+                                        [% IF ( serialslis.status6 ) %]Delete[% END %]
+                                        [% IF ( serialslis.status7 ) %]
+                                            Claimed
+                                            [% IF ( serialslis.claimdate ) %]
+                                                [% serialslis.claimdate | html %]
+                                            [% END %]
+                                        [% END %]
+                                        [% IF ( serialslis.status8 ) %]Stopped[% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    </div>
+
+                    <div id="subscription_summary">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="rows">
+                                    <ol>
+                                        <li><span class="label">Start date:</span> [% startdate | html %] </li>
+                                        <li><span class="label">End date:</span> [% enddate | html %]</li>
+                                        <li><span class="label">History start date:</span> [% histstartdate | html %] </li>
+                                        <li><span class="label">History end date:</span> [% histenddate | html %]</li>
+                                        <li><span class="label">Received issues:</span>[% recievedlist | html | html_line_break %]</li>
+                                        <li><span class="label">Missing issues:</span>[% missinglist | html | html_line_break %]</li>
+                                        <li><span class="label">Nonpublic note:</span>[% internalnotes | html | html_line_break %]</li>
+                                        <li><span class="label">Public note:</span>[% notes | html | html_line_break %]</li>
+                                        <li><span class="label">History staff note:</span>[% librariannote | html | html_line_break %]</li>
+                                        <li><span class="label">History OPAC note:</span>[% opacnote | html | html_line_break %]</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    [% IF orders_grouped.size %]
+                        <div id="acquisition_details">
+                            <h2>Acquisition details</h2>
+                            <table id="orders">
+                                <caption>
+                                    <span class="actions">
+                                        <a href="#" id="hide_received_orders">Hide already received orders</a>
+                                        | <a href="#" id="show_all_orders">Show all orders</a>
+                                        | <a href="#" id="expand_all">Expand all</a>
+                                        | <a href="#" id="collapse_all">Collapse all</a>
+                                    </span>
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th>Invoice</th>
+                                        <th>Basket</th>
+                                        <th>Order number</th>
+                                        <th class="title-string">Creation date</th>
+                                        <th class="title-string">Receive date</th>
+                                        <th class="title-string">Status</th>
+                                        <th>Internal note</th>
+                                        <th>Vendor note</th>
+                                        <th>Fund</th>
+                                        <th>Quantity</th>
+                                        <th title="ecost tax exc. / ecost tax inc.">Ordered</th>
+                                        <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOR ordernumber IN orders_grouped.keys %]
+                                        [% SET parent_tree_id = loop.count %]
+                                        [% SET parent_order = orders_grouped.$ordernumber %]
+                                        <tr data-tt-id="[% parent_tree_id | html %]" class="highlighted-row">
+                                            <td></td> [%# invoice %]
+                                            <td>
+                                                [% IF CAN_user_acquisition_order_manage %]
+                                                    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basket.basketno | uri %]">[% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])</a>
+                                                [% ELSE %]
+                                                    [% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])
+                                                [% END %]
+                                            </td>
+                                            <td></td> [%# ordernumber %]
+                                            <td>[% parent_order.basket.creationdate | $KohaDates %]</td>
+                                            <td>[% parent_order.datereceived | $KohaDates %]</td>
+                                            <td>
+                                                [% SWITCH parent_order.orderstatus %]
+                                                    [% CASE 'new' %]<span title="status_1">New</span>
+                                                    [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                                                    [% CASE 'partial' %]<span title="status_3">Partial</span>
+                                                    [% CASE 'complete' %]<span title="status_4">Complete</span>
+                                                    [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
+                                                [% END %]
+                                            </td>
+                                            <td></td> [%# internalnote %]
+                                            <td></td> [%# vendornote %]
+                                            <td></td> [%# fund %]
+                                            <td>[% parent_order.quantity | html %]</td>
+                                            <td>[% parent_order.ecost_tax_excluded | $Price %] / [% parent_order.ecost_tax_included | $Price %]</td>
+                                            <td>[% parent_order.unitprice_tax_excluded | $Price %] / [% parent_order.unitprice_tax_included | $Price %]</td>
+                                        </tr>
+                                        [% FOR order IN parent_order.orders %]
+                                            <tr data-tt-id="0" data-tt-parent-id="[% parent_tree_id | html %]">
+                                            <td>
+                                            [% IF order.invoice %]
+                                                [% IF CAN_user_acquisition %]
+                                                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
+                                                       [% order.invoice.invoicenumber | html %]</a>
+                                                [% ELSE %]
+                                                    [% order.invoice.invoicenumber | html %]
+                                                [% END %]
+                                            [% END %]
+                                            </td>
+                                            <td></td> [%# basket %]
+                                            <td>[% order.ordernumber | html %]</td>
+                                            <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
+                                            <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
+                                            <td>
+                                                [% SWITCH order.orderstatus %]
+                                                    [% CASE 'new' %]<span title="status_1">New</span>
+                                                    [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                                                    [% CASE 'partial' %]<span title="status_3">Partial</span>
+                                                    [% CASE 'complete' %]<span title="status_4">Complete</span>
+                                                    [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
+                                                [% END %]
+                                            </td>
+                                            <td>[% order.order_internalnote | html %]</td>
+                                            <td>[% order.order_vendornote | html %]</td>
+                                            <td>[% order.fund.budget_name | html %]</td>
+                                            <td>[% order.quantity | html %]</td>
+                                            <td>
+                                                [% UNLESS order.datereceived %]
+                                                    [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF order.datereceived %]
+                                                    [%# FIXME What if unitprice has not been filled? %]
+                                                    [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                        [% END %]
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        </div>
+                    [% END %]
+                </div>
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
