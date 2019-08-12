@@ -270,16 +270,22 @@
                                                     [% END %]
                                                 </ul>
                                             </li>
-                                        [% ELSIF guarantor_relationships %]
-                                            [% FOREACH gr IN guarantor_relationships %]
+                                        [% ELSIF guarantor_relationships.count > 0 %]
                                                 <li>
+                                                [% IF guarantor_relationships.count > 1 %]
+                                                    <span class="label">Guarantors:</span>
+                                                [% ELSE %]
                                                     <span class="label">Guarantor:</span>
-                                                    [% SET guarantor = gr.guarantor %]
-                                                    [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-                                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
+                                                [% END %]
+                                                    <ul>
+                                                    [% FOREACH gr IN guarantor_relationships %]
+                                                        [% SET guarantor = gr.guarantor %]
+                                                        [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
+                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a></li>
+                                                        [% END %]
                                                     [% END %]
+                                                    </ul>
                                                 </li>
-                                            [% END %]
                                         [% END %]
                                     </ol>
                                 </div> [% # /div.rows %]
