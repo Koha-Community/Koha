@@ -920,7 +920,6 @@ sub add_guarantors {
 
         $patron->add_guarantor(
             {
-                guarantee_id => $patron->id,
                 guarantor_id => $guarantor_id,
                 relationship => $relationship,
             }
