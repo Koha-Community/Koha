@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 62;
+use Test::More tests => 63;
 use Test::MockModule;
 use Test::Warn;
 
@@ -872,6 +872,84 @@ subtest 'MoveReserve additional test' => sub {
     MoveReserve($item_1->itemnumber,$patron_2->borrowernumber);
     is($patron_2->holds->count, 0, "The 2nd patrons no longer has a hold");
     is($patron_2->old_holds->next()->reserve_id, $reserve_2, "The 2nd patrons hold was filled and moved to old holds");
+
+};
+
+subtest 'CheckReserves additional test' => sub {
+
+    plan tests => 3;
+
+    my $item = $builder->build_sample_item;
+    my $reserve1 = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                found            => undef,
+                priority         => 1,
+                itemnumber       => undef,
+                biblionumber     => $item->biblionumber,
+                waitingdate      => undef,
+                cancellationdate => undef,
+                item_level_hold  => 0,
+                lowestPriority   => 0,
+                expirationdate   => undef,
+                suspend_until    => undef,
+                suspend          => 0,
+                itemtype         => undef,
+            }
+        }
+    );
+    my $reserve2 = $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => {
+                found            => undef,
+                priority         => 2,
+                biblionumber     => $item->biblionumber,
+                borrowernumber   => $reserve1->borrowernumber,
+                itemnumber       => undef,
+                waitingdate      => undef,
+                cancellationdate => undef,
+                item_level_hold  => 0,
+                lowestPriority   => 0,
+                expirationdate   => undef,
+                suspend_until    => undef,
+                suspend          => 0,
+                itemtype         => undef,
+            }
+        }
+    );
+
+    my $tmp_holdsqueue = $builder->build(
+        {
+            source => 'TmpHoldsqueue',
+            value  => {
+                borrowernumber => $reserve1->borrowernumber,
+                biblionumber   => $reserve1->biblionumber,
+            }
+        }
+    );
+    my $fill_target = $builder->build(
+        {
+            source => 'HoldFillTarget',
+            value  => {
+                borrowernumber     => $reserve1->borrowernumber,
+                biblionumber       => $reserve1->biblionumber,
+                itemnumber         => $item->itemnumber,
+                item_level_request => 0,
+            }
+        }
+    );
+
+    ModReserveAffect( $item->itemnumber, $reserve1->borrowernumber, 1,
+        $reserve1->reserve_id );
+    my ( $status, $matched_reserve, $possible_reserves ) =
+      CheckReserves( $item->itemnumber );
+
+    is( $status, 'Reserved', "We found a reserve" );
+    is( $matched_reserve->{reserve_id},
+        $reserve1->reserve_id, "We got the Transit reserve" );
+    is( scalar @$possible_reserves, 1, 'We only get the one matched' );
 
 };
 
