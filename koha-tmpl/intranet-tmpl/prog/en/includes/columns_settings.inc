@@ -102,7 +102,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         thead_row.before(clone);
     }
 
-    table.DataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
+    table.dataTable($.extend(true, {}, dataTablesDefaults, dt_parameters));
 
     table.DataTable().on("column-visibility.dt", function(){
         if( typeof columnsInit == 'function' ){
