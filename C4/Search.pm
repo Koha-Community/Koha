@@ -1491,12 +1491,12 @@ sub buildQuery {
         @limits = grep {!/^$/} @limits;
         my $original_q = $q; # without available part
         unless ( grep { /^available$/ } @limits ) {
-            $q =~ s| and \( \( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:''\) and \(lost,st-numeric=0\) \)||;
+            $q =~ s| and \( \(allrecords,AlwaysMatches=''\) and \(not-onloan-count,st-numeric >= 1\) and \(lost,st-numeric=0\) \)||;
             $original_q = $q;
         }
         if ( @limits ) {
             if ( grep { /^available$/ } @limits ) {
-                $q .= q| and ( ( allrecords,AlwaysMatches:'' not onloan,AlwaysMatches:'') and (lost,st-numeric=0) )|;
+                $q .= q| and ( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )|;
                 delete $limits['available'];
             }
             $q .= ' and '.join(' and ', @limits) if @limits;
@@ -1710,7 +1710,7 @@ sub buildQuery {
 ## In English:
 ## all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
             $availability_limit .=
-"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+"( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )";
             $limit_cgi  .= "&limit=available";
             $limit_desc .= "";
         }
