@@ -778,6 +778,7 @@
                 <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6'][not(@tag=655)]">
             <span property="keywords">
             <a>
+            <xsl:attribute name="class">subject</xsl:attribute>
             <xsl:choose>
             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
@@ -812,11 +813,8 @@
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                    <xsl:element name="img">
-                        <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
-                        <xsl:attribute name="style">vertical-align:middle</xsl:attribute>
-                        <xsl:attribute name="height">15</xsl:attribute>
-                        <xsl:attribute name="width">15</xsl:attribute>
+                    <xsl:element name="i">
+                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
                     </xsl:element>
                 </a>
             </xsl:if>
@@ -863,7 +861,7 @@
                             <a class='authlink'>
                                 <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                                 <xsl:element name="img">
-                                    <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
+                                    <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/z.png</xsl:attribute>
                                     <xsl:attribute name="alt"></xsl:attribute>
                                     <xsl:attribute name="height">15</xsl:attribute>
                                     <xsl:attribute name="width">15</xsl:attribute>
@@ -1565,6 +1563,7 @@
                         <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
+                <xsl:attribute name="class">contributors</xsl:attribute>
                 <span resource="#record"><span>
                     <xsl:choose>
                         <xsl:when test="substring(@tag, 1, 1)='1'">
@@ -1793,11 +1792,8 @@
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
                     <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                    <xsl:element name="img">
-                        <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
-                        <xsl:attribute name="style">vertical-align:middle</xsl:attribute>
-                        <xsl:attribute name="height">15</xsl:attribute>
-                        <xsl:attribute name="width">15</xsl:attribute>
+                    <xsl:element name="i">
+                        <xsl:attribute name="class">fa fa-search</xsl:attribute>
                     </xsl:element>
                 </a>
             </xsl:if>

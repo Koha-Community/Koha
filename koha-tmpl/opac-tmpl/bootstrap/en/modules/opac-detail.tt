@@ -125,7 +125,7 @@
                         [% XSLTBloc | $raw %]
                     [% ELSE %]
                         <h1 class="title">[% INCLUDE 'biblio-title.inc' %]</h1>
-                        [% IF ( author ) %]<h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author | html %]</a></h5>[% END %]
+                        [% IF ( author ) %]<h5 class="author">by <a class="contributors" href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author | html %]</a></h5>[% END %]
 
                         <span class="results_summary">[% UNLESS ( item_level_itypes ) %]
                             [
@@ -141,60 +141,18 @@
                         [% IF ( MARCAUTHORS ) %]
                             <div class="results_summary">
                                 <span class="label">Additional authors:</span>
-                                [% IF OPACPopupAuthorsSearch %]
-                                    <!-- Author search term selection modal -->
-                                    <div id="authorSearch" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="authorSearchLabel" aria-hidden="true">
-                                        <div class="modal-header">
-                                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h3 id="authorSearchLabel">Select the item(s) to search</h3>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="checkbox" onchange="checkAll(this, '#authorsList')" /> <b>All</b>
-                                            <ul id="authorsList">
-                                                [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                                                    <li>
-                                                        [% IF (MARCAUTHOR.authoritylink) %]
-                                                            <input type="checkbox" name="checkbox"
-                                                                id="author_[% loop.count | html %]"
-                                                                onclick="makeAuthorRequest()"
-                                                                value="an:[% MARCAUTHOR.authoritylink | html %]" />
-                                                        [% ELSE %]
-                                                            <input type="checkbox" name="checkbox"
-                                                                id="author_[% loop.count | html %]"
-                                                                onclick="makeAuthorRequest()"
-                                                                value="au,wrdl:[% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% SUBFIELD.value |url %][% UNLESS (loop.last) %]+[% END %][% END %]" />
-                                                        [% END %]
-                                                        <label for="author_[% loop.count | html %]">
-                                                            [% FOREACH SUBFIELD IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
-                                                                [% SUBFIELD.value | html %]
-                                                            [% END %]
-                                                        </label>
-                                                    </li>
-                                                [% END # /FOREACH MARCAUTHORS %]
-                                            </ul>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a id="validAuthorSearch" href="#" class="btn btn-primary">Search</a>
-                                            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-                                        </div>
-                                    </div>
-                                [% END # /OPACPopupAuthorsSearch %]
-
                                 [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                                    [% authorsloop = loop %]
                                     [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
                                         [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
-                                        [% IF Koha.Preference( 'OPACPopupAuthorsSearch' ) == 1 %]
-                                            <a role="button" data-toggle="modal" title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]"
-                                            class="showauthors" data-count="[% authorsloop.count | html %]"
-                                            href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]#authorSearch">[% MARCAUTHOR_SUBFIELDS_LOO.value | html %]</a>
+                                        [% IF ( MARCAUTHOR.authoritylink ) %]
+                                            <a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]" class="contributors authority_link" data-authid="[% MARCAUTHOR.authoritylink | html %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">
                                         [% ELSE %]
-                                            <a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]"
-                                            class="showauthors" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value | html %]</a>
+                                            <a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]" class="contributors" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">
                                         [% END %]
+                                        [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]</a>
                                     [% END %]
                                     [% IF (MARCAUTHOR.authoritylink) %]
-                                        <a class='authlink' href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink | html %]"><img style="vertical-align:middle" height="15" width="15" src="[% interface | html %]/[% theme | html %]/images/filefind.png"></a>
+                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink | html %]"><i class="fa fa-search"></i></a>
                                     [% END %]
                                     [% IF IDREF and MARCAUTHOR.unimarc3 %]
                                         <a href="/cgi-bin/koha/opac-idref.pl?unimarc3=[% MARCAUTHOR.unimarc3 | uri %]" title="IdRef" rel="gb_page_center[600,500]">IdRef</a>
@@ -265,64 +223,23 @@
                         [% END %]
 
                         [% IF ( MARCSUBJCTS ) %]
-                            <div class="results_summary subject">
+                            <div class="results_summary subjects">
                                 <span class="label">Subject(s):</span>
-
-                                [% IF OPACPopupAuthorsSearch %]
-                                    <!-- Search term selection modal -->
-                                    <div id="subjectSearch" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="subjectSearchLabel" aria-hidden="true">
-                                        <div class="modal-header">
-                                            <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                                            <h3 id="subjectSearchLabel">Select the term(s) to search</h3>
-                                        </div>
-                                        <div id="subjectsList" class="modal-body">
-                                            <input type="checkbox" id="all_subjects" onchange="checkAll(this, '#subjectsList')" />
-                                            <label for="all_subjects">
-                                                <b>All</b>
-                                            </label>
-                                            [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                                                [% subjectsloop = loop %]
-                                                [% IF MARCSUBJCT.authoritylink %]
-                                                    <ul id="subjectsList[% loop.count | html %]" data-authid="[% MARCSUBJCT.authoritylink | html %]">
-                                                [% ELSE %]
-                                                    <ul id="subjectsList[% loop.count | html %]">
-                                                [% END %]
-                                                [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
-                                                    <li>
-                                                        <input type="checkbox" onclick="makeSubjectRequest()" name="checkbox" id="subject_[% subjectsloop.count | html %]_[% loop.count | html %]" value="su,wrdl:[% SUBFIELD.value |url %]" />
-                                                        <label for="subject_[% subjectsloop.count | html %]_[% loop.count | html %]">
-                                                            [% SUBFIELD.value | html %]
-                                                        </label>
-                                                    </li>
-                                                [% END %]
-                                                </ul>
-                                            [% END %]
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a href="#" id="validSubjectSearch" class="btn btn-primary">Search</a>
-                                            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-                                        </div>
-                                    </div>
-                                [% END # /OPACPopupAuthorsSearch%]
 
                                 [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
                                     [% subjectsloop = loop %]
                                     [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
                                         [% SUBFIELD.separator | html %]
-                                        [% IF Koha.Preference( 'OPACPopupAuthorsSearch' ) == 1 %]
-                                            <a role="button" data-toggle="modal" title="[% '$' _ SUBFIELD.code _ ' ' _ SUBFIELD.value | html %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]#subjectSearch" onclick="showSubjects(this, [% subjectsloop.count | html %], [% loop.count | html %]); return false;">[% SUBFIELD.value | html %]</a>
-                                        [% ELSE %]
-                                            <a title="[% '$' _ SUBFIELD.code _ ' ' _ SUBFIELD.value | html %]" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% SUBFIELD.value | html %]</a>
-                                        [% END %]
+                                        <a title="[% '$' _ SUBFIELD.code _ ' ' _ SUBFIELD.value | html %]" class="subject" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% SUBFIELD.value | html %]</a>
                                     [% END %]
                                     [% IF (MARCSUBJCT.authoritylink) %]
-                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCSUBJCT.authoritylink | html %]"><img style="vertical-align:middle" height="15" width="15" src="[% interface | html %]/[% theme | html %]/images/filefind.png" /></a>
+                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCSUBJCT.authoritylink | html %]"><i class="fa fa-search"></i></a>
                                     [% END %]
                                     [% UNLESS ( loop.last ) %] | [% END %]
                                 [% END # / FOREACH MARCSUBJCTS %]
                             </div>
                         [% ELSE # /IF MARCSUBJCTS %]
-                            [% IF ( subjects ) %]<span class="results_summary"><span class="label">Subject(s):</span> [% FOREACH subject IN subjects %]<a href="/cgi-bin/koha/opac-search.pl?q=su:[% subject.subject |url %]">[% subject.subject | html %]</a> | [% END %]</span>[% END %]
+                            [% IF ( subjects ) %]<span class="results_summary subjects"><span class="label">Subject(s):</span> [% FOREACH subject IN subjects %]<a class="subject" href="/cgi-bin/koha/opac-search.pl?q=su:[% subject.subject |url %]">[% subject.subject | html %]</a> | [% END %]</span>[% END %]
                         [% END %]
 
                         [% IF ( copyrightdate ) %]
@@ -1425,6 +1342,30 @@
     </table>
 [% END %][%# end of items_table block %]
 
+[% IF ( OPACPopupAuthorsSearch  ) %]
+    <!-- Modal -->
+    <div class="modal hide" id="multiSearch" tabindex="-1" role="dialog" aria-labelledby="multiSearchLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 id="multiSearchLabel">Select the item(s) to search</h3>
+                </div>
+                <div class="modal-body">
+                    <a href="#" class="check_all"><i class="fa fa-check"></i> Select all</a> <span class="sep">|</span>
+                    <a href="#" class="check_none"><i class="fa fa-remove"></i> Select none</a>
+                    <ul id="termsList">
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <a id="validMultiSearch" href="#" class="btn btn-primary">Search</a>
+                    <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#myModal -->
+[% END %]
+
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
@@ -1448,6 +1389,7 @@
 [% END %]
 
 <script>
+    var OPACPopupAuthorsSearch = "[% Koha.Preference('OPACPopupAuthorsSearch') | html %]";
     [% IF ( OpacHighlightedWords ) %]
         var q_array = new Array();  // holds search terms if available
 
@@ -1793,85 +1735,86 @@
             }
         }
     [% END # / IF IDreamBooksReviews || IDreamBooksReadometer %]
-</script>
 
-[% IF OPACPopupAuthorsSearch %]
-    <script>
-        function showAuthors(element){
-            var authornumber = $(element).attr("data-count");
+        $(document).ready(function() {
+            if( OPACPopupAuthorsSearch == "1" ){
+                var terms = {
+                    contributors : {
+                        "label" : "author",
+                        "keyword_search" : "au:",
+                    },
+                    subject : {
+                        "label" : "subject",
+                        "keyword_search" : "su:",
+                    }
+                }
+                $(".contributors,.subject").on("click", function(e){
+                    e.preventDefault();
+                    var term = $(this).attr("class");
+                    var selected_term = $(this).text();
+                    var term_links = $("." + term );
+                    if( term_links.length > 1 ){
+                        term_links.each(function( index ){
+                            var authid = "";
+                            var preselected = false;
+                            var search_label = $(this).text().trim();
+                            if( $(this).text() == selected_term ){ preselected = true }
+                            if( $(this).hasClass("authority_link") ){
+                                authid = $(this).data("authid");
+                                search_string = "an:" + authid;
+                            } else {
+                                search_string = terms[term]["keyword_search"] + encodeURIComponent( search_label );
+                            }
+                            var termLink = $("<li>")
+                                .append( $("<input>", { type: "checkbox", class: "select_term", value: search_string, id: terms[term]["label"] + index } ).prop("checked", preselected ) )
+                                .append("&nbsp;")
+                                .append( $("<label>", { for: terms[term]["label"] + index, text: search_label } ) )
+                            $("#termsList").append( termLink );
+                            $("#multiSearch").modal("show");
+                        });
+                    } else {
+                        location.href = $(this).attr("href");
+                    }
+                });
 
-            // Check checkbox related to the clicked link
-            $("#authorsList input[type='checkbox']").attr('checked', false);
-            $("#author_"+authornumber).attr('checked', true);
+                $("#multiSearch").on("hide.bs.modal", function(){
+                    $("#termsList").html("");
+                });
 
-            makeAuthorRequest();
-        }
+                $(".check_all").on("click", function(e){
+                    e.preventDefault();
+                    $(".select_term").each(function(){
+                        $(this).prop("checked", true );
+                    });
+                });
 
-        function checkAll(checkbox, elem) {
-            var check = $(checkbox).attr('checked') ? true : false;
-            $(elem).find("input[type='checkbox']").attr('checked', check);
-            elem == "#authorsList" ? makeAuthorRequest() : makeSubjectRequest();
-        }
+                $(".check_none").on("click", function(e){
+                    e.preventDefault();
+                    $(".select_term").each(function(){
+                        $(this).prop("checked", false );
+                    });
+                });
 
-        function makeAuthorRequest(){
+                $("#validMultiSearch").on("click", function(e){
+                    e.preventDefault();
+                    multiSearchRequest();
+                });
+            }
+        });
+
+        function multiSearchRequest(){
             var values = [];
-
-            $("#authorsList").find("input[type='checkbox']:checked").each(function () {
-                values.push($(this).val());
+            $(".select_term").each(function(){
+                if( $(this).prop("checked") ){
+                    values.push( $(this).val() );
+                }
             });
 
             if (values.length > 0) {
                 var request = "/cgi-bin/koha/opac-search.pl?q=" + values.join(' and ');
-                $("#validAuthorSearch").attr("href", request);
-            } else {
-                $("#validAuthorSearch").removeAttr("href");
+                location.href = request;
             }
 
         }
-
-        //Subjects
-        function showSubjects(element, subjectnumber, subfieldnumber){
-
-            // Check checkbox related to the clicked link
-            $("#subjectsList input[type='checkbox']").attr('checked', false);
-            $("#subject_"+subjectnumber+"_"+subfieldnumber).attr('checked', true);
-
-            makeSubjectRequest();
-
-        }
-
-        function makeSubjectRequest() {
-            var values = [];
-            $("#subjectsList > ul").each(function() {
-                var all_checked = true;
-                var local_values = [];
-                $(this).find('input[type="checkbox"]').each(function() {
-                    if($(this).attr('checked')) {
-                        local_values.push($(this).val());
-                    } else {
-                        all_checked = false;
-                    }
-                });
-                var authid = $(this).attr('data-authid');
-                if(all_checked && authid) {
-                    values.push('an:' + authid);
-                } else {
-                    values = values.concat(local_values);
-                }
-            });
-            if(values.length > 0) {
-                var request = "/cgi-bin/koha/opac-search.pl?q=" + values.join(' and ');
-                $("#validSubjectSearch").attr('href', request);
-            } else {
-                $("#validSubjectSearch").removeAttr("href");
-            }
-        }
-        $(document).ready(function() {
-            $("a.showauthors").click(function(e){
-                e.preventDefault();
-                showAuthors(this);
-            });
-        });
     </script>
-[% END # / IF OPACPopupAuthorsSearch  %]
 [% END %]
