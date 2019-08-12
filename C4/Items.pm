@@ -159,6 +159,7 @@ sub AddItemFromMarc {
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_values->{more_subfields_xml} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     $item_values->{biblionumber} = $biblionumber;
+    $item_values->{cn_source} = delete $item_values->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     my $item = Koha::Item->new( $item_values )->store;
     return ( $item->biblionumber, $item->biblioitemnumber, $item->itemnumber );
 }
@@ -237,6 +238,7 @@ sub AddItemBatchFromMarc {
         $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
         $item->{'biblionumber'} = $biblionumber;
         $item->{'biblioitemnumber'} = $biblioitemnumber;
+        $item->{cn_source} = delete $item->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
 
         # check for duplicate barcode
         my %item_errors = CheckItemPreSave($item);
@@ -278,6 +280,7 @@ sub ModItemFromMarc {
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
     my $item_object = Koha::Items->find($itemnumber);
     my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    $item->{cn_source} = delete $item->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     $item_object->set($item);
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
