@@ -166,38 +166,48 @@ function update_category_code(category_code) {
 }
 
 function select_user(borrowernumber, borrower) {
-    $('#guarantor_id').val(borrower.borrowernumber);
-    $('#guarantor_surname').val(borrower.surname);
-    $('#guarantor_firstname').val(borrower.firstname);
+    let is_guarantor = $(`.guarantor-details[data-borrowernumber=${borrower.borrowernumber}]`).length;
+    console.log("LEN: "  + is_guarantor );
 
-    var fieldset = $('#guarantor_template').clone();
-    fieldset.removeAttr('id');
-
-    var guarantor_id = $('#guarantor_id').val();
-    if ( guarantor_id ) {
-        fieldset.find('.new_guarantor_id').first().val( guarantor_id );
-        fieldset.find('.new_guarantor_id_text').first().text( guarantor_id );
+    if ( is_guarantor ) {
+        alert("Patron is already a guarantor for this patron");
     } else {
-        fieldset.find('.guarantor_id').first().hide();
+        $('#guarantor_id').val(borrower.borrowernumber);
+        $('#guarantor_surname').val(borrower.surname);
+        $('#guarantor_firstname').val(borrower.firstname);
+
+        var fieldset = $('#guarantor_template').clone();
+        fieldset.removeAttr('id');
+
+        var guarantor_id = $('#guarantor_id').val();
+        if ( guarantor_id ) {
+            fieldset.find('.new_guarantor_id').first().val( guarantor_id );
+            fieldset.find('.new_guarantor_id_text').first().text( guarantor_id );
+        } else {
+            fieldset.find('.guarantor_id').first().hide();
+        }
+        $('#guarantor_id').val("");
+
+        var guarantor_surname = $('#guarantor_surname').val();
+        fieldset.find('.new_guarantor_surname').first().val( guarantor_surname );
+        fieldset.find('.new_guarantor_surname_text').first().text( guarantor_surname );
+        $('#guarantor_surname').val("");
+
+        var guarantor_firstname = $('#guarantor_firstname').val();
+        fieldset.find('.new_guarantor_firstname').first().val( guarantor_firstname );
+        fieldset.find('.new_guarantor_firstname_text').first().text( guarantor_firstname );
+        $('#guarantor_firstname').val("");
+
+        var guarantor_relationship = $('#relationship').val();
+        fieldset.find('.new_guarantor_relationship').first().val( guarantor_relationship );
+        $('#relationship').find('option:eq(0)').prop('selected', true);
+
+        fieldset.find('.guarantor-details').first().attr( 'data-borrowernumber', borrower.borrowernumber );
+        console.log( fieldset.find('.guarantor-details').first().data() );
+
+        $('#guarantor_relationships').append( fieldset );
+        fieldset.show();
     }
-    $('#guarantor_id').val("");
-
-    var guarantor_surname = $('#guarantor_surname').val();
-    fieldset.find('.new_guarantor_surname').first().val( guarantor_surname );
-    fieldset.find('.new_guarantor_surname_text').first().text( guarantor_surname );
-    $('#guarantor_surname').val("");
-
-    var guarantor_firstname = $('#guarantor_firstname').val();
-    fieldset.find('.new_guarantor_firstname').first().val( guarantor_firstname );
-    fieldset.find('.new_guarantor_firstname_text').first().text( guarantor_firstname );
-    $('#guarantor_firstname').val("");
-
-    var guarantor_relationship = $('#relationship').val();
-    fieldset.find('.new_guarantor_relationship').first().val( guarantor_relationship );
-    $('#relationship').find('option:eq(0)').prop('selected', true);;
-
-    $('#guarantor_relationships').append( fieldset );
-    fieldset.show();
 
     return 0;
 }
