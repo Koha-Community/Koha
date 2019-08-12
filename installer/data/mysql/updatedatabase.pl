@@ -19239,6 +19239,17 @@ if ( CheckVersion($DBversion) ) {
 "Upgrade to $DBversion done (Bug 23228 - Add option to automatically display payment receipt for printing after making a payment)\n";
 }
 
+$DBversion = '19.06.00.020';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('PreserveSerialNotes','1','','When a new "Expected" issue is generated, should it be prefilled with last created issue notes?','YesNo');
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23416 - Add PreserveSerialNotes syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
