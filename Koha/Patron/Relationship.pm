@@ -18,8 +18,11 @@ package Koha::Patron::Relationship;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw( any );
+use Try::Tiny;
 
 use Koha::Database;
+use Koha::Exceptions::Patron::Relationship;
 
 use base qw(Koha::Object);
 
@@ -32,9 +35,41 @@ and provides a way to access those relationships.
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
+
+=head3 store
+
+Overloaded method that makes some checks before storing on the DB
+
+=cut
+
+sub store {
+    my ( $self ) = @_;
+
+    my @valid_relationships = split /,|\|/, C4::Context->preference('borrowerRelationship');
+
+    Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw(
+        no_relationship => 1 )
+        unless defined $self->relationship;
+
+    Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw(
+        relationship => $self->relationship )
+        unless any { $_ eq $self->relationship } @valid_relationships;
+
+    return try {
+        $self->SUPER::store;
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Object::DuplicateID' ) {
+            Koha::Exceptions::Patron::Relationship::DuplicateRelationship->throw(
+                guarantee_id => $self->guarantee_id,
+                guarantor_id => $self->guarantor_id
+            );
+        }
+    };
+}
 
 =head3 guarantor
 

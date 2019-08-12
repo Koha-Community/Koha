@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockObject;
 use Test::Exception;
 
@@ -125,6 +125,52 @@ subtest 'Koha::Exceptions::Metadata tests' => sub {
     throws_ok
         { Koha::Exceptions::Metadata::Invalid->throw( "Manual message exception" ) }
         'Koha::Exceptions::Metadata::Invalid',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
+
+subtest 'Koha::Exceptions::Patron::Relationship tests' => sub {
+
+    plan tests => 9;
+
+    use_ok('Koha::Exceptions::Patron::Relationship');
+
+    throws_ok
+        { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( no_relationship => 1 ); }
+        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", 'No relationship passed.', 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( relationship => 'some' ); }
+        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", "Invalid relationship passed, 'some' is not defined.", 'Exception stringified correctly' );
+
+    my $guarantor_id = 1;
+    my $guarantee_id = 2;
+
+    throws_ok {
+        Koha::Exceptions::Patron::Relationship::DuplicateRelationship->throw(
+            guarantor_id => $guarantor_id,
+            guarantee_id => $guarantee_id
+        );
+    }
+    'Koha::Exceptions::Patron::Relationship::DuplicateRelationship', 'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@",
+        "There already exists a relationship for the same guarantor ($guarantor_id) and guarantee ($guarantee_id) combination",
+        'Exception stringified correctly'
+    );
+
+    throws_ok
+        { Koha::Exceptions::Patron::Relationship::InvalidRelationship->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Patron::Relationship::InvalidRelationship',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
