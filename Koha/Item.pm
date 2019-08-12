@@ -76,7 +76,8 @@ sub store {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
 
-    if ( $self->itemcallnumber ) { # This could be improved, we should recalculate it only if changed
+    my %updated_columns = $self->_result->get_dirty_columns;
+    if ( exists $updated_columns{itemcallnumber} ) {
         my $cn_sort = GetClassSort($self->cn_source, $self->itemcallnumber, "");
         $self->cn_sort($cn_sort);
     }
@@ -135,7 +136,7 @@ sub store {
             }
         }
 
-        my %updated_columns = $self->_result->get_dirty_columns;
+        %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
         if (    exists $updated_columns{location}
             and $self->location ne 'CART'
