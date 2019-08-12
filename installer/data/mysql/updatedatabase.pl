@@ -18771,6 +18771,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (19.05.03 release)\n";
 }
 
+$DBversion = '19.05.03.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('PreserveSerialNotes','1','','When a new "Expected" issue is generated, should it be prefilled with last created issue notes?','YesNo');
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23416 - Add PreserveSerialNotes syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
