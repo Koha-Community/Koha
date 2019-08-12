@@ -72,6 +72,10 @@ sub new {
 
     my $self = $class->SUPER::new($params);
 
+    # Optionally, query ALL possible transfer limits for every item in order
+    # to generate a list of available pickup locations.
+    # Don't provide the following parameter if you want to skip this step.
+    $self->{'query_pickup_locations'} = $params->{'query_pickup_locations'};
     # Additionally, consider any transfer limits to pickup library by
     # providing to_branch parameter with branchcode of pickup library
     $self->{'to_branch'} = $params->{'to_branch'};
@@ -186,6 +190,7 @@ sub _item_looper {
         borrowernumber => $patron->borrowernumber,
     })->as_list if $patron;
     $self->{'hold_queue_length'} = scalar(@holds) || 0;
+    my $pickup_locations = {};
     foreach my $item (@items) {
         # Break out of loop after $limit items are found available
         if (defined $limit && @{$self->{'item_availabilities'}} >= $limit) {
@@ -193,6 +198,14 @@ sub _item_looper {
         }
         my $item_availability = $self->_item_check($item, $patron, \@holds, \@nonfound_holds, $intranet, $override);
         if ($item_availability->available) {
+            if ($self->{'query_pickup_locations'}) {
+                my $notes = $item_availability->notes;
+                if (defined $notes && ($notes = $notes->{'Koha::Exceptions::Item::PickupLocations'})) {
+                    foreach my $branchcode (@{$notes->to_libraries}) {
+                        $pickup_locations->{$branchcode} = 1;
+                    }
+                }
+            }
             push @{$self->{'item_availabilities'}}, $item_availability;
             $count++;
         } else {
@@ -213,7 +226,9 @@ sub _item_looper {
     if (@{$self->{'item_availabilities'}} == 0) {
         $self->unavailable(Koha::Exceptions::Biblio::NoAvailableItems->new);
     }
-
+    $self->note(Koha::Exceptions::Biblio::PickupLocations->new(
+        to_libraries => [sort { $a cmp $b } keys %$pickup_locations]
+    )) if $pickup_locations;
     return $self;
 }
 
@@ -223,6 +238,7 @@ sub _item_check {
     my $item_availability = Koha::Item::Availability::Hold->new({
         item => $item,
         patron => $patron,
+        query_pickup_locations => $self->query_pickup_locations,
         to_branch => $self->to_branch,
     });
 

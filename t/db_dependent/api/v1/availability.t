@@ -149,7 +149,7 @@ subtest '/availability/biblio' => sub {
                 to_library => $branch->branchcode,});
 
         subtest 'Test pickup locations search' => sub {
-            plan tests => 15;
+            plan tests => 17;
 
             t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
             t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
@@ -166,6 +166,7 @@ subtest '/availability/biblio' => sub {
 
             # Generate a bunch of libraries
             my $valid_pickup_locations = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+            my $example_limit_branch;
             for (my $i = 0; $i < 10; $i++) {
                 my $branch = $builder->build({ source => 'Branch', value => {
                     'pickup_location' => 1,
@@ -176,6 +177,7 @@ subtest '/availability/biblio' => sub {
                         $pl_item1->holdingbranch,
                         $pl_item1->effective_itemtype,
                     ), 1, 'We added a branch transfer limit to ' . $branch->{branchcode});
+                    $example_limit_branch = $branch->{branchcode};
                 } else {
                     push @{$valid_pickup_locations}, { branchcode => $branch->{branchcode} };
                 }
@@ -230,7 +232,31 @@ subtest '/availability/biblio' => sub {
                 ->json_is('/0/item_availabilities/2/availability/notes/Item::PickupLocations' => {
                     from_library => $pl_item3->holdingbranch,
                     to_libraries => []
+                })
+                ->json_is('/0/availability/notes/Biblio::PickupLocations' => {
+                    to_libraries => \@all_pickup_locations
                 });
+
+            subtest 'Test a case where all items have branch transfer limits' => sub {
+                plan tests => 3;
+                # Test a case where all items have branch transfer limits
+                C4::Circulation::CreateBranchTransferLimit(
+                    $example_limit_branch,
+                    $pl_item2->holdingbranch,
+                    $pl_item2->effective_itemtype,
+                );
+                my @limited_pickup_locations = grep {!/^$example_limit_branch$/} @all_pickup_locations;
+                @limited_pickup_locations = sort { $a cmp $b } @limited_pickup_locations;
+                $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$pl_item1->biblionumber.'&query_pickup_locations=1' );
+                $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+                $tx->req->env( { REMOTE_ADDR => $remote_address } );
+                $t->request_ok($tx)
+                    ->status_is(200)
+                    ->json_is('/0/availability/notes/Biblio::PickupLocations' => {
+                    to_libraries => \@limited_pickup_locations
+                });
+            };
+
         };
 
         $schema->storage->txn_rollback;

@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -231,6 +231,110 @@ sub t_itemlevelholdforbidden {
        'When I look at the item in this biblio, it is not to be available.');
     ok($availability->available, 'But then, the biblio is available.');
     is(@{$item_availabilities}, 1, 'There seems to be one available item in this biblio.');
+};
+
+subtest 'Pickup locations' => \&t_pickup_locations;
+sub t_pickup_locations {
+    plan tests => 17;
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    my $biblio = Koha::Biblios->find($item->biblionumber);
+    $item = Koha::Items->find($item->itemnumber);
+    my $expecting = 'Koha::Exceptions::Biblio::PickupLocations';
+
+    # Generate a bunch of libraries
+    my $valid_pickup_locations = Koha::Libraries->search({ pickup_location => 1 })->unblessed;
+    my $example_invalid_pickup_location;
+    for (my $i = 0; $i < 10; $i++) {
+        my $branch = $builder->build({ source => 'Branch', value => {
+            'pickup_location' => 1,
+        } });
+        if ($i % 2 == 0) {
+            is(C4::Circulation::CreateBranchTransferLimit(
+                $branch->{branchcode},
+                $item->holdingbranch,
+                $item->effective_itemtype,
+            ), 1, 'We added a branch transfer limit to ' . $branch->{branchcode});
+            $example_invalid_pickup_location = $branch->{branchcode};
+        } else {
+            push @{$valid_pickup_locations}, { branchcode => $branch->{branchcode} };
+        }
+    }
+
+    # push just the branchcodes in array for easy comparasion
+    my @valid_pickup_branchcodes = ();
+    foreach my $branch (@{$valid_pickup_locations}) {
+        push @valid_pickup_branchcodes, $branch->{branchcode};
+    }
+    @valid_pickup_branchcodes = sort { $a cmp $b } @valid_pickup_branchcodes;
+
+    my $availability = Koha::Biblio::Availability::Hold->new({
+        biblio                  => $biblio,
+        patron                  => $patron,
+        query_pickup_locations  => 1,
+    })->in_opac;
+
+    ok($availability->available,
+        'When I request availability, then the biblio is available.');
+    is(ref($availability->notes->{$expecting}), $expecting, 'Then there is an availability'
+        .' note that contains valid pickup locations.');
+
+    my @returned_branchcodes = @{$availability->notes->{$expecting}->to_libraries};
+    is_deeply(\@valid_pickup_branchcodes, \@returned_branchcodes,
+        scalar @valid_pickup_branchcodes . ' valid pickup locations!');
+    ok(!grep(/^$example_invalid_pickup_location$/, @returned_branchcodes),
+        "But for example $example_invalid_pickup_location is not a valid pickup location");
+
+
+    # Add another item without transfer limits, and all $valid_pickup_locations
+    # should now be in the list
+    my $item2 = build_a_test_item(
+        scalar Koha::Biblios->find($item->biblionumber),
+        scalar Koha::Biblioitems->find($item->biblioitemnumber)
+    );
+
+    $availability = Koha::Biblio::Availability::Hold->new({
+        biblio                  => $biblio,
+        patron                  => $patron,
+        query_pickup_locations  => 1,
+    })->in_opac;
+
+    ok($availability->available,
+        'After adding another item with no transfer limits, biblio is still available.');
+    is(ref($availability->notes->{$expecting}), $expecting,
+        'Then there is an availability note that contains valid pickup locations.');
+
+    @returned_branchcodes = @{$availability->notes->{$expecting}->to_libraries};
+    my $count = Koha::Libraries->search({ pickup_location => 1 })->count;
+    is($count, @returned_branchcodes, "$count valid pickup locations!");
+    ok(grep(/^$example_invalid_pickup_location$/, @returned_branchcodes),
+        "Previously invalid location $example_invalid_pickup_location is now a valid pickup location");
+
+    C4::Circulation::CreateBranchTransferLimit(
+        $example_invalid_pickup_location,
+        $item2->holdingbranch,
+        $item2->effective_itemtype,
+    );
+
+    $availability = Koha::Biblio::Availability::Hold->new({
+        biblio                  => $biblio,
+        patron                  => $patron,
+        query_pickup_locations  => 1,
+    })->in_opac;
+
+    ok($availability->available,
+        'After setting a transfer limit to the new item, biblio is still available.');
+    is(ref($availability->notes->{$expecting}), $expecting,
+        'Then there is an availability note that contains valid pickup locations.');
+
+    @returned_branchcodes = @{$availability->notes->{$expecting}->to_libraries};
+    is($count-1, @returned_branchcodes, "$count valid pickup locations!");
+    ok(!grep(/^$example_invalid_pickup_location$/, @returned_branchcodes),
+        "Previously valid location $example_invalid_pickup_location is not a valid pickup location anymore");
 };
 
 subtest 'Performance test' => \&t_performance_test;
