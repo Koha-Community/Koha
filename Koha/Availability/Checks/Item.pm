@@ -357,10 +357,24 @@ Returns Koha::Exceptions::Item::PickupLocations.
 sub pickup_locations {
     my ($self) = @_;
 
+    my $pickup_libraries = Koha::Libraries->search({
+        pickup_location => 1 })->unblessed;
     my $pickup_locations = [];
-    foreach my $library (Koha::Libraries->search({ pickup_location => 1 })->as_list) {
-        if (!$self->transfer_limit($library->branchcode)) {
-            push @{$pickup_locations}, $library->branchcode;
+    if (C4::Context->preference('UseBranchTransferLimits')) {
+        my $limit_type = C4::Context->preference('BranchTransferLimitsType');
+        my $limits = Koha::Item::Transfer::Limits->search({
+            fromBranch  => $self->item->holdingbranch,
+            $limit_type => $self->item->branch_transfer_limit_code,
+        })->unblessed;
+
+        foreach my $library (@$pickup_libraries) {
+            if (!grep { $library->{branchcode} eq $_->{toBranch} } @$limits) {
+                push @{$pickup_locations}, $library->{branchcode};
+            }
+        }
+    } else {
+        foreach my $library (@$pickup_libraries) {
+            push @{$pickup_locations}, $library->{branchcode};
         }
     }
 
