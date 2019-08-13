@@ -16,6 +16,18 @@
       "type": "object",
       "properties": {}
     },
+    "Biblio::PickupLocations": {
+      "description": "Biblio's items have these valid pickup locations for hold.",
+      "type": "object",
+      "properties": {
+        "to_libraries": {
+          "type": ["array", "null"],
+          "items": {
+            "$ref": "../../x-primitives.json#/branchcode"
+          }
+        }
+      }
+    },
     "Checkout::DueDateBeforeNow": {
       "description": "Given due date is in the past.",
       "type": "object",
