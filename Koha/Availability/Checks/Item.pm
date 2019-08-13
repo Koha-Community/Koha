@@ -431,18 +431,7 @@ sub transfer_limit {
 
     return unless C4::Context->preference('UseBranchTransferLimits');
     my $item = $self->item;
-    my $limit_type = C4::Context->preference('BranchTransferLimitsType');
-    my $code;
-    if ($limit_type eq 'itemtype') {
-        $code = $item->effective_itemtype;
-    } elsif ($limit_type eq 'ccode') {
-        $code = $item->ccode;
-    } else {
-        Koha::Exceptions::BadParameter->throw(
-            error => 'System preference BranchTransferLimitsType has an'
-            .' unrecognized value.'
-        );
-    }
+    my $code = $item->branch_transfer_limit_code;
 
     my $allowed = C4::Circulation::IsBranchTransferAllowed(
         $to_branch,
