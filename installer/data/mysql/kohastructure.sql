@@ -4080,6 +4080,7 @@ CREATE TABLE `borrower_relationships` (
       guarantee_id INT(11) NOT NULL,
       relationship VARCHAR(100) NOT NULL,
       PRIMARY KEY (id),
+      UNIQUE KEY `guarantor_guarantee_idx` ( `guarantor_id`, `guarantee_id` ),
       CONSTRAINT r_guarantor FOREIGN KEY ( guarantor_id ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE,
       CONSTRAINT r_guarantee FOREIGN KEY ( guarantee_id ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
