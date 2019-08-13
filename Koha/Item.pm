@@ -32,6 +32,7 @@ use Koha::Item::Transfers;
 use Koha::Patrons;
 use Koha::Libraries;
 
+use Koha::Exceptions;
 use Koha::Exceptions::Library;
 
 use base qw(Koha::Object);
@@ -316,6 +317,35 @@ sub current_holds {
     };
     my $hold_rs = $self->_result->reserves->search( $params, $attributes );
     return Koha::Holds->_new_from_dbic($hold_rs);
+}
+
+=head3 branch_transfer_limit_code
+
+Returns item's branch transfer limit code. It can be either item's item type
+or item's ccode.
+
+Throws Koha::Exceptions::BadParameter if BranchTransferLimitsType is incorrectly
+configured.
+
+=cut
+
+sub branch_transfer_limit_code {
+    my ($self) = @_;
+
+    my $limit_type = C4::Context->preference('BranchTransferLimitsType');
+    my $code;
+    if ($limit_type eq 'itemtype') {
+        $code = $self->effective_itemtype;
+    } elsif ($limit_type eq 'ccode') {
+        $code = $self->ccode;
+    } else {
+        Koha::Exceptions::BadParameter->throw(
+            error => 'System preference BranchTransferLimitsType has an'
+                .' unrecognized value.'
+        );
+    }
+
+    return $code;
 }
 
 =head3 type

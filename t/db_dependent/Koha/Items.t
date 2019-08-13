@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use C4::Circulation;
 use Koha::Item;
@@ -164,6 +164,35 @@ subtest 'can_be_transferred' => sub {
     is(ref($@), 'Koha::Exceptions::Library::BranchcodeNotFound', 'Exception thrown when invalid library is given.');
     eval { $item->can_be_transferred({ to => $library2, from => 'hell' }); };
     is(ref($@), 'Koha::Exceptions::Library::BranchcodeNotFound', 'Exception thrown when invalid library is given.');
+};
+
+subtest 'branch_transfer_limit_code' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+
+    my $item_type_code = 'item_type99';
+    my $ccode_code = 'collection_code99';
+    my $library = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $item  = Koha::Item->new({
+        biblionumber     => $biblioitem->{biblionumber},
+        biblioitemnumber => $biblioitem->{biblioitemnumber},
+        homebranch       => $library,
+        holdingbranch    => $library,
+        itype            => $item_type_code,
+        ccode            => $ccode_code,
+        barcode          => "somerandombarcode",
+    })->store;
+    $nb_of_items++;
+
+    ok($item->can('branch_transfer_limit_code'), 'Method available');
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    is($item->branch_transfer_limit_code, $item_type_code, 'Limit by itemtype');
+
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
+    is($item->branch_transfer_limit_code, $ccode_code, 'Limit by ccode');
 };
 
 $retrieved_item_1->delete;
