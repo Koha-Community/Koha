@@ -39,6 +39,7 @@
                                     <th>Cost</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,6 +47,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="3">Total payable:</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                             </tfoot>
@@ -183,7 +185,8 @@
         invoiceTitle,
         invoicePrice,
         1,
-        null
+        null,
+        '<button class="drop"><i class="fa fa-trash"></i> Remove</button>'
          ]
       );
     }
@@ -263,7 +266,7 @@
                 "bSortable": false,
                 "bSearchable": false,
             }, {
-                "aTargets": [-1],
+                "aTargets": [-2],
                 "mRender": function ( data, type, full ) {
                     var price = Number.parseFloat(data).toFixed(2);
                     return '£'+price;
@@ -302,6 +305,10 @@
                 $('#paid').trigger('change');
             }
         }));
+
+        $("#sale").on("click", "button.drop", function(){
+                sale_table.DataTable().row($(this).parents('tr')).remove().draw(false);
+        });
 
         var items_table = $("#invoices").dataTable($.extend(true,{}, dataTablesDefaults, {
                "aoColumnDefs": [
