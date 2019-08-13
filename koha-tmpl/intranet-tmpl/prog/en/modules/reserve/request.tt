@@ -167,11 +167,7 @@
 
   <fieldset class="rows left">
     <legend>Hold details</legend>
-        [% UNLESS ( multi_hold ) %]
-            <form action="placerequest.pl" method="post" onsubmit="return check();" name="form" id="hold-request-form">
-        [% ELSE %]
-            <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
-        [% END %]
+        <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
 
         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
         <input type="hidden" name="type" value="str8" />
@@ -746,6 +742,16 @@
                 "width":"auto",
                 "margin-right":"0em"
             });
+
+            [% UNLESS ( multi_hold ) %]
+                $("#hold-request-form").on("submit", function(){
+                    return check();
+                });
+            [% ELSE %]
+                $("#hold-request-form").on("submit", function(){
+                    return checkMultiHold();
+                });
+            [% END %]
 
         });
 
