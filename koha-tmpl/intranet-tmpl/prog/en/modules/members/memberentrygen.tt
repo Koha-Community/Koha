@@ -60,7 +60,7 @@
 	[% IF ( check_member ) %]
 			<div class="dialog alert">
 				<h3>Duplicate patron record?</h3>
-                <p><a class="popup" href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member | html %]');return false;" >View existing record</a></p>
+                <p><a class="popup" href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]');return false;" >View existing record</a></p>
                 <button id="duplicate" type="submit" class="new"><i class="fa fa-pencil"></i> It is a duplicate.
                 Edit existing record</button>
 

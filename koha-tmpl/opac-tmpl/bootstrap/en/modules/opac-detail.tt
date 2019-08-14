@@ -915,7 +915,7 @@
                                                     [% FILTER html_break %]
                                                         [% review.review | html %]
                                                     [% END %]
-                                                    <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber | html %]&amp;reviewid=[% review.reviewid | html %]');">Edit</a>
+                                                    <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber | uri %]&amp;reviewid=[% review.reviewid | uri %]');">Edit</a>
                                                 </p>
                                             </div>
                                         [% ELSE %]
@@ -956,7 +956,7 @@
 
                                 [% IF ( loggedinusername ) %]
                                     [% UNLESS ( loggedincommenter ) %]
-                                       <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | html %]'); return false;">
+                                       <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% biblio.biblionumber | uri %]'); return false;">
                                             Post your comments on this item.
                                         </a></div>
                                     [% END %]

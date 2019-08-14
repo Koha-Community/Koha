@@ -473,7 +473,7 @@
                                                         [% END # / IF TagsInputEnabled %]
 
                                                         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                            <span class="actions"><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]'); return false;">Save to another list</a></span>
+                                                            <span class="actions"><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | uri %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | uri %]'); return false;">Save to another list</a></span>
                                                         [% END %]
 
                                                         [% IF can_remove_biblios %]
