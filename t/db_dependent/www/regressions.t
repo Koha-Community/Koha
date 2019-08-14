@@ -38,9 +38,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'open redirection vulnerabilities in tracklinks' => sub {
-    plan tests => 30;
-
-    $schema->storage->txn_begin;
+    plan tests => 36;
 
     # No URI's
     my $biblio        = $builder->build_sample_biblio();
@@ -58,12 +56,12 @@ subtest 'open redirection vulnerabilities in tracklinks' => sub {
     $biblio = $builder->build_sample_biblio();
     my $biblionumber3 = $biblio->biblionumber;
     $record        = $biblio->metadata->record;
-    $new856 = MARC::Field->new( '856', '', '', u => "www.google.com" );
+    $new856 = MARC::Field->new( '856', '', '', u => "http://www.google.com" );
     $record->insert_fields_ordered($new856);
     C4::Biblio::ModBiblio( $record, $biblionumber3 );
 
     # URI at Item level
-    my $item = $builder->build_sample_item( { uri => 'www.google.com' } );
+    my $item = $builder->build_sample_item( { uri => 'http://www.google.com' } );
     my $itemnumber1 = $item->itemnumber;
 
     # Incorrect URI at Item level
@@ -132,6 +130,4 @@ subtest 'open redirection vulnerabilities in tracklinks' => sub {
       ->status_is( 404, "404 for itemnumber containing different URI" );
     $t->get_ok( $opac . $good_itemnumber )
       ->status_is( 302, "302 for itemnumber with matching URI" );
-
-    $schema->storage->txn_rollback;
 };

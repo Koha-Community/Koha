@@ -22,6 +22,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Auth qw(checkauth);
 use C4::Biblio;
+use C4::Output;
 use Koha::Items;
 use Koha::Linktracker;
 use CGI qw ( -utf8 );
@@ -78,5 +79,5 @@ if ($uri && ($biblionumber || $itemnumber) ) {
     }
 }
 
-print $cgi->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
+output_error( $cgi, '404' );
 exit;
