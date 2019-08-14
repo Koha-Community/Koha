@@ -17,7 +17,7 @@
             <main>
 
 			<h2>Quick spine label creator</h2>
-				<form action="/cgi-bin/koha/labels/spinelabel-print.pl" method="post">
+                <form action="/cgi-bin/koha/labels/spinelabel-print.pl" method="post" id="spinelabelprint">
 				<fieldset class="brief">
 				<ol>
 					<li><label for="barcode">Barcode: </label>
@@ -40,6 +40,16 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    <script>
+        $(document).ready(function(){
+            $("#spinelabelprint").on("submit", function(e){
+                e.preventDefault();
+                var params = $(this).serialize();
+                openWindow("/cgi-bin/koha/labels/spinelabel-print.pl?" + params,"Print spine label",400,400);
+                $("#barcode").val("").focus();
+            });
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

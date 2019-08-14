@@ -209,10 +209,10 @@
                 [% IF materials %]<th>Materials specified</th>[% END %]
                 [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
                 [% IF ( itemdata_nonpublicnotes ) %]<th>Non-public notes</th>[% END %]
-                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine label</th>[% END %]
                 [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
                 [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
                 [% IF ( ShowCourseReserves ) %]<th>Course Reserves</th>[% END %]
+                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th class="NoSort">Spine label</th>[% END %]
                 [% IF ( CAN_user_editcatalogue_edit_items ) %]<th class="NoSort">&nbsp;</th>[% END %]
             </tr>
         </thead>
@@ -365,9 +365,6 @@
                     [% IF itemdata_nonpublicnotes %]
                         <td class="nonpublicnote">[% item.itemnotes_nonpublic | html %]</td>
                     [% END %]
-                    [% IF ( SpineLabelShowPrintOnBibDetails ) %]
-                        <td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% item.barcode | uri %]" >Print label</a></td>
-                    [% END %]
                     [% IF ( hostrecords ) %]
                         <td>[% IF ( item.hostbiblionumber) %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.hostbiblionumber | uri %]" >[% item.hosttitle | html %]</a>[% END %]</td>
                     [% END %]
@@ -400,6 +397,11 @@
                        [% END %]
                     </td>
                 [% END %]
+
+                [% IF ( SpineLabelShowPrintOnBibDetails ) %]
+                    <td><a class="btn btn-default btn-xs print-label" href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% item.barcode | uri %]"><i class="fa fa-print"></i> Print label</a></td>
+                [% END %]
+
                 [% IF CAN_user_editcatalogue_edit_items %]
                     <td class="actions">
                         [% UNLESS item.cannot_be_edited %]
@@ -937,7 +939,11 @@
                     }
                  });
              [% END %]
-
+             $(".print-label").on("click", function(e){
+                e.preventDefault();
+                link = $(this).attr("href");
+                openWindow(link,"Print spine label",400,400);
+             });
         });
 
         [% IF ( AmazonCoverImages || LocalCoverImages ) %]$(window).load(function() {
