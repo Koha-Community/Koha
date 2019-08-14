@@ -31,6 +31,7 @@ use strict;
 use URI::Escape;
 use Scalar::Util qw( looks_like_number );
 
+use C4::Auth qw(get_template_and_user);
 use C4::Context;
 use C4::Templates;
 
@@ -51,7 +52,7 @@ BEGIN {
     );
     push @EXPORT, qw(
         &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers
-        &output_and_exit_if_error &output_and_exit
+        &output_and_exit_if_error &output_and_exit &output_error
     );
 
 }
@@ -363,6 +364,24 @@ sub output_and_exit {
     $template->param( blocking_error => $error );
     output_html_with_http_headers ( $query, $cookie, $template->output );
     exit;
+}
+
+sub output_error {
+    my ( $query, $error ) = @_;
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => 'errors/errorpage.tt',
+            query           => $query,
+            type            => 'intranet',
+            authnotrequired => 1,
+        }
+    );
+    my $admin = C4::Context->preference('KohaAdminEmailAddress');
+    $template->param (
+        admin => $admin,
+        errno => $error,
+    );
+    output_with_http_headers $query, $cookie, $template->output, 'html', '404 Not Found';
 }
 
 sub parametrized_url {
