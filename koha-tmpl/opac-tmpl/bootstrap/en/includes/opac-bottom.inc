@@ -196,7 +196,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         return false;
     });
     $("#ulactioncontainer > ul > li > a.addtoshelf").on("click",function(){
-        Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber | html %]');
+        Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber | uri %]');
         return false;
     });
     $("body").on("click", ".addtocart", function(e){
