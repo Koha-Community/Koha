@@ -134,7 +134,7 @@
                                     <h3>Please transfer item to: [% Branches.GetName( collectionBranch ) | html %]</h3>
                                     <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
                                     <p>This item is part of a rotating collection.</p>
-                                    <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% collectionBranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
+                                    <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% collectionBranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
                                 </div>
                             [% END %]
 
@@ -290,7 +290,6 @@
                                         [% IF ( errmsgloo.foreverdebarred ) %]
                                             <p class="problem"><b>Reminder: </b>Patron has an indefinite restriction.</p>
                                         [% END %]
-
                                         [% IF errmsgloo.data_corrupted %]
                                             <p class="problem">The item has not been checked in due to a configuration issue in your system. You must ask an administrator to take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a> and search for the "data problems" section</p>
                                         [% END %]
@@ -374,7 +373,7 @@
                                                 <!-- CONFIRM -->
                                                 <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                                                 <!-- PRINT SLIP -->
-                                                <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+                                                <button type="button" data-dismiss="modal" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% TransferWaitingAt | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
                                                 <!-- CANCEL TRANSFER -->
                                                 <form method="post" action="returns.pl" name="mainform">
                                                     <button class="btn btn-default deny" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
@@ -522,11 +521,11 @@
                                                 <div class="modal-footer">
                                                     [% IF !transfer %]
                                                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve"><i class="fa fa-check"></i> Yes</button>
-                                                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
+                                                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button>
                                                         <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
                                                     [% ELSE %]
                                                         <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                                                        <button type="button" data-dismiss="modal" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
+                                                        <button type="button" data-dismiss="modal" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
@@ -934,11 +933,11 @@
 
             $(".print-slip").on('click', function(e) {
                 e.preventDefault();
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;biblionumber=[% biblionumber | html %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;biblionumber=[% biblionumber | uri %]');
             });
 
             [% IF print_slip %]
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber | html %]&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% itemnumber | html %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber | uri %]&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]');
             [% END %]
 
             var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]

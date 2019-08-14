@@ -169,7 +169,7 @@
                                         <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; "><i class="fa fa-fw fa-envelope"></i> Send list</a></span>
                                     [% END %]
 
-                                    <a class="btn btn-link print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction |uri %]&print=1"><i class="fa fa-fw fa-print"></i> Print list</a>
+                                    <a class="btn btn-link print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction | uri %]&print=1"><i class="fa fa-fw fa-print"></i> Print list</a>
 
                                     [% IF can_manage_shelf %]
                                         <span class="sep">|</span>
@@ -481,7 +481,7 @@
                                                         [% END # / IF TagsInputEnabled %]
 
                                                         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                            <span class="actions"><a class="btn btn-link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]'); return false;"><i class="fa fa-fw fa-list"></i> Save to another list</a></span>
+                                                            <span class="actions"><a class="btn btn-link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | uri %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | uri %]'); return false;"><i class="fa fa-fw fa-list"></i> Save to another list</a></span>
                                                         [% END %]
 
                                                         [% IF can_remove_biblios %]
