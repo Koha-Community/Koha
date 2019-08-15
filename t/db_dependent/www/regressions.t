@@ -33,6 +33,14 @@ my $intranet =
   $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseURL");
 my $opac = $ENV{KOHA_OPAC_URL} || C4::Context->preference("OPACBaseURL");
 
+my $context = C4::Context->new();
+my $db_name   = $context->config("database");
+my $db_host   = $context->config("hostname");
+my $db_port   = $context->config("port") || '';
+my $db_user   = $context->config("user");
+my $db_passwd = $context->config("pass");
+`mysqldump --add-drop-table -u $db_user --password="$db_passwd" -h $db_host -P $db_port $db_name > dumpfile.sql`;
+
 my $t       = Test::Mojo->new();
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -131,3 +139,6 @@ subtest 'open redirection vulnerabilities in tracklinks' => sub {
     $t->get_ok( $opac . $good_itemnumber )
       ->status_is( 302, "302 for itemnumber with matching URI" );
 };
+
+`mysql -u $db_user --password="$db_passwd" -h $db_host -P $db_port --database="$db_name" < dumpfile.sql`;
+`rm dumpfile.sql`;
