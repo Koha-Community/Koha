@@ -19250,6 +19250,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23416 - Add PreserveSerialNotes syspref)\n";
 }
 
+$DBversion = '19.06.00.021';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q|
+        ALTER TABLE marc_subfield_structure CHANGE COLUMN hidden hidden TINYINT(1) DEFAULT 8 NOT NULL;
+    |);
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23309 - Can't add new subfields to bibliographic frameworks in strict mode)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
