@@ -3074,14 +3074,18 @@ subtest 'ProcessOfflinePayment() tests' => sub {
 };
 
 subtest 'Incremented fee tests' => sub {
-    plan tests => 11;
+    plan tests => 16;
 
-    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    my $dt = dt_from_string();
+    Time::Fake->offset( $dt->epoch );
 
-    my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
+
+    my $library =
+      $builder->build_object( { class => 'Koha::Libraries' } )->store;
 
     my $module = new Test::MockModule('C4::Context');
-    $module->mock('userenv', sub { { branch => $library->id } });
+    $module->mock( 'userenv', sub { { branch => $library->id } } );
 
     my $patron = $builder->build_object(
         {
@@ -3093,9 +3097,9 @@ subtest 'Incremented fee tests' => sub {
     my $itemtype = $builder->build_object(
         {
             class => 'Koha::ItemTypes',
-            value  => {
-                notforloan          => undef,
-                rentalcharge        => 0,
+            value => {
+                notforloan         => undef,
+                rentalcharge       => 0,
                 rentalcharge_daily => 1.000000
             }
         }
@@ -3108,32 +3112,45 @@ subtest 'Incremented fee tests' => sub {
         }
     );
 
-    is( $itemtype->rentalcharge_daily, '1.000000', 'Daily rental charge stored and retreived correctly' );
-    is( $item->effective_itemtype, $itemtype->id, "Itemtype set correctly for item");
+    is( $itemtype->rentalcharge_daily,
+        '1.000000', 'Daily rental charge stored and retreived correctly' );
+    is( $item->effective_itemtype, $itemtype->id,
+        "Itemtype set correctly for item" );
 
-    my $dt_from = dt_from_string();
-    my $dt_to = dt_from_string()->add( days => 7 );
+    my $dt_from     = dt_from_string();
+    my $dt_to       = dt_from_string()->add( days => 7 );
     my $dt_to_renew = dt_from_string()->add( days => 13 );
 
-    t::lib::Mocks::mock_preference('finesCalendar', 'ignoreCalendar');
-    my $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
-    my $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
-    is( $accountline->amount, '7.000000', "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar" );
+    # Daily Tests
+    t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
+    my $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    my $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '7.000000',
+"Daily rental charge calculated correctly with finesCalendar = ignoreCalendar"
+    );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
-    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
-    is( $accountline->amount, '6.000000', "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar, for renewal" );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '6.000000',
+"Daily rental charge calculated correctly with finesCalendar = ignoreCalendar, for renewal"
+    );
     $accountline->delete();
     $issue->delete();
 
-    t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
-    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
-    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
-    is( $accountline->amount, '7.000000', "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed" );
+    t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
+    $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '7.000000',
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed"
+    );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
-    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
-    is( $accountline->amount, '6.000000', "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed, for renewal" );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '6.000000',
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed, for renewal"
+    );
     $accountline->delete();
     $issue->delete();
 
@@ -3143,27 +3160,74 @@ subtest 'Incremented fee tests' => sub {
         title       => 'Test holiday',
         description => 'Test holiday'
     );
-    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
-    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
-    is( $accountline->amount, '6.000000', "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
+    $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '6.000000',
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays"
+    );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
-    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
-    is( $accountline->amount, '5.000000', "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays, for renewal" );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '5.000000',
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays, for renewal"
+    );
     $accountline->delete();
     $issue->delete();
 
     $itemtype->rentalcharge('2.000000')->store;
-    is( $itemtype->rentalcharge, '2.000000', 'Rental charge updated and retreived correctly' );
-    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from);
-    my $accountlines = Koha::Account::Lines->search({ itemnumber => $item->id });
-    is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly");
+    is( $itemtype->rentalcharge, '2.000000',
+        'Rental charge updated and retreived correctly' );
+    $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    my $accountlines =
+      Koha::Account::Lines->search( { itemnumber => $item->id } );
+    is( $accountlines->count, '2',
+        "Fixed charge and accrued charge recorded distinctly" );
     $accountlines->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
-    $accountlines = Koha::Account::Lines->search({ itemnumber => $item->id });
-    is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly, for renewal");
+    $accountlines = Koha::Account::Lines->search( { itemnumber => $item->id } );
+    is( $accountlines->count, '2',
+        "Fixed charge and accrued charge recorded distinctly, for renewal" );
     $accountlines->delete();
     $issue->delete();
+    $itemtype->rentalcharge('00.000000')->store;
+    is( $itemtype->rentalcharge, '00.000000',
+        'Rental charge reset and retreived correctly' );
+
+    # Hourly
+    my $issuingrule = Koha::IssuingRules->get_effective_issuing_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $itemtype->id,
+            branchcode   => $library->id
+        }
+    );
+    $issuingrule->lengthunit('hours')->store();
+    is( $issuingrule->lengthunit, 'hours',
+        'Issuingrule updated and retrieved correctly' );
+
+    $itemtype->rentalcharge_hourly('2.500000')->store();
+    is( $itemtype->rentalcharge_hourly,
+        '2.500000', 'Hourly rental charge stored and retreived correctly' );
+
+    $dt_to       = dt_from_string()->add( hours => 4 );
+    $dt_to_renew = dt_from_string()->add( hours => 6 );
+
+    $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '10.000000',
+        "Hourly rental charge calculated correctly" );
+    $accountline->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount, '5.000000',
+        "Hourly rental charge calculated correctly, for renewal" );
+    $accountline->delete();
+    $issue->delete();
+    $issuingrule->lengthunit('days')->store();
+    Time::Fake->reset;
 };
 
 subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
