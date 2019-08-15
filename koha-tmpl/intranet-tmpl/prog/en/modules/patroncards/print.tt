@@ -36,10 +36,12 @@
                 </fieldset>
             </form>
             [% ELSIF ( patronlist_id && template_id && layout_id ) %]
-                <h3>Click on the link to download the patron cards from the patron list.</h3>
+                <div id="export_patron_list">
+                    <h3>Click on the link to download the patron cards from the patron list.</h3>
                     <p>
                         <a class="document pdf" href="/cgi-bin/koha/patroncards/create-pdf.pl?patronlist_id=[% patronlist_id | html %]&amp;template_id=[% template_id | html %]&amp;layout_id=[% layout_id | html %]&amp;layout_back_id=[% layout_back_id | html %]&amp;start_card=[% start_card | html %]">label_patronlist_[% patronlist_id | html %].pdf</a>
                     </p>
+                </div>
             [% ELSE %]
             <h3>
                     [% IF ( label_ids ) %]

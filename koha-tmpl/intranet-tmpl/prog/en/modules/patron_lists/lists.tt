@@ -47,7 +47,7 @@
                         <td>
                             [% IF l.shared %]
                                 [% IF shared_by_other %]
-                                    by <a href=/cgi-bin/koha/members/moremember.pl?borrowernumber=[% l.owner.id | html %]">[% INCLUDE 'patron-title.inc' patron=l.owner %]</a>
+                                    by <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% l.owner.id | uri %]">[% INCLUDE 'patron-title.inc' patron=l.owner %]</a>
                                 [% ELSE %]
                                     by you
                                 [% END %]
@@ -128,7 +128,7 @@
     <script>
         $(document).ready(function() {
             var patronExportModal = $("#patronExportModal");
-            var patronExportModalBody = $("#patronExportModal .modal-body")
+            var patronExportModalBody = $("#patronExportModal .modal-body");
 
             $('#patron-lists-table').dataTable($.extend(true, {}, dataTablesDefaults, {
                 "autoWidth": false,
@@ -160,7 +160,7 @@
                 modal_body.html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
                 target_url = $(this).attr("action");
                 params =  $( this ).serialize();
-                modal_body.load( target_url + "?" + params + " #custom-doc");
+                $("#patronExportModal .modal-body").load( target_url + "?" + params + " #export_patron_list");
             });
 
             patronExportModal.on("click",".closebtn,.gb-close",function(e){
