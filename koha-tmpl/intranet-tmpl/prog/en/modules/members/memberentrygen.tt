@@ -66,16 +66,16 @@ $(document).ready(function() {
     });
 
     [% IF email %]
-    patron_email = "[% email %]";
+    patron_email = "[% email |html %]";
     [% END %]
     [% IF phone %]
-    patron_phone = "[% phone %]";
+    patron_phone = "[% phone |html %]";
     [% END %]
     [% IF smsalertnumber %]
-    patron_sms = "[% smsalertnumber %]";
+    patron_sms = "[% smsalertnumber |html %]";
     [% END %]
     [% IF borrowernumber %]
-    borrowernumber = [% borrowernumber %]
+    borrowernumber = [% borrowernumber |html %]
     [% END %]
     var MSG_INCORRECT_PHONE = _("Please enter a valid phone number.");
     $.validator.addMethod('phone', function(value) {
