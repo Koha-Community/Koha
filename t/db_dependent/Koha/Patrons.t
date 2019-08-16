@@ -87,6 +87,9 @@ subtest 'library' => sub {
 
 subtest 'guarantees' => sub {
     plan tests => 13;
+
+    t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test|test2' );
+
     my $guarantees = $new_patron_1->guarantee_relationships;
     is( ref($guarantees), 'Koha::Patron::Relationships', 'Koha::Patron->guarantees should return a Koha::Patrons result set in a scalar context' );
     is( $guarantees->count, 0, 'new_patron_1 should have 0 guarantee relationships' );

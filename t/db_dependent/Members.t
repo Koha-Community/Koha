@@ -265,6 +265,9 @@ $patstodel = GetBorrowersToExpunge( {not_borrowed_since => '2016-01-02', patron_
 ok( scalar(@$patstodel) == 1 && $patstodel->[0]->{'borrowernumber'} eq $bor2inlist,'Staff patron not deleted by last issue date');
 
 Koha::Patrons->find($bor1inlist)->set({ categorycode => 'CIVILIAN' })->store;
+
+t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
+
 my $relationship = Koha::Patron::Relationship->new( { guarantor_id => $bor1inlist, guarantee_id => $guarantee->{borrowernumber}, relationship => 'test' } )->store();
 
 $patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
