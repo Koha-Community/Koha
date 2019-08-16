@@ -823,9 +823,9 @@ sub _isbn_cleanup {
     ) if $isbn;
 }
 
-=head2 NormalizedISBN
+=head2 NormalizeISBN
 
-  my $isbns = NormalizedISBN({
+  my $isbns = NormalizeISBN({
     isbn => $isbn,
     strip_hyphens => [0,1],
     format => ['ISBN-10', 'ISBN-13']
