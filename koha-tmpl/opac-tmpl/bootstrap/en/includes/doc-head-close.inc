@@ -8,11 +8,11 @@
 <link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | url %]/[% theme | url %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% IF ( bidi ) %]
     [% Asset.css("lib/bootstrap/css/bootstrap-rtl.min.css") | $raw %]
-    [% Asset.css("lib/jquery/jquery-ui-rtl.css") | $raw %]
+    [% Asset.css("lib/jquery/jquery-ui-rtl-1.12.1.min.css") | $raw %]
     [% Asset.css("css/right-to-left.css") | $raw %]
 [% ELSE %]
     [% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
-    [% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
+    [% Asset.css("lib/jquery/jquery-ui-1.12.1.min.css") | $raw %]
 [% END %]
 [% IF ( Koha.Preference('opaclayoutstylesheet') ) %]
     [% SET opaclayoutstylesheet = Koha.Preference('opaclayoutstylesheet') %]

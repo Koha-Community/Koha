@@ -699,7 +699,7 @@ function tagAdded() {
 function enableCheckboxActions(){
     // Enable/disable controls if checkboxes are checked
     var checkedBoxes = $(".checkboxed input:checkbox:checked");
-    var controls = $("#selections-toolbar .links a, #selections-toolbar .links input, #selections-toolbar .links select, , #selections-toolbar .links label")
+    var controls = $("#selections-toolbar .links a, #selections-toolbar .links input, #selections-toolbar .links select, #selections-toolbar .links label")
     if ($(checkedBoxes).size()) {
       $("#selections").html(_("With selected titles: "));
       $(controls).removeClass("disabled");

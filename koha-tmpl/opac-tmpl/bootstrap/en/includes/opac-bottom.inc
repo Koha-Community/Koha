@@ -81,8 +81,9 @@
 
 
 <!-- JavaScript includes -->
-[% Asset.js("lib/jquery/jquery.js") | $raw %]
-[% Asset.js("lib/jquery/jquery-ui.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-3.4.1.min.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-migrate-3.1.0.min.js") | $raw %]
+[% Asset.js("lib/jquery/jquery-ui-1.12.1.min.js") | $raw %]
 <script>
 // Resolve name collision between jQuery UI and Twitter Bootstrap
 $.widget.bridge('uitooltip', $.ui.tooltip);
