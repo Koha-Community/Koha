@@ -389,7 +389,7 @@
                 [% FOREACH unit IN ir_units %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
-                    <td>The [% unit.branchcode | html %], [% unit.categorycode | html %], [% unit.itemtype %] 
+                    <td>The [% unit.branchcode | html %], [% unit.categorycode | html %], [% unit.itemtype | html %] 
                         issuingrule will fallback to 'days' for 'lengthunit' as it is incorrectly defined as 
                         [% unit.lengthunit | html %]. 
                     </td>
