@@ -229,7 +229,7 @@
             <br/>
         [% END %]
 
-        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules %]
             <h2>Warnings regarding the system configuration</h2>
             <table>
                 <caption>Preferences and parameters</caption>
@@ -380,6 +380,21 @@
                 </tr>
                 [% END %]
             [% END %]
+            </table>
+        [% END %]
+
+        [% IF warnIssuingRules %]
+            <table>
+                <caption>Issuing rules</caption>
+                [% FOREACH unit IN ir_units %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>The [% unit.branchcode | html %], [% unit.categorycode | html %], [% unit.itemtype %] 
+                        issuingrule will fallback to 'days' for 'lengthunit' as it is incorrectly defined as 
+                        [% unit.lengthunit | html %]. 
+                    </td>
+                </tr>
+                [% END %]
             </table>
         [% END %]
 

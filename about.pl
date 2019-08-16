@@ -444,6 +444,22 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
         );
     }
 }
+
+# Circ rule warnings
+{
+    my $dbh   = C4::Context->dbh;
+    my $units = $dbh->selectall_arrayref(
+        q|SELECT branchcode, categorycode, itemtype, lengthunit FROM issuingrules WHERE lengthunit NOT IN ( 'days', 'hours' ); |,
+        { Slice => {} }
+    );
+
+    if (@$units) {
+        $template->param(
+            warnIssuingRules => 1,
+            ir_units         => $units,
+        );
+    }
+}
 my %versions = C4::Context::get_versions();
 
 $template->param(
