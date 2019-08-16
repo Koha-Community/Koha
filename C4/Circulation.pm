@@ -707,8 +707,7 @@ sub CanBookBeIssued {
     unless ( $duedate ) {
         my $issuedate = $now->clone();
 
-        my $branch = $circ_library;
-        $duedate = CalcDateDue( $issuedate, $effective_itemtype, $branch, $patron_unblessed );
+        $duedate = CalcDateDue( $issuedate, $effective_itemtype, $circ_library->branchcode, $patron_unblessed );
 
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
@@ -998,16 +997,23 @@ sub CanBookBeIssued {
               if ( $patron->branchcode ne $userenv->{branch} );
         }
     }
+
     #
     # CHECK IF THERE IS RENTAL CHARGES. RENTAL MUST BE CONFIRMED BY THE BORROWER
     #
     my $rentalConfirmation = C4::Context->preference("RentalFeesCheckoutConfirmation");
-
-    if ( $rentalConfirmation ){
+    if ($rentalConfirmation) {
         my ($rentalCharge) = GetIssuingCharges( $item_object->itemnumber, $patron->borrowernumber );
-        my $itemtype = Koha::ItemTypes->find( $item_object->itype ); # GetItem sets effective itemtype
-        $rentalCharge += $fees->accumulate_rentalcharge({ from => dt_from_string(), to => $duedate });
-        if ( $rentalCharge > 0 ){
+
+        my $itemtype_object = Koha::ItemTypes->find( $item_object->effective_itemtype );
+        if ($itemtype_object) {
+            my $accumulate_charge = $fees->accumulate_rentalcharge();
+            if ( $accumulate_charge > 0 ) {
+                $rentalCharge += $accumulate_charge;
+            }
+        }
+
+        if ( $rentalCharge > 0 ) {
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
         }
     }
@@ -1475,7 +1481,7 @@ sub AddIssue {
             if ( $itemtype_object ) {
                 my $accumulate_charge = $fees->accumulate_rentalcharge();
                 if ( $accumulate_charge > 0 ) {
-                    AddIssuingCharge( $issue, $accumulate_charge, 'RENT_DAILY' ) if $accumulate_charge > 0;
+                    AddIssuingCharge( $issue, $accumulate_charge, 'RENT_DAILY' );
                     $charge += $accumulate_charge;
                     $item_unblessed->{charge} = $charge;
                 }
