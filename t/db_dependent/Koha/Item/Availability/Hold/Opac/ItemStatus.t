@@ -352,7 +352,7 @@ sub t_more_than_maxreserves {
 
 subtest 'Pickup locations' => \&t_pickup_locations;
 sub t_pickup_locations {
-    plan tests => 8;
+    plan tests => 10;
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
@@ -399,6 +399,14 @@ sub t_pickup_locations {
     my @returned_branchcodes = @{$availability->notes->{'Koha::Exceptions::Item::PickupLocations'}->to_libraries};
     is_deeply(\@valid_pickup_branchcodes, \@returned_branchcodes,
         scalar @valid_pickup_branchcodes . ' valid pickup locations!');
+
+    my $availability = Koha::Item::Availability::Hold->new({
+        item                    => $item,
+        patron                  => $patron,
+    })->in_opac;
+
+    ok($availability->available, 'Without query_pickup_locations, item is still available.');
+    ok(!$availability->note, 'But there are no availability notes, as expected.');
 };
 
 $schema->storage->txn_rollback;

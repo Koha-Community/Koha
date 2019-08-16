@@ -235,7 +235,7 @@ sub t_itemlevelholdforbidden {
 
 subtest 'Pickup locations' => \&t_pickup_locations;
 sub t_pickup_locations {
-    plan tests => 17;
+    plan tests => 19;
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
@@ -335,6 +335,14 @@ sub t_pickup_locations {
     is($count-1, @returned_branchcodes, "$count valid pickup locations!");
     ok(!grep(/^$example_invalid_pickup_location$/, @returned_branchcodes),
         "Previously valid location $example_invalid_pickup_location is not a valid pickup location anymore");
+
+    my $availability = Koha::Biblio::Availability::Hold->new({
+        biblio                  => $biblio,
+        patron                  => $patron,
+    })->in_opac;
+
+    ok($availability->available, 'Without query_pickup_locations, biblio is still available.');
+    ok(!$availability->note, 'But there are no availability notes, as expected.');
 };
 
 subtest 'Performance test' => \&t_performance_test;

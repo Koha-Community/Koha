@@ -149,7 +149,7 @@ subtest '/availability/biblio' => sub {
                 to_library => $branch->branchcode,});
 
         subtest 'Test pickup locations search' => sub {
-            plan tests => 17;
+            plan tests => 20;
 
             t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
             t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
@@ -236,6 +236,13 @@ subtest '/availability/biblio' => sub {
                 ->json_is('/0/availability/notes/Biblio::PickupLocations' => {
                     to_libraries => \@all_pickup_locations
                 });
+
+            $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$pl_item1->biblionumber );
+            $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+            $tx->req->env( { REMOTE_ADDR => $remote_address } );
+            $t->request_ok($tx)
+                ->status_is(200)
+                ->json_hasnt('/0/availability/notes/Biblio::PickupLocations');
 
             subtest 'Test a case where all items have branch transfer limits' => sub {
                 plan tests => 3;
@@ -398,7 +405,7 @@ subtest '/availability/item' => sub {
                 to_library => $branch->branchcode,});
 
         subtest 'Test pickup locations search' => sub {
-            plan tests => 11;
+            plan tests => 14;
 
             t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
             t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
@@ -455,6 +462,13 @@ subtest '/availability/item' => sub {
                 from_library => $pl_item->holdingbranch,
                 to_libraries => $pickup_locations
             });
+
+            $tx = $t->ua->build_tx( GET => $route . '?itemnumber='.$pl_item->itemnumber );
+            $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+            $tx->req->env( { REMOTE_ADDR => $remote_address } );
+            $t->request_ok($tx)
+                ->status_is(200)
+                ->json_hasnt('/0/availability/notes/Item::PickupLocations');
         };
 
         $schema->storage->txn_rollback;
