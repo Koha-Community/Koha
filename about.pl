@@ -460,6 +460,52 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
         );
     }
 }
+
+# Guarantor relationships warnings
+{
+    my $dbh   = C4::Context->dbh;
+    my ($bad_relationships_count) = $dbh->selectall_arrayref(q{
+        SELECT COUNT(*)
+        FROM (
+            SELECT relationship FROM borrower_relationships WHERE relationship='_bad_data'
+            UNION ALL
+            SELECT relationship FROM borrowers WHERE relationship='_bad_data') a
+    });
+
+    $bad_relationships_count = $bad_relationships_count->[0]->[0];
+
+    my @existing_relationships = $dbh->selectall_array(q{
+        SELECT DISTINCT(relationship)
+        FROM (
+            SELECT relationship FROM borrower_relationships WHERE relationship IS NOT NULL
+            UNION ALL
+            SELECT relationship FROM borrowers WHERE relationship IS NOT NULL) a
+    });
+
+    my %valid_relationships = map { $_ => 1 } split( /,|\|/, C4::Context->preference('borrowerRelationship') );
+    $valid_relationships{ _bad_data } = 1; # we handle this case in another way
+
+    my @wrong_relationships = grep { !$valid_relationships{ $_->[0] } } @existing_relationships;
+
+    if ( @wrong_relationships or $bad_relationships_count ) {
+
+        $template->param(
+            warnRelationships => 1,
+        );
+
+        if ( @wrong_relationships ) {
+            $template->param(
+                wrong_relationships => \@wrong_relationships
+            );
+        }
+        if ($bad_relationships_count) {
+            $template->param(
+                bad_relationships_count => $bad_relationships_count,
+            );
+        }
+    }
+}
+
 my %versions = C4::Context::get_versions();
 
 $template->param(

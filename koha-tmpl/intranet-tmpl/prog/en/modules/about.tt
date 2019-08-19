@@ -184,7 +184,7 @@
         </div>
 
         <div id="sysinfo">
-    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs %]
+    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -227,6 +227,23 @@
                 <p>[% FOR h IN ai_holds %][% h.reserve_id | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             <br/>
+        [% END %]
+
+        [% IF warnRelationships %]
+            <h2>Patron relationship problems</h2>
+            [% IF bad_relationships_count %]
+                <p>Your database contained guarantee/guarantor pairs with no defined relationship. They have been set the value '_bad_data' in the [% "borrowers.relationship" | $HtmlTags tag="strong" %] and/or [% "borrower_relationships.relationship" | $HtmlTags tag="strong" %] columns. Fix them manually by recreating those relationships, or have your system's administrator correct the values.</p>
+            [% END %]
+
+            [% IF wrong_relationships %]
+                <p>The following values have been used for guarantee/guarantor relationships, but do not exist in the 'borrowerRelationship' system preference:</p>
+                <ul>
+                    [% FOR rel IN wrong_relationships %]
+                        <li>[% rel.0 | html %]</li>
+                    [% END %]
+                </ul>
+                <p>If the relationship is one you want, please add it to the 'borrowerRelationship' system preference, otherwise have your system's administrator correct the values in [% "borrowers.relationship" | $HtmlTags tag="strong" %] and/or [% "borrower_relationships.relationship" | $HtmlTags tag="strong" %] in the database.</p>
+            [% END %]
         [% END %]
 
         [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules %]
