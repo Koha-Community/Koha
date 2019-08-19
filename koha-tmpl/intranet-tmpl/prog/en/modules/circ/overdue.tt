@@ -34,7 +34,11 @@
 
   <p>
     [% IF ( isfiltered ) %]
-      <a href="overdue.pl?op=csv&amp;[% csv_param_string | uri %]">Download file of displayed overdues</a>
+        [% SET url_params = '' %]
+        [% FOR var IN filters.keys %]
+            [% url_params = BLOCK %][% url_params %]&amp;[% var | uri %]=[% filters.$var | uri %][% END %]
+        [% END %]
+      <a href="overdue.pl?op=csv[% url_params | $raw %]">Download file of displayed overdues</a>
     [% ELSE %]
       <a href="overdue.pl?op=csv">Download file of all overdues</a>
     [% END %]
@@ -102,15 +106,15 @@
 	<fieldset><legend>Date due:</legend>
 	<ol>
     <li><label for="from">From:</label>
-    <input type="text" id="from" name="dateduefrom" size="10" value="[% dateduefrom | $KohaDates %]" class="datepickerfrom" />
+    <input type="text" id="from" name="dateduefrom" size="10" value="[% filters.dateduefrom | $KohaDates %]" class="datepickerfrom" />
 	</li>
 	<li>
     <label for="to">To:</label>
-    <input type="text" id="to" name="datedueto" size="10" value="[% datedueto | $KohaDates %]" class="datepickerto" />
+    <input type="text" id="to" name="datedueto" size="10" value="[% filters.datedueto | $KohaDates %]" class="datepickerto" />
     </li>
     </ol></fieldset>
     <ol>
-    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname | html %]" /></li>
+    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% filters.borname | html %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       [% FOREACH borcatloo IN borcatloop %]
         [% IF ( borcatloo.selected ) %]<option value="[% borcatloo.value | html %]" selected="selected">[% borcatloo.catname | html %]</option>[% ELSE %]<option value="[% borcatloo.value | html %]">[% borcatloo.catname | html %]</option>[% END %]
@@ -167,7 +171,7 @@
         <label>Item home library:</label>
         <select name="homebranch" id="homebranch">
             <option value="">Any</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => homebranchfilter ) %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => filters.homebranch ) %]
         </select>
     </li>
 
@@ -175,7 +179,7 @@
         <label>Item holding library:</label>
         <select name="holdingbranch" id="holdingbranch">
             <option value="">Any</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => holdingbranchfilter ) %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => filters.holdingbranch ) %]
         </select>
     </li>
 
@@ -183,7 +187,7 @@
         <label>Library of the patron:</label>
         <select name="branch" id="branch">
             <option value="">Any</option>
-            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter, only_from_group => 1 ) %]
+            [% PROCESS options_for_libraries libraries => Branches.all( selected => filters.branch, only_from_group => 1 ) %]
         </select>
     </li>
 
