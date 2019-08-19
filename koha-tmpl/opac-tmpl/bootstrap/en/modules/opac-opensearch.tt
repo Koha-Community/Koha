@@ -24,7 +24,7 @@
    <channel>
      <title><![CDATA[[% LibraryName | html %] Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]]]></title>
      <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss</link>
-     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;sort_by=[% sort_by | uri %]&amp;format=atom"/>
+     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi | $raw %][% SEARCH_RESULT.limit_cgi | $raw %]&amp;sort_by=[% sort_by | uri %]&amp;format=atom"/>
      <description><![CDATA[ Search results [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %] at [% LibraryName | html %]]]></description>
      <opensearch:totalResults>[% total | html %]</opensearch:totalResults>
      <opensearch:startIndex>[% offset | html %]</opensearch:startIndex>
@@ -40,11 +40,11 @@
        <title>[% INCLUDE 'biblio-title-head.inc' biblio=SEARCH_RESULT %]</title>
        <dc:identifier>ISBN [% SEARCH_RESULT.isbn | html %]</dc:identifier>
         [% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %]
-            <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" />
+        <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
         [% ELSIF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %]
-            <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" />
+        <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
         [% ELSE %]
-            <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" />
+        <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
         [% END %]
        <description><![CDATA[
 [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
