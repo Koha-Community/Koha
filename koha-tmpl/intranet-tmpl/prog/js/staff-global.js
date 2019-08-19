@@ -149,6 +149,7 @@ $.fn.selectTabByID = function (tabID) {
             }
         });
         resetSearchContext();
+        saveOrClearSimpleSearchParams();
     });
     /* any link to launch a search except navigation links */
     $("[href*='search.pl?']").not(".nav").not('.searchwithcontext').click(function(){
@@ -339,4 +340,10 @@ function getContextBiblioNumbers() {
 
 function resetSearchContext() {
     setContextBiblioNumbers( new Array() );
+}
+
+function saveOrClearSimpleSearchParams() {
+    // Simple masthead search - pass value for display on details page
+    localStorage.setItem('cat_search_pulldown_selection', $("#cat-search-block select.advsearch").val() );
+    localStorage.setItem('searchbox_value', $("#cat-search-block #search-form").val() );
 }
