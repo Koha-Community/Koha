@@ -29,6 +29,7 @@ my $Import = Koha::Patrons::Import->new();
 my $csv_file;
 my $matchpoint;
 my $overwrite_cardnumber;
+my $overwrite_passwords;
 my %defaults;
 my $ext_preserve = 0;
 my $confirm;
@@ -41,6 +42,7 @@ GetOptions(
     'm|matchpoint=s'                => \$matchpoint,
     'd|default=s'                   => \%defaults,
     'o|overwrite'                   => \$overwrite_cardnumber,
+    'op|overwrite_passwords'        => \$overwrite_passwords,
     'p|preserve-extended-attributes' => \$ext_preserve,
     'v|verbose+'                    => \$verbose,
     'h|help|?'                      => \$help,
@@ -61,6 +63,7 @@ my $return = $Import->import_patrons(
         defaults                     => \%defaults,
         matchpoint                   => $matchpoint,
         overwrite_cardnumber         => $overwrite_cardnumber,
+        overwrite_passwords          => $overwrite_passwords,
         preserve_extended_attributes => $ext_preserve,
     }
 );

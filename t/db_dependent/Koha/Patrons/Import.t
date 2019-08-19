@@ -434,6 +434,45 @@ subtest 'test_import_with_cardnumber_0' => sub {
 
 };
 
+subtest 'test_import_with_password_overwrite' => sub {
+    plan tests => 4;
+
+    #Remove possible existing user to avoid clashes
+    my $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
+    $ernest->delete if $ernest;
+
+    #Setup our info
+    my $branchcode = $builder->build({ source => "Branch"})->{branchcode};
+    my $categorycode = $builder->build({ source => "Category"})->{categorycode};
+    my $csv_headers  = 'surname,userid,branchcode,categorycode,password';
+    my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest";
+    my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern";
+    my $defaults = { cardnumber => "" }; #currently all the defaults come as "" if not filled
+
+    #Make the test files for importing
+    my $filename_1 = make_csv($temp_dir, $csv_headers, $csv_password);
+    open(my $handle_1, "<", $filename_1) or die "cannot open < $filename_1: $!";
+    my $params_1 = { file => $handle_1, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1};
+    my $filename_2 = make_csv($temp_dir, $csv_headers, $csv_password_change);
+    open(my $handle_2, "<", $filename_2) or die "cannot open < $filename_2: $!";
+    my $params_2 = { file => $handle_2, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1};
+
+
+    my $result = $patrons_import->import_patrons($params_1, $defaults);
+    like($result->{feedback}->[1]->{value}, qr/^Worrell \/ \d+/, 'First borrower imported as expected');
+    $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
+    isnt($ernest->password,'Ernest',"New patron is imported, password is encrypted");
+
+    #Save info to double check
+    my $orig_pass = $ernest->password;
+
+    $result = $patrons_import->import_patrons($params_2, $defaults);
+    $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
+    isnt($ernest->password,$orig_pass,"New patron is overwritten, password is overwritten");
+    isnt($ernest->password,'Vern',"Password is overwritten and is encrypted from value provided");
+
+};
+
 
 subtest 'test_prepare_columns' => sub {
     plan tests => 16;

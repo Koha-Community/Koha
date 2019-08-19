@@ -128,6 +128,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             defaults                     => \%defaults,
             matchpoint                   => $matchpoint,
             overwrite_cardnumber         => $input->param('overwrite_cardnumber'),
+            overwrite_passwords          => $input->param('overwrite_passwords'),
             preserve_extended_attributes => $input->param('ext_preserve') || 0,
         }
     );

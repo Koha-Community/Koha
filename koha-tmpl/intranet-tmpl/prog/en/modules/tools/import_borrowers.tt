@@ -220,6 +220,12 @@
 
                 <li class="radio">
                     <input type="radio" id="overwrite_cardnumberyes" name="overwrite_cardnumber" value="1" /><label for="overwrite_cardnumberyes">Overwrite the existing one with this</label>
+                    <ul>
+                        <li>
+                            <input type="checkbox" id="overwrite_passwords" name="overwrite_passwords" disabled="true"/>
+                            <label for="overwrite_passwords">Replace patron passwords with those in the file</label>
+                        </li
+                    </ul>
                 </li>
             </ol>
         </fieldset>
@@ -276,7 +282,7 @@
         </li>
 
         <li>
-            'password' should be stored in plaintext, and will be converted to a Bcrypt hash (if your passwords are already encrypted, talk to your system administrator about options).
+            'password' should be stored in plaintext, and will be converted to a Bcrypt hash (if your passwords are already encrypted, talk to your system administrator about options). Passwords will not be updated on overwrite unless replace passwords option is checked.
         </li>
 
         <li>
@@ -312,6 +318,13 @@ you can supply dates in ISO format (e.g., '2010-10-28').
                 $(".default_values").toggle();
                 $(".expand_defaults").toggle();
             });
+        });
+
+        $("#overwrite_cardnumberno").click(function(){
+            $("#overwrite_passwords").prop('checked',false).prop('disabled',true);
+        });
+        $("#overwrite_cardnumberyes").click(function(){
+            $("#overwrite_passwords").prop('disabled',false);
         });
     </script>
 [% END %]

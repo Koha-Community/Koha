@@ -71,6 +71,7 @@ sub import_patrons {
     my $defaults             = $params->{defaults};
     my $ext_preserve         = $params->{preserve_extended_attributes};
     my $overwrite_cardnumber = $params->{overwrite_cardnumber};
+    my $overwrite_passwords  = $params->{overwrite_passwords};
     my $extended             = C4::Context->preference('ExtendedPatronAttributes');
     my $set_messaging_prefs  = C4::Context->preference('EnhancedMessagingPreferences');
 
@@ -255,8 +256,8 @@ sub import_patrons {
                 # use values from extant patron unless our csv file includes this column or we provided a default.
                 # FIXME : You cannot update a field with a  perl-evaluated false value using the defaults.
 
-                # The password is always encrypted, skip it!
-                next if $col eq 'password';
+                # The password is always encrypted, skip it unless we are forcing overwrite!
+                next if $col eq 'password' && !$overwrite_passwords;
 
                 unless ( exists( $csvkeycol{$col} ) || $defaults->{$col} ) {
                     $borrower{$col} = $member->{$col} if ( $member->{$col} );
@@ -300,6 +301,9 @@ sub import_patrons {
                         }
                     );
                 }
+            }
+            if ($overwrite_passwords){
+                $patron->set_password({ password => $borrower{password} });
             }
             if ($extended) {
                 if ($ext_preserve) {
