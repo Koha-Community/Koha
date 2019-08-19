@@ -22,11 +22,27 @@ if( CheckVersion( $DBversion ) ) {
             SET borrowers.guarantorid = NULL WHERE guarantor.borrowernumber IS NULL;
         });
 
+        # Bad data handling: guarantorid IS NOT NULL AND relationship IS NULL
+        $dbh->do(q{
+            UPDATE borrowers
+            SET relationship = '_bad_data'
+            WHERE guarantorid IS NOT NULL AND
+                  relationship IS NULL
+        });
+
         $dbh->do(q{
             INSERT INTO borrower_relationships ( guarantor_id, guarantee_id, relationship )
             SELECT guarantorid, borrowernumber, relationship FROM borrowers WHERE guarantorid IS NOT NULL;
         });
 
+        # Clean migrated guarantor data
+        $dbh->do(q{
+            UPDATE borrowers
+            SET contactname=NULL,
+                contactfirstname=NULL,
+                relationship=NULL
+            WHERE guarantorid IS NOT NULL
+        });
     }
 
      if( column_exists( 'borrowers', 'guarantorid' ) ) {
