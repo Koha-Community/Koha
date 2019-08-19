@@ -19201,13 +19201,22 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do("UPDATE marc_subfield_structure JOIN fieldmapping ON tagfield = fieldcode AND subfieldcode=tagsubfield SET kohafield='biblio.subtitle' WHERE fieldmapping.frameworkcode=''");
     $sth = $dbh->prepare("SELECT * FROM fieldmapping WHERE frameworkcode != '' OR field != 'subtitle'");
     $sth->execute;
-    print "Keyword to MARC mappings below cannot be preserved: \n" if $sth->rows;
-    while ( my $value = $sth->fetchrow_hashref() ){
-        my $framework = $value->{frameworkcode} eq "" ? "Default" : $value->{frameworkcode};
-        print "    keyword: " . $value->{'field'} . " to field: " . $value->{fieldcode} . "\$" . $value->{subfieldcode} . " for $framework framework\n";
+    my @fails_11529;
+    if ( $sth->rows ) {
+        while ( my $value = $sth->fetchrow_hashref() ) {
+            my $framework =
+              $value->{frameworkcode} eq ""
+              ? "Default"
+              : $value->{frameworkcode};
+            push @fails_11529,
+              {
+                field        => $value->{field},
+                fieldcode    => $value->{fieldcode},
+                subfieldcode => $value->{subfieldcode},
+                framework    => $framework
+              };
+        }
     }
-    print "You will need to remap using Koha to MARC mappings in administration\n" if $sth->rows;
-
 
     $dbh->do( "DROP TABLE IF EXISTS fieldmapping" );
 
@@ -19217,7 +19226,21 @@ if( CheckVersion( $DBversion ) ) {
 
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 11529 - Add medium, subtitle and part information to biblio table)\n";
+    print "Upgrade to $DBversion done (Bug 11529: Add medium, subtitle and part information to biblio table)\n";
+    if ( @fails_11529 ) {
+        print "WARNING: Not all Keyword to MARC mappings could be preserved\n";
+        for my $fail_11529 ( @fails_11529 ) {
+            print "    keyword: "
+              . $fail_11529->{field}
+              . " to field: "
+              . $fail_11529->{fieldcode} . "\$"
+              . $fail_11529->{subfieldcode} . " for "
+              . $fail_11529->{framework}
+              . " framework\n";
+        }
+        print "You will need to remap using Koha to MARC mappings in administration\n";
+    }
+    print "NOTE: misc/batchRebuildBiblioTables.pl should be run to populate the fields introduced in bug 11529. It may take some time for larger databases.\n\n"
 }
 
 $DBversion = '19.06.00.019';
