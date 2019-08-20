@@ -19284,6 +19284,74 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23309 - Can't add new subfields to bibliographic frameworks in strict mode)\n";
 }
 
+$DBversion = '19.06.00.022';
+if ( CheckVersion($DBversion) ) {
+
+    unless ( TableExists('borrower_relationships') ) {
+        $dbh->do(q{
+            CREATE TABLE `borrower_relationships` (
+                  id INT(11) NOT NULL AUTO_INCREMENT,
+                  guarantor_id INT(11) NOT NULL,
+                  guarantee_id INT(11) NOT NULL,
+                  relationship VARCHAR(100) NOT NULL,
+                  PRIMARY KEY (id),
+                  UNIQUE KEY `guarantor_guarantee_idx` ( `guarantor_id`, `guarantee_id` ),
+                  CONSTRAINT r_guarantor FOREIGN KEY ( guarantor_id ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE,
+                  CONSTRAINT r_guarantee FOREIGN KEY ( guarantee_id ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        });
+
+        $dbh->do(q{
+            UPDATE borrowers
+            LEFT JOIN borrowers guarantor ON ( borrowers.guarantorid = guarantor.borrowernumber )
+            SET borrowers.guarantorid = NULL WHERE guarantor.borrowernumber IS NULL;
+        });
+
+        # Bad data handling: guarantorid IS NOT NULL AND relationship IS NULL
+        $dbh->do(q{
+            UPDATE borrowers
+            SET relationship = '_bad_data'
+            WHERE guarantorid IS NOT NULL AND
+                  relationship IS NULL
+        });
+
+        $dbh->do(q{
+            INSERT INTO borrower_relationships ( guarantor_id, guarantee_id, relationship )
+            SELECT guarantorid, borrowernumber, relationship FROM borrowers WHERE guarantorid IS NOT NULL;
+        });
+
+        # Clean migrated guarantor data
+        $dbh->do(q{
+            UPDATE borrowers
+            SET contactname=NULL,
+                contactfirstname=NULL,
+                relationship=NULL
+            WHERE guarantorid IS NOT NULL
+        });
+    }
+
+    if ( column_exists( 'borrowers', 'guarantorid' ) ) {
+        $dbh->do(q{
+            ALTER TABLE borrowers DROP guarantorid;
+        });
+    }
+
+    if ( column_exists( 'deletedborrowers', 'guarantorid' ) ) {
+        $dbh->do(q{
+            ALTER TABLE deletedborrowers DROP guarantorid;
+        });
+    }
+
+    if ( column_exists( 'borrower_modifications', 'guarantorid' ) ) {
+        $dbh->do(q{
+            ALTER TABLE borrower_modifications DROP guarantorid;
+        });
+    }
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 14570 - Make it possible to add multiple guarantors to a record)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';

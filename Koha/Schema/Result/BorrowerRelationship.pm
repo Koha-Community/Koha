@@ -72,6 +72,22 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<guarantor_guarantee_idx>
+
+=over 4
+
+=item * L</guarantor_id>
+
+=item * L</guarantee_id>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("guarantor_guarantee_idx", ["guarantor_id", "guarantee_id"]);
+
 =head1 RELATIONS
 
 =head2 guarantee
@@ -110,8 +126,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-07-18 10:52:59
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R8RThgcrct40Zq0UMW3TWQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-08-20 15:14:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZymvWAn9Nzfuh1lExUIhIg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
