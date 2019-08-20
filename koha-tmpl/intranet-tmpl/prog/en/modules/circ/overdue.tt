@@ -36,7 +36,7 @@
     [% IF ( isfiltered ) %]
         [% SET url_params = '' %]
         [% FOR var IN filters.keys %]
-            [% url_params = BLOCK %][% url_params %]&amp;[% var | uri %]=[% filters.$var | uri %][% END %]
+            [% url_params = BLOCK %][% url_params | uri %]&amp;[% var | uri %]=[% filters.$var | uri %][% END %]
         [% END %]
       <a href="overdue.pl?op=csv[% url_params | $raw %]">Download file of displayed overdues</a>
     [% ELSE %]
