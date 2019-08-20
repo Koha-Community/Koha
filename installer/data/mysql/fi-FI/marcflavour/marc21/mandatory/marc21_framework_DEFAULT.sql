@@ -395,7 +395,7 @@ INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, 
         ('657','Tapahtuma tai toiminto hakuterminä','Tapahtuma tai toiminto hakuterminä', 1, 0, NULL, ''),
         ('658','Opinto-ohjelman tai kurssin tavoitteet hakuterminä','Opinto-ohjelman tai kurssin tavoitteet hakuterminä', 1, 0, NULL, ''),
         ('662','Hierarkkinen maantieteellinen nimi asiasanana','Hierarkkinen maantieteellinen nimi asiasanana', 1, 0, NULL, ''),
-        ('690','LOCAL SUBJECT ADDED ENTRY--TOPICAL TERM (OCLC, RLIN)','LOCAL SUBJECT ADDED ENTRY--TOPICAL TERM (OCLC, RLIN)', 1, 0, NULL, '');
+        ('690','LOCAL SUBJECT ADDED ENTRY--TOPICAL TERM (OCLC, RLIN)','LOCAL SUBJECT ADDED ENTRY--TOPICAL TERM (OCLC, RLIN)', 1, 0, NULL, ''),
         ('691','LOCAL SUBJECT ADDED ENTRY--GEOGRAPHIC NAME (RLIN)','LOCAL SUBJECT ADDED ENTRY--GEOGRAPHIC NAME (RLIN)', 1, 0, NULL, ''),
         ('696','LOCAL SUBJECT ADDED ENTRY--PERSONAL NAME (RLIN)','LOCAL SUBJECT ADDED ENTRY--PERSONAL NAME (RLIN)', 1, 0, NULL, ''),
         ('697','LOCAL SUBJECT ADDED ENTRY--CORPORATE NAME (RLIN)','LOCAL SUBJECT ADDED ENTRY--CORPORATE NAME (RLIN)', 1, 0, NULL, ''),
