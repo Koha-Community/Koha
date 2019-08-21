@@ -70,6 +70,13 @@ if( $op eq 'view' || $op eq 'list' ){
         });
 }
 
+if (C4::Context->preference("BakerTaylorEnabled")) {
+    $template->param(
+        BakerTaylorImageURL => &image_url(),
+        BakerTaylorLinkURL  => &link_url(),
+    );
+}
+
 my $referer  = $query->param('referer')  || $op;
 my $category = $query->param('category') || 1;
 my ( $shelf, $shelfnumber, @messages );

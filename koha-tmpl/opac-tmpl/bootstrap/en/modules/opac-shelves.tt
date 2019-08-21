@@ -368,10 +368,21 @@
                                                             [% END %]
 
                                                         </a> <!-- / .p1 -->
-                                                        [% IF ( BakerTaylorEnabled ) %]
+                                                        [% IF ( Koha.Preference('BakerTaylorEnabled') && !Koha.Preference('BakerTaylorBookstoreURL') ) %]
                                                             [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
                                                             [% IF ( bt_id ) %]
-                                                                <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                                                <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
+                                                            [% ELSE %]
+                                                                <span class="no-image">No cover image available</span>
+                                                            [% END %]
+                                                        [% END %]
+
+                                                        [% IF ( Koha.Preference('BakerTaylorEnabled') && Koha.Preference('BakerTaylorBookstoreURL') ) %]
+                                                            [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
+                                                            [% IF ( bt_id ) %]
+                                                                <a href="https://[% Koha.Preference('BakerTaylorBookstoreURL') | uri %][% bt_id | uri %]">
+                                                                    <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
+                                                                </a>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
