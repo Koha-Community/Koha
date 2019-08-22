@@ -551,9 +551,9 @@ subtest 'apply() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Keep account info when related patron, staff or item is deleted' => sub {
+subtest 'Keep account info when related patron, staff, item or cash_register is deleted' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -566,6 +566,8 @@ subtest 'Keep account info when related patron, staff or item is deleted' => sub
             value => { itemnumber => $item->itemnumber }
         }
     );
+    my $register = $builder->build_object({ class => 'Koha::Cash::Registers' });
+
     my $line = Koha::Account::Line->new(
     {
         borrowernumber => $patron->borrowernumber,
@@ -575,6 +577,7 @@ subtest 'Keep account info when related patron, staff or item is deleted' => sub
         status         => "RETURNED",
         amount         => 10,
         interface      => 'commandline',
+        register_id    => $register->id
     })->store;
 
     $issue->delete;
@@ -589,6 +592,10 @@ subtest 'Keep account info when related patron, staff or item is deleted' => sub
     $patron->delete;
     $line = $line->get_from_storage;
     is( $line->borrowernumber, undef, "The account line should not be deleted when the related patron is delete");
+
+    $register->delete;
+    $line = $line->get_from_storage;
+    is( $line->register_id, undef, "The account line should not be deleted when the related cash register is delete");
 
     $schema->storage->txn_rollback;
 };
