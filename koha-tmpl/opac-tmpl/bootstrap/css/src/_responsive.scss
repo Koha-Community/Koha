@@ -383,7 +383,6 @@
             padding: 0;
 
             a {
-                @include border-radius-all( 7px );
                 border-bottom: 0;
                 font-weight: normal;
                 padding: .7em .2em;
@@ -435,7 +434,6 @@
     #menu h4 a.menu-open,
     #search-facets h4 a.menu-open {
         border-bottom: 1px solid #D8D8D8;
-        border-radius: 7px 7px 0 0;
     }
 
     #loginModal {
@@ -503,6 +501,22 @@
         li {
             &.page-num {
                 display: inline;
+            }
+        }
+    }
+
+    a {
+        &.menu-collapse-toggle {
+            &:link,
+            &:visited,
+            &:hover,
+            &:active {
+                color: #727272;
+                cursor: default;
+
+                &::before {
+                    display: none;
+                }
             }
         }
     }

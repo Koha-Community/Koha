@@ -13,18 +13,38 @@ enquire.register("screen and (max-width:608px)", {
 
 enquire.register("screen and (min-width:768px)", {
     match : function() {
-        $(".menu-collapse").show();
+        facetMenu( "show" );
     },
     unmatch : function() {
-        $(".menu-collapse").hide();
+        facetMenu( "hide" );
     }
 });
+
+function facetMenu( action ){
+    if( action == "show" ){
+        $(".menu-collapse-toggle").unbind("click", facetHandler )
+        $(".menu-collapse").show();
+    } else {
+        $(".menu-collapse-toggle").bind("click", facetHandler ).removeClass("menu-open");
+        $(".menu-collapse").hide();
+    }
+}
+
+var facetHandler = function(e){
+    e.preventDefault();
+    $(this).toggleClass("menu-open");
+    $(".menu-collapse").toggle();
+};
 
 $(document).ready(function(){
     $(".close").click(function(){
         window.close();
     });
     $(".focus").focus();
+
+    if( $(window).width() < 768 ){
+        facetMenu("hide");
+    }
 
     // clear the basket when user logs out
     $("#logout").click(function(){
@@ -46,11 +66,7 @@ $(document).ready(function(){
             mem.removeAttr("style");
         }
     });
-    $(".menu-collapse-toggle").on("click",function(e){
-        e.preventDefault();
-        $(this).toggleClass("menu-open");
-        $(".menu-collapse").toggle();
-    });
+
     $(".loginModal-trigger").on("click",function(e){
         e.preventDefault();
         $("#loginModal").modal("show");
