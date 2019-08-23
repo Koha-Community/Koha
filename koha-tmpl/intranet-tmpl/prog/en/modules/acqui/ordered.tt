@@ -29,7 +29,7 @@
     <th class="anti-the"> Title </th>
     <th> Order </th>
     <th> Vendor </th>
-    <th> Item type </th>
+    <th> Item types </th>
     <th> Left on order </th>
     <th> Estimated cost per unit </th>
     <th class="title-string"> Date ordered </th>
@@ -55,7 +55,10 @@
         <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
     </td>
     <td class="cell">
-        [% ItemTypes.GetDescription( order.itype ) | html %]
+        [% FOREACH itemtype IN order.itemtypes %]
+            [% IF !(loop.count() mod 2) %] | [% END %]
+            [% ItemTypes.GetDescription( itemtype ) | html %]
+        [% END %]
     </td>
     <td class="cell">
         [% order.left | html %]

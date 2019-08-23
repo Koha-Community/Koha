@@ -30,7 +30,7 @@
            <th>Order</th>
            <th>Vendor</th>
            <th>Invoice</th>
-           <th>Item type</th>
+           <th>Item types</th>
            <th>Received</th>
            <th>Unit price</th>
            <th class="title-string">Date ordered</th>
@@ -56,7 +56,10 @@
                 <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
             </td>
             <td class="cell">
-                [% ItemTypes.GetDescription( order.itype ) | html %]
+                [% FOREACH itemtype IN order.itemtypes %]
+                    [% IF !(loop.count() mod 2) %] | [% END %]
+                    [% ItemTypes.GetDescription( itemtype ) | html %]
+                [% END %]
             </td>
             <td class="cell">
                 [% order.quantityreceived | html %]

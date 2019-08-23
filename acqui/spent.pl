@@ -59,7 +59,7 @@ SELECT
     quantity-quantityreceived AS tleft,
     budgetdate, entrydate,
     aqbasket.booksellerid,
-    GROUP_CONCAT(DISTINCT itype),
+    GROUP_CONCAT(DISTINCT itype SEPARATOR '|') as itypes,
     title,
     aqorders.invoiceid,
     aqinvoices.invoicenumber,
@@ -106,6 +106,7 @@ my $subtotal = 0;
 my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
+    $data->{'itemtypes'} = [split('\|', $data->{itypes})];
     if ( $recv > 0 ) {
         my $rowtotal = $recv * get_rounded_price($data->{'unitprice_tax_included'});
         $data->{'rowtotal'}  = sprintf( "%.2f", $rowtotal );
