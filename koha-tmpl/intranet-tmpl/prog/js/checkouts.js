@@ -596,19 +596,20 @@ $(document).ready(function() {
                     fnCallback(json)
                 } );
             },
+            "rowGroup":{
+                "dataSrc": "issued_today",
+                "startRender": function ( rows, group ) {
+                    if ( group ) {
+                        return $('<tr/>').append("<td colspan='100%'><strong>" + TODAYS_CHECKOUTS + "</strong></td>");
+                    } else {
+                        return $('<tr/>').append("<td colspan='100%'><strong>" + PREVIOUS_CHECKOUTS + "</strong></td>");
+                    }
+                }
+            },
             "fnInitComplete": function(oSettings, json) {
                 // Disable rowGrouping plugin after first use
                 // so any sorting on the table doesn't use it
-                var oSettings = issuesTable.fnSettings();
-
-                for (f = 0; f < oSettings.aoDrawCallback.length; f++) {
-                    if (oSettings.aoDrawCallback[f].sName == 'fnRowGrouping') {
-                        oSettings.aoDrawCallback.splice(f, 1);
-                        break;
-                    }
-                }
-
-                oSettings.aaSortingFixed = null;
+                //var oSettings = issuesTable.fnSettings();
 
                 // Build a summary of checkouts grouped by itemtype
                 var checkoutsByItype = json.aaData.reduce(function (obj, row) {
@@ -628,13 +629,7 @@ $(document).ready(function() {
                     .append(ul)
                     .insertBefore(oSettings.nTableWrapper)
             },
-        }, columns_settings_issues_table).rowGrouping(
-            {
-                iGroupingColumnIndex: 1,
-                iGroupingOrderByColumnIndex: 0,
-                sGroupingColumnSortDirection: "asc"
-            }
-        );
+        }, columns_settings_issues_table);
 
         if ( $("#issues-table").length ) {
             $("#issues-table_processing").position({
