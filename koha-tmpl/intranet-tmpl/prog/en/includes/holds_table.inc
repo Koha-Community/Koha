@@ -17,7 +17,7 @@
             <th><img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Toggle set to lowest priority" /></th>
         [% END %]
         <th>&nbsp;</th>
-        [% IF SuspendHoldsIntranet %]<th>&nbsp;</th><!-- Suspend Holds Column Header -->[% END %]
+        <th>&nbsp;</th>
     </tr>
 
     [% SET first_priority = 0 %]
@@ -188,24 +188,25 @@
                 </a>
             </td>
 
-            [% IF SuspendHoldsIntranet %]
-                <td>
+            <td>
+                [% IF Koha.Preference('SuspendHoldsIntranet') %]
                     [% UNLESS ( hold.found ) %]
                         <input type="button" value="[% IF ( hold.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]" onclick="window.location.href='request.pl?action=toggleSuspend&amp;reserve_id=[% hold.reserve_id | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;date=[% hold.date | html %]&amp;suspend_until=' + $('#suspend_until_[% hold.reserve_id | html %]').val()" />
 
-                        [% IF AutoResumeSuspendedHolds %]
+                        [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                             <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>
                             <input type="text" name="suspend_until" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
                             <a href='#' onclick="document.getElementById('suspend_until_[% hold.reserve_id | html %]').value='';">Clear date</a>
                         [% ELSE %]
                             <input type="hidden" name="suspend_until" id="suspend_until_[% hold.reserve_id | html %]" value=""/>
                         [% END %]
-
-                    [% ELSE %]
-                        <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
                     [% END %]
-                </td>
-            [% END # IF SuspendHoldsIntranet %]
+                [% END # IF SuspendHoldsIntranet %]
+
+                [% IF ( hold.found ) %]
+                    <input type="button" id="revert_hold_[% hold.reserve_id | html %]" value="[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting status[% END %]" onclick="window.location.href='request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | uri %]&amp;last_priority=[% last_priority | uri %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | uri %]&amp;biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]&amp;reserve_id=[% hold.reserve_id | uri %]&amp;date=[% hold.date | uri %]'">
+                [% END %]
+            </td>
 
         </tr>
 
