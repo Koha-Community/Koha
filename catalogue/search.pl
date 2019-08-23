@@ -354,7 +354,6 @@ if ( $template_type eq 'advsearch' ) {
 #  * we can edit the values by changing the key
 #  * multivalued CGI paramaters are returned as a packaged string separated by "\0" (null)
 my $params = $cgi->Vars;
-
 # Params that can have more than one value
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
@@ -464,6 +463,7 @@ my $scan = $params->{'scan'};
 my $count = C4::Context->preference('numSearchResults') || 20;
 my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
+my $whole_record = $params->{'whole_record'} || 0;
 $offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 #my $offset = ($page-1)*$results_per_page;
@@ -483,7 +483,7 @@ my $searcher = Koha::SearchEngine::Search->new(
     $query_type
   )
   = $builder->build_query_compat( \@operators, \@operands, \@indexes, \@limits,
-    \@sort_by, $scan, $lang, { weighted_fields => !$cgi->param('advsearch') });
+    \@sort_by, $scan, $lang, { weighted_fields => !$cgi->param('advsearch'), whole_record => $whole_record });
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;

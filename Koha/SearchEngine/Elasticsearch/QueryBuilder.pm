@@ -85,15 +85,21 @@ sub build_query {
     $query = '*' unless defined $query;
 
     my $res;
+    my $fields = $self->_search_fields({
+        is_opac => $options{is_opac},
+        weighted_fields => $options{weighted_fields},
+    });
+    if ($options{whole_record}) {
+        push @$fields, 'marc_data_array.*';
+    }
     $res->{query} = {
         query_string => {
             query            => $query,
             fuzziness        => $fuzzy_enabled ? 'auto' : '0',
             default_operator => 'AND',
-            fields          => $self->_search_fields({ is_opac => $options{is_opac}, weighted_fields => $options{weighted_fields} }),
+            fields           => $fields,
             lenient          => JSON::true,
             analyze_wildcard => JSON::true,
-            fields           => $options{fields} || [],
         }
     };
 
@@ -182,7 +188,7 @@ sub build_browse_query {
         $stopwords_removed, $query_type
       )
       = $builder->build_query_compat( \@operators, \@operands, \@indexes,
-        \@limits, \@sort_by, $scan, $lang );
+        \@limits, \@sort_by, $scan, $lang, $params );
 
 This handles a search using the same api as L<C4::Search::buildQuery> does.
 
@@ -204,7 +210,6 @@ sub build_query_compat {
     my @index_params = $self->_convert_index_fields(@$indexes);
     my $limits       = $self->_fix_limit_special_cases($orig_limits);
     if ( $params->{suppress} ) { push @$limits, "suppress:0"; }
-
     # Merge the indexes in with the search terms and the operands so that
     # each search thing is a handy unit.
     unshift @$operators, undef;    # The first one can't have an op
@@ -237,6 +242,7 @@ sub build_query_compat {
     $options{sort} = \@sort_params;
     $options{is_opac} = $params->{is_opac};
     $options{weighted_fields} = $params->{weighted_fields};
+    $options{whole_record} = $params->{whole_record};
     my $query = $self->build_query( $query_str, %options );
 
     # We roughly emulate the CGI parameters of the zebra query builder
@@ -1040,15 +1046,14 @@ sub _search_fields {
     $params //= {
         is_opac => 0,
         weighted_fields => 0,
+        whole_record => 0,
         # This is a hack for authorities build_authorities_query
         # can hopefully be removed in the future
         subfield => undef,
     };
-
     my $cache = Koha::Caches->get_instance();
     my $cache_key = 'elasticsearch_search_fields' . ($params->{is_opac} ? '_opac' : '_staff_client');
     my $search_fields = $cache->get_from_cache($cache_key, { unsafe => 1 });
-
     if (!$search_fields) {
         # The reason we don't use Koha::SearchFields->search here is we don't
         # want or need resultset wrapped as Koha::SearchField object.
@@ -1096,7 +1101,6 @@ sub _search_fields {
             } @{$search_fields}
         ];
     }
-
     if ($params->{weighted_fields}) {
         return [map { join('^', @{$_}) } @{$search_fields}];
     }
