@@ -56,8 +56,8 @@
     </td>
     <td class="cell">
         [% FOREACH itemtype IN order.itemtypes %]
-            [% IF !(loop.count() mod 2) %] | [% END %]
             [% ItemTypes.GetDescription( itemtype ) | html %]
+            [% IF !loop.last() %] | [% END %]
         [% END %]
     </td>
     <td class="cell">
