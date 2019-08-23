@@ -58,7 +58,7 @@ SELECT
     ecost_tax_included, budgetdate, entrydate,
     aqbasket.booksellerid,
     aqbooksellers.name as vendorname,
-    GROUP_CONCAT(DISTINCT itype),
+    GROUP_CONCAT(DISTINCT itype SEPARATOR '|') AS itypes,
     title
 FROM (aqorders, aqbasket)
 LEFT JOIN biblio ON
@@ -93,6 +93,7 @@ my @ordered;
 
 my $total = 0;
 while ( my $data = $sth->fetchrow_hashref ) {
+    $data->{'itemtypes'} = [split('\|', $data->{itypes})];
     my $left = $data->{'tleft'};
     if ( !$left || $left eq '' ) {
         $left = $data->{'quantity'};
