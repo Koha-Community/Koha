@@ -78,6 +78,7 @@
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
     <input type="hidden" name="title" id="title" value="[% title | html %]" />
+    <input type="hidden" name="change_given" id="change_given" />
 
 <fieldset class="rows">
     <legend>Pay an individual fine</legend>
@@ -167,6 +168,7 @@
     <input type="hidden" name="payment_note" id="payment_note" value="[% payment_note | html %]" />
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
     <input type="hidden" name="confirm_writeoff" id="confirm_writeoff" value="1" />
+    <input type="hidden" name="change_given" id="change_given" />
     <table>
     <thead><tr>
             <th>Description</th>
@@ -209,6 +211,7 @@
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts | html %]" />
     <input type="hidden" name="total" id="total" value="[% total | html %]" />
     <input type="hidden" name="type" value="[% type | html %]" />
+    <input type="hidden" name="change_given" id="change_given" />
 
     <fieldset class="rows">
     [% IF ( selected_accts ) %]
@@ -324,7 +327,7 @@
     <script>
         $(document).ready(function() {
             [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
-                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id | html %]&borrowernumber=[% patron.borrowernumber | html %]', '_blank');
+                window.open('/cgi-bin/koha/members/printfeercpt.pl?action=print&accountlines_id=[% payment_id | html %]&change_given=[% change_given | html %]&borrowernumber=[% patron.borrowernumber | html %]', '_blank');
             [% END %]
 
             var forms = $('#payindivfine, #payfine');
@@ -431,10 +434,12 @@
             change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
             if (change.innerHTML <= 0) {
                 change.innerHTML = "0.00";
+                $('input[name="change_given"]').val('0.00');
             } else {
                 change.value = change.innerHTML;
                 moneyFormat(change);
                 change.innerHTML = change.value;
+                $('input[name="change_given"]').val(change.value);
             }
 
             $('#modal_change').html(change.innerHTML);

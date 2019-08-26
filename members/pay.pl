@@ -64,6 +64,7 @@ if ( !$borrowernumber ) {
 }
 
 my $payment_id = $input->param('payment_id');
+our $change_given = $input->param('change_given');
 
 # get borrower details
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
@@ -77,7 +78,7 @@ our $branch = C4::Context->userenv->{'branch'};
 
 if ( $input->param('paycollect') ) {
     print $input->redirect(
-        "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber");
+        "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber&change_given=$change_given");
 }
 elsif ( $input->param('payselected') ) {
     payselected({ params => \@names });
@@ -105,6 +106,7 @@ elsif ( $input->param('confirm_writeoff') ) {
               . "&amountoutstanding=" . $accountline->amountoutstanding
               . "&accounttype=" . $accountline->accounttype
               . "&accountlines_id=" . $accountlines_id
+              . "&change_given=" . $change_given
               . "&writeoff_individual=1"
               . "&error_over=1" );
 
@@ -135,6 +137,7 @@ for (@names) {
 $template->param(
     finesview  => 1,
     payment_id => $payment_id,
+    change_given => $change_given,
 );
 
 add_accounts_to_template();
@@ -198,6 +201,7 @@ sub redirect_to_paycollect {
     $redirect .= get_for_redirect( 'accountlines_id', "accountlines_id$line_no", 0 );
     $redirect .= q{&} . 'payment_note' . q{=} . uri_escape_utf8( scalar $input->param("payment_note_$line_no") );
     $redirect .= '&remote_user=';
+    $redirect .= "change_given=$change_given";
     $redirect .= $user;
     return print $input->redirect($redirect);
 }

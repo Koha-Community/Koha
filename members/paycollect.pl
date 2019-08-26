@@ -39,6 +39,7 @@ my $input = CGI->new();
 
 my $payment_id          = $input->param('payment_id');
 my $writeoff_individual = $input->param('writeoff_individual');
+my $change_given        = $input->param('change_given');
 my $type                = scalar $input->param('type') || 'payment';
 
 my $updatecharges_permissions = ($writeoff_individual || $type eq 'writeoff') ? 'writeoff' : 'remaining_permissions';
@@ -162,7 +163,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 }
             );
             print $input->redirect(
-                "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber&payment_id=$payment_id");
+                "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=$change_given");
         } else {
             if ($select) {
                 if ( $select =~ /^([\d,]*).*/ ) {
@@ -208,7 +209,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 );
             }
 
-            print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber&payment_id=$payment_id");
+            print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=$change_given");
         }
     }
 } else {

@@ -49,6 +49,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 
 my $borrowernumber = $input->param('borrowernumber');
 my $payment_id     = $input->param('payment_id');
+my $change_given   = $input->param('change_given');
 my $action         = $input->param('action') || '';
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
@@ -86,6 +87,7 @@ $template->param(
     totalcredit         => $totalcredit,
     accounts            => \@accountlines,
     payment_id          => $payment_id,
+    change_given        => $change_given,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

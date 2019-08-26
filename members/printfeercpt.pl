@@ -50,6 +50,7 @@ my ($template, $loggedinuser, $cookie)
 my $borrowernumber=$input->param('borrowernumber');
 my $action = $input->param('action') || '';
 my $accountlines_id = $input->param('accountlines_id');
+my $change_given = $input->param('change_given');
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 my $patron         = Koha::Patrons->find( $borrowernumber );
@@ -92,6 +93,8 @@ $template->param(
     total       => $total,
     totalcredit => $totalcredit,
     accounts    => [$accountline],        # FIXME There is always only 1 row!
+
+    change_given => $change_given,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
