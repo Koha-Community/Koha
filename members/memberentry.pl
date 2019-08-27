@@ -270,6 +270,11 @@ if ( $guarantorid ) {
 	push @errors, 'ERROR_guarantor_is_guarantee' if ( $guarantordata->{'guarantorid'} );
     }
 }
+else {
+    #bug 3939 these fields are no more in use
+    delete $data{'contactname'};
+    delete $data{'contactfirstname'};
+}
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
 $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
