@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-07-19 08:21-0300\n"
+"POT-Creation-Date: 2019-08-27 13:30-0300\n"
 "PO-Revision-Date: 2018-06-01 09:13+0000\n"
 "Last-Translator: Marijana Glavica <mglavica@ffzg.hr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,12 +221,12 @@ msgstr ""
 msgid "# Bibliographic records"
 msgstr "Bibliografski zapis"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:282
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:335
 #, c-format
 msgid "# Items"
 msgstr "# Items"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:281
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
 #, c-format
 msgid "# Records"
 msgstr "# Zapisi"
@@ -1064,6 +1064,24 @@ msgstr "%s %s %s Sve knjižnice %s %s "
 msgid "%s %s %s Basket group no. %s %s "
 msgstr "%s %s %s Grupa košarica br. %s %s "
 
+#. %1$s:  END 
+#. %2$s:  IF ( itemloo.reservedate ) 
+#. %3$s:  IF ( itemloo.nocancel ) 
+#. %4$s:  ELSE 
+#. %5$s:  IF ( itemloo.waitingdate ) 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  IF ( itemloo.canreservefromotherbranches ) 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:407
+#, fuzzy, c-format
+msgid ""
+"%s %s %s Can't be cancelled when item is in transit %s %sWaiting%sOn hold%s "
+"%sfor "
+msgstr ""
+"%s %s Nedostupno (izgubljeno ili nedostaje) %s %s Nije za posudbu (%s) %s %s "
+"%s Ne može se otkazati kad je primjerak u tranzitu %s %sČeka%sRezervirano%s "
+"%sza "
+
 #. %1$s:  IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) 
 #. %2$s:  IF loop_receive.cannot_cancel 
 #. %3$s:  span_title = BLOCK 
@@ -1583,10 +1601,10 @@ msgstr "%s %s (%s otkazano) %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:132
-#, c-format
-msgid "%s %s (%s) %s No matching rule in effect %s%s "
-msgstr ""
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:140
+#, fuzzy, c-format
+msgid "%s %s (%s) %s No matching rule in effect %s %s "
+msgstr "%s %s %s Nema drugih primjeraka. %s "
 
 #. %1$s:  IF ( msg ) 
 #. %2$s:  msg | html 
@@ -2007,23 +2025,15 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#. %2$s:  IF patrons_to_anonymize.count 
-#. %3$s:  patrons_to_anonymize.count | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:159
-#, c-format
-msgid "%s %s Checkout history for %s patrons will be anonymized "
-msgstr "%s %s Povijest posudbe za %s korisnika bit će anonimizirana "
-
-#. %1$s:  END 
 #. %2$s:  IF ( delete_confirmed ) 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:453
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:454
 #, c-format
 msgid "%s %s Data deleted "
 msgstr "%s %s Obrisanih podataka "
 
 #. %1$s:  END 
 #. %2$s:  IF ( add_validate or copy_validate) 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:413
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:414
 #, c-format
 msgid "%s %s Data recorded "
 msgstr "%s %s Podaci su zapisani "
@@ -2226,7 +2236,7 @@ msgstr "%s %s Nije za posudbu (%s)%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  IF itemloo.item_level_holds == "N" 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:424
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:417
 #, c-format
 msgid "%s %s Not on hold %s %s "
 msgstr "%s %s Nije rezervirano %s %s "
@@ -2396,29 +2406,6 @@ msgid ""
 msgstr ""
 
 #. %1$s:  END 
-#. %2$s:  IF ( itemloo.message ) 
-#. %3$s:  END 
-#. %4$s:  IF ( itemloo.notforloan ) 
-#. %5$s:  itemloo.notforloanvalue | html 
-#. %6$s:  END 
-#. %7$s:  IF ( itemloo.reservedate ) 
-#. %8$s:  IF ( itemloo.nocancel ) 
-#. %9$s:  ELSE 
-#. %10$s:  IF ( itemloo.waitingdate ) 
-#. %11$s:  ELSE 
-#. %12$s:  END 
-#. %13$s:  IF ( itemloo.canreservefromotherbranches ) 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:407
-#, c-format
-msgid ""
-"%s %s Unavailable (lost or missing) %s %s Not for loan (%s) %s %s %s Can't "
-"be cancelled when item is in transit %s %sWaiting%sOn hold%s %sfor "
-msgstr ""
-"%s %s Nedostupno (izgubljeno ili nedostaje) %s %s Nije za posudbu (%s) %s %s "
-"%s Ne može se otkazati kad je primjerak u tranzitu %s %sČeka%sRezervirano%s "
-"%sza "
-
-#. %1$s:  END 
 #. %2$s:  IF defaultRefundRule 
 #. %3$s:  ELSE 
 #. %4$s:  END 
@@ -2433,7 +2420,7 @@ msgstr ""
 #. %4$s:  IF expires_on 
 #. %5$s:  expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:777
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
 #, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s Čeka u %s %s do %s %s "
@@ -2930,7 +2917,7 @@ msgstr ""
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:799
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:823
 #, c-format
 msgid "%s %sNot checked out%s"
 msgstr "%s %sNije posuđeno%s"
@@ -3114,7 +3101,7 @@ msgstr ""
 #. %10$s:  itemloo.reservedate | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:422
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:415
 #, c-format
 msgid "%s %sat%sexpected at%s %s since %s%s%s%s%s%s%s. "
 msgstr ""
@@ -3328,7 +3315,7 @@ msgstr "%s ( %s ) %s %s callnumber: %s%s"
 #. %1$s:  issue.item.biblioitemnumber.biblionumber.title | html 
 #. %2$s:  issue.item.barcode | html 
 #. %3$s:  issue.date_due | $KohaDates as_due_date => 1 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:631
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:632
 #, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s (%s). Posuđeno do %s"
@@ -3421,7 +3408,7 @@ msgid "%s (inactive) %s %s %s "
 msgstr "%s (neaktivni) %s %s %s "
 
 #. %1$s:  riloo.duedate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:767
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:791
 #, c-format
 msgid "%s (overdue)"
 msgstr ""
@@ -3452,6 +3439,12 @@ msgstr "%s (rcvd)%s %s %s by %s"
 #, fuzzy, c-format
 msgid "%s (rcvd)%s %s %s%s by %s%s %s "
 msgstr "%s (rcvd)%s %s %s by %s"
+
+#. A
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:244
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:667
+msgid "%s - Click to Expand this Tag"
+msgstr ""
 
 #. %1$s:  report.total_success | html 
 #. %2$s:  report.total_records | html 
@@ -3533,7 +3526,7 @@ msgstr ""
 #. %4$s:  nomatch_action | html 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:160
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:170
 #, c-format
 msgid ""
 "%s Add incoming record %s Ignore incoming record (its items may still be "
@@ -3555,7 +3548,7 @@ msgstr ""
 "%s Dodaj primjerke samo ako nije pronađen odgovarajući bibliografski zapis"
 
 #. %1$s:  IF ( record_type != 'auth' ) 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:204
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:215
 #, c-format
 msgid "%s Add new bibliographic records into this framework: "
 msgstr ""
@@ -3643,7 +3636,7 @@ msgstr "%s Uvijek dodaj primjerke"
 #. %6$s:  item_action | html 
 #. %7$s:  END 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:177
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:186
 #, c-format
 msgid ""
 "%s Always add items %s Add items only if matching bib was found %s Add items "
@@ -3685,7 +3678,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  patron.article_requests_current.count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:702
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:848
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:849
 #, c-format
 msgid "%s Article requests"
 msgstr ""
@@ -3730,7 +3723,7 @@ msgstr "%s Zaduženo (%s),"
 #. For the first occurrence,
 #. %1$s:  issuecount | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:681
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:828
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:829
 #, c-format
 msgid "%s Checkout(s)"
 msgstr "%s Zaduženja"
@@ -3772,8 +3765,8 @@ msgstr "%s Grad: "
 #. %7$s:  ELSE 
 #. %8$s:  import_status | html 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:101
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:291
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:104
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:344
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:400
 #, c-format
 msgid ""
@@ -3867,7 +3860,7 @@ msgid "%s Date of birth: "
 msgstr "%s Datum rođenja: "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:531
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:562
 #, fuzzy, c-format
 msgid "%s Default "
 msgstr "Izvorno"
@@ -3926,6 +3919,12 @@ msgstr "%s Onemogućeno %s "
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:19
 #, fuzzy, c-format
 msgid "%s Edit "
+msgstr "%sUređivanje "
+
+#. %1$s:  IF ( biblionumber ) 
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:465
+#, fuzzy, c-format
+msgid "%s Editing "
 msgstr "%sUređivanje "
 
 #. For the first occurrence,
@@ -4044,7 +4043,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  holds_count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:694
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:840
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:841
 #, c-format
 msgid "%s Hold(s)"
 msgstr "%s Rezervacije"
@@ -4573,7 +4572,7 @@ msgstr "%s Vlasnik, korisnici i knjižnica "
 #. %2$s:  current_page | html 
 #. %3$s:  total_pages | html 
 #. %4$s:  IF ( show_nextbutton ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:185
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:205
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:190
 #, c-format
@@ -4735,11 +4734,11 @@ msgstr "%s Zamijeni postojeći zapis novi zapisom"
 #. %5$s:  overlay_action | html 
 #. %6$s:  END 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:143
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:153
 #, c-format
 msgid ""
 "%s Replace existing record with incoming record %s Add incoming record %s "
-"Ignore incoming record (its items may still be processed) %s %s %s %s"
+"Ignore incoming record (its items may still be processed) %s %s %s %s "
 msgstr ""
 
 #. %1$s:  END 
@@ -4764,7 +4763,7 @@ msgstr "%s Pronađena je rezervacija za %s ("
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:945
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:120
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:718
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:719
 #, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
 msgstr ""
@@ -4773,7 +4772,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  debarments.size | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:706
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:852
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
 #, c-format
 msgid "%s Restrictions"
 msgstr "%s Ograničenja"
@@ -5364,10 +5363,10 @@ msgstr "%s, %s%s "
 #. %3$s:  biblio.author | html 
 #. %4$s: ~ END 
 #. %5$s:  (biblioitem.publicationyear || biblio.copyrightdate) | html 
-#. %6$s:  biblioitem.publishercode | html 
+#. %6$s:  biblioitem.publishercode | html | $To 
 #. %7$s:  AuthorisedValues.GetByCode( 'CCODE', item.ccode ) | html 
 #. %8$s:  FILTER escape_quotes ~
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:9
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:10
 #, fuzzy, c-format
 msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s %s %s %s Nijedan %s "
@@ -5490,6 +5489,16 @@ msgstr "%s za '%s'%s"
 msgid "%s framework"
 msgstr "%s obrazac"
 
+#. A
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
+#, fuzzy
+msgid ""
+"%s fund(s) are attached to this budget. You must delete all attached funds "
+"before deleting this budget."
+msgstr ""
+"[% count %] primjeraka je pridruženo ovom zapisu. Morate obrisati sve "
+"primjerke prije nego obrišete zapis."
+
 #. For the first occurrence,
 #. %1$s:  loop_order.holds | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:203
@@ -5597,7 +5606,8 @@ msgstr ""
 msgid "%s item(s) added to your cart"
 msgstr "%s primjerak(a) dodano u košaricu"
 
-#. SCRIPT
+#. A
+#: intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
 #: intranet-tmpl/prog/en/includes/catalog-strings.inc:1
 msgid ""
 "%s item(s) are attached to this record. You must delete all items before "
@@ -5794,35 +5804,35 @@ msgstr "preostalih narudžbi: %s"
 msgid "%s overwritten %s(last was %s)%s"
 msgstr ""
 
-#. %1$s:  patrons_to_anonymize.count || 0 | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:145
-#, fuzzy, c-format
-msgid "%s patron's checkout histories will be anonymized"
-msgstr "%s%s %s0 %s povijest posudbe bit će anonimizirana"
-
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:196
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:212
 #, c-format
 msgid "%s patrons have been successfully deleted"
 msgstr "%s korisnika je uspješno izbrisano"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:210
 #, c-format
 msgid "%s patrons have been successfully moved to trash"
 msgstr ""
 
 #. %1$s:  patrons_to_delete.size || 0 | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:144
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:147
 #, fuzzy, c-format
 msgid "%s patrons will be deleted"
 msgstr "%s%s %s0 %s korisnika bit će izbrisano"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:189
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
 #, c-format
 msgid "%s patrons would have been removed (if it wasn't a test run)"
 msgstr ""
+
+#. %1$s:  patrons_to_anonymize.count || 0 | html 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:148
+#, fuzzy, c-format
+msgid "%s patrons' checkout histories will be anonymized"
+msgstr "%s%s %s0 %s povijest posudbe bit će anonimizirana"
 
 #. %1$s:  reserveloo.pendingorders | html 
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:105
@@ -5852,8 +5862,8 @@ msgstr ""
 #. %1$s:  errcon.server | html 
 #. %2$s:  errcon.seq | html 
 #. %3$s:  PROCESS 'xslt-handler.inc' code=errcon.error 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:87
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:88
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:105
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:106
 #, c-format
 msgid "%s record %s: %s"
 msgstr "%s zapis %s: %s"
@@ -5941,6 +5951,14 @@ msgstr "%s rezultata pronađeno "
 #, c-format
 msgid "%s shipments"
 msgstr "%s pošiljki"
+
+#. IMG
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:170
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:178
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:186
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:194
+msgid "%s sort"
+msgstr ""
 
 #. %1$s:  cannotdelbiblio.subscriptions | html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:176
@@ -6087,7 +6105,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:767
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:791
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sNije zaduženo %s "
@@ -6222,7 +6240,7 @@ msgstr "%s%s%s%s/160 znakova"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:110
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:436
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:437
 #, c-format
 msgid "%s%s%s(All libraries)%s"
 msgstr "%s%s%s(Sve knjižnice)%s"
@@ -6249,7 +6267,7 @@ msgstr "%s%s%s(nema primarne adrese e-pošte u bazi)%s"
 #. %2$s:  comments | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:98
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:101
 #, c-format
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(nijedna)%s"
@@ -6675,7 +6693,7 @@ msgstr ""
 #. %1$s:  IF ( record_type == 'auth' ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:99
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:102
 #, c-format
 msgid "%sAuthority records%sBibliographic records%s"
 msgstr "%sNormativni zapisi%sBibliografski zapisi%s"
@@ -6683,7 +6701,7 @@ msgstr "%sNormativni zapisi%sBibliografski zapisi%s"
 #. %1$s:  IF ( batch_lis.record_type == 'auth' ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:290
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:343
 #, c-format
 msgid "%sAuthority%sBibliographic%s"
 msgstr "%sNormativni%sBibliografski%s"
@@ -6809,12 +6827,6 @@ msgstr "Uredi predložak za korisničke kartice"
 #, fuzzy, c-format
 msgid "%sEdit%sCreate%s printer profile%s (%s)%s"
 msgstr "Uredi profil printera"
-
-#. %1$s:  IF ( biblionumber ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:444
-#, c-format
-msgid "%sEditing "
-msgstr "%sUređivanje "
 
 #. %1$s:  IF ( serialslis.status1 ) 
 #. %2$s:  END 
@@ -7184,6 +7196,11 @@ msgstr ""
 msgid "%sOverdue:%s "
 msgstr "Prekoračenja roka posudbe"
 
+#. INPUT type=button
+#: intranet-tmpl/prog/en/includes/holds_table.inc:205
+msgid "%sRevert transit status%sRevert waiting status%s"
+msgstr ""
+
 #. %1$s:  IF ( reserved ) 
 #. %2$s:  branchname | html 
 #. %3$s:  END 
@@ -7260,6 +7277,11 @@ msgstr ""
 "%sNaslov, Datum izdavanja, Izdavač, Zbirka, Bar-kod, Signatura, Knjižnica "
 "vlasnik, Trenutna lokacija, Lokacija na polici, Inventarni broj, Status, "
 "Broj posudbi%s "
+
+#. INPUT type=button
+#: intranet-tmpl/prog/en/includes/holds_table.inc:194
+msgid "%sUnsuspend%sSuspend%s"
+msgstr ""
 
 #. %1$s:  IF currency.archived 
 #. %2$s:  END 
@@ -7600,7 +7622,6 @@ msgstr ""
 msgid "&lt;&lt; Back to suggestions"
 msgstr "&lt;&lt; Natrag na prijedloge"
 
-#: intranet-tmpl/prog/en/includes/page-numbers.inc:6
 #: intranet-tmpl/prog/en/modules/serials/result.tt:52
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:110
 #, c-format
@@ -7820,7 +7841,7 @@ msgstr "&rsaquo; %s Dodaj novi zbirku %s "
 #. %2$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #, fuzzy, c-format
-msgid "&rsaquo; %s Batch patron deletion/anonymization %s "
+msgid "&rsaquo; %s Batch patron deletion and anonymization %s "
 msgstr "Brisanje korisnika/anonimizacija za skupinu"
 
 #. %1$s:  IF type == 'credit' 
@@ -7849,6 +7870,12 @@ msgstr "&rsaquo; %s Uredi "
 #, c-format
 msgid "&rsaquo; %s Edit news item%sAdd news item%s%sNews%s"
 msgstr "&rsaquo; %s Uredi novost%sDodaj novost%s%sNovosti%s"
+
+#. %1$s:  IF ( biblionumber ) 
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:453
+#, fuzzy, c-format
+msgid "&rsaquo; %s Editing "
+msgstr "&rsaquo; %s Uredi "
 
 #. %1$s:  IF club 
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
@@ -8012,12 +8039,6 @@ msgstr "&rsaquo; %sKorisnik ne postojo%sStatistike za %s %s (%s)%s "
 #, fuzzy, c-format
 msgid "&rsaquo; %sEdit (%s)%sNew%s "
 msgstr "&rsaquo; Uredi %s "
-
-#. %1$s:  IF ( biblionumber ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:438
-#, c-format
-msgid "&rsaquo; %sEditing "
-msgstr ""
 
 #. %1$s:  IF ( authid ) 
 #. %2$s:  authid | html 
@@ -8342,7 +8363,7 @@ msgstr "&rsaquo; Grupiranje košarica"
 #. %1$s:  import_batch_id | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:23
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:24
 #, c-format
 msgid "&rsaquo; Batch %s %s &rsaquo; Manage staged MARC records %s "
 msgstr ""
@@ -9507,7 +9528,7 @@ msgstr ""
 #. %6$s:  w.item.itemcallnumber | html 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:770
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:771
 #, fuzzy, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "(%s), %sby %s%s %s[%s] %sDatum rezervacije %s. %s "
@@ -9533,7 +9554,7 @@ msgstr ""
 msgid "(Authorised values for %s) %s %s "
 msgstr "Autorizirane vrijednosti za kategoriju %s:"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:310
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:363
 #, c-format
 msgid "(Create label batch)"
 msgstr "(Izradi skupinu naljepnica)"
@@ -9622,18 +9643,18 @@ msgstr "(Nijedna)"
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:445
-#, c-format
-msgid "(Record number %s) %sAdd MARC record %s"
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:467
+#, fuzzy, c-format
+msgid "(Record number %s) %s Add MARC record %s"
 msgstr "(Broj zapisa %s) %sDodaj MARC zapis %s"
 
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:438
-#, c-format
-msgid "(Record number %s)%sAdd MARC record%s"
-msgstr "(Broj zapisa %s)%sDodaj MARC zapis%s"
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:455
+#, fuzzy, c-format
+msgid "(Record number %s) %s Add MARC record %s "
+msgstr "(Broj zapisa %s) %sDodaj MARC zapis %s"
 
 #: intranet-tmpl/prog/en/includes/accounts.inc:45
 #, c-format
@@ -9767,7 +9788,7 @@ msgid "(exclusive) "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:131
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:446
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:469
 #, c-format
 msgid "(fast cataloging)"
 msgstr "(brza katalogizacija)"
@@ -10047,7 +10068,7 @@ msgid "- None -"
 msgstr "- Nijedno -"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "- Please select an item to place a hold"
 msgstr ""
 
@@ -10171,13 +10192,13 @@ msgstr ""
 msgid "...to "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:830
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:831
 #, c-format
 msgid "0 Checkouts"
 msgstr "0 Zaduženja"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:696
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:843
 #, c-format
 msgid "0 Holds"
 msgstr "0 Rezervacije"
@@ -10333,7 +10354,7 @@ msgid "A control field cannot be used with a regular field."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:484
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 msgid "A default letter with the code '%s' already exists."
 msgstr "Zadana poruka s kodom '%s' već postoji."
 
@@ -10357,12 +10378,12 @@ msgid "A group with the title %s already exists. "
 msgstr "Obrazac s tim nazivom već postoji."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "A hold cannot be requested on any of these items."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:484
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "Poruka s kodom '%s' već postoji za '%s'."
 
@@ -10395,7 +10416,7 @@ msgstr ""
 msgid "A pattern with this name already exists."
 msgstr "Obrazac s tim nazivom već postoji."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:630
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:654
 #, c-format
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr ""
@@ -10771,7 +10792,7 @@ msgstr "Statistika nabave "
 
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:16
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:67
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:336
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
@@ -10784,8 +10805,8 @@ msgstr "Statistika nabave "
 msgid "Action"
 msgstr "Radnja"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:140
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:143
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:150
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:153
 #, c-format
 msgid "Action if matching record found:"
 msgstr "Postupak ako je pronađen odgovarajući zapis:"
@@ -10795,8 +10816,8 @@ msgstr "Postupak ako je pronađen odgovarajući zapis:"
 msgid "Action if matching record found: "
 msgstr "Postupak ako je pronađen odgovarajući zapis: "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:157
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:160
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:167
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:170
 #, c-format
 msgid "Action if no match found:"
 msgstr "Postupak ako nije pronađen odgovarajući zapis:"
@@ -10818,7 +10839,7 @@ msgstr "Postupak ako nije pronađen odgovarajući zapis: "
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:64
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:83
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:61
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:108
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:127
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:82
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:83
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:136
@@ -10873,7 +10894,7 @@ msgstr "Radnje"
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:43
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:57
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:57
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:135
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:83
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:92
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:127
@@ -11079,12 +11100,12 @@ msgid "Add a new item"
 msgstr "Dodaj novo polje"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:106
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:817
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:818
 #, c-format
 msgid "Add a new message"
 msgstr "Dodaj novu poruku"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:605
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:636
 #, fuzzy, c-format
 msgid "Add a new record"
 msgstr "Dodaj novo polje"
@@ -11727,7 +11748,7 @@ msgstr "Dodatne vrste sadržaja"
 
 #: intranet-tmpl/prog/en/includes/additional-fields-entry.inc:4
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:139
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:106
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:109
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:211
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:66
@@ -11816,7 +11837,7 @@ msgstr "Adresa 2: "
 msgid "Address line 3: "
 msgstr "Adresa 3: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:701
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
 #, c-format
 msgid "Address:"
 msgstr "Adresa:"
@@ -12194,7 +12215,7 @@ msgstr "Svi budžeti"
 
 #. %1$s:  do_anonym | html 
 #. %2$s:  last_issue_date | $KohaDates 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:203
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:219
 #, fuzzy, c-format
 msgid "All checkouts (%s) older than %s have been anonymized"
 msgstr "Svi korisnici koji imaju zaduženja starija od %s su anonimizirani"
@@ -12247,7 +12268,7 @@ msgstr "Sve vrste građe"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:112
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:114
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:61
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:37
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:43
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:56
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:207
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:19
@@ -12786,7 +12807,7 @@ msgstr "Analitika"
 msgid "Analyze items"
 msgstr "Analitika za primjerak"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:113
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:115
 #, c-format
 msgid "Anonymize checkout history"
 msgstr "Aninimiziraj povijest posudbe"
@@ -12803,7 +12824,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:92
 #: intranet-tmpl/prog/en/includes/patron-search.inc:102
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:90
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:92
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:27
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:38
 #: intranet-tmpl/prog/en/modules/members/member.tt:198
@@ -12869,8 +12890,8 @@ msgstr "Bilo koja vrsta građe"
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:91
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:223
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:607
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:642
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:608
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:643
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:86
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:109
@@ -12891,7 +12912,7 @@ msgstr ""
 msgid "Any library"
 msgstr "Bilo koja knjižnica"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:635
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:659
 #, c-format
 msgid "Any lost item fees for this item will remain on the patron's account."
 msgstr ""
@@ -12948,13 +12969,13 @@ msgstr ""
 msgid "Applied different matching rule. Number of records matched now %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:122
+#: intranet-tmpl/prog/en/modules/members/pay.tt:126
 #, fuzzy, c-format
 msgid "Apply "
 msgstr "Dodaj iznos"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:193
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:203
 msgid "Apply different matching rules"
 msgstr ""
 
@@ -13034,7 +13055,7 @@ msgid "Are you sure you want to cancel adding this quote?"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Zaista želite otkazati ovu rezervaciju?"
 
@@ -13369,7 +13390,7 @@ msgstr "Zaista želite obrisati ovaj primjerak?"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:848
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1017
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1018
 #, fuzzy
 msgid "Are you sure you want to delete this message? This cannot be undone."
 msgstr "Zaista želite obrisati ovu sliku korisnika? Slika se ne može vratiti."
@@ -13514,7 +13535,7 @@ msgid "Are you sure you want to merge the selected patrons?"
 msgstr "Jeste li sigurni da želite izbrisati označene korisnike?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #, fuzzy
 msgid "Are you sure you want to permanently delete this batch?"
 msgstr "Zaista želite obrisati ovu košaricu?"
@@ -13600,7 +13621,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #, fuzzy
 msgid ""
 "Are you sure you want to undo the import of this batch into the catalog?"
@@ -13785,7 +13806,7 @@ msgstr "Pridruži ovu košaricu u novu grupu košarica s istim imenom"
 msgid "Attempt to delete record failed."
 msgstr "Izmijeni pravilo podudaranja zapisa"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:664
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:665
 #, c-format
 msgid "Attention:"
 msgstr "Pažnja:"
@@ -13867,7 +13888,7 @@ msgstr "Drugo ime"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:192
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:309
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:310
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:100
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
@@ -13876,7 +13897,7 @@ msgstr "Drugo ime"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:105
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:178
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:229
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:76
@@ -13979,8 +14000,8 @@ msgid "Author:"
 msgstr "Autor:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:5
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:27
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:71
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:31
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:91
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:34
@@ -14255,7 +14276,7 @@ msgstr "Promjena podataka o primjercima za skupinu"
 msgid "Automatic ordering: "
 msgstr "Automatsko obnavljanje"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:582
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:583
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:101
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:377
 #, c-format
@@ -14443,7 +14464,7 @@ msgstr "Ožu"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:260
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:912
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:52
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:103
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
@@ -14452,7 +14473,7 @@ msgstr "Ožu"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:179
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:59
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:98
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:112
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:220
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
@@ -14519,7 +14540,7 @@ msgstr "Barkodovi nisu pronađeni"
 msgid "Barcode not found. The following items were found by searching:"
 msgstr "Ovi primjerci nisu pronađeni pretraživanjem: %s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:995
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:996
 #, fuzzy, c-format
 msgid "Barcode submitted"
 msgstr "Barkod %s"
@@ -14614,7 +14635,7 @@ msgstr ""
 msgid "Basic parameters"
 msgstr "Osnovni parametri"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:19
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:17
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:557
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:360
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:142
@@ -14934,17 +14955,17 @@ msgstr "Promjena podataka o primjercima za skupinu"
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:35
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:58
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:22
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:48
-#, c-format
-msgid "Batch patron deletion/anonymization"
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:35
+#, fuzzy, c-format
+msgid "Batch patron deletion and anonymization"
 msgstr "Brisanje korisnika/anonimizacija za skupinu"
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( current_branch ) | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:50
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:53
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:37
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:55
 #, fuzzy, c-format
-msgid "Batch patron deletion/anonymization for %s"
+msgid "Batch patron deletion and anonymization for %s"
 msgstr "Brisanje korisnika/anonimizacija za skupinu"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:38
@@ -15297,13 +15318,13 @@ msgstr "Blokiraj korisnike kojima je isteklo članstvo"
 msgid "Blocked!"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:741
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:765
 #, c-format
 msgid "Book drop mode"
 msgstr ""
 
 #. %1$s:  dropboxdate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:679
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:703
 #, c-format
 msgid "Book drop mode. (Effective checkin date is %s )."
 msgstr ""
@@ -15802,7 +15823,7 @@ msgstr "Signatura (0-9 prema A-Z)"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:733
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:42
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:882
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:157
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:175
 #, c-format
@@ -15834,14 +15855,14 @@ msgstr "Signatura"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:910
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:53
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:186
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:181
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:83
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:109
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:217
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
@@ -15974,18 +15995,14 @@ msgid "Can't cancel order and delete catalog record"
 msgstr "Ne mogu obrisati narudžbu i kataložni zapis"
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
-msgid ""
-"Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked "
-"with this order. Cancel holds first"
-msgstr ""
-
-#. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:184
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
+#, fuzzy
 msgid ""
-"Can't cancel order, ([% loop_order.holds_on_order | html %]) holds are "
-"linked with this order. Cancel holds first"
+"Can't cancel order, (%s) holds are linked with this order. Cancel holds first"
 msgstr ""
+"Ne mogu obristati kataložni zapisi ili otkazati narudžbu, najprije treba "
+"otkazati rezervaciju"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:359
 #, c-format
@@ -16003,9 +16020,7 @@ msgstr ""
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
 #, fuzzy
-msgid ""
-"Can't delete catalog record, because of [% books_loo.items | html %] "
-"existing hold(s)"
+msgid "Can't delete catalog record, because of %s existing hold(s)"
 msgstr ""
 "Kataložni zapis se ne može obrisati zbog [% books_loo.items %] postojećih "
 "rezervacija"
@@ -16013,9 +16028,7 @@ msgstr ""
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:194
 #, fuzzy
-msgid ""
-"Can't delete catalog record, because of [% loop_order.items | html %] "
-"existing item(s)"
+msgid "Can't delete catalog record, because of %s existing item(s)"
 msgstr ""
 "Kataložni zapis nije moguće izbrisati zbog [% loop_order.items %] postojećih "
 "primjeraka"
@@ -16084,7 +16097,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:144
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:217
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:280
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:188
@@ -16105,15 +16118,15 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:162
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:170
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:254
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:59
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:76
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:229
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:239
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:554
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:558
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:562
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:566
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:570
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:585
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:589
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:593
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:597
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:601
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:90
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:159
@@ -16160,7 +16173,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:87
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:470
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:471
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:52
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:76
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:76
@@ -16290,7 +16303,7 @@ msgstr "Ukloni filter"
 #. A
 #: intranet-tmpl/prog/en/includes/holds_table.inc:186
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:56
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:424
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:417
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:224
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:230
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:154
@@ -16298,17 +16311,16 @@ msgstr "Ukloni filter"
 msgid "Cancel hold"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:320
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:344
 #, fuzzy, c-format
 msgid "Cancel hold "
 msgstr "Otkazano "
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:152
-msgid ""
-"Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) | "
-"html %]"
-msgstr ""
+#, fuzzy
+msgid "Cancel hold and return to : %s"
+msgstr "Odustani i vrati me u narudžbu"
 
 #. %1$s:  Branches.GetName( reserveloo.item.homebranch ) | html 
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:54
@@ -16323,7 +16335,7 @@ msgstr "Otkaži spajanje"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:783
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:923
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:924
 msgid "Cancel marked holds"
 msgstr "Otkaži označene rezervacije"
 
@@ -16375,7 +16387,7 @@ msgid "Cancel reservation and then attempt transfer:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:77
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:227
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:244
 #, c-format
 msgid "Cancel transfer"
 msgstr "Odustani od transfera"
@@ -16385,7 +16397,7 @@ msgstr "Odustani od transfera"
 msgid "Cancel upload"
 msgstr "Otkaži učitavanje"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:916
 #, fuzzy, c-format
 msgid "Cancel?"
 msgstr "Odustani"
@@ -16460,8 +16472,8 @@ msgstr "Ne može se naručiti"
 msgid "Cannot cancel receipt. Possible reasons : "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:632
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:640
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:656
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:664
 #, c-format
 msgid "Cannot check in"
 msgstr "Ne može se razdužiti"
@@ -16478,7 +16490,7 @@ msgstr "Ne može se posuditi"
 
 #. For the first occurrence,
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:656
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:657
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:47
 #, c-format
 msgid "Cannot check out! %s "
@@ -16594,7 +16606,7 @@ msgid "Cap fine at replacement price"
 msgstr "Vrijednost"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:123
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:140
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:73
 #: intranet-tmpl/prog/en/modules/members/member.tt:97
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:61
@@ -16695,7 +16707,7 @@ msgstr "Broj islaznice može sadržavati najviše %s znakova."
 msgid "Card number: "
 msgstr "Članski broj: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:140
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:132
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:181
 #, fuzzy, c-format
@@ -16862,7 +16874,7 @@ msgstr "Statistika kataloga"
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:438
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:453
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:9
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:138
@@ -17039,7 +17051,7 @@ msgid "Change basketgroup"
 msgstr "Promijeni grupu košarica"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:525
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:556
 #, fuzzy, c-format
 msgid "Change framework"
 msgstr "Promijeni obrazac: "
@@ -17102,25 +17114,25 @@ msgstr "Promijeni korisničko ime i/ili lozinku za %s %s"
 msgid "Change your Mana KB settings"
 msgstr "Postavke zaduživanja"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:86
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:87
 #, c-format
 msgid "Changed action if matching record found"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:89
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:91
 #, c-format
 msgid "Changed action if no match found"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:92
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:95
 #, c-format
 msgid "Changed item processing option"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:132
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:141
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:158
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:175
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:138
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:151
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:168
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:184
 #, c-format
 msgid "Changed. "
 msgstr ""
@@ -17163,7 +17175,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:26
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:734
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:46
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:884
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
 #, c-format
@@ -17244,7 +17256,7 @@ msgstr "Prijašnja zaduženja"
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:26
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:48
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:96
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:686
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:710
 #, c-format
 msgid "Check in"
 msgstr "Razduži"
@@ -17257,7 +17269,7 @@ msgstr "Razduži "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:560
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:584
 #, c-format
 msgid "Check in message"
 msgstr ""
@@ -17294,8 +17306,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/currencies-admin-search.inc:24
 #: intranet-tmpl/prog/en/includes/letters-search.inc:24
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:462
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:546
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:463
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:547
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:85
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:47
 #, c-format
@@ -17368,8 +17380,9 @@ msgstr ""
 
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:289
-msgid "Check to delete subfield [% ite.subfield | html %]"
-msgstr ""
+#, fuzzy
+msgid "Check to delete subfield %s"
+msgstr "Potvrda brisanja potpolja %s?"
 
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:256
@@ -17487,7 +17500,7 @@ msgstr "Posuđivano %s puta"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:39
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:60
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:732
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:882
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:156
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:174
 #, c-format
@@ -17497,20 +17510,20 @@ msgstr "Posuđeno iz"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:731
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:880
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:155
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:173
 #, c-format
 msgid "Checked out on"
 msgstr "Posuđeno na datum"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:631
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:632
 #, fuzzy, c-format
 msgid "Checked out: "
 msgstr "Posuđeno "
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:106
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:783
 #, c-format
 msgid "Checked-in items"
 msgstr "Razduženi primjerci"
@@ -17547,8 +17560,8 @@ msgstr "Zaduživanje na "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:532
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:533
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:654
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:64
 #, c-format
 msgid "Checking out to %s"
@@ -17618,6 +17631,12 @@ msgstr "Povijest posudbe"
 msgid "Checkout history for %s"
 msgstr "Povijest posudbe za %s"
 
+#. %1$s:  patrons_to_anonymize.count | html 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#, fuzzy, c-format
+msgid "Checkout history for %s patrons will be anonymized "
+msgstr "%s %s Povijest posudbe za %s korisnika bit će anonimizirana "
+
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:24
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:34
@@ -17641,7 +17660,7 @@ msgstr "Zaduženo"
 msgid "Checkout or renew"
 msgstr "Zaduženo"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:549
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:550
 #, c-format
 msgid "Checkout settings"
 msgstr "Postavke zaduživanja"
@@ -17663,7 +17682,7 @@ msgid "Checkouts"
 msgstr "Zaduživanja"
 
 #: intranet-tmpl/prog/en/includes/blocked-fines.inc:8
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:750
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:50
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:57
 #, fuzzy, c-format
@@ -17676,7 +17695,7 @@ msgstr "Zaduživanje je BLOKIRANO jer korisnik nije na vrijeme vratio građu"
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "Zaduživanje je BLOKIRANO jer korisnik nije na vrijeme vratio građu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:795
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:819
 #, fuzzy, c-format
 msgid "Checkouts:"
 msgstr "Zaduživanja"
@@ -18020,7 +18039,7 @@ msgstr "Napomena o cirkulaciji"
 msgid "Circulation: Overdues at %s"
 msgstr "Cirkulacija: Prekoračenje roka u %s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:347
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:401
 #, c-format
 msgid "Citation"
 msgstr ""
@@ -18189,13 +18208,13 @@ msgstr "Klasifikacija: %s "
 msgid "Classification: %s "
 msgstr "Klasifikacija: %s "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:316
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:369
 #, c-format
 msgid "Clean"
 msgstr ""
 
 #. %1$s:  import_batch_id | html 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:51
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:52
 #, c-format
 msgid "Cleaned import batch #%s"
 msgstr ""
@@ -18210,9 +18229,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1073
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:442
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:569
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:570
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:135
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:710
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:734
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:273
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:351
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
@@ -18235,7 +18254,7 @@ msgstr "Ukloni"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:109
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:68
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:180
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:42
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:58
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:66
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:42
@@ -18259,7 +18278,7 @@ msgid "Clear all"
 msgstr "Ukloni sve oznake"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid ""
 "Clear all reservoir records staged in this batch? This cannot be undone."
 msgstr ""
@@ -18304,12 +18323,12 @@ msgid "Clear on loan"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:526
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:527
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:124
 msgid "Clear screen"
 msgstr "Očisti ekran"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:45
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:50
 #, c-format
@@ -18461,7 +18480,7 @@ msgstr ""
 
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:304
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:676
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:708
 msgid "Click to Expand this Tag"
 msgstr ""
 
@@ -18506,7 +18525,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:766
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:804
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:69
@@ -18522,7 +18541,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:766
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:804
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:402
 msgid "Clone this subfield"
@@ -18547,7 +18566,7 @@ msgstr "Pravila cirkulacije i kazne"
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:63
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:119
 #: intranet-tmpl/prog/en/includes/chart.inc:100
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:368
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:422
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:127
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:172
@@ -18690,7 +18709,7 @@ msgstr ""
 #. %1$s:  enrollments.count | html 
 #. %2$s:  enrollable.count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:712
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:859
 #, fuzzy, c-format
 msgid "Clubs (%s/%s) "
 msgstr "Zatvoreno (%s)"
@@ -18706,7 +18725,7 @@ msgid "Clubs not enrolled in"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:100
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:431
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:432
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:23
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:408
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:138
@@ -18800,7 +18819,7 @@ msgstr "Zbirka: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:129
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:269
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:878
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:183
 #, c-format
 msgid "Collection code"
@@ -18986,7 +19005,7 @@ msgstr "Komentator "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:20
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:32
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:277
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:388
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:13
@@ -19016,7 +19035,7 @@ msgstr "Komentari koji čekaju moderiranje"
 msgid "Comments pending approval"
 msgstr "Komentari koji čekaju odobrenje"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:98
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:101
 #, c-format
 msgid "Comments:"
 msgstr "Komentari:"
@@ -19054,7 +19073,7 @@ msgstr "Pregled svega"
 msgid "Completed"
 msgstr "Pregled svega"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:234
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:250
 #, c-format
 msgid "Completed import of records"
 msgstr ""
@@ -19114,7 +19133,7 @@ msgstr ""
 #. INPUT type=submit name=submitbutton
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:129
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:238
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:350
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:374
 #, c-format
 msgid "Confirm"
 msgstr "Potvrdi"
@@ -19188,13 +19207,13 @@ msgstr "Potvrda brisanja taga "
 msgid "Confirm deletion of this vendor ?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:311
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:540
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:335
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #, fuzzy, c-format
 msgid "Confirm hold "
 msgstr "Potvrdi rezervacije"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:533
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:557
 #, fuzzy, c-format
 msgid "Confirm hold and transfer "
 msgstr "Potvrdi rezervacije"
@@ -19236,7 +19255,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:85
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:103
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:156
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:207
 #, c-format
@@ -19245,7 +19264,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:86
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:157
 #, c-format
 msgid "Connection timeout to %s"
@@ -19397,7 +19416,7 @@ msgstr ""
 msgid "Continue without renewing"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:22
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:20
 #, c-format
 msgid "Contract"
 msgstr ""
@@ -19490,13 +19509,13 @@ msgstr ""
 msgid "Control key is \"Ctrl\""
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:31
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
 #, c-format
 msgid "Control no.: "
 msgstr "Kontrolni br.: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:76
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:94
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:96
 #, fuzzy, c-format
 msgid "Control no: "
@@ -20204,7 +20223,7 @@ msgstr "Vrsta kredita: "
 msgid "Credit type: "
 msgstr "Vrsta kredita: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:757
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:758
 #, c-format
 msgid "Credits:"
 msgstr ""
@@ -20473,12 +20492,6 @@ msgstr "Cijena posudbe: "
 msgid "Damaged"
 msgstr "Uništeno"
 
-#. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:437
-#, fuzzy, c-format
-msgid "Damaged %s "
-msgstr "Uništeno"
-
 #: intranet-tmpl/prog/en/columns.def:103
 #, fuzzy, c-format
 msgid "Damaged on"
@@ -20599,7 +20612,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:86
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:166
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:161
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:46
@@ -20632,7 +20645,7 @@ msgid "Date accessioned"
 msgstr "Datum zaprimanja"
 
 #: intranet-tmpl/prog/en/columns.def:70
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #, c-format
 msgid "Date acquired"
 msgstr "Datum zaprimanja"
@@ -20935,7 +20948,7 @@ msgstr "Pro"
 msgid "December"
 msgstr "Prosinac"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:208
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:219
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:31
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:318
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:47
@@ -21293,7 +21306,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:77
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:49
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:77
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:322
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:375
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:170
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:182
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:272
@@ -21313,7 +21326,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:158
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:97
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:769
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:807
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:71
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
@@ -21337,7 +21350,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:73
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:59
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:812
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:813
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:148
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:150
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:152
@@ -21587,7 +21600,7 @@ msgstr "Obriši popis"
 msgid "Delete macro"
 msgstr "Brisanje korisnika"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:425
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:426
 #, c-format
 msgid "Delete notice?"
 msgstr "Brisati obavijest?"
@@ -21599,12 +21612,19 @@ msgid ""
 "reading history) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:65
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:67
 #, c-format
 msgid "Delete patrons"
 msgstr "Brisanje korisnika"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
+#, c-format
+msgid ""
+"Delete patrons directly from the database. Patron data will not be "
+"recoverable. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:70
 #, c-format
 msgid "Delete patrons who meet the following criteria:"
 msgstr ""
@@ -21698,8 +21718,8 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:312
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:313
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:684
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:685
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:717
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:718
 msgid "Delete this Tag"
 msgstr "Obriši ovaj tag"
 
@@ -21741,7 +21761,7 @@ msgstr "Obriši ovaj snimljeni izvještaj"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:769
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:807
 msgid "Delete this subfield"
 msgstr ""
 
@@ -21753,7 +21773,7 @@ msgstr ""
 msgid "Delete user"
 msgstr "Obriši korisnika"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:32
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:30
 #, c-format
 msgid "Delete vendor"
 msgstr "Obriši dobavljača"
@@ -22150,8 +22170,8 @@ msgstr "Broj primjerka:"
 msgid "Dewey/classification"
 msgstr "Dewey/klasifikacija"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:32
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:77
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:41
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:95
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:40
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:97
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:58
@@ -22209,13 +22229,13 @@ msgstr ""
 msgid "Did you mean?"
 msgstr "Jeste li mislili?"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:351
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:405
 #, c-format
 msgid "Diff"
 msgstr ""
 
 #. ABBR
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:351
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:405
 #, fuzzy
 msgid "Differences between the original bibliographic record and the imported"
 msgstr "Obrisan bibliografski zapis, ne mogu pronaći naslov"
@@ -22430,7 +22450,7 @@ msgstr "nemoj izraditi zapis o primjerku prilikom zaprimanja"
 msgid "Do not create an item record when receiving this serial "
 msgstr "nemoj izraditi zapis o primjerku prilikom zaprimanja "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:120
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:125
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:54
 #, c-format
@@ -22441,11 +22461,6 @@ msgstr ""
 #, c-format
 msgid "Do not notify"
 msgstr "Ne obvještavati"
-
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
-#, c-format
-msgid "Do not remove any patrons (test run)"
-msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:85
 #, fuzzy, c-format
@@ -22517,7 +22532,7 @@ msgstr ""
 msgid "Don't check out and print slip (P)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:599
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:600
 #, c-format
 msgid "Don't decrease checkout length based on holds"
 msgstr ""
@@ -22704,16 +22719,16 @@ msgstr "Rok za vraćanje %s"
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:46
 #: intranet-tmpl/prog/en/modules/members/pay.tt:52
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:247
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:876
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:48
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:151
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:169
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #, c-format
 msgid "Due date"
 msgstr "Rok posudbe"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:874
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr ""
@@ -22794,7 +22809,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "Primjerci u seriji broj %s"
 
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:192
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:454
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:477
 #, c-format
 msgid "Duplicate record suspected"
 msgstr "Sumnja na dupli zapis"
@@ -23027,7 +23042,7 @@ msgid "Edit"
 msgstr "Uredi"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:16
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:27
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:28
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:32
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:17
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:27
@@ -23175,8 +23190,8 @@ msgstr "Uredi kolegij"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:151
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:461
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:679
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:696
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:680
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:697
 #, fuzzy, c-format
 msgid "Edit details"
 msgstr "Uredi detalje"
@@ -23213,7 +23228,7 @@ msgstr "Uredi u domaćinu"
 msgid "Edit internal note"
 msgstr "Dodaj internu bilješku"
 
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:27
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:28
 #: intranet-tmpl/prog/en/includes/str/cataloging_additem.inc:2
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:60
 #, fuzzy, c-format
@@ -23294,7 +23309,7 @@ msgid "Edit quotes for quote-of-the-day feature "
 msgstr "Uređivanje citata za opciju 'citat dana' u OPAC-u"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:32
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:27
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:28
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:443
@@ -23388,7 +23403,7 @@ msgstr "Uredi košaricu"
 msgid "Edit this holiday"
 msgstr "Uredi ovaj praznik"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:30
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:28
 #, c-format
 msgid "Edit vendor"
 msgstr "Uredi podatake o dobavljaču"
@@ -23436,7 +23451,7 @@ msgstr "Rezultati pretraživanja dobavljača"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:102
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:121
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:162
 #, c-format
 msgid "Edition"
@@ -23790,13 +23805,13 @@ msgstr "Upiši bar-kod primjerka:"
 msgid "Enter cover biblionumber: "
 msgstr "Unesi biblionumber za ovu sliku naslovnice: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:535
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:536
 #, fuzzy, c-format
 msgid "Enter item barcode or keyword:"
 msgstr "Upiši bar-kod primjerka:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:46
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:537
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:538
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:126
 #, c-format
 msgid "Enter item barcode:"
@@ -23804,7 +23819,7 @@ msgstr "Upiši bar-kod primjerka:"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:171
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:97
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:687
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:711
 #, c-format
 msgid "Enter item barcode: "
 msgstr "Unesi bar-kod primjerka: "
@@ -23940,7 +23955,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #: intranet-tmpl/prog/en/modules/about.tt:112
 #, c-format
 msgid "Error"
@@ -24019,7 +24034,7 @@ msgstr "Greška kod preuzimanja datoteke"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:280
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:34
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:511
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:512
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:111
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:113
 #: intranet-tmpl/prog/en/modules/auth.tt:26
@@ -24255,7 +24270,7 @@ msgstr "Izvještaj o prekoračenim rokovima"
 msgid "Existing SQL"
 msgstr "Uredi korisnike"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:553
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:554
 #, c-format
 msgid "Existing holds"
 msgstr ""
@@ -24283,7 +24298,7 @@ msgstr "Očekivani datum pristizanja"
 #: intranet-tmpl/prog/en/includes/holds_table.inc:13
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:933
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:773
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
 #, c-format
 msgid "Expiration"
 msgstr "Ističe"
@@ -24315,8 +24330,8 @@ msgstr "Datum isteka: %s"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:63
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:139
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:149
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:678
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:679
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:693
 #, c-format
 msgid "Expiration:"
 msgstr "Ističe:"
@@ -24828,7 +24843,7 @@ msgid "Feedback:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/blocked-fines.inc:5
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:748
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:54
 #, c-format
 msgid "Fees &amp; Charges:"
@@ -24894,7 +24909,7 @@ msgid "Field 3"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:739
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:777
 #, fuzzy
 msgid "Field autofilled by plugin"
 msgstr "Prikaži sve knjižnice"
@@ -25014,14 +25029,14 @@ msgstr "E-pošta je poslana."
 msgid "File is not readable"
 msgstr "Ovaj zapis nema primjerke"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:276
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:329
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:387
 #, c-format
 msgid "File name"
 msgstr "Naziv datoteke"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:97
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:100
 #: intranet-tmpl/prog/en/modules/tools/export.tt:159
 #: intranet-tmpl/prog/en/modules/tools/export.tt:220
 #, c-format
@@ -25247,7 +25262,7 @@ msgstr "Dodaj novi uvjet"
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:27
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:48
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:735
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:884
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:885
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:82
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:84
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:205
@@ -25294,18 +25309,18 @@ msgstr "Novčane naknade"
 msgid "Fines &amp; Charges"
 msgstr "Novčane naknade i naplata"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:676
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:700
 #, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:673
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:697
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr "Novčana naknada za vraćene primjerke je oproštena."
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:593
 msgid "Finish"
 msgstr "Završi"
@@ -25540,7 +25555,7 @@ msgstr "Zauvijek"
 msgid "Forget %s %s (%s)"
 msgstr "Oprosti %s %s (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:750
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:774
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr ""
@@ -25550,7 +25565,7 @@ msgstr ""
 msgid "Forgive fines on return:"
 msgstr "Oprosti novčane naknade prilikom vraćanja: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:732
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:756
 #, c-format
 msgid "Forgive overdue charges"
 msgstr ""
@@ -26203,7 +26218,7 @@ msgid "Glyphicons Free"
 msgstr ""
 
 #. INPUT type=submit name=changepage_goto
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:211
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:196
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:155
@@ -26239,7 +26254,7 @@ msgid "Go to advanced search"
 msgstr "Složeno pretraživanje"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:15
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:16
 #, fuzzy
 msgid "Go to item details"
 msgstr "Podaci o primjerku"
@@ -26249,7 +26264,7 @@ msgstr "Podaci o primjerku"
 msgid "Go to item search"
 msgstr "Pretraživanje normative"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:191
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:211
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:196
 #, c-format
@@ -26262,7 +26277,7 @@ msgid "Go to receipt page"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:9
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:10
 msgid "Go to record detail page"
 msgstr ""
 
@@ -26683,16 +26698,16 @@ msgid "Hold"
 msgstr "Rezervacija"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:101
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:285
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:346
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:506
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:309
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:370
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:530
 #, c-format
 msgid "Hold at"
 msgstr "Rezervacija kod"
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:47
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:768
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:98
 #, c-format
 msgid "Hold date"
@@ -26730,19 +26745,19 @@ msgstr "Cijena rezervacije: "
 msgid "Hold filled for:"
 msgstr "Rezervacija za:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:258
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:428
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:469
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:282
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:493
 #, c-format
 msgid "Hold for:"
 msgstr "Rezervacija za:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:334
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:358
 #, c-format
 msgid "Hold for: "
 msgstr "Rezervacija za: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:244
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:268
 #, fuzzy, c-format
 msgid "Hold found (item is already waiting): "
 msgstr "Rezervacija postoji (primjerak već čeka): "
@@ -26753,7 +26768,7 @@ msgstr "Rezervacija postoji (primjerak već čeka): "
 msgid "Hold found for (%s), please transfer"
 msgstr "Pronađena rezervacija za (%s), molim transfer"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:457
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:481
 #, fuzzy, c-format
 msgid "Hold found: "
 msgstr "Postoji rezervacija: "
@@ -26768,7 +26783,7 @@ msgstr ""
 msgid "Hold must be record level "
 msgstr "Izvorni zapisi"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:332
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:356
 #, fuzzy, c-format
 msgid "Hold needing transfer found"
 msgstr "Pronađena rezervacija koja treba transfer: "
@@ -26846,7 +26861,7 @@ msgstr "Knjižnice u kojima se nalazi građa"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:262
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:172
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:252
 #, c-format
@@ -26943,16 +26958,16 @@ msgstr "Rezervacije na ovom popisu čekale su korisnika više od %s dana."
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:129
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:188
-msgid ""
-"Holds on this item: [% item_loo.item_holds | html %] / Total holds on this "
-"record: [% item_loo.holds | html -%]"
-msgstr ""
+#, fuzzy
+msgid "Holds on this item: %s / Total holds on this record: %s"
+msgstr "Nema slika za ovaj zapis."
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:135
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:194
-msgid "Holds on this record: [% item_loo.holds | html -%]"
-msgstr ""
+#, fuzzy
+msgid "Holds on this record: %s"
+msgstr "Nema slika za ovaj zapis."
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:106
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:382
@@ -27001,7 +27016,7 @@ msgstr ""
 msgid "Holds waiting over %s days: %s "
 msgstr "Rezervacije koje čekaju korisnika za vašu knjižnicu %s %s "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:766
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #, c-format
 msgid "Holds waiting:"
 msgstr "Rezervacije na čekanju:"
@@ -27082,7 +27097,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:13
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:32
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:20
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:21
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:76
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:15
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:17
@@ -27135,7 +27150,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:25
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:438
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:452
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:9
@@ -27350,7 +27365,7 @@ msgstr "Knjižnice"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:261
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:43
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
@@ -27483,6 +27498,11 @@ msgstr ""
 msgid "How many issues do you want to receive?"
 msgstr "Koliko sveščića želite zaprimiti ?"
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:154
+#, fuzzy, c-format
+msgid "How should patrons be deleted?"
+msgstr "%s%s %s0 %s korisnika bit će izbrisano"
+
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:191
 #, c-format
 msgid "How to process items: "
@@ -27611,7 +27631,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:15
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:321
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:322
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:103
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:122
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:83
@@ -27655,7 +27675,7 @@ msgstr "ISBN:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:6
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:24
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:72
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:92
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:38
@@ -27747,8 +27767,8 @@ msgstr "ISSN"
 msgid "ISSN:"
 msgstr "ISSN:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:25
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:73
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:27
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:50
@@ -28024,7 +28044,7 @@ msgstr ""
 msgid "Ignore"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:548
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:572
 #, fuzzy, c-format
 msgid "Ignore "
 msgstr "Više "
@@ -28040,7 +28060,7 @@ msgid "Ignore this one, keep the existing one"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid "Ignored"
 msgstr ""
 
@@ -28204,7 +28224,7 @@ msgstr "Slike za "
 #: intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:99
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:161
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:156
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
@@ -28243,7 +28263,7 @@ msgstr "Učitaj sve označene primjerke u košaricu sa sljedećim parametrima:"
 msgid "Import an MARC (ISO 2709) or MARCXML record"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:55
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:56
 #, fuzzy, c-format
 msgid "Import batch deleted successfully"
 msgstr "Slika je uspješno učitana"
@@ -28304,7 +28324,7 @@ msgid "Import results :"
 msgstr "Učitaj rezultate :"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:215
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:226
 msgid "Import this batch into the catalog"
 msgstr ""
 
@@ -28325,7 +28345,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:39
 #, c-format
 msgid "Imported"
@@ -28499,7 +28519,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:72
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:316
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:462
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:463
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:62
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:105
 #, c-format
@@ -28950,7 +28970,7 @@ msgid "Is hidden by default"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:193
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:455
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:478
 #, c-format
 msgid "Is this a duplicate of "
 msgstr ""
@@ -29116,7 +29136,7 @@ msgstr "Signatura:"
 msgid "Item cannot be renewed because it's an onsite checkout"
 msgstr "Naslov je dodan u košaricu"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:487
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:488
 #, c-format
 msgid "Item checked out"
 msgstr "Primjerak je zadužen"
@@ -29128,7 +29148,7 @@ msgstr "Primjerak je zadužen"
 msgid "Item circulation alerts"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:448
 #, c-format
 msgid "Item consigned:"
 msgstr ""
@@ -29229,7 +29249,7 @@ msgstr ""
 msgid "Item is already at destination library."
 msgstr "Primjerak je već u odredišnoj knjižnici."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:625
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
 #, fuzzy, c-format
 msgid "Item is lost, cannot be checked in."
 msgstr "Primjerak nije zadužen."
@@ -29262,20 +29282,20 @@ msgstr ""
 msgid "Item is restricted."
 msgstr "Korisnik ima ograničenje"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:643
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:667
 #, c-format
 msgid "Item is withdrawn."
 msgstr "Primjerak je otpisan."
 
 #. %1$s:  END 
-#. %2$s:  IF ( itemloo.damaged ) 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:434
+#. %2$s:  IF ( itemloo.itemlost ) 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:426
 #, fuzzy, c-format
 msgid "Item level hold forced from OPAC %s %s "
 msgstr "Rezervacije za primjerak"
 
 #. %1$s:  ELSIF itemloo.item_level_holds == "F" 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:432
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:424
 #, c-format
 msgid "Item level hold not allowed from OPAC %s "
 msgstr ""
@@ -29338,8 +29358,8 @@ msgstr ""
 msgid "Item only"
 msgstr "Broj primjeraka"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:174
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:177
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:183
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:186
 #, c-format
 msgid "Item processing:"
 msgstr ""
@@ -29395,7 +29415,7 @@ msgstr "Polja za pretraživanje primjeraka"
 msgid "Item search results"
 msgstr "Rezultati pretraživanja primjeraka"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:583
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:607
 #, fuzzy, c-format
 msgid "Item shelving location updated. "
 msgstr "Odabrana lokacija na polici: "
@@ -29436,13 +29456,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:729
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:303
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:459
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:460
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:270
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:253
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:878
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:154
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:172
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:182
@@ -29561,7 +29581,7 @@ msgstr ""
 msgid "Item was checked out to %s and was returned automatically."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:627
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:651
 #, c-format
 msgid "Item was lost, now found."
 msgstr "Primjerak je bio izgubljen, sada je nađen."
@@ -29788,8 +29808,8 @@ msgstr ""
 msgid "Jo Ransom"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:218
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:229
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:230
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:243
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:198
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:241
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
@@ -29886,7 +29906,7 @@ msgstr "Pretraživanje preko ključnih riječi"
 msgid "Keyword"
 msgstr "Ključna riječ"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:29
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:35
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:27
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:37
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:19
@@ -31914,10 +31934,10 @@ msgstr "Koha &rsaquo; Alati &rsaquo; Promjena primjeraka u seriji"
 #. %3$s:  IF step == 3 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:8
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization %s&rsaquo; "
-"Confirm%s%s&rsaquo; Finished%s"
+"Koha &rsaquo; Tools &rsaquo; Batch patron deletion and anonymization "
+"%s&rsaquo; Confirm%s%s&rsaquo; Finished%s"
 msgstr ""
 "Koha &rsaquo; Alati &rsaquo; Grupno brisanje/anonimizacija korisnika "
 "%s&rsaquo; Potvrdi%s%s&rsaquo; Gotovo%s"
@@ -32588,8 +32608,8 @@ msgstr ""
 msgid "LC call number:"
 msgstr "LC signatura: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:74
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:37
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:94
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:30
@@ -32599,7 +32619,7 @@ msgstr "LC signatura: "
 
 #: intranet-tmpl/prog/en/columns.def:141
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:104
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:198
 #, c-format
@@ -32780,12 +32800,14 @@ msgstr "Uvećani tisak"
 msgid "Large text"
 msgstr "Vrsta naplate"
 
-#. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
-#: intranet-tmpl/prog/en/includes/page-numbers.inc:17
-#, c-format
 msgid "Last"
+msgstr "Posljednja"
+
+#: intranet-tmpl/prog/en/includes/page-numbers.inc:17
+#, fuzzy, c-format
+msgid "Last "
 msgstr "Posljednja"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:236
@@ -33105,7 +33127,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:183
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:142
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:98
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:429
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:430
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:221
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:128
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:79
@@ -33583,9 +33605,9 @@ msgstr "Popisi na kojima je ovaj naslov: "
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
 #: intranet-tmpl/prog/en/includes/z3950_search.inc:1
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:288
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:484
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
@@ -33599,13 +33621,13 @@ msgid "Loading"
 msgstr "Učitavanje"
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:140
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:365
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:419
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:169
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:158
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:139
@@ -33648,7 +33670,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:173
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:433
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:446
 #, c-format
 msgid "Loading, please wait..."
 msgstr ""
@@ -33659,20 +33681,20 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:238
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:848
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1017
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1018
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:175
 #, c-format
 msgid "Loading..."
 msgstr "Učitavanje..."
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:753
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:894
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "Učitavanje..."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1017
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1018
 msgid "Loading... you may continue scanning."
 msgstr ""
 
@@ -33725,7 +33747,7 @@ msgid "Local use preferences"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:323
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:621
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:645
 #, c-format
 msgid "Local use recorded"
 msgstr ""
@@ -33758,7 +33780,7 @@ msgstr "Jezik:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:168
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:265
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:879
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:880
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:48
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:40
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:75
@@ -33971,7 +33993,7 @@ msgstr "Status izgubljeno:"
 msgid "Lost status: "
 msgstr "Status izgubljeno: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:705
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #, c-format
 msgid "Lost: "
 msgstr ""
@@ -34022,7 +34044,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:59
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:60
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:100
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:139
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:333
@@ -34145,10 +34167,10 @@ msgstr "Treba označiti barem jednu akciju"
 msgid "MARC organization code"
 msgstr "Organizacija"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:362
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:416
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:139
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:131
@@ -34810,7 +34832,7 @@ msgstr "Postavke alata za pretraživanje"
 msgid "Manage serial subscriptions"
 msgstr "Pretplate na periodiku"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:23
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:24
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
 #, c-format
 msgid "Manage staged MARC records"
@@ -35068,7 +35090,7 @@ msgid "MassCat, USA"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid "Match applied"
 msgstr ""
 
@@ -35088,13 +35110,13 @@ msgstr ""
 msgid "Match check 1 | "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:350
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:404
 #, c-format
 msgid "Match details"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid "Match found"
 msgstr ""
 
@@ -35124,28 +35146,28 @@ msgstr ""
 msgid "Match threshold: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:349
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:403
 #, c-format
 msgid "Match type"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid "Matches authority %s (score=%s):%s"
 msgstr "Odgovara normativnom zapisu %s (rezultat=%s):%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #, fuzzy
 msgid "Matches bibliographic record %s (score=%s):%s"
 msgstr "Odgovara normativnom zapisu %s (rezultat=%s):%s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:132
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:140
 #, c-format
 msgid "Matching rule applied"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:119
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:123
 #, c-format
 msgid "Matching rule applied:"
 msgstr ""
@@ -35349,7 +35371,7 @@ msgid "Message subject:"
 msgstr "Naslov poruke:"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:84
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:795
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:796
 #, c-format
 msgid "Messages:"
 msgstr "Poruke:"
@@ -35711,7 +35733,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:205
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:99
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:430
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:431
 #, c-format
 msgid "Module"
 msgstr "Modul"
@@ -35849,8 +35871,8 @@ msgstr ""
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:332
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:334
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:703
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:705
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:736
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:738
 msgid "Move Up"
 msgstr ""
 
@@ -35915,12 +35937,19 @@ msgstr ""
 msgid "Move hold up"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:165
+#, c-format
+msgid ""
+"Move patrons to the deleted patrons table. They can be deleted permanently "
+"by the "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:345
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:155
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:164
 #, c-format
 msgid "Move these patrons to the trash"
 msgstr ""
@@ -36009,8 +36038,8 @@ msgstr ""
 msgid "NORMARC"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:633
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:657
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:665
 #, c-format
 msgid "NOT CHECKED IN"
 msgstr ""
@@ -36052,7 +36081,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:29
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:252
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:101
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:432
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:433
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:62
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:83
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:33
@@ -36270,7 +36299,7 @@ msgstr "Novo"
 #: intranet-tmpl/prog/en/includes/labels-toolbar.inc:4
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:7
 #: intranet-tmpl/prog/en/includes/patroncards-toolbar.inc:4
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:14
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:12
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:5
 #, c-format
 msgid "New "
@@ -36750,7 +36779,7 @@ msgstr "Novi dobavljač"
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:597
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:621
 #, c-format
 msgid ""
 "New value: %s %s empty %s %s (Not an authorized value) %s %s %s %s \"Blank\" "
@@ -36761,12 +36790,12 @@ msgstr ""
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:574
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:598
 #, c-format
 msgid "New value: %s %s. %s Available for loan. %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:39
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:37
 #, c-format
 msgid "New vendor"
 msgstr "Novi dobavljač"
@@ -36807,6 +36836,7 @@ msgstr ""
 msgid "Next"
 msgstr "Sljedeće"
 
+#: intranet-tmpl/prog/en/includes/page-numbers.inc:16
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:215
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:170
 #: intranet-tmpl/prog/en/modules/labels/result.tt:17
@@ -36814,7 +36844,6 @@ msgstr "Sljedeće"
 msgid "Next "
 msgstr "Sljedeće"
 
-#: intranet-tmpl/prog/en/includes/page-numbers.inc:16
 #: intranet-tmpl/prog/en/modules/serials/result.tt:55
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:120
 #, c-format
@@ -36822,7 +36851,7 @@ msgid "Next &gt;&gt;"
 msgstr "Sljedeće &gt;&gt;"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:131
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:133
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:380
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:457
@@ -36856,7 +36885,7 @@ msgid "Next issue publication date:"
 msgstr "Datum izdavanja sljdedećeg broja:"
 
 #. INPUT type=button name=changepage_next
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:189
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:209
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:145
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:194
 msgid "Next page"
@@ -36884,7 +36913,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:269
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:400
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:56
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:58
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:117
@@ -37124,8 +37153,11 @@ msgstr ""
 msgid "No comments to moderate."
 msgstr ""
 
+#. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/js_includes.inc:59
+#: intranet-tmpl/prog/en/modules/catalogue/results.tt:394
+#, c-format
 msgid "No cover image available"
 msgstr "Nema slike ovitka"
 
@@ -37214,10 +37246,9 @@ msgstr "Nema rezervacija."
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:190
-msgid ""
-"No holds on this item / Total holds on this record: [% item_loo.holds | html "
-"-%]"
-msgstr ""
+#, fuzzy
+msgid "No holds on this item / Total holds on this record: %s"
+msgstr "Nema slika za ovaj zapis."
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:137
@@ -37286,7 +37317,7 @@ msgstr ""
 "zabilježena): %s"
 
 #. %1$s:  errmsgloo.msg | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:612
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:636
 #, c-format
 msgid "No item with barcode: %s"
 msgstr ""
@@ -37304,7 +37335,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:122
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:507
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:508
 #, c-format
 msgid "No items are available"
 msgstr "Nema dostupnih primjeraka"
@@ -37366,7 +37397,7 @@ msgid "No mappings have been defined for this set"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid "No match"
 msgstr ""
 
@@ -37386,7 +37417,7 @@ msgid "No matches found"
 msgstr "Nije pronađen niti jedan primjerak."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:484
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #, fuzzy
 msgid "No matching notices found"
 msgstr "Nije pronađen niti jedan primjerak."
@@ -37458,7 +37489,7 @@ msgstr "Upiši broj iskaznice korisnika:"
 msgid "No patron cardnumber in offline database (proceeding anyway): %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:492
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:493
 #, c-format
 msgid "No patron matched "
 msgstr ""
@@ -37468,17 +37499,17 @@ msgstr ""
 msgid "No patron may put this book on hold."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:190
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
 #, c-format
 msgid "No patron records have been actually removed"
 msgstr "Zapisi o korisnicima nisu zapravo uklonjeni"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:221
 #, c-format
 msgid "No patron records have been anonymized"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:199
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:215
 #, c-format
 msgid "No patron records have been removed"
 msgstr ""
@@ -37588,7 +37619,7 @@ msgstr "Broj ignoriranih zapisa"
 msgid "No records have been selected."
 msgstr "Spoji označeno"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:61
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:62
 #, c-format
 msgid "No records have been staged."
 msgstr ""
@@ -37714,7 +37745,7 @@ msgstr ""
 msgid "No, do not Delete"
 msgstr "Ne, nemoj brisati (N)"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:451
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:452
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:268
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:254
@@ -37779,7 +37810,8 @@ msgstr "Ne, nemoj produžiti rok posudbe (N)"
 msgid "No, let me think about it"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:464
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:492
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:494
 #, c-format
 msgid "No, save as new record"
 msgstr "Ne, spremi kao novi zapis"
@@ -37886,7 +37918,7 @@ msgid "None defined"
 msgstr "%s %s Nije definirano %s "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "None of these items can normally be put on hold for this patron."
 msgstr ""
 
@@ -37917,7 +37949,7 @@ msgstr "Interna napomena:"
 msgid "Nonpublic note: "
 msgstr "Interna napomena:"
 
-#. %1$s:  internalnotes | html 
+#. %1$s:  internalnotes | html | html_line_break 
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:98
 #, c-format
 msgid "Nonpublic note: %s"
@@ -38049,7 +38081,7 @@ msgstr "Nije dostupno"
 msgid "Not checked out since: "
 msgstr "Nije posuđivano od: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:618
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:642
 #, c-format
 msgid "Not checked out."
 msgstr "Nije posuđeno."
@@ -38064,6 +38096,12 @@ msgstr "Nije posuđeno."
 msgid "Not for loan"
 msgstr ""
 
+#. %1$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', itemloo.notforloan ) | html 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:438
+#, fuzzy, c-format
+msgid "Not for loan (%s)"
+msgstr "Nije za posudbu: "
+
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
@@ -38072,7 +38110,7 @@ msgstr ""
 msgid "Not for loan status"
 msgstr "Nije za posudbu: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:566
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:590
 #, fuzzy, c-format
 msgid "Not for loan status updated. "
 msgstr "Nije za posudbu: "
@@ -38107,7 +38145,7 @@ msgstr "Zadnji put viđeno"
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:123
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:106
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:107
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:69
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:83
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:136
@@ -38306,7 +38344,7 @@ msgstr "Napomene/komentari"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:178
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:369
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:208
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:790
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:628
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:720
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:819
@@ -38333,8 +38371,8 @@ msgstr "Napomene: "
 #. For the first occurrence,
 #. %1$s:  reservenotes | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:62
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:255
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:467
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:279
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:491
 #, c-format
 msgid "Notes: %s"
 msgstr "Napomene: %s"
@@ -38346,7 +38384,7 @@ msgstr "Napomene: %s"
 msgid "Notes: %s%s "
 msgstr "Napomene: %s%s %s "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:195
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:215
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:162
 #, c-format
 msgid "Nothing found."
@@ -38538,12 +38576,12 @@ msgstr "Količina brojeva:"
 msgid "Number of items"
 msgstr "Broj dodanih primjeraka"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:240
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:266
 #, c-format
 msgid "Number of items added"
 msgstr "Broj dodanih primjeraka"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:251
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:290
 #, c-format
 msgid "Number of items deleted"
 msgstr "Broj obrisanih primjeraka"
@@ -38553,12 +38591,12 @@ msgstr "Broj obrisanih primjeraka"
 msgid "Number of items displayed"
 msgstr "Broj prikazanih primjeraka"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:242
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:274
 #, c-format
 msgid "Number of items ignored because of duplicate barcode"
 msgstr "Broj ignoriranih primjeraka radi duplog bar-koda"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:241
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:270
 #, c-format
 msgid "Number of items replaced"
 msgstr "Broj zamijenjenih primjeraka"
@@ -38602,33 +38640,33 @@ msgstr "Broj stranica"
 msgid "Number of potential barcodes read: %s"
 msgstr "Broj potencijalno pročitanih barkodova: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:236
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:253
 #, c-format
 msgid "Number of records added"
 msgstr "Broj dodanih zapisa"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:254
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:299
 #, c-format
 msgid "Number of records changed back"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:249
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:285
 #, c-format
 msgid "Number of records deleted"
 msgstr "Broj izbrisanih zapisa"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:238
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:255
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:261
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:303
 #, c-format
 msgid "Number of records ignored"
 msgstr "Broj ignoriranih zapisa"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:252
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:294
 #, c-format
 msgid "Number of records not deleted due to items on loan"
 msgstr "Broj primjeraka koji nisu obrisani radi toga što su u posudbi"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:237
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:257
 #, c-format
 msgid "Number of records updated"
 msgstr "Broj ažuriranih zapisa"
@@ -38756,8 +38794,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/cities-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/modals/serials_multi_receiving.inc:27
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:78
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:419
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:459
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:420
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:460
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:27
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:17
@@ -38770,9 +38808,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:48
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:59
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:198
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:225
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:402
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:432
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:226
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:426
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:456
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:31
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:382
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:249
@@ -39006,7 +39044,7 @@ msgstr "Zadnja vrijednost "
 #. %7$s:  END 
 #. %8$s:  ELSE 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:585
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
 #, c-format
 msgid ""
 "Old value: %s %s empty %s %s (No description available) %s %s %s %s \"Blank"
@@ -39017,7 +39055,7 @@ msgstr ""
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:592
 #, c-format
 msgid "Old value: %s %s. %s Available for loan. %s "
 msgstr ""
@@ -39069,7 +39107,7 @@ msgstr "Za naslov "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:613
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:614
 #, fuzzy, c-format
 msgid "On-site checkout"
 msgstr "Nije posuđeno."
@@ -39079,7 +39117,7 @@ msgstr "Nije posuđeno."
 msgid "On-site checkouts"
 msgstr "Ukoupno posuđeno"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:608
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:609
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr ""
@@ -39172,7 +39210,7 @@ msgstr "Bilo koja vrsta građe"
 msgid "Only items currently available:"
 msgstr "Samo trenutno dostupni primjerci:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:659
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:660
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr ""
@@ -39286,7 +39324,7 @@ msgstr "Nedostaje opcionalni modul"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:94
 #: intranet-tmpl/prog/en/modules/tools/export.tt:119
 #: intranet-tmpl/prog/en/modules/tools/export.tt:202
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:724
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:748
 #, c-format
 msgid "Options"
 msgstr "Opcije"
@@ -39718,7 +39756,7 @@ msgstr "Izlazni podaci"
 msgid "Outstanding"
 msgstr "Duguje"
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:121
+#: intranet-tmpl/prog/en/modules/members/pay.tt:125
 #, c-format
 msgid "Outstanding credits could be applied: "
 msgstr ""
@@ -39771,7 +39809,7 @@ msgstr "Prekoračenja roka posudbe"
 msgid "Overdues with fines"
 msgstr "Prekoračenja roka posudbe i zakasnine"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:738
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
 #, c-format
 msgid "Overdues: Patron has ITEMS OVERDUE."
 msgstr "Prekoračenja roka posudbe: Korisnik je PREKORAČIO ROK."
@@ -39801,7 +39839,7 @@ msgstr ""
 msgid "Override renewal restrictions:"
 msgstr "Zaobiđi limit broja produženja:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:731
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:732
 #, c-format
 msgid "Override restriction temporarily"
 msgstr ""
@@ -40046,11 +40084,11 @@ msgstr "Patent"
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:36
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:26
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:737
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:886
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:887
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:49
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:60
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:103
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:221
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:39
@@ -40256,7 +40294,7 @@ msgstr ""
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount | $Price 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:757
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:758
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr ""
@@ -40277,7 +40315,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:418
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:652
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:676
 #, c-format
 msgid "Patron has an indefinite restriction."
 msgstr "Korisnik ima beskonačno ograničenje."
@@ -40305,7 +40343,7 @@ msgid "Patron has nothing checked out."
 msgstr "Korisnik nema ništa posuđeno."
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:813
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:953
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr "Korisnik nema ništa rezervirano."
@@ -40332,13 +40370,13 @@ msgid "Patron has outstanding fines: %s"
 msgstr "Korisnik ima dugove: %s"
 
 #. %1$s:  IF CAN_user_borrowers_edit_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:669
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "Zahtjevi za promjenom korisničkog računa"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:100
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:493
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:494
 #, fuzzy, c-format
 msgid "Patron has previously checked out this title"
 msgstr ""
@@ -40379,9 +40417,9 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:91
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:274
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:496
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:364
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:520
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr ""
@@ -40464,7 +40502,7 @@ msgid "Patron not found."
 msgstr "Korisnik nije pronađen."
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #, fuzzy, c-format
 msgid "Patron not found. "
 msgstr "Korisnik nije pronađen."
@@ -40578,7 +40616,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  errmsgloo.prevdebarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:673
 #, fuzzy, c-format
 msgid "Patron was earlier restricted until %s."
 msgstr "Korisnik je prije bio restriktiran do %s"
@@ -40601,22 +40639,22 @@ msgstr "Članstvo je produžen do %s"
 #. %3$s:  END 
 #. %4$s:  IF ( patron.debarredcomment ) 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:114
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:710
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:711
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:169
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:701
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:702
 #, c-format
 msgid "Patron's address in doubt"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:374
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:278
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:341
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:500
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:302
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:365
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:524
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr ""
@@ -40647,7 +40685,7 @@ msgstr ""
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:692
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:693
 #, c-format
 msgid "Patron's card has expired. %s Patron's card expired on %s %s "
 msgstr ""
@@ -40668,7 +40706,7 @@ msgid "Patron's card is expired."
 msgstr "Izrada korisničkih iskaznica"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:378
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:705
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:706
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 #, c-format
 msgid "Patron's card is lost"
@@ -40682,7 +40720,7 @@ msgstr "Korisnici na popisima"
 #. For the first occurrence,
 #. %1$s:  expiry | $KohaDates 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:149
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:678
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:679
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr ""
@@ -40695,7 +40733,7 @@ msgstr ""
 
 #. %1$s:  chargesamount_guarantees | $Price 
 #. %2$s:  IF noissues 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:748
 #, c-format
 msgid "Patron's guarantees collectively owe %s. %s "
 msgstr ""
@@ -41004,7 +41042,7 @@ msgstr "Neobrađeni prijedlozi za nabavu"
 msgid "Pending holds"
 msgstr "Narudžbe na čekanju"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:669
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:670
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "Otkaži promjene"
@@ -41140,12 +41178,12 @@ msgstr ""
 msgid "Permanent shelving location"
 msgstr "Stalna lokacija na polici"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:121
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:123
 #, c-format
 msgid "Permanently delete checkout history older than"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:152
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:157
 #, c-format
 msgid "Permanently delete these patrons"
 msgstr ""
@@ -41210,7 +41248,7 @@ msgid "Pick up location"
 msgstr "Knjižnica za preuzimanje"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:772
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:912
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
 #, fuzzy, c-format
 msgid "Pickup at"
 msgstr "Preuzmi u:"
@@ -41295,10 +41333,10 @@ msgstr "Rezultati pretraživanja od %s do %s od %s"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:275
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:277
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:279
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:528
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:530
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:533
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:535
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:529
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:531
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:534
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:536
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:15
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:152
 #, c-format
@@ -41323,12 +41361,12 @@ msgid "Place hold for %s %s (%s)"
 msgstr "Rezerviraj za %s %s (%s)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "Place hold on this item?"
 msgstr "Rezerviraj ovaj primjerak?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "Place hold?"
 msgstr "Rezerviraj?"
 
@@ -41447,7 +41485,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
 msgid "Please check at least one action"
 msgstr "Treba označiti barem jednu akciju"
 
@@ -41607,7 +41645,7 @@ msgid "Please enter a "
 msgstr "Unesi pojmove za pretraživanje"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
 #, fuzzy
 msgid "Please enter a date!"
 msgstr "Unesi pojmove za pretraživanje"
@@ -41702,7 +41740,7 @@ msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
 msgid "Please enter at least one criterion for deletion!"
 msgstr ""
 
@@ -41758,7 +41796,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:484
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 msgid "Please fill at least one template."
 msgstr ""
 
@@ -41863,19 +41901,19 @@ msgid "Please return item to home library: %s"
 msgstr ""
 
 #. %1$s:  Branches.GetName( errmsgloo.msg ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:615
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:639
 #, fuzzy, c-format
 msgid "Please return item to: %s"
 msgstr "Odaberite %s."
 
 #. %1$s:  Branches.GetName( TransferWaitingAt ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:213
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:212
 #, fuzzy, c-format
 msgid "Please return item to: %s "
 msgstr "Odaberite %s."
 
 #. %1$s:  Branches.GetName( returnbranch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:378
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:402
 #, fuzzy, c-format
 msgid "Please return this item to %s "
 msgstr "Odaberite %s."
@@ -42043,7 +42081,7 @@ msgid "Please specify the reason for cancelling selected item(s):"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:484
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 msgid "Please specify title and content for %s"
 msgstr ""
 
@@ -42290,7 +42328,7 @@ msgid "Prev"
 msgstr "Pret"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:398
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:202
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:111
@@ -42336,6 +42374,7 @@ msgstr "Izradi novi predložak"
 #: intranet-tmpl/prog/en/includes/browser-strings.inc:1
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
+#: intranet-tmpl/prog/en/includes/page-numbers.inc:6
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:487
 #: intranet-tmpl/prog/en/modules/labels/result.tt:7
 #, c-format
@@ -42363,7 +42402,7 @@ msgid "Previous checkouts"
 msgstr "Prijašnja zaduženja"
 
 #. INPUT type=button name=changepage_prev
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:185
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:205
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:190
 msgid "Previous page"
@@ -42381,7 +42420,7 @@ msgstr "Prethodni periodi aktivnosti"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:83
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:885
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:886
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:82
 #, c-format
@@ -42529,7 +42568,7 @@ msgstr "Printanje poruka za %s"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:33
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:127
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:403
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:427
 #, c-format
 msgid "Print slip"
 msgstr "Ispis potvrde"
@@ -42540,23 +42579,23 @@ msgid "Print slip "
 msgstr "Ispis potvrde"
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:527
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:528
 #, fuzzy
 msgid "Print slip and clear screen"
 msgstr "Potvrdi i ispiši potvrdu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:316
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:543
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:567
 #, fuzzy, c-format
 msgid "Print slip and confirm "
 msgstr "Potvrdi i ispiši potvrdu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:354
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:378
 #, fuzzy, c-format
 msgid "Print slip and continue"
 msgstr "Potvrdi i ispiši potvrdu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:536
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:560
 #, fuzzy, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Potvrdi i ispiši potvrdu"
@@ -42576,7 +42615,7 @@ msgstr "Printanje grupe košarica u PDF"
 msgid "Print this label"
 msgstr "Otisni naljepnicu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:226
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:235
 #, fuzzy, c-format
 msgid "Print transfer slip"
 msgstr "Ispis potvrde"
@@ -42644,8 +42683,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:5
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:774
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:461
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:462
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
 #, c-format
 msgid "Priority"
 msgstr "Prioritet"
@@ -42936,7 +42975,7 @@ msgid "Publication year"
 msgstr "Godina izdavanja"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:289
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:478
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:479
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:277
 #, c-format
 msgid "Publication year:"
@@ -43324,7 +43363,7 @@ msgstr ""
 msgid "Rate: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:78
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:96
 #, c-format
 msgid "Raw (any): "
 msgstr "Sve: "
@@ -43413,7 +43452,7 @@ msgstr "Zaprimi pošiljku"
 msgid "Receive shipment from vendor "
 msgstr "Zaprimi pošiljku od dobavljača "
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:36
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:34
 #, c-format
 msgid "Receive shipments"
 msgstr "Zaprimi pošiljke"
@@ -43493,7 +43532,7 @@ msgstr ""
 msgid "Recipients:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:406
 #, c-format
 msgid "Record"
 msgstr "Zapis"
@@ -43708,7 +43747,7 @@ msgstr "Informacija o vezi"
 msgid "Relationship: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:835
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:836
 #, c-format
 msgid "Relatives' checkouts"
 msgstr ""
@@ -43769,12 +43808,12 @@ msgstr "Administracija profila"
 msgid "Remaining system parameters permissions "
 msgstr "Nemate potrebne ovlasti za postavljanje ovlasti"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:703
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
 #, c-format
 msgid "Remember for next check in:"
 msgstr "Zapamti za sljedeće razduživanje:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:563
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:564
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:133
 #, c-format
 msgid "Remember for session:"
@@ -43790,8 +43829,8 @@ msgstr ""
 msgid "Reminder date"
 msgstr "Podsjetnik: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:652
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:673
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:676
 #, c-format
 msgid "Reminder: "
 msgstr "Podsjetnik: "
@@ -43887,8 +43926,9 @@ msgstr "Ukloni duplikate"
 
 #. A
 #: intranet-tmpl/prog/en/includes/facets.inc:40
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "Ukloni facetu [% facet.facet_link_value | html %]"
+#, fuzzy
+msgid "Remove facet %s"
+msgstr "Ukloni "
 
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:375
 #, fuzzy, c-format
@@ -43993,8 +44033,8 @@ msgstr "Ukloni?"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:169
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:29
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:679
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:696
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:680
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:697
 #, c-format
 msgid "Renew"
 msgstr "Produži"
@@ -44177,8 +44217,8 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:308
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:309
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:680
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:681
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:714
 msgid "Repeat this Tag"
 msgstr ""
 
@@ -44595,7 +44635,7 @@ msgstr "Nedostaje potreban modul"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:493
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:204
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:761
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:799
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:405
@@ -44751,6 +44791,11 @@ msgstr "Obavezno"
 msgid "Required fields cannot be cleared"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
+#, fuzzy, c-format
+msgid "Required fields:"
+msgstr "Obavezno"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:11
 #, c-format
 msgid "Required for staff login."
@@ -44802,10 +44847,10 @@ msgstr "Pronađena je rezervacija"
 msgid "Reserves"
 msgstr "Rezervacije"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:132
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:141
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:158
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:175
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:138
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:151
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:168
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:184
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:158
 #, c-format
 msgid "Reset"
@@ -44866,12 +44911,12 @@ msgstr ""
 msgid "Restricted status of an item"
 msgstr "Ne može se razdužiti"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:710
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:711
 #, c-format
 msgid "Restricted:"
 msgstr "Ograničeno:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:480
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:481
 #, c-format
 msgid "Restriction overridden temporarily"
 msgstr ""
@@ -44894,7 +44939,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:131
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:371
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:68
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:85
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:204
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:97
 #, c-format
@@ -44952,7 +44997,7 @@ msgstr "Rezultati"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:807
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:947
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:948
 msgid "Resume all suspended holds"
 msgstr "Reaktiviraj sve obustavljene rezervacije"
 
@@ -45045,7 +45090,7 @@ msgid "Return to rotating collections home"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:962
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
 #, fuzzy, c-format
 msgid "Return to search"
 msgstr "Povratak na rezultate"
@@ -45115,7 +45160,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/ill-list-table-strings.inc:1
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 msgid "Reverted"
 msgstr ""
 
@@ -45490,9 +45535,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:91
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:35
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:487
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:491
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:504
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:518
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:522
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:535
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:89
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:427
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:89
@@ -45580,12 +45625,12 @@ msgid "Save all %s preferences"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:177
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:498
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:529
 #, c-format
 msgid "Save and continue editing"
 msgstr "Spremi i nastavi uređivati"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:497
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:528
 #, c-format
 msgid "Save and edit items"
 msgstr "Spremi i uredi primjerke"
@@ -45595,7 +45640,7 @@ msgstr "Spremi i uredi primjerke"
 msgid "Save and preview routing slip"
 msgstr "Spremi i pregledaj potvrdu za redoslijed kruženja"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:496
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:527
 #, c-format
 msgid "Save and view record"
 msgstr "Spremi i pogledaj zapis"
@@ -45852,7 +45897,7 @@ msgstr "Na ekran"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:139
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:31
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:72
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:59
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:76
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:137
@@ -45882,6 +45927,13 @@ msgid "Search"
 msgstr "Pretraživanje"
 
 #. INPUT type=text
+#: intranet-tmpl/prog/en/modules/serials/claims.tt:115
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:83
+#, fuzzy
+msgid "Search %s"
+msgstr "Pretraživanje"
+
+#. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:108
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:71
 msgid "Search ISSN"
@@ -45891,13 +45943,6 @@ msgstr "Pretraži ISSN"
 #, fuzzy, c-format
 msgid "Search Z39.50/SRU servers"
 msgstr "Pretraživanje Z39.50 servera"
-
-#. INPUT type=text
-#: intranet-tmpl/prog/en/modules/serials/claims.tt:115
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:83
-#, fuzzy
-msgid "Search [% field.name | html %]"
-msgstr "Pretraži [% subfiel.marc_value %]"
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:230
 #, c-format
@@ -46159,17 +46204,17 @@ msgstr "Pretraživanje poruka"
 msgid "Search on"
 msgstr "Pretraži preko"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
-#, fuzzy, c-format
-msgid "Search on Mana"
-msgstr "Pretraži preko"
-
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:85
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:82
 #, fuzzy
-msgid "Search on [% subfiel.marc_value | html %]"
-msgstr "Pretraži [% subfiel.marc_value |html %]"
+msgid "Search on %s"
+msgstr "Pretraži preko"
+
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
+#, fuzzy, c-format
+msgid "Search on Mana"
+msgstr "Pretraži preko"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:12
 #, c-format
@@ -46260,7 +46305,7 @@ msgstr "Pretraži prijedloge"
 msgid "Search system preferences"
 msgstr "Pretraži sistemske postavke"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:40
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:54
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:51
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:58
 #, fuzzy, c-format
@@ -46443,7 +46488,7 @@ msgid "Section"
 msgstr "Sekcija"
 
 #. %1$s:  BIG_LOO.number | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:629
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:660
 #, fuzzy, c-format
 msgid "Section %s"
 msgstr "Sekcija"
@@ -46458,7 +46503,7 @@ msgstr "Sekcija:"
 msgid "See any subscription attached to this biblio"
 msgstr "Vidi sve pretplate vezane uz ovaj biblio"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:738
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:739
 #, c-format
 msgid "See highlighted items below"
 msgstr "Pogledajte istaknute primjerke dolje"
@@ -46616,7 +46661,7 @@ msgstr ""
 msgid "Select a library :"
 msgstr "Odaberi knjižnicu :"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:34
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:40
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:53
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:55
 #, c-format
@@ -46678,7 +46723,7 @@ msgstr "Obriši predložak"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:66
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:179
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:42
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:57
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
@@ -47228,7 +47273,7 @@ msgstr "Naslov nakladničke cjeline"
 msgid "Series: "
 msgstr "Nakladnička cjelina: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:98
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:117
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:79
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:103
 #, c-format
@@ -47294,7 +47339,7 @@ msgstr "Nova grupa košarica"
 msgid "Set by"
 msgstr "Poredaj prema"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
 #, c-format
 msgid "Set due date to expiry:"
 msgstr ""
@@ -47307,8 +47352,8 @@ msgstr "Podesi geolokaciju"
 #. IMG
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:197
 #, fuzzy
-msgid "Set geolocation for [% l.branchname | html %]"
-msgstr "Podesi geolokaciju za [% l.branchname %]"
+msgid "Set geolocation for %s"
+msgstr "Podesi geolokaciju"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:46
 #, c-format
@@ -47386,7 +47431,7 @@ msgid "Set user permissions"
 msgstr "Postavi ovlasti"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:45
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:512
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:543
 #, c-format
 msgid "Settings "
 msgstr "Postavke "
@@ -47496,7 +47541,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:180
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:204
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:199
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:134
@@ -47644,7 +47689,7 @@ msgstr "Prikaži"
 msgid "Show MARC"
 msgstr "Prikaži MARC"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:519
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:550
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr "Prikaži poveznice na MARC dokumentaciju"
@@ -47735,7 +47780,7 @@ msgstr "Prikaži sve primjerke"
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:430
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:447
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:448
 #, c-format
 msgid "Show all items (%s hidden)"
 msgstr "Prikaži sve primjerke (%s sakriveno)"
@@ -47880,7 +47925,7 @@ msgstr "Prikaži samo pretplate "
 msgid "Show subscriptions"
 msgstr "Prikaži pretplate"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:521
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:552
 #, c-format
 msgid "Show tags"
 msgstr "Prikaži tagove"
@@ -48247,14 +48292,14 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:797
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:937
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:938
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:557
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:558
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:131
 #, c-format
 msgid "Specify due date %s: "
@@ -48266,7 +48311,7 @@ msgid "Specify how the holiday should repeat."
 msgstr ""
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:699
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:723
 #, c-format
 msgid "Specify return date %s: "
 msgstr "Specificiraj datum vraćanja %s: "
@@ -48410,7 +48455,7 @@ msgstr ""
 msgid "Stage MARC records"
 msgstr "Administracija pripremljenih MARC zapisa"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:62
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:63
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:18
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:32
@@ -48438,8 +48483,8 @@ msgstr ""
 msgid "Stage records into the reservoir"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:280
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:333
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:390
 #, c-format
 msgid "Staged"
@@ -48455,7 +48500,7 @@ msgstr ""
 msgid "Staged MARC record management"
 msgstr "Administracija pripremljenih MARC zapisa"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:100
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:103
 #, c-format
 msgid "Staged:"
 msgstr ""
@@ -48484,8 +48529,8 @@ msgstr ""
 msgid "Standard"
 msgstr "Standardno"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:33
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:97
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:41
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:62
 #, c-format
@@ -48670,8 +48715,8 @@ msgstr "Statistički mađioničar"
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:22
 #: intranet-tmpl/prog/en/modules/tags/review.tt:81
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:68
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:279
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:348
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:332
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:402
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:202
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:515
@@ -48692,7 +48737,7 @@ msgstr "Statistički mađioničar"
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:389
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:37
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:917
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:474
@@ -48713,7 +48758,7 @@ msgid "Status changed"
 msgstr "Vrijeme zadnje promjene:"
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:194
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:101
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:104
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:39
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:196
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
@@ -48835,7 +48880,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  numberpending | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:203
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:230
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:168
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:220
 #, c-format
@@ -48913,7 +48958,7 @@ msgstr "Sub-klasifikacija"
 msgid "Sub total "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:127
+#: intranet-tmpl/prog/en/modules/members/pay.tt:135
 #, c-format
 msgid "Sub total:"
 msgstr ""
@@ -49008,8 +49053,8 @@ msgstr ""
 msgid "Subject"
 msgstr "Predmet"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:28
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:75
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:33
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:41
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:95
@@ -49138,7 +49183,7 @@ msgstr "Predmeti:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:99
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:160
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:188
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:695
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:719
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:35
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:118
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:102
@@ -49423,7 +49468,7 @@ msgstr "Ograničenje na podtipove"
 msgid "Success."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:247
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:282
 #, c-format
 msgid "Success: Import reversed"
 msgstr ""
@@ -49668,7 +49713,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:792
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:932
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
 msgid "Suspend all holds"
 msgstr "Odgodi sve rezervacije"
 
@@ -49685,7 +49730,7 @@ msgid "Suspend until:"
 msgstr "Odgodi sve rezervacije"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:776
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:916
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:917
 #, c-format
 msgid "Suspend?"
 msgstr ""
@@ -49713,7 +49758,7 @@ msgstr ""
 msgid "Switch languages"
 msgstr "Jezici"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:515
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:546
 #, fuzzy, c-format
 msgid "Switch to advanced editor"
 msgstr "Složeno pretraživanje"
@@ -49962,8 +50007,8 @@ msgstr "Tag obrisan"
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:379
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:168
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:733
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:741
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:771
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:779
 #, fuzzy, c-format
 msgid "Tag editor"
 msgstr "Alat za uređivanje citata"
@@ -50206,6 +50251,11 @@ msgstr "Testiranje uzorka"
 msgid "Test prediction pattern"
 msgstr "Testiranje uzorka predviđanja"
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:171
+#, c-format
+msgid "Test run: Do not remove any patrons."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:265
 #, c-format
 msgid "Test the regular expressions:"
@@ -50357,7 +50407,7 @@ msgid ""
 "for statistical purposes"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:115
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
 #, c-format
 msgid ""
 "The AnonymousPatron system preference is not defined. You can use this "
@@ -50681,9 +50731,9 @@ msgstr ""
 msgid "The field itemnum MUST be mapped "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:271
+#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
 #, c-format
-msgid "The fields 'branchcode' and 'categorycode' are "
+msgid "The fields 'surname', 'branchcode', and 'categorycode' are "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:31
@@ -50876,7 +50926,7 @@ msgstr "Naslov je dodan u košaricu"
 msgid "The item has been removed from your cart"
 msgstr "Naslov je dodan u košaricu"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:656
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:680
 #, c-format
 msgid ""
 "The item has not been checked in due to a configuration issue in your "
@@ -51164,7 +51214,7 @@ msgstr ""
 msgid "The record id "
 msgstr "Novi zapis "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:603
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:634
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr ""
@@ -51260,6 +51310,13 @@ msgid ""
 "it includes them all."
 msgstr ""
 
+#. SPAN
+#: intranet-tmpl/prog/en/modules/admin/preferences.tt:68
+msgid ""
+"The system preference %s may have been overridden from this value by one or "
+"more virtual hosts."
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:113
 #, c-format
 msgid ""
@@ -51271,13 +51328,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:50
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:57
 msgid "The system preference ProtectSuperlibrarianPrivileges is enabled"
-msgstr ""
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/preferences.tt:68
-msgid ""
-"The system preference [% NAME.name | html %] may have been overridden from "
-"this value by one or more virtual hosts."
 msgstr ""
 
 #. SCRIPT
@@ -51703,6 +51753,13 @@ msgstr ""
 msgid "These items have a hold ratio &ge; %s."
 msgstr ""
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
+msgid ""
+"These patrons will be permanently removed from the database and cannot be "
+"recovered"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:218
 #, c-format
 msgid "Theses"
@@ -51998,13 +52055,13 @@ msgid "This item must be returned to %s."
 msgstr "Naslov je dodan u košaricu"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "This item normally cannot be put on hold except for patrons from %s."
 msgstr ""
 "Ovaj primjerak se uobičajeno ne može rezervirati, osim za korisnike iz %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:692
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:693
 msgid "This item normally cannot be put on hold."
 msgstr "Ovaj primjerak se ne može rezervirati prema pravilima."
 
@@ -52077,7 +52134,7 @@ msgid ""
 "in, but the AnonymousPatron system preference is empty or incorrect."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:511
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:512
 #, c-format
 msgid ""
 "This patron has requested their circulation history be anonymized on check-"
@@ -52174,23 +52231,9 @@ msgstr "Naziv ili barkod nisu pronađeni. Molimo pokušajte drugi "
 
 #. TR
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:30
-msgid ""
-"This resource has been reported more than [% highWarned | html %] times, "
-"take care!"
-msgstr ""
-
-#. TR
-#: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:34
-msgid ""
-"This resource has been reported more than [% lowWarned | html %] times, take "
-"care!"
-msgstr ""
-
-#. TR
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:32
-msgid ""
-"This resource has been reported more than [% warned | html %] times, take "
-"care!"
+#: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:34
+msgid "This resource has been reported more than %s times, take care!"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:256
@@ -52228,7 +52271,7 @@ msgstr "Ova pretplata ovisi o drugom dobavljaču"
 msgid "This subscription is closed."
 msgstr "Ova pretplata je zatvorena."
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:60
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:62
 #, c-format
 msgid ""
 "This tool allows you to delete patrons and anonymize checkout history. For "
@@ -52441,7 +52484,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:245
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:305
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:306
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:118
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:29
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:159
@@ -52457,14 +52500,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:769
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:81
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:457
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:458
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:29
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:34
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:252
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:876
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:877
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:910
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:51
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:104
@@ -52477,7 +52520,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:177
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:53
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:68
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:105
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
@@ -52576,8 +52619,8 @@ msgstr "Naslov:"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:80
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:150
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:70
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:26
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:70
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:29
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:33
@@ -52937,7 +52980,7 @@ msgstr "Administracija prijedloga"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:14
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:14
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:32
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:20
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:21
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:76
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:15
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:17
@@ -53144,7 +53187,12 @@ msgstr "Nije posuđeno."
 msgid "Total due"
 msgstr "Ukupno duguje"
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:132
+#: intranet-tmpl/prog/en/modules/members/pay.tt:129
+#, fuzzy, c-format
+msgid "Total due if credit applied:"
+msgstr "Vrsta kredita: "
+
+#: intranet-tmpl/prog/en/modules/members/pay.tt:120
 #, c-format
 msgid "Total due:"
 msgstr "Ukupan dug:"
@@ -53320,7 +53368,7 @@ msgstr "Transfer kasni %s dana"
 msgid "Transfer is not allowed for: "
 msgstr "Izradi novu zbirku"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:389
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:413
 #, fuzzy, c-format
 msgid "Transfer now? "
 msgstr "Dodaj narudžbu u košaricu %s"
@@ -53332,9 +53380,9 @@ msgid "Transfer order to this basket?"
 msgstr "Administracija narudžbi"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:99
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:283
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:344
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:504
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:307
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:368
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:528
 #, c-format
 msgid "Transfer to:"
 msgstr ""
@@ -53388,8 +53436,9 @@ msgstr "Naziv organizacije: "
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:121
-msgid "Translate item type [% itemtype.itemtype | html %]"
-msgstr ""
+#, fuzzy
+msgid "Translate item type %s"
+msgstr "Dostupne vrste građe"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:36
 #: intranet-tmpl/prog/en/modules/about.tt:675
@@ -53445,7 +53494,7 @@ msgid "Try again with a different barcode"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:197
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:222
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:150
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:213
@@ -53489,7 +53538,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:40
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:17
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:278
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: intranet-tmpl/prog/en/modules/members/files.tt:39
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
@@ -53499,7 +53548,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:35
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:761
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:785
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:410
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:162
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:146
@@ -53515,7 +53564,7 @@ msgstr "Vrsta"
 msgid "Type of change"
 msgstr "Vrsta procedure"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:99
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:102
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:110
 #, c-format
 msgid "Type:"
@@ -53722,7 +53771,7 @@ msgid "Undefined"
 msgstr ""
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:227
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:240
 msgid "Undo import into catalog"
 msgstr ""
 
@@ -54036,7 +54085,7 @@ msgid "Update existing or add new"
 msgstr "Koristi postojeći zapis"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:666
 msgid "Update hold(s)"
 msgstr ""
 
@@ -54777,7 +54826,7 @@ msgstr ""
 msgid "Variable: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:25
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:23
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:554
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:88
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:23
@@ -54949,12 +54998,12 @@ msgstr "Dobavljač: "
 msgid "Vendor: %s"
 msgstr "Dobavljač: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:119
 #, c-format
 msgid "Verify you want to anonymize patron checkout history"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:66
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
 #, c-format
 msgid "Verify you want to delete patrons"
 msgstr ""
@@ -54980,7 +55029,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:389
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:442
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:371
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:173
@@ -55027,7 +55076,7 @@ msgstr ""
 msgid "View all libraries"
 msgstr "Prikaži sve knjižnice"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:671
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "Nema zahtjeva za promjenom podataka o korisnicima na čekanju."
@@ -55081,15 +55130,10 @@ msgstr "Prikaži finalni zapis"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:439
-#, fuzzy
-msgid "View funds for [% period_active.budget_period_description | html %]"
-msgstr "Prikaži mjesta troška za [% period_active.budget_period_description %]"
-
-#. A
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:475
 #, fuzzy
-msgid "View funds for [% period_loo.budget_period_description | html %]"
-msgstr "Prikaži mjesta troška za [% period_loo.budget_period_description %]"
+msgid "View funds for %s"
+msgstr "Novo mjesto troška za %s"
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:38
 #, c-format
@@ -55149,7 +55193,7 @@ msgid "View report plugins"
 msgstr "Dodaci za izvještaje"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:128
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:727
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:728
 #, c-format
 msgid "View restrictions"
 msgstr "Prikaži restrikcije"
@@ -55259,6 +55303,7 @@ msgstr "Na čekanju "
 msgid "Waiting since"
 msgstr "Na čekanju "
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:145
 #: intranet-tmpl/prog/en/modules/about.tt:114
 #: intranet-tmpl/prog/en/modules/about.tt:237
 #: intranet-tmpl/prog/en/modules/about.tt:240
@@ -55463,11 +55508,6 @@ msgstr "Upozorenje: bar-kodovi nisu pronađeni"
 msgid "Warning: no itemnumbers were found"
 msgstr "Upozorenje: bar-kodovi nisu pronađeni"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:142
-#, c-format
-msgid "Warnings"
-msgstr "Upozorenja"
-
 #: intranet-tmpl/prog/en/modules/about.tt:233
 #, c-format
 msgid "Warnings regarding the system configuration"
@@ -55666,11 +55706,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Welcome to the Koha %s web installer"
 msgstr "Koha %s priručnik"
-
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:150
-#, c-format
-msgid "What do you want to do for deleted patrons?"
-msgstr ""
 
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:25
 #, c-format
@@ -55948,7 +55983,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:399
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:423
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:62
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:64
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:118
@@ -56031,7 +56066,7 @@ msgstr "Da, zatvori (Y)"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:229
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:447
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:448
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:266
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:119
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:251
@@ -56100,12 +56135,12 @@ msgstr "Da, obriši ovo potpolje"
 msgid "Yes, delete this tag"
 msgstr "Da, obriši ovu košaricu!"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:458
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:482
 #, fuzzy, c-format
 msgid "Yes, edit existing items"
 msgstr "Da: Prikaži postojeće primjerke"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:400
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
 #, fuzzy, c-format
 msgid "Yes, print slip"
 msgstr "Ispis potvrde"
@@ -56126,7 +56161,7 @@ msgid "Yes: Edit existing authority"
 msgstr "Da: Uredi postojeće normative zapise"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:461
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:487
 msgid "Yes: View existing items"
 msgstr "Da: Prikaži postojeće primjerke"
 
@@ -56448,7 +56483,7 @@ msgid ""
 "using Koha"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:998
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:999
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -56528,7 +56563,7 @@ msgid ""
 "%s. %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:687
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -56636,7 +56671,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:848
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1017
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1018
 msgid "You must select checkout(s) to export"
 msgstr ""
 
@@ -56678,7 +56713,7 @@ msgstr "Tražili ste "
 
 #. For the first occurrence,
 #. %1$s:  IF ( title ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:69
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:35
 #, c-format
@@ -56813,7 +56848,9 @@ msgstr "Preuzimanje će započetu automatski."
 
 #: intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:16
 #, c-format
-msgid "Your file was processed."
+msgid ""
+"Your file was uploaded. Once all files are uploaded, please process them in "
+"pending offline circulation actions."
 msgstr ""
 
 #. SCRIPT
@@ -56940,8 +56977,8 @@ msgstr "Z39.50 pretraživanje"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:154
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:266
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:17
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:508
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:16
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:539
 #, c-format
 msgid "Z39.50/SRU search"
 msgstr "Z39.50/SRU pretraživanje"
@@ -57031,63 +57068,9 @@ msgstr "[ Novi popis ]"
 msgid "[#%% Default branch %%#] %s %s "
 msgstr ""
 
-#. INPUT type=button
-#: intranet-tmpl/prog/en/includes/holds_table.inc:194
-msgid "[% IF ( hold.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
-msgstr ""
-
-#. INPUT type=button
-#: intranet-tmpl/prog/en/includes/holds_table.inc:205
-msgid ""
-"[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting "
-"status[% END %]"
-msgstr ""
-
-#. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
-#, fuzzy
-msgid ""
-"[% block_budget.count | html %] fund(s) are attached to this budget. You "
-"must delete all attached funds before deleting this budget."
-msgstr ""
-"[% count %] primjeraka je pridruženo ovom zapisu. Morate obrisati sve "
-"primjerke prije nego obrišete zapis."
-
-#. A
-#: intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
-#, fuzzy
-msgid ""
-"[% count | html %] item(s) are attached to this record. You must delete all "
-"items before deleting this record."
-msgstr ""
-"[% count %] primjeraka je pridruženo ovom zapisu. Morate obrisati sve "
-"primjerke prije nego obrišete zapis."
-
-#. IMG
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:170
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:178
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:186
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:194
-#, fuzzy
-msgid "[% direction | html %] sort"
-msgstr "[% direction %] sort"
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:267
 msgid "[% discount | format ("
-msgstr ""
-
-#. A
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:244
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:636
-msgid "[% innerloo.tag_lib | html %] - Click to Expand this Tag"
-msgstr ""
-
-#. IMG
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:14
-msgid ""
-"[% patron.firstname | html %] [% patron.surname | html %] ([% patron."
-"cardnumber | html %])"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:325
@@ -57251,7 +57234,7 @@ msgid "a an the"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:82
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:656
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:680
 #, fuzzy, c-format
 msgid "about page"
 msgstr "Sljedeća stranica"
@@ -57299,7 +57282,7 @@ msgid "already exists in database"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:118
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:504
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:505
 #, c-format
 msgid "already has a hold"
 msgstr ""
@@ -57314,10 +57297,14 @@ msgstr ""
 msgid "and"
 msgstr "i"
 
-#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
 #: intranet-tmpl/prog/en/modules/about.tt:549
 #, c-format
 msgid "and "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
+#, c-format
+msgid "and 'branchcode' and 'categorycode' "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:140
@@ -57330,7 +57317,7 @@ msgstr ""
 msgid "and mark one currency as active."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:656
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:680
 #, c-format
 msgid "and search for the \"data problems\" section"
 msgstr ""
@@ -57717,6 +57704,11 @@ msgstr ""
 msgid "children's library"
 msgstr "Bilo koja knjižnica"
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
+#, fuzzy, c-format
+msgid "cleanup_database"
+msgstr "Preuzimanje baze podataka"
+
 #: intranet-tmpl/prog/en/modules/auth.tt:58
 #, c-format
 msgid "click here"
@@ -57814,23 +57806,11 @@ msgstr ""
 #. SPAN
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:78
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:291
-#, fuzzy
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
-"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
-"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
-"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
-"series %]&rft.genre="
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:39
 #, c-format
@@ -57917,7 +57897,7 @@ msgstr "Globalne sistemske postavke"
 msgid "display detail for this librarian."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:605
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:636
 #, fuzzy, c-format
 msgid "do a catalog search"
 msgstr "Pretraži katalog"
@@ -58097,8 +58077,9 @@ msgstr ""
 
 #. A
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:451
-msgid "go to [% bibliotitle | html %]"
-msgstr ""
+#, fuzzy
+msgid "go to %s"
+msgstr "Kopiraj u %s"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:94
 #, c-format
@@ -58357,7 +58338,7 @@ msgid "is not"
 msgstr "Napomene o cirkulaciji"
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:646
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:670
 #, fuzzy, c-format
 msgid "is now debarred until %s."
 msgstr "%s na %s do %s"
@@ -58834,7 +58815,7 @@ msgstr "Rezervirano"
 msgid "on reserve"
 msgstr "Dodaj rezervacije"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:504
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:505
 #, c-format
 msgid "on this item "
 msgstr ""
@@ -58872,13 +58853,13 @@ msgid "or"
 msgstr "ili"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:267
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:605
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:636
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:145
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:151
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:461
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:466
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:679
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:696
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:680
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:697
 #, c-format
 msgid "or "
 msgstr ""
@@ -59120,6 +59101,11 @@ msgstr "zadano (sve knjižnice), ista vrsta korisnika, sve vrste građe"
 msgid "same library, same patron category, same item type"
 msgstr "zadano (sve knjižnice), ista vrsta korisnika, ista vrsta građe"
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
+#, fuzzy, c-format
+msgid "script. "
+msgstr "Opis: "
+
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:112
 #, c-format
 msgid "search will boost/increase weighted field(s) relevancy"
@@ -59177,8 +59163,8 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:443
 #, fuzzy
-msgid "serial collection for [% subscription.bibliotitle | uri %]"
-msgstr "zbrika periodike za [% subscription.bibliotitle %]"
+msgid "serial collection for %s"
+msgstr "Zbirka serijskih publikacija #%s"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:44
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
@@ -59364,10 +59350,8 @@ msgid "tag %s subfield %s %s in tab %s"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:593
-msgid ""
-"tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo."
-"random | html %]"
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:624
+msgid "tag_anchor_%s_%s%s"
 msgstr ""
 
 #. META http-equiv=Content-Type
@@ -59447,7 +59431,7 @@ msgstr "puta"
 msgid "to "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:507
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:508
 #, c-format
 msgid "to be placed on hold"
 msgstr ""
@@ -59501,7 +59485,7 @@ msgid "unrecognized command"
 msgstr "Korisnik nije prepoznat (%s)"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:795
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:936
 #, c-format
 msgid "until"
 msgstr "do"
@@ -59609,27 +59593,27 @@ msgstr ""
 msgid "which should be set up by your system administrator. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:100
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:102
 #, fuzzy, c-format
 msgid "who are in patron list: "
 msgstr "Popisi korisnika"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:82
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:84
 #, fuzzy, c-format
 msgid "who have not been connected since:"
 msgstr "koji nisu posuđivali od:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:71
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:73
 #, c-format
 msgid "who have not borrowed since:"
 msgstr "koji nisu posuđivali od:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:76
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:78
 #, c-format
 msgid "whose expiration date is before:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:88
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:90
 #, c-format
 msgid "whose patron category is:"
 msgstr "čija kategorija je:"
@@ -59751,14 +59735,14 @@ msgid "| Status: %s "
 msgstr "%s sveščići "
 
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:97
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:361
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:415
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:165
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:445
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:154
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:110
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:122
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:203

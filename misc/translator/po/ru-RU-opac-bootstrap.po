@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 08:37-0300\n"
-"PO-Revision-Date: 2019-04-09 09:03+0000\n"
-"Last-Translator: xhoper <9985767@mail.ru>\n"
+"POT-Creation-Date: 2019-08-27 13:46-0300\n"
+"PO-Revision-Date: 2019-08-04 20:20+0000\n"
+"Last-Translator: Oleh Vasylenko <synapse.ova@gmail.com>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1554800631.135027\n"
+"X-POOTLE-MTIME: 1564950037.685255\n"
 "X-Pootle-Path: /ru/18.05/ru-RU-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -350,48 +350,6 @@ msgstr ""
 "%s %sBIBTEX %sEndNote %sMARCXML %sMARC (не-Unicode/MARC-8) %sMARC (Unicode/"
 "UTF-8) %sMARC (Unicode/UTF-8, Стандартный) %sMODS (XML) %sRIS %sISBD %s "
 
-#. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
-#. %2$s:  CASE 'Pay' 
-#. %3$s:  CASE 'Pay00' 
-#. %4$s:  CASE 'Pay01' 
-#. %5$s:  CASE 'Pay02' 
-#. %6$s:  CASE 'VOID' 
-#. %7$s:  CASE 'N' 
-#. %8$s:  CASE 'OVERDUE' 
-#. %9$s:  CASE 'A' 
-#. %10$s:  CASE 'M' 
-#. %11$s:  CASE 'L' 
-#. %12$s:  CASE 'W' 
-#. %13$s:  CASE 'HE' 
-#. %14$s:  CASE 'Rent' 
-#. %15$s:  CASE 'FOR' 
-#. %16$s:  CASE 'LR' 
-#. %17$s:  CASE 'PF' 
-#. %18$s:  CASE 'PAY' 
-#. %19$s:  CASE 'WO' 
-#. %20$s:  CASE 'C' 
-#. %21$s:  CASE 'CR' 
-#. %22$s: -CASE 'Res' 
-#. %23$s:  CASE 
-#. %24$s:  ACCOUNT_LINE.accounttype | html 
-#. %25$s: - END -
-#. %26$s: - PROCESS account_status_description account=ACCOUNT_LINE -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:30
-#, fuzzy, c-format
-msgid ""
-"%s %sPayment %sPayment (cash via SIP2) %sPayment (VISA via SIP2) %sPayment "
-"(credit card via SIP2) %sVoided %sNew card %sFine %sAccount management fee "
-"%sSundry %sLost item %sWriteoff %sHold waiting too long %sRental fee "
-"%sForgiven %sLost item fee refund %sLost item processing fee %sPayment "
-"%sWriteoff %sCredit %sCredit %sHold fee %s%s %s %s "
-msgstr ""
-"%s %sОплата, спасибо %sОплата, спасибо (оплата с помощью SIP2) %sОплата, "
-"спасибо (VISA с помощью SIP2) %sОплата, спасибо (кредитная карта с помощью "
-"SIP2) %sНовая карта %sШтраф %sСбор за владение учётной записью %sSundry "
-"%sУтерянные единицы %sWriteoff %sAccruing fine %sHold waiting too long "
-"%sRental fee %sForgiven %sLost item fee refund %sPayment %sWriteoff %sCredit "
-"%sCredit %s%s %s %s, %s%s %s(%s)%s "
-
 #. %1$s:  IF s.is_private 
 #. %2$s:  IF s.is_shared 
 #. %3$s:  ELSE 
@@ -466,12 +424,11 @@ msgstr "%s Учётная запись заблокирована %s %s "
 
 #. %1$s:  ELSIF (errMultipleAccountsForEmail) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid "%s Account identification with this email address only is ambiguous. "
 msgstr ""
-"Попробуйте ещё раз позднее. %s Мы не смогли найти учётную запись по "
-"введённой информации. %s Процесс восстановления пароля уже был запущен для "
-"этой учётной записи (\""
+"Идентификация учетной записи %s только с этим адресом электронной почты "
+"неоднозначна. "
 
 #. %1$s:  IF review.your_comment 
 #. %2$s:  review.datereviewed | $KohaDates 
@@ -529,9 +486,11 @@ msgstr "%s Автоматическое продление"
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:316
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
-msgstr "%s Не продлевается %s Не разрешено "
+msgstr ""
+"Не удалось автоматически продлить %s, срок действия вашей учетной записи "
+"истек."
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount | html 
@@ -721,7 +680,7 @@ msgstr "%s Зарезервировано %s Продлений не остал�
 #. %10$s:  IF ( WrongPass ) 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Password "
 "must be at least %s characters long. %s %s Password must contain at least "
@@ -730,11 +689,12 @@ msgid ""
 "incorrectly. If this problem persists, please ask a librarian to reset your "
 "password for you. %s "
 msgstr ""
-"%s Пароли не совпадают.  Пожалуйста, ещё раз введите новый пароль.  %s %s "
-"Ваш пароль должен содержать не менее %s символов %s %s Ваш действующий "
-"пароль введен неправильно.  Если проблема останется, пожалуйста, обратитесь "
-"к библиотекарю, чтобы переустановить пароль.  %s %s Ваш пароль содержит "
-"прямой и/или обратный слеш. %s "
+"%s Пароли не совпадают. Пожалуйста, еще раз введите новый пароль. %s %s "
+"Пароль должен содержать не менее %s символов. %s %s Пароль должен содержать "
+"как минимум одну цифру, одну строчную и одну прописную. %s %s Пароль не "
+"должен иметь пробелы в начале или в конце. %s %s Ваш текущий пароль введен "
+"неправильно. Если проблема не устраняется, попросите библиотекаря сбросить "
+"ваш пароль. %s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
 #. %2$s:  ELSIF ar.status == 'PROCESSING' 
@@ -809,6 +769,12 @@ msgstr "%s: поиск"
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Поиск %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s"
+
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
+#, fuzzy
+msgid "%s Search RSS feed"
+msgstr "%s: поиск"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:88
@@ -917,7 +883,7 @@ msgstr "%s Выдержки из видео"
 #. %12$s:  itemLoo.reservedate | html 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:407
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 #, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -962,7 +928,7 @@ msgstr "%s Вы никогда не занимали что-либо у этой
 #. %3$s:  ELSE 
 #. %4$s:  RESERVE_CHARGE | $Price 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:138
 #, c-format
 msgid ""
 "%s You will be charged a hold fee of %s when you collect this item %s You "
@@ -1155,7 +1121,7 @@ msgstr "%s %s%s%s &rsaquo;  %sКоха %s &rsaquo; Самообслуживан�
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:5
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:6
 #, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout help"
 msgstr ""
@@ -1801,6 +1767,14 @@ msgstr ""
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 msgstr "%s%s%sАБИС Коха%s Электронный каталог &rsaquo; Ваша история поисков"
 
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
+#, fuzzy
+msgid "%s%s%sKoha online%s catalog recent comments"
+msgstr ""
+"%s %s %s%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Последние "
+"комментарии %s "
+
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
 #. %3$s:  SEARCH_RESULT.biblionumber | html 
@@ -1836,7 +1810,7 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
 #, c-format
 msgid "%s, by %s%s "
 msgstr "%s, / %s%s "
@@ -1911,9 +1885,9 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "%s0 biblios%s "
-msgstr "%s библиотечных записей"
+msgstr "%s0 библиотечных записей%s "
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
@@ -2100,23 +2074,22 @@ msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt; Предыдущие"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:496
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt;<br/>&lt;"
-"AuthenticatePatron&gt;<br/>  &lt;id&gt;419&lt;/id&gt;<br/>&lt;/"
-"AuthenticatePatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
+"AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:780
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt;<br/>&lt;CancelHold&gt;<br/"
-">  &lt;message&gt;Canceled&lt;/message&gt;<br/>&lt;/CancelHold&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
+"&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:528
 #, fuzzy, c-format
@@ -2263,16 +2236,17 @@ msgstr ""
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;"
 "status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
 "GetPatronStatus&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt;<br/>&lt;GetPatronStatus&gt;"
-"<br/>  &lt;expiry&gt;2015-06-20&lt;/expiry&gt;<br/>  &lt;status&gt;0&lt;/"
-"status&gt;<br/>  &lt;type&gt;ST&lt;/type&gt;<br/>&lt;/GetPatronStatus&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
+"GetPatronStatus&gt; &lt;expiry&gt;2010-03-04&lt;/expiry&gt; &lt;"
+"status&gt;0&lt;/status&gt; &lt;type&gt;ADUEXT&lt;/type&gt; &lt;/"
+"GetPatronStatus&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:210
 #, c-format
@@ -2494,50 +2468,49 @@ msgstr ""
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:671
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
 "&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
 "AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt;<br/>&lt;GetServices&gt;<br/"
-">  &lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt;<br/>  &lt;"
-"AvailableFor&gt;item level hold&lt;/AvailableFor&gt;<br/>&lt;/GetServices&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
+"&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
+"AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:726
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:757
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
 "title&gt;(les) galères de l'Orfèvre&lt;/title&gt; &lt;"
 "date_available&gt;2009-05-11&lt;/date_available&gt; &lt;pickup_location&gt;"
 "Bibliothèque Jean-Prunier&lt;/pickup_location&gt; &lt;/HoldTitle&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;HoldTitle&gt;<br />   "
-"&lt;title&gt;Централка Гогенфурт&lt;/title&gt;<br />   &lt;"
-"date_available&gt;2009-05-11&lt;/date_available&gt;<br />   &lt;"
-"pickup_location&gt;Библиотека Ивана Пулюя&lt;/pickup_location&gt;<br />&lt;/"
-"HoldTitle&gt;<br />"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
+"title&gt;Галеры ювелира&lt;/title&gt; &lt;date_available&gt;2009-05-11&lt;/"
+"date_available&gt; &lt;pickup_location&gt;Библиотека Жан-Прунье&lt;/"
+"pickup_location&gt; &lt;/HoldTitle&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:475
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
 "&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt;<br/>&lt;LookupPatron&gt;"
-"<br/>  &lt;id&gt;419&lt;/id&gt;<br/>&lt;/LookupPatron&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
+"&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:695
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
 "success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
 "date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt;<br/>&lt;RenewLoan&gt;<br/"
-">  &lt;success&gt;0&lt;/success&gt;<br/>  &lt;renewals&gt;5&lt;/renewals&gt;"
-"<br/>  &lt;date_due&gt;2015-05-11&lt;/date_due&gt;<br/>&lt;/RenewLoan&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
+"success&gt;0&lt;/success&gt; &lt;renewals&gt;5&lt;/renewals&gt; &lt;"
+"date_due&gt;2009-05-11&lt;/date_due&gt; &lt;/RenewLoan&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:137
 #, c-format
@@ -2610,34 +2583,24 @@ msgid ""
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 msgstr ""
-"&lt;xml version=\"1.0\" encoding=\"UTF-8\"&gt;;<br />&lt;"
-"GetAuthorityRecords&gt;<br />&nbsp;&lt;record&gt;<br />&nbsp;&nbsp;&lt;?xml "
-"version=\"1.0\" encoding=\"UTF-8\"?&gt;<br />&nbsp;&nbsp;&lt;record<br /"
-">&nbsp;&nbsp;&nbsp;xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance"
-"\"<br />&nbsp;&nbsp;&nbsp;xsi:schemaLocation=\"http://www.loc.gov/MARC21/"
-"slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\"<br /"
-">&nbsp;&nbsp;&nbsp;xmlns=\"http://www.loc.gov/MARC21/slim\"&gt;<br />&nbsp;"
-"&nbsp;&nbsp;&lt;leader&gt;00182     2200085   4500&lt;/leader&gt;<br />&nbsp;"
-"&nbsp;&nbsp;&lt;controlfield tag=\"001\"&gt;1&lt;/controlfield&gt;<br /"
-">&nbsp;&nbsp;&nbsp;&lt;datafield tag=\"200\" ind1=\" \" ind2=\" \"&gt;<br /"
-">&nbsp;&nbsp;&nbsp;&lt;subfield code=\"a\"&gt;Франко&lt;/subfield&gt;<br /"
-">&nbsp;&nbsp;&nbsp;&lt;subfield code=\"b\"&gt;Иван&lt;/subfield&gt;<br /"
-">&nbsp;&nbsp;&nbsp;&lt;/datafield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;datafield "
-"tag=\"801\" ind1=\" \" ind2=\" \"&gt;<br />&nbsp;&nbsp;&nbsp;&lt;subfield "
-"code=\"a\"&gt;Россия&lt;/subfield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;subfield "
-"code=\"b\"&gt;НТБ&lt;/subfield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;subfield code="
-"\"c\"&gt;2010/04/13&lt;/subfield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;/"
-"datafield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;datafield tag=\"100\" ind1=\" \" "
-"ind2=\" \"&gt;<br />&nbsp;&nbsp;&nbsp;&lt;subfield code=\"a"
-"\"&gt;20100413     50                    &lt;/subfield&gt;<br />&nbsp;&nbsp;"
-"&nbsp;&lt;/datafield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;datafield tag=\"152\" "
-"ind1=\" \" ind2=\" \"&gt;<br />&nbsp;&nbsp;&nbsp;&lt;subfield code=\"b\"&gt;"
-"NP&lt;/subfield&gt;<br />&nbsp;&nbsp;&nbsp;&lt;/datafield&gt;<br />&nbsp;"
-"&nbsp;&lt;/record&gt;<br />&nbsp;&lt;/record&gt;<br />&nbsp;&lt;record&gt;"
-"<br />&nbsp;&nbsp;&lt;code&gt;RecordNotFound&lt;/code&gt;<br />&nbsp;&lt;/"
-"record&gt;<br />&nbsp;&lt;record&gt;<br />&nbsp;&nbsp;&lt;code&gt;"
-"RecordNotFound&lt;/code&gt;<br />&nbsp;&lt;/record&gt;<br />&lt;/"
-"GetAuthorityRecords&gt;<br />"
+"&lt;xml version=\"1.0\" encoding=\"UTF-8\"&gt;; &lt;GetAuthorityRecords&gt; "
+"&lt;record&gt; &lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt; &lt;record "
+"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation="
+"\"http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/"
+"schema/MARC21slim.xsd\" xmlns=\"http://www.loc.gov/MARC21/slim\"&gt; &lt;"
+"leader&gt;00182 2200085 4500&lt;/leader&gt; &lt;controlfield tag="
+"\"001\"&gt;1&lt;/controlfield&gt; &lt;datafield tag=\"200\" ind1=\" \" ind2="
+"\" \"&gt; &lt;subfield code=\"a\"&gt;Гюго&lt;/subfield&gt; &lt;subfield code="
+"\"b\"&gt;Виктор&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag="
+"\"801\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;Франция&lt;/"
+"subfield&gt; &lt;subfield code=\"b\"&gt;Ниме&lt;/subfield&gt; &lt;subfield "
+"code=\"c\"&gt;2010/04/13&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield "
+"tag=\"100\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20100413 50 "
+"&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"152\" ind1=\" \" "
+"ind2=\" \"&gt; &lt;subfield code=\"b\"&gt;NP&lt;/subfield&gt; &lt;/"
+"datafield&gt; &lt;/record&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
+"RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
+"RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 
 #. %1$s:  SEARCH_RESULT.score_avg | html 
 #. %2$s:  SEARCH_RESULT.num_scores | html 
@@ -2751,7 +2714,7 @@ msgstr "(%s в целом)"
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:121
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:148
 #, c-format
 msgid "(Accruing)"
 msgstr ""
@@ -2773,7 +2736,7 @@ msgstr " не найден в базе данных. Попробуйте сно
 msgid "(Checked out)"
 msgstr "(Выдано)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:124
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:151
 #, c-format
 msgid "(Forgiven)"
 msgstr ""
@@ -2837,7 +2800,7 @@ msgstr ""
 "(Пожалуйста, учтите: при возобновлении учётной записи через веб может "
 "возникнуть задержка.)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:123
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:150
 #, fuzzy, c-format
 msgid "(Replaced)"
 msgstr "юридические статьи"
@@ -2868,7 +2831,7 @@ msgstr "юридические статьи"
 msgid "(Required)"
 msgstr "(обязательное)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:122
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:149
 #, c-format
 msgid "(Returned)"
 msgstr ""
@@ -2912,7 +2875,7 @@ msgstr "(используйте ЭК взамен)"
 msgid "(Use SRU instead)"
 msgstr "(используйте SRU взамен)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:125
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:152
 #, c-format
 msgid "(Voided)"
 msgstr ""
@@ -2959,9 +2922,9 @@ msgstr "Просрочки "
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:664
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1354
-#, fuzzy, c-format
+#, c-format
 msgid "(priority %s)"
-msgstr "Приоритет"
+msgstr "(приоритет %s)"
 
 #. %1$s:  FOREACH relate IN related 
 #. %2$s:  relate.related_search | html 
@@ -3016,9 +2979,9 @@ msgstr ""
 #. %2$s:  END 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid ".%sYou have fines.%s %s "
-msgstr "У вас есть неуплаченные пени в размере: %s. "
+msgstr ".%sУ вас есть неуплаченные штрафы.%s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:57
 #, c-format
@@ -3136,7 +3099,7 @@ msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:321
 #, fuzzy, c-format
 msgid "A specific item"
 msgstr "Конкретный экземпляр "
@@ -3160,11 +3123,19 @@ msgstr "В доступе отказано"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
 "Please contact the library. "
-msgstr "По нашим данным, у нас нет актуальной %s"
+msgstr ""
+"По нашим записям, у нас нет актуальной контактной информации. Пожалуйста, "
+"свяжитесь с библиотекой. "
+
+#. %1$s: - CASE 'M'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:127
+#, c-format
+msgid "Account management fee %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:65
 #, c-format
@@ -3259,9 +3230,8 @@ msgstr "Добавить в:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
-#, fuzzy
 msgid "Add to: "
-msgstr "Добавить %s "
+msgstr "Добавить в: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:131
 #, c-format
@@ -3284,9 +3254,9 @@ msgstr "Данные для связи"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:579
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:730
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:732
-#, fuzzy, c-format
+#, c-format
 msgid "Address 2:"
-msgstr "%s Адрес 2: "
+msgstr "Адрес 2:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:389
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:391
@@ -3294,9 +3264,9 @@ msgstr "%s Адрес 2: "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:566
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:717
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:719
-#, fuzzy, c-format
+#, c-format
 msgid "Address:"
-msgstr "%s Адрес: "
+msgstr "Адрес:"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:125
@@ -3311,7 +3281,7 @@ msgstr "Изображение обложки"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:257
-msgid "Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
+msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 
 # 008.22=d - http://marc21.rsl.ru/index.php?doc=1050
@@ -3407,6 +3377,7 @@ msgstr "Запасной адрес"
 msgid "Alternate contact"
 msgstr "Запасные данные для связи"
 
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:12
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:391
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:405
 #, c-format
@@ -3490,7 +3461,7 @@ msgstr "Любой формат"
 msgid "Any item "
 msgstr "Любой тип единицы"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:289
 #, c-format
 msgid "Any item type"
 msgstr "Любой тип единицы"
@@ -3648,7 +3619,7 @@ msgid ""
 msgstr ""
 
 #. OPTION
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
 msgid "At least one item is available at this library"
 msgstr ""
 
@@ -3851,7 +3822,7 @@ msgstr "ОСТОРОЖНО"
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:13
 #, c-format
 msgid "BT"
-msgstr ""
+msgstr "ШТ"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:31
@@ -3872,7 +3843,7 @@ msgstr "Вернуться к списку результатов поиска"
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:108
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:472
@@ -3953,7 +3924,7 @@ msgstr "История кратко"
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:13
 msgid "Broader Term"
-msgstr ""
+msgstr "Более Широкий Термин"
 
 # "Просмотр по иерархии" (если не только разбор классификационных индексов)
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:280
@@ -4034,7 +4005,7 @@ msgstr "Шифр для заказа"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:225
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:227
@@ -4151,7 +4122,7 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Отменяет активный запрос на резервирование для посетителя."
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 msgid "Cannot be put on hold"
 msgstr "Невозможно установить резервирование"
 
@@ -4164,9 +4135,9 @@ msgstr "Пароль должен состоять не менее чем из %
 #. %1$s:  minlength_cardnumber | html 
 #. %2$s:  maxlength_cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:157
-#, fuzzy, c-format
+#, c-format
 msgid "Card number must be between %s and %s characters."
-msgstr "Ваш пароль должен состоять не менее чем из %s символов."
+msgstr "Номер читательского билета должен содержать от %s до %s символов."
 
 #. %1$s:  minlength_cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:153
@@ -4355,9 +4326,9 @@ msgstr "Образец цитирования"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:592
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:743
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:745
-#, fuzzy, c-format
+#, c-format
 msgid "City:"
-msgstr "%s Населённый пункт: "
+msgstr "Город:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:869
 #, c-format
@@ -4401,7 +4372,7 @@ msgstr "Очистить всё"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:294
 #, c-format
 msgid "Clear date"
@@ -4415,9 +4386,9 @@ msgstr ""
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "Click here if you're not %s"
-msgstr "Нажмите здесь, если вы не %s %s"
+msgstr "Нажмите здесь, если вы не %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:139
 #, c-format
@@ -4522,7 +4493,7 @@ msgstr "Выберите единицы, какие Вы хотите прове
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:122
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #, c-format
@@ -4605,14 +4576,14 @@ msgid "Comments%s"
 msgstr "Комментарии ( %s )"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
 #, fuzzy
 msgid "Confirm hold"
 msgstr "Подтвердите пароль"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
 #, fuzzy, c-format
 msgid "Confirm holds for:%s (%s)"
 msgstr "Подтвердите резервирования для:%s %s (%s)"
@@ -4641,9 +4612,9 @@ msgstr "Контактная информация: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:668
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:670
-#, fuzzy, c-format
+#, c-format
 msgid "Contact note:"
-msgstr "%s Контакты:"
+msgstr "Заметки о контакте:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
 #, c-format
@@ -4666,7 +4637,7 @@ msgid "Contents of "
 msgstr "Содержимое списка: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:335
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1209
 #, c-format
 msgid "Copy number"
@@ -4713,9 +4684,9 @@ msgstr "Количество"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:631
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:782
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:784
-#, fuzzy, c-format
+#, c-format
 msgid "Country:"
-msgstr "%s Страна: "
+msgstr "Страна:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:34
 #, c-format
@@ -4786,6 +4757,14 @@ msgid ""
 msgstr ""
 "Создает для посетителя запрос на резервирование уровня экземпляра на "
 "конкретный экземпляр библиографической записи в Коха."
+
+#. For the first occurrence,
+#. %1$s: - CASE 'CR'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#, fuzzy, c-format
+msgid "Credit %s"
+msgstr "Кредиты"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
 #, c-format
@@ -4887,9 +4866,9 @@ msgstr "Дата получения"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:285
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:287
-#, fuzzy, c-format
+#, c-format
 msgid "Date of birth:"
-msgstr "%s Дата рождения:"
+msgstr "Дата рождения:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:175
 #, c-format
@@ -5037,9 +5016,9 @@ msgid "Details for %s"
 msgstr "Детали для %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Details for: "
-msgstr "Детали для %s"
+msgstr "Подробности о:"
 
 #. %1$s:  biblio.title | html 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:16
@@ -5186,7 +5165,7 @@ msgid "Due"
 msgstr "Возвращение"
 
 #. %1$s:  itemLoo.dateDue | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:393
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
 #, c-format
 msgid "Due %s"
 msgstr "Возвращение %s"
@@ -5323,7 +5302,7 @@ msgstr "Введите поисковые термины"
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:42
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:43
 #, c-format
 msgid ""
 "Enter your User ID%s and password%s, and click the submit button (or press "
@@ -5360,9 +5339,8 @@ msgstr "Ошибка %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Error searching %s collection"
-msgstr "Ошибка при поиске по коллекции OverDrive"
+msgstr "Ошибка поиска коллекции %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -5481,7 +5459,7 @@ msgid "Expected"
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Expecting a specific item selection."
 msgstr "Ожидается выбор конкретного экземпляра."
 
@@ -5529,9 +5507,9 @@ msgstr "Facebook"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:542
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:544
-#, fuzzy, c-format
+#, c-format
 msgid "Fax:"
-msgstr "%s Факс:"
+msgstr "Факс:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5575,10 +5553,11 @@ msgstr "Примечания о художественной литератур�
 msgid "Filmographies"
 msgstr "фильмографии"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:12
-#, c-format
-msgid "Fine amount"
-msgstr "Сумма пени"
+#. %1$s: - CASE 'A'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:126
+#, fuzzy, c-format
+msgid "Fine %s"
+msgstr "Пеня"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:202
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
@@ -5634,9 +5613,9 @@ msgstr "Первое"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:274
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:704
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:706
-#, fuzzy, c-format
+#, c-format
 msgid "First name:"
-msgstr "%s Имя и отчество: "
+msgstr "Имя:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:177
 #, c-format
@@ -5650,22 +5629,22 @@ msgstr ""
 "после 2008 года."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in and change your password."
 msgstr ""
-"Для вашего удобства, блок входа на этой странице был предварительно "
-"заполнен. Пожалуйста, войдите%s и измените ваш пароль%s."
+"Для вашего удобства поле для входа на этой странице было предварительно "
+"заполнено этими данными. Пожалуйста, войдите и измените свой пароль."
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in."
 msgstr ""
-"Для вашего удобства, блок входа на этой странице был предварительно "
-"заполнен. Пожалуйста, войдите%s и измените ваш пароль%s."
+"Для вашего удобства поле для входа на этой странице было предварительно "
+"заполнено этими данными. Пожалуйста, войдите."
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:59
@@ -5681,6 +5660,12 @@ msgid ""
 msgstr ""
 "Навсегда: хранить мою историю чтения истории без ограничений.  Это вариант "
 "для пользователей, которые хотят отслеживать то, что они читают."
+
+#. %1$s: - CASE 'LR'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:133
+#, c-format
+msgid "Forgiven %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
@@ -5971,7 +5956,7 @@ msgid "Hi,"
 msgstr "Приветствуем,"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #, fuzzy
 msgid "Hide options"
 msgstr "[Больше параметров]"
@@ -5993,21 +5978,33 @@ msgstr "Подсветить"
 msgid "Hold date:"
 msgstr "Дата резервирования"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:274
+#. %1$s: - CASE           -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#, fuzzy, c-format
+msgid "Hold fee %s"
+msgstr "Резервирования (%s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "Зарезервированое не потребуется после"
 
 # http://www.loc.gov/marc/holdings/hd866868.html
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Hold notes:"
 msgstr "Примечание о резервировании:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:267
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, fuzzy, c-format
 msgid "Hold starts on date:"
 msgstr "история Короткий отчет о подписке"
+
+#. %1$s: - CASE 'Rent'    -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:131
+#, c-format
+msgid "Hold waiting too long %s"
+msgstr ""
 
 # название функции ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:72
@@ -6122,7 +6119,7 @@ msgstr "Начало"
 msgid "Home libraries"
 msgstr "Домашняя библиотека"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1198
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:127
 #, c-format
@@ -6272,7 +6269,7 @@ msgstr ""
 "Если это ошибка, пожалуйста, принесите свой билет к обменному столу в Вашей "
 "местной библиотеке и ошибка будет исправлена."
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:37
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:38
 #, c-format
 msgid ""
 "If this is your first time using the self checkout system, or if the system "
@@ -6289,7 +6286,7 @@ msgid "If you did not receive this email, you can request a new one: "
 msgstr "Если вам не пришло письмо, вы можете запросить ещё одно: "
 
 #. %1$s:  SelfCheckTimeout | html 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:51
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:52
 #, c-format
 msgid ""
 "If you do not click the 'Finish' button, your session will automatically "
@@ -6299,10 +6296,10 @@ msgstr ""
 "завершён за %s секунд."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:818
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you do not enter a password a system generated password will be created."
-msgstr "%s %s Если вы не укажете пароль, система создаст его сама. %s "
+msgstr "Если вы не укажете пароль, система создаст его сама."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:138
 #, c-format
@@ -6358,13 +6355,13 @@ msgstr ""
 "стола библиотеки. Мы с удовольствием установим его для Вас."
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:125
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
 "authenticate:"
 msgstr ""
-"%s %s пожалуйста, выберите через который Вы хотели бы провести "
-"аутентификацию: "
+"Если у вас есть учетная запись CAS, выберите, какую учетную запись вы хотите "
+"аутентифицировать:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:121
 #, c-format
@@ -6442,7 +6439,7 @@ msgstr ""
 #. %2$s:  Branches.GetName( item.transfertto ) | html 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:45
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:397
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "Результаты поиска с %s по %s из %s"
@@ -6465,16 +6462,16 @@ msgstr "Проиндексировано как: "
 msgid "Indexes"
 msgstr "указатели"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #, c-format
 msgid "Information"
 msgstr "Информация"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:307
-#, fuzzy, c-format
+#, c-format
 msgid "Initials:"
-msgstr "%s Инициалы:"
+msgstr "Инициалы:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:37
 #, fuzzy, c-format
@@ -6600,7 +6597,7 @@ msgstr "%s Не продляется %s Не разрешено "
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:335
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
@@ -6617,7 +6614,7 @@ msgstr "Тип единицы"
 msgid "Item type:"
 msgstr "Тип единицы: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:209
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:324
 #, c-format
 msgid "Item type: "
@@ -6700,6 +6697,14 @@ msgstr "Ключевое слово"
 msgid "Koha"
 msgstr "Коха"
 
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
+#, fuzzy
+msgid "Koha %s"
+msgstr "Коха"
+
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
 msgid "Koha - RSS"
@@ -6709,14 +6714,6 @@ msgstr "Koha — RSS"
 #, c-format
 msgid "Koha Wiki"
 msgstr "Коха Wiki"
-
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
-#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:7
-#, fuzzy
-msgid "Koha [% Version | html %]"
-msgstr "Коха [% Version %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:191
 #, c-format
@@ -6770,7 +6767,7 @@ msgstr "большая печать"
 msgid "Last"
 msgstr "Последнее"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:342
 #, c-format
 msgid "Last location"
 msgstr "Последнее расположение"
@@ -6844,9 +6841,9 @@ msgstr "Библиотека"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:143
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:145
-#, fuzzy, c-format
+#, c-format
 msgid "Library card number:"
-msgstr "%s Номер читательского билета: "
+msgstr "Номер читательского билета:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:159
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:161
@@ -7089,9 +7086,9 @@ msgstr "Войти в систему с помощью Google"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:114
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid "Log out"
-msgstr "%s Выйти"
+msgstr "Выйти"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:37
@@ -7141,6 +7138,24 @@ msgstr ""
 #, c-format
 msgid "LookupPatron"
 msgstr "LookupPatron"
+
+#. %1$s: - CASE 'W'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:129
+#, fuzzy, c-format
+msgid "Lost item %s"
+msgstr "Добавить %s элемент(а/ов) в список: %s"
+
+#. %1$s: - CASE 'PF'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:134
+#, c-format
+msgid "Lost item fee refund %s"
+msgstr ""
+
+#. %1$s: - CASE 'PAY'     -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:135
+#, c-format
+msgid "Lost item processing fee %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7282,7 +7297,7 @@ msgstr ""
 msgid "Missing (sold out)"
 msgstr ""
 
-#. %1$s:  subscription.missinglist | html 
+#. %1$s:  subscription.missinglist | html | html_line_break 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:835
 #, c-format
 msgid "Missing issues: %s "
@@ -7366,7 +7381,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:15
 #, c-format
 msgid "NT"
-msgstr ""
+msgstr "УТ"
 
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:10
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:45
@@ -7378,7 +7393,7 @@ msgstr "Наименование "
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:15
 msgid "Narrower Term"
-msgstr ""
+msgstr "Более Узкий Термин"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:69
@@ -7387,9 +7402,9 @@ msgid "Never"
 msgstr "Никогда"
 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:88
-#, fuzzy, c-format
+#, c-format
 msgid "Never expires "
-msgstr "%s%s%s Никогда не заканчивается %s "
+msgstr "Никогда не истекает "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:46
 #, c-format
@@ -7403,6 +7418,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:884
 #, c-format
 msgid "New"
+msgstr ""
+
+#. %1$s: - CASE 'OVERDUE' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:125
+#, c-format
+msgid "New card %s"
 msgstr ""
 
 #. %1$s:  review.title | html 
@@ -7494,7 +7515,7 @@ msgstr "Далее &gt;&gt;"
 msgid "Next &raquo;"
 msgstr "Далее &raquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
 #, c-format
 msgid "Next available item"
 msgstr "Следующая доступная единица"
@@ -7627,9 +7648,9 @@ msgid "No operation parameter has been passed."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:698
-#, fuzzy, c-format
+#, c-format
 msgid "No other items."
-msgstr "%s %s %s Нет других экземпляров. %s %s "
+msgstr "Нет других экземпляров."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:684
 #, c-format
@@ -7678,9 +7699,8 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "No results found in the library's %s collection"
-msgstr "Ничего не найдено при поиске по коллекции OverDrive."
+msgstr "Ничего не найдено при поиске по коллекции %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -7793,7 +7813,7 @@ msgid "Not for loan %s"
 msgstr "Не для выдачи %s"
 
 #. %1$s:  itemLoo.notforloanvalue | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:405
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Не для ссуды (%s)"
@@ -7803,7 +7823,7 @@ msgstr "Не для ссуды (%s)"
 msgid "Not issued"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:429
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:431
 #, c-format
 msgid "Not on hold"
 msgstr "Не зарезервировано"
@@ -7832,7 +7852,7 @@ msgstr "Примечание: "
 
 #. %1$s:  END 
 #. %2$s:  END # / UNLESS bibitemloo.holdable 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7878,18 +7898,16 @@ msgstr ""
 "термином. Смотрите «Мои метки», чтобы увидеть Ваши текущие метки."
 
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:28
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Note: your comment contained illegal markup code. It has been saved with the "
 "markup removed, as below. You can edit the comment further, or cancel to "
 "retain the comment as is."
 msgstr ""
-"%sПримечание: Ваш комментарий содержал неразрешенный код разметки.  "
-"Комментарий был сохранен а разметка удалена, как видно ниже.  Вы можете "
-"редактировать свой комментарий дальше, или же отменить, чтобы оставить "
-"комментарий, как есть. %s %sОшибка!  Ваш комментарий полностью состоит из "
-"неразрешенного кода разметки.  Он не добавлен.%s %sОшибка!  Вы можете "
-"добавить пустой комментарий.  Пожалуйста, добавьте содержимое или отмените.%s"
+"Примечание: Ваш комментарий содержал неразрешенный код разметки. Комментарий "
+"был сохранен а разметка удалена, как видно ниже. Вы можете редактировать "
+"свой комментарий дальше, или же отменить, чтобы оставить комментарий, как "
+"есть."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
@@ -7980,7 +7998,7 @@ msgstr "Ноябрь"
 msgid "Number"
 msgstr "Номер"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:223
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
 #, c-format
 msgid "Number of holds: "
 msgstr ""
@@ -8119,15 +8137,15 @@ msgstr "Другие фонды ( %s )"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:318
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:320
-#, fuzzy, c-format
+#, c-format
 msgid "Other names:"
-msgstr "%s Другие используемые имена:"
+msgstr "Другие имена:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:503
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:505
-#, fuzzy, c-format
+#, c-format
 msgid "Other phone:"
-msgstr "%s Другой телефон:"
+msgstr "Другой телефон:"
 
 # название функции ILS-DI
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:803
@@ -8242,10 +8260,12 @@ msgstr "Пароль должен состоять не менее чем из %
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
-msgstr "Пароль должен состоять не менее чем из %s символов."
+msgstr ""
+"Пароль должен содержать как минимум одну цифру, одну строчную и одну "
+"прописную."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:77
@@ -8294,6 +8314,32 @@ msgstr "Оплатить выбранные пени и штрафы"
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
+#. For the first occurrence,
+#. %1$s: - CASE 'Pay00'   -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:121
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:136
+#, fuzzy, c-format
+msgid "Payment %s"
+msgstr "Способ оплаты"
+
+#. %1$s: - CASE 'Pay02'   -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:123
+#, c-format
+msgid "Payment (VISA via SIP2) %s"
+msgstr ""
+
+#. %1$s: - CASE 'Pay01'   -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:122
+#, c-format
+msgid "Payment (cash via SIP2) %s"
+msgstr ""
+
+#. %1$s: - CASE 'N'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:124
+#, c-format
+msgid "Payment (credit card via SIP2) %s"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:65
 #, c-format
 msgid "Payment applied:"
@@ -8333,7 +8379,7 @@ msgid "Pick up location"
 msgstr "Место получения"
 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:98
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:231
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
 #, c-format
 msgid "Pick up location:"
 msgstr "Библиотека получения:"
@@ -8349,17 +8395,17 @@ msgid "Pickup library:"
 msgstr "Библиотека получения:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Place a hold on"
 msgstr "Зарезервировать"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:169
 #, c-format
 msgid "Place a hold on "
 msgstr "Зарезервировать "
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Place a hold on: "
 msgstr "Зарезервировать: "
 
@@ -8507,9 +8553,9 @@ msgstr "Пожалуйста, обратитесь в библиотеку дл�
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "Please correct and resubmit."
-msgstr "%s Пожалуйста, исправьте и отправьте форму ещё раз. "
+msgstr "Пожалуйста, исправьте и отправьте форму ещё раз."
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:40
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:44
@@ -8517,7 +8563,7 @@ msgstr "%s Пожалуйста, исправьте и отправьте фор
 msgid "Please do not use this mail to request or renew books."
 msgstr "Если вам не пришло письмо, вы можете запросить ещё одно: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:302
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -8744,15 +8790,15 @@ msgstr "для детей младшего возраста от 6 до 8 лет
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:516
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:518
-#, fuzzy, c-format
+#, c-format
 msgid "Primary email:"
-msgstr "%s Основная электронная почта:"
+msgstr "Основная электронная почта:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:477
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:479
-#, fuzzy, c-format
+#, c-format
 msgid "Primary phone:"
-msgstr "%s Основной телефон:"
+msgstr "Основной телефон:"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:14
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:32
@@ -8943,14 +8989,14 @@ msgstr "RIS (Zotero, EndNote и другие)"
 
 #. %1$s:  shelf.shelfname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:8
-#, fuzzy, c-format
+#, c-format
 msgid "RSS feed for public list %s"
-msgstr "Нет общих списков."
+msgstr "RSS-канал для публичного списка %s"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
 #, c-format
 msgid "RT"
-msgstr ""
+msgstr "СТ"
 
 #. INPUT type=submit name=rate_button
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:498
@@ -9075,9 +9121,8 @@ msgstr "обыкновенная печать"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:19
-#, fuzzy
 msgid "Related Term"
-msgstr "Относительное"
+msgstr "Связанный термин"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:425
 #, c-format
@@ -9102,8 +9147,8 @@ msgstr "Удалить"
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:49
 #, fuzzy
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "[% facet.facet_title_value |html %]"
+msgid "Remove facet %s"
+msgstr "Удалить поле"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:101
@@ -9181,6 +9226,12 @@ msgstr "RenewLoan"
 msgid "Renewed!"
 msgstr "Продлено!"
 
+#. %1$s: - CASE 'FOR'     -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:132
+#, c-format
+msgid "Rental fee %s"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:67
 #, fuzzy, c-format
 msgid "Report issues and broken links"
@@ -9220,7 +9271,7 @@ msgstr "юридические статьи"
 msgid "Request placed:"
 msgstr "юридические статьи"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
 #, c-format
 msgid "Request specific item type:"
 msgstr "Выберите конкретный тип единиц:"
@@ -9410,7 +9461,7 @@ msgstr "Расширенный поиск"
 msgid "Return to the main page"
 msgstr "Вернуть этот экземпляр "
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:55
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:56
 #, c-format
 msgid "Return to the self-checkout"
 msgstr "Вернуться к самообслуживанию"
@@ -9507,9 +9558,9 @@ msgstr "Сб"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:238
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:240
-#, fuzzy, c-format
+#, c-format
 msgid "Salutation:"
-msgstr "%s Приветствие:"
+msgstr "Приветствие:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -9565,7 +9616,7 @@ msgstr "Scan "
 msgid "Scan a new item or enter its barcode:"
 msgstr "Просканируйте новую единицу или введите ее штрих-код:"
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:46
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:47
 #, c-format
 msgid ""
 "Scan each item and wait for the page to reload before scanning the next "
@@ -9699,15 +9750,15 @@ msgstr "Ищем по OverDrive..."
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:529
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:531
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary email:"
-msgstr "%s Дополнительная электронная почта:"
+msgstr "Дополнительная электронная почта:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:490
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:492
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary phone:"
-msgstr "%s Дополнительный телефон:"
+msgstr "Дополнительный телефон:"
 
 # 124^b - секция (часть)
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:35
@@ -9742,30 +9793,20 @@ msgstr "См. также:"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
-#, fuzzy
-msgid ""
-"See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END "
-"%]"
+msgid "See: %s%s%snext biblio%s"
 msgstr ""
-"См.: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
-"%]"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
-#, fuzzy
-msgid ""
-"See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous "
-"biblio[% END %]"
+msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
-"См.: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
-"biblio[% END %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
 msgid "Select a list"
 msgstr "Выбираем список"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:121
 #, fuzzy, c-format
 msgid "Select a specific item:"
@@ -9827,7 +9868,7 @@ msgstr "Выберите заглавия, чтобы: "
 msgid "Self check-in help"
 msgstr "Помощь по самообслуживанию"
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:29
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:30
 #, c-format
 msgid "Self checkout help"
 msgstr "Помощь по самообслуживанию"
@@ -9842,9 +9883,9 @@ msgid "Send"
 msgstr "Выслать"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:70
-#, fuzzy, c-format
+#, c-format
 msgid "Send email"
-msgstr "%s Дополнительная электронная почта:"
+msgstr "Отправить email"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:168
 #, c-format
@@ -10017,8 +10058,8 @@ msgstr "Показать все экземпляры"
 msgid "Show more"
 msgstr "Показать больше"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #, c-format
 msgid "Show more options"
 msgstr "Показать больше параметров"
@@ -10099,7 +10140,7 @@ msgstr ""
 msgid "Sorry"
 msgstr "Извините"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
 #, c-format
 msgid "Sorry,"
 msgstr "Извините,"
@@ -10123,7 +10164,7 @@ msgstr "Простите, но вы не ввели правильный адр�
 msgid "Sorry, no suggestions."
 msgstr "К сожалению, нет предложений."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:125
 #, fuzzy, c-format
 msgid "Sorry, none of these titles can be placed on hold. "
 msgstr ", ни один из этих экземпляров не может быть зарезервирован. "
@@ -10193,7 +10234,7 @@ msgstr ""
 "Простите, этот пункт самообслуживания отключён. Свяжитесь с администратором, "
 "чтобы решить эту проблему."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:186
 #, c-format
 msgid "Sorry, you are too young to reserve this material."
 msgstr "Простите, но вы слишком молоды для работы с этой единицей."
@@ -10288,9 +10329,9 @@ msgstr "Стандартный номер (ISBN, ISSN или другой):"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:605
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:756
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:758
-#, fuzzy, c-format
+#, c-format
 msgid "State:"
-msgstr "%s Область/штат/провинция: "
+msgstr "Область/штат/провинция: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:358
 #, c-format
@@ -10319,18 +10360,18 @@ msgstr "Состояние: "
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:41
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:42
 #, c-format
 msgid "Step one: Enter your user id%s and password%s"
 msgstr "Шаг первый: введите Ваш пользовательский идентификатор%s и пароль%s"
 
 # Готово
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:50
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:51
 #, c-format
 msgid "Step three: Click the 'Finish' button"
 msgstr "Шаг третий: нажмите на кнопку «Завершить»"
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:45
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:46
 #, c-format
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "Шаг два: просканируйте штрих-код для каждого элемента, поочередно"
@@ -10342,9 +10383,9 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:378
-#, fuzzy, c-format
+#, c-format
 msgid "Street number:"
-msgstr "%s Номер дома:"
+msgstr "Номер дома:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -10507,9 +10548,9 @@ msgstr "Подписка: "
 
 #. %1$s:  subscriptionsnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:584
-#, fuzzy, c-format
+#, c-format
 msgid "Subscriptions ( %s )"
-msgstr "Подписки"
+msgstr "Подписки ( %s )"
 
 # Sudoc -- название системы
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:33
@@ -10558,13 +10599,19 @@ msgstr "Вск"
 msgid "Sunday"
 msgstr "Воскресенье"
 
+#. %1$s: - CASE 'L'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
+#, fuzzy, c-format
+msgid "Sundry %s"
+msgstr "Вхождение «%s»"
+
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:691
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:693
-#, fuzzy, c-format
+#, c-format
 msgid "Surname:"
-msgstr "%s Фамилия:  "
+msgstr "Фамилия:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:353
 #, c-format
@@ -11034,7 +11081,7 @@ msgstr "С этим заглавием связано подписок: %s."
 msgid "There are no comments for this item."
 msgstr "Нет никаких комментариев для этой единицы."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:192
 #, fuzzy, c-format
 msgid "There are no items that can be placed on hold."
 msgstr ", ни один из этих экземпляров не может быть зарезервирован. "
@@ -11132,9 +11179,9 @@ msgstr "Это сериальное издание"
 
 # займа / ссуды
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:129
-#, fuzzy, c-format
+#, c-format
 msgid "This item does not exist."
-msgstr "Этот экземпляр не для ссуды. %s "
+msgstr "Этот экземпляр не существует."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:328
 #, c-format
@@ -11143,9 +11190,9 @@ msgid ""
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:113
-#, fuzzy, c-format
+#, c-format
 msgid "This item is already checked out to you."
-msgstr "%s Этот экземпляр уже был выдан Вам. %s"
+msgstr "Этот экземпляр уже был Вам выдан."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:87
 #, c-format
@@ -11175,11 +11222,10 @@ msgstr ""
 msgid "This message can have the following reason(s):"
 msgstr ""
 
-# займа / ссуды
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
-#, fuzzy, c-format
+#, c-format
 msgid "This news item does not exist. "
-msgstr "Этот экземпляр не для ссуды. %s "
+msgstr "Эта новость не существует."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1170
@@ -11193,23 +11239,23 @@ msgstr ""
 
 #. %1$s:  items_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:647
-#, fuzzy, c-format
+#, c-format
 msgid "This record has many physical items (%s). "
-msgstr "Эта запись имеет много физических экземпляров. "
+msgstr "Эта запись имеет много физических экземпляров (%s). "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:811
 #, c-format
 msgid "This subscription is closed."
 msgstr "Эту подписку закрыто."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:195
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 "Это заглавие не может быть запрошенно, потому что оно уже в Вашем "
 "распоряжении."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:197
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Это заглавие не может быть запрошено."
@@ -11344,10 +11390,15 @@ msgstr "Верхний уровень"
 msgid "Topics"
 msgstr "Рубрики"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:75
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
 #, c-format
 msgid "Total due"
 msgstr "Всего подлежит платежу"
+
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#, c-format
+msgid "Total due if credit(s) applied:"
+msgstr ""
 
 #. %1$s:  holds_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:660
@@ -11407,7 +11458,7 @@ msgstr "Тип: "
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:17
 #, c-format
 msgid "UF"
-msgstr ""
+msgstr "ИД"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1207
 #, fuzzy, c-format
@@ -11462,7 +11513,7 @@ msgstr "Не удаётся добавить одну или несколько 
 msgid "Unable to verify payment."
 msgstr "Не удаётся добавить одну или несколько меток."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:399
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:401
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Недоступно (утеряно или отсутствует)"
@@ -11526,7 +11577,7 @@ msgstr ""
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:17
 msgid "Used For"
-msgstr ""
+msgstr "Используется Для"
 
 # проверить, связано с http://www.loc.gov/marc/authority/ad4xx.html и http://www.gpntb.ru/win/usmarc/ch2/box6.html
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:66
@@ -11626,15 +11677,16 @@ msgstr "Посмотреть на Amazon.com"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
-msgid "View record \"[% listitem.title | html %]\""
-msgstr ""
+#, fuzzy
+msgid "View record \"%s\""
+msgstr "Сохранить запись: "
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:108
 msgid "View your search history"
 msgstr "Просмотр истории поисков"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
 #, c-format
 msgid "Vol info"
@@ -11749,6 +11801,14 @@ msgstr "Нед"
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:408
 msgid "Would you like to print a receipt?"
 msgstr ""
+
+#. For the first occurrence,
+#. %1$s: - CASE 'HE'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
+#, fuzzy, c-format
+msgid "Writeoff %s"
+msgstr "Написано %s с: «%s»"
 
 #. %1$s:  message.message_date | $KohaDates 
 #. %2$s:  Branches.GetName(message.branchcode) | html 
@@ -11959,9 +12019,9 @@ msgid "You currently owe fines and charges amounting to:"
 msgstr "Вы на текущий момент задолжали штраф и должны оплатить:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:51
-#, fuzzy, c-format
+#, c-format
 msgid "You did not specify any search criteria"
-msgstr "%s Вы не отметили ни одного поискового критерия. %s"
+msgstr "Вы не указали ни одного критерия поиска"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:28
 #, c-format
@@ -12025,7 +12085,7 @@ msgstr ""
 msgid "You have a credit of:"
 msgstr "У Вас есть кредит на сумму:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
 #, c-format
 msgid "You have already requested this title."
 msgstr "Вы уже ранее запрашивали это заглавие."
@@ -12081,11 +12141,9 @@ msgid "You have renewed this item the maximum number of times allowed."
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
-#, fuzzy, c-format
+#, c-format
 msgid "You have subscribed to email notification on new issues. "
-msgstr ""
-"%s %s %s %s Вы подписались на уведомления по электронной почте о новых "
-"выпусках "
+msgstr "Вы подписались на уведомления по электронной почте о новых выпусках "
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:36
 #, fuzzy, c-format
@@ -12142,12 +12200,12 @@ msgid "You must have an email address to enroll"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:831
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
 msgstr ""
-"%s %s Вы должны войти в систему, чтобы подписаться на уведомления по "
-"электронной почте %s %s "
+"Вы должны войти в систему, чтобы подписаться на уведомления по электронной "
+"почте"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:92
 #, c-format
@@ -12162,10 +12220,9 @@ msgstr "Вы должны выбрать хотя бы одну единицу. 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:46
-msgid ""
-"You searched [% IF ( query_desc ) %] for '[% query_desc | html %]'[% END %]"
-"[% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]"
-msgstr ""
+#, fuzzy
+msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
+msgstr "%s Поиск %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:70
 #, c-format
@@ -12400,15 +12457,13 @@ msgstr ""
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:713
-#, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
-msgstr "Вход в каталог не был разрешён библиотекой."
+msgstr "Ваше примечание о %s было сохранено и отправлено в библиотеку."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:713
-#, fuzzy
 msgid "Your note about %s was removed."
-msgstr "Запись не была удалена."
+msgstr "Ваше примечание о %s было удалено."
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:42
 #, c-format
@@ -12456,7 +12511,7 @@ msgstr ""
 msgid "Your personal details"
 msgstr "Личная информация"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:218
 #, fuzzy, c-format
 msgid "Your priority: "
 msgstr "Резервирование и приоритет"
@@ -12560,9 +12615,9 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:618
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:769
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:771
-#, fuzzy, c-format
+#, c-format
 msgid "ZIP/Postal code:"
-msgstr "%s Почтовый индекс:"
+msgstr "Почтовый индекс:"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -12572,22 +12627,6 @@ msgstr "%s Почтовый индекс:"
 msgid "[ New list ]"
 msgstr "Новый список"
 
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-#, fuzzy
-msgid ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] catalog recent comments"
-msgstr ""
-"Коха &rsaquo;  [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %] "
-"[% END %] Эллектронный каталог &rsaquo; Последние комментарии"
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
-#, fuzzy
-msgid "[% LibraryName | html %] Search RSS feed"
-msgstr "[% LibraryName |html %] Поиск по ленте новостей (RSS)"
-
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
 msgid "[% limit or"
@@ -12595,11 +12634,9 @@ msgstr "[% limit or"
 
 #. %1$s:  HTML5MediaParent | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1022
-#, fuzzy, c-format
+#, c-format
 msgid "[%s tag not supported by your browser.]"
-msgstr ""
-"<%s controls preload=none> %s <%s src=\"%s\"%s /> %s [теґ „%s“ не "
-"підтримується Вашим браузером.] "
+msgstr "[тег %s не поддерживается вашим браузером.]"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -12712,23 +12749,11 @@ msgstr "содержит"
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
-#, fuzzy
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
-"date=[% BIBLIO_RESULT.publicationyear %]&rft.tpages=[% BIBLIO_RESULT."
-"item('size') %]&rft.isbn=[% BIBLIO_RESULT.isbn |url %]&rft.aucorp=&rft."
-"place=[% BIBLIO_RESULT.place %]&rft.pub=[% BIBLIO_RESULT.publisher |url "
-"%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
-"series %]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
@@ -12774,9 +12799,9 @@ msgid "email address"
 msgstr "адрес электронной почты:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:466
-#, fuzzy, c-format
+#, c-format
 msgid "firstname"
-msgstr "%s Имя и отчество: "
+msgstr "имя"
 
 #: opac-tmpl/bootstrap/en/modules/opac-browser.tt:65
 #, c-format
@@ -12944,8 +12969,8 @@ msgstr "АБИС Коха ЭК - %s"
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
 #, fuzzy
-msgid "koha:biblionumber:[% biblio.biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblionumber %]"
+msgid "koha:biblionumber:%s"
+msgstr "Шифр хранения: %s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -13107,9 +13132,9 @@ msgid "search"
 msgstr "поиска"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid "secondary email address"
-msgstr "%s Дополнительная электронная почта:"
+msgstr "дополнительная электронная почта"
 
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:101
 #, c-format
@@ -13219,12 +13244,12 @@ msgid "tagsel_button"
 msgstr "tagsel_button"
 
 #. META http-equiv=Content-Type
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:4
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 #: opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:6
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
@@ -13292,7 +13317,7 @@ msgid "to post a comment."
 msgstr " для возможности публиковать комментарии."
 
 #. LINK
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:47
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
 msgid "unAPI"
 msgstr "unAPI"
 
@@ -13309,7 +13334,7 @@ msgstr "вплоть до "
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:92
 #, c-format
 msgid "used for/see from:"
-msgstr ""
+msgstr "используется для/смотри от:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:487
 #, c-format
@@ -13380,7 +13405,7 @@ msgstr "возвращать или нет информацию о ссуде в
 msgid "whether or not to return patron's contact information in the response"
 msgstr "возвращать или нет контактную информацию посетителя в ответ"
 
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:7
 msgid "width=device-width, initial-scale=1"
 msgstr "width=device-width, initial-scale=1"
 
@@ -13396,7 +13421,7 @@ msgid "would be entered as "
 msgstr ""
 
 #. %1$s:  new_reserves_allowed | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
 #, c-format
 msgid ""
 "you can only place %s more holds. Please uncheck the checkboxes for the "
@@ -13489,9 +13514,5 @@ msgstr "×"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:180
-#, fuzzy
-msgid ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"
+msgid "‡%s %s"
 msgstr ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value %]"

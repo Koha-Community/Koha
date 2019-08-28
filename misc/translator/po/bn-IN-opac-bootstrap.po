@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-07-19 08:10-0300\n"
-"PO-Revision-Date: 2019-03-20 11:54+0000\n"
+"POT-Creation-Date: 2019-08-27 13:20-0300\n"
+"PO-Revision-Date: 2019-07-25 16:56+0000\n"
 "Last-Translator: Mubassir Ahsan <mahsandu@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: bn\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1553082878.861758\n"
+"X-POOTLE-MTIME: 1564073803.996011\n"
 "X-Pootle-Path: /bn/18.05/bn-IN-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -173,9 +173,9 @@ msgstr "%s %s টি পরিবহনাধীন অবস্থায় আ
 #. %1$s:  IF ( HOLD.is_at_destination ) 
 #. %2$s:  IF ( HOLD.found ) 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:111
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Item waiting at "
-msgstr "%s %s %s আপনার জন্য অপেক্ষমাণ "
+msgstr "%s %s রয়েছে "
 
 #. %1$s:  SWITCH code 
 #. %2$s:  CASE 'XSLTH_ERR_NO_FILE' 
@@ -351,51 +351,6 @@ msgstr ""
 "%s %sBIBTEX %sশেষেরনোট %sমার্ক্এক্সএমএল %sমার্ক্ (অ-ইউনিকোড/মার্ক্-8) %sমার্ক্ "
 "(ইউনিকোড/ইউটিএফ-8) %sমার্ক্ (ইউনিকোড/ইউটিএফ-8, মান) %sএমওডিএস (এক্সএমএল) "
 "%sআরআইএস %sআইএসবিডি %s"
-
-# see %sWriteoff%
-# %sHold waiting too long%
-# %sForgiven%
-#. %1$s:  SWITCH ACCOUNT_LINE.accounttype 
-#. %2$s:  CASE 'Pay' 
-#. %3$s:  CASE 'Pay00' 
-#. %4$s:  CASE 'Pay01' 
-#. %5$s:  CASE 'Pay02' 
-#. %6$s:  CASE 'VOID' 
-#. %7$s:  CASE 'N' 
-#. %8$s:  CASE 'OVERDUE' 
-#. %9$s:  CASE 'A' 
-#. %10$s:  CASE 'M' 
-#. %11$s:  CASE 'L' 
-#. %12$s:  CASE 'W' 
-#. %13$s:  CASE 'HE' 
-#. %14$s:  CASE 'Rent' 
-#. %15$s:  CASE 'FOR' 
-#. %16$s:  CASE 'LR' 
-#. %17$s:  CASE 'PF' 
-#. %18$s:  CASE 'PAY' 
-#. %19$s:  CASE 'WO' 
-#. %20$s:  CASE 'C' 
-#. %21$s:  CASE 'CR' 
-#. %22$s: -CASE 'Res' 
-#. %23$s:  CASE 
-#. %24$s:  ACCOUNT_LINE.accounttype | html 
-#. %25$s: - END -
-#. %26$s: - PROCESS account_status_description account=ACCOUNT_LINE -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:30
-#, fuzzy, c-format
-msgid ""
-"%s %sPayment %sPayment (cash via SIP2) %sPayment (VISA via SIP2) %sPayment "
-"(credit card via SIP2) %sVoided %sNew card %sFine %sAccount management fee "
-"%sSundry %sLost item %sWriteoff %sHold waiting too long %sRental fee "
-"%sForgiven %sLost item fee refund %sLost item processing fee %sPayment "
-"%sWriteoff %sCredit %sCredit %sHold fee %s%s %s %s "
-msgstr ""
-"%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
-"(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
-"%sAccount management fee %sSundry %sLost item %sWriteoff %sAccruing fine "
-"%sHold waiting too long %sRental fee %sForgiven %sLost item fee refund "
-"%sProcessing fee %sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s %s, "
-"%s%s %s(%s)%s "
 
 #. %1$s:  IF s.is_private 
 #. %2$s:  IF s.is_shared 
@@ -622,9 +577,9 @@ msgstr "%s আপনি কি বুঝাচ্ছেন: "
 #. %1$s:  END 
 #. %2$s:  HOLDS.count | html 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
-#, fuzzy, c-format
+#, c-format
 msgid "%s Holds (%s) "
-msgstr "হোল্ডস্ (%s)"
+msgstr "%s বুকিং লিস্ট (%s) "
 
 #. %1$s:  SEARCH_RESULT.num_critics | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:457
@@ -807,6 +762,12 @@ msgstr "%s অনুসন্ধান"
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s অনুসন্ধান %s করা হোক '%s'%s%s&nbsp;মাত্রার মধ্যে:&nbsp;'%s'%s"
 
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
+#, fuzzy
+msgid "%s Search RSS feed"
+msgstr "%s অনুসন্ধান"
+
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:88
 #, fuzzy, c-format
@@ -923,7 +884,7 @@ msgstr "%s ভিডিও সারসংক্ষেপ"
 #. %12$s:  itemLoo.reservedate | html 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:407
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:409
 #, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -968,7 +929,7 @@ msgstr "%s আপনি এখনো এই গ্রন্থাগার থ�
 #. %3$s:  ELSE 
 #. %4$s:  RESERVE_CHARGE | $Price 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:136
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:138
 #, fuzzy, c-format
 msgid ""
 "%s You will be charged a hold fee of %s when you collect this item %s You "
@@ -1162,7 +1123,7 @@ msgstr "%s%s%sকোহা %s &rsaquo; স্বং চেকঅাউট &rsaqu
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:5
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:6
 #, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout help"
 msgstr "%s%s%sকোহা %s &rsaquo; স্বং চেকঅাউটের সাহায্য"
@@ -1193,13 +1154,13 @@ msgstr "%s%s%sকোহা অনলাইন%s ক্যাটালগ"
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s %s Results of search for '%s' %s "
 "Search results %s %s You did not specify any search criteria. %s"
 msgstr ""
-"%s%s%s কোহা অনলাইন %s সূচী &rsaquo; %s Results of search %sfor '%s'%s%s&nbsp;"
-"with limit(s):&nbsp;'%s'%s %s You did not specify any search criteria. %s"
+"%s%s%sকোহা অনলাইন%s ক্যাটালগ &rsaquo; %s %s এই সার্চের ফলাফল '%s' %s সার্চের "
+"ফলাফল %s %s সার্চের কোন টপিক দেয়া হয়নি. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1775,6 +1736,12 @@ msgstr "%s %s %s %s (%s) "
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 msgstr "%s%s%sকোহা অনলাইন%s ক্যাটালগ &rsaquo; আপনার অনুসন্ধান ইতিহাস"
 
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
+#, fuzzy
+msgid "%s%s%sKoha online%s catalog recent comments"
+msgstr "%s%s%s কোহা অনলাইন %s ক্যাটালগ &rsaquo; সাম্প্রতিক মন্তব্য"
+
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
 #. %3$s:  SEARCH_RESULT.biblionumber | html 
@@ -1809,7 +1776,7 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author | html 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
 #, c-format
 msgid "%s, by %s%s "
 msgstr "%s, দ্বারা %s%s "
@@ -2709,7 +2676,7 @@ msgstr "(%s সর্বমোট)"
 msgid "(123) 456-7890"
 msgstr "(১২৩) ৪৫৬-৭৮৯০"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:121
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:148
 #, c-format
 msgid "(Accruing)"
 msgstr ""
@@ -2732,7 +2699,7 @@ msgstr "ডাটাবেজে পাওয়া যায়নি. দয়াক�
 msgid "(Checked out)"
 msgstr "(চেক আউট)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:124
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:151
 #, c-format
 msgid "(Forgiven)"
 msgstr ""
@@ -2798,7 +2765,7 @@ msgstr ""
 "(দয়া করে মনে রাখবেনঃ যদি আপনি আপনার একাউন্ট অনলাইনে করে থাকেন তাহলে পুন্রুদ্ধারের "
 "সময় কিছু সময় বিলম্ব হতে পারে।)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:123
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:150
 #, c-format
 msgid "(Replaced)"
 msgstr ""
@@ -2829,7 +2796,7 @@ msgstr ""
 msgid "(Required)"
 msgstr "(আবশ্যক)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:122
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:149
 #, c-format
 msgid "(Returned)"
 msgstr ""
@@ -2878,7 +2845,7 @@ msgstr "(বিকল্প হিসেবে OPAC ব্যবহার কর
 msgid "(Use SRU instead)"
 msgstr "(বিকল্প হিসেবে SRU ব্যবহার করুন )"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:125
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:152
 #, c-format
 msgid "(Voided)"
 msgstr ""
@@ -3103,7 +3070,7 @@ msgid ""
 "A payment with the transaction id '%s' has already been posted to an account."
 msgstr "লেনদেনর সঙ্গে একটি অর্থ '%s' ইতিমধ্যে একটি অ্যাকাউন্টে পোস্ট করা হয়ছেে."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:321
 #, fuzzy, c-format
 msgid "A specific item"
 msgstr "একটি নির্দিষ্ট আইটেম "
@@ -3135,6 +3102,12 @@ msgid ""
 msgstr ""
 "আমাদের রেকর্ড অনুযায়ী, আমাদের কাছে যোগাযোগের হালনাগাদ তথ্য নেই। দয়াকরে "
 "গ্রন্থাগারের সাথে যোগাযোগ করুন।"
+
+#. %1$s: - CASE 'M'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:127
+#, c-format
+msgid "Account management fee %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:65
 #, fuzzy, c-format
@@ -3280,7 +3253,7 @@ msgstr "প্রচ্ছদ "
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:257
-msgid "Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
+msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
@@ -3374,6 +3347,7 @@ msgstr "বিকল্প ঠিকানার তথ্যঃ"
 msgid "Alternate contact"
 msgstr "বিকল্প যোগাযোগ"
 
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:12
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:391
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:405
 #, c-format
@@ -3453,7 +3427,7 @@ msgstr "যে কোন ফরম্যাট"
 msgid "Any item "
 msgstr "যে কোন টি"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:289
 #, fuzzy, c-format
 msgid "Any item type"
 msgstr "যে কোন ধরণের উপাদান"
@@ -3615,7 +3589,7 @@ msgid ""
 msgstr ""
 
 #. OPTION
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:249
 #, fuzzy
 msgid "At least one item is available at this library"
 msgstr "গ্রন্থাগারে অন্তত একটি উপাদান আছে"
@@ -3839,7 +3813,7 @@ msgstr "ফলাফলের অনুসন্ধান তালিকায�
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:108
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:150
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:95
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:472
@@ -4002,7 +3976,7 @@ msgstr "ডাক নং.:"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:225
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:227
@@ -4117,7 +4091,7 @@ msgid "Cancels an active hold request for the patron."
 msgstr "ব্যবহারকারীর একটি সক্রিয় হোল্ড বাতিল করে ।"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:360
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
 #, fuzzy
 msgid "Cannot be put on hold"
 msgstr "ধরে রাখা যাবে না"
@@ -4368,7 +4342,7 @@ msgstr "সব মুছে ফেলুন"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:294
 #, fuzzy, c-format
 msgid "Clear date"
@@ -4489,7 +4463,7 @@ msgstr "আপনার প্রিয় আইটেম গুলো সংগ�
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:122
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #, c-format
@@ -4573,13 +4547,13 @@ msgid "Comments%s"
 msgstr "মন্তব্য%s"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
 msgid "Confirm hold"
 msgstr "হোল্ড নিশ্চিত করুন"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
 #, c-format
 msgid "Confirm holds for:%s (%s)"
 msgstr "হোল্ড জন্য নিশ্চিত করা হয়েচ্ছে:%s (%s)"
@@ -4633,7 +4607,7 @@ msgid "Contents of "
 msgstr "বিষয়বস্তুর"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:335
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1209
 #, fuzzy, c-format
 msgid "Copy number"
@@ -4753,6 +4727,14 @@ msgid ""
 msgstr ""
 "একজন ব্যবহারকারীর জন্য, কোহায় গ্রন্থপুঞ্জি তালিকায় প্রদত্ত একটি  নির্দিষ্ট সামগ্রীর "
 "একটি সামগ্রী ধারণ সুপারিশ তৈরি কর।"
+
+#. For the first occurrence,
+#. %1$s: - CASE 'CR'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#, fuzzy, c-format
+msgid "Credit %s"
+msgstr "ক্রেডিট"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
 #, fuzzy, c-format
@@ -5153,7 +5135,7 @@ msgid "Due"
 msgstr "পাওনা"
 
 #. %1$s:  itemLoo.dateDue | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:393
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
 #, fuzzy, c-format
 msgid "Due %s"
 msgstr "পাওনা %s"
@@ -5291,7 +5273,7 @@ msgstr "সার্চ টার্ম দিন"
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:42
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:43
 #, fuzzy, c-format
 msgid ""
 "Enter your User ID%s and password%s, and click the submit button (or press "
@@ -5449,7 +5431,7 @@ msgid "Expected"
 msgstr "প্রত্যাশিত"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #, fuzzy
 msgid "Expecting a specific item selection."
 msgstr "একটি নির্দিষ্ট আইটেম নির্বাচন করা।"
@@ -5544,10 +5526,11 @@ msgstr "উপন্যাস নোট্‌স"
 msgid "Filmographies"
 msgstr "ফিল্মোগ্রাফি সমূহ"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:12
-#, c-format
-msgid "Fine amount"
-msgstr "জরিমানার অংক"
+#. %1$s: - CASE 'A'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:126
+#, fuzzy, c-format
+msgid "Fine %s"
+msgstr "জরিমানা"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:202
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
@@ -5570,9 +5553,9 @@ msgstr "জরিমানা ও ‍ফি"
 
 #. %1$s:  total | $Price 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
-#, fuzzy, c-format
+#, c-format
 msgid "Fines and charges (%s)"
-msgstr "জরিমানা ও ‍ফি"
+msgstr "জরিমানা ও ‍ফি (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:333
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:570
@@ -5618,22 +5601,22 @@ msgstr ""
 "2008 সালে এবং পরবর্তীতে প্রকাশিত সকলের জন্য  \"2008-\" ব্যবহার করতে পারেন।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:58
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in and change your password."
 msgstr ""
 "আপনার সুবিধার জন্য, এই পেজের লগইন আগের তথ্য দিয়ে পুর্ন করা হয়েছে। অনুগ্রহপূর্বক লগইন "
-"করে আপনার %s পাসওয়ার্ড বদলে দিন %s."
+"করে আপনার পাসওয়ার্ড বদলে দিন ।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in."
 msgstr ""
 "আপনার সুবিধার জন্য, এই পেজের লগইন আগের তথ্য দিয়ে পুর্ন করা হয়েছে। অনুগ্রহপূর্বক লগইন "
-"করে আপনার %s পাসওয়ার্ড বদলে দিন %s."
+"করুন ।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:59
@@ -5649,6 +5632,12 @@ msgid ""
 msgstr ""
 "চিরদিন: আমার সকল ব্যবহার ইতিহাস জমা রাখুন। এই অংশটি সেসকল ব্যবহারকারীদের জন্য "
 "যারা তাদের গ্রন্থাগার সামগ্রী ব্যবহার ট্রাক করতে চান।"
+
+#. %1$s: - CASE 'LR'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:133
+#, c-format
+msgid "Forgiven %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
@@ -5918,7 +5907,7 @@ msgid "Hi,"
 msgstr "হাই,"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #, fuzzy
 msgid "Hide options"
 msgstr "অপশন লুকিয়ে রাখুন"
@@ -5940,20 +5929,32 @@ msgstr "হাইলাইট"
 msgid "Hold date:"
 msgstr "বছর"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:274
+#. %1$s: - CASE           -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#, fuzzy, c-format
+msgid "Hold fee %s"
+msgstr "হোল্ডস্ (%s)"
+
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
 #, fuzzy, c-format
 msgid "Hold not needed after:"
 msgstr "বছর"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:298
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, fuzzy, c-format
 msgid "Hold notes:"
 msgstr "নোট হোল্ড করাঃ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:267
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, fuzzy, c-format
 msgid "Hold starts on date:"
 msgstr "হোল্ড শুরুর তারিখ:"
+
+#. %1$s: - CASE 'Rent'    -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:131
+#, c-format
+msgid "Hold waiting too long %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:72
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
@@ -6066,7 +6067,7 @@ msgstr "মূল পাতা"
 msgid "Home libraries"
 msgstr "হোম লাইব্রেরি"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1198
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:127
 #, fuzzy, c-format
@@ -6215,7 +6216,7 @@ msgstr ""
 "যদি এটি একটি ত্রুটি হয়, তাহলে আপনার কার্ডটি নিয়ে স্থানীয় লাইব্রেরির সার্কুলেশন ডেস্ক-"
 "এ যোগাযোগ করুন এবং ত্রুটি সংশোধন করা হবে."
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:37
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:38
 #, fuzzy, c-format
 msgid ""
 "If this is your first time using the self checkout system, or if the system "
@@ -6233,7 +6234,7 @@ msgstr ""
 "যদি আপনি এই এ-মেইলটি না পেয়ে থাকেন, তাহলে নতুন একটির জন্য অনুরোধ করতে পারেন: "
 
 #. %1$s:  SelfCheckTimeout | html 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:51
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:52
 #, fuzzy, c-format
 msgid ""
 "If you do not click the 'Finish' button, your session will automatically "
@@ -6379,7 +6380,7 @@ msgstr ""
 #. %2$s:  Branches.GetName( item.transfertto ) | html 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:45
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:397
 #, fuzzy, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "ট্রানজিট থেকে %s প্রতি %s হতে %s"
@@ -6402,7 +6403,7 @@ msgstr "ইনডেক্স-এ: "
 msgid "Indexes"
 msgstr "ইনডেক্স"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:351
 #, c-format
 msgid "Information"
 msgstr "তথ্য"
@@ -6489,14 +6490,14 @@ msgid "Item cannot be checked out."
 msgstr "আইটেমটি নেওয়া যাবে না."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:201
-#, fuzzy, c-format
+#, c-format
 msgid "Item checked in"
-msgstr "চেকড আউট (%s)"
+msgstr "চেক-ইন কপি"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
-#, fuzzy, c-format
+#, c-format
 msgid "Item checked out"
-msgstr "%s ইস্যু হয়েছে"
+msgstr "ইস্যু হয়েছে"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:83
 #, fuzzy, c-format
@@ -6538,7 +6539,7 @@ msgstr "রি-ইস্যু অসম্ভব"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:335
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:192
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
@@ -6555,7 +6556,7 @@ msgstr "আইটেমটির ধরণ"
 msgid "Item type:"
 msgstr "আইটেমটির ধরণ:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:209
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:324
 #, fuzzy, c-format
 msgid "Item type: "
@@ -6636,6 +6637,14 @@ msgstr "কী খুঁজতে হবে"
 msgid "Koha"
 msgstr "কোহা"
 
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
+#, fuzzy
+msgid "Koha %s"
+msgstr "কোহা"
+
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
 #, fuzzy
@@ -6646,14 +6655,6 @@ msgstr "কোহা- আরএসএস"
 #, fuzzy, c-format
 msgid "Koha Wiki"
 msgstr "কোহা- উইকি"
-
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
-#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:7
-#, fuzzy
-msgid "Koha [% Version | html %]"
-msgstr "কোহা [% ভার্সন %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:191
 #, fuzzy, c-format
@@ -6707,7 +6708,7 @@ msgstr "বড় ছাপা অক্ষর"
 msgid "Last"
 msgstr "বিগত"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:342
 #, fuzzy, c-format
 msgid "Last location"
 msgstr "সর্বশেষ অবস্থান"
@@ -6961,9 +6962,9 @@ msgstr "স্থান(গুলি) (অবস্থান)"
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:814
-#, fuzzy, c-format
+#, c-format
 msgid "Location: %s %s %s "
-msgstr "সংগ্রহ: %s "
+msgstr "অবস্থান: %s %s %s "
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:36
 #, c-format
@@ -7076,6 +7077,24 @@ msgstr ""
 #, fuzzy, c-format
 msgid "LookupPatron"
 msgstr "লুক-আপপ্যাট্রন"
+
+#. %1$s: - CASE 'W'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:129
+#, fuzzy, c-format
+msgid "Lost item %s"
+msgstr "সংযোজন %s উপাদানের প্রতি %s"
+
+#. %1$s: - CASE 'PF'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:134
+#, c-format
+msgid "Lost item fee refund %s"
+msgstr ""
+
+#. %1$s: - CASE 'PAY'     -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:135
+#, c-format
+msgid "Lost item processing fee %s"
+msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7217,7 +7236,7 @@ msgstr "অনুপস্থিত (কখনো গ্রহণ করা হ�
 msgid "Missing (sold out)"
 msgstr "অনুপস্থিত (বিক্রি হয়ে গিয়েছে)"
 
-#. %1$s:  subscription.missinglist | html 
+#. %1$s:  subscription.missinglist | html | html_line_break 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:835
 #, fuzzy, c-format
 msgid "Missing issues: %s "
@@ -7342,6 +7361,12 @@ msgstr ""
 msgid "New"
 msgstr "নতুন"
 
+#. %1$s: - CASE 'OVERDUE' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:125
+#, c-format
+msgid "New card %s"
+msgstr ""
+
 #. %1$s:  review.title | html 
 #. %2$s:  FOREACH subtitl IN review.subtitle 
 #. %3$s:  subtitl.subfield | html 
@@ -7431,7 +7456,7 @@ msgstr "পরবর্তী &gt;&gt;"
 msgid "Next &raquo;"
 msgstr "পরবর্তী &raquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:313
 #, fuzzy, c-format
 msgid "Next available item"
 msgstr "পরবর্তী সহজলভ্য উপাদান"
@@ -7448,9 +7473,9 @@ msgstr "না"
 
 # Please see:  Article   "নিবন্ধ "
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:182
-#, fuzzy, c-format
+#, c-format
 msgid "No article requests can be made for this record. "
-msgstr "%s কোন প্রবন্ধ এই রেকর্ডের জন্য অনুরোধ করা যাবে না। %s "
+msgstr "এই রেকর্ডের জন্য কপির অনুরোধ করা যাবে না।"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:54
 #, fuzzy, c-format
@@ -7735,7 +7760,7 @@ msgid "Not for loan %s"
 msgstr "ইস্যু করার জন্য নয় %s"
 
 #. %1$s:  itemLoo.notforloanvalue | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:403
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:405
 #, fuzzy, c-format
 msgid "Not for loan (%s)"
 msgstr "ইস্যু করার জন্য নয় (%s)"
@@ -7745,7 +7770,7 @@ msgstr "ইস্যু করার জন্য নয় (%s)"
 msgid "Not issued"
 msgstr "ইস্যু হয়নি"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:429
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:431
 #, fuzzy, c-format
 msgid "Not on hold"
 msgstr "হোল্ডে নেই"
@@ -7774,7 +7799,7 @@ msgstr "দ্রষ্টব্য: "
 
 #. %1$s:  END 
 #. %2$s:  END # / UNLESS bibitemloo.holdable 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:254
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7913,7 +7938,7 @@ msgstr "নভেম্বর"
 msgid "Number"
 msgstr "নাম্বার"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:223
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:225
 #, fuzzy, c-format
 msgid "Number of holds: "
 msgstr "সংকলন সংখ্যাঃ"
@@ -8217,6 +8242,32 @@ msgstr "নির্বাচিত জরিমানা ও চার্জ �
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
+#. For the first occurrence,
+#. %1$s: - CASE 'Pay00'   -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:121
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:136
+#, fuzzy, c-format
+msgid "Payment %s"
+msgstr "মূল্য পরিশোধ পদ্ধতি"
+
+#. %1$s: - CASE 'Pay02'   -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:123
+#, c-format
+msgid "Payment (VISA via SIP2) %s"
+msgstr ""
+
+#. %1$s: - CASE 'Pay01'   -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:122
+#, c-format
+msgid "Payment (cash via SIP2) %s"
+msgstr ""
+
+#. %1$s: - CASE 'N'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:124
+#, c-format
+msgid "Payment (credit card via SIP2) %s"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:65
 #, fuzzy, c-format
 msgid "Payment applied:"
@@ -8256,7 +8307,7 @@ msgid "Pick up location"
 msgstr "উত্তোলনের স্থান"
 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:98
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:231
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:233
 #, c-format
 msgid "Pick up location:"
 msgstr ""
@@ -8272,17 +8323,17 @@ msgid "Pickup library:"
 msgstr "পিকআপ লাইব্রেরি:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Place a hold on"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:169
 #, c-format
 msgid "Place a hold on "
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Place a hold on: "
 msgstr ""
 
@@ -8429,7 +8480,7 @@ msgstr "অনুগ্রহ করে সংশোধন করে পুন�
 msgid "Please do not use this mail to request or renew books."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:302
 #, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -8993,8 +9044,9 @@ msgstr "অপসারণ"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:49
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr ""
+#, fuzzy
+msgid "Remove facet %s"
+msgstr "তালিকা থেকে অপসারণ করুন"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:101
@@ -9073,6 +9125,12 @@ msgstr ""
 msgid "Renewed!"
 msgstr ""
 
+#. %1$s: - CASE 'FOR'     -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:132
+#, c-format
+msgid "Rental fee %s"
+msgstr ""
+
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:67
 #, c-format
 msgid "Report issues and broken links"
@@ -9111,7 +9169,7 @@ msgstr ""
 msgid "Request placed:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:285
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:287
 #, c-format
 msgid "Request specific item type:"
 msgstr ""
@@ -9301,7 +9359,7 @@ msgstr ""
 msgid "Return to the main page"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:55
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:56
 #, c-format
 msgid "Return to the self-checkout"
 msgstr ""
@@ -9447,7 +9505,7 @@ msgstr "স্ক্যান করুন "
 msgid "Scan a new item or enter its barcode:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:46
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:47
 #, c-format
 msgid ""
 "Scan each item and wait for the page to reload before scanning the next "
@@ -9616,16 +9674,12 @@ msgstr ""
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
-msgid ""
-"See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END "
-"%]"
+msgid "See: %s%s%snext biblio%s"
 msgstr ""
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
-msgid ""
-"See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous "
-"biblio[% END %]"
+msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
@@ -9633,7 +9687,7 @@ msgstr ""
 msgid "Select a list"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:333
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:121
 #, c-format
 msgid "Select a specific item:"
@@ -9695,7 +9749,7 @@ msgstr ""
 msgid "Self check-in help"
 msgstr "স্বয়ং চেক-ইনের হেল্প"
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:29
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:30
 #, c-format
 msgid "Self checkout help"
 msgstr "স্বয়ং চেক-অাউট হেল্প"
@@ -9884,8 +9938,8 @@ msgstr ""
 msgid "Show more"
 msgstr "আরও প্রদর্শন করুন"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:260
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:455
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 #, c-format
 msgid "Show more options"
 msgstr "অারো বিকল্প প্রদর্শনী"
@@ -9963,7 +10017,7 @@ msgstr ""
 msgid "Sorry"
 msgstr "দুঃখিত"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
 #, c-format
 msgid "Sorry,"
 msgstr ""
@@ -9985,7 +10039,7 @@ msgstr ""
 msgid "Sorry, no suggestions."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:125
 #, fuzzy, c-format
 msgid "Sorry, none of these titles can be placed on hold. "
 msgstr ", এই উপাদানগুলোর কোনটাই রাখা যাবে না।"
@@ -10049,7 +10103,7 @@ msgid ""
 "the administrator to resolve this problem."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:186
 #, c-format
 msgid "Sorry, you are too young to reserve this material."
 msgstr ""
@@ -10167,17 +10221,17 @@ msgstr "অবস্থা:"
 
 #. %1$s:  IF ( SelfCheckoutByLogin ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:41
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:42
 #, c-format
 msgid "Step one: Enter your user id%s and password%s"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:50
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:51
 #, fuzzy, c-format
 msgid "Step three: Click the 'Finish' button"
 msgstr "স্টেপ তিন:  'ফিনিশ' বাটন ক্লিক করুন"
 
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:45
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:46
 #, c-format
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr ""
@@ -10401,6 +10455,12 @@ msgstr "রবি"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sunday"
 msgstr "রবিবার"
+
+#. %1$s: - CASE 'L'       -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
+#, fuzzy, c-format
+msgid "Sundry %s"
+msgstr "প্রবেশ %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
@@ -10859,7 +10919,7 @@ msgstr ""
 msgid "There are no comments for this item."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:192
 #, fuzzy, c-format
 msgid "There are no items that can be placed on hold."
 msgstr ", এই উপাদানগুলোর কোনটাই রাখা যাবে না।"
@@ -11013,12 +11073,12 @@ msgstr "এই রেকর্ডের কোন অাইটেম নেই (
 msgid "This subscription is closed."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:193
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:195
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:195
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:197
 #, c-format
 msgid "This title cannot be requested."
 msgstr ""
@@ -11151,9 +11211,14 @@ msgstr "শীর্ষ স্তর"
 msgid "Topics"
 msgstr "বিষয় সমূহ"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:75
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
 #, c-format
 msgid "Total due"
+msgstr ""
+
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#, c-format
+msgid "Total due if credit(s) applied:"
 msgstr ""
 
 #. %1$s:  holds_count | html 
@@ -11266,7 +11331,7 @@ msgstr ""
 msgid "Unable to verify payment."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:399
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:401
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr ""
@@ -11423,15 +11488,16 @@ msgstr ""
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
-msgid "View record \"[% listitem.title | html %]\""
-msgstr ""
+#, fuzzy
+msgid "View record \"%s\""
+msgstr "ভিডিও রেকর্ডিং "
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:108
 msgid "View your search history"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:349
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
 #, c-format
 msgid "Vol info"
@@ -11539,6 +11605,14 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:408
 msgid "Would you like to print a receipt?"
+msgstr ""
+
+#. For the first occurrence,
+#. %1$s: - CASE 'HE'      -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
+#, c-format
+msgid "Writeoff %s"
 msgstr ""
 
 #. %1$s:  message.message_date | $KohaDates 
@@ -11804,7 +11878,7 @@ msgstr ""
 msgid "You have a credit of:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
 #, c-format
 msgid "You have already requested this title."
 msgstr ""
@@ -11933,10 +12007,9 @@ msgstr ""
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:46
-msgid ""
-"You searched [% IF ( query_desc ) %] for '[% query_desc | html %]'[% END %]"
-"[% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]"
-msgstr ""
+#, fuzzy
+msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
+msgstr "%s অনুসন্ধান %s করা হোক '%s'%s%s&nbsp;মাত্রার মধ্যে:&nbsp;'%s'%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:70
 #, c-format
@@ -12219,7 +12292,7 @@ msgstr "আপনার পেমেন্ট $%s সফল হয়েছে!"
 msgid "Your personal details"
 msgstr "আপনার ব্যক্তিগত তথ্যসমূহ"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:218
 #, fuzzy, c-format
 msgid "Your priority: "
 msgstr "আপনার প্রাধান্য: "
@@ -12248,9 +12321,9 @@ msgstr "আপনার তালিকা : %s "
 
 #. %1$s:  my_rating.rating_value | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:501
-#, fuzzy, c-format
+#, c-format
 msgid "Your rating: %s."
-msgstr "আপনার তালিকা"
+msgstr "আপনার মূল্যায়ন: %s."
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:29
 #, c-format
@@ -12329,18 +12402,6 @@ msgstr "জিপ/পোস্টাল কোড:"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 msgid "[ New list ]"
 msgstr "[ নতুন তালিকা ]"
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-msgid ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] catalog recent comments"
-msgstr ""
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
-msgid "[% LibraryName | html %] Search RSS feed"
-msgstr ""
 
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
@@ -12459,13 +12520,9 @@ msgstr "ধারন করে"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
@@ -12666,8 +12723,9 @@ msgstr "কোহা ওপাক %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
-msgid "koha:biblionumber:[% biblio.biblionumber | html %]"
-msgstr ""
+#, fuzzy
+msgid "koha:biblionumber:%s"
+msgstr "ডাক নম্বর: %s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -12922,12 +12980,12 @@ msgid "tagsel_button"
 msgstr ""
 
 #. META http-equiv=Content-Type
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:4
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 #: opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:6
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 msgid "text/html; charset=utf-8"
 msgstr ""
@@ -12990,7 +13048,7 @@ msgid "to post a comment."
 msgstr "মন্তব্য প্রদান করা."
 
 #. LINK
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:47
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:49
 msgid "unAPI"
 msgstr ""
 
@@ -13077,7 +13135,7 @@ msgstr ""
 msgid "whether or not to return patron's contact information in the response"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:7
 msgid "width=device-width, initial-scale=1"
 msgstr ""
 
@@ -13093,7 +13151,7 @@ msgid "would be entered as "
 msgstr ""
 
 #. %1$s:  new_reserves_allowed | html 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:149
 #, c-format
 msgid ""
 "you can only place %s more holds. Please uncheck the checkboxes for the "
@@ -13186,7 +13244,5 @@ msgstr "×"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:180
-msgid ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"
+msgid "‡%s %s"
 msgstr ""
