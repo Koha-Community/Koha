@@ -18765,6 +18765,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23396 - Fix missing keyboard_shortcuts table)\n";
 }
 
+$DBversion = '19.05.03.000';
+if( CheckVersion( $DBversion ) ) {
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (19.05.03 release)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
