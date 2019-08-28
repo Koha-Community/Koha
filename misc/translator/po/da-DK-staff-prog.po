@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-07-19 08:51-0300\n"
+"POT-Creation-Date: 2019-08-17 19:55-0300\n"
 "PO-Revision-Date: 2017-01-19 16:08+0000\n"
 "Last-Translator: Poul <poul@wachmann.dk>\n"
 "Language-Team: -\n"
@@ -216,12 +216,12 @@ msgstr "er ikke en gyldig værdi (\"%s\"). %sFEJL: "
 msgid "# Bibliographic records"
 msgstr "Bibliografisk post"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:336
 #, c-format
 msgid "# Items"
 msgstr "# eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:282
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:335
 #, c-format
 msgid "# Records"
 msgstr "# Poster"
@@ -873,7 +873,7 @@ msgstr "%s %s %s %s Ingen %s "
 #. %19$s:  END 
 #. %20$s:  IF ( ActionsLoo.conditional_regex ) 
 #. %21$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:145
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:146
 #, fuzzy, c-format
 msgid ""
 "%s %s %s %s if %s %s unless %s %s%s$%s%s %s exists %s %s does not exist %s "
@@ -1044,6 +1044,23 @@ msgstr "%s %s %s Intet bibliotek %s %s "
 #, c-format
 msgid "%s %s %s Basket group no. %s %s "
 msgstr "%s %s %s Kurvegruppe nr. %s %s "
+
+#. %1$s:  END 
+#. %2$s:  IF ( itemloo.reservedate ) 
+#. %3$s:  IF ( itemloo.nocancel ) 
+#. %4$s:  ELSE 
+#. %5$s:  IF ( itemloo.waitingdate ) 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#. %8$s:  IF ( itemloo.canreservefromotherbranches ) 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:394
+#, fuzzy, c-format
+msgid ""
+"%s %s %s Can't be cancelled when item is in transit %s %sWaiting%sOn hold%s "
+"%sfor "
+msgstr ""
+"%s %s Ikke til stede (tabt eller borte) %s %s Ej til låns (%s) %s %s %s Kan "
+"ikke slettes, mens eksemplaret er undervejs %s %sVenter%sPå hold%s %stil "
 
 #. %1$s:  IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) 
 #. %2$s:  IF loop_receive.cannot_cancel 
@@ -1521,9 +1538,9 @@ msgstr "%s %s (%s annulleret) %s "
 #. %4$s:  ELSE 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:133
-#, c-format
-msgid "%s %s (%s) %s No matching rule in effect %s%s "
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:141
+#, fuzzy, c-format
+msgid "%s %s (%s) %s No matching rule in effect %s %s "
 msgstr "%s %s (%s) %s Ingen sammenligningsregel aktiv %s%s "
 
 #. %1$s:  ELSE 
@@ -1930,23 +1947,15 @@ msgstr ""
 "%s %s Dag er %s %s Måned er %s %s År er %s %s %s = %s %s "
 
 #. %1$s:  END 
-#. %2$s:  IF patrons_to_anonymize.count 
-#. %3$s:  patrons_to_anonymize.count | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:159
-#, c-format
-msgid "%s %s Checkout history for %s patrons will be anonymized "
-msgstr "%s %s Udlånshistorik for %s brugere anonymiseres "
-
-#. %1$s:  END 
 #. %2$s:  IF ( delete_confirmed ) 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:456
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:457
 #, c-format
 msgid "%s %s Data deleted "
 msgstr "%s %s Data slettet "
 
 #. %1$s:  END 
 #. %2$s:  IF ( add_validate or copy_validate) 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:416
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:417
 #, c-format
 msgid "%s %s Data recorded "
 msgstr "%s %s Data optaget "
@@ -2149,7 +2158,7 @@ msgstr "%s %s Ikke reserveret (%s)%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #. %4$s:  IF itemloo.item_level_holds == "N" 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:411
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:404
 #, fuzzy, c-format
 msgid "%s %s Not on hold %s %s "
 msgstr "%s %s Ikke reserveret %s "
@@ -2328,28 +2337,6 @@ msgid ""
 "template with code ACQORDER defined. %s Order e-mail was sent to the vendor. "
 "%s ERROR! - %s %s "
 msgstr ""
-
-#. %1$s:  END 
-#. %2$s:  IF ( itemloo.message ) 
-#. %3$s:  END 
-#. %4$s:  IF ( itemloo.notforloan ) 
-#. %5$s:  itemloo.notforloanvalue | html 
-#. %6$s:  END 
-#. %7$s:  IF ( itemloo.reservedate ) 
-#. %8$s:  IF ( itemloo.nocancel ) 
-#. %9$s:  ELSE 
-#. %10$s:  IF ( itemloo.waitingdate ) 
-#. %11$s:  ELSE 
-#. %12$s:  END 
-#. %13$s:  IF ( itemloo.canreservefromotherbranches ) 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:394
-#, c-format
-msgid ""
-"%s %s Unavailable (lost or missing) %s %s Not for loan (%s) %s %s %s Can't "
-"be cancelled when item is in transit %s %sWaiting%sOn hold%s %sfor "
-msgstr ""
-"%s %s Ikke til stede (tabt eller borte) %s %s Ej til låns (%s) %s %s %s Kan "
-"ikke slettes, mens eksemplaret er undervejs %s %sVenter%sPå hold%s %stil "
 
 #. %1$s:  END 
 #. %2$s:  IF defaultRefundRule 
@@ -2575,7 +2562,7 @@ msgstr "%s %s til %s %s "
 #. %5$s:  ActionsLoo.to_subfield | html 
 #. %6$s:  END 
 #. %7$s:  IF ( ActionsLoo.to_regex_search ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:138
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:139
 #, c-format
 msgid "%s %s to %s%s$%s%s %s using RegEx s"
 msgstr "%s %s to %s%s$%s%s %s benytter RegEx s"
@@ -2856,7 +2843,7 @@ msgstr "%s %singen defineret"
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:767
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:791
 #, fuzzy, c-format
 msgid "%s %sNot checked out%s"
 msgstr "%sIkke udlånt%s"
@@ -3062,7 +3049,7 @@ msgstr ""
 #. %10$s:  itemloo.reservedate | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:409
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:402
 #, c-format
 msgid "%s %sat%sexpected at%s %s since %s%s%s%s%s%s%s. "
 msgstr "%s %sat%sforventet den%s %s siden %s%s%s%s%s%s%s. "
@@ -3400,7 +3387,7 @@ msgid "%s (inactive) %s %s %s "
 msgstr "%s (inaktiv) %s %s %s "
 
 #. %1$s:  riloo.duedate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:735
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
 #, c-format
 msgid "%s (overdue)"
 msgstr "%s (for sent)"
@@ -3510,7 +3497,7 @@ msgstr "%s Tilføj indkommende post"
 #. %4$s:  nomatch_action | html 
 #. %5$s:  END 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:161
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:171
 #, c-format
 msgid ""
 "%s Add incoming record %s Ignore incoming record (its items may still be "
@@ -3532,7 +3519,7 @@ msgid "%s Add items only if no matching bib was found"
 msgstr "%s Tilføj kun eksemplarer, hvis ingen passende titel blev fundet"
 
 #. %1$s:  IF ( record_type != 'auth' ) 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:205
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:216
 #, c-format
 msgid "%s Add new bibliographic records into this framework: "
 msgstr "%s Tilføj nye bibliografiske poster til denne struktur: "
@@ -3610,7 +3597,7 @@ msgstr "%s Tilføj altid eksemplarer"
 #. %6$s:  item_action | html 
 #. %7$s:  END 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:178
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:187
 #, c-format
 msgid ""
 "%s Always add items %s Add items only if matching bib was found %s Add items "
@@ -3752,8 +3739,8 @@ msgstr "%s By: "
 #. %7$s:  ELSE 
 #. %8$s:  import_status | html 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:102
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:292
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:345
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:498
 #, c-format
 msgid ""
@@ -3888,7 +3875,7 @@ msgstr ""
 #. %19$s:  ActionsLoo.from_subfield | html 
 #. %20$s:  END 
 #. %21$s:  IF ( ActionsLoo.field_value ) 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:119
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:120
 #, fuzzy, c-format
 msgid ""
 "%s Delete %s %s Add new %s %s Update existing or add new %s %s Move %s %s "
@@ -4505,7 +4492,7 @@ msgstr "%s ELLER %s "
 
 #. %1$s:  UNLESS TransferWhenCancelAllWaitingHolds 
 #. %2$s:  END 
-#. %3$s:  INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop 
+#. %3$s:  INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop tab='holdsover' 
 #. %4$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:89
 #, fuzzy, c-format
@@ -4568,7 +4555,7 @@ msgstr "%s Ejer, brugere og bibliotek "
 #. %2$s:  current_page | html 
 #. %3$s:  total_pages | html 
 #. %4$s:  IF ( show_nextbutton ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:186
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:182
 #, c-format
@@ -4706,11 +4693,11 @@ msgstr "%sErstatte eksisterende post med indkommende post"
 #. %5$s:  overlay_action | html 
 #. %6$s:  END 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:144
-#, c-format
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:154
+#, fuzzy, c-format
 msgid ""
 "%s Replace existing record with incoming record %s Add incoming record %s "
-"Ignore incoming record (its items may still be processed) %s %s %s %s"
+"Ignore incoming record (its items may still be processed) %s %s %s %s "
 msgstr ""
 "%s Erstat eksisterende post med indkommende post %s Tilføj indkommende post "
 "%s Ignorer indkommende post (dens eksemplarer kan stadig behandles) %s %s %s "
@@ -5801,35 +5788,35 @@ msgstr "%s ordre(r) tilbage"
 msgid "%s overwritten %s(last was %s)%s"
 msgstr "%s overskrevet %s(sidste var %s)%s"
 
-#. %1$s:  patrons_to_anonymize.count || 0 | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:145
-#, fuzzy, c-format
-msgid "%s patron's checkout histories will be anonymized"
-msgstr "%s%s %s0 %s udlånshistorik anonymiseres"
-
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:196
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:212
 #, c-format
 msgid "%s patrons have been successfully deleted"
 msgstr "%s låner blev slettet korrekt"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:210
 #, c-format
 msgid "%s patrons have been successfully moved to trash"
 msgstr "%s låner blev flyttet til papirkurven"
 
 #. %1$s:  patrons_to_delete.size || 0 | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:144
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:147
 #, fuzzy, c-format
 msgid "%s patrons will be deleted"
 msgstr "%s%s %s0 %s lånere vil blive slettet"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:189
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
 #, c-format
 msgid "%s patrons would have been removed (if it wasn't a test run)"
 msgstr "%s lånere ville være blevet fjernet (hvis det ikke var en testkørsel)"
+
+#. %1$s:  patrons_to_anonymize.count || 0 | html 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:148
+#, fuzzy, c-format
+msgid "%s patrons' checkout histories will be anonymized"
+msgstr "%s%s %s0 %s udlånshistorik anonymiseres"
 
 #. %1$s:  reserveloo.pendingorders | html 
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:96
@@ -5861,8 +5848,8 @@ msgstr "%s citater gemt."
 #. %1$s:  errcon.server | html 
 #. %2$s:  errcon.seq | html 
 #. %3$s:  PROCESS 'xslt-handler.inc' code=errcon.error 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:88
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:106
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:107
 #, c-format
 msgid "%s record %s: %s"
 msgstr "%s post %s: %s"
@@ -6098,7 +6085,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:735
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sIkke udlånt %s "
@@ -6233,7 +6220,7 @@ msgstr "%s%s%s%s/160 karakterer"
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:111
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:439
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:440
 #, c-format
 msgid "%s%s%s(All libraries)%s"
 msgstr "%s%s%s(Alle biblioteker)%s"
@@ -6260,7 +6247,7 @@ msgstr "%s%s%s(ingen primær emailadresse gemt)%s"
 #. %2$s:  comments | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:99
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:102
 #, c-format
 msgid "%s%s%s(none)%s"
 msgstr "%s%s%s(ingen)%s"
@@ -6692,7 +6679,7 @@ msgstr ""
 #. %1$s:  IF ( record_type == 'auth' ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:100
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:103
 #, c-format
 msgid "%sAuthority records%sBibliographic records%s"
 msgstr "%sNormposter%sBibliografisk post%s"
@@ -6700,7 +6687,7 @@ msgstr "%sNormposter%sBibliografisk post%s"
 #. %1$s:  IF ( batch_lis.record_type == 'auth' ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:291
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:344
 #, c-format
 msgid "%sAuthority%sBibliographic%s"
 msgstr "%sNorm%sBibliografisk%s"
@@ -7631,7 +7618,6 @@ msgstr "&#x010D;e&#353;tina (Tjekkisk)"
 msgid "&lt;&lt; Back to suggestions"
 msgstr "&lt;&lt;Tilbage til listen"
 
-#: intranet-tmpl/prog/en/includes/page-numbers.inc:6
 #: intranet-tmpl/prog/en/modules/serials/result.tt:52
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:111
 #, c-format
@@ -7793,7 +7779,7 @@ msgstr "&rsaquo; %s%sBekræft%s%sAfsluttet%s"
 #. %1$s:  template_name | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:28
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, fuzzy, c-format
 msgid "&rsaquo; %s %s MARC modification templates %s "
 msgstr "&rsaquo; MARC ændrede skabeloner"
@@ -7853,7 +7839,7 @@ msgstr "&rsaquo; %s Tilføj ny samling %s "
 #. %2$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:18
 #, fuzzy, c-format
-msgid "&rsaquo; %s Batch patron deletion/anonymization %s "
+msgid "&rsaquo; %s Batch patron deletion and anonymization %s "
 msgstr "Stabelsletning/anonymisering af lånere"
 
 #. For the first occurrence,
@@ -8351,7 +8337,7 @@ msgstr "&rsaquo; Kurvgruppe"
 #. %1$s:  import_batch_id | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:24
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:25
 #, c-format
 msgid "&rsaquo; Batch %s %s &rsaquo; Manage staged MARC records %s "
 msgstr "&rsaquo; Batch %s %s &rsaquo; Administrer klargjorte MARC-poster %s "
@@ -9553,7 +9539,7 @@ msgstr ""
 msgid "(Authorised values for %s) %s %s "
 msgstr "(Autoritetsværdier for %s) %s %s "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:311
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:364
 #, c-format
 msgid "(Create label batch)"
 msgstr "(Lav etiket-stabel)"
@@ -10075,7 +10061,7 @@ msgid "- None -"
 msgstr "- Ingen -"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "- Please select an item to place a hold"
 msgstr "- Vælg et eksemplar, som skal reserveres"
 
@@ -10112,7 +10098,7 @@ msgstr "-- Vælg format --"
 msgid "-- Choose one -- "
 msgstr "-- Vælg en --"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:314
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:295
 #, fuzzy, c-format
 msgid "-- None --"
 msgstr "- Ingen -"
@@ -10265,7 +10251,7 @@ msgstr "10; url=/cgi-bin/koha/mainpage.pl"
 msgid "1/2"
 msgstr "1/2"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:197
 #, c-format
 msgid "1st"
 msgstr "1st"
@@ -10363,12 +10349,12 @@ msgid "<< Previous"
 msgstr "<< Forrige"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "A control field cannot be used with a regular field."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:481
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 #, fuzzy
 msgid "A default letter with the code '%s' already exists."
 msgstr "Der findes allerede en liste med navnet %s!"
@@ -10386,12 +10372,12 @@ msgid "A group with the title %s already exists. "
 msgstr "Der findes allerede en vending med navnet."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "A hold cannot be requested on any of these items."
 msgstr "Ingen af disse eksemplarer kan reserveres."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:481
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "A brev med koden '%s' eksisterer allerede for '%s'."
 
@@ -10412,7 +10398,7 @@ msgstr ""
 msgid "A pattern with this name already exists."
 msgstr "Der findes allerede en vending med navnet."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:598
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:622
 #, c-format
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr "En godtgørelse er tilført lånerens konto."
@@ -10778,9 +10764,9 @@ msgstr "Erhvervelsesstatistik "
 
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:14
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:70
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:284
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:337
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:203
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:59
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:318
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:357
@@ -10791,8 +10777,8 @@ msgstr "Erhvervelsesstatistik "
 msgid "Action"
 msgstr "Aktion"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:141
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:144
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:151
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:154
 #, c-format
 msgid "Action if matching record found:"
 msgstr "Aktion, når en passende post findes:"
@@ -10802,8 +10788,8 @@ msgstr "Aktion, når en passende post findes:"
 msgid "Action if matching record found: "
 msgstr "Aktion, når en passende post findes: "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:158
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:161
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:168
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:171
 #, c-format
 msgid "Action if no match found:"
 msgstr "Aktion, når ingen passende post findes:"
@@ -10820,10 +10806,10 @@ msgstr "Aktion, når ingen overensstemmelse findes: "
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:163
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:258
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:104
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:64
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:87
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:109
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:128
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:83
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:83
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:136
@@ -10874,7 +10860,7 @@ msgstr "Aktioner"
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:44
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:57
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:58
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:136
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:156
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:207
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:93
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:127
@@ -10899,7 +10885,7 @@ msgstr "Aktioner"
 msgid "Actions "
 msgstr "Aktioner "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:82
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:83
 #, fuzzy, c-format
 msgid "Actions for "
 msgstr "Aktioner "
@@ -11058,7 +11044,7 @@ msgstr "Tilføj besked til:"
 msgid "Add a new OAI set"
 msgstr "Tilføj et nyt OAI-sæt"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:182
 #, fuzzy, c-format
 msgid "Add a new action"
 msgstr "Tilføj en ny låner"
@@ -11109,7 +11095,7 @@ msgid "Add a substitution"
 msgstr "Abonnementstitel"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:281
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
 #, fuzzy
 msgid "Add action"
 msgstr "Tilføje lånere"
@@ -11359,7 +11345,7 @@ msgstr "Tilføj flere eksemplarer"
 msgid "Add multiple items"
 msgstr "Tilføj flere eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:206
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:187
 #, fuzzy, c-format
 msgid "Add new"
 msgstr "Tilføj til "
@@ -11703,7 +11689,7 @@ msgstr "Ekstra forfattere:"
 msgid "Additional content types"
 msgstr "Ekstra indholdstyper"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:107
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:126
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:450
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:110
 #, fuzzy, c-format
@@ -12153,8 +12139,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:56
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:124
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:126
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:196
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:42
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:35
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:250
@@ -12227,7 +12213,7 @@ msgstr "Tilføj budget"
 
 #. %1$s:  do_anonym | html 
 #. %2$s:  last_issue_date | $KohaDates 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:203
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:219
 #, fuzzy, c-format
 msgid "All checkouts (%s) older than %s have been anonymized"
 msgstr "Alle lånere med udlån ældre end %s blev anonymiseret"
@@ -12280,7 +12266,7 @@ msgstr "Alle medietyper"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:149
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:151
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:62
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:37
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:43
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:57
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:208
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:19
@@ -12874,7 +12860,7 @@ msgstr "Andrew Moore"
 msgid "Andrew Moore"
 msgstr "Andrew Moore"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:113
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:115
 #, c-format
 msgid "Anonymize checkout history"
 msgstr "Anonymisere udlånshistorik"
@@ -12891,7 +12877,7 @@ msgstr "Antoine Farnault"
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:92
 #: intranet-tmpl/prog/en/includes/patron-search.inc:102
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:90
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:92
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:28
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:39
 #: intranet-tmpl/prog/en/modules/members/member.tt:197
@@ -12957,8 +12943,8 @@ msgstr "Eneste eksemplar "
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:88
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:212
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:584
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:619
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:585
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:620
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:86
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:109
@@ -12979,7 +12965,7 @@ msgstr ""
 msgid "Any library"
 msgstr "Ethvert bibliotek"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:603
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:627
 #, fuzzy, c-format
 msgid "Any lost item fees for this item will remain on the patron's account."
 msgstr "Ethvert gebyr for mistet eksemplar, forbliver på brugerens konto"
@@ -13043,7 +13029,7 @@ msgid "Apply credits"
 msgstr "Tilføj kredit"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:194
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:204
 msgid "Apply different matching rules"
 msgstr "Anvend forskellige afstemningsregler"
 
@@ -13125,7 +13111,7 @@ msgid "Are you sure you want to cancel adding this quote?"
 msgstr "Er du sikker på, at du vil annullere dette tilbud?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Er du sikker på, at du vil annullere reserveringen?"
 
@@ -13605,7 +13591,7 @@ msgid "Are you sure you want to merge the selected patrons?"
 msgstr "Er du sikker på, at du vil slette de markerede eksemplarer?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "Are you sure you want to permanently delete this batch?"
 msgstr "Er du sikker på, at du vil slette denne kurv?"
@@ -13695,7 +13681,7 @@ msgstr ""
 "fortrydes."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid ""
 "Are you sure you want to undo the import of this batch into the catalog?"
@@ -13743,13 +13729,13 @@ msgid "Are you sure you wish to delete this request?"
 msgstr "Er du sikker på, at du vil slette dette eksemplar?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "Are you sure you wish to delete this template action?"
 msgstr "Er du sikker på, at du vil slette dette eksemplar?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "Are you sure you wish to delete this template?"
 msgstr "Er du sikker på, at du vil slette dette eksemplar?"
@@ -13961,7 +13947,7 @@ msgstr "Aut."
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:300
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:301
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:680
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:101
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:43
@@ -13970,7 +13956,7 @@ msgstr "Aut."
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:174
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
@@ -14073,8 +14059,8 @@ msgid "Author:"
 msgstr "Forfatter:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:5
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:28
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:72
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:32
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:92
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:34
@@ -14543,7 +14529,7 @@ msgstr "Mar"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:175
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:94
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:112
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:220
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
@@ -14729,7 +14715,7 @@ msgstr "Installation afsluttet."
 msgid "Basic parameters"
 msgstr "Basisparametre"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:19
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:17
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:362
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
@@ -15044,17 +15030,17 @@ msgstr "Stabelændring af eksemplarer"
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:35
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:58
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:22
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:48
-#, c-format
-msgid "Batch patron deletion/anonymization"
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:35
+#, fuzzy, c-format
+msgid "Batch patron deletion and anonymization"
 msgstr "Stabelsletning/anonymisering af lånere"
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( current_branch ) | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:50
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:53
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:37
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:55
 #, fuzzy, c-format
-msgid "Batch patron deletion/anonymization for %s"
+msgid "Batch patron deletion and anonymization for %s"
 msgstr "Stabelsletning/anonymisering af lånere"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:38
@@ -15442,13 +15428,13 @@ msgstr "Spærret!"
 msgid "Bonnie Crawford"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:709
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:733
 #, fuzzy, c-format
 msgid "Book drop mode"
 msgstr "Bogkassemodus"
 
 #. %1$s:  dropboxdate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:647
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:671
 #, fuzzy, c-format
 msgid "Book drop mode. (Effective checkin date is %s )."
 msgstr "Bogkassemodus (effektiv afleveringsdato er %s)"
@@ -15508,7 +15494,7 @@ msgid "Borrowernumber: %s"
 msgstr "Lånernummer: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Both subfield values should be filled or empty."
 msgstr "Begge underfeltværdier skal udfyldes eller være tomme."
 
@@ -16066,7 +16052,7 @@ msgstr "Signatur"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:177
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:52
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:109
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:217
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:161
@@ -16297,7 +16283,7 @@ msgstr "Kan ikke gemme denne post, da følgende felter ikke er udfyldte:"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:104
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:198
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:217
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:68
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:281
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:189
@@ -16305,8 +16291,8 @@ msgstr "Kan ikke gemme denne post, da følgende felter ikke er udfyldte:"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:310
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:148
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:285
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:281
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:218
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:220
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:104
@@ -16318,7 +16304,7 @@ msgstr "Kan ikke gemme denne post, da følgende felter ikke er udfyldte:"
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:487
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:60
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:352
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:362
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
@@ -16502,7 +16488,7 @@ msgstr "Annuller filter"
 #. A
 #: intranet-tmpl/prog/en/includes/holds_table.inc:186
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:53
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:411
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:404
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:217
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:223
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:155
@@ -16510,7 +16496,7 @@ msgstr "Annuller filter"
 msgid "Cancel hold"
 msgstr "Slette reservering"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:316
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
 #, fuzzy, c-format
 msgid "Cancel hold "
 msgstr "Slette reservering"
@@ -16589,7 +16575,7 @@ msgid "Cancel reservation and then attempt transfer:"
 msgstr "Slet reservering og prøv så overførsel:"
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:73
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:223
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:240
 #, c-format
 msgid "Cancel transfer"
 msgstr "Annuller overførsel"
@@ -16674,8 +16660,8 @@ msgstr "Kan ikke sorteres"
 msgid "Cannot cancel receipt. Possible reasons : "
 msgstr "Kan ikke annullere modtagelsen. Mulige årsager : "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:600
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:608
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:632
 #, c-format
 msgid "Cannot check in"
 msgstr "Aflevering ikke mulig"
@@ -16809,7 +16795,7 @@ msgid "Cap fine at replacement price"
 msgstr "Erstatningspris"
 
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:122
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:161
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:74
 #: intranet-tmpl/prog/en/modules/members/member.tt:98
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:61
@@ -16918,7 +16904,7 @@ msgstr "Lånernummer: "
 msgid "Card number: %s"
 msgstr "Kortnummer: %s"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:141
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:161
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:132
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:179
 #, fuzzy, c-format
@@ -17303,7 +17289,7 @@ msgstr "Ethvert bibliotek"
 msgid "Change messaging preferences to default for this category?"
 msgstr "Standard-beskedindstillinger for denne lånertype"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:89
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:87
 #, fuzzy, c-format
 msgid "Change order"
@@ -17333,25 +17319,25 @@ msgstr "Ændre adgangskode"
 msgid "Change username and/or password for %s %s"
 msgstr "Ændre brugernavn og/eller adgangskode for %s %s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:87
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:88
 #, c-format
 msgid "Changed action if matching record found"
 msgstr "Ændret aktion, hvis passende post findes"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:90
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:92
 #, c-format
 msgid "Changed action if no match found"
 msgstr "Ændret aktion, hvis passende post ikke findes"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:93
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:96
 #, c-format
 msgid "Changed item processing option"
 msgstr "Option for medieforvaltning ændret"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:133
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:142
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:159
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:176
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:139
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:152
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:169
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:185
 #, c-format
 msgid "Changed. "
 msgstr "Ændret "
@@ -17490,7 +17476,7 @@ msgstr "Tidligere udlån"
 #: intranet-tmpl/prog/en/includes/circ-search.inc:36
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:26
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:47
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:654
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:678
 #, c-format
 msgid "Check in"
 msgstr "Aflevere"
@@ -17503,7 +17489,7 @@ msgstr "Aflevere "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:556
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:580
 #, c-format
 msgid "Check in message"
 msgstr "Beskeder ved aflevering"
@@ -17768,7 +17754,7 @@ msgid "Checked out: "
 msgstr "Udlånt "
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:105
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:727
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:751
 #, c-format
 msgid "Checked-in items"
 msgstr "Afleverede eksemplarer"
@@ -17875,6 +17861,12 @@ msgstr "Udlånshistorik"
 msgid "Checkout history for %s"
 msgstr "Udlånshistorik for %s"
 
+#. %1$s:  patrons_to_anonymize.count | html 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#, fuzzy, c-format
+msgid "Checkout history for %s patrons will be anonymized "
+msgstr "%s %s Udlånshistorik for %s brugere anonymiseres "
+
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:24
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:45
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:28
@@ -17933,7 +17925,7 @@ msgstr "Udlån er BLOKERET, fordi låneren har for sent afleverede genstande"
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "Udlån er BLOKERET, fordi låneren har for sent afleverede genstande"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:763
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:787
 #, fuzzy, c-format
 msgid "Checkouts:"
 msgstr "Udlån"
@@ -18350,7 +18342,7 @@ msgstr "Udlånstabeller"
 msgid "Circulation: Overdues at %s"
 msgstr "Udlån: Udestående den %s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:348
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:402
 #, c-format
 msgid "Citation"
 msgstr "Citat"
@@ -18546,13 +18538,13 @@ msgstr "Claudia Forsman"
 msgid "Clay Fouts"
 msgstr "Clay Fouts"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:317
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:370
 #, c-format
 msgid "Clean"
 msgstr "Slette"
 
 #. %1$s:  import_batch_id | html 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:52
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:53
 #, c-format
 msgid "Cleaned import batch #%s"
 msgstr "Renset importfil-stabel #%s"
@@ -18568,7 +18560,7 @@ msgstr "Renset importfil-stabel #%s"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:205
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:555
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:137
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:678
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:702
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -18591,7 +18583,7 @@ msgstr "Slette"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:68
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:340
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:59
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:66
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:42
@@ -18615,7 +18607,7 @@ msgid "Clear all"
 msgstr "Slet alle"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 msgid ""
 "Clear all reservoir records staged in this batch? This cannot be undone."
 msgstr ""
@@ -18661,7 +18653,7 @@ msgstr "Ryd ved udlån"
 msgid "Clear screen"
 msgstr "Tøm skærm"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:35
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:46
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:46
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:51
 #, c-format
@@ -18917,7 +18909,7 @@ msgstr "Kopiering af udlånsregler mislykkedes fehlgeschlagen!"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:63
 #: intranet-tmpl/prog/en/includes/chart.inc:100
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:369
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:423
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:128
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:132
@@ -19074,7 +19066,7 @@ msgid "Clubs not enrolled in"
 msgstr "Brugergebyr: "
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:101
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:434
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:435
 #: intranet-tmpl/prog/en/modules/members/update-child.tt:24
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:344
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:139
@@ -19346,7 +19338,7 @@ msgid "Commenter "
 msgstr "Kommentator "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:20
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:278
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:688
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:486
@@ -19371,7 +19363,7 @@ msgstr "Kommentarer til moderation"
 msgid "Comments pending approval"
 msgstr "Kommentarer afventer godkendelse"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:99
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:102
 #, c-format
 msgid "Comments:"
 msgstr "Kommentarer:"
@@ -19409,7 +19401,7 @@ msgstr "Komplet visning"
 msgid "Completed"
 msgstr "Komplet visning"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:235
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:251
 #, c-format
 msgid "Completed import of records"
 msgstr "Afsluttet import af poster"
@@ -19464,7 +19456,7 @@ msgstr ""
 #. INPUT type=submit name=submitbutton
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:346
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:370
 #, c-format
 msgid "Confirm"
 msgstr "Bekræft"
@@ -19538,13 +19530,13 @@ msgstr "Bekræft sletning af mærke "
 msgid "Confirm deletion of this vendor ?"
 msgstr "Bekræft sletning af denne leverandør?"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:307
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:536
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:331
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:560
 #, fuzzy, c-format
 msgid "Confirm hold "
 msgstr "Bekræft reservering"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:529
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:553
 #, fuzzy, c-format
 msgid "Confirm hold and transfer "
 msgstr "Bekræft reservering og overførsel"
@@ -19581,7 +19573,7 @@ msgstr "Etabler forbindelse."
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:86
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:157
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:199
 #, c-format
@@ -19590,7 +19582,7 @@ msgstr "Forbindelse mislykket til %s"
 
 #. For the first occurrence,
 #. %1$s:  errcon.server | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:87
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:105
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:158
 #, c-format
 msgid "Connection timeout to %s"
@@ -19753,7 +19745,7 @@ msgstr "Fortsæt uden markering >>"
 msgid "Continue without renewing"
 msgstr "Fortsæt uden markering >>"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:22
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:20
 #, c-format
 msgid "Contract"
 msgstr "Kontrakt"
@@ -19841,13 +19833,13 @@ msgstr "Kontrakter"
 msgid "Contributing companies and institutions"
 msgstr "Bidragende firmaer og institurioner"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:32
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:40
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:40
 #, c-format
 msgid "Control no.: "
 msgstr "Kontrolnr.: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:77
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:95
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:97
 #, fuzzy, c-format
 msgid "Control no: "
@@ -19909,13 +19901,13 @@ msgstr "Kopier:"
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:214
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:141
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:209
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:190
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:185
 #, c-format
 msgid "Copy"
 msgstr "Eksemplarnr."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:210
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:191
 #, c-format
 msgid "Copy and replace"
 msgstr ""
@@ -20307,7 +20299,7 @@ msgstr "Oprette en ny post ved at importere den eksterne (dublet) post."
 msgid "Create a new subscription"
 msgstr "Nyt abonnement"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:298
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:279
 #, fuzzy, c-format
 msgid "Create a new template"
 msgstr "Opret ny liste"
@@ -20836,12 +20828,6 @@ msgstr "DVD-Video / Video-CD"
 msgid "Damaged"
 msgstr "Beskadiget"
 
-#. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:424
-#, fuzzy, c-format
-msgid "Damaged %s "
-msgstr "Beskadiget"
-
 #: intranet-tmpl/prog/en/columns.def:103
 #, fuzzy, c-format
 msgid "Damaged on"
@@ -21012,7 +20998,7 @@ msgstr "Database: "
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:87
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:130
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:167
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:102
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:121
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:159
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:46
@@ -21046,7 +21032,7 @@ msgid "Date accessioned"
 msgstr "Ankomstdato"
 
 #: intranet-tmpl/prog/en/columns.def:70
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #, fuzzy, c-format
 msgid "Date acquired"
 msgstr "Ankomstdato"
@@ -21403,7 +21389,7 @@ msgstr "Dec"
 msgid "December"
 msgstr "December"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:209
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:220
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:31
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:319
 #: intranet-tmpl/prog/en/modules/catalogue/labeledMARCdetail.tt:48
@@ -21769,15 +21755,15 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:77
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:50
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:80
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:323
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:376
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:207
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:183
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:272
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:308
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:150
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:205
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:74
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:169
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:186
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:63
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:102
@@ -21852,7 +21838,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:157
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:181
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:183
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:262
@@ -22062,7 +22048,7 @@ msgstr "Slette liste"
 msgid "Delete macro"
 msgstr "Slet lånere"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:428
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:429
 #, c-format
 msgid "Delete notice?"
 msgstr "Slette notits?"
@@ -22074,12 +22060,19 @@ msgid ""
 "reading history)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:65
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:67
 #, c-format
 msgid "Delete patrons"
 msgstr "Slet lånere"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
+#, c-format
+msgid ""
+"Delete patrons directly from the database. Patron data will not be "
+"recoverable. "
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:70
 #, c-format
 msgid "Delete patrons who meet the following criteria:"
 msgstr "Slette lånere, der opfylder følgende kriterier:"
@@ -22223,7 +22216,7 @@ msgstr "Slette dette delfelt"
 msgid "Delete user"
 msgstr "Slette ordre"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:32
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:30
 #, c-format
 msgid "Delete vendor"
 msgstr "Slette leverandør"
@@ -22380,7 +22373,7 @@ msgstr "Afd."
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:318
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:253
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:62
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:93
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:64
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:131
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:269
@@ -22456,7 +22449,7 @@ msgstr "Gebyrbeskrivelse"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:84
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:152
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:141
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:277
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:185
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:61
 #: intranet-tmpl/prog/en/modules/members/files.tt:71
@@ -22603,8 +22596,8 @@ msgstr "Klassifikation"
 msgid "Dewey:"
 msgstr "Dewey:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:33
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:78
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:42
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:96
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:41
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:98
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:58
@@ -22664,13 +22657,13 @@ msgstr "Mente du: "
 msgid "Did you mean?"
 msgstr "Mente du?"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:406
 #, c-format
 msgid "Diff"
 msgstr "Diff"
 
 #. ABBR
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:352
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:406
 #, fuzzy
 msgid "Differences between the original bibliographic record and the imported"
 msgstr "Forskellen mellem de originale titler og de importerede"
@@ -22879,7 +22872,7 @@ msgstr ""
 "Lav ikke en dobbelt post. Tilføj en ordre fra den eksisterende post i dit "
 "katalog."
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:121
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:126
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:162
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:156
 #, c-format
@@ -22890,11 +22883,6 @@ msgstr "Søg ikke efter passende poster."
 #, c-format
 msgid "Do not notify"
 msgstr "Giv ikke besked"
-
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
-#, c-format
-msgid "Do not remove any patrons (test run)"
-msgstr "Fjern ingen lånere (testkørsel)"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:85
 #, fuzzy, c-format
@@ -23172,7 +23160,7 @@ msgstr "Afleveres den %s"
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:50
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:154
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:172
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #, c-format
 msgid "Due date"
 msgstr "Udløbssdato"
@@ -23199,7 +23187,7 @@ msgid "Duncan Tyler"
 msgstr "Duncan Tyler"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:25
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:25
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:268
@@ -23212,7 +23200,7 @@ msgstr "Kopiere"
 msgid "Duplicate "
 msgstr "Kopiere"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:312
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:293
 #, fuzzy, c-format
 msgid "Duplicate a template:"
 msgstr "Kurven er tom i øjeblikket"
@@ -23440,7 +23428,7 @@ msgstr "Ed Summers (Kode og Perl-pakker som f.eks. MARC::post)"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:206
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:271
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:147
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:185
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:79
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:566
@@ -23489,7 +23477,6 @@ msgstr "Ed Summers (Kode og Perl-pakker som f.eks. MARC::post)"
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:95
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:157
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:179
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:261
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:158
@@ -23570,11 +23557,11 @@ msgid "Edit SQL report"
 msgstr "Rediger SQL poster"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "Edit action %s"
 msgstr "Redigér handling %s"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:71
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:72
 #, fuzzy, c-format
 msgid "Edit actions"
 msgstr "Redigér handling %s"
@@ -23827,6 +23814,8 @@ msgstr "Editer tidsskrifter"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:305
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:313
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
+#, c-format
 msgid "Edit subfields"
 msgstr "Editer underfelter"
 
@@ -23835,13 +23824,18 @@ msgstr "Editer underfelter"
 msgid "Edit subscription"
 msgstr "Rediger abonnement"
 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
+#, fuzzy, c-format
+msgid "Edit tag"
+msgstr "Rediger bestilling"
+
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:58
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:112
 #, c-format
 msgid "Edit this holiday"
 msgstr "Editer denne helligdag"
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:30
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:28
 #, c-format
 msgid "Edit vendor"
 msgstr "Editer leverandør"
@@ -23889,7 +23883,7 @@ msgstr "Resultater af leverandørsøgning"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:103
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:122
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:160
 #, c-format
 msgid "Edition"
@@ -24267,7 +24261,7 @@ msgstr "Indtast eksemplarstregkode:"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:161
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:96
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:655
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:679
 #, c-format
 msgid "Enter item barcode: "
 msgstr "Indtast eksemplarstregkode: "
@@ -24424,7 +24418,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #: intranet-tmpl/prog/en/modules/about.tt:111
 #, c-format
 msgid "Error"
@@ -24569,7 +24563,7 @@ msgstr "Fejl: Server med id %s ikke fundet"
 msgid "Error: Two or more patrons need to be selected for merging"
 msgstr "Der skal vælges to poster til sammenføjning."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:49
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:50
 #, c-format
 msgid "Error: no field value specified."
 msgstr "Fejl: ingen feltværdi angivet."
@@ -24664,7 +24658,7 @@ msgstr "Betydning"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:96
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:398
 #, fuzzy, c-format
@@ -24747,7 +24741,7 @@ msgstr "Udestående rapport"
 msgid "Existing SQL"
 msgstr "Eksisterende reserveringer"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:530
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:531
 #, c-format
 msgid "Existing holds"
 msgstr "Eksisterende reserveringer"
@@ -25527,14 +25521,14 @@ msgstr "Email er sendt."
 msgid "File is not readable"
 msgstr ". Sletning er ikke mulig."
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:277
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:485
 #, c-format
 msgid "File name"
 msgstr "Filnavn"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:98
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:101
 #: intranet-tmpl/prog/en/modules/tools/export.tt:159
 #: intranet-tmpl/prog/en/modules/tools/export.tt:220
 #, c-format
@@ -25800,18 +25794,18 @@ msgstr "Bøder &amp; gebyrer"
 msgid "Fines &amp; charges"
 msgstr "Bøder &amp; gebyrer"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:668
 #, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:665
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr "Bøder for returnerede eksemplarer eftergives."
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:573
 msgid "Finish"
 msgstr "Afslut"
@@ -26034,7 +26028,7 @@ msgstr "Altid"
 msgid "Forget %s %s (%s)"
 msgstr "Glem %s %s (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:718
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:742
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr ""
@@ -26044,7 +26038,7 @@ msgstr ""
 msgid "Forgive fines on return: "
 msgstr "Eftergiv bøder ved aflevering: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:700
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:724
 #, c-format
 msgid "Forgive overdue charges"
 msgstr "Eftergive bøder"
@@ -26747,7 +26741,7 @@ msgid "Glyphicons Free"
 msgstr "Glyphicons fri"
 
 #. INPUT type=submit name=changepage_goto
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:192
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:148
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:188
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:137
@@ -26793,7 +26787,7 @@ msgstr "Eksemplar detaljer"
 msgid "Go to item search"
 msgstr "Søgning i normdata"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:192
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:148
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:188
 #, c-format
@@ -27260,9 +27254,9 @@ msgid "Hold"
 msgstr "Reservering"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:97
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:281
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:342
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:502
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:305
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:366
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:526
 #, c-format
 msgid "Hold at"
 msgstr "Reserveret i"
@@ -27301,19 +27295,19 @@ msgstr "Reserveringsgebyr: "
 msgid "Hold filled for:"
 msgstr "Reserveret til:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:254
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:465
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:278
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:448
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:489
 #, c-format
 msgid "Hold for:"
 msgstr "Reserveret til:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:330
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:354
 #, c-format
 msgid "Hold for: "
 msgstr "Reserveret til: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:240
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:264
 #, fuzzy, c-format
 msgid "Hold found (item is already waiting): "
 msgstr "Reservering fundet (Eksemplar er klar): "
@@ -27324,7 +27318,7 @@ msgstr "Reservering fundet (Eksemplar er klar): "
 msgid "Hold found for (%s), please transfer"
 msgstr "Reservering fundet til (%s), overfør venligst"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:453
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:477
 #, fuzzy, c-format
 msgid "Hold found: "
 msgstr "Reservering fundet: "
@@ -27339,7 +27333,7 @@ msgstr "Reservation <strong>suspenderet</strong>"
 msgid "Hold must be record level "
 msgstr "Lokalt brug gemt"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:328
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:352
 #, fuzzy, c-format
 msgid "Hold needing transfer found"
 msgstr "Reservering, som kræver overførsel: "
@@ -27416,7 +27410,7 @@ msgstr "Eksemplarbiblioteker"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:263
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:172
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:252
 #, c-format
@@ -27656,7 +27650,7 @@ msgstr "Helligdag, der falder samme dato hvert år i et område"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:13
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:13
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:33
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:21
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:22
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:74
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
@@ -27677,7 +27671,7 @@ msgstr "Helligdag, der falder samme dato hvert år i et område"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:61
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:18
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:25
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
 #: intranet-tmpl/prog/en/modules/authorities/authorities-home.tt:11
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:13
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:19
@@ -27926,7 +27920,7 @@ msgstr "Hjemmebibliotek"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:262
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:39
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
@@ -28044,6 +28038,11 @@ msgstr ""
 #, fuzzy, c-format
 msgid "How many issues do you want to receive?"
 msgstr "Hvor mange udgaver vil du modtage?"
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:154
+#, fuzzy, c-format
+msgid "How should patrons be deleted?"
+msgstr "%s%s %s0 %s lånere vil blive slettet"
 
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:190
 #, c-format
@@ -28171,7 +28170,7 @@ msgstr "ISBD"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:15
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:312
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:313
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:104
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:123
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:83
@@ -28217,7 +28216,7 @@ msgstr "ISBN:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:6
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:25
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:73
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:91
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:38
@@ -28311,8 +28310,8 @@ msgstr "ISSN"
 msgid "ISSN:"
 msgstr "ISSN:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:26
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:74
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:28
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:92
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:94
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:50
@@ -28448,7 +28447,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "If the field is a control field, the subfield should be empty"
 msgstr ""
 
@@ -28564,7 +28563,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:544
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
 #, fuzzy, c-format
 msgid "Ignore "
 msgstr "Ignorer"
@@ -28580,7 +28579,7 @@ msgid "Ignore this one, keep the existing one"
 msgstr "Ignorer denne, behold den eksisterende"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "Ignored"
 msgstr "Ignorer"
@@ -28754,7 +28753,7 @@ msgstr "Billeder for "
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:242
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:142
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:162
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:98
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:156
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:147
@@ -28795,7 +28794,7 @@ msgstr "Importer alle linjer i kurven med følgende parametre:"
 msgid "Import an MARC (ISO 2709) or MARCXML record"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:56
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:57
 #, fuzzy, c-format
 msgid "Import batch deleted successfully"
 msgstr "Samling blev korrekt slettet"
@@ -28855,7 +28854,7 @@ msgid "Import results :"
 msgstr "Importresultater:"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:216
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:227
 msgid "Import this batch into the catalog"
 msgstr "Importere denne stabel til kataloget"
 
@@ -28876,7 +28875,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:37
 #, fuzzy, c-format
 msgid "Imported"
@@ -29065,7 +29064,7 @@ msgstr "Info:"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:65
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:305
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:448
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:449
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:63
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:104
 #, c-format
@@ -29698,7 +29697,7 @@ msgstr "Eksemplar udlånt"
 msgid "Item circulation alerts"
 msgstr "Udlåns- og afleveringsbetingelser"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:444
 #, c-format
 msgid "Item consigned:"
 msgstr "Eksemplar tilsendt:"
@@ -29799,7 +29798,7 @@ msgstr "Materialet er <strong>i vente</strong>"
 msgid "Item is already at destination library."
 msgstr "Eksemplar er allerede i målbiblioteket."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:592
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:616
 #, fuzzy, c-format
 msgid "Item is lost, cannot be checked in."
 msgstr "Eksemplar ikke udlånt."
@@ -29832,20 +29831,20 @@ msgstr "Materialet har begrænsninger (transaktionen er gemt alligevel)"
 msgid "Item is restricted."
 msgstr "Eksemplar er spærret"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:611
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:635
 #, c-format
 msgid "Item is withdrawn."
 msgstr "Medium blev trukket tilbage"
 
 #. %1$s:  END 
-#. %2$s:  IF ( itemloo.damaged ) 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:421
+#. %2$s:  IF ( itemloo.itemlost ) 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:413
 #, fuzzy, c-format
 msgid "Item level hold forced from OPAC %s %s "
 msgstr "Eksemplarreserveringer"
 
 #. %1$s:  ELSIF itemloo.item_level_holds == "F" 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:419
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:411
 #, c-format
 msgid "Item level hold not allowed from OPAC %s "
 msgstr ""
@@ -29910,8 +29909,8 @@ msgstr "Fil med eksemplarnumre: "
 msgid "Item only"
 msgstr "Eksemplar tæller"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:175
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:178
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:184
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:187
 #, c-format
 msgid "Item processing:"
 msgstr "Eksemplaradministration:"
@@ -30005,7 +30004,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:693
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:292
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:445
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:446
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:34
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:174
@@ -30122,7 +30121,7 @@ msgid ""
 "books, CDs, or DVDs."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:594
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:618
 #, c-format
 msgid "Item was lost, now found."
 msgstr "Eksemplar var savnet, nu fundet."
@@ -30438,8 +30437,8 @@ msgstr "Jo Ransom"
 msgid "Joachim Ganseman"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:219
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:230
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:231
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:244
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:197
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:201
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:306
@@ -30698,7 +30697,7 @@ msgstr "Nøgleordssøgning"
 msgid "Keyword"
 msgstr "Stikord"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:36
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:28
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:38
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping_auth.tt:19
@@ -32772,10 +32771,10 @@ msgstr "Koha &rsaquo; Værktøj &rsaquo; Stapelbearbejdning af eksemplarer"
 #. %3$s:  IF step == 3 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:8
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"Koha &rsaquo; Tools &rsaquo; Batch patron deletion/anonymization %s&rsaquo; "
-"Confirm%s%s&rsaquo; Finished%s"
+"Koha &rsaquo; Tools &rsaquo; Batch patron deletion and anonymization "
+"%s&rsaquo; Confirm%s%s&rsaquo; Finished%s"
 msgstr ""
 "Koha &rsaquo; Værktøj &rsaquo; Stabel lånersletning/-anonymisering "
 "%s&rsaquo; Bekræft%s%s&rsaquo; Afsluttet%s"
@@ -32899,7 +32898,7 @@ msgstr ""
 "Koha &rsaquo; Værktøjer &rsaquo; Lav etiketter &rsaquo; Skabeloner &rsaquo; "
 "%sRediger (%s)%sNy%s"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:5
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:6
 #, fuzzy, c-format
 msgid "Koha &rsaquo; Tools &rsaquo; MARC modification templates"
 msgstr "Koha &rsaquo; Værktøj &rsaquo; Stapelbearbejdning af eksemplarer"
@@ -33489,8 +33488,8 @@ msgstr "Kyle Hall (3.8 Release Maintainer; 3.14 - 3.18 QA Team Member)"
 msgid "LC call number:"
 msgstr "LC-signaturnummer: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:31
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:75
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:38
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:95
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:30
@@ -33500,7 +33499,7 @@ msgstr "LC-signaturnummer: "
 
 #: intranet-tmpl/prog/en/columns.def:143
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:105
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:108
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:198
 #, c-format
@@ -33688,12 +33687,14 @@ msgstr "Larry Baerveldt"
 msgid "Lars Wirzenius"
 msgstr "Lars Wirzenius"
 
-#. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
-#: intranet-tmpl/prog/en/includes/page-numbers.inc:17
-#, c-format
 msgid "Last"
+msgstr "Sidste"
+
+#: intranet-tmpl/prog/en/includes/page-numbers.inc:17
+#, fuzzy, c-format
+msgid "Last "
 msgstr "Sidste"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:233
@@ -34013,7 +34014,7 @@ msgstr "Biblioteksbegrænsning: "
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:184
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:143
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:99
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:432
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:433
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:217
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:127
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
@@ -34488,9 +34489,9 @@ msgstr ""
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/z3950_search.inc:1
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:248
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:481
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:128
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:216
@@ -34503,13 +34504,13 @@ msgstr ""
 msgid "Loading"
 msgstr "Indlæser"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:366
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:420
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:129
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:28
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:104
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:115
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:203
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:139
@@ -34631,7 +34632,7 @@ msgid "Local use preferences"
 msgstr "Lokale systemindstillinger"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:310
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:588
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:612
 #, c-format
 msgid "Local use recorded"
 msgstr "Lokalt brug gemt"
@@ -34915,7 +34916,7 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:59
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:113
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:209
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:140
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:335
@@ -35020,13 +35021,13 @@ msgid "MARC frameworks: %s"
 msgstr "MARC-strukturer: %s"
 
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:201
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:28
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:29
 #, fuzzy, c-format
 msgid "MARC modification templates"
 msgstr "Ændringslog"
 
 #. %1$s:  template_id | html 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:57
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:58
 #, fuzzy, c-format
 msgid "MARC modification templates %s"
 msgstr "Ændringslog"
@@ -35037,10 +35038,10 @@ msgstr "Ændringslog"
 msgid "MARC organization code"
 msgstr "Organisation"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:363
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:126
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:140
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:112
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:131
@@ -35645,7 +35646,7 @@ msgstr "Gem konfiguration"
 msgid "Manage serial subscriptions"
 msgstr "Tidsskriftsabonnementer"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:24
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:25
 #: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:20
 #, c-format
 msgid "Manage staged MARC records"
@@ -35988,7 +35989,7 @@ msgid "MassCat, USA"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "Match applied"
 msgstr "Sammenligningsregel anvendt"
@@ -36009,13 +36010,13 @@ msgstr "Sammenfaldskontrol %s"
 msgid "Match check 1 | "
 msgstr "Sammenfaldskontrol 1 | "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:351
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:405
 #, fuzzy, c-format
 msgid "Match details"
 msgstr "Detaljer for bestilling"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "Match found"
 msgstr "Sammenfaldspunkt "
@@ -36046,28 +36047,28 @@ msgstr "Sammenfaldspunkter"
 msgid "Match threshold: "
 msgstr "Sammenlignings-grænseværdi: "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:350
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:404
 #, fuzzy, c-format
 msgid "Match type"
 msgstr "Søg typer:"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 msgid "Matches authority %s (score=%s):%s"
 msgstr "Matcher autoritet %s (score = %s):%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "Matches bibliographic record %s (score=%s):%s"
 msgstr "Matcher titlen %s (score = %s):%s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:133
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:141
 #, c-format
 msgid "Matching rule applied"
 msgstr "Sammenligningsregel anvendt"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:120
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:124
 #, c-format
 msgid "Matching rule applied:"
 msgstr "Anvendte sammenligningsregel:"
@@ -36708,7 +36709,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:202
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:100
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:433
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:434
 #, c-format
 msgid "Module"
 msgstr "Modul"
@@ -36843,7 +36844,7 @@ msgstr "Advarsel"
 msgid "Most-circulated items"
 msgstr "Mest udlånte eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:189
 #, fuzzy, c-format
 msgid "Move"
 msgstr "Opad"
@@ -36857,25 +36858,25 @@ msgid "Move Up"
 msgstr "Opad"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:113
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:114
 #, fuzzy
 msgid "Move action down"
 msgstr "Live film"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:109
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:110
 #, fuzzy
 msgid "Move action to bottom"
 msgstr "Flyt reservering til bunden"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:105
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:106
 #, fuzzy
 msgid "Move action to top"
 msgstr "Flyt reservering til toppen"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:101
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:102
 #, fuzzy
 msgid "Move action up"
 msgstr "Live film"
@@ -36928,12 +36929,19 @@ msgstr "Flyt reservering til toppen"
 msgid "Move hold up"
 msgstr "Flyt reservering opad"
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:165
+#, c-format
+msgid ""
+"Move patrons to the deleted patrons table. They can be deleted permanently "
+"by the "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:346
 #, c-format
 msgid "Move remaining unspent funds"
 msgstr "Flyt tilbageværende ubenyttede beløb"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:155
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:164
 #, c-format
 msgid "Move these patrons to the trash"
 msgstr "Læg disse lånere i papirkurven"
@@ -37022,8 +37030,8 @@ msgstr "INTET NAVN"
 msgid "NORMARC"
 msgstr "NORMARC"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:601
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:625
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:633
 #, c-format
 msgid "NOT CHECKED IN"
 msgstr "IKKE AFLEVERET"
@@ -37077,7 +37085,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/tools/access_files.tt:29
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:252
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:102
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:435
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:436
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:59
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:86
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:34
@@ -37204,7 +37212,7 @@ msgstr "Navn:"
 
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:5
 #: intranet-tmpl/prog/en/includes/admin-items-search-field-form.inc:9
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:304
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
 #: intranet-tmpl/prog/en/modules/serials/add_fields.tt:104
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:207
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
@@ -37314,7 +37322,7 @@ msgstr "Ny"
 #: intranet-tmpl/prog/en/includes/labels-toolbar.inc:4
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:7
 #: intranet-tmpl/prog/en/includes/patroncards-toolbar.inc:4
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:14
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:12
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:5
 #, c-format
 msgid "New "
@@ -37385,7 +37393,7 @@ msgstr ""
 msgid "New account "
 msgstr "Konto"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:43
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:44
 #, fuzzy, c-format
 msgid "New action"
 msgstr "Ny låner "
@@ -37755,7 +37763,7 @@ msgstr "Nyt abonnement"
 msgid "New tag"
 msgstr "Nyt felt"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:41
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:42
 #, fuzzy, c-format
 msgid "New template"
 msgstr "Etiketskabeloner"
@@ -37775,12 +37783,12 @@ msgstr "værdi"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:570
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:594
 #, c-format
 msgid "New value: %s %s. %s Available for loan. %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:39
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:37
 #, c-format
 msgid "New vendor"
 msgstr "Ny leverandør"
@@ -37816,13 +37824,13 @@ msgstr "Nyhed: "
 msgid "Next"
 msgstr "Næste"
 
+#: intranet-tmpl/prog/en/includes/page-numbers.inc:16
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:171
 #: intranet-tmpl/prog/en/modules/labels/result.tt:17
 #, fuzzy, c-format
 msgid "Next "
 msgstr "Næste"
 
-#: intranet-tmpl/prog/en/includes/page-numbers.inc:16
 #: intranet-tmpl/prog/en/modules/serials/result.tt:55
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:121
 #, c-format
@@ -37830,7 +37838,7 @@ msgid "Next &gt;&gt;"
 msgstr "Næste >>"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:131
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:133
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:209
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:360
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:385
@@ -37865,7 +37873,7 @@ msgid "Next issue publication date:"
 msgstr "Næste udgave udgivelsesdag:"
 
 #. INPUT type=button name=changepage_next
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:190
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:210
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:146
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:186
 #, fuzzy
@@ -37920,7 +37928,7 @@ msgstr "Nicole C. Engard (3.0+ Documentation Manager)"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:411
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:396
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:117
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:120
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:62
@@ -38237,7 +38245,7 @@ msgid "No holds allowed:"
 msgstr "Ingen reservering tilladt:"
 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:74
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:96
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:95
 #, c-format
 msgid "No holds found."
 msgstr "Ingen reservering fundet"
@@ -38317,7 +38325,7 @@ msgstr ""
 "alligevel): %s"
 
 #. %1$s:  errmsgloo.msg | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:579
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:603
 #, c-format
 msgid "No item with barcode: %s"
 msgstr "Intet eksemplar med stregkode: %s"
@@ -38335,7 +38343,7 @@ msgid ""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:111
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:488
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:489
 #, fuzzy, c-format
 msgid "No items are available"
 msgstr "Ingen eksemplarer tilgængelige"
@@ -38400,7 +38408,7 @@ msgid "No mappings have been defined for this set"
 msgstr "Der er ingen tilordning for dette sæt"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "No match"
 msgstr "Ny stabel"
@@ -38421,7 +38429,7 @@ msgid "No matches found"
 msgstr "Ingen passende post fundet"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:481
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 #, fuzzy
 msgid "No matching notices found"
 msgstr "Ingen passende rapport fundet"
@@ -38503,17 +38511,17 @@ msgstr "Ingen passende låner "
 msgid "No patron may put this book on hold."
 msgstr "Ingen låner må reservere denne bog."
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:190
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
 #, fuzzy, c-format
 msgid "No patron records have been actually removed"
 msgstr "Ingen lånerposter fjernet"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:221
 #, c-format
 msgid "No patron records have been anonymized"
 msgstr "Ingen lånerposter anonymiseret"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:199
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:215
 #, c-format
 msgid "No patron records have been removed"
 msgstr "Ingen lånerposter fjernet"
@@ -38625,7 +38633,7 @@ msgstr "Antal ignorerede poster"
 msgid "No records have been selected."
 msgstr "Ingen titelposter klartgjort."
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:62
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:63
 #, c-format
 msgid "No records have been staged."
 msgstr "Ingen titelposter klartgjort."
@@ -38748,7 +38756,7 @@ msgstr "Nej, jeg bekræfter ikke"
 msgid "No, do not Delete"
 msgstr "Nej, slet ikke"
 
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:454
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:455
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:501
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:255
@@ -38914,7 +38922,7 @@ msgid "None defined"
 msgstr "Ingen defineret "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "None of these items can normally be put on hold for this patron."
 msgstr "Ingen af disse eksemplarer kan reserveres til denne låner."
 
@@ -39071,7 +39079,7 @@ msgstr "Ikke tilgængelig"
 msgid "Not checked out since: "
 msgstr "Ikke udlånt siden: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:585
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
 #, c-format
 msgid "Not checked out."
 msgstr "Ikke udlånt."
@@ -39086,12 +39094,18 @@ msgstr "Ikke udlånt."
 msgid "Not for loan"
 msgstr "Kan ikke udlånes"
 
+#. %1$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', itemloo.notforloan ) | html 
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:425
+#, fuzzy, c-format
+msgid "Not for loan (%s)"
+msgstr "Kan ikke udlånes: "
+
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:89
 #, fuzzy, c-format
 msgid "Not for loan status"
 msgstr "Kan ikke udlånes: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:562
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:586
 #, fuzzy, c-format
 msgid "Not for loan status updated. "
 msgstr "Kan ikke udlånes: "
@@ -39128,7 +39142,7 @@ msgstr "Sidst set"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:106
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:64
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:73
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:126
@@ -39356,8 +39370,8 @@ msgstr "Bemærkninger: "
 #. For the first occurrence,
 #. %1$s:  reservenotes | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:58
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:251
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:463
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:275
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:487
 #, c-format
 msgid "Notes: %s"
 msgstr "Bemærkninger: %s"
@@ -39369,7 +39383,7 @@ msgstr "Bemærkninger: %s"
 msgid "Notes: %s%s "
 msgstr "Bemærkninger: %s%s %s "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:196
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:216
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:163
 #, c-format
 msgid "Nothing found."
@@ -39564,12 +39578,12 @@ msgstr "Antal hæfter:"
 msgid "Number of items"
 msgstr "Antal tilføjede eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:241
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:267
 #, c-format
 msgid "Number of items added"
 msgstr "Antal tilføjede eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:252
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:291
 #, c-format
 msgid "Number of items deleted"
 msgstr "Antal slettede eksemplarer"
@@ -39579,12 +39593,12 @@ msgstr "Antal slettede eksemplarer"
 msgid "Number of items displayed"
 msgstr "Antal viste eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:243
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:275
 #, c-format
 msgid "Number of items ignored because of duplicate barcode"
 msgstr "Antal ignorerede eksemplarer pga. stregkode-dubletter"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:242
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:271
 #, fuzzy, c-format
 msgid "Number of items replaced"
 msgstr "Antal viste eksemplarer"
@@ -39621,33 +39635,33 @@ msgstr "Antal hæfter:"
 msgid "Number of potential barcodes read: %s"
 msgstr "Antal læste potentielle stregkoder: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:237
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:254
 #, c-format
 msgid "Number of records added"
 msgstr "Antal tilføjede poster"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:255
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:300
 #, c-format
 msgid "Number of records changed back"
 msgstr "Antal poster ændret tilbage"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:250
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:286
 #, c-format
 msgid "Number of records deleted"
 msgstr "Antal slettede poster"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:239
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:256
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:262
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:304
 #, c-format
 msgid "Number of records ignored"
 msgstr "Antal ignorerede poster"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:253
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:295
 #, c-format
 msgid "Number of records not deleted due to items on loan"
 msgstr "Antal ikke slettede poster, da medierne er udlånt"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:238
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:258
 #, c-format
 msgid "Number of records updated"
 msgstr "Antal ændrede poster"
@@ -39774,8 +39788,8 @@ msgstr "FRA"
 #: intranet-tmpl/prog/en/includes/cities-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/modals/serials_multi_receiving.inc:27
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:79
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:422
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:462
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:423
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:463
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:27
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:17
@@ -39788,9 +39802,9 @@ msgstr "FRA"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:44
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:194
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:221
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:398
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:428
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:222
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:422
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:30
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:318
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:249
@@ -40027,7 +40041,7 @@ msgstr "værdi"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:564
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:588
 #, c-format
 msgid "Old value: %s %s. %s Available for loan. %s "
 msgstr ""
@@ -40318,7 +40332,7 @@ msgstr "Optionalt modul mangler"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:95
 #: intranet-tmpl/prog/en/modules/tools/export.tt:119
 #: intranet-tmpl/prog/en/modules/tools/export.tt:202
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:692
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:716
 #, c-format
 msgid "Options"
 msgstr "Optioner"
@@ -41080,7 +41094,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:51
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:99
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:221
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
@@ -41302,7 +41316,7 @@ msgstr ""
 "udlåne? %s "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:407
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:620
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
 #, c-format
 msgid "Patron has an indefinite restriction."
 msgstr "Låner har en ubestemt begrænsning."
@@ -41396,9 +41410,9 @@ msgstr "Lånerbillede(r) oploadet med nogle fejl"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:87
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:270
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:492
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:294
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:360
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:516
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr "Låner er SPÆRRET"
@@ -41591,7 +41605,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  errmsgloo.prevdebarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:617
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
 #, fuzzy, c-format
 msgid "Patron was earlier restricted until %s."
 msgstr "Låner har udestående medier og er spærret for %s dag(e). "
@@ -41627,9 +41641,9 @@ msgstr "Låneradresse uklar"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:363
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:91
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:274
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:337
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:496
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:361
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:520
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr "Låneradresse uklar"
@@ -42164,12 +42178,12 @@ msgstr "Aktuelle bibliotek"
 msgid "Permanent shelving location"
 msgstr "Alle hyldeplaceringer"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:121
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:123
 #, c-format
 msgid "Permanently delete checkout history older than"
 msgstr "Permanent sletning af udlånshistorik ældre end"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:152
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:157
 #, c-format
 msgid "Permanently delete these patrons"
 msgstr "Slette denne låner permanent"
@@ -42354,9 +42368,9 @@ msgstr "Resultater fra %s til %s af %s"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:264
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:266
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:268
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:509
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:511
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:513
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:510
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:512
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:514
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:15
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:159
 #, c-format
@@ -42381,12 +42395,12 @@ msgid "Place hold for %s %s (%s)"
 msgstr "Reserver til %s %s (%s)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "Place hold on this item?"
 msgstr "Reservere dette eksemplar?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "Place hold?"
 msgstr "Reservere?"
 
@@ -42509,7 +42523,7 @@ msgid ""
 msgstr "Tilføj stregkode enten med tekstfeltet eller med eksemplarsøgning."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
 #, fuzzy
 msgid "Please check at least one action"
 msgstr "Vælg mindst et eksemplar."
@@ -42672,7 +42686,7 @@ msgid "Please enter a "
 msgstr "indtast en dato !"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
 #, fuzzy
 msgid "Please enter a date!"
 msgstr "indtast en dato !"
@@ -42748,7 +42762,7 @@ msgid "Please enter a value less than or equal to {0}."
 msgstr "Indtast en værdi mindre end eller lig med {0}."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
 msgid "Please enter at least one criterion for deletion!"
 msgstr "Vælg mindst et kriterie for sletning!"
 
@@ -42797,7 +42811,7 @@ msgid "Please enter your username and password"
 msgstr "Indtast brugernavn og password:"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:481
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 #, fuzzy
 msgid "Please fill at least one template."
 msgstr "Vælg mindst et eksemplar."
@@ -42911,19 +42925,19 @@ msgid "Please return item to home library: %s"
 msgstr "Send eksemplaret tilbage til hjemmebiblioteket: %s"
 
 #. %1$s:  Branches.GetName( errmsgloo.msg ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:582
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:606
 #, fuzzy, c-format
 msgid "Please return item to: %s"
 msgstr "Send tilbage til %s"
 
 #. %1$s:  Branches.GetName( TransferWaitingAt ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:209
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:208
 #, fuzzy, c-format
 msgid "Please return item to: %s "
 msgstr "Send tilbage til %s"
 
 #. %1$s:  Branches.GetName( returnbranch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:374
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:398
 #, fuzzy, c-format
 msgid "Please return this item to %s "
 msgstr "Send tilbage til %s"
@@ -43099,7 +43113,7 @@ msgid "Please specify the reason for cancelling selected item(s):"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:481
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 msgid "Please specify title and content for %s"
 msgstr "Vælg titel og indhold for %s"
 
@@ -43362,7 +43376,7 @@ msgid "Prev"
 msgstr "Forr"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:399
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:156
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:177
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:200
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:136
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
@@ -43403,6 +43417,7 @@ msgstr "Opret ny liste"
 #: intranet-tmpl/prog/en/includes/browser-strings.inc:1
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
+#: intranet-tmpl/prog/en/includes/page-numbers.inc:6
 #: intranet-tmpl/prog/en/modules/labels/result.tt:7
 #, c-format
 msgid "Previous"
@@ -43429,7 +43444,7 @@ msgid "Previous checkouts"
 msgstr "Tidligere udlån"
 
 #. INPUT type=button name=changepage_prev
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:186
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:182
 #, fuzzy
@@ -43600,7 +43615,7 @@ msgstr "Udskriv kvittering for %s"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:33
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:123
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:399
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:423
 #, c-format
 msgid "Print slip"
 msgstr "Udskriv bon"
@@ -43610,18 +43625,18 @@ msgstr "Udskriv bon"
 msgid "Print slip "
 msgstr "Udskriv bon"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:312
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:539
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:563
 #, fuzzy, c-format
 msgid "Print slip and confirm "
 msgstr "Udskriv og bekræft kvittering"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:350
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:374
 #, fuzzy, c-format
 msgid "Print slip and continue"
 msgstr "Udskriv og bekræft kvittering"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:532
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:556
 #, fuzzy, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Udskriv kvittering, overfør og bekræft"
@@ -43641,7 +43656,7 @@ msgstr "Print denne kurvegruppe til PDF"
 msgid "Print this label"
 msgstr "Udskriv denne etiket"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:222
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:231
 #, fuzzy, c-format
 msgid "Print transfer slip"
 msgstr "Udskriv bon"
@@ -43709,7 +43724,7 @@ msgstr "Printere"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:5
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:738
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:447
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:448
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
 #, c-format
 msgid "Priority"
@@ -44011,7 +44026,7 @@ msgid "Publication year"
 msgstr "Udgivelsesår"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:278
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:460
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:461
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:278
 #, c-format
 msgid "Publication year:"
@@ -44380,7 +44395,7 @@ msgstr ""
 msgid "Rafal Kopaczka"
 msgstr "Rafal Kopaczka"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:90
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:91
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:53
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:62
@@ -44409,7 +44424,7 @@ msgstr "Kurs"
 msgid "Rate: "
 msgstr "Kurs: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:79
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:97
 #, c-format
 msgid "Raw (any): "
 msgstr "Fri tekst (alle): "
@@ -44498,7 +44513,7 @@ msgstr "Modtage leverance"
 msgid "Receive shipment from vendor "
 msgstr "Modtage leverance fra leverandør "
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:36
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:34
 #, c-format
 msgid "Receive shipments"
 msgstr "Modtage leverance"
@@ -44586,7 +44601,7 @@ msgstr "Klik for at kontrollere afhængigheder igen "
 msgid "Recipients:"
 msgstr "Modtagere:"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:353
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:407
 #, c-format
 msgid "Record"
 msgstr "Post"
@@ -44711,8 +44726,8 @@ msgstr ""
 msgid "Refund lost item fee"
 msgstr "Tilbage til eksemplar stabelsletning"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:231
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:265
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:212
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
 #, c-format
 msgid "RegEx"
 msgstr ""
@@ -44846,7 +44861,7 @@ msgstr ""
 msgid "Remaining system parameters permissions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:671
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:695
 #, fuzzy, c-format
 msgid "Remember for next check in:"
 msgstr "Fastholde for session:"
@@ -44872,8 +44887,8 @@ msgstr ""
 msgid "Reminder date"
 msgstr "Påmindelsesdato"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:617
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:620
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
 #, fuzzy, c-format
 msgid "Reminder: "
 msgstr "Påmindelsesdato"
@@ -45653,7 +45668,7 @@ msgstr "Krævede moduler mangler."
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:199
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:274
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:279
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:327
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:705
@@ -45806,6 +45821,11 @@ msgstr "Obligatorisk"
 msgid "Required fields cannot be cleared"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
+#, fuzzy, c-format
+msgid "Required fields:"
+msgstr "Obligatorisk"
+
 #: intranet-tmpl/prog/en/includes/permissions.inc:5
 #, c-format
 msgid "Required for staff login."
@@ -45857,10 +45877,10 @@ msgstr "Reservering fundet"
 msgid "Reserves"
 msgstr "Web-tjenester"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:133
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:142
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:159
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:176
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:139
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:152
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:169
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:185
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:159
 #, c-format
 msgid "Reset"
@@ -45939,7 +45959,7 @@ msgstr "Resultat"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:132
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:169
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:360
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:69
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:86
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:204
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:97
 #, c-format
@@ -46143,7 +46163,7 @@ msgid "Revert waiting status"
 msgstr "Tilbage til vente-status"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #, fuzzy
 msgid "Reverted"
 msgstr "Gå tilbage"
@@ -46966,7 +46986,7 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:168
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:140
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:31
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:60
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:71
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:137
@@ -47375,7 +47395,7 @@ msgstr "Søg anskaffelsesforslag"
 msgid "Search system preferences"
 msgstr "Gennemsøg systemindstillinger"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:41
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:55
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:52
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:59
 #, fuzzy, c-format
@@ -47722,7 +47742,7 @@ msgstr "Vælg et layout til anvendelse: "
 msgid "Select a library :"
 msgstr "Vælg et bibiotek:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:34
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:40
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:54
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:45
 #, c-format
@@ -47767,7 +47787,7 @@ msgstr "Slette liste"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:107
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:66
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:339
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:43
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:58
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:54
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:40
@@ -48320,7 +48340,7 @@ msgstr "Rækketitel"
 msgid "Series: "
 msgstr "Serier: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:118
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:80
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
 #, c-format
@@ -48540,7 +48560,7 @@ msgstr "Søg indeks: kontrolnummer"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:176
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:204
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:199
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:134
@@ -48771,7 +48791,7 @@ msgstr "Vis alle eksemplarer"
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:434
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:435
 #, c-format
 msgid "Show all items (%s hidden)"
 msgstr "Vis alle eksemplarer (%s skjult)"
@@ -49325,7 +49345,7 @@ msgid "Specify how the holiday should repeat."
 msgstr "Angiv hvordan lukkedagen skal gentages."
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:667
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:691
 #, fuzzy, c-format
 msgid "Specify return date %s: "
 msgstr "Angiv afleveringsdag %s: "
@@ -49479,7 +49499,7 @@ msgstr "Klargøre MARC-poster til import"
 msgid "Stage MARC records"
 msgstr "Administrere klargjorte MARC-poster"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:63
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:64
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:206
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:16
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:31
@@ -49507,8 +49527,8 @@ msgstr "Klargøre til import"
 msgid "Stage records into the reservoir"
 msgstr "Klargøre poster i reservoiret"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:281
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:488
 #, c-format
 msgid "Staged"
@@ -49524,7 +49544,7 @@ msgstr "Forvalte klargjorte MARC-poster"
 msgid "Staged MARC record management"
 msgstr "Forvalte klargjorte MARC-poster"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:101
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:104
 #, c-format
 msgid "Staged:"
 msgstr "Mellemlagret:"
@@ -49558,8 +49578,8 @@ msgstr "Stan Brinkerhoff"
 msgid "Standard"
 msgstr "Standard"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:80
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:44
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:98
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:42
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:62
 #, c-format
@@ -49743,8 +49763,8 @@ msgstr "Statistik-assistenter"
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:16
 #: intranet-tmpl/prog/en/modules/tags/review.tt:82
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:69
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:280
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:349
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:333
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:403
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:362
@@ -49782,7 +49802,7 @@ msgid "Status "
 msgstr "Status: "
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:195
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:102
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:558
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:72
@@ -49956,7 +49976,7 @@ msgstr "Steven Callender"
 
 #. For the first occurrence,
 #. %1$s:  numberpending | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:204
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:231
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:212
 #, c-format
@@ -50088,7 +50108,6 @@ msgid "Subfield: %s"
 msgstr "Unterfelt: %s"
 
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:216
-#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:211
 #, c-format
 msgid "Subfields"
 msgstr "Underfelter"
@@ -50141,8 +50160,8 @@ msgstr "Emne"
 msgid "Subject Line"
 msgstr "Emne: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:29
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:76
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:34
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:94
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:37
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:96
@@ -50245,7 +50264,7 @@ msgstr "Emner:"
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:162
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:216
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:204
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:324
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:87
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:486
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
@@ -50265,7 +50284,7 @@ msgstr "Emner:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:98
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:155
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:184
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:663
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:687
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:35
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
@@ -50534,7 +50553,7 @@ msgstr "Undertyper begrænsninger"
 msgid "Success."
 msgstr "Succes."
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:248
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:283
 #, c-format
 msgid "Success: Import reversed"
 msgstr "Succes: Import før tilbage"
@@ -51217,7 +51236,7 @@ msgstr ""
 msgid "Technical reports"
 msgstr "Teknisk rapport"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:62
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:63
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:128
 #, fuzzy, c-format
 msgid "Template"
@@ -51333,6 +51352,11 @@ msgstr "Nulstil mønster"
 #, c-format
 msgid "Test prediction pattern"
 msgstr "Test udgivelsesmønster"
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:171
+#, fuzzy, c-format
+msgid "Test run: Do not remove any patrons."
+msgstr "Fjern ingen lånere (testkørsel)"
 
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:265
 #, c-format
@@ -51501,7 +51525,7 @@ msgstr ""
 "De følgende 2 felter står til din egen rådighed. De kan være nyttige til "
 "statistiske formål"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:115
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
 #, c-format
 msgid ""
 "The AnonymousPatron system preference is not defined. You can use this "
@@ -51647,24 +51671,24 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The conditional comparison operator should be filled."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional field should be filled."
 msgstr "Dette underfelt slettes"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional regular expression should be filled."
 msgstr "Dette underfelt slettes"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The conditional value should be filled."
 msgstr "Dette underfelt slettes"
@@ -51721,7 +51745,7 @@ msgid "The database returned an error while saving %s %s. "
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The destination should be filled."
 msgstr ""
 
@@ -51778,9 +51802,9 @@ msgstr ""
 msgid "The field itemnum MUST be mapped "
 msgstr "Feltet itemnum SKAL linkes "
 
-#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:271
+#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
 #, fuzzy, c-format
-msgid "The fields 'branchcode' and 'categorycode' are "
+msgid "The fields 'surname', 'branchcode', and 'categorycode' are "
 msgstr "Felterne 'afdelingskode' og 'kategorikode' er "
 
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:32
@@ -51973,7 +51997,7 @@ msgstr "Materialet er fjernet fra listen."
 msgid "The item has been removed from your cart"
 msgstr "Materialet er fjernet fra listen."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
 #, c-format
 msgid ""
 "The item has not been checked in due to a configuration issue in your "
@@ -52331,13 +52355,13 @@ msgid "The secondary email is invalid."
 msgstr "Slutdato mangler eller er ugyldig."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "The source field should be filled."
 msgstr "Dette underfelt slettes"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 msgid "The source subfield should be filled for update."
 msgstr ""
 
@@ -52497,12 +52521,12 @@ msgstr "Der er ingen samlinger defineret i øjeblikket. "
 msgid "There are no contracts with this vendor. %s "
 msgstr "Der er ingen kontrakter med denne leverandør. %s "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:195
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:176
 #, fuzzy, c-format
 msgid "There are no defined actions for this template."
 msgstr "Der er ingen statistikker for denne låner."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:289
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:270
 #, c-format
 msgid "There are no defined templates. Please create a template first."
 msgstr ""
@@ -52815,6 +52839,13 @@ msgstr ""
 msgid "These items have a hold ratio &ge; %s."
 msgstr "Disse eksemplarer har en reserveringsrate &ge; %s."
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
+msgid ""
+"These patrons will be permanently removed from the database and cannot be "
+"recovered"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:218
 #, c-format
 msgid "Theses"
@@ -53084,13 +53115,13 @@ msgid "This item must be returned to %s."
 msgstr "Dette eksemplar skal overføres til %s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "This item normally cannot be put on hold except for patrons from %s."
 msgstr ""
 "Dette eksemplar kan normalt ikke reserveres undtagen til lånere fra %s."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:664
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:665
 msgid "This item normally cannot be put on hold."
 msgstr "Dette eksemplar kan normalt ikke reserveres."
 
@@ -53280,7 +53311,7 @@ msgstr "Denne låner findes ikke."
 msgid "This subscription is closed."
 msgstr "Dette abonnement er lukket"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:60
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:62
 #, c-format
 msgid ""
 "This tool allows you to delete patrons and anonymize checkout history. For "
@@ -53526,7 +53557,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:296
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:297
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:681
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:100
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:29
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:157
@@ -53542,7 +53573,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:733
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:81
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:443
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:444
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:105
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:30
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:124
@@ -53562,7 +53593,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:173
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:49
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:105
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
@@ -53661,8 +53692,8 @@ msgstr "Titel:"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:81
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:151
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:89
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:27
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:71
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:30
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:91
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:33
@@ -54026,7 +54057,7 @@ msgstr "Plugin-værktøjer"
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:14
 #: intranet-tmpl/prog/en/modules/tools/batchMod.tt:14
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:33
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:21
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:22
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:74
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:16
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:18
@@ -54046,7 +54077,7 @@ msgstr "Plugin-værktøjer"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:19
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:26
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:27
 #: intranet-tmpl/prog/en/modules/patroncards/home.tt:10
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:15
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:14
@@ -54410,7 +54441,7 @@ msgstr "Transport er %s dag(e) forsinket"
 msgid "Transfer is not allowed for: "
 msgstr "Flytte samling"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:385
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:409
 #, fuzzy, c-format
 msgid "Transfer now? "
 msgstr "Overfør nu?"
@@ -54422,9 +54453,9 @@ msgid "Transfer order to this basket?"
 msgstr "Administrere bestillinger"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:279
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:500
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:303
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:364
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:524
 #, c-format
 msgid "Transfer to:"
 msgstr "Overførsel til:"
@@ -54535,7 +54566,7 @@ msgid "Try again with a different barcode"
 msgstr "Prøv igen med en anden stregkode"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:198
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:223
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:151
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:205
@@ -54582,7 +54613,7 @@ msgstr "Tumer Garip"
 
 #: intranet-tmpl/prog/en/columns.def:113
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:9
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:279
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:332
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:51
 #: intranet-tmpl/prog/en/modules/members/files.tt:38
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:929
@@ -54592,7 +54623,7 @@ msgstr "Tumer Garip"
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:36
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:346
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:159
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:147
@@ -54613,7 +54644,7 @@ msgstr "Type af skore:"
 msgid "Type of procedure"
 msgstr "Type af skore:"
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:100
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:103
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:110
 #, c-format
 msgid "Type:"
@@ -54829,7 +54860,7 @@ msgid "Undefined"
 msgstr "Ikke defineret"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:228
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:241
 msgid "Undo import into catalog"
 msgstr "Annuller import til katalog"
 
@@ -55112,7 +55143,7 @@ msgid "Update SQL"
 msgstr "Opdatere SQL"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:344
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:325
 #, fuzzy
 msgid "Update action"
 msgstr "Anden aktion"
@@ -55139,13 +55170,13 @@ msgstr "Ændre fra barn til voksen"
 msgid "Update errors :"
 msgstr "Opdateringsfejl :"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:188
 #, fuzzy, c-format
 msgid "Update existing or add new"
 msgstr "Brug eksisterende post"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:642
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:643
 msgid "Update hold(s)"
 msgstr "Opdatere reserveringer"
 
@@ -55819,7 +55850,7 @@ msgstr "Variabel: "
 msgid "Vassilis Kanellopoulos"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:25
+#: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:23
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:715
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:89
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:23
@@ -55991,12 +56022,12 @@ msgstr "Leverandør: "
 msgid "Vendor: %s"
 msgstr "Leverandør: %s"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:119
 #, c-format
 msgid "Verify you want to anonymize patron checkout history"
 msgstr "Bekræft at du vil anonymisere låner-udlånshistorik"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:66
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
 #, c-format
 msgid "Verify you want to delete patrons"
 msgstr "Bekræft at du vil slette lånere"
@@ -56027,7 +56058,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:390
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:376
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:147
 #, c-format
@@ -56205,6 +56236,11 @@ msgstr "Løft begrænsninger"
 msgid "View spine label"
 msgstr "Vis signaturskilt"
 
+#: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:212
+#, fuzzy, c-format
+msgid "View subfields"
+msgstr "Editer underfelter"
+
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:35
 #, fuzzy, c-format
 msgid "View tool plugins"
@@ -56324,6 +56360,7 @@ msgstr "Afhenter "
 msgid "Ward van Wanrooij"
 msgstr "Ward van Wanrooij"
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:145
 #: intranet-tmpl/prog/en/modules/about.tt:113
 #: intranet-tmpl/prog/en/modules/about.tt:236
 #: intranet-tmpl/prog/en/modules/about.tt:239
@@ -56542,11 +56579,6 @@ msgstr "Advarsel, ingen stregkoder fundet:"
 msgid "Warning: no itemnumbers were found"
 msgstr "Advarsel, ingen stregkoder fundet:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:142
-#, c-format
-msgid "Warnings"
-msgstr "Advarsler"
-
 #: intranet-tmpl/prog/en/modules/about.tt:232
 #, c-format
 msgid "Warnings regarding the system configuration"
@@ -56750,11 +56782,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Welcome to the Koha %s web installer"
 msgstr "Velkommen i Kohas web-installer"
-
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:150
-#, c-format
-msgid "What do you want to do for deleted patrons?"
-msgstr "Hvad vil du gøre med slettede lånere?"
 
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:26
 #, c-format
@@ -57036,7 +57063,7 @@ msgstr "Årlig lukkedag: %s"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:395
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:419
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:121
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:61
@@ -57117,7 +57144,7 @@ msgstr "Ja, luk (Y)"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:229
-#: intranet-tmpl/prog/en/modules/tools/letter.tt:450
+#: intranet-tmpl/prog/en/modules/tools/letter.tt:451
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:499
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:119
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:252
@@ -57191,7 +57218,7 @@ msgstr "Ja, slet dette mærke"
 msgid "Yes, edit existing items"
 msgstr "Ja, editer bestående eksemplarer"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:396
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
 #, fuzzy, c-format
 msgid "Yes, print slip"
 msgstr "Ja, udskriv bon"
@@ -57553,7 +57580,7 @@ msgid ""
 "process..."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:202
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:183
 #, c-format
 msgid ""
 "You have chosen a condition on the same field as the original field. If your "
@@ -57785,7 +57812,7 @@ msgstr "Du søgte efter "
 
 #. For the first occurrence,
 #. %1$s:  IF ( title ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:70
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:90
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:35
 #, c-format
@@ -57902,8 +57929,10 @@ msgstr "Din download skulle starte automatisk."
 
 #: intranet-tmpl/prog/en/modules/offline_circ/enqueue_koc.tt:16
 #, c-format
-msgid "Your file was processed."
-msgstr "Din fil blev behandlet."
+msgid ""
+"Your file was uploaded. Once all files are uploaded, please process them in "
+"pending offline circulation actions."
+msgstr ""
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:254
@@ -57993,7 +58022,7 @@ msgstr "Z39.50-Søgning"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:148
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:257
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:18
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:17
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:482
 #, fuzzy, c-format
 msgid "Z39.50/SRU search"
@@ -58329,7 +58358,7 @@ msgid "a an the"
 msgstr "a og den"
 
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
 #, fuzzy, c-format
 msgid "about page"
 msgstr "Næste side"
@@ -58377,7 +58406,7 @@ msgid "already exists in database"
 msgstr "findes allerede i databasen"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:107
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:485
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:486
 #, c-format
 msgid "already has a hold"
 msgstr "er allerede reserveret"
@@ -58392,11 +58421,15 @@ msgstr "Analyse."
 msgid "and"
 msgstr "og"
 
-#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
 #: intranet-tmpl/prog/en/modules/about.tt:944
 #, c-format
 msgid "and "
 msgstr "og "
+
+#: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:272
+#, fuzzy, c-format
+msgid "and 'branchcode' and 'categorycode' "
+msgstr "Felterne 'afdelingskode' og 'kategorikode' er "
 
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:135
 #, c-format
@@ -58408,7 +58441,7 @@ msgstr "og er blevet returneret."
 msgid "and mark one currency as active."
 msgstr "Editer en valuta og marker den som aktiv."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
 #, c-format
 msgid "and search for the \"data problems\" section"
 msgstr ""
@@ -58790,6 +58823,11 @@ msgstr "marker for at slette dette delfelt"
 msgid "children's library"
 msgstr "i bibliotek "
 
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
+#, fuzzy, c-format
+msgid "cleanup_database"
+msgstr "Download database"
+
 #: intranet-tmpl/prog/en/modules/auth.tt:57
 #, c-format
 msgid "click here"
@@ -59006,12 +59044,12 @@ msgstr "lave ikke et eksemplar ved tidsskrifttilgang"
 msgid "do not create an item record when receiving this serial "
 msgstr "lav ikke et eksemplar ved tidsskrifttilgang "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:255
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:236
 #, fuzzy, c-format
 msgid "doesn't exist"
 msgstr "Denne låner findes ikke."
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:257
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:238
 #, fuzzy, c-format
 msgid "doesn't match"
 msgstr "skal være ens"
@@ -59080,7 +59118,7 @@ msgstr "eks: stregkode, eksemplarsignatur, titel, \"050a 050b\", 300a "
 msgid "exchange"
 msgstr "Ændre"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:254
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
 #, fuzzy, c-format
 msgid "exists"
 msgstr "eksisterer."
@@ -59120,12 +59158,12 @@ msgstr ""
 msgid "famfamfam.com"
 msgstr "famfamfam.com"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:249
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:230
 #, fuzzy, c-format
 msgid "field "
 msgstr "underfelt "
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:218
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:199
 #, c-format
 msgid "field(s) "
 msgstr "felte(r): "
@@ -59287,7 +59325,7 @@ msgstr "hjemmeafdeling IKKE tilknyttet"
 msgid "homebranch defined"
 msgstr "hjemmeafdeling defineret"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:245
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
 #, c-format
 msgid "if"
 msgstr ""
@@ -59308,7 +59346,7 @@ msgid "if you wish to enable this feature."
 msgstr "hvis du vil aktivere denne egenskab."
 
 #. INPUT type=text name=to_regex_modifiers
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 msgid "ig"
 msgstr ""
 
@@ -59432,7 +59470,7 @@ msgid "is not"
 msgstr "er ikke"
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:614
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:638
 #, fuzzy, c-format
 msgid "is now debarred until %s."
 msgstr "er nu frigivet indtil %s "
@@ -59667,8 +59705,8 @@ msgid "last on: %s"
 msgstr "sidst den: %s"
 
 #. INPUT type=text name=from_subfield
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:201
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:208
 msgid "let blank for the entire field"
 msgstr ""
 
@@ -59717,7 +59755,7 @@ msgstr "Spærret "
 msgid "lost"
 msgstr "mistet"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:262
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:243
 #, c-format
 msgid "m/"
 msgstr "m/"
@@ -59737,7 +59775,7 @@ msgstr "Udlåns- og afleveringsbetingelser"
 msgid "marc"
 msgstr "marc"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:256
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:237
 #, c-format
 msgid "matches"
 msgstr "sammenfald"
@@ -59908,7 +59946,7 @@ msgstr "reserveret"
 msgid "on reserve"
 msgstr "Tilføj brugere"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:485
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:486
 #, c-format
 msgid "on this item "
 msgstr "ved dette eksemplar "
@@ -60108,12 +60146,12 @@ msgid "records in various format. Choose one): "
 msgstr "poster i forskelligt format, vælg et): "
 
 #. INPUT type=text name=to_regex_search
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 msgid "regex pattern"
 msgstr "regex mønster"
 
 #. INPUT type=text name=to_regex_replace
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:235
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:216
 #, fuzzy
 msgid "regex replacement"
 msgstr "erstatning"
@@ -60167,7 +60205,7 @@ msgstr "Advarsel"
 msgid "s&eacute;lection au moyen d'une liste de descripteurs"
 msgstr "udvalg ud fra en liste med beskrivelser"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:234
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:215
 #, c-format
 msgid "s/"
 msgstr "s/"
@@ -60191,6 +60229,11 @@ msgstr "samme bibliotek, samme lånertype, alle medietyper"
 #, fuzzy, c-format
 msgid "same library, same patron category, same item type"
 msgstr "samme bibliotek, samme låner, samme medietype"
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
+#, fuzzy, c-format
+msgid "script. "
+msgstr "Beskrivelse: "
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:109
 #, c-format
@@ -60514,7 +60557,7 @@ msgstr "gange"
 msgid "to "
 msgstr "til "
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:488
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:489
 #, c-format
 msgid "to be placed on hold"
 msgstr "reservere"
@@ -60529,7 +60572,7 @@ msgstr "reservere"
 msgid "to create"
 msgstr "eller opret"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:226
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:207
 #, c-format
 msgid "to field "
 msgstr "til felt "
@@ -60555,7 +60598,7 @@ msgstr "Ikke defineret"
 msgid "unknown"
 msgstr "(Ukendt)"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:246
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:227
 #, c-format
 msgid "unless"
 msgstr ""
@@ -60674,27 +60717,27 @@ msgstr "hvilket skulle sættes op af systemadministratoren."
 msgid "which should be set up by your system administrator. "
 msgstr "hvilket skulle sættes op af systemadministratoren."
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:100
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:102
 #, fuzzy, c-format
 msgid "who are in patron list: "
 msgstr "Dine lister"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:82
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:84
 #, fuzzy, c-format
 msgid "who have not been connected since:"
 msgstr "som ikke har lånt noget siden:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:71
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:73
 #, c-format
 msgid "who have not borrowed since:"
 msgstr "som ikke har lånt noget siden:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:76
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:78
 #, c-format
 msgid "whose expiration date is before:"
 msgstr "hvis udløbsdato er før:"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:88
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:90
 #, c-format
 msgid "whose patron category is:"
 msgstr "hvis lånerkategori er:"
@@ -60727,7 +60770,7 @@ msgstr ""
 msgid "with this reason:"
 msgstr "med denne begrundelse"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:222
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:203
 #, c-format
 msgid "with value "
 msgstr "med værdi "
@@ -60821,13 +60864,13 @@ msgstr "%s %s til %s %s "
 msgid "| "
 msgstr "| "
 
-#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:362
+#: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:416
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:125
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:24
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:297
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:610
-#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:155
+#: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:122
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:203
