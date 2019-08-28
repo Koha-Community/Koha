@@ -158,9 +158,15 @@
                     <div id="bigloop">
 
                         [% FOREACH bibitemloo IN bibitemloop %]
-                            <div class="holdrow">
-                                <p>
                                     [% IF ( bibitemloo.holdable ) %]
+                            <div class="holdrow">
+                                [% IF bibitemloo.forced_hold_level %]
+                                    <span class="forced_hold_level"><h5>
+                                        You already have at least one [% bibitemloo.forced_hold_level %] level hold on this title.
+                                        All further holds must be [% bibitemloo.forced_hold_level %] level.
+                                    </h5></span>
+                                [% END %]
+                                <p>
                                         <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
                                         <input class="single_bib" name="single_bib" type="hidden" value="[% bibitemloo.biblionumber | html %]"/>
                                         <span class="confirmjs_hold" title="[% bibitemloo.biblionumber | html %]" style="padding:.3em"></span>

@@ -638,6 +638,7 @@ foreach my $biblioNum (@biblionumbers) {
     if ($forced_hold_level) {
         $biblioLoopIter{force_hold}   = 1 if $forced_hold_level eq 'item';
         $biblioLoopIter{itemholdable} = 0 if $forced_hold_level eq 'record';
+        $biblioLoopIter{forced_hold_level} = $forced_hold_level;
     }
 
 
