@@ -222,7 +222,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 48;
+    plan tests => 50;
 
     my $qb;
 
@@ -466,6 +466,20 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         '(title:"donald duck")',
         "query of specific field is not added AND suppress:0"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( ['AND'], ['title:"donald duck"'], undef, ['author:Dillinger Escaplan'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:"donald duck") AND author:(Dillinger Escaplan)',
+        "Simplle query with limit's term in parentheses"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( ['AND'], ['title:"donald duck"'], undef, ['author:Dillinger Escaplan', 'itype:BOOK'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:"donald duck") AND (author:(Dillinger Escaplan)) AND (itype:(BOOK))',
+        "Simplle query with each limit's term in parentheses"
     );
     is($query_cgi, 'idx=&q=title%3A%22donald%20duck%22', 'query cgi');
     is($query_desc, 'title:"donald duck"', 'query desc ok');
