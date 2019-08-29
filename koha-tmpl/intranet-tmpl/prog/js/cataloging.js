@@ -559,4 +559,7 @@ function CheckMandatorySubfields(p){
 
 $(document).ready(function() {
     $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');
+    $(document).ajaxSuccess(function() {
+        $("input.input_marceditor, input.indicator").addClass('noEnterSubmit');
+    });
 });
