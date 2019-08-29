@@ -1007,7 +1007,13 @@ sub _fix_limit_special_cases {
             push @new_lim, 'onloan:false';
         }
         else {
-            push @new_lim, $l;
+            my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
+            if ( defined($field) && defined($term) ) {
+                push @new_lim, "$field:($term)";
+            }
+            else {
+                push @new_lim, $l;
+            }
         }
     }
     return \@new_lim;
