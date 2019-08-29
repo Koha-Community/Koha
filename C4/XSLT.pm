@@ -320,7 +320,6 @@ sub buildKohaItemsNamespace {
     for my $item (@items) {
         my $status;
         my $substatus = '';
-<<<<<<< HEAD
 
         if ($item->has_pending_hold) {
             $status = 'Pending hold';
@@ -343,13 +342,12 @@ sub buildKohaItemsNamespace {
         elsif ($item->onloan) {
             $status = "Checked out";
         }
-        elsif ( $item->notforloan > 0 ) {
+        elsif ( $item->notforloan ) {
                 $status = "reallynotforloan";
                 $substatus = $descs{$item->{notforloan}} || '';
                 $substatus = $substatus->{opac_description} if $substatus;
         }
-        elsif ( $item->notforloan && $item->notforloan > 0
-            || exists $itemtypes->{ $item->effective_itemtype }
+        elsif ( exists $itemtypes->{ $item->effective_itemtype }
             && $itemtypes->{ $item->effective_itemtype }->{notforloan} == 1 )
         {
             $status = "reference";
