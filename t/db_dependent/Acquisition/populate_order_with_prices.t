@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 34;
+use Test::More tests => 44;
 use C4::Acquisition;
 use C4::Context;
 use Koha::Database;
@@ -44,7 +44,7 @@ my $order_exc_tax = {
     tax_rate  => .1965,
     discount  => .42,
     rrp       => 16.99,
-    unitprice => 9.85,
+    unitprice => 0.00,
     quantity  => 8,
 };
 
@@ -60,7 +60,19 @@ is( $order_with_prices->{rrp_tax_excluded}+0      ,16.99      ,"Ordering tax exc
 is( $order_with_prices->{rrp_tax_included}+0      ,20.328535  ,"Ordering tax excluded, no round: rrp tax included is rr tax excluded * (1 + tax rate on ordering)");
 is( $order_with_prices->{ecost_tax_excluded}+0    ,9.8542     ,"Ordering tax excluded, no round: ecost tax excluded is rrp * ( 1 - discount )");
 is( $order_with_prices->{ecost_tax_included}+0    ,11.7905503 ,"Ordering tax excluded, no round: ecost tax included is ecost tax excluded * (1 + tax rate on ordering)");
-is( $order_with_prices->{tax_value_on_ordering}+0 ,15.4908024 ,"Ordering tax excluded, no round: tax value on ordering is quantity * ecost_tax_excluded * tax rate on ordering");
+is( $order_with_prices->{tax_value_on_ordering}+0 ,15.4908024 ,"Ordering tax excluded, no round: tax value on ordering is quantity * ecost_tax_excluded * tax rate on ordering if no unitprice");
+
+$order_exc_tax->{unitprice} = 9.85;
+
+$order_with_prices = C4::Acquisition::populate_order_with_prices({
+    ordering     => 1,
+    booksellerid => $bookseller_exc_tax->id,
+    order        => $order_exc_tax,
+});
+
+is( $order_with_prices->{unitprice_tax_excluded}+0      ,9.85      ,"Ordering tax excluded, no round: rrp tax excluded is rrp");
+is( $order_with_prices->{unitprice_tax_included}+0      ,11.785525  ,"Ordering tax excluded, no round: rrp tax included is rr tax excluded * (1 + tax rate on ordering)");
+is( $order_with_prices->{tax_value_on_ordering}+0 ,15.4842 ,"Ordering tax excluded, no round: tax value on ordering is quantity * unitprice_tax_excluded * tax rate on ordering if unitprice");
 
 #Vendor prices exclude tax, no rounding, receiving
 $order_with_prices = C4::Acquisition::populate_order_with_prices({
@@ -72,7 +84,12 @@ $order_with_prices = C4::Acquisition::populate_order_with_prices({
 is( $order_with_prices->{unitprice}+0              ,9.8542     ,"Receiving tax excluded, no round, rounded ecost tax excluded = rounded unitprice : unitprice is ecost tax excluded");
 is( $order_with_prices->{unitprice_tax_excluded}+0 ,9.8542     ,"Receiving tax excluded, no round, rounded ecost tax excluded = rounded unitprice : unitprice tax excluded is ecost tax excluded");
 is( $order_with_prices->{unitprice_tax_included}+0 ,11.7905503 ,"Receiving tax excluded, no round: unitprice tax included is unitprice tax excluded * (1 + tax rate on ordering)");
-is( $order_with_prices->{tax_value_on_ordering}+0  ,15.4908024 ,"Receiving tax excluded, no round: tax value on receiving is quantity * unitprice_tax_excluded * tax rate on receiving");
+is( $order_with_prices->{tax_value_on_receiving}+0  ,15.4908024 ,"Receiving tax excluded, no round: tax value on receiving is quantity * unitprice_tax_excluded * tax rate on receiving");
+
+
+$order_exc_tax->{unitprice} = 9.85;
+#populate order with prices updates the passed in order hashref
+#we need to reset after additional tests and changes
 
 #Vendor prices exclude tax, rounding to nearest cent, ordering
 t::lib::Mocks::mock_preference('OrderPriceRounding', 'nearest_cent');
@@ -82,6 +99,8 @@ $order_with_prices = C4::Acquisition::populate_order_with_prices({
     order        => $order_exc_tax,
 });
 
+is( $order_with_prices->{unitprice_tax_excluded}+0      ,9.85      ,"Ordering tax excluded, round: unitprice tax excluded is unitprice");
+is( $order_with_prices->{unitprice_tax_included}+0      ,11.785525  ,"Ordering tax excluded, round: unitprice tax included is unitprice tax excluded * (1 + tax rate on ordering)");
 is( $order_with_prices->{rrp_tax_excluded}+0      ,16.99      ,"Ordering tax excluded, round: rrp tax excluded is rrp");
 is( $order_with_prices->{rrp_tax_included}+0      ,20.328535  ,"Ordering tax excluded, round: rrp tax included is rr tax excluded * (1 + tax rate on ordering)");
 is( $order_with_prices->{ecost_tax_excluded}+0    ,9.8542     ,"Ordering tax excluded, round: ecost tax excluded is rrp * ( 1 - discount )");
@@ -105,7 +124,7 @@ my $order_inc_tax = {
     tax_rate  => .1965,
     discount  => .42,
     rrp       => 20.33,
-    unitprice => 11.79,
+    unitprice => 0.00,
     quantity  => 8,
 };
 
@@ -121,8 +140,18 @@ is( $order_with_prices->{rrp_tax_included}+0      ,20.33            ,"Ordering t
 is( $order_with_prices->{rrp_tax_excluded}+0      ,16.9912244045132 ,"Ordering tax included, no round: rrp tax excluded is rrp tax included / (1 + tax rate on ordering)");
 is( $order_with_prices->{ecost_tax_included}+0    ,11.7914          ,"Ordering tax included, no round: ecost tax included is rrp tax included * (1 - discount)");
 is( $order_with_prices->{ecost_tax_excluded}+0    ,9.85491015461764 ,"Ordering tax included, no round: ecost tax excluded is rrp tax excluded * ( 1 - discount )");
-is( $order_with_prices->{tax_value_on_ordering}+0 ,15.4919187630589 ,"Ordering tax included, no round: tax value on ordering is ( ecost tax included - ecost tax excluded ) * quantity");
+is( $order_with_prices->{tax_value_on_ordering}+0 ,15.4919187630589 ,"Ordering tax included, no round: tax value on ordering is ( ecost tax included - ecost tax excluded ) * quantity if no unitprice");
 
+$order_inc_tax->{unitprice} = 11.79;
+$order_with_prices = C4::Acquisition::populate_order_with_prices({
+    ordering     => 1,
+    booksellerid => $bookseller_inc_tax->id,
+    order        => $order_inc_tax,
+});
+
+is( $order_with_prices->{unitprice_tax_included}+0 ,11.79             ,"Ordering tax included, no round: unitprice tax included is unitprice");
+is( $order_with_prices->{unitprice_tax_excluded}+0 ,9.85374007521939  ,"Ordering tax included, no round: unitprice tax excluded is unitprice tax included / (1 + tax_rate_on_ordering ");
+is( $order_with_prices->{tax_value_on_ordering}+0  ,15.4900793982449  ,"Ordering tax included, no round: tax value on ordering is ( unitprice tax included - unitprice tax excluded ) * quantity if unitprice");
 
 #Vendor prices include tax, no rounding, receiving
 $order_with_prices = C4::Acquisition::populate_order_with_prices({
@@ -134,16 +163,19 @@ $order_with_prices = C4::Acquisition::populate_order_with_prices({
 is( $order_with_prices->{unitprice}+0              ,11.7914          ,"Receiving tax included, no round, rounded ecost tax excluded = rounded unitprice : unitprice is ecost tax excluded");
 is( $order_with_prices->{unitprice_tax_included}+0 ,11.7914          ,"Receiving tax included, no round: unitprice tax included is unitprice");
 is( $order_with_prices->{unitprice_tax_excluded}+0 ,9.85491015461764 ,"Receiving tax included, no round: unitprice tax excluded is unitprice tax included / (1 + tax rate on receiving)");
-is( $order_with_prices->{tax_value_on_ordering}+0  ,15.4919187630589 ,"Receiving tax included, no round: tax value on receiving is quantity * unitprice_tax_excluded * tax rate on receiving");
+is( $order_with_prices->{tax_value_on_receiving}+0 ,15.4919187630589 ,"Receiving tax included, no round: tax value on receiving is quantity * unitprice_tax_excluded * tax rate on receiving");
 
 #Vendor prices include tax, rounding to nearest cent, ordering
 t::lib::Mocks::mock_preference('OrderPriceRounding', 'nearest_cent');
+$order_inc_tax->{unitprice} = 11.79;
 $order_with_prices = C4::Acquisition::populate_order_with_prices({
     ordering     => 1,
     booksellerid => $bookseller_inc_tax->id,
     order        => $order_inc_tax,
 });
 
+is( $order_with_prices->{unitprice_tax_included}+0      ,11.79      ,"Ordering tax included, round: unitprice tax included is unitprice");
+is( $order_with_prices->{unitprice_tax_excluded}+0,9.85374007521939 ,"Ordering tax included, round: unitprice tax excluded is unitprice tax included / (1 + tax_rate_on_ordering ");
 is( $order_with_prices->{rrp_tax_included}+0      ,20.33            ,"Ordering tax included, round: rrp tax included is rrp");
 is( $order_with_prices->{rrp_tax_excluded}+0      ,16.9912244045132 ,"Ordering tax included, round: rrp tax excluded is rounded rrp tax included * (1 + tax rate on ordering)");
 is( $order_with_prices->{ecost_tax_included}+0    ,11.7914          ,"Ordering tax included, round: ecost tax included is rounded rrp * ( 1 - discount )");

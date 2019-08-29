@@ -3062,10 +3062,13 @@ sub populate_order_with_prices {
     if ($ordering) {
         $order->{tax_rate_on_ordering} //= $order->{tax_rate};
         if ( $bookseller->listincgst ) {
-            # The user entered the rrp tax included
+
+            # The user entered the prices tax included
+            $order->{unitprice_tax_included} = $order->{unitprice};
             $order->{rrp_tax_included} = $order->{rrp};
 
-            # rrp tax excluded = rrp tax included / ( 1 + tax rate )
+            # price tax excluded = price tax included / ( 1 + tax rate )
+            $order->{unitprice_tax_excluded} = $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate_on_ordering} );
             $order->{rrp_tax_excluded} = $order->{rrp_tax_included} / ( 1 + $order->{tax_rate_on_ordering} );
 
             # ecost tax included = rrp tax included  ( 1 - discount )
@@ -3075,14 +3078,19 @@ sub populate_order_with_prices {
             $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
 
             # tax value = quantity * ecost tax excluded * tax rate
-            $order->{tax_value_on_ordering} = ( get_rounded_price($order->{ecost_tax_included}) - get_rounded_price($order->{ecost_tax_excluded}) ) * $order->{quantity};
+            # we should use the unitprice if included
+            my $cost_tax_included = $order->{unitprice_tax_included} || $order->{ecost_tax_included};
+            my $cost_tax_excluded = $order->{unitprice_tax_excluded} || $order->{ecost_tax_excluded};
+            $order->{tax_value_on_ordering} = ( get_rounded_price($cost_tax_included) - get_rounded_price($cost_tax_excluded) ) * $order->{quantity};
 
         }
         else {
-            # The user entered the rrp tax excluded
+            # The user entered the prices tax excluded
+            $order->{unitprice_tax_excluded} = $order->{unitprice};
             $order->{rrp_tax_excluded} = $order->{rrp};
 
-            # rrp tax included = rrp tax excluded * ( 1 - tax rate )
+            # price tax included = price tax excluded * ( 1 - tax rate )
+            $order->{unitprice_tax_included} = $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate_on_ordering} );
             $order->{rrp_tax_included} = $order->{rrp_tax_excluded} * ( 1 + $order->{tax_rate_on_ordering} );
 
             # ecost tax excluded = rrp tax excluded * ( 1 - discount )
@@ -3092,7 +3100,9 @@ sub populate_order_with_prices {
             $order->{ecost_tax_included} = $order->{ecost_tax_excluded} * ( 1 + $order->{tax_rate_on_ordering} );
 
             # tax value = quantity * ecost tax included * tax rate
-            $order->{tax_value_on_ordering} = $order->{quantity} * get_rounded_price($order->{ecost_tax_excluded}) * $order->{tax_rate_on_ordering};
+            # we should use the unitprice if included
+            my $cost_tax_excluded = $order->{unitprice_tax_excluded} || $order->{ecost_tax_excluded};
+            $order->{tax_value_on_ordering} = $order->{quantity} * get_rounded_price($cost_tax_excluded) * $order->{tax_rate_on_ordering};
         }
     }
 
