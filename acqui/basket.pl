@@ -459,8 +459,11 @@ sub get_order_infos {
     $line{basketno}       = $basketno;
     $line{budget_name}    = $budget->{budget_name};
 
-    $line{total_tax_included} = get_rounded_price($line{ecost_tax_included}) * $line{quantity};
-    $line{total_tax_excluded} = get_rounded_price($line{ecost_tax_excluded}) * $line{quantity};
+    # If we have an actual cost tht should be the total, otherwise use the ecost
+    my $cost_tax_included = $line{unitprice_tax_included} || $line{ecost_tax_included};
+    my $cost_tax_excluded = $line{unitprice_tax_excluded} || $line{ecost_tax_excluded};
+    $line{total_tax_included} = get_rounded_price($cost_tax_included) * $line{quantity};
+    $line{total_tax_excluded} = get_rounded_price($cost_tax_excluded) * $line{quantity};
     $line{tax_value} = $line{tax_value_on_ordering};
     $line{tax_rate} = $line{tax_rate_on_ordering};
 
