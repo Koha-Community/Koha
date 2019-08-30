@@ -634,7 +634,7 @@
                             [% END #/IF reserved %]
                         [% END # /IF found %]
 
-                        <div class="static_checkin_messages" style="display:none">
+                        <div class="static_checkin_messages">
                             [% INCLUDE all_checkin_messages %]
                         </div>
 
@@ -885,10 +885,8 @@
             $("#barcode").focus();
         }
         $(document).ready(function () {
-            $(".static_checkin_messages").show();
             $(".modal").modal({ backdrop: 'static' }).on('shown.bs.modal', function() {
                 $("#barcode").prop("disabled", true);
-                $(".static_checkin_messages").hide();
                 $(".show_checkin_dialog").show();
             }).on('hidden.bs.modal', function() {
                 $("#barcode").prop("disabled", false).focus();
