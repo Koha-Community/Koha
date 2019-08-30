@@ -71,9 +71,9 @@
                     <!-- TODO <a href="#" class="btn btn-default" id="preview_template_button" role="button" data-toggle="modal">Convert using the Template Toolkit syntax</a>-->
                     <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#preview_template -->
 
     [% IF add_form or copy_form %]
         <div class="main container-fluid">
@@ -99,7 +99,7 @@
                                 </select>
                             </p>
                         [% END %]
-                    </form>
+                    </form> <!-- /#selectlibrary -->
 
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
@@ -118,7 +118,7 @@
 
                             </ul>
                         </div>
-                    </div>
+                    </div> <!-- /#toolbar -->
 
                     [% IF ( search ) %]
                         <p>You searched for <b>[% searchfield | html %]</b></p>
@@ -188,7 +188,7 @@
                                                     [% END %]
                                                     <button class="btn btn-default btn-xs"><i class="fa fa-clone"></i> Copy</button>
                                                 </form>
-                                            [% END %]
+                                            [% END # /IF !independent_branch %]
                                         </td>
                                         <td class="actions">
                                             [% IF can_edit %]
@@ -199,10 +199,10 @@
                                             [% END %]
                                         </td>
                                     </tr>
-                                [% END %]
+                                [% END # /FOREACH lette %]
                             </tbody>
-                        </table>
-                    [% ELSE %]
+                        </table> <!-- /#lettert -->
+                    [% ELSE # IF lette %]
                         <div class="dialog message">
                             [% IF ( branchcode ) %]
                                 <p>There are no notices for this library.</p>
@@ -210,8 +210,8 @@
                                 <p>There are no notices.</p>
                             [% END %]
                         </div>
-                    [% END %]
-                [% END %]
+                    [% END # /IF lette %]
+                [% END # /IF no_op_set %]
 
                 [% IF add_form or copy_form %]
                     <h1>[% IF ( modify ) %]Modify notice[% ELSE %]Add notice[% END %]</h1>
@@ -227,7 +227,7 @@
                             </ul>
                         </div>
                         <a class="btn btn-default cancel" href="/cgi-bin/koha/tools/letter.pl"><i class="fa fa-remove"></i> Cancel</a>
-                    </div>
+                    </div> <!-- /#toolbar -->
 
                     <form id="add_notice" name="Aform" method="post" enctype="multipart/form-data" class="validate">
                         [% IF add_form %]
@@ -268,7 +268,7 @@
                                             [% END %]
                                         [% END %]
                                     </li>
-                            [% END %]
+                            [% END # /IF independant_branch %]
                                 <li>
                                     <label for="module">Koha module:</label>
                                     <input type="hidden" name="oldmodule" value="[% module | html %]" />
@@ -359,9 +359,9 @@
                                             Not supported yet.
                                     [% END %]
                                     </li>
-                            [% END %]
+                            [% END # /IF code %]
                         </ol>
-                    </fieldset>
+                    </fieldset> <!-- /#add_notice -->
 
                     [% IF Koha.Preference('TranslateNotices') %]
                         <div style="clear:both"></div>
@@ -378,7 +378,7 @@
                                     [% END %]
                                 [% END %]
                             </ul>
-                    [% END %]
+                    [% END # /IF TranslateNotices %]
 
                     [% FOREACH lang IN letters.keys %]
                         <div id="lang_[% lang | html %]">
@@ -453,11 +453,11 @@
                                                 </li>
                                             [% END %]
                                         </ol>
-                                    </fieldset>
-                                [% END %]
+                                    </fieldset> <!-- /.rows.mtt -->
+                                [% END # /FOR mtt %]
                             </div>
                         </div> <!-- / #transport-types -->
-                    [% END %]
+                    [% END # /FOREACH lang %]
 
                     [% IF Koha.Preference('TranslateNotices') %]
                         </div>
@@ -466,8 +466,8 @@
                         <input type="hidden" id="redirect" name="redirect" value="" />
                         <input type="hidden" id="section" name="section" value="[% section | html %]" />
                         <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
-                    </form>
-                [% END %]
+                    </form> <!-- /#add_notice -->
+                [% END # /IF add_form %]
 
                 [% IF ( add_validate or copy_validate) %]
                     Data recorded
@@ -507,7 +507,7 @@
                             <button type="submit" class="deny"><i class="fa fa-times"></i> No, do not delete</button>
                         </form>
                     </div>
-                [% END %]
+                [% END # /IF delete_confirm %]
 
                 [% IF ( delete_confirmed ) %]
                     Data deleted
