@@ -312,7 +312,7 @@
                                                     [% IF ( BakerTaylorEnabled && BakerTaylorBookstoreURL ) %]
                                                         [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]">
+                                                            <a href="https://[% BakerTaylorBookstoreURL | url %][% bt_id | url %]">
                                                                 <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
                                                             </a>
                                                         [% ELSE %]
