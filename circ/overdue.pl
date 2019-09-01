@@ -193,7 +193,6 @@ if (@patron_attr_filter_loop) {
 }
 
 
-use Data::Printer colored => 1; warn p $filters;
 $template->param(
     patron_attr_header_loop => [ map { { header => $_->{description} } } grep { ! $_->{isclone} } @patron_attr_filter_loop ],
     filters => $filters,
