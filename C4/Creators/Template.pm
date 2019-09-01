@@ -166,7 +166,7 @@ sub save {
         foreach my $key (keys %{$self}) {
             next if ($key eq 'template_id') || ($key eq 'template_stat') || ($key eq 'creator');
             push (@params, $self->{$key});
-            $query .= "$key=?, ";
+            $query .= "`$key`=?, ";
         }
         $query = substr($query, 0, (length($query)-2));
         push (@params, $self->{'template_id'}, $self->{'creator'});
@@ -186,7 +186,7 @@ sub save {
         foreach my $key (keys %{$self}) {
             next if $key eq 'template_stat';
             push (@params, $self->{$key});
-            $query .= "$key, ";
+            $query .= "`$key`, ";
         }
         $query = substr($query, 0, (length($query)-2));
         $query .= ") VALUES (";
