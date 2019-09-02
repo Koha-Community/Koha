@@ -16,9 +16,7 @@ use Scalar::Util;
 ##################################
 #gets timeout based on borrower's category
 sub get_timeout {
-    my $error;
     my ($cardnumber,$timeout) = @_;
-    
     my $dbh   = C4::Context->dbh;
     my $valueyaml;
     my $retval = $timeout;
@@ -59,13 +57,8 @@ sub get_timeout {
         }
     }
     catch {
-       $error = $_;
+       $logger->warn("Timeout or YAML error  $_");
     };
-
-    if($error) {
-        $logger->warn("Timeout or YAML error  $_");
-        $retval = C4::Context->preference('timeout') || 600;
-    }
 
     return($retval);
 }

@@ -187,17 +187,14 @@ if ( my $guarantor = $patron->guarantor ) {
     $template->param( guarantor => $guarantor );
     push @relatives, $guarantor->borrowernumber;
     push @relatives, $_->borrowernumber for $patron->siblings;
-}
-#guarantor info is in normal name fields. borrowernumber is guarantorid 
-#elsif ( $patron->contactname || $patron->contactfirstname ) {
-#    $template->param(
-#        guarantor => {
-#            firstname => $patron->contactfirstname,
-#            surname   => $patron->contactname,
-#        }
-#    );
-#} 
-else {
+} elsif ( $patron->contactname || $patron->contactfirstname ) {
+    $template->param(
+        guarantor => {
+            firstname => $patron->contactfirstname,
+            surname   => $patron->contactname,
+        }
+    );
+} else {
     my @guarantees = $patron->guarantees;
     $template->param( guarantees => \@guarantees );
     push @relatives, $_->borrowernumber for @guarantees;
