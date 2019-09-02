@@ -27,7 +27,6 @@ use CGI::Session;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 use YAML::Syck;
-use C4::AuthExtra;
 
 require Exporter;
 use C4::Context;
@@ -43,7 +42,7 @@ use Koha::Patrons;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
-use Data::Dumper;
+
 # use utf8;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $shib $shib_login);
 
@@ -157,7 +156,6 @@ More information on the C<gettemplate> sub can be found in the
 Output.pm module.
 
 =cut
-
 
 sub get_template_and_user {
 
@@ -603,7 +601,6 @@ sub get_template_and_user {
         }
     }
 
-
     return ( $template, $borrowernumber, $cookie, $flags );
 }
 
@@ -739,16 +736,13 @@ sub _session_log {
 }
 
 sub _timeout_syspref {
-   my $timeout = 600;
-   my $tmptimeout = C4::AuthExtra::get_timeout(undef,$timeout); 
+    my $timeout = C4::Context->preference('timeout') || 600;
+
     # value in days, convert in seconds
-    #if ( $timeout =~ /(\d+)[dD]/ ) {
-    #    $timeout = $1 * 86400;
-    #}
-   if ($tmptimeout) {
-      $timeout = $tmptimeout;
-   }
-   return($timeout);
+    if ( $timeout =~ /(\d+)[dD]/ ) {
+        $timeout = $1 * 86400;
+    }
+    return $timeout;
 }
 
 sub checkauth {
@@ -826,11 +820,6 @@ sub checkauth {
             $ip          = $session->param('ip');
             $lasttime    = $session->param('lasttime');
             $userid      = $s_userid;
-           
-            ###################################
-            $timeout = C4::AuthExtra::get_timeout($userid,$timeout);            
-            ###################################           
-
             $sessiontype = $session->param('sessiontype') || '';
         }
         if ( ( $query->param('koha_login_context') && ( $q_userid ne $s_userid ) )
@@ -1438,11 +1427,6 @@ sub check_api_auth {
             my $ip       = $session->param('ip');
             my $lasttime = $session->param('lasttime');
             my $userid   = $session->param('id');
-            
-            #############################
-            $timeout = C4::AuthExtra::get_timeout($userid,$timeout);
-            ###############################
-
             if ( $lasttime < time() - $timeout ) {
 
                 # time out
@@ -1703,11 +1687,6 @@ sub check_cookie_auth {
         my $ip       = $session->param('ip');
         my $lasttime = $session->param('lasttime');
         my $userid   = $session->param('id');
-
-        ####################################
-        $timeout = C4::AuthExtra::get_timeout($userid,$timeout); 
-        ####################################
-
         if ( $lasttime < time() - $timeout ) {
 
             # time out
