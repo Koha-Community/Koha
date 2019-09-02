@@ -235,7 +235,7 @@ sub t_itemlevelholdforbidden {
 
 subtest 'Pickup locations' => \&t_pickup_locations;
 sub t_pickup_locations {
-    plan tests => 19;
+    plan tests => 21;
 
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
@@ -343,6 +343,33 @@ sub t_pickup_locations {
 
     ok($availability->available, 'Without query_pickup_locations, biblio is still available.');
     ok(!$availability->note, 'But there are no availability notes, as expected.');
+
+    # Add branch transfer limit to all branches
+    foreach my $library (Koha::Libraries->search({ pickup_location => 1 })->as_list) {
+        C4::Circulation::CreateBranchTransferLimit(
+            $library->branchcode,
+            $item->holdingbranch,
+            $item->effective_itemtype,
+        );
+        C4::Circulation::CreateBranchTransferLimit(
+            $library->branchcode,
+            $item2->holdingbranch,
+            $item2->effective_itemtype,
+        );
+    }
+
+    $expecting = 'Koha::Exceptions::Biblio::NoAvailableItems';
+    $availability = Koha::Biblio::Availability::Hold->new({
+        biblio                  => $biblio,
+        patron                  => $patron,
+        query_pickup_locations  => 1,
+    })->in_opac;
+
+    ok(!$availability->available,
+        'After setting a transfer limit from items\'s holding libraries to all'
+       .'pickup libraries, then the item is not available');
+    is(ref($availability->unavailabilities->{$expecting}), $expecting,
+        'Then there is an availability note that contains valid pickup locations.');
 };
 
 subtest 'Performance test' => \&t_performance_test;
