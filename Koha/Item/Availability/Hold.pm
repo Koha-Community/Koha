@@ -272,6 +272,12 @@ sub common_item_checks {
 
     $self->unavailable($reason) if $reason = $itemcalc->from_another_library;
     if ($self->query_pickup_locations && ($reason = $itemcalc->pickup_locations)) {
+        if (@{$reason->to_libraries} == 0) {
+            $self->unavailable(Koha::Exceptions::Item::CannotBeTransferred->new(
+                from_library => $item->holdingbranch,
+                to_library => undef, # any
+            ));
+        }
         $self->note($reason);
     }
     if ($self->to_branch && ($reason = $itemcalc->transfer_limit($self->to_branch))) {
