@@ -245,7 +245,7 @@ subtest '/availability/biblio' => sub {
                 ->json_hasnt('/0/availability/notes/Biblio::PickupLocations');
 
             subtest 'Test a case where all items have branch transfer limits' => sub {
-                plan tests => 3;
+                plan tests => 4;
                 # Test a case where all items have branch transfer limits
                 C4::Circulation::CreateBranchTransferLimit(
                     $example_limit_branch,
@@ -262,8 +262,43 @@ subtest '/availability/biblio' => sub {
                     ->json_is('/0/availability/notes/Biblio::PickupLocations' => {
                     to_libraries => \@limited_pickup_locations
                 });
-            };
 
+                subtest 'All items are forbidden to transfer to any library' => sub {
+                    plan tests => 7;
+
+                    # Add branch transfer limit to all branches
+                    foreach my $library (Koha::Libraries->search({ pickup_location => 1 })->as_list) {
+                        C4::Circulation::CreateBranchTransferLimit(
+                            $library->branchcode,
+                            $pl_item1->holdingbranch,
+                            $pl_item1->effective_itemtype,
+                        );
+                        C4::Circulation::CreateBranchTransferLimit(
+                            $library->branchcode,
+                            $pl_item2->holdingbranch,
+                            $pl_item2->effective_itemtype,
+                        );
+                        C4::Circulation::CreateBranchTransferLimit(
+                            $library->branchcode,
+                            $pl_item3->holdingbranch,
+                            $pl_item3->effective_itemtype,
+                        );
+                    }
+
+                    $tx = $t->ua->build_tx( GET => $route . '?biblionumber='.$pl_item1->biblionumber.'&query_pickup_locations=1' );
+                    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+                    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+                    $t->request_ok($tx)
+                        ->status_is(200)
+                        ->json_is('/0/availability/available' => Mojo::JSON->false)
+                        ->json_has('/0/item_availabilities/0/availability/unavailabilities/Item::CannotBeTransferred')
+                        ->json_has('/0/item_availabilities/1/availability/unavailabilities/Item::CannotBeTransferred')
+                        ->json_has('/0/item_availabilities/2/availability/unavailabilities/Item::CannotBeTransferred')
+                        ->json_is('/0/availability/notes/Biblio::PickupLocations' => {
+                        to_libraries => []
+                    });
+                };
+            };
         };
 
         $schema->storage->txn_rollback;

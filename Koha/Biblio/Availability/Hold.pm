@@ -228,7 +228,7 @@ sub _item_looper {
     }
     $self->note(Koha::Exceptions::Biblio::PickupLocations->new(
         to_libraries => [sort { $a cmp $b } keys %$pickup_locations]
-    )) if %$pickup_locations;
+    )) if $self->{'query_pickup_locations'};
     return $self;
 }
 
