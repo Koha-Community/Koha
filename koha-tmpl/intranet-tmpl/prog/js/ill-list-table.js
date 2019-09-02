@@ -362,140 +362,143 @@ $(document).ready(function() {
     // Get our data from the API and process it prior to passing
     // it to datatables
     var filterParam = prefilters ? '&' + prefilters : '';
-    var ajax = $.ajax(
-        '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments,requested_partners'
-        + filterParam
-        ).done(function() {
-            var data = JSON.parse(ajax.responseText);
-            // Make a copy, we'll be removing columns next and need
-            // to be able to refer to data that has been removed
-            var dataCopy = $.extend(true, [], data);
-            // Expand columns that need it and create an array
-            // of all column names
-            $.each(dataCopy, function(k, row) {
-                expandExpand(row);
-            });
-
-            // Assemble an array of column definitions for passing
-            // to datatables
-            var colData = [];
-            columns_settings.forEach(function(thisCol) {
-                var colName = thisCol.columnname;
-                // Create the base column object
-                var colObj = $.extend({}, thisCol);
-                colObj.name = colName;
-                colObj.className = colName;
-                colObj.defaultContent = '';
-
-                // We may need to process the data going in this
-                // column, so do it if necessary
-                if (
-                    specialCols.hasOwnProperty(colName) &&
-                    specialCols[colName].hasOwnProperty('func')
-                ) {
-                    var renderArray = [
-                        specialCols[colName].func
-                    ];
-                    if (!specialCols[colName].skipSanitize) {
-                        renderArray.push(
-                            $.fn.dataTable.render.text()
-                        );
-                    }
-
-                    colObj.render = $.fn.dataTable.render.multi(
-                        renderArray
-                    );
-                } else {
-                    colObj.data = colName;
-                    colObj.render = $.fn.dataTable.render.text()
-                }
-                // Make sure properties that aren't present in the API
-                // response are populated with null to avoid Datatables
-                // choking on their absence
-                dataCopy.forEach(function(thisData) {
-                    if (!thisData.hasOwnProperty(colName)) {
-                        thisData[colName] = null;
-                    }
+    // Only fire the request if we're on the ILL list page
+    if (window.location.search.length == 0) {}
+        var ajax = $.ajax(
+            '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments,requested_partners'
+            + filterParam
+            ).done(function() {
+                var data = JSON.parse(ajax.responseText);
+                // Make a copy, we'll be removing columns next and need
+                // to be able to refer to data that has been removed
+                var dataCopy = $.extend(true, [], data);
+                // Expand columns that need it and create an array
+                // of all column names
+                $.each(dataCopy, function(k, row) {
+                    expandExpand(row);
                 });
-                colData.push(colObj);
-            });
 
-            // Initialise the datatable
-            table = KohaTable("ill-requests", {
-                'aoColumnDefs': [
-                    { // Last column shouldn't be sortable or searchable
-                        'aTargets': [ 'actions' ],
-                        'bSortable': false,
-                        'bSearchable': false
-                    },
-                    { // When sorting 'placed', we want to use the
-                        // unformatted column
-                        'aTargets': [ 'placed_formatted'],
-                        'iDataSort': 14
-                    },
-                    { // When sorting 'updated', we want to use the
-                        // unformatted column
-                        'aTargets': [ 'updated_formatted'],
-                        'iDataSort': 16
-                    },
-                    { // When sorting 'completed', we want to use the
-                        // unformatted column
-                        'aTargets': [ 'completed_formatted'],
-                        'iDataSort': 19
+                // Assemble an array of column definitions for passing
+                // to datatables
+                var colData = [];
+                columns_settings.forEach(function(thisCol) {
+                    var colName = thisCol.columnname;
+                    // Create the base column object
+                    var colObj = $.extend({}, thisCol);
+                    colObj.name = colName;
+                    colObj.className = colName;
+                    colObj.defaultContent = '';
+
+                    // We may need to process the data going in this
+                    // column, so do it if necessary
+                    if (
+                        specialCols.hasOwnProperty(colName) &&
+                        specialCols[colName].hasOwnProperty('func')
+                    ) {
+                        var renderArray = [
+                            specialCols[colName].func
+                        ];
+                        if (!specialCols[colName].skipSanitize) {
+                            renderArray.push(
+                                $.fn.dataTable.render.text()
+                            );
+                        }
+
+                        colObj.render = $.fn.dataTable.render.multi(
+                            renderArray
+                        );
+                    } else {
+                        colObj.data = colName;
+                        colObj.render = $.fn.dataTable.render.text()
                     }
-                ],
-                'aaSorting': [[ 16, 'desc' ]], // Default sort, updated descending
-                'processing': true, // Display a message when manipulating
-                'sPaginationType': "full_numbers", // Pagination display
-                'deferRender': true, // Improve performance on big datasets
-                'data': dataCopy,
-                'columns': colData,
-                'originalData': data, // Enable render functions to access
-                                        // our original data
-                'initComplete': function() {
+                    // Make sure properties that aren't present in the API
+                    // response are populated with null to avoid Datatables
+                    // choking on their absence
+                    dataCopy.forEach(function(thisData) {
+                        if (!thisData.hasOwnProperty(colName)) {
+                            thisData[colName] = null;
+                        }
+                    });
+                    colData.push(colObj);
+                });
 
-                    // Prepare any filter elements that need it
-                    for (var el in filterable) {
-                        if (filterable.hasOwnProperty(el)) {
-                            if (filterable[el].hasOwnProperty('prep')) {
-                                filterable[el].prep(dataCopy, data);
-                            }
-                            if (filterable[el].hasOwnProperty('listener')) {
-                                filterable[el].listener();
+                // Initialise the datatable
+                table = KohaTable("ill-requests", {
+                    'aoColumnDefs': [
+                        { // Last column shouldn't be sortable or searchable
+                            'aTargets': [ 'actions' ],
+                            'bSortable': false,
+                            'bSearchable': false
+                        },
+                        { // When sorting 'placed', we want to use the
+                            // unformatted column
+                            'aTargets': [ 'placed_formatted'],
+                            'iDataSort': 14
+                        },
+                        { // When sorting 'updated', we want to use the
+                            // unformatted column
+                            'aTargets': [ 'updated_formatted'],
+                            'iDataSort': 16
+                        },
+                        { // When sorting 'completed', we want to use the
+                            // unformatted column
+                            'aTargets': [ 'completed_formatted'],
+                            'iDataSort': 19
+                        }
+                    ],
+                    'aaSorting': [[ 16, 'desc' ]], // Default sort, updated descending
+                    'processing': true, // Display a message when manipulating
+                    'sPaginationType': "full_numbers", // Pagination display
+                    'deferRender': true, // Improve performance on big datasets
+                    'data': dataCopy,
+                    'columns': colData,
+                    'originalData': data, // Enable render functions to access
+                                            // our original data
+                    'initComplete': function() {
+
+                        // Prepare any filter elements that need it
+                        for (var el in filterable) {
+                            if (filterable.hasOwnProperty(el)) {
+                                if (filterable[el].hasOwnProperty('prep')) {
+                                    filterable[el].prep(dataCopy, data);
+                                }
+                                if (filterable[el].hasOwnProperty('listener')) {
+                                    filterable[el].listener();
+                                }
                             }
                         }
+
+                    }
+                }, columns_settings);
+
+                // Custom date range filtering
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    var placedStart = $('#illfilter_dateplaced_start').datepicker('getDate');
+                    var placedEnd = $('#illfilter_dateplaced_end').datepicker('getDate');
+                    var modifiedStart = $('#illfilter_datemodified_start').datepicker('getDate');
+                    var modifiedEnd = $('#illfilter_datemodified_end').datepicker('getDate');
+                    var rowPlaced = data[14] ? new Date(data[14]) : null;
+                    var rowModified = data[16] ? new Date(data[16]) : null;
+                    var placedPassed = true;
+                    var modifiedPassed = true;
+                    if (placedStart && rowPlaced && rowPlaced < placedStart) {
+                        placedPassed = false
+                    };
+                    if (placedEnd && rowPlaced && rowPlaced > placedEnd) {
+                        placedPassed = false;
+                    }
+                    if (modifiedStart && rowModified && rowModified < modifiedStart) {
+                        modifiedPassed = false
+                    };
+                    if (modifiedEnd && rowModified && rowModified > modifiedEnd) {
+                        modifiedPassed = false;
                     }
 
-                }
-            }, columns_settings);
+                    return placedPassed && modifiedPassed;
 
-            // Custom date range filtering
-            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                var placedStart = $('#illfilter_dateplaced_start').datepicker('getDate');
-                var placedEnd = $('#illfilter_dateplaced_end').datepicker('getDate');
-                var modifiedStart = $('#illfilter_datemodified_start').datepicker('getDate');
-                var modifiedEnd = $('#illfilter_datemodified_end').datepicker('getDate');
-                var rowPlaced = data[14] ? new Date(data[14]) : null;
-                var rowModified = data[16] ? new Date(data[16]) : null;
-                var placedPassed = true;
-                var modifiedPassed = true;
-                if (placedStart && rowPlaced && rowPlaced < placedStart) {
-                    placedPassed = false
-                };
-                if (placedEnd && rowPlaced && rowPlaced > placedEnd) {
-                    placedPassed = false;
-                }
-                if (modifiedStart && rowModified && rowModified < modifiedStart) {
-                    modifiedPassed = false
-                };
-                if (modifiedEnd && rowModified && rowModified > modifiedEnd) {
-                    modifiedPassed = false;
-                }
+                });
 
-                return placedPassed && modifiedPassed;
-
-            });
-
+            }
         }
     );
 
