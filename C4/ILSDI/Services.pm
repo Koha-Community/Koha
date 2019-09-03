@@ -673,9 +673,9 @@ Parameters:
     IP address where the end user request is being placed
   - pickup_location (Optional)
     a branch code indicating the location to which to deliver the item for pickup
-  - needed_before_date (Optional)
-    date after which hold request is no longer needed
-  - pickup_expiry_date (Optional)
+  - start_date (Optional)
+    date after which hold request is no longer needed if the document has not been made available
+  - expiry_date (Optional)
     date after which item returned to shelf if item is not picked up
 
 =cut
@@ -728,6 +728,16 @@ sub HoldTitle {
     return { code => 'libraryNotPickupLocation' } unless $destination->pickup_location;
     return { code => 'cannotBeTransferred' } unless $biblio->can_be_transferred({ to => $destination });
 
+    my $resdate;
+    if ( $cgi->param('start_date') ) {
+        $resdate = $cgi->param('start_date');
+    }
+
+    my $expdate;
+    if ( $cgi->param('expiry_date') ) {
+        $expdate = $cgi->param('expiry_date');
+    }
+
     # Add the reserve
     #    $branch,    $borrowernumber, $biblionumber,
     #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
@@ -735,11 +745,13 @@ sub HoldTitle {
     my $priority= C4::Reserves::CalculatePriority( $biblionumber );
     AddReserve(
         {
-            branch         => $branch,
-            borrowernumber => $borrowernumber,
-            biblionumber   => $biblionumber,
-            priority       => $priority,
-            title          => $title,
+            branch           => $branch,
+            borrowernumber   => $borrowernumber,
+            biblionumber     => $biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            title            => $title,
         }
     );
 
@@ -769,9 +781,9 @@ Parameters:
     an itemnumber
   - pickup_location (Optional)
     a branch code indicating the location to which to deliver the item for pickup
-  - needed_before_date (Optional)
-    date after which hold request is no longer needed
-  - pickup_expiry_date (Optional)
+  - start_date (Optional)
+    date after which hold request is no longer needed if the item has not been made available
+  - expiry_date (Optional)
     date after which item returned to shelf if item is not picked up
 
 =cut
@@ -815,16 +827,28 @@ sub HoldItem {
     my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber, $branch )->{status};
     return { code => $canitembereserved } unless $canitembereserved eq 'OK';
 
+    my $resdate;
+    if ( $cgi->param('start_date') ) {
+        $resdate = $cgi->param('start_date');
+    }
+
+    my $expdate;
+    if ( $cgi->param('expiry_date') ) {
+        $expdate = $cgi->param('expiry_date');
+    }
+
     # Add the reserve
     my $priority = C4::Reserves::CalculatePriority($biblionumber);
     AddReserve(
         {
-            branch         => $branch,
-            borrowernumber => $borrowernumber,
-            biblionumber   => $biblionumber,
-            priority       => $priority,
-            title          => $title,
-            itemnumber     => $itemnumber,
+            branch           => $branch,
+            borrowernumber   => $borrowernumber,
+            biblionumber     => $biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            title            => $title,
+            itemnumber       => $itemnumber,
         }
     );
 

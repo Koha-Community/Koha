@@ -108,8 +108,8 @@ my %optional = (
     'GetPatronStatus'     => [],
     'GetServices'         => [],
     'RenewLoan'           => ['desired_due_date'],
-    'HoldTitle'  => [ 'pickup_location', 'needed_before_date', 'pickup_expiry_date' ],
-    'HoldItem'   => [ 'pickup_location', 'needed_before_date', 'pickup_expiry_date' ],
+    'HoldTitle'  => [ 'pickup_location', 'start_date', 'expiry_date' ],
+    'HoldItem'   => [ 'pickup_location', 'start_date', 'expiry_date' ],
     'CancelHold' => [],
 );
 
