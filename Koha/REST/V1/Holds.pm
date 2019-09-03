@@ -349,6 +349,46 @@ sub resume {
     };
 }
 
+=head3 update_priority
+
+Method that handles modifying a Koha::Hold object
+
+=cut
+
+sub update_priority {
+    my $c = shift->openapi->valid_input or return;
+
+    my $hold_id = $c->validation->param('hold_id');
+    my $hold = Koha::Holds->find($hold_id);
+
+    unless ($hold) {
+        return $c->render(
+            status  => 404,
+            openapi => { error => "Hold not found" }
+        );
+    }
+
+    return try {
+        my $priority = $c->req->json;
+        C4::Reserves::_FixPriority(
+            {
+                reserve_id => $hold_id,
+                rank       => $priority
+            }
+        );
+
+        return $c->render( status => 200, openapi => $priority );
+    }
+    catch {
+        return $c->render(
+            status  => 500,
+            openapi => { error => "Something went wrong. check the logs." }
+        );
+    };
+}
+
+=head2 Internal methods
+
 =head3 _to_api
 
 Helper function that maps unblessed Koha::Hold objects into REST api
