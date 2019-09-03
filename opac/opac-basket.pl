@@ -18,7 +18,6 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
-use List::Util qw/none/; # well just one :)
 
 use C4::Koha;
 use C4::Biblio;
@@ -100,12 +99,14 @@ foreach my $biblionumber ( @bibs ) {
     # copy the visible ones into the items array.
     my @items;
     foreach my $item (@all_items) {
-        if ( none { $item->{itemnumber} ne $_ } @hidden_items ) {
+
+            # next if item is hidden
+            next  if  grep  { $item->{itemnumber} eq $_  } @hidden_items ;
+
             my $reserve_status = C4::Reserves::GetReserveStatus($item->{itemnumber});
             if( $reserve_status eq "Waiting"){ $item->{'waiting'} = 1; }
             if( $reserve_status eq "Reserved"){ $item->{'onhold'} = 1; }
             push @items, $item;
-        }
     }
 
     my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
