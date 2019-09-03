@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -401,6 +401,92 @@ subtest 'suspend and resume tests' => sub {
     $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
       ->status_is( 400, 'Cannot suspend waiting hold' )
       ->json_is( '/error', 'Found hold cannot be suspended. Status=T' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'PUT /holds/{hold_id}/priority tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $patron_np = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 0 } } );
+    $patron_np->set_password( { password => $password, skip_validation => 1 } );
+    my $userid_np = $patron_np->userid;
+
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { flags => 0 } } );
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $patron->userid;
+    $builder->build(
+        {
+            source => 'UserPermission',
+            value  => {
+                borrowernumber => $patron->borrowernumber,
+                module_bit     => 6,
+                code           => 'modify_holds_priority',
+            },
+        }
+    );
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $hold_1 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                suspend       => 0,
+                suspend_until => undef,
+                waitingdate   => undef,
+                biblionumber  => $biblio->biblionumber,
+                priority      => 1
+            }
+        }
+    );
+    my $hold_2 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                suspend       => 0,
+                suspend_until => undef,
+                waitingdate   => undef,
+                biblionumber  => $biblio->biblionumber,
+                priority      => 2
+            }
+        }
+    );
+    my $hold_3 = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                suspend       => 0,
+                suspend_until => undef,
+                waitingdate   => undef,
+                biblionumber  => $biblio->biblionumber,
+                priority      => 3
+            }
+        }
+    );
+
+    $t->put_ok( "//$userid_np:$password@/api/v1/holds/"
+          . $hold_3->id
+          . "/priority" => json => 1 )->status_is(403);
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold_3->id
+          . "/priority" => json => 1 )->status_is(200)->json_is(1);
+
+    is( $hold_1->discard_changes->priority, 2, 'Priority adjusted correctly' );
+    is( $hold_2->discard_changes->priority, 3, 'Priority adjusted correctly' );
+    is( $hold_3->discard_changes->priority, 1, 'Priority adjusted correctly' );
 
     $schema->storage->txn_rollback;
 };
