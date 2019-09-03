@@ -35,27 +35,20 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder     = t::lib::TestBuilder->new;
-my $biblioitem  = $builder->build( { source => 'Biblioitem' } );
 my $library     = $builder->build( { source => 'Branch' } );
 my $nb_of_items = Koha::Items->search->count;
-my $new_item_1  = Koha::Item->new(
-    {   biblionumber     => $biblioitem->{biblionumber},
-        biblioitemnumber => $biblioitem->{biblioitemnumber},
-        homebranch       => $library->{branchcode},
-        holdingbranch    => $library->{branchcode},
-        barcode          => "a_barcode_for_t",
-        itype            => 'BK',
-    }
-)->store;
-my $new_item_2 = Koha::Item->new(
-    {   biblionumber     => $biblioitem->{biblionumber},
-        biblioitemnumber => $biblioitem->{biblioitemnumber},
-        homebranch       => $library->{branchcode},
-        holdingbranch    => $library->{branchcode},
-        barcode          => "another_bc_for_t",
-        itype            => 'BK',
-    }
-)->store;
+my $biblio      = $builder->build_sample_biblio();
+my $new_item_1   = $builder->build_sample_item({
+    biblionumber => $biblio->biblionumber,
+    homebranch       => $library->{branchcode},
+    holdingbranch    => $library->{branchcode},
+});
+my $new_item_2   = $builder->build_sample_item({
+    biblionumber => $biblio->biblionumber,
+    homebranch       => $library->{branchcode},
+    holdingbranch    => $library->{branchcode},
+});
+
 
 t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
@@ -145,16 +138,14 @@ subtest 'can_be_transferred' => sub {
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
 
+    my $biblio   = $builder->build_sample_biblio();
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $item  = Koha::Item->new({
-        biblionumber     => $biblioitem->{biblionumber},
-        biblioitemnumber => $biblioitem->{biblioitemnumber},
+    my $item  = $builder->build_sample_item({
+        biblionumber     => $biblio->biblionumber,
         homebranch       => $library1->branchcode,
         holdingbranch    => $library1->branchcode,
-        itype            => 'test',
-        barcode          => "newbarcode",
-    })->store;
+    });
     $nb_of_items++;
 
     is(Koha::Item::Transfer::Limits->search({
