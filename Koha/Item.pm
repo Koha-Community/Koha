@@ -139,9 +139,9 @@ Return holds attached to an item, optionally accept a hashref of params to pass 
 
 sub holds {
     my ( $self,$params ) = @_;
-    my $transfer_rs = $self->_result->reserves->search($params);
-    return unless $transfer_rs->count;
-    return Koha::Holds->_new_from_dbic( $transfer_rs );
+    my $holds_rs = $self->_result->reserves->search($params);
+    return unless $holds_rs->count;
+    return Koha::Holds->_new_from_dbic( $holds_rs );
 }
 
 =head3 get_transfer
