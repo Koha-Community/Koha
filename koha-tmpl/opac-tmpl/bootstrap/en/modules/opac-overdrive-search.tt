@@ -125,7 +125,7 @@ function search( offset ) {
             results.push( prod.title );
             if ( prod.subtitle ) results.push( ', ', prod.subtitle );
             results.push( '</a>' );
-            results.push( '<p>' + _("by") + ' ', prod.primaryCreator.name, '</p>' );
+            if ( prod.primaryCreator ) results.push( '<p>' + _("by") + ' ', prod.primaryCreator.name, '</p>' );
             results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.mediaType, '</span>' );
 
             if ( prod.starRating ) {
