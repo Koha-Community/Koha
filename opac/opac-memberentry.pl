@@ -194,6 +194,9 @@ if ( $action eq 'create' ) {
                       C4::Context->preference('KohaAdminEmailAddress'),
                 }
             );
+            my $num_letters_attempted = C4::Letters::SendQueuedMessages( {
+                    letter_code => 'OPAC_REG_VERIFY'
+                    } );
         }
         else {
             ( $template, $borrowernumber, $cookie ) = get_template_and_user(
