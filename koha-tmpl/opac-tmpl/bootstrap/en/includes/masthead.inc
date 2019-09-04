@@ -4,7 +4,7 @@
 [% USE Categories %]
 [% USE KohaNews %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
+[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => news_lang, library => branchcode, blocktitle => 0 ) %]
 <div id="wrap">
     <div id="header-region" class="noprint">
         <div class="navbar navbar-inverse navbar-static-top">
@@ -145,7 +145,15 @@
             </div> <!-- /navbar-inner -->
         </div> <!-- /navbar -->
 
-        [% PROCESS koha_news_block news => KohaNews.get( location => "opacheader", lang => news_lang, library => branchcode, blocktitle => 0 ) %]
+        [% IF ( OpacHeader ) %]
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div id="opacheader">
+                        [% PROCESS koha_news_block news => OpacHeader %]
+                    </div>
+                </div>
+            </div>
+        [% END %]
 
     </div> <!-- / header-region -->
 
