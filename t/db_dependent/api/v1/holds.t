@@ -40,33 +40,28 @@ my $builder = t::lib::TestBuilder->new();
 
 $schema->storage->txn_begin;
 
-# FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
-# this affects the other REST api tests
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-$ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
-my $tx;
 
 my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
+# Generic password for everyone
+my $password = 'thePassword123';
+
 # User without any permissions
-my $nopermission = $builder->build({
-    source => 'Borrower',
+my $nopermission = $builder->build_object({
+    class => 'Koha::Patrons',
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
         flags        => 0
     }
 });
-my $session_nopermission = C4::Auth::get_session('');
-$session_nopermission->param('number', $nopermission->{ borrowernumber });
-$session_nopermission->param('id', $nopermission->{ userid });
-$session_nopermission->param('ip', '127.0.0.1');
-$session_nopermission->param('lasttime', time());
-$session_nopermission->flush;
+$nopermission->set_password( { password => $password, skip_validation => 1 } );
+my $nopermission_userid = $nopermission->userid;
 
 my $patron_1 = $builder->build_object(
     {
@@ -79,6 +74,8 @@ my $patron_1 = $builder->build_object(
         }
     }
 );
+$patron_1->set_password( { password => $password, skip_validation => 1 } );
+my $userid_1 = $patron_1->userid;
 
 my $patron_2 = $builder->build_object(
     {
@@ -91,6 +88,8 @@ my $patron_2 = $builder->build_object(
         }
     }
 );
+$patron_2->set_password( { password => $password, skip_validation => 1 } );
+my $userid_2 = $patron_2->userid;
 
 my $patron_3 = $builder->build_object(
     {
@@ -103,36 +102,14 @@ my $patron_3 = $builder->build_object(
         }
     }
 );
+$patron_3->set_password( { password => $password, skip_validation => 1 } );
+my $userid_3 = $patron_3->userid;
 
-# Get sessions
-my $session = C4::Auth::get_session('');
-$session->param('number', $patron_1->borrowernumber);
-$session->param('id', $patron_1->userid);
-$session->param('ip', '127.0.0.1');
-$session->param('lasttime', time());
-$session->flush;
-my $session2 = C4::Auth::get_session('');
-$session2->param('number', $patron_2->borrowernumber);
-$session2->param('id', $patron_2->userid);
-$session2->param('ip', '127.0.0.1');
-$session2->param('lasttime', time());
-$session2->flush;
-my $session3 = C4::Auth::get_session('');
-$session3->param('number', $patron_3->borrowernumber);
-$session3->param('id', $patron_3->userid);
-$session3->param('ip', '127.0.0.1');
-$session3->param('lasttime', time());
-$session3->flush;
+my $biblio_1 = $builder->build_sample_biblio;
+my $item_1   = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber, itype => $itemtype });
 
-my $biblionumber = create_biblio('RESTful Web APIs');
-my $item = create_item($biblionumber, 'TEST000001');
-my $itemnumber = $item->{itemnumber};
-$item->{itype} = $itemtype;
-C4::Items::ModItem($item, $biblionumber, $itemnumber);
-
-my $biblionumber2 = create_biblio('RESTful Web APIs');
-my $item2 = create_item($biblionumber2, 'TEST000002');
-my $itemnumber2 = $item2->{itemnumber};
+my $biblio_2 = $builder->build_sample_biblio;
+my $item_2   = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber, itype => $itemtype });
 
 my $dbh = C4::Context->dbh;
 $dbh->do('DELETE FROM reserves');
@@ -143,19 +120,19 @@ $dbh->do('DELETE FROM issuingrules');
     }, {}, '*', '*', '*', 1);
 
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $patron_1->borrowernumber,
-    $biblionumber, undef, 1, undef, undef, undef, '', $itemnumber);
+    $biblio_1->biblionumber, undef, 1, undef, undef, undef, '', $item_1->itemnumber);
 
 # Add another reserve to be able to change first reserve's rank
 my $reserve_id2 = C4::Reserves::AddReserve($branchcode, $patron_2->borrowernumber,
-    $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber);
+    $biblio_1->biblionumber, undef, 2, undef, undef, undef, '', $item_1->itemnumber);
 
 my $suspended_until = DateTime->now->add(days => 10)->truncate( to => 'day' );
 my $expiration_date = DateTime->now->add(days => 10)->truncate( to => 'day' );
 
 my $post_data = {
     patron_id => int($patron_1->borrowernumber),
-    biblio_id => int($biblionumber),
-    item_id => int($itemnumber),
+    biblio_id => int($biblio_1->biblionumber),
+    item_id => int($item_1->itemnumber),
     pickup_library_id => $branchcode,
     expiration_date => output_pref({ dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 }),
     priority => 2,
@@ -177,29 +154,23 @@ subtest "Test endpoints without authentication" => sub {
       ->status_is(401);
 };
 
-
 subtest "Test endpoints without permission" => sub {
+
     plan tests => 10;
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?patron_id=" . $patron_1->borrowernumber);
-    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
-    $t->request_ok($tx) # no permission
+    $t->get_ok( "//$nopermission_userid:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber ) # no permission
       ->status_is(403);
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?patron_id=" . $patron_1->borrowernumber);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx) # reserveforothers permission
+
+    $t->get_ok( "//$userid_3:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )    # no permission
       ->status_is(403);
-    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data );
-    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
-    $t->request_ok($tx) # no permission
+
+    $t->post_ok( "//$nopermission_userid:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403);
-    $tx = $t->ua->build_tx(PUT => "/api/v1/holds/0" => json => $put_data );
-    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
-    $t->request_ok($tx) # no permission
+
+    $t->put_ok( "//$nopermission_userid:$password@/api/v1/holds/0" => json => $put_data )
       ->status_is(403);
-    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/0");
-    $tx->req->cookies({name => 'CGISESSID', value => $session_nopermission->id});
-    $t->request_ok($tx) # no permission
+
+    $t->delete_ok( "//$nopermission_userid:$password@/api/v1/holds/0" )
       ->status_is(403);
 };
 
@@ -207,90 +178,66 @@ subtest "Test endpoints with permission" => sub {
 
     plan tests => 44;
 
-    $tx = $t->ua->build_tx(GET => '/api/v1/holds');
-    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
       ->json_has('/0')
       ->json_has('/1')
       ->json_hasnt('/2');
 
-    $tx = $t->ua->build_tx(GET => '/api/v1/holds?priority=2');
-    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid_1:$password@/api/v1/holds?priority=2" )
       ->status_is(200)
       ->json_is('/0/patron_id', $patron_2->borrowernumber)
       ->json_hasnt('/1');
 
-    $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id" => json => $put_data);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => $put_data )
       ->status_is(200)
       ->json_is( '/hold_id', $reserve_id )
       ->json_is( '/suspended_until', output_pref({ dt => $suspended_until, dateformat => 'rfc3339' }) )
       ->json_is( '/priority', 2 );
 
-    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id");
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
       ->status_is(200);
 
-    $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id" => json => $put_data);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->put_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" => json => $put_data )
       ->status_is(404)
       ->json_has('/error');
 
-    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id");
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
       ->status_is(404)
       ->json_has('/error');
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?patron_id=" . $patron_1->borrowernumber);
-    $tx->req->cookies({name => 'CGISESSID', value => $session2->id}); # get with borrowers flag
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid_2:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )
       ->status_is(200)
       ->json_is([]);
 
     my $inexisting_borrowernumber = $patron_2->borrowernumber * 2;
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?patron_id=$inexisting_borrowernumber");
-    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid_1:$password@/api/v1/holds?patron_id=$inexisting_borrowernumber")
       ->status_is(200)
       ->json_is([]);
 
-    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id2");
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id2" )
       ->status_is(200);
 
-    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
       ->json_has('/hold_id');
+    # Get id from response
     $reserve_id = $t->tx->res->json->{hold_id};
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?patron_id=" . $patron_1->borrowernumber);
-    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid_1:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )
       ->status_is(200)
       ->json_is('/0/hold_id', $reserve_id)
       ->json_is('/0/expiration_date', output_pref({ dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 }))
       ->json_is('/0/pickup_library_id', $branchcode);
 
-    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
       ->json_like('/error', qr/itemAlreadyOnHold/);
 
-    $post_data->{biblionumber} = int($biblionumber2);
-    $post_data->{itemnumber} = int($itemnumber2);
-    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $post_data->{biblionumber} = int($biblio_2->biblionumber);
+    $post_data->{itemnumber}   = int($item_2->itemnumber);
+
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(403)
       ->json_like('/error', qr/itemAlreadyOnHold/);
 };
@@ -300,27 +247,21 @@ subtest 'Reserves with itemtype' => sub {
 
     my $post_data = {
         patron_id => int($patron_1->borrowernumber),
-        biblio_id => int($biblionumber),
+        biblio_id => int($biblio_1->biblionumber),
         pickup_library_id => $branchcode,
         item_type => $itemtype,
     };
 
-    $tx = $t->ua->build_tx(DELETE => "/api/v1/holds/$reserve_id");
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
       ->status_is(200);
 
-    $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
-    $tx->req->cookies({name => 'CGISESSID', value => $session3->id});
-    $t->request_ok($tx)
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
       ->json_has('/hold_id');
 
     $reserve_id = $t->tx->res->json->{hold_id};
 
-    $tx = $t->ua->build_tx(GET => "/api/v1/holds?patron_id=" . $patron_1->borrowernumber);
-    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
-    $t->request_ok($tx)
+    $t->get_ok( "//$userid_1:$password@/api/v1/holds?patron_id=" . $patron_1->borrowernumber )
       ->status_is(200)
       ->json_is('/0/hold_id', $reserve_id)
       ->json_is('/0/item_type', $itemtype);
@@ -490,30 +431,3 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-sub create_biblio {
-    my ($title) = @_;
-
-    my $biblio = Koha::Biblio->new( { title => $title } )->store;
-    my $biblioitem = Koha::Biblioitem->new({biblionumber => $biblio->biblionumber})->store;
-
-    return $biblio->biblionumber;
-}
-
-sub create_item {
-    my ( $biblionumber, $barcode ) = @_;
-
-    Koha::Items->search( { barcode => $barcode } )->delete;
-    my $builder = t::lib::TestBuilder->new;
-    my $item    = $builder->build(
-        {
-            source => 'Item',
-            value  => {
-                biblionumber     => $biblionumber,
-                barcode          => $barcode,
-            }
-        }
-    );
-
-    return $item;
-}
