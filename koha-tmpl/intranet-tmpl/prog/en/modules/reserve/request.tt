@@ -73,7 +73,7 @@
                 <h1>Confirm holds</h1>
             [% END %]
 
-            [% UNLESS patron OR patron.borrowernumber OR noitems %]
+            [% UNLESS club OR patron OR patron.borrowernumber OR noitems %]
                 [% IF ( messageborrower ) %]
                     <div class="dialog alert">
                         <h3>Patron not found</h3>
@@ -81,30 +81,224 @@
                     </div>
                 [% END %]
 
-                <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
-                    <fieldset id="circ_holds_selectborrower" class="brief">
-                        [% UNLESS borrowers %]
-                            <label for="patron">Patron: </label>
-                            <div class="hint">Enter patron card number or partial name:</div>
-                            <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
-                            <input type="submit" value="Search" />
-                            [% IF multi_hold %]
-                                <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                            [% ELSE %]
-                                <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                [% IF ( messageclub ) %]
+                    <div class="dialog alert">
+                        <h3>Club not found</h3>
+                        <p>No club with this name, please, try another</p>
+                    </div>
+                [% END %]
+                <fieldset class="brief">
+                    <label>Seach Patrons or clubs</label>
+                    <div id="circ_holds_select">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation"><a href="#holds_patronsearch_pane" aria-controls="holds_patronsearch_pane" role="tab" data-toggle="tab">Patrons</a></li>
+                            <li role="presentation"><a href="#holds_clubsearch_pane" aria-controls="holds_clubsearch_pane" role="tab" data-toggle="tab">Clubs</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane" id="holds_patronsearch_pane">
+                                <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                                    <div class="hint">Enter patron card number or partial name:</div>
+                                    <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
+                                    <input type="submit" value="Search" />
+                                    [% IF multi_hold %]
+                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                    [% ELSE %]
+                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                    [% END %]
+
+                                    [% IF ( multi_hold ) %]
+                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                    [% END %]
+                                </form> <!-- /#holds_patronsearch -->
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="holds_clubsearch_pane">
+                                <form  id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                                    <div class="hint">Enter club id or partial name:</div>
+                                    <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
+                                    <input type="submit" value="Search" />
+                                    [% IF multi_hold %]
+                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                    [% ELSE %]
+                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                    [% END %]
+
+                                    [% IF ( multi_hold ) %]
+                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                    [% END %]
+                                </form> <!-- /#holds_patronsearch -->
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+                        [% IF borrowers %]
+                            [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
+                        [% ELSIF clubs %]
+                            [% INCLUDE 'clubs-table.inc' destination = "holds" %]
+                        [% END %]
+                    </p>
+                </fieldset>
+            [% ELSIF club %]
+                <div class="dialog alert hide clubalert">
+                </div>
+                <fieldset class="rows">
+                    <legend>Hold details</legend>
+                    <form action="/api/v1/clubs/[% club.id | html %]/holds" method="post" name="form" id="club-request-form">
+
+                        [% IF ( multi_hold ) %]
+                            <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                            <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
+                            <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
+                            <input type="hidden" name="request" value="any"/>
+                            [% FOREACH biblioloo IN biblioloop %]
+                                <input type="hidden" name="title_[% biblioloo.biblionumber | html %]" value="[% biblioloo.title | html %]"/>
+                                <input type="hidden" name="rank_[% biblioloo.biblionumber | html %]" value="[% biblioloo.rank | html %]"/>
                             [% END %]
                         [% ELSE %]
-                            [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
+                            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                            <input type="hidden" name="title" value="[% biblio.title | html %]" />
+                            <input type="hidden" name="rank-request" value="[% fixedRank | html %]" />
+                        [% END # /IF multi_hold %]
+                        <ol>
+                            <li>
+                                <span class="label">Club: </span> [% club.name | html %]
+                            </li>
+                            <li>
+                                <span class="label">Description: </span> [% club.description | html %]
+                            </li>
+                            <li>
+                                <label for="pickup">Pickup at:</label>
+                                <select name="pickup" size="1" id="pickup">
+                                    [% PROCESS options_for_libraries libraries => Branches.all({ selected => club.branchcode, search_params => { pickup_location => 1 } }) %]
+                                </select>
+                            </li>
+                        </ol>
+                        <h2 style="padding: 0 1em;">Members</h2>
+                        <ol>
+                            [% FOREACH member IN members %]
+                                [% SET patron = member.patron %]
+                                <li style="padding: 0.5em 1em;">
+                                    <div><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a></div>
+                                    [% IF member.exceeded_maxreserves %]
+                                        <div>
+                                            <i class="fa fa-error"></i>
+                                            <strong>Too many holds: </strong> Patron can only place a maximum of [% maxreserves | html %] total holds.
+                                        </div>
+                                    [% END %]
+                                    [% IF ( member.expiry ) %]
+                                        <div>
+                                            <i class="fa fa-warning"></i>
+                                            <strong>Account has expired</strong>
+                                        </div>
+                                    [% END %]
+                                    [% IF patron.is_debarred %]
+                                        <div>
+                                            <i class="fa fa-warning"></i>
+                                            <strong>Patron has restrictions</strong>
+                                        </div>
+                                    [% END %]
+                                    [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
+                                        <div>
+                                            <i class="fa fa-warning"></i>
+                                            <strong>Patron has outstanding fines: [% member.amount_outstanding | $Price %]</strong>
+                                        </div>
+                                    [% END %]
+
+                                    [% IF ( member.diffbranch ) %]
+                                        <div>
+                                            <i class="fa fa-warning"></i>
+                                            <strong>Pickup library is different.</strong> Patron's home library: ([% Branches.GetName(patron.branchcode) | html %] / [% patron.branchcode | html %] )
+                                        </div>
+                                    [% END %]
+                                </li>
+                            [% END %]
+                        </ol>
+                        [% UNLESS ( multi_hold ) %]
+                            <fieldset class="action">
+                                <input type="submit" value="Place hold" />
+                            </fieldset>
+                        [% ELSE %]
+                            <table id="requesttitles">
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Title</th>
+                                    [% UNLESS ( item_level_itypes ) %]
+                                        <th>Item type</th>
+                                    [% END %]
+                                    <th>Priority</th>
+                                    <th>Information</th>
+                                </tr>
+                                [% FOREACH biblioloo IN biblioloop %]
+                                    [% IF ( biblioloo.warn ) %]
+                                        <tr class="onissue">
+                                    [% ELSE %]
+                                        <tr>
+                                    [% END %]
+                                        <td>
+                                            [% UNLESS ( biblioloo.warn ) %]
+                                                    <input class="multi_hold_item_checkbox" type="checkbox" checked="checked" title="[% biblioloo.biblionumber | html %]"/>
+                                                </td>
+                                            [% END %]
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber | uri %]">[% biblioloo.title | html %]</a>
+                                                </li>
+                                                [% IF ( biblioloo.publicationyear ) %]
+                                                    <li>
+                                                        <span class="label">Publication year:</span> [% biblioloo.publicationyear | html %]
+                                                    </li>
+                                                [% END %]
+                                            </ul>
+                                            [% IF ( biblioloo.warn ) %]
+                                                <span class="not_holdable" title="[% biblioloo.biblionumber | html %]"></span>
+                                            [% END %]
+                                        </td>
+                                        [% UNLESS ( item_level_itypes ) %]
+                                            <td>
+                                                <img src="[% biblioloo.imageurl | html %]" alt="[% biblioloo.itypename | html %]" title="[% biblioloo.itypename | html %]" />
+                                            </td>
+                                        [% END %]
+                                        <td>[% biblioloo.rank | html %]</td>
+                                        <td>
+                                            [% IF ( biblioloo.checked_previously ) %]
+                                                <span>Patron has previously checked out this title</span><br/>
+                                            [% END %]
+                                            [% IF ( biblioloo.alreadyres ) %]
+                                                <ul>
+                                            [% ELSE %]
+                                                [% IF ( biblioloo.none_avail ) %]
+                                                    <ul>
+                                                [% END %]
+                                            [% END %]
+
+                                            [% IF ( biblioloo.alreadyres ) %]
+                                                <li>
+                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a>
+                                                    <strong>already has a hold</strong> on this item
+                                                </li>
+                                            [% END %]
+                                            [% IF ( biblioloo.none_avail ) %]
+                                                <li> <strong>No items are available</strong> to be placed on hold</li>
+                                            [% END %]
+
+                                            [% IF ( biblioloo.alreadyres ) %]
+                                                </ul>
+                                            [% ELSE %]
+                                                [% IF ( biblioloo.none_avail ) %]
+                                                    </ul>
+                                                [% END %]
+                                            [% END %]
+                                        </td>
+                                    </tr>
+                                [% END # /FOREACH biblioloo %]
+                            </table> <!-- /#requesttitles -->
                         [% END %]
-                    </fieldset> <!-- /#circ_holds_selectborrower -->
-
-                    [% IF ( multi_hold ) %]
-                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                    [% END %]
-                </form> <!-- /#holds_patronsearch -->
-
+                    </form>
+                </fieldset>
             [% ELSIF NOT noitems # /UNLESS patron %]
 
                 [% IF ( checked_previously && !multi_hold ) %]
@@ -183,7 +377,7 @@
 
                 <fieldset class="rows">
                     <legend>Hold details</legend>
-                    <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
+                    <form action="/api/v1/holds" method="post" name="form" id="hold-request-form">
 
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                         <input type="hidden" name="type" value="str8" />
@@ -752,6 +946,11 @@
         columns_settings_borrowers_table = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         $(document).ready(function() {
+            [% UNLESS clubs %]
+                $('#circ_holds_select').tabs({active: 0});
+            [% ELSE %]
+                $('#circ_holds_select').tabs({active: 1});
+            [% END %]
             function ToggleHoldsToPlace() {
                 if ( $("#requestany").prop('checked') ) {
                     $("#holds_to_place_count").prop('disabled', false);
@@ -791,6 +990,31 @@
             $(".dataTables_filter label").css({
                 "width":"auto",
                 "margin-right":"0em"
+            });
+
+            $("#club-request-form").on("submit", function() {
+                let $t = $(this);
+                $('.clubalert').addClass('hide');
+                let options = {
+                    url: $t.attr('action'),
+                    method: $t.attr('method').toUpperCase(),
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        biblio_id: biblionumber,
+                        pickup_library_id: $('select[name="pickup"]').val()
+                    })
+                };
+                if($('input[name="checkitem"]:checked').length)
+                    options.data.item_id = $('input[name="checkitem"]:checked').val();
+                $.ajax(options)
+                    .then(function(result) {
+                        let url = 'request.pl?biblionumber='+biblionumber+($('input[name="multi_hold"]').length && $('input[name="multi_hold"]').val()?'&multi_hold=1':'');
+                        document.location = url;
+                    })
+                    .fail(function(err) {
+                        $('.clubalert').removeClass('hide').html(err.responseJSON.error);
+                    });
+                return false;
             });
 
             [% UNLESS ( multi_hold ) %]

@@ -53,6 +53,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Clubs;
 
 my $dbh = C4::Context->dbh;
 my $input = new CGI;
@@ -75,8 +76,12 @@ my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_l
 my $findborrower = $input->param('findborrower');
 $findborrower = '' unless defined $findborrower;
 $findborrower =~ s|,| |g;
+my $findclub = $input->param('findclub');
+$findclub = '' unless defined $findclub && !$findborrower;
 my $borrowernumber_hold = $input->param('borrowernumber') || '';
+my $club_hold = $input->param('club')||'';
 my $messageborrower;
+my $messageclub;
 my $warnings;
 my $messages;
 my $exceeded_maxreserves;
@@ -131,6 +136,25 @@ if ($findborrower) {
             $template->param( borrowers => $borrowers );
         } else {
             $messageborrower = "'$findborrower'";
+        }
+    }
+}
+
+if($findclub) {
+    my $club = Koha::Clubs->find( { name => $findclub } );
+    if( $club ) {
+        $club_hold = $club->id;
+    } else {
+        my @clubs = Koha::Clubs->search( [
+            { name => { like => '%'.$findclub.'%' } },
+            { description => { like => '%'.$findclub.'%' } }
+        ] );
+        if( scalar @clubs == 1 ) {
+            $club_hold = $clubs[0]->id;
+        } elsif ( @clubs ) {
+            $template->param( clubs => \@clubs );
+        } else {
+            $messageclub = "'$findclub'";
         }
     }
 }
@@ -203,7 +227,54 @@ if ($borrowernumber_hold && !$action) {
     );
 }
 
-$template->param( messageborrower => $messageborrower );
+if ($club_hold && !$borrowernumber_hold && !$action) {
+    my $club = Koha::Clubs->find($club_hold);
+
+    my $enrollments = $club->club_enrollments;
+
+    my $maxreserves = C4::Context->preference('maxreserves');
+    my $new_reserves_count = scalar( @biblionumbers );
+
+    my @members;
+
+    while(my $enrollment = $enrollments->next) {
+        next if $enrollment->is_canceled;
+        my $member = { patron => $enrollment->patron->unblessed };
+        my $reserves_count = $enrollment->patron->holds->count;
+        if ( $maxreserves
+            && ( $reserves_count + $new_reserves_count > $maxreserves ) )
+        {
+            $member->{new_reserves_allowed} = $maxreserves - $reserves_count > 0
+                ? $maxreserves - $reserves_count
+                : 0;
+            $member->{exceeded_maxreserves} = 1;
+        }
+        my $expiry_date = $enrollment->patron->dateexpiry;
+        $member->{expiry} = 0; # flag set if patron account has expired
+        if ($expiry_date and $expiry_date ne '0000-00-00' and
+            Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
+            $member->{expiry} = 1;
+        }
+        $member->{amount_outstanding} = $enrollment->patron->account->balance;
+        if ( $enrollment->patron->branchcode ne C4::Context->userenv->{'branch'} ) {
+            $member->{diffbranch} = 1;
+        }
+
+        push @members, $member;
+    }
+
+    $template->param(
+        club                => $club,
+        members             => \@members,
+        maxreserves         => $maxreserves,
+        new_reserves_count  => $new_reserves_count
+    );
+}
+
+$template->param(
+    messageborrower => $messageborrower,
+    messageclub     => $messageclub
+);
 
 # FIXME launch another time GetMember perhaps until (Joubu: Why?)
 my $patron = Koha::Patrons->find( $borrowernumber_hold );

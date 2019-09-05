@@ -24,6 +24,8 @@ use Carp;
 use Koha::Database;
 use Koha::Clubs;
 use Koha::Patrons;
+use Koha::DateUtils qw(dt_from_string);
+use DateTime;
 
 use base qw(Koha::Object);
 
@@ -69,6 +71,20 @@ sub club {
 sub patron {
     my ( $self ) = @_;
     return scalar Koha::Patrons->find( $self->borrowernumber() );
+}
+
+=head3 is_canceled
+Determines if enrollment is canceled
+=cut
+
+sub is_canceled {
+    my ( $self ) = @_;
+
+    return 0 unless $self->date_canceled;
+    my $today = dt_from_string;
+    my $date_canceled = dt_from_string( $self->date_canceled );
+
+    return DateTime->compare($date_canceled, $today) < 1;
 }
 
 =head3 type

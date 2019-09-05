@@ -203,6 +203,14 @@ if($cgi->cookie("holdfor")){
     );
 }
 
+if($cgi->cookie("holdforclub")){
+    my $holdfor_club = Koha::Clubs->find( $cgi->cookie("holdforclub") );
+    $template->param(
+        holdforclub => $cgi->cookie("holdforclub"),
+        holdforclub_name => $holdfor_club->name,
+    );
+}
+
 # get biblionumbers stored in the cart
 my @cart_list;
 
