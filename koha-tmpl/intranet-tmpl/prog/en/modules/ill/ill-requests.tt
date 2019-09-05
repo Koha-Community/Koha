@@ -262,6 +262,16 @@
                     expandExpand(row);
                 });
 
+                //Not all types have all core columns, mark them 'N/A' if not applied
+                //Otherwise we get errors on table load
+                dataCopy.forEach(function(thisRow){
+                    core.forEach(function(thisCore){
+                        if ( typeof thisRow[thisCore] == 'undefined' ){
+                          thisRow[thisCore] = 'N/A';
+                        }
+                    });
+                });
+
                 // Assemble an array of column definitions for passing
                 // to datatables
                 var colData = [];
