@@ -28,6 +28,39 @@
             <div class="row">
 
                 <div class="col-sm-6">
+                    <fieldset class="rows">
+                        <legend>Items for purchase</legend>
+                            Please select items from below to add to this transaction:
+                            [% SET invoice_types = AuthorisedValues.GetAuthValueDropbox('MANUAL_INV') %]
+                            [% IF invoice_types %]
+                            <table id="invoices">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th>Cost</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            [% FOREACH invoice IN invoice_types %]
+                                <tr>
+                                    <td>[% invoice.authorised_value | html %]</td>
+                                    <td>[% invoice.lib_opac | html %]</td>
+                                    <td>[% invoice.lib | html %]</td>
+                                    <td>
+                                        <button class="add_button" data-invoice-code="[% invoice.lib_opac %]" data-invoice-title="[% invoice.authorised_value | html %]" data-invoice-price="[% invoice.lib | html %]"><i class="fa fa-plus"></i> Add</button>
+                                    </td>
+                                </tr>
+                            [% END %]
+                            </table>
+                            [% ELSE %]
+                            You have no manual invoice types defined
+                            [% END %]
+                    </fieldset>
+                </div>
+
+                <div class="col-sm-6">
 
                     <fieldset class="rows">
                         <legend>This sale</legend>
@@ -99,38 +132,6 @@
                             [% END %]
                         </ol>
 
-                    </fieldset>
-                </div>
-
-                <div class="col-sm-6">
-                    <fieldset class="rows">
-                        <legend>Items for purchase</legend>
-                            [% SET invoice_types = AuthorisedValues.GetAuthValueDropbox('MANUAL_INV') %]
-                            [% IF invoice_types %]
-                            <table id="invoices">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            [% FOREACH invoice IN invoice_types %]
-                                <tr>
-                                    <td>[% invoice.authorised_value | html %]</td>
-                                    <td>[% invoice.lib_opac | html %]</td>
-                                    <td>[% invoice.lib | html %]</td>
-                                    <td>
-                                        <button class="add_button" data-invoice-code="[% invoice.lib_opac %]" data-invoice-title="[% invoice.authorised_value | html %]" data-invoice-price="[% invoice.lib | html %]"><i class="fa fa-plus"></i> Add</button>
-                                    </td>
-                                </tr>
-                            [% END %]
-                            </table>
-                            [% ELSE %]
-                            You have no manual invoice types defined
-                            [% END %]
                     </fieldset>
                 </div>
 
@@ -272,7 +273,7 @@
                     return '£'+price;
                 }
             }, {
-                "aTargets": [-2, -3],
+                "aTargets": [-3, -4],
                 "sClass" : "editable",
             }],
             "aaSorting": [
