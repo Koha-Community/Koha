@@ -374,7 +374,7 @@ sub transferbook {
 
 sub TooMany {
     my $borrower        = shift;
-	my $item_object = shift;
+    my $item_object = shift;
     my $params = shift;
     my $onsite_checkout = $params->{onsite_checkout} || 0;
     my $switch_onsite_checkout = $params->{switch_onsite_checkout} || 0;
