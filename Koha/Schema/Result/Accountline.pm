@@ -67,7 +67,7 @@ __PACKAGE__->table("accountlines");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 16
+  size: 80
 
 =head2 status
 
@@ -136,7 +136,7 @@ __PACKAGE__->add_columns(
   "description",
   { data_type => "longtext", is_nullable => 1 },
   "accounttype",
-  { data_type => "varchar", is_nullable => 1, size => 16 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "status",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "payment_type",
@@ -285,8 +285,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-17 17:00:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2NOxgVuaRQ+6oTqgYDqzBg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-06 12:23:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/8Qeh530PbLC6ryxC1Dw9w
 
 sub koha_objects_class {
     'Koha::Account::Lines';
