@@ -27,6 +27,7 @@
     [% CASE 'All statuses' %]<span>All statuses</span>
     [% CASE 'damaged' %]<span>Damaged</span>
     [% CASE 'itemlost' %]<span>Lost</span>
+    [% CASE 'withdrawn' %]<span>Withdrawn</span>
   [% END %]
 [% END %]
 
@@ -158,6 +159,9 @@
             [% IF itemlosts.size %]
                 [% INCLUDE form_field_select name="itemlost" options = itemlosts empty_option = "All statuses" %]
             [% END %]
+            [% IF withdrawns.size %]
+                [% INCLUDE form_field_select name="withdrawn" options = withdrawns empty_option = "All statuses" %]
+            [% END %]
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select_text %]
@@ -275,6 +279,7 @@
                 + '      <th id="item_inventoryno">' + _("Inventory number") + '</th>'
                 + '      <th id="items_status">' + _("Not for loan status") + '</th>'
                 + '      <th id="items_itemlost">' + _("Lost status") + '</th>'
+                + '      <th id="items_widthdrawn">' + _("Withdrawn status") + '</th>'
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
                 + '      <th id=""></th>'
                 + '    </tr>'
@@ -378,6 +383,7 @@
                     { 'sName': 'stocknumber' },
                     { 'sName': 'notforloan' },
                     { 'sName': 'itemlost' },
+                    { 'sName': 'withdrawn' },
                     { 'sName': 'issues' },
                     { 'sName': 'checkbox', 'bSortable': false }
                 ],
@@ -415,6 +421,11 @@
                     [% END %]
                     [% IF itemlosts.size %]
                         { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => itemlosts %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
+                    [% IF withdrawns.size %]
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => withdrawns %] },
                     [% ELSE %]
                         null,
                     [% END %]

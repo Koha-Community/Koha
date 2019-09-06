@@ -106,6 +106,9 @@ my $location_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_v
 $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 my $itemlost_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.withdrawn', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
+my $withdrawn_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
+
 if (scalar keys %params > 0) {
     # Parameters given, it's a search
 
@@ -114,7 +117,7 @@ if (scalar keys %params > 0) {
         filters => [],
     };
 
-    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost)) {
+    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost withdrawn)) {
         if (my @q = $cgi->multi_param($p)) {
             if ($q[0] ne '') {
                 my $f = {
@@ -241,6 +244,12 @@ if (scalar keys %params > 0) {
             $itemlost_map->{$il_value->{authorised_value}} = $il_value->{lib};
         }
 
+        # Get withdrawn labels
+        my $withdrawn_map = {};
+        foreach my $wd_value (@$withdrawn_values) {
+            $withdrawn_map->{$wd_value->{authorised_value}} = $wd_value->{lib};
+        }
+
         foreach my $item (@$results) {
             my $biblio = Koha::Biblios->find( $item->{biblionumber} );
             $item->{biblio} = $biblio;
@@ -321,6 +330,14 @@ foreach my $value (@$itemlost_values) {
     };
 }
 
+my @withdrawns;
+foreach my $value (@$withdrawn_values) {
+    push @withdrawns, {
+        value => $value->{authorised_value},
+        label => $value->{lib},
+    };
+}
+
 my @items_search_fields = GetItemSearchFields();
 
 my $authorised_values = {};
@@ -337,6 +354,7 @@ $template->param(
     ccodes => \@ccodes,
     notforloans => \@notforloans,
     itemlosts => \@itemlosts,
+    withdrawns => \@withdrawns,
     items_search_fields => \@items_search_fields,
     authorised_values_json => to_json($authorised_values),
 );
