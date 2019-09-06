@@ -38,7 +38,7 @@
      <opensearch:Query role="request" searchTerms="[% SEARCH_RESULT.query_desc |uri %][% SEARCH_RESULT.limit_desc |uri %]" startPage="[% SEARCH_RESULT.page | html %]" />
      <item>
        <title>[% INCLUDE 'biblio-title-head.inc' biblio=SEARCH_RESULT %]</title>
-       <dc:identifier>ISBN [% SEARCH_RESULT.isbn | html %]</dc:identifier>
+       <dc:identifier>ISBN:[% SEARCH_RESULT.isbn | html %]</dc:identifier>
         [% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %]
         <link>[% OPACBaseURL | url %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]</link>
         [% ELSIF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %]
@@ -83,7 +83,7 @@
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
    <id>[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;format=atom</id>
    <title>[% LibraryName | html %] Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</title>
-    <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;format=rss2"/>
+    <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;format=rss"/>
    <updated>[% timestamp | html %]</updated>
    <author>
      <name>[% LibraryName | html %]</name>
