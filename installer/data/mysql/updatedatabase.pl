@@ -18801,6 +18801,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23309 - Can't add new subfields to bibliographic frameworks in strict mode)\n";
 }
 
+$DBversion = '19.05.03.003';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{ALTER TABLE accountlines CHANGE COLUMN accounttype accounttype varchar(80) default NULL});
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23539 - accountlines.accounttype should match authorised_values.authorised_value in size)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
