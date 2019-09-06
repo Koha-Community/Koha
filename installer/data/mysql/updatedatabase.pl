@@ -19371,6 +19371,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22258 - Add ElasticsearchMARCFormat preference)\n";
 }
 
+$DBversion = '19.06.00.024';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{ALTER TABLE accountlines CHANGE COLUMN accounttype accounttype varchar(80) default NULL});
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23539 - accountlines.accounttype should match authorised_values.authorised_value in size)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
