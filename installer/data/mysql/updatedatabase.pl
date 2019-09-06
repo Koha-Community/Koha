@@ -19360,6 +19360,17 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 14570 - Make it possible to add multiple guarantors to a record)\n";
 }
 
+$DBversion = '19.06.00.023';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (`variable`,`value`,`explanation`,`options`,`type`) VALUES
+        ('ElasticsearchMARCFormat', 'ISO2709', 'ISO2709|ARRAY', 'Elasticsearch MARC format. ISO2709 format is recommended as it is faster and takes less space, whereas array is searchable.', 'Choice')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22258 - Add ElasticsearchMARCFormat preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
