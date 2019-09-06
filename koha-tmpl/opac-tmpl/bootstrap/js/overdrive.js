@@ -86,6 +86,16 @@ KOHA.OverDriveCirculation = new function() {
 
     var checkout_popup = null;
     $( document ).ready(function() {
+        checkout_popup = $("#overdrive-checkout");
+        $("#overdrive-login-form").submit(function(e){
+            e.preventDefault();
+            $("#overdrive-login").modal('hide');
+            var ODpassword = $("input[name='ODpassword']").val();
+            login( ODpassword );
+        });
+    });
+
+    $( document ).ready(function() {
         var p = window.opener;
         if (p) {
             try { cb = p.refresh_overdrive_account_details;}
@@ -97,13 +107,6 @@ KOHA.OverDriveCirculation = new function() {
             }
             window.close();
         }
-        checkout_popup = $("#overdrive-checkout");
-        $("#overdrive-login-form").submit(function(e){
-            e.preventDefault();
-            $("#overdrive-login").modal('hide');
-            var ODpassword = $("input[name='ODpassword']").val();
-            login( ODpassword );
-        });
     });
 
     function display_account (container, data) {
