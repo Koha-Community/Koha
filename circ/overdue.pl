@@ -39,29 +39,15 @@ my $borflagsfilter  = $input->param('borflag') || '';
 my $branchfilter    = $input->param('branch') || '';
 my $homebranchfilter    = $input->param('homebranch') || '';
 my $holdingbranchfilter = $input->param('holdingbranch') || '';
-my $dateduefrom     = $input->param('dateduefrom');
-my $datedueto       = $input->param('datedueto');
 my $op              = $input->param('op') || '';
 
-if ( $dateduefrom ) {
+my ($dateduefrom, $datedueto);
+if ( $dateduefrom = $input->param('dateduefrom') ) {
     $dateduefrom = dt_from_string( $dateduefrom );
 }
-if ( $datedueto ) {
+if ( $datedueto = $input->param('datedueto') ) {
     $datedueto = dt_from_string( $datedueto )->set_hour(23)->set_minute(59);
 }
-
-my $filters = {
-    itemtype      => $itemtypefilter,
-    borname       => $bornamefilter,
-    borcat        => $borcatfilter,
-    itemtype      => $itemtypefilter,
-    borflag       => $borflagsfilter,
-    branch        => $branchfilter,
-    homebranch    => $homebranchfilter,
-    holdingbranch => $holdingbranchfilter,
-    dateduefrom   => $dateduefrom,
-    datedueto     => $datedueto,
-};
 
 my $isfiltered      = $op =~ /apply/i && $op =~ /filter/i;
 my $noreport        = C4::Context->preference('FilterBeforeOverdueReport') && ! $isfiltered && $op ne "csv";
@@ -193,14 +179,18 @@ if (@patron_attr_filter_loop) {
 }
 
 
-use Data::Printer colored => 1; warn p $filters;
 $template->param(
     patron_attr_header_loop => [ map { { header => $_->{description} } } grep { ! $_->{isclone} } @patron_attr_filter_loop ],
-    filters => $filters,
+    branchfilter => $branchfilter,
+    homebranchfilter => $homebranchfilter,
+    holdingbranchfilter => $holdingbranchfilter,
     borcatloop=> \@borcatloop,
     itemtypeloop => \@itemtypeloop,
     patron_attr_filter_loop => \@patron_attr_filter_loop,
+    borname => $bornamefilter,
     showall => $showall,
+    dateduefrom => $dateduefrom,
+    datedueto   => $datedueto,
 );
 
 if ($noreport) {
@@ -356,8 +346,10 @@ if ($noreport) {
     # generate parameter list for CSV download link
     my $new_cgi = CGI->new($input);
     $new_cgi->delete('op');
+    my $csv_param_string = $new_cgi->query_string();
 
     $template->param(
+        csv_param_string        => $csv_param_string,
         todaysdate              => output_pref($today_dt),
         overdueloop             => \@overduedata,
         nnoverdue               => scalar(@overduedata),
