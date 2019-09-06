@@ -23,8 +23,8 @@
       xmlns:atom="http://www.w3.org/2005/Atom">
    <channel>
      <title><![CDATA[[% LibraryName | html %] Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %]]]></title>
-     <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss</link>
-     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi | $raw %][% SEARCH_RESULT.limit_cgi | $raw %]&amp;sort_by=[% sort_by | uri %]&amp;format=atom"/>
+     <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;format=rss</link>
+     <atom:link rel="self" type="application/rss+xml" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;sort_by=[% sort_by | uri %]&amp;format=atom"/>
      <description><![CDATA[ Search results [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %] with limit(s): '[% limit_desc | html %]'[% END %] at [% LibraryName | html %]]]></description>
      <opensearch:totalResults>[% total | html %]</opensearch:totalResults>
      <opensearch:startIndex>[% offset | html %]</opensearch:startIndex>
@@ -81,9 +81,9 @@
 [% IF ( atom ) %]
 <feed xmlns="http://www.w3.org/2005/Atom"
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
-   <id>[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=atom</id>
+   <id>[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;format=atom</id>
    <title>[% LibraryName | html %] Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</title>
-    <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss2"/>
+    <link href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | html %][% limit_cgi | html %]&amp;format=rss2"/>
    <updated>[% timestamp | html %]</updated>
    <author>
      <name>[% LibraryName | html %]</name>
