@@ -119,7 +119,7 @@ else {
     $template_type = 'advsearch';
 }
 
-$format = 'rss' if $format =~ /rss/;
+$format = 'rss' if $format =~ /^rss2?$/;
 
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
