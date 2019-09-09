@@ -438,15 +438,16 @@
                         }
                     }
                 });
-                $('#itemsearchform').submit(function() {
-                  var searchform = $(this);
-                  var format = searchform.find('input[name="format"]:checked').val();
-                  if (format == 'html') {
+            });
+
+            $('#itemsearchform').submit(function() {
+                var searchform = $(this);
+                var format = searchform.find('input[name="format"]:checked').val();
+                if (format == 'html') {
                     submitForm(searchform);
                     $("#item-search-block").hide();
                     return false;
-                  }
-                });
+                }
             });
         });
     </script>
