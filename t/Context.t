@@ -1,13 +1,54 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
+
 use DBI;
-use Test::More tests => 27;
+use Test::More tests => 28;
 use Test::MockModule;
+use Test::Warn;
+use YAML;
 
 BEGIN {
     use_ok('C4::Context');
 }
+
+subtest 'yaml_preference() tests' => sub {
+
+    plan tests => 3;
+
+    my $data = [ 'uno', 'dos', { 'tres' => 'cuatro' } ];
+
+    my $context = Test::MockModule->new( 'C4::Context' );
+    $context->mock( 'preference', YAML::Dump($data) );
+
+    my $pref = C4::Context->new->yaml_preference( 'nothing' );
+
+    is_deeply( $pref, $data, 'yaml_preference returns the right structure' );
+
+    $context->mock( 'preference', q{- uno - dos: asd} );
+    warning_like
+        { $pref = C4::Context->new->yaml_preference('nothing') }
+        qr/^Unable to parse nothing syspref/,
+        'Invalid YAML on syspref throws a warning';
+    is( $pref, undef, 'Invalid YAML on syspref makes it return undef' );
+
+    $context->unmock( 'preference' );
+};
 
 my $context = new Test::MockModule('C4::Context');
 my $userenv = {};
