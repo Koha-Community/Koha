@@ -63,7 +63,7 @@ sub login_shib_url {
 
     my $param = _get_uri() . get_script_name();
     if ( $query->query_string() ) {
-        $param = $param . '%3F' . $query->query_string();
+        $param = $param . '?' . $query->query_string();
     }
     my $uri = _get_uri() . "/Shibboleth.sso/Login?target=$param";
     return $uri;
