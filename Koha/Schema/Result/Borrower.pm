@@ -1564,9 +1564,10 @@ __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lbMdmIHlRt+zayG5+Rq4/w
 
 __PACKAGE__->add_columns(
-    '+anonymized' => { is_boolean => 1 },
+    '+anonymized'    => { is_boolean => 1 },
     '+lost'          => { is_boolean => 1 },
-    '+gonenoaddress' => { is_boolean => 1 }
+    '+gonenoaddress' => { is_boolean => 1 },
+    '+privacy_guarantor_fines' => { is_boolean => 1 }
 );
 
 sub koha_objects_class {
