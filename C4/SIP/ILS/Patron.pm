@@ -30,10 +30,11 @@ use Koha::Checkouts;
 use Koha::TemplateUtils qw( process_tt );
 use Koha::Patron::Messages;
 use Koha::DateUtils qw(dt_from_string output_pref);
+use Date::Calc qw/Today Date_to_Days/;
 
 our $kp;    # koha patron
 
-=head1 METHODS
+=head1 Methods
 
 =cut
 
@@ -64,14 +65,31 @@ sub new {
     my $pw        = $kp->{password};
     my $flags     = C4::Members::patronflags( $kp );
     my $debarred  = $patron->is_debarred;
-    my ($day, $month, $year) = (localtime)[3,4,5];
-    my $today    = sprintf '%04d-%02d-%02d', $year+1900, $month+1, $day;
-    my $expired  = ($today gt $kp->{dateexpiry}) ? 1 : 0;
-    if ($expired) {
-        if ($kp->{opacnote} ) {
-            $kp->{opacnote} .= q{ };
+    siplog( "LOG_DEBUG", "Debarred = %s : ", ( $debarred || 'undef' ) );    # Do we need more debug info here?
+    my $expired = 0;
+    if ( $kp->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
+        my ( $today_year,   $today_month,   $today_day )   = Today();
+        my ( $warning_year, $warning_month, $warning_day ) = split /-/, $kp->{'dateexpiry'};
+        my $days_to_expiry = Date_to_Days( $warning_year, $warning_month, $warning_day ) -
+            Date_to_Days( $today_year, $today_month, $today_day );
+        my $dt         = dt_from_string( $kp->{'dateexpiry'}, 'iso' );
+        my $dateexpiry = output_pref( { dt => $dt, dateonly => 1 } );
+        if ( $days_to_expiry < 0 ) {
+
+            #borrower card has expired, warn the borrower
+            if ( $kp->{opacnote} ) {
+                $kp->{opacnote} .= q{ };
+            }
+            $kp->{opacnote} .= "Your account has expired as of $dateexpiry";
+            $expired = 1;
+        } elsif ( $days_to_expiry < C4::Context->preference('NotifyBorrowerDeparture') ) {
+
+            # borrower card soon to expire, warn the borrower
+            if ( $kp->{opacnote} ) {
+                $kp->{opacnote} .= q{ };
+            }
+            $kp->{opacnote} .= "Your card will expire on $dateexpiry";
         }
-        $kp->{opacnote} .= 'PATRON EXPIRED';
     }
     my %ilspatron;
     my $adr     = _get_address($kp);

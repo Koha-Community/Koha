@@ -4,7 +4,7 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -251,6 +251,62 @@ subtest "fine_items tests" => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest "Patron expiration tests" => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                opacnote => "",
+
+                # dateexpiry is today when unspecified
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'NotifyBorrowerDeparture', 0 );
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    like(
+        $sip_patron->screen_msg, qr/^Greetings from Koha. $/,
+        "No message is displayed when NotifyBorrowerDeparture is disabled"
+    );
+
+    t::lib::Mocks::mock_preference( 'NotifyBorrowerDeparture', 1 );
+    $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    like(
+        $sip_patron->screen_msg, qr/Your card will expire on/,
+        "A message is displayed when the card expires within NotifyBorrowerDeparture days"
+    );
+
+    $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                opacnote   => "",
+                dateexpiry => "1900-01-01",
+            }
+        }
+    );
+    $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    like(
+        $sip_patron->screen_msg, qr/Your account has expired as of/,
+        "A message is displayed when the card has expired and NotifyBorrowerDeparture is not disabled"
+    );
+
+    t::lib::Mocks::mock_preference( 'NotifyBorrowerDeparture', 0 );
+    $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    like(
+        $sip_patron->screen_msg, qr/^Greetings from Koha. $/,
+        "No message is displayed when the card has expired and NotifyBorrowerDeparture is disabled"
+    );
+
+    $schema->storage->txn_rollback;
+
+};
 
 subtest "NoIssuesChargeGuarantees tests" => sub {
 
