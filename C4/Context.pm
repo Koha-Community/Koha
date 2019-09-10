@@ -96,6 +96,7 @@ use Encode;
 use File::Spec;
 use Module::Load::Conditional qw(can_load);
 use POSIX ();
+use YAML qw/Load/;
 use ZOOM;
 
 use C4::Boolean;
@@ -435,6 +436,26 @@ sub boolean_preference {
     my $var = shift;        # The system preference to return
     my $it = preference($self, $var);
     return defined($it)? C4::Boolean::true_p($it): undef;
+}
+
+=head2 yaml_preference
+
+Retrieves the required system preference value, and converts it
+from YAML into a Perl data structure. It throws an exception if
+the value cannot be properly decoded as YAML.
+
+=cut
+
+sub yaml_preference {
+    my ( $self, $preference ) = @_;
+
+    my $yaml = eval { YAML::Load( $self->preference( $preference ) ); };
+    if ($@) {
+        warn "Unable to parse $preference syspref : $@";
+        return;
+    }
+
+    return $yaml;
 }
 
 =head2 enable_syspref_cache
