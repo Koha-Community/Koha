@@ -691,5 +691,10 @@
             Add, edit and archive cash registers
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'takepayment' -%]
+        <span class="sub_permission takepayment_subpermission">
+            Access the point of sale page and take payments
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
 [%- END -%]
