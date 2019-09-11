@@ -4,7 +4,7 @@
 # This needs to be extended! Your help is appreciated..
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -402,6 +402,33 @@ subtest "NoIssuesChargeGuarantorsWithGuarantees tests" => sub {
     is( $sip_patron->fines_amount, 11, "Personal fines correctly reported");
     ok( $sip_patron->charge_ok, "Patron not blocked");
     unlike( $sip_patron->screen_msg, qr/Patron blocked by fines .* on related accounts/,"Screen message does not indicate block");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "Patron messages tests" => sub {
+    plan tests => 1;
+    $schema->storage->txn_begin;
+    my $today = output_pref({ dt => dt_from_string(), dateonly => 1});
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
+    my $new_message_1  = Koha::Patron::Message->new(
+        { borrowernumber => $patron->id,
+          branchcode     => $library->branchcode,
+          message_type   => 'B',
+          message        => 'my message 1',
+        })->store;
+
+    my $new_message_2  = Koha::Patron::Message->new(
+        { borrowernumber => $patron->id,
+          branchcode     => $library->branchcode,
+          message_type   => 'B',
+          message        => 'my message 2',
+        })->store;
+
+
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    like( $sip_patron->screen_msg, qr/Messages for you: $today: my message 1 \/ $today: my message 2/,"Screen message includes patron messages");
 
     $schema->storage->txn_rollback;
 };
