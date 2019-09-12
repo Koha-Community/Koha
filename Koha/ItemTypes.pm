@@ -24,7 +24,7 @@ use C4::Languages;
 use Koha::Database;
 use Koha::ItemType;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Limit::Library);
 
 =head1 NAME
 
@@ -32,7 +32,7 @@ Koha::ItemTypes - Koha ItemType Object set class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -62,42 +62,7 @@ sub search_with_localization {
     }
 }
 
-=head3 search_with_library_limits
-
-search itemtypes by library
-
-my @itemtypes = Koha::ItemTypes->search_with_library_limits({branchcode => branchcode});
-
-=cut
-
-sub search_with_library_limits {
-    my ( $self, $params, $attributes ) = @_;
-
-    my $branchcode = $params->{branchcode};
-    delete( $params->{branchcode} );
-
-    return $self->SUPER::search( $params, $attributes ) unless $branchcode;
-
-    my $where = {
-        '-or' => [
-            'itemtypes_branches.branchcode' => undef,
-            'itemtypes_branches.branchcode' => $branchcode
-        ]
-    };
-
-    $attributes //= {};
-    if(exists $attributes->{join}) {
-        if(ref $attributes->{join} eq 'ARRAY') {
-            push @{$attributes->{join}}, 'itemtypes_branches';
-        } else {
-            $attributes->{join} = [ $attributes->{join}, 'itemtypes_branches' ];
-        }
-    } else {
-        $attributes->{join} = 'itemtypes_branches';
-    }
-
-    return $self->SUPER::search( { %$params, %$where, }, $attributes );
-}
+=head2 Internal methods
 
 =head3 type
 
