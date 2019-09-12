@@ -53,7 +53,7 @@ limits
 sub search_with_library_limits {
     my ( $self, $params, $attributes, $library_id ) = @_;
 
-    return $self->SUPER::search( $params, $attributes ) unless $library_id;
+    return $self->search( $params, $attributes ) unless $library_id;
 
     my $library_limits = $self->object_class()->_library_limits;
     my $library_limits_table
