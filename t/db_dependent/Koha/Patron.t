@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::Database;
@@ -71,4 +71,86 @@ subtest 'add_guarantor() tests' => sub {
         'Exception is thrown for duplicated relationship';
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'add_enrolment_fee_if_needed() tests' => sub {
+
+    plan tests => 2;
+
+    subtest 'category has enrolment fee' => sub {
+        plan tests => 7;
+
+        $schema->storage->txn_begin;
+
+        my $category = $builder->build_object(
+            {
+                class => 'Koha::Patron::Categories',
+                value => {
+                    enrolmentfee => 20
+                }
+            }
+        );
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category->categorycode
+                }
+            }
+        );
+
+        my $enrollment_fee = $patron->add_enrolment_fee_if_needed();
+        is( $enrollment_fee * 1, 20, 'Enrolment fee amount is correct' );
+        my $account = $patron->account;
+        is( $patron->account->balance * 1, 20, 'Patron charged the enrolment fee' );
+        # second enrolment fee, new
+        $enrollment_fee = $patron->add_enrolment_fee_if_needed(0);
+        # third enrolment fee, renewal
+        $enrollment_fee = $patron->add_enrolment_fee_if_needed(1);
+        is( $patron->account->balance * 1, 60, 'Patron charged the enrolment fees' );
+
+        my @debits = $account->outstanding_debits;
+        is( scalar @debits, 3, '3 enrolment fees' );
+        is( $debits[0]->accounttype, 'ACCOUNT', 'Account type set correctly' );
+        is( $debits[1]->accounttype, 'ACCOUNT', 'Account type set correctly' );
+        is( $debits[2]->accounttype, 'ACCOUNT_RENEW', 'Account type set correctly' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'no enrolment fee' => sub {
+
+        plan tests => 3;
+
+        $schema->storage->txn_begin;
+
+        my $category = $builder->build_object(
+            {
+                class => 'Koha::Patron::Categories',
+                value => {
+                    enrolmentfee => 0
+                }
+            }
+        );
+
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    categorycode => $category->categorycode
+                }
+            }
+        );
+
+        my $enrollment_fee = $patron->add_enrolment_fee_if_needed();
+        is( $enrollment_fee * 1, 0, 'No enrolment fee' );
+        my $account = $patron->account;
+        is( $patron->account->balance, 0, 'Patron not charged anything' );
+
+        my @debits = $account->outstanding_debits;
+        is( scalar @debits, 0, 'no debits' );
+
+        $schema->storage->txn_rollback;
+    };
 };
