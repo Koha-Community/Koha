@@ -19418,6 +19418,24 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20691 - Add ability for guarantors to view guarantee's fines in OPAC)\n";
 }
 
+$DBversion = '19.06.00.027';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !TableExists( 'itemtypes_branches' ) ) {
+       $dbh->do( "
+            CREATE TABLE itemtypes_branches( -- association table between authorised_values and branches
+                itemtype VARCHAR(10) NOT NULL,
+                branchcode VARCHAR(10) NOT NULL,
+                FOREIGN KEY (itemtype) REFERENCES itemtypes(itemtype) ON DELETE CASCADE,
+                FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        ");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15497 - Add itemtypes_branches table)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
