@@ -74,7 +74,9 @@ sub patron {
 }
 
 =head3 is_canceled
+
 Determines if enrollment is canceled
+
 =cut
 
 sub is_canceled {
