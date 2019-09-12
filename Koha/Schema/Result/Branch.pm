@@ -541,6 +541,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 itemtypes_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ItemtypesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "itemtypes_branches",
+  "Koha::Schema::Result::ItemtypesBranch",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 library_groups
 
 Type: has_many
@@ -647,8 +662,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-29 15:02:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:y+tNq5YiUeUOyAwB4r6GHw
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2019-07-04 04:56:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:15/s0/8d2cNB9YLLlsEY4w
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }

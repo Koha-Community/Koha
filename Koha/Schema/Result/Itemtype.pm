@@ -181,6 +181,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 itemtypes_branches
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ItemtypesBranch>
+
+=cut
+
+__PACKAGE__->has_many(
+  "itemtypes_branches",
+  "Koha::Schema::Result::ItemtypesBranch",
+  { "foreign.itemtype" => "self.itemtype" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 old_reserves
 
 Type: has_many
@@ -212,8 +227,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-29 15:02:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X7Py35p8kotheBvJjuwDcA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2019-07-04 04:56:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qo6jabJSQGeYJ542ebSJfg
 
 # Use the ItemtypeLocalization view to create the join on localization
 our $LANGUAGE;
