@@ -183,7 +183,13 @@ sub generate_subfield_form {
             }
             elsif ( $subfieldlib->{authorised_value} eq "itemtypes" ) {
                   push @authorised_values, "";
-                  my $itemtypes = Koha::ItemTypes->search_with_localization;
+                  my $branch_limit = C4::Context->userenv && C4::Context->userenv->{"branch"};
+                  my $itemtypes;
+                  if($branch_limit) {
+                      $itemtypes = Koha::ItemTypes->search_with_localization({branchcode => $branch_limit});
+                  } else {
+                      $itemtypes = Koha::ItemTypes->search_with_localization;
+                  }
                   while ( my $itemtype = $itemtypes->next ) {
                       push @authorised_values, $itemtype->itemtype;
                       $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;

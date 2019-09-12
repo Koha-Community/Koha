@@ -283,6 +283,19 @@ Item types administration
                         [% END %]
                     </select>
                 </li>
+                <li><label for="branches">Libraries limitation: </label>
+                    <select id="branches" name="branches" multiple size="10">
+                        <option value="">All libraries</option>
+                        [% FOREACH branch IN branches_loop %]
+                        [% IF ( branch.selected ) %]
+                            <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                        [% ELSE %]
+                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                        [% END %]
+                        [% END %]
+                    </select>
+                    <span>Select 'All libraries' if this authorized value must be displayed all the time. Otherwise select libraries you want to associate with this value.</span>
+                </li>
                 <li>
                     <label for="summary">Summary: </label>
                    <textarea id="summary" name="summary" cols="55" rows="5">[% itemtype.summary | html %]</textarea>

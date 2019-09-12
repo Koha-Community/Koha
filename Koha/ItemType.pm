@@ -25,7 +25,7 @@ use Koha::Database;
 use Koha::IssuingRules;
 use Koha::Localizations;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Limit::Library);
 
 =head1 NAME
 
@@ -123,6 +123,20 @@ sub may_article_request {
         $category ? ( categorycode => $category ) : (),
     });
     return ( $guess->{ $itemtype // q{} } || $guess->{ '*' } ) ? 1 : q{};
+}
+
+=head3 _library_limits
+
+ configure library limits
+
+=cut
+
+sub _library_limits {
+    return {
+        class => "ItemtypesBranch",
+        id => "itemtype",
+        library => "branchcode",
+    };
 }
 
 =head3 type

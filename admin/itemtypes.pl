@@ -58,6 +58,19 @@ undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$
 
 if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
+
+    my $selected_branches = $itemtype->get_library_limits;
+    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
+    my @branches_loop;
+    foreach my $branch ( @$branches ) {
+        my $selected = ($selected_branches && grep {$_->branchcode eq $branch->{branchcode}} @{ $selected_branches->as_list } ) ? 1 : 0;
+        push @branches_loop, {
+            branchcode => $branch->{branchcode},
+            branchname => $branch->{branchname},
+            selected   => $selected,
+        };
+    }
+
     my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
     my $searchcategory = GetAuthorisedValues("ITEMTYPECAT");
     my $translated_languages = C4::Languages::getTranslatedLanguages( undef , C4::Context->preference('template') );
@@ -66,6 +79,7 @@ if ( $op eq 'add_form' ) {
         imagesets => $imagesets,
         searchcategory => $searchcategory,
         can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
+        branches_loop    => \@branches_loop,
     );
 } elsif ( $op eq 'add_validate' ) {
     my $is_a_modif   = $input->param('is_a_modif');
@@ -77,6 +91,7 @@ if ( $op eq 'add_form' ) {
     my $defaultreplacecost = $input->param('defaultreplacecost');
     my $processfee = $input->param('processfee');
     my $image = $input->param('image') || q||;
+    my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     my $notforloan = $input->param('notforloan') ? 1 : 0;
     my $imageurl =
@@ -107,7 +122,10 @@ if ( $op eq 'add_form' ) {
         $itemtype->hideinopac($hideinopac);
         $itemtype->searchcategory($searchcategory);
 
-        eval { $itemtype->store; };
+        eval {
+          $itemtype->store;
+          $itemtype->replace_library_limits( \@branches );
+        };
 
         if ($@) {
             push @messages, { type => 'alert', code => 'error_on_update' };
@@ -134,7 +152,10 @@ if ( $op eq 'add_form' ) {
                 searchcategory      => $searchcategory,
             }
         );
-        eval { $itemtype->store; };
+        eval {
+          $itemtype->store;
+          $itemtype->replace_library_limits( \@branches );
+        };
 
         if ($@) {
             push @messages, { type => 'alert', code => 'error_on_insert' };

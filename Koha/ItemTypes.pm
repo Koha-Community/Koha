@@ -55,7 +55,48 @@ sub search_with_localization {
             -as      => 'translated_description'
         }
     ];
-    $self->SUPER::search( $params, $attributes );
+    if(defined $params->{branchcode}) {
+        $self->search_with_library_limits( $params, $attributes );
+    } else {
+        $self->SUPER::search( $params, $attributes );
+    }
+}
+
+=head3 search_with_library_limits
+
+search itemtypes by library
+
+my @itemtypes = Koha::ItemTypes->search_with_library_limits({branchcode => branchcode});
+
+=cut
+
+sub search_with_library_limits {
+    my ( $self, $params, $attributes ) = @_;
+
+    my $branchcode = $params->{branchcode};
+    delete( $params->{branchcode} );
+
+    return $self->SUPER::search( $params, $attributes ) unless $branchcode;
+
+    my $where = {
+        '-or' => [
+            'itemtypes_branches.branchcode' => undef,
+            'itemtypes_branches.branchcode' => $branchcode
+        ]
+    };
+
+    $attributes //= {};
+    if(exists $attributes->{join}) {
+        if(ref $attributes->{join} eq 'ARRAY') {
+            push @{$attributes->{join}}, 'itemtypes_branches';
+        } else {
+            $attributes->{join} = [ $attributes->{join}, 'itemtypes_branches' ];
+        }
+    } else {
+        $attributes->{join} = 'itemtypes_branches';
+    }
+
+    return $self->SUPER::search( { %$params, %$where, }, $attributes );
 }
 
 =head3 type
@@ -65,6 +106,10 @@ sub search_with_localization {
 sub _type {
     return 'Itemtype';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::ItemType';
