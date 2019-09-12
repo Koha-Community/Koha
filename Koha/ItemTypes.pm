@@ -56,7 +56,8 @@ sub search_with_localization {
         }
     ];
     if(defined $params->{branchcode}) {
-        $self->search_with_library_limits( $params, $attributes );
+        my $branchcode = delete $params->{branchcode};
+        $self->search_with_library_limits( $params, $attributes, $branchcode );
     } else {
         $self->SUPER::search( $params, $attributes );
     }
