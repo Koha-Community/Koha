@@ -27,7 +27,6 @@ use Test::Exception;
 
 use C4::Context;
 use Koha::Database;
-use Koha::Patron::Attribute::Type;
 use Koha::Patron::Attribute::Types;
 
 my $schema  = Koha::Database->new->schema;
@@ -289,7 +288,7 @@ subtest 'replace_library_limits() tests' => sub {
 
 subtest 'search_with_library_limits() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -326,6 +325,9 @@ subtest 'search_with_library_limits() tests' => sub {
         3, '3 attribute types are available for the specified branch' );
     is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, $branch_2 )->count,
         3, '3 attribute types are available for the specified branch' );
+    is( Koha::Patron::Attribute::Types->search_with_library_limits( {}, {}, undef )->count,
+        4, '4 attribute types are available with no library passed'
+    );
 
     $schema->storage->txn_rollback;
 };
