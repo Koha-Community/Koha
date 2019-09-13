@@ -1,6 +1,6 @@
 <div id="navmenu">
     <div id="navmenulist">
-        [% IF ( CAN_user_cash_management_cashup_cash_registers ) %]
+        [% IF ( CAN_user_cash_management_cashup ) %]
         <h5>Point of sale</h5>
         <ul>
             <li><a href="/cgi-bin/koha/pos/register.pl">Register details</a></li>

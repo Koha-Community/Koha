@@ -121,5 +121,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (23, 'self_checkout_module', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    (24, 'manage_rotas', 'Create, edit and delete rotas'),
    (24, 'manage_rota_items', 'Add and remove items from rotas'),
+   (25, 'cashup', 'Perform cash register cashup action'),
    (25, 'takepayment', 'Access the point of sale page and take payments')
 ;

@@ -699,5 +699,10 @@
             Access the point of sale page and take payments
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'cashup' -%]
+        <span class="sub_permission cashup_subpermission">
+            Perform cash register cashup action
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
 [%- END -%]
