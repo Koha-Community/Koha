@@ -268,7 +268,7 @@
             <tr>
                 <th>Category</th>
                 <th>Description</th>
-                <th>&nbsp;</th>
+                <th class="noExport">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -302,15 +302,18 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-            $(".authorized_values_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var columns_settings = []; // Empty because there are no columns we want to be configurable
+
+            KohaTable("categoriest", {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 ],
                 "aaSorting": [[ 0, "asc" ]],
                 "sPaginationType": "full"
-            }));
+            }, columns_settings);
 
             if ( $("#branches option:selected").length < 1 ) {
                 $("#branches option:first").attr("selected", "selected");
