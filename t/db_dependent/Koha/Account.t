@@ -158,7 +158,7 @@ subtest 'outstanding_credits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -231,7 +231,8 @@ subtest 'add_credit() tests' => sub {
     is( $offset_2->debit_id, undef, 'No debit_id is set for credits' );
 
     my $line_3 = $account->add_credit(
-        {   amount      => 20,
+        {
+            amount      => 20,
             description => 'Manual credit applied',
             library_id  => $patron->branchcode,
             user_id     => $patron->id,
@@ -242,6 +243,26 @@ subtest 'add_credit() tests' => sub {
 
     is( $schema->resultset('ActionLog')->count(), $action_logs + 2, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'No action added to statistics, because of credit type' );
+
+    # Enable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    throws_ok {
+        $account->add_credit(
+            {
+                amount       => 20,
+                description  => 'Cash payment without cash register',
+                library_id   => $patron->branchcode,
+                user_id      => $patron->id,
+                payment_type => 'CASH',
+                interface    => 'intranet'
+            }
+        );
+    }
+    'Koha::Exceptions::Account::RegisterRequired',
+      'Exception thrown for UseCashRegisters:1 + payment_type:CASH + cash_register:undef';
+
+    # Disable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
 
     $schema->storage->txn_rollback;
 };
@@ -560,7 +581,7 @@ subtest 'reconcile_balance' => sub {
 
 subtest 'pay() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -580,6 +601,23 @@ subtest 'pay() tests' => sub {
     my $credit_2    = Koha::Account::Lines->find( $credit_2_id );
 
     is( $credit_2->branchcode, $library->id, 'branchcode set because library_id was passed' );
+
+    # Enable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    throws_ok {
+        $account->pay(
+            {
+                amount       => 20,
+                payment_type => 'CASH',
+                interface    => 'intranet'
+            }
+        );
+    }
+    'Koha::Exceptions::Account::RegisterRequired',
+      'Exception thrown for UseCashRegisters:1 + payment_type:CASH + cash_register:undef';
+
+    # Disable cash registers
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
 
     $schema->storage->txn_rollback;
 };
