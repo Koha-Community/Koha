@@ -45,9 +45,10 @@ subtest 'get_balance() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $patron, $session_id ) = create_user_and_session({ authorized => 0 });
-    my $patron_id  = $patron->id;
-    my $account = $patron->account;
+    my ( $patron, $session_id ) = create_user_and_session({ authorized => 1 });
+    my $library   = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron_id = $patron->id;
+    my $account   = $patron->account;
 
     my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patron_id/account");
     $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
@@ -235,7 +236,7 @@ subtest 'add_credit() tests' => sub {
 sub create_user_and_session {
 
     my $args  = shift;
-    my $flags = ( $args->{authorized} ) ? 2**10 : 0;
+    my $flags = ( $args->{authorized} ) ? 1 : 0;
 
     my $patron = $builder->build_object(
         {
