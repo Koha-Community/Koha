@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Price %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item types [% IF op == 'add_form' %]&rsaquo;
@@ -347,7 +348,7 @@ Item types administration
     [% IF itemtypes %]
         <table id="table_item_type">
           <thead>
-            [% UNLESS Koha.Preference('noItemTypeImages') %]<th>Image</th>[% END %]
+            [% UNLESS Koha.Preference('noItemTypeImages') %]<th class="noExport">Image</th>[% END %]
             <th>Code</th>
             <th>Description</th>
             <th>Search category</th>
@@ -360,7 +361,7 @@ Item types administration
             <th>Processing fee (when lost)</th>
             <th>Checkin message</th>
             <th>Library limitations</th>
-            <th>Actions</th>
+            <th class="noExport">Actions</th>
           </thead>
           [% FOREACH itemtype IN itemtypes %]
             <tr>
@@ -458,17 +459,26 @@ Item types administration
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
          $(document).ready(function() {
             $('#icons').tabs();
-            $("#table_item_type").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                ],
+            var columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
+            [% IF Koha.Preference('noItemTypeImages') %]
+                columns_settings.shift(); // Remove item type image column from configuration
+            [% END %]
+
+            $(document).ready(function() {
+                KohaTable("table_item_type", {
+                    "aoColumnDefs": [
+                        { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    ],
                 "aaSorting": [[ 2, "asc" ]],
                 "iDisplayLength": 10,
                 "sPaginationType": "full"
-            }));
+                }, columns_settings);
+            });
+
             $( "#itemtypeentry" ).validate({
                 rules: {
                     itemtype: { required: true },
