@@ -89,8 +89,9 @@ sub pay {
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
-        && !defined($cash_register)
-        && ( $interface ne 'opac' ) );
+        && defined($payment_type)
+        && ( $payment_type eq 'CASH' )
+        && !defined($cash_register) );
 
     my @fines_paid; # List of account lines paid on with this payment
 
@@ -352,8 +353,9 @@ sub add_credit {
 
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
-        && !defined($cash_register)
-        && ( $payment_type eq 'CASH' ) );
+        && defined($payment_type)
+        && ( $payment_type eq 'CASH' )
+        && !defined($cash_register) );
 
     my $schema = Koha::Database->new->schema;
 
