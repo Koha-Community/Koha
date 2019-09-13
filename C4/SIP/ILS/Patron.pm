@@ -66,7 +66,8 @@ sub new {
     my $dexpiry     = $kp->{dateexpiry};
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 
-    my $fines_amount = $flags->{CHARGES}->{amount}; # This "amount" is the negative balance or the one of the guarantees
+    # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
+    my $fines_amount = $flags->{CHARGES}->{amount};
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     my $guarantees_fines_amount = $flags->{CHARGES_GUARANTEES} ? $flags->{CHARGES_GUARANTEES}->{amount} : 0;
     $fines_amount += $guarantees_fines_amount;
