@@ -231,7 +231,7 @@ if ( $op eq 'list' ) {
         $row_data{lib}                   = $av->lib;
         $row_data{lib_opac}              = $av->lib_opac;
         $row_data{imageurl}              = getitemtypeimagelocation( 'intranet', $av->imageurl );
-        $row_data{branches}              = $av->library_limits->as_list;
+        $row_data{branches}              = $av->library_limits ? $av->library_limits->as_list : [];
         $row_data{id}                    = $av->id;
         push(@loop_data, \%row_data);
     }
