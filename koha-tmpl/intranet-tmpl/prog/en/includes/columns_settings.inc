@@ -70,17 +70,25 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
                 node.addClass("disabled");
             }
         },
-        {
-            extend: 'colvis',
-            fade: 100,
-            columns: included_ids,
-            className: "columns_controls",
-            titleAttr: _("Columns settings"),
-            text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
-            exportOptions: {
-                columns: exportColumns
+    ];
+
+    if( included_ids.length > 0 ){
+        dt_parameters[ "buttons" ].push(
+            {
+                extend: 'colvis',
+                fade: 100,
+                columns: included_ids,
+                className: "columns_controls",
+                titleAttr: _("Columns settings"),
+                text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
+                exportOptions: {
+                    columns: exportColumns
+                },
             },
-        },
+        );
+    }
+
+    dt_parameters[ "buttons" ].push(
         {
             extend: 'collection',
             autoClose: true,
@@ -90,8 +98,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + _("Export") + '</span>',
             buttons: export_buttons
         }
-
-    ];
+    );
 
     var table = $(selector);
     if ( add_filters ) {
