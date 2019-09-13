@@ -51,6 +51,15 @@
         </ul>
     [% END %]
 
+    [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_manage_cash_registers ) %]
+        <h5>Accounting</h5>
+        <ul>
+            [% IF ( CAN_user_cash_management_manage_cash_registers ) %]
+                <li><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></li>
+            [% END %]
+        </ul>
+    [% END %]
+
     [% IF ( CAN_user_parameters_manage_marc_frameworks || CAN_user_parameters_manage_classifications || CAN_user_parameters_manage_matching_rules || CAN_user_parameters_manage_oai_sets || CAN_user_parameters_manage_item_search_fields || (Koha.Preference('SearchEngine') == 'Elasticsearch' && CAN_user_parameters_manage_search_engine_config) ) %]
         <h5>Catalog</h5>
         <ul>
