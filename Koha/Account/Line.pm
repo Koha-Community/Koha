@@ -110,6 +110,87 @@ sub debit_type {
     return Koha::Account::DebitType->_new_from_dbic( $rs );
 }
 
+=head3 credit_offsets
+
+Return the credit_offsets linked to this account line if some exist
+
+=cut
+
+sub credit_offsets {
+    my ( $self ) = @_;
+    my $rs = $self->_result->account_offsets_credits;
+    return unless $rs;
+    return Koha::Account::Offsets->_new_from_dbic($rs);
+}
+
+=head3 debit_offsets
+
+Return the debit_offsets linked to this account line if some exist
+
+=cut
+
+sub debit_offsets {
+    my ( $self ) = @_;
+    my $rs = $self->_result->account_offsets_debits;
+    return unless $rs;
+    return Koha::Account::Offsets->_new_from_dbic($rs);
+}
+
+
+=head3 credits
+
+  my $credits = $accountline->credits;
+  my $credits = $accountline->credits( $cond, $attr );
+
+Return the credits linked to this account line if some exist.
+Search conditions and attributes may be passed if you wish to filter
+the resultant resultant resultset.
+
+=cut
+
+sub credits {
+    my ( $self, $cond, $attr ) = @_;
+
+    unless ( $self->is_debit ) {
+        Koha::Exceptions::Account::IsNotCredit->throw(
+            error => 'Account line ' . $self->id . ' is not a debit'
+        );
+    }
+
+    my $rs =
+      $self->_result->search_related('account_offsets_debits')
+      ->search_related( 'credit', $cond, $attr );
+    return unless $rs;
+    return Koha::Account::Lines->_new_from_dbic($rs);
+}
+
+=head3 debits
+
+  my $debits = $accountline->debits;
+  my $debits = $accountline->debits( $cond, $attr );
+
+Return the debits linked to this account line if some exist.
+Search conditions and attributes may be passed if you wish to filter
+the resultant resultant resultset.
+
+=cut
+
+sub debits {
+    my ( $self, $cond, $attr ) = @_;
+
+    unless ( $self->is_credit ) {
+        Koha::Exceptions::Account::IsNotCredit->throw(
+            error => 'Account line ' . $self->id . ' is not a credit'
+        );
+    }
+
+    my $rs =
+      $self->_result->search_related('account_offsets_credits')
+      ->search_related( 'debit', $cond, $attr );
+    return unless $rs;
+    return Koha::Account::Lines->_new_from_dbic($rs);
+}
+
 =head3 void
 
   $payment_accountline->void();

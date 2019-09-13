@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Exception;
 
 use C4::Circulation qw/AddIssue AddReturn/;
@@ -514,6 +514,65 @@ subtest 'checkout() tests' => sub {
 
     $line->issue_id(undef)->store;
     is( $line->checkout, undef, 'Koha::Account::Line->checkout should return undef if no checkout linked' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'credits() and debits() tests' => sub {
+    plan tests => 10;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
+
+    my $debit1 = $account->add_debit({
+        amount    => 8,
+        interface => 'commandline',
+        type      => 'ACCOUNT',
+    });
+    my $debit2 = $account->add_debit({
+        amount    => 12,
+        interface => 'commandline',
+        type      => 'ACCOUNT',
+    });
+    my $credit1 = $account->add_credit({
+        amount    => 5,
+        interface => 'commandline',
+        type      => 'CREDIT',
+    });
+    my $credit2 = $account->add_credit({
+        amount    => 10,
+        interface => 'commandline',
+        type      => 'CREDIT',
+    });
+
+    $credit1->apply({ debits => [ $debit1 ] });
+    $credit2->apply({ debits => [ $debit1, $debit2 ] });
+
+    my $credits = $debit1->credits;
+    is($credits->count, 2, '2 Credits applied to debit 1');
+    my $credit = $credits->next;
+    is($credit->amount + 0, -5, 'Correct first credit');
+    $credit = $credits->next;
+    is($credit->amount + 0, -10, 'Correct second credit');
+
+    $credits = $debit2->credits;
+    is($credits->count, 1, '1 Credits applied to debit 2');
+    $credit = $credits->next;
+    is($credit->amount + 0, -10, 'Correct first credit');
+
+    my $debits = $credit1->debits;
+    is($debits->count, 1, 'Credit 1 applied to 1 debit');
+    my $debit = $debits->next;
+    is($debit->amount + 0, 8, 'Correct first debit');
+
+    $debits = $credit2->debits;
+    is($debits->count, 2, 'Credit 2 applied to 2 debits');
+    $debit = $debits->next;
+    is($debit->amount + 0, 8, 'Correct first debit');
+    $debit = $debits->next;
+    is($debit->amount + 0, 12, 'Correct second debit');
 
     $schema->storage->txn_rollback;
 };
