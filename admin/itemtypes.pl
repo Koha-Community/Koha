@@ -196,9 +196,15 @@ if ( $op eq 'add_form' ) {
 }
 
 if ( $op eq 'list' ) {
-    my $itemtypes = Koha::ItemTypes->search;
+    my @itypes = Koha::ItemTypes->search->as_list;
+    my @itemtypes;
+    foreach my $itype (@itypes) {
+        my $itemtype = $itype->unblessed;
+        $itemtype->{branches} = $itype->library_limits ? $itype->library_limits->as_list : [];
+        push @itemtypes, $itemtype;
+    }
     $template->param(
-        itemtypes => $itemtypes,
+        itemtypes => \@itemtypes,
         messages  => \@messages,
     );
 }

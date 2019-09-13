@@ -359,6 +359,7 @@ Item types administration
             <th>Default replacement cost</th>
             <th>Processing fee (when lost)</th>
             <th>Checkin message</th>
+            <th>Branches limitations</th>
             <th>Actions</th>
           </thead>
           [% FOREACH itemtype IN itemtypes %]
@@ -411,6 +412,22 @@ Item types administration
             <td>[% itemtype.defaultreplacecost | $Price %]</td>
             <td>[% itemtype.processfee | $Price %]</td>
             <td>[% itemtype.checkinmsg | html_line_break | $raw %]</td>
+            <td>
+                [% IF itemtype.branches.size > 0 %]
+                    [% branches_str = "" %]
+                    [% FOREACH branch IN itemtype.branches %]
+                        [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
+                    [% END %]
+                    <span href="#" title="[% branches_str | html %]">
+                        [% IF itemtype.branches.size > 1 %]
+                            [% itemtype.branches.size | html %] branches limitations
+                        [% ELSE %]
+                            [% itemtype.branches.size | html %] branch limitation
+                        [% END %]
+                [% ELSE %]
+                    No limitation
+                [% END %]
+            </td>
             <td class="actions">
               <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
               <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
