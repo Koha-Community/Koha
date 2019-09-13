@@ -151,9 +151,9 @@
                     </select>
                     <span class="required">Required</span>
                 </li>
-                <li><label for="branches">Branches limitation: </label>
+                <li><label for="branches">Library limitations: </label>
                     <select id="branches" name="branches" multiple size="10">
-                        <option value="">All branches</option>
+                        <option value="">All libraries</option>
                         [% FOREACH branch IN branches_loop %]
                           [% IF branch.selected %]
                             <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
@@ -162,7 +162,7 @@
                           [% END %]
                         [% END %]
                     </select>
-                    <span>Select <i>All branches</i> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
+                    <span>Select <i>All libraries</i> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
                     </span>
                 </li>
                 <li>
@@ -418,7 +418,7 @@
                     [% IF ( EnhancedMessagingPreferences ) %]
                     <th scope="col">Messaging</th>
                     [% END %]
-                    <th scope="col">Branches limitations</th>
+                    <th scope="col">Library limitations</th>
                     [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                     <th scope="col">Check previous checkout?</th>
                     [% END %]
@@ -505,9 +505,9 @@
                                 [% END %]
                                 <span title="[% branches_str | html %]">
                                     [% IF branch_limitations.size > 1 %]
-                                        [% branch_limitations.size | html %] branches limitations
+                                        [% branch_limitations.size | html %] library limitations
                                     [% ELSE %]
-                                        [% branch_limitations.size | html %] branch limitation
+                                        [% branch_limitations.size | html %] library limitation
                                     [% END %]
                                 </span>
                             [% ELSE %]
