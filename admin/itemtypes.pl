@@ -59,7 +59,7 @@ undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$
 if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
 
-    my $selected_branches = $itemtype->get_library_limits;
+    my $selected_branches = $itemtype ? $itemtype->get_library_limits : undef;
     my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
     my @branches_loop;
     foreach my $branch ( @$branches ) {
