@@ -36,64 +36,71 @@
                         <li>
                             [% IF mandatory_fields.search('title') %]
                                 <label for="title" class="required">Title:</label>
+                                <input type="text" required name="title" id="title" size="50"/>
                             [% ELSE %]
                                 <label for="title">Title:</label>
+                                <input type="text" name="title" id="title" size="50"/>
                             [% END %]
-                            <input type="text" name="title" id="title" size="50"/>
                         </li>
 
                         <li>
                             [% IF mandatory_fields.search('author') %]
                                 <label for="author" class="required">Author:</label>
+                                <input type="text" required name="author" id="author" size="50"/>
                             [% ELSE %]
                                 <label for="author">Author:</label>
+                                <input type="text" name="author" id="author" size="50"/>
                             [% END %]
-                            <input type="text" name="author" id="author" size="50"/>
                         </li>
 
                         <li>
                             [% IF mandatory_fields.search('volume') %]
                                 <label for="volume" class="required">Volume:</label>
+                                <input type="text" required name="volume" id="volume" size="50"/>
                             [% ELSE %]
                                 <label for="volume">Volume:</label>
+                                <input type="text" name="volume" id="volume" size="50"/>
                             [% END %]
-                            <input type="text" name="volume" id="volume" size="50"/>
                         </li>
 
                         <li>
                             [% IF mandatory_fields.search('issue') %]
                                 <label for="issue" class="required">Issue:</label>
+                                <input type="text" required name="issue" id="issue" size="50"/>
                             [% ELSE %]
                                 <label for="issue">Issue:</label>
+                                <input type="text" name="issue" id="issue" size="50"/>
                             [% END %]
-                            <input type="text" name="issue" id="issue" size="50"/>
                         </li>
 
                         <li>
                             [% IF mandatory_fields.search('date') %]
                                 <label for="date" class="required">Date:</label>
+                                <input type="text" required name="date" id="date" size="50"/>
                             [% ELSE %]
                                 <label for="date">Date:</label>
+                                <input type="text" name="date" id="date" size="50"/>
                             [% END %]
-                            <input type="text" name="date" id="date" size="50"/>
                         </li>
 
                         <li>
                             [% IF mandatory_fields.search('pages') %]
                                 <label for="pages" class="required">Pages:</label>
+                                <input type="text" required name="pages" id="pages" size="50"/>
                             [% ELSE %]
                                 <label for="pages">Pages:</label>
+                                <input type="text" name="pages" id="pages" size="50"/>
                             [% END %]
-                            <input type="text" name="pages" id="pages" size="50"/>
                         </li>
 
                         <li>
                             [% IF mandatory_fields.search('chapters') %]
                                 <label for="chapters" class="required">Chapters:</label>
+                                <input type="text" required name="chapters" id="chapters" size="50"/>
                             [% ELSE %]
                                 <label for="chapters">Chapters:</label>
+                                <input type="text" name="chapters" id="chapters" size="50"/>
                             [% END %]
-                            <input type="text" name="chapters" id="chapters" size="50"/>
                         </li>
 
                         <li>
@@ -104,7 +111,7 @@
                         <li>
                             <label for="branchcode">Pickup library:</label>
                             <select name="branchcode" id="branchcode">
-                                [% FOREACH b IN Branches.all %]
+                                [% FOREACH b IN Branches.all %]required
                                     [% IF b.branchcode == Branches.GetLoggedInBranchcode %]
                                         <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                                     [% ELSE %]
