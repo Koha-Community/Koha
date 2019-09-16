@@ -1,86 +1,240 @@
 {
-  "/public/patrons/{patron_id}/password": {
-    "post": {
-      "x-mojo-to": "Patrons::Password#set_public",
-      "operationId": "setPatronPasswordPublic",
-      "tags": [
-        "patron"
-      ],
-      "parameters": [
-        {
-          "$ref": "../parameters.json#/patron_id_pp"
-        },
-        {
-          "name": "body",
-          "in": "body",
-          "description": "A JSON object containing password information",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "password": {
-                "description": "New password (plain text)",
-                "type": "string"
-              },
-              "password_repeated": {
-                "description": "Repeated new password (plain text)",
-                "type": "string"
-              },
-              "old_password": {
-                "description": "Patron's original password",
-                "type": "string"
-              }
+    "/public/patrons/{patron_id}/password": {
+        "post": {
+            "x-mojo-to": "Patrons::Password#set_public",
+            "operationId": "setPatronPasswordPublic",
+            "tags": [
+                "patron"
+            ],
+            "parameters": [
+                {
+                    "$ref": "../parameters.json#/patron_id_pp"
+                },
+                {
+                    "name": "body",
+                    "in": "body",
+                    "description": "A JSON object containing password information",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "password": {
+                                "description": "New password (plain text)",
+                                "type": "string"
+                            },
+                            "password_repeated": {
+                                "description": "Repeated new password (plain text)",
+                                "type": "string"
+                            },
+                            "old_password": {
+                                "description": "Patron's original password",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "password",
+                            "password_repeated",
+                            "old_password"
+                        ]
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Password changed"
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "401": {
+                    "description": "Authentication required",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Patron not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "503": {
+                    "description": "Under maintenance",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
             },
-            "required": ["password", "password_repeated", "old_password"]
-          }
+            "x-koha-authorization": {
+                "allow-owner": true
+            }
         }
-      ],
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "Password changed"
-        },
-        "400": {
-          "description": "Bad request",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
-        },
-        "401": {
-          "description": "Authentication required",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
-        },
-        "403": {
-          "description": "Access forbidden",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
-        },
-        "404": {
-          "description": "Patron not found",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
-        },
-        "500": {
-          "description": "Internal server error",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
-        },
-        "503": {
-          "description": "Under maintenance",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
+    },
+    "/public/patrons/{patron_id}/guarantors/can_see_charges": {
+        "put": {
+            "x-mojo-to": "Patrons#guarantors_can_see_charges",
+            "operationId": "setPatronGuarantorsCanSeeCharges",
+            "tags": [
+                "patron"
+            ],
+            "parameters": [
+                {
+                    "$ref": "../parameters.json#/patron_id_pp"
+                },
+                {
+                    "name": "body",
+                    "in": "body",
+                    "description": "A boolean representing if guarantors should be able to see the patron's charges",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "allowed": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Charges view policy for guarantors changed"
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "401": {
+                    "description": "Authentication required",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Patron not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "503": {
+                    "description": "Under maintenance",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "allow-owner": true
+            }
         }
-      },
-      "x-koha-authorization": {
-        "allow-owner": true
-      }
+    },
+    "/public/patrons/{patron_id}/guarantors/can_see_checkouts": {
+        "put": {
+            "x-mojo-to": "Patrons#guarantors_can_see_checkouts",
+            "operationId": "setPatronGuarantorsCanSeeCheckouts",
+            "tags": [
+                "patron"
+            ],
+            "parameters": [
+                {
+                    "$ref": "../parameters.json#/patron_id_pp"
+                },
+                {
+                    "name": "body",
+                    "in": "body",
+                    "description": "A boolean representing if guarantors should be able to see the patron's checkouts",
+                    "required": true,
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "allowed": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "Check-out view policy for guarantors changed"
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "401": {
+                    "description": "Authentication required",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Patron not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "503": {
+                    "description": "Under maintenance",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "allow-owner": true
+            }
+        }
     }
-  }
 }
