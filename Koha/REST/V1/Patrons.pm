@@ -296,6 +296,92 @@ sub delete {
     };
 }
 
+=head3 guarantors_can_see_charges
+
+Method for setting whether guarantors can see the patron's charges.
+
+=cut
+
+sub guarantors_can_see_charges {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        if ( C4::Context->preference('AllowPatronToSetFinesVisibilityForGuarantor') ) {
+            my $patron = $c->stash( 'koha.user' );
+            my $privacy_setting = ($c->req->json->{allowed}) ? 1 : 0;
+
+            $patron->privacy_guarantor_fines( $privacy_setting )->store;
+
+            return $c->render(
+                status  => 200,
+                openapi => {}
+            );
+        }
+        else {
+            return $c->render(
+                status  => 403,
+                openapi => {
+                    error =>
+                      'The current configuration doesn\'t allow the requested action.'
+                }
+            );
+        }
+    }
+    catch {
+        return $c->render(
+            status  => 500,
+            openapi => {
+                error =>
+                  "Something went wrong, check Koha logs for details. $_"
+            }
+        );
+    };
+}
+
+=head3 guarantors_can_see_checkouts
+
+Method for setting whether guarantors can see the patron's checkouts.
+
+=cut
+
+sub guarantors_can_see_checkouts {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        if ( C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor') ) {
+            my $patron = $c->stash( 'koha.user' );
+            my $privacy_setting = ( $c->req->json->{allowed} ) ? 1 : 0;
+
+            $patron->privacy_guarantor_checkouts( $privacy_setting )->store;
+
+            return $c->render(
+                status  => 200,
+                openapi => {}
+            );
+        }
+        else {
+            return $c->render(
+                status  => 403,
+                openapi => {
+                    error =>
+                      'The current configuration doesn\'t allow the requested action.'
+                }
+            );
+        }
+    }
+    catch {
+        return $c->render(
+            status  => 500,
+            openapi => {
+                error =>
+                  "Something went wrong, check Koha logs for details. $_"
+            }
+        );
+    };
+}
+
+=head2 Internal methods
+
 =head3 _to_api
 
 Helper function that maps unblessed Koha::Patron objects into REST api

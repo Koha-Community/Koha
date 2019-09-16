@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Test::Mojo;
 use Test::Warn;
 
@@ -340,6 +340,82 @@ subtest 'delete() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'guarantors_can_see_charges() tests' => sub {
+
+    plan tests => 11;
+
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy_guarantor_fines => 0 } });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+    my $patron_id = $patron->borrowernumber;
+
+    t::lib::Mocks::mock_preference( 'AllowPatronToSetFinesVisibilityForGuarantor', 0 );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_charges" => json => { allowed => Mojo::JSON->true } )
+      ->status_is( 403 )
+      ->json_is( '/error', 'The current configuration doesn\'t allow the requested action.' );
+
+    t::lib::Mocks::mock_preference( 'AllowPatronToSetFinesVisibilityForGuarantor', 1 );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_charges" => json => { allowed => Mojo::JSON->true } )
+      ->status_is( 200 )
+      ->json_is( {} );
+
+    ok( $patron->discard_changes->privacy_guarantor_fines, 'privacy_guarantor_fines has been set correctly' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_charges" => json => { allowed => Mojo::JSON->false } )
+      ->status_is( 200 )
+      ->json_is( {} );
+
+    ok( !$patron->discard_changes->privacy_guarantor_fines, 'privacy_guarantor_fines has been set correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'guarantors_can_see_checkouts() tests' => sub {
+
+    plan tests => 11;
+
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { privacy_guarantor_checkouts => 0 } });
+    my $password = 'thePassword123';
+    $patron->set_password({ password => $password, skip_validation => 1 });
+    my $userid = $patron->userid;
+    my $patron_id = $patron->borrowernumber;
+
+    t::lib::Mocks::mock_preference( 'AllowPatronToSetCheckoutsVisibilityForGuarantor', 0 );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_checkouts" => json => { allowed => Mojo::JSON->true } )
+      ->status_is( 403 )
+      ->json_is( '/error', 'The current configuration doesn\'t allow the requested action.' );
+
+    t::lib::Mocks::mock_preference( 'AllowPatronToSetCheckoutsVisibilityForGuarantor', 1 );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_checkouts" => json => { allowed => Mojo::JSON->true } )
+      ->status_is( 200 )
+      ->json_is( {} );
+
+    ok( $patron->discard_changes->privacy_guarantor_checkouts, 'privacy_guarantor_checkouts has been set correctly' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/public/patrons/$patron_id/guarantors/can_see_checkouts" => json => { allowed => Mojo::JSON->false } )
+      ->status_is( 200 )
+      ->json_is( {} );
+
+    ok( !$patron->discard_changes->privacy_guarantor_checkouts, 'privacy_guarantor_checkouts has been set correctly' );
+
+    $schema->storage->txn_rollback;
 };
 
 # Centralized tests for 401s and 403s assuming the endpoint requires
