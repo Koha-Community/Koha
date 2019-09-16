@@ -39,6 +39,7 @@ use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::SearchEngine::Indexer;
 use Koha::Suggestions;
 use Koha::Subscriptions;
 
@@ -951,6 +952,29 @@ sub get_marc_host {
         return wantarray ? ( $host, $hostfld->subfield('g') ) : $host;
     }
 }
+
+=head3 adopt_items_from_biblio
+
+$biblio->adopt_items_from_biblio($from_biblio);
+
+Move items from the given biblio to this one.
+
+=cut
+
+sub adopt_items_from_biblio {
+    my ( $self, $from_biblio ) = @_;
+
+    my $items = $from_biblio->items;
+    if ($items) {
+        while (my $item = $items->next()) {
+            $item->move_to_biblio($self, { skip_record_index => 1 });
+        }
+        my $indexer = Koha::SearchEngine::Indexer->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+        $indexer->index_records( $self->biblionumber, "specialUpdate", "biblioserver" );
+        $indexer->index_records( $from_biblio->biblionumber, "specialUpdate", "biblioserver" );
+    }
+}
+
 
 =head2 Internal methods
 

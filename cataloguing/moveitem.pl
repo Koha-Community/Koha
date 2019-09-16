@@ -69,8 +69,9 @@ if ( $barcode && $biblionumber ) {
 
         $itemnumber = $item->itemnumber;
         my $frombiblionumber = $item->biblionumber;
+        my $to_biblio = Koha::Biblios->find($biblionumber);
 
-        my $moveresult = MoveItemFromBiblio( $itemnumber, $frombiblionumber, $biblionumber );
+        my $moveresult = $item->move_to_biblio($to_biblio);
         if ($moveresult) {
             $template->param(
                 success => 1,

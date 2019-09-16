@@ -39,6 +39,7 @@ use C4::Reserves qw( MergeHolds );
 use C4::Acquisition qw( ModOrder GetOrdersByBiblionumber );
 
 use Koha::BiblioFrameworks;
+use Koha::Biblios;
 use Koha::Items;
 use Koha::MetadataRecord;
 
@@ -88,25 +89,16 @@ if ($merge) {
     $record->leader(GetMarcBiblio({ biblionumber => $ref_biblionumber })->leader());
 
     my $frameworkcode = $input->param('frameworkcode');
-    my @notmoveditems;
 
     # Modifying the reference record
     ModBiblio($record, $ref_biblionumber, $frameworkcode);
 
-    # Moving items from the other record to the reference record
+    # Moving items and article requests from the other record to the reference record
+    my $biblio = Koha::Biblios->find($ref_biblionumber);
     foreach my $biblionumber (@biblionumbers) {
-        my $items = Koha::Items->search({ biblionumber => $biblionumber });
-        while ( my $item = $items->next) {
-            my $res = MoveItemFromBiblio( $item->itemnumber, $biblionumber, $ref_biblionumber );
-            if ( not defined $res ) {
-                push @notmoveditems, $item->itemnumber;
-            }
-        }
-    }
-    # If some items could not be moved :
-    if (scalar(@notmoveditems) > 0) {
-        my $itemlist = join(' ',@notmoveditems);
-        push @errors, { code => "CANNOT_MOVE", value => $itemlist };
+        my $from_biblio = Koha::Biblios->find($biblionumber);
+        $biblio->adopt_items_from_biblio($from_biblio);
+        $from_biblio->article_requests->update({ biblionumber => $ref_biblionumber }, { no_triggers => 1 });
     }
 
     my $sth_subscription = $dbh->prepare("
@@ -170,7 +162,7 @@ if ($merge) {
     # Moving suggestions
     $sth_suggestions->execute($ref_biblionumber, $biblionumber);
 
-    # Moving orders (orders linked to items of frombiblio have already been moved by MoveItemFromBiblio)
+    # Moving orders (orders linked to items of frombiblio have already been moved by adopt_items_from_biblio)
     my @allorders = GetOrdersByBiblionumber($biblionumber);
     foreach my $myorder (@allorders) {
         $myorder->{'biblionumber'} = $ref_biblionumber;

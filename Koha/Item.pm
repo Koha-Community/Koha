@@ -1172,6 +1172,90 @@ sub itemtype {
     return Koha::ItemTypes->find( $self->effective_itemtype );
 }
 
+=head3 item_orders
+
+my $orders = $item->item_orders();
+
+Returns a Koha::Acquisition::Orders object
+
+=cut
+
+sub item_orders {
+    my ( $self ) = @_;
+
+    my $orders = $self->_result->item_orders;
+    return unless $orders;
+    return Koha::Acquisition::Orders->_new_from_dbic($orders);
+}
+
+=head3 move_to_biblio
+
+  $item->move_to_biblio($to_biblio[, $params]);
+
+Move the item to another biblio and update any references also in other tables.
+
+The final optional parameter, C<$params>, is expected to contain the
+'skip_record_index' key, which is relayed down to Koha::Item->store.
+There it prevents calling index_records, which takes most of the
+time in batch adds/deletes. The caller must take care of calling
+index_records separately.
+
+$params:
+    skip_record_index => 1|0
+
+Returns undef if the move failed or the biblionumber of the destination record otherwise
+
+=cut
+
+sub move_to_biblio {
+    my ( $self, $to_biblio, $params ) = @_;
+
+    $params //= {};
+
+    return unless $self->biblionumber != $to_biblio->biblionumber;
+
+    my $biblionumber = $to_biblio->biblionumber;
+
+    # Own biblionumber and biblioitemnumber
+    $self->set({
+        biblionumber => $biblionumber,
+        biblioitemnumber => $to_biblio->biblioitem->biblioitemnumber
+    })->store({ skip_record_index => $params->{skip_record_index} });
+
+    # Acquisition orders
+    my $orders = $self->item_orders;
+    if ($orders) {
+        $orders->update({ biblionumber => $biblionumber }, { no_triggers => 1 });
+    }
+
+    # Holds
+    $self->holds->update({ biblionumber => $biblionumber });
+
+    # hold_fill_target (there's no Koha object available)
+    my $hold_fill_target = $self->_result->hold_fill_target;
+    if ($hold_fill_target) {
+        $hold_fill_target->update({ biblionumber => $biblionumber });
+    }
+
+    # tmp_holdsqueues - Can't update with DBIx since the table is missing a primary key
+    # and can't even fake one since the significant columns are nullable.
+    my $storage = $self->_result->result_source->storage;
+    $storage->dbh_do(
+        sub {
+            my ($storage, $dbh, @cols) = @_;
+
+            $dbh->do("UPDATE tmp_holdsqueue SET biblionumber=? WHERE itemnumber=?", undef, $biblionumber, $self->itemnumber);
+        }
+    );
+
+    # linktrackers
+    my $schema = Koha::Database->new()->schema();
+    my $linktrackers = $schema->resultset('Linktracker')->search({ itemnumber => $self->itemnumber });
+    $linktrackers->update_all({ biblionumber => $biblionumber });
+
+    return $biblionumber;
+}
+
 =head2 Internal methods
 
 =head3 _after_item_action_hooks

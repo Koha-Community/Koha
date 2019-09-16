@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 11;
 use Test::Exception;
 
 use C4::Biblio qw( GetMarcSubfieldStructure );
@@ -813,6 +813,185 @@ subtest 'get_transfers' => sub {
     is($transfers->count, 1, 'Once a transfer is cancelled, it no longer appears in the list from ->get_transfers()');
     $result_1 = $transfers->next;
     is( $result_1->branchtransfer_id, $transfer_3->branchtransfer_id, 'Koha::Item->get_transfers returns the only transfer that remains');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'move_to_biblio() tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    my $dbh = C4::Context->dbh;
+
+    my $source_biblio = $builder->build_sample_biblio();
+    my $target_biblio = $builder->build_sample_biblio();
+
+    my $source_biblionumber = $source_biblio->biblionumber;
+    my $target_biblionumber = $target_biblio->biblionumber;
+
+    my $item1 = $builder->build_sample_item({ biblionumber => $source_biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $source_biblionumber });
+    my $item3 = $builder->build_sample_item({ biblionumber => $source_biblionumber });
+
+    my $itemnumber1 = $item1->itemnumber;
+    my $itemnumber2 = $item2->itemnumber;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { branchcode => $library->branchcode }
+    });
+    my $borrowernumber = $patron->borrowernumber;
+
+    my $aq_budget = $builder->build({
+        source => 'Aqbudget',
+        value  => {
+            budget_notes => 'test',
+        },
+    });
+
+    my $aq_order1 = $builder->build_object({
+        class => 'Koha::Acquisition::Orders',
+        value  => {
+            biblionumber => $source_biblionumber,
+            budget_id => $aq_budget->{budget_id},
+        },
+    });
+    my $aq_order_item1 = $builder->build({
+        source => 'AqordersItem',
+        value  => {
+            ordernumber => $aq_order1->ordernumber,
+            itemnumber => $itemnumber1,
+        },
+    });
+    my $aq_order2 = $builder->build_object({
+        class => 'Koha::Acquisition::Orders',
+        value  => {
+            biblionumber => $source_biblionumber,
+            budget_id => $aq_budget->{budget_id},
+        },
+    });
+    my $aq_order_item2 = $builder->build({
+        source => 'AqordersItem',
+        value  => {
+            ordernumber => $aq_order2->ordernumber,
+            itemnumber => $itemnumber2,
+        },
+    });
+
+    my $bib_level_hold = $builder->build_object({
+        class => 'Koha::Holds',
+        value  => {
+            biblionumber => $source_biblionumber,
+        },
+    });
+    my $item_level_hold1 = $builder->build_object({
+        class => 'Koha::Holds',
+        value  => {
+            biblionumber => $source_biblionumber,
+            itemnumber => $itemnumber1,
+        },
+    });
+    my $item_level_hold2 = $builder->build_object({
+        class => 'Koha::Holds',
+        value  => {
+            biblionumber => $source_biblionumber,
+            itemnumber => $itemnumber2,
+        }
+    });
+
+    my $tmp_holdsqueue1 = $builder->build({
+        source => 'TmpHoldsqueue',
+        value  => {
+            borrowernumber => $borrowernumber,
+            biblionumber   => $source_biblionumber,
+            itemnumber     => $itemnumber1,
+        }
+    });
+    my $tmp_holdsqueue2 = $builder->build({
+        source => 'TmpHoldsqueue',
+        value  => {
+            borrowernumber => $borrowernumber,
+            biblionumber   => $source_biblionumber,
+            itemnumber     => $itemnumber2,
+        }
+    });
+    my $hold_fill_target1 = $builder->build({
+        source => 'HoldFillTarget',
+        value  => {
+            borrowernumber     => $borrowernumber,
+            biblionumber       => $source_biblionumber,
+            itemnumber         => $itemnumber1,
+        }
+    });
+    my $hold_fill_target2 = $builder->build({
+        source => 'HoldFillTarget',
+        value  => {
+            borrowernumber     => $borrowernumber,
+            biblionumber       => $source_biblionumber,
+            itemnumber         => $itemnumber2,
+        }
+    });
+    my $linktracker1 = $builder->build({
+        source => 'Linktracker',
+        value  => {
+            borrowernumber     => $borrowernumber,
+            biblionumber       => $source_biblionumber,
+            itemnumber         => $itemnumber1,
+        }
+    });
+    my $linktracker2 = $builder->build({
+        source => 'Linktracker',
+        value  => {
+            borrowernumber     => $borrowernumber,
+            biblionumber       => $source_biblionumber,
+            itemnumber         => $itemnumber2,
+        }
+    });
+
+    my $to_biblionumber_after_move = $item1->move_to_biblio($target_biblio);
+    is($to_biblionumber_after_move, $target_biblionumber, 'move_to_biblio returns the target biblionumber if success');
+
+    $to_biblionumber_after_move = $item1->move_to_biblio($target_biblio);
+    is($to_biblionumber_after_move, undef, 'move_to_biblio returns undef if the move has failed. If called twice, the item is not attached to the first biblio anymore');
+
+    my $get_item1 = Koha::Items->find( $item1->itemnumber );
+    is($get_item1->biblionumber, $target_biblionumber, 'item1 is moved');
+    my $get_item2 = Koha::Items->find( $item2->itemnumber );
+    is($get_item2->biblionumber, $source_biblionumber, 'item2 is not moved');
+    my $get_item3 = Koha::Items->find( $item3->itemnumber );
+    is($get_item3->biblionumber, $source_biblionumber, 'item3 is not moved');
+
+    $aq_order1->discard_changes;
+    $aq_order2->discard_changes;
+    is($aq_order1->biblionumber, $target_biblionumber, 'move_to_biblio moves aq_orders for item 1');
+    is($aq_order2->biblionumber, $source_biblionumber, 'move_to_biblio does not move aq_orders for item 2');
+
+    $bib_level_hold->discard_changes;
+    $item_level_hold1->discard_changes;
+    $item_level_hold2->discard_changes;
+    is($bib_level_hold->biblionumber,   $source_biblionumber, 'move_to_biblio does not move the biblio-level hold');
+    is($item_level_hold1->biblionumber, $target_biblionumber, 'move_to_biblio moves the item-level hold placed on item 1');
+    is($item_level_hold2->biblionumber, $source_biblionumber, 'move_to_biblio does not move the item-level hold placed on item 2');
+
+    my $get_tmp_holdsqueue1 = $schema->resultset('TmpHoldsqueue')->search({ itemnumber => $tmp_holdsqueue1->{itemnumber} })->single;
+    my $get_tmp_holdsqueue2 = $schema->resultset('TmpHoldsqueue')->search({ itemnumber => $tmp_holdsqueue2->{itemnumber} })->single;
+    is($get_tmp_holdsqueue1->biblionumber, $target_biblionumber, 'move_to_biblio moves tmp_holdsqueue for item 1');
+    is($get_tmp_holdsqueue2->biblionumber, $source_biblionumber, 'move_to_biblio does not move tmp_holdsqueue for item 2');
+
+    my $get_hold_fill_target1 = $schema->resultset('HoldFillTarget')->search({ itemnumber => $hold_fill_target1->{itemnumber} })->single;
+    my $get_hold_fill_target2 = $schema->resultset('HoldFillTarget')->search({ itemnumber => $hold_fill_target2->{itemnumber} })->single;
+    # Why does ->biblionumber return a Biblio object???
+    is($get_hold_fill_target1->biblionumber->biblionumber, $target_biblionumber, 'move_to_biblio moves hold_fill_targets for item 1');
+    is($get_hold_fill_target2->biblionumber->biblionumber, $source_biblionumber, 'move_to_biblio does not move hold_fill_targets for item 2');
+
+    my $get_linktracker1 = $schema->resultset('Linktracker')->search({ itemnumber => $linktracker1->{itemnumber} })->single;
+    my $get_linktracker2 = $schema->resultset('Linktracker')->search({ itemnumber => $linktracker2->{itemnumber} })->single;
+    is($get_linktracker1->biblionumber, $target_biblionumber, 'move_to_biblio moves linktracker for item 1');
+    is($get_linktracker2->biblionumber, $source_biblionumber, 'move_to_biblio does not move linktracker for item 2');
 
     $schema->storage->txn_rollback;
 };
