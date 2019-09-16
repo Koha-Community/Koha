@@ -87,7 +87,7 @@ sub new {
     $self->{namespace} .= ":$subnamespace:";
 
     if ( $self->{'default_type'} eq 'memcached'
-        && can_load( modules => { 'Cache::Memcached::Fast' => undef } )
+        && can_load( modules => { 'Cache::Memcached::Fast::Safe' => undef } )
         && _initialize_memcached($self, @servers)
         && defined( $self->{'memcached_cache'} ) )
     {
@@ -120,9 +120,9 @@ sub _initialize_memcached {
       . join( ', ', @servers )
       . " with "
       . $self->{'namespace'};
-    # Cache::Memcached::Fast doesn't allow a default expire time to be set
+    # Cache::Memcached::Fast::Safe doesn't allow a default expire time to be set
     # so we force it on setting.
-    my $memcached = Cache::Memcached::Fast->new(
+    my $memcached = Cache::Memcached::Fast::Safe->new(
         {
             servers            => \@servers,
             compress_threshold => 10_000,

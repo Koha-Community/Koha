@@ -265,7 +265,12 @@ our $PERL_DEPS = {
     'Cache::Memcached::Fast' => {
         'usage'    => 'Caching',
         'required' => '0',
-        'min_ver'  => '0.17'
+        'min_ver'  => '0.19'
+    },
+    'Cache::Memcached::Fast::Safe' => {
+        'usage'    => 'Caching',
+        'required' => '0',
+        'min_ver'  => '0.06'
     },
     'Cache::FastMmap' => {
         'usage'    => 'Caching',
