@@ -348,7 +348,7 @@ subtest 'suspend and resume tests' => sub {
 
 subtest 'PUT /holds/{hold_id}/priority tests' => sub {
 
-    plan tests => 8;
+    plan tests => 14;
 
     $schema->storage->txn_begin;
 
@@ -428,6 +428,14 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
     is( $hold_1->discard_changes->priority, 2, 'Priority adjusted correctly' );
     is( $hold_2->discard_changes->priority, 3, 'Priority adjusted correctly' );
     is( $hold_3->discard_changes->priority, 1, 'Priority adjusted correctly' );
+
+    $t->put_ok( "//$userid:$password@/api/v1/holds/"
+          . $hold_3->id
+          . "/priority" => json => 3 )->status_is(200)->json_is(3);
+
+    is( $hold_1->discard_changes->priority, 1, 'Priority adjusted correctly' );
+    is( $hold_2->discard_changes->priority, 2, 'Priority adjusted correctly' );
+    is( $hold_3->discard_changes->priority, 3, 'Priority adjusted correctly' );
 
     $schema->storage->txn_rollback;
 };
