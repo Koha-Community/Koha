@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use C4::Biblio;
 use C4::Context;
@@ -448,6 +448,41 @@ subtest '->get_effective_marcorgcode' => sub {
     $library_2->marcorgcode('ThisIsACode')->store();
     is( $library_2->get_effective_marcorgcode, 'ThisIsACode',
        'Pick library_2 code');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'cash_registers' => sub {
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $register1 = $builder->build_object(
+        {
+            class => 'Koha::Cash::Registers',
+            value  => { branch => $library->branchcode },
+        }
+    );
+    my $register2 = $builder->build_object(
+        {
+            class => 'Koha::Cash::Registers',
+            value  => { branch => $library->branchcode },
+        }
+    );
+
+    my $registers = $library->cash_registers;
+    is( ref($registers), 'Koha::Cash::Registers',
+'Koha::Library->cash_registers should return a set of Koha::Cash::Registers'
+    );
+    is( $registers->count, 2,
+        'Koha::Library->cash_registers should return the correct cash registers'
+    );
+
+    $register1->delete;
+    is( $library->cash_registers->next->id, $register2->id,
+        'Koha::Library->cash_registers should return the correct cash registers'
+    );
 
     $schema->storage->txn_rollback;
 };

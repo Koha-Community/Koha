@@ -77,6 +77,18 @@ sub library_groups {
     return Koha::Library::Groups->_new_from_dbic( $rs );
 }
 
+=head3 cash_registers
+
+Return Cash::Registers associated with this Library
+
+=cut
+
+sub cash_registers {
+    my ( $self ) = @_;
+    my $rs = $self->_result->cash_registers;
+    return Koha::Cash::Registers->_new_from_dbic( $rs );
+}
+
 =head2 Internal methods
 
 =head3 _type
