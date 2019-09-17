@@ -25,7 +25,7 @@ use Exception::Class (
     'Koha::Exceptions::Metadata::Invalid' => {
         isa => 'Koha::Exceptions::Metadata',
         description => 'Invalid data',
-        fields => ['id','format','schema', 'marcxml_error']
+        fields => ['id','format','schema', 'decoding_error']
     }
 );
 
@@ -36,8 +36,8 @@ sub full_message {
 
     unless ($msg) {
         if ( $self->isa('Koha::Exceptions::Metadata::Invalid') ) {
-            $msg = sprintf( "Invalid data, cannot decode object (id=%s, format=%s, schema=%s, MARCXML error='%s')",
-                $self->id, $self->format, $self->schema, $self->marcxml_error );
+            $msg = sprintf( "Invalid data, cannot decode object (id=%s, format=%s, schema=%s, decoding_error='%s')",
+                $self->id, $self->format, $self->schema, $self->decoding_error );
         }
     }
 

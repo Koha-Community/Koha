@@ -75,7 +75,7 @@ sub record {
                 id     => $self->id,
                 format => $self->format,
                 schema => $self->schema,
-                marcxml_error => $marcxml_error,
+                decoding_error => $marcxml_error,
             );
         }
     }
