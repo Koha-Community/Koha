@@ -1053,7 +1053,7 @@
                     $('#update_privacy_guarantor_checkouts').click( function() {
                         var can_see_checkouts = $('#privacy_guarantor_checkouts').val() == 1;
                         $.ajax({
-                            url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber %]/guarantors/can_see_checkouts"
+                            url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber %]/guarantors/can_see_checkouts",
                             type: "PUT",
                             data: JSON.stringify({ allowed: can_see_checkouts }),
                             contentType: "application/json",
