@@ -420,8 +420,13 @@ sub nb_rows {
     my $sql = shift or return;
     my $sth = C4::Context->dbh->prepare($sql);
     $sth->execute();
-    my $rows = $sth->fetchall_arrayref();
-    return scalar (@$rows);
+    my $n = 0;
+    # Loop through the complete results, fetching 1,000 rows at a time.  This
+    # lowers memory requirements but increases execution time.
+    while (my $rows = $sth->fetchall_arrayref(undef, 1000)) {
+        $n += @$rows;
+    }
+    return $n;
 }
 
 =head2 execute_query
