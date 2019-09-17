@@ -70,15 +70,16 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
 sub pay {
     my ( $self, $params ) = @_;
 
-    my $amount       = $params->{amount};
-    my $description  = $params->{description};
-    my $note         = $params->{note} || q{};
-    my $library_id   = $params->{library_id};
-    my $lines        = $params->{lines};
-    my $type         = $params->{type} || 'payment';
-    my $payment_type = $params->{payment_type} || undef;
-    my $account_type = $params->{account_type};
-    my $offset_type  = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
+    my $amount        = $params->{amount};
+    my $description   = $params->{description};
+    my $note          = $params->{note} || q{};
+    my $library_id    = $params->{library_id};
+    my $lines         = $params->{lines};
+    my $type          = $params->{type} || 'payment';
+    my $payment_type  = $params->{payment_type} || undef;
+    my $account_type  = $params->{account_type};
+    my $offset_type   = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
+    my $cash_register = $params->{cash_register};
 
     my $userenv = C4::Context->userenv;
 
@@ -86,6 +87,10 @@ sub pay {
 
     my $manager_id = $userenv ? $userenv->{number} : 0;
     my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
+    Koha::Exceptions::Account::RegisterRequired->throw()
+      if ( C4::Context->preference("UseCashRegisters")
+        && !defined($cash_register)
+        && ( $interface ne 'opac' ) );
 
     my @fines_paid; # List of account lines paid on with this payment
 
@@ -227,6 +232,7 @@ sub pay {
             manager_id        => $manager_id,
             interface         => $interface,
             branchcode        => $library_id,
+            register_id       => $cash_register,
             note              => $note,
         }
     )->store();
@@ -327,21 +333,27 @@ sub add_credit {
     my ( $self, $params ) = @_;
 
     # amount is passed as a positive value, but we store credit as negative values
-    my $amount       = $params->{amount} * -1;
-    my $description  = $params->{description} // q{};
-    my $note         = $params->{note} // q{};
-    my $user_id      = $params->{user_id};
-    my $interface    = $params->{interface};
-    my $library_id   = $params->{library_id};
-    my $payment_type = $params->{payment_type};
-    my $type         = $params->{type} || 'payment';
-    my $item_id      = $params->{item_id};
+    my $amount        = $params->{amount} * -1;
+    my $description   = $params->{description} // q{};
+    my $note          = $params->{note} // q{};
+    my $user_id       = $params->{user_id};
+    my $interface     = $params->{interface};
+    my $library_id    = $params->{library_id};
+    my $cash_register = $params->{cash_register};
+    my $payment_type  = $params->{payment_type};
+    my $type          = $params->{type} || 'payment';
+    my $item_id       = $params->{item_id};
 
     unless ( $interface ) {
         Koha::Exceptions::MissingParameter->throw(
             error => 'The interface parameter is mandatory'
         );
     }
+
+    Koha::Exceptions::Account::RegisterRequired->throw()
+      if ( C4::Context->preference("UseCashRegisters")
+        && !defined($cash_register)
+        && ( $payment_type eq 'CASH' ) );
 
     my $schema = Koha::Database->new->schema;
 
@@ -364,6 +376,7 @@ sub add_credit {
                     manager_id        => $user_id,
                     interface         => $interface,
                     branchcode        => $library_id,
+                    register_id       => $cash_register,
                     itemnumber        => $item_id,
                 }
             )->store();

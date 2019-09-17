@@ -122,6 +122,20 @@
             </select>
         </li>
     [% END %]
+    [% IF Koha.Preference('UseCashRegisters') %]
+    <li>
+        <label for="cash_register">Cash register: </label>
+        <select name="cash_register" id="cash_register">
+            [% FOREACH register IN registers %]
+              [% IF register.id == registerid %]
+            <option value="[% register.id %]" selected="selected">[% register.name | html %]</option>
+              [% ELSE %]
+            <option value="[% register.id %]">[% register.name | html %]</option>
+              [% END %]
+            [% END %]
+        </select>
+    </li>
+    [% END %]
 </ol>
 </fieldset>
 
@@ -216,6 +230,7 @@
         <label>Change to give: </label>
         <span id="change">0.00</span>
     </li>
+
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
         <li>
@@ -228,6 +243,22 @@
             </select>
         </li>
     [% END %]
+
+    [% IF Koha.Preference('UseCashRegisters') %]
+    <li>
+        <label for="cash_register">Cash register: </label>
+        <select name="cash_register" id="cash_register">
+            [% FOREACH register IN registers %]
+              [% IF register.id == registerid %]
+            <option value="[% register.id %]" selected="selected">[% register.name | html %]</option>
+              [% ELSE %]
+            <option value="[% register.id %]">[% register.name | html %]</option>
+              [% END %]
+            [% END %]
+        </select>
+    </li>
+    [% END %]
+
     <li>
         <label for="selected_accts_notes">Note: </label>
         <textarea name="selected_accts_notes" id="selected_accts_notes">[% selected_accts_notes | html %]</textarea>

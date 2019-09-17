@@ -41,8 +41,11 @@ use Exception::Class (
     'Koha::Exceptions::Account::UnrecognisedType' => {
         isa         => 'Koha::Exceptions::Account',
         description => 'Account type was not recognised'
+    },
+    'Koha::Exceptions::Account::RegisterRequired' => {
+        isa         => 'Koha::Exceptions::Account',
+        description => 'Account transaction requires a cash register'
     }
-
 );
 
 =head1 NAME
@@ -78,6 +81,12 @@ decimal value.
 =head2 Koha::Exceptions::Account::UnrecognisedType
 
 Exception to be used when a passed credit or debit is not of a recognised type.
+
+=cut
+
+=head2 Koha::Exceptions::Account::RegisterRequired
+
+Exception to be used when UseCashRegisters is enabled and one is not passed for a transaction.
 
 =cut
 

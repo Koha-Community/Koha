@@ -28,6 +28,7 @@ use C4::Members;
 use C4::Accounts;
 use C4::Koha;
 
+use Koha::Cash::Registers;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::AuthorisedValues;
@@ -73,6 +74,21 @@ my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
+
+my $registerid = $input->param('registerid');
+if ( !$registerid ) {
+    $registerid = Koha::Cash::Registers->find(
+        { branch => $library_id, branch_default => 1 },
+    )->id;
+}
+my $registers = Koha::Cash::Registers->search(
+    { branch   => $library_id, archived => 0 },
+    { order_by => { '-asc' => 'name' } }
+);
+$template->param(
+    registerid => $registerid,
+    registers  => $registers,
+);
 
 if ( $pay_individual || $writeoff_individual ) {
     if ($pay_individual) {
@@ -130,6 +146,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     note         => $payment_note,
                     interface    => C4::Context->interface,
                     payment_type => $payment_type,
+                    cash_register => $registerid
                 }
             );
             print $input->redirect(
@@ -160,6 +177,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                         note         => $note,
                         interface    => C4::Context->interface,
                         payment_type => $payment_type,
+                        cash_register => $registerid
                     }
                   );
             }
@@ -171,7 +189,9 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                         library_id   => $library_id,
                         note         => $note,
                         payment_type => $payment_type,
-                        interface    => C4::Context->interface
+                        interface    => C4::Context->interface,
+                        payment_type => $payment_type,
+                        cash_register => $registerid
                     }
                 );
             }
