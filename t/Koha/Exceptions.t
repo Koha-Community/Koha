@@ -115,12 +115,14 @@ subtest 'Koha::Exceptions::Metadata tests' => sub {
     $object->mock( 'schema', 'a_schema' );
 
     throws_ok
-        { Koha::Exceptions::Metadata::Invalid->throw( id => 'an_id', format => 'a_format', schema => 'a_schema' ); }
+        { Koha::Exceptions::Metadata::Invalid->throw(
+            id => 'an_id', format => 'a_format',
+            schema => 'a_schema', decoding_error => 'a_nasty_error' ); }
         'Koha::Exceptions::Metadata::Invalid',
         'Exception is thrown :-D';
 
     # stringify the exception
-    is( "$@", 'Invalid data, cannot decode object (id=an_id, format=a_format, schema=a_schema)', 'Exception stringified correctly' );
+    is( "$@", 'Invalid data, cannot decode object (id=an_id, format=a_format, schema=a_schema, decoding_error=\'a_nasty_error\')', 'Exception stringified correctly' );
 
     throws_ok
         { Koha::Exceptions::Metadata::Invalid->throw( "Manual message exception" ) }
