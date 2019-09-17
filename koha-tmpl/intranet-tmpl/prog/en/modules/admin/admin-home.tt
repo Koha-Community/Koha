@@ -98,6 +98,16 @@
                 </dl>
             [% END %]
 
+            [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_manage_cash_registers ) %]
+                <h3>Accounting</h3>
+                <dl>
+                    [% IF ( CAN_user_cash_management_manage_cash_registers ) %]
+                        <dt><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></dt>
+                        <dd>Define cash registers</dd>
+                    [% END %]
+                </dl>
+            [% END %]
+
             [% IF CAN_user_plugins && plugins_enabled %]
                 <h3>Plugins</h3>
                 <dl>
