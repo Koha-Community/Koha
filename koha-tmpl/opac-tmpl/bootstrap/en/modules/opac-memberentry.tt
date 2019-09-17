@@ -1053,7 +1053,7 @@
                     $('#update_privacy_guarantor_checkouts').click( function() {
                         var can_see_checkouts = $('#privacy_guarantor_checkouts').val() == 1;
                         $.ajax({
-                            url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber %]/guarantors/can_see_checkouts",
+                            url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber | uri %]/guarantors/can_see_checkouts",
                             type: "PUT",
                             data: JSON.stringify({ allowed: can_see_checkouts }),
                             contentType: "application/json",
@@ -1071,7 +1071,7 @@
                     $('#update_privacy_guarantor_fines').click( function() {
                         var can_see_charges = $('#privacy_guarantor_fines').val() == 1;
                         $.ajax({
-                            url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber %]/guarantors/can_see_charges",
+                            url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber | uri %]/guarantors/can_see_charges",
                             type: 'PUT',
                             data: JSON.stringify({ allowed: can_see_charges }),
                             contentType: 'application/json',
