@@ -128,9 +128,38 @@ elsif ( $op eq 'unarchive' ) {
     $op = 'list';
 }
 
+elsif ( $op eq 'make_default' ) {
+    if ($registerid) {
+        try {
+            my $cash_register = Koha::Cash::Registers->find($registerid);
+            $cash_register->make_default;
+            push @messages, { code => 'success_on_default', type => 'message' };
+        }
+        catch {
+            push @messages, { code => 'error_on_default', type => 'alert' };
+        }
+    }
+    $op = 'list';
+}
+elsif ( $op eq 'drop_default' ) {
+    if ($registerid) {
+        try {
+            my $cash_register = Koha::Cash::Registers->find($registerid);
+            $cash_register->drop_default;
+            push @messages, { code => 'success_on_default', type => 'message' };
+        }
+        catch {
+            push @messages, { code => 'error_on_default', type => 'alert' };
+        }
+    }
+    $op = 'list';
+}
+
+
 if ( $op eq 'list' ) {
     my $cash_registers =
-      Koha::Cash::Registers->search( {}, { prefetch => 'branch' } );
+      Koha::Cash::Registers->search( {},
+        { prefetch => 'branch', order_by => { -asc => [qw/branch name/] } } );
     $template->param( cash_registers => $cash_registers, );
 }
 

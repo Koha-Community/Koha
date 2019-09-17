@@ -41,6 +41,11 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Object',
         description => "Invalid property",
     },
+    'Koha::Exceptions::Object::ReadOnlyProperty' => {
+        isa => 'Koha::Exceptions::Object',
+        description => "Change of readonly property attempted",
+        fields => [ 'property' ],
+    },
     'Koha::Exceptions::Object::MethodNotCoveredByTests' => {
         isa => 'Koha::Exceptions::Object',
         description => "Method not covered by tests",
@@ -63,6 +68,9 @@ sub full_message {
         }
         elsif ( $self->isa('Koha::Exceptions::Object::BadValue') ) {
             $msg = sprintf("Invalid value passed, %s=%s expected type is %s", $self->property, $self->value, $self->type );
+        }
+        elsif ( $self->isa('Koha::Exceptions::Object::ReadOnlyProperty') ) {
+            $msg = sprintf("Invalid attempt to change readonly property: %s", $self->property );
         }
     }
 

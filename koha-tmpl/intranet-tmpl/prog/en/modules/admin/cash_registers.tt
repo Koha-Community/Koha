@@ -1,9 +1,9 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
-[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Cash Registers
+<title>Koha &rsaquo; Administration &rsaquo; Cash registers
 [% IF op == 'add_form' %]
     &rsaquo;[% IF cash_register %]Modify cash register[% ELSE %]New cash register [% cash_register.id | html %][% END %]
 [% ELSIF op == 'delete_confirm' %]
@@ -36,20 +36,22 @@
                 [% FOREACH m IN messages %]
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
-                    [% CASE 'error_on_update' %]
-                        An error occurred when updating this cash register.
+                    [% CASE 'success_on_insert' %]
+                        Cash register added successfully.
                     [% CASE 'error_on_insert' %]
                         An error occurred when adding this cash register.
                     [% CASE 'success_on_update' %]
                         Cash register updated successfully.
-                    [% CASE 'success_on_insert' %]
-                        Cash register added successfully.
+                    [% CASE 'error_on_update' %]
+                        An error occurred when updating this cash register.
+                    [% CASE 'success_on_default' %]
+                        Branch default updated successfully.
+                    [% CASE 'error_on_update' %]
+                        An error on setting branch default.
                     [% CASE 'success_on_archive' %]
                         Cash register archived successfully.
                     [% CASE 'success_on_restore' %]
                         Cash register restored successfully.
-                    [% CASE 'success_on_delete' %]
-                        Cash register deleted successfully.
                     [% CASE %]
                         [% m.code | html %]
                     [% END %]
@@ -81,7 +83,7 @@
                                 <input type="text" name="description" id="description" value="[% cash_register.description %]"/>
                             </li>
                             <li>
-                                <label for="branch">Branch: </label>
+                                <label for="branch">Library: </label>
                                 <select id="branch" name="branch">
                                 [% FOREACH branch IN branch_list %]
                                 [% IF cash_register.branch == branch.branchcode %]
@@ -116,27 +118,44 @@
                    <a class="btn btn-default" id="newcashregister" href="/cgi-bin/koha/admin/cash_registers.pl?op=add_form"><i class="fa fa-plus"></i> New cash register</a>
                </div>
 
-               <h3>Cash Registers</h3>
+               <h3>Cash registers for <select id="branch_filter" name="branch_filter">
+                       <option value=""></option>
+                       [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode, unfiltered => 1, ) %]
+                   </select>
+               </h3>
+
                [% IF cash_registers.count %]
                <table id="table_cash_registers">
                    <thead>
-                       <th>Id</th>
                        <th>Name</th>
                        <th>Description</th>
-                       <th>Branch</th>
+                       <th>Library</th>
+                       <th>Default</th>
                        <th>Initial float</th>
                        <th>Actions</th>
                    </thead>
                    <tbody>
                    [% FOREACH cash_register IN cash_registers %]
+                   [% IF cash_register.branch_default %]
+                   <tr class="default">
+                   [% ELSE %]
                    <tr>
-                       <td>[% cash_register.id %]</td>
+                   [% END %]
                        <td>[% cash_register.name %]</td>
                        <td>[% cash_register.description %]</td>
                        <td>[% cash_register.library.branchname %]</td>
+                       <td>[% IF cash_register.branch_default %]Yes[% ELSE %]No[% END %]</td>
                        <td>[% cash_register.starting_float %]</td>
                        [% IF cash_register.archived == '0' %]
-                       <td class="actions"><a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs" href="cash_registers.pl?op=archive&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Archive</a></td>
+                       <td class="actions">
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                           [% IF cash_register.branch_default %]
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=drop_default&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Drop default</a>
+                           [% ELSE %]
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=make_default&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Make default</a>
+                           [% END %]
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=archive&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Archive</a>
+                       </td>
                        [% ELSE %]
                        <td class="actions"><a class="btn btn-default btn-xs" href="cash_registers.pl?op=unarchive&amp;id=[% cash_register.id %]"><i class="fa fa-trash-restore"></i> Restore</a></td>
                        [% END %]
@@ -161,16 +180,39 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-
     <script>
+    function filterDataTable( table, column, term ){
+        if( column ){
+            table.column( column ).search( term ).draw();
+        } else {
+            table.search( term ).draw();
+        }
+        clearFilter( term );
+    }
+
+    function clearFilter( term ){
+        if( term == "" ){
+            $(".dt_button_clear_filter").addClass("disabled");
+        } else {
+            $(".dt_button_clear_filter").removeClass("disabled");
+        }
+    }
+
     $(document).ready(function() {
-        $("#table_cash_registers").dataTable($.extend(true, {}, dataTablesDefaults, {
+        var crtable = $("#table_cash_registers").DataTable($.extend(true, {}, dataTablesDefaults, {
               "aoColumnDefs": [
                   { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable":false },
                ],
                "aaSorting": [[ 1, "asc" ]],
                "paginationType": "full",
         }));
+
+        $("#branch_filter").on("change", function(){
+            // Table must be filtered by the <option>'s text, not its value
+            var opt = $(this).find("option:selected").text();
+            filterDataTable( crtable, 2, opt );
+        });
+
     });
     </script>
 [% END %]
