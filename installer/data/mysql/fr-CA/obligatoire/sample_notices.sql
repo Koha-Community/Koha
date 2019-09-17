@@ -25,8 +25,8 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 ('suggestions','REJECTED','','Suggestion d\'achat rejetée',0,'Suggestion d\'achat rejetée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nVous nous avez suggéré l\'achat du document <<suggestions.title>> par <<suggestions.author>>.\r\n\r\nNous avons évalué votre suggestion aujourd\'hui et décidé de ne pas l\'acheter cette fois.\r\n\r\nLa raison de notre refus est : <<suggestions.reason>>\r\n\r\nPour toute question, veuillez nous contacter à l\'adresse suivante : <<branches.branchemail>>.\r\n\r\nMerci.\r\n\r\n<<branches.branchname>>','email');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
-VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
-    <p><h4>Suggested by</h4>
+VALUES ('suggestions','NEW_SUGGESTION','Nouvelle suggestion','Nouvelle suggestion','<h3>Suggestion en attente</h3>
+    <p><h4>Suggestion de</h4>
     <ul>
     <li><<borrowers.firstname>> <<borrowers.surname>></li>
     <li><<borrowers.cardnumber>></li>
@@ -34,20 +34,20 @@ VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Su
     <li><<borrowers.email>></li>
     </ul>
     </p>
-    <p><h4>Title suggested</h4>
+    <p><h4>Titre suggéré</h4>
     <ul>
-    <li><b>Library:</b> <<branches.branchname>></li>
-    <li><b>Title:</b> <<suggestions.title>></li>
-    <li><b>Author:</b> <<suggestions.author>></li>
-    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>
-    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>
-    <li><b>Publisher:</b> <<suggestions.publishercode>></li>
-    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>
-    <li><b>Publication place:</b> <<suggestions.place>></li>
-    <li><b>Quantity:</b> <<suggestions.quantity>></li>
-    <li><b>Item type:</b>  <<suggestions.itemtype>></li>
-    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
-    <li><b>Notes:</b> <<suggestions.note>></li>
+    <li><b>Bibliothèque :</b> <<branches.branchname>></li>
+    <li><b>Titre :</b> <<suggestions.title>></li>
+    <li><b>Auteur :</b> <<suggestions.author>></li>
+    <li><b>Date de droit d\'auteur:</b> <<suggestions.copyrightdate>></li>
+    <li><b>Numéro standard (ISBN, ISSN ou autre) :</b> <<suggestions.isbn>></li>
+    <li><b>Éditeur :</b> <<suggestions.publishercode>></li>
+    <li><b>Collection :</b> <<suggestions.collectiontitle>></li>
+    <li><b>Lieu de publication :</b> <<suggestions.place>></li>
+    <li><b>Quantité :</b> <<suggestions.quantity>></li>
+    <li><b>Type de document :</b>  <<suggestions.itemtype>></li>
+    <li><b>Raison de la suggestion :</b> <<suggestions.patronreason>></li>
+    <li><b>Notes :</b> <<suggestions.note>></li>
     </ul>
     </p>',1, 'email');
 INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type) VALUES
