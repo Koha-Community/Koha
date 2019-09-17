@@ -57,15 +57,16 @@
                         <ol>
                             <li>
                                 <label for="paid">Amount being paid: </label>
-                                <input name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
+                                <input type="number" min="0.00" max="10000.00" step="0.01" name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]" readonly/>
                             </li>
                             <li>
                                 <label for="collected">Collected from patron: </label>
-                                <input id="collected" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
+                                <input type="number" min="0.00" max="10000.00" step="0.01" name="collected" id="collected" value=""/>
                             </li>
                             <li>
                                 <label>Change to give: </label>
                                 <span id="change">0.00</span>
+                                <input type="hidden" name="change" value="0.00"/>
                             </li>
 
                             [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
@@ -145,8 +146,32 @@
             [% INCLUDE 'pos-menu.inc' %]
         </aside>
     </div>
-
 </div> <!-- /.row -->
+
+<!-- Modal -->
+<div id="confirm_change_form" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>The amount collected is more than the outstanding charge</h3>
+            </div>
+            <div class="modal-body">
+                <p>The amount collected from the patron is higher than the amount to be paid.</p>
+                <p>The change to give is <b><span id="modal_change">0.00</span></b>.</p>
+                <p>Confirm this payment?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default approve" id="modal_submit" type="button"><i class="fa fa-check"></i> Yes</button>
+                <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+[% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
+<!-- Automatic Print Reciept -->
+      <a id="printReciept" style="display: none" href="#"></a>
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
@@ -170,7 +195,7 @@
         var decFlag   = false;
         var aChar     = "";
 
-        for(i=0; i < newValue.length; i++) {
+        for(var i=0; i < newValue.length; i++) {
             aChar = newValue.substring(i, i+1);
             if (aChar >= "0" && aChar <= "9") {
                 if(decFlag) {
@@ -222,6 +247,8 @@
             moneyFormat(change);
             change.innerHTML = change.value;
         }
+
+        $(':input[name="change"]').val(change.value);
         $('#modal_change').html(change.innerHTML);
     }
 
@@ -256,7 +283,7 @@
                     return value;
                 },{
                     type    : 'text'
-                })
+                });
             },
             "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                 var iTotal = aData[1] * aData[2];
@@ -272,6 +299,7 @@
                 iTotalPrice = Number.parseFloat(iTotalPrice).toFixed(2);
                 nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice;
                 $('#paid').val(iTotalPrice);
+                $('#paid').trigger('change');
             }
         }));
 
@@ -283,12 +311,14 @@
                "paginationType": "full",
         }));
 
-        $(".add_button").on("click", function(ev) {
-            ev.preventDefault();
+        $(".add_button").on("click", function(e) {
+            e.preventDefault();
             fnClickAddRow(sale_table, $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
             items_table.fnFilter( '' );
         });
 
+        // Change calculation and modal
+        var change = $('#change')[0];
         $("#paid, #collected").on("change",function() {
             moneyFormat( this );
             if (change != undefined) {
@@ -296,22 +326,41 @@
             }
         });
 
-        $("#payForm").submit(function(e){
-            var rows = sale_table.fnGetData();
-            rows.forEach(function (row, index) {
-                var sale = {
-                    code: row[0],
-                    price: row[1],
-                    quantity: row[2]
-                };
-                $('<input>').attr({
-                    type: 'hidden',
-                    name: 'sales',
-                    value: JSON.stringify(sale)
-                }).appendTo('#payForm');
-            });
-            return true;
+        var checked = false;
+        $('#modal_submit').click(function() {
+            checked = true;
+            $('#payForm').submit();
         });
+
+        $('#payForm').submit(function(e){
+            if (change != undefined && change.innerHTML > 0.00 && !checked) {
+                e.preventDefault();
+                $("#confirm_change_form").modal("show");
+            } else {
+                var rows = sale_table.fnGetData();
+                rows.forEach(function (row, index) {
+                    var sale = {
+                        code: row[0],
+                        price: row[1],
+                        quantity: row[2]
+                    };
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'sales',
+                        value: JSON.stringify(sale)
+                    }).appendTo('#payForm');
+                });
+                return true;
+            }
+        });
+
+        [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
+            $("#printReciept").click(function() {
+                var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]', '_blank');
+                win.focus();
+            });
+            $("#printReciept").click();
+        [% END %]
     });
     </script>
 [% END %]

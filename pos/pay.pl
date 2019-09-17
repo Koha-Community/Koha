@@ -55,7 +55,6 @@ else {
 
 my $total_paid = $q->param('paid');
 if ( $total_paid and $total_paid ne '0.00' ) {
-    warn "total_paid: $total_paid\n";
     my $cash_register = Koha::Cash::Registers->find( { id => $registerid } );
     my $payment_type  = $q->param('payment_type');
     my $sale          = Koha::Charges::Sales->new(
@@ -71,7 +70,13 @@ if ( $total_paid and $total_paid ne '0.00' ) {
         $sale->add_item($item);
     }
 
-    $sale->purchase( { payment_type => $payment_type } );
+    my $payment = $sale->purchase( { payment_type => $payment_type } );
+
+    $template->param(
+        payment_id => $payment->accountlines_id,
+        collected  => scalar $q->param('collected'),
+        change     => scalar $q->param('change')
+    );
 }
 
 output_html_with_http_headers( $q, $cookie, $template->output );

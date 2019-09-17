@@ -1,0 +1,26 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Branches %]
+[% USE Price %]
+[% SET footerjs = 1 %]
+
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Print receipt</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/printreceiptinvoice.css") | $raw %]
+[% INCLUDE 'blocking_errors.inc' %]
+</head>
+
+<body id="pat_printfeercpt" class="pat">
+
+<div id="receipt">
+    [% letter.content | $raw | evaltt %]
+</div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'slip-print.inc' #printThenClose %]
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
