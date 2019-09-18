@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<lb:LetterBundle schemaVersion="v1x0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lb="urn:itella.com:/schema/ipost/letterbundle/v1x0">
+  <lb:Bundle>
+    <lb:BundleCommon isTest="false">
+      <lb:Sender contact="<TMPL_VAR NAME=CONTACT>" email="<TMPL_VAR NAME=CONTACT>" ovtID="<TMPL_VAR NAME=OVTID>" companyName="<TMPL_VAR NAME=SENDERID>"></lb:Sender>
+      <lb:StdBundleProcessing customerId="<TMPL_VAR NAME=CUSTOMERID>" password="<TMPL_VAR NAME=CUSTOMERPASS>" isDuplex="true" serviceFunction="0" electronicArchiving="T" letterClass="2" envelope="S" paper="0" />
+      <lb:ExternalFile senderFileId="<TMPL_VAR NAME=LETTERID>" fileName="<TMPL_VAR NAME=EXFILENAME>"></lb:ExternalFile>
+    </lb:BundleCommon>
+    <lb:Letter senderLetterId="<TMPL_VAR NAME=LETTERID>">
+      <lb:LetterMeta>
+        <lb:Location startPage="1" pages="<TMPL_VAR NAME=TOTALPAGES>"/>
+        <lb:Recipient SSN="<TMPL_VAR NAME=SSN>">
+          <lb:Address>
+            <lb:Eu1 name="<TMPL_VAR NAME=NAME> <TMPL_VAR NAME=SURNAME>" address="<TMPL_VAR NAME=ADDRESS1> <TMPL_VAR NAME=ADDRESS2>" postalCode="<TMPL_VAR NAME=ZIPCODE>" city="<TMPL_VAR NAME=CITY>" countryCode="FI"/>
+          </lb:Address>
+        </lb:Recipient>
+        <lb:LetterDetails>
+          <lb:Subject text="<TMPL_VAR NAME=SUBJECT>"/>
+        </lb:LetterDetails>
+      </lb:LetterMeta>
+    </lb:Letter>
+  </lb:Bundle>
+</lb:LetterBundle>

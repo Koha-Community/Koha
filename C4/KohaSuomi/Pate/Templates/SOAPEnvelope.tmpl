@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:asi="http://www.suomi.fi/asiointitili">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <asi:LahetaViesti xmlns:asi="http://www.suomi.fi/asiointitili">
+      <asi:Viranomainen>
+         <asi:ViranomaisTunnus><TMPL_VAR NAME=VIRANOMAISTUNNUS></asi:ViranomaisTunnus>
+         <asi:PalveluTunnus><TMPL_VAR NAME=PALVELUTUNNUS></asi:PalveluTunnus>
+         <asi:KayttajaTunnus><TMPL_VAR NAME=KAYTTAJATUNNUS></asi:KayttajaTunnus>
+         <asi:Yhteyshenkilo Nimi="<TMPL_VAR NAME=YHTEYSNIMI>" Sahkoposti="<TMPL_VAR NAME=YHTEYSEMAIL>" Matkapuhelin="<TMPL_VAR NAME=YHTEYSPUHELIN>"/>
+         <asi:Osoite>
+           <asi:Nimi><TMPL_VAR NAME=VONIMI></asi:Nimi>
+           <asi:Lahiosoite><TMPL_VAR NAME=VOOSOITE></asi:Lahiosoite>
+           <asi:Postinumero><TMPL_VAR NAME=VOPOSTINUMERO></asi:Postinumero>
+           <asi:Postitoimipaikka><TMPL_VAR NAME=VOPOSTITOIMIPAIKKA></asi:Postitoimipaikka>
+           <asi:Maa><TMPL_VAR NAME=VOMAA></asi:Maa>
+          </asi:Osoite>
+          <asi:SanomaTunniste><TMPL_VAR NAME=SANOMATUNNISTE></asi:SanomaTunniste>
+          <asi:SanomaVersio><TMPL_VAR NAME=SANOMAVERSIO></asi:SanomaVersio>
+          <asi:SanomaVarmenneNimi><TMPL_VAR NAME=VARMENNENIMI></asi:SanomaVarmenneNimi>
+      </asi:Viranomainen>
+        <asi:Kysely>
+          <asi:Paperi>false</asi:Paperi>
+          <asi:Kohteet>
+             <asi:Kohde>
+                <asi:Asiakas AsiakasTunnus="<TMPL_VAR NAME=ASID>" TunnusTyyppi="<TMPL_VAR NAME=ASID_TYYPPI>">
+                   <asi:Osoite>
+                      <asi:Nimi><TMPL_VAR NAME=ASNIMI></asi:Nimi>
+                      <asi:Lahiosoite><TMPL_VAR NAME=ASOSOITE></asi:Lahiosoite>
+                      <asi:Postinumero><TMPL_VAR NAME=ASPOSTINUMERO></asi:Postinumero>
+                      <asi:Postitoimipaikka><TMPL_VAR NAME=ASPOSTITOIMIPAIKKA></asi:Postitoimipaikka>
+                      <asi:Maa><TMPL_VAR NAME=ASMAA></asi:Maa>
+                   </asi:Osoite>
+                </asi:Asiakas>
+                <asi:ViranomaisTunniste><TMPL_VAR NAME=VIRANOMAISTUNNISTE></asi:ViranomaisTunniste>
+                <asi:Nimeke><TMPL_VAR NAME=OTSIKKO></asi:Nimeke>
+                <asi:LahetysPvm><TMPL_VAR NAME=LAHETYSPVM></asi:LahetysPvm>
+                <asi:KuvausTeksti><TMPL_VAR NAME=KUVAUSTEKSTI></asi:KuvausTeksti>
+                <asi:Tiedostot>
+                   <asi:Tiedosto>
+                      <asi:TiedostonKuvaus>PDF (Portable Document Format)</asi:TiedostonKuvaus>
+                      <asi:TiedostoSisalto><TMPL_VAR NAME=BASE64DATA></asi:TiedostoSisalto>
+                      <asi:TiedostoMuoto>application/pdf</asi:TiedostoMuoto>
+                      <asi:TiedostoNimi><TMPL_VAR NAME=TIEDOSTONIMI></asi:TiedostoNimi>
+                   </asi:Tiedosto>
+                </asi:Tiedostot>
+             </asi:Kohde>
+           </asi:Kohteet>
+         <asi:Tulostustoimittaja><TMPL_VAR NAME=TOIMITTAJA></asi:Tulostustoimittaja>
+      </asi:Kysely>
+    </asi:LahetaViesti>
+  </soapenv:Body>
+</soapenv:Envelope>

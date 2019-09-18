@@ -328,6 +328,105 @@ __PAZPAR2_TOGGLE_XML_POST__
       <sftp>1</sftp>
     </ropocapital>
  </printmailProviders>
+ <ksmessaging>
+  <letters>
+    <combineacrossbranches>no</combineacrossbranches> <!-- not implemented yet -->
+    <branches>
+      <!-- You can either define individual configurations for known branches here or use the settings in 'default' tags -->
+      <default>
+        <stagingdir>/home/koha/koha-dev/var/spool/pate-staging</stagingdir>
+        <contact></contact> <!-- e-mail address to contact in case of errors -->
+        <!-- configure either epl or pdf for each branch (or 'default') -->
+        <!-- <ipostepl>
+          <unicode>no</unicode>
+          <header>EPL111645560490TT002SD 0</header>
+          <code>30041</code>
+          <layout>
+            EPL55506 takes 42 lines
+            <templatecode>EPL55504</templatecode>
+            <firstpage>42</firstpage>
+            EPL80068 will take 76 lines, EPL8DEFO will take 60 lines
+            <contpagecode>EPL8DEFO</contpagecode>
+            <otherpages>60</otherpages>
+          </layout>
+          <stagingdir>/home/koha/koha-dev/var/spool/pate-staging</stagingdir>
+          <contact></contact> <!- e-mail address to contact in case of errors ->
+        </ipostepl> -->
+        <ipostpdf>
+          <customerid></customerid>
+          <customerpass></customerpass>
+        </ipostpdf>
+        <filetransfer>
+          <!-- configure either sftp or ftp file transfer or leave unconfigured for other means of delivering the letters -->
+          <!-- port and remotedir are not mandatory, if undefined defaults (21/22 and ~) will be used -->
+          <host></host>
+          <port></port>
+          <remotedir></remotedir>
+          <user></user>
+          <password></password>
+          <protocol></protocol>
+        </filetransfer>
+      </default>
+    </branches>
+  </letters>
+  <suomifi>
+    <branches>
+      <default>
+        <!-- Configure either 'wsapi' or 'pdf' interface for delivering suomi.fi messages -->
+        <!-- <wsapi>
+          <viranomainen>
+            <sanomaversio>1</sanomaversio>
+            <varmennenimi></varmennenimi>
+            <viranomaistunnus></viranomaistunnus>
+            <palvelutunnus></palvelutunnus>
+            <kayttajatunnus></kayttajatunnus>
+            <yhteyshenkilo>
+              <nimi></nimi>
+              <email></email>
+              <puhelin></puhelin>
+            </yhteyshenkilo>
+            <osoite>
+              <nimi></nimi>
+              <lahiosoite></lahiosoite>
+              <postinumero></postinumero>
+              <postitoimipaikka></postitoimipaikka>
+              <maa>FI</maa>
+            </osoite>
+          </viranomainen>
+          <tulostus>
+            <toimittaja>Edita</toimittaja>
+          </tulostus>
+          <sign>
+            <trust>/home/koha/koha-dev/etc/suomificerts/trust.jks</trust>
+            <key>/home/koha/koha-dev/etc/suomificerts/id.jks</key>
+          </sign>
+        </wsapi> -->
+        <ipostpdf>
+          <customerid></customerid> <!-- six digit customerid required by suomifi for print letters, although not actually used atm -->
+          <customerpass></customerpass>
+          <ovtid></ovtid> <!-- 12 digit OVT-id for organization -->
+          <printprovider>Edita</printprovider> <!-- suomi.fi supports Edita and OpusCapita, but because of legal stuff not in use atm -->
+          <senderid>koha_sftp</senderid>
+          <fileprefix>koha</fileprefix> <!-- senderid is used if this is not set -->
+        </ipostpdf>
+        <!-- stagingdir, contact and filetransfer-part are only needed for pdf-interface, wsapi does not use them
+             it's safe to comment them out (or remove altogether) if you use wsapi only. -->
+        <stagingdir>/home/koha/koha-dev/var/spool/pate-staging</stagingdir>
+        <contact></contact> <!-- e-mail address to contact in case of errors -->
+        <filetransfer>
+          <!-- configure sftp file transfer or leave unconfigured to use wsapi -->
+          <!-- port and remotedir are not mandatory, if undefined defaults (22 and ~) will be used -->
+          <host></host>
+          <port></port>
+          <remotedir></remotedir>
+          <user></user>
+          <password></password>
+          <protocol>sftp</protocol>
+        </filetransfer>
+      </default>
+    </branches>
+  </suomifi>
+ </ksmessaging>
  <smsProviders>
     <labyrintti>
         <!-- Login details for SMS Gateway service
