@@ -1423,7 +1423,6 @@ See verbose embedded documentation.
 
 sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = @_;
-
     warn "---------\nEnter buildQuery\n---------" if $DEBUG;
 
     my $query_desc;
@@ -1702,7 +1701,7 @@ sub buildQuery {
             if ( $k !~ /mc-i(tem)?type/ ) {
                 # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
                 $this_limit =~ tr/"//d;
-                $this_limit = $k.":'".$v."'";
+                $this_limit = $k.':"'.$v.'"';
             }
 
             $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
