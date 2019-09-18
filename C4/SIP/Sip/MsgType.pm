@@ -704,6 +704,8 @@ sub handle_checkin {
         $resp .= add_field( FID_PERM_LOCN, $item->permanent_location, $server );
         $resp .= maybe_add( FID_TITLE_ID, $item->title_id, $server );
         $resp .= $item->build_additional_item_fields_string( $server );
+    } else {
+        $resp .= add_field( FID_PERM_LOCN, "", $server );
     }
 
     if ( $protocol_version >= 2 ) {
