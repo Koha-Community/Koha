@@ -101,7 +101,8 @@ __PACKAGE__->table("marc_subfield_structure");
 =head2 hidden
 
   data_type: 'tinyint'
-  is_nullable: 1
+  default_value: 8
+  is_nullable: 0
 
 =head2 frameworkcode
 
@@ -161,7 +162,7 @@ __PACKAGE__->add_columns(
   "isurl",
   { data_type => "tinyint", is_nullable => 1 },
   "hidden",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 8, is_nullable => 0 },
   "frameworkcode",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 4 },
   "seealso",
@@ -213,8 +214,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-02 18:57:57
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:18iBiNNiwTSYtKk28aoLJg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-19 20:31:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:l389FQ9jmX8nXzcUDVe6eA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
