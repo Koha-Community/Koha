@@ -84,14 +84,6 @@ use constant {
 Converts C<MARC::Records> C<$records> to Elasticsearch documents and performs
 an update request for these records on the Elasticsearch index.
 
-The values in the arrays must match up, and the 999$c value in the MARC record
-will be rewritten using the values in C<$biblionums> to ensure they are correct.
-If C<$biblionums> is C<undef>, this won't happen, so in that case you should make
-sure that 999$c is correct.
-
-Note that this will modify the original record if C<$biblionums> is supplied.
-If that's a problem, clone them first.
-
 =over 4
 
 =item C<$biblionums>
@@ -110,17 +102,14 @@ Arrayref of C<MARC::Record>s.
 sub update_index {
     my ($self, $biblionums, $records) = @_;
 
-    if ($biblionums) {
-        $self->_sanitise_records($biblionums, $records);
-    }
-
     my $conf = $self->get_elasticsearch_params();
     my $elasticsearch = $self->get_elasticsearch();
     my $documents = $self->marc_records_to_documents($records);
     my @body;
 
-    foreach my $document_info (@{$documents}) {
-        my ($id, $document) = @{$document_info};
+    for (my $i=0; $i < scalar @$biblionums; $i++) {
+        my $id = $biblionums->[$i];
+        my $document = $documents->[$i];
         push @body, {
             index => {
                 _id => $id
@@ -380,28 +369,6 @@ sub index_exists {
     return $elasticsearch->indices->exists(
         index => $conf->{index_name},
     );
-}
-
-sub _sanitise_records {
-    my ($self, $biblionums, $records) = @_;
-
-    confess "Unequal number of values in \$biblionums and \$records." if (@$biblionums != @$records);
-
-    my $c = @$biblionums;
-    for (my $i=0; $i<$c; $i++) {
-        my $bibnum = $biblionums->[$i];
-        my $rec = $records->[$i];
-        # I've seen things you people wouldn't believe. Attack ships on fire
-        # off the shoulder of Orion. I watched C-beams glitter in the dark near
-        # the Tannhauser gate. MARC records where 999$c doesn't match the
-        # biblionumber column. All those moments will be lost in time... like
-        # tears in rain...
-        if ( $rec ) {
-            $rec->delete_fields($rec->field('999'));
-            # Make sure biblionumber is a string. Elasticsearch would consider int and string different IDs.
-            $rec->append_fields(MARC::Field->new('999','','','c' => "" . $bibnum, 'd' => "" . $bibnum));
-        }
-    }
 }
 
 1;
