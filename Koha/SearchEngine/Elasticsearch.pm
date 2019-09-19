@@ -414,7 +414,7 @@ sub _process_mappings {
 
 =head2 marc_records_to_documents($marc_records)
 
-    my @record_documents = $self->marc_records_to_documents($marc_records);
+    my $record_documents = $self->marc_records_to_documents($marc_records);
 
 Using mappings stored in database convert C<$marc_records> to Elasticsearch documents.
 
@@ -583,8 +583,7 @@ sub marc_records_to_documents {
                 $record_document->{'marc_format'} = 'base64ISO2709';
             }
         }
-        my $id = $record->subfield('999', 'c');
-        push @record_documents, [$id, $record_document];
+        push @record_documents, $record_document;
     }
     return \@record_documents;
 }

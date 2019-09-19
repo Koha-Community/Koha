@@ -59,7 +59,7 @@ subtest 'create_index() tests' => sub {
         MARC::Field->new('245', '', '', 'a' => 'Title')
     );
     my $records = [$marc_record];
-    ok($indexer->update_index(undef, $records), 'Update Index');
+    ok($indexer->update_index([1], $records), 'Update Index');
 
     is(
         $indexer->drop_index(),
