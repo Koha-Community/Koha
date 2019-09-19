@@ -418,14 +418,19 @@ sub get_criteria {
 
 sub nb_rows {
     my $sql = shift or return;
-    my $sth = C4::Context->dbh->prepare($sql);
-    $sth->execute();
-    my $n = 0;
-    # Loop through the complete results, fetching 1,000 rows at a time.  This
-    # lowers memory requirements but increases execution time.
-    while (my $rows = $sth->fetchall_arrayref(undef, 1000)) {
-        $n += @$rows;
+
+    my $derived_name = 'xxx';
+    # make sure the derived table name is not already used
+    while ( $sql =~ m/$derived_name/ ) {
+        $derived_name .= 'x';
     }
+    my $sth = C4::Context->dbh->prepare(qq{
+        SELECT COUNT(*) FROM
+        ( $sql ) $derived_name
+    });
+    $sth->execute();
+    my $n = $sth->fetch->[0];
+
     return $n;
 }
 
