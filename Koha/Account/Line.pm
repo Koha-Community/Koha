@@ -166,7 +166,7 @@ sub void {
     my $debits = $account->outstanding_debits;
     my $outstanding_amount = $credit->apply( { debits => $debits, [ offset_type => $offset_type ] } );
 
-Applies the credit to a given debits set.
+Applies the credit to a given debits array reference.
 
 =head4 arguments hashref
 
