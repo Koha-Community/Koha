@@ -18,12 +18,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Warn;
 
 use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
+use Koha::Items;
 use Koha::Reports;
 use Koha::Notice::Messages;
 
@@ -409,6 +410,28 @@ subtest 'Email report test' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'nb_rows() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $items_count = Koha::Items->search->count;
+    $builder->build_object({ class => 'Koha::Items' });
+    $builder->build_object({ class => 'Koha::Items' });
+    $items_count += 2;
+
+    my $query = q{
+        SELECT * FROM items xxx
+    };
+
+    my $nb_rows = nb_rows( $query );
+
+    is( $nb_rows, $items_count, 'nb_rows returns the right value' );
+
+    $schema->storage->txn_rollback;
+};
 
 sub trim {
     my ($s) = @_;
