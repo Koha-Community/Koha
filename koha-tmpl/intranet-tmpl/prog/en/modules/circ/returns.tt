@@ -225,6 +225,8 @@
                             <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
                             <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                         [% END %]
+                        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+                        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
                     </form>
                     <!-- PRINT SLIP -->
                     <form method="post" action="returns.pl" name="mainform">
@@ -234,6 +236,9 @@
                             <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
                             <input type="hidden" name="bn-[% inputloo.counter | html %]" value="[% inputloo.borrowernumber | html %]" />
                         [% END %]
+                        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
+                        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
+
                     </form>
                     <!-- CANCEL TRANSFER -->
                     <form method="post" action="returns.pl" name="mainform">
