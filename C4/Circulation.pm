@@ -1178,7 +1178,7 @@ sub CanBookBeReturned {
 
 sub checkHighHolds {
     my ( $item, $borrower ) = @_;
-    my $branch = _GetCircControlBranch( $item, $borrower );
+    my $branchcode = _GetCircControlBranch( $item, $borrower );
     my $item_object = Koha::Items->find( $item->{itemnumber} );
 
     my $return_data = {
@@ -1236,10 +1236,10 @@ sub checkHighHolds {
 
         my $issuedate = DateTime->now( time_zone => C4::Context->tz() );
 
-        my $calendar = Koha::Calendar->new( branchcode => $branch );
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
 
         my $itype = $item_object->effective_itemtype;
-        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branch, $borrower );
+        my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
         my $decreaseLoanHighHoldsDuration = C4::Context->preference('decreaseLoanHighHoldsDuration');
 
@@ -1329,7 +1329,7 @@ sub AddIssue {
           or return;    # if we don't get an Item, abort.
         my $item_unblessed = $item_object->unblessed;
 
-        my $branch = _GetCircControlBranch( $item_unblessed, $borrower );
+        my $branchcode = _GetCircControlBranch( $item_unblessed, $borrower );
 
         # get actual issuing if there is one
         my $actualissue = $item_object->checkout;
@@ -1340,7 +1340,7 @@ sub AddIssue {
             $datedue = AddRenewal(
                 $borrower->{'borrowernumber'},
                 $item_object->itemnumber,
-                $branch,
+                $branchcode,
                 $datedue,
                 $issuedate,    # here interpreted as the renewal date
             );
@@ -1348,13 +1348,13 @@ sub AddIssue {
         else {
             unless ($datedue) {
                 my $itype = $item_object->effective_itemtype;
-                $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
+                $datedue = CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
             }
             $datedue->truncate( to => 'minute' );
 
             my $patron = Koha::Patrons->find( $borrower );
-            my $library = Koha::Libraries->find( $branch );
+            my $library = Koha::Libraries->find( $branchcode );
             my $fees = Koha::Charges::Fees->new(
                 {
                     patron    => $patron,
@@ -1395,7 +1395,7 @@ sub AddIssue {
                 my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
                     {   categorycode => $borrower->{categorycode},
                         itemtype     => $item_object->effective_itemtype,
-                        branchcode   => $branch
+                        branchcode   => $branchcode
                     }
                 );
 
@@ -1405,7 +1405,7 @@ sub AddIssue {
             # Record in the database the fact that the book was issued.
             unless ($datedue) {
                 my $itype = $item_object->effective_itemtype;
-                $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
+                $datedue = CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
             }
             $datedue->truncate( to => 'minute' );
@@ -1505,7 +1505,7 @@ sub AddIssue {
             # Send a checkout slip.
             my $circulation_alert = 'C4::ItemCirculationAlertPreference';
             my %conditions        = (
-                branchcode   => $branch,
+                branchcode   => $branchcode,
                 categorycode => $borrower->{categorycode},
                 item_type    => $item_object->effective_itemtype,
                 notification => 'CHECKOUT',
@@ -1516,7 +1516,7 @@ sub AddIssue {
                         type     => 'CHECKOUT',
                         item     => $item_object->unblessed,
                         borrower => $borrower,
-                        branch   => $branch,
+                        branch   => $branchcode,
                     }
                 );
             }
