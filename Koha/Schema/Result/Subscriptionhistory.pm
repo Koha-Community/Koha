@@ -59,17 +59,13 @@ __PACKAGE__->table("subscriptionhistory");
 
 =head2 opacnote
 
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 150
+  data_type: 'longtext'
+  is_nullable: 1
 
 =head2 librariannote
 
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 150
+  data_type: 'longtext'
+  is_nullable: 1
 
 =cut
 
@@ -87,9 +83,9 @@ __PACKAGE__->add_columns(
   "recievedlist",
   { data_type => "longtext", is_nullable => 0 },
   "opacnote",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 150 },
+  { data_type => "longtext", is_nullable => 1 },
   "librariannote",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 150 },
+  { data_type => "longtext", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -105,8 +101,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("subscriptionid");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+cXluRE1oKiCGOgwq1bhJw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-19 20:31:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:agjFFZ+wiiWP5GTRKap8+Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
