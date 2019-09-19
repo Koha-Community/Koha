@@ -780,7 +780,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
         }
     )->store();
     my $debits = $account->outstanding_debits;
-    $credit->apply({ debits => $debits });
+    $credit->apply({ debits => [ $debits->as_list ] });
 
     $debit = Koha::Account::Lines->find( $debit->id );
     is( $debit->amountoutstanding, '0.500000', 'Account line was paid down by half' );
@@ -798,7 +798,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
         }
     )->store();
     $debits = $account->outstanding_debits;
-    $credit->apply({ debits => $debits });
+    $credit->apply({ debits => [ $debits->as_list ] });
 
     $debit = Koha::Account::Lines->find( $debit->id );
     is( $debit->amountoutstanding, '0.000000', 'Account line was paid down by half' );
