@@ -103,7 +103,7 @@ sub FileTransfer {
                 print STDERR "Transferring file to SFTP server failed.\n";
                 return 0;
             }
-            unless ( $sftp->rename ( $hash{'filename'} . '.part', $hash{'filename'} ) ) {
+            unless ( $sftp->rename ( $config{'remotedir'} . '/' . $hash{'filename'} . '.part', $config{'remotedir'} . '/' . $hash{'filename'} ) ) {
                 print STDERR "Renaming a file on SFTP server failed.\n";
                 return 0;
             }
@@ -125,7 +125,7 @@ sub FileTransfer {
                 print STDERR "Transfering file to FTP server failed.\n";
                 return 0;
             }
-            unless ( $ftp->rename ( $hash{'filename'} . '.part', $hash{'filename'} ) ) {
+            unless ( $ftp->rename ( $config{'remotedir'} . '/' . $hash{'filename'} . '.part', $config{'remotedir'}. '/' . $hash{'filename'} ) ) {
                 print STDERR "Renaming a file on FTP server failed.\n";
                 return 0;
             }
