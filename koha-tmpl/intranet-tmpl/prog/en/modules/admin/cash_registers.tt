@@ -68,7 +68,7 @@
                         [% IF cash_register %]
                             <li>
                                 <span class="label">Cash Register ID: </span>[% cash_register.id | html %]
-                                <input type="hidden" name="id" value="[% cash_register.id %]" />
+                                <input type="hidden" name="id" value="[% cash_register.id | html %]" />
                             </li>
                         [% END %]
 
@@ -80,16 +80,16 @@
 
                             <li>
                                 <label for="description">Description: </label>
-                                <input type="text" name="description" id="description" value="[% cash_register.description %]"/>
+                                <input type="text" name="description" id="description" value="[% cash_register.description | html %]"/>
                             </li>
                             <li>
                                 <label for="branch">Library: </label>
                                 <select id="branch" name="branch">
                                 [% FOREACH branch IN branch_list %]
                                 [% IF cash_register.branch == branch.branchcode %]
-                                    <option value="[% branch.branchcode %]" selected="1">[% branch.branchname %]</option>
+                                    <option value="[% branch.branchcode | html %]" selected="1">[% branch.branchname | html %]</option>
                                 [% ELSE %]
-                                    <option value="[% branch.branchcode %]">[% branch.branchname %]</option>
+                                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
                                 [% END %]
                                 [% END %]
                                 </select>
@@ -97,7 +97,7 @@
 
                             <li>
                                 <label for="starting_float">Initial float: </label>
-                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" value="[% cash_register.starting_float %]" />
+                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" value="[% cash_register.starting_float | html %]" />
                             </li>
                         </ol>
                    </fieldset>
@@ -141,23 +141,23 @@
                    [% ELSE %]
                    <tr>
                    [% END %]
-                       <td>[% cash_register.name %]</td>
-                       <td>[% cash_register.description %]</td>
-                       <td>[% cash_register.library.branchname %]</td>
+                       <td>[% cash_register.name | html %]</td>
+                       <td>[% cash_register.description | html %]</td>
+                       <td>[% cash_register.library.branchname | html %]</td>
                        <td>[% IF cash_register.branch_default %]Yes[% ELSE %]No[% END %]</td>
-                       <td>[% cash_register.starting_float %]</td>
+                       <td>[% cash_register.starting_float | html %]</td>
                        [% IF cash_register.archived == '0' %]
                        <td class="actions">
                            <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
                            [% IF cash_register.branch_default %]
-                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=drop_default&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Drop default</a>
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=drop_default&amp;id=[% cash_register.id | uri %]"><i class="fa fa-archive"></i> Drop default</a>
                            [% ELSE %]
-                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=make_default&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Make default</a>
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=make_default&amp;id=[% cash_register.id | uri %]"><i class="fa fa-archive"></i> Make default</a>
                            [% END %]
-                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=archive&amp;id=[% cash_register.id %]"><i class="fa fa-archive"></i> Archive</a>
+                           <a class="btn btn-default btn-xs" href="cash_registers.pl?op=archive&amp;id=[% cash_register.id | uri %]"><i class="fa fa-archive"></i> Archive</a>
                        </td>
                        [% ELSE %]
-                       <td class="actions"><a class="btn btn-default btn-xs" href="cash_registers.pl?op=unarchive&amp;id=[% cash_register.id %]"><i class="fa fa-trash-restore"></i> Restore</a></td>
+                       <td class="actions"><a class="btn btn-default btn-xs" href="cash_registers.pl?op=unarchive&amp;id=[% cash_register.id | uri %]"><i class="fa fa-trash-restore"></i> Restore</a></td>
                        [% END %]
                    </tr>
                    [% END %]

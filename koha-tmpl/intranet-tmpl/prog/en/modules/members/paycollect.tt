@@ -134,9 +134,9 @@
         <select name="cash_register" id="cash_register">
             [% FOREACH register IN registers %]
               [% IF register.id == registerid %]
-            <option value="[% register.id %]" selected="selected">[% register.name | html %]</option>
+            <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
               [% ELSE %]
-            <option value="[% register.id %]">[% register.name | html %]</option>
+            <option value="[% register.id | html %]">[% register.name | html %]</option>
               [% END %]
             [% END %]
         </select>
@@ -263,9 +263,9 @@
         <select name="cash_register" id="cash_register">
             [% FOREACH register IN registers %]
               [% IF register.id == registerid %]
-            <option value="[% register.id %]" selected="selected">[% register.name | html %]</option>
+            <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
               [% ELSE %]
-            <option value="[% register.id %]">[% register.name | html %]</option>
+            <option value="[% register.id | html %]">[% register.name | html %]</option>
               [% END %]
             [% END %]
         </select>
