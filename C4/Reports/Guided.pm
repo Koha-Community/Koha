@@ -424,12 +424,15 @@ sub nb_rows {
     while ( $sql =~ m/$derived_name/ ) {
         $derived_name .= 'x';
     }
+
     my $sth = C4::Context->dbh->prepare(qq{
         SELECT COUNT(*) FROM
         ( $sql ) $derived_name
     });
+
     $sth->execute();
-    my $n = $sth->fetch->[0];
+    my $results = $sth->fetch;
+    my $n = $results ? $results->[0] : 0;
 
     return $n;
 }
