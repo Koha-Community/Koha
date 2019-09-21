@@ -17554,6 +17554,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23309 - Can't add new subfields to bibliographic frameworks in strict mode)\n";
 }
 
+$DBversion = "18.11.10.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (18.11.10 release)\n";
+            SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
