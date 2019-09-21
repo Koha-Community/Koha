@@ -531,12 +531,6 @@ No patron matched <span class="ex">[% message | html %]</span>
     [% END %]
     <button type="submit" class="btn btn-default">Check out</button>
 
-                            <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
-
-                            [% INCLUDE "checkouts-table.inc" %]
-
-                            [% INCLUDE "relatives-issues-table.inc" %]
-
     <div id="show-checkout-settings">
         <a href="#"><i class="fa fa-caret-right checkout-settings-icon"></i> Checkout settings</a>
     </div>
@@ -853,29 +847,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 [% INCLUDE "checkouts-table.inc" %]
 
-[% IF ( relatives_issues_count ) %]
-    <div id="relatives-issues">
-        <table id="relatives-issues-table">
-            <thead>
-                <tr>
-                    <th scope="col">Due date (unformatted, hidden)</th>
-                    <th scope="col">Due date</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Item type</th>
-                    <th scope="col">Collection code</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Checked out on</th>
-                    <th scope="col">Checked out from</th>
-                    <th scope="col">Call no</th>
-                    <th scope="col">Charge</th>
-                    <th scope="col">Fine</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Patron</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-[% END %]
+[% INCLUDE "relatives-issues-table.inc" %]
 
 [% IF CAN_user_clubs && ( enrollable.count || enrollments.count ) %]
     <div id="clubs-tab">
