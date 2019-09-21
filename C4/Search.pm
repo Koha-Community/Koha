@@ -1953,8 +1953,9 @@ sub searchResults {
         $oldbiblio->{edition} = $oldbiblio->{editionstatement};
         $oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{translated_description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
- # FIXME: is this used anywhere, I think it can be commented out? -- JF
-        if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
+
+        # FIXME: this is only used in the deprecated non-XLST opac results
+        if ( !$xslfile && $is_opac && $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
             my $summary = $itemtypes{ $oldbiblio->{itemtype} }->{summary};
             my @fields  = $marcrecord->fields();
 
