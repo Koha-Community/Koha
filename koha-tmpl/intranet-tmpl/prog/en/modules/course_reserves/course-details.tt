@@ -165,7 +165,7 @@
                                 [% END %]
                             </td>
                             <td>[% IF (cr.public_note) %]
-                                    [% cr.public_note | html %]
+                                    [% cr.public_note | $raw %]
                                 [% ELSIF (cr.item.itemnotes) %]
                                     [% cr.item.itemnotes | $raw %]
                                 [% END %]
