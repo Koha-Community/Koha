@@ -178,6 +178,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'format_price.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script>
@@ -269,8 +270,8 @@
             }, {
                 "aTargets": [-2],
                 "mRender": function ( data, type, full ) {
-                    var price = Number.parseFloat(data).toFixed(2);
-                    return '£'+price;
+                    var price = Number.parseFloat(data);
+                    return price.format_price();
                 }
             }, {
                 "aTargets": [-4],
@@ -305,7 +306,7 @@
             },
             "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                 var iTotal = aData[1] * aData[2];
-                this.fnUpdate( iTotal, nRow, 3, false, false );
+                this.fnUpdate( iTotal.format_price(), nRow, 3, false, false );
             },
             "fnFooterCallback": function(nFoot, aData, iStart, iEnd, aiDisplay) {
                 var iTotalPrice = 0;
