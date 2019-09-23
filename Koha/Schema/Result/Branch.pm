@@ -677,8 +677,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-17 07:15:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qGiu+y4MHq5CvBQTj0m8QQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-23 10:45:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KDg4i49bpMxXQ1LP6OZFWQ
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }

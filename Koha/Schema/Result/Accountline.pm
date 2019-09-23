@@ -313,8 +313,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-06 12:23:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/8Qeh530PbLC6ryxC1Dw9w
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-23 10:45:21
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L+QlTTT+MdGoA3shpyaBgQ
 
 sub koha_objects_class {
     'Koha::Account::Lines';
