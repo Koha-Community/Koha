@@ -486,9 +486,9 @@ sub _core_status_graph {
     };
 }
 
-=head3 _core_status_graph
+=head3 _status_graph_union
 
-    my $status_graph = $illrequest->_core_status_graph($origin, $new_graph);
+    my $status_graph = $illrequest->_status_graph_union($origin, $new_graph);
 
 Return a new status_graph, the result of merging $origin & new_graph.  This is
 operation is a union over the sets defied by the two graphs.
