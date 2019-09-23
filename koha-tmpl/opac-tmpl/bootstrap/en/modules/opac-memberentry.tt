@@ -1055,13 +1055,23 @@
                         $.ajax({
                             url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber | uri %]/guarantors/can_see_checkouts",
                             type: "PUT",
-                            data: JSON.stringify({ allowed: can_see_checkouts }),
+                            data: JSON.stringify({
+                                allowed: can_see_checkouts
+                            }),
                             contentType: "application/json",
-                            success: function() {
-                                $('#update_privacy_guarantor_checkouts_message').fadeIn("slow").text( _("Your setting has been updated!") ).delay( 5000 ).fadeOut("slow");
+                            success: function () {
+                                $('#update_privacy_guarantor_checkouts_message')
+                                    .fadeIn("slow")
+                                    .text(_("Your setting has been updated!"))
+                                    .delay(5000)
+                                    .fadeOut("slow");
                             },
-                            error: function() {
-                                $('#update_privacy_guarantor_checkouts_message').fadeIn("slow").text( _("Unable to update your setting!") ).delay( 5000 ).fadeOut("slow");
+                            error: function () {
+                                $('#update_privacy_guarantor_checkouts_message')
+                                    .fadeIn("slow")
+                                    .text(_("Unable to update your setting!"))
+                                    .delay(5000)
+                                    .fadeOut("slow");
                             }
                         });
                     });
@@ -1073,13 +1083,23 @@
                         $.ajax({
                             url: "/api/v1/public/patrons/[% logged_in_user.borrowernumber | uri %]/guarantors/can_see_charges",
                             type: 'PUT',
-                            data: JSON.stringify({ allowed: can_see_charges }),
+                            data: JSON.stringify({ 
+                                allowed: can_see_charges
+                            }),
                             contentType: 'application/json',
                             success: function() {
-                                $('#update_privacy_guarantor_fines_message').fadeIn("slow").text( _("Your setting has been updated!") ).delay( 5000 ).fadeOut("slow");
+                                $('#update_privacy_guarantor_fines_message')
+                                    .fadeIn("slow")
+                                    .text( _("Your setting has been updated!") )
+                                    .delay( 5000 )
+                                    .fadeOut("slow");
                             },
                             error: function() {
-                                $('#update_privacy_guarantor_fines_message').fadeIn("slow").text( _("Unable to update your setting!") ).delay( 5000 ).fadeOut("slow");
+                                $('#update_privacy_guarantor_fines_message')
+                                    .fadeIn("slow")
+                                    .text( _("Unable to update your setting!") )
+                                    .delay( 5000 )
+                                    .fadeOut("slow");
                             }
                         });
                     });
