@@ -23,6 +23,7 @@ use C4::Context;
 
 use Koha::Database;
 use Koha::Exceptions::Config;
+use Koha::Exceptions::Elasticsearch;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 
