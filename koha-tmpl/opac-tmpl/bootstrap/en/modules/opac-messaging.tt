@@ -40,7 +40,6 @@
                                         [% IF ( TalkingTechItivaPhone ) %]<th>Phone</th>[% END %]
                                         <th>Email</th>
                                         <th>Digests only <i id="info_digests" data-toggle="tooltip" title="You can ask for a digest to reduce the number of messages. Messages will be saved and sent as a single message." data-placement="right" class="fa fa-info-circle"></i></th>
-                                        <!-- <th>RSS</th> --><th>Do not notify</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,9 +69,9 @@
                                             [% IF ( messaging_preference.transport_sms ) %]
                                                 <td>
                                                     [% IF ( messaging_preference.transports_sms ) %]
-                                                      <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                      <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" checked="checked" />
                                                     [% ELSE %]
-                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id | html %].checked=false;" />
+                                                        <input type="checkbox" id="sms[% messaging_preference.message_attribute_id | html %]" name="[% messaging_preference.message_attribute_id | html %]" value="sms" />
                                                     [% END %]
                                                 </td>
                                             [% ELSE %]
@@ -123,7 +122,6 @@
                                         <td>-</td>
                                         [% END %]
 
-                                        <td><input type="checkbox" class="none" id="none[% messaging_preference.message_attribute_id | html %]" /></td>
                                     </tr>
                                 [% END # / FOREACH messaging_preferences%]
                             </tbody>
