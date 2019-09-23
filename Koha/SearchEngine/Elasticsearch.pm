@@ -815,7 +815,7 @@ which is terribly slow.
 sub _get_marc_mapping_rules {
     my ($self) = @_;
     my $marcflavour = lc C4::Context->preference('marcflavour');
-    my $field_spec_regexp = qr/^([0-9]{3})([()0-9a-z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
+    my $field_spec_regexp = qr/^([0-9]{3})([()0-9a-zA-Z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
     my $leader_regexp = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
     my $rules = {
         'leader' => [],
