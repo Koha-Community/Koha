@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::Warn;
 
@@ -36,6 +36,64 @@ my $builder = t::lib::TestBuilder->new;
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 my $t = Test::Mojo->new('Koha::REST::V1');
+
+subtest 'list() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $item   = $builder->build_object( { class => 'Koha::Items' } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 4 }
+        }
+    );
+
+    my $nonprivilegedpatron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+
+    my $password = 'thePassword123';
+
+    $nonprivilegedpatron->set_password(
+        { password => $password, skip_validation => 1 } );
+    my $userid = $nonprivilegedpatron->userid;
+
+    $t->get_ok( "//$userid:$password@/api/v1/items" )
+      ->status_is(403)
+      ->json_is(
+        '/error' => 'Authorization failure. Missing required permission(s).' );
+
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $userid = $patron->userid;
+
+    $t->get_ok( "//$userid:$password@/api/v1/items" )
+      ->status_is( 200, 'SWAGGER3.2.2' );
+
+    my $items_count = Koha::Items->search->count;
+    my $response_count = scalar @{ $t->tx->res->json };
+
+    is( $items_count, $response_count, 'The API returns all the items' );
+
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
+      ->status_is(200)
+      ->json_is( '' => [ Koha::REST::V1::Items::_to_api( $item->TO_JSON ) ], 'SWAGGER3.3.2');
+
+    my $barcode = $item->barcode;
+    $item->delete;
+
+    $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
+      ->status_is(200)
+      ->json_is( '' => [] );
+
+    $schema->storage->txn_rollback;
+};
+
 
 subtest 'get() tests' => sub {
 

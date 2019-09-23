@@ -23,6 +23,57 @@ use Koha::Items;
 
 use Try::Tiny;
 
+=head1 NAME
+
+Koha::REST::V1::Items - Koha REST API for handling items (V1)
+
+=head1 API
+
+=head2 Methods
+
+=cut
+
+=head3 list
+
+Controller function that handles listing Koha::Item objects
+
+=cut
+
+sub list {
+    my $c = shift->openapi->valid_input or return;
+
+    return try {
+        my $items_set = Koha::Items->new;
+        my $items     = $c->objects->search( $items_set, \&_to_model, \&_to_api );
+        return $c->render(
+            status  => 200,
+            openapi => $items
+        );
+    }
+    catch {
+        unless ( blessed $_ && $_->can('rethrow') ) {
+            return $c->render(
+                status  => 500,
+                openapi => {
+                    error =>
+                      "Something went wrong, check Koha logs for details."
+                }
+            );
+        }
+        return $c->render(
+            status  => 500,
+            openapi => { error => "$_" }
+        );
+    };
+}
+
+
+=head3 get
+
+Controller function that handles retrieving a single Koha::Item
+
+=cut
+
 sub get {
     my $c = shift->openapi->valid_input or return;
 
@@ -46,6 +97,8 @@ sub get {
         }
     };
 }
+
+=head2 Internal methods
 
 =head3 _to_api
 
