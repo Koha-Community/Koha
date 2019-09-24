@@ -132,7 +132,7 @@ is(
     login_shib_url($query),
     'https://testopac.com'
       . '/Shibboleth.sso/Login?target='
-      . 'https://testopac.com/cgi-bin/koha/opac-user.pl' . '%3F'
+      . 'https://testopac.com/cgi-bin/koha/opac-user.pl?'
       . $query_string,
     "login shib url"
 );
