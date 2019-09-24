@@ -354,6 +354,7 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
 
     my $password = 'AbcdEFG123';
 
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
     my $patron_np = $builder->build_object(
         { class => 'Koha::Patrons', value => { flags => 0 } } );
     $patron_np->set_password( { password => $password, skip_validation => 1 } );
@@ -378,43 +379,46 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
     t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
-    my $biblio = $builder->build_sample_biblio;
+    my $biblio   = $builder->build_sample_biblio;
+    my $patron_1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
+    my $patron_2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
+    my $patron_3 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
 
-    my $hold_1 = $builder->build_object(
-        {
-            class => 'Koha::Holds',
-            value => {
-                suspend       => 0,
-                suspend_until => undef,
-                waitingdate   => undef,
-                biblionumber  => $biblio->biblionumber,
-                priority      => 1
-            }
-        }
+    my $hold_1 = Koha::Holds->find(
+        AddReserve(
+            $library->branchcode,  $patron_1->borrowernumber,
+            $biblio->biblionumber, undef,
+            1
+        )
     );
-    my $hold_2 = $builder->build_object(
-        {
-            class => 'Koha::Holds',
-            value => {
-                suspend       => 0,
-                suspend_until => undef,
-                waitingdate   => undef,
-                biblionumber  => $biblio->biblionumber,
-                priority      => 2
-            }
-        }
+    my $hold_2 = Koha::Holds->find(
+        AddReserve(
+            $library->branchcode,  $patron_2->borrowernumber,
+            $biblio->biblionumber, undef,
+            2
+        )
     );
-    my $hold_3 = $builder->build_object(
-        {
-            class => 'Koha::Holds',
-            value => {
-                suspend       => 0,
-                suspend_until => undef,
-                waitingdate   => undef,
-                biblionumber  => $biblio->biblionumber,
-                priority      => 3
-            }
-        }
+    my $hold_3 = Koha::Holds->find(
+        AddReserve(
+            $library->branchcode,  $patron_3->borrowernumber,
+            $biblio->biblionumber, undef,
+            3
+        )
     );
 
     $t->put_ok( "//$userid_np:$password@/api/v1/holds/"
