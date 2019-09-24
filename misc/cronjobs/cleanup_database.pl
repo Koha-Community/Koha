@@ -42,6 +42,14 @@ use Getopt::Long;
 use C4::Log;
 use C4::Accounts;
 use Koha::UploadedFiles;
+use Koha::Old::Biblios;
+use Koha::Old::Items;
+use Koha::Old::Biblioitems;
+use Koha::Old::Checkouts;
+use Koha::Old::Holds;
+use Koha::Old::Patrons;
+use Koha::Item::Transfers;
+
 
 sub usage {
     print STDERR <<USAGE;
@@ -395,88 +403,47 @@ if ($oauth_tokens) {
 
 if ($pStatistics) {
     print "Purging statistics older than $pStatistics days.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM statistics
-            WHERE datetime < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    $sth->execute($pStatistics);
+    Koha::Statistics->filter_by_last_update(
+        { timestamp_column_name => 'datetime', days => $pStatistics } )->delete;
     print "Done with purging statistics.\n" if $verbose;
 }
 
 if ($pDeletedCatalog) {
     print "Purging deleted catalog older than $pDeletedCatalog days.\n" if $verbose;
-    my $sth1 = $dbh->prepare(
-        q{
-            DELETE FROM deleteditems
-            WHERE timestamp < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    my $sth2 = $dbh->prepare(
-        q{
-            DELETE FROM deletedbiblioitems
-            WHERE timestamp < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    my $sth3 = $dbh->prepare(
-        q{
-            DELETE FROM deletedbiblio
-            WHERE timestamp < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    # deletedbiblio_metadata is managed by FK with deletedbiblio
-    $sth1->execute($pDeletedCatalog);
-    $sth2->execute($pDeletedCatalog);
-    $sth3->execute($pDeletedCatalog);
+    Koha::Old::Items      ->filter_by_last_update( { days => $pDeletedCatalog } )->delete;
+    Koha::Old::Biblioitems->filter_by_last_update( { days => $pDeletedCatalog } )->delete;
+    Koha::Old::Biblios    ->filter_by_last_update( { days => $pDeletedCatalog } )->delete;
     print "Done with purging deleted catalog.\n" if $verbose;
 }
 
 if ($pDeletedPatrons) {
     print "Purging deleted patrons older than $pDeletedPatrons days.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM deletedborrowers
-            WHERE updated_on < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    $sth->execute($pDeletedPatrons);
+    Koha::Old::Patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', days => $pDeletedPatrons } )
+      ->delete;
     print "Done with purging deleted patrons.\n" if $verbose;
 }
 
 if ($pOldIssues) {
     print "Purging old checkouts older than $pOldIssues days.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM old_issues
-            WHERE timestamp < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    $sth->execute($pOldIssues);
+    Koha::Old::Checkouts->filter_by_last_update( { days => $pOldIssues } )->delete;
     print "Done with purging old issues.\n" if $verbose;
 }
 
 if ($pOldReserves) {
     print "Purging old reserves older than $pOldReserves days.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM old_reserves
-            WHERE timestamp < DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        }
-    );
-    $sth->execute($pOldReserves);
+    Koha::Old::Holds->filter_by_last_update( { days => $pOldReserves } )->delete;
     print "Done with purging old reserves.\n" if $verbose;
 }
 
 if ($pTransfers) {
     print "Purging arrived item transfers older than $pTransfers days.\n" if $verbose;
-    $sth = $dbh->prepare(
-        q{
-            DELETE FROM branchtransfers
-            WHERE datearrived < DATE_SUB(CURDATE(), INTERVAL ? DAY)
+    Koha::Item::Transfers->filter_by_last_update(
+        {
+            timestamp_column_name => 'datearrived',
+            days => $pTransfers,
         }
-    );
-    $sth->execute($pTransfers);
+    )->delete;
     print "Done with purging transfers.\n" if $verbose;
 }
 

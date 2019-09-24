@@ -252,6 +252,19 @@ sub update {
     return $self->_resultset->update($fields);
 }
 
+sub filter_by_last_update {
+    my ( $self, $params ) = @_;
+    my $timestamp_column_name = $params->{timestamp_column_name} || 'timestamp';
+    return $self->_resultset->search(
+        {
+            $timestamp_column_name => {
+                '<' =>
+                  [ \'DATE_SUB(CURDATE(), INTERVAL ? DAY)', $params->{days} ]
+            }
+        }
+    );
+}
+
 =head3 single
 
 my $object = Koha::Objects->search({}, { rows => 1 })->single
