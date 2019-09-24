@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 13:55-0300\n"
-"PO-Revision-Date: 2019-08-14 06:57+0000\n"
+"POT-Creation-Date: 2019-09-17 09:51-0300\n"
+"PO-Revision-Date: 2019-09-22 08:45+0000\n"
 "Last-Translator: Anthony MAO <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1565765869.798110\n"
+"X-POOTLE-MTIME: 1569141936.804180\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -217,7 +217,7 @@ msgstr "%s %s 找不到。%s "
 #. %9$s:  ELSE 
 #. %10$s:  END 
 #. %11$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:110
 #, c-format
 msgid ""
 "%s %s RSS feed for %s library news %s RSS feed for library news %s %s %s RSS "
@@ -744,7 +744,7 @@ msgstr "%s 搜尋"
 #. %5$s:  IF ( limit_desc ) 
 #. %6$s:  limit_desc | html 
 #. %7$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:85
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s 搜尋 %s對象 '%s'%s%s&nbsp;限制是:&nbsp;'%s'%s"
@@ -1111,7 +1111,7 @@ msgstr "%s%s%sKoha %s &rsaquo; 自助借出"
 #: opac-tmpl/bootstrap/en/modules/opac-registration-invalid.tt:3
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:4
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:9
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:4
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:5
 #: opac-tmpl/bootstrap/en/modules/opac-blocked.tt:3
 #, c-format
 msgid "%s%s%sKoha online%s catalog"
@@ -1715,7 +1715,7 @@ msgstr "%s%s%s Koha 線上%s 目錄最近的評論"
 #. %10$s:  SEARCH_RESULT.biblionumber | html 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:42
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:111
 #, c-format
 msgid ""
 "%s%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s%s%s%s/cgi-bin/koha/opac-"
@@ -1743,12 +1743,27 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s"
 msgid "%s, by %s%s "
 msgstr "%s, 作者 %s%s "
 
+#. %1$s:  OPACBaseURL | url 
+#. %2$s:  SEARCH_RESULT.biblionumber | uri 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:45
+#, c-format
+msgid "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
+
+#. %1$s:  OPACBaseURL | url 
+#. %2$s:  SEARCH_RESULT.biblionumber | uri 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:43
+#, c-format
+msgid "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
+
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  i.biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves-rss.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:68
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:47
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:74
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:114
 #, c-format
 msgid "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
 msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
@@ -1781,21 +1796,21 @@ msgstr "%s/cgi-bin/koha/opac-main.pl"
 msgid "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
 msgstr "%s/cgi-bin/koha/opac-main.pl#newsitem%s"
 
-#. %1$s:  OPACBaseURL | html 
-#. %2$s:  query_cgi | $raw 
+#. %1$s:  OPACBaseURL | url 
+#. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:78
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:84
 #, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 
 #. %1$s:  OPACBaseURL | html 
-#. %2$s:  query_cgi | $raw 
-#. %3$s:  limit_cgi | url 
+#. %2$s:  query_cgi | html 
+#. %3$s:  limit_cgi | html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:26
 #, c-format
-msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
-msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
+msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
+msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
 
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  shelf.shelfnumber | html 
@@ -4037,7 +4052,7 @@ msgstr "讀者證號長度必須在 %s 和 %s 字元之間。"
 msgid "Card number must be exactly %s characters."
 msgstr "讀者證號長度至少恰好為 %s 字元。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:51
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:52
 #, c-format
 msgid "Card number:"
 msgstr "讀者證號碼："
@@ -4952,7 +4967,7 @@ msgstr "離館除籍"
 msgid "Discographies"
 msgstr "唱片分類目錄"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:59
 #, c-format
 msgid "Display news for: "
 msgstr "顯示最新消息："
@@ -4980,8 +4995,8 @@ msgid "Don't have a password yet?"
 msgstr "沒有密碼嗎？"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:341
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:184
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Don't have an account? "
 msgstr "沒有帳號嗎？"
@@ -5487,14 +5502,14 @@ msgstr ""
 "如：1999-2001。以 \"-1987\" 表示1987年以前的出版品；或 \"2008-\" 表示2008年以"
 "後的出版品。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:58
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:59
 #, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
 "this data. Please log in and change your password."
 msgstr "為了方便起見，本頁面的登入盒已預填資料。請登入並更改密碼。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:61
 #, c-format
 msgid ""
 "For your convenience, the login box on this page has been pre-filled with "
@@ -5522,7 +5537,7 @@ msgstr "豁免 %s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:336
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:179
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:180
 #, c-format
 msgid "Forgot your password?"
 msgstr "忘記您的密碼嗎？"
@@ -5923,7 +5938,7 @@ msgstr "預約 (%s)"
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:18
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:30
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:14
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-registration-email-sent.tt:12
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:43
@@ -6025,12 +6040,6 @@ msgstr "ISBD檢視"
 msgid "ISBN"
 msgstr "ISBN"
 
-#. %1$s:  SEARCH_RESULT.isbn | html 
-#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:41
-#, c-format
-msgid "ISBN %s"
-msgstr "ISBN %s"
-
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:227
 #, c-format
 msgid "ISBN:"
@@ -6056,6 +6065,12 @@ msgstr "ISBN: %s "
 #, c-format
 msgid "ISBN: %s %s %s; %s %s "
 msgstr "ISBN: %s %s %s; %s %s "
+
+#. %1$s:  SEARCH_RESULT.isbn | html 
+#: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:41
+#, c-format
+msgid "ISBN:%s"
+msgstr "ISBN: %s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:184
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:186
@@ -6828,8 +6843,8 @@ msgstr "位置"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:347
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:20
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:171
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:170
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:379
@@ -6838,6 +6853,10 @@ msgid "Log in"
 msgstr "登入"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:564
+#, c-format
+msgid "Log in to add tags"
+msgstr "登入才能新增標籤"
+
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:431
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:471
@@ -6868,8 +6887,8 @@ msgstr "登入以檢視您自己儲存的標籤。"
 msgid "Log in to your account"
 msgstr "以您的帳號登入"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:166
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:81
 #, c-format
 msgid "Log in to your account:"
 msgstr "以您的帳號登入："
@@ -6910,8 +6929,8 @@ msgstr "登入首頁面"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:327
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:80
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:82
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:374
 #, c-format
 msgid "Login:"
@@ -7426,7 +7445,7 @@ msgstr "無限制"
 msgid "No matching records found"
 msgstr "未找到匹配的紀錄"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:135
 #, c-format
 msgid "No news to display."
 msgstr "無最新消息可顯示。"
@@ -8040,9 +8059,9 @@ msgstr "更新密碼"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:168
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:45
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:46
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:376
 #, c-format
 msgid "Password:"
@@ -8666,7 +8685,7 @@ msgstr "出版者：%s %s 在 %s %s %s , %s %s %s , %s %s "
 
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
 #, c-format
 msgid "Published on %s %s by "
 msgstr "(出版日期 %s %s 出版社 "
@@ -8701,7 +8720,7 @@ msgstr "新書推薦"
 msgid "Quantity:"
 msgstr "數量："
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:146
 #, c-format
 msgid "Quote of the day"
 msgstr "今日引句"
@@ -8816,18 +8835,18 @@ msgid "Register a new account"
 msgstr "註冊新帳號"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:341
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:184
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:97
 #, c-format
 msgid "Register here."
 msgstr "在此註冊。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:34
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:35
 #, c-format
 msgid "Registration Complete!"
 msgstr "註冊完成！"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:14
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:15
 #, c-format
 msgid "Registration complete"
 msgstr "註冊完成"
@@ -9743,7 +9762,7 @@ msgstr "顯示_MENU_ 課程"
 msgid "Show all items"
 msgstr "顯示所有館藏"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:99
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:100
 #, c-format
 msgid "Show all news"
 msgstr "顯示所有新聞"
@@ -10332,8 +10351,8 @@ msgstr "切換語文"
 msgid "System Maintenance"
 msgstr "系統維護"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:64
 #, c-format
 msgid "System-wide only"
 msgstr "只限本系統"
@@ -10885,7 +10904,7 @@ msgstr "此虛擬書架是空的。%s 可將搜尋結果加入您的虛擬書架
 msgid "This message can have the following reason(s):"
 msgstr "基於以下的理由出現此訊息："
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:75
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:76
 #, c-format
 msgid "This news item does not exist. "
 msgstr "此新聞項目不存在。"
@@ -11006,7 +11025,7 @@ msgstr "題名："
 msgid "Titles"
 msgstr "題名"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:38
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:39
 #, c-format
 msgid "To log in, use the following credentials:"
 msgstr "使用以下憑證登入："
@@ -11236,7 +11255,7 @@ msgstr "使用於"
 msgid "Used for/see from:"
 msgstr "使用於/見自："
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:41
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:42
 #, c-format
 msgid "Username:"
 msgstr "使用者名稱："
@@ -11388,7 +11407,7 @@ msgid "Wednesday"
 msgstr "星期三"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:103
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:195
 #, c-format
 msgid "Welcome, "
 msgstr "歡迎， "
@@ -11771,7 +11790,7 @@ msgstr "您已續借此館藏至最高次數。"
 msgid "You have subscribed to email notification on new issues. "
 msgstr "您要求此期刊到館後以 E-Mail 通報。"
 
-#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:36
+#: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:37
 #, c-format
 msgid "You have successfully registered your new account."
 msgstr "成功建立新帳號。"
@@ -12327,7 +12346,7 @@ msgstr "讀者證號碼："
 msgid "change your password"
 msgstr "修改您的密碼"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:198
 #, c-format
 msgid "checkout(s)"
 msgstr "借出"
@@ -12378,7 +12397,7 @@ msgstr "設定搜尋用的記錄辨識碼類型，可能的值是："
 msgid "desired_due_date"
 msgstr "desired_due_date"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:209
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:210
 #, c-format
 msgid "due in fines and charges"
 msgstr "罰款和費用"
@@ -12409,12 +12428,12 @@ msgstr "有關內容及組態的更多資訊。"
 msgid "here"
 msgstr "這裡"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:204
 #, c-format
 msgid "hold(s) pending"
 msgstr "預約暫停"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:206
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:207
 #, c-format
 msgid "hold(s) waiting"
 msgstr "預約停止"
@@ -12605,7 +12624,7 @@ msgstr "或"
 msgid "out of"
 msgstr "out of"
 
-#: opac-tmpl/bootstrap/en/modules/opac-main.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-main.tt:201
 #, c-format
 msgid "overdue(s)"
 msgstr "逾期"
