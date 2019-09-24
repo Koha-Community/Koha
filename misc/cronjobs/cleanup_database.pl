@@ -92,6 +92,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --uploads-missing FLAG Delete upload records for missing files when FLAG is true, count them otherwise
    --oauth-tokens     Delete expired OAuth2 tokens
    --statistics DAYS       Purge statistics entries more than DAYS days old.
+                           This table is used to build reports, make sure you are aware of the consequences of this before using it!
    --deleted-catalog  DAYS Purge catalog records deleted more then DAYS days ago
                            (from tables deleteditems, deletedbiblioitems, deletedbiblio_metadata and deletedbiblio).
    --deleted-patrons DAYS  Purge patrons deleted more than DAYS days ago.
