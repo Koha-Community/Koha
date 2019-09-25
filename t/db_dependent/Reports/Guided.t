@@ -413,7 +413,7 @@ $schema->storage->txn_rollback;
 
 subtest 'nb_rows() tests' => sub {
 
-    plan tests => 1;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -429,6 +429,17 @@ subtest 'nb_rows() tests' => sub {
     my $nb_rows = nb_rows( $query );
 
     is( $nb_rows, $items_count, 'nb_rows returns the right value' );
+
+    my $bad_query = q{
+        SELECT * items xxx
+    };
+
+    warning_like
+        { $nb_rows = nb_rows( $bad_query ) }
+        qr/^DBD::mysql::st execute failed:/,
+        'Bad queries raise a warning';
+
+    is( $nb_rows, 0, 'nb_rows returns 0 on bad queries' );
 
     $schema->storage->txn_rollback;
 };
