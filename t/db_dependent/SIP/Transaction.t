@@ -334,8 +334,10 @@ subtest "Placing holds via SIP check CanItemBeReserved" => sub {
 };
 
 subtest do_checkin => sub {
-    plan tests => 12;
+    plan tests => 13;
 
+    my $mockILS = Test::MockObject->new;
+    my $server = { ils => $mockILS };
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron = $builder->build_object(
@@ -437,11 +439,92 @@ subtest do_checkin => sub {
         is( $hold->itemnumber, $item->itemnumber, );
         is( Koha::Checkouts->search({itemnumber => $item->itemnumber})->count, 0, );
     };
+
+    subtest 'Checkin with fines' => sub {
+        plan tests => 2;
+
+        my $mockILS = Test::MockObject->new;
+        my $server = { ils => $mockILS };
+        my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $institution = {
+            id             => $library->id,
+            implementation => "ILS",
+            policy         => {
+                checkin  => "true",
+                renewal  => "true",
+                checkout => "true",
+                timeout  => 100,
+                retries  => 5,
+            }
+        };
+        my $ils = C4::SIP::ILS->new($institution);
+        my $item = $builder->build_sample_item(
+            {
+                library => $library->branchcode,
+            }
+        );
+
+        # show_outstanding_amount disabled
+        my $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    branchcode => $library->branchcode,
+                }
+            }
+        );
+        my $circ = $ils->checkout($patron->cardnumber, $item->barcode, undef, undef, $server->{account});
+        my $fee1 = $builder->build(
+            {
+                source => 'Accountline',
+                value  => {
+                    borrowernumber => $patron->borrowernumber,
+                    amountoutstanding => 12,
+                    debit_type_code   => 'OVERDUE',
+                    itemnumber        => $item->itemnumber
+                }
+            }
+        );
+        $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode, undef, undef, $server->{account} );
+        is( $circ->{screen_msg}, '', "The fine is not displayed on checkin when show_outstanding_amount is disabled" );
+
+        # show_outstanding_amount enabled
+        $patron = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => {
+                    branchcode => $library->branchcode,
+                }
+            }
+        );
+        $circ = $ils->checkout($patron->cardnumber, $item->barcode, undef, undef, $server->{account});
+
+        $fee1 = $builder->build(
+            {
+                source => 'Accountline',
+                value  => {
+                    borrowernumber => $patron->borrowernumber,
+                    amountoutstanding => 12,
+                    debit_type_code   => 'OVERDUE',
+                    itemnumber        => $item->itemnumber
+                }
+            }
+        );
+
+        $server->{account}->{show_outstanding_amount} = 1;
+        $circ = $ils->checkout($patron->cardnumber, $item->barcode, undef, undef, $server->{account});
+
+        $circ = $ils->checkin( $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode, undef, undef, $server->{account} );
+        is( $circ->{screen_msg}, 'You owe $12.00 for this item.', "The fine is displayed on checkin when show_outstanding_amount is enabled" );
+
+    };
 };
 
 subtest do_checkout_with_patron_blocked => sub {
-    plan tests => 4;
+    plan tests => 5;
 
+    my $mockILS = Test::MockObject->new;
+    my $server = { ils => $mockILS };
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $institution = {
         id             => $library->id,
@@ -492,9 +575,13 @@ subtest do_checkout_with_patron_blocked => sub {
     );
 
     my $fines_sip_patron  = C4::SIP::ILS::Patron->new( $fines_patron->cardnumber );
-    $circ = $ils->checkout($fines_patron->cardnumber, $item->barcode);
+
+    $circ = $ils->checkout($fines_patron->cardnumber, $item->barcode, undef, undef, $server->{account});
     is( $circ->{screen_msg}, 'Patron has fines', "Got correct fines screen message" );
 
+    $server->{account}->{show_outstanding_amount} = 1;
+    $circ = $ils->checkout($fines_patron->cardnumber, $item->barcode, undef, undef, $server->{account});
+    is( $circ->{screen_msg}, 'Patron has fines - You owe $10.00.', "Got correct fines with amount screen message" );
     my $debarred_patron = $builder->build_object(
         {
             class => 'Koha::Patrons',

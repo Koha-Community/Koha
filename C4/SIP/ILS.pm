@@ -140,7 +140,15 @@ sub checkout {
         } elsif ($patron->expired) {
             $circ->screen_msg("Patron expired on " . output_pref({ dt => dt_from_string( $patron->dateexpiry_iso, 'iso' ), dateonly => 1 }));
         } elsif ($patron->fine_blocked) {
-            $circ->screen_msg("Patron has fines");
+            my $message = "Patron has fines";
+            if ($account->{show_outstanding_amount}) {
+                my $patron_account = Koha::Account->new( { patron_id => $patron->{borrowernumber} });
+                my $balance = $patron_account->balance;
+                if ($balance) {
+                    $message .= (" - You owe " . Koha::Number::Price->new( $balance )->format({ with_symbol => 1}) . ".");
+                }
+            }
+            $circ->screen_msg($message);
         } else {
             $circ->screen_msg("Patron blocked");
         }
@@ -247,6 +255,23 @@ sub checkin {
         delete $item->{borrowernumber};
         delete $item->{due_date};
         $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
+        # Check for overdue fines to display
+        if ($account->{show_outstanding_amount}) {
+            my $kohaitem = Koha::Items->find( { barcode => $item_id } );
+            if ($kohaitem) {
+                my $charges = Koha::Account::Lines->search(
+                    {
+                        borrowernumber    => $patron->{borrowernumber},
+                        amountoutstanding => { '>' => 0 },
+                        debit_type_code   => [ 'OVERDUE' ],
+                        itemnumber        => $kohaitem->itemnumber
+                    },
+                );
+                if ($charges) {
+                    $circ->screen_msg("You owe " . Koha::Number::Price->new( $charges->total_outstanding )->format({ with_symbol => 1}) . " for this item.");
+                }
+            }
+        }
     } else {
         # Checkin failed: Wrongbranch or withdrawn?
         # Bug 10748 with pref BlockReturnOfLostItems adds another case to come
