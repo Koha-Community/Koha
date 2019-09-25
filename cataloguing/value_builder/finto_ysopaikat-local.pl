@@ -53,14 +53,16 @@ my $builder = sub {
 	     var sfid2 = found[1] + 'subfield_2_';
 	     var sf2val;
 	     var sf0val;
+             var sfind = " ";
 	     if (sels.userdef) {
-		 sf2val = "local";
+		 sf2val = "";
 		 sf0val = "";
+                 sfind = "4";
 	     } else {
 	         if (sels.vocab) {
                      if (/-/.test(sels.vocab)) {
-                         sels.vocab = sels.vocab.split("-")[0];
-                     }
+                           sels.vocab = sels.vocab.split("-")[0];
+		     }
 		     sf2val = sels.vocab + "/$langcode";
 		     \$('#'+id).data('vocab', sels.vocab);
 		 }
@@ -69,7 +71,7 @@ my $builder = sub {
 		     \$('#'+id).data('uri', sels.uri);
 		 }
 	     }
-	     /*\$('#'+id).parent().parent().find("input[name^='"+ind2+"']").val("7");*/
+	     \$('#'+id).parent().parent().find("input[name^='"+ind2+"']").val(sfind);
              if (typeof sf2val !== "undefined") \$('#'+id).parent().parent().find("input[id^='"+sfid2+"']").val(sf2val);
              if (typeof sf0val !== "undefined") \$('#'+id).parent().parent().find("input[id^='"+sfid0+"']").val(sf0val);
 	 }
@@ -91,7 +93,7 @@ my $builder = sub {
           /*multiple: false,*/
           /*maximumSelectionLength: 1,*/
           /*maximumSelectionSize: 1,*/
-          /*createSearchChoice: function(term, data) { return { id: term, text: term + " <i>(local)</i>", userdef: true }; },*/
+          createSearchChoice: function(term, data) { return { id: term, text: term + " <i>(local)</i>", userdef: true }; },
 	  minimumInputLength: 2,
 	  ajax: {
 	      url:'https://api.finto.fi/rest/v1/search',

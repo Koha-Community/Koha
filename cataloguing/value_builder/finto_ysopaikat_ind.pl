@@ -58,6 +58,9 @@ my $builder = sub {
 		 sf0val = "";
 	     } else {
 	         if (sels.vocab) {
+                     if (/-/.test(sels.vocab)) {
+                         sels.vocab = sels.vocab.split("-")[0];
+                     }
 		     sf2val = sels.vocab + "/$langcode";
 		     \$('#'+id).data('vocab', sels.vocab);
 		 }
