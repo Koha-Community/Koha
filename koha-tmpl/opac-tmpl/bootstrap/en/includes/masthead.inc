@@ -100,7 +100,7 @@
                                         [% END %]
                                     [% END %]
                                     [% IF ( loggedinusername ) %]
-                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber | html %]" data-branchcode="[% logged_in_user.branchcode | html %]" >[% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span></a></p></li>
+                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% logged_in_user.borrowernumber | html %]" data-branchcode="[% logged_in_user.branchcode | html %]" data-categorycode="[% logged_in_user.categorycode | html %]">[% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span></a></p></li>
                                         <li class="divider-vertical"></li>
                                     [% END %]
                                 [% END %]
