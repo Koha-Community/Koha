@@ -431,10 +431,13 @@ sub nb_rows {
     });
 
     $sth->execute();
-    my $results = $sth->fetch;
-    my $n = $results ? $results->[0] : 0;
 
-    return $n;
+    if ( $sth->errstr ) {
+        return 0;
+    }
+    else {
+       return $sth->fetch->[0];
+    }
 }
 
 =head2 execute_query
