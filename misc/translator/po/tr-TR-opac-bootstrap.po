@@ -4,9 +4,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-17 20:46-0300\n"
-"PO-Revision-Date: 2019-07-09 11:10+0000\n"
-"Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
+"POT-Creation-Date: 2019-09-17 10:26-0300\n"
+"PO-Revision-Date: 2019-09-11 09:13+0000\n"
+"Last-Translator: Meltem Arun <meltem.arun@goethe.de>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1562670609.301907\n"
+"X-POOTLE-MTIME: 1568193185.221025\n"
 "X-Pootle-Path: /tr/18.05/tr-TR-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -30,7 +30,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:372
 #, c-format
 msgid "%s %s %s %s %s No title %s %s %s %s "
-msgstr "%s %s %s%s%s Eseradı yok %s %s %s%s "
+msgstr "%s %s %s%s%s Eser adı yok %s %s %s%s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -44,7 +44,7 @@ msgstr "%s %s %s%s%s Eseradı yok %s %s %s%s "
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:333
 #, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
-msgstr "%s %s %s%s%s Eseradı yok %s %s , %s %s"
+msgstr "%s %s %s%s%s Eser adı yok %s %s , %s %s"
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -812,6 +812,12 @@ msgstr "%s Ara"
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Ara %siçin '%s'%s%s&nbsp;ile sınırla(r):&nbsp;'%s'%s"
+
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
+#, fuzzy
+msgid "%s Search RSS feed"
+msgstr "%s Ara"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:88
@@ -1769,6 +1775,12 @@ msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; pnn için IDREF aramanız %s"
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Arama geçmişiniz"
 
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
+#, fuzzy
+msgid "%s%s%sKoha online%s catalog recent comments"
+msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; En son yorumlar"
+
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
 #. %3$s:  SEARCH_RESULT.biblionumber | html 
@@ -2082,7 +2094,7 @@ msgstr ""
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:528
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
 "&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
@@ -3254,7 +3266,8 @@ msgstr "Adlibris kapak resmi"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:242
-msgid "Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
+#, fuzzy
+msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 "ISBN için Adlibris thumbnail: [% SEARCH_RESULT.normalized_isbn | html %]"
 
@@ -3742,7 +3755,7 @@ msgid "Availability:"
 msgstr "Kullanılabilirlik:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:217
-#, fuzzy, c-format
+#, c-format
 msgid "Availability: "
 msgstr "Kullanılabilirlik:"
 
@@ -6519,6 +6532,14 @@ msgstr "Anahtar kelime"
 msgid "Koha"
 msgstr "Koha"
 
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
+#, fuzzy
+msgid "Koha %s"
+msgstr "Koha"
+
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
 msgid "Koha - RSS"
@@ -6528,13 +6549,6 @@ msgstr "Koha - RSS"
 #, c-format
 msgid "Koha Wiki"
 msgstr "Koha Wiki"
-
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
-#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
-msgid "Koha [% Version | html %]"
-msgstr "Koha [% Version | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:191
 #, c-format
@@ -8078,9 +8092,9 @@ msgid "Payment method"
 msgstr "Ödeme yöntemi"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:94
-#, fuzzy, c-format
+#, c-format
 msgid "Pending hold"
-msgstr "Ayırtma işlemi yapılıyor"
+msgstr "Beklemede olan ayırtma işlemi"
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:40
 #, c-format
@@ -8846,8 +8860,9 @@ msgstr "Çıkar"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:46
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "Faset kaldır [% facet.facet_link_value | html %]"
+#, fuzzy
+msgid "Remove facet %s"
+msgstr "Alanı kaldır"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:101
@@ -9456,21 +9471,13 @@ msgstr "Ayrıca bakınız:"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
-msgid ""
-"See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END "
-"%]"
+msgid "See: %s%s%snext biblio%s"
 msgstr ""
-"Bakınız: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% "
-"END %]"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
-msgid ""
-"See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous "
-"biblio[% END %]"
+msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
-"Bakınız: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE "
-"%]previous biblio[% END %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -11298,8 +11305,9 @@ msgstr "Amazon.com üzerinde görüntüle"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
-msgid "View record \"[% listitem.title | html %]\""
-msgstr "Kaydı görüntüle \"[% listitem.title | html %]\""
+#, fuzzy
+msgid "View record \"%s\""
+msgstr "Künyeyi kaydet"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:107
@@ -12095,13 +12103,13 @@ msgstr "Parolanız en az %s karakterden oluşmalıdır."
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:813
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your password must contain at least %s characters, including UPPERCASE, "
 "lowercase and numbers."
 msgstr ""
 "Şifre, BÜYÜK HARF, küçük harf ve rakamlar da dahil olmak üzere en az %s "
-"karakter içermelidir"
+"karakter içermelidir."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:13
 #, c-format
@@ -12220,20 +12228,6 @@ msgstr "ZIP/Posta kodu:"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:288
 msgid "[ New list ]"
 msgstr "[ Yeni liste ]"
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-msgid ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] catalog recent comments"
-msgstr ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] katalog son yorumlar"
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
-msgid "[% LibraryName | html %] Search RSS feed"
-msgstr "[% LibraryName | html %] RSS beslemesi ara"
 
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
@@ -12361,21 +12355,10 @@ msgstr "içerir"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
@@ -12580,8 +12563,9 @@ msgstr "koha %s kataloğu"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-msgid "koha:biblionumber:[% biblio.biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblio.biblionumber | html %]"
+#, fuzzy
+msgid "koha:biblionumber:%s"
+msgstr "Yer numarası: %s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -13126,9 +13110,5 @@ msgstr "×"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:186
-msgid ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"
+msgid "‡%s %s"
 msgstr ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"

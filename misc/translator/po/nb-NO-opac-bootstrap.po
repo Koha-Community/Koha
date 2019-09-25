@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nb-NO-i-staff-prog-v-3000000\n"
-"POT-Creation-Date: 2019-08-17 20:27-0300\n"
+"POT-Creation-Date: 2019-09-17 10:14-0300\n"
 "PO-Revision-Date: 2019-03-21 16:54+0000\n"
 "Last-Translator: Magnus Enger <magnus@enger.priv.no>\n"
 "Language-Team: NorwegianBokmal <>\n"
@@ -813,6 +813,12 @@ msgstr "%s Søk"
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Søk %setter «%s»%s%s&nbsp;med begrensning(er):&nbsp;«%s»%s"
+
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
+#, fuzzy
+msgid "%s Search RSS feed"
+msgstr "%s Søk"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:88
@@ -1752,6 +1758,12 @@ msgstr "%s%s%sKoha %s nettkatalog &rsaquo; Ditt søk i IdRef for PPN %s"
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 msgstr "%s%s%sKoha %s nettkatalog &rsaquo; Din søkehistorikk"
+
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
+#, fuzzy
+msgid "%s%s%sKoha online%s catalog recent comments"
+msgstr "%s%s%sKoha %s nettkatalog &rsaquo; Nyeste kommentarer"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
@@ -3238,7 +3250,8 @@ msgstr "Adlibris omslagsbilde"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:242
-msgid "Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
+#, fuzzy
+msgid "Adlibris thumbnail for ISBN: %s"
 msgstr ""
 "Adlibris omslagsbilde for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
 
@@ -6496,6 +6509,14 @@ msgstr "Nøkkelord"
 msgid "Koha"
 msgstr "Koha"
 
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
+#, fuzzy
+msgid "Koha %s"
+msgstr "Koha"
+
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
 msgid "Koha - RSS"
@@ -6505,13 +6526,6 @@ msgstr "Koha - RSS"
 #, c-format
 msgid "Koha Wiki"
 msgstr "Koha Wiki"
-
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
-#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
-msgid "Koha [% Version | html %]"
-msgstr "Koha [% Version | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:191
 #, c-format
@@ -8818,8 +8832,9 @@ msgstr "Fjern"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:46
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "Fjern fasetten [% facet.facet_link_value | html %]"
+#, fuzzy
+msgid "Remove facet %s"
+msgstr "Fjern felt"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:101
@@ -9429,20 +9444,13 @@ msgstr "Se også:"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
-msgid ""
-"See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END "
-"%]"
+msgid "See: %s%s%snext biblio%s"
 msgstr ""
-"Se: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]neste post[% END %]"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
-msgid ""
-"See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous "
-"biblio[% END %]"
+msgid "See: %s%s%sprevious biblio%s"
 msgstr ""
-"Se: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]forrige "
-"post[% END %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -11277,8 +11285,9 @@ msgstr "Vis hos Amazon.com"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
-msgid "View record \"[% listitem.title | html %]\""
-msgstr "Vis post \"[% listitem.title | html %]\""
+#, fuzzy
+msgid "View record \"%s\""
+msgstr "Lagre post "
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:107
@@ -12184,20 +12193,6 @@ msgstr "Postnummer:"
 msgid "[ New list ]"
 msgstr "[ Ny liste ]"
 
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-msgid ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] catalog recent comments"
-msgstr ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% "
-"END %] katalog. Nye kommentarer."
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
-msgid "[% LibraryName | html %] Search RSS feed"
-msgstr "[% LibraryName | html %] RSS-strøm for søk"
-
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
 msgid "[% limit or"
@@ -12323,21 +12318,10 @@ msgstr "inneholder"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
@@ -12544,8 +12528,9 @@ msgstr "Kohas publikumskatalog%s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-msgid "koha:biblionumber:[% biblio.biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblio.biblionumber | html %]"
+#, fuzzy
+msgid "koha:biblionumber:%s"
+msgstr "Hyllesignatur: %s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -13091,9 +13076,5 @@ msgstr "×"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:186
-msgid ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"
+msgid "‡%s %s"
 msgstr ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"

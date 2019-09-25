@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-08-17 20:47-0300\n"
+"POT-Creation-Date: 2019-09-17 10:27-0300\n"
 "PO-Revision-Date: 2019-08-20 18:50+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-POOTLE-MTIME: 1566327047.573222\n"
@@ -2808,7 +2808,7 @@ msgstr ""
 #. %18$s:  multi_batch_count | html 
 #. %19$s:  END 
 #. %20$s:  END 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:44
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:46
 #, c-format
 msgid ""
 "%s %sExporting %s patron card%sExporting %s patron cards%s %s %sExporting %s "
@@ -3461,6 +3461,13 @@ msgstr "%s (отримано)%s %s "
 #, c-format
 msgid "%s (rcvd)%s %s %s%s by %s%s %s "
 msgstr "%s (отримано)%s %s %s%s / %s%s %s "
+
+#. A
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:241
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:580
+#, fuzzy
+msgid "%s - Click to Expand this Tag"
+msgstr "Клацніть, щоб розкрити цю ознаку"
 
 #. %1$s:  report.total_success | html 
 #. %2$s:  report.total_records | html 
@@ -5404,10 +5411,10 @@ msgstr ""
 #. %3$s:  biblio.author | html 
 #. %4$s: ~ END 
 #. %5$s:  (biblioitem.publicationyear || biblio.copyrightdate) | html 
-#. %6$s:  biblioitem.publishercode | html 
+#. %6$s:  biblioitem.publishercode | html | $To 
 #. %7$s:  AuthorisedValues.GetByCode( 'CCODE', item.ccode ) | html 
 #. %8$s:  FILTER escape_quotes ~
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:10
 #, c-format
 msgid "%s by%s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
 msgstr "%s за %s %s %s\", \"%s\", \"%s\", \"%s\", \"%s "
@@ -5534,6 +5541,16 @@ msgstr "%s для „%s“%s"
 msgid "%s framework"
 msgstr "Структура %s"
 
+#. A
+#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
+#, fuzzy
+msgid ""
+"%s fund(s) are attached to this budget. You must delete all attached funds "
+"before deleting this budget."
+msgstr ""
+"[% count %] примірник(а/ів) приєднані до цього запису. Ви повинні вилучити "
+"усі примірники, перш ніж вилучати цей запис."
+
 #. For the first occurrence,
 #. %1$s:  loop_order.holds | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:205
@@ -5632,7 +5649,7 @@ msgid "%s issues %s %s "
 msgstr "%s випусків %s %s "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #, fuzzy
 msgid "%s item mandatory fields empty"
 msgstr "%s обов'язкові поля не заповнені "
@@ -5648,7 +5665,8 @@ msgstr "%s запис(и/ів) про примірники було знайде
 msgid "%s item(s) added to your cart"
 msgstr "%s запис(и) додано у Ваш кошик записів"
 
-#. SCRIPT
+#. A
+#: intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
 #: intranet-tmpl/prog/en/includes/catalog-strings.inc:1
 msgid ""
 "%s item(s) are attached to this record. You must delete all items before "
@@ -6000,6 +6018,14 @@ msgstr " %s знайдено "
 #, c-format
 msgid "%s shipments"
 msgstr "Посилок: %s."
+
+#. IMG
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:177
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:185
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:193
+#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:201
+msgid "%s sort"
+msgstr ""
 
 #. %1$s:  cannotdelbiblio.subscriptions | html 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:178
@@ -6573,6 +6599,14 @@ msgstr "%s(ММ/ДД/РРРР)%s(ДД/ММ/РРРР)%s(ДД.ММ.РРРР)%s(Р�
 #, c-format
 msgid "%s(deleted patron)%s "
 msgstr "%s(вилучений відвідувач)%s "
+
+#. %1$s:  IF (invoiceincgst == 1) 
+#. %2$s:  ELSE 
+#. %3$s:  END 
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:471
+#, fuzzy, c-format
+msgid "%s(tax inc.)%s(tax exc.)%s "
+msgstr "%s (включаючи податок) %s (без урахування податку) %s "
 
 #. For the first occurrence,
 #. %1$s:  IF (invoiceincgst == 1) 
@@ -7260,6 +7294,12 @@ msgstr "%sПрострочення!%s&nbsp;%s"
 msgid "%sOverdue:%s "
 msgstr "%s Прострочення:%s "
 
+#. INPUT type=button
+#: intranet-tmpl/prog/en/includes/holds_table.inc:205
+#, fuzzy
+msgid "%sRevert transit status%sRevert waiting status%s"
+msgstr "Одиниця очікує на "
+
 #. %1$s:  IF ( reserved ) 
 #. %2$s:  branchname | html 
 #. %3$s:  END 
@@ -7336,6 +7376,11 @@ msgstr ""
 "%sЗаголовок, Дата публікації, Видавництво, Зібрання, Штрих-код, Шифр "
 "зберігання, Джерельна бібліотека, Поточне місце розташування, Загальне "
 "розташування полиці, Інвентарний номер, Стан, Число видач %s"
+
+#. INPUT type=button
+#: intranet-tmpl/prog/en/includes/holds_table.inc:194
+msgid "%sUnsuspend%sSuspend%s"
+msgstr ""
 
 #. %1$s:  IF currency.archived 
 #. %2$s:  END 
@@ -10131,7 +10176,7 @@ msgstr ", Паскаль Нелон {Pascale Nalon} (ENSMP) та багато і
 msgid ", Please transfer this item. "
 msgstr ", будь ласка, перемістіть цю одиницю."
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:515
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:520
 #, fuzzy, c-format
 msgid ", greater than or equal to 1"
 msgstr ", яка дорівнює або перевищує 1"
@@ -11065,6 +11110,11 @@ msgstr "Фактична вартість включаючи податки"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:299
 #, c-format
 msgid "Actual cost:"
+msgstr "Фактична вартість: "
+
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:470
+#, fuzzy, c-format
+msgid "Actual cost: "
 msgstr "Фактична вартість: "
 
 #: intranet-tmpl/prog/en/modules/about.tt:799
@@ -14563,7 +14613,7 @@ msgstr "Повернутися"
 msgid "Back %s "
 msgstr "Повернутися %s"
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:88
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:90
 #, c-format
 msgid "Back side layout not used"
 msgstr ""
@@ -16287,17 +16337,10 @@ msgid "Can't cancel order and delete catalog record"
 msgstr "Неможливо скасувати замовлення та видалити запис з каталогу"
 
 #. SPAN
+#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
 msgid ""
-"Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked "
-"with this order. Cancel holds first"
-msgstr ""
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/acqui/parcel.tt:186
-msgid ""
-"Can't cancel order, ([% loop_order.holds_on_order | html %]) holds are "
-"linked with this order. Cancel holds first"
+"Can't cancel order, (%s) holds are linked with this order. Cancel holds first"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:361
@@ -16313,16 +16356,12 @@ msgstr ""
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
-msgid ""
-"Can't delete catalog record, because of [% books_loo.items | html %] "
-"existing hold(s)"
+msgid "Can't delete catalog record, because of %s existing hold(s)"
 msgstr ""
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:196
-msgid ""
-"Can't delete catalog record, because of [% loop_order.items | html %] "
-"existing item(s)"
+msgid "Can't delete catalog record, because of %s existing item(s)"
 msgstr ""
 
 #. B
@@ -16392,7 +16431,7 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:306
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:218
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:220
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:104
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:106
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:147
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:458
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:96
@@ -16446,9 +16485,9 @@ msgstr "Неможливо зберегти цей запис, бо наступ
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:667
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:753
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:159
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:490
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:493
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:495
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:498
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:500
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:37
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:124
@@ -16601,12 +16640,8 @@ msgstr "Скасувати резервування"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:153
 #, fuzzy
-msgid ""
-"Cancel hold and return to : [% Branches.GetName( reserveloo.homebranch ) | "
-"html %]"
-msgstr ""
-"Відмініть резерв і поверніться : [% Branches.GetName( reserveloo."
-"homebranch ) | html %]"
+msgid "Cancel hold and return to : %s"
+msgstr "Ігнорувати та повернутися до переміщень: "
 
 #. %1$s:  Branches.GetName( reserveloo.item.homebranch ) | html 
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:51
@@ -17718,8 +17753,9 @@ msgstr ""
 
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:285
-msgid "Check to delete subfield [% ite.subfield | html %]"
-msgstr "Позначте, щоб вилучити підполе „[% ite.subfield | html %]“"
+#, fuzzy
+msgid "Check to delete subfield %s"
+msgstr "Так, вилучити це підполе"
 
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:257
@@ -18894,7 +18930,7 @@ msgstr ""
 msgid "Click on the grid to toggle the settings."
 msgstr "Клацайте на клітинки для перемикання налаштувань."
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:39
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:40
 #, c-format
 msgid "Click on the link to download the patron cards from the patron list."
 msgstr ""
@@ -22362,7 +22398,7 @@ msgstr "Вилучити це підполе"
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:230
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:889
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:86
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #, fuzzy, c-format
 msgid "Delete user"
 msgstr "Вилучити список"
@@ -23418,7 +23454,7 @@ msgstr "Здублювати цей збережений звіт"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 msgid "Duplicate values detected. Please correct the errors and resubmit."
 msgstr ""
 "Виявлено дубльовані значення. Будь ласка, виправте помилки та повторно "
@@ -23652,7 +23688,7 @@ msgid "Edit"
 msgstr "Редагувати"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:16
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:26
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:32
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:9
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:27
@@ -23830,7 +23866,7 @@ msgstr "Редагувати список"
 msgid "Edit internal note"
 msgstr "Додати внутрішню примітку"
 
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:26
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:57
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:15
 #, c-format
@@ -23900,7 +23936,7 @@ msgid "Edit quotes for quote-of-the-day feature"
 msgstr "Редагування цитат з набору „цитати дня“"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:32
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:24
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:26
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:35
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:30
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:471
@@ -24490,7 +24526,7 @@ msgstr "Ввести ключові слова для пошуку: "
 msgid "Enter search terms"
 msgstr "Введіть пошукові терміни"
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:97
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:99
 #, fuzzy, c-format
 msgid "Enter starting card position: "
 msgstr "Введіть номер квитка відвідувача або частину прізвища"
@@ -25014,7 +25050,7 @@ msgstr "Пояснення: "
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:171
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:77
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:179
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:103
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:105
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:103
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:247
@@ -26211,7 +26247,7 @@ msgstr "Прощено"
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:15
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:10
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:401
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:461
@@ -26941,7 +26977,7 @@ msgid "Go to advanced search"
 msgstr "Перейти до детальнішого пошуку"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:14
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:16
 msgid "Go to item details"
 msgstr "Перейти до подробиць про примірник"
 
@@ -26963,7 +26999,7 @@ msgid "Go to receipt page"
 msgstr "Перейти на сторінку отримання"
 
 #. A
-#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:8
+#: intranet-tmpl/prog/en/includes/catalogue/itemsearch_item.json.inc:10
 msgid "Go to record detail page"
 msgstr "Перейти до подробиць про біб-запис"
 
@@ -27670,16 +27706,16 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:190
-msgid ""
-"Holds on this item: [% item_loo.item_holds | html %] / Total holds on this "
-"record: [% item_loo.holds | html -%]"
-msgstr ""
+#, fuzzy
+msgid "Holds on this item: %s / Total holds on this record: %s"
+msgstr "Занадто багато резервувань: "
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:136
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:196
-msgid "Holds on this record: [% item_loo.holds | html -%]"
-msgstr ""
+#, fuzzy
+msgid "Holds on this record: %s"
+msgstr "Занадто багато резервувань: "
 
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:368
@@ -29418,7 +29454,7 @@ msgstr "Внутрішня примітка:  "
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:83
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:302
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:470
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:475
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:454
 #, c-format
 msgid "Internal note: "
@@ -29509,7 +29545,7 @@ msgstr ""
 msgid "Invalid month entered in field %s"
 msgstr "Невірно внесено місяць у поле %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:514
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:519
 #, fuzzy, c-format
 msgid "Invalid number of copies"
 msgstr "Номер рахунку-фактури"
@@ -38584,10 +38620,9 @@ msgstr "Резервувань не виявлено."
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:132
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:192
-msgid ""
-"No holds on this item / Total holds on this record: [% item_loo.holds | html "
-"-%]"
-msgstr ""
+#, fuzzy
+msgid "No holds on this item / Total holds on this record: %s"
+msgstr "Занадто багато резервувань: "
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:138
@@ -40834,7 +40869,7 @@ msgid "Order this one"
 msgstr "Замовити цю"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 msgid "Order total (%s) exceeds budget available (%s)"
 msgstr ""
 
@@ -43065,7 +43100,7 @@ msgstr ""
 msgid "Please enter %n or more characters"
 msgstr "Будь ласка, введіть не більше %n символів."
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:515
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:520
 #, c-format
 msgid "Please enter a "
 msgstr ""
@@ -44232,7 +44267,7 @@ msgstr "Плата за обробку (при втраті)"
 msgid "Processing fee (when lost): "
 msgstr "Плата за обробку (при втраті): "
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:505
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:510
 #, fuzzy, c-format
 msgid "Processing multiple items"
 msgstr "o — неповний авторитетний запис"
@@ -44643,7 +44678,7 @@ msgid "Quantity"
 msgstr "Кількість"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 msgid "Quantity must be greater than '0'"
 msgstr ""
 
@@ -45393,8 +45428,9 @@ msgstr "Вилучити дублікати"
 
 #. A
 #: intranet-tmpl/prog/en/includes/facets.inc:37
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "Вилучити грань „[% facet.facet_link_value | html %]“"
+#, fuzzy
+msgid "Remove facet %s"
+msgstr "Отримання"
 
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:375
 #, fuzzy, c-format
@@ -46155,7 +46191,7 @@ msgstr "Модульна система Require.js JS"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:129
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:321
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:370
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:754
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:759
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:402
@@ -47063,7 +47099,7 @@ msgstr "По суботах"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:311
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:752
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:493
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:277
@@ -47427,6 +47463,13 @@ msgid "Search"
 msgstr "Пошук"
 
 #. INPUT type=text
+#: intranet-tmpl/prog/en/modules/serials/claims.tt:116
+#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:83
+#, fuzzy
+msgid "Search %s"
+msgstr "Пошук"
+
+#. INPUT type=text
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:109
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:71
 #, fuzzy
@@ -47437,13 +47480,6 @@ msgstr "Пошук"
 #, c-format
 msgid "Search Z39.50/SRU servers"
 msgstr "Пошук серед серверів Z39.50/SRU"
-
-#. INPUT type=text
-#: intranet-tmpl/prog/en/modules/serials/claims.tt:116
-#: intranet-tmpl/prog/en/modules/serials/serials-search.tt:83
-#, fuzzy
-msgid "Search [% field.name | html %]"
-msgstr "Шукати за полями: "
 
 #: intranet-tmpl/prog/en/includes/authorities-search.inc:230
 #, c-format
@@ -47719,17 +47755,17 @@ msgstr "Пошук сповіщень"
 msgid "Search on"
 msgstr "Пошук за"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
-#, fuzzy, c-format
-msgid "Search on Mana"
-msgstr "Пошук за"
-
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/detail.tt:85
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:81
 #, fuzzy
-msgid "Search on [% subfiel.marc_value | html %]"
-msgstr "Шукати за „[% subfiel.marc_value |html %]“"
+msgid "Search on %s"
+msgstr "Пошук за"
+
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
+#, fuzzy, c-format
+msgid "Search on Mana"
+msgstr "Пошук за"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:12
 #, c-format
@@ -48151,12 +48187,12 @@ msgstr "виберіть кошти"
 msgid "Select a language: "
 msgstr "Виберіть мову: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:86
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:88
 #, fuzzy, c-format
 msgid "Select a layout for back side: "
 msgstr "Виберіть файл для імпорту: "
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:78
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:80
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:79
 #, fuzzy, c-format
 msgid "Select a layout to be applied: "
@@ -48187,7 +48223,7 @@ msgstr "Вибираємо бібліотеку: "
 msgid "Select a template"
 msgstr "Вилучити список"
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:70
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:72
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:71
 #, fuzzy, c-format
 msgid "Select a template to be applied: "
@@ -48844,8 +48880,8 @@ msgstr "Встановити розташування"
 #. IMG
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:197
 #, fuzzy
-msgid "Set geolocation for [% l.branchname | html %]"
-msgstr "Встановити географічне розташування для підрозділу [% l.branchname %]"
+msgid "Set geolocation for %s"
+msgstr "Встановити розташування"
 
 # --Дата повернення (конфлікт з Return Date)
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:47
@@ -50113,7 +50149,7 @@ msgid "Start using Koha"
 msgstr "Почніть використовувати Коха"
 
 #. INPUT type=text name=start_card
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:98
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:100
 #, fuzzy
 msgid "Starting card number"
 msgstr "Стандартний номер"
@@ -50160,7 +50196,7 @@ msgid "Statistic 1 done on: "
 msgstr "Статистика 1 ведеться за списком: "
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:228
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:478
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:483
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:250
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:463
 #, c-format
@@ -50173,7 +50209,7 @@ msgid "Statistic 2 done on: "
 msgstr "Статистика 2 ведеться за списком: "
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:235
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:481
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:486
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:467
 #, c-format
@@ -51979,7 +52015,7 @@ msgstr ""
 "використовуйте DOM. Для зміни зверніться до цієї вікі-сторінки: "
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:477
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:482
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
 #, c-format
 msgid ""
@@ -52892,6 +52928,16 @@ msgstr " передплату"
 msgid "The subscription has not expired yet"
 msgstr " передплату"
 
+#. SPAN
+#: intranet-tmpl/prog/en/modules/admin/preferences.tt:68
+#, fuzzy
+msgid ""
+"The system preference %s may have been overridden from this value by one or "
+"more virtual hosts."
+msgstr ""
+"Параметр системи „[% NAME.name | html %]“ може бути перевизначений замість "
+"цього значення одним чи декількома віртуальними хостами."
+
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:109
 #, c-format
 msgid ""
@@ -52906,15 +52952,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/member-flags.tt:48
 msgid "The system preference ProtectSuperlibrarianPrivileges is enabled"
 msgstr "Параметр системи „ProtectSuperlibrarianPrivileges“ задіяно"
-
-#. SPAN
-#: intranet-tmpl/prog/en/modules/admin/preferences.tt:68
-msgid ""
-"The system preference [% NAME.name | html %] may have been overridden from "
-"this value by one or more virtual hosts."
-msgstr ""
-"Параметр системи „[% NAME.name | html %]“ може бути перевизначений замість "
-"цього значення одним чи декількома віртуальними хостами."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:58
@@ -54830,7 +54867,7 @@ msgid "Total items in group"
 msgstr "Усього примірників у групі"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #, fuzzy
 msgid "Total must be a number"
 msgstr "До шифру замовлення примірника: "
@@ -55052,8 +55089,8 @@ msgstr "Перекласти іншими мовами"
 #. A
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:122
 #, fuzzy
-msgid "Translate item type [% itemtype.itemtype | html %]"
-msgstr "Перекласти тип одиниці [% itemtype.itemtype %]"
+msgid "Translate item type %s"
+msgstr "Керування типами примірників"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:37
 #: intranet-tmpl/prog/en/modules/about.tt:1067
@@ -56190,7 +56227,7 @@ msgstr "Використано"
 msgid "Used For"
 msgstr "Використано для"
 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:93
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:95
 #, c-format
 msgid "Used for duplex printers (needs a '1 up template')"
 msgstr ""
@@ -56479,14 +56516,14 @@ msgstr "Примітка для постачальника: "
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:304
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:474
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:479
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
 #, c-format
 msgid "Vendor note: "
 msgstr "Примітка для постачальника: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 msgid "Vendor price must be a number"
 msgstr ""
 
@@ -56703,15 +56740,10 @@ msgstr "Переглянути результуючий запис"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:440
-#, fuzzy
-msgid "View funds for [% period_active.budget_period_description | html %]"
-msgstr "Перегляд коштів на „[% period_active.budget_period_description %]“"
-
-#. A
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:476
 #, fuzzy
-msgid "View funds for [% period_loo.budget_period_description | html %]"
-msgstr "Перегляд коштів на „[% period_loo.budget_period_description %]“"
+msgid "View funds for %s"
+msgstr "Нові кошти для %s"
 
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:38
 #, c-format
@@ -58049,7 +58081,7 @@ msgid "You can use the following wildcard characters: %% _"
 msgstr "Ви можете використовувати наступні символи підстановки: „%%“ „_“"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 msgid "You can't add a new item, please create a new order line"
 msgstr ""
 
@@ -58169,7 +58201,7 @@ msgid "You have chosen to move all unreceived orders from '%s' to '%s'."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 msgid ""
 "You have deleted item(s) in the order, don't forget to delete it(them) in "
 "the catalog"
@@ -58329,7 +58361,7 @@ msgid "You must reset your password"
 msgstr "Ви повинні скинути свій пароль"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:537
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #, fuzzy
 msgid "You must select a fund"
 msgstr "Ви повинні вибрати кошторис"
@@ -58716,69 +58748,10 @@ msgstr "[ Новий список ]"
 msgid "[#%% Default branch %%#] %s %s "
 msgstr ""
 
-#. INPUT type=button
-#: intranet-tmpl/prog/en/includes/holds_table.inc:194
-#, fuzzy
-msgid "[% IF ( hold.suspend ) %]Unsuspend[% ELSE %]Suspend[% END %]"
-msgstr ""
-"[% IF ( reserveloo.suspend ) %]Зняти призупинення[% ELSE %]Призупинити[% END "
-"%]"
-
-#. INPUT type=button
-#: intranet-tmpl/prog/en/includes/holds_table.inc:205
-msgid ""
-"[% IF hold.intransit %]Revert transit status[% ELSE %]Revert waiting "
-"status[% END %]"
-msgstr ""
-
-#. A
-#: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:17
-#, fuzzy
-msgid ""
-"[% block_budget.count | html %] fund(s) are attached to this budget. You "
-"must delete all attached funds before deleting this budget."
-msgstr ""
-"[% count %] примірник(а/ів) приєднані до цього запису. Ви повинні вилучити "
-"усі примірники, перш ніж вилучати цей запис."
-
-#. A
-#: intranet-tmpl/prog/en/includes/cat-toolbar.inc:70
-msgid ""
-"[% count | html %] item(s) are attached to this record. You must delete all "
-"items before deleting this record."
-msgstr ""
-"[% count | html %] примірник(а/ів) приєднані до цього запису. Ви повинні "
-"вилучити усі примірники, перш ніж вилучати цей запис."
-
-#. IMG
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:177
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:185
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:193
-#: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:201
-#, fuzzy
-msgid "[% direction | html %] sort"
-msgstr "[% direction %]-сортування"
-
 #. INPUT type=text name=discount
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:268
 msgid "[% discount | format ("
 msgstr "[% discount | format ("
-
-#. A
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:241
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:580
-#, fuzzy
-msgid "[% innerloo.tag_lib | html %] - Click to Expand this Tag"
-msgstr "[% innerloo.tag_lib %] — клацніть, щоб розкрити цю ознаку"
-
-#. IMG
-#: intranet-tmpl/prog/en/includes/circ-menu.inc:16
-msgid ""
-"[% patron.firstname | html %] [% patron.surname | html %] ([% patron."
-"cardnumber | html %])"
-msgstr ""
-"[% patron.firstname | html %] [% patron.surname | html %] ([% patron."
-"cardnumber | html %])"
 
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:326
 #, c-format
@@ -59577,21 +59550,10 @@ msgstr "critical.ogg"
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:78
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:291
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/macles.tt:39
 #, fuzzy, c-format
@@ -59863,8 +59825,9 @@ msgstr "дарунок"
 
 #. A
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:452
-msgid "go to [% bibliotitle | html %]"
-msgstr ""
+#, fuzzy
+msgid "go to %s"
+msgstr "Копіювати для підрозділу „%s“"
 
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:93
 #, c-format
@@ -60344,7 +60307,7 @@ msgid "label_batch_%s.pdf"
 msgstr "label_batch_%s.pdf"
 
 #. %1$s:  patronlist_id | html 
-#: intranet-tmpl/prog/en/modules/patroncards/print.tt:41
+#: intranet-tmpl/prog/en/modules/patroncards/print.tt:42
 #, c-format
 msgid "label_patronlist_%s.pdf"
 msgstr "label_patronlist_%s.pdf"
@@ -60575,7 +60538,7 @@ msgstr "не запущено"
 msgid "notforloan"
 msgstr "Не для випожичання"
 
-#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:515
+#: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:520
 #, fuzzy, c-format
 msgid "number"
 msgstr "Номер"
@@ -60964,8 +60927,8 @@ msgstr "серіальний ресурс"
 #. A
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:444
 #, fuzzy
-msgid "serial collection for [% subscription.bibliotitle | uri %]"
-msgstr "зібрання серіального видання на „[% subscription.bibliotitle %]“"
+msgid "serial collection for %s"
+msgstr "Зібрання серіального видання #%s"
 
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:44
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:122
@@ -61591,18 +61554,6 @@ msgstr ""
 
 #. A
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:165
-msgid ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value |url %]"
-msgstr ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value |url %]"
-
-#. A
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:250
-msgid ""
-"‡[% MARCSUBJECT_SUBFIELDS_LOO.code | html %] [% MARCSUBJECT_SUBFIELDS_LOO."
-"value | html %]"
+msgid "‡%s %s"
 msgstr ""
-"‡[% MARCSUBJECT_SUBFIELDS_LOO.code | html %] [% MARCSUBJECT_SUBFIELDS_LOO."
-"value | html %]"

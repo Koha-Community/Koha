@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-08-17 20:11-0300\n"
-"PO-Revision-Date: 2019-06-24 06:41+0000\n"
+"POT-Creation-Date: 2019-09-17 10:05-0300\n"
+"PO-Revision-Date: 2019-09-17 07:23+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1561358490.093707\n"
+"X-POOTLE-MTIME: 1568704991.329283\n"
 "X-Pootle-Path: /hy/18.05/hy-Armn-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -815,6 +815,11 @@ msgstr "%s Որոնում"
 #, c-format
 msgid "%s Search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "%s Փնտրիր %sհամար '%s'%s%s&nbsp;սահմանափակումներով:&nbsp;'%s'%s"
+
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
+msgid "%s Search RSS feed"
+msgstr "%s Որոնիր RSS սնունդ"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:88
@@ -1764,6 +1769,11 @@ msgstr ""
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search history"
 msgstr "%s%s%sԿոհա առցանց%s քարտարան &rsaquo; Փնտրման քո պատմությունը"
+
+#. LINK
+#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
+msgid "%s%s%sKoha online%s catalog recent comments"
+msgstr "%s%s%sԿոհա առցանց%s քարտարանի վերջին մեկնաբանությունները"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
@@ -3244,9 +3254,8 @@ msgstr "Adlibris կազմի պատկեր"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:242
-msgid "Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
-msgstr ""
-"Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]"
+msgid "Adlibris thumbnail for ISBN: %s"
+msgstr "Adlibris -ի մանրապատկերը %s ISBN -ի համար:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
 #, c-format
@@ -6501,6 +6510,13 @@ msgstr "Վճռորոշ բառ"
 msgid "Koha"
 msgstr "Կոհա"
 
+#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
+#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
+#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
+msgid "Koha %s"
+msgstr "Կոհա %s"
+
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
 msgid "Koha - RSS"
@@ -6510,13 +6526,6 @@ msgstr "Կոհա - RSS"
 #, c-format
 msgid "Koha Wiki"
 msgstr "Կոհա Wiki"
-
-#: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:6
-#: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
-#: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
-msgid "Koha [% Version | html %]"
-msgstr "Կոհա [% Տարբերակ | html %]"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:191
 #, c-format
@@ -8820,8 +8829,8 @@ msgstr "Հեռացրու"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:46
-msgid "Remove facet [% facet.facet_link_value | html %]"
-msgstr "Remove facet [% facet.facet_link_value | html %]"
+msgid "Remove facet %s"
+msgstr "Հեռացրու ֆասետը %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:101
@@ -9431,21 +9440,13 @@ msgstr "Տես նաև։"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1094
-msgid ""
-"See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END "
-"%]"
-msgstr ""
-"See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END "
-"%]"
+msgid "See: %s%s%snext biblio%s"
+msgstr "Տես: %s%s%sհաջորդ մատենը%s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1085
-msgid ""
-"See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous "
-"biblio[% END %]"
-msgstr ""
-"See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous "
-"biblio[% END %]"
+msgid "See: %s%s%sprevious biblio%s"
+msgstr "Տես: %s%s%sնախորդ մատենը%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -11273,8 +11274,8 @@ msgstr "Դիտիր Amazon.com-ից"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1110
-msgid "View record \"[% listitem.title | html %]\""
-msgstr "Դիտիր գրառումը \"[% listitem.title | html %]\""
+msgid "View record \"%s\""
+msgstr "Դիտիր գրառումը \"%s\""
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:107
@@ -12175,20 +12176,6 @@ msgstr "Զիպ/Փոստային ինդեքս:"
 msgid "[ New list ]"
 msgstr "[ Նոր ցուցակ ]"
 
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-msgid ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] catalog recent comments"
-msgstr ""
-"[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha "
-"online[% END %] catalog recent comments"
-
-#. LINK
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
-msgid "[% LibraryName | html %] Search RSS feed"
-msgstr "[% LibraryName | html %] Search RSS feed"
-
 #. INPUT type=text name=limit
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:89
 msgid "[% limit or"
@@ -12314,21 +12301,13 @@ msgstr "պարունակում է"
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
-"%]&rft.date=[% BIBLIO_RESULT.publicationyear | html %]&rft.tpages=[% "
-"BIBLIO_RESULT.item('size') | html %]&rft.isbn=[% BIBLIO_RESULT.isbn |url "
-"%]&rft.aucorp=&rft.place=[% BIBLIO_RESULT.place | html %]&rft.pub=[% "
-"BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
-"%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au="
+"%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
+"%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
@@ -12535,8 +12514,8 @@ msgstr "կոհա հօաք %s"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:108
-msgid "koha:biblionumber:[% biblio.biblionumber | html %]"
-msgstr "koha:biblionumber:[% biblio.biblionumber | html %]"
+msgid "koha:biblionumber:%s"
+msgstr "koha:biblionumber:%s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -13088,9 +13067,5 @@ msgstr "×"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:182
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:186
-msgid ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"
-msgstr ""
-"‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO."
-"value | html %]"
+msgid "‡%s %s"
+msgstr "‡%s %s"
