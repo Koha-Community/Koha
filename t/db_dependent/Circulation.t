@@ -721,8 +721,8 @@ subtest "CanBookBeRenewed tests" => sub {
         is( $error, 'auto_renew', 'Cannot renew, renew is automatic' );
     };
 
-    subtest "auto_too_much_oweing | OPACFineNoRenewalsBlockAutoRenew" => sub {
-        plan tests => 6;
+    subtest "auto_too_much_oweing | OPACFineNoRenewalsBlockAutoRenew & OPACFineNoRenewalsIncludeCredit" => sub {
+        plan tests => 10;
         my $item_to_auto_renew = $builder->build({
             source => 'Item',
             value => {
@@ -739,6 +739,7 @@ subtest "CanBookBeRenewed tests" => sub {
         $dbh->do('UPDATE issuingrules SET norenewalbefore = 10, no_auto_renewal_after = 11');
         C4::Context->set_preference('OPACFineNoRenewalsBlockAutoRenew','1');
         C4::Context->set_preference('OPACFineNoRenewals','10');
+        C4::Context->set_preference('OPACFineNoRenewalsIncludeCredit','1');
         my $fines_amount = 5;
         my $account = Koha::Account->new({patron_id => $renewing_borrowernumber});
         $account->add_debit(
@@ -783,7 +784,27 @@ subtest "CanBookBeRenewed tests" => sub {
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_too_much_oweing', 'Cannot auto renew, OPACFineNoRenewals=10, patron has 15' );
 
+        $account->add_credit(
+            {
+                amount      => $fines_amount,
+                interface   => 'test',
+                type        => 'overdue',
+                description => "Some fines"
+            }
+        )->store;
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_renew', 'Can auto renew, OPACFineNoRenewals=10, OPACFineNoRenewalsIncludeCredit=1, patron has 15 debt, 5 credit'  );
+
+        C4::Context->set_preference('OPACFineNoRenewalsIncludeCredit','0');
+        ( $renewokay, $error ) =
+          CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
+        is( $renewokay, 0, 'Do not renew, renewal is automatic' );
+        is( $error, 'auto_too_much_oweing', 'Cannot auto renew, OPACFineNoRenewals=10, OPACFineNoRenewalsIncludeCredit=1, patron has 15 debt, 5 credit'  );
+
         $dbh->do('DELETE FROM accountlines WHERE borrowernumber=?', undef, $renewing_borrowernumber);
+        C4::Context->set_preference('OPACFineNoRenewalsIncludeCredit','1');
     };
 
     subtest "auto_account_expired | BlockExpiredPatronOpacActions" => sub {
