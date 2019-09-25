@@ -40,6 +40,14 @@
     </li>
     [% END %]
 
+
+    [% IF ( Koha.Preference('OPACDetailQRCode' ) ) %]
+        <li>
+            <a class="show_qrcode" href="#">Send to device</a>
+            <div id="qrcode" class="hidden"></div>
+        </li>
+    [% END %]
+
     [% SET export_options = Koha.Preference('OpacExportOptions').split(',') %]
     [% IF export_options.size %]
         <li>

@@ -259,6 +259,12 @@ a {
     &.removefromlist {
         @extend %initial_icon;
     }
+
+    &.show_qrcode {
+        @extend %initial_icon;
+        background-position: 0 -1164px; /* QR Code */
+        padding-left: 35px;
+    }
 }
 
 h1 {
@@ -3210,5 +3216,13 @@ $star-selected: #EDB867;
 
 /* END jQuery Bar Rating plugin for star ratings */
 
+#qrcode {
+    margin-left: 35px;
+
+    img,
+    canvas {
+        margin-top: 1em;
+    }
+}
 
 @import "responsive";

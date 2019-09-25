@@ -1392,6 +1392,9 @@
 [% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %][% END %]
 
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
+[% IF ( Koha.Preference('OPACDetailQRCode') ) %]
+    [% Asset.js("lib/kjua/kjua.min.js") | $raw %]
+[% END %]
 
 <script>
     [% IF ( OpacHighlightedWords ) %]
@@ -1420,6 +1423,30 @@
     [% END %]
 
      $(document).ready(function() {
+
+        [% IF ( Koha.Preference('OPACDetailQRCode') ) %]
+
+            var qrcode = kjua({
+                ecLevel: "H",
+                render: "canvas",
+                rounded: 100,
+                size: 150,
+                text: location.href,
+            });
+            if (qrcode) {
+                document.getElementById("qrcode").appendChild( qrcode );
+            }
+
+            $(".show_qrcode").on("click", function(){
+                var qrcodeImg = $("#qrcode");
+                if( qrcodeImg.hasClass("hidden") ){
+                    qrcodeImg.removeClass("hidden");
+                } else {
+                    qrcodeImg.addClass("hidden");
+                }
+            });
+        [% END %]
+
         $('#bibliodescriptions').tabs();
         $(".branch-info-tooltip-trigger").uitooltip({
             position: { my: "left+15 center", at: "right center" },
