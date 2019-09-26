@@ -312,6 +312,7 @@ sub transferbook {
     unless ( $item ) {
         $messages->{'BadBarcode'} = $barcode;
         $dotransfer = 0;
+        return ( $dotransfer, $messages );
     }
 
     my $itemnumber = $item->itemnumber;
