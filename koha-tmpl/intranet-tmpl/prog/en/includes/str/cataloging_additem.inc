@@ -3,7 +3,11 @@
     var searchid = '[% searchid | html %]';
     var biblionumber = '[% biblionumber | html %]';
     var frameworkcode = '[% frameworkcode | html %]';
-    var popup = '[% popup | html %]';
+    [% IF popup %]
+      var popup = true;
+    [% ELSE %]
+      var popup = false;
+    [% END %]
     var op = '[% op | html %]';
     var LABEL_EDIT_ITEM = _("Edit item");
     var LABEL_DELETE_ITEM = _("Delete item");
