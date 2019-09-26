@@ -477,6 +477,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.86'
     },
+    'MARC::Record::MiJ' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.04'
+    },
     'MARC::File::XML' => {
         'usage'    => 'Core',
         'required' => '1',
