@@ -2683,7 +2683,8 @@ CREATE TABLE `accountlines` (
   CONSTRAINT `accountlines_ibfk_borrowers_2` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_branches` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_registers` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type`) REFERENCES `account_debit_types` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type`) REFERENCES `account_debit_types` (`code`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_check_type` CHECK (`accounttype` IS NOT NULL OR `debit_type_code` IS NOT NULL)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

@@ -91,6 +91,12 @@ if ( CheckVersion($DBversion) ) {
 
     $dbh->do(
         qq{
+        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_check_type` CHECK (accounttype IS NOT NULL OR debit_type IS NOT NULL)
+        }
+    );
+
+    $dbh->do(
+        qq{
         UPDATE accountlines SET debit_type = accounttype, accounttype = NULL WHERE accounttype IN (SELECT code from account_debit_types)
         }
     );
