@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::Warn;
 
@@ -34,6 +34,67 @@ my $builder = t::lib::TestBuilder->new;
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 
 my $t = Test::Mojo->new('Koha::REST::V1');
+
+subtest 'get() tests' => sub {
+
+    plan tests => 18;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio({
+        title  => 'The unbearable lightness of being',
+        author => 'Milan Kundera'
+    });
+    $t->get_ok("//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber)
+      ->status_is(403);
+
+    $patron->flags(4)->store;
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                => { Accept => 'application/weird+format' } )
+      ->status_is(406)
+      ->json_is( [ "application/json",
+                   "application/marcxml+xml",
+                   "application/marc-in-json",
+                   "application/marc" ] );
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/json' } )
+      ->status_is(200)
+      ->json_is( '/title', 'The unbearable lightness of being' )
+      ->json_is( '/author', 'Milan Kundera' );
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marcxml+xml' } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marc-in-json' } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marc' } )
+      ->status_is(200);
+
+    $biblio->delete;
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marc' } )
+      ->status_is(404)
+      ->json_is( '/error', 'Object not found.' );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'delete() tests' => sub {
 
