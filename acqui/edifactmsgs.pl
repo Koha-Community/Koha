@@ -19,10 +19,13 @@
 use Modern::Perl;
 
 use CGI;
-use Koha::Database;
-use C4::Koha;
+
 use C4::Auth;
+use C4::Koha;
 use C4::Output;
+use Koha::Database;
+use Koha::EDI qw(process_invoice);
+use Koha::Plugins::Handler;
 
 my $q = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -42,6 +45,27 @@ if ( $cmd && $cmd eq 'delete' ) {
     my $msg = $schema->resultset('EdifactMessage')->find($id);
     $msg->deleted(1);
     $msg->update;
+}
+
+if ( $cmd && $cmd eq 'import' ) {
+    my $id  = $q->param('message_id');
+    my $invoice = $schema->resultset('EdifactMessage')->find($id);
+
+    my $plugin_used = 0;
+    if ( my $plugin_class = $invoice->edi_acct->plugin ) {
+        $plugin_used = 1;
+        Koha::Plugins::Handler->run(
+            {
+                class  => $plugin_class,
+                method => 'edifact_process_invoice',
+                params => {
+                    invoice => $invoice,
+                }
+            }
+        );
+    }
+
+    process_invoice($invoice) unless $plugin_used;
 }
 
 my @msgs = $schema->resultset('EdifactMessage')->search(
