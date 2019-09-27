@@ -215,7 +215,7 @@
         <th>Description</th>
         <th>Description (OPAC)</th>
         <th>Icon</th>
-        <th>Branches limitations</th>
+        <th>Library limitations</th>
         <th>Actions</th>
         </tr>
     </thead><tbody>
@@ -229,13 +229,17 @@
             [% IF loo.branches.size > 0 %]
                 [% branches_str = "" %]
                 [% FOREACH branch IN loo.branches %]
-                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
-                [% END %]
-                <span href="#" title="[% branches_str | html %]">
-                    [% IF loo.branches.size > 1 %]
-                        [% loo.branches.size | html %] branches limitations
+                    [%- IF loop.first -%]
+                    [% branches_str = branch.branchname _ " (" _ branch.branchcode _ ")" %]
                     [% ELSE %]
-                        [% loo.branches.size | html %] branch limitation
+                    [% branches_str = branches_str _ "\n" _ branch.branchname _ " (" _ branch.branchcode _ ")" %]
+                    [% END %]
+                [% END %]
+                <span class="library_limitation" title="[% branches_str | html %]">
+                    [% IF loo.branches.size > 1 %]
+                        [% loo.branches.size | html %] library limitations
+                    [% ELSE %]
+                        [% loo.branches.size | html %] library limitation
                     [% END %]
             [% ELSE %]
                 No limitation
@@ -320,6 +324,7 @@
             $('#searchfield').change(function() {
                 $('#category').submit();
             });
+            $(".library_limitation").tooltip();
         });
     </script>
 [% END %]
