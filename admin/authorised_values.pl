@@ -54,7 +54,7 @@ if ($op eq 'add_form') {
     my ( @selected_branches, $category, $av );
     if ($id) {
         $av = Koha::AuthorisedValues->new->find( $id );
-        @selected_branches = $av->library_limits->as_list;
+        @selected_branches = $av->library_limits ? $av->library_limits->as_list : ();
     } else {
         $category = $input->param('category');
     }
