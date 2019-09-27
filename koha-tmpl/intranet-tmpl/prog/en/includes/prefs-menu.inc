@@ -1,6 +1,6 @@
 <div id="menu">
 <ul>
-[% IF ( accounts ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Accounts" href="/cgi-bin/koha/admin/preferences.pl?tab=accounts">Accounts</a></li>
+[% IF ( accounting ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Accounting" href="/cgi-bin/koha/admin/preferences.pl?tab=accounting">Accounting</a></li>
 [% IF ( acquisitions ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Acquisitions" href="/cgi-bin/koha/admin/preferences.pl?tab=acquisitions">Acquisitions</a></li>
 [% IF ( admin ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Administration" href="/cgi-bin/koha/admin/preferences.pl?tab=admin">Administration</a></li>
 [% IF ( authorities ) %]<li class="active">[% ELSE %]<li>[% END %]<a title="Authority Control" href="/cgi-bin/koha/admin/preferences.pl?tab=authorities">Authorities</a></li>
