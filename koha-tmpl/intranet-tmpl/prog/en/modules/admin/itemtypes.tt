@@ -416,7 +416,11 @@ Item types administration
                 [% IF itemtype.branches.size > 0 %]
                     [% branches_str = "" %]
                     [% FOREACH branch IN itemtype.branches %]
-                        [% branches_str = branches_str _ " " _ branch.branchname _ " (" _ branch.branchcode _ ")" %]
+                        [%- IF loop.first -%]
+                        [% branches_str = branch.branchname _ " (" _ branch.branchcode _ ")" %]
+                        [% ELSE %]
+                        [% branches_str = branches_str _ "\n" _ branch.branchname _ " (" _ branch.branchcode _ ")" %]
+                        [% END %]
                     [% END %]
                     <span class="library_limitation" title="[% branches_str | html %]">
                         [% IF itemtype.branches.size > 1 %]
