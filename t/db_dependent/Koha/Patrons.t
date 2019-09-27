@@ -1512,13 +1512,13 @@ subtest '->store' => sub {
     $patron_1->surname('xxx')->store;
     is( $patron_1->password, $digest, 'Password should not have changed on ->store');
 
-    # Test uppercasesurname
-    t::lib::Mocks::mock_preference( 'uppercasesurname', 1 );
+    # Test uppercasesurnames
+    t::lib::Mocks::mock_preference( 'uppercasesurnames', 1 );
     my $surname = lc $patron_1->surname;
     $patron_1->surname($surname)->store;
     isnt( $patron_1->surname, $surname,
         'Surname converts to uppercase on store.');
-    t::lib::Mocks::mock_preference( 'uppercasesurname', 0 );
+    t::lib::Mocks::mock_preference( 'uppercasesurnames', 0 );
     $patron_1->surname($surname)->store;
     is( $patron_1->surname, $surname,
         'Surname remains unchanged on store.');
