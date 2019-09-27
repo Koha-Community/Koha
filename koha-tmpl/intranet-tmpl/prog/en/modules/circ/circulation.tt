@@ -600,7 +600,11 @@
                                                                     <input type="hidden" name="onsite_checkout" checked="checked" value="1" />
                                                                 </div>
                                                             [% ELSE %]
+                                                                [% IF Koha.Preference('OnSiteCheckoutAutoCheck') && onsite_checkout == "on" %]
+                                                                <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting" checked="checked" /> <label for="onsite_checkout">On-site checkout</label>
+                                                                [% ELSE %]
                                                                 <input type="checkbox" id="onsite_checkout" name="onsite_checkout" class="circ_setting" /> <label for="onsite_checkout">On-site checkout</label>
+                                                                [% END %]
                                                             [% END %]
                                                         </div>
                                                     [% END %]

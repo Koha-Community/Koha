@@ -148,8 +148,11 @@ my $force_allow_issue = $query->param('forceallow') || 0;
 if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {
     $force_allow_issue = 0;
 }
-
 my $onsite_checkout = $query->param('onsite_checkout');
+
+if (C4::Context->preference("OnSiteCheckoutAutoCheck") && $onsite_checkout eq "on") {
+    $template->param(onsite_checkout => $onsite_checkout);
+}
 
 my @failedrenews = $query->multi_param('failedrenew');    # expected to be itemnumbers
 our %renew_failed = ();
