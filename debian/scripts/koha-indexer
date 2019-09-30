@@ -47,6 +47,7 @@ $scriptname -h|--help
     --start               Start the indexer daemon for the specified instances
     --stop                Stop the indexer daemon for the specified instances
     --restart             Restart the indexer daemon for the specified instances
+    --status              Show the status of the indexer for the specified instances
     --quiet|-q            Make the script quiet about non existent instance names
                           (useful for calling from another scripts).
     --help|-h             Display this help message
@@ -138,6 +139,19 @@ restart_indexer()
     fi
 }
 
+indexer_status()
+{
+    local name=$1
+
+    if is_indexer_running ${name}; then
+        log_daemon_msg "Indexer running for ${name}"
+        log_end_msg 0
+    else
+        log_daemon_msg "Indexer not running for ${name}"
+        log_end_msg 3
+    fi
+}
+
 set_action()
 {
     if [ "$op" = "" ]; then
@@ -167,6 +181,9 @@ while [ $# -gt 0 ]; do
             shift ;;
         --restart)
             set_action "restart"
+            shift ;;
+        --status)
+            set_action "status"
             shift ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
@@ -221,6 +238,8 @@ if [ $# -gt 0 ]; then
                 "restart")
                     restart_indexer $name
                     ;;
+                "status")
+                    indexer_status $name
             esac
 
         else
