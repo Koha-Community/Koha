@@ -80,6 +80,7 @@ my $setwaiting;
 
 my $request        = $query->param('request')        || '';
 my $borrowernumber = $query->param('borrowernumber') ||  0;
+my $frombranchcd   = $query->param('frombranchcd')   || C4::Context->userenv->{'branch'};
 my $tobranchcd     = $query->param('tobranchcd')     || '';
 
 my $ignoreRs = 0;
@@ -223,6 +224,7 @@ $template->param(
     itemnumber              => $itemnumber,
     barcode                 => $barcode,
     biblionumber            => $biblionumber,
+    frombranchcd            => $frombranchcd,
     tobranchcd              => $tobranchcd,
     reqmessage              => $reqmessage,
     cancelled               => $cancelled,

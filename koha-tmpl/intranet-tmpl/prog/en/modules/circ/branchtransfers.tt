@@ -72,6 +72,7 @@
                             <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
                             <input type="hidden" name="tobranchcd" value="[% tobranchcd | html %]" />
+                            <input type="hidden" name="frombranchcd" value="[% tobranchcd | html %]" />
                             <input type="hidden" name="barcode" value="[% barcode | html %]" />
                             <input type="hidden" name="request" value="KillReserved" />
                             <input type="submit" value="Cancel" />
@@ -128,6 +129,7 @@
                                           [% ELSE %]
                                               <li>Collection: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) | html %]</b></li>
                                           [% END %]
+                                          <li>Originating library: <b>[% Branches.GetName( errmsgloo.fbr ) | html %]</b></li>
                                           <li>Destination library: <b>[% Branches.GetName( errmsgloo.tbr ) | html %]</b></li>
                                       </ol>
                                   </li>
@@ -151,6 +153,13 @@
             <legend>Transfer</legend>
             <ol>
 			<li>
+                <label for="frombranchcd">Originating library: </label>
+                    <select name="frombranchcd" id="frombranchcd">
+                        <option value="current_holding">Item's holding branch</option>
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => '', unfiltered => 1) %]
+                    </select>
+            </li>
+            <li>
                 <label for="tobranchcd">Destination library: </label>
                     <select name="tobranchcd" id="tobranchcd">
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => tobranchcd, unfiltered => 1) %]
@@ -182,6 +191,7 @@
                 <th class="tf-itemcallnumber">Call number</th>
                 <th class="tf-itemtype">Item type</th>
                 <th class="tf-ccode">Collection</th>
+                <th class="tf-origin">Origin</th>
                 <th class="tf-destination">Destination</th>
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
@@ -197,6 +207,7 @@
                     <td class="tf-itemcallnumber">[% trsfitemloo.item.itemcallnumber | html %]</td>
                     <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.item.effective_itemtype ) | html %]</td>
                     <td class="tf-ccode">[% AuthorisedValues.GetByCode( 'CCODE', trsfitemloo.item.ccode ) | html %]</td>
+                    <td class="tf-origin">[% Branches.GetName( trsfitemloo.frombrcd ) | html %]</td>
                     <td class="tf-destination">[% Branches.GetName( trsfitemloo.tobrcd ) | html %]</td>
                 </tr>
             [% END %]

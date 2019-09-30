@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
 
@@ -3293,6 +3293,32 @@ subtest 'Cancel transfers on lost items' => sub {
     is( $tobranch, undef, 'The transfer on the lost item has been deleted as the LostItemCancelOutstandingTransfer is enabled');
     $itemcheck = Koha::Items->find($item->itemnumber);
     is( $itemcheck->holdingbranch, $library_1->{branchcode}, 'Lost item with cancelled hold has holding branch equallying the transfers source branch' );
+
+};
+
+subtest 'transferbook test' => sub {
+    plan tests => 5;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item = $builder->build_sample_item();
+    ok( $item->holdingbranch ne $library->branchcode && $item->homebranch ne $library->branchcode, "Item is not held or owned by library");
+    C4::Circulation::transferbook({
+        from_branch => $library->branchcode,
+        to_branch => $item->homebranch,
+        barcode   => $item->barcode,
+    });
+    my ($datesent,$from_branch,$to_branch) = GetTransfers($item->itemnumber);
+    is( $from_branch, $library->branchcode, 'The transfer is initiated from the specified branch, not the items home or holdingbranch');
+    is( $to_branch, $item->homebranch, 'The transfer is initiated to the specified branch');
+    C4::Circulation::transferbook({
+        from_branch => $item->homebranch,
+        to_branch => $library->branchcode,
+        barcode   => $item->barcode,
+    });
+    ($datesent,$from_branch,$to_branch) = GetTransfers($item->itemnumber);
+    is( $from_branch, $item->homebranch, 'The transfer is initiated from the specified branch');
+    is( $to_branch, $library->branchcode, 'The transfer is initiated to the specified branch');
+
 };
 
 subtest 'CanBookBeIssued | is_overdue' => sub {
