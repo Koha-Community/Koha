@@ -788,7 +788,10 @@
                                         </td>
                                         <td class="ci-title">
                                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
-                                                [% riloo.itemtitle | html %] [% FOREACH subt IN riloo.subtitle %] [% subt | html %] [% riloo.part_number | html %] [% riloo.part_name | html %][% END %]
+                                                [% riloo.itemtitle | html %]
+                                                [% FOREACH subtitle IN riloo.subtitle.split(' \\| ') %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
+                                                [% FOREACH part_number IN riloo.part_number.split(' \\| ') %] <span class="part_number">[% part_number | html %]</span>[% END %]
+                                                [% FOREACH part_name IN riloo.part_name.split(' \\| ') %] <span class="part_name">[% part_name | html %]<span>[% END %]
                                             </a>
                                             [% IF ( riloo.enumchron ) %]
                                                 <br/>
