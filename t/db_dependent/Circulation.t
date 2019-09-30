@@ -1958,20 +1958,11 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
     C4::Context->_new_userenv('xxx');
     C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Random Library', '', '', '');
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $biblionumber = $biblioitem->{biblionumber};
-    my $item = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblionumber,
-            }
+    my $item = $builder->build_sample_item(
+        {
+            library      => $library->{branchcode},
         }
-    );
+    )->unblessed;
 
     my ( $error, $question, $alerts );
     my $issue = AddIssue( $patron1->unblessed, $item->{barcode} );
@@ -2003,6 +1994,7 @@ subtest 'AddReturn | is_overdue' => sub {
     my $item = $builder->build_sample_item(
         {
             library      => $library->{branchcode},
+            replacementprice => 7
         }
     )->unblessed;
 
@@ -2630,15 +2622,10 @@ subtest 'Cancel transfers on lost items' => sub {
     my $library_2 = $builder->build( { source => 'Branch' } );
     my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode}, categorycode => $patron_category->{categorycode} } } );
     my $biblio = $builder->build_sample_biblio({branchcode => $library->{branchcode}});
-    my $item   = $builder->build_sample_item(
-        {
-            class => 'Koha::Items',
-            value => {
-                biblionumber => $biblio->biblionumber,
-                library      => $library_1->{branchcode},
-            }
-        }
-    );
+    my $item   = $builder->build_sample_item({
+        biblionumber  => $biblio->biblionumber,
+        library    => $library_1->{branchcode},
+    });
 
     set_userenv( $library_2 );
     my $reserve_id = AddReserve(
@@ -3114,22 +3101,12 @@ subtest 'Incremented fee tests' => sub {
         }
     )->store;
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $item = $builder->build_object(
+    my $item = $builder->build_sample_item(
         {
-            class => 'Koha::Items',
-            value => {
-                homebranch       => $library->id,
-                holdingbranch    => $library->id,
-                notforloan       => 0,
-                itemlost         => 0,
-                withdrawn        => 0,
-                itype            => $itemtype->id,
-                biblionumber     => $biblioitem->{biblionumber},
-                biblioitemnumber => $biblioitem->{biblioitemnumber},
-            }
+            library  => $library->{branchcode},
+            itype    => $itemtype->id,
         }
-    )->store;
+    );
 
     is( $itemtype->rentalcharge_daily, '1.000000', 'Daily rental charge stored and retreived correctly' );
     is( $item->effective_itemtype, $itemtype->id, "Itemtype set correctly for item");
