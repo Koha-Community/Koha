@@ -23,6 +23,12 @@ __PACKAGE__->table("search_marc_to_field");
 
 =head1 ACCESSORS
 
+=head2 search
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
 =head2 search_marc_map_id
 
   data_type: 'integer'
@@ -61,6 +67,8 @@ true/false creates special sort handling, null doesn't
 =cut
 
 __PACKAGE__->add_columns(
+  "search",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "search_marc_map_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "search_field_id",
@@ -120,8 +128,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-10-12 16:41:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ccnCYwDdtPGZ/VArAe1kPA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-02 12:47:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9mqZ/zrii+Fv+k+eQNHYUw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

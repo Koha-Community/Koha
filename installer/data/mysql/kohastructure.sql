@@ -1396,6 +1396,8 @@ CREATE TABLE `search_field` (
   `type` ENUM('', 'string', 'date', 'number', 'boolean', 'sum', 'isbn', 'stdno') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
   `weight` decimal(5,2) DEFAULT NULL,
   `facet_order` TINYINT(4) DEFAULT NULL COMMENT 'the order place of the field in facet list if faceted',
+  `staff_client` tinyint(1) NOT NULL DEFAULT 1,
+  `opac` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name` (191))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1440,6 +1442,7 @@ CREATE TABLE `search_marc_map` (
 
 DROP TABLE IF EXISTS search_marc_to_field;
 CREATE TABLE `search_marc_to_field` (
+  search tinyint(1) NOT NULL DEFAULT 1,
   search_marc_map_id int(11) NOT NULL,
   search_field_id int(11) NOT NULL,
   facet boolean DEFAULT FALSE COMMENT 'true if a facet field should be generated for this',

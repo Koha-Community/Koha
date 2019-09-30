@@ -19555,6 +19555,29 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23566 - Add OPACDetailQRCode system preference)\n";
 }
 
+$DBversion = '19.06.00.032';
+if ( CheckVersion($DBversion) ) {
+    if ( !column_exists( 'search_marc_to_field', 'search' ) ) {
+        $dbh->do(q|
+            ALTER TABLE `search_marc_to_field` ADD COLUMN `search` tinyint(1) NOT NULL DEFAULT 1
+        |);
+    }
+    if ( !column_exists( 'search_field', 'staff_client' ) ) {
+        $dbh->do(q|
+            ALTER TABLE `search_field` ADD COLUMN `staff_client` tinyint(1) NOT NULL DEFAULT 1
+        |);
+    }
+    if ( !column_exists( 'search_field', 'opac' ) ) {
+        $dbh->do(q|
+            ALTER TABLE `search_field` ADD COLUMN `opac` tinyint(1) NOT NULL DEFAULT 1
+        |);
+    }
+
+    SetVersion($DBversion);
+    print
+"Upgrade to $DBversion done (Bug 20589 - Add field boosting and use elastic query fields parameter instead of depricated _all)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
