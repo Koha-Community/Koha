@@ -1478,7 +1478,7 @@
                 <xsl:choose>
                     <xsl:when test="position()&gt;1"/>
                     <!-- #13383 -->
-                    <xsl:when test="@tag&lt;700">By: </xsl:when>
+                    <xsl:when test="@tag&lt;700"><span class="byAuthor">By: </span></xsl:when>
                     <!--#13382 Changed Additional author to contributor -->
                     <xsl:otherwise>Contributor(s): </xsl:otherwise>
                 </xsl:choose>

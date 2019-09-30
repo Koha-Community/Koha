@@ -506,7 +506,7 @@
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 
-    by <span class="author">
+        <span class="byAuthor">by </span><span class="author">
         <!-- #13383 -->
         <xsl:for-each select="marc:datafield[(@tag=100 or @tag=700 or @tag=110 or @tag=710 or @tag=111 or @tag=711) and @ind1!='z']">
             <xsl:call-template name="chopPunctuation">
