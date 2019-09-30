@@ -41,38 +41,38 @@
                         <ul class="biglinks-list">
                             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                             <li>
-                                <a class="icon_general icon_circulation" href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+                                <a class="icon_general icon_circulation" href="/cgi-bin/koha/circ/circulation-home.pl"><i class="fa fa-exchange"></i>Circulation</a>
                             </li>
                             [% END %]
 
                             [% IF CAN_user_borrowers_edit_borrowers %]
                             <li>
-                                <a class="icon_general icon_patrons" href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+                                <a class="icon_general icon_patrons" href="/cgi-bin/koha/members/members-home.pl"><i class="fa fa-id-card-o"></i>Patrons</a>
                             </li>
                             [% END %]
 
                             [% IF ( CAN_user_catalogue ) %]
                             <li>
-                                <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a>
+                                <a class="icon_general icon_search" href="/cgi-bin/koha/catalogue/search.pl"><i class="fa fa-search"></i>Advanced search</a>
                             </li>
                             [% END %]
 
                             <li>
-                                <a class="icon_general icon_lists" href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
+                                <a class="icon_general icon_lists" href="/cgi-bin/koha/virtualshelves/shelves.pl"><i class="fa fa-list-alt"></i>Lists</a>
                             </li>
 
                             [% IF ( UseCourseReserves ) %]
                                 <li>
-                                    <a class="icon_general icon_course_reserves" href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a>
+                                    <a class="icon_general icon_course_reserves" href="/cgi-bin/koha/course_reserves/course-reserves.pl"><i class="fa fa-book"></i>Course reserves</a>
                                 </li>
                             [% END %]
 
                             <li>
-                                <a class="icon_general icon_authorities" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>
+                                <a class="icon_general icon_authorities" href="/cgi-bin/koha/authorities/authorities-home.pl"><i class="fa fa-link"></i>Authorities</a>
                             </li>
                             [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
                             <li>
-                                <a class="icon_general icon_ill" href="/cgi-bin/koha/ill/ill-requests.pl">ILL requests</a>
+                                <a class="icon_general icon_ill" href="/cgi-bin/koha/ill/ill-requests.pl"><i class="fa fa-retweet"></i>ILL requests</a>
                             </li>
                             [% END %]
                         </ul>
@@ -82,44 +82,44 @@
 
                             [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ) %]
                             <li>
-                                <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+                                <a class="icon_general icon_cataloging" href="/cgi-bin/koha/cataloguing/addbooks.pl"><i class="fa fa-barcode"></i>Cataloging</a>
                             </li>
                             [% END %]
 
                             [% IF ( CAN_user_serials ) %]
                             <li>
-                                <a class="icon_general icon_serials" href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+                                <a class="icon_general icon_serials" href="/cgi-bin/koha/serials/serials-home.pl"><i class="fa fa-newspaper-o"></i>Serials</a>
                                 <span class="biglink"></span>
                             </li>
                             [% END %]
 
                             [% IF ( CAN_user_acquisition ) %]
                             <li>
-                                <a class="icon_general icon_acquisitions" href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
+                                <a class="icon_general icon_acquisitions" href="/cgi-bin/koha/acqui/acqui-home.pl"><i class="fa fa-folder-open"></i>Acquisitions</a>
                                 <span class="biglink"></span>
                             </li>
                             [% END %]
 
                             [% IF ( CAN_user_reports ) %]
                             <li>
-                                <a class="icon_general icon_reports" href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+                                <a class="icon_general icon_reports" href="/cgi-bin/koha/reports/reports-home.pl"><i class="fa fa-pie-chart"></i>Reports</a>
                             </li>
                             [% END %]
 
 
                             [% IF ( CAN_user_tools ) %]
                             <li>
-                                <a class="icon_general icon_tools" href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
+                                <a class="icon_general icon_tools" href="/cgi-bin/koha/tools/tools-home.pl"><i class="fa fa-wrench"></i>Tools</a>
                             </li>
                             [% END %]
 
                             [% IF ( CAN_user_parameters ) %]
                             <li>
-                                <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a>
+                                <a class="icon_general icon_administration" href="/cgi-bin/koha/admin/admin-home.pl"><i class="fa fa-cogs"></i>Koha administration</a>
                             </li>
                             [% END %]
                             <li>
-                                <a class="icon_general icon_koha" href="/cgi-bin/koha/about.pl">About Koha</a>
+                                <a class="icon_general icon_koha" href="/cgi-bin/koha/about.pl">About Koha<img src="/intranet-tmpl/prog/img/koha-egg.svg" alt="Koha Logo SVG"/></a>
                             </li>
                         </ul>
                     </div> <!-- /.col-sm-6 -->
