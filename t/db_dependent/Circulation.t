@@ -3244,7 +3244,7 @@ subtest 'Set waiting flag' => sub {
 };
 
 subtest 'Cancel transfers on lost items' => sub {
-    plan tests => 5;
+    plan tests => 6;
     my $library_1 = $builder->build( { source => 'Branch' } );
     my $patron_1 = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} } } );
     my $library_2 = $builder->build( { source => 'Branch' } );
@@ -3271,15 +3271,20 @@ subtest 'Cancel transfers on lost items' => sub {
     my $do_transfer = 1;
     my ( $res, $rr ) = AddReturn( $item->barcode, $library_1->{branchcode} );
     ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
-    C4::Circulation::transferbook( $library_2->{branchcode}, $item->barcode );
+    C4::Circulation::transferbook({
+        from_branch => $library_1->{branchcode},
+        to_branch => $library_2->{branchcode},
+        barcode   => $item->barcode,
+    });
     my $hold = Koha::Holds->find( $reserve_id );
     is( $hold->found, 'T', 'Hold is in transit' );
 
     #Check transfer exists and the items holding branch is the transfer destination branch before marking it as lost
     my ($datesent,$frombranch,$tobranch) = GetTransfers($item->itemnumber);
-    is( $tobranch, $library_2->{branchcode}, 'The transfer record exists in the branchtransfers table');
+    is( $frombranch, $library_1->{branchcode}, 'The transfer is generated from the correct library');
+    is( $tobranch, $library_2->{branchcode}, 'The transfer is generated to the correct library');
     my $itemcheck = Koha::Items->find($item->itemnumber);
-    is( $itemcheck->holdingbranch, $library_1->{branchcode}, 'Items holding branch is the transfers origin branch before it is marked as lost' );
+    is( $itemcheck->holdingbranch, $library_1->{branchcode}, 'Items holding branch is the transfers origination branch before it is marked as lost' );
 
     #Simulate item being marked as lost and confirm the transfer is deleted and the items holding branch is the transfers source branch
     $item->itemlost(1)->store;

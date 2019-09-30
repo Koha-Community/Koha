@@ -127,7 +127,14 @@ defined $barcode and $barcode =~ s/^\s*|\s*$//g;  # FIXME: barcodeInputFilter
 if ($barcode) {
 
     ( $transferred, $messages ) =
-      transferbook( $tobranchcd, $barcode, $ignoreRs, 'Manual' );
+
+        transferbook({
+            from_branch => C4::Context->userenv->{'branch'},
+            to_branch => $tobranchcd,
+            barcode => $barcode,
+            ignore_reserves => $ignoreRs,
+            trigger => 'Manual'
+        });
     my $item = Koha::Items->find({ barcode => $barcode });
     $found = $messages->{'ResFound'};
     if ($transferred) {

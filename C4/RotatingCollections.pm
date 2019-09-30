@@ -446,7 +446,13 @@ sub TransferCollection {
     while ( my $item = $sth->fetchrow_hashref ) {
         my ($status) = CheckReserves( $item->{itemnumber} );
         my @transfers = C4::Circulation::GetTransfers( $item->{itemnumber} );
-        C4::Circulation::transferbook( $colBranchcode, $item->{barcode}, 1, 'RotatingCollection' ) unless ( $status eq 'Waiting' || @transfers );
+        C4::Circulation::transferbook({
+            from_branch => $item->holdingbranch,
+            to_branch => $colBranchcode,
+            barcode => $item->{barcode},
+            ignore_reserves => 1,
+            trigger => 'RotatingCollection'
+        }) unless ( $status eq 'Waiting' || @transfers );
     }
 
     return 1;

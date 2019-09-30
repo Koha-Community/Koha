@@ -92,7 +92,11 @@ subtest 'get_transfer' => sub {
 
     my $library_to = $builder->build( { source => 'Branch' } );
 
-    C4::Circulation::transferbook( $library_to->{branchcode}, $new_item_1->barcode );
+    C4::Circulation::transferbook({
+        from_branch => $new_item_1->holdingbranch,
+        to_branch => $library_to->{branchcode},
+        barcode => $new_item_1->barcode,
+    });
 
     $transfer = $new_item_1->get_transfer();
     is( ref($transfer), 'Koha::Item::Transfer', 'Koha::Item->get_transfer should return a Koha::Item::Transfers object' );

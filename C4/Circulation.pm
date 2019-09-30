@@ -251,12 +251,18 @@ sub decode {
 
 =head2 transferbook
 
-  ($dotransfer, $messages, $iteminformation) = &transferbook($newbranch, 
-                                            $barcode, $ignore_reserves, $trigger);
+  ($dotransfer, $messages, $iteminformation) = &transferbook({
+                                                   from_branch => $frombranch
+                                                   to_branch => $tobranch,
+                                                   barcode => $barcode,
+                                                   ignore_reserves => $ignore_reserves,
+                                                   trigger => $trigger
+                                                });
 
 Transfers an item to a new branch. If the item is currently on loan, it is automatically returned before the actual transfer.
 
-C<$newbranch> is the code for the branch to which the item should be transferred.
+C<$fbr> is the code for the branch initiating the transfer.
+C<$tbr> is the code for the branch to which the item should be transferred.
 
 C<$barcode> is the barcode of the item to be transferred.
 
@@ -306,7 +312,12 @@ The item was eligible to be transferred. Barring problems communicating with the
 =cut
 
 sub transferbook {
-    my ( $tbr, $barcode, $ignoreRs, $trigger ) = @_;
+    my $params = shift;
+    my $tbr      = $params->{to_branch};
+    my $fbr      = $params->{from_branch};
+    my $ignoreRs = $params->{ignore_reserves};
+    my $barcode  = $params->{barcode};
+    my $trigger  = $params->{trigger};
     my $messages;
     my $dotransfer      = 1;
     my $item = Koha::Items->find( { barcode => $barcode } );
@@ -321,7 +332,6 @@ sub transferbook {
     my $itemnumber = $item->itemnumber;
     # get branches of book...
     my $hbr = $item->homebranch;
-    my $fbr = $item->holdingbranch;
 
     # if using Branch Transfer Limits
     if ( C4::Context->preference("UseBranchTransferLimits") == 1 ) {
