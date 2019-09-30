@@ -162,14 +162,7 @@ restart_plack()
     local PIDFILE="/var/run/koha/${instancename}/plack.pid"
 
     if is_plack_running ${instancename}; then
-
-        log_daemon_msg "Restarting Plack daemon for ${instancename}"
-
-        if stop_plack $instancename && start_plack $instancename; then
-            log_end_msg 0
-        else
-            log_end_msg 1
-        fi
+        stop_plack $instancename && start_plack $instancename
     else
         log_daemon_msg "Error: Plack not running for ${instancename}"
         log_end_msg 1
