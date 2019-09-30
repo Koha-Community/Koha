@@ -77,7 +77,7 @@ if ( C4::Context->preference('UseKohaPlugins') &&
     foreach my $tab_plugin (@tab_plugins) {
         my @biblio_tabs = $tab_plugin->intranet_catalog_biblio_tab();
         foreach my $tab (@biblio_tabs) {
-            $tab->{id} = 'tab-' + $tab->{title};
+            $tab->{id} = 'tab-' . $tab->{title};
             $tab->{id} =~ s/[^0-9A-Za-z]+/-/g;
             push @tabs, $tab,
         }
