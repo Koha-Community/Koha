@@ -75,6 +75,11 @@ my $query = qq{
     FROM biblio_metadata
     WHERE format='marcxml'
     AND  `schema` = ?
+    UNION
+    SELECT biblionumber, metadata
+    FROM deletedbiblio_metadata
+    WHERE format='marcxml'
+    AND  `schema` = ?
 };
 if($length) {
     $query .= "LIMIT $length";
@@ -83,7 +88,7 @@ if($length) {
     }
 }
 my $sth = $dbh->prepare($query);
-$sth->execute( C4::Context->preference('marcflavour') );
+$sth->execute( C4::Context->preference('marcflavour'), C4::Context->preference('marcflavour'));
 my $results = $sth->fetchall_arrayref({});
 print "done.\n" if $verbose;
 
