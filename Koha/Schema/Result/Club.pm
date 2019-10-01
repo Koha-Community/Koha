@@ -173,6 +173,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 club_holds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubHold>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_holds",
+  "Koha::Schema::Result::ClubHold",
+  { "foreign.club_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 club_template
 
 Type: belongs_to
@@ -189,8 +204,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6EB6FURHN+brOhDoPZVeGQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WbB7PSSU4xaszsKe9Eacqw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

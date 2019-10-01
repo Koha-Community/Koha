@@ -959,6 +959,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 club_holds_to_patron_holds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubHoldsToPatronHold>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_holds_to_patron_holds",
+  "Koha::Schema::Result::ClubHoldsToPatronHold",
+  { "foreign.patron_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 course_instructors
 
 Type: has_many
@@ -1560,8 +1575,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-22 04:33:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lbMdmIHlRt+zayG5+Rq4/w
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FRyurgV8tVN4EBduIM8tGA
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

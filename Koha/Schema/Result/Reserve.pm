@@ -280,6 +280,21 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 club_holds_to_patron_holds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubHoldsToPatronHold>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_holds_to_patron_holds",
+  "Koha::Schema::Result::ClubHoldsToPatronHold",
+  { "foreign.hold_id" => "self.reserve_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -321,8 +336,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-06-17 07:24:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OMFqEWyKqFTcYj7vAFXy/g
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pc5zh5iFbdwko5KS51Y9Uw
 
 __PACKAGE__->belongs_to(
   "item",

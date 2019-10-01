@@ -511,6 +511,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 club_holds
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ClubHold>
+
+=cut
+
+__PACKAGE__->has_many(
+  "club_holds",
+  "Koha::Schema::Result::ClubHold",
+  { "foreign.item_id" => "self.itemnumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 course_item
 
 Type: might_have
@@ -717,8 +732,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-14 18:14:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wDXcErUYqg0aoQkzz3P5vg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:n/X6k+IwU4pkLS+PjKWVWA
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
