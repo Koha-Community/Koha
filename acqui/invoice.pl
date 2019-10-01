@@ -71,7 +71,10 @@ if ( C4::Context->preference('AcqEnableFiles') ) {
 if ( $op && $op eq 'close' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
-    CloseInvoice($invoiceid);
+    my @invoiceid = $input->multi_param('invoiceid');
+    foreach my $invoiceid ( @invoiceid ) {
+        CloseInvoice($invoiceid);
+    }
     my $referer = $input->param('referer');
     if ($referer) {
         print $input->redirect($referer);
@@ -81,8 +84,10 @@ if ( $op && $op eq 'close' ) {
 elsif ( $op && $op eq 'reopen' ) {
     output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
         unless $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
-
-    ReopenInvoice($invoiceid);
+    my @invoiceid = $input->multi_param('invoiceid');
+    foreach my $invoiceid ( @invoiceid ) {
+        ReopenInvoice($invoiceid);
+    }
     my $referer = $input->param('referer');
     if ($referer) {
         print $input->redirect($referer);

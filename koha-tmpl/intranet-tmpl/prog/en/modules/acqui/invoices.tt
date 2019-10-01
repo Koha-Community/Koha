@@ -38,11 +38,17 @@
       <h1>Invoices</h1>
       [% IF ( do_search ) %]
         [% IF invoices %]
+          [% BLOCK invoices_table %]
+            [% IF closed %]
+                [% SET tab = 'closed' %]
+            [% ELSE %]
+                [% SET tab = 'opened' %]
+            [% END %]
           <label for="show_only_subscription">
-            <input type="checkbox" style="vertical-align: middle;" id="show_only_subscription" />
+            <input type="checkbox" style="vertical-align: middle;" class="show_only_subscription" data-tableid="[% tab %]resultst"/>
             Show only subscriptions
           </label>
-          <table id="resultst">
+          <table id="[% tab %]resultst" class="result">
             <thead>
               <tr>
                 [% IF CAN_user_acquisition_merge_invoices %]
@@ -113,23 +119,56 @@
             </tbody>
           </table>
           [% IF CAN_user_acquisition_merge_invoices %]
-              <a class="submit" id="merge" href="#merge_invoices">Merge selected invoices</a>
-              <div id="merge_invoices">
-                  <form id="merge_invoice_form" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
-                  <fieldset class="rows">
-                      <ol>
-                      <li><h2>Merge invoices</h2></li>
-                      <li><table id="merge_table">
-                          <thead><tr><th>Invoice no.</th><th>Shipment date</th><th>Billing date</th><th>Shipment cost</th></tr></thead>
-                          <tbody>
-                          </tbody>
-                      </table></li>
-                      <li><label for="merge_invoicenumber" class="required">Invoice number:</label>
-                              <input type="text" size="10" id="merge_invoicenumber" name="invoicenumber" value="" class="required" required="required" />
-                              <span class="required">Required</span>
-                              </li>
-                      <li><label for="merge_shipmentdate">Shipment date:</label>
-                              <input type="text" size="10" id="merge_shipmentdate" name="shipmentdate" value="" class="datepicker" /></li>
+              <a class="submit merge" id="merge" href="#merge_invoices">Merge selected invoices</a>
+              [% IF tab == 'closed' %]
+                <a class="submit" id="open_sel" href="#reopen_selected" data-op="reopen" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-refresh"></i> Reopen Selected Invoices</a>
+              [% ELSE  %]
+                <a class="submit" id="close_sel" href="#close_selected" data-op="close" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close Selected Invoices</a>
+              [% END %]
+
+              [% END %] <!-- invoices_table -->
+              <div id="invoicestabs" class="toptabs" style="clear:both;">
+                  <ul class="ui-tabs-nav">
+                      <li><a href="#opened">Open Invoices ([% openedinvoices.size || 0 | html %])</a></li>
+                      <li><a href="#closed">Closed Invoices ([% closedinvoices.size || 0 | html %]) </a></li>
+                  </ul>
+                  <div id="opened">
+                      [% IF openedinvoices %]
+                        [% INCLUDE invoices_table invoices = openedinvoices %]
+                    [% ELSE %]
+                        <div class="dialog message">
+                            <p>Your search returned no open invoices.</p>
+                        </div>
+                    [% END %]
+                  </div> <!-- opened -->
+                  <div id="closed">
+                      [% IF closedinvoices %]
+                        [% INCLUDE invoices_table invoices = closedinvoices closed = 1 %]
+                    [% ELSE %]
+                        <div class="dialog message">
+                            <p>Your search returned no closed invoices.</p>
+                        </div>
+                    [% END %]
+                </div> <!-- closed -->
+              </div> <!-- invoicestabs -->
+
+
+                <div id="merge_invoices">
+                    <form id="merge_invoice_form" action="/cgi-bin/koha/acqui/invoice.pl" method="post">
+                    <fieldset class="rows">
+                        <ol>
+                        <li><h2>Merge invoices</h2></li>
+                        <li><table id="merge_table">
+                            <thead><tr><th>Invoice no.</th><th>Shipment date</th><th>Billing date</th><th>Shipment cost</th></tr></thead>
+                            <tbody>
+                            </tbody>
+                        </table></li>
+                        <li><label for="merge_invoicenumber" class="required">Invoice number:</label>
+                                <input type="text" size="10" id="merge_invoicenumber" name="invoicenumber" value="" class="required" required="required" />
+                                <span class="required">Required</span>
+                                </li>
+                        <li><label for="merge_shipmentdate">Shipment date:</label>
+                                <input type="text" size="10" id="merge_shipmentdate" name="shipmentdate" value="" class="datepicker" /></li>
 
                       <li><label for="merge_billingdate">Billing date:</label>
                               <input type="text" size="10" id="merge_billingdate" name="billingdate" value="" class="datepicker" /></li>
@@ -322,10 +361,11 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function() {
+            $('#invoicestabs').tabs();
             $(".delete_invoice").click(function(){
                 return confirmDelete(_("Are you sure you want to delete this invoice?"));
             });
-            var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var resultst = $("table.result").dataTable($.extend(true, {}, dataTablesDefaults, {
                 bPaginate: false,
                 aoColumnDefs: [
                     { "bSortable": false, "aTargets": [1, -1] },
@@ -333,17 +373,29 @@
                 ]
             }));
 
-            $("#show_only_subscription").prop("checked", false);
+            $(".show_only_subscription").prop("checked", false);
 
-            $("#show_only_subscription").click(function(){
+            $(".show_only_subscription").click(function(){
+                var table_id = $(this).attr("data-tableid");
                 if ( $(this).prop("checked") ) {
-                    resultst.fnFilter( "1", 0, true );
+                    $('#'+table_id).dataTable().fnFilter( "1", 0, true );
                 } else {
-                    resultst.fnFilter( '', 0 );
+                    $('#'+table_id).dataTable().fnFilter( '', 0 );
                 }
             });
 
-            $('#merge').click(function (ev) {
+            $('#open_sel,#close_sel').click(function () {
+                var referer = $(this).attr("data-referer");
+                var op = $(this).attr("data-op");
+                var invoice_link = "invoice.pl?op="+op;
+                $('.select-invoice:checked').each(function () {
+                    var row = $(this).parents('tr');
+                    invoice_link = invoice_link + "&amp;invoiceid="+$(row).attr('data-invoiceid');
+                });
+                window.location.href =invoice_link +"&amp;"+referer;
+            });
+
+            $('.merge').click(function (ev) {
                 var booksellerid;
                 var mismatch;
                 var invoices = [ ];
