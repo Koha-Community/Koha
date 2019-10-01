@@ -18,15 +18,15 @@ if ( CheckVersion( $DBversion ) ) {
             ('SUSPENSION', 'Suspension', 1, 0),
             ('DISCHARGE', 'Discharge', 1, 0);
         |);
+        $dbh->do( q|
+            ALTER TABLE borrower_debarments
+            MODIFY COLUMN type varchar(50) NOT NULL
+        | );
+        $dbh->do( q|
+            ALTER TABLE borrower_debarments
+            ADD CONSTRAINT borrower_debarments_ibfk_2 FOREIGN KEY (type) REFERENCES debarment_types(code) ON DELETE NO ACTION ON UPDATE CASCADE;
+        | );
     }
-    $dbh->do( q|
-        ALTER TABLE borrower_debarments
-        MODIFY COLUMN type varchar(50) NOT NULL
-    | );
-    $dbh->do( q|
-        ALTER TABLE borrower_debarments
-        ADD CONSTRAINT borrower_debarments_ibfk_2 FOREIGN KEY (type) REFERENCES debarment_types(code) ON DELETE NO ACTION ON UPDATE CASCADE;
-    | );
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 23681 - Add debarment_types)\n";

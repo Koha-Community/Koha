@@ -163,6 +163,11 @@
             Manage patron categories
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_patron_restrictions' -%]
+        <span class="sub_permission manage_patron_restrictions_subpermission">
+            Manage patron restrictions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_patron_attributes' -%]
         <span class="sub_permission manage_patron_attributes_subpermission">
             Manage extended patron attributes
