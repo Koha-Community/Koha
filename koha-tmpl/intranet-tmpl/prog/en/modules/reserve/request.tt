@@ -375,6 +375,9 @@
                     </div>
                 [% END %]
 
+                <div class="dialog alert hide holdalert">
+                </div>
+
                 <fieldset class="rows">
                     <legend>Hold details</legend>
                     <form action="/api/v1/holds" method="post" name="form" id="hold-request-form">
@@ -443,6 +446,7 @@
                                 <li>
                                     <label for="from">Hold starts on date:</label>
                                     <input name="reserve_date" id="from" size="10" class="datepickerfrom" type="text" >
+                                    <input type="hidden" class="datepickerfrom_hidden" />
                                     <a href="#" id="clear-date-from" class="clear-date">Clear date</a>
                                 </li>
                             [% END %]
@@ -450,6 +454,7 @@
                             <li>
                                 <label for="to">Hold expires on date:</label>
                                 <input name="expiration_date" id="to" size="10" class="datepickerto" type="text" />
+                                <input type="hidden" class="datepickerto_hidden" />
                                 <a href="#" id="clear-date-to" class="clear-date">Clear date</a>
                             </li>
 
@@ -977,6 +982,12 @@
                 $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
             [% END %]
 
+            $(".datepickerto").datepicker("option", "altField", ".datepickerto_hidden");
+            $(".datepickerto").datepicker("option", "altFormat", "yy-mm-dd");
+
+            $(".datepickerfrom").datepicker("option", "altField", ".datepickerfrom_hidden");
+            $(".datepickerfrom").datepicker("option", "altFormat", "yy-mm-dd");
+
             var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bPaginate': false,
                 "sDom": '<"top pager"ilf>t',
@@ -992,28 +1003,56 @@
                 "margin-right":"0em"
             });
 
-            $("#club-request-form").on("submit", function() {
+            $("#club-request-form, #hold-request-form").on("submit", function() {
                 let $t = $(this);
                 $('.clubalert').addClass('hide');
-                let options = {
-                    url: $t.attr('action'),
-                    method: $t.attr('method').toUpperCase(),
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        biblio_id: biblionumber,
-                        pickup_library_id: $('select[name="pickup"]').val()
-                    })
+                let biblionumbers = [biblionumber];
+                let biblionumbers_text;
+                const data = {
+                    pickup_library_id: $('select[name="pickup"]').val()
                 };
                 if($('input[name="checkitem"]:checked').length)
-                    options.data.item_id = $('input[name="checkitem"]:checked').val();
-                $.ajax(options)
-                    .then(function(result) {
-                        let url = 'request.pl?biblionumber='+biblionumber+($('input[name="multi_hold"]').length && $('input[name="multi_hold"]').val()?'&multi_hold=1':'');
-                        document.location = url;
-                    })
-                    .fail(function(err) {
-                        $('.clubalert').removeClass('hide').html(err.responseJSON.error);
-                    });
+                    data.item_id = $('input[name="checkitem"]:checked').val();
+                if($('input[name="borrowernumber"]').length)
+                    data.patron_id = $('input[name="borrowernumber"]').val();
+                if($('textarea[name="notes"]').length)
+                    data.notes = $('textarea[name="notes"]').val()||null;
+                if($('.datepickerto_hidden').length)
+                    data.expiration_date = $('.datepickerto_hidden').val()||null;
+                if($('.datepickerfrom_hidden').length)
+                    data.hold_date = $('.datepickerfrom_hidden').val()||null;
+                if($('input[name="itemtype"]').length) {
+                    data.item_type = $('input[name="itemtype"]').val()||null;
+                }
+                if($('input[name="biblionumbers"]').length) {
+                    biblionumbers_text = $('input[name="biblionumbers"]').val();
+                    biblionumbers = biblionumbers_text.replace(/\/$/, '').split('/')
+                }
+
+                const count = $('input[name="holds_to_place_count"]').length?$('input[name="holds_to_place_count"]').val():1;
+                biblionumbers.forEach(function(biblionumber) {
+                    data.biblio_id = biblionumber;
+                    let options = {
+                        url: $t.attr('action'),
+                        method: $t.attr('method').toUpperCase(),
+                        contentType: 'application/json',
+                        data: JSON.stringify(data)
+                    };
+                    for(let i = 0; i < count; i++) {
+                        $.ajax(options)
+                        .then(function(result) {
+                            let url = 'request.pl?biblionumber='+biblionumber;
+                            if(biblionumbers_text) {
+                                url = 'request.pl?biblionumbers='+biblionumbers_text+'&multi_hold=1';
+                            }
+                            document.location = url;
+                        })
+                        .fail(function(err) {
+                            $('.clubalert, .holdalert').removeClass('hide').html(err.responseJSON.error);
+                        });
+                    }
+                });
+
                 return false;
             });
 
