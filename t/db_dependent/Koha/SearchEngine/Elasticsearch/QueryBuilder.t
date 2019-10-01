@@ -178,7 +178,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
     $query = $qb->build_authorities_query_compat( [ 'mainentry' ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
     is_deeply(
         $query->{query}->{bool}->{filter},
-        { term => { 'authtype' => 'auth_type' } },
+        { term => { 'authtype.raw' => 'AUTH_TYPE' } },
         "authorities type code is used as filter"
     );
 
