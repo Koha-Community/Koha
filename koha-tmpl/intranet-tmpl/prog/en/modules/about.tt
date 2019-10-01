@@ -102,7 +102,7 @@
                         [% CASE # nowhere %]
                             <span class="status_warn">Nowhere</span> Note that the right place to define the memcached config is in your $KOHA_CONF file. Currently you do not have a valid memcached configuration defined.
                     [% END %]
-                  [% IF effective_caching_method != 'Cache::Memcached::Fast::Safe' %]
+                  [% IF effective_caching_method != 'Cache::Memcached::Fast' %]
                     | Effective caching method: [% effective_caching_method | html %]
                   [% END %]
                 </td>
