@@ -169,7 +169,7 @@ subtest 'Working with related objects' => sub {
 
 subtest 'Status Graph tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -225,6 +225,106 @@ subtest 'Status Graph tests' => sub {
         },
         "REQ atom + linking QER = cyclical status graph"
     );
+
+    # Create a new node, with no prev_actions and no next_actions. This should
+    # protect us against regressions related to bug 22280.
+    my $new_node = {
+        TEST => {
+            prev_actions   => [ ],
+            id             => 'TEST',
+            next_actions   => [ ],
+        },
+    };
+    # Add the new node to the core_status_grpah
+    my $new_graph = $illrq_obj->_status_graph_union( $new_node, $illrq_obj->_core_status_graph);
+    # Compare the updated graph to the expected graph
+    # The structure we compare against here is just a copy of the structure found
+    # in Koha::Illrequest::_core_status_graph() + the new node we created above
+    is_deeply( $new_graph,
+        {
+        NEW => {
+            prev_actions => [ ],                           # Actions containing buttons
+                                                           # leading to this status
+            id             => 'NEW',                       # ID of this status
+            name           => 'New request',               # UI name of this status
+            ui_method_name => 'New request',               # UI name of method leading
+                                                           # to this status
+            method         => 'create',                    # method to this status
+            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ], # buttons to add to all
+                                                           # requests with this status
+            ui_method_icon => 'fa-plus',                   # UI Style class
+        },
+        REQ => {
+            prev_actions   => [ 'NEW', 'REQREV', 'QUEUED', 'CANCREQ' ],
+            id             => 'REQ',
+            name           => 'Requested',
+            ui_method_name => 'Confirm request',
+            method         => 'confirm',
+            next_actions   => [ 'REQREV', 'COMP' ],
+            ui_method_icon => 'fa-check',
+        },
+        GENREQ => {
+            prev_actions   => [ 'NEW', 'REQREV' ],
+            id             => 'GENREQ',
+            name           => 'Requested from partners',
+            ui_method_name => 'Place request with partners',
+            method         => 'generic_confirm',
+            next_actions   => [ 'COMP' ],
+            ui_method_icon => 'fa-send-o',
+        },
+        REQREV => {
+            prev_actions   => [ 'REQ' ],
+            id             => 'REQREV',
+            name           => 'Request reverted',
+            ui_method_name => 'Revert Request',
+            method         => 'cancel',
+            next_actions   => [ 'REQ', 'GENREQ', 'KILL' ],
+            ui_method_icon => 'fa-times',
+        },
+        TEST => {
+            prev_actions   => [ ],
+            id             => 'TEST',
+            next_actions   => [ ],
+        },
+        QUEUED => {
+            prev_actions   => [ ],
+            id             => 'QUEUED',
+            name           => 'Queued request',
+            ui_method_name => 0,
+            method         => 0,
+            next_actions   => [ 'REQ', 'KILL' ],
+            ui_method_icon => 0,
+        },
+        CANCREQ => {
+            prev_actions   => [ 'NEW' ],
+            id             => 'CANCREQ',
+            name           => 'Cancellation requested',
+            ui_method_name => 0,
+            method         => 0,
+            next_actions   => [ 'KILL', 'REQ' ],
+            ui_method_icon => 0,
+        },
+        COMP => {
+            prev_actions   => [ 'REQ' ],
+            id             => 'COMP',
+            name           => 'Completed',
+            ui_method_name => 'Mark completed',
+            method         => 'mark_completed',
+            next_actions   => [ ],
+            ui_method_icon => 'fa-check',
+        },
+        KILL => {
+            prev_actions   => [ 'QUEUED', 'REQREV', 'NEW', 'CANCREQ' ],
+            id             => 'KILL',
+            name           => 0,
+            ui_method_name => 'Delete request',
+            method         => 'delete',
+            next_actions   => [ ],
+            ui_method_icon => 'fa-trash',
+        },
+    },
+        "new node + core_status_graph = bigger status graph"
+    ) || diag explain $new_graph;
 
     $schema->storage->txn_rollback;
 };
