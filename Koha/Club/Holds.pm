@@ -25,6 +25,8 @@ use Koha::Database;
 
 use Koha::Club::Field;
 
+use Koha::Club::Hold;
+
 use base qw(Koha::Objects);
 
 =head1 NAME

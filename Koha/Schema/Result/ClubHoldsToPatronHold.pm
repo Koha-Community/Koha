@@ -162,6 +162,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/T626DfqUi7SnXOyieUzYw
 
+sub koha_objects_class {
+    'Koha::Club::Hold::PatronHolds';
+}
+sub koha_object_class {
+    'Koha::Club::Hold::PatronHold';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
