@@ -65,8 +65,9 @@ sub new {
         }
     };
 
+    my $query = new CGI; # To keep C4::Templates::_get_template_file() from complaining
     my ( $htdocs, $theme, $lang, $base ) =
-        C4::Templates::_get_template_file('ill/log/', 'intranet');
+        C4::Templates::_get_template_file('ill/log/', 'intranet', $query);
 
     $self->{templates} = {
         STATUS_CHANGE => $base . 'status_change.tt'
