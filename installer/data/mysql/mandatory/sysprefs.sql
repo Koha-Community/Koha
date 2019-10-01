@@ -536,6 +536,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PatronDuplicateMatchingAddFields','surname|firstname|dateofbirth', NULL,'A list of fields separated by "|" to deduplicate patrons when created','Free'),
 ('patronimages','0',NULL,'Enable patron images for the staff interface','YesNo'),
 ('PatronRemovalDelay','',NULL,'Delay for removing anonymized patrons', 'Integer'),
+('PatronRestrictionTypes','0',NULL,'Specify type of patron restriction being applied', 'YesNo'),
 ('PatronSelfModificationBorrowerUnwantedField','',NULL,'Name the fields you don\'t want to display when a patron is editing their information via the OPAC.','free'),
 ('PatronSelfModificationMandatoryField','',NULL,'Define the required fields when a patron is editing their information via the OPAC','free'),
 ('PatronSelfRegistration','0',NULL,'If enabled, patrons will be able to register themselves via the OPAC.','YesNo'),
