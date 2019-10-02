@@ -315,7 +315,7 @@ sub build_authorities_query {
     foreach my $s ( @{ $search->{searches} } ) {
         my ( $wh, $op, $val ) = @{$s}{qw(where operator value)};
         $wh = '_all' if $wh eq '';
-        if ( $op eq 'is' || $op eq '='  || $op eq 'exact' ) {
+        if ( defined $op && ($op eq 'is' || $op eq '='  || $op eq 'exact') ) {
 
             # look for something that matches a term completely
             # note, '=' is about numerical vals. May need special handling.
@@ -324,7 +324,7 @@ sub build_authorities_query {
             # search analyzer applied to them.
             push @query_parts, { match_phrase => {"$wh.phrase" => lc $val} };
         }
-        elsif ( $op eq 'start' ) {
+        elsif ( defined $op && $op eq 'start' ) {
             # startswith search, uses lowercase untokenized version of heading
             push @query_parts, { match_phrase_prefix => {"$wh.phrase" => lc $val} };
         }
@@ -449,21 +449,25 @@ sub build_authorities_query_compat {
     # This turns the old-style many-options argument form into a more
     # extensible hash form that is understood by L<build_authorities_query>.
     my @searches;
+    my $mappings = $self->get_elasticsearch_mappings();
 
     # Convert to lower case
     $marclist = [map(lc, @{$marclist})];
     $orderby  = lc $orderby;
 
+    my @indexes;
     # Make sure everything exists
     foreach my $m (@$marclist) {
-        Koha::Exceptions::WrongParameter->throw("Invalid marclist field provided: $m")
-            unless exists $koha_to_index_name->{$m};
+
+        $m = exists $koha_to_index_name->{$m} ? $koha_to_index_name->{$m} : $m;
+        push @indexes, $m;
+        warn "Unknown search field $m in marclist" unless (defined $mappings->{data}->{properties}->{$m} || $m eq '');
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches
         push @searches,
           {
-            where    => $koha_to_index_name->{$marclist->[$i]},
+            where    => $indexes[$i],
             operator => $operator->[$i],
             value    => $value->[$i],
           };

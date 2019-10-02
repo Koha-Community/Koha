@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 use Test::Exception;
+use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::More tests => 6;
@@ -47,6 +48,10 @@ $se->mock( 'get_elasticsearch_mappings', sub {
                 subject => {
                     type => 'text'
                 },
+                'subject-heading-thesaurus' => {
+                    type => 'text',
+                    facet => 1
+                },
                 itemnumber => {
                     type => 'integer'
                 },
@@ -56,12 +61,24 @@ $se->mock( 'get_elasticsearch_mappings', sub {
                 sortablenumber__sort => {
                     type => 'integer'
                 },
-                Heading => {
+                heading => {
                     type => 'text'
                 },
-                Heading__sort => {
+                'heading-main' => {
                     type => 'text'
-                }
+                },
+                heading__sort => {
+                    type => 'text'
+                },
+                match => {
+                    type => 'text'
+                },
+                'match-heading' => {
+                    type => 'text'
+                },
+                'match-heading-see-from' => {
+                    type => 'text'
+                },
             }
         }
     };
@@ -82,7 +99,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 });
 
 subtest 'build_authorities_query_compat() tests' => sub {
-    plan tests => 45;
+    plan tests => 47;
 
     my $qb;
 
@@ -169,12 +186,23 @@ subtest 'build_authorities_query_compat() tests' => sub {
         "authorities type code is used as filter"
     );
 
-    # Failing case
-    throws_ok {
-        $qb->build_authorities_query_compat( [ 'tomas' ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
+    # Authorities marclist check
+    warning_like {
+        $query = $qb->build_authorities_query_compat( [ 'tomas','mainentry' ],  undef, undef, ['contains'], [$search_term,$search_term], 'AUTH_TYPE', 'asc' )
     }
-    'Koha::Exceptions::WrongParameter',
-        'Exception thrown on invalid value in the marclist param';
+    qr/Unknown search field tomas/,
+    "Warning for unknown field in marclist";
+    is_deeply(
+        $query->{query}->{bool}->{must}[0]->{query_string}->{default_field},
+        'tomas',
+        "If no mapping for marclist the index is passed through as defined"
+    );
+    is_deeply(
+        $query->{query}->{bool}->{must}[1]->{query_string}{default_field},
+        'heading',
+        "If mapping found for marclist the index is passed through converted"
+    );
+
 };
 
 subtest 'build_query tests' => sub {
