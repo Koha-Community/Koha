@@ -98,7 +98,6 @@ BEGIN {
 		&GetIssuingCharges
         &GetBranchBorrowerCircRule
         &GetBranchItemRule
-		&GetBiblioIssues
 		&GetOpenIssue
         &CheckIfIssuedToPatron
         &IsItemIssued
@@ -2642,50 +2641,6 @@ sub GetOpenIssue {
   $sth->execute( $itemnumber );
   return $sth->fetchrow_hashref();
 
-}
-
-=head2 GetBiblioIssues
-
-  $issues = GetBiblioIssues($biblionumber);
-
-this function get all issues from a biblionumber.
-
-Return:
-C<$issues> is a reference to array which each value is ref-to-hash. This ref-to-hash contains all column from
-tables issues and the firstname,surname & cardnumber from borrowers.
-
-=cut
-
-sub GetBiblioIssues {
-    my $biblionumber = shift;
-    return unless $biblionumber;
-    my $dbh   = C4::Context->dbh;
-    my $query = "
-        SELECT issues.*,items.barcode,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
-        FROM issues
-            LEFT JOIN borrowers ON borrowers.borrowernumber = issues.borrowernumber
-            LEFT JOIN items ON issues.itemnumber = items.itemnumber
-            LEFT JOIN biblioitems ON items.itemnumber = biblioitems.biblioitemnumber
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-        WHERE biblio.biblionumber = ?
-        UNION ALL
-        SELECT old_issues.*,items.barcode,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
-        FROM old_issues
-            LEFT JOIN borrowers ON borrowers.borrowernumber = old_issues.borrowernumber
-            LEFT JOIN items ON old_issues.itemnumber = items.itemnumber
-            LEFT JOIN biblioitems ON items.itemnumber = biblioitems.biblioitemnumber
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-        WHERE biblio.biblionumber = ?
-        ORDER BY timestamp
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber, $biblionumber);
-
-    my @issues;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @issues, $data;
-    }
-    return \@issues;
 }
 
 =head2 GetUpcomingDueIssues
