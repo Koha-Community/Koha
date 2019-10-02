@@ -503,6 +503,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 desks
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Desk>
+
+=cut
+
+__PACKAGE__->has_many(
+  "desks",
+  "Koha::Schema::Result::Desk",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 edifact_eans
 
 Type: has_many
@@ -729,8 +744,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-10 09:57:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:juk2V/100I2EIrxFNhjI7A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-25 09:27:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:r2wn2GewgIc5+ShIdgmd9g
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
