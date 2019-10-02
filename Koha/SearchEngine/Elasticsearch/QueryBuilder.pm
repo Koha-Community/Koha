@@ -469,16 +469,16 @@ sub build_authorities_query_compat {
     $marclist = [map(lc, @{$marclist})];
     $orderby  = lc $orderby;
 
+    my @indexes;
     # Make sure everything exists
     foreach my $m (@$marclist) {
-        Koha::Exceptions::WrongParameter->throw("Invalid marclist field provided: $m")
-            unless exists $koha_to_index_name->{$m};
+        push @indexes, exists $koha_to_index_name->{$m} ? $koha_to_index_name->{$m} : $m;
     }
     for ( my $i = 0 ; $i < @$value ; $i++ ) {
         next unless $value->[$i]; #clean empty form values, ES doesn't like undefined searches
         push @searches,
           {
-            where    => $koha_to_index_name->{$marclist->[$i]},
+            where    => $indexes[$i],
             operator => $operator->[$i],
             value    => $value->[$i],
           };

@@ -91,7 +91,8 @@ my $clear_search_fields_cache = sub {
 };
 
 subtest 'build_authorities_query_compat() tests' => sub {
-    plan tests => 55;
+
+    plan tests => 56;
 
     my $qb;
 
@@ -184,12 +185,19 @@ subtest 'build_authorities_query_compat() tests' => sub {
         "authorities type code is used as filter"
     );
 
-    # Failing case
-    throws_ok {
-        $qb->build_authorities_query_compat( [ 'tomas' ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
-    }
-    'Koha::Exceptions::WrongParameter',
-        'Exception thrown on invalid value in the marclist param';
+    # Authorities marclist check
+    $query = $qb->build_authorities_query_compat( [ 'tomas','mainentry' ],  undef, undef, ['contains'], [$search_term,$search_term], 'AUTH_TYPE', 'asc' );
+    is_deeply(
+        $query->{query}->{bool}->{must}[0]->{query_string}->{default_field},
+        'tomas',
+        "If no mapping for marclist the index is passed through as defined"
+    );
+    is_deeply(
+        $query->{query}->{bool}->{must}[1]->{query_string}{default_field},
+        'heading',
+        "If mapping found for marclist the index is passed through converted"
+    );
+
 };
 
 subtest 'build_query tests' => sub {
