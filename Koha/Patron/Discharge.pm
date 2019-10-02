@@ -142,7 +142,25 @@ sub generate_as_pdf {
     else {
         my $pdf = PDF::FromHTML->new( encoding => 'utf-8' );
         $pdf->load_file( $html_path );
-        $pdf->convert;
+
+        my $ttf = C4::Context->config('ttf');
+        if ( $ttf  && exists $ttf->{font} ) {
+
+            my $type2path;
+            foreach my $font ( @{ $ttf->{font} } ) {
+                    $type2path->{ $font->{type} } = $font->{content};
+            }
+
+            $pdf->convert(
+                FontBold          => $type2path->{'HB'} || 'HelveticaBold',
+                FontOblique       => $type2path->{'HO'} || 'HelveticaOblique',
+                FontBoldOblique   => $type2path->{'HBO'}|| 'HelveticaBoldOblique',
+                FontUnicode       => $type2path->{'H'}  || 'Helvetica',
+                Font              => $type2path->{'H'}  || 'Helvetica',
+            );
+        } else {
+            $pdf->convert();
+        }
         $pdf->write_file( $pdf_path );
     }
 
