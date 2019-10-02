@@ -1,0 +1,174 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Patron restrictions &rsaquo; [% IF op == 'add_form' %][% IF ( restriction ) %]Modify restriction '[% restriction.display_text | html %]'[% ELSE %]New restriction[% END %][% END %]
+[% IF op == 'delete_confirm' %]Confirm deletion of restriction '[% restriction.display_text | html %]'[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_restrictions" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patrons-admin-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF op == 'add_form' %] <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a> &rsaquo; [% IF ( restriction ) %]Modify restriction '[% restriction.display_text | html %]'[% ELSE %]New restriction[% END %][% END %]
+[% IF op == 'delete_confirm' %] <a href="/cgi-bin/koha/admin/restrictions.pl">Patron restrictions</a> &rsaquo; Confirm deletion of restriction '[% restriction.display_text | html %]'[% END %]
+[% IF op == 'delete_confirmed' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron restrictions</a> &rsaquo; Restriction deleted[% END %]
+[% IF op == 'list' %]Patron restrictions[% END %]</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+[% FOR m IN messages %]
+    <div class="dialog [% m.type | html %]">
+        [% SWITCH m.code %]
+        [% CASE 'duplicate_display_text' %]
+            Another restriction already has this label
+        [% CASE 'duplicate_code' %]
+            Another restriction already has this code
+        [% CASE %]
+            [% m.code | html %]
+        [% END %]
+    </div>
+[% END %]
+
+[% IF op == 'add_form' %]
+    <form id="restriction_form" action="/cgi-bin/koha/admin/restrictions.pl" method="post">
+        <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="checked" value="0" />
+        [% IF restriction %]
+            <h1>Modify restriction [% restriction.display_text | html %]</h1>
+            <input type="hidden" name="is_a_modif" value="1" />
+        [% ELSE %]
+            <h1>New restriction</h1>
+        [% END %]
+        <fieldset class="rows">
+            <ol>
+                [% IF restriction %]
+                    <li>
+                        <span class="label">Code: </span>[% restriction.code | html %]
+                        <input type="hidden" name="code" value="[% restriction.code | html %]" />
+                    </li>
+                    <li>
+                        <label for="display_text" class="required">Label: </label>
+                        <input type="text" value="[% restriction.display_text | html %]" name="display_text" id="display_text" size="50" maxlength="50" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                [% ELSE %]
+                    <li>
+                        <label for="code" class="required">Code: </label>
+                        <input type="text" name="code" id="code" size="50" maxlength="50" class="required type_input " required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                    <li>
+                        <label for="display_text" class="required">Label: </label>
+                        <input type="text" name="display_text" id="display_text" size="50" maxlength="50" class="required" required="required" />
+                        <span class="required">Required</span>
+                    </li>
+                [% END %]
+            </ol>
+        </fieldset>
+
+        <fieldset class="action">
+            <input type="submit" value="Save" />
+            <a href="/cgi-bin/koha/admin/restrictions.pl" class="cancel">Cancel</a>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'delete_confirm' %]
+    <form action="/cgi-bin/koha/admin/restrictions.pl" method="post">
+        <fieldset>
+            <legend>
+                Confirm restriction deletion
+            </legend>
+
+            <p>Are you sure you want to delete &quot;[% restriction.display_text | html %]&quot;</p>
+
+            <fieldset class="action">
+                <input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="code" value="[% restriction.code | html %]" />
+                <input type="submit" value="Delete this restriction" />
+                <a class="cancel" href="/cgi-bin/koha/admin/restrictions.pl">Cancel</a>
+            </fieldset>
+        </fieldset>
+    </form>
+[% END %]
+
+[% IF op == 'list' %]
+
+    <div id="toolbar" class="btn-toolbar">
+        <a class="btn btn-default" id="newrestriction" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form"><i class="fa fa-plus"></i> New restriction</a>
+    </div>
+
+    <h2>Patron restrictions</h2>
+    [% IF searchfield %]
+        You Searched for [% searchfield | html %]</span>
+    [% END %]
+    [% IF restrictions %]
+        <table id="restriction_types">
+            <thead>
+                <tr>
+                    <th scope="col">Code</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH restriction IN restrictions %]
+                    <tr>
+                        <td>
+                            [% restriction.code | html %]
+                        </td>
+                        <td>
+                            [% restriction.display_text | html %]
+                        </td>
+                        <td>
+                            [% IF restriction.dflt %]Yes[% END %]
+                        </td>
+                        <td class="actions">
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=add_form&amp;code=[% restriction.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                            [% IF !restriction.ronly %]
+                                <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/restrictions.pl?op=delete_confirm&amp;code=[% restriction.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    [% ELSE %]
+        <div class="dialog alert">No restrictions have been defined. <a href="/cgi-bin/koha/admin/restrictions.pl?op=add_form">Create a new restriction</a>.</div>
+    [% END %]
+[% END %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
+        var MSG_DUPLICATE_CODE = _("Restriction code is already in use");
+        var MSG_DUPLICATE_DISPLAY_TEXT = _("Label is already in use");
+        var existing = {
+        [% FOREACH ex IN existing %]
+            [% ex.code | $raw %]: '[% ex.display_text | $raw %]',
+        [% END %]
+        };
+    </script>
+    [% Asset.js("js/restrictiontypes.js") | $raw %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
