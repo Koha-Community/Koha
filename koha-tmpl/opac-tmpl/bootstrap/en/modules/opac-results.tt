@@ -337,7 +337,7 @@
                                                     <!-- COinS / Openurl -->
                                                     <span class="Z3988" title="[% SEARCH_RESULT.coins | html %]"></span>
                                                 [% END %]
-
+                                                <div id="title_summary_[% SEARCH_RESULT.biblionumber | html %]" class="title_summary">
                                                 [% IF ( OPACXSLTResultsDisplay ) %]
                                                     [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
                                                 [% ELSE %]
@@ -571,7 +571,7 @@
                                                             [% END %]
                                                         [% END # / IF opacbookbag %]
                                                 </div>
-
+                                                </div>
                                                 [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
 
                                             </td>
