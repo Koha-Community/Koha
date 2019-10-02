@@ -48,7 +48,6 @@ can_ok(
       AddIssuingCharge
       AddRenewal
       AddReturn
-      GetBiblioIssues
       GetIssuingCharges
       GetOpenIssue
       GetRenewCount
@@ -296,9 +295,6 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
         }
     }
 };
-
-#Test GetBiblioIssues
-is( GetBiblioIssues(), undef, "GetBiblio Issues without parameters" );
 
 #Test GetOpenIssue
 is( GetOpenIssue(), undef, "Without parameter GetOpenIssue returns undef" );
