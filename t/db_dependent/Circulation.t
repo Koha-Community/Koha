@@ -3213,6 +3213,7 @@ subtest 'Incremented fee tests' => sub {
 
     $dt_to       = dt_from_string()->add( hours => 4 );
     $dt_to_renew = dt_from_string()->add( hours => 6 );
+    $calendar->delete_holiday( weekday => 3);
 
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
@@ -3279,7 +3280,7 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
 
     $itemtype->rentalcharge('1.000000')->store;
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
-    is_deeply( $needsconfirmation, { RENTALCHARGE => '1' }, 'Item needs rentalcharge confirmation to be issued' );
+    is_deeply( $needsconfirmation, { RENTALCHARGE => '1.00' }, 'Item needs rentalcharge confirmation to be issued' );
     $itemtype->rentalcharge('0')->store;
     $itemtype->rentalcharge_daily('1.000000')->store;
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
