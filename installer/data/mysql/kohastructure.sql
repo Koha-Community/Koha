@@ -4476,6 +4476,21 @@ CREATE TABLE `problem_reports` (
     CONSTRAINT `problem_reports_ibfk2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table advanced_editor_macros
+--
+
+DROP TABLE IF EXISTS advanced_editor_macros;
+CREATE TABLE advanced_editor_macros (
+    id INT(11) NOT NULL AUTO_INCREMENT,     -- Unique ID of the macro
+    name varchar(80) NOT NULL,              -- Name of the macro
+    macro longtext NULL,                    -- The macro code itself
+    borrowernumber INT(11) default NULL,    -- ID of the borrower who created this macro
+    shared TINYINT(1) default 0,            -- Bit to define if shared or private macro
+    PRIMARY KEY (id),
+    CONSTRAINT borrower_macro_fk FOREIGN KEY ( borrowernumber ) REFERENCES borrowers ( borrowernumber ) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

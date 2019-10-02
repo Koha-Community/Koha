@@ -290,6 +290,16 @@
             Use the advanced cataloging editor (requires edit_catalogue)
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'create_shared_macros' -%]
+        <span class="sub_permission create_shared_macros_subpermission">
+            Create shared macros (requires advanced_editor)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_shared_macros' -%]
+        <span class="sub_permission delete_shared_macros_subpermission">
+            Delete shared macros (requires advanced_editor)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_items' -%]
         <span class="sub_permission edit_items_subpermission">
             Edit items
