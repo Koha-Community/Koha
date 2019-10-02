@@ -243,7 +243,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RecordedBooksLibraryID','','','Library ID for RecordedBooks integration','Integer'),
 ('OnSiteCheckouts','0','','Enable/Disable the on-site checkouts feature','YesNo'),
 ('OnSiteCheckoutsForce','0','','Enable/Disable the on-site for all cases (Even if a user is debarred, etc.)','YesNo'),
-('OnSiteCheckoutAutoCheck','0','','onsite Checkout by default if last checkout was an onsite checkout box','YesNo'),
+('OnSiteCheckoutAutoCheck','0','','Enable/Do not enable onsite checkout by default if last checkout was an onsite checkout','YesNo'),
 ('INTRAdidyoumean','',NULL,'Did you mean? configuration for the Intranet. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),
 ('IntranetBiblioDefaultView','normal','normal|marc|isbd|labeled_marc','Choose the default detail view in the staff interface; choose between normal, labeled_marc, marc or isbd','Choice'),
 ('intranetbookbag','1','','If ON, enables display of Cart feature in the intranet','YesNo'),
