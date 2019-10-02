@@ -228,7 +228,14 @@ sub GetRecords {
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
         my $holds  = $biblio->current_holds->unblessed;
-        my $issues           = GetBiblioIssues($biblionumber);
+        my $checkouts = Koha::Checkouts->search(
+            { biblionumber => $biblionumber },
+            {
+                join => 'item',
+                '+select' => ['item.barcode'],
+                '+as'     => ['barcode'],
+            }
+        )->unblessed;
         my @items            = $biblio->items->as_list;
 
         $biblioitem->{items}->{item} = [];
@@ -274,7 +281,7 @@ sub GetRecords {
 
         # Hashref building...
         $biblioitem->{'reserves'}->{'reserve'} = $holds;
-        $biblioitem->{'issues'}->{'issue'}     = $issues;
+        $biblioitem->{'issues'}->{'issue'}     = $checkouts;
 
         push @records, $biblioitem;
     }
