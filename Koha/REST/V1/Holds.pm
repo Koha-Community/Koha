@@ -84,6 +84,7 @@ sub add {
         my $item_type         = $body->{item_type};
         my $expiration_date   = $body->{expiration_date};
         my $notes             = $body->{notes};
+        my $hold_date         = C4::Context->preference( 'AllowHoldDateInFuture' )?$body->{hold_date}:undef;
 
         if ( $item_id and $biblio_id ) {
 
@@ -135,7 +136,9 @@ sub add {
             ? C4::Reserves::CanItemBeReserved( $patron_id, $item_id )
             : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
 
-        unless ( $can_place_hold->{status} eq 'OK' ) {
+        my $can_override = C4::Context->preference('AllowHoldPolicyOverride');
+
+        unless ($can_override || $can_place_hold->{status} eq 'OK' ) {
             return $c->render(
                 status => 403,
                 openapi =>
@@ -156,7 +159,7 @@ sub add {
             $biblio_id,
             undef,    # $bibitems param is unused
             $priority,
-            undef,    # hold date, we don't allow it currently
+            $hold_date,
             $expiration_date,
             $notes,
             $biblio->title,

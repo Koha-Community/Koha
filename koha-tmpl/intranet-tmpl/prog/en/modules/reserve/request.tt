@@ -948,6 +948,17 @@
             [% END %][% END %][% END %]
         };
         var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items.");
+        var ERROR_MAP = {
+            damaged: _("Item damaged"),
+            ageRestricted: _("Age restricted"),
+            tooManyHoldsForThisRecord: _("Exceeded max holds per record"),
+            tooManyReservesToday: _("Daily hold limit reached for patron"),
+            tooManyReserves: _("Too many holds"),
+            notReservable: _("Not holdable"),
+            cannotReserveFromOtherBranches: _("Patron is from different library"),
+            itemAlreadyOnHold: _("Patron already has hold for this item"),
+            cannotBeTransferred: _("Cannot be transferred to pickup library")
+        }
         columns_settings_borrowers_table = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         $(document).ready(function() {
@@ -1005,7 +1016,7 @@
 
             $("#club-request-form, #hold-request-form").on("submit", function() {
                 let $t = $(this);
-                $('.clubalert').addClass('hide');
+                $('.clubalert, .holdalert').addClass('hide');
                 let biblionumbers = [biblionumber];
                 let biblionumbers_text;
                 const data = {
@@ -1048,7 +1059,12 @@
                             document.location = url;
                         })
                         .fail(function(err) {
-                            $('.clubalert, .holdalert').removeClass('hide').html(err.responseJSON.error);
+                            var message = err.responseJSON.error;
+                            var match = err.responseJSON.error.match(/Reason: (\w+)\s*$/);
+                            if(match && ERROR_MAP[match[1]]) {
+                                message = '<div><strong>'+_("Cannot place hold")+'</strong></div><div>'+ERROR_MAP[match[1]]+'</div>'
+                            }
+                            $('.clubalert, .holdalert').removeClass('hide').html(message);
                         });
                     }
                 });
