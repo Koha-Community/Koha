@@ -33,10 +33,16 @@
                             </select>
                         </li>
 
-                        <li>
-                            <label for="include-all">Include all rows (ignore pagination):</label>
-                            <input id="include-all" name="chart-include-all" type="checkbox" />
-                        </li>
+                        [% IF allresults.size %]
+                            <li>
+                                <label for="include-all">Include all rows (ignore pagination):</label>
+                                <input id="include-all" name="chart-include-all" type="checkbox" />
+                            </li>
+                        [% ELSE %]
+                            <li>
+                                <p>This chart will use only visible rows, click 'Fetch all data' to chart the full report</p>
+                            </li>
+                        [% END %]
 
                         <li>
                             <label for="exclude-last">Exclude last line (Rollup): </label>

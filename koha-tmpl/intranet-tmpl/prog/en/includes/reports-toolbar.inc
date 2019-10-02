@@ -107,7 +107,13 @@
                 <a class="btn btn-default toggle_sql" id="toggle_sql_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide SQL code</a>
             </div>
             <div class="btn-group">
-                <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-bar-chart"></i> Create chart</a>
+                [% IF allresults.size %]
+                    <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-bar-chart"></i> Create chart</a>
+                [% ELSE %]
+                    <a class="btn btn-default" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-bar-chart"></i> Create chart</a>
+                    <a class="btn btn-default fetch_chart_data" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id | html %]&amp;phase=Run this report&amp;reportname=[% name |uri %][% PROCESS params %]&amp;want_full_chart=1"><i class="fa fa-bar-chart"></i> Fetch all data for chart</a>
+                [% END %]
+
             </div>
         [% END %]
 

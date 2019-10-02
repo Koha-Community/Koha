@@ -692,6 +692,7 @@ elsif ($phase eq 'Run this report'){
     my $report_id  = $input->param('reports');
     my @sql_params = $input->multi_param('sql_params');
     my @param_names = $input->multi_param('param_name');
+    my $want_full_chart = $input->param('want_full_chart') || 0;
 
     # offset algorithm
     if ($input->param('page')) {
@@ -829,7 +830,6 @@ elsif ($phase eq 'Run this report'){
             my ($sql,$header_types) = get_prepped_report( $sql, \@param_names, \@sql_params);
             $template->param(header_types => $header_types);
             my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
-            my ($sth2, $errors2) = execute_query($sql);
             my $total = nb_rows($sql) || 0;
             unless ($sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
@@ -840,14 +840,17 @@ elsif ($phase eq 'Run this report'){
                     my @cells = map { +{ cell => $_ } } @$row;
                     push @rows, { cells => \@cells };
                 }
-                while (my $row = $sth2->fetchrow_arrayref()) {
-                    my @cells = map { +{ cell => $_ } } @$row;
-                    push @allrows, { cells => \@cells };
+                if( $want_full_chart ){
+                    my ($sth2, $errors2) = execute_query($sql);
+                    while (my $row = $sth2->fetchrow_arrayref()) {
+                        my @cells = map { +{ cell => $_ } } @$row;
+                        push @allrows, { cells => \@cells };
+                    }
                 }
             }
 
             my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
-            my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report_id&amp;phase=Run%20this%20report&amp;limit=$limit";
+            my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report_id&amp;phase=Run%20this%20report&amp;limit=$limit&amp;want_full_chart=$want_full_chart";
             if (@param_names) {
                 $url = join('&amp;param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names);
             }

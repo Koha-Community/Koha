@@ -1159,6 +1159,17 @@ canned reports and writing custom SQL reports.</p>
         }
 
         $(document).ready(function(){
+
+            $("body").on('click',".fetch_chart_data",function(){
+                if( [% unlimited_total %] > 1000 ){
+                    if( confirm("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you with to chart this report?") ){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+
             var showsql;
             hide_bar_element();
 
@@ -1201,12 +1212,16 @@ canned reports and writing custom SQL reports.</p>
                     headers = [% header_row.json | $raw %];
 
                     var results;
-                    if ($('input[name="chart-include-all"]').prop('checked')) {
-                        results = [% allresults.json | $raw %]
-                    }
-                    else {
-                        results = [% results.json | $raw %]
-                    }
+                    [% IF allresults.size %]
+                        if ($('input[name="chart-include-all"]').prop('checked')) {
+                            results = [% allresults.json | $raw %]
+                        }
+                        else {
+                            results = [% results.json | $raw %]
+                        }
+                    [% ELSE %]
+                        results = [% results.json | $raw %];
+                    [% END %]
 
                     if ($('input[name="chart-exclude-last"]').prop('checked')) {
                         results.splice(-1, 1);
