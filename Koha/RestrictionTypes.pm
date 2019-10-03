@@ -36,7 +36,7 @@ Koha::RestrictionTypes - Koha Restriction Types Object set class
 
 =cut
 
-=head3 type
+=head3 keyed_on_code
 
 Return all restriction types as a hashref keyed on the code
 
@@ -54,7 +54,7 @@ sub keyed_on_code {
     return $out;
 }
 
-=head3 type
+=head3 _type
 
 =cut
 
@@ -62,9 +62,7 @@ sub _type {
     return 'DebarmentType';
 }
 
-=head3 type
-
-Object class
+=head3 object_class
 
 =cut
 
