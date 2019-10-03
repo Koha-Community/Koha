@@ -227,7 +227,6 @@ sub GetRecords {
 
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
-        my $holds  = $biblio->current_holds->unblessed;
         my $checkouts = Koha::Checkouts->search(
             { biblionumber => $biblionumber },
             {
@@ -263,6 +262,12 @@ sub GetRecords {
             }
 
             push @{ $biblioitem->{items}->{item} }, \%item;
+        }
+
+        # Holds
+        my $holds = $biblio->current_holds->unblessed;
+        foreach my $hold (@$holds) {
+            delete $hold->{'borrowernumber'};
         }
 
         # Hashref building...
