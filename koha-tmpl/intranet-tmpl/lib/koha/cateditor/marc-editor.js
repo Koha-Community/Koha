@@ -163,6 +163,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             var curLine = cm.getLine( cm.getCursor().line );
 
             $("#clipboard").prepend('<option>'+curLine+'</option>');
+            $("#clipboard option:first-child").prop('selected', true);
 
             cm.execCommand('deleteLine');
         }
@@ -197,10 +198,11 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             if ( !field ) return;
 
             var curCursor = cm.getCursor();
-            var subfield = field.getSubfieldAt( curCursor().ch );
+            var subfield = field.getSubfieldAt( curCursor.ch );
             var subfieldText= cm.getRange({line:curCursor.line,ch:subfield.start},{line:curCursor.line,ch:subfield.end});
             if ( subfield ) {
                 $("#clipboard").prepend('<option>'+subfieldText+'</option>');
+                $("#clipboard option:first-child").prop('selected', true);
                 subfield.delete();
             }
         }
@@ -210,6 +212,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             if ( cm.somethingSelected() ) return true;
             var curLine = cm.getLine( cm.getCursor().line );
             $("#clipboard").prepend('<option>'+curLine+'</option>');
+            $("#clipboard option:first-child").prop('selected', true);
         }
 
     _editorKeys[copy_subfield] = function( cm ) {
@@ -218,10 +221,11 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             if ( !field ) return;
 
             var curCursor = cm.getCursor();
-            var subfield = field.getSubfieldAt( curCursor().ch );
+            var subfield = field.getSubfieldAt( curCursor.ch );
             var subfieldText= cm.getRange({line:curCursor.line,ch:subfield.start},{line:curCursor.line,ch:subfield.end});
             if ( subfield ) {
                 $("#clipboard").prepend('<option>'+subfieldText+'</option>');
+                $("#clipboard option:first-child").prop('selected', true);
             }
         }
 
