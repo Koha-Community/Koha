@@ -1360,8 +1360,9 @@ legend:hover {
                                                 </thead>
                                                 <tbody>
                                                     [% FOREACH d IN debarments %]
+                                                        [% dtype = d.type %]
                                                         <tr>
-                                                            <td>[% d.type | html %]</td>
+                                                            <td>[% restriction_types.$dtype.display_text | html %]</td>
                                                             <td>
                                                                 [% IF d.comment.search('OVERDUES_PROCESS') %]
                                                                     Restriction added by overdues process [% d.comment.remove('OVERDUES_PROCESS ') | $raw %]

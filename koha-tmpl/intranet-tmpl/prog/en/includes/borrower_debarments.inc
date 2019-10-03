@@ -17,18 +17,10 @@
             </thead>
             <tbody>
                 [% FOREACH d IN debarments %]
+                    [% dtype = d.type %]
                     <tr>
                         <td>
-                            [% SWITCH d.type %]
-                                [% CASE 'MANUAL' %]
-                                    <span>Manual</span>
-                                [% CASE 'OVERDUES' %]
-                                    <span>Overdues</span>
-                                [% CASE 'SUSPENSION' %]
-                                    <span>Suspension</span>
-                                [% CASE 'DISCHARGE' %]
-                                    <span>Discharge</span>
-                            [% END %]
+                            [% restriction_types.$dtype.display_text | html %]
                         </td>
                         <td>
                             [% IF d.comment.search('OVERDUES_PROCESS') %]
