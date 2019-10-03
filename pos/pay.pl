@@ -9,6 +9,7 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Context;
 
+use Koha::Account::DebitTypes;
 use Koha::AuthorisedValues;
 use Koha::Cash::Registers;
 use Koha::Charges::Sales;
@@ -52,6 +53,12 @@ else {
         registers  => $registers,
     );
 }
+
+my $invoice_types =
+  Koha::Account::DebitTypes->search_with_library_limits(
+    { can_be_added_manually => 1 },
+    {}, $library_id );
+$template->param( invoice_types => $invoice_types );
 
 my $total_paid = $q->param('paid');
 if ( $total_paid and $total_paid ne '0.00' ) {

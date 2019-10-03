@@ -31,7 +31,6 @@
                     <fieldset class="rows">
                         <legend>Items for purchase</legend>
                             Please select items from below to add to this transaction:
-                            [% SET invoice_types = AuthorisedValues.GetAuthValueDropbox('MANUAL_INV') %]
                             [% IF invoice_types %]
                             <table id="invoices">
                             <thead>
@@ -45,11 +44,11 @@
                             <tbody>
                             [% FOREACH invoice IN invoice_types %]
                                 <tr>
-                                    <td>[% invoice.authorised_value | html %]</td>
-                                    <td>[% invoice.lib_opac | html %]</td>
-                                    <td>[% invoice.lib | html %]</td>
+                                    <td>[% invoice.code | html %]</td>
+                                    <td>[% invoice.description | html %]</td>
+                                    <td>[% invoice.default_amount | $Price %]</td>
                                     <td>
-                                        <button class="add_button" data-invoice-code="[% invoice.lib_opac %]" data-invoice-title="[% invoice.authorised_value | html %]" data-invoice-price="[% invoice.lib | html %]"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="add_button" data-invoice-code="[% invoice.code %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
                                     </td>
                                 </tr>
                             [% END %]

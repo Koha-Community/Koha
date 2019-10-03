@@ -157,12 +157,9 @@ sub _get_valid_items {
     my $self = shift;
 
     $self->{valid_items} //= {
-        map { $_ => 1 } Koha::AuthorisedValues->search(
-            {
-                category   => 'MANUAL_INV',
-                branchcode => $self->{cash_register}->branch
-            }
-        )->get_column('authorised_value')
+        map { $_ => 1 }
+          Koha::Account::DebitTypes->search_with_library_limits( {}, {},
+            $self->{cash_register}->branch )->get_column('code')
     };
 
     return $self->{valid_items};

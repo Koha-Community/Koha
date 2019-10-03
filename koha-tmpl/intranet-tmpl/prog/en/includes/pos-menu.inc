@@ -7,8 +7,8 @@
                 <li><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></li>
             [% END %]
 
-            [% IF ( CAN_user_parameters_manage_auth_values ) %]
-                <li><a href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=MANUAL_INV">Purchase items</a></li>
+            [% IF ( CAN_user_parameters_manage_accounts ) %]
+                <li><a href="/cgi-bin/koha/admin/debit_types.pl">Purchase items</a></li>
             [% END %]
         </ul>
         [% END %]
