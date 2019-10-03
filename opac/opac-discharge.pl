@@ -99,11 +99,13 @@ elsif ( $op eq 'get' ) {
         my @lines = <$fh>;
         close $fh;
         print @lines;
-        exit;
     };
     if ( $@ ) {
         carp $@;
         $template->param( messages => [ {type => 'error', code => 'unable_to_generate_pdf'} ] );
+    } else {
+        # no error, pdf is sent, so stop sending data to browser
+        exit;
     }
 }
 else {

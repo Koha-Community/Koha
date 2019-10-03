@@ -90,11 +90,13 @@ if ( $input->param('discharge') and $can_be_discharged ) {
         my @lines = <$fh>;
         close $fh;
         print @lines;
-        exit;
     };
     if ( $@ ) {
         carp $@;
         $template->param( messages => [ {type => 'error', code => 'unable_to_generate_pdf'} ] );
+    } else {
+        # no error, pdf is sent, so stop sending data to browser
+        exit;
     }
 }
 
