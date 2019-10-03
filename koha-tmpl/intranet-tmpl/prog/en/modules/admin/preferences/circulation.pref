@@ -923,6 +923,12 @@ Circulation:
               type: textarea
               syntax: javascript
               class: code
+        -
+            - pref: RoundFinesAtPayment
+              choices:
+                  yes: Do
+                  no: "Don't"
+            - round fines to the nearest cent when collecting payments. Enabling this preference allows paying fines of partial cents which may not be visible in the interface.
     Self Checkout:
         -
             - "Include the following JavaScript on all pages in the web-based self checkout:"
