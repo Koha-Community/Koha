@@ -100,7 +100,7 @@ subtest 'get_elasticsearch_settings() tests' => sub {
     # test reading index settings
     my $es = Koha::SearchEngine::Elasticsearch->new( {index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX} );
     $settings = $es->get_elasticsearch_settings();
-    is( $settings->{index}{analysis}{analyzer}{analyser_phrase}{tokenizer}, 'keyword', 'Index settings parsed correctly' );
+    is( $settings->{index}{analysis}{analyzer}{analyzer_phrase}{tokenizer}, 'keyword', 'Index settings parsed correctly' );
 };
 
 subtest 'get_elasticsearch_mappings() tests' => sub {
@@ -112,7 +112,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
     # test reading mappings
     my $es = Koha::SearchEngine::Elasticsearch->new( {index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX} );
     $mappings = $es->get_elasticsearch_mappings();
-    is( $mappings->{data}{_all}{type}, 'string', 'Field mappings parsed correctly' );
+    is( $mappings->{data}{properties}{isbn__sort}{index}, 'false', 'Field mappings parsed correctly' );
 };
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
@@ -128,6 +128,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => undef,
             marc_type => 'marc21',
             marc_field => '001',
@@ -137,6 +138,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'isbn',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => '020a',
@@ -146,6 +148,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 1,
             suggestible => 1,
+            searchable => 1,
             sort => undef,
             marc_type => 'marc21',
             marc_field => '100a',
@@ -155,6 +158,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 1,
             suggestible => 1,
+            searchable => 1,
             sort => 1,
             marc_type => 'marc21',
             marc_field => '110a',
@@ -164,6 +168,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 1,
+            searchable => 1,
             sort => 1,
             marc_type => 'marc21',
             marc_field => '245(ab)ab',
@@ -173,6 +178,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 1,
+            searchable => 1,
             sort => 1,
             marc_type => 'unimarc',
             marc_field => '245a',
@@ -182,6 +188,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => undef,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => '220',
@@ -191,6 +198,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => undef,
             marc_type => 'marc21',
             marc_field => '245',
@@ -200,6 +208,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'sum',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => '952g',
@@ -209,6 +218,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'boolean',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => '9520',
@@ -218,6 +228,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 1,
             marc_type => 'marc21',
             marc_field => '952o',
@@ -227,6 +238,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => 'leader_/6',
@@ -236,6 +248,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => 'leader_/6-7',
@@ -245,6 +258,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             type => 'string',
             facet => 0,
             suggestible => 0,
+            searchable => 1,
             sort => 0,
             marc_type => 'marc21',
             marc_field => '007_/0',
@@ -262,6 +276,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
                 $map->{facet},
                 $map->{suggestible},
                 $map->{sort},
+                $map->{searchable},
                 $map->{marc_type},
                 $map->{marc_field}
             );
@@ -307,7 +322,6 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     # First record:
     is(scalar @{$docs}, 2, 'Two records converted to documents');
-
     is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
 
     is_deeply($docs->[0][1]->{control_number}, ['123'], 'First record control number should be set correctly');
@@ -519,6 +533,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
             facet => 0,
             suggestible => 0,
             sort => undef,
+            searchable => 1,
             marc_type => 'marc21',
             marc_field => '001',
         }
@@ -535,6 +550,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
                 $map->{facet},
                 $map->{suggestible},
                 $map->{sort},
+                $map->{searchable},
                 $map->{marc_type},
                 $map->{marc_field}
             );

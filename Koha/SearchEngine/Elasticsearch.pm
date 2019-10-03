@@ -890,7 +890,6 @@ sub _get_marc_mapping_rules {
 
             my $range = defined $3 ? $3 : undef;
             my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $search, $name, $type, $range);
-
             if ($field_tag < 10) {
                 $rules->{control_fields}->{$field_tag} //= [];
                 push @{$rules->{control_fields}->{$field_tag}}, @mappings;
