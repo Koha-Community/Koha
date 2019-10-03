@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 8;
 
 use Koha::Database;
 use Koha::SearchFields;
@@ -134,69 +134,5 @@ $search_field = Koha::SearchFields->find($sf3->{id});
 ok(!$search_field->is_mapped_biblios, 'Search field is not mapped');
 
 Koha::SearchFields->search({})->delete;
-
-$builder->build({
-    source => 'SearchField',
-    value => {
-        name    => 'acqdate',
-        label   => 'acqdate',
-        weight  => undef
-    }
-});
-
-$builder->build({
-    source => 'SearchField',
-    value => {
-        name    => 'copydate',
-        label   => 'copydate',
-        weight  => undef
-    }
-});
-
-$builder->build({
-    source => 'SearchField',
-    value => {
-        name    => 'ccode',
-        label   => 'ccode',
-        weight  => 0
-    }
-});
-
-$builder->build({
-    source => 'SearchField',
-    value => {
-        name    => 'title',
-        label   => 'title',
-        weight  => 25
-    }
-});
-
-$builder->build({
-    source => 'SearchField',
-    value => {
-        name    => 'subject',
-        label   => 'subject',
-        weight  => 15
-    }
-});
-
-$builder->build({
-    source => 'SearchField',
-    value => {
-        name    => 'author',
-        label   => 'author',
-        weight  => 5
-    }
-});
-
-my @w_fields = Koha::SearchFields->weighted_fields();
-is(scalar(@w_fields), 3, 'weighted_fields should return 3 weighted fields.');
-
-is($w_fields[0]->name, 'title', 'First field is title.');
-is($w_fields[0]->weight+0, 25, 'Title weight is 25.');
-is($w_fields[1]->name, 'subject', 'Second field is subject.');
-is($w_fields[1]->weight+0, 15, 'Subject weight is 15.');
-is($w_fields[2]->name, 'author', 'Third field is author.');
-is($w_fields[2]->weight+0, 5, 'Author weight is 5.');
 
 $schema->storage->txn_rollback;
