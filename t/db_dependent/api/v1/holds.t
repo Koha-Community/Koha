@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -34,6 +34,7 @@ use Koha::DateUtils;
 use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
+use Koha::CirculationRules;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
@@ -265,6 +266,67 @@ subtest 'Reserves with itemtype' => sub {
       ->status_is(200)
       ->json_is('/0/hold_id', $reserve_id)
       ->json_is('/0/item_type', $itemtype);
+};
+
+
+subtest 'test AllowHoldDateInFuture' => sub {
+
+    plan tests => 6;
+
+    $dbh->do('DELETE FROM reserves');
+
+    my $future_hold_date = DateTime->now->add(days => 10)->truncate( to => 'day' );
+
+    my $post_data = {
+        patron_id => int($patron_1->borrowernumber),
+        biblio_id => int($biblio_1->biblionumber),
+        item_id => int($item_1->itemnumber),
+        pickup_library_id => $branchcode,
+        expiration_date => output_pref({ dt => $expiration_date, dateformat => 'rfc3339', dateonly => 1 }),
+        hold_date => output_pref({ dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 }),
+        priority => 2,
+    };
+
+    t::lib::Mocks::mock_preference( 'AllowHoldDateInFuture', 0 );
+
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(400)
+      ->json_has('/error');
+
+    t::lib::Mocks::mock_preference( 'AllowHoldDateInFuture', 1 );
+
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(201)
+      ->json_is('/hold_date', output_pref({ dt => $future_hold_date, dateformat => 'rfc3339', dateonly => 1 }));
+};
+
+subtest 'test AllowHoldPolicyOverride' => sub {
+
+    plan tests => 5;
+
+    $dbh->do('DELETE FROM reserves');
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
+                holdallowed              => 1
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 0 );
+
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(403)
+      ->json_has('/error');
+
+    t::lib::Mocks::mock_preference( 'AllowHoldPolicyOverride', 1 );
+
+    $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
+      ->status_is(201);
 };
 
 $schema->storage->txn_rollback;

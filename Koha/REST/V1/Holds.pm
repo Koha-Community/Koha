@@ -84,7 +84,14 @@ sub add {
         my $item_type         = $body->{item_type};
         my $expiration_date   = $body->{expiration_date};
         my $notes             = $body->{notes};
-        my $hold_date         = C4::Context->preference( 'AllowHoldDateInFuture' )?$body->{hold_date}:undef;
+        my $hold_date         = $body->{hold_date};
+
+        if(!C4::Context->preference( 'AllowHoldDateInFuture' ) && $hold_date) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Hold date in future not allowed" }
+            );
+        }
 
         if ( $item_id and $biblio_id ) {
 
