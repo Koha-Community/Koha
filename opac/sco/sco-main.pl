@@ -1,5 +1,5 @@
+
 #!/usr/bin/perl
-#
 # This code has been modified by Trendsetters (originally from opac-user.pl)
 # This code has been modified by rch
 # Parts Copyright 2010-2011, ByWater Solutions (those related to username/password auth)
@@ -31,6 +31,7 @@
 #
 # FIXME: inputfocus not really used in TMPL
 
+
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
@@ -48,8 +49,13 @@ use Koha::Acquisition::Currencies;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
 use Koha::Token;
+use Koha::Calendar;
+
 
 my $query = new CGI;
+my $messages;
+my $borrower;
+
 
 unless (C4::Context->preference('WebBasedSelfCheck')) {
     # redirect to OPAC home if self-check is not enabled
@@ -75,6 +81,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     debug => 1,
 });
 
+
 if (C4::Context->preference('SelfCheckoutByLogin'))
 {
     $template->param(authbylogin  => 1);
@@ -94,27 +101,70 @@ if (defined C4::Context->preference('AllowSelfCheckReturns')) {
 }
 $template->param(AllowSelfCheckReturns => $allowselfcheckreturns);
 
-
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed) = (
+my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $uibarcode,$checkinmessage,
+    $reserve_id) = (
     $query->param("op")         || '',
     $query->param("patronid")   || '',
     $query->param("patronlogin")|| '',
     $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
     $query->param("confirmed")  || '',
+    $query->param("uibarcode")  || '',
+    $query->param("checkinmessage") || '',
+    $query->param("reserve_id") || '',
 );
+
 
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 #warn "issuerid: " . $issuerid;
 my $issuer   = GetMember( borrowernumber => $issuerid );
 my $item     = GetItem(undef,$barcode);
+$checkinmessage = undef;
+my $checkinitem;
+my $checkinbranchcode;
+my $userenv = C4::Context->userenv;
+my $userenv_branch = $userenv->{'branch'} // '';
+my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
+my $today       = DateTime->now( time_zone => C4::Context->tz());
+my $dropboxdate = $calendar->addDate($today, -1);
+#my $returndate = $calendar->addDate($today);
+my $biblio;
+
+#message to screen if returned without log in (checkinmessage)
+if ($uibarcode) {
+    $checkinitem = GetItem(undef,$uibarcode);
+    my $checkinmember = GetMember( borrowernumber => $loggedinuser);
+    if ($checkinitem) {
+       $biblio = GetBiblioData($checkinitem->{biblionumber});
+       if ($biblio) {
+           $checkinmessage = "Returned ".$biblio->{title};
+       }
+       if ($checkinmember) {
+          $checkinbranchcode = $checkinmember->{branchcode};
+
+          #home branch of item
+          if ($checkinbranchcode) {
+             my $tmpdbh = C4::Context->dbh;
+             my $tmpsth = $tmpdbh->prepare("select branchname from branches where branchcode = ? ");
+             $tmpsth->execute($checkinbranchcode);
+              while (my @row=$tmpsth->fetchrow_array()) {
+                  $checkinmessage.=", ".$row[0];    
+              }
+          }
+       }
+    }
+    else {
+        $checkinmessage = "Item not found"; 
+    }
+} 
+
 if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     my $dbh = C4::Context->dbh;
     my $resval;
     ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
-my $borrower = GetMember( cardnumber => $patronid );
+$borrower = GetMember( cardnumber => $patronid );
 
 my $currencySymbol = "";
 if ( my $active_currency = Koha::Acquisition::Currencies->get_active ) {
@@ -122,6 +172,7 @@ if ( my $active_currency = Koha::Acquisition::Currencies->get_active ) {
 }
 
 my $branch = $issuer->{branchcode};
+
 my $confirm_required = 0;
 my $return_only = 0;
 #warn "issuer cardnumber: " .   $issuer->{cardnumber};
@@ -129,14 +180,63 @@ my $return_only = 0;
 if ($op eq "logout") {
     $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
 }
-elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
-    my ($doreturn) = AddReturn( $barcode, $branch );
-    #warn "returnbook: " . $doreturn;
-    $borrower = GetMember( cardnumber => $patronid );
+
+#if returned
+elsif (($op eq "checkin") || ($op eq "returnbook" && $allowselfcheckreturns)) {
+    
+    $checkinitem = GetItem(undef,$uibarcode);
+    my $tobranch = $checkinitem->{'homebranch'};
+
+    $biblio = GetBiblioData($checkinitem->{biblionumber});
+    my ($doreturn,$messages,$issueinformation,$borrower) = AddReturn($uibarcode,$branch,undef,1,$today,$dropboxdate);
+    my $needstransfer = $messages->{'NeedsTransfer'};
+    my $settransit=0;
+    if($messages->{'ResFound'}) {
+        my $reserve = $messages->{'ResFound'};
+        my $reserve_id = $reserve->{'reserve_id'};
+        my $resborrower = $reserve->{'borrowernumber'};
+        my $diffBranchReturned = $reserve->{'branchcode'};
+        my $itemnumber = $checkinitem->{'itemnumber'};
+        my $diffBranchSend = ($branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
+        my $iteminfo   = GetBiblioFromItemNumber($itemnumber);
+
+        if($diffBranchSend) {
+            ModReserveAffect( $itemnumber, $resborrower, $diffBranchSend, $reserve_id);
+            ModItemTransfer($itemnumber,$branch,$diffBranchReturned);         
+        }
+        else {
+            $settransit = C4::Context->preference('RequireSCCheckInBeforeNotifyingPickups');
+            $settransit = 0 unless $settransit;
+
+            ModReserveAffect( $itemnumber, $resborrower, $settransit, $reserve_id);
+        }
+        $borrower = GetMember( cardnumber => $patronid );
+    }
+    else {
+         if($needstransfer) {
+             ModItemTransfer($checkinitem->{'itemnumber'}, $branch, $tobranch);
+         }
+    }
+
+    if($messages->{'WrongTransfer'}) {
+       updateWrongTransfer ($checkinitem->{'itemnumber'},$tobranch,$branch);
+    }
+    
+    if ($checkinmessage) {
+        $template->param(checkinmessage => $checkinmessage);
+    }
+    else {
+        $template->param(checkinmessage => undef);
+    }
+
+    #don't show returns long
+    $template->param(SelfCheckTimeout => 10000);
+    $template->param(uibarcode => $uibarcode); 
 }
 elsif ( $op eq "checkout" ) {
     my $impossible  = {};
     my $needconfirm = {};
+
     ( $impossible, $needconfirm ) = CanBookBeIssued(
         $borrower,
         $barcode,
@@ -249,6 +349,8 @@ elsif ( $op eq "checkout" ) {
         }
     }
 } # $op
+
+
 
 if ($borrower->{cardnumber}) {
 #   warn "issuer's  branchcode: " .   $issuer->{branchcode};
