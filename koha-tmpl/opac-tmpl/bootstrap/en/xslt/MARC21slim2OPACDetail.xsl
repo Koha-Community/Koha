@@ -940,6 +940,19 @@
         </span>
     </xsl:if>
 
+<!-- LOC classification -->
+    <xsl:if test="marc:datafield[@tag=050]">
+        <span class="results_summary loc">
+            <span class="label">LOC classification: </span>
+            <xsl:for-each select="marc:datafield[@tag=050]">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">ab</xsl:with-param>
+                    <xsl:with-param name="delimeter"><xsl:text> | </xsl:text></xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
+        </span>
+    </xsl:if>
+
 <!-- Other classification -->
     <xsl:if test="marc:datafield[@tag=084]">
        <span class="results_summary oc">
