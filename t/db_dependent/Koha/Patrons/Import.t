@@ -445,8 +445,8 @@ subtest 'test_import_with_password_overwrite' => sub {
     my $branchcode = $builder->build({ source => "Branch"})->{branchcode};
     my $categorycode = $builder->build({ source => "Category"})->{categorycode};
     my $csv_headers  = 'surname,userid,branchcode,categorycode,password';
-    my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest";
-    my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern";
+    my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest1";
+    my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern1";
     my $defaults = { cardnumber => "" }; #currently all the defaults come as "" if not filled
 
     #Make the test files for importing
