@@ -888,7 +888,7 @@ elsif ($phase eq 'Export'){
     my $reportname     = $input->param('reportname');
     my $reportfilename = $reportname ? "$reportname-reportresults.$format" : "reportresults.$format" ;
 
-    $sql = get_prepped_report( $sql, \@param_names, \@sql_params );
+    ($sql, undef) = get_prepped_report( $sql, \@param_names, \@sql_params );
 	my ($sth, $q_errors) = execute_query($sql);
     unless ($q_errors and @$q_errors) {
         my ( $type, $content );
