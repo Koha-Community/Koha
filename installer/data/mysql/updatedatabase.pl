@@ -19578,6 +19578,17 @@ if ( CheckVersion($DBversion) ) {
 "Upgrade to $DBversion done (Bug 20589 - Add field boosting and use elastic query fields parameter instead of depricated _all)\n";
 }
 
+$DBversion = '19.06.00.033';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(qq{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
+        ('OnSiteCheckoutAutoCheck','0','','Enable/Do not enable onsite checkout by default if last checkout was an onsite checkout','YesNo')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23686: Add OnSiteCheckoutAutoCheck system preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
