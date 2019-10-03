@@ -258,7 +258,7 @@ sub raw_elasticsearch_mappings {
 
     my $schema = Koha::Database->new()->schema();
 
-    my $search_fields = Koha::SearchFields->search();
+    my $search_fields = Koha::SearchFields->search({}, { order_by => { -asc => 'name' } });
 
     my $mappings = {};
     while ( my $search_field = $search_fields->next ) {
