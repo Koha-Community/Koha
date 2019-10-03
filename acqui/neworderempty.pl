@@ -110,8 +110,6 @@ my $from_subscriptionid  = $input->param('from_subscriptionid');
 my $data;
 my $new = 'no';
 
-my $budget_name;
-
 our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {
         template_name   => "acqui/neworderempty.tt",
