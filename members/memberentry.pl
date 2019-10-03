@@ -136,7 +136,7 @@ if ( $input->param('add_debarment') ) {
     AddDebarment(
         {
             borrowernumber => $borrowernumber,
-            type           => 'MANUAL',
+            type           => scalar $input->param('debarred_type') // 'MANUAL',
             comment        => scalar $input->param('debarred_comment'),
             expiration     => $expiration,
         }
@@ -221,7 +221,7 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^\d+-DAYS/,
         qr/^patron_attr_/,
         qr/^csrf_token$/,
-        qr/^add_debarment$/, qr/^debarred_comment$/,qr/^debarred_expiration$/, qr/^remove_debarment$/, # We already dealt with debarments previously
+        qr/^add_debarment$/, qr/^debarred_comment$/,qr/^debarred_expiration$/, qr/^debarred_type$/, qr/^remove_debarment$/, # We already dealt with debarments previously
         qr/^housebound_chooser$/, qr/^housebound_deliverer$/,
         qr/^select_city$/,
         qr/^new_guarantor_/,

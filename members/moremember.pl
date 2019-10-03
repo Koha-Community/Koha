@@ -82,7 +82,7 @@ for (qw(gonenoaddress lost borrowernotes is_debarred)) {
 
 $template->param(
     restriction_types => scalar Koha::RestrictionTypes->keyed_on_code()
-}
+);
 
 if ( $patron->is_debarred ) {
     $template->param(

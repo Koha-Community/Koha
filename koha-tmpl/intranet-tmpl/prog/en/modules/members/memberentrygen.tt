@@ -1397,6 +1397,16 @@ legend:hover {
                                                 <input type="hidden" id="add_debarment" name="add_debarment" value="0" />
                                                 <legend id="manual_restriction_lgd">Add manual restriction</legend>
                                                 <ol>
+                                                    [% IF Koha.Preference('PatronRestrictionTypes') %]
+                                                    <li>
+                                                        <label for="debarred_type">Type:</label>
+                                                        <select name="debarred_type">
+                                                            [% FOREACH code IN restriction_types.keys %]
+                                                                <option value="[% code | html %]">[% restriction_types.$code.display_text | html %]</option>
+                                                            [% END %]
+                                                        </select>
+                                                    </li>
+                                                    [% END %]
                                                     <li>
                                                         <label for="debarred_comment">Comment: </label>
                                                         <input type="text" id="debarred_comment" name="debarred_comment" />

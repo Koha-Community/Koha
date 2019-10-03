@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Koha %]
 <div id="reldebarments">
     [% IF ( not debarments.defined || debarments.size < 1 ) %]
         <p>Patron is currently unrestricted.</p>
@@ -51,6 +52,16 @@
             <fieldset class="rows" id="manual_restriction_form">
                 <legend>Add manual restriction</legend>
                 <ol>
+                    [% IF Koha.Preference('PatronRestrictionTypes') %]
+                    <li>
+                        <label for="debarred_type">Type:</label>
+                        <select name="debarred_type">
+                            [% FOREACH code IN restriction_types.keys %]
+                                <option value="[% code | html %]">[% restriction_types.$code.display_text | html %]</option>
+                            [% END %]
+                        </select>
+                    </li>
+                    [% END %]
                     <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
                     <li>
                         <label for="rexpiration">Expiration:</label>
