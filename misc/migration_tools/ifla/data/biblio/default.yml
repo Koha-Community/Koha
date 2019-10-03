@@ -1,4 +1,13 @@
 subfields:
+  - liblibrarian: Persistent Record Identifier
+    repeatable: 0
+    tab: 0
+    tagfield: 033
+    tagsubfield: a
+  - liblibrarian: Cancelled or Invalid Persistent Record Identifier
+    tab: 0
+    tagfield: 033
+    tagsubfield: z
   - authorised_value: unimarc_146a
     liblibrarian: Type of Performance Medium
     repeatable: 0
@@ -77,6 +86,23 @@ subfields:
     tab: 1
     tagfield: 182
     tagsubfield: c
+  - liblibrarian: Type of Carrier Code
+    tab: 1
+    tagfield: 183
+    tagsubfield: a
+  - liblibrarian: System code
+    repeatable: 0
+    tab: 1
+    tagfield: 183
+    tagsubfield: 2
+  - liblibrarian: Interfield Linking Data
+    tab: 1
+    tagfield: 183
+    tagsubfield: 6
+  - liblibrarian: Materials specified
+    tab: 1
+    tagfield: 183
+    tagsubfield: 8
   - liblibrarian: Inclusive Dates
     repeatable: 0
     tab: 2
@@ -92,6 +118,19 @@ subfields:
     tab: 2
     tagfield: 200
     tagsubfield: r
+  - liblibrarian: Content form
+    tab: 2
+    tagfield: 203
+    tagsubfield: a
+  - liblibrarian: Content qualification
+    tab: 2
+    tagfield: 203
+    tagsubfield: b
+  - liblibrarian: Media type
+    repeatable: 0
+    tab: 2
+    tagfield: 203
+    tagsubfield: c
   - liblibrarian: Printing and/or Publishing Information Transcribed as Found in the Main Source of Information
     repeatable: 0
     tab: 2
@@ -134,6 +173,46 @@ subfields:
     tab: 2
     tagfield: 215
     tagsubfield: b
+  - liblibrarian: File type
+    tab: 2
+    tagfield: 231
+    tagsubfield: a
+  - liblibrarian: Encoding standard
+    tab: 2
+    tagfield: 231
+    tagsubfield: b
+  - liblibrarian: Version of encoding standard
+    tab: 2
+    tagfield: 231
+    tagsubfield: c
+  - liblibrarian: Details of encoding standard
+    tab: 2
+    tagfield: 231
+    tagsubfield: d
+  - liblibrarian: File size
+    tab: 2
+    tagfield: 231
+    tagsubfield: e
+  - liblibrarian: Resolution
+    tab: 2
+    tagfield: 231
+    tagsubfield: f
+  - liblibrarian: Regional encoding
+    tab: 2
+    tagfield: 231
+    tagsubfield: g
+  - liblibrarian: Encoded bitrate
+    tab: 2
+    tagfield: 231
+    tagsubfield: h
+  - liblibrarian: Source
+    tab: 2
+    tagfield: 231
+    tagsubfield: 2
+  - liblibrarian: Interfield linking data
+    tab: 2
+    tagfield: 231
+    tagsubfield: 6
   - liblibrarian: Organization
     tab: 2
     tagfield: 251
@@ -147,6 +226,22 @@ subfields:
     tab: 2
     tagfield: 251
     tagsubfield: c
+  - liblibrarian: Carrier Type Designation
+    tab: 2
+    tagfield: 283
+    tagsubfield: a
+  - liblibrarian: System code
+    tab: 2
+    tagfield: 283
+    tagsubfield: 2
+  - liblibrarian: Interfield Linking Data
+    tab: 2
+    tagfield: 283
+    tagsubfield: 6
+  - liblibrarian: Materials specified
+    tab: 2
+    tagfield: 283
+    tagsubfield: 8
   - liblibrarian: Interfield Linking Data
     repeatable: 0
     tab: 3
@@ -255,6 +350,38 @@ subfields:
     tab: 3
     tagfield: 335
     tagsubfield: u
+  - liblibrarian: Text of Unstructured Note
+    repeatable: 0
+    tab: 3
+    tagfield: 338
+    tagsubfield: a
+  - liblibrarian: Funding Organization
+    tab: 3
+    tagfield: 338
+    tagsubfield: b
+  - liblibrarian: Program
+    tab: 3
+    tagfield: 338
+    tagsubfield: c
+  - liblibrarian: Project Number
+    repeatable: 0
+    tab: 3
+    tagfield: 338
+    tagsubfield: d
+  - liblibrarian: Jurisdiction
+    tab: 3
+    tagfield: 338
+    tagsubfield: e
+  - liblibrarian: Project Name
+    repeatable: 0
+    tab: 3
+    tagfield: 338
+    tagsubfield: f
+  - liblibrarian: Project Acronym
+    repeatable: 0
+    tab: 3
+    tagfield: 338
+    tagsubfield: g
   - liblibrarian: Terms governing use and reproduction
     repeatable: 0
     tab: 3
@@ -1969,18 +2096,32 @@ subfields:
     tagfield: 723
     tagsubfield: o
 tags:
+  - liblibrarian: '[Reserved for other International Standard Numbers]'
+    tagfield: 018
+  - liblibrarian: 'Other system persistent record identifier'
+    tagfield: 033
   - liblibrarian: 'Coded Data Field: Medium of Performance'
     tagfield: 146
   - liblibrarian: 'Coded Data Field: content form'
     tagfield: 181
   - liblibrarian: 'Coded Data Field: media type'
     tagfield: 182
+  - liblibrarian: 'Coded Data Field: Type of Carrier'
+    tagfield: 183
+  - liblibrarian: 'Coded Data Field: Content Form'
+    tagfield: 203
   - liblibrarian: Production, Publication, Distribution, Manufacture statements
     tagfield: 214
+  - liblibrarian: Digital File Characteristics
+    tagfield: 231
   - liblibrarian: Organization and Arrangement of Materials
     tagfield: 251
+  - liblibrarian: Carrier Type
+    tagfield: 283
   - liblibrarian: Location of Originals/ Reproductions
     tagfield: 335
+  - liblibrarian: Funding Information Note
+    tagfield: 338
   - liblibrarian: Notes on Information Service Policy
     libopac: Note
     tagfield: 371
