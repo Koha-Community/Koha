@@ -182,7 +182,7 @@ sub BuildReport {
         TransferWhenCancelAllWaitingHolds
         AllowAllMessageDeletion
         AllowOfflineCirculation
-        CircAutocompl
+        PatronAutocompletion
         CircAutoPrintQuickSlip
         DisplayClearScreenButton
         FilterBeforeOverdueReport

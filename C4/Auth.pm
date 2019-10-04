@@ -480,7 +480,7 @@ sub get_template_and_user {
             AmazonCoverImages                                                          => C4::Context->preference("AmazonCoverImages"),
             AutoLocation                                                               => C4::Context->preference("AutoLocation"),
             "BiblioDefaultView" . C4::Context->preference("IntranetBiblioDefaultView") => 1,
-            CircAutocompl                                                              => C4::Context->preference("CircAutocompl"),
+            PatronAutocompletion                                                       => C4::Context->preference("PatronAutocompletion"),
             FRBRizeEditions                                                            => C4::Context->preference("FRBRizeEditions"),
             IndependentBranches                                                        => C4::Context->preference("IndependentBranches"),
             IntranetNav                                                                => C4::Context->preference("IntranetNav"),

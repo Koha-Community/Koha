@@ -1224,7 +1224,7 @@
             });
 
             [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems ) %]
-                [% IF ( CircAutocompl ) %]
+                [% IF ( PatronAutocompletion ) %]
                 $( "#patron" ).autocomplete({
                     source: "/cgi-bin/koha/circ/ysearch.pl",
                     minLength: 3,
