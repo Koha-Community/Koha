@@ -46,4 +46,5 @@
     var CURRENT = _(" (current) ");
     var MSG_NO_ITEMTYPE = _("No itemtype");
     var MSG_CHECKOUTS_BY_ITEMTYPE = _("Number of checkouts by item type");
+    var PATRON_NOTE = _("Patron note");
 </script>

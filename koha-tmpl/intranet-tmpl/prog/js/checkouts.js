@@ -1,3 +1,5 @@
+/* global PATRON_NOTE */
+
 $(document).ready(function() {
     $.ajaxSetup ({ cache: false });
 
@@ -117,7 +119,7 @@ $(document).ready(function() {
                     $(id).parent().parent().addClass('ok');
                     $('#date_due_' + data.itemnumber).html(CIRCULATION_RETURNED);
                     if ( data.patronnote != null ) {
-                        $('.patron_note_' + data.itemnumber).html("Patron note: " + data.patronnote);
+                        $('.patron_note_' + data.itemnumber).html( PATRON_NOTE + ": " + data.patronnote);
                     }
                 } else {
                     content = CIRCULATION_NOT_RETURNED;
