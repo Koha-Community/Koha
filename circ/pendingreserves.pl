@@ -214,7 +214,7 @@ my $strsth =
         LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
         LEFT JOIN issues ON items.itemnumber=issues.itemnumber
         LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
-        LEFT JOIN circulation_rules ON items.itype=circulation_rules.itemtype AND rule_name = 'holdallowed' AND circulation_rules.branchcode IS NULL AND circulation_rules.categorycode IS NULL
+        LEFT JOIN circulation_rules ON ( items.itype=circulation_rules.itemtype AND rule_name = 'holdallowed' AND circulation_rules.branchcode IS NULL AND circulation_rules.categorycode IS NULL )
     WHERE
     reserves.found IS NULL
     $sqldatewhere
