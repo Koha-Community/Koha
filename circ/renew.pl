@@ -95,7 +95,11 @@ if ($barcode) {
                 }
                 if ($can_renew) {
                     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-                    my $date_due = AddRenewal( undef, $item->itemnumber(), $branchcode, dt_from_string( scalar $cgi->param('renewonholdduedate')) );
+                    my $date_due;
+                    if ( $cgi->param('renewonholdduedate') ) {
+                        $date_due = dt_from_string( scalar $cgi->param('renewonholdduedate'));
+                    }
+                    $date_due = AddRenewal( undef, $item->itemnumber(), $branchcode, $date_due );
                     $template->param( date_due => $date_due );
                 }
             }
