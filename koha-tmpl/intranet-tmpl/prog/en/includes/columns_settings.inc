@@ -69,7 +69,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
                 dt.search( "" ).draw("page");
                 node.addClass("disabled");
             }
-        },
+        }
     ];
 
     if( included_ids.length > 0 ){
@@ -83,8 +83,8 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
                 text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
                 exportOptions: {
                     columns: exportColumns
-                },
-            },
+                }
+            }
         );
     }
 
