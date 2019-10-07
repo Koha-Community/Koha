@@ -92,6 +92,7 @@ SKIP: {
         $driver->find_element('//div[@id="userdetails"]');
         like( $driver->get_title, qr(Your library home), 'Patron without permissions should be able to login to the OPAC using the modal');
 
+        $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
         $driver->find_element('//div[@id="login"]'); # logged out
 
@@ -101,6 +102,7 @@ SKIP: {
         $driver->find_element('//div[@id="userdetails"]');
         like( $driver->get_title, qr(Your library home), 'Patron without permissions should be able to login to the OPAC using the form on the right');
 
+        $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
         $driver->find_element('//div[@id="login"]'); # logged out
 
@@ -111,6 +113,7 @@ SKIP: {
         $driver->find_element('//div[@id="userdetails"]');
         like( $driver->get_title, qr(Your library home), 'Patron with catalogue permission should be able to login to the OPAC');
 
+        $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
         $driver->find_element('//div[@id="login"]'); # logged out
 
@@ -120,6 +123,7 @@ SKIP: {
         $driver->find_element('//div[@id="userdetails"]');
         like( $driver->get_title, qr(Your library home), 'Patron with superlibrarian permission should be able to login to the OPAC');
 
+        $driver->find_element('//a[@id="user-menu"]')->click;
         $driver->find_element('//a[@id="logout"]')->click;
         $driver->find_element('//div[@id="login"]'); # logged out
 
