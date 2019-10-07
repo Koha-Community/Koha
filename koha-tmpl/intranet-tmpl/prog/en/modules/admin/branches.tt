@@ -262,7 +262,8 @@
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/tiny_mce/tiny_mce.js") | $raw %]
+    [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
+    [% INCLUDE 'str/tinymce_i18n.inc' %]
     <script>
         var columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'libraries', 'libraries', 'json' ) | $raw %];
         $(document).ready(function() {
@@ -286,20 +287,17 @@
                 });
             [% END %]
         });
-        tinyMCE.baseURL = "[% interface | html %]/lib/tiny_mce";
+
         tinyMCE.init({
-            mode : "textareas",
-            theme : "advanced",
+            branding : false,
             content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
-            plugins : "table,save,advhr,advlink,contextmenu",
-            theme_advanced_buttons1 : "save,|,bold,italic,|,cut,copy,paste,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,link,unlink,anchor,cleanup,help,code,advhr,",
-            theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap",
-            // theme_advanced_buttons3 : "",
-            theme_advanced_toolbar_location : "top",
-            theme_advanced_toolbar_align : "left",
-            theme_advanced_path_location : "bottom",
-            theme_advanced_resizing : true,
-            apply_source_formatting : true
+            menubar : "file edit view insert format tools table",
+            mode : "specific_textareas",
+            plugins : "autoresize table hr link image charmap lists code emoticons",
+            toolbar : [
+                "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
+                "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
+            ],
         });
     </script>
 [% END %]

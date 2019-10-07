@@ -1,60 +1,34 @@
 [% USE raw %]
 [% USE Asset %]
 [% #Enable tinymce for system preferences %]
-[% Asset.js("lib/tiny_mce/tiny_mce.js") | $raw %]
+[% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
+[% INCLUDE 'str/tinymce_i18n.inc' %]
+
 <script>
+    // Save TinyMCE content and trigger an event on the original element
+    function wysiwyg_change (ed){
+        ed.save();
+        var original_textarea = ed.getElement();
+        $(original_textarea).trigger("input");
+    }
 
-[%# Save TinyMCE content and trigger an event on the original element %]
-function wysiwyg_change (ed){
-    ed.save();
-    var original_textarea = ed.getElement();
-    $(original_textarea).trigger("input");
-}
-
-tinyMCE.baseURL = "[% interface | html %]/lib/tiny_mce";
-tinyMCE.init({
-    setup : function(ed) {
-        ed.onInit.add(function(editor){
-            [%-
-            #Ideally, it would be nice just to use the "oninput" event, which captures keyboard input, dragging, pasting, etc.
-            #However, it doesn't work in IE when the event listener is for an element which is "contenteditable". Since TinyMCE
-            #uses a "contenteditable" body element in an iframe element, it's never going to fire in IE.
-
-            #We can get around this a bit by using "onkeyup" and "ondragend".
-
-            #"ondragend" occurs after you drag content within the editor. "ondrop" is for when you drag content from outside the
-            #editor but it doesn't "dirty" the editor, which makes it useless, as the editor won't save unless it's dirty.
-            #"onpaste" is useless in this same way.
-
-            #Reference:
-            #https://developer.mozilla.org/en-US/docs/Web/Events/input
-            #https://connect.microsoft.com/IE/feedbackdetail/view/794285
-            -%]
-
-            tinyMCE.dom.Event.bind(editor.getBody(), 'input keyup dragend', function(e){
-                wysiwyg_change(ed);
+    tinyMCE.init({
+        branding : false,
+        content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
+        editor_selector : "mce",
+        menubar : "file edit view insert format tools table",
+        mode : "specific_textareas",
+        plugins : "autoresize table hr link image charmap lists code emoticons",
+        toolbar : [
+            "formatselect | bold italic | cut copy paste | alignleft aligncenter alignright | outdent indent | image link unlink anchor cleanup hr",
+            "table | bullist numlist | undo redo | removeformat | emoticons charmap | forecolor backcolor | code visualaid help"
+        ],
+        init_instance_callback: function (editor) {
+            editor.on('Dirty', function (e) {
+                // When a change has been made to the contents of an editor,
+                // enable the corresponding preference Save button
+                wysiwyg_change( editor );
             });
-        });
-
-        // Register change when TinyMCE command returns isDirty()
-        ed.onExecCommand.add(function(ed, cmd, ui, val) {
-            wysiwyg_change(ed);
-        });
-
-    },
-    mode : "specific_textareas",
-    editor_selector : "mce",
-    theme : "advanced",
-    content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
-    plugins : "table,save,advhr,advlink,contextmenu,advimage",
-    theme_advanced_buttons1 : "bold,italic,|,cut,copy,paste,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,|,image,link,unlink,anchor,cleanup,help,code,advhr,",
-    theme_advanced_buttons2 : "tablecontrols,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,removeformat,|,visualaid,|,sub,sup,|,charmap|,forecolor,backcolor",
-    theme_advanced_buttons3 : "",
-    theme_advanced_toolbar_location : "top",
-    theme_advanced_toolbar_align : "left",
-    theme_advanced_path_location : "bottom",
-    theme_advanced_resizing : true,
-    apply_source_formatting : true
-});
-//]]>
+        }
+    });
 </script>
