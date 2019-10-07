@@ -19599,6 +19599,26 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23007: Make transfer modals optionally block circ)\n";
 }
 
+$DBversion = '19.06.00.035';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
+        ( 'IntranetCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the staff client', 'YesNo')
+    });
+
+    $dbh->do(qq{
+        UPDATE systempreferences SET 
+          variable = 'OpacCoce', 
+          explanation = 'If on, enables cover retrieval from the configured Coce server in the OPAC'
+        WHERE 
+          variable = 'Coce'
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18421: Add Coce image cache to the Intranet)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
