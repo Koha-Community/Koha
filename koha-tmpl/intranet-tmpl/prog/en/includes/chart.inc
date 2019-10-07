@@ -36,7 +36,7 @@
                         [% IF allresults.size %]
                             <li>
                                 <label for="include-all">Include all rows (ignore pagination):</label>
-                                <input id="include-all" name="chart-include-all" type="checkbox" />
+                                <input id="include-all" name="chart-include-all" type="checkbox" checked="checked"/>
                             </li>
                         [% ELSE %]
                             <li>
