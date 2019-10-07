@@ -897,7 +897,7 @@ sub GetVariationsOfISBN {
 
     my @isbns;
 
-    push( @isbns, NormalizeISBN({ isbn => $isbn }) );
+    push( @isbns, NormalizeISBN({ isbn => $isbn, return_invalid => 1 }) );
     push( @isbns, NormalizeISBN({ isbn => $isbn, format => 'ISBN-10' }) );
     push( @isbns, NormalizeISBN({ isbn => $isbn, format => 'ISBN-13' }) );
     push( @isbns, NormalizeISBN({ isbn => $isbn, format => 'ISBN-10', strip_hyphens => 1 }) );
