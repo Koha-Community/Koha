@@ -19589,6 +19589,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23686: Add OnSiteCheckoutAutoCheck system preference)\n";
 }
 
+$DBversion = '19.06.00.034';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('TransfersBlockCirc','1',NULL,'Should the transfer modal block circulation staff from continuing scanning items','YesNo')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23007: Make transfer modals optionally block circ)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
