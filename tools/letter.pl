@@ -290,10 +290,10 @@ sub add_validate {
     my @content       = $input->multi_param('content');
     my @lang          = $input->multi_param('lang');
     for my $mtt ( @mtt ) {
-        my $is_html = $input->param("is_html_$mtt");
+        my $lang = shift @lang;
+        my $is_html = $input->param("is_html_$mtt\_$lang");
         my $title   = shift @title;
         my $content = shift @content;
-        my $lang = shift @lang;
         my $letter = C4::Letters::getletter( $oldmodule, $code, $branchcode, $mtt, $lang );
 
         # getletter can return the default letter even if we pass a branchcode
