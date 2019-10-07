@@ -81,7 +81,7 @@
 [% END %]
 
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
-    [% IF ( PatronAutocompletion ) %]
+    [% IF ( PatronAutoComplete ) %]
         <script>
             $(document).ready(function(){
                 var obj = $( "#findborrower" ).autocomplete({
@@ -109,7 +109,7 @@
         </script>
     [% END %]
 [% END %]
-[% IF ( PatronAutocompletion ) %]
+[% IF ( PatronAutoComplete ) %]
     <script>
     $(document).ready(function(){
         var obj = $( "#searchmember" ).autocomplete({

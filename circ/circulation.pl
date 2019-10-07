@@ -636,7 +636,7 @@ my $has_modifications = Koha::Patron::Modifications->search( { borrowernumber =>
 $template->param(
     debt_confirmed            => $debt_confirmed,
     SpecifyDueDate            => $duedatespec_allow,
-    PatronAutocompletion      => C4::Context->preference("PatronAutocompletion"),
+    PatronAutoComplete      => C4::Context->preference("PatronAutoComplete"),
     debarments                => scalar GetDebarments({ borrowernumber => $borrowernumber }),
     todaysdate                => output_pref( { dt => dt_from_string()->set(hour => 23)->set(minute => 59), dateformat => 'sql' } ),
     has_modifications         => $has_modifications,

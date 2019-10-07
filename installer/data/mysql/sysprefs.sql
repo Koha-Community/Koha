@@ -463,7 +463,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OverduesBlockCirc','noblock','noblock|confirmation|block','When checking out an item should overdues block checkout, generate a confirmation dialogue, or allow checkout','Choice'),
 ('OverduesBlockRenewing','allow','allow|blockitem|block','If any of patron checked out documents is late, should renewal be allowed, blocked only on overdue items or blocked on whatever checked out document','Choice'),
 ('PatronAnonymizeDelay','',NULL,'Delay for anonymizing patrons', 'Integer'),
-('PatronAutocompletion','1','Try|Don\'t try','to guess the patron being entered while typing a patron search for circulation or patron search. Only returns the first 10 results at a time.','YesNo'),
+('PatronAutoComplete','1','Try|Don\'t try','to guess the patron being entered while typing a patron search for circulation or patron search. Only returns the first 10 results at a time.','YesNo'),
 ('patronimages','0',NULL,'Enable patron images for the Staff Client','YesNo'),
 ('PatronRemovalDelay','',NULL,'Delay for removing anonymized patrons', 'Integer'),
 ('PatronSelfModificationBorrowerUnwantedField','',NULL,'Name the fields you don\'t want to display when a patron is editing their information via the OPAC.','free'),

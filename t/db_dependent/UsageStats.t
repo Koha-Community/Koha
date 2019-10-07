@@ -435,7 +435,7 @@ sub mocking_systempreferences_to_a_set_value {
         TransferWhenCancelAllWaitingHolds
         AllowAllMessageDeletion
         AllowOfflineCirculation
-        PatronAutocompletion
+        PatronAutoComplete
         CircAutoPrintQuickSlip
         DisplayClearScreenButton
         FilterBeforeOverdueReport

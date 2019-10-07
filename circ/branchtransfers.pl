@@ -241,7 +241,7 @@ $template->param(
     setwaiting              => $setwaiting,
     trsfitemloop            => \@trsfitemloop,
     errmsgloop              => \@errmsgloop,
-    PatronAutocompletion    => C4::Context->preference("PatronAutocompletion"),
+    PatronAutoComplete    => C4::Context->preference("PatronAutoComplete"),
 );
 
 # Checking if there is a Fast Cataloging Framework

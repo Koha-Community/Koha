@@ -70,7 +70,7 @@ $template->param(
 
 $template->param(
     alphabet => C4::Context->preference('alphabet') || join (' ', 'A' .. 'Z'),
-    PatronAutocompletion => C4::Context->preference('PatronAutocompletion'),
+    PatronAutoComplete => C4::Context->preference('PatronAutoComplete'),
     patron_lists => [ GetPatronLists() ],
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
 );
