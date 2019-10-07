@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 1;
 use Test::Exception;
 
 use t::lib::Mocks;

@@ -598,66 +598,20 @@ for (my $i=0;$i<@servers;$i++) {
                     $line->{'incart'} = 1;
                 }
             }
-            $template->param(SEARCH_RESULTS => \@newresults);
-            ## FIXME: add a global function for this, it's better than the current global one
-            ## Build the page numbers on the bottom of the page
-            my @page_numbers;
-            my $max_result_window = $searcher->max_result_window;
-            my $hits_to_paginate = ($max_result_window && $max_result_window < $hits) ? $max_result_window : $hits;
-            $template->param( hits_to_paginate => $hits_to_paginate );
-            # total number of pages there will be
-            my $pages = ceil($hits_to_paginate / $results_per_page);
-            my $last_page_offset = ( $pages -1 ) * $results_per_page;
-            # default page number
-            my $current_page_number = 1;
-            $current_page_number = ($offset / $results_per_page + 1) if $offset;
-            my $previous_page_offset;
-            if ( $offset >= $results_per_page ) {
-                $previous_page_offset = $offset - $results_per_page;
-            }
-            my $next_page_offset = $offset + $results_per_page;
-            # If we're within the first 10 pages, keep it simple
-            #warn "current page:".$current_page_number;
-            if ($current_page_number < 10) {
-                # just show the first 10 pages
-                # Loop through the pages
-                my $pages_to_show = 10;
-                $pages_to_show = $pages if $pages<10;
-                for (my $i=1; $i<=$pages_to_show;$i++) {
-                    # the offset for this page
-                    my $this_offset = (($i*$results_per_page)-$results_per_page);
-                    # the page number for this page
-                    my $this_page_number = $i;
-                    # put it in the array
-                    push @page_numbers,
-                      { offset    => $this_offset,
-                        pg        => $this_page_number,
-                        # it should only be highlighted if it's the current page
-                        highlight => $this_page_number == $current_page_number,
-                        sort_by   => join ' ', @sort_by
-                      };
-                                
-                }
-                        
-            }
-
-            # now, show twenty pages, with the current one smack in the middle
-            else {
-                for (my $i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
-                    my $this_offset = ((($i-9)*$results_per_page)-$results_per_page);
-                    my $this_page_number = $i-9;
-                    if ( $this_page_number <= $pages ) {
-                        push @page_numbers,
-                          { offset    => $this_offset,
-                            pg        => $this_page_number,
-                            highlight => $this_page_number == $current_page_number,
-                            sort_by   => join ' ', @sort_by
-                          };
+            my( $page_numbers, $hits_to_paginate, $pages, $current_page_number, $previous_page_offset, $next_page_offset, $last_page_offset ) =
+                Koha::SearchEngine::Search->pagination_bar(
+                    {
+                        hits              => $hits,
+                        max_result_window => $searcher->max_result_window,
+                        results_per_page  => $results_per_page,
+                        offset            => $offset,
+                        sort_by           => \@sort_by
                     }
-                }
-            }
+                );
+            $template->param( hits_to_paginate => $hits_to_paginate );
+            $template->param(SEARCH_RESULTS => \@newresults);
             # FIXME: no previous_page_offset when pages < 2
-            $template->param(   PAGE_NUMBERS => \@page_numbers,
+            $template->param(   PAGE_NUMBERS => $page_numbers,
                                 last_page_offset => $last_page_offset,
                                 previous_page_offset => $previous_page_offset) unless $pages < 2;
             $template->param(   next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
