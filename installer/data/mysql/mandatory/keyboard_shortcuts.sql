@@ -32,4 +32,8 @@ INSERT INTO keyboard_shortcuts (shortcut_name, shortcut_keys) VALUES
     ("line_break","Shift-Enter"),
     ("next_position","Tab"),
     ("prev_position","Shift-Tab"),
-    ("toggle_keyboard", "Shift-Ctrl-K");
+    ("toggle_keyboard", "Shift-Ctrl-K"),
+    ("copy_line","Ctrl-C"),
+    ("copy_subfield","Shift-Ctrl-C"),
+    ("paste_line","Ctrl-P"),
+    ("insert_line","Ctrl-I");
