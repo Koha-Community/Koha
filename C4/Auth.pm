@@ -1781,8 +1781,11 @@ sub checkpw {
     my $shib_login = $shib ? get_login_shib() : undef;
 
     my @return;
-    my $patron = Koha::Patrons->find({ userid => $userid });
-    $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
+    my $patron;
+    if ( defined $userid ){
+        $patron = Koha::Patrons->find({ userid => $userid });
+        $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
+    }
     my $check_internal_as_fallback = 0;
     my $passwd_ok = 0;
     # Note: checkpw_* routines returns:
