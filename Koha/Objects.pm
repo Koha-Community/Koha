@@ -308,6 +308,18 @@ sub TO_JSON {
     return [ map { $_->TO_JSON } $self->as_list ];
 }
 
+=head3 Koha::Objects->to_api
+
+Returns a representation of the objects, suitable for API output .
+
+=cut
+
+sub to_api {
+    my ($self) = @_;
+
+    return [ map { $_->to_api } $self->as_list ];
+}
+
 =head3 Koha::Objects->_wrap
 
 wraps the DBIC object in a corresponding Koha object

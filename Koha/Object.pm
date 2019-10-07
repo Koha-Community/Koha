@@ -356,6 +356,40 @@ sub _numeric_column_type {
     return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
 }
 
+=head3 to_api
+
+    my $object_for_api = $object->to_api;
+
+Returns a representation of the object, suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self ) = @_;
+    my $json_object = $self->TO_JSON;
+
+    # Rename attributes if there's a mapping
+    if ( $self->can('to_api_mapping') ) {
+        foreach my $column ( keys %{$self->to_api_mapping} ) {
+            my $mapped_column = $self->to_api_mapping->{$column};
+            if ( exists $json_object->{$column}
+                && defined $mapped_column )
+            {
+                # key != undef
+                $json_object->{$mapped_column} = delete $json_object->{$column};
+            }
+            elsif ( exists $json_object->{$column}
+                && !defined $mapped_column )
+            {
+                # key == undef
+                delete $json_object->{$column};
+            }
+        }
+    }
+
+    return $json_object;
+}
+
 =head3 $object->unblessed_all_relateds
 
 my $everything_into_one_hashref = $object->unblessed_all_relateds
