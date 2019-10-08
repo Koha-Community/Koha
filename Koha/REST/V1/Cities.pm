@@ -65,7 +65,7 @@ sub get {
                            openapi => { error => "City not found" } );
     }
 
-    return $c->render( status => 200, openapi => _to_api($city->TO_JSON) );
+    return $c->render( status => 200, openapi => $city->to_api );
 }
 
 =head3 add
@@ -78,7 +78,7 @@ sub add {
     return try {
         my $city = Koha::City->new( _to_model( $c->validation->param('body') ) );
         $city->store;
-        return $c->render( status => 200, openapi => _to_api($city->TO_JSON) );
+        return $c->render( status => 200, openapi => $city->to_api );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
@@ -114,7 +114,7 @@ sub update {
         my $params = $c->req->json;
         $city->set( _to_model($params) );
         $city->store();
-        return $c->render( status => 200, openapi => _to_api($city->TO_JSON) );
+        return $c->render( status => 200, openapi => $city->to_api );
     }
     catch {
         if ( $_->isa('Koha::Exceptions::Object') ) {
