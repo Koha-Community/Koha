@@ -352,7 +352,7 @@
                         <th scope="col" class="title-string">Start date</th>
                         <th scope="col" class="title-string">End date</th>
                         [% IF CAN_user_acquisition_contracts_manage %]
-                            <th scope="col">Actions</th>
+                            <th scope="col" class="NoSort">Actions</th>
                         [% END %]
                     </tr>
                   </thead>
@@ -430,11 +430,7 @@
          $(document).ready(function() {
             var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
-                    [% IF CAN_user_acquisition_contracts_manage %]
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    [% ELSE %]
-                    { "bSortable": false, "bSearchable": false },
-                    [% END %]
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
                 'sDom': 't'
