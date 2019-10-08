@@ -29,11 +29,28 @@ Koha::City - Koha City Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::City object
+on the API.
 
 =cut
 
-=head3 type
+sub to_api_mapping {
+    return {
+        cityid       => 'city_id',
+        city_country => 'country',
+        city_name    => 'name',
+        city_state   => 'state',
+        city_zipcode => 'postal_code'
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
