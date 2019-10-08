@@ -320,7 +320,7 @@
 
 [% IF show_guarantor || guarantor %]
     [% SET possible_relationships = Koha.Preference('borrowerRelationship') %]
-    <fieldset class="rows">
+    <fieldset id="memberentry_guarantor" class="rows">
         <legend>Guarantor information</legend>
 
         <span id="guarantor_relationships">
