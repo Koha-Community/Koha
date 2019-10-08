@@ -19619,6 +19619,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18421: Add Coce image cache to the Intranet)\n";
 }
 
+$DBversion = '19.06.00.036';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type`) VALUES  
+        ('QueryRegexEscapeOptions', 'escape', 'dont_escape|escape|unescape_escaped', 'Escape option for regexps delimiters in Elasicsearch queries.', 'Choice')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20334: Add elasticsearch escape options preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';

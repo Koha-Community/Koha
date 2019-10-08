@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type`) VALUES  ('QueryRegexEscapeOptions', 'escape', 'dont_escape|escape|unescape_escaped', 'Escape option for regexps delimiters in Elasicsearch queries.', 'Choice');
