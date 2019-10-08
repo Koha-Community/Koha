@@ -10,7 +10,7 @@ $(document).ready(function() {
     function load_holds_table() {
         var holds = new Array();
         if ( ! holdsTable ) {
-            holdsTable = $("#holds-table").dataTable({
+            holdsTable = $("#holds-table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "bAutoWidth": false,
                 "sDom": "rt",
                 "columns": [
@@ -170,7 +170,7 @@ $(document).ready(function() {
                         d.borrowernumber = borrowernumber;
                     }
                 },
-            });
+            }));
 
             $('#holds-table').on( 'draw.dt', function () {
                 $(".hold-suspend").on( "click", function() {
