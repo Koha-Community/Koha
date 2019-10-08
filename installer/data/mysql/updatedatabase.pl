@@ -19642,6 +19642,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21701 - PayPal return URL option)\n";
 }
 
+$DBversion = '19.06.00.038';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET variable='PatronAutoComplete' WHERE variable='CircAutocompl' LIMIT 1" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23697 - Rename CircAutocompl system preference to PatronAutoComplete)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
