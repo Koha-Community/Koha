@@ -623,7 +623,7 @@ $(document).ready(function() {
     var relativesIssuesTable;
     $("#relatives-issues-tab").click( function() {
         if ( ! relativesIssuesTable ) {
-            relativesIssuesTable = $("#relatives-issues-table").dataTable({
+            relativesIssuesTable = $("#relatives-issues-table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "bAutoWidth": false,
                 "sDom": "rt",
                 "aaSorting": [],
@@ -776,7 +776,7 @@ $(document).ready(function() {
                         fnCallback(json)
                     } );
                 },
-            });
+            }));
         }
     });
 
