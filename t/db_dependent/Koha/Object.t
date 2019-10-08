@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -209,6 +209,58 @@ subtest 'TO_JSON tests' => sub {
         /xms;
     like( $updated_on, $rfc3999_regex, "Date-time $updated_on formatted correctly");
     like( $lastseen, $rfc3999_regex, "Date-time $updated_on formatted correctly");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "to_api() tests" => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $city = $builder->build_object({ class => 'Koha::Cities' });
+
+    # THE mapping
+    # cityid       => 'city_id',
+    # city_country => 'country',
+    # city_name    => 'name',
+    # city_state   => 'state',
+    # city_zipcode => 'postal_code'
+
+    my $api_city = $city->to_api;
+
+    is( $api_city->{city_id},     $city->cityid,       'Attribute translated correctly' );
+    is( $api_city->{country},     $city->city_country, 'Attribute translated correctly' );
+    is( $api_city->{name},        $city->city_name,    'Attribute translated correctly' );
+    is( $api_city->{state},       $city->city_state,   'Attribute translated correctly' );
+    is( $api_city->{postal_code}, $city->city_zipcode, 'Attribute translated correctly' );
+
+    # Lets emulate an undef
+    my $city_class = Test::MockModule->new('Koha::City');
+    $city_class->mock( 'to_api_mapping',
+        sub {
+            return {
+                cityid       => 'city_id',
+                city_country => 'country',
+                city_name    => 'name',
+                city_state   => 'state',
+                city_zipcode => undef
+            };
+        }
+    );
+
+    $api_city = $city->to_api;
+
+    is( $api_city->{city_id},     $city->cityid,       'Attribute translated correctly' );
+    is( $api_city->{country},     $city->city_country, 'Attribute translated correctly' );
+    is( $api_city->{name},        $city->city_name,    'Attribute translated correctly' );
+    is( $api_city->{state},       $city->city_state,   'Attribute translated correctly' );
+    ok( !exists $api_city->{postal_code}, 'Attribute removed' );
+
+    # Pick a class that won't have a mapping for the API
+    my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
+    is_deeply( $illrequest->to_api, $illrequest->TO_JSON, 'If no to_api_method present, return TO_JSON' );
 
     $schema->storage->txn_rollback;
 };

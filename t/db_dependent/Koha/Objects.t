@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 use Test::Exception;
 use Test::Warn;
 
@@ -277,6 +277,31 @@ subtest '->search() tests' => sub {
         is( ref($patrons[$i]), 'Koha::Patron', 'Objects in the list have the singular type' );
         $i++;
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "to_api() tests" => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $city_1 = $builder->build_object( { class => 'Koha::Cities' } );
+    my $city_2 = $builder->build_object( { class => 'Koha::Cities' } );
+
+    my $cities = Koha::Cities->search(
+        {
+            cityid => [ $city_1->cityid, $city_2->cityid ]
+        },
+        { -orderby => { -desc => 'cityid' } }
+    );
+
+    is( $cities->count, 2, 'Count is correct' );
+    my $cities_api = $cities->to_api;
+    is( ref( $cities_api ), 'ARRAY', 'to_api returns an array' );
+    is_deeply( $cities_api->[0], $city_1->to_api, 'to_api returns the individual objects with ->to_api' );
+    is_deeply( $cities_api->[1], $city_2->to_api, 'to_api returns the individual objects with ->to_api' );
 
     $schema->storage->txn_rollback;
 };
