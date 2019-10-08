@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Exception;
 use Test::Warn;
 
@@ -302,6 +302,31 @@ subtest "to_api() tests" => sub {
     is( ref( $cities_api ), 'ARRAY', 'to_api returns an array' );
     is_deeply( $cities_api->[0], $city_1->to_api, 'to_api returns the individual objects with ->to_api' );
     is_deeply( $cities_api->[1], $city_2->to_api, 'to_api returns the individual objects with ->to_api' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "TO_JSON() tests" => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $city_1 = $builder->build_object( { class => 'Koha::Cities' } );
+    my $city_2 = $builder->build_object( { class => 'Koha::Cities' } );
+
+    my $cities = Koha::Cities->search(
+        {
+            cityid => [ $city_1->cityid, $city_2->cityid ]
+        },
+        { -orderby => { -desc => 'cityid' } }
+    );
+
+    is( $cities->count, 2, 'Count is correct' );
+    my $cities_json = $cities->TO_JSON;
+    is( ref($cities_json), 'ARRAY', 'to_api returns an array' );
+    is_deeply( $cities_json->[0], $city_1->TO_JSON, 'TO_JSON returns the individual objects with ->TO_JSON' );
+    is_deeply( $cities_json->[1], $city_2->TO_JSON,'TO_JSON returns the individual objects with ->TO_JSON' );
 
     $schema->storage->txn_rollback;
 };
