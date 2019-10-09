@@ -71,7 +71,7 @@ my $total_paid = $input->param('paid');
 
 my $select_lines = $input->param('selected');
 my $pay_individual   = $input->param('pay_individual');
-my $select       = $input->param('selected_accts');
+my $selected_accts   = $input->param('selected_accts');
 my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
@@ -166,11 +166,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             print $input->redirect(
                 "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=$change_given");
         } else {
-            if ($select) {
-                if ( $select =~ /^([\d,]*).*/ ) {
-                    $select = $1;    # ensure passing no junk
+            if ($selected_accts) {
+                if ( $selected_accts =~ /^([\d,]*).*/ ) {
+                    $selected_accts = $1;    # ensure passing no junk
                 }
-                my @acc = split /,/, $select;
+                my @acc = split /,/, $selected_accts;
                 my $note = $input->param('selected_accts_notes');
 
                 my @lines = Koha::Account::Lines->search(
