@@ -69,9 +69,9 @@ my $total_due  = $account->outstanding_debits->total_outstanding;
 
 my $total_paid = $input->param('paid');
 
-my $selected_lines = $input->param('selected');
+my $selected_lines = $input->param('selected'); # comes from pay.pl
 my $pay_individual   = $input->param('pay_individual');
-my $selected_accts   = $input->param('selected_accts');
+my $selected_accts   = $input->param('selected_accts'); # comes from paycollect.pl
 my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
 my $accountlines_id;
@@ -136,6 +136,27 @@ if ( $pay_individual || $writeoff_individual ) {
     );
 }
 
+my @selected_accountlines;
+if ( $selected_accts ) {
+    if ( $selected_accts =~ /^([\d,]*).*/ ) {
+        $selected_accts = $1;    # ensure passing no junk
+    }
+    my @acc = split /,/, $selected_accts;
+
+    @selected_accountlines = koha::account::lines->search(
+        {
+            borrowernumber    => $borrowernumber,
+            amountoutstanding => { '<>' => 0 },
+            accountlines_id   => { 'in' => \@acc },
+        },
+        { order_by => 'date' }
+    );
+
+    $total_due = 0; # Reset and recalculate total due
+    map { $total_due += $_->amountoutstanding } @selected_accountlines;
+}
+
+
 if ( $total_paid and $total_paid ne '0.00' ) {
     $total_paid = $total_due if (abs($total_paid - $total_due) < 0.01) && C4::Context->preference('RoundFinesAtPayment');
     if ( $total_paid < 0 or $total_paid > $total_due ) {
@@ -167,33 +188,27 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=$change_given");
         } else {
             if ($selected_accts) {
-                if ( $selected_accts =~ /^([\d,]*).*/ ) {
-                    $selected_accts = $1;    # ensure passing no junk
+                if ( $total_paid > $total_due ) {
+                    $template->param(
+                        error_over => 1,
+                        total_due => $total_due
+                    );
+                } else {
+                    my $note = $input->param('selected_accts_notes');
+
+                    $payment_id = $account->pay(
+                        {
+                            type         => $type,
+                            amount       => $total_paid,
+                            library_id   => $library_id,
+                            lines        => \@selected_accountlines,
+                            note         => $note,
+                            interface    => C4::Context->interface,
+                            payment_type => $payment_type,
+                            cash_register => $registerid
+                        }
+                      );
                 }
-                my @acc = split /,/, $selected_accts;
-                my $note = $input->param('selected_accts_notes');
-
-                my @lines = Koha::Account::Lines->search(
-                    {
-                        borrowernumber    => $borrowernumber,
-                        amountoutstanding => { '<>' => 0 },
-                        accountlines_id   => { 'IN' => \@acc },
-                    },
-                    { order_by => 'date' }
-                );
-
-                $payment_id = $account->pay(
-                    {
-                        type         => $type,
-                        amount       => $total_paid,
-                        library_id   => $library_id,
-                        lines        => \@lines,
-                        note         => $note,
-                        interface    => C4::Context->interface,
-                        payment_type => $payment_type,
-                        cash_register => $registerid
-                    }
-                  );
             }
             else {
                 my $note = $input->param('selected_accts_notes');
