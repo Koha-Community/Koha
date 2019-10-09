@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% PROCESS 'html_helpers.inc' %]
 <ol>
     <li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% filters.title | html %]" /></li>
     <li><label for="author">Author: </label> <input type="text" name="author" id="author" value="[% filters.author | html %]" /></li>
