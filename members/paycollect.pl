@@ -69,7 +69,7 @@ my $total_due  = $account->outstanding_debits->total_outstanding;
 
 my $total_paid = $input->param('paid');
 
-my $select_lines = $input->param('selected');
+my $selected_lines = $input->param('selected');
 my $pay_individual   = $input->param('pay_individual');
 my $selected_accts   = $input->param('selected_accts');
 my $payment_note = uri_unescape scalar $input->param('payment_note');
@@ -127,10 +127,10 @@ if ( $pay_individual || $writeoff_individual ) {
         individual_description => $description,
         payment_note    => $payment_note,
     );
-} elsif ($select_lines) {
+} elsif ($selected_lines) {
     $total_due = $input->param('amt');
     $template->param(
-        selected_accts => $select_lines,
+        selected_accts => $selected_lines,
         amt            => $total_due,
         selected_accts_notes => scalar $input->param('notes'),
     );
