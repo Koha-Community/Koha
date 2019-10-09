@@ -91,7 +91,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'ACCOUNT_WRITEOFF', '', 'Amnistie', 0, 'Amnistie', '[%- USE Price -%]\r\nNous avons accordé une amnistie de [% credit.amount * -1 | $Price %] à votre compte.\r\n\r\nLes frais suivants ont été amnistiés :\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nMontant payé : [% o.amount * -1 | $Price %]\r\nMontant en souffrance : [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
 
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('circulation', 'ACCOUNT_CREDIT', '', 'Account payment', 0, 'Account payment', '<table>
+('circulation', 'ACCOUNT_CREDIT', '', 'Confirmation de paiement', 0, 'Confirmation de paiement', '<table>
 [% IF ( LibraryName ) %]
  <tr>
     <th colspan="4" class="centerednames">
@@ -101,7 +101,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 [% END %]
  <tr>
     <th colspan="4" class="centerednames">
-        <h2><u>Fee receipt</u></h2>
+        <h2><u>REÇU</u></h2>
     </th>
  </tr>
  <tr>
@@ -111,15 +111,15 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
  </tr>
  <tr>
     <th colspan="4">
-        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />
-        Card number: [% patron.cardnumber | html %]<br />
+        Reçu de [% patron.firstname | html %] [% patron.surname | html %] <br />
+        Numéro de carte : [% patron.cardnumber | html %]<br />
     </th>
  </tr>
   <tr>
     <th>Date</th>
-    <th>Description of charges</th>
+    <th>Description des frais</th>
     <th>Note</th>
-    <th>Amount</th>
+    <th>Montant</th>
  </tr>
 
   [% FOREACH account IN accounts %]
@@ -136,7 +136,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="3">Total outstanding dues as on date: </td>
+    <td colspan="3">Solde non-réglé : </td>
     [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
   </tr>
 </tfoot>
@@ -154,7 +154,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   <tr>
     <th colspan="5" class="centerednames">
-      <h2><u>INVOICE</u></h2>
+      <h2><u>FACTURE</u></h2>
     </th>
   </tr>
   <tr>
@@ -164,16 +164,16 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
   </tr>
   <tr>
     <th colspan="5" >
-      Bill to: [% patron.firstname | html %] [% patron.surname | html %] <br />
-      Card number: [% patron.cardnumber | html %]<br />
+      Facturé à : [% patron.firstname | html %] [% patron.surname | html %] <br />
+      Numéro de carte : [% patron.cardnumber | html %]<br />
     </th>
   </tr>
   <tr>
     <th>Date</th>
-    <th>Description of charges</th>
+    <th>Description des frais</th>
     <th>Note</th>
-    <th style="text-align:right;">Amount</th>
-    <th style="text-align:right;">Amount outstanding</th>
+    <th style="text-align:right;">Montant</th>
+    <th style="text-align:right;">Solde</th>
   </tr>
 
   [% FOREACH account IN accounts %]
@@ -191,7 +191,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   <tfoot>
     <tr>
-      <td colspan="4">Total outstanding dues as on date: </td>
+      <td colspan="4">Solde non-réglé : </td>
       [% IF ( totalcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% total | $Price %]</td>
     </tr>
   </tfoot>
