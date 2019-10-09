@@ -20,7 +20,7 @@ our $child;
 
 subtest 'test_search' => sub {
 
-    plan tests => 20;
+    plan tests => 19;
 
     t::lib::Mocks::mock_preference('SearchEngine', 'Elasticsearch');
 
@@ -113,8 +113,6 @@ subtest 'test_search' => sub {
     my $returned2= MARC::Record->new_from_xml($rs->record(1)->raw());
     ok($returned2, 'Record 2 returned as MARCXML');
     is($returned2->as_xml, $marc_record_2->as_xml, 'Record 2 returned properly');
-
-    is($rs->record(2), undef, 'Record 3 does not exist');
 
     # SRU protocol tests
     my $base = 'http://localhost:42111';
