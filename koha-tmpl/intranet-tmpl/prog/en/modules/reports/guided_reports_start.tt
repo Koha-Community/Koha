@@ -1161,7 +1161,7 @@ canned reports and writing custom SQL reports.</p>
         $(document).ready(function(){
 
             $("body").on('click',".fetch_chart_data",function(){
-                if( [% unlimited_total %] > 1000 ){
+                if( [% unlimited_total | $raw %] > 1000 ){
                     if( confirm("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you with to chart this report?") ){
                         return true;
                     } else {
