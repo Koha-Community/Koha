@@ -23,6 +23,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+use URI::Escape;
 
 use C4::Auth;
 use C4::Output;
@@ -32,6 +33,7 @@ use C4::Accounts;
 use Koha::Cash::Registers;
 use Koha::Patrons;
 use Koha::Patron::Categories;
+use Koha::Items;
 
 my $input=new CGI;
 
@@ -53,6 +55,7 @@ my $borrowernumber = $input->param('borrowernumber');
 my $payment_id     = $input->param('payment_id');
 my $change_given   = $input->param('change_given');
 my $action         = $input->param('action') || '';
+my @renew_results  = $input->param('renew_result');
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $library_id = C4::Context->userenv->{'branch'};
@@ -184,6 +187,22 @@ if($total <= 0){
         $totalcredit = 1;
 }
 
+# Populate an arrayref with everything we need to display any
+# renew errors that occurred based on what we were passed
+my $renew_results_display = [];
+foreach my $renew_result(@renew_results) {
+    my ($itemnumber, $success, $info) = split(/,/, $renew_result);
+    my $item = Koha::Items->find($itemnumber);
+    if ($success) {
+        $info = uri_unescape($info);
+    }
+    push @{$renew_results_display}, {
+        item    => $item,
+        success => $success,
+        info    => $info
+    };
+}
+
 $template->param(
     patron              => $patron,
     finesview           => 1,
@@ -192,6 +211,7 @@ $template->param(
     accounts            => \@accountlines,
     payment_id          => $payment_id,
     change_given        => $change_given,
+    renew_results       => $renew_results_display,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

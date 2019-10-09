@@ -453,11 +453,6 @@ sub apply {
 
     my $schema = Koha::Database->new->schema;
 
-    # Item numbers that have had a fine paid where the line has a accounttype
-    # of OVERDUE and a status of UNRETURNED. We might want to try and renew
-    # these items.
-    my $overdue_unreturned = {};
-
     $schema->txn_do( sub {
         for my $debit ( @{$debits} ) {
 
@@ -490,17 +485,10 @@ sub apply {
             $self->amountoutstanding( $available_credit * -1 )->store;
             $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
 
-            # If we need to make a note of the item associated with this line,
-            # in order that we can potentially renew it, do so.
-            # Same logic existing in Koha::Account::pay
-            if (
-                $debit->amountoutstanding == 0 &&
-                $debit->accounttype &&
-                $debit->accounttype eq 'OVERDUE' &&
-                $debit->status &&
-                $debit->status eq 'UNRETURNED'
-            ) {
-                $overdue_unreturned->{$debit->itemnumber} = $debit;
+            # Attempt to renew the item associated with this debit if
+            # appropriate
+            if ($debit->renewable) {
+                $debit->renew_item($params->{interface});
             }
 
             # Same logic exists in Koha::Account::pay
@@ -514,36 +502,6 @@ sub apply {
 
         }
     });
-
-    # If we have overdue unreturned items that have had payments made
-    # against them, check whether the balance on those items is now zero
-    # and, if the syspref is set, renew them
-    # Same logic existing in Koha::Account::pay
-    if (
-        C4::Context->preference('RenewAccruingItemWhenPaid') &&
-        keys %{$overdue_unreturned}
-    ) {
-        foreach my $itemnumber (keys %{$overdue_unreturned}) {
-            # Only do something if this item has no fines left on it
-            my $fine = C4::Overdues::GetFine( $itemnumber, $self->borrowernumber );
-            next if $fine && $fine > 0;
-
-            my ( $renew_ok, $error ) =
-                C4::Circulation::CanBookBeRenewed(
-                    $self->borrowernumber, $itemnumber
-                );
-            if ( $renew_ok ) {
-                C4::Circulation::AddRenewal(
-                    $self->borrowernumber,
-                    $itemnumber,
-                    $overdue_unreturned->{$itemnumber}->{branchcode},
-                    undef,
-                    undef,
-                    1
-                );
-            }
-        }
-    }
 
     return $available_credit;
 }
@@ -810,6 +768,98 @@ sub to_api_mapping {
         manager_id        => 'user_id',
         note              => 'internal_note',
     };
+
+=head3 renewable
+
+    my $bool = $line->renewable;
+
+=cut
+
+sub renewable {
+    my ($self) = @_;
+
+    return (
+        $self->amountoutstanding == 0 &&
+        $self->accounttype &&
+        $self->accounttype eq 'OVERDUE' &&
+        $self->status &&
+        $self->status eq 'UNRETURNED'
+    ) ? 1 : 0;
+}
+
+=head3 renew_item
+
+    my $renew_result = $line->renew_item;
+
+Conditionally attempt to renew an item and return the outcome. This is
+as a consequence of the fine on an item being fully paid off
+
+=cut
+
+sub renew_item {
+    my ($self, $params) = @_;
+
+    my $outcome = {};
+
+    # We want to reject the call to renew if any of these apply:
+    # - The RenewAccruingItemWhenPaid syspref is off
+    # - The line item doesn't have an item attached to it
+    # - The line item doesn't have a patron attached to it
+    #
+    # - The RenewAccruingItemInOpac syspref is off
+    # AND
+    # - There is an interface param passed and it's value is 'opac'
+
+    if (
+        !C4::Context->preference('RenewAccruingItemWhenPaid') ||
+        !$self->item ||
+        !$self->patron ||
+        (
+            !C4::Context->preference('RenewAccruingItemInOpac') &&
+            $params->{interface} &&
+            $params->{interface} eq 'opac'
+        )
+    ) {
+        return;
+    }
+
+    my $itemnumber = $self->item->itemnumber;
+    my $borrowernumber = $self->patron->borrowernumber;
+    # Only do something if this item has no fines left on it
+    my $fine = C4::Overdues::GetFine($itemnumber, $borrowernumber);
+    if ($fine && $fine > 0) {
+        return {
+            itemnumber => $itemnumber,
+            error      => 'has_fine',
+            success    => 0
+        };
+    }
+    my ( $can_renew, $error ) = C4::Circulation::CanBookBeRenewed(
+        $borrowernumber,
+        $itemnumber
+    );
+    if ( $can_renew ) {
+        my $due_date = C4::Circulation::AddRenewal(
+            $borrowernumber,
+            $itemnumber,
+            $self->{branchcode},
+            undef,
+            undef,
+            1
+        );
+        return {
+            itemnumber => $itemnumber,
+            due_date   => $due_date,
+            success    => 1
+        };
+    } else {
+        return {
+            itemnumber => $itemnumber,
+            error      => $error,
+            success    => 0
+        };
+    }
+
 }
 
 =head2 Internal methods

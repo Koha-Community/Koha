@@ -57,13 +57,13 @@ sub pay {
     my $account = Koha::Account->new( { patron_id => $borrowernumber } );
 
     if ($disallow_overpayment) {
-        return 0 if $account->balance < $amt;
+        return { ok => 0 } if $account->balance < $amt;
     }
 
     if ($fee_id) {
         my $fee = Koha::Account::Lines->find($fee_id);
         if ( $fee ) {
-            $account->pay(
+            my $pay_response = $account->pay(
                 {
                     amount       => $amt,
                     type         => $type,
@@ -72,14 +72,19 @@ sub pay {
                     interface    => C4::Context->interface
                 }
             );
-            return 1;
+            return {
+                ok           => 1,
+                pay_response => $pay_response
+            };
         }
         else {
-            return 0;
+            return {
+                ok => 0
+            };
         }
     }
     else {
-        $account->pay(
+        my $pay_response = $account->pay(
             {
                 amount       => $amt,
                 type         => $type,
@@ -87,7 +92,10 @@ sub pay {
                 interface    => C4::Context->interface
             }
         );
-        return 1;
+        return {
+            ok           => 1,
+            pay_response => $pay_response
+        };
     }
 }
 

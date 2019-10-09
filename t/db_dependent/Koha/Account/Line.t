@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 use Test::MockModule;
 
@@ -288,7 +288,7 @@ subtest 'apply() tests' => sub {
     my $module = new Test::MockModule('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
     my $credit_renew = $account->add_credit({ amount => 100, user_id => $patron->id, interface => 'commandline' });
-    my $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id });
+    my $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id })->as_list;
     $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
 
     is( $called, 1, 'RenewAccruingItemWhenPaid causes C4::Circulation::AddRenew to be called when appropriate' );
@@ -341,6 +341,81 @@ subtest 'Keep account info when related patron, staff, item or cash_register is 
     $register->delete;
     $line = $line->get_from_storage;
     is( $line->register_id, undef, "The account line should not be deleted when the related cash register is delete");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Renewal related tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $staff = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item = $builder->build_object({ class => 'Koha::Items' });
+    my $issue = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber      => $item->itemnumber,
+                onsite_checkout => 0,
+                renewals        => 99,
+                auto_renew      => 0
+            }
+        }
+    );
+    my $line = Koha::Account::Line->new(
+    {
+        borrowernumber    => $patron->borrowernumber,
+        manager_id        => $staff->borrowernumber,
+        itemnumber        => $item->itemnumber,
+        accounttype       => "OVERDUE",
+        status            => "UNRETURNED",
+        amountoutstanding => 0,
+        interface         => 'commandline',
+    })->store;
+
+    is( $line->renewable, 1, "Item is returned as renewable when it meets the conditions" );
+    $line->amountoutstanding(5);
+    is( $line->renewable, 0, "Item is returned as unrenewable when it has outstanding fine" );
+    $line->amountoutstanding(0);
+    $line->accounttype("VOID");
+    is( $line->renewable, 0, "Item is returned as unrenewable when it has the wrong account type" );
+    $line->accounttype("OVERDUE");
+    $line->status("RETURNED");
+    is( $line->renewable, 0, "Item is returned as unrenewable when it has the wrong account status" );
+
+
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );
+    is ($line->renew_item, 0, 'Attempt to renew fails when syspref is not set');
+    t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
+    is_deeply(
+        $line->renew_item,
+        {
+            itemnumber => $item->itemnumber,
+            error      => 'too_many',
+            success    => 0
+        },
+        'Attempt to renew fails when CanBookBeRenewed returns false'
+    );
+    $issue->delete;
+    $issue = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber      => $item->itemnumber,
+                onsite_checkout => 0,
+                renewals        => 0,
+                auto_renew      => 0
+            }
+        }
+    );
+    my $called = 0;
+    my $module = new Test::MockModule('C4::Circulation');
+    $module->mock('AddRenewal', sub { $called = 1; });
+    $line->renew_item;
+    is( $called, 1, 'Attempt to renew succeeds when conditions are met' );
 
     $schema->storage->txn_rollback;
 };
@@ -606,7 +681,7 @@ subtest "void() tests" => sub {
             lines  => [$line1, $line2],
             amount => 30,
         }
-    );
+    )->{payment_id};
 
     my $account_payment = Koha::Account::Lines->find( $id );
 

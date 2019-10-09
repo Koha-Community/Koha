@@ -493,7 +493,14 @@ Circulation:
               choices:
                   yes: Renew
                   no: "Don't renew"
-            - the item automatically.
+            - the item automatically. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue.
+        -
+            - If a patron pays off all fines on an overdue item that is accruing fines in the OPAC via a payment plugin
+            - pref: RenewAccruingItemInOpac
+              choices:
+                  yes: Renew
+                  no: "Don't renew"
+            - the item automatically. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue.
         -
             - pref: ItemsDeniedRenewal
               type: textarea

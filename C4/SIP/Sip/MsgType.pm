@@ -20,6 +20,7 @@ use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
 
 use Koha::Patron::Attributes;
+use Koha::Items;
 
 use UNIVERSAL::can;
 
@@ -1103,7 +1104,46 @@ sub handle_fee_paid {
 
     $ils->check_inst_id( $inst_id, "handle_fee_paid" );
 
-    $status = $ils->pay_fee( $patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency, $is_writeoff, $disallow_overpayment );
+    my $pay_result = $ils->pay_fee( $patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency, $is_writeoff, $disallow_overpayment );
+    $status = $pay_result->{status};
+    my $pay_response = $pay_result->{pay_response};
+
+    my $failmap = {
+        "no_item" => "No matching item could be found",
+        "no_checkout" => "Item is not checked out",
+        "too_soon" => "Cannot yet be renewed",
+        "too_many" => "Renewed the maximum number of times",
+        "auto_too_soon" => "Scheduled for automatic renewal and cannot yet be renewed",
+        "auto_too_late" => "Scheduled for automatic renewal and cannot yet be any more",
+        "auto_account_expired" => "Scheduled for automatic renewal and cannot be renewed because the patron's account has expired",
+        "auto_renew" => "Scheduled for automatic renewal",
+        "auto_too_much_oweing" => "Scheduled for automatic renewal",
+        "on_reserve" => "On hold for another patron",
+        "patron_restricted" => "Patron is currently restricted",
+        "item_denied_renewal" => "Item is not allowed renewal",
+        "onsite_checkout" => "Item is an onsite checkout"
+    };
+    my @success = ();
+    my @fail = ();
+    foreach my $result( @{$pay_response->{renew_result}} ) {
+        my $item = Koha::Items->find({ itemnumber => $result->{itemnumber} });
+        if ($result->{success}) {
+            push @success, '"' . $item->biblio->title . '"';
+        } else {
+            push @fail, '"' . $item->biblio->title . '" : ' . $failmap->{$result->{error}};
+        }
+    }
+
+    my $msg = "";
+    if (scalar @success > 0) {
+        $msg.="The following items were renewed: " . join(", ", @success) . ". ";
+    }
+    if (scalar @fail > 0) {
+        $msg.="The following items were not renewed: " . join(", ", @fail) . ".";
+    }
+    if (length $msg > 0) {
+        $status->screen_msg($status->screen_msg . " $msg");
+    }
 
     $resp .= ( $status->ok ? 'Y' : 'N' ) . timestamp;
     $resp .= add_field( FID_INST_ID,   $inst_id, $server );

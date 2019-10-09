@@ -214,7 +214,7 @@ subtest "Koha::Account::pay tests" => sub {
     my $borrowernumber = $borrower->borrowernumber;
     my $data = '20.00';
     my $payment_note = '$20.00 payment note';
-    my $id = $account->pay( { amount => $data, note => $payment_note, payment_type => "TEST_TYPE" } );
+    my $id = $account->pay( { amount => $data, note => $payment_note, payment_type => "TEST_TYPE" } )->{payment_id};
 
     my $accountline = Koha::Account::Lines->find( $id );
     is( $accountline->payment_type, "TEST_TYPE", "Payment type passed into pay is set in account line correctly" );
@@ -294,7 +294,7 @@ subtest "Koha::Account::pay tests" => sub {
     is($note,'$200.00 payment note', '$200.00 payment note is registered');
 
     my $line3 = $account->add_debit({ type => 'ACCOUNT', amount => 42, interface => 'commandline' });
-    my $payment_id = $account->pay( { lines => [$line3], amount => 42 } );
+    my $payment_id = $account->pay( { lines => [$line3], amount => 42 } )->{payment_id};
     my $payment = Koha::Account::Lines->find( $payment_id );
     is( $payment->amount()+0, -42, "Payment paid the specified fine" );
     $line3 = Koha::Account::Lines->find( $line3->id );
@@ -376,7 +376,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
             amount => 42,
             type   => 'WRITEOFF',
         }
-    );
+    )->{payment_id};
 
     $line->_result->discard_changes();
 
@@ -1111,7 +1111,7 @@ subtest "Koha::Account::Offset credit & debit tests" => sub {
             lines  => [$line1, $line2],
             amount => 30,
         }
-    );
+    )->{payment_id};
 
     # Test debit and credit methods for Koha::Account::Offset
     my $account_offset = Koha::Account::Offsets->find( { credit_id => $id, debit_id => $line1->id } );
@@ -1177,15 +1177,15 @@ subtest "Payment notice tests" => sub {
     $letter->store();
 
     t::lib::Mocks::mock_preference('UseEmailReceipts', '0');
-    my $id = $account->pay( { amount => 1 } );
+    my $id = $account->pay( { amount => 1 } )->{payment_id};
     is( Koha::Notice::Messages->search()->count(), 0, 'Notice for payment not sent if UseEmailReceipts is disabled' );
 
-    $id = $account->pay( { amount => 1, type => 'WRITEOFF' } );
+    $id = $account->pay( { amount => 1, type => 'WRITEOFF' } )->{payment_id};
     is( Koha::Notice::Messages->search()->count(), 0, 'Notice for writeoff not sent if UseEmailReceipts is disabled' );
 
     t::lib::Mocks::mock_preference('UseEmailReceipts', '1');
 
-    $id = $account->pay( { amount => 12, library_id => $branchcode } );
+    $id = $account->pay( { amount => 12, library_id => $branchcode } )->{payment_id};
     my $notice = Koha::Notice::Messages->search()->next();
     is( $notice->subject, 'Account payment', 'Notice subject is correct for payment' );
     is( $notice->letter_code, 'ACCOUNT_PAYMENT', 'Notice letter code is correct for payment' );
@@ -1196,7 +1196,7 @@ subtest "Payment notice tests" => sub {
     $letter->content('[%- USE Price -%]A writeoff of [% credit.amount * -1 | $Price %] has been applied to your account. Your [% branch.branchcode %]');
     $letter->store();
 
-    $id = $account->pay( { amount => 13, type => 'WRITEOFF', library_id => $branchcode  } );
+    $id = $account->pay( { amount => 13, type => 'WRITEOFF', library_id => $branchcode  } )->{payment_id};
     $notice = Koha::Notice::Messages->search()->next();
     is( $notice->subject, 'Account writeoff', 'Notice subject is correct for payment' );
     is( $notice->letter_code, 'ACCOUNT_WRITEOFF', 'Notice letter code is correct for writeoff' );

@@ -271,10 +271,14 @@ sub pay_fee {
         $trans->screen_msg('Invalid patron barcode.');
         return $trans;
     }
-    my $ok = $trans->pay( $patron->{borrowernumber}, $fee_amt, $pay_type, $fee_id, $is_writeoff, $disallow_overpayment );
+    my $trans_result = $trans->pay( $patron->{borrowernumber}, $fee_amt, $pay_type, $fee_id, $is_writeoff, $disallow_overpayment );
+    my $ok = $trans_result->{ok};
     $trans->ok($ok);
 
-    return $trans;
+    return {
+        status       => $trans,
+        pay_response => $trans_result->{pay_response}
+    };
 }
 
 sub add_hold {

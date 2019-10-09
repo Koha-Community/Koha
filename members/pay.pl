@@ -39,6 +39,7 @@ use C4::Stats;
 use C4::Koha;
 use C4::Overdues;
 use Koha::Patrons;
+use Koha::Items;
 
 use Koha::Patron::Categories;
 use URI::Escape;
@@ -65,6 +66,7 @@ if ( !$borrowernumber ) {
 
 my $payment_id = $input->param('payment_id');
 our $change_given = $input->param('change_given');
+our @renew_results = $input->multi_param('renew_result');
 
 # get borrower details
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
@@ -135,10 +137,27 @@ for (@names) {
     }
 }
 
+# Populate an arrayref with everything we need to display any
+# renew results that occurred based on what we were passed
+my $renew_results_display = [];
+foreach my $renew_result(@renew_results) {
+    my ($itemnumber, $success, $info) = split(/,/, $renew_result);
+    my $item = Koha::Items->find($itemnumber);
+    if ($success) {
+        $info = uri_unescape($info);
+    }
+    push @{$renew_results_display}, {
+        item => $item,
+        success => $success,
+        info => $info
+    };
+}
+
 $template->param(
     finesview  => 1,
     payment_id => $payment_id,
     change_given => $change_given,
+    renew_results => $renew_results_display
 );
 
 add_accounts_to_template();

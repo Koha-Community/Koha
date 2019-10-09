@@ -39,6 +39,7 @@
     <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
+[% INCLUDE 'renew_results.inc' renew_results=renew_results %]
 <!-- The table with the account items -->
 <table id="table_account_fines">
     <thead>

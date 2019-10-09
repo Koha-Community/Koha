@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use Test::Exception;
 
@@ -685,12 +685,12 @@ subtest 'pay() tests' => sub {
     my $context = Test::MockModule->new('C4::Context');
     $context->mock( 'userenv', { branch => $library->id } );
 
-    my $credit_1_id = $account->pay({ amount => 200 });
+    my $credit_1_id = $account->pay({ amount => 200 })->{payment_id};
     my $credit_1    = Koha::Account::Lines->find( $credit_1_id );
 
     is( $credit_1->branchcode, undef, 'No branchcode is set if library_id was not passed' );
 
-    my $credit_2_id = $account->pay({ amount => 150, library_id => $library->id });
+    my $credit_2_id = $account->pay({ amount => 150, library_id => $library->id })->{payment_id};
     my $credit_2    = Koha::Account::Lines->find( $credit_2_id );
 
     is( $credit_2->branchcode, $library->id, 'branchcode set because library_id was passed' );

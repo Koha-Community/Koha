@@ -34,6 +34,7 @@ use Koha::Patron::Categories;
 use Koha::AuthorisedValues;
 use Koha::Account;
 use Koha::Token;
+use Koha::DateUtils;
 
 my $input = CGI->new();
 
@@ -177,9 +178,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 token  => scalar $input->param('csrf_token'),
             });
 
+        my $url;
+        my $pay_result;
         if ($pay_individual) {
             my $line = Koha::Account::Lines->find($accountlines_id);
-            $payment_id = $account->pay(
+            $pay_result = $account->pay(
                 {
                     lines        => [$line],
                     amount       => $total_paid,
@@ -190,8 +193,9 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     cash_register => $registerid
                 }
             );
-            print $input->redirect(
-                "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=$change_given");
+            $payment_id = $pay_result->{payment_id};
+
+            $url = "/cgi-bin/koha/members/pay.pl";
         } else {
             if ($selected_accts) {
                 if ( $total_paid > $total_due ) {
@@ -202,7 +206,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 } else {
                     my $note = $input->param('selected_accts_notes');
 
-                    $payment_id = $account->pay(
+                    $pay_result = $account->pay(
                         {
                             type         => $type,
                             amount       => $total_paid,
@@ -213,12 +217,13 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                             payment_type => $payment_type,
                             cash_register => $registerid
                         }
-                      );
+                    );
                 }
+                $payment_id = $pay_result->{payment_id};
             }
             else {
                 my $note = $input->param('selected_accts_notes');
-                $payment_id = $account->pay(
+                $pay_result = $payment_id = $account->pay(
                     {
                         amount       => $total_paid,
                         library_id   => $library_id,
@@ -230,9 +235,26 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     }
                 );
             }
+            $payment_id = $pay_result->{payment_id};
 
-            print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=$change_given");
+            $url = "/cgi-bin/koha/members/boraccount.pl";
         }
+        # It's possible renewals took place, parse any renew results
+        # and pass on
+        my @renew_result = ();
+        foreach my $ren( @{$pay_result->{renew_result}} ) {
+            my $str = "renew_result=$ren->{itemnumber},$ren->{success},";
+            my $app = $ren->{success} ?
+                uri_escape(
+                    output_pref({ dt => $ren->{due_date}, as_due_date => 1 })
+                ) : $ren->{error};
+                push @renew_result, "${str}${app}";
+        }
+        my $append = scalar @renew_result ? '&' . join('&', @renew_result) : '';
+
+        $url .= "?borrowernumber=$borrowernumber&payment_id=$payment_id&change_given=${change_given}${append}";
+
+        print $input->redirect($url);
     }
 } else {
     $total_paid = '0.00';    #TODO not right with pay_individual
