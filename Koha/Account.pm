@@ -456,7 +456,7 @@ $debit_type can be any of:
   - rent_daily
   - rent_renew
   - rent_daily_renew
-  - reserve
+  - RESERVE
   - manual_debit
 
 =cut
@@ -632,7 +632,7 @@ sub non_issues_charges {
     #NOTE: With bug 23049 these preferences could be moved to being attached
     #to individual debit types to give more flexability and specificity.
     my @not_fines;
-    push @not_fines, 'Res'
+    push @not_fines, 'RESERVE'
       unless C4::Context->preference('HoldsInNoissuesCharge');
     push @not_fines, ( 'RENT', 'RENT_DAILY', 'RENT_RENEW', 'RENT_DAILY_RENEW' )
       unless C4::Context->preference('RentalsInNoissuesCharge');
@@ -711,7 +711,7 @@ our $offset_type = {
     'writeoff'         => 'Writeoff',
     'account'          => 'Account Fee',
     'account_renew'    => 'Account Fee',
-    'reserve'          => 'Reserve Fee',
+    'RESERVE'          => 'Reserve Fee',
     'processing'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
     'rent'             => 'Rental Fee',
@@ -752,7 +752,7 @@ our $account_type_debit = {
     'rent_daily'       => 'RENT_DAILY',
     'rent_renew'       => 'RENT_RENEW',
     'rent_daily_renew' => 'RENT_DAILY_RENEW',
-    'reserve'          => 'Res',
+    'RESERVE'          => 'RESERVE',
     'manual_debit'     => 'M'
 };
 

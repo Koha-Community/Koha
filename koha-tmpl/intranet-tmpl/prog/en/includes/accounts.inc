@@ -25,7 +25,7 @@
            [%- CASE 'RENT_DAILY'       -%]Daily rental fee
            [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
            [%- CASE 'RENT_DAILY_RENEW' -%]Rewewal of daily rental item
-           [%- CASE 'Res'              -%]Hold fee
+           [%- CASE 'RESERVE'          -%]Hold fee
            [%- CASE                    -%][% account.debit_type.description | html %]
        [%- END -%]
     [%- END -%]

@@ -241,7 +241,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                     patron_has_hold_fee => Koha::Account::Lines->search(
                         {
                             borrowernumber  => $borrower->{borrowernumber},
-                            debit_type_code => 'Res',
+                            debit_type_code => 'RESERVE',
                             description     => $item->biblio->title,
                             date            => $dtf->format_date(dt_from_string)
                         }

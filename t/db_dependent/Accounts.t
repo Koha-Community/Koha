@@ -774,7 +774,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $account->add_debit(
         {
             description => 'a Res fee',
-            type        => 'reserve',
+            type        => 'RESERVE',
             amount      => $res,
             interface   => 'commandline'
         }
