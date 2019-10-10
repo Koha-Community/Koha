@@ -106,9 +106,9 @@ subtest "FeePayment->pay tests" => sub {
     my $account =
       Koha::Account->new( { patron_id => $patron->{borrowernumber} } );
     my $debt1 = $account->add_debit(
-        { type => 'account', amount => 100, interface => 'commandline' } );
+        { type => 'ACCOUNT', amount => 100, interface => 'commandline' } );
     my $debt2 = $account->add_debit(
-        { type => 'account', amount => 200, interface => 'commandline' } );
+        { type => 'ACCOUNT', amount => 200, interface => 'commandline' } );
 
     # Instantiate a new FeePayment transaction object
     my $trans = C4::SIP::ILS::Transaction::FeePayment->new();

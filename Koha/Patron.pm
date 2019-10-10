@@ -887,7 +887,7 @@ sub add_enrolment_fee_if_needed {
     my ($self, $renewal) = @_;
     my $enrolment_fee = $self->category->enrolmentfee;
     if ( $enrolment_fee && $enrolment_fee > 0 ) {
-        my $type = $renewal ? 'account_renew' : 'account';
+        my $type = $renewal ? 'ACCOUNT_RENEW' : 'ACCOUNT';
         $self->account->add_debit(
             {
                 amount     => $enrolment_fee,

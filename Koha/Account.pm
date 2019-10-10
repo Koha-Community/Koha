@@ -444,8 +444,8 @@ my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
 );
 
 $debit_type can be any of:
-  - account
-  - account_renew
+  - ACCOUNT
+  - ACCOUNT_RENEW
   - hold_expired
   - lost_item
   - sundry
@@ -709,8 +709,8 @@ our $offset_type = {
     'lost_item_return' => 'Lost Item',
     'payment'          => 'Payment',
     'writeoff'         => 'Writeoff',
-    'account'          => 'Account Fee',
-    'account_renew'    => 'Account Fee',
+    'ACCOUNT'          => 'Account Fee',
+    'ACCOUNT_RENEW'    => 'Account Fee',
     'RESERVE'          => 'Reserve Fee',
     'PROCESSING'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
@@ -740,8 +740,8 @@ our $account_type_credit = {
 =cut
 
 our $account_type_debit = {
-    'account'          => 'ACCOUNT',
-    'account_renew'    => 'ACCOUNT_RENEW',
+    'ACCOUNT'          => 'ACCOUNT',
+    'ACCOUNT_RENEW'    => 'ACCOUNT_RENEW',
     'hold_expired'     => 'HE',
     'lost_item'        => 'LOST',
     'sundry'           => 'M',

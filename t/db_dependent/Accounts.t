@@ -183,8 +183,8 @@ subtest "Koha::Account::pay tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = $account->add_debit({ type => 'account', amount => 100, interface => 'commandline' });
-    my $line2 = $account->add_debit({ type => 'account', amount => 200, interface => 'commandline' });
+    my $line1 = $account->add_debit({ type => 'ACCOUNT', amount => 100, interface => 'commandline' });
+    my $line2 = $account->add_debit({ type => 'ACCOUNT', amount => 200, interface => 'commandline' });
 
     $sth = $dbh->prepare("SELECT count(*) FROM accountlines");
     $sth->execute;
@@ -283,7 +283,7 @@ subtest "Koha::Account::pay tests" => sub {
     $note = $sth->fetchrow_array;
     is($note,'$200.00 payment note', '$200.00 payment note is registered');
 
-    my $line3 = $account->add_debit({ type => 'account', amount => 42, interface => 'commandline' });
+    my $line3 = $account->add_debit({ type => 'ACCOUNT', amount => 42, interface => 'commandline' });
     my $payment_id = $account->pay( { lines => [$line3], amount => 42 } );
     my $payment = Koha::Account::Lines->find( $payment_id );
     is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
@@ -311,10 +311,10 @@ subtest "Koha::Account::pay particular line tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = $account->add_debit({ type => 'account', amount => 1, interface => 'commandline' });
-    my $line2 = $account->add_debit({ type => 'account', amount => 2, interface => 'commandline' });
-    my $line3 = $account->add_debit({ type => 'account', amount => 3, interface => 'commandline' });
-    my $line4 = $account->add_debit({ type => 'account', amount => 4, interface => 'commandline' });
+    my $line1 = $account->add_debit({ type => 'ACCOUNT', amount => 1, interface => 'commandline' });
+    my $line2 = $account->add_debit({ type => 'ACCOUNT', amount => 2, interface => 'commandline' });
+    my $line3 = $account->add_debit({ type => 'ACCOUNT', amount => 3, interface => 'commandline' });
+    my $line4 = $account->add_debit({ type => 'ACCOUNT', amount => 4, interface => 'commandline' });
 
     is( $account->balance(), 10, "Account balance is 10" );
 
@@ -356,7 +356,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line = $account->add_debit({ type => 'account', amount => 42, interface => 'commandline' });
+    my $line = $account->add_debit({ type => 'ACCOUNT', amount => 42, interface => 'commandline' });
 
     is( $account->balance(), 42, "Account balance is 42" );
 
