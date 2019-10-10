@@ -446,7 +446,7 @@ my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
 $debit_type can be any of:
   - ACCOUNT
   - ACCOUNT_RENEW
-  - hold_expired
+  - RESERVE_EXPIRED
   - lost_item
   - sundry
   - new_card
@@ -720,7 +720,7 @@ our $offset_type = {
     'RENT_DAILY_RENEW' => 'Rental Fee',
     'overdue'          => 'OVERDUE',
     'manual_debit'     => 'Manual Debit',
-    'hold_expired'     => 'Hold Expired'
+    'RESERVE_EXPIRED'  => 'Hold Expired'
 };
 
 =head3 $account_type_credit
@@ -742,7 +742,7 @@ our $account_type_credit = {
 our $account_type_debit = {
     'ACCOUNT'          => 'ACCOUNT',
     'ACCOUNT_RENEW'    => 'ACCOUNT_RENEW',
-    'hold_expired'     => 'HE',
+    'RESERVE_EXPIRED'  => 'RESERVE_EXPIRED',
     'lost_item'        => 'LOST',
     'sundry'           => 'M',
     'new_card'         => 'N',

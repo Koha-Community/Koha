@@ -15,7 +15,6 @@
        [%- SWITCH account.debit_type -%]
            [%- CASE 'ACCOUNT'          -%]Account creation fee
            [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
-           [%- CASE 'HE'               -%]Hold waiting too long
            [%- CASE 'LOST'             -%]Lost item
            [%- CASE 'M'                -%]Sundry
            [%- CASE 'N'                -%]New card
@@ -26,6 +25,7 @@
            [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
            [%- CASE 'RENT_DAILY_RENEW' -%]Rewewal of daily rental item
            [%- CASE 'RESERVE'          -%]Hold fee
+           [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
            [%- CASE                    -%][% account.debit_type.description | html %]
        [%- END -%]
     [%- END -%]
