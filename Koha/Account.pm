@@ -452,10 +452,10 @@ $debit_type can be any of:
   - new_card
   - overdue
   - processing
-  - rent
-  - rent_daily
-  - rent_renew
-  - rent_daily_renew
+  - RENT
+  - RENT_DAILY
+  - RENT_RENEW
+  - RENT_DAILY_RENEW
   - RESERVE
   - manual_debit
 
@@ -714,10 +714,10 @@ our $offset_type = {
     'RESERVE'          => 'Reserve Fee',
     'processing'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
-    'rent'             => 'Rental Fee',
-    'rent_daily'       => 'Rental Fee',
-    'rent_renew'       => 'Rental Fee',
-    'rent_daily_renew' => 'Rental Fee',
+    'RENT'             => 'Rental Fee',
+    'RENT_DAILY'       => 'Rental Fee',
+    'RENT_RENEW'       => 'Rental Fee',
+    'RENT_DAILY_RENEW' => 'Rental Fee',
     'overdue'          => 'OVERDUE',
     'manual_debit'     => 'Manual Debit',
     'hold_expired'     => 'Hold Expired'
@@ -748,10 +748,10 @@ our $account_type_debit = {
     'new_card'         => 'N',
     'overdue'          => 'OVERDUE',
     'processing'       => 'PF',
-    'rent'             => 'RENT',
-    'rent_daily'       => 'RENT_DAILY',
-    'rent_renew'       => 'RENT_RENEW',
-    'rent_daily_renew' => 'RENT_DAILY_RENEW',
+    'RENT'             => 'RENT',
+    'RENT_DAILY'       => 'RENT_DAILY',
+    'RENT_RENEW'       => 'RENT_RENEW',
+    'RENT_DAILY_RENEW' => 'RENT_DAILY_RENEW',
     'RESERVE'          => 'RESERVE',
     'manual_debit'     => 'M'
 };

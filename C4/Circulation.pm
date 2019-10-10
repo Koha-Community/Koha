@@ -1468,14 +1468,14 @@ sub AddIssue {
             # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
-                AddIssuingCharge( $issue, $charge, 'rent' );
+                AddIssuingCharge( $issue, $charge, 'RENT' );
             }
 
             my $itemtype_object = Koha::ItemTypes->find( $item_object->effective_itemtype );
             if ( $itemtype_object ) {
                 my $accumulate_charge = $fees->accumulate_rentalcharge();
                 if ( $accumulate_charge > 0 ) {
-                    AddIssuingCharge( $issue, $accumulate_charge, 'rent_daily' ) if $accumulate_charge > 0;
+                    AddIssuingCharge( $issue, $accumulate_charge, 'RENT_DAILY' ) if $accumulate_charge > 0;
                     $charge += $accumulate_charge;
                     $item_unblessed->{charge} = $charge;
                 }
@@ -2911,7 +2911,7 @@ sub AddRenewal {
         # Charge a new rental fee, if applicable
         my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
         if ( $charge > 0 ) {
-            AddIssuingCharge($issue, $charge, 'rent_renew');
+            AddIssuingCharge($issue, $charge, 'RENT_RENEW');
         }
 
         # Charge a new accumulate rental fee, if applicable
@@ -2919,7 +2919,7 @@ sub AddRenewal {
         if ( $itemtype_object ) {
             my $accumulate_charge = $fees->accumulate_rentalcharge();
             if ( $accumulate_charge > 0 ) {
-                AddIssuingCharge( $issue, $accumulate_charge, 'rent_daily_renew' )
+                AddIssuingCharge( $issue, $accumulate_charge, 'RENT_DAILY_RENEW' )
             }
             $charge += $accumulate_charge;
         }

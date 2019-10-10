@@ -782,7 +782,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $account->add_debit(
         {
             description => 'a Rental fee',
-            type        => 'rent',
+            type        => 'RENT',
             amount      => $rent,
             interface   => 'commandline'
         }

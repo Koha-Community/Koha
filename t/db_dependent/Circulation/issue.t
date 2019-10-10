@@ -211,7 +211,7 @@ $sth->execute;
 my $countaccount = $sth->fetchrow_array;
 is ($countaccount,0,"0 accountline exists");
 my $checkout = Koha::Checkouts->find( $issue_id1 );
-my $charge = C4::Circulation::AddIssuingCharge( $checkout, 10, 'rent' );
+my $charge = C4::Circulation::AddIssuingCharge( $checkout, 10, 'RENT' );
 is( ref( $charge ), 'Koha::Account::Line', "An issuing charge has been added" );
 is( $charge->issue_id, $issue_id1, 'Issue id is set correctly for issuing charge' );
 my $offset = Koha::Account::Offsets->find( { debit_id => $charge->id } );

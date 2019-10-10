@@ -290,7 +290,7 @@ subtest 'add_debit() tests' => sub {
             description => 'amount validation failure',
             library_id  => $patron->branchcode,
             note        => 'this should fail anyway',
-            type        => 'rent',
+            type        => 'RENT',
             user_id     => $patron->id,
             interface   => 'commandline'
         }
@@ -316,7 +316,7 @@ subtest 'add_debit() tests' => sub {
             description => 'Rental charge of 25',
             library_id  => $patron->branchcode,
             note        => 'not really important',
-            type        => 'rent',
+            type        => 'RENT',
             user_id     => $patron->id
         }
     ); } 'Koha::Exceptions::MissingParameter', 'Exception thrown if interface parameter missing';
@@ -330,7 +330,7 @@ subtest 'add_debit() tests' => sub {
             description => 'Rental charge of 25',
             library_id  => $patron->branchcode,
             note        => 'not really important',
-            type        => 'rent',
+            type        => 'RENT',
             user_id     => $patron->id,
             interface   => 'commandline'
         }
@@ -344,7 +344,7 @@ subtest 'add_debit() tests' => sub {
     );
     is(
         $line_1->debit_type_code,
-        $Koha::Account::account_type_debit->{'rent'},
+        $Koha::Account::account_type_debit->{'RENT'},
         'Account type is correctly set'
     );
 
@@ -357,7 +357,7 @@ subtest 'add_debit() tests' => sub {
             description => 'Rental charge of 37',
             library_id  => $patron->branchcode,
             note        => 'not really important',
-            type        => 'rent',
+            type        => 'RENT',
             user_id     => $patron->id,
             interface   => 'commandline'
         }
@@ -371,7 +371,7 @@ subtest 'add_debit() tests' => sub {
     );
     is(
         $line_2->debit_type_code,
-        $Koha::Account::account_type_debit->{'rent'},
+        $Koha::Account::account_type_debit->{'RENT'},
         'Account type is correctly set'
     );
 
