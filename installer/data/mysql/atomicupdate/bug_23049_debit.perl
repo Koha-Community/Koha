@@ -43,7 +43,7 @@ if ( CheckVersion($DBversion) ) {
               ('RESERVE_EXPIRED', 'Hold waiting too long', 0, NULL, 1),
               ('LOST', 'Lost item', 1, NULL, 1),
               ('M', 'Manual fee', 1, NULL, 0),
-              ('N', 'New card fee', 1, NULL, 1),
+              ('NEW_CARD', 'New card fee', 1, NULL, 1),
               ('OVERDUE', 'Overdue fine', 0, NULL, 1),
               ('PROCESSING', 'Lost item processing fee', 0, NULL, 1),
               ('RENT', 'Rental fee', 0, NULL, 1),
@@ -72,6 +72,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         qq{
           UPDATE accountlines SET accounttype = 'RESERVE_EXPIRED' WHERE accounttype = 'HE'
+        }
+    );
+
+    # Update accountype 'N' to 'NEW_CARD'
+    $dbh->do(
+        qq{
+          UPDATE accountlines SET accounttype = 'NEW_CARD' WHERE accounttype = 'N'
         }
     );
 

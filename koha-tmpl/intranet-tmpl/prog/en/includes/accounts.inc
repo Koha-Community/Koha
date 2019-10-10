@@ -17,7 +17,7 @@
            [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
            [%- CASE 'LOST'             -%]Lost item
            [%- CASE 'M'                -%]Sundry
-           [%- CASE 'N'                -%]New card
+           [%- CASE 'NEW_CARD'         -%]New card
            [%- CASE 'OVERDUE'          -%]Fine
            [%- CASE 'PROCESSING'       -%]Lost item processing fee
            [%- CASE 'RENT'             -%]Rental fee

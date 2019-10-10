@@ -449,7 +449,7 @@ $debit_type can be any of:
   - RESERVE_EXPIRED
   - LOST
   - sundry
-  - new_card
+  - NEW_CARD
   - OVERDUE
   - PROCESSING
   - RENT
@@ -742,7 +742,7 @@ our $account_type_debit = {
     'ACCOUNT_RENEW'    => 'ACCOUNT_RENEW',
     'RESERVE_EXPIRED'  => 'RESERVE_EXPIRED',
     'LOST_ITEM'        => 'LOST',
-    'new_card'         => 'N',
+    'NEW_CARD'         => 'NEW_CARD',
     'OVERDUE'          => 'OVERDUE',
     'PROCESSING'       => 'PROCESSING',
     'RENT'             => 'RENT',

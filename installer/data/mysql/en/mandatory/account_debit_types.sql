@@ -3,7 +3,7 @@ INSERT INTO account_debit_types ( code, description, can_be_added_manually, defa
 ('ACCOUNT_RENEW', 'Account renewal fee', 0, NULL, 1),
 ('LOST', 'Lost item', 1, NULL, 1),
 ('M', 'Manual fee', 1, NULL, 0),
-('N', 'New card fee', 1, NULL, 1),
+('NEW_CARD', 'New card fee', 1, NULL, 1),
 ('OVERDUE', 'Overdue fine', 0, NULL, 1),
 ('PROCESSING', 'Lost item processing fee', 0, NULL, 1),
 ('RENT', 'Rental fee', 0, NULL, 1),
