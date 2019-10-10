@@ -914,10 +914,7 @@ sub _sort_field {
     my $mappings = $self->get_elasticsearch_mappings();
     my $fieldType = defined $mappings->{data}{properties}{$f}{type} ? $mappings->{data}{properties}{$f}{type} : undef;
     if (!defined $self->sort_fields()->{$f} || $self->sort_fields()->{$f}) {
-        $f .= '__sort' unless $fieldType eq 'integer';
-        # We need to add '.phrase' to text fields, otherwise it'll sort
-        # based on the tokenised form.
-        $f .= '.phrase' if $fieldType eq 'text';
+        $f .= '__sort';
     } else {
         # We need to add '.raw' to text fields without a sort field,
         # otherwise it'll sort based on the tokenised form.

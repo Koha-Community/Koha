@@ -64,9 +64,6 @@ suggestible:
 # Sort
 sort:
   default:
-    type: text
-    analyzer: analyser_phrase
-    search_analyzer: analyser_phrase
-    fields:
-      phrase:
-        type: keyword
+    type: icu_collation_keyword
+    index: false
+    numeric: true
