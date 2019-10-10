@@ -211,7 +211,7 @@ sub get_request_logs {
     )->unblessed;
 
     # Populate a lookup table for status aliases
-    my $aliases = GetAuthorisedValues('ILLSTATUS');
+    my $aliases = C4::Koha::GetAuthorisedValues('ILLSTATUS');
     my $alias_hash;
     foreach my $alias(@{$aliases}) {
         $alias_hash->{$alias->{authorised_value}} = $alias;
