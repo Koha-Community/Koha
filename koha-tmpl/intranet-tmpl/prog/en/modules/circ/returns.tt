@@ -420,7 +420,7 @@
                                                     <h4>Hold for:</h4>
                                                     <ul>
                                                         <li>
-                                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %])
+                                                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
                                                             <span class="patron-category"> - [% patron.category.description | html %]</span>
                                                         </li>
                                                         [% INCLUDE display_holdpatron_address %]
