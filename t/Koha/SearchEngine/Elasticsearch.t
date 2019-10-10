@@ -117,7 +117,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 49;
+    plan tests => 51;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -263,6 +263,16 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             marc_type => 'marc21',
             marc_field => '007_/0',
         },
+        {
+            name => 'issues',
+            type => 'sum',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '952l',
+        },
     );
 
     my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
@@ -301,9 +311,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
         MARC::Field->new('999', '', '', c => '1234567'),
         # '  ' for testing trimming of white space in boolean value callback:
-        MARC::Field->new('952', '', '', 0 => '  ', g => '123.30', o => $callno),
-        MARC::Field->new('952', '', '', 0 => 0, g => '127.20', o => $callno2),
-        MARC::Field->new('952', '', '', 0 => 1, g => '0.00', o => $long_callno),
+        MARC::Field->new('952', '', '', 0 => '  ', g => '123.30', o => $callno, l => 3),
+        MARC::Field->new('952', '', '', 0 => 0, g => '127.20', o => $callno2, l => 2),
+        MARC::Field->new('952', '', '', 0 => 1, g => '0.00', o => $long_callno, l => 1),
     );
     my $marc_record_2 = MARC::Record->new();
     $marc_record_2->leader('     cam  22      a 4500');
@@ -336,8 +346,12 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is(scalar @{$docs->[0]->{title__sort}}, 1, 'First document title__sort field should have a single');
     is_deeply($docs->[0]->{title__sort}, ['Title: first record Title: first record'], 'First document title__sort field should be set correctly');
 
+    is($docs->[0]->{issues}, 6, 'Issues field should be sum of the issues for each item');
+    is($docs->[0]->{issues__sort}, 6, 'Issues sort field should also be a sum of the issues');
+
     is(scalar @{$docs->[0]->{title_wildcard}}, 2, 'First document title_wildcard field should have two values');
     is_deeply($docs->[0]->{title_wildcard}, ['Title:', 'first record'], 'First document title_wildcard field should be set correctly');
+
 
     is(scalar @{$docs->[0]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
     is_deeply(
