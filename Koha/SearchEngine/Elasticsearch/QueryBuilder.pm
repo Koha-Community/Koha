@@ -992,9 +992,6 @@ sub _sort_field {
     my $textField = defined $mappings->{data}{properties}{$f}{type} && $mappings->{data}{properties}{$f}{type} eq 'text';
     if (!defined $self->sort_fields()->{$f} || $self->sort_fields()->{$f}) {
         $f .= '__sort';
-        # We need to add '.phrase' to text fields, otherwise it'll sort
-        # based on the tokenised form.
-        $f .= '.phrase' if $textField;
     } else {
         # We need to add '.raw' to text fields without a sort field,
         # otherwise it'll sort based on the tokenised form.

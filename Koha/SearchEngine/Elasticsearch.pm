@@ -831,6 +831,7 @@ sub _get_marc_mapping_rules {
 
         if ($type eq 'sum') {
             push @{$rules->{sum}}, $name;
+            push @{$rules->{sum}}, $name."__sort" if $sort;
         }
         elsif ($type eq 'isbn') {
             push @{$rules->{isbn}}, $name;
