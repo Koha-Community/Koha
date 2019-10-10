@@ -911,7 +911,7 @@ subtest "CanBookBeRenewed tests" => sub {
     );
 
     my $line = Koha::Account::Lines->search({ borrowernumber => $renewing_borrower->{borrowernumber} })->next();
-    is( $line->accounttype, 'OVERDUE', 'Account line type is OVERDUE' );
+    is( $line->debit_type_code, 'OVERDUE', 'Account line type is OVERDUE' );
     is( $line->status, 'UNRETURNED', 'Account line status is UNRETURNED' );
     is( $line->amountoutstanding, '15.000000', 'Account line amount outstanding is 15.00' );
     is( $line->amount, '15.000000', 'Account line amount is 15.00' );
@@ -927,7 +927,7 @@ subtest "CanBookBeRenewed tests" => sub {
     LostItem( $item_1->itemnumber, 'test', 1 );
 
     $line = Koha::Account::Lines->find($line->id);
-    is( $line->accounttype, 'OVERDUE', 'Account type remains as OVERDUE' );
+    is( $line->debit_type_code, 'OVERDUE', 'Account type remains as OVERDUE' );
     isnt( $line->status, 'UNRETURNED', 'Account status correctly changed from UNRETURNED to RETURNED' );
 
     my $item = Koha::Items->find($item_1->itemnumber);
@@ -2124,7 +2124,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
@@ -2133,7 +2133,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right LOST amount is generated' );
@@ -2159,7 +2159,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         $lost_fee_line->discard_changes; # reload from DB
         is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
-        is( $lost_fee_line->accounttype,
+        is( $lost_fee_line->debit_type_code,
             'LOST', 'Lost fee now still has account type of LOST' );
         is( $lost_fee_line->status, 'RETURNED', "Lost fee now has account status of RETURNED");
 
@@ -2188,7 +2188,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
@@ -2197,7 +2197,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right LOST amount is generated' );
@@ -2227,7 +2227,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         $lost_fee_line->discard_changes;
         is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
-        is( $lost_fee_line->accounttype,
+        is( $lost_fee_line->debit_type_code,
             'LOST', 'Lost fee now still has account type of LOST' );
         is( $lost_fee_line->status, 'RETURNED', "Lost fee now has account status of RETURNED");
 
@@ -2258,7 +2258,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
@@ -2267,7 +2267,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right LOST amount is generated' );
@@ -2283,7 +2283,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         $lost_fee_line->discard_changes;
         is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
-        is( $lost_fee_line->accounttype,
+        is( $lost_fee_line->debit_type_code,
             'LOST', 'Lost fee now still has account type of LOST' );
         is( $lost_fee_line->status, 'RETURNED', "Lost fee now has account status of RETURNED");
 
@@ -2311,7 +2311,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
@@ -2320,7 +2320,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right LOST amount is generated' );
@@ -2367,7 +2367,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         $lost_fee_line->discard_changes;
         is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
-        is( $lost_fee_line->accounttype,
+        is( $lost_fee_line->debit_type_code,
             'LOST', 'Lost fee now still has account type of LOST' );
         is( $lost_fee_line->status, 'RETURNED', "Lost fee now has account status of RETURNED");
 
@@ -2424,7 +2424,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item_id, 1 );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'LOST' } );
+            { borrowernumber => $patron->id, itemnumber => $item_id, debit_type_code => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right LOST amount is generated' );
@@ -2461,7 +2461,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PF - payment (LOST_RETURN)' );
 
-        my $manual_debit = Koha::Account::Lines->search({ borrowernumber => $patron->id, accounttype => 'OVERDUE', status => 'UNRETURNED' })->next;
+        my $manual_debit = Koha::Account::Lines->search({ borrowernumber => $patron->id, debit_type_code => 'OVERDUE', status => 'UNRETURNED' })->next;
         is( $manual_debit->amountoutstanding + 0, $manual_debit_amount - $payment_amount, 'reconcile_balance was called' );
     };
 };
@@ -2491,7 +2491,7 @@ subtest '_FixOverduesOnReturn' => sub {
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber => $patron->{borrowernumber},
-            accounttype    => 'OVERDUE',
+            debit_type_code    => 'OVERDUE',
             status         => 'UNRETURNED',
             itemnumber     => $item->itemnumber,
             amount => 99.00,
@@ -2511,7 +2511,7 @@ subtest '_FixOverduesOnReturn' => sub {
     ## Run again, with exemptfine enabled
     $accountline->set(
         {
-            accounttype    => 'OVERDUE',
+            debit_type_code    => 'OVERDUE',
             status         => 'UNRETURNED',
             amountoutstanding => 99.00,
         }
@@ -2558,7 +2558,7 @@ subtest '_FixAccountForLostAndReturned returns undef if patron is deleted' => su
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber => $patron->id,
-            accounttype    => 'L',
+            debit_type_code    => 'LOST',
             status         => undef,
             itemnumber     => $item->itemnumber,
             amount => 99.00,
@@ -3033,12 +3033,12 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     is( $lines->count, 2 );
 
     my $line = $lines->next;
-    is( $line->accounttype, 'RENT',       'The issue of item with issuing charge generates an accountline of the correct type' );
+    is( $line->debit_type_code, 'RENT',       'The issue of item with issuing charge generates an accountline of the correct type' );
     is( $line->branchcode,  $library->id, 'AddIssuingCharge correctly sets branchcode' );
     is( $line->description, '',     'AddIssue does not set a hardcoded description for the accountline' );
 
     $line = $lines->next;
-    is( $line->accounttype, 'RENT_RENEW', 'The renewal of item with issuing charge generates an accountline of the correct type' );
+    is( $line->debit_type_code, 'RENT_RENEW', 'The renewal of item with issuing charge generates an accountline of the correct type' );
     is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
     is( $line->description, '', 'AddRenewal does not set a hardcoded description for the accountline' );
 

@@ -105,7 +105,7 @@ elsif ( $input->param('confirm_writeoff') ) {
               . "borrowernumber=$borrowernumber"
               . "&amount=" . $accountline->amount
               . "&amountoutstanding=" . $accountline->amountoutstanding
-              . "&accounttype=" . $accountline->accounttype
+              . "&debit_type_code=" . $accountline->debit_type_code
               . "&accountlines_id=" . $accountlines_id
               . "&change_given=" . $change_given
               . "&writeoff_individual=1"
@@ -192,7 +192,7 @@ sub redirect_to_paycollect {
       "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber";
     $redirect .= q{&};
     $redirect .= "$action=1";
-    $redirect .= get_for_redirect( 'accounttype', "accounttype$line_no", 0 );
+    $redirect .= get_for_redirect( 'debit_type_code', "debit_type_code$line_no", 0 );
     $redirect .= get_for_redirect( 'amount', "amount$line_no", 1 );
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );

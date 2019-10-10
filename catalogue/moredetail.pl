@@ -179,7 +179,7 @@ foreach my $item (@items){
         my $accountlines = Koha::Account::Lines->search(
             {
                 itemnumber        => $item->{itemnumber},
-                accounttype       => 'LOST',
+                debit_type_code   => 'LOST',
                 status            => [ undef, { '<>' => 'RETURNED' } ],
                 amountoutstanding => 0
             },

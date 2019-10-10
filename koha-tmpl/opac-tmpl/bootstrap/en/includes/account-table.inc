@@ -170,31 +170,38 @@
 </form>
 
 [%- BLOCK account_type_description -%]
-    [%- SWITCH account.accounttype -%]
-        [%- CASE 'Pay'              -%]<span>Payment
-        [%- CASE 'VOID'             -%]<span>Voided
-        [%- CASE 'N'                -%]<span>New card
-        [%- CASE 'OVERDUE'          -%]<span>Fine
-        [%- CASE 'ACCOUNT'          -%]<span>Account creation fee
-        [%- CASE 'ACCOUNT_RENEW'    -%]<span>Account renewal fee
-        [%- CASE 'M'                -%]<span>Sundry
-        [%- CASE 'LOST'             -%]<span>Lost item
-        [%- CASE 'W'                -%]<span>Writeoff
-        [%- CASE 'HE'               -%]<span>Hold waiting too long
-        [%- CASE 'RENT'             -%]<span>Rental fee
-        [%- CASE 'RENT_DAILY'       -%]<span>Daily rental fee
-        [%- CASE 'RENT_RENEW'       -%]<span>Renewal of rental item
-        [%- CASE 'RENT_DAILT_RENEW' -%]<span>Renewal of dailt rental item
-        [%- CASE 'FOR'              -%]<span>Forgiven
-        [%- CASE 'PF'               -%]<span>Lost item processing fee
-        [%- CASE 'PAY'              -%]<span>Payment
-        [%- CASE 'WO'               -%]<span>Writeoff
-        [%- CASE 'C'                -%]<span>Credit
-        [%- CASE 'LOST_RETURN'      -%]<span>Lost item fee refund
-        [%- CASE 'Res'              -%]<span>Hold fee
-        [%- CASE                    -%]<span>[% account.accounttype | html %]
+    <span>
+    [%- IF account.accounttype -%]
+        [%- SWITCH account.accounttype -%]
+            [%- CASE 'Pay'              -%]Payment
+            [%- CASE 'W'                -%]Writeoff
+            [%- CASE 'FOR'              -%]Forgiven
+            [%- CASE 'PAY'              -%]Payment
+            [%- CASE 'WO'               -%]Writeoff
+            [%- CASE 'C'                -%]Credit
+            [%- CASE 'LOST_RETURN'      -%]Lost item fee refund
+            [%- CASE                    -%][% account.accounttype | html %]
+        [%- END -%]
+    [%- ELSIF account.debit_type -%]
+       [%- SWITCH account.debit_type -%]
+           [%- CASE 'ACCOUNT'          -%]Account creation fee
+           [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
+           [%- CASE 'HE'               -%]Hold waiting too long
+           [%- CASE 'LOST'             -%]Lost item
+           [%- CASE 'M'                -%]Sundry
+           [%- CASE 'N'                -%]New card
+           [%- CASE 'OVERDUE'          -%]Fine
+           [%- CASE 'PF'               -%]Lost item processing fee
+           [%- CASE 'RENT'             -%]Rental fee
+           [%- CASE 'RENT_DAILY'       -%]Daily rental fee
+           [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
+           [%- CASE 'RENT_DAILY_RENEW' -%]Rewewal of daily rental item
+           [%- CASE 'Res'              -%]Hold fee
+           [%- CASE                    -%][% account.debit_type.description | html %]
+       [%- END -%]
     [%- END -%]
-    [%- PROCESS account_status_description account=account -%]</span>
+    [%- PROCESS account_status_description account=account -%]
+    </span>
 [%- END -%]
 
 [%- BLOCK account_status_description -%]

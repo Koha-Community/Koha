@@ -4,6 +4,7 @@
 [% USE Price %]
 [% USE ItemTypes %]
 [% SET footerjs = 1 %]
+[% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash register statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash register statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -78,54 +79,17 @@
                         <option value="FORW">Write off</option>
                         [% END %]
 
-                        [% IF transaction_type == "F" %]
-                        <option value="F" selected="selected">Fine</option>
-                        [% ELSE %]
-                        <option value="F">Fine</option>
-                        [% END %]
-
-                        [% IF transaction_type == "FU" %]
-                        <option value="FU" selected="selected">Accruing fine</option>
-                        [% ELSE %]
-                        <option value="FU">Accruing fine</option>
-                        [% END %]
-
                         [% IF transaction_type == "PAY" %]
                         <option value="PAY" selected="selected">Payment</option>
                         [% ELSE %]
                         <option value="PAY">Payment</option>
                         [% END %]
 
-                        [% IF transaction_type == "A" %]
-                        <option value="A" selected="selected">Account management fee</option>
-                        [% ELSE %]
-                        <option value="A">Account management fee</option>
-                        [% END %]
-
-                        [% IF transaction_type == "M" %]
-                        <option value="M" selected="selected">Sundry</option>
-                        [% ELSE %]
-                        <option value="M">Sundry</option>
-                        [% END %]
-
-                        [% IF transaction_type == "L" %]
-                        <option value="L" selected="selected">Lost item</option>
-                        [% ELSE %]
-                        <option value="L">Lost item</option>
-                        [% END %]
-
-                        [% IF transaction_type == "N" %]
-                        <option value="N" selected="selected">New card</option>
-                        [% ELSE %]
-                        <option value="N">New card</option>
-                        [% END %]
-
-                        [% FOREACH manualinv IN manualinv_types %]
-                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
-                            [% IF transaction_type == value_manualinv %]
-                            <option value="[% value_manualinv | html %]" selected="selected">[% manualinv.authorised_value | html %]</option>
+                        [% FOREACH debit_type IN debit_types %]
+                            [% IF transaction_type == debit_type.code %]
+                            <option value="[% debit_type.code | html %]" selected="selected">[% debit_type.description | html %]</option>
                             [% ELSE %]
-                            <option value="[% value_manualinv | html %]">[% manualinv.authorised_value | html %]</option>
+                            <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
@@ -197,32 +161,8 @@
                 <td>
                     [% IF loopresul.accounttype == "ACT" %]
                         <span>All payments to the library</span>
-                    [% ELSIF loopresul.accounttype == "C" || loopresul.accounttype == "CR" %]
-                        <span>Credit</span>
-                    [% ELSIF loopresul.accounttype == "FORW" || loopresul.accounttype == "W" %]
-                        <span>Write off</span>
-                    [% ELSIF loopresul.accounttype == "F" %]
-                        <span>Fine</span>
-                    [% ELSIF loopresul.accounttype == "FU" %]
-                        <span>Accruing fine</span>
-                    [% ELSIF loopresul.accounttype == "Pay" %]
-                        <span>Payment</span>
-                    [% ELSIF loopresul.accounttype == "A" %]
-                        <span>Account management fee</span>
-                    [% ELSIF loopresul.accounttype == "M" %]
-                        <span>Sundry</span>
-                    [% ELSIF loopresul.accounttype == "LOST" %]
-                        <span>Lost item</span>
-                    [% ELSIF loopresul.accounttype == "N" %]
-                        <span>New card</span>
                     [% ELSE %]
-                        [% FOREACH manualinv IN manualinv_types %]
-                            [% value_manualinv = manualinv.authorised_value|truncate(5, '') %]
-                            [% IF loopresul.accounttype == value_manualinv %]
-                            <span>[% manualinv.authorised_value | html %]</span>
-                            [% LAST %]
-                            [% END %]
-                        [% END %]
+                        [%- PROCESS account_type_description account=loopresul -%]
                     [% END %]
                 </td>
                 <td>[% loopresul.note | html %]</td>

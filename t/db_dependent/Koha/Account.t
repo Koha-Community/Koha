@@ -343,7 +343,7 @@ subtest 'add_debit() tests' => sub {
         'No log was added'
     );
     is(
-        $line_1->accounttype,
+        $line_1->debit_type_code,
         $Koha::Account::account_type_debit->{'rent'},
         'Account type is correctly set'
     );
@@ -370,7 +370,7 @@ subtest 'add_debit() tests' => sub {
         'Log was added'
     );
     is(
-        $line_2->accounttype,
+        $line_2->debit_type_code,
         $Koha::Account::account_type_debit->{'rent'},
         'Account type is correctly set'
     );
@@ -657,7 +657,7 @@ subtest 'pay() handles lost items when paying a specific lost fee' => sub {
             borrowernumber => $patron->id,
             itemnumber     => $item->id,
             date           => \'NOW()',
-            accounttype    => 'LOST',
+            debit_type_code    => 'LOST',
             interface      => 'cli',
             amount => '1',
             amountoutstanding => '1',
@@ -730,7 +730,7 @@ subtest 'pay() handles lost items when paying by amount ( not specifying the los
             borrowernumber => $patron->id,
             itemnumber     => $item->id,
             date           => \'NOW()',
-            accounttype    => 'LOST',
+            debit_type_code    => 'LOST',
             interface      => 'cli',
             amount => '1',
             amountoutstanding => '1',
@@ -801,7 +801,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
             borrowernumber    => $patron->id,
             itemnumber        => $item->id,
             date              => \'NOW()',
-            accounttype       => 'LOST',
+            debit_type_code       => 'LOST',
             interface         => 'cli',
             amount            => '1',
             amountoutstanding => '1',

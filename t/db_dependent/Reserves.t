@@ -739,7 +739,7 @@ subtest 'ChargeReserveFee tests' => sub {
 
     is( ref($line), 'Koha::Account::Line' , 'Returns a Koha::Account::Line object');
     ok( $line->is_debit, 'Generates a debit line' );
-    is( $line->accounttype, 'Res' , 'generates Res accounttype');
+    is( $line->debit_type_code, 'Res' , 'generates Res debit_type');
     is( $line->borrowernumber, $patron->id , 'generated line belongs to the passed patron');
     is( $line->amount, $fee , 'amount set correctly');
     is( $line->amountoutstanding, $fee , 'amountoutstanding set correctly');

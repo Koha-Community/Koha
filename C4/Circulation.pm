@@ -2347,10 +2347,10 @@ sub _FixOverduesOnReturn {
             # check for overdue fine
             my $accountlines = Koha::Account::Lines->search(
                 {
-                    borrowernumber => $borrowernumber,
-                    itemnumber     => $item,
-                    accounttype    => 'OVERDUE',
-                    status         => 'UNRETURNED'
+                    borrowernumber  => $borrowernumber,
+                    itemnumber      => $item,
+                    debit_type_code => 'OVERDUE',
+                    status          => 'UNRETURNED'
                 }
             );
             return 0 unless $accountlines->count; # no warning, there's just nothing to fix
@@ -2411,9 +2411,9 @@ sub _FixAccountForLostAndReturned {
     # check for charge made for lost book
     my $accountlines = Koha::Account::Lines->search(
         {
-            itemnumber  => $itemnumber,
-            accounttype => 'LOST',
-            status      => [ undef, { '<>' => 'RETURNED' } ]
+            itemnumber      => $itemnumber,
+            debit_type_code => 'LOST',
+            status          => [ undef, { '<>' => 'RETURNED' } ]
         },
         {
             order_by => { -desc => [ 'date', 'accountlines_id' ] }

@@ -73,7 +73,7 @@
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
     <input type="hidden" name="description" id="description" value="[% description | html %]" />
-    <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype | html %]" />
+    <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
     <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
@@ -97,7 +97,7 @@
             <td>
                 [% individual_description | html %]
             </td>
-            <td>[% accounttype | html %]</td>
+            <td>[% debit_type_code | html %]</td>
             <td class="debit">[% amount | format('%.2f') %]</td>
             <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
         </tr></tbody>
@@ -161,7 +161,7 @@
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
     <input type="hidden" name="description" id="description" value="[% description | html %]" />
-    <input type="hidden" name="accounttype" id="accounttype" value="[% accounttype | html %]" />
+    <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
     <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
     <input type="hidden" name="title" id="title" value="[% title | html %]" />
@@ -179,7 +179,7 @@
     <tfoot><tr><td colspan="3">Total amount outstanding:</td><td>[% amountoutstanding | format('%.2f') %]</td></tr></tfoot>
     <tbody><tr>
             <td>[% description | html %] [% title | html %]</td>
-            <td>[% accounttype | html %]</td>
+            <td>[% debit_type_code | html %]</td>
             <td class="debit">[% amount | format('%.2f') %]</td>
             <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
         </tr></tbody>

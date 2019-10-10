@@ -115,8 +115,8 @@ sub pay {
         # Same logic exists in Koha::Account::Line::apply
         if (   $new_amountoutstanding == 0
             && $fine->itemnumber
-            && $fine->accounttype
-            && ( $fine->accounttype eq 'LOST' ) )
+            && $fine->debit_type_code
+            && ( $fine->debit_type_code eq 'LOST' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }
@@ -174,8 +174,8 @@ sub pay {
 
         if (   $fine->amountoutstanding == 0
             && $fine->itemnumber
-            && $fine->accounttype
-            && ( $fine->accounttype eq 'LOST' ) )
+            && $fine->debit_type_code
+            && ( $fine->debit_type_code eq 'LOST' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }
@@ -444,19 +444,20 @@ my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
 );
 
 $debit_type can be any of:
-  - overdue
-  - lost_item
-  - new_card
   - account
   - account_renew
+  - hold_expired
+  - lost_item
   - sundry
+  - new_card
+  - overdue
   - processing
   - rent
   - rent_daily
-  - rent_renewal
-  - rent_daily_renewal
+  - rent_renew
+  - rent_daily_renew
   - reserve
-  - manual
+  - manual_debit
 
 =cut
 
@@ -465,27 +466,25 @@ sub add_debit {
     my ( $self, $params ) = @_;
 
     # amount should always be a positive value
-    my $amount       = $params->{amount};
+    my $amount = $params->{amount};
 
     unless ( $amount > 0 ) {
         Koha::Exceptions::Account::AmountNotPositive->throw(
-            error => 'Debit amount passed is not positive'
-        );
+            error => 'Debit amount passed is not positive' );
     }
 
-    my $description  = $params->{description} // q{};
-    my $note         = $params->{note} // q{};
-    my $user_id      = $params->{user_id};
-    my $interface    = $params->{interface};
-    my $library_id   = $params->{library_id};
-    my $type         = $params->{type};
-    my $item_id      = $params->{item_id};
-    my $issue_id     = $params->{issue_id};
+    my $description = $params->{description} // q{};
+    my $note        = $params->{note} // q{};
+    my $user_id     = $params->{user_id};
+    my $interface   = $params->{interface};
+    my $library_id  = $params->{library_id};
+    my $type        = $params->{type};
+    my $item_id     = $params->{item_id};
+    my $issue_id    = $params->{issue_id};
 
-    unless ( $interface ) {
+    unless ($interface) {
         Koha::Exceptions::MissingParameter->throw(
-            error => 'The interface parameter is mandatory'
-        );
+            error => 'The interface parameter is mandatory' );
     }
 
     my $schema = Koha::Database->new->schema;
@@ -496,20 +495,20 @@ sub add_debit {
         );
     }
 
-    my $account_type = $Koha::Account::account_type_debit->{$type};
+    my $debit_type_code = $Koha::Account::account_type_debit->{$type};
 
     my $line;
-
     $schema->txn_do(
         sub {
 
             # Insert the account line
             $line = Koha::Account::Line->new(
-                {   borrowernumber    => $self->{patron_id},
+                {
+                    borrowernumber    => $self->{patron_id},
                     date              => \'NOW()',
                     amount            => $amount,
                     description       => $description,
-                    accounttype       => $account_type,
+                    debit_type_code   => $debit_type_code,
                     amountoutstanding => $amount,
                     payment_type      => undef,
                     note              => $note,
@@ -518,15 +517,16 @@ sub add_debit {
                     itemnumber        => $item_id,
                     issue_id          => $issue_id,
                     branchcode        => $library_id,
-                    ( $type eq 'overdue' ? ( status => 'UNRETURNED' ) : ()),
+                    ( $type eq 'overdue' ? ( status => 'UNRETURNED' ) : () ),
                 }
             )->store();
 
             # Record the account offset
             my $account_offset = Koha::Account::Offset->new(
-                {   debit_id => $line->id,
-                    type      => $Koha::Account::offset_type->{$type},
-                    amount    => $amount
+                {
+                    debit_id => $line->id,
+                    type     => $Koha::Account::offset_type->{$type},
+                    amount   => $amount
                 }
             )->store();
 
@@ -535,12 +535,13 @@ sub add_debit {
                     "FINES", 'CREATE',
                     $self->{patron_id},
                     Dumper(
-                        {   action            => "create_$type",
+                        {
+                            action            => "create_$type",
                             borrowernumber    => $self->{patron_id},
                             amount            => $amount,
                             description       => $description,
                             amountoutstanding => $amount,
-                            accounttype       => $account_type,
+                            debit_type_code   => $debit_type_code,
                             note              => $note,
                             itemnumber        => $item_id,
                             manager_id        => $user_id,
@@ -636,13 +637,13 @@ sub non_issues_charges {
     push @not_fines, ( 'RENT', 'RENT_DAILY', 'RENT_RENEW', 'RENT_DAILY_RENEW' )
       unless C4::Context->preference('RentalsInNoissuesCharge');
     unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
-        my @man_inv = Koha::Account::DebitTypes->search({ system => 0 })->get_column('code');
+        my @man_inv = Koha::Account::DebitTypes->search({ is_system => 0 })->get_column('code');
         push @not_fines, @man_inv;
     }
 
     return $self->lines->search(
         {
-            debit_type => { -not_in => \@not_fines }
+            debit_type_code => { -not_in => \@not_fines }
         },
     )->total_outstanding;
 }
@@ -741,18 +742,18 @@ our $account_type_credit = {
 our $account_type_debit = {
     'account'          => 'ACCOUNT',
     'account_renew'    => 'ACCOUNT_RENEW',
-    'overdue'          => 'OVERDUE',
+    'hold_expired'     => 'HE',
     'lost_item'        => 'LOST',
-    'new_card'         => 'N',
     'sundry'           => 'M',
+    'new_card'         => 'N',
+    'overdue'          => 'OVERDUE',
     'processing'       => 'PF',
     'rent'             => 'RENT',
     'rent_daily'       => 'RENT_DAILY',
     'rent_renew'       => 'RENT_RENEW',
     'rent_daily_renew' => 'RENT_DAILY_RENEW',
     'reserve'          => 'Res',
-    'manual_debit'     => 'M',
-    'hold_expired'     => 'HE'
+    'manual_debit'     => 'M'
 };
 
 =head1 AUTHORS

@@ -112,9 +112,9 @@ subtest 'add_enrolment_fee_if_needed() tests' => sub {
 
         my @debits = $account->outstanding_debits;
         is( scalar @debits, 3, '3 enrolment fees' );
-        is( $debits[0]->accounttype, 'ACCOUNT', 'Account type set correctly' );
-        is( $debits[1]->accounttype, 'ACCOUNT', 'Account type set correctly' );
-        is( $debits[2]->accounttype, 'ACCOUNT_RENEW', 'Account type set correctly' );
+        is( $debits[0]->debit_type_code, 'ACCOUNT', 'Account type set correctly' );
+        is( $debits[1]->debit_type_code, 'ACCOUNT', 'Account type set correctly' );
+        is( $debits[2]->debit_type_code, 'ACCOUNT_RENEW', 'Account type set correctly' );
 
         $schema->storage->txn_rollback;
     };

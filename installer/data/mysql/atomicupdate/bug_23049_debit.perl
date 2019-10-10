@@ -1,6 +1,7 @@
 $DBversion = 'XXX';    # will be replaced by the RM
 if ( CheckVersion($DBversion) ) {
 
+    # Adding account_debit_types
     $dbh->do(
         qq{
             CREATE TABLE IF NOT EXISTS account_debit_types (
@@ -14,6 +15,7 @@ if ( CheckVersion($DBversion) ) {
           }
     );
 
+    # Adding ac_debit_types_branches
     $dbh->do(
         qq{
             CREATE TABLE IF NOT EXISTS ac_debit_types_branches (
@@ -25,6 +27,7 @@ if ( CheckVersion($DBversion) ) {
         }
     );
 
+    # Populating account_debit_types
     $dbh->do(
         qq{
             INSERT IGNORE INTO account_debit_types (
@@ -51,6 +54,7 @@ if ( CheckVersion($DBversion) ) {
         }
     );
 
+    # Moving MANUAL_INV to account_debit_types
     $dbh->do(
         qq{
             INSERT IGNORE INTO account_debit_types (
@@ -73,35 +77,43 @@ if ( CheckVersion($DBversion) ) {
           }
     );
 
-    $dbh->do(
-        qq{
-            ALTER IGNORE TABLE accountlines
-            ADD
-              debit_type varchar(64) DEFAULT NULL
-            AFTER
-              accounttype
-          }
-    );
+    # Adding debit_type_code to accountlines
+    unless ( column_exists('accountlines', 'debit_type_code') ) {
+        $dbh->do(
+            qq{
+                ALTER IGNORE TABLE accountlines
+                ADD
+                  debit_type_code varchar(64) DEFAULT NULL
+                AFTER
+                  accounttype
+              }
+        );
+    }
 
-    $dbh->do(
-        qq{
-        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type`) REFERENCES `account_debit_types` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
-          }
-    );
+    # Linking debit_type_code in accountlines to code in account_debit_types
+    unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_debit_type' ) ) {
+        $dbh->do(
+            qq{
+            ALTER TABLE accountlines ADD CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type_code`) REFERENCES `account_debit_types` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE
+              }
+        );
+    }
 
+    # Adding a check constraints to accountlines
     $dbh->do(
         qq{
-        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_check_type` CHECK (accounttype IS NOT NULL OR debit_type IS NOT NULL)
+        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_check_type` CHECK (accounttype IS NOT NULL OR debit_type_code IS NOT NULL)
         }
     );
 
+    # Populating debit_type_code
     $dbh->do(
         qq{
-        UPDATE accountlines SET debit_type = accounttype, accounttype = NULL WHERE accounttype IN (SELECT code from account_debit_types)
+        UPDATE accountlines SET debit_type_code = accounttype, accounttype = NULL WHERE accounttype IN (SELECT code from account_debit_types)
         }
     );
 
-    # Clean up MANUAL_INV
+    # Remove MANUAL_INV
     $dbh->do(
         qq{
         DELETE FROM authorised_values WHERE category = 'MANUAL_INV'

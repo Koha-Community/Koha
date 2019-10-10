@@ -46,7 +46,7 @@ subtest 'patron() tests' => sub {
     my $line = Koha::Account::Line->new(
     {
         borrowernumber => $patron->{borrowernumber},
-        accounttype    => "OVERDUE",
+        debit_type_code    => "OVERDUE",
         status         => "RETURNED",
         amount         => 10,
         interface      => 'commandline',
@@ -86,7 +86,7 @@ subtest 'item() tests' => sub {
     {
         borrowernumber => $patron->{borrowernumber},
         itemnumber     => $item->itemnumber,
-        accounttype    => "OVERDUE",
+        debit_type_code    => "OVERDUE",
         status         => "RETURNED",
         amount         => 10,
         interface      => 'commandline',
@@ -115,7 +115,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $debit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
             amountoutstanding => 10,
@@ -125,7 +125,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $debit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
             amountoutstanding => 10,
@@ -138,7 +138,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $credit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => -10,
             amountoutstanding => -10,
@@ -151,7 +151,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $credit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => -10,
             amountoutstanding => -10,
@@ -164,7 +164,7 @@ subtest 'total_outstanding() tests' => sub {
 
     my $credit_3 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => -100,
             amountoutstanding => -100,
@@ -195,7 +195,7 @@ subtest 'is_credit() and is_debit() tests' => sub {
     my $debit = Koha::Account::Line->new(
     {
         borrowernumber => $patron->id,
-        accounttype    => "OVERDUE",
+        debit_type_code    => "OVERDUE",
         status         => "RETURNED",
         amount         => 10,
         interface      => 'commandline',
@@ -220,7 +220,7 @@ subtest 'apply() tests' => sub {
 
     my $debit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
             amountoutstanding => 10,
@@ -230,7 +230,7 @@ subtest 'apply() tests' => sub {
 
     my $debit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => 100,
             amountoutstanding => 100,
@@ -293,7 +293,7 @@ subtest 'apply() tests' => sub {
     my $credit_2 = $account->add_credit({ amount => 20, interface => 'commandline' });
     my $debit_3  = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => 100,
             amountoutstanding => 100,
@@ -343,7 +343,7 @@ subtest 'Keep account info when related patron, staff or item is deleted' => sub
         borrowernumber => $patron->borrowernumber,
         manager_id     => $staff->borrowernumber,
         itemnumber     => $item->itemnumber,
-        accounttype    => "OVERDUE",
+        debit_type_code    => "OVERDUE",
         status         => "RETURNED",
         amount         => 10,
         interface      => 'commandline',
@@ -382,7 +382,7 @@ subtest 'adjust() tests' => sub {
 
     my $debit_1 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "RETURNED",
             amount            => 10,
             amountoutstanding => 10,
@@ -392,7 +392,7 @@ subtest 'adjust() tests' => sub {
 
     my $debit_2 = Koha::Account::Line->new(
         {   borrowernumber    => $patron->id,
-            accounttype       => "OVERDUE",
+            debit_type_code       => "OVERDUE",
             status            => "UNRETURNED",
             amount            => 100,
             amountoutstanding => 100,
@@ -406,7 +406,7 @@ subtest 'adjust() tests' => sub {
     qr/Update type not recognised/, 'Exception thrown for unrecognised type';
 
     throws_ok { $debit_1->adjust( { amount => 50, type => 'overdue_update', interface => 'commandline' } ) }
-    qr/Update type not allowed on this accounttype/,
+    qr/Update type not allowed on this debit_type/,
       'Exception thrown for type conflict';
 
     # Increment an unpaid fine

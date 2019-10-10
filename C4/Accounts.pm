@@ -90,9 +90,9 @@ sub chargelostitem {
     # first make sure the borrower hasn't already been charged for this item (for this issuance)
     my $existing_charges = $account->lines->search(
         {
-            itemnumber     => $itemnumber,
-            accounttype    => 'LOST',
-            issue_id       => $issue_id
+            itemnumber      => $itemnumber,
+            debit_type_code => 'LOST',
+            issue_id        => $issue_id
         }
     )->count();
 
@@ -174,7 +174,7 @@ sub manualinvoice {
             date              => \'NOW()',
             amount            => $amount,
             description       => $desc,
-            accounttype       => $type,
+            debit_type_code   => $type,
             amountoutstanding => $amountleft,
             itemnumber        => $itemnum || undef,
             issue_id          => $issue_id,
@@ -199,7 +199,7 @@ sub manualinvoice {
             borrowernumber    => $borrowernumber,
             amount            => $amount,
             description       => $desc,
-            accounttype       => $type,
+            debit_type_code   => $type,
             amountoutstanding => $amountleft,
             note              => $note,
             itemnumber        => $itemnum,

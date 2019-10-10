@@ -229,7 +229,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
 
             my $desc        = "staticfine";
             my $query       = "INSERT INTO accountlines
-                        (borrowernumber,itemnumber,date,amount,description,accounttype,status,amountoutstanding)
+                        (borrowernumber,itemnumber,date,amount,description,debit_type_code,status,amountoutstanding)
                                 VALUES (?,?,now(),?,?,'OVERDUE','RETURNED',?)";
             my $sth2 = $dbh->prepare($query);
             $bigdebug and warn "query: $query\nw/ args: $borrowernumber, $itemnumber, $amount, $desc, $amount\n";

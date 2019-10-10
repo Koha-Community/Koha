@@ -82,8 +82,8 @@ my %row = (
     'amount'                  => sprintf( "%.2f", $accountline->{'amount'} ),
     'amountoutstanding' =>
       sprintf( "%.2f", $accountline->{'amountoutstanding'} ),
-    accounttype => $accountline->{accounttype},
-    'note'      => $accountline->{'note'},
+    'debit_type_code' => $accountline->{'debit_type_code'},
+    'note'            => $accountline->{'note'},
 );
 
 my @account_offsets = Koha::Account::Offsets->search( { debit_id => $accountline_object->id } );

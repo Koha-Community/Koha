@@ -523,7 +523,7 @@ sub UpdateFine {
     my $overdues = Koha::Account::Lines->search(
         {
             borrowernumber    => $borrowernumber,
-            accounttype       => [ 'OVERDUE', 'M' ],
+            debit_type_code   => [ 'OVERDUE', 'M' ],
             amountoutstanding => { '<>' => 0 }
         }
     );
@@ -637,7 +637,7 @@ sub GetFine {
     my ( $itemnum, $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh();
     my $query = q|SELECT sum(amountoutstanding) as fineamount FROM accountlines
-    where accounttype like 'OVERDUE'
+    WHERE debit_type_code LIKE 'OVERDUE'
   AND amountoutstanding > 0 AND borrowernumber=?|;
     my @query_param;
     push @query_param, $borrowernumber;
@@ -728,7 +728,7 @@ sub GetOverduesForBranch {
     LEFT JOIN itemtypes   ON itemtypes.itemtype       = $itype_link
     LEFT JOIN branches    ON  branches.branchcode     = issues.branchcode
     WHERE (accountlines.amountoutstanding  != '0.000000')
-      AND (accountlines.accounttype         = 'OVERDUE' )
+      AND (accountlines.debit_type_code     = 'OVERDUE' )
       AND (accountlines.status              = 'UNRETURNED' )
       AND (issues.branchcode =  ?   )
       AND (issues.date_due  < NOW())

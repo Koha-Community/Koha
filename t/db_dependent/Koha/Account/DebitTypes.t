@@ -52,8 +52,6 @@ my $new_debit_type_2 = Koha::Account::DebitType->new(
     }
 )->store;
 
-my $defaults                  = Koha::Account::DebitType::defaults;
-my $number_of_system_types    = scalar @{$defaults};
 my $retrieved_debit_types_all = Koha::Account::DebitTypes->search();
 try {
     $retrieved_debit_types_all->delete;

@@ -240,10 +240,10 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                     # Note that this should not be needed but since we do not have proper exception handling here we do it this way
                     patron_has_hold_fee => Koha::Account::Lines->search(
                         {
-                            borrowernumber => $borrower->{borrowernumber},
-                            accounttype    => 'Res',
-                            description    => $item->biblio->title,
-                            date           => $dtf->format_date(dt_from_string)
+                            borrowernumber  => $borrower->{borrowernumber},
+                            debit_type_code => 'Res',
+                            description     => $item->biblio->title,
+                            date            => $dtf->format_date(dt_from_string)
                         }
                       )->count,
                 );

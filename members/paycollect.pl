@@ -109,8 +109,8 @@ if ( $pay_individual || $writeoff_individual ) {
     } elsif ($writeoff_individual) {
         $template->param( writeoff_individual => 1 );
     }
-    my $accounttype       = $input->param('accounttype');
-    $accountlines_id       = $input->param('accountlines_id');
+    my $debit_type_code   = $input->param('debit_type_code');
+    $accountlines_id      = $input->param('accountlines_id');
     my $amount            = $input->param('amount');
     my $amountoutstanding = $input->param('amountoutstanding');
     my $itemnumber  = $input->param('itemnumber');
@@ -118,7 +118,7 @@ if ( $pay_individual || $writeoff_individual ) {
     my $title        = $input->param('title');
     $total_due = $amountoutstanding;
     $template->param(
-        accounttype       => $accounttype,
+        debit_type_code    => $debit_type_code,
         accountlines_id    => $accountlines_id,
         amount            => $amount,
         amountoutstanding => $amountoutstanding,

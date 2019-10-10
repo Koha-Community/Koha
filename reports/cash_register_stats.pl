@@ -25,6 +25,9 @@ use C4::Circulation;
 use DateTime;
 use Koha::DateUtils;
 use Text::CSV::Encoded;
+use List::Util qw/any/;
+
+use Koha::Account::DebitTypes;
 
 my $input            = new CGI;
 my $dbh              = C4::Context->dbh;
@@ -53,11 +56,8 @@ $template->param(
 my $fromDate = dt_from_string;
 my $toDate   = dt_from_string;
 
-my $query_manualinv = "SELECT id, authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'";
-my $sth_manualinv = $dbh->prepare($query_manualinv) or die "Unable to prepare query" . $dbh->errstr;
-$sth_manualinv->execute() or die "Unable to execute query " . $sth_manualinv->errstr;
-my $manualinv_types = $sth_manualinv->fetchall_arrayref({});
-
+my @debit_types =
+  Koha::Account::DebitTypes->search()->as_list;
 
 if ($do_it) {
 
@@ -73,9 +73,12 @@ if ($do_it) {
         $whereTType = q{};
     } elsif ($transaction_type eq 'ACT') { #Active
         $whereTType = q{ AND accounttype IN ('Pay','C') };
-    } else { #Single transac type
-        if ($transaction_type eq 'FORW') {
-            $whereTType = q{ AND accounttype IN ('FOR','W') };
+    } elsif ($transaction_type eq 'FORW') {
+        $whereTType = q{ AND accounttype IN ('FOR','W') };
+    } else {
+        if ( any { $transaction_type eq $_->code } @debit_types ) {
+            $whereTType = q{ AND debit_type_code = ? };
+            push @extra_params, $transaction_type;
         } else {
             $whereTType = q{ AND accounttype = ? };
             push @extra_params, $transaction_type;
@@ -93,7 +96,7 @@ if ($do_it) {
     SELECT round(amount,2) AS amount, description,
         bo.surname AS bsurname, bo.firstname AS bfirstname, m.surname AS msurname, m.firstname AS mfirstname,
         bo.cardnumber, br.branchname, bo.borrowernumber,
-        al.borrowernumber, DATE(al.date) as date, al.accounttype, al.amountoutstanding, al.note,
+        al.borrowernumber, DATE(al.date) as date, al.accounttype, al.debit_type_code, al.amountoutstanding, al.note,
         bi.title, bi.biblionumber, i.barcode, i.itype
         FROM accountlines al
         LEFT JOIN borrowers bo ON (al.borrowernumber = bo.borrowernumber)
@@ -153,6 +156,7 @@ if ($do_it) {
                         $row->{branchname},
                         $row->{date},
                         $row->{accounttype},
+                        $row->{debit_type},
                         $row->{note},
                         $row->{amount},
                         $row->{title},
@@ -182,7 +186,7 @@ $template->param(
     endDate          => $toDate,
     transaction_type => $transaction_type,
     branchloop       => Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed,
-    manualinv_types  => $manualinv_types,
+    debit_types      => \@debit_types,
     CGIsepChoice => GetDelimiterChoices,
 );
 

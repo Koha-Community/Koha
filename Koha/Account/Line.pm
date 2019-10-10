@@ -252,8 +252,8 @@ sub apply {
             # Same logic exists in Koha::Account::pay
             if (   $debit->amountoutstanding == 0
                 && $debit->itemnumber
-                && $debit->accounttype
-                && $debit->accounttype eq 'LOST' )
+                && $debit->debit_type_code
+                && $debit->debit_type_code eq 'LOST' )
             {
                 C4::Circulation::ReturnLostItem( $self->borrowernumber, $debit->itemnumber );
             }
@@ -300,21 +300,21 @@ sub adjust {
         );
     }
 
-    my $account_type   = $self->accounttype;
-    my $account_status = $self->status;
+    my $debit_type_code = $self->debit_type_code;
+    my $account_status  = $self->status;
     unless (
         (
             exists(
                 $Koha::Account::Line::allowed_update->{$update_type}
-                  ->{$account_type}
+                  ->{$debit_type_code}
             )
             && ( $Koha::Account::Line::allowed_update->{$update_type}
-                ->{$account_type} eq $account_status )
+                ->{$debit_type_code} eq $account_status )
         )
       )
     {
         Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Update type not allowed on this accounttype' );
+            error => 'Update type not allowed on this debit_type' );
     }
 
     my $schema = Koha::Database->new->schema;
@@ -327,7 +327,7 @@ sub adjust {
             my $difference                = $amount - $amount_before;
             my $new_outstanding           = $amount_outstanding_before + $difference;
 
-            my $offset_type = $account_type;
+            my $offset_type = $debit_type_code;
             $offset_type .= ( $difference > 0 ) ? "_INCREASE" : "_DECREASE";
 
             # Catch cases that require patron refunds
@@ -374,7 +374,7 @@ sub adjust {
                             amount            => $amount,
                             description       => undef,
                             amountoutstanding => $new_outstanding,
-                            accounttype       => $self->accounttype,
+                            debit_type_code   => $self->debit_type_code,
                             note              => undef,
                             itemnumber        => $self->itemnumber,
                             manager_id        => undef,
