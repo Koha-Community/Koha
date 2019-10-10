@@ -21,8 +21,9 @@ use Modern::Perl;
 use List::Util qw/any/;
 
 use Koha::Database;
+use Koha::Account::DebitType;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Limit::Library);
 
 =head1 NAME
 

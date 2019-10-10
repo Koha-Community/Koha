@@ -23,7 +23,7 @@ use List::Util qw/any/;
 use Koha::Database;
 use Koha::Exceptions;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Limit::Library);
 
 =head1 NAME
 
@@ -47,6 +47,20 @@ sub delete {
     Koha::Exceptions::CannotDeleteDefault->throw if $self->is_system;
 
     return $self->SUPER::delete;
+}
+
+=head3 _library_limits
+
+Configurable library limits
+
+=cut
+
+sub _library_limits {
+    return {
+        class   => "AccountDebitTypesBranch",
+        id      => "debit_type_code",
+        library => "branchcode",
+    };
 }
 
 =head3 type

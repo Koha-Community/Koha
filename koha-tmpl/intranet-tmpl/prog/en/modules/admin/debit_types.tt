@@ -1,0 +1,232 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Branches %]
+[% USE Price %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo;
+    [% IF op =='add_form' %]
+       Debit types &rsaquo;
+       [% IF debit_type.code %]
+           Modify debit type
+       [% ELSE %]
+           New debit type
+       [% END %]
+    [% ELSE %]
+       [% IF op == 'delete_confirm' %]
+           Debit types &rsaquo; Confirm deletion of debit type
+       [% ELSE %]
+           Debit types
+       [% END %]
+    [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_debit_types" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/debit_types.pl">Debit types</a>
+[% IF op == 'add_form' %]
+&rsaquo; [% IF debit_type.code %]Modify[% ELSE %]New[% END %] debit type
+[% ELSIF op == 'delete_confirm' %]
+&rsaquo; Confirm deletion of debit type
+[% END %]
+</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+                [% FOREACH m IN messages %]
+                <div class="dialog [% m.type | html %]">
+                    [% SWITCH m.code %]
+                    [% CASE 'error_on_saving' %]
+                        An error occurred when saving this debit type.
+                    [% CASE 'error_on_delete' %]
+                        An error occurred when deleting this debit type. Check the logs.
+                    [% CASE 'success_on_saving' %]
+                        Debit type saved successfully.
+                    [% CASE 'success_on_delete' %]
+                        Debit type deleted successfully.
+                    [% CASE %]
+                        [% m.code | html %]
+                    [% END %]
+                </div>
+                [% END %]
+
+                [% IF op == 'add_form' %]
+                    [% IF debit_type %]
+                        <h3>Modify a debit type</h3>
+                    [% ELSE %]
+                        <h3>New debit type</h3>
+                    [% END %]
+
+                    <form action="/cgi-bin/koha/admin/debit_types.pl" name="Aform" method="post" class="validated">
+                        <input type="hidden" name="op" value="add_validate" />
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <label for="code" class="required">Debit type code: </label>
+                                    [% IF debit_type %]
+                                        <strong>[% debit_type.code | html %]</strong>
+                                        <input type="hidden" name="code" value="[% code | html %]" />
+                                    [% ELSE %]
+                                    <input type="text" name="code" id="code" size="80" maxlength="64" class="required" required="required"><span class="required">Required. Maximum length is 64 letters</span>
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label for="default_amount">Default amount: </label>
+                                    <input type="text" pattern="^\d+(\.\d{2})?$" name="default_amount" id="default_amount" size="80" maxlength="100" value="[% debit_type.default_amount | $Price on_editing => 1 %]" step="any" min="0"/>
+                                </li>
+                                <li>
+                                    <label for="description" class="required">Description: </label>
+                                    <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% debit_type.description | html %]" /> <span class="required">Required</span>
+                                </li>
+                                <li>
+                                    <label for="can_be_added_manually">Can be added manually? </label>
+                                    [% IF debit_type.can_be_added_manually %]
+                                        <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" checked="checked" value="1" />
+                                    [% ELSE %]
+                                        <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" value="1" />
+                                    [% END %]
+                                </li>
+                                <li>
+                                    <label for="branches">Libraries limitation: </label>
+                                    <select id="branches" name="branches" multiple size="10">
+                                        <option value="">All libraries</option>
+                                        [% FOREACH branch IN branches_loop %]
+                                        [% IF ( branch.selected ) %]
+                                        <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                        [% ELSE %]
+                                        <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
+                                        [% END %]
+                                        [% END %]
+                                    </select>
+                                    <span>Select 'All libraries' if this debit type should be available at all libraries. Otherwise select libraries you want to associate debit type with.</span>
+                                </li>
+                            </ol>
+                        </fieldset>
+
+                        <fieldset class="action">
+                            <button id="save_debit_type" class="btn btn-default"><i class="fa fa-save"></i> Save</button>
+                            <a class="cancel btn-link" href="/cgi-bin/koha/admin/debit_types.pl"><i class="fa fa-times"></i> Cancel</a>
+                        </fieldset>
+                    </form>
+                [% END %]
+
+                [% IF op == 'delete_confirm' %]
+                    <div class="dialog alert">
+                        <h3>Delete debit type "[% debit_type.description | html %]?"</h3>
+                        <table>
+                            <tr><th>Debit type code</th>
+                                <td>[% debit_type.code | html %]</td>
+                            </tr>
+                            <tr><th>Debit type description</th>
+                                <td>[% debit_type.description | html %]</td>
+                            </tr>
+                        </table>
+                        <form action="/cgi-bin/koha/admin/debit_types.pl" method="post">
+                            <input type="hidden" name="op" value="delete_confirmed" />
+                            <input type="hidden" name="code" value="[% debit_type.code | html %]" />
+                            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                        </form>
+                        <form action="/cgi-bin/koha/admin/debit_types.pl" method="get">
+                            <button type=submit" class="btn btn-default deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+                        </form>
+                    </div>
+                [% END %]
+
+                [% IF op == 'list' %]
+                    <div id="toolbar" class="btn-toolbar">
+                        <a class="btn btn-default" id="newdebittype" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form"><i class="fa fa-plus"></i> New debit type</a>
+                    </div>
+
+                    <h3>Account debit types</h3>
+                    [% IF debit_types.count %]
+                        <table id="table_debit_types">
+                            <thead>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Default amount</th>
+                                <th>Can be added manually</th>
+                                <th>Library limitations</th>
+                                <th>Actions</th>
+                            </thead>
+                            <tbody>
+                                [% FOREACH debit_type IN debit_types %]
+                                <tr>
+                                    <td>[% debit_type.code | html %]</td>
+                                    <td>[% debit_type.description | html %]</td>
+                                    <td>[% debit_type.default_amount | $Price %]</td>
+                                    <td>[% IF debit_type.can_be_added_manually %]Yes[% ELSE %]No[% END %]</td>
+                                    <td>
+                                        [% IF debit_type.library_limits.count > 0 %]
+                                            [% library_limits_str = "" %]
+                                            [% FOREACH library IN debit_type.library_limits %]
+                                                [%- IF loop.first -%]
+                                                [% library_limits_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                [% ELSE %]
+                                                [% library_limits_str = library_limits_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                                                [% END %]
+                                            [% END %]
+                                            <span class="library_limitation" title="[% library_limits_str | html %]">
+                                                [% IF debit_type.library_limits.count > 1 %]
+                                                    [% debit_type.library_limits.count | html %] library limitations
+                                                [% ELSE %]
+                                                    [% debit_type.library_limits.count | html %] library limitation
+                                                [% END %]
+                                        [% ELSE %]
+                                            No limitation
+                                        [% END %]
+                                    </td>
+                                    <td class="actions">
+                                        [% IF !debit_type.is_system %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=delete_confirm&amp;code=[% debit_type.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                        [% END %]
+                                    </td>
+                                </tr>
+                                [% END %]
+                            </tbody>
+                        </table>
+                    [% ELSE %]
+                        <div class="dialog message">
+                            There are no account debit types defined. <a href="/cgi-bin/koha/admin/debit_types.pl?op=add_form">Create new debit type</a>
+                        </div>
+                    [% END %]
+                [% END %]
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+
+    <script>
+        $(document).ready(function() {
+            $("#table_debit_types").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "aaSorting": [[ 1, "asc" ]],
+                "iDisplayLength": 10,
+                "sPaginationType": "full_numbers"
+            }));
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
