@@ -457,7 +457,6 @@ $debit_type can be any of:
   - RENT_RENEW
   - RENT_DAILY_RENEW
   - RESERVE
-  - manual_debit
 
 =cut
 
@@ -719,7 +718,6 @@ our $offset_type = {
     'RENT_RENEW'       => 'Rental Fee',
     'RENT_DAILY_RENEW' => 'Rental Fee',
     'overdue'          => 'OVERDUE',
-    'manual_debit'     => 'Manual Debit',
     'RESERVE_EXPIRED'  => 'Hold Expired'
 };
 
@@ -744,7 +742,6 @@ our $account_type_debit = {
     'ACCOUNT_RENEW'    => 'ACCOUNT_RENEW',
     'RESERVE_EXPIRED'  => 'RESERVE_EXPIRED',
     'LOST_ITEM'        => 'LOST',
-    'sundry'           => 'M',
     'new_card'         => 'N',
     'overdue'          => 'OVERDUE',
     'PROCESSING'       => 'PROCESSING',
@@ -753,7 +750,6 @@ our $account_type_debit = {
     'RENT_RENEW'       => 'RENT_RENEW',
     'RENT_DAILY_RENEW' => 'RENT_DAILY_RENEW',
     'RESERVE'          => 'RESERVE',
-    'manual_debit'     => 'M'
 };
 
 =head1 AUTHORS
