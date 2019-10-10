@@ -447,7 +447,7 @@ $debit_type can be any of:
   - ACCOUNT
   - ACCOUNT_RENEW
   - RESERVE_EXPIRED
-  - lost_item
+  - LOST
   - sundry
   - new_card
   - overdue
@@ -713,7 +713,7 @@ our $offset_type = {
     'ACCOUNT_RENEW'    => 'Account Fee',
     'RESERVE'          => 'Reserve Fee',
     'PROCESSING'       => 'Processing Fee',
-    'lost_item'        => 'Lost Item',
+    'LOST'             => 'Lost Item',
     'RENT'             => 'Rental Fee',
     'RENT_DAILY'       => 'Rental Fee',
     'RENT_RENEW'       => 'Rental Fee',
@@ -743,7 +743,7 @@ our $account_type_debit = {
     'ACCOUNT'          => 'ACCOUNT',
     'ACCOUNT_RENEW'    => 'ACCOUNT_RENEW',
     'RESERVE_EXPIRED'  => 'RESERVE_EXPIRED',
-    'lost_item'        => 'LOST',
+    'LOST_ITEM'        => 'LOST',
     'sundry'           => 'M',
     'new_card'         => 'N',
     'overdue'          => 'OVERDUE',
