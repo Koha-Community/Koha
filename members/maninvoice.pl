@@ -3,9 +3,9 @@
 #written 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details
 
-
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2010 BibLibre
+# Copyright 2019 PTFS Europe
 #
 # This file is part of Koha.
 #
@@ -36,94 +36,105 @@ use Koha::Items;
 use Koha::Patrons;
 
 use Koha::Patron::Categories;
+use Koha::Account::DebitTypes;
 
-my $input=new CGI;
-my $flagsrequired = { borrowers => 'edit_borrowers' };
+my $input = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {   template_name   => "members/maninvoice.tt",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => $flagsrequired,
-        debug           => 1,
-    }
-);
-
-my $borrowernumber=$input->param('borrowernumber');
-
-my $patron = Koha::Patrons->find( $borrowernumber );
-unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
-    exit;
-}
-
-my $add=$input->param('add');
-if ($add){
-    if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
-        output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
-            unless Koha::Token->new->check_csrf( {
-                session_id => scalar $input->cookie('CGISESSID'),
-                token => scalar $input->param('csrf_token'),
-            });
-        # Note: If the logged in user is not allowed to see this patron an invoice can be forced
-        # Here we are trusting librarians not to hack the system
-        my $barcode=$input->param('barcode');
-        my $itemnum;
-        if ($barcode) {
-            my $item = Koha::Items->find({barcode => $barcode});
-            $itemnum = $item->itemnumber if $item;
-        }
-        my $desc=$input->param('desc');
-        my $amount=$input->param('amount');
-        my $type=$input->param('type');
-        my $note    = $input->param('note');
-        my $error   = C4::Accounts::manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
-        if ($error) {
-            if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
-                $template->param( 'ITEMNUMBER' => 1 );
-            }
-            $template->param( csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }) );
-            $template->param( 'ERROR' => $error );
-            output_html_with_http_headers $input, $cookie, $template->output;
-        } else {
-
-            if ( C4::Context->preference('AccountAutoReconcile') ) {
-                $patron->account->reconcile_balance;
-            }
-
-            print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
-            exit;
-        }
-    }
-} else {
-
-    my ($template, $loggedinuser, $cookie) = get_template_and_user({
+    {
         template_name   => "members/maninvoice.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { borrowers => 'edit_borrowers',
-                             updatecharges => 'remaining_permissions' },
-        debug           => 1,
-    });
+        flagsrequired   => {
+            borrowers     => 'edit_borrowers',
+            updatecharges => 'remaining_permissions'
+        }
+    }
+);
 
-    my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
-    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+my $borrowernumber = $input->param('borrowernumber');
+my $patron         = Koha::Patrons->find($borrowernumber);
+unless ($patron) {
+    print $input->redirect(
+        "/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
+    exit;
+}
 
-  # get authorised values with type of MANUAL_INV
-  my @invoice_types;
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare('SELECT * FROM authorised_values WHERE category = "MANUAL_INV"');
-  $sth->execute();
-  while ( my $row = $sth->fetchrow_hashref() ) {
-    push @invoice_types, $row;
-  }
-  $template->param( invoice_types_loop => \@invoice_types );
+my $library_id = C4::Context->userenv->{'branch'};
 
+my $add = $input->param('add');
+if ($add) {
+    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
+      unless Koha::Token->new->check_csrf(
+        {
+            session_id => scalar $input->cookie('CGISESSID'),
+            token      => scalar $input->param('csrf_token'),
+        }
+      );
+
+# Note: If the logged in user is not allowed to see this patron an invoice can be forced
+# Here we are trusting librarians not to hack the system
+    my $barcode = $input->param('barcode');
+    my $itemnum;
+    if ($barcode) {
+        my $item = Koha::Items->find( { barcode => $barcode } );
+        $itemnum = $item->itemnumber if $item;
+    }
+    my $desc   = $input->param('desc');
+    my $amount = $input->param('amount');
+    my $type   = $input->param('type');
+    my $note   = $input->param('note');
+    my $error =
+      C4::Accounts::manualinvoice( $borrowernumber, $itemnum, $desc, $type,
+        $amount, $note );
+    if ($error) {
+        if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
+            $template->param( 'ITEMNUMBER' => 1 );
+        }
+        $template->param(
+            csrf_token => Koha::Token->new->generate_csrf(
+                { session_id => scalar $input->cookie('CGISESSID') }
+            )
+        );
+        $template->param( 'ERROR' => $error );
+        output_html_with_http_headers $input, $cookie, $template->output;
+    }
+    else {
+
+        if ( C4::Context->preference('AccountAutoReconcile') ) {
+            $patron->account->reconcile_balance;
+        }
+
+        print $input->redirect(
+            "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
+        );
+        exit;
+    }
+}
+else {
+
+    my $logged_in_user = Koha::Patrons->find($loggedinuser)
+      or die "Not logged in";
+    output_and_exit_if_error(
+        $input, $cookie,
+        $template,
+        {
+            module         => 'members',
+            logged_in_user => $logged_in_user,
+            current_patron => $patron
+        }
+    );
+
+    my @debit_types = Koha::Account::DebitTypes->search_with_library_limits(
+        { can_be_added_manually => 1 },
+        {}, $library_id );
+    $template->param( debit_types => \@debit_types );
     $template->param(
-        csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
-        patron         => $patron,
-        finesview      => 1,
+        csrf_token => Koha::Token->new->generate_csrf(
+            { session_id => scalar $input->cookie('CGISESSID') }
+        ),
+        patron    => $patron,
+        finesview => 1,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

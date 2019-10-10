@@ -22,6 +22,7 @@ use Data::Dumper;
 
 use C4::Log qw(logaction);
 
+use Koha::Account::DebitType;
 use Koha::Account::Offsets;
 use Koha::Database;
 use Koha::Exceptions::Account;
@@ -80,6 +81,19 @@ sub checkout {
     $self->{_checkout} ||= Koha::Checkouts->find( $self->issue_id );
     $self->{_checkout} ||= Koha::Old::Checkouts->find( $self->issue_id );
     return $self->{_checkout};
+}
+
+=head3 debit_type
+
+Return the debit_type linked to this account line
+
+=cut
+
+sub debit_type {
+    my ( $self ) = @_;
+    my $rs = $self->_result->debit_type_code;
+    return unless $rs;
+    return Koha::Account::DebitType->_new_from_dbic( $rs );
 }
 
 =head3 void

@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE Price %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -12,58 +13,61 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Manual invoice</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo;
+    Manual invoice
+</div>
 
 <div class="main container-fluid">
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-[% INCLUDE 'members-toolbar.inc' %]
+            [% INCLUDE 'members-toolbar.inc' %]
 
-<!-- The manual invoice and credit buttons -->
-<div class="statictabs">
-<ul>
-    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
-    <li class="active"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
-    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
-</ul>
-<div class="tabs-container">
+            <!-- The manual invoice and credit buttons -->
+            <div class="statictabs">
+                <ul>
+                    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
+                    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
+                    <li class="active"><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
+                    <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
+                </ul>
+                <div class="tabs-container">
 
-[% IF ( ERROR ) %]
-[% IF ( ITEMNUMBER ) %]
-  ERROR an invalid itemnumber was entered, please hit back and try again
-[% END %]
-[% ELSE %]
-<form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-	<fieldset class="rows">
-	<legend>Manual invoice</legend>
-	<ol>
-      <li>
-        <label for="type">Type: </label>
-        <select name="type" id="invoice_type">
-          <option value="LOST">Lost item</option>
-          <option value="OVERDUE">Fine</option>
-          <option value="A">Account management fee</option>
-          <option value="N">New card</option>
-          <option value="M">Sundry</option>
-          [% FOREACH invoice_types_loo IN invoice_types_loop %]
-            <option value="[% invoice_types_loo.authorised_value | html %]">[% invoice_types_loo.authorised_value | html %]</option>
-          [% END %]
-        </select>
-      </li>
-	<li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
-	<li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" /></li>
-    <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
-    <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
-	</ol></fieldset>
-<fieldset class="action"><input type="submit" name="add" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
-</form>
+                [% IF ( ERROR ) %]
+                [% IF ( ITEMNUMBER ) %]
+                  ERROR an invalid itemnumber was entered, please hit back and try again
+                [% END %]
+                [% ELSE %]
+                <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+            <fieldset class="rows">
+            <legend>Manual invoice</legend>
+            <ol>
+                      <li>
+                        <label for="type">Type: </label>
+                        <select name="type" id="type">
+                          [% FOREACH debit_type IN debit_types %]
+                            <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
+                          [% END %]
+                        </select>
+                      </li>
+              <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
+                      <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" /></li>
+                      <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
+                      <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
+            </ol>
+                    </fieldset>
+                    <fieldset class="action">
+                        <input type="submit" name="add" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
+                    </fieldset>
+                </form>
 
-[% END %]
-</div></div>
+                [% END %]
+                </div>
+            </div>
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -79,9 +83,9 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        var type_fees = {'LOST':'','OVERDUE':'','ACCOUNT':'','ACCOUNT_RENEW':'','N':'','M':''};
-        [% FOREACH invoice_types_loo IN invoice_types_loop %]
-            type_fees['[% invoice_types_loo.authorised_value | html %]'] = "[% invoice_types_loo.lib | html %]";
+        var type_fees = {};
+        [% FOREACH debit_type IN debit_types %]
+            type_fees['[% debit_type.code | html %]'] = "[% debit_type.default_amount | $Price %]";
         [% END %]
         $(document).ready(function(){
             $('#maninvoice').preventDoubleFormSubmit();
@@ -89,6 +93,12 @@
             $("#invoice_type").on("change",function(){
                 this.form.desc.value = this.options[this.selectedIndex].value;
                 this.form.amount.value = type_fees[this.options[this.selectedIndex].value];
+            });
+            $("#maninvoice #desc").val($("#maninvoice #type option:selected").text());
+            $("#maninvoice #amount").val(type_fees[$("#maninvoice #type option:selected").val()]);
+            $("#maninvoice #type").change(function(){
+                $("#maninvoice #desc").val($(this).find("option:selected").text());
+                $("#maninvoice #amount").val(type_fees[$(this).val()]);
             });
         });
     </script>

@@ -23,6 +23,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 
+use Koha::Account::DebitType;
 use Koha::Account::DebitTypes;
 
 my $input = new CGI;
@@ -113,7 +114,9 @@ elsif ( $op eq 'delete_confirmed' ) {
 
 if ( $op eq 'list' ) {
     my $debit_types = Koha::Account::DebitTypes->search();
-    $template->param( debit_types => $debit_types );
+    $template->param(
+        debit_types  => $debit_types,
+    );
 }
 
 $template->param(
