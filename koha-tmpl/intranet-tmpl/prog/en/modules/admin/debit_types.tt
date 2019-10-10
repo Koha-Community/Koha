@@ -151,6 +151,7 @@
                     [% IF debit_types.count %]
                         <table id="table_debit_types">
                             <thead>
+                                <th>System</th>
                                 <th>Code</th>
                                 <th>Description</th>
                                 <th>Default amount</th>
@@ -161,6 +162,7 @@
                             <tbody>
                                 [% FOREACH debit_type IN debit_types %]
                                 <tr>
+                                    <td>[% debit_type.is_system | html %]</td>
                                     <td>[% debit_type.code | html %]</td>
                                     <td>[% debit_type.description | html %]</td>
                                     <td>[% debit_type.default_amount | $Price %]</td>
@@ -217,14 +219,34 @@
 
     <script>
         $(document).ready(function() {
-            $("#table_debit_types").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var txtActivefilter = _("Filter system debit types");
+            var txtInactivefilter = _("Show all debit types");
+            var table_debit_types = $("#table_debit_types").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                    { "aTargets": [ 0 ], "bSortable": false, "bVisible": false },
                 ],
                 "aaSorting": [[ 1, "asc" ]],
-                "iDisplayLength": 10,
+                "sDom": 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
+                "iDisplayLength": 20,
                 "sPaginationType": "full_numbers"
             }));
+            $("#filter_s").html('<p><a href="#" id="filter_system"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
+            $('#filter_system').click(function(e) {
+                e.preventDefault();
+                if ($(this).hasClass('filtered')) {
+                    var filteredValue = '';
+                    $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
+                } else { //Not filtered. Let's do it!
+                    var filteredValue = '0';
+                    $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+                }
+                table_debit_types.fnFilter(filteredValue, 0, false, false);
+                $(this).toggleClass('filtered');
+            });
+
+            //Start filtered
+            $('#filter_system').click();
         });
     </script>
 [% END %]
