@@ -191,7 +191,7 @@
            [%- CASE 'M'                -%]Sundry
            [%- CASE 'N'                -%]New card
            [%- CASE 'OVERDUE'          -%]Fine
-           [%- CASE 'PF'               -%]Lost item processing fee
+           [%- CASE 'PROCESSING'       -%]Lost item processing fee
            [%- CASE 'RENT'             -%]Rental fee
            [%- CASE 'RENT_DAILY'       -%]Daily rental fee
            [%- CASE 'RENT_RENEW'       -%]Renewal of rental item

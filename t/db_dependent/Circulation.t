@@ -2124,13 +2124,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PROCESSING' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
-            $processfee_amount, 'The right PF amount is generated' );
+            $processfee_amount, 'The right PROCESSING amount is generated' );
         is( $processing_fee_line->amountoutstanding + 0,
-            $processfee_amount, 'The right PF amountoutstanding is generated' );
+            $processfee_amount, 'The right PROCESSING amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
@@ -2188,13 +2188,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PROCESSING' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
-            $processfee_amount, 'The right PF amount is generated' );
+            $processfee_amount, 'The right PROCESSING amount is generated' );
         is( $processing_fee_line->amountoutstanding + 0,
-            $processfee_amount, 'The right PF amountoutstanding is generated' );
+            $processfee_amount, 'The right PROCESSING amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
@@ -2258,13 +2258,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PROCESSING' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
-            $processfee_amount, 'The right PF amount is generated' );
+            $processfee_amount, 'The right PROCESSING amount is generated' );
         is( $processing_fee_line->amountoutstanding + 0,
-            $processfee_amount, 'The right PF amountoutstanding is generated' );
+            $processfee_amount, 'The right PROCESSING amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
@@ -2311,13 +2311,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PF' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'PROCESSING' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
         is( $processing_fee_line->amount + 0,
-            $processfee_amount, 'The right PF amount is generated' );
+            $processfee_amount, 'The right PROCESSING amount is generated' );
         is( $processing_fee_line->amountoutstanding + 0,
-            $processfee_amount, 'The right PF amountoutstanding is generated' );
+            $processfee_amount, 'The right PROCESSING amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
@@ -2328,7 +2328,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $replacement_amount, 'The right LOST amountountstanding is generated' );
 
         my $account = $patron->account;
-        is( $account->balance, $processfee_amount + $replacement_amount, 'Balance is PF + L' );
+        is( $account->balance, $processfee_amount + $replacement_amount, 'Balance is PROCESSING + L' );
 
         # Partially pay fee
         my $payment_amount = 27;
@@ -2363,7 +2363,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item->itemnumber, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
-        is( $account->balance, $processfee_amount - $payment_amount, 'Balance is PF - payment (LOST_RETURN)' );
+        is( $account->balance, $processfee_amount - $payment_amount, 'Balance is PROCESSING - payment (LOST_RETURN)' );
 
         $lost_fee_line->discard_changes;
         is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
@@ -2383,7 +2383,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         is( $account->balance,
             $processfee_amount - $payment_amount,
-            'The patron balance is the difference between the PF and the credit'
+            'The patron balance is the difference between the PROCESSING and the credit'
         );
     };
 
@@ -2459,7 +2459,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item_id, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
-        is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PF - payment (LOST_RETURN)' );
+        is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PROCESSING - payment (LOST_RETURN)' );
 
         my $manual_debit = Koha::Account::Lines->search({ borrowernumber => $patron->id, debit_type_code => 'OVERDUE', status => 'UNRETURNED' })->next;
         is( $manual_debit->amountoutstanding + 0, $manual_debit_amount - $payment_amount, 'reconcile_balance was called' );

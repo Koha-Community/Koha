@@ -45,7 +45,7 @@ if ( CheckVersion($DBversion) ) {
               ('M', 'Manual fee', 1, NULL, 0),
               ('N', 'New card fee', 1, NULL, 1),
               ('OVERDUE', 'Overdue fine', 0, NULL, 1),
-              ('PF', 'Lost item processing fee', 0, NULL, 1),
+              ('PROCESSING', 'Lost item processing fee', 0, NULL, 1),
               ('RENT', 'Rental fee', 0, NULL, 1),
               ('RENT_DAILY', 'Daily rental fee', 0, NULL, 1),
               ('RENT_RENEW', 'Renewal of rental item', 0, NULL, 1),
@@ -58,6 +58,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         qq{
           UPDATE accountlines SET accounttype = 'RESERVE' WHERE accounttype = 'Res'
+        }
+    );
+
+    # Update accountype 'PF' to 'PROCESSING'
+    $dbh->do(
+        qq{
+          UPDATE accountlines SET accounttype = 'PROCESSING' WHERE accounttype = 'PF'
         }
     );
 

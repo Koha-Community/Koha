@@ -451,7 +451,7 @@ $debit_type can be any of:
   - sundry
   - new_card
   - overdue
-  - processing
+  - PROCESSING
   - RENT
   - RENT_DAILY
   - RENT_RENEW
@@ -712,7 +712,7 @@ our $offset_type = {
     'account'          => 'Account Fee',
     'account_renew'    => 'Account Fee',
     'RESERVE'          => 'Reserve Fee',
-    'processing'       => 'Processing Fee',
+    'PROCESSING'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
     'RENT'             => 'Rental Fee',
     'RENT_DAILY'       => 'Rental Fee',
@@ -747,7 +747,7 @@ our $account_type_debit = {
     'sundry'           => 'M',
     'new_card'         => 'N',
     'overdue'          => 'OVERDUE',
-    'processing'       => 'PF',
+    'PROCESSING'       => 'PROCESSING',
     'RENT'             => 'RENT',
     'RENT_DAILY'       => 'RENT_DAILY',
     'RENT_RENEW'       => 'RENT_RENEW',

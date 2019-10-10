@@ -108,7 +108,7 @@ sub chargelostitem {
                     user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                     interface   => C4::Context->interface,
                     library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
-                    type        => 'processing',
+                    type        => 'PROCESSING',
                     item_id     => $itemnumber,
                     issue_id    => $issue_id,
                 }
