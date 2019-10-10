@@ -745,7 +745,7 @@ subtest "CanBookBeRenewed tests" => sub {
             {
                 amount      => $fines_amount,
                 interface   => 'test',
-                type        => 'overdue',
+                type        => 'OVERDUE',
                 item_id     => $item_to_auto_renew->{itemnumber},
                 description => "Some fines"
             }
@@ -759,7 +759,7 @@ subtest "CanBookBeRenewed tests" => sub {
             {
                 amount      => $fines_amount,
                 interface   => 'test',
-                type        => 'overdue',
+                type        => 'OVERDUE',
                 item_id     => $item_to_auto_renew->{itemnumber},
                 description => "Some fines"
             }
@@ -773,7 +773,7 @@ subtest "CanBookBeRenewed tests" => sub {
             {
                 amount      => $fines_amount,
                 interface   => 'test',
-                type        => 'overdue',
+                type        => 'OVERDUE',
                 item_id     => $item_to_auto_renew->{itemnumber},
                 description => "Some fines"
             }
@@ -2450,7 +2450,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         );
 
         my $manual_debit_amount = 80;
-        $account->add_debit( { amount => $manual_debit_amount, type => 'overdue', interface =>'test' } );
+        $account->add_debit( { amount => $manual_debit_amount, type => 'OVERDUE', interface =>'test' } );
 
         is( $account->balance, $manual_debit_amount + $replacement_amount - $payment_amount, 'Manual debit applied' );
 

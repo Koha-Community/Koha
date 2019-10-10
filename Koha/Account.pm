@@ -450,7 +450,7 @@ $debit_type can be any of:
   - LOST
   - sundry
   - new_card
-  - overdue
+  - OVERDUE
   - PROCESSING
   - RENT
   - RENT_DAILY
@@ -516,7 +516,7 @@ sub add_debit {
                     itemnumber        => $item_id,
                     issue_id          => $issue_id,
                     branchcode        => $library_id,
-                    ( $type eq 'overdue' ? ( status => 'UNRETURNED' ) : () ),
+                    ( $type eq 'OVERDUE' ? ( status => 'UNRETURNED' ) : () ),
                 }
             )->store();
 
@@ -717,7 +717,7 @@ our $offset_type = {
     'RENT_DAILY'       => 'Rental Fee',
     'RENT_RENEW'       => 'Rental Fee',
     'RENT_DAILY_RENEW' => 'Rental Fee',
-    'overdue'          => 'OVERDUE',
+    'OVERDUE'          => 'OVERDUE',
     'RESERVE_EXPIRED'  => 'Hold Expired'
 };
 
@@ -743,7 +743,7 @@ our $account_type_debit = {
     'RESERVE_EXPIRED'  => 'RESERVE_EXPIRED',
     'LOST_ITEM'        => 'LOST',
     'new_card'         => 'N',
-    'overdue'          => 'OVERDUE',
+    'OVERDUE'          => 'OVERDUE',
     'PROCESSING'       => 'PROCESSING',
     'RENT'             => 'RENT',
     'RENT_DAILY'       => 'RENT_DAILY',

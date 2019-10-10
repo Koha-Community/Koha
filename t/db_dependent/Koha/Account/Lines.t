@@ -497,7 +497,7 @@ subtest 'checkout() tests' => sub {
         interface => 'commandline',
         item_id   => $item->itemnumber,
         issue_id  => $checkout->issue_id,
-        type      => 'overdue',
+        type      => 'OVERDUE',
     });
 
     my $line_checkout = $line->checkout;
