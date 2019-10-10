@@ -344,7 +344,7 @@ subtest 'add_debit() tests' => sub {
     );
     is(
         $line_1->debit_type_code,
-        $Koha::Account::account_type_debit->{'RENT'},
+        'RENT',
         'Account type is correctly set'
     );
 
@@ -371,7 +371,7 @@ subtest 'add_debit() tests' => sub {
     );
     is(
         $line_2->debit_type_code,
-        $Koha::Account::account_type_debit->{'RENT'},
+        'RENT',
         'Account type is correctly set'
     );
 

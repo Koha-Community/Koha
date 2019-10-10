@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 use Data::Dumper;
 use List::MoreUtils qw( uniq );
+use Try::Tiny;
 
 use C4::Circulation qw( ReturnLostItem );
 use C4::Letters;
@@ -477,7 +478,7 @@ sub add_debit {
     my $user_id     = $params->{user_id};
     my $interface   = $params->{interface};
     my $library_id  = $params->{library_id};
-    my $type        = $params->{type};
+    my $debit_type  = $params->{type};
     my $item_id     = $params->{item_id};
     my $issue_id    = $params->{issue_id};
 
@@ -488,69 +489,80 @@ sub add_debit {
 
     my $schema = Koha::Database->new->schema;
 
-    unless ( exists($Koha::Account::account_type_debit->{$type}) ) {
-        Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Type of debit not recognised'
-        );
-    }
-
-    my $debit_type_code = $Koha::Account::account_type_debit->{$type};
+    my $offset_type = $Koha::Account::offset_type->{$debit_type} // 'Manual Debit';
 
     my $line;
-    $schema->txn_do(
-        sub {
+    try {
+        $schema->txn_do(
+            sub {
 
-            # Insert the account line
-            $line = Koha::Account::Line->new(
-                {
-                    borrowernumber    => $self->{patron_id},
-                    date              => \'NOW()',
-                    amount            => $amount,
-                    description       => $description,
-                    debit_type_code   => $debit_type_code,
-                    amountoutstanding => $amount,
-                    payment_type      => undef,
-                    note              => $note,
-                    manager_id        => $user_id,
-                    interface         => $interface,
-                    itemnumber        => $item_id,
-                    issue_id          => $issue_id,
-                    branchcode        => $library_id,
-                    ( $type eq 'OVERDUE' ? ( status => 'UNRETURNED' ) : () ),
+                # Insert the account line
+                $line = Koha::Account::Line->new(
+                    {
+                        borrowernumber    => $self->{patron_id},
+                        date              => \'NOW()',
+                        amount            => $amount,
+                        description       => $description,
+                        debit_type_code   => $debit_type,
+                        amountoutstanding => $amount,
+                        payment_type      => undef,
+                        note              => $note,
+                        manager_id        => $user_id,
+                        interface         => $interface,
+                        itemnumber        => $item_id,
+                        issue_id          => $issue_id,
+                        branchcode        => $library_id,
+                        (
+                            $debit_type eq 'OVERDUE'
+                            ? ( status => 'UNRETURNED' )
+                            : ()
+                        ),
+                    }
+                )->store();
+
+                # Record the account offset
+                my $account_offset = Koha::Account::Offset->new(
+                    {
+                        debit_id => $line->id,
+                        type     => $offset_type,
+                        amount   => $amount
+                    }
+                )->store();
+
+                if ( C4::Context->preference("FinesLog") ) {
+                    logaction(
+                        "FINES", 'CREATE',
+                        $self->{patron_id},
+                        Dumper(
+                            {
+                                action            => "create_$debit_type",
+                                borrowernumber    => $self->{patron_id},
+                                amount            => $amount,
+                                description       => $description,
+                                amountoutstanding => $amount,
+                                debit_type_code   => $debit_type,
+                                note              => $note,
+                                itemnumber        => $item_id,
+                                manager_id        => $user_id,
+                            }
+                        ),
+                        $interface
+                    );
                 }
-            )->store();
-
-            # Record the account offset
-            my $account_offset = Koha::Account::Offset->new(
-                {
-                    debit_id => $line->id,
-                    type     => $Koha::Account::offset_type->{$type},
-                    amount   => $amount
-                }
-            )->store();
-
-            if ( C4::Context->preference("FinesLog") ) {
-                logaction(
-                    "FINES", 'CREATE',
-                    $self->{patron_id},
-                    Dumper(
-                        {
-                            action            => "create_$type",
-                            borrowernumber    => $self->{patron_id},
-                            amount            => $amount,
-                            description       => $description,
-                            amountoutstanding => $amount,
-                            debit_type_code   => $debit_type_code,
-                            note              => $note,
-                            itemnumber        => $item_id,
-                            manager_id        => $user_id,
-                        }
-                    ),
-                    $interface
-                );
+            }
+        );
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Object::FKConstraint' ) {
+            if ( $_->broken_fk eq 'debit_type_code' ) {
+                Koha::Exceptions::Account::UnrecognisedType->throw(
+                    error => 'Type of debit not recognised' );
+            }
+            else {
+                $_->rethrow;
             }
         }
-    );
+    };
 
     return $line;
 }
@@ -731,25 +743,6 @@ our $account_type_credit = {
     'lost_item_return' => 'LOST_RETURN',
     'payment'          => 'Pay',
     'writeoff'         => 'W'
-};
-
-=head3 $account_type_debit
-
-=cut
-
-our $account_type_debit = {
-    'ACCOUNT'          => 'ACCOUNT',
-    'ACCOUNT_RENEW'    => 'ACCOUNT_RENEW',
-    'RESERVE_EXPIRED'  => 'RESERVE_EXPIRED',
-    'LOST_ITEM'        => 'LOST',
-    'NEW_CARD'         => 'NEW_CARD',
-    'OVERDUE'          => 'OVERDUE',
-    'PROCESSING'       => 'PROCESSING',
-    'RENT'             => 'RENT',
-    'RENT_DAILY'       => 'RENT_DAILY',
-    'RENT_RENEW'       => 'RENT_RENEW',
-    'RENT_DAILY_RENEW' => 'RENT_DAILY_RENEW',
-    'RESERVE'          => 'RESERVE',
 };
 
 =head1 AUTHORS
