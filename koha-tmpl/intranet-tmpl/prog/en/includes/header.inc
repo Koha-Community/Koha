@@ -23,7 +23,7 @@
             </li>
             [% IF ( intranetbookbag ) %]
                 <li>
-                    <a href="#" id="cartmenulink">Cart<span id="basketcount"></span></a>
+                    <a href="#" id="cartmenulink"><i class="fa fa-shopping-cart"></i>Cart<span id="basketcount"></span></a>
                 </li>
             [% END %]
             [% IntranetNav | $raw %]
