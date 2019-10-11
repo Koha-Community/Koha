@@ -487,11 +487,14 @@ OPAC:
               class: long
             -  search results in the RSS feed.
         -
+            - Show
             - pref: SocialNetworks
-              default: 0
-              choices:
-                  yes: Enable
-                  no: Disable
+              multiple:
+                facebook: Facebook
+                linkedin: LinkedIn
+                email: Email
+                twitter: Twitter
+
             - social network links in opac detail pages
         -
             - pref: OpacBrowseResults
