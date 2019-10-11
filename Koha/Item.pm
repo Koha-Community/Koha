@@ -26,6 +26,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use C4::Context;
+
 use Koha::Checkouts;
 use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
@@ -383,6 +384,49 @@ sub has_pending_hold {
     my ( $self ) = @_;
     my $pending_hold = $self->_result->tmp_holdsqueues;
     return !C4::Context->preference('AllowItemsOnHoldCheckout') && $pending_hold->count ? 1: 0;
+}
+
+=head3 as_marc_field
+
+    my $mss   = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
+    my $field = $item->as_marc_field({ [ mss => $mss ] });
+
+This method returns a MARC::Field object representing the Koha::Item object
+with the current mappings configuration.
+
+=cut
+
+sub as_marc_field {
+    my ( $self, $params ) = @_;
+
+    my $mss = $params->{mss} // C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
+    my $item_tag = $mss->{'items.itemnumber'}[0]->{tagfield};
+
+    my @subfields;
+
+    my @columns = $self->_result->result_source->columns;
+
+    foreach my $item_field ( @columns ) {
+        my $mapping = $mss->{ "items.$item_field"}[0];
+        my $tagfield    = $mapping->{tagfield};
+        my $tagsubfield = $mapping->{tagsubfield};
+        next if !$tagfield; # TODO: Should we raise an exception instead?
+                            # Feels like safe fallback is better
+
+        push @subfields, $tagsubfield => $self->$item_field;
+    }
+
+    my $unlinked_item_subfields = C4::Items::_parse_unlinked_item_subfields_from_xml($self->more_subfields_xml);
+    push( @subfields, @{$unlinked_item_subfields} )
+        if defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1;
+
+    my $field;
+
+    $field = MARC::Field->new(
+        "$item_tag", ' ', ' ', @subfields
+    ) if @subfields;
+
+    return $field;
 }
 
 =head2 Internal methods
