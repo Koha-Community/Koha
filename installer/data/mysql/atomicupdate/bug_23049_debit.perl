@@ -5,7 +5,7 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         qq{
             CREATE TABLE IF NOT EXISTS account_debit_types (
-              code varchar(64) NOT NULL,
+              code varchar(80) NOT NULL,
               description varchar(200) NULL,
               can_be_added_manually tinyint(4) NOT NULL DEFAULT 1,
               default_amount decimal(28, 6) NULL,
@@ -15,11 +15,11 @@ if ( CheckVersion($DBversion) ) {
           }
     );
 
-    # Adding ac_debit_types_branches
+    # Adding account_debit_types_branches
     $dbh->do(
         qq{
-            CREATE TABLE IF NOT EXISTS ac_debit_types_branches (
-                debit_type_code VARCHAR(64),
+            CREATE TABLE IF NOT EXISTS account_debit_types_branches (
+                debit_type_code VARCHAR(80),
                 branchcode VARCHAR(10),
                 FOREIGN KEY (debit_type_code) REFERENCES account_debit_types(code) ON DELETE CASCADE,
                 FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
@@ -93,7 +93,7 @@ if ( CheckVersion($DBversion) ) {
               is_system
             )
             SELECT
-              SUBSTR(authorised_value, 1, 64),
+              SUBSTR(authorised_value, 1, 80),
               lib,
               authorised_value,
               1,
@@ -111,7 +111,7 @@ if ( CheckVersion($DBversion) ) {
             qq{
                 ALTER IGNORE TABLE accountlines
                 ADD
-                  debit_type_code varchar(64) DEFAULT NULL
+                  debit_type_code varchar(80) DEFAULT NULL
                 AFTER
                   accounttype
               }

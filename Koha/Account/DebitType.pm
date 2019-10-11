@@ -68,7 +68,7 @@ sub _library_limits {
 =cut
 
 sub _type {
-    return 'AccountDebitType';
+    return 'AccountDebitTypesBranch';
 }
 
 1;

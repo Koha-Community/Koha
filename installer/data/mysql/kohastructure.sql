@@ -2627,7 +2627,7 @@ CREATE TABLE `cash_registers` (
 
 DROP TABLE IF EXISTS `account_debit_types`;
 CREATE TABLE `account_debit_types` (
-  `code` varchar(64) NOT NULL,
+  `code` varchar(80) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
   `can_be_added_manually` tinyint(4) NOT NULL DEFAULT 1,
   `default_amount` decimal(28,6) DEFAULT NULL,
@@ -2636,12 +2636,12 @@ CREATE TABLE `account_debit_types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `ac_debit_types_branches`
+-- Table structure for table `account_debit_types_branches`
 --
 
-DROP TABLE IF EXISTS `ac_debit_types_branches`;
-CREATE TABLE `ac_debit_types_branches` (
-    `debit_type_code` VARCHAR(64),
+DROP TABLE IF EXISTS `account_debit_types_branches`;
+CREATE TABLE `account_debit_types_branches` (
+    `debit_type_code` VARCHAR(80),
     `branchcode` VARCHAR(10),
     FOREIGN KEY (`debit_type_code`) REFERENCES `account_debit_types` (`code`) ON DELETE CASCADE,
     FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE
@@ -2661,7 +2661,7 @@ CREATE TABLE `accountlines` (
   `amount` decimal(28,6) default NULL,
   `description` LONGTEXT,
   `accounttype` varchar(80) default NULL,
-  `debit_type_code` varchar(64) default NULL,
+  `debit_type_code` varchar(80) default NULL,
   `status` varchar(16) default NULL,
   `payment_type` varchar(80) default NULL, -- optional authorised value PAYMENT_TYPE
   `amountoutstanding` decimal(28,6) default NULL,

@@ -211,17 +211,17 @@ __PACKAGE__->set_primary_key("branchcode");
 
 =head1 RELATIONS
 
-=head2 ac_debit_types_branches
+=head2 account_debit_types_branches
 
 Type: has_many
 
-Related object: L<Koha::Schema::Result::AcDebitTypesBranch>
+Related object: L<Koha::Schema::Result::AccountDebitTypesBranch>
 
 =cut
 
 __PACKAGE__->has_many(
-  "ac_debit_types_branches",
-  "Koha::Schema::Result::AcDebitTypesBranch",
+  "account_debit_types_branches",
+  "Koha::Schema::Result::AccountDebitTypesBranch",
   { "foreign.branchcode" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -692,8 +692,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-26 15:59:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IiEBfDpMBAi9cv7OqevVRQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-11 11:36:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:HCQKMSgKhVKtDSrvs1IeRg
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }

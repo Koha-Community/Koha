@@ -74,7 +74,7 @@ __PACKAGE__->table("accountlines");
   data_type: 'varchar'
   is_foreign_key: 1
   is_nullable: 1
-  size: 64
+  size: 80
 
 =head2 status
 
@@ -151,7 +151,7 @@ __PACKAGE__->add_columns(
   "accounttype",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "debit_type_code",
-  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 64 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 80 },
   "status",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "payment_type",
@@ -342,8 +342,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-08 11:15:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1Vgkg0JR7RqmkniOmUoUhQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-11 11:36:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WZ2Mcd5gwQc69yDSEsJHGA
 
 sub koha_objects_class {
     'Koha::Account::Lines';
