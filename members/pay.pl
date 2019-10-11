@@ -112,7 +112,7 @@ elsif ( $input->param('confirm_writeoff') ) {
               . "&error_over=1" );
 
     } else {
-        Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+        $payment_id = Koha::Account->new( { patron_id => $borrowernumber } )->pay(
             {
                 amount     => $amount,
                 lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
