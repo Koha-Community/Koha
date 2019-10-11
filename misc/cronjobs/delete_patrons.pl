@@ -12,7 +12,7 @@ use Koha::Patrons;
 use C4::Log;
 
 my ( $help, $verbose, $not_borrowed_since, $expired_before, $last_seen,
-    $category_code, $branchcode, $confirm );
+    $category_code, $branchcode, $file, $confirm );
 GetOptions(
     'h|help'                 => \$help,
     'v|verbose'              => \$verbose,
@@ -21,6 +21,7 @@ GetOptions(
     'last_seen:s'            => \$last_seen,
     'category_code:s'        => \$category_code,
     'library:s'              => \$branchcode,
+    'file:s'                 => \$file,
     'c|confirm'              => \$confirm,
 ) || pod2usage(1);
 
@@ -38,21 +39,52 @@ if ( $last_seen and not C4::Context->preference('TrackLastPatronActivity') ) {
     pod2usage(q{The --last_seen option cannot be used with TrackLastPatronActivity turned off});
 }
 
-unless ( $not_borrowed_since or $expired_before or $last_seen or $category_code or $branchcode ) {
+unless ( $not_borrowed_since or $expired_before or $last_seen or $category_code or $branchcode or $file ) {
     pod2usage(q{At least one filter is mandatory});
 }
 
 cronlogaction();
 
-my $members = GetBorrowersToExpunge(
-    {
-        not_borrowed_since => $not_borrowed_since,
-        expired_before       => $expired_before,
-        last_seen            => $last_seen,
-        category_code        => $category_code,
-        branchcode           => $branchcode,
+my @file_members;
+if ($file) {
+    open(my $fh, '<:encoding(UTF-8)', $file) or die "Could not open file $file' $!";
+    while (my $line = <$fh>) {
+        chomp($line);
+        my %fm = ('borrowernumber' => $line);
+        my $fm_ref = \%fm;
+        push @file_members, $fm_ref;
     }
-);
+    close $fh;
+}
+
+my $members;
+if ( $not_borrowed_since or $expired_before or $last_seen or $category_code or $branchcode ) {
+    $members = GetBorrowersToExpunge(
+        {
+            not_borrowed_since   => $not_borrowed_since,
+            expired_before       => $expired_before,
+            last_seen            => $last_seen,
+            category_code        => $category_code,
+            branchcode           => $branchcode,
+        }
+    );
+}
+
+if ($members and @file_members) {
+    my @filtered_members;
+    for my $member (@$members) {
+        for my $fm (@file_members) {
+            if ($member->{borrowernumber} eq $fm->{borrowernumber}) {
+                push @filtered_members, $fm;
+            }
+        }
+    }
+    $members = \@filtered_members;
+}
+
+if (!defined $members and @file_members) {
+   $members = \@file_members;
+}
 
 unless ($confirm) {
     say "Doing a dry run; no patron records will actually be deleted.";
@@ -102,7 +134,7 @@ delete_patrons - This script deletes patrons
 
 =head1 SYNOPSIS
 
-delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--library=LIBRARY]
+delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--library=LIBRARY] [--file=FILE]
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
 with `date -d '-3 month' --iso-8601`.
@@ -140,6 +172,11 @@ Delete patrons who have this category code.
 =item B<--library>
 
 Delete patrons in this library.
+
+=item B<--file>
+
+Delete patrons whose borrower numbers are in this file.  If other criteria are defined
+it will only delete those in the file that match those criteria.
 
 =item B<-c|--confirm>
 
