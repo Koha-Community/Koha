@@ -67,16 +67,16 @@
                 <td class="name-cell">
                     <code>
                         [% FOREACH NAME IN LINE.NAMES %]
-						<label for="pref_[% NAME.name | html %]">
+                        <label for="pref_[% NAME.name | html %]">
                             <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=[% NAME.name | html %]">
                                 <i class="fa fa-bookmark" aria-hidden="true"></i></a>
-							[% IF ( NAME.jumped ) %]
-							<span class="term" id="jumped">[% NAME.name | html %]</span>
+                            [% IF ( NAME.jumped ) %]
+                                <span class="term" id="jumped">[% NAME.name | html %]</span>
                             [% ELSIF ( NAME.highlighted ) %]
-							<span class="term">[% NAME.name | html %]</span>
-							[% ELSE %]
-							[% NAME.name | html %]
-							[% END %]
+                                <span class="term">[% NAME.name | html %]</span>
+                            [% ELSE %]
+                                [% NAME.name | html %]
+                            [% END %]
 
                             [% IF NAME.overridden %]
                                 <span class="overridden" title="The system preference [% NAME.name | html %] may have been overridden from this value by one or more virtual hosts.">
