@@ -465,9 +465,17 @@ sub add_debit {
 
     my ( $self, $params ) = @_;
 
+    # check for mandatory params
+    my @mandatory = ( 'interface', 'type', 'amount' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
     # amount should always be a positive value
     my $amount = $params->{amount};
-
     unless ( $amount > 0 ) {
         Koha::Exceptions::Account::AmountNotPositive->throw(
             error => 'Debit amount passed is not positive' );
@@ -481,17 +489,10 @@ sub add_debit {
     my $debit_type  = $params->{type};
     my $item_id     = $params->{item_id};
     my $issue_id    = $params->{issue_id};
-
-    unless ($interface) {
-        Koha::Exceptions::MissingParameter->throw(
-            error => 'The interface parameter is mandatory' );
-    }
-
-    my $schema = Koha::Database->new->schema;
-
     my $offset_type = $Koha::Account::offset_type->{$debit_type} // 'Manual Debit';
 
     my $line;
+    my $schema = Koha::Database->new->schema;
     try {
         $schema->txn_do(
             sub {
