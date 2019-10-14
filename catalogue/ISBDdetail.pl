@@ -97,7 +97,7 @@ my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
     options => {
         interface => 'intranet',
-        frameworkcode => 'ACQ'
+        frameworkcode => $framework
     },
 });
 $record_processor->process($record);
