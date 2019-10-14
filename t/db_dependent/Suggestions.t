@@ -253,7 +253,6 @@ is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEm
 {
     # Hiding the expected warning displayed by DBI
     # DBD::mysql::st execute failed: Incorrect date value: 'invalid date!' for column 'manageddate'
-    my $stderr;
     local *STDERR;
     open STDERR, '>', '/dev/null';
 

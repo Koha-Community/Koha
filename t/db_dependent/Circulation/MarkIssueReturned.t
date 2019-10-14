@@ -177,7 +177,6 @@ subtest 'Manually pass a return date' => sub {
     {
         # Hiding the expected warning displayed by DBI
         # DBD::mysql::st execute failed: Incorrect datetime value: 'bad_date' for column 'returndate'
-        my $stderr;
         local *STDERR;
         open STDERR, '>', '/dev/null';
         throws_ok
