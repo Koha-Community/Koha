@@ -324,7 +324,7 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
 $credit_type can be any of:
   - 'CREDIT'
   - 'payment'
-  - 'forgiven'
+  - 'FORGIVEN'
   - 'lost_item_return'
   - 'writeoff'
 
@@ -717,7 +717,7 @@ sub reconcile_balance {
 
 our $offset_type = {
     'CREDIT'           => 'Manual Credit',
-    'forgiven'         => 'Writeoff',
+    'FORGIVEN'         => 'Writeoff',
     'lost_item_return' => 'Lost Item',
     'payment'          => 'Payment',
     'writeoff'         => 'Writeoff',
@@ -740,7 +740,7 @@ our $offset_type = {
 
 our $account_type_credit = {
     'CREDIT'           => 'CREDIT',
-    'forgiven'         => 'FOR',
+    'FORGIVEN'         => 'FORGIVEN',
     'lost_item_return' => 'LOST_RETURN',
     'payment'          => 'Pay',
     'writeoff'         => 'W'

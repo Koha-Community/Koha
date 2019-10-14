@@ -4,7 +4,7 @@
         [%- SWITCH account.credit_type_code -%]
             [%- CASE 'Pay'              -%]Payment
             [%- CASE 'W'                -%]Writeoff
-            [%- CASE 'FOR'              -%]Forgiven
+            [%- CASE 'FORGIVEN'         -%]Forgiven
             [%- CASE 'PAY'              -%]Payment
             [%- CASE 'WO'               -%]Writeoff
             [%- CASE 'CREDIT'           -%]Credit

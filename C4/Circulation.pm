@@ -2366,7 +2366,7 @@ sub _FixOverduesOnReturn {
                         user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                         library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
                         interface  => C4::Context->interface,
-                        type       => 'forgiven',
+                        type       => 'FORGIVEN',
                         item_id    => $item
                     }
                 );

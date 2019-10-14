@@ -276,7 +276,7 @@ subtest 'add_credit() tests' => sub {
             description => 'Manual credit applied',
             library_id  => $patron->branchcode,
             user_id     => $patron->id,
-            type        => 'forgiven',
+            type        => 'FORGIVEN',
             interface   => 'commandline'
         }
     );
