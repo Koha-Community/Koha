@@ -14358,7 +14358,7 @@ if( CheckVersion( $DBversion ) ) {
         SELECT expirationdate, waitingdate, branchcode
         FROM reserves
         WHERE found = 'W' AND priority = 0
-    |);
+    |, { Slice => {} });
     my $update_sth = $dbh->prepare(q|
         UPDATE reserves
         SET expirationdate = ?
