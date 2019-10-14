@@ -11,8 +11,8 @@
             [%- CASE 'LOST_RETURN'      -%]Lost item fee refund
             [%- CASE                    -%][% account.accounttype | html %]
         [%- END -%]
-    [%- ELSIF account.debit_type -%]
-       [%- SWITCH account.debit_type -%]
+    [%- ELSIF account.debit_type_code -%]
+       [%- SWITCH account.debit_type_code -%]
            [%- CASE 'ACCOUNT'          -%]Account creation fee
            [%- CASE 'ACCOUNT_RENEW'    -%]Account renewal fee
            [%- CASE 'LOST'             -%]Lost item
