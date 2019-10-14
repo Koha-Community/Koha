@@ -247,7 +247,7 @@ sub pay {
     UpdateStats(
         {
             branch         => $library_id,
-            type           => $type,
+            type           => lc($type),
             amount         => $amount,
             borrowernumber => $self->{patron_id},
         }
@@ -403,7 +403,7 @@ sub add_credit {
                 UpdateStats(
                     {
                         branch         => $library_id,
-                        type           => $credit_type,
+                        type           => lc($credit_type),
                         amount         => $amount,
                         borrowernumber => $self->{patron_id},
                     }
