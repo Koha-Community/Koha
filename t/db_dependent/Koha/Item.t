@@ -19,7 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+
+use C4::Biblio;
 
 use Koha::Items;
 use Koha::Database;
@@ -81,4 +83,68 @@ subtest 'has_pending_hold() tests' => sub {
     t::lib::Mocks::mock_preference( 'AllowItemsOnHoldCheckout', 0 );
     $dbh->do("DELETE FROM tmp_holdsqueue WHERE itemnumber=$itemnumber");
     ok( !$item->has_pending_hold, "We don't have a pending hold if nothing in the tmp_holdsqueue");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "as_marc_field() tests" => sub {
+
+    my $mss = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 1 } );
+
+    my @schema_columns = $schema->resultset('Item')->result_source->columns;
+    my @mapped_columns = grep { exists $mss->{'items.'.$_} } @schema_columns;
+
+    plan tests => 2 * (scalar @mapped_columns + 1) + 1;
+
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item;
+
+    # Tests with the mss parameter
+    my $marc_field = $item->as_marc_field({ mss => $mss });
+
+    is(
+        $marc_field->tag,
+        $mss->{'items.itemnumber'}[0]->{tagfield},
+        'Generated field set the right tag number'
+    );
+
+    foreach my $column ( @mapped_columns ) {
+        my $tagsubfield = $mss->{ 'items.' . $column }[0]->{tagsubfield};
+        is( $marc_field->subfield($tagsubfield),
+            $item->$column, "Value is mapped correctly for column $column" );
+    }
+
+    # Tests without the mss parameter
+    $marc_field = $item->as_marc_field();
+
+    is(
+        $marc_field->tag,
+        $mss->{'items.itemnumber'}[0]->{tagfield},
+        'Generated field set the right tag number'
+    );
+
+    foreach my $column (@mapped_columns) {
+        my $tagsubfield = $mss->{ 'items.' . $column }[0]->{tagsubfield};
+        is( $marc_field->subfield($tagsubfield),
+            $item->$column, "Value is mapped correctly for column $column" );
+    }
+
+    my $unmapped_subfield = Koha::MarcSubfieldStructure->new(
+        {
+            frameworkcode => '',
+            tagfield      => $mss->{'items.itemnumber'}[0]->{tagfield},
+            tagsubfield   => 'X',
+        }
+    )->store;
+
+    $mss = C4::Biblio::GetMarcSubfieldStructure( '', { unsafe => 0 } );
+    my @unlinked_subfields;
+    push @unlinked_subfields, X => 'Something weird';
+    $item->more_subfields_xml( C4::Items::_get_unlinked_subfields_xml( \@unlinked_subfields ) )->store;
+
+    $marc_field = $item->as_marc_field;
+    is( scalar $marc_field->subfield('X'), 'Something weird', 'more_subfield_xml is considered' );
+
+    $schema->storage->txn_rollback;
 };
