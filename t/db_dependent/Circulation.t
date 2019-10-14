@@ -2219,7 +2219,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item->itemnumber, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
-        is( $credit_return->accounttype, 'LOST_RETURN', 'An account line of type LOST_RETURN is added' );
+        is( $credit_return->credit_type_code, 'LOST_RETURN', 'An account line of type LOST_RETURN is added' );
         is( $credit_return->amount + 0,
             -99.00, 'The account line of type LOST_RETURN has an amount of -99' );
         is( $credit_return->amountoutstanding + 0,
@@ -2277,7 +2277,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item->itemnumber, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
-        is( $credit_return->accounttype, 'LOST_RETURN', 'An account line of type LOST_RETURN is added' );
+        is( $credit_return->credit_type_code, 'LOST_RETURN', 'An account line of type LOST_RETURN is added' );
         is( $credit_return->amount + 0, -99.00, 'The account line of type LOST_RETURN has an amount of -99' );
         is( $credit_return->amountoutstanding + 0, 0, 'The account line of type LOST_RETURN has an amountoutstanding of 0' );
 
@@ -2371,7 +2371,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             'LOST', 'Lost fee now still has account type of LOST' );
         is( $lost_fee_line->status, 'RETURNED', "Lost fee now has account status of RETURNED");
 
-        is( $credit_return->accounttype, 'LOST_RETURN', 'An account line of type LOST_RETURN is added' );
+        is( $credit_return->credit_type_code, 'LOST_RETURN', 'An account line of type LOST_RETURN is added' );
         is( $credit_return->amount + 0,
             ($payment_amount + $outstanding ) * -1,
             'The account line of type LOST_RETURN has an amount equal to the payment + outstanding'

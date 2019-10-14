@@ -115,7 +115,7 @@ my $sth = $dbh->prepare(
          date,
          description,
          interface,
-         accounttype,
+         credit_type_code,
          debit_type_code
      )
      VALUES ( ?, ?, (select date_sub(CURRENT_DATE, INTERVAL ? DAY) ), ?, ?, ?, ? )"
@@ -124,17 +124,17 @@ my $sth = $dbh->prepare(
 my $days = 5;
 
 my @test_data = (
-    { amount => 0     , days_ago => 0         , description =>'purge_zero_balance_fees should not delete 0 balance fees with date today'                     , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => 0     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete 0 balance fees with date before threshold day'      , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => 0     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => 0     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => undef , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete NULL balance fees with date after threshold day'        , delete => 1, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed before threshold day' , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with positive amout owed on threshold day'     , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed after threshold day'  , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
-    { amount => -5    , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0, accounttype => 'Pay', debit_type => undef } ,
-    { amount => -5    , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0, accounttype => 'Pay', debit_type => undef } ,
-    { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0, accounttype => 'Pay', debit_type => undef }
+    { amount => 0     , days_ago => 0         , description =>'purge_zero_balance_fees should not delete 0 balance fees with date today'                     , delete => 0, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => 0     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete 0 balance fees with date before threshold day'      , delete => 0, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => 0     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => 0     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => undef , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete NULL balance fees with date after threshold day'        , delete => 1, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed before threshold day' , delete => 0, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with positive amout owed on threshold day'     , delete => 0, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed after threshold day'  , delete => 0, credit_type => undef, debit_type => 'OVERDUE' } ,
+    { amount => -5    , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0, credit_type => 'PAYMENT', debit_type => undef } ,
+    { amount => -5    , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0, credit_type => 'PAYMENT', debit_type => undef } ,
+    { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0, credit_type => 'PAYMENT', debit_type => undef }
 );
 my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $borrower = Koha::Patron->new( { firstname => 'Test', surname => 'Patron', categorycode => $categorycode, branchcode => $branchcode } )->store();
@@ -146,7 +146,7 @@ for my $data ( @test_data ) {
         $data->{days_ago},
         $data->{description},
         'commandline',
-        $data->{accounttype},
+        $data->{credit_type},
         $data->{debit_type}
     );
 }
@@ -384,7 +384,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
     my $writeoff = Koha::Account::Lines->find( $id );
 
-    is( $writeoff->accounttype, 'W', 'Type is correct for writeoff' );
+    is( $writeoff->credit_type_code, 'W', 'Type is correct for writeoff' );
     is( $writeoff->description, 'Writeoff', 'Description is correct' );
     is( $writeoff->amount, '-42.000000', 'Amount is correct' );
 };
@@ -411,7 +411,7 @@ subtest "More Koha::Account::pay tests" => sub {
                 borrowernumber    => $borrowernumber,
                 amount            => $amount,
                 amountoutstanding => $amount,
-                accounttype       => undef,
+                credit_type_code  => undef,
             }
         }
     );
@@ -471,7 +471,7 @@ subtest "Even more Koha::Account::pay tests" => sub {
                 borrowernumber    => $borrowernumber,
                 amount            => $amount,
                 amountoutstanding => $amount,
-                accounttype       => undef,
+                credit_type_code  => undef,
             }
         }
     );
@@ -523,7 +523,7 @@ subtest 'balance' => sub {
                 borrowernumber    => $patron->borrowernumber,
                 amount            => 42,
                 amountoutstanding => 42,
-                accounttype       => undef,
+                credit_type_code  => undef,
             }
         }
     );
@@ -981,7 +981,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
             date              => '1900-01-01',
             amountoutstanding => -5,
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     my $offset = Koha::Account::Offset->new(
@@ -1014,7 +1014,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
             date              => '1900-01-01',
             amountoutstanding => 0,
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     $offset = Koha::Account::Offset->new(
@@ -1048,7 +1048,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
             date              => '1900-01-01',
             amountoutstanding => 0,
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     $offset = Koha::Account::Offset->new(

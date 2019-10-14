@@ -587,7 +587,7 @@ subtest "void() tests" => sub {
     $line1->_result->discard_changes();
     $line2->_result->discard_changes();
 
-    is( $account_payment->accounttype, 'Pay', 'Voided payment accounttype is still Pay' );
+    is( $account_payment->credit_type_code, 'Pay', 'Voided payment credit_type_code is still Pay' );
     is( $account_payment->status, 'VOID', 'Voided payment status is VOID' );
     is( $account_payment->amount+0, 0, 'Voided payment amount is 0' );
     is( $account_payment->amountoutstanding+0, 0, 'Voided payment amount outstanding is 0' );

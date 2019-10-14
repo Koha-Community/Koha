@@ -86,7 +86,7 @@ subtest 'outstanding_debits() tests' => sub {
             borrowernumber    => $patron_2->id,
             amountoutstanding => -2,
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store;
     my $just_one = Koha::Account::Line->new(
@@ -104,7 +104,7 @@ subtest 'outstanding_debits() tests' => sub {
             amount            => -6,
             amountoutstanding => -6,
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store;
     $lines = $patron_2->account->outstanding_debits();
@@ -135,7 +135,7 @@ subtest 'outstanding_debits() tests' => sub {
             amount            => -3,
             amountoutstanding => 3,
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     $lines = $account_4->outstanding_debits();
@@ -241,7 +241,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -25, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 1, 'Action added to statistics' );
-    is( $line_1->accounttype, $Koha::Account::account_type_credit->{'payment'}, 'Account type is correctly set' );
+    is( $line_1->credit_type_code, $Koha::Account::account_type_credit->{'payment'}, 'Account type is correctly set' );
 
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
@@ -259,7 +259,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -62, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'Action added to statistics' );
-    is( $line_2->accounttype, $Koha::Account::account_type_credit->{'payment'}, 'Account type is correctly set' );
+    is( $line_2->credit_type_code, $Koha::Account::account_type_credit->{'payment'}, 'Account type is correctly set' );
 
     # offsets have the credit_id set to accountlines_id, and debit_id is undef
     my $offset_1 = Koha::Account::Offsets->search({ credit_id => $line_1->id })->next;
@@ -903,7 +903,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
             amount            => "-0.500000",
             amountoutstanding => "-0.500000",
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     my $debits = $account->outstanding_debits;
@@ -922,7 +922,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
             amount            => "-0.500000",
             amountoutstanding => "-0.500000",
             interface         => 'commandline',
-            accounttype       => 'Pay'
+            credit_type_code  => 'PAYMENT'
         }
     )->store();
     $debits = $account->outstanding_debits;
