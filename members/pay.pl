@@ -84,7 +84,7 @@ elsif ( $input->param('payselected') ) {
     payselected({ params => \@names });
 }
 elsif ( $input->param('writeoff_selected') ) {
-    payselected({ params => \@names, type => 'writeoff' });
+    payselected({ params => \@names, type => 'WRITEOFF' });
 }
 elsif ( $input->param('woall') ) {
     writeoff_all(@names);
@@ -116,7 +116,7 @@ elsif ( $input->param('confirm_writeoff') ) {
             {
                 amount     => $amount,
                 lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
-                type       => 'writeoff',
+                type       => 'WRITEOFF',
                 note       => $payment_note,
                 interface  => C4::Context->interface,
                 library_id => $branch,
@@ -223,7 +223,7 @@ sub writeoff_all {
                 {
                     amount => $amount,
                     lines  => [ scalar Koha::Account::Lines->find($accountlines_id) ],
-                    type   => 'writeoff',
+                    type   => 'WRITEOFF',
                     note   => $payment_note,
                     interface  => C4::Context->interface,
                     library_id => $branch,

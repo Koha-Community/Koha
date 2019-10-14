@@ -374,7 +374,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
         {
             lines  => [$line],
             amount => 42,
-            type   => 'writeoff',
+            type   => 'WRITEOFF',
         }
     );
 
@@ -384,7 +384,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
     my $writeoff = Koha::Account::Lines->find( $id );
 
-    is( $writeoff->credit_type_code, 'W', 'Type is correct for writeoff' );
+    is( $writeoff->credit_type_code, 'WRITEOFF', 'Type is correct for WRITEOFF' );
     is( $writeoff->description, 'Writeoff', 'Description is correct' );
     is( $writeoff->amount, '-42.000000', 'Amount is correct' );
 };
@@ -1180,7 +1180,7 @@ subtest "Payment notice tests" => sub {
     my $id = $account->pay( { amount => 1 } );
     is( Koha::Notice::Messages->search()->count(), 0, 'Notice for payment not sent if UseEmailReceipts is disabled' );
 
-    $id = $account->pay( { amount => 1, type => 'writeoff' } );
+    $id = $account->pay( { amount => 1, type => 'WRITEOFF' } );
     is( Koha::Notice::Messages->search()->count(), 0, 'Notice for writeoff not sent if UseEmailReceipts is disabled' );
 
     t::lib::Mocks::mock_preference('UseEmailReceipts', '1');
@@ -1196,7 +1196,7 @@ subtest "Payment notice tests" => sub {
     $letter->content('[%- USE Price -%]A writeoff of [% credit.amount * -1 | $Price %] has been applied to your account.');
     $letter->store();
 
-    $id = $account->pay( { amount => 13, type => 'writeoff' } );
+    $id = $account->pay( { amount => 13, type => 'WRITEOFF' } );
     $notice = Koha::Notice::Messages->search()->next();
     is( $notice->subject, 'Account writeoff', 'Notice subject is correct for payment' );
     is( $notice->letter_code, 'ACCOUNT_WRITEOFF', 'Notice letter code is correct for writeoff' );

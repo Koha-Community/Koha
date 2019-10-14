@@ -3,9 +3,8 @@
     [%- IF account.credit_type_code -%]
         [%- SWITCH account.credit_type_code -%]
             [%- CASE 'PAYMENT'          -%]Payment
-            [%- CASE 'W'                -%]Writeoff
+            [%- CASE 'WRITEOFF'         -%]Writeoff
             [%- CASE 'FORGIVEN'         -%]Forgiven
-            [%- CASE 'WO'               -%]Writeoff
             [%- CASE 'CREDIT'           -%]Credit
             [%- CASE 'LOST_RETURN'      -%]Lost item fee refund
             [%- CASE                    -%][% account.credit_type.description | html %]

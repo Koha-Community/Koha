@@ -74,7 +74,7 @@ if ($do_it) {
     } elsif ($transaction_type eq 'ACT') { #Active
         $whereTType = q{ AND credit_type_code IN ('PAYMENT','CREDIT') };
     } elsif ($transaction_type eq 'FORW') {
-        $whereTType = q{ AND credit_type_code IN ('FORGIVEN','W') };
+        $whereTType = q{ AND credit_type_code IN ('FORGIVEN','WRITEOFF') };
     } else {
         if ( any { $transaction_type eq $_->code } @debit_types ) {
             $whereTType = q{ AND debit_type_code = ? };
@@ -128,7 +128,7 @@ if ($do_it) {
             if($row->{credit_type_code} =~ /^CREDIT$/){
                 $grantotal -= abs($row->{amount});
                 $row->{amount} = '-' . $row->{amount};
-            }elsif($row->{credit_type_code} eq 'FORGIVEN' || $row->{credit_type_code} eq 'W'){
+            }elsif($row->{credit_type_code} eq 'FORGIVEN' || $row->{credit_type_code} eq 'WRITEOFF'){
             }else{
                 $grantotal += abs($row->{amount});
             }

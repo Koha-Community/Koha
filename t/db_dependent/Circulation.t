@@ -2148,7 +2148,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         # Write off the debt
         my $credit = $account->add_credit(
             {   amount => $account->balance,
-                type   => 'writeoff',
+                type   => 'WRITEOFF',
                 interface => 'test',
             }
         );
@@ -2345,7 +2345,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $write_off_amount = 25;
         my $write_off        = $account->add_credit(
             {   amount => $write_off_amount,
-                type   => 'writeoff',
+                type   => 'WRITEOFF',
                 interface => 'test',
             }
         );

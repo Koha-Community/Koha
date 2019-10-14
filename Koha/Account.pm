@@ -79,7 +79,7 @@ sub pay {
     my $type          = $params->{type} || 'PAYMENT';
     my $payment_type  = $params->{payment_type} || undef;
     my $credit_type   = $params->{credit_type};
-    my $offset_type   = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
+    my $offset_type   = $params->{offset_type} || $type eq 'WRITEOFF' ? 'Writeoff' : 'Payment';
     my $cash_register = $params->{cash_register};
 
     my $userenv = C4::Context->userenv;
@@ -216,11 +216,11 @@ sub pay {
     }
 
     $credit_type ||=
-      $type eq 'writeoff'
-      ? 'W'
+      $type eq 'WRITEOFF'
+      ? 'WRITEOFF'
       : 'PAYMENT';
 
-    $description ||= $type eq 'writeoff' ? 'Writeoff' : q{};
+    $description ||= $type eq 'WRITEOFF' ? 'Writeoff' : q{};
 
     my $payment = Koha::Account::Line->new(
         {
@@ -326,7 +326,7 @@ $credit_type can be any of:
   - 'PAYMENT'
   - 'FORGIVEN'
   - 'LOST_RETURN'
-  - 'writeoff'
+  - 'WRITEOFF'
 
 =cut
 
@@ -398,7 +398,7 @@ sub add_credit {
                     amount         => $amount,
                     borrowernumber => $self->{patron_id},
                 }
-            ) if grep { $type eq $_ } ('PAYMENT', 'writeoff') ;
+            ) if grep { $type eq $_ } ('PAYMENT', 'WRITEOFF') ;
 
             if ( C4::Context->preference("FinesLog") ) {
                 logaction(
@@ -720,7 +720,7 @@ our $offset_type = {
     'FORGIVEN'         => 'Writeoff',
     'LOST_RETURN'      => 'Lost Item',
     'PAYMENT'          => 'Payment',
-    'writeoff'         => 'Writeoff',
+    'WRITEOFF'         => 'Writeoff',
     'ACCOUNT'          => 'Account Fee',
     'ACCOUNT_RENEW'    => 'Account Fee',
     'RESERVE'          => 'Reserve Fee',
@@ -743,7 +743,7 @@ our $account_type_credit = {
     'FORGIVEN'         => 'FORGIVEN',
     'LOST_RETURN'      => 'LOST_RETURN',
     'PAYMENT'          => 'PAYMENT',
-    'writeoff'         => 'W'
+    'WRITEOFF'         => 'WRITEOFF'
 };
 
 =head1 AUTHORS

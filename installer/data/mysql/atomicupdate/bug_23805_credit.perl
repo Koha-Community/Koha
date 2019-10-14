@@ -37,8 +37,7 @@ if ( CheckVersion($DBversion) ) {
             )
             VALUES
               ('PAYMENT', 'Payment', 0, 1),
-              ('W', 'Writeoff', 0, 1),
-              ('WO', 'Writeoff', 0, 1),
+              ('WRITEOFF', 'Writeoff', 0, 1),
               ('FORGIVEN', 'Forgiven', 1, 1),
               ('CREDIT', 'Credit', 1, 1),
               ('LOST_RETURN', 'Lost item fee refund', 0, 1)
@@ -92,6 +91,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         qq{
           UPDATE accountlines SET accounttype = 'PAYMENT' WHERE accounttype = 'Pay' OR accounttype = 'PAY'
+        }
+    );
+
+    # Update accountype 'W' to 'WRITEOFF'
+    $dbh->do(
+        qq{
+          UPDATE accountlines SET accounttype = 'WRITEOFF' WHERE accounttype = 'W' OR accounttype = 'WO'
         }
     );
 
