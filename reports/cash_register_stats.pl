@@ -72,7 +72,7 @@ if ($do_it) {
     if ($transaction_type eq 'ALL') { #All Transactons
         $whereTType = q{};
     } elsif ($transaction_type eq 'ACT') { #Active
-        $whereTType = q{ AND credit_type_code IN ('Pay','C') };
+        $whereTType = q{ AND credit_type_code IN ('Pay','CREDIT') };
     } elsif ($transaction_type eq 'FORW') {
         $whereTType = q{ AND credit_type_code IN ('FOR','W') };
     } else {

@@ -7,7 +7,7 @@
             [%- CASE 'FOR'              -%]Forgiven
             [%- CASE 'PAY'              -%]Payment
             [%- CASE 'WO'               -%]Writeoff
-            [%- CASE 'C'                -%]Credit
+            [%- CASE 'CREDIT'           -%]Credit
             [%- CASE 'LOST_RETURN'      -%]Lost item fee refund
             [%- CASE                    -%][% account.credit_type.description | html %]
         [%- END -%]

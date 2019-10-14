@@ -338,7 +338,7 @@ sub adjust {
                     {
                         amount      => $new_outstanding * -1,
                         description => 'Overpayment refund',
-                        type        => 'credit',
+                        type        => 'CREDIT',
                         interface   => $interface,
                         ( $update_type eq 'overdue_update' ? ( item_id => $self->itemnumber ) : ()),
                     }
