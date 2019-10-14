@@ -2622,6 +2622,31 @@ CREATE TABLE `cash_registers` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `account_credit_types`
+--
+
+DROP TABLE IF EXISTS `account_credit_types`;
+CREATE TABLE `account_credit_types` (
+  `code` varchar(80) NOT NULL,
+  `description` varchar(200) DEFAULT NULL,
+  `can_be_added_manually` tinyint(4) NOT NULL DEFAULT 1,
+  `is_system` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table `account_credit_types_branches`
+--
+
+DROP TABLE IF EXISTS `account_credit_types_branches`;
+CREATE TABLE `account_credit_types_branches` (
+    `credit_type_code` VARCHAR(80),
+    `branchcode` VARCHAR(10),
+    FOREIGN KEY (`credit_type_code`) REFERENCES `account_credit_types` (`code`) ON DELETE CASCADE,
+    FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `account_debit_types`
 --
 
@@ -2661,7 +2686,7 @@ CREATE TABLE `accountlines` (
   `date` date default NULL,
   `amount` decimal(28,6) default NULL,
   `description` LONGTEXT,
-  `accounttype` varchar(80) default NULL,
+  `credit_type_code` varchar(80) default NULL,
   `debit_type_code` varchar(80) default NULL,
   `status` varchar(16) default NULL,
   `payment_type` varchar(80) default NULL, -- optional authorised value PAYMENT_TYPE
@@ -2675,6 +2700,7 @@ CREATE TABLE `accountlines` (
   PRIMARY KEY (`accountlines_id`),
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
+  KEY `credit_type_code` (`credit_type_code`),
   KEY `debit_type_code` (`debit_type_code`),
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`),
@@ -2684,8 +2710,9 @@ CREATE TABLE `accountlines` (
   CONSTRAINT `accountlines_ibfk_borrowers_2` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_branches` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_registers` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_ibfk_credit_type` FOREIGN KEY (`credit_type_code`) REFERENCES `account_credit_types` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type_code`) REFERENCES `account_debit_types` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `accountlines_check_type` CHECK (`accounttype` IS NOT NULL OR `debit_type_code` IS NOT NULL)
+  CONSTRAINT `accountlines_check_type` CHECK (`credit_type_code` IS NOT NULL OR `debit_type_code` IS NOT NULL)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
