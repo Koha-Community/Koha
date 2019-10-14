@@ -225,7 +225,7 @@ sub _to_model {
 
 our $to_api_mapping = {
     accountlines_id   => 'account_line_id',
-    accounttype       => 'account_type',
+    credit_type_code  => 'credit_type',
     debit_type_code   => 'debit_type',
     amountoutstanding => 'amount_outstanding',
     borrowernumber    => 'patron_id',
@@ -242,7 +242,7 @@ our $to_api_mapping = {
 
 our $to_model_mapping = {
     account_line_id    => 'accountlines_id',
-    account_type       => 'accounttype',
+    credit_type        => 'credit_type_code',
     debit_type         => 'debit_type_code',
     amount_outstanding => 'amountoutstanding',
     checkout_id        => 'issue_id',

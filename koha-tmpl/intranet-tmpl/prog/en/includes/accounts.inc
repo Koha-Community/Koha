@@ -1,7 +1,7 @@
 [%- BLOCK account_type_description -%]
     <span>
-    [%- IF account.accounttype -%]
-        [%- SWITCH account.accounttype -%]
+    [%- IF account.credit_type_code -%]
+        [%- SWITCH account.credit_type_code -%]
             [%- CASE 'Pay'              -%]Payment
             [%- CASE 'W'                -%]Writeoff
             [%- CASE 'FOR'              -%]Forgiven
@@ -9,7 +9,7 @@
             [%- CASE 'WO'               -%]Writeoff
             [%- CASE 'C'                -%]Credit
             [%- CASE 'LOST_RETURN'      -%]Lost item fee refund
-            [%- CASE                    -%][% account.accounttype | html %]
+            [%- CASE                    -%][% account.credit_type.description | html %]
         [%- END -%]
     [%- ELSIF account.debit_type_code -%]
        [%- SWITCH account.debit_type_code -%]

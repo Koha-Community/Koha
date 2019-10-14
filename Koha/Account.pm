@@ -60,8 +60,8 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
         note        => $note,
         description => $description,
         library_id  => $branchcode,
-        lines        => $lines, # Arrayref of Koha::Account::Line objects to pay
-        account_type => $type,  # accounttype code
+        lines       => $lines, # Arrayref of Koha::Account::Line objects to pay
+        credit_type => $type,  # credit_type_code code
         offset_type => $offset_type,    # offset type code
     }
 );
@@ -78,7 +78,7 @@ sub pay {
     my $lines         = $params->{lines};
     my $type          = $params->{type} || 'payment';
     my $payment_type  = $params->{payment_type} || undef;
-    my $account_type  = $params->{account_type};
+    my $credit_type   = $params->{credit_type};
     my $offset_type   = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
     my $cash_register = $params->{cash_register};
 
@@ -215,7 +215,7 @@ sub pay {
         last unless $balance_remaining > 0;
     }
 
-    $account_type ||=
+    $credit_type ||=
       $type eq 'writeoff'
       ? 'W'
       : 'Pay';
@@ -228,7 +228,7 @@ sub pay {
             date              => dt_from_string(),
             amount            => 0 - $amount,
             description       => $description,
-            accounttype       => $account_type,
+            credit_type_code  => $credit_type,
             payment_type      => $payment_type,
             amountoutstanding => 0 - $balance_remaining,
             manager_id        => $manager_id,
@@ -263,7 +263,7 @@ sub pay {
                     borrowernumber    => $self->{patron_id},
                     amount            => 0 - $amount,
                     amountoutstanding => 0 - $balance_remaining,
-                    accounttype       => $account_type,
+                    credit_type_code  => $credit_type,
                     accountlines_paid => \@fines_paid,
                     manager_id        => $manager_id,
                 }
@@ -360,7 +360,7 @@ sub add_credit {
 
     my $schema = Koha::Database->new->schema;
 
-    my $account_type = $Koha::Account::account_type_credit->{$type};
+    my $credit_type = $Koha::Account::account_type_credit->{$type};
     my $line;
 
     $schema->txn_do(
@@ -372,7 +372,7 @@ sub add_credit {
                     date              => \'NOW()',
                     amount            => $amount,
                     description       => $description,
-                    accounttype       => $account_type,
+                    credit_type_code  => $credit_type,
                     amountoutstanding => $amount,
                     payment_type      => $payment_type,
                     note              => $note,
@@ -410,7 +410,7 @@ sub add_credit {
                             amount            => $amount,
                             description       => $description,
                             amountoutstanding => $amount,
-                            accounttype       => $account_type,
+                            credit_type_code  => $credit_type,
                             note              => $note,
                             itemnumber        => $item_id,
                             manager_id        => $user_id,

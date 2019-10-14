@@ -150,7 +150,7 @@ sub void {
                             amount            => $self->amount,
                             amountoutstanding => $self->amountoutstanding,
                             description       => $self->description,
-                            accounttype       => $self->accounttype,
+                            credit_type_code  => $self->credit_type_code,
                             payment_type      => $self->payment_type,
                             note              => $self->note,
                             itemnumber        => $self->itemnumber,

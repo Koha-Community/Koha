@@ -159,7 +159,7 @@
                 <td>[% loopresul.branchname | html %]</td>
                 <td>[% loopresul.date | $KohaDates %]</td>
                 <td>
-                    [% IF loopresul.accounttype == "ACT" %]
+                    [% IF loopresul.credit_type == "ACT" %]
                         <span>All payments to the library</span>
                     [% ELSE %]
                         [%- PROCESS account_type_description account=loopresul -%]

@@ -72,15 +72,15 @@ if ($do_it) {
     if ($transaction_type eq 'ALL') { #All Transactons
         $whereTType = q{};
     } elsif ($transaction_type eq 'ACT') { #Active
-        $whereTType = q{ AND accounttype IN ('Pay','C') };
+        $whereTType = q{ AND credit_type_code IN ('Pay','C') };
     } elsif ($transaction_type eq 'FORW') {
-        $whereTType = q{ AND accounttype IN ('FOR','W') };
+        $whereTType = q{ AND credit_type_code IN ('FOR','W') };
     } else {
         if ( any { $transaction_type eq $_->code } @debit_types ) {
             $whereTType = q{ AND debit_type_code = ? };
             push @extra_params, $transaction_type;
         } else {
-            $whereTType = q{ AND accounttype = ? };
+            $whereTType = q{ AND credit_type_code = ? };
             push @extra_params, $transaction_type;
         }
     }
@@ -96,7 +96,7 @@ if ($do_it) {
     SELECT round(amount,2) AS amount, description,
         bo.surname AS bsurname, bo.firstname AS bfirstname, m.surname AS msurname, m.firstname AS mfirstname,
         bo.cardnumber, br.branchname, bo.borrowernumber,
-        al.borrowernumber, DATE(al.date) as date, al.accounttype, al.debit_type_code, al.amountoutstanding, al.note,
+        al.borrowernumber, DATE(al.date) as date, al.credit_type_code, al.debit_type_code, al.amountoutstanding, al.note,
         bi.title, bi.biblionumber, i.barcode, i.itype
         FROM accountlines al
         LEFT JOIN borrowers bo ON (al.borrowernumber = bo.borrowernumber)
@@ -121,14 +121,14 @@ if ($do_it) {
             $row->{date} = dt_from_string($row->{date}, 'sql');
 
             push (@loopresult, $row);
-            if($transaction_type eq 'ACT' && ($row->{accounttype} !~ /^C$|^CR$|^Pay$/)){
+            if($transaction_type eq 'ACT' && ($row->{credit_type_code} !~ /^C$|^CR$|^Pay$/)){
                 pop @loopresult;
                 next;
             }
-            if($row->{accounttype} =~ /^C$|^CR$/){
+            if($row->{credit_type_code} =~ /^C$|^CR$/){
                 $grantotal -= abs($row->{amount});
                 $row->{amount} = '-' . $row->{amount};
-            }elsif($row->{accounttype} eq 'FORW' || $row->{accounttype} eq 'W'){
+            }elsif($row->{credit_type_code} eq 'FORW' || $row->{credit_type_code} eq 'W'){
             }else{
                 $grantotal += abs($row->{amount});
             }
@@ -155,7 +155,7 @@ if ($do_it) {
                         $row->{bfirstname} . ' ' . $row->{bsurname},
                         $row->{branchname},
                         $row->{date},
-                        $row->{accounttype},
+                        $row->{credit_type},
                         $row->{debit_type},
                         $row->{note},
                         $row->{amount},
