@@ -10,5 +10,5 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do("UPDATE systempreferences SET value = '', explanation = 'email|facebook|linkedin|twitter', type = 'multiple'  WHERE variable = 'SocialNetworks'");
     }
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (Bug 22880: Move contents of socialnetworks preference to Koha news system)\n";
+    print "Upgrade to $DBversion done (Bug 22880: Allow granular control of socialnetworks preference)\n";
 }
