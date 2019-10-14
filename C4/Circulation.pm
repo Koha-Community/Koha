@@ -2454,7 +2454,7 @@ sub _FixAccountForLostAndReturned {
         $credit = $account->add_credit(
             {   amount      => $credit_total,
                 description => 'Item Returned ' . $item_id,
-                type        => 'lost_item_return',
+                type        => 'LOST_RETURN',
                 interface   => C4::Context->interface,
                 library_id  => $branchcode
             }
