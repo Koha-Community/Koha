@@ -334,8 +334,22 @@ sub add_credit {
 
     my ( $self, $params ) = @_;
 
-    # amount is passed as a positive value, but we store credit as negative values
-    my $amount        = $params->{amount} * -1;
+    # check for mandatory params
+    my @mandatory = ( 'interface', 'amount' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    # amount should always be passed as a positive value
+    my $amount = $params->{amount} * -1;
+    unless ( $amount < 0 ) {
+        Koha::Exceptions::Account::AmountNotPositive->throw(
+            error => 'Debit amount passed is not positive' );
+    }
+
     my $description   = $params->{description} // q{};
     my $note          = $params->{note} // q{};
     my $user_id       = $params->{user_id};
@@ -343,14 +357,8 @@ sub add_credit {
     my $library_id    = $params->{library_id};
     my $cash_register = $params->{cash_register};
     my $payment_type  = $params->{payment_type};
-    my $type          = $params->{type} || 'PAYMENT';
+    my $credit_type   = $params->{type} || 'PAYMENT';
     my $item_id       = $params->{item_id};
-
-    unless ( $interface ) {
-        Koha::Exceptions::MissingParameter->throw(
-            error => 'The interface parameter is mandatory'
-        );
-    }
 
     Koha::Exceptions::Account::RegisterRequired->throw()
       if ( C4::Context->preference("UseCashRegisters")
@@ -358,70 +366,84 @@ sub add_credit {
         && ( $payment_type eq 'CASH' )
         && !defined($cash_register) );
 
-    my $schema = Koha::Database->new->schema;
-
-    my $credit_type = $Koha::Account::account_type_credit->{$type};
     my $line;
+    my $schema = Koha::Database->new->schema;
+    try {
+        $schema->txn_do(
+            sub {
 
-    $schema->txn_do(
-        sub {
+                # Insert the account line
+                $line = Koha::Account::Line->new(
+                    {
+                        borrowernumber    => $self->{patron_id},
+                        date              => \'NOW()',
+                        amount            => $amount,
+                        description       => $description,
+                        credit_type_code  => $credit_type,
+                        amountoutstanding => $amount,
+                        payment_type      => $payment_type,
+                        note              => $note,
+                        manager_id        => $user_id,
+                        interface         => $interface,
+                        branchcode        => $library_id,
+                        register_id       => $cash_register,
+                        itemnumber        => $item_id,
+                    }
+                )->store();
 
-            # Insert the account line
-            $line = Koha::Account::Line->new(
-                {   borrowernumber    => $self->{patron_id},
-                    date              => \'NOW()',
-                    amount            => $amount,
-                    description       => $description,
-                    credit_type_code  => $credit_type,
-                    amountoutstanding => $amount,
-                    payment_type      => $payment_type,
-                    note              => $note,
-                    manager_id        => $user_id,
-                    interface         => $interface,
-                    branchcode        => $library_id,
-                    register_id       => $cash_register,
-                    itemnumber        => $item_id,
+                # Record the account offset
+                my $account_offset = Koha::Account::Offset->new(
+                    {
+                        credit_id => $line->id,
+                        type   => $Koha::Account::offset_type->{$credit_type},
+                        amount => $amount
+                    }
+                )->store();
+
+                UpdateStats(
+                    {
+                        branch         => $library_id,
+                        type           => $credit_type,
+                        amount         => $amount,
+                        borrowernumber => $self->{patron_id},
+                    }
+                ) if grep { $credit_type eq $_ } ( 'PAYMENT', 'WRITEOFF' );
+
+                if ( C4::Context->preference("FinesLog") ) {
+                    logaction(
+                        "FINES", 'CREATE',
+                        $self->{patron_id},
+                        Dumper(
+                            {
+                                action            => "create_$credit_type",
+                                borrowernumber    => $self->{patron_id},
+                                amount            => $amount,
+                                description       => $description,
+                                amountoutstanding => $amount,
+                                credit_type_code  => $credit_type,
+                                note              => $note,
+                                itemnumber        => $item_id,
+                                manager_id        => $user_id,
+                                branchcode        => $library_id,
+                            }
+                        ),
+                        $interface
+                    );
                 }
-            )->store();
-
-            # Record the account offset
-            my $account_offset = Koha::Account::Offset->new(
-                {   credit_id => $line->id,
-                    type      => $Koha::Account::offset_type->{$type},
-                    amount    => $amount
-                }
-            )->store();
-
-            UpdateStats(
-                {   branch         => $library_id,
-                    type           => $type,
-                    amount         => $amount,
-                    borrowernumber => $self->{patron_id},
-                }
-            ) if grep { $type eq $_ } ('PAYMENT', 'WRITEOFF') ;
-
-            if ( C4::Context->preference("FinesLog") ) {
-                logaction(
-                    "FINES", 'CREATE',
-                    $self->{patron_id},
-                    Dumper(
-                        {   action            => "create_$type",
-                            borrowernumber    => $self->{patron_id},
-                            amount            => $amount,
-                            description       => $description,
-                            amountoutstanding => $amount,
-                            credit_type_code  => $credit_type,
-                            note              => $note,
-                            itemnumber        => $item_id,
-                            manager_id        => $user_id,
-                            branchcode        => $library_id,
-                        }
-                    ),
-                    $interface
-                );
+            }
+        );
+    }
+    catch {
+        if ( ref($_) eq 'Koha::Exceptions::Object::FKConstraint' ) {
+            if ( $_->broken_fk eq 'credit_type_code' ) {
+                Koha::Exceptions::Account::UnrecognisedType->throw(
+                    error => 'Type of credit not recognised' );
+            }
+            else {
+                $_->rethrow;
             }
         }
-    );
+    };
 
     return $line;
 }
@@ -732,18 +754,6 @@ our $offset_type = {
     'RENT_DAILY_RENEW' => 'Rental Fee',
     'OVERDUE'          => 'OVERDUE',
     'RESERVE_EXPIRED'  => 'Hold Expired'
-};
-
-=head3 $account_type_credit
-
-=cut
-
-our $account_type_credit = {
-    'CREDIT'           => 'CREDIT',
-    'FORGIVEN'         => 'FORGIVEN',
-    'LOST_RETURN'      => 'LOST_RETURN',
-    'PAYMENT'          => 'PAYMENT',
-    'WRITEOFF'         => 'WRITEOFF'
 };
 
 =head1 AUTHORS

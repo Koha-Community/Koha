@@ -241,7 +241,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -25, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 1, 'Action added to statistics' );
-    is( $line_1->credit_type_code, $Koha::Account::account_type_credit->{'PAYMENT'}, 'Account type is correctly set' );
+    is( $line_1->credit_type_code, 'PAYMENT', 'Account type is correctly set' );
 
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
@@ -259,7 +259,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -62, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'Action added to statistics' );
-    is( $line_2->credit_type_code, $Koha::Account::account_type_credit->{'PAYMENT'}, 'Account type is correctly set' );
+    is( $line_2->credit_type_code, 'PAYMENT', 'Account type is correctly set' );
 
     # offsets have the credit_id set to accountlines_id, and debit_id is undef
     my $offset_1 = Koha::Account::Offsets->search({ credit_id => $line_1->id })->next;
