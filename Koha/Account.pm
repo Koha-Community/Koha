@@ -76,7 +76,7 @@ sub pay {
     my $note          = $params->{note} || q{};
     my $library_id    = $params->{library_id};
     my $lines         = $params->{lines};
-    my $type          = $params->{type} || 'payment';
+    my $type          = $params->{type} || 'PAYMENT';
     my $payment_type  = $params->{payment_type} || undef;
     my $credit_type   = $params->{credit_type};
     my $offset_type   = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
@@ -218,7 +218,7 @@ sub pay {
     $credit_type ||=
       $type eq 'writeoff'
       ? 'W'
-      : 'Pay';
+      : 'PAYMENT';
 
     $description ||= $type eq 'writeoff' ? 'Writeoff' : q{};
 
@@ -323,7 +323,7 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
 
 $credit_type can be any of:
   - 'CREDIT'
-  - 'payment'
+  - 'PAYMENT'
   - 'FORGIVEN'
   - 'LOST_RETURN'
   - 'writeoff'
@@ -343,7 +343,7 @@ sub add_credit {
     my $library_id    = $params->{library_id};
     my $cash_register = $params->{cash_register};
     my $payment_type  = $params->{payment_type};
-    my $type          = $params->{type} || 'payment';
+    my $type          = $params->{type} || 'PAYMENT';
     my $item_id       = $params->{item_id};
 
     unless ( $interface ) {
@@ -398,7 +398,7 @@ sub add_credit {
                     amount         => $amount,
                     borrowernumber => $self->{patron_id},
                 }
-            ) if grep { $type eq $_ } ('payment', 'writeoff') ;
+            ) if grep { $type eq $_ } ('PAYMENT', 'writeoff') ;
 
             if ( C4::Context->preference("FinesLog") ) {
                 logaction(
@@ -719,7 +719,7 @@ our $offset_type = {
     'CREDIT'           => 'Manual Credit',
     'FORGIVEN'         => 'Writeoff',
     'LOST_RETURN'      => 'Lost Item',
-    'payment'          => 'Payment',
+    'PAYMENT'          => 'Payment',
     'writeoff'         => 'Writeoff',
     'ACCOUNT'          => 'Account Fee',
     'ACCOUNT_RENEW'    => 'Account Fee',
@@ -742,7 +742,7 @@ our $account_type_credit = {
     'CREDIT'           => 'CREDIT',
     'FORGIVEN'         => 'FORGIVEN',
     'LOST_RETURN'      => 'LOST_RETURN',
-    'payment'          => 'Pay',
+    'PAYMENT'          => 'PAYMENT',
     'writeoff'         => 'W'
 };
 

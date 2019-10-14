@@ -2,10 +2,9 @@
     <span>
     [%- IF account.credit_type_code -%]
         [%- SWITCH account.credit_type_code -%]
-            [%- CASE 'Pay'              -%]Payment
+            [%- CASE 'PAYMENT'          -%]Payment
             [%- CASE 'W'                -%]Writeoff
             [%- CASE 'FORGIVEN'         -%]Forgiven
-            [%- CASE 'PAY'              -%]Payment
             [%- CASE 'WO'               -%]Writeoff
             [%- CASE 'CREDIT'           -%]Credit
             [%- CASE 'LOST_RETURN'      -%]Lost item fee refund

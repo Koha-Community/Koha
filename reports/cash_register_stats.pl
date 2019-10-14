@@ -72,7 +72,7 @@ if ($do_it) {
     if ($transaction_type eq 'ALL') { #All Transactons
         $whereTType = q{};
     } elsif ($transaction_type eq 'ACT') { #Active
-        $whereTType = q{ AND credit_type_code IN ('Pay','CREDIT') };
+        $whereTType = q{ AND credit_type_code IN ('PAYMENT','CREDIT') };
     } elsif ($transaction_type eq 'FORW') {
         $whereTType = q{ AND credit_type_code IN ('FORGIVEN','W') };
     } else {
@@ -121,11 +121,11 @@ if ($do_it) {
             $row->{date} = dt_from_string($row->{date}, 'sql');
 
             push (@loopresult, $row);
-            if($transaction_type eq 'ACT' && ($row->{credit_type_code} !~ /^C$|^CR$|^Pay$/)){
+            if($transaction_type eq 'ACT' && ($row->{credit_type_code} !~ /^CREDIT$|^PAYMENT$/)){
                 pop @loopresult;
                 next;
             }
-            if($row->{credit_type_code} =~ /^C$|^CR$/){
+            if($row->{credit_type_code} =~ /^CREDIT$/){
                 $grantotal -= abs($row->{amount});
                 $row->{amount} = '-' . $row->{amount};
             }elsif($row->{credit_type_code} eq 'FORGIVEN' || $row->{credit_type_code} eq 'W'){

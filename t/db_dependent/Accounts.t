@@ -433,7 +433,7 @@ subtest "More Koha::Account::pay tests" => sub {
 
     my $stat = $schema->resultset('Statistic')->search({
         branch  => $branch,
-        type    => 'payment'
+        type    => 'PAYMENT'
     }, { order_by => { -desc => 'datetime' } })->next();
 
     ok( defined $stat, "There's a payment log that matches the branch" );
@@ -493,7 +493,7 @@ subtest "Even more Koha::Account::pay tests" => sub {
 
     my $stat = $schema->resultset('Statistic')->search({
         branch  => $branch,
-        type    => 'payment'
+        type    => 'PAYMENT'
     }, { order_by => { -desc => 'datetime' } })->next();
 
     ok( defined $stat, "There's a payment log that matches the branch" );

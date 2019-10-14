@@ -50,7 +50,7 @@ sub pay {
     my $is_writeoff          = shift;
     my $disallow_overpayment = shift;
 
-    my $type = $is_writeoff ? 'writeoff' : 'payment';
+    my $type = $is_writeoff ? 'writeoff' : 'PAYMENT';
 
     warn("RECORD:$borrowernumber::$amt");
 

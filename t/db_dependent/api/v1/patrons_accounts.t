@@ -113,7 +113,7 @@ subtest 'get_balance() tests' => sub {
             note         => 'He paid!',
             description  => 'Finally!',
             library_id   => $patron->branchcode,
-            account_type => 'Pay',
+            account_type => 'PAYMENT',
             offset_type  => 'Payment'
         }
     );

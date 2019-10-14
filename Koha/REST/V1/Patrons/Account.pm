@@ -92,7 +92,7 @@ sub add_credit {
     my $body    = $c->validation->param('body');
 
     return try {
-        my $credit_type = $body->{credit_type} || 'payment';    # default to 'payment'
+        my $credit_type = $body->{credit_type} || 'PAYMENT';    # default to 'PAYMENT'
         my $amount = $body->{amount};                           # mandatory, validated by openapi
 
         unless ( $amount > 0 ) {  # until we support newer JSON::Validator and thus minimumExclusive
@@ -107,7 +107,7 @@ sub add_credit {
 
         my $credit = $account->add_credit(
             {   amount       => $amount,
-                credit_type  => $credit_type,
+                type         => $credit_type,
                 payment_type => $payment_type,
                 description  => $description,
                 note         => $note,

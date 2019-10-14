@@ -36,8 +36,7 @@ if ( CheckVersion($DBversion) ) {
               is_system
             )
             VALUES
-              ('Pay', 'Payment', 0, 1),
-              ('PAY', 'Payment', 0, 1),
+              ('PAYMENT', 'Payment', 0, 1),
               ('W', 'Writeoff', 0, 1),
               ('WO', 'Writeoff', 0, 1),
               ('FORGIVEN', 'Forgiven', 1, 1),
@@ -86,6 +85,13 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         qq{
           UPDATE accountlines SET accounttype = 'FORGIVEN' WHERE accounttype = 'FOR' OR accounttype = 'FORW'
+        }
+    );
+
+    # Update accountype 'Pay' to 'PAYMENT'
+    $dbh->do(
+        qq{
+          UPDATE accountlines SET accounttype = 'PAYMENT' WHERE accounttype = 'Pay' OR accounttype = 'PAY'
         }
     );
 

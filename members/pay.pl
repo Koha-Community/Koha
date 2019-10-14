@@ -240,7 +240,7 @@ sub payselected {
     my $parameters = shift;
 
     my @params = @{ $parameters->{params} };
-    my $type = $parameters->{type} || 'payment';
+    my $type = $parameters->{type} || 'PAYMENT';
 
     my $amt    = 0;
     my @lines_to_pay;

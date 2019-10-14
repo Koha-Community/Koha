@@ -2210,7 +2210,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         # Write off the debt
         my $credit = $account->add_credit(
             {   amount => $account->balance,
-                type   => 'payment',
+                type   => 'PAYMENT',
                 interface => 'test',
             }
         );
@@ -2334,7 +2334,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $payment_amount = 27;
         my $payment        = $account->add_credit(
             {   amount => $payment_amount,
-                type   => 'payment',
+                type   => 'PAYMENT',
                 interface => 'test',
             }
         );
@@ -2363,7 +2363,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item->itemnumber, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
-        is( $account->balance, $processfee_amount - $payment_amount, 'Balance is PROCESSING - payment (LOST_RETURN)' );
+        is( $account->balance, $processfee_amount - $payment_amount, 'Balance is PROCESSING - PAYMENT (LOST_RETURN)' );
 
         $lost_fee_line->discard_changes;
         is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
@@ -2438,7 +2438,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $payment_amount = 27;
         my $payment        = $account->add_credit(
             {   amount => $payment_amount,
-                type   => 'payment',
+                type   => 'PAYMENT',
                 interface => 'test',
             }
         );

@@ -40,7 +40,7 @@ my $input = CGI->new();
 my $payment_id          = $input->param('payment_id');
 my $writeoff_individual = $input->param('writeoff_individual');
 my $change_given        = $input->param('change_given');
-my $type                = scalar $input->param('type') || 'payment';
+my $type                = scalar $input->param('type') || 'PAYMENT';
 
 my $updatecharges_permissions = ($writeoff_individual || $type eq 'writeoff') ? 'writeoff' : 'remaining_permissions';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
