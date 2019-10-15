@@ -63,9 +63,10 @@ __PACKAGE__->table("accountlines");
   data_type: 'longtext'
   is_nullable: 1
 
-=head2 accounttype
+=head2 credit_type_code
 
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
   size: 80
 
@@ -148,8 +149,8 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "description",
   { data_type => "longtext", is_nullable => 1 },
-  "accounttype",
-  { data_type => "varchar", is_nullable => 1, size => 80 },
+  "credit_type_code",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 80 },
   "debit_type_code",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 80 },
   "status",
@@ -253,6 +254,26 @@ __PACKAGE__->belongs_to(
   "branchcode",
   "Koha::Schema::Result::Branch",
   { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 credit_type_code
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::AccountCreditType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "credit_type_code",
+  "Koha::Schema::Result::AccountCreditType",
+  { code => "credit_type_code" },
   {
     is_deferrable => 1,
     join_type     => "LEFT",
