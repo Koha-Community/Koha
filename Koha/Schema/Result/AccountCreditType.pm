@@ -108,6 +108,15 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-14 09:59:52
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Uycu/23b681kWHNX+/gNiw
 
+__PACKAGE__->add_columns(
+    '+is_system' => { is_boolean => 1 }
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub koha_objects_class {
+    'Koha::Account::CreditTypes';
+}
+sub koha_object_class {
+    'Koha::Account::CreditType';
+}
+
 1;

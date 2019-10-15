@@ -12,45 +12,56 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Manual credit</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo;
+    Manual credit
+</div>
 
 <div class="main container-fluid">
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-[% INCLUDE 'members-toolbar.inc' %]
+            [% INCLUDE 'members-toolbar.inc' %]
 
-<!-- The manual invoice and credit buttons -->
-<div class="statictabs">
-<ul>
-    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
-    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
-    <li class="active"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
-</ul>
-<div class="tabs-container">
+            <!-- The manual invoice and credit buttons -->
+            <div class="statictabs">
+                <ul>
+                    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
+                    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
+                    <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
+                    <li class="active"><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
+                </ul>
+                <div class="tabs-container">
 
-<form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
-<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
-    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                <form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
+                    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                    <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
 
-<fieldset class="rows">
-<legend>Manual credit</legend><ol>
-	<li><label for="type">Credit type: </label><select name="type" id="type">
-<option value="credit">Credit</option>
-<option value="forgiven">Forgiven</option>
-</select></li>
-	<li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
-	<li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
-    <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
-    <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
-</ol></fieldset>
+                    <fieldset class="rows">
+                        <legend>Manual credit</legend>
+                        <ol>
+                            <li>
+                                <label for="type">Credit type: </label>
+                                <select name="type" id="type">
+                                    [% FOREACH credit_type IN credit_types %]
+                                    <option value="[% credit_type.code | html %]">[% credit_type.description | html %]</option>
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
+                            <li><label for="desc">Description: </label><input type="text" name="desc" size="50" id="desc" /></li>
+                            <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
+                            <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
+                        </ol>
+                    </fieldset>
 
-<fieldset class="action"><input type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
-</form>
+                    <fieldset class="action"><input type="submit" name="add" value="Add credit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></fieldset>
+                </form>
 
-</div></div>
+                </div>
+            </div>
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -60,7 +71,7 @@
                 [% INCLUDE 'circ-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
