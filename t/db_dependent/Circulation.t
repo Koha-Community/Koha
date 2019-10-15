@@ -2648,7 +2648,7 @@ subtest 'Cancel transfers on lost items' => sub {
     my ($datesent,$frombranch,$tobranch) = GetTransfers($item->itemnumber);
     is( $tobranch, $library_2->{branchcode}, 'The transfer record exists in the branchtransfers table');
     my $itemcheck = Koha::Items->find($item->itemnumber);
-    is( $itemcheck->holdingbranch, $library_2->{branchcode}, 'Items holding branch is the transfers destination branch before it is marked as lost' );
+    is( $itemcheck->holdingbranch, $library_1->{branchcode}, 'Items holding branch is the transfers origin branch before it is marked as lost' );
 
     #Simulate item being marked as lost and confirm the transfer is deleted and the items holding branch is the transfers source branch
     ModItem( { itemlost => 1 }, $item->biblionumber, $item->itemnumber );
