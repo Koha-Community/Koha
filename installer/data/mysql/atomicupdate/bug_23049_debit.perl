@@ -105,6 +105,29 @@ if ( CheckVersion($DBversion) ) {
           }
     );
 
+    # Add any unexpected accounttype codes to debit_types as appropriate
+    $dbh->do(
+        qq{
+          INSERT IGNORE INTO account_debit_types (
+            code,
+            description,
+            can_be_added_manually,
+            default_amount,
+            is_system
+          )
+          SELECT
+            SUBSTR(accounttype, 1, 80),
+            "Unexpected type found during upgrade",
+            1,
+            NULL,
+            0
+          FROM
+            accountlines
+          WHERE
+            amount > 0
+        }
+    );
+
     # Adding debit_type_code to accountlines
     unless ( column_exists('accountlines', 'debit_type_code') ) {
         $dbh->do(
