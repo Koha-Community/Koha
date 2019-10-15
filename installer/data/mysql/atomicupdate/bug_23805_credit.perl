@@ -61,7 +61,12 @@ if ( CheckVersion($DBversion) ) {
     unless ( foreign_key_exists( 'accountlines', 'accountlines_ibfk_credit_type' ) ) {
         $dbh->do(
             qq{
-            ALTER TABLE accountlines ADD CONSTRAINT `accountlines_ibfk_credit_type` FOREIGN KEY (`credit_type_code`) REFERENCES `account_credit_types` (`code`) ON DELETE SET NULL ON UPDATE CASCADE
+                ALTER TABLE accountlines
+                ADD CONSTRAINT
+                  `accountlines_ibfk_credit_type`
+                FOREIGN KEY (`credit_type_code`) REFERENCES `account_credit_types` (`code`)
+                ON DELETE RESTRICT
+                ON UPDATE CASCADE
               }
         );
     }
@@ -69,7 +74,11 @@ if ( CheckVersion($DBversion) ) {
     # Dropping the check constraint in accountlines
     $dbh->do(
         qq{
-        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_check_type` CHECK (accounttype IS NOT NULL OR credit_type_code IS NOT NULL)
+          ALTER TABLE
+            accountlines
+          ADD CONSTRAINT
+            `accountlines_check_type`
+          CHECK (credit_type_code IS NOT NULL OR debit_type_code IS NOT NULL)
         }
     );
 
@@ -98,6 +107,27 @@ if ( CheckVersion($DBversion) ) {
     $dbh->do(
         qq{
           UPDATE accountlines SET accounttype = 'WRITEOFF' WHERE accounttype = 'W' OR accounttype = 'WO'
+        }
+    );
+
+    # Add any unexpected accounttype codes to credit_types as appropriate
+    $dbh->do(
+        qq{
+          INSERT IGNORE INTO account_credit_types (
+            code,
+            description,
+            can_be_added_manually,
+            is_system
+          )
+          SELECT
+            DISTINCT(accounttype),
+            "Unexpected type found during upgrade",
+            1,
+            0
+          FROM
+            accountlines
+          WHERE
+            amount < 0
         }
     );
 
