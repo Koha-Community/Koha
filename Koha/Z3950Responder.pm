@@ -99,8 +99,11 @@ sub new {
         unshift @{ $self->{yaz_options} }, '-v', 'none,fatal';
     }
 
-    # Set main config for SRU support
-    unshift @{ $self->{yaz_options} }, '-f', $self->{config_dir} . 'config.xml' if $self->{config_dir};
+    # Set main config for SRU support and working directory
+    if ( $self->{config_dir} ) {
+        unshift @{ $self->{yaz_options} }, '-f', $self->{config_dir} . 'config.xml';
+        unshift @{ $self->{yaz_options} }, '-w', $self->{config_dir};
+    }
 
     # Set num to prefetch if not passed
     $self->{num_to_prefetch} //= 20;
