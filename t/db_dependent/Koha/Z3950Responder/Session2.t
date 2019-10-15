@@ -5,6 +5,8 @@ use Test::More tests => 3;
 use t::lib::TestBuilder;
 use C4::Items;
 
+use Koha::Caches;
+
 BEGIN {
     use_ok('Koha::Z3950Responder');
     use_ok('Koha::Z3950Responder::Session');
@@ -20,7 +22,7 @@ subtest 'add_item_status' => sub {
     plan tests => 2;
 
     # This time we are sustituting some values
-    $builder->schema->resultset( 'AuthorisedValue' )->delete_all;
+    $builder->schema->resultset( 'AuthorisedValue' )->delete_all();
     $builder->build({
         source => 'AuthorisedValue',
         value => {
@@ -37,6 +39,10 @@ subtest 'add_item_status' => sub {
             lib => "Borked completely"
         }
     });
+
+    # Clear the cache to make sure the above values take effect
+    my $cache = Koha::Caches->get_instance();
+    $cache->flush_all();
 
     ## FIRST ITEM HAS ALL THE STATUSES ##
     my $item_1 = $builder->build({

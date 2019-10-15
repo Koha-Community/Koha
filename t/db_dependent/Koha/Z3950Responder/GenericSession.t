@@ -7,6 +7,8 @@ use Test::WWW::Mechanize;
 use t::lib::Mocks qw(mock_preference);
 
 use File::Basename;
+use File::Copy;
+use FindBin qw($Bin);
 use XML::LibXML;
 use YAML;
 use ZOOM;
@@ -80,7 +82,7 @@ subtest 'test_search' => sub {
 
     $child = fork();
     if ($child == 0) {
-        my $config_dir = dirname(__FILE__) . '/';
+        my $config_dir = $Bin . '/';
         my $z = Koha::Z3950Responder->new( {
             config_dir => $config_dir
         });
@@ -116,21 +118,21 @@ subtest 'test_search' => sub {
 
     # SRU protocol tests
     my $base = 'http://localhost:42111';
-    my $ns = 'http://docs.oasis-open.org/ns/search-ws/sruResponse';
+    my $ns = 'http://www.loc.gov/zing/srw/';
     my $marc_ns = 'http://www.loc.gov/MARC21/slim';
     my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
 
-    $agent->get_ok("$base", 'Retrieve explain response');
+    $agent->get_ok("$base?version=1.1", 'Retrieve explain response');
     my $dom = XML::LibXML->load_xml(string => $agent->content());
     my @nodes = $dom->getElementsByTagNameNS($ns, 'explainResponse');
     is(scalar(@nodes), 1, 'explainResponse returned');
 
-    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=", 'Try bad search query');
+    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&version=1.1&maximumRecords=10&query=", 'Try bad search query');
     $dom = XML::LibXML->load_xml(string => $agent->content());
     @nodes = $dom->getElementsByTagNameNS($ns, 'diagnostics');
     is(scalar(@nodes), 1, 'diagnostics returned for bad query');
 
-    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&maximumRecords=10&query=(dc.author%3dauthor AND (dc.title%3d\"title(s)\" OR dc.title%3danother))", 'Retrieve search results');
+    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&version=1.1&maximumRecords=10&query=(dc.author%3dauthor AND (dc.title%3d\"title(s)\" OR dc.title%3danother))", 'Retrieve search results');
     $dom = XML::LibXML->load_xml(string => $agent->content());
     @nodes = $dom->getElementsByTagNameNS($ns, 'searchRetrieveResponse');
     is(scalar(@nodes), 1, 'searchRetrieveResponse returned');
