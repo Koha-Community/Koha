@@ -21,6 +21,7 @@ use namespace::clean;
 
 use Carp;
 use Text::CSV;
+use Encode qw( decode_utf8 );
 
 use C4::Members;
 use C4::Members::Attributes qw(:all);
@@ -101,7 +102,7 @@ sub import_patrons {
         my $status  = $self->text_csv->parse($borrowerline);
         my @columns = $self->text_csv->fields();
         if ( !$status ) {
-            push @missing_criticals, { badparse => 1, line => $line_number, lineraw => $borrowerline };
+            push @missing_criticals, { badparse => 1, line => $line_number, lineraw => decode_utf8($borrowerline) };
         }
         elsif ( @columns == @columnkeys ) {
             @borrower{@columnkeys} = @columns;
@@ -125,7 +126,7 @@ sub import_patrons {
                 elsif ( scalar grep { $key eq $_ } @criticals ) {
 
                     # a critical field is undefined
-                    push @missing_criticals, { key => $key, line => $., lineraw => $borrowerline };
+                    push @missing_criticals, { key => $key, line => $., lineraw => decode_utf8($borrowerline) };
                 }
                 else {
                     $borrower{$key} = '';
@@ -483,14 +484,14 @@ sub check_branch_code {
 
     # No branch code
     unless( $branchcode ) {
-        push (@$missing_criticals, { key => 'branchcode', line => $line_number, lineraw => $borrowerline, });
+        push (@$missing_criticals, { key => 'branchcode', line => $line_number, lineraw => decode_utf8($borrowerline), });
         return;
     }
 
     # look for branch code
     my $library = Koha::Libraries->find( $branchcode );
     unless( $library ) {
-        push (@$missing_criticals, { key => 'branchcode', line => $line_number, lineraw => $borrowerline,
+        push (@$missing_criticals, { key => 'branchcode', line => $line_number, lineraw => decode_utf8($borrowerline),
                                      value => $branchcode, branch_map => 1, });
     }
 }
@@ -508,14 +509,14 @@ sub check_borrower_category {
 
     # No branch code
     unless( $categorycode ) {
-        push (@$missing_criticals, { key => 'categorycode', line => $line_number, lineraw => $borrowerline, });
+        push (@$missing_criticals, { key => 'categorycode', line => $line_number, lineraw => decode_utf8($borrowerline), });
         return;
     }
 
     # Looking for borrower category
     my $category = Koha::Patron::Categories->find($categorycode);
     unless( $category ) {
-        push (@$missing_criticals, { key => 'categorycode', line => $line_number, lineraw => $borrowerline,
+        push (@$missing_criticals, { key => 'categorycode', line => $line_number, lineraw => decode_utf8($borrowerline),
                                      value => $categorycode, category_map => 1, });
     }
 }
@@ -540,7 +541,7 @@ sub format_dates {
             $params->{borrower}->{$date_type} = $formatted_date;
         } else {
             $params->{borrower}->{$date_type} = '';
-            push (@{$params->{missing_criticals}}, { key => $date_type, line => $params->{line}, lineraw => $params->{lineraw}, bad_date => 1 });
+            push (@{$params->{missing_criticals}}, { key => $date_type, line => $params->{line}, lineraw => decode_utf8($params->{lineraw}), bad_date => 1 });
         }
     }
 }
