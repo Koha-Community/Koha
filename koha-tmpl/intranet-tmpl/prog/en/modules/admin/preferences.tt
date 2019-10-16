@@ -68,6 +68,8 @@
                     <code>
                         [% FOREACH NAME IN LINE.NAMES %]
 						<label for="pref_[% NAME.name | html %]">
+                            <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=[% NAME.name | html %]">
+                                <i class="fa fa-bookmark" aria-hidden="true"></i></a>
 							[% IF ( NAME.jumped ) %]
 							<span class="term" id="jumped">[% NAME.name | html %]</span>
                             [% ELSIF ( NAME.highlighted ) %]
