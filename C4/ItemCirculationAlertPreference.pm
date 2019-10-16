@@ -331,7 +331,7 @@ sub grid {
     my ($class, $where) = @_;
     my @branch_prefs = $class->find($where);
     my @default_prefs = $class->find({ branchcode => '*', notification => $where->{notification} });
-    my @cc = Koha::Patron::Categories->search_limited;
+    my @cc = Koha::Patron::Categories->search_with_library_limits;
     my @it = Koha::ItemTypes->search;
     my $notification = $where->{notification};
     my %disabled = map {

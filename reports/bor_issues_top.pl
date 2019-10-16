@@ -108,7 +108,7 @@ my $dbh = C4::Context->dbh;
 my @mime  = ( map { {type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 my $delims = GetDelimiterChoices;
 
-my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['categorycode']});
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['categorycode']});
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 $template->param(
 	    mimeloop => \@mime,

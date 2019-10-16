@@ -43,7 +43,7 @@ my $op = $input->param('op') || '';
 
 my $referer = $input->referer();
 
-my $patron_categories = Koha::Patron::Categories->search_limited;
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits;
 $template->param(
     view            => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
     columns         => ['cardnumber', 'name', 'category', 'branch', 'dateexpiry', 'borrowernotes', 'action'],

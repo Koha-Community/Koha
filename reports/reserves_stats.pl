@@ -73,7 +73,7 @@ $sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
 );
 
-my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+my @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
 
 my $locations = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.location' }, { order_by => ['description'] } ) };
 my $ccodes = { map { ( $_->{authorised_value} => $_->{lib} ) } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => '', kohafield => 'items.ccode' }, { order_by => ['description'] } ) };
@@ -330,7 +330,7 @@ sub display_value {
         }
     }
     elsif ( $crit =~ /category/ ) {
-        my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+        my @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
         foreach my $patron_category ( @patron_categories ) {
             ( $value eq $patron_category->categorycode ) or next;
             $display_value = $patron_category->description and last;

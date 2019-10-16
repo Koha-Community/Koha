@@ -113,7 +113,7 @@ if ($do_it) {
     my $CGIextChoice = ( 'CSV' ); # FIXME translation
 	my $CGIsepChoice = GetDelimiterChoices;
 
-    my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['categorycode']});
+    my $patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['categorycode']});
     $template->param(
                     CGIextChoice => $CGIextChoice,
                     CGIsepChoice => $CGIsepChoice,

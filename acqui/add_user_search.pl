@@ -50,7 +50,7 @@ my $search_patrons_with_acq_perm_only =
     ( $referer =~ m|acqui/basket.pl| )
         ? 1 : 0;
 
-my $patron_categories = Koha::Patron::Categories->search_limited;
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits;
 $template->param(
     patrons_with_acq_perm_only => $search_patrons_with_acq_perm_only,
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",

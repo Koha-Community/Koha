@@ -49,7 +49,7 @@ sub show {
     );
 
     my $branch   = $input->param('branch') || '*';
-    my @categories = Koha::Patron::Categories->search_limited;
+    my @categories = Koha::Patron::Categories->search_with_library_limits;
     my @item_types = Koha::ItemTypes->search;
     my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
     my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });

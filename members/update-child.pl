@@ -57,7 +57,7 @@ my $op             = $input->param('op');
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
-my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits({ category_type => 'A' }, {order_by => ['categorycode']});
 if ( $op eq 'multi' ) {
     # FIXME - what are the possible upgrade paths?  C -> A , C -> S ...
     #   currently just allowing C -> A

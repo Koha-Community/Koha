@@ -113,7 +113,7 @@ if ( $op eq 'show' ) {
     my @patron_attributes_codes;
     my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
     my $patron_attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
-    my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+    my @patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
     while ( my $attr_type = $patron_attribute_types->next ) {
         # TODO Repeatable attributes are not correctly managed and can cause data lost.
         # This should be implemented.

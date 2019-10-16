@@ -21,7 +21,7 @@ use Koha::Database;
 
 use Koha::Patron::Category;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Limit::Library);
 
 =head1 NAME
 
@@ -32,17 +32,6 @@ Koha::Patron::Categories - Koha Patron Category Object set class
 =head2 Class methods
 
 =cut
-
-sub search_limited {
-    my ( $self, $params, $attributes ) = @_;
-    my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-    if ( $branch_limit ) {
-        $params->{'categories_branches.branchcode'} = [ $branch_limit, undef ];
-        $attributes->{join} = 'categories_branches';
-    }
-    $attributes->{order_by} = ['description'] unless $attributes->{order_by};
-    return $self->search($params, $attributes);
-}
 
 =head3 type
 

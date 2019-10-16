@@ -178,7 +178,7 @@ elsif ( $step == 3 ) {
     $template->param( patron_lists => [ @non_empty_lists ] );
 }
 
-my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+my $patron_categories = Koha::Patron::Categories->search_with_library_limits({}, {order_by => ['description']});
 
 $template->param(
     step                   => $step,

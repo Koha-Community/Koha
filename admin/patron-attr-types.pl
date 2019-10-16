@@ -85,7 +85,7 @@ exit 0;
 sub add_attribute_type_form {
     my $template = shift;
 
-    my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
+    my $patron_categories = Koha::Patron::Categories->search_with_library_limlits({}, {order_by => ['description']});
     $template->param(
         attribute_type_form => 1,
         confirm_op => 'add_attribute_type_confirmed',
