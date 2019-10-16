@@ -3074,7 +3074,7 @@ subtest 'ProcessOfflinePayment() tests' => sub {
 };
 
 subtest 'Incremented fee tests' => sub {
-    plan tests => 16;
+    plan tests => 20;
 
     my $dt = dt_from_string();
     Time::Fake->offset( $dt->epoch );
@@ -3207,24 +3207,52 @@ subtest 'Incremented fee tests' => sub {
     is( $issuingrule->lengthunit, 'hours',
         'Issuingrule updated and retrieved correctly' );
 
-    $itemtype->rentalcharge_hourly('2.500000')->store();
+    $itemtype->rentalcharge_hourly('0.25')->store();
     is( $itemtype->rentalcharge_hourly,
-        '2.500000', 'Hourly rental charge stored and retreived correctly' );
+        '0.25', 'Hourly rental charge stored and retreived correctly' );
 
-    $dt_to       = dt_from_string()->add( hours => 4 );
-    $dt_to_renew = dt_from_string()->add( hours => 6 );
-    $calendar->delete_holiday( weekday => 3);
+    $dt_to       = dt_from_string()->add( hours => 168 );
+    $dt_to_renew = dt_from_string()->add( hours => 312 );
 
+    t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '10.000000',
-        "Hourly rental charge calculated correctly" );
+    is( $accountline->amount + 0, 42,
+        "Hourly rental charge calculated correctly with finesCalendar = ignoreCalendar (168h * 0.25u)" );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '5.000000',
-        "Hourly rental charge calculated correctly, for renewal" );
+    is( $accountline->amount + 0, 36,
+        "Hourly rental charge calculated correctly with finesCalendar = ignoreCalendar, for renewal (312h - 168h * 0.25u)" );
+    $accountline->delete();
+    $issue->delete();
+
+    t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
+    $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount + 0, 36,
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays (168h - 24h * 0.25u)" );
+    $accountline->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount + 0, 30,
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays, for renewal (312h - 168h - 24h * 0.25u" );
+    $accountline->delete();
+    $issue->delete();
+
+    $calendar->delete_holiday( weekday => 3 );
+    $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount + 0, 42,
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (168h - 0h * 0.25u" );
+    $accountline->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
+    is( $accountline->amount + 0, 36,
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed, for renewal (312h - 168h - 0h * 0.25u)" );
     $accountline->delete();
     $issue->delete();
     $issuingrule->lengthunit('days')->store();
