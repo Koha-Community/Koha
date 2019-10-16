@@ -62,10 +62,16 @@ sub all {
     my $selecteds = $params->{selecteds};
     my $unfiltered = $params->{unfiltered} || 0;
     my $search_params = $params->{search_params} || {};
+    my $do_not_select_my_library = $params->{do_not_select_my_library} || 0; # By default we select the library of the logged in user if no selected passed
 
     if ( !$unfiltered ) {
         $search_params->{only_from_group} = $params->{only_from_group} || 0;
     }
+
+    my @selected =
+      ref $selected eq 'Koha::Libraries'
+      ? $selected->get_column('branchcode')
+      : $selected;
 
     my $libraries = $unfiltered
       ? Koha::Libraries->search( $search_params, { order_by => ['branchname'] } )->unblessed

@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE Price %]
 [% USE TablesSettings %]
@@ -375,13 +376,7 @@ Item types &rsaquo; Administration &rsaquo; Koha
                 <li><label for="branches">Library limitation: </label>
                     <select id="branches" name="branches" multiple size="10">
                         <option value="">All libraries</option>
-                        [% FOREACH branch IN branches_loop %]
-                        [% IF ( branch.selected ) %]
-                            <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                        [% ELSE %]
-                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                        [% END %]
-                        [% END %]
+                        [% PROCESS options_for_libraries libraries => Branches.all( selecteds => itemtype.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
                     <span class="hint">Select 'All libraries' if all libraries use this item type. Otherwise, select the specific libraries that use this item type.</span>
                 </li>
@@ -528,20 +523,21 @@ Item types &rsaquo; Administration &rsaquo; Koha
             <td>[% itemtype.processfee | $Price %]</td>
             <td>[% itemtype.checkinmsg | html_line_break | $raw %]</td>
             <td>
-                [% IF itemtype.library_limits %]
-                    [% libraries_str = "" %]
-                    [% FOREACH library IN itemtype.library_limits %]
+                [% SET library_limits = itemtype.library_limits %]
+                [% IF library_limits.count > 0 %]
+                    [% library_str = "" %]
+                    [% FOREACH library IN library_limits %]
                         [%- IF loop.first -%]
-                        [% libraries_str = library.branchname _ " (" _ library.branchcode _ ")" %]
+                            [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
                         [% ELSE %]
-                        [% libraries_str = libraries_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
+                            [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
                         [% END %]
                     [% END %]
-                    <span class="library_limitation" title="[% libraries_str | html %]">
-                        [% IF itemtype.library_limits.count > 1 %]
-                            [% itemtype.library_limits.count | html %] library limitations
+                    <span class="library_limitation" title="[% library_str | html %]">
+                        [% IF library_limits.count > 1 %]
+                            [% library_limits.count | html %] library limitations
                         [% ELSE %]
-                            [% itemtype.library_limits.count | html %] library limitation
+                            [% library_limits.count | html %] library limitation
                         [% END %]
                 [% ELSE %]
                     No limitation

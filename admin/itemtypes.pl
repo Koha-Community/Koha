@@ -58,18 +58,6 @@ undef($sip_media_type) if defined($sip_media_type) and $sip_media_type =~ /^\s*$
 if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
 
-    my $selected_branches = $itemtype ? $itemtype->get_library_limits : undef;
-    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
-    my @branches_loop;
-    foreach my $branch ( @$branches ) {
-        my $selected = ($selected_branches && grep {$_->branchcode eq $branch->{branchcode}} @{ $selected_branches->as_list } ) ? 1 : 0;
-        push @branches_loop, {
-            branchcode => $branch->{branchcode},
-            branchname => $branch->{branchname},
-            selected   => $selected,
-        };
-    }
-
     my $parent_type = $itemtype ? $itemtype->parent_type : undef;
     my $parent_types = Koha::ItemTypes->search({parent_type=>undef,itemtype => {'!='=>$itemtype_code}});
     my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
@@ -83,7 +71,6 @@ if ( $op eq 'add_form' ) {
         imagesets => $imagesets,
         searchcategory => $searchcategory,
         can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
-        branches_loop    => \@branches_loop,
     );
 } elsif ( $op eq 'add_validate' ) {
     my $is_a_modif   = $input->param('is_a_modif');
@@ -209,9 +196,8 @@ if ( $op eq 'add_form' ) {
 }
 
 if ( $op eq 'list' ) {
-    my @itemtypes = Koha::ItemTypes->search->as_list;
     $template->param(
-        itemtypes => \@itemtypes,
+        itemtypes => scalar Koha::ItemTypes->search,
         messages  => \@messages,
     );
 }
