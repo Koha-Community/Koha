@@ -88,9 +88,9 @@ sub new {
 =cut
 
 sub accumulate_rentalcharge {
-    my ( $self ) = @_;
+    my ($self) = @_;
 
-    my $itemtype = Koha::ItemTypes->find( $self->item->effective_itemtype );
+    my $itemtype     = Koha::ItemTypes->find( $self->item->effective_itemtype );
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {
             categorycode => $self->patron->categorycode,
@@ -99,7 +99,10 @@ sub accumulate_rentalcharge {
         }
     );
     my $units = $issuing_rule->lengthunit;
-    my $rentalcharge_increment = ( $units eq 'days' ) ? $itemtype->rentalcharge_daily : $itemtype->rentalcharge_hourly;
+    my $rentalcharge_increment =
+      ( $units eq 'days' )
+      ? $itemtype->rentalcharge_daily
+      : $itemtype->rentalcharge_hourly;
 
     return 0 unless $rentalcharge_increment && $rentalcharge_increment > 0;
 
@@ -108,11 +111,14 @@ sub accumulate_rentalcharge {
 
     if ( $units eq 'hours' ) {
         if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
-            $duration =
-              $calendar->hours_between( $self->from_date, $self->to_date );
+            $duration = $calendar->hours_between(
+                $self->from_date->truncate( to => 'minute' ),
+                $self->to_date->truncate( to => 'minute' )
+            );
         }
         else {
-            $duration = $self->to_date->delta_ms($self->from_date);
+            $duration = $self->to_date->truncate( to => 'minute' )
+              ->delta_ms( $self->from_date->truncate( to => 'minute' ) );
         }
     }
     else {
