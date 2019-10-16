@@ -78,16 +78,16 @@
                         <option value="FORW">Write off</option>
                         [% END %]
 
-                        [% IF transaction_type == "F" %]
-                        <option value="F" selected="selected">Fine</option>
+                        [% IF transaction_type == "OVERDUE" %]
+                        <option value="OVERDUE" selected="selected">Fine</option>
                         [% ELSE %]
-                        <option value="F">Fine</option>
+                        <option value="OVERDUE">Fine</option>
                         [% END %]
 
-                        [% IF transaction_type == "FU" %]
-                        <option value="FU" selected="selected">Accruing fine</option>
+                        [% IF transaction_type == "OVERDUEA" %]
+                        <option value="OVERDUEA" selected="selected">Accruing fine</option>
                         [% ELSE %]
-                        <option value="FU">Accruing fine</option>
+                        <option value="OVERDUEA">Accruing fine</option>
                         [% END %]
 
                         [% IF transaction_type == "PAY" %]
@@ -201,9 +201,9 @@
                         <span>Credit</span>
                     [% ELSIF loopresul.accounttype == "FORW" || loopresul.accounttype == "W" %]
                         <span>Write off</span>
-                    [% ELSIF loopresul.accounttype == "F" %]
+                    [% ELSIF loopresul.accounttype == "OVERDUE" && loopresul.status != "UNRETURNED" %]
                         <span>Fine</span>
-                    [% ELSIF loopresul.accounttype == "FU" %]
+                    [% ELSIF loopresul.accounttype == "OVERDUE" && loopresul.status == "UNRETURNED" %]
                         <span>Accruing fine</span>
                     [% ELSIF loopresul.accounttype == "Pay" %]
                         <span>Payment</span>

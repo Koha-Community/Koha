@@ -76,6 +76,10 @@ if ($do_it) {
     } else { #Single transac type
         if ($transaction_type eq 'FORW') {
             $whereTType = q{ AND accounttype IN ('FOR','W') };
+        } elsif ( $transaction_type eq 'OVERDUEA' ) {
+            $whereTType = q{ AND accounttype = 'OVERDUE' AND status = 'UNRETURNED' };
+        } elsif ( $transaction_type eq 'OVERDUE' ) {
+            $whereTType = q{ AND accounttype = 'OVERDUE' AND status != 'UNRETURNED' };
         } else {
             $whereTType = q{ AND accounttype = ? };
             push @extra_params, $transaction_type;
