@@ -25,7 +25,7 @@ use C4::Members::Messaging;
 use Koha::Database;
 use Koha::DateUtils;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Limit::Library);
 
 =head1 NAME
 
@@ -101,117 +101,6 @@ sub default_messaging {
         push @messaging, $brief_pref;
     }
     return \@messaging;
-}
-
-=head3 branch_limitations
-
-my $limitations = $category->branch_limitations();
-
-$category->branch_limitations( \@branchcodes );
-
-=cut
-
-sub branch_limitations {
-    my ( $self, $branchcodes ) = @_;
-
-    if ($branchcodes) {
-        return $self->replace_branch_limitations($branchcodes);
-    }
-    else {
-        return $self->get_branch_limitations();
-    }
-
-}
-
-=head3 get_branch_limitations
-
-my $limitations = $category->get_branch_limitations();
-
-=cut
-
-sub get_branch_limitations {
-    my ($self) = @_;
-
-    my @branchcodes =
-      $self->_catb_resultset->search( { categorycode => $self->categorycode } )
-      ->get_column('branchcode')->all();
-
-    return \@branchcodes;
-}
-
-=head3 add_branch_limitation
-
-$category->add_branch_limitation( $branchcode );
-
-=cut
-
-sub add_branch_limitation {
-    my ( $self, $branchcode ) = @_;
-
-    croak("No branchcode passed in!") unless $branchcode;
-
-    my $limitation = $self->_catb_resultset->update_or_create(
-        { categorycode => $self->categorycode, branchcode => $branchcode } );
-
-    return $limitation ? 1 : undef;
-}
-
-=head3 del_branch_limitation
-
-$category->del_branch_limitation( $branchcode );
-
-=cut
-
-sub del_branch_limitation {
-    my ( $self, $branchcode ) = @_;
-
-    croak("No branchcode passed in!") unless $branchcode;
-
-    my $limitation =
-      $self->_catb_resultset->find(
-        { categorycode => $self->categorycode, branchcode => $branchcode } );
-
-    unless ($limitation) {
-        my $categorycode = $self->categorycode;
-        carp(
-"No branch limit for branch $branchcode found for categorycode $categorycode to delete!"
-        );
-        return;
-    }
-
-    return $limitation->delete();
-}
-
-=head3 replace_branch_limitations
-
-$category->replace_branch_limitations( \@branchcodes );
-
-=cut
-
-sub replace_branch_limitations {
-    my ( $self, $branchcodes ) = @_;
-
-    $self->_catb_resultset->search( { categorycode => $self->categorycode } )->delete;
-
-    my @return_values =
-      map { $self->add_branch_limitation($_) } @$branchcodes;
-
-    return \@return_values;
-}
-
-=head3 Koha::Objects->_catb_resultset
-
-Returns the internal resultset or creates it if undefined
-
-=cut
-
-sub _catb_resultset {
-    my ($self) = @_;
-
-    $self->{_catb_resultset} ||=
-      Koha::Database->new->schema->resultset('CategoriesBranch');
-
-    return $self->{_catb_resultset};
 }
 
 sub get_expiry_date {
@@ -298,6 +187,20 @@ sub override_hidden_items {
 }
 
 =head2 Internal methods
+
+=head3 _library_limits
+
+ configure library limits
+
+=cut
+
+sub _library_limits {
+    return {
+        class => "CategoriesBranch",
+        id => "categorycode",
+        library => "branchcode",
+    };
+}
 
 =head3 type
 

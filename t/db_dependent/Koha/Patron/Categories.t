@@ -34,14 +34,15 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
-my $branch = $builder->build({ source => 'Branch', });
+my $library_1 = $builder->build_object({ class => 'Koha::Libraries', });
+my $library_2 = $builder->build_object({ class => 'Koha::Libraries', });
 my $nb_of_categories = Koha::Patron::Categories->search->count;
 my $new_category_1 = Koha::Patron::Category->new({
     categorycode => 'mycatcodeX',
     category_type => 'A',
     description  => 'mycatdescX',
 })->store;
-$new_category_1->add_branch_limitation( $branch->{branchcode} );
+$new_category_1->replace_library_limits( [ $library_1->branchcode, $library_2->branchcode ] );
 my $new_category_2 = Koha::Patron::Category->new({
     categorycode => 'mycatcodeY',
     category_type => 'S',
@@ -53,7 +54,7 @@ is( Koha::Patron::Categories->search->count, $nb_of_categories + 2, 'The 2 patro
 
 my $retrieved_category_1 = Koha::Patron::Categories->find( $new_category_1->categorycode );
 is( $retrieved_category_1->categorycode, $new_category_1->categorycode, 'Find a patron category by categorycode should return the correct category' );
-is_deeply( $retrieved_category_1->branch_limitations, [ $branch->{branchcode} ], 'The branch limitation should have been stored and retrieved' );
+is_deeply( [ $retrieved_category_1->library_limits->get_column('branchcode') ], [ $library_1->branchcode, $library_2->branchcode ], 'The branch limitation should have been stored and retrieved' );
 is_deeply( $retrieved_category_1->default_messaging, [], 'By default there is not messaging option' );
 
 my $retrieved_category_2 = Koha::Patron::Categories->find( $new_category_2->categorycode );

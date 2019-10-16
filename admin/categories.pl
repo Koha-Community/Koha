@@ -48,26 +48,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 if ( $op eq 'add_form' ) {
-    my ( $category, $selected_branches );
-    if ($categorycode) {
-        $category          = Koha::Patron::Categories->find($categorycode);
-        $selected_branches = $category->branch_limitations;
-    }
-
-    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
-    my @branches_loop;
-    foreach my $branch ( @$branches ) {
-        my $selected = ( grep { $_ eq $branch->{branchcode} } @$selected_branches ) ? 1 : 0;
-        push @branches_loop,
-          { branchcode => $branch->{branchcode},
-            branchname => $branch->{branchname},
-            selected   => $selected,
-          };
-    }
 
     $template->param(
-        category => $category,
-        branches_loop       => \@branches_loop,
+        category => scalar Koha::Patron::Categories->find($categorycode),
     );
 
     if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
@@ -138,7 +121,7 @@ elsif ( $op eq 'add_validate' ) {
         $category->require_strong_password($require_strong_password);
         eval {
             $category->store;
-            $category->replace_branch_limitations( \@branches );
+            $category->replace_library_limits( \@branches );
         };
         if ( $@ ) {
             push @messages, {type => 'error', code => 'error_on_update' };
@@ -170,7 +153,7 @@ elsif ( $op eq 'add_validate' ) {
         });
         eval {
             $category->store;
-            $category->replace_branch_limitations( \@branches );
+            $category->replace_library_limits( \@branches );
         };
 
         if ( $@ ) {

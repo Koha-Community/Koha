@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE Branches %]
 [% USE KohaDates %]
 [% USE Price %]
 [% USE TablesSettings %]
@@ -217,13 +218,7 @@
                 <li><label for="branches">Library limitations: </label>
                     <select id="branches" name="branches" multiple size="10">
                         <option value="">All libraries</option>
-                        [% FOREACH branch IN branches_loop %]
-                          [% IF branch.selected %]
-                            <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                          [% ELSE %]
-                            <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                          [% END %]
-                        [% END %]
+                        [% PROCESS options_for_libraries libraries => Branches.all( selecteds => category.get_library_limits, unfiltered => 1, do_not_select_my_library => 1 ) %]
                     </select>
                     <span>Select <em>All libraries</em> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
                     </span>
@@ -613,19 +608,22 @@
                             </td>
                         [% END %]
                         <td>
-                            [% SET branch_limitations = category.branch_limitations %]
-                            [% IF branch_limitations.size > 0 %]
-                                [% branches_str = "" %]
-                                [% FOREACH branch IN branch_limitations %]
-                                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
-                                [% END %]
-                                <span title="[% branches_str | html %]">
-                                    [% IF branch_limitations.size > 1 %]
-                                        [% branch_limitations.size | html %] library limitations
+                            [% SET library_limits = category.library_limits %]
+                            [% IF library_limits.count > 0 %]
+                                [% library_str = "" %]
+                                [% FOREACH library IN library_limits %]
+                                    [%- IF loop.first -%]
+                                        [% library_str = library.branchname _ " (" _ library.branchcode _ ")" %]
                                     [% ELSE %]
-                                        [% branch_limitations.size | html %] library limitation
+                                        [% library_str = library_str _ "\n" _ library.branchname _ " (" _ library.branchcode _ ")" %]
                                     [% END %]
-                                </span>
+                                [% END %]
+                                <span class="library_limitation" title="[% library_str | html %]">
+                                    [% IF library_limits.count > 1 %]
+                                        [% library_limits.count | html %] library limitations
+                                    [% ELSE %]
+                                        [% library_limits.count | html %] library limitation
+                                    [% END %]
                             [% ELSE %]
                                 No limitation
                             [% END %]
