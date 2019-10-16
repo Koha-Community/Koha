@@ -6,7 +6,7 @@ if( CheckVersion( $DBversion ) ) {
         VALUES
             ('CustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed in the staff client. CustomCoverImagesURL must be defined.','YesNo'),
             ('OPACCustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed at the OPAC. CustomCoverImagesURL must be defined.','YesNo'),
-            ('CustomCoverImagesURL','',NULL,'Define an URL serving book cover images, using the following patterns: %issn%, %isbn%, FIXME ADD MORE (use it with CustomCoverImages and/or OPACCustomCoverImages)','free')
+            ('CustomCoverImagesURL','',NULL,'Define an URL serving book cover images, using the following patterns: {issn}, {isbn}, {normalized_isbn}, {field$subfield} (use it with CustomCoverImages and/or OPACCustomCoverImages)','free')
     });
 
     SetVersion( $DBversion );

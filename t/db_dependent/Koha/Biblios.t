@@ -190,7 +190,7 @@ subtest 'can_be_transferred' => sub {
 subtest 'custom_cover_image_url' => sub {
     plan tests => 3;
 
-    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%isbn%_%issn%.png' );
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{isbn}_{issn}.png' );
 
     my $isbn       = '0553573403 | 9780553573404 (pbk.).png';
     my $issn       = 'my_issn';
@@ -206,10 +206,10 @@ subtest 'custom_cover_image_url' => sub {
     $marc_record->append_fields( MARC::Field->new( '024', '', '', a => $marc_024a ) );
     C4::Biblio::ModBiblio( $marc_record, $biblio->biblionumber );
 
-    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%024$a%.png' );
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{024$a}.png' );
     is( $biblio->custom_cover_image_url, "https://my_url/$marc_024a.png" );
 
-    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%normalized_isbn%.png' );
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/{normalized_isbn}.png' );
     my $normalized_isbn = C4::Koha::GetNormalizedISBN($isbn);
     is( $biblio->custom_cover_image_url, "https://my_url/$normalized_isbn.png" );
 };

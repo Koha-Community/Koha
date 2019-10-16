@@ -672,20 +672,20 @@ It is built regaring the value of the system preference CustomCoverImagesURL
 sub custom_cover_image_url {
     my ( $self ) = @_;
     my $url = C4::Context->preference('CustomCoverImagesURL');
-    if ( $url =~ m|%isbn%| ) {
+    if ( $url =~ m|{isbn}| ) {
         my $isbn = $self->biblioitem->isbn;
-        $url =~ s|%isbn%|$isbn|g;
+        $url =~ s|{isbn}|$isbn|g;
     }
-    if ( $url =~ m|%normalized_isbn%| ) {
+    if ( $url =~ m|{normalized_isbn}| ) {
         my $normalized_isbn = C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
-        $url =~ s|%normalized_isbn%|$normalized_isbn|g;
+        $url =~ s|{normalized_isbn}|$normalized_isbn|g;
     }
-    if ( $url =~ m|%issn%| ) {
+    if ( $url =~ m|{issn}| ) {
         my $issn = $self->biblioitem->issn;
-        $url =~ s|%issn%|$issn|g;
+        $url =~ s|{issn}|$issn|g;
     }
 
-    my $re = qr|%(?<field>\d{3})\$(?<subfield>.)%|;
+    my $re = qr|{(?<field>\d{3})\$(?<subfield>.)}|;
     if ( $url =~ $re ) {
         my $field = $+{field};
         my $subfield = $+{subfield};
