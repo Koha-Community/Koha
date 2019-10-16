@@ -97,22 +97,17 @@ subtest 'pickup_locations' => sub {
         branchnotes => 'zzzto',
     })->store;
 
-    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
-    # Create item instance for testing.
-    my ($item_bibnum1, $item_bibitemnum1, $itemnumber1)
-    = AddItem({ homebranch => $from->branchcode,
-                holdingbranch => $from->branchcode } , $bibnum);
-    my ($item_bibnum2, $item_bibitemnum2, $itemnumber2)
-    = AddItem({ homebranch => $from->branchcode,
-                holdingbranch => $from->branchcode } , $bibnum);
-    my ($item_bibnum3, $item_bibitemnum3, $itemnumber3)
-    = AddItem({ homebranch => $from->branchcode,
-                holdingbranch => $from->branchcode } , $bibnum);
-    my $item1 = Koha::Items->find($itemnumber1);
-    my $item2 = Koha::Items->find($itemnumber2);
-    my $item3 = Koha::Items->find($itemnumber3);
-    my $biblio = Koha::Biblios->find($bibnum);
+
+    my $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
     my $itemtype = $biblio->itemtype;
+    my $item_info = {
+        biblionumber => $biblio->biblionumber,
+        library      => $from->branchcode,
+        itype        => $itemtype
+    };
+    my $item1 = $builder->build_sample_item({%$item_info});
+    my $item2 = $builder->build_sample_item({%$item_info});
+    my $item3 = $builder->build_sample_item({%$item_info});
 
     subtest 'UseBranchTransferLimits = OFF' => sub {
         plan tests => 5;
@@ -129,7 +124,7 @@ subtest 'pickup_locations' => sub {
         my $total_pickup = Koha::Libraries->search({
             pickup_location => 1
         })->count;
-        my $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+        my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
         is(C4::Context->preference('UseBranchTransferLimits'), 0, 'Given system '
            .'preference UseBranchTransferLimits is switched OFF,');
         is(@{$pickup}, $total_pickup, 'Then the total number of pickup locations '
@@ -137,15 +132,15 @@ subtest 'pickup_locations' => sub {
 
         t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
         t::lib::Mocks::mock_preference('item-level_itypes', 1);
-        $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+        $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
         is(@{$pickup}, $total_pickup, '...when '
            .'BranchTransferLimitsType = itemtype and item-level_itypes = 1');
         t::lib::Mocks::mock_preference('item-level_itypes', 0);
-        $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+        $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
         is(@{$pickup}, $total_pickup, '...as well as when '
            .'BranchTransferLimitsType = itemtype and item-level_itypes = 0');
         t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
-        $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+        $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
         is(@{$pickup}, $total_pickup, '...as well as when '
            .'BranchTransferLimitsType = ccode');
         t::lib::Mocks::mock_preference('item-level_itypes', 1);
@@ -175,7 +170,7 @@ subtest 'pickup_locations' => sub {
                'Given all items of a biblio have same the itemtype,');
             is($limit->itemtype, $item1->effective_itemtype, 'and given there '
                .'is an existing transfer limit for that itemtype,');
-            my $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber});
             my $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -204,7 +199,7 @@ subtest 'pickup_locations' => sub {
             is(Koha::Item::Transfer::Limits->search({
                 itemtype => $item2->effective_itemtype })->count, 0, 'and it is'
                .' not restricted by transfer limits,');
-            $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -223,7 +218,7 @@ subtest 'pickup_locations' => sub {
             is($found, 1, 'The same applies when asking pickup locations of '
                .'a that particular item.');
             Koha::Item::Transfer::Limits->delete;
-            $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -261,7 +256,7 @@ subtest 'pickup_locations' => sub {
                'Given items use biblio-level itemtype,');
             is($limit->itemtype, $item1->effective_itemtype, 'and given there '
                .'is an existing transfer limit for that itemtype,');
-            my $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             my $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -285,7 +280,7 @@ subtest 'pickup_locations' => sub {
             is(@{$pickup}, $others, 'However, the number of other pickup '
                .'libraries is correct.');
             Koha::Item::Transfer::Limits->delete;
-            $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -302,7 +297,7 @@ subtest 'pickup_locations' => sub {
             ok($item1->itype ne $item1->effective_itemtype
                && $limit->itemtype eq $item1->itype, 'Given we have added a limit'
                .' matching ITEM-level itemtype,');
-            $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -338,7 +333,7 @@ subtest 'pickup_locations' => sub {
 
             is($limit->ccode, $item1->ccode, 'Given there '
                .'is an existing transfer limit for that ccode,');
-            my $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             my $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -367,7 +362,7 @@ subtest 'pickup_locations' => sub {
             is(Koha::Item::Transfer::Limits->search({
                 ccode => $item3->ccode })->count, 0, 'and it is'
                .' not restricted by transfer limits,');
-            $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -386,7 +381,7 @@ subtest 'pickup_locations' => sub {
             is($found, 1, 'The same applies when asking pickup locations of '
                .'a that particular item.');
             Koha::Item::Transfer::Limits->delete;
-            $pickup = Koha::Libraries->pickup_locations({ biblio => $bibnum });
+            $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber });
             $found = 0;
             foreach my $lib (@{$pickup}) {
                 if ($lib->{'branchcode'} eq $limit->toBranch) {
@@ -407,19 +402,6 @@ subtest 'pickup_locations' => sub {
         };
     };
 };
-
-sub create_helper_biblio {
-    my $itemtype = shift;
-    my ($bibnum, $title, $bibitemnum);
-    my $bib = MARC::Record->new();
-    $title = 'Silence in the library';
-    $bib->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => $title),
-        MARC::Field->new('942', ' ', ' ', c => $itemtype),
-    );
-    return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
-}
 
 $schema->storage->txn_rollback;
 
