@@ -187,11 +187,10 @@
                                         <li>
                                             [% IF ( note_required ) %]
                                                 <label for="note" class="required">Notes:</label>
-                                                <textarea name="note" id="note" rows="5" cols="40" required="required"></textarea>
+                                                <textarea name="note" id="note" rows="5" cols="40" required="required">[% note %]</textarea>
                                                 <span class="required">Required</span>
                                             [% ELSE %]
                                                 <label for="note">Notes:</label>
-                                                <textarea name="note" id="note" rows="5" cols="40"></textarea>
                                                 <textarea name="note" id="note" rows="5" cols="40">[% note %]</textarea>
                                             [% END %]
                                         </li>
