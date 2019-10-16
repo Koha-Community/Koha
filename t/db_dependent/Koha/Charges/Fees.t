@@ -307,7 +307,7 @@ subtest 'from_date accessor' => sub {
 };
 
 subtest 'accumulate_rentalcharge tests' => sub {
-    plan tests => 5;
+    plan tests => 7;
 
     my $fees = Koha::Charges::Fees->new(
         {
@@ -358,10 +358,10 @@ subtest 'accumulate_rentalcharge tests' => sub {
     );
     $issuingrule->lengthunit('hours');
     $issuingrule->store();
-    $itemtype->rentalcharge_hourly("2.50");
+    $itemtype->rentalcharge_hourly("0.25");
     $itemtype->store();
-    $dt_from = dt_from_string();
-    $dt_to   = dt_from_string()->add( hours => 4 );
+
+    $dt_to   = $dt_from->clone->add( hours => 96 );
     $fees    = Koha::Charges::Fees->new(
         {
             patron    => $patron,
@@ -372,8 +372,19 @@ subtest 'accumulate_rentalcharge tests' => sub {
         }
     );
 
+    t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
     $charge = $fees->accumulate_rentalcharge();
-    is( $charge, 10.00, 'Hourly rental charge calculated correctly' );
+    is( $charge, 24.00, 'Hourly rental charge calculated correctly (96h * 0.25u)' );
+
+    t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
+    $charge = $fees->accumulate_rentalcharge();
+    is( $charge, 18.00,
+'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays (96h - 24h * 0.25u)'
+    );
+
+    $calendar->delete_holiday( weekday => 3);
+    $charge = $fees->accumulate_rentalcharge();
+    is( $charge, 24.00, 'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (96h - 0h * 0.25u)' );
 };
 
 $schema->storage->txn_rollback;
