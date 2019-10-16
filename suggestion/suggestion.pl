@@ -117,6 +117,7 @@ my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
 
 $borrowernumber = $input->param('borrowernumber') if ( $input->param('borrowernumber') );
 $template->param('borrowernumber' => $borrowernumber);
+my $branchfilter = $input->param('branchcode') || C4::Context->userenv->{'branch'};
 
 #########################################
 ##  Operations
@@ -253,7 +254,6 @@ if ($op=~/else/) {
     $op='else';
     
     $displayby||="STATUS";
-    delete $$suggestion_ref{'branchcode'} if($displayby eq "branchcode");
     # distinct values of display by
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
     my (@criteria_dv, $criteria_has_empty);
@@ -267,6 +267,14 @@ if ($op=~/else/) {
     # aggregate null and empty values under empty value
     push @criteria_dv, '' if $criteria_has_empty;
 
+    # Hack to not modify GetDistinctValues for this specific case
+    if (   $displayby eq 'branchcode'
+        && C4::Context->preference('IndependentBranches')
+        && not C4::Context->IsSuperLibrarian )
+    {
+        @criteria_dv = ( C4::Context->userenv->{'branch'} );
+    }
+
     my @allsuggestions;
     foreach my $criteriumvalue ( @criteria_dv ) {
         # By default, display suggestions from current working branch
@@ -275,7 +283,7 @@ if ($op=~/else/) {
         }
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
 
-        next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue );
+        next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue ) and ($displayby ne 'branchcode' or $branchfilter ne '__ANY__' );
         $$suggestion_ref{$displayby} = $criteriumvalue;
 
         my $suggestions = &SearchSuggestion($suggestion_ref);
@@ -329,8 +337,6 @@ if(defined($returnsuggested) and $returnsuggested ne "noone")
 {
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=".$returnsuggested."#suggestions");
 }
-
-my $branchfilter = ($displayby ne "branchcode") ? $input->param('branchcode') : C4::Context->userenv->{'branch'};
 
 $template->param(
     branchfilter => $branchfilter,
