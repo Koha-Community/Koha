@@ -135,10 +135,13 @@ sub SearchSuggestion {
     }
 
     # filter on user branch
-    if ( C4::Context->preference('IndependentBranches') ) {
+    if (   C4::Context->preference('IndependentBranches')
+        && !C4::Context->IsSuperLibrarian() )
+    {
+        # If IndependentBranches is set and the logged in user is not superlibrarian
+        # Then we want to filter by the user's library (i.e. cannot see suggestions from other libraries)
         my $userenv = C4::Context->userenv;
         if ($userenv) {
-            if ( !C4::Context->IsSuperLibrarian() && !$suggestion->{branchcode} )
             {
                 push @sql_params, $$userenv{branch};
                 push @query,      q{
@@ -146,13 +149,16 @@ sub SearchSuggestion {
                 };
             }
         }
-    } else {
-        if ( defined $suggestion->{branchcode} && $suggestion->{branchcode} ) {
-            unless ( $suggestion->{branchcode} eq '__ANY__' ) {
-                push @sql_params, $suggestion->{branchcode};
-                push @query,      qq{ AND suggestions.branchcode=? };
-            }
-        }
+    }
+    elsif (defined $suggestion->{branchcode}
+        && $suggestion->{branchcode}
+        && $suggestion->{branchcode} ne '__ANY__' )
+    {
+        # If IndependentBranches is not set OR the logged in user is not superlibrarian
+        # AND the branchcode filter is passed and not '__ANY__'
+        # Then we want to filter using this parameter
+        push @sql_params, $suggestion->{branchcode};
+        push @query,      qq{ AND suggestions.branchcode=? };
     }
 
     # filter on nillable fields
