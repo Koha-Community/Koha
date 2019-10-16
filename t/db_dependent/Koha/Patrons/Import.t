@@ -20,6 +20,8 @@
 use Modern::Perl;
 use Test::More tests => 157;
 use Test::Warn;
+use Encode qw( encode_utf8 );
+use utf8;
 
 # To be replaced by t::lib::Mock
 use Test::MockModule;
@@ -255,12 +257,14 @@ is($result_4a->{overwritten}, 0, 'Got the expected 0 overwritten result from imp
 
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
 
+my $surname ='Chloé';
+my $surname_utf8 = encode_utf8($surname);
 # Given ... 3 new inputs. One with no branch code, one with unexpected branch code.
-my $input_no_branch   = '1002,Johnny,Reynolds,Mr,Patricia,JR,12,Hill,Kennedy,Saint Louis,Colorado Springs,Missouri,63131,United States,preynolds2@washington.edu,7-(925)314-9514,0-(315)973-8956,4-(510)556-2323,09/18/1967,,PT,05/07/2015,07/01/2015,preynolds2,K3HiDzl';
-my $input_good_branch = '1003,Linda,Richardson,Mr,Kimberly,LR,90,Place,Bayside,Atlanta,Erie,Georgia,31190,United States,krichardson3@pcworld.com,8-(035)185-0387,4-(796)518-3676,3-(644)960-3789,04/13/1954,RPL,PT,06/06/2015,07/01/2015,krichardson3,P3EO0MVRPXbM';
-my $input_na_branch   = '1005,Ruth,Greene,Mr,Michael,RG,3,Avenue,Grim,Peoria,Jacksonville,Illinois,61614,United States,mgreene5@seesaa.net,3-(941)565-5752,1-(483)885-8138,4-(979)577-6908,02/09/1957,ZZZ,ST,04/02/2015,07/01/2015,mgreene5,or4ORT6JH';
+my $input_no_branch   = qq|1002,$surname,Reynolds,Mr,Patricia,JR,12,Hill,Kennedy,Saint Louis,Colorado Springs,Missouri,63131,United States,preynolds2i\@washington.edu,7-(925)314-9514,0-(315)973-8956,4-(510)556-2323,09/18/1967,,PT,05/07/2015,07/01/2015,preynolds2,K3HiDzl|;
+my $input_good_branch = qq|1003,$surname,Richardson,Mr,Kimberly,LR,90,Place,Bayside,Atlanta,Erie,Georgia,31190,United States,krichardson3\@pcworld.com,8-(035)185-0387,4-(796)518-3676,3-(644)960-3789,04/13/1954,RPL,PT,06/06/2015,07/01/2015,krichardson3,P3EO0MVRPXbM|;
+my $input_na_branch   = qq|1005,$surname,Greene,Mr,Michael,RG,3,Avenue,Grim,Peoria,Jacksonville,Illinois,61614,United States,mgreene5\@seesaa.net,3-(941)565-5752,1-(483)885-8138,4-(979)577-6908,02/09/1957,ZZZ,ST,04/02/2015,07/01/2015,mgreene5,or4ORT6JH|;
 
-my $filename_5 = make_csv($temp_dir, $csv_headers, $input_no_branch, $input_good_branch, $input_na_branch);
+my $filename_5 = make_csv($temp_dir, $csv_headers, encode_utf8($input_no_branch), encode_utf8($input_good_branch), encode_utf8($input_na_branch));
 open(my $handle_5, "<", $filename_5) or die "cannot open < $filename_5: $!";
 my $params_5 = { file => $handle_5, matchpoint => 'cardnumber', };
 
@@ -274,14 +278,14 @@ is($result_5->{errors}->[0]->{missing_criticals}->[0]->{borrowernumber}, 'UNDEF'
 is($result_5->{errors}->[0]->{missing_criticals}->[0]->{key}, 'branchcode', 'Got the expected branch code key from import patrons for branch tests');
 is($result_5->{errors}->[0]->{missing_criticals}->[0]->{line}, 2, 'Got the expected 2 line number error from import patrons for branch tests');
 is($result_5->{errors}->[0]->{missing_criticals}->[0]->{lineraw}, $input_no_branch."\r\n", 'Got the expected lineraw error from import patrons for branch tests');
-is($result_5->{errors}->[0]->{missing_criticals}->[0]->{surname}, 'Johnny', 'Got the expected surname error from import patrons for branch tests');
+is($result_5->{errors}->[0]->{missing_criticals}->[0]->{surname}, $surname, 'Got the expected surname error from import patrons for branch tests');
 
 is($result_5->{errors}->[1]->{missing_criticals}->[0]->{borrowernumber}, 'UNDEF', 'Got the expected undef borrower number error from import patrons for branch tests');
 is($result_5->{errors}->[1]->{missing_criticals}->[0]->{branch_map}, 1, 'Got the expected 1 branchmap error from import patrons for branch tests');
 is($result_5->{errors}->[1]->{missing_criticals}->[0]->{key}, 'branchcode', 'Got the expected branch code key from import patrons for branch tests');
 is($result_5->{errors}->[1]->{missing_criticals}->[0]->{line}, 4, 'Got the expected 4 line number error from import patrons for branch tests');
 is($result_5->{errors}->[1]->{missing_criticals}->[0]->{lineraw}, $input_na_branch."\r\n", 'Got the expected lineraw error from import patrons for branch tests');
-is($result_5->{errors}->[1]->{missing_criticals}->[0]->{surname}, 'Ruth', 'Got the expected surname error from import patrons for branch tests');
+is($result_5->{errors}->[1]->{missing_criticals}->[0]->{surname}, $surname, 'Got the expected surname error from import patrons for branch tests');
 is($result_5->{errors}->[1]->{missing_criticals}->[0]->{value}, 'ZZZ', 'Got the expected ZZZ value error from import patrons for branch tests');
 
 is($result_5->{feedback}->[0]->{feedback}, 1, 'Got the expected 1 feedback from import_patrons for branch tests');
@@ -290,7 +294,7 @@ is($result_5->{feedback}->[0]->{value}, $res_header, 'Got the expected header ro
 
 is($result_5->{feedback}->[1]->{feedback}, 1, 'Got the expected 1 feedback from import_patrons for branch tests');
 is($result_5->{feedback}->[1]->{name}, 'lastimported', 'Got the expected lastimported name from import_patrons for branch tests');
-like($result_5->{feedback}->[1]->{value},  qr/^Linda \/ \d+/, 'Got the expected last imported value from import_patrons with for branch tests');
+like($result_5->{feedback}->[1]->{value},  qr/^$surname \/ \d+/, 'Got the expected last imported value from import_patrons with for branch tests');
 
 is($result_5->{imported}, 1, 'Got the expected 1 imported result from import patrons for branch tests');
 is($result_5->{invalid}, 2, 'Got the expected 2 invalid result from import patrons for branch tests');
