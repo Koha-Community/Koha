@@ -2864,113 +2864,118 @@ sub AddRenewal {
 
     my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item_unblessed, $patron_unblessed) );
 
-    if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
-        _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
-    }
-    _FixOverduesOnReturn( $borrowernumber, $itemnumber, undef, 'RENEWED' );
+    my $schema = Koha::Database->new->schema;
+    $schema->txn_do(sub{
 
-    # If the due date wasn't specified, calculate it by adding the
-    # book's loan length to today's date or the current due date
-    # based on the value of the RenewalPeriodBase syspref.
-    my $itemtype = $item_object->effective_itemtype;
-    unless ($datedue) {
-
-        $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
-                                        dt_from_string( $issue->date_due, 'sql' ) :
-                                        DateTime->now( time_zone => C4::Context->tz());
-        $datedue =  CalcDateDue($datedue, $itemtype, $circ_library->branchcode, $patron_unblessed, 'is a renewal');
-    }
-
-    my $fees = Koha::Charges::Fees->new(
-        {
-            patron    => $patron,
-            library   => $circ_library,
-            item      => $item_object,
-            from_date => dt_from_string( $issue->date_due, 'sql' ),
-            to_date   => dt_from_string($datedue),
+        if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
+            _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
         }
-    );
+        _FixOverduesOnReturn( $borrowernumber, $itemnumber, undef, 'RENEWED' );
 
-    # Update the issues record to have the new due date, and a new count
-    # of how many times it has been renewed.
-    my $renews = $issue->renewals + 1;
-    my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
-                            WHERE borrowernumber=? 
-                            AND itemnumber=?"
-    );
+        # If the due date wasn't specified, calculate it by adding the
+        # book's loan length to today's date or the current due date
+        # based on the value of the RenewalPeriodBase syspref.
+        my $itemtype = $item_object->effective_itemtype;
+        unless ($datedue) {
 
-    $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
-
-    # Update the renewal count on the item, and tell zebra to reindex
-    $renews = $item_object->renewals + 1;
-    ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item_object->biblionumber, $itemnumber, { log_action => 0 } );
-
-    # Charge a new rental fee, if applicable
-    my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
-    if ( $charge > 0 ) {
-        AddIssuingCharge($issue, $charge, 'rent_renew');
-    }
-
-    # Charge a new accumulate rental fee, if applicable
-    my $itemtype_object = Koha::ItemTypes->find( $itemtype );
-    if ( $itemtype_object ) {
-        my $accumulate_charge = $fees->accumulate_rentalcharge();
-        if ( $accumulate_charge > 0 ) {
-            AddIssuingCharge( $issue, $accumulate_charge, 'rent_daily_renew' )
+            $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
+                                            dt_from_string( $issue->date_due, 'sql' ) :
+                                            DateTime->now( time_zone => C4::Context->tz());
+            $datedue =  CalcDateDue($datedue, $itemtype, $circ_library->branchcode, $patron_unblessed, 'is a renewal');
         }
-        $charge += $accumulate_charge;
-    }
 
-    # Send a renewal slip according to checkout alert preferencei
-    if ( C4::Context->preference('RenewalSendNotice') eq '1' ) {
-        my $circulation_alert = 'C4::ItemCirculationAlertPreference';
-        my %conditions        = (
-            branchcode   => $branch,
-            categorycode => $patron->categorycode,
-            item_type    => $itemtype,
-            notification => 'CHECKOUT',
+        my $fees = Koha::Charges::Fees->new(
+            {
+                patron    => $patron,
+                library   => $circ_library,
+                item      => $item_object,
+                from_date => dt_from_string( $issue->date_due, 'sql' ),
+                to_date   => dt_from_string($datedue),
+            }
         );
-        if ( $circulation_alert->is_enabled_for( \%conditions ) ) {
-            SendCirculationAlert(
-                {
-                    type     => 'RENEWAL',
-                    item     => $item_unblessed,
-                    borrower => $patron->unblessed,
-                    branch   => $branch,
-                }
+
+        # Update the issues record to have the new due date, and a new count
+        # of how many times it has been renewed.
+        my $renews = $issue->renewals + 1;
+        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
+                                WHERE borrowernumber=?
+                                AND itemnumber=?"
+        );
+
+        $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
+
+        # Update the renewal count on the item, and tell zebra to reindex
+        $renews = $item_object->renewals + 1;
+        ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item_object->biblionumber, $itemnumber, { log_action => 0 } );
+
+        # Charge a new rental fee, if applicable
+        my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
+        if ( $charge > 0 ) {
+            AddIssuingCharge($issue, $charge, 'rent_renew');
+        }
+
+        # Charge a new accumulate rental fee, if applicable
+        my $itemtype_object = Koha::ItemTypes->find( $itemtype );
+        if ( $itemtype_object ) {
+            my $accumulate_charge = $fees->accumulate_rentalcharge();
+            if ( $accumulate_charge > 0 ) {
+                AddIssuingCharge( $issue, $accumulate_charge, 'rent_daily_renew' )
+            }
+            $charge += $accumulate_charge;
+        }
+
+        # Send a renewal slip according to checkout alert preferencei
+        if ( C4::Context->preference('RenewalSendNotice') eq '1' ) {
+            my $circulation_alert = 'C4::ItemCirculationAlertPreference';
+            my %conditions        = (
+                branchcode   => $branch,
+                categorycode => $patron->categorycode,
+                item_type    => $itemtype,
+                notification => 'CHECKOUT',
             );
+            if ( $circulation_alert->is_enabled_for( \%conditions ) ) {
+                SendCirculationAlert(
+                    {
+                        type     => 'RENEWAL',
+                        item     => $item_unblessed,
+                        borrower => $patron->unblessed,
+                        branch   => $branch,
+                    }
+                );
+            }
         }
-    }
 
-    # Remove any OVERDUES related debarment if the borrower has no overdues
-    if ( $patron
-      && $patron->is_debarred
-      && ! $patron->has_overdues
-      && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
-    ) {
-        DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
-    }
-
-    unless ( C4::Context->interface eq 'opac' ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
-        $branch = C4::Context->userenv ? C4::Context->userenv->{branch} : $branch;
-    }
-
-    # Add the renewal to stats
-    UpdateStats(
-        {
-            branch         => $branch,
-            type           => 'renew',
-            amount         => $charge,
-            itemnumber     => $itemnumber,
-            itemtype       => $itemtype,
-            location       => $item_object->location,
-            borrowernumber => $borrowernumber,
-            ccode          => $item_object->ccode,
+        # Remove any OVERDUES related debarment if the borrower has no overdues
+        if ( $patron
+          && $patron->is_debarred
+          && ! $patron->has_overdues
+          && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
+        ) {
+            DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
-    );
 
-    #Log the renewal
-    logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
+        unless ( C4::Context->interface eq 'opac' ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
+            $branch = C4::Context->userenv ? C4::Context->userenv->{branch} : $branch;
+        }
+
+        # Add the renewal to stats
+        UpdateStats(
+            {
+                branch         => $branch,
+                type           => 'renew',
+                amount         => $charge,
+                itemnumber     => $itemnumber,
+                itemtype       => $itemtype,
+                location       => $item_object->location,
+                borrowernumber => $borrowernumber,
+                ccode          => $item_object->ccode,
+            }
+        );
+
+        #Log the renewal
+        logaction("CIRCULATION", "RENEWAL", $borrowernumber, $itemnumber) if C4::Context->preference("RenewalLog");
+    });
+
     return $datedue;
 }
 
