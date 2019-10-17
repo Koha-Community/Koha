@@ -347,7 +347,7 @@ subtest "Placing holds via SIP check CanItemBeReserved" => sub {
 };
 
 subtest do_checkin => sub {
-    plan tests => 13;
+    plan tests => 14;
 
     my $mockILS  = Test::MockObject->new;
     my $server   = { ils => $mockILS };
@@ -461,6 +461,75 @@ subtest do_checkin => sub {
         is( $hold->found,                                                          'T', );
         is( $hold->itemnumber,                                                     $item->itemnumber, );
         is( Koha::Checkouts->search( { itemnumber => $item->itemnumber } )->count, 0, );
+    };
+
+    subtest 'Checkin message' => sub {
+        plan tests => 3;
+        my $mockILS    = Test::MockObject->new;
+        my $server     = { ils => $mockILS };
+        my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
+        my $patron     = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $homebranch = $builder->build(
+            {
+                source => 'Branch',
+                value  => {
+                    branchcode => 'HMBR',
+                    branchname => 'Homebranch'
+                }
+            }
+        );
+
+        my $institution = {
+            id             => $library->id,
+            implementation => "ILS",
+            policy         => {
+                checkin  => "true",
+                renewal  => "true",
+                checkout => "true",
+                timeout  => 100,
+                retries  => 5,
+            }
+        };
+        my $ils  = C4::SIP::ILS->new($institution);
+        my $item = $builder->build_sample_item(
+            {
+                library            => $library->branchcode,
+                homebranch         => $homebranch->{'branchcode'},
+                location           => 'My Location',
+                permanent_location => 'My Permanent Location',
+            }
+        );
+        my $circ = $ils->checkout( $patron->cardnumber, $item->barcode, undef, undef, $server->{account} );
+        $circ = $ils->checkin(
+            $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode, undef, undef,
+            $server->{account}
+        );
+        is( $circ->{screen_msg}, '', "Checkin message is not displayed when show_checkin_message is disabled" );
+
+        $server->{account}->{show_checkin_message} = 1;
+
+        $circ = $ils->checkout( $patron->cardnumber, $item->barcode, undef, undef, $server->{account} );
+        $circ = $ils->checkin(
+            $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode, undef, undef,
+            $server->{account}
+        );
+        is(
+            $circ->{screen_msg}, 'Item checked-in: Homebranch - My Location.',
+            "Checkin message when show_checkin_message is enabled and UseLocationAsAQInSIP is disabled"
+        );
+
+        t::lib::Mocks::mock_preference( 'UseLocationAsAQInSIP', '1' );
+
+        $circ = $ils->checkout( $patron->cardnumber, $item->barcode, undef, undef, $server->{account} );
+        $circ = $ils->checkin(
+            $item->barcode, C4::SIP::Sip::timestamp, undef, $library->branchcode, undef, undef,
+            $server->{account}
+        );
+        is(
+            $circ->{screen_msg}, 'Item checked-in: My Permanent Location - My Location.',
+            "Checkin message when both show_checkin_message and UseLocationAsAQInSIP are enabled"
+        );
+
     };
 
     subtest 'Checkin with fines' => sub {

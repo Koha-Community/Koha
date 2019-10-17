@@ -262,6 +262,18 @@ sub checkin {
         delete $item->{borrowernumber};
         delete $item->{due_date};
         $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
+
+        my $message = '';
+        if ($account->{show_checkin_message}) {
+            my $permanent_location;
+            if (C4::Context->preference("UseLocationAsAQInSIP")) {
+                $permanent_location = $item->{'permanent_location'};
+            } else {
+                $permanent_location = Koha::Libraries->find($item->{permanent_location})->branchname;
+            }
+            $message .= "Item checked-in: " . $permanent_location . " - " . $item->{location} . ".";
+        }
+
         # Check for overdue fines to display
         if ($account->{show_outstanding_amount}) {
             my $kohaitem = Koha::Items->find( { barcode => $item_id } );
@@ -275,9 +287,12 @@ sub checkin {
                     },
                 );
                 if ($charges) {
-                    $circ->screen_msg("You owe " . Koha::Number::Price->new( $charges->total_outstanding )->format({ with_symbol => 1}) . " for this item.");
+                    $message .= "You owe " . Koha::Number::Price->new( $charges->total_outstanding )->format({ with_symbol => 1}) . " for this item.";
                 }
             }
+        }
+        if ($message) {
+            $circ->screen_msg($message);
         }
     } else {
         # Checkin failed: Wrongbranch or withdrawn?
