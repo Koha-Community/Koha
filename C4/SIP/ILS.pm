@@ -123,21 +123,26 @@ sub offline_ok {
 sub checkout {
     my ( $self, $patron_id, $item_id, $sc_renew, $fee_ack, $account ) = @_;
     my ( $patron, $item, $circ );
-
     $circ = C4::SIP::ILS::Transaction::Checkout->new();
-
     # BEGIN TRANSACTION
     $circ->patron( $patron = C4::SIP::ILS::Patron->new($patron_id) );
     $circ->item( $item     = C4::SIP::ILS::Item->new($item_id) );
     if ($fee_ack) {
         $circ->fee_ack($fee_ack);
     }
-
     if ( !$patron ) {
         $circ->screen_msg("Invalid Patron");
     }
     elsif ( !$patron->charge_ok ) {
-        $circ->screen_msg("Patron Blocked");
+        if ($patron->debarred) {
+            $circ->screen_msg("Patron debarred");
+        } elsif ($patron->expired) {
+            $circ->screen_msg("Patron expired");
+        } elsif ($patron->fine_blocked) {
+            $circ->screen_msg("Patron has fines");
+        } else {
+            $circ->screen_msg("Patron blocked");
+        }
     }
     elsif ( !$item ) {
         $circ->screen_msg("Invalid Item");

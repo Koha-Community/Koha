@@ -126,7 +126,9 @@ sub new {
         recall_items    => [],
         unavail_holds   => [],
         inet            => ( !$debarred && !$expired ),
+        debarred        => $debarred,
         expired         => $expired,
+        fine_blocked    => $fine_blocked,
         fee_limit       => $fee_limit,
         userid          => $kp->{userid},
     );
@@ -181,6 +183,8 @@ my %fields = (
     birthdate_iso           => 0,
     dateexpiry              => 0,
     dateexpiry_iso          => 0,
+    debarred                => 0,
+    fine_blocked            => 0,
     ptype                   => 0,
     charge_ok               => 0,   # for patron_status[0] (inverted)
     renew_ok                => 0,   # for patron_status[1] (inverted)

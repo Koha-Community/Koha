@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -375,6 +375,96 @@ subtest do_checkin => sub {
         is( $hold->itemnumber, $item->itemnumber, );
         is( Koha::Checkouts->search({itemnumber => $item->itemnumber})->count, 0, );
     };
+};
+
+subtest do_checkout_with_patron_blocked => sub {
+    plan tests => 4;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $institution = {
+        id             => $library->id,
+        implementation => "ILS",
+        policy         => {
+            checkin  => "true",
+            renewal  => "true",
+            checkout => "true",
+            timeout  => 100,
+            retries  => 5,
+        }
+    };
+    my $ils = C4::SIP::ILS->new($institution);
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $expired_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+                dateexpiry => '2020/01/01',
+            }
+        }
+    );
+    my $circ = $ils->checkout($expired_patron->cardnumber, $item->barcode);
+    is( $circ->{screen_msg}, 'Patron expired', "Got correct expired screen message" );
+
+    my $fines_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    my $fee1 = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber => $fines_patron->borrowernumber,
+                amountoutstanding => 10,
+            }
+        }
+    );
+
+    my $fines_sip_patron  = C4::SIP::ILS::Patron->new( $fines_patron->cardnumber );
+    $circ = $ils->checkout($fines_patron->cardnumber, $item->barcode);
+    is( $circ->{screen_msg}, 'Patron has fines', "Got correct fines screen message" );
+
+    my $debarred_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+                debarred => '9999/01/01',
+            }
+        }
+    );
+    my $debarred_sip_patron  = C4::SIP::ILS::Patron->new( $debarred_patron->cardnumber );
+    $circ = $ils->checkout($debarred_patron->cardnumber, $item->barcode);
+    is( $circ->{screen_msg}, 'Patron debarred', "Got correct debarred screen message" );
+
+    my $overdue_patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    my $odue = $builder->build({ source => 'Issue', value => {
+            borrowernumber => $overdue_patron->borrowernumber,
+            date_due => '2017-01-01',
+        }
+    });
+    t::lib::Mocks::mock_preference( 'OverduesBlockCirc', 'block' );
+    my $overdue_sip_patron  = C4::SIP::ILS::Patron->new( $overdue_patron->cardnumber );
+    $circ = $ils->checkout($overdue_patron->cardnumber, $item->barcode);
+    is( $circ->{screen_msg}, 'Patron blocked', "Got correct blocked screen message" );
+
 };
 
 subtest do_checkout_with_holds => sub {
