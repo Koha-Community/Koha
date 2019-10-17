@@ -2632,6 +2632,7 @@ CREATE TABLE `account_debit_types` (
   `can_be_added_manually` tinyint(4) NOT NULL DEFAULT 1,
   `default_amount` decimal(28,6) DEFAULT NULL,
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
+  `archived` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this till is archived or not
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

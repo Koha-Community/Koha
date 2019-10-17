@@ -10,6 +10,7 @@ if ( CheckVersion($DBversion) ) {
               can_be_added_manually tinyint(4) NOT NULL DEFAULT 1,
               default_amount decimal(28, 6) NULL,
               is_system tinyint(1) NOT NULL DEFAULT 0,
+              archived tinyint(1) NOT NULL DEFAULT 0,
               PRIMARY KEY (code)
             ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci
           }

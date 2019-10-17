@@ -19,6 +19,8 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use Try::Tiny;
+
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -85,38 +87,41 @@ elsif ( $op eq 'add_validate' ) {
     $debit_type->can_be_added_manually($can_be_added_manually);
     $debit_type->default_amount($default_amount);
 
-    eval {
+    try {
         $debit_type->store;
         $debit_type->replace_library_limits( \@branches );
-    };
-    if ($@) {
-        push @messages, { type => 'error', code => 'error_on_saving' };
-    }
-    else {
         push @messages, { type => 'message', code => 'success_on_saving' };
     }
+    catch {
+        push @messages, { type => 'error', code => 'error_on_saving' };
+    };
     $op = 'list';
 }
-elsif ( $op eq 'delete_confirm' ) {
-    $template->param( debit_type => $debit_type );
-}
-elsif ( $op eq 'delete_confirmed' ) {
-    my $deleted = eval { $debit_type->delete; };
+elsif ( $op eq 'archive' ) {
+    try {
+        $debit_type->archived(1)->store();
+        push @messages, { code => 'success_on_archive', type => 'message' };
+    }
+    catch {
+        push @messages, { code => 'error_on_archive', type => 'alert' };
 
-    if ( $@ or not $deleted ) {
-        push @messages, { type => 'error', code => 'error_on_delete' };
+    };
+    $op = 'list';
+}
+elsif ( $op eq 'unarchive' ) {
+    try {
+        $debit_type->archived(0)->store();
+        push @messages, { code => 'success_on_restore', type => 'message' };
     }
-    else {
-        push @messages, { type => 'message', code => 'success_on_delete' };
-    }
+    catch {
+        push @messages, { code => 'error_on_restore', type => 'alert' };
+    };
     $op = 'list';
 }
 
 if ( $op eq 'list' ) {
     my $debit_types = Koha::Account::DebitTypes->search();
-    $template->param(
-        debit_types  => $debit_types,
-    );
+    $template->param( debit_types => $debit_types, );
 }
 
 $template->param(

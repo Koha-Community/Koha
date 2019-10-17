@@ -13,11 +13,7 @@
            New debit type
        [% END %]
     [% ELSE %]
-       [% IF op == 'delete_confirm' %]
-           Debit types &rsaquo; Confirm deletion of debit type
-       [% ELSE %]
-           Debit types
-       [% END %]
+       Debit types
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -33,8 +29,6 @@
 &rsaquo; <a href="/cgi-bin/koha/admin/debit_types.pl">Debit types</a>
 [% IF op == 'add_form' %]
 &rsaquo; [% IF debit_type.code %]Modify[% ELSE %]New[% END %] debit type
-[% ELSIF op == 'delete_confirm' %]
-&rsaquo; Confirm deletion of debit type
 [% END %]
 </div>
 
@@ -46,14 +40,14 @@
                 [% FOREACH m IN messages %]
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
-                    [% CASE 'error_on_saving' %]
-                        An error occurred when saving this debit type.
-                    [% CASE 'error_on_delete' %]
-                        An error occurred when deleting this debit type. Check the logs.
                     [% CASE 'success_on_saving' %]
                         Debit type saved successfully.
-                    [% CASE 'success_on_delete' %]
-                        Debit type deleted successfully.
+                    [% CASE 'error_on_saving' %]
+                        An error occurred when saving this debit type.
+                    [% CASE 'success_on_archive' %]
+                        Debit type archived successfully.
+                    [% CASE 'success_on_restore' %]
+                        Debit type restored successfully.
                     [% CASE %]
                         [% m.code | html %]
                     [% END %]
@@ -120,28 +114,6 @@
                     </form>
                 [% END %]
 
-                [% IF op == 'delete_confirm' %]
-                    <div class="dialog alert">
-                        <h3>Delete debit type "[% debit_type.description | html %]?"</h3>
-                        <table>
-                            <tr><th>Debit type code</th>
-                                <td>[% debit_type.code | html %]</td>
-                            </tr>
-                            <tr><th>Debit type description</th>
-                                <td>[% debit_type.description | html %]</td>
-                            </tr>
-                        </table>
-                        <form action="/cgi-bin/koha/admin/debit_types.pl" method="post">
-                            <input type="hidden" name="op" value="delete_confirmed" />
-                            <input type="hidden" name="code" value="[% debit_type.code | html %]" />
-                            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
-                        </form>
-                        <form action="/cgi-bin/koha/admin/debit_types.pl" method="get">
-                            <button type=submit" class="btn btn-default deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
-                        </form>
-                    </div>
-                [% END %]
-
                 [% IF op == 'list' %]
                     <div id="toolbar" class="btn-toolbar">
                         <a class="btn btn-default" id="newdebittype" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form"><i class="fa fa-plus"></i> New debit type</a>
@@ -151,6 +123,7 @@
                     [% IF debit_types.count %]
                         <table id="table_debit_types">
                             <thead>
+                                <th>Archived</th>
                                 <th>System</th>
                                 <th>Code</th>
                                 <th>Description</th>
@@ -162,6 +135,7 @@
                             <tbody>
                                 [% FOREACH debit_type IN debit_types %]
                                 <tr>
+                                    <td>[% debit_type.archived | html %]</td>
                                     <td>[% debit_type.is_system | html %]</td>
                                     <td>[% debit_type.code | html %]</td>
                                     <td>[% debit_type.description | html %]</td>
@@ -188,9 +162,11 @@
                                         [% END %]
                                     </td>
                                     <td class="actions">
-                                        [% IF !debit_type.is_system %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=delete_confirm&amp;code=[% debit_type.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                        [% IF !debit_type.is_system && !debit_type.archived %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=add_form&amp;code=[% debit_type.code | uri %]&type=debit"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=archive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
+                                        [% ELSIF debit_type.archived %]
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/debit_types.pl?op=unarchive&amp;code=[% debit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
                                         [% END %]
                                     </td>
                                 </tr>
@@ -224,9 +200,9 @@
             var table_debit_types = $("#table_debit_types").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "aTargets": [ 0 ], "bSortable": false, "bVisible": false },
+                    { "aTargets": [ 0, 1 ], "bSortable": false, "bVisible": false },
                 ],
-                "aaSorting": [[ 1, "asc" ]],
+                "aaSorting": [[ 0, "asc" ],[ 2, "asc" ]],
                 "sDom": 'C<"top pager"ilpfB><"#filter_s">tr<"bottom pager"ip>',
                 "iDisplayLength": 20,
                 "sPaginationType": "full_numbers"
@@ -241,7 +217,7 @@
                     var filteredValue = '0';
                     $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
                 }
-                table_debit_types.fnFilter(filteredValue, 0, false, false);
+                table_debit_types.fnFilter(filteredValue, 1, false, false);
                 $(this).toggleClass('filtered');
             });
 
