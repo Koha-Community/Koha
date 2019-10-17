@@ -76,7 +76,8 @@ if ( $op eq 'add_form' ) {
 }
 elsif ( $op eq 'add_validate' ) {
     my $description           = $input->param('description');
-    my $can_be_added_manually = $input->param('can_be_added_manually') || 0;
+    my $can_be_invoiced = $input->param('can_be_invoiced') || 0;
+    my $can_be_sold = $input->param('can_be_sold') || 0;
     my $default_amount        = $input->param('default_amount') || undef;
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
@@ -84,7 +85,8 @@ elsif ( $op eq 'add_validate' ) {
         $debit_type = Koha::Account::DebitType->new( { code => $code } );
     }
     $debit_type->description($description);
-    $debit_type->can_be_added_manually($can_be_added_manually);
+    $debit_type->can_be_invoiced($can_be_invoiced);
+    $debit_type->can_be_sold($can_be_sold);
     $debit_type->default_amount($default_amount);
 
     try {

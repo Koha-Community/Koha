@@ -56,7 +56,7 @@ else {
 
 my $invoice_types =
   Koha::Account::DebitTypes->search_with_library_limits(
-    { can_be_added_manually => 1 },
+    { can_be_sold => 1 },
     {}, $library_id );
 $template->param( invoice_types => $invoice_types );
 

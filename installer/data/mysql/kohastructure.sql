@@ -2654,7 +2654,8 @@ DROP TABLE IF EXISTS `account_debit_types`;
 CREATE TABLE `account_debit_types` (
   `code` varchar(80) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
-  `can_be_added_manually` tinyint(4) NOT NULL DEFAULT 1,
+  `can_be_invoiced` tinyint(1) NOT NULL DEFAULT 1, -- boolean flag to denote if this debit type is available for manual invoicing
+  `can_be_sold` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this debit type is available at point of sale
   `default_amount` decimal(28,6) DEFAULT NULL,
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
   `archived` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this till is archived or not

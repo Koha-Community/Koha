@@ -35,10 +35,16 @@ __PACKAGE__->table("account_debit_types");
   is_nullable: 1
   size: 200
 
-=head2 can_be_added_manually
+=head2 can_be_invoiced
 
   data_type: 'tinyint'
   default_value: 1
+  is_nullable: 0
+
+=head2 can_be_sold
+
+  data_type: 'tinyint'
+  default_value: 0
   is_nullable: 0
 
 =head2 default_amount
@@ -66,8 +72,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 80 },
   "description",
   { data_type => "varchar", is_nullable => 1, size => 200 },
-  "can_be_added_manually",
+  "can_be_invoiced",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
+  "can_be_sold",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "default_amount",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "is_system",
@@ -121,8 +129,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-23 13:48:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uDKsz1QUF6zY+haOVVQZNw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-17 12:22:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8FIMJZ+JAmqa+Dx7oymBjw
 
 __PACKAGE__->add_columns(
     '+is_system' => { is_boolean => 1 }

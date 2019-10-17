@@ -5,6 +5,28 @@ if( CheckVersion( $DBversion ) ) {
         INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Purchase' );
     });
 
+    # Updating field in account_debit_types
+    unless ( column_exists('account_debit_types', 'can_be_invoiced') ) {
+        $dbh->do(
+            qq{
+                ALTER TABLE account_debit_types
+                CHANGE COLUMN
+                  can_be_added_manually can_be_invoiced tinyint(1) NOT NULL DEFAULT 1
+              }
+        );
+    }
+    unless ( column_exists('account_debit_types', 'can_be_sold') ) {
+        $dbh->do(
+            qq{
+                ALTER IGNORE TABLE account_debit_types
+                ADD
+                  can_be_sold tinyint(1) DEFAULT 0
+                AFTER
+                  can_be_invoiced
+              }
+        );
+    }
+
     $dbh->do(q{
 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
 ('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '<table>
