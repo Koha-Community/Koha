@@ -2020,12 +2020,20 @@ input {
 }
 
 #social_networks {
+    margin-top: .5em;
+
     a {
-        background: transparent url( "../images/social-sprite.png" ) no-repeat;
-        display: block;
-        height: 20px !important;
-        text-indent: -999em;
-        width: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        display: inline-block;
+        min-width: 1em;
+        padding: .5em;
+        text-align: center;
+    }
+
+    a:hover,
+    a:active {
+        border: 1px solid #EEE;
     }
 
     span {
@@ -2035,32 +2043,27 @@ input {
         font-size: 85%;
         font-weight: bold;
         line-height: 2em;
-        margin: .5em 0 .5em .5em !important;
+        margin: .5em;
     }
 
     div {
-        float: left !important;
-        margin: .5em 0 .5em .2em !important;
+        float: left;
     }
 
     #facebook {
-        background-position: -7px -35px;
+        color: #4267B2;
     }
 
     #twitter {
-        background-position: -7px -5px;
+        color: #1DA1F2;
     }
 
     #linkedin {
-        background-position: -7px -95px;
-    }
-
-    #delicious {
-        background-position: -7px -66px;
+        color: #0073b0;
     }
 
     #email {
-        background-position: -7px -126px;
+        color: #666;
     }
 }
 
