@@ -2864,7 +2864,7 @@ sub AddRenewal {
 
     my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item_unblessed, $patron_unblessed) );
 
-    my $schema = Koha::Database->new->schema;
+    my $schema = Koha::Database->schema;
     $schema->txn_do(sub{
 
         if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
