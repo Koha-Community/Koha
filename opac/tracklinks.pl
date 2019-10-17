@@ -33,9 +33,10 @@ my $uri = $cgi->param('uri') || '';
 my $biblionumber = $cgi->param('biblionumber') || 0;
 my $itemnumber   = $cgi->param('itemnumber')   || 0;
 
+my $tracking_method = C4::Context->preference('TrackClicks');
+output_error( $cgi, '404' ) unless $tracking_method;
 my $tracker = Koha::Linktracker->new(
-    { trackingmethod => C4::Context->preference('TrackClicks') } );
-
+    { trackingmethod => $tracking_method } );
 if ($uri && ($biblionumber || $itemnumber) ) {
     my $borrowernumber = 0;
 
