@@ -129,6 +129,7 @@ while ( my $h = $holds_rs->next() ) {
         $hold->{itemnumber}     = $item->itemnumber();
         $hold->{barcode}        = $item->barcode();
         $hold->{itemtype}       = $item->effective_itemtype();
+        $hold->{enumchron}      = $item->enumchron();
         $hold->{itemcallnumber} = $item->itemcallnumber() || q{};
 
         my ( $transferred_when, $transferred_from, $transferred_to ) =
