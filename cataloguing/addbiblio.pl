@@ -559,7 +559,7 @@ sub build_tabs {
                             my $subfield = $subfields[$subfieldcount][0];
                             my $value    = $subfields[$subfieldcount][1];
                             next if ( length $subfield != 1 );
-                            next if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
+                            next if ( !defined $tagslib->{$tag}->{$subfield} || $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
                             push(
                                 @subfields_data,
                                 &create_input(

@@ -37,7 +37,7 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li class="z3950searchFw"><a href="#">Default framework</a></li>
+                                    <li id="Default" class="z3950searchFw"><a href="#">Default framework</a></li>
                                     [% FOREACH framework IN frameworks %]
                                         <li id="[% framework.frameworkcode | html %]" class="z3950searchFw"><a href="#">[% framework.frameworktext | html %]</a></li>
                                     [% END %]
@@ -227,7 +227,7 @@
             $("input[name=q]:eq(0)").focus();
 
             $("#z3950search").click(function(){
-                PopupZ3950("");
+                PopupZ3950("Default");
                 return false;
             });
 
