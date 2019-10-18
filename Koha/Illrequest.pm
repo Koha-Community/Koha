@@ -854,9 +854,9 @@ sub expandTemplate {
     my $backend_dir = $self->_config->backend_dir;
     my $backend_tmpl = join "/", $backend_dir, $backend;
     my $intra_tmpl =  join "/", $backend_tmpl, "intra-includes",
-        $params->{method} . ".inc";
+        ( $params->{method}//q{} ) . ".inc";
     my $opac_tmpl =  join "/", $backend_tmpl, "opac-includes",
-        $params->{method} . ".inc";
+        ( $params->{method}//q{} ) . ".inc";
     # Set files to load
     $params->{template} = $intra_tmpl;
     $params->{opac_template} = $opac_tmpl;
