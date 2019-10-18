@@ -121,9 +121,9 @@
           [% IF CAN_user_acquisition_merge_invoices %]
               <a class="submit merge" id="merge" href="#merge_invoices">Merge selected invoices</a>
               [% IF tab == 'closed' %]
-                <a class="submit" id="open_sel" href="#reopen_selected" data-op="reopen" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-refresh"></i> Reopen selected invoices</a>
+                <a class="btn btn-default" id="open_sel" href="#reopen_selected" data-op="reopen" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-refresh"></i> Reopen selected invoices</a>
               [% ELSE  %]
-                <a class="submit" id="close_sel" href="#close_selected" data-op="close" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close selected invoices</a>
+                <a class="btn btn-default" id="close_sel" href="#close_selected" data-op="close" data-referer="referer=/cgi-bin/koha/acqui/invoices.pl%3Fop=do_search%26invoicenumber=[% invoicenumber | uri %]%26supplier=[% booksellerid | uri %]%26shipmentdatefrom=[% shipmentdatefrom | $KohaDates %]%26shipmentdateto=[% shipmentdateto | $KohaDates %]%26billingdatefrom=[% billingdatefrom | $KohaDates %]%26billingdateto=[% billingdateto | $KohaDates %]%26isbneanissn=[% isbneanissn | uri %]%26title=[% title | uri %]%26author=[% author | uri %]%26publisher=[% publisher | uri %]%26publicationyear=[% publicationyear | uri %]%26branch=[% branch | uri %]"><i class="fa fa-times-circle"></i> Close selected invoices</a>
               [% END %]
 
           [% END %] <!-- invoices_table -->
@@ -370,7 +370,8 @@
                 aoColumnDefs: [
                     { "bSortable": false, "aTargets": [1, -1] },
                     { "bVisible": false, "aTargets": [0] }
-                ]
+                ],
+                autoWidth: false
             }));
 
             $(".show_only_subscription").prop("checked", false);
