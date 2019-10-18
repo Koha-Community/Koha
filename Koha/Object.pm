@@ -174,11 +174,12 @@ sub store {
                     duplicate_id => $+{key}
                 );
             }
-            elsif( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column '(?<property>\w+)'/ ) {
+            elsif( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/ ) {
+            # The optional \W in the regex might be a quote or backtick
                 Koha::Exceptions::Object::BadValue->throw(
                     type     => $+{type},
                     value    => $+{value},
-                    property => $+{property}
+                    property => $+{property},
                 );
             }
         }
