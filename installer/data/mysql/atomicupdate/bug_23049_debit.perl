@@ -83,6 +83,17 @@ if ( CheckVersion($DBversion) ) {
         }
     );
 
+    # Catch 'F' cases introduced since bug 22521
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'OVERDUE',
+          status = 'RETURNED'
+        WHERE
+          accounttype = 'F';
+    });
+
     # Moving MANUAL_INV to account_debit_types
     $dbh->do(
         qq{
@@ -94,7 +105,7 @@ if ( CheckVersion($DBversion) ) {
               is_system
             )
             SELECT
-              SUBSTR(authorised_value, 1, 80),
+              authorised_value,
               lib,
               authorised_value,
               1,
@@ -105,6 +116,22 @@ if ( CheckVersion($DBversion) ) {
               category = 'MANUAL_INV'
           }
     );
+
+    # Update uncaught partial accounttypes left behind after bugs 23539 and 22521
+    my $sth = $dbh->prepare( "SELECT code, SUBSTR(code, 1,5) AS subcode FROM account_debit_types" );
+    $sth->execute();
+    while ( my $row = $sth->fetchrow_hashref ) {
+        $dbh->do(
+            qq{
+              UPDATE accountlines SET accounttype = ? WHERE accounttype = ?
+            },
+            {},
+            (
+                $row->{code},
+                $row->{subcode}
+            )
+        );
+    }
 
     # Add any unexpected accounttype codes to debit_types as appropriate
     $dbh->do(
@@ -117,7 +144,7 @@ if ( CheckVersion($DBversion) ) {
             is_system
           )
           SELECT
-            SUBSTR(accounttype, 1, 80),
+            DISTINCT(accounttype),
             "Unexpected type found during upgrade",
             1,
             NULL,
