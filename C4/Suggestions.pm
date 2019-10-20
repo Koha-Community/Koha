@@ -414,7 +414,7 @@ sub CountSuggestion {
             FROM suggestions
                 LEFT JOIN borrowers ON borrowers.borrowernumber=suggestions.suggestedby
             WHERE STATUS=?
-                AND (borrowers.branchcode='' OR borrowers.branchcode=?)
+                AND (suggestions.branchcode='' OR suggestions.branchcode=?)
         };
         $sth = $dbh->prepare($query);
         $sth->execute( $status, $userenv->{branch} );
