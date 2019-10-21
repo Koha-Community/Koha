@@ -429,6 +429,63 @@ sub as_marc_field {
     return $field;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Item object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        itemnumber               => 'item_id',
+        biblionumber             => 'biblio_id',
+        biblioitemnumber         => undef,
+        barcode                  => 'external_id',
+        dateaccessioned          => 'acquisition_date',
+        booksellerid             => 'acquisition_source',
+        homebranch               => 'home_library_id',
+        price                    => 'purchase_price',
+        replacementprice         => 'replacement_price',
+        replacementpricedate     => 'replacement_price_date',
+        datelastborrowed         => 'last_checkout_date',
+        datelastseen             => 'last_seen_date',
+        stack                    => undef,
+        notforloan               => 'not_for_loan_status',
+        damaged                  => 'damaged_status',
+        damaged_on               => 'damaged_date',
+        itemlost                 => 'lost_status',
+        itemlost_on              => 'lost_date',
+        withdrawn                => 'withdrawn',
+        withdrawn_on             => 'withdrawn_date',
+        itemcallnumber           => 'callnumber',
+        coded_location_qualifier => 'coded_location_qualifier',
+        issues                   => 'checkouts_count',
+        renewals                 => 'renewals_count',
+        reserves                 => 'holds_count',
+        restricted               => 'restricted_status',
+        itemnotes                => 'public_notes',
+        itemnotes_nonpublic      => 'internal_notes',
+        holdingbranch            => 'holding_library_id',
+        paidfor                  => undef,
+        timestamp                => 'timestamp',
+        location                 => 'location',
+        permanent_location       => 'permanent_location',
+        onloan                   => 'checked_out_date',
+        cn_source                => 'call_number_source',
+        cn_sort                  => 'call_number_sort',
+        ccode                    => 'collection_code',
+        materials                => 'materials_notes',
+        uri                      => 'uri',
+        itype                    => 'item_type',
+        more_subfields_xml       => 'extended_subfields',
+        enumchron                => 'serial_issue_number',
+        copynumber               => 'copy_number',
+        stocknumber              => 'inventory_number',
+        new_status               => 'new_status'
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type

@@ -18,10 +18,6 @@ package Koha::REST::V1::Items;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
-use Mojo::JSON;
-
-use C4::Auth qw( haspermission );
-use C4::Items qw( GetHiddenItemnumbers );
 
 use Koha::Items;
 
@@ -33,7 +29,7 @@ sub get {
     my $item;
     try {
         $item = Koha::Items->find($c->validation->param('item_id'));
-        return $c->render( status => 200, openapi => _to_api( $item->TO_JSON ) );
+        return $c->render( status => 200, openapi => $item->to_api );
     }
     catch {
         unless ( defined $item ) {
