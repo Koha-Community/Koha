@@ -393,7 +393,7 @@
                         </table>
 
                         <div id="marcPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-wide">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
@@ -474,8 +474,21 @@
                             var record_details_url = "/cgi-bin/koha/catalogue/detail.pl?biblionumber=";
                         [% END %]
 
+                        var additional_details = "";
+                        if( aData['author'] ){
+                            additional_details += " " + aData['author'] + " ";
+                        }
+
+                        if( aData['isbn'] ){
+                            additional_details += " (" + aData['isbn'] + ") ";
+                        }
+
+                        if( aData['issn'] ){
+                            additional_details += " (" + aData['issn'] + ") ";
+                        }
+
                         $('td:eq(1)', nRow).html(
-                            '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + aData['citation'] + '</a>'
+                            '<a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=' + aData['import_record_id'] + '&viewas=html" class="previewMARC">' + aData['citation'] + '</a> ' + additional_details
                         );
 
                         $('td:eq(2)', nRow).html(

@@ -68,12 +68,6 @@ my $records =
 my @list = ();
 foreach my $record (@$records) {
     my $citation = $record->{'title'} || $record->{'authorized_heading'};
-    $citation .= " $record->{'author'}" if $record->{'author'};
-    $citation .= " (" if $record->{'issn'} or $record->{'isbn'};
-    $citation .= $record->{'isbn'} if $record->{'isbn'};
-    $citation .= ", " if $record->{'issn'} and $record->{'isbn'};
-    $citation .= $record->{'issn'} if $record->{'issn'};
-    $citation .= ")" if $record->{'issn'} or $record->{'isbn'};
 
     my $match = GetImportRecordMatches( $record->{'import_record_id'}, 1 );
     my $match_citation = '';
@@ -99,6 +93,9 @@ foreach my $record (@$records) {
         DT_RowId        => $record->{'import_record_id'},
         import_record_id => $record->{'import_record_id'},
         citation        => $citation,
+        author          => $record->{'author'},
+        issn            => $record->{'issn'},
+        isbn            => $record->{'isbn'},
         status          => $record->{'status'},
         overlay_status  => $record->{'overlay_status'},
         match_citation  => $match_citation,
