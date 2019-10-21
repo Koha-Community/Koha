@@ -184,7 +184,10 @@ sub add {
 
         my $hold = Koha::Holds->find($hold_id);
 
-        return $c->render( status => 201, openapi => _to_api($hold->TO_JSON) );
+        return $c->render(
+            status  => 201,
+            openapi => $hold->to_api
+        );
     }
     catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions') ) {
@@ -258,7 +261,10 @@ sub edit {
     C4::Reserves::ModReserve($params);
     $hold->discard_changes; # refresh
 
-    return $c->render( status => 200, openapi => _to_api( $hold->TO_JSON ) );
+    return $c->render(
+        status  => 200,
+        openapi => $hold->to_api
+    );
 }
 
 =head3 delete

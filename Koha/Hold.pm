@@ -400,7 +400,39 @@ sub _move_to_old {
     return Koha::Old::Hold->new( $hold_infos )->store;
 }
 
-=head3 type
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Hold object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        reserve_id       => 'hold_id',
+        borrowernumber   => 'patron_id',
+        reservedate      => 'hold_date',
+        biblionumber     => 'biblio_id',
+        branchcode       => 'pickup_library_id',
+        notificationdate => undef,
+        reminderdate     => undef,
+        cancellationdate => 'cancelation_date',
+        reservenotes     => 'notes',
+        found            => 'status',
+        itemnumber       => 'item_id',
+        waitingdate      => 'waiting_date',
+        expirationdate   => 'expiration_date',
+        lowestPriority   => 'lowest_priority',
+        suspend          => 'suspended',
+        suspend_until    => 'suspended_until',
+        itemtype         => 'item_type',
+        item_level_hold  => 'item_level',
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
