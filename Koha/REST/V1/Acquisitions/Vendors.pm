@@ -101,6 +101,7 @@ sub add_vendor {
 
     return try {
         $vendor->store;
+        $c->res->headers->location($c->req->url->to_string . '/' . $vendor->id );
         return $c->render(
             status  => 200,
             openapi => $vendor->to_api
