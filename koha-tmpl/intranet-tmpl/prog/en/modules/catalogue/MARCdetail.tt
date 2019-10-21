@@ -21,7 +21,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC details for <em>[% INCLUDE 'biblio-title.inc' %]</em>
+    [% INCLUDE 'biblio-title.inc' link = 1 %] &rsaquo; MARC details
   [% END %]
 </div>
 

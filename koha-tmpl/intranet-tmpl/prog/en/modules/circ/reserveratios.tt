@@ -57,7 +57,8 @@
             <td><p>[% reserveloo.reservecount | html %]</p></td>
             <td><p>[% reserveloo.itemcount | html %]</p></td>
             <td><a href="#" class="ratiolimit">[% reserveloo.thisratio | html %]</a></td>
-            <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% INCLUDE 'biblio-title.inc' biblio=reserveloo %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author | html %][% END %]
+            <td>
+                [% INCLUDE 'biblio-title.inc' biblio=reserveloo link = 1 %][% IF ( reserveloo.author ) %] by [% reserveloo.author | html %][% END %]
             </td>
             <td>
                   <ul>

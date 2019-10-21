@@ -6,7 +6,7 @@
 <body id="catalog_moveitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <em>[% INCLUDE 'biblio-title.inc' %]</em></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; [% INCLUDE 'biblio-title.inc' link = 1 %] &rsaquo; Attach an item</div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -66,7 +66,7 @@
                 </div>
             [% END %]
 
-            <div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<em>[% bibliotitle | html %]</em></a>.
+            <div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-title.inc' link = 1 %].
 			<p>
 			[% INCLUDE actions %]
                     <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> OK</button>
@@ -94,7 +94,7 @@
 	    [% END %]
 
 		[% IF ( missingbarcode ) %]
-        <h3>Attach an item[% IF ( bibliotitle ) %] to <em>[% bibliotitle | html %]</em>[% END %]</h3>
+        <h3>Attach an item [% IF ( biblio.title ) %] to [% INCLUDE 'biblio-title.inc' %][% END %]</h3>
 	    <fieldset id="barcode_fieldset">
 		<label for="barcode">Enter the barcode of the item to attach:</label>
 		    <p class="hint">The item you select will be moved to the target record.</p>

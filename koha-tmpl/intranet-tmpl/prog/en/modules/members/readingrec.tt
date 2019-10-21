@@ -74,7 +74,9 @@
           <td>
             <span title="[% issue.issuestimestamp | html %]">[% issue.issuestimestamp | $KohaDates  with_hours => 1 %]</span>
           </td>
-          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issue.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=issue %]</a></td>
+          <td>
+            [% INCLUDE 'biblio-title.inc' biblio=issue link = 1 %]
+            </td>
 
           <td>[% issue.author | html %]</td>
 

@@ -52,7 +52,7 @@
                 [% END %]
                     <td><p><span title="[% reser.datetransfer | html %]">[% reser.datetransfer | $KohaDates %]</span></p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff | html %] days late</span>[% END %]</td>
                     <td>
-                        [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% INCLUDE 'biblio-title.inc' biblio=reser %]</a> [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
+                        [% INCLUDE 'biblio-title.inc' biblio=reser link = 1 %] [% IF ( reser.author ) %]by [% reser.author | html %][% END %]
                             [% IF ( reser.itemtype ) %] (<strong>[% reser.itemtype | html %]</strong>)[% END %]
                             <br />Barcode: [% reser.barcode | html %]
                     </td>

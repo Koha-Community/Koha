@@ -209,8 +209,7 @@
                 [% IF ( itemsloo.XSLTBloc ) %]
                     [% itemsloo.XSLTBloc | $raw %]
                 [% ELSE %]
-                    [% INCLUDE 'biblio-default-view.inc' biblionumber = itemsloo.biblionumber %]
-                        [% INCLUDE 'biblio-title.inc' biblio=itemsloo %]
+                        [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
                     </a>
                 [% END %]
                     <p class="hold">

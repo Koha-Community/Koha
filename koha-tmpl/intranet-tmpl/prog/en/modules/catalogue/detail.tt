@@ -48,9 +48,9 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo;
   [% IF ( unknownbiblionumber ) %]
-    <span class="unknownrecord">Unknown record</span>
+    Unknown record
   [% ELSE %]
-    <span class="titledetails">Details for <em>[% INCLUDE 'biblio-title.inc' %]</em></span>
+    [% INCLUDE 'biblio-title.inc' link = 1 %] &rsaquo; Details
   [% END %]
 </div>
 

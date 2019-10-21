@@ -104,7 +104,7 @@
                     </tr>
                     [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
                       <tr>
-                        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = collectionItemsLoo.biblionumber %][% collectionItemsLoo.title | html %]</a></td>
+                        <td>[% INCLUDE 'biblio-title.inc' biblio=collectionItemsLoo link = 1 %]</td>
                         <td>[% collectionItemsLoo.itemcallnumber | html %]</td>
                         <td>[% collectionItemsLoo.barcode | html %]</td>
                         <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]&amp;barcode=[% collectionItemsLoo.barcode | uri %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>

@@ -21,9 +21,8 @@
             <tr>
                 <td><span title="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
                 <td><span title="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
-                <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                        [% INCLUDE 'biblio-title.inc' biblio=reserveloo.biblio %]
-                    </a>
+                <td>
+                    [% INCLUDE 'biblio-title.inc' biblio=reserveloo.biblio link = 1 %]
                         [% UNLESS ( item_level_itypes ) %]
                             [% IF ( ItemTypes.GetDescription(reserveloo.item.effective_itemtype) ) %]&nbsp; (<strong>[% ItemTypes.GetDescription(reserveloo.item.effective_itemtype) | html %]</strong>)
                             [% END %]

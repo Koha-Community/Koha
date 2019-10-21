@@ -21,7 +21,7 @@
         <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
         [% UNLESS blocking_error %]
         &rsaquo;
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' %]</a>
+            [% INCLUDE 'biblio-title.inc' link = 1 %]
         &rsaquo;
         Request article
         [% END %]
@@ -33,7 +33,7 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-                    <h1>Request article from <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.id | uri %]">[% INCLUDE 'biblio-title.inc' %]</a></h1>
+                    <h1>Request article from [% INCLUDE 'biblio-title.inc' link = 1 %]</h1>
                     [% IF no_patrons_found %]
                         <div class="dialog alert">
                             <h3>Patron not found</h3>

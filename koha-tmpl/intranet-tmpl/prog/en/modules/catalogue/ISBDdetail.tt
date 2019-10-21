@@ -20,7 +20,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    ISBD details for [% INCLUDE 'biblio-title.inc' %]
+    [% INCLUDE 'biblio-title.inc' link = 1 %] &rsaquo; ISBD details
   [% END %]
 </div>
 

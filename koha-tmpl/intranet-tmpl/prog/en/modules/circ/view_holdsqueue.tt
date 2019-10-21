@@ -124,9 +124,7 @@
         <tr>
             <td class="hq-title">
                 <p>
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber | uri %]">
-                        [% INCLUDE 'biblio-title.inc' biblio=itemsloo %]
-                    </a>
+                    [% INCLUDE 'biblio-title.inc' biblio=itemsloo link = 1 %]
                 </p>
                 <p>
                     <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>

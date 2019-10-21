@@ -132,7 +132,7 @@
                                         <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
                                         <td class="ar-title">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | uri %]">
+                                                <a class="title" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | uri %]">
                                                     [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
                                                 </a>
                                             </p>
@@ -233,9 +233,7 @@
                                         <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
                                         <td class="ar-title">
                                             <p>
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber | uri %]">
-                                                    [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
-                                                </a>
+                                                [% INCLUDE 'biblio-title.inc' biblio=ar.biblio link = 1%]
                                             </p>
 
                                             <p>

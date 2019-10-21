@@ -77,9 +77,8 @@
             <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber | uri %]">[% reserveloo.firstname | html %] [% reserveloo.surname | html %]</a></td>
             <td>
             <p>
-                [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                    [% INCLUDE 'biblio-title.inc' biblio=reserveloo %]
-                </a></p>
+                [% INCLUDE 'biblio-title.inc' biblio=reserveloo link = 1 %]
+            </p>
                 [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author | html %]</p>[% END %]
                 [% IF ( reserveloo.editionstatement ) %]<p>[% reserveloo.editionstatement | html %]</p>[% END %]
                 [% IF ( reserveloo.publicationyear ) %]<p>[% reserveloo.publicationyear | html %]</p>[% END %]

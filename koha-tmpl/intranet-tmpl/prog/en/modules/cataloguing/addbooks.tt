@@ -75,7 +75,7 @@
                                     <td><input type="checkbox" class="selection" id="bib[% resultsloo.biblionumber | html %]" name="biblionumber" value="[% resultsloo.biblionumber | html %]" /></td>
                                     <td>
                                         <p>
-                                            <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% resultsloo.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=resultsloo %]</a>
+                                            [% INCLUDE 'biblio-title.inc' biblio=resultsloo link = 1 %]
                                         </p>
                                         [% IF ( resultsloo.summary ) %]
                                             <p>[% resultsloo.summary | html %]</p>

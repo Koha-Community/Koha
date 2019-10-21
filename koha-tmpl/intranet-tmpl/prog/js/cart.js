@@ -143,7 +143,7 @@ $(document).ready(function(){
         e.preventDefault();
         delBasket('popup');
     });
-    $(".open_title").on("click",function(e){
+    $(".title").on("click",function(e){
         e.preventDefault();
         openBiblio( this.href );
     });

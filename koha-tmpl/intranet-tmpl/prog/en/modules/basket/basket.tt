@@ -262,9 +262,7 @@
                                             <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
                                         </td>
                                         <td>
-                                            <a href="[% BIBLIO_RESULT.dest | url %]?biblionumber=[% BIBLIO_RESULT.biblionumber | uri %]" class="open_title">
-                                                [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT %]
-                                            </a>
+                                            [% INCLUDE 'biblio-title.inc' biblio=BIBLIO_RESULT link = 1 %]</a>
                                             [% BIBLIO_RESULT.author | html %]
                                             <p>
                                                 [% IF ( BIBLIO_RESULT.publishercode ) %]

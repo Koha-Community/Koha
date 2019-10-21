@@ -31,7 +31,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
         [% FOREACH title IN titles %]
             <tr>
-            <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = title.biblionumber %][% INCLUDE 'biblio-title.inc' biblio=title %]</a>
+            <td>[% INCLUDE 'biblio-title.inc' biblio=title link = 1 %]
             [% title.author | html %]
             <p>[% IF ( title.publishercode ) %]- [% title.publishercode | html %]
             [% IF ( title.place ) %] [% title.place | html %][% END %][% END %]
