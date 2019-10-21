@@ -196,15 +196,12 @@ elsif ($op eq "change" ) {
     my $accepted_by = $input->param('acceptedby');
     if ( $STATUS eq "ACCEPTED" ) {
         $suggestion = {
-            STATUS       => $STATUS,
             accepteddate => dt_from_string,
             acceptedby => C4::Context->userenv->{number},
         };
     }
     elsif ( $STATUS eq "REJECTED" ) {
         $suggestion = {
-
-            STATUS       => $STATUS,
             rejecteddate => dt_from_string,
             rejectedby   => C4::Context->userenv->{number},
         };
@@ -212,6 +209,7 @@ elsif ($op eq "change" ) {
     if ($STATUS) {
         $suggestion->{manageddate} = dt_from_string;
         $suggestion->{managedby}   = C4::Context->userenv->{number};
+        $suggestion->{STATUS}      = $STATUS;
     }
     if ( my $reason = $input->param("reason$tabcode") ) {
         if ( $reason eq "other" ) {
