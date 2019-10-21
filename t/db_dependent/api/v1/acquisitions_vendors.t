@@ -180,7 +180,7 @@ subtest 'get() test' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -223,6 +223,7 @@ subtest 'add() tests' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     my $vendor_id = $t->request_ok($tx)
                       ->status_is(200)
+                      ->header_like( Location => qr|^\/api\/v1\/acquisitions\/vendors/\d*|, 'SWAGGER3.4.1')
                       ->json_is( '/name' => $vendor->{name} )
                       ->json_is( '/address1' => $vendor->{address1} )->tx->res->json('/id')
         ;    # read the response vendor id for later use
