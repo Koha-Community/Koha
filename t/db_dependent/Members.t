@@ -367,13 +367,16 @@ subtest 'purgeSelfRegistration' => sub {
     });
     is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with checkout");
 
-    my $account_line = $builder->build_object({
-        class=>'Koha::Account::Lines',
-        value=>{
-            borrowernumber=>$self_reg->borrowernumber,
-            amountoutstanding=>5
+    my $account_line = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => {
+                borrowernumber    => $self_reg->borrowernumber,
+                amountoutstanding => 5,
+                acocunttype       => undef
+            }
         }
-    });
+    );
     is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with checkout and fine");
 
     $checkout->delete;

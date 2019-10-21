@@ -35,7 +35,12 @@ subtest 'total_outstanding() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $line = $builder->build_object( { class => 'Koha::Account::Lines' } );
+    my $line = $builder->build_object(
+        {
+            class => 'Koha::Account::Lines',
+            value => { debit_type_code => undef }
+        }
+    );
 
     my $amount_1 = 100;
     my $amount_2 = 200;

@@ -394,11 +394,17 @@ subtest "More Koha::Account::pay tests" => sub {
     })->{ borrowernumber };
 
     my $amount = 100;
-    my $accountline = $builder->build({ source => 'Accountline',
-        value  => { borrowernumber => $borrowernumber,
-                    amount => $amount,
-                    amountoutstanding => $amount }
-    });
+    my $accountline = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $borrowernumber,
+                amount            => $amount,
+                amountoutstanding => $amount,
+                accounttype       => undef,
+            }
+        }
+    );
 
     my $rs = $schema->resultset('Accountline')->search({
         borrowernumber => $borrowernumber
@@ -448,11 +454,17 @@ subtest "Even more Koha::Account::pay tests" => sub {
 
     my $amount = 100;
     my $partialamount = 60;
-    my $accountline = $builder->build({ source => 'Accountline',
-        value  => { borrowernumber => $borrowernumber,
-                    amount => $amount,
-                    amountoutstanding => $amount }
-    });
+    my $accountline = $builder->build(
+        {
+            source => 'Accountline',
+            value  => {
+                borrowernumber    => $borrowernumber,
+                amount            => $amount,
+                amountoutstanding => $amount,
+                accounttype       => undef,
+            }
+        }
+    );
 
     my $rs = $schema->resultset('Accountline')->search({
         borrowernumber => $borrowernumber
@@ -500,7 +512,8 @@ subtest 'balance' => sub {
             value  => {
                 borrowernumber    => $patron->borrowernumber,
                 amount            => 42,
-                amountoutstanding => 42
+                amountoutstanding => 42,
+                accounttype       => undef,
             }
         }
     );
@@ -510,7 +523,8 @@ subtest 'balance' => sub {
             value  => {
                 borrowernumber    => $patron->borrowernumber,
                 amount            => -13,
-                amountoutstanding => -13
+                amountoutstanding => -13,
+                debit_type_code   => undef,
             }
         }
     );
