@@ -35,7 +35,8 @@
 		<th>Notice</th>
 		<th>Type</th>
 		<th>Status</th>
-		<th>Time</th>
+        <th>Updated on</th>
+        <th>Time created</th>
 	    </tr>
 	</thead>
 	<tbody>
@@ -73,6 +74,7 @@
             </div>
             [% END %]
         </td>
+        <td><span title="[% QUEUED_MESSAGE.time_status_changed | html %]">[% QUEUED_MESSAGE.updated_on | $KohaDates  with_hours => 1 %]</span></td>
         <td><span title="[% QUEUED_MESSAGE.time_queued | html %]">[% QUEUED_MESSAGE.time_queued | $KohaDates  with_hours => 1 %]</span></td>
 	    </tr>
 	    [% END %]
@@ -98,7 +100,7 @@
         $(document).ready(function() {
             $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aaSorting": [[ 3, "desc" ]],
-                "aoColumns": [ null,null,null,{ "sType": "title-string" } ],
+                "aoColumns": [ null,null,null, { "sType": "title-string" } ,{ "sType": "title-string" } ],
                 "sPaginationType": "full"
             }));
 

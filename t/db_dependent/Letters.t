@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 69;
+use Test::More tests => 73;
 use Test::MockModule;
 use Test::Warn;
 
@@ -132,8 +132,12 @@ is( $messages->[0]->{subject}, $my_message->{letter}->{title}, 'EnqueueLetter st
 is( $messages->[0]->{content}, $my_message->{letter}->{content}, 'EnqueueLetter stores the content correctly' );
 is( $messages->[0]->{message_transport_type}, $my_message->{message_transport_type}, 'EnqueueLetter stores the message type correctly' );
 is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pending correctly' );
+isnt( $messages->[0]->{time_queued}, undef, 'Time queued inserted by default in message_queue table' );
+is( $messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed equals time queued when created in message_queue table' );
 
+my $message_time_queued = $messages->[0]->{time_queued};
 
+sleep 1;
 # SendQueuedMessages
 my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' });
 is($messages_processed, 0, 'No queued messages processed if type limit passed with unused type');
@@ -145,6 +149,8 @@ is(
     'failed',
     'message marked failed if tried to send SMS message for borrower with no smsalertnumber set (bug 11208)'
 );
+isnt($messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed differs from time queued when status changes' );
+is($messages->[0]->{time_queued}, $message_time_queued, 'Time queued remaines inmutable' );
 
 # ResendMessage
 my $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});

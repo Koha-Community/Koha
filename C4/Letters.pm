@@ -1070,7 +1070,7 @@ sub GetQueuedMessages {
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued
+SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, updated_on
 FROM message_queue
 ENDSQL
 
@@ -1124,7 +1124,7 @@ sub GetMessage {
     return unless $message_id;
     my $dbh = C4::Context->dbh;
     return $dbh->selectrow_hashref(q|
-        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, content_type
+        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, updated_on, to_address, from_address, content_type
         FROM message_queue
         WHERE message_id = ?
     |, {}, $message_id );
@@ -1368,7 +1368,7 @@ sub _is_duplicate {
         WHERE message_transport_type = ?
         AND borrowernumber = ?
         AND letter_code = ?
-        AND CAST(time_queued AS date) = CAST(NOW() AS date)
+        AND CAST(updated_on AS date) = CAST(NOW() AS date)
         AND status="sent"
         AND content = ?
     |, {}, $message->{message_transport_type}, $message->{borrowernumber}, $message->{letter_code}, $message->{content} );
