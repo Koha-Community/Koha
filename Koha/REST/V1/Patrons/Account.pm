@@ -49,27 +49,25 @@ sub get {
     }
 
     my $account = $patron->account;
-    my $balance;
-
-    $balance->{balance} = $account->balance;
 
     # get outstanding debits and credits
     my $debits  = $account->outstanding_debits;
     my $credits = $account->outstanding_credits;
 
-    my @debit_lines = map { _to_api( $_->TO_JSON ) } @{ $debits->as_list };
-    $balance->{outstanding_debits} = {
-        total => $debits->total_outstanding,
-        lines => \@debit_lines
-    };
-
-    my @credit_lines = map { _to_api( $_->TO_JSON ) } @{ $credits->as_list };
-    $balance->{outstanding_credits} = {
-        total => $credits->total_outstanding,
-        lines => \@credit_lines
-    };
-
-    return $c->render( status => 200, openapi => $balance );
+    return $c->render(
+        status  => 200,
+        openapi => {
+            balance => $account->balance,
+            outstanding_debits => {
+                total => $debits->total_outstanding,
+                lines => $debits->to_api
+            },
+            outstanding_credits => {
+                total => $credits->total_outstanding,
+                lines => $credits->to_api
+              }
+        }
+    );
 }
 
 =head3 add_credit

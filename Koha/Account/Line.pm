@@ -398,6 +398,27 @@ sub is_debit {
     return !$self->is_credit;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Account::Line object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        accountlines_id   => 'account_line_id',
+        accounttype       => 'account_type',
+        amountoutstanding => 'amount_outstanding',
+        borrowernumber    => 'patron_id',
+        branchcode        => 'library_id',
+        issue_id          => 'checkout_id',
+        itemnumber        => 'item_id',
+        manager_id        => 'user_id',
+        note              => 'internal_note',
+    };
+}
+
 =head2 Internal methods
 
 =cut
