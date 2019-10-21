@@ -140,7 +140,7 @@ subtest 'get() tests' => sub {
 
 subtest 'add() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -190,7 +190,11 @@ subtest 'add() tests' => sub {
     $tx->req->env({ REMOTE_ADDR => $remote_address });
     my $city_id =
       $t->request_ok($tx)
-        ->status_is(200)
+        ->status_is( 201, 'SWAGGER3.2.1' )
+        ->header_like(
+            Location => qr|^\/api\/v1\/cities/\d*|,
+            'SWAGGER3.4.1'
+            )
         ->json_is( '/name'        => $city->{name} )
         ->json_is( '/state'       => $city->{state} )
         ->json_is( '/postal_code' => $city->{postal_code} )
