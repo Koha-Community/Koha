@@ -127,7 +127,11 @@ sub add {
 
         my $patron = Koha::Patron->new( _to_model($body) )->store;
 
-        return $c->render( status => 201, openapi => $patron->to_api );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $patron->borrowernumber );
+        return $c->render(
+            status  => 201,
+            openapi => $patron->to_api
+        );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
