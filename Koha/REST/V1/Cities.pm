@@ -78,7 +78,11 @@ sub add {
     return try {
         my $city = Koha::City->new( _to_model( $c->validation->param('body') ) );
         $city->store;
-        return $c->render( status => 200, openapi => $city->to_api );
+        $c->res->headers->location( $c->req->url->to_string . '/' . $city->cityid );
+        return $c->render(
+            status  => 201,
+            openapi => $city->to_api
+        );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
