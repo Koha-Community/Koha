@@ -134,7 +134,7 @@ subtest 'add() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 20;
+        plan tests => 21;
 
         $schema->storage->txn_begin;
 
@@ -197,6 +197,10 @@ subtest 'add() tests' => sub {
         $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
         $t->request_ok($tx)
           ->status_is(201, 'Patron created successfully')
+          ->header_like(
+            Location => qr|^\/api\/v1\/patrons/\d*|,
+            'SWAGGER3.4.1'
+          )
           ->json_has('/patron_id', 'got a patron_id')
           ->json_is( '/cardnumber' => $newpatron->{ cardnumber })
           ->json_is( '/surname'    => $newpatron->{ surname })
