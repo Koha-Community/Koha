@@ -56,10 +56,11 @@ sub list_funds {
     }
 
     return try {
-        my @funds = Koha::Acquisition::Funds->search($filter);
-        @funds = map { _to_api($_->TO_JSON) } @funds;
-        return $c->render( status  => 200,
-                           openapi =>  \@funds);
+        my $funds = Koha::Acquisition::Funds->search($filter);
+        return $c->render(
+            status  => 200,
+            openapi => $funds->to_api
+        );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {

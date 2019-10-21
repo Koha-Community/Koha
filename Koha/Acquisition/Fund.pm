@@ -27,6 +27,35 @@ Koha::Acquisition::Fund object class
 
 =head1 API
 
+=head2 Class methods
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Acquisition::Fund object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        budget_id         => 'fund_id',
+        budget_code       => 'code',
+        budget_name       => 'name',
+        budget_branchcode => 'library_id',
+        budget_amount     => 'total_amount',
+        budget_encumb     => 'warn_at_percentage',
+        budget_expend     => 'warn_at_amount',
+        budget_notes      => 'notes',
+        budget_period_id  => 'budget_id',
+        timestamp         => 'timestamp',
+        budget_owner_id   => 'fund_owner_id',
+        budget_permission => 'fund_access',
+        sort1_authcat     => 'statistic1_auth_value_category',
+        sort2_authcat     => 'statistic2_auth_value_category',
+        budget_parent_id  => 'parent_fund_id',
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type
