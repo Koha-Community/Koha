@@ -79,7 +79,10 @@ sub get {
                            openapi => { error => "Library not found" } );
     }
 
-    return $c->render( status => 200, openapi => _to_api( $library->TO_JSON ) );
+    return $c->render(
+        status  => 200,
+        openapi => $library->to_api
+    );
 }
 
 =head3 add
@@ -95,7 +98,11 @@ sub add {
         my $library = Koha::Library->new( _to_model( $c->validation->param('body') ) );
         $library->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $library->branchcode );
-        return $c->render( status => 201, openapi => _to_api( $library->TO_JSON ) );
+
+        return $c->render(
+            status  => 201,
+            openapi => $library->to_api
+        );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
@@ -141,7 +148,10 @@ sub update {
         my $params = $c->req->json;
         $library->set( _to_model($params) );
         $library->store();
-        return $c->render( status => 200, openapi => _to_api($library->TO_JSON) );
+        return $c->render(
+            status  => 200,
+            openapi => $library->to_api
+        );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {

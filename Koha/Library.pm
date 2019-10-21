@@ -89,6 +89,38 @@ sub cash_registers {
     return Koha::Cash::Registers->_new_from_dbic( $rs );
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Library object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        branchcode       => 'library_id',
+        branchname       => 'name',
+        branchaddress1   => 'address1',
+        branchaddress2   => 'address2',
+        branchaddress3   => 'address3',
+        branchzip        => 'postal_code',
+        branchcity       => 'city',
+        branchstate      => 'state',
+        branchcountry    => 'country',
+        branchphone      => 'phone',
+        branchfax        => 'fax',
+        branchemail      => 'email',
+        branchreplyto    => 'reply_to_email',
+        branchreturnpath => 'return_path_email',
+        branchurl        => 'url',
+        issuing          => undef,
+        branchip         => 'ip',
+        branchprinter    => undef,
+        branchnotes      => 'notes',
+        marcorgcode      => 'marc_org_code',
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type
