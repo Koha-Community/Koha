@@ -92,8 +92,8 @@ sub get {
     }
 
     return $c->render(
-        status => 200,
-        openapi => _to_api($checkout->TO_JSON)
+        status  => 200,
+        openapi => $checkout->to_api
     );
 }
 
@@ -134,8 +134,8 @@ sub renew {
 
     $c->res->headers->location( $c->req->url->to_string );
     return $c->render(
-        status => 201,
-        openapi => _to_api( $checkout->TO_JSON )
+        status  => 201,
+        openapi => $checkout->to_api
     );
 }
 
