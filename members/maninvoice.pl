@@ -126,7 +126,7 @@ else {
     );
 
     my @debit_types = Koha::Account::DebitTypes->search_with_library_limits(
-        { can_be_added_manually => 1 },
+        { can_be_added_manually => 1, archived => 0 },
         {}, $library_id );
     $template->param( debit_types => \@debit_types );
     $template->param(
