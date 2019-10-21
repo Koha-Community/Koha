@@ -222,7 +222,7 @@ subtest 'add() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     my $vendor_id = $t->request_ok($tx)
-                      ->status_is(200)
+                      ->status_is( 201, 'SWAGGER3 .2.1' )
                       ->header_like( Location => qr|^\/api\/v1\/acquisitions\/vendors/\d*|, 'SWAGGER3.4.1')
                       ->json_is( '/name' => $vendor->{name} )
                       ->json_is( '/address1' => $vendor->{address1} )->tx->res->json('/id')
