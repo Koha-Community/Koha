@@ -119,9 +119,10 @@ sub add {
             item_type => $item_type
         });
 
-        my $mapping = _to_api($club_hold->unblessed);
-
-        return $c->render( status => 201, openapi => $mapping );
+        return $c->render(
+            status  => 201,
+            openapi => $club_hold->to_api
+        );
     }
     catch {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Object') ) {

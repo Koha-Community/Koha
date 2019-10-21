@@ -40,7 +40,7 @@ Represents a hold made for every member of club
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -125,7 +125,26 @@ sub add {
 
 }
 
-=head3 type
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Club::Hold object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        id        => 'club_hold_id',
+        club_id   => 'club_id',
+        biblio_id => 'biblio_id',
+        item_id   => 'item_id'
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
