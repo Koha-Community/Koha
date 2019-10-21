@@ -83,7 +83,7 @@ my $input           = CGI->new;
 my $redirect  = $input->param('redirect');
 my $suggestedbyme   = (defined $input->param('suggestedbyme')? $input->param('suggestedbyme'):1);
 my $op              = $input->param('op')||'else';
-my @editsuggestions = $input->multi_param('edit_field');
+my @editsuggestions = $input->multi_param('suggestionid');
 my $suggestedby     = $input->param('suggestedby');
 my $returnsuggestedby = $input->param('returnsuggestedby');
 my $returnsuggested = $input->param('returnsuggested');
@@ -105,7 +105,7 @@ $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 
 delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
 foreach (keys %$suggestion_ref){
-    delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
+    delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' ));
 }
 my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
         {
@@ -210,7 +210,7 @@ elsif ($op=~/edit/) {
     Init($suggestion_ref);
     $op ='save';
 }  
-elsif ($op eq "change" ) {
+elsif ($op eq "update_status" ) {
 
     my $suggestion;
     # set accepted/rejected/managed informations if applicable
@@ -234,9 +234,9 @@ elsif ($op eq "change" ) {
         $suggestion->{managedby}   = C4::Context->userenv->{number};
         $suggestion->{STATUS}      = $STATUS;
     }
-    if ( my $reason = $input->param("reason$tabcode") ) {
+    if ( my $reason = $input->param("reason") ) {
         if ( $reason eq "other" ) {
-            $reason = $input->param("other_reason$tabcode");
+            $reason = $input->param("other_reason");
         }
         $suggestion->{reason} = $reason;
     }
@@ -265,6 +265,13 @@ elsif ($op eq "change" ) {
         &DelSuggestion( $borrowernumber, $delete_field,'intranet' );
     }
     $op = 'else';
+}
+elsif ( $op eq 'update_itemtype' ) {
+    my $new_itemtype = $input->param('suggestion_itemtype');
+    foreach my $suggestionid (@editsuggestions) {
+        next unless $suggestionid;
+        &ModSuggestion({ suggestionid => $suggestionid, itemtype => $new_itemtype });
+    }
 }
 elsif ( $op eq 'show' ) {
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
