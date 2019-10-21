@@ -48,13 +48,12 @@ sub list_vendors {
             if $args->{$filter_param};
     }
 
-    my @vendors;
-
     return try {
-        @vendors = Koha::Acquisition::Booksellers->search($filter);
-        @vendors = map { _to_api($_->TO_JSON) } @vendors;
-        return $c->render( status  => 200,
-                           openapi => \@vendors );
+        my $vendors = Koha::Acquisition::Booksellers->search($filter);
+        return $c->render(
+            status  => 200,
+            openapi => $vendors->to_api
+        );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
@@ -83,8 +82,10 @@ sub get_vendor {
                            openapi => { error => "Vendor not found" } );
     }
 
-    return $c->render( status  => 200,
-                       openapi => _to_api($vendor->TO_JSON) );
+    return $c->render(
+        status  => 200,
+        openapi => $vendor->to_api
+    );
 }
 
 =head3 add_vendor
@@ -100,8 +101,10 @@ sub add_vendor {
 
     return try {
         $vendor->store;
-        return $c->render( status  => 200,
-                           openapi => _to_api($vendor->TO_JSON) );
+        return $c->render(
+            status  => 200,
+            openapi => $vendor->to_api
+        );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
@@ -130,8 +133,10 @@ sub update_vendor {
         $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
         $vendor->set( _to_model( $c->validation->param('body') ) );
         $vendor->store();
-        return $c->render( status  => 200,
-                           openapi => _to_api($vendor->TO_JSON) );
+        return $c->render(
+            status  => 200,
+            openapi => $vendor->to_api
+        );
     }
     catch {
         if ( not defined $vendor ) {

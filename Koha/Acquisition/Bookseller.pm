@@ -28,7 +28,7 @@ Koha::Acquisition::Bookseller Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 baskets
 
@@ -71,6 +71,28 @@ sub subscriptions {
     my ($self) = @_;
 
     return Koha::Subscriptions->search( { aqbooksellerid => $self->id } );
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Acquisition::Bookseller object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        booksellerfax   => undef,
+        bookselleremail => undef,
+        booksellerurl   => undef,
+        currency        => undef,
+        othersupplier   => undef,
+        listprice       => 'list_currency',
+        invoiceprice    => 'invoice_currency',
+        gstreg          => 'gst',
+        listincgst      => 'list_includes_gst',
+        invoiceincgst   => 'invoice_includes_gst'
+    };
 }
 
 =head2 Internal methods
