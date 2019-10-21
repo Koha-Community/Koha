@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 13;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -51,14 +51,18 @@ my $unauth_password = 'thePassword123';
 $patron->set_password({ password => $unauth_password, skip_validation => 1 });
 my $unauth_userid = $patron->userid;
 
-my $fund1 = {
-    budget_code      => 'ABCD',
-    budget_amount    => '123.132000',
-    budget_name      => 'Periodiques',
-    budget_notes     => 'This is a note',
-};
-my $budget_id = AddBudget($fund1);
-isnt( $budget_id, undef, 'AddBudget does not returns undef' );
+my $fund_name = 'Periodiques';
+
+my $fund = $builder->build_object(
+    {
+        class => 'Koha::Acquisition::Funds',
+        value => {
+            budget_amount => '123.132000',
+            budget_name   => $fund_name,
+            budget_notes  => 'This is a note'
+        }
+    }
+);
 
 $t->get_ok('/api/v1/acquisitions/funds')
   ->status_is(401);
@@ -69,15 +73,15 @@ $t->get_ok('/api/v1/acquisitions/funds/?name=testFund')
 $t->get_ok("//$unauth_userid:$unauth_password@/api/v1/acquisitions/funds")
   ->status_is(403);
 
-$t->get_ok("//$unauth_userid:$unauth_password@/api/v1/acquisitions/funds/?name=" . $fund1->{ budget_name })
+$t->get_ok("//$unauth_userid:$unauth_password@/api/v1/acquisitions/funds?name=" . $fund_name)
   ->status_is(403);
 
 $t->get_ok("//$userid:$password@/api/v1/acquisitions/funds")
   ->status_is(200);
 
-$t->get_ok("//$userid:$password@/api/v1/acquisitions/funds/?name=" . $fund1->{ budget_name })
+$t->get_ok("//$userid:$password@/api/v1/acquisitions/funds?name=" . $fund_name)
   ->status_is(200)
-  ->json_like('/0/name' => qr/$fund1->{ budget_name }/);
+  ->json_like('/0/name' => qr/$fund_name/);
 
 $schema->storage->txn_rollback;
 
