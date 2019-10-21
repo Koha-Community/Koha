@@ -1476,6 +1476,90 @@ sub add_guarantor {
     )->store();
 }
 
+=head3 to_api
+
+    my $json = $patron->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Patron object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self ) = @_;
+
+    my $json_patron = $self->SUPER::to_api;
+
+    $json_patron->{restricted} = ( $self->is_debarred )
+                                    ? Mojo::JSON->true
+                                    : Mojo::JSON->false;
+
+    return $json_patron;
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Patron object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        borrowernotes       => 'staff_notes',
+        borrowernumber      => 'patron_id',
+        branchcode          => 'library_id',
+        categorycode        => 'category_id',
+        checkprevcheckout   => 'check_previous_checkout',
+        contactfirstname    => undef,                     # Unused
+        contactname         => undef,                     # Unused
+        contactnote         => 'altaddress_notes',
+        contacttitle        => undef,                     # Unused
+        dateenrolled        => 'date_enrolled',
+        dateexpiry          => 'expiry_date',
+        dateofbirth         => 'date_of_birth',
+        debarred            => undef,                     # replaced by 'restricted'
+        debarredcomment     => undef,    # calculated, API consumers will use /restrictions instead
+        emailpro            => 'secondary_email',
+        flags               => undef,    # permissions manipulation handled in /permissions
+        gonenoaddress       => 'incorrect_address',
+        guarantorid         => 'guarantor_id',
+        lastseen            => 'last_seen',
+        lost                => 'patron_card_lost',
+        opacnote            => 'opac_notes',
+        othernames          => 'other_name',
+        password            => undef,            # password manipulation handled in /password
+        phonepro            => 'secondary_phone',
+        relationship        => 'relationship_type',
+        sex                 => 'gender',
+        smsalertnumber      => 'sms_number',
+        sort1               => 'statistics_1',
+        sort2               => 'statistics_2',
+        streetnumber        => 'street_number',
+        streettype          => 'street_type',
+        zipcode             => 'postal_code',
+        B_address           => 'altaddress_address',
+        B_address2          => 'altaddress_address2',
+        B_city              => 'altaddress_city',
+        B_country           => 'altaddress_country',
+        B_email             => 'altaddress_email',
+        B_phone             => 'altaddress_phone',
+        B_state             => 'altaddress_state',
+        B_streetnumber      => 'altaddress_street_number',
+        B_streettype        => 'altaddress_street_type',
+        B_zipcode           => 'altaddress_postal_code',
+        altcontactaddress1  => 'altcontact_address',
+        altcontactaddress2  => 'altcontact_address2',
+        altcontactaddress3  => 'altcontact_city',
+        altcontactcountry   => 'altcontact_country',
+        altcontactfirstname => 'altcontact_firstname',
+        altcontactphone     => 'altcontact_phone',
+        altcontactsurname   => 'altcontact_surname',
+        altcontactstate     => 'altcontact_state',
+        altcontactzipcode   => 'altcontact_postal_code'
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type

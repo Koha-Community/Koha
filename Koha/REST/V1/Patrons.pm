@@ -73,9 +73,8 @@ sub list {
                 }
             );
         }
-        my @patrons = $patrons->as_list;
-        @patrons = map { _to_api( $_->TO_JSON ) } @patrons;
-        return $c->render( status => 200, openapi => \@patrons );
+
+        return $c->render( status => 200, openapi => $patrons->to_api );
     }
     catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
@@ -110,7 +109,7 @@ sub get {
         return $c->render( status => 404, openapi => { error => "Patron not found." } );
     }
 
-    return $c->render( status => 200, openapi => _to_api( $patron->TO_JSON ) );
+    return $c->render( status => 200, openapi => $patron->to_api );
 }
 
 =head3 add
@@ -127,9 +126,8 @@ sub add {
         my $body = _to_model( $c->validation->param('body') );
 
         my $patron = Koha::Patron->new( _to_model($body) )->store;
-        $patron    = _to_api( $patron->TO_JSON );
 
-        return $c->render( status => 201, openapi => $patron );
+        return $c->render( status => 201, openapi => $patron->to_api );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
