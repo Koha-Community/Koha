@@ -111,7 +111,7 @@
                     <div class="hint">Standing orders do not close when received.</div>
                 </li>
                 [% IF basketno %]
-                    <input type="hidden" name="create_items" value="[% create_items %]" />
+                    <input type="hidden" name="create_items" value="[% create_items | html %]" />
                 [% ELSE %]
                  <li>
                     <label for="create_items">Create items when:</label>
