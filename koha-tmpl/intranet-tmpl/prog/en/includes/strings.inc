@@ -17,6 +17,7 @@
     var PREVIOUS_CHECKOUTS = _("Previous checkouts");
     var BY = _("by _AUTHOR_");
     var ON_HOLD = _("On hold");
+    var PLACE_HOLD = _("Place hold");
     var NOT_RENEWABLE = _("Not renewable");
     var NOT_RENEWABLE_TOO_SOON = _("No renewal before %s");
     var NOT_RENEWABLE_AUTO_TOO_SOON = _("Scheduled for automatic renewal");
