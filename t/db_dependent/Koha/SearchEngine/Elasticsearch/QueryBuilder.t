@@ -228,7 +228,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 68;
+    plan tests => 69;
 
     my $qb;
 
@@ -245,7 +245,7 @@ subtest 'build_query tests' => sub {
 
     is_deeply(
         $query->{sort},
-        [ { 'title__sort' => { 'order' => 'asc' } } ],
+        [ { 'title__sort' => { 'order' => 'asc' } }, { 'local-number' => { 'order' => 'desc' } } ],
         "sort parameter properly formed"
     );
 
@@ -266,6 +266,17 @@ subtest 'build_query tests' => sub {
     $options{skip_facets} = 1;
     $query = $qb->build_query( 'test', %options );
     ok( !defined $query->{aggregations}, 'Skipping facets means we do not have aggregations in the the query' );
+
+    $query = $qb->build_query( 'test', () );
+
+    is_deeply(
+        $query->{sort},
+        [
+            { '_score'       => { 'order' => 'desc' } },
+            { 'local-number' => { 'order' => 'desc' } }
+        ],
+        "sort parameter properly formed if no sort passed"
+    );
 
     t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '' );
 

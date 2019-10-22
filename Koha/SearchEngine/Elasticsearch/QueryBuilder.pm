@@ -227,6 +227,14 @@ sub build_query {
         }
     }
 
+    # If not sorting by anything explicitly search by score
+    if ( !defined $res->{sort} ) {
+        push @{ $res->{sort} }, { _score => { order => 'desc' } };
+    }
+
+    # Add a tie breaker in case of equally relevant records
+    push @{ $res->{sort} }, { 'local-number' => { order => 'desc' } };
+
     unless ( $options{skip_facets} ) {
 
         # See _convert_facets in Search.pm for how these get turned into
