@@ -123,8 +123,11 @@ my $branchfilter = $input->param('branchcode') || C4::Context->userenv->{'branch
 ##  Operations
 ##
 if ( $op =~ /save/i ) {
-    $suggestion_only->{suggesteddate} = dt_from_string( $suggestion_only->{suggesteddate} )
-        if $suggestion_only->{suggesteddate};
+
+    for my $date_key ( qw( suggesteddate manageddate accepteddate rejecteddate ) ) {
+        $suggestion_only->{$date_key} = dt_from_string( $suggestion_only->{$date_key} )
+            if $suggestion_only->{$date_key};
+    }
 
     if ( $suggestion_only->{"STATUS"} ) {
         if ( my $tmpstatus = lc( $suggestion_only->{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
