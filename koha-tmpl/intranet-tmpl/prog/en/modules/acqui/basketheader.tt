@@ -110,7 +110,9 @@
                     [% END %]
                     <div class="hint">Standing orders do not close when received.</div>
                 </li>
-                [% UNLESS basketno %]
+                [% IF basketno %]
+                    <input type="hidden" name="create_items" value="[% create_items %]" />
+                [% ELSE %]
                  <li>
                     <label for="create_items">Create items when:</label>
                     <select name="create_items" id="create_items">
