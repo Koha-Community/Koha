@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 
 use C4::Items;
@@ -184,6 +184,21 @@ subtest 'can_be_transferred' => sub {
     is($biblio->can_be_transferred({ to => $library2 }), 0, 'Given all of items'
         .' of the biblio are from same, transfer limited library, then transfer'
         .' is not possible.');
+};
+
+subtest 'custom_cover_image_url' => sub {
+    plan tests => 1;
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%isbn%_%issn%.png' );
+    my $isbn       = 'my_isbn';
+    my $issn       = 'my_issn';
+    my $biblioitem = $builder->build_object(
+        {
+            class => 'Koha::Biblioitems',
+            value => { isbn => $isbn, issn => $issn }
+        }
+    );
+    my $biblio = Koha::Biblios->find( $biblioitem->biblionumber );
+    is( $biblio->custom_cover_image_url, "https://my_url/${isbn}_${issn}.png" );
 };
 
 $schema->storage->txn_rollback;
