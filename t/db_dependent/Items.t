@@ -322,7 +322,7 @@ subtest 'GetItemsInfo tests' => sub {
     $dbh->do(q{INSERT INTO tmp_holdsqueue (biblionumber, itemnumber, surname, borrowernumber ) VALUES (?, ?, "Zorro", 42)}, undef, $item_bibnum, $itemnumber);
     @results = GetItemsInfo( $biblio->biblionumber );
     is( $results[0]->{ has_pending_hold }, "1",
-        'Hold marked as pending/unavailable if not AllowItemsOnHoldCheckout' );
+        'Hold marked as pending/unavailable if tmp_holdsqueue is not empty for item' );
 
     $schema->storage->txn_rollback;
 };
