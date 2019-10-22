@@ -152,7 +152,7 @@
                                         [% END %]
 
                                         [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                            <a href="[% review.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% review.biblio_object.custom_cover_image_url | url %]" /></a>
+                                            <a class="custom_cover_image" href="[% review.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% review.biblio_object.custom_cover_image_url | url %]" /></a>
                                         [% END %]
 
                                     </td>

@@ -62,7 +62,9 @@
                                     [% END %]
                                 [% END %]
                                 [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
-                                    <img alt="Cover image" src="[% item.biblio_object.custom_cover_image_url | url %]" />
+                                    <span class="custom_cover_image">
+                                        <img alt="Cover image" src="[% item.biblio_object.custom_cover_image_url | url %]" />
+                                    </span>
                                 [% END %]
 
                             </a>
