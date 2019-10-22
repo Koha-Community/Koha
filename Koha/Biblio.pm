@@ -24,6 +24,7 @@ use List::MoreUtils qw(any);
 use URI;
 use URI::Escape;
 
+use C4::Koha;
 use C4::Biblio qw();
 
 use Koha::Database;
@@ -674,6 +675,10 @@ sub custom_cover_image_url {
     if ( $url =~ m|%isbn%| ) {
         my $isbn = $self->biblioitem->isbn;
         $url =~ s|%isbn%|$isbn|g;
+    }
+    if ( $url =~ m|%normalized_isbn%| ) {
+        my $normalized_isbn = C4::Koha::GetNormalizedISBN($self->biblioitem->isbn);
+        $url =~ s|%normalized_isbn%|$normalized_isbn|g;
     }
     if ( $url =~ m|%issn%| ) {
         my $issn = $self->biblioitem->issn;

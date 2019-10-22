@@ -188,11 +188,11 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'custom_cover_image_url' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%isbn%_%issn%.png' );
 
-    my $isbn       = 'my_isbn';
+    my $isbn       = '0553573403 | 9780553573404 (pbk.).png';
     my $issn       = 'my_issn';
     my $marc_record = MARC::Record->new;
     my ( $biblionumber, undef ) = C4::Biblio::AddBiblio($marc_record, '');
@@ -208,6 +208,10 @@ subtest 'custom_cover_image_url' => sub {
 
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%024$a%.png' );
     is( $biblio->custom_cover_image_url, "https://my_url/$marc_024a.png" );
+
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%normalized_isbn%.png' );
+    my $normalized_isbn = C4::Koha::GetNormalizedISBN($isbn);
+    is( $biblio->custom_cover_image_url, "https://my_url/$normalized_isbn.png" );
 };
 
 $schema->storage->txn_rollback;
