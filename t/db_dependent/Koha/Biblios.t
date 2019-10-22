@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 6;
 use Test::Exception;
+use MARC::Field;
 
 use C4::Items;
 use C4::Biblio;
@@ -187,18 +188,26 @@ subtest 'can_be_transferred' => sub {
 };
 
 subtest 'custom_cover_image_url' => sub {
-    plan tests => 1;
+    plan tests => 2;
+
     t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%isbn%_%issn%.png' );
+
     my $isbn       = 'my_isbn';
     my $issn       = 'my_issn';
-    my $biblioitem = $builder->build_object(
-        {
-            class => 'Koha::Biblioitems',
-            value => { isbn => $isbn, issn => $issn }
-        }
-    );
-    my $biblio = Koha::Biblios->find( $biblioitem->biblionumber );
+    my $marc_record = MARC::Record->new;
+    my ( $biblionumber, undef ) = C4::Biblio::AddBiblio($marc_record, '');
+
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    my $biblioitem = $biblio->biblioitem->set(
+        { isbn => $isbn, issn => $issn });
     is( $biblio->custom_cover_image_url, "https://my_url/${isbn}_${issn}.png" );
+
+    my $marc_024a = '710347104926';
+    $marc_record->append_fields( MARC::Field->new( '024', '', '', a => $marc_024a ) );
+    C4::Biblio::ModBiblio( $marc_record, $biblio->biblionumber );
+
+    t::lib::Mocks::mock_preference( 'CustomCoverImagesURL', 'https://my_url/%024$a%.png' );
+    is( $biblio->custom_cover_image_url, "https://my_url/$marc_024a.png" );
 };
 
 $schema->storage->txn_rollback;

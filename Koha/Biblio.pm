@@ -679,6 +679,16 @@ sub custom_cover_image_url {
         my $issn = $self->biblioitem->issn;
         $url =~ s|%issn%|$issn|g;
     }
+
+    my $re = qr|%(?<field>\d{3})\$(?<subfield>.)%|;
+    if ( $url =~ $re ) {
+        my $field = $+{field};
+        my $subfield = $+{subfield};
+        my $marc_record = $self->metadata->record;
+        my $value = $marc_record->subfield($field, $subfield);
+        $url =~ s|$re|$value|;
+    }
+
     return $url;
 }
 
