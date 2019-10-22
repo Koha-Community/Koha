@@ -25,6 +25,7 @@ use Koha::BiblioFrameworks;
 use Koha::Biblioitems;
 use Koha::Items;
 use Koha::ItemTypes;
+use C4::Biblio;
 
 {
     my $items = Koha::Items->search({ -or => { homebranch => undef, holdingbranch => undef }});
@@ -184,6 +185,20 @@ use Koha::ItemTypes;
                 );
             }
         }
+    }
+}
+
+{
+    my $biblios = Koha::Biblios->search({ -or => { title => undef, title => '' }});
+    if ( $biblios->count ) {
+        my ( $title_tag, $title_subtag ) = C4::Biblio::GetMarcFromKohaField( 'biblio.title' );
+        my $title_field = $title_tag // '';
+        $title_field .= '$'.$title_subtag if $title_subtag;
+        new_section("Biblio without title $title_field");
+        while ( my $biblio = $biblios->next ) {
+            new_item(sprintf "Biblio with biblionumber=%s does not have title defined", $biblio->biblionumber);
+        }
+        new_hint("Edit these biblio records to defined a title");
     }
 }
 
