@@ -246,25 +246,12 @@ elsif ($op eq "update_status" ) {
         $suggestion->{suggestionid} = $suggestionid;
         &ModSuggestion($suggestion);
     }
-    my $params = '';
-    foreach my $key (
-        qw(
-        displayby branchcode title author isbn publishercode copyrightdate
-        collectiontitle suggestedby suggesteddate_from suggesteddate_to
-        manageddate_from manageddate_to accepteddate_from
-        accepteddate_to budgetid
-        )
-      )
-    {
-        $params .= $key . '=' . uri_escape($input->param($key)) . '&'
-          if defined($input->param($key));
-    }
-    print $input->redirect("/cgi-bin/koha/suggestion/suggestion.pl?$params");
+    redirect_with_params($input);
 }elsif ($op eq "delete" ) {
     foreach my $delete_field (@editsuggestions) {
         &DelSuggestion( $borrowernumber, $delete_field,'intranet' );
     }
-    $op = 'else';
+    redirect_with_params($input);
 }
 elsif ( $op eq 'update_itemtype' ) {
     my $new_itemtype = $input->param('suggestion_itemtype');
@@ -272,6 +259,7 @@ elsif ( $op eq 'update_itemtype' ) {
         next unless $suggestionid;
         &ModSuggestion({ suggestionid => $suggestionid, itemtype => $new_itemtype });
     }
+    redirect_with_params($input);
 }
 elsif ( $op eq 'show' ) {
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
@@ -428,3 +416,21 @@ $template->param(
     SuggestionStatuses       => GetAuthorisedValues('SUGGEST_STATUS'),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
+
+sub redirect_with_params {
+    my ( $input ) = @_;
+    my $params = '';
+    foreach my $key (
+        qw(
+        displayby branchcode title author isbn publishercode copyrightdate
+        collectiontitle suggestedby suggesteddate_from suggesteddate_to
+        manageddate_from manageddate_to accepteddate_from
+        accepteddate_to budgetid
+        )
+      )
+    {
+        $params .= $key . '=' . uri_escape(scalar $input->param($key)) . '&'
+          if defined($input->param($key));
+    }
+    print $input->redirect("/cgi-bin/koha/suggestion/suggestion.pl?$params");
+}
