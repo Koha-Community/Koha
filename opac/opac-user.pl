@@ -33,6 +33,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Letters;
 use Koha::Account::Lines;
+use Koha::Biblios;
 use Koha::Libraries;
 use Koha::DateUtils;
 use Koha::Holds;
@@ -248,6 +249,8 @@ if ( $pending_checkouts->count ) { # Useless test
             $issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
             $issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
         }
+
+        $issue->{biblio_object} = Koha::Biblios->find($issue->{biblionumber});
         push @issuedat, $issue;
         $count++;
 
@@ -309,7 +312,9 @@ if (C4::Context->preference('BakerTaylorEnabled')) {
 if (C4::Context->preference("OPACAmazonCoverImages") or 
     C4::Context->preference("GoogleJackets") or
     C4::Context->preference("BakerTaylorEnabled") or
-    C4::Context->preference("SyndeticsCoverImages")) {
+    C4::Context->preference("SyndeticsCoverImages") or
+    ( C4::Context->preference('OPACCustomCoverImages') and C4::Context->preference('CustomCoverImagesURL') )
+) {
         $template->param(JacketImages=>1);
 }
 

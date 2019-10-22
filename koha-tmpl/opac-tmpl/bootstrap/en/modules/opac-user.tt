@@ -242,6 +242,10 @@
                                                         [% END %]
                                                     [% END %]
 
+                                                    [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+                                                        <a href="[% ISSUE.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% ISSUE.biblio_object.custom_cover_image_url | url %]" /></a>
+                                                    [% END %]
+
                                                     [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                                         <img src="https://secure.syndetics.com/index.aspx?isbn=[% ISSUE.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% ISSUE.normalized_upc | html %]&amp;oclc=[% ISSUE.normalized_oclc | html %]" alt="" class="item-thumbnail" />
                                                     [% END %]
