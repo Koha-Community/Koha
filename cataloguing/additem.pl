@@ -577,7 +577,17 @@ if ($op eq "additem") {
 
 		    # Putting it into the record
 		    if ($barcodevalue) {
-			$record->field($tagfield)->update($tagsubfield => $barcodevalue);
+                if ( C4::Context->preference("autoBarcode") eq 'hbyymmincr' && $i > 0 ) { # The first copy already contains the homebranch prefix
+                    # This is terribly hacky but the easiest way to fix the way hbyymmincr is working
+                    # Contrary to what one might think, the barcode plugin does not prefix the returned string with the homebranch
+                    # For a single item, it is handled with some JS code (see cataloguing/value_builder/barcode.pl)
+                    # But when adding multiple copies we need to prefix it here,
+                    # so we retrieve the homebranch from the item and prefix the barcode with it.
+                    my ($hb_field, $hb_subfield) = GetMarcFromKohaField( "items.homebranch" );
+                    my $homebranch = $record->subfield($hb_field, $hb_subfield);
+                    $barcodevalue = $homebranch . $barcodevalue;
+                }
+                $record->field($tagfield)->update($tagsubfield => $barcodevalue);
 		    }
 
 		    # Checking if the barcode already exists
