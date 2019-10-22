@@ -68,7 +68,6 @@
 
                     [% PROCESS 'account-table.inc' ACCOUNT_LINES = ACCOUNT_LINES, ENABLE_OPAC_PAYMENTS = ENABLE_OPAC_PAYMENTS, plugins = plugins %]
 
-
                 </div> <!-- / #useraccount -->
             </div> <!-- / .span10 -->
         </div> <!-- / .row-fluid -->
@@ -82,13 +81,37 @@
 $( document ).ready(function() {
 
     var MSG_MIN_THRESHOLD = _("Minimum amount needed by this service is %s");
+    var txtActivefilter = _("Filter paid transactions");
+    var txtInactivefilter = _("Show all transactions");
 
-    $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+    var fines_table = $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
         "columnDefs": [
              { "type": "title-string", "targets" : [ "title-string" ] }
          ],
-         "order": [[ 0, "desc" ]]
+         [% IF ENABLE_OPAC_PAYMENTS %]
+         "order": [[ 1, "desc" ]],
+         [% ELSE %]
+         "order": [[ 0, "desc" ]],
+         [% END %]
+         "dom": '<"#filter_p">',
     } ));
+
+    $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
+    $('#filter_paid').click(function(e) {
+        e.preventDefault();
+        if ($(this).hasClass('filtered')) {
+            var filteredValue = '';
+            $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
+        } else { //Not filtered. Let's do it!
+            var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
+            $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+        }
+        fines_table.fnFilter(filteredValue, -1, true, false);
+        $(this).toggleClass('filtered');
+    });
+
+    //Start filtered
+    $('#filter_paid').click();
 
     $(".paypal").on("click", function() {
         window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700');
