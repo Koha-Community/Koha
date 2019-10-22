@@ -61,6 +61,10 @@
                                         <span class="no-image">No cover image available</span>
                                     [% END %]
                                 [% END %]
+                                [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+                                    <img alt="Cover image" src="[% item.biblio_object.custom_cover_image_url | url %]" />
+                                [% END %]
+
                             </a>
                         </td>
                     [% END %]
