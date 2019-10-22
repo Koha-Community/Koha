@@ -18077,7 +18077,8 @@ VALUES
 
 $DBversion = '18.12.00.051';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "UPDATE borrowers SET login_attempts = ? WHERE login_attempts > ?", undef, C4::Context->preference('FailedLoginAttempts'), C4::Context->preference('FailedLoginAttempts') );
+    my $failed_attempts = C4::Context->preference('FailedLoginAttempts');
+    $dbh->do( "UPDATE borrowers SET login_attempts = ? WHERE login_attempts > ?", undef, $failed_attempts, $failed_attempts ) if $failed_attempts && $failed_attempts > 0;
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 21336 - Reset login_attempts)\n";
 }
