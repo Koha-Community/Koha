@@ -642,7 +642,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UploadPurgeTemporaryFilesDays','',NULL,'If not empty, number of days used when automatically deleting temporary uploads','integer'),
 ('uppercasesurnames','0',NULL,'If ON, surnames are converted to upper case in patron entry form','YesNo'),
 ('URLLinkText','',NULL,'Text to display as the link anchor in the OPAC','free'),
-('UsageStats', 0, NULL, 'Share anonymous usage data on the Hea Koha community website.', 'YesNo'),
+('UsageStats', 2, NULL, 'Share anonymous usage data on the Hea Koha community website.', 'YesNo'),
 ('UsageStatsCountry', '', NULL, 'The country where your library is located, to be shown on the Hea Koha community website', 'Choice'),
 ('UsageStatsID', '', NULL, 'This preference is part of Koha but it should not be deleted or updated manually.',  'Free'),
 ('UsageStatsGeolocation', '', NULL, 'Geolocation of the main library.', 'Free'),

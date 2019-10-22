@@ -184,10 +184,11 @@ Administration:
         -
             - "Share anonymous Koha usage data with the Koha community: "
             - pref: UsageStats
-              default: 0
+              default: 2
               choices:
                   yes: "Yes"
                   no: "No"
+                  2: "No, let me think about it"
             - ". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
             - "<br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
             - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."

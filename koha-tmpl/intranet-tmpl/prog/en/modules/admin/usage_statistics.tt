@@ -57,12 +57,18 @@
                         <li>
                             <label for="UsageStats">Share my Koha usage statistics: </label>
                             <select name="UsageStats" id="UsageStats">
-                            [% IF Koha.Preference('UsageStats') %]
+                            [% IF Koha.Preference('UsageStats') == 1 %]
+                                <option value="2">Undecided</option>
                                 <option value="1" selected="selected">Yes</option>
                                 <option value="0">No</option>
-                            [% ELSE %]
+                            [% ELSIF Koha.Preference('UsageStats') == 0 %]
+                                <option value="2">Undecided</option>
                                 <option value="1">Yes</option>
                                 <option value="0" selected="selected">No</option>
+                            [% ELSE %]
+                                <option value="2" selected="selected">Undecided</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
                             [% END %]
                             </select>
                         </li>
