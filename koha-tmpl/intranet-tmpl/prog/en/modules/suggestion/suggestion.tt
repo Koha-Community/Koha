@@ -498,7 +498,7 @@
 <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#tab_[% loop.count %]">
 
 [% IF ( suggestion.suggestions_loop ) %]
-<p><a class="checkall" href="#">Check all</a> | <a name="uncheckall" href="#">Uncheck all</a></p>
+<p><a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a></p>
     <table id="table_[% loop.count %]" class="sorted">
         <thead>
             <tr>
@@ -856,11 +856,13 @@
                 [% END %]
 
                 $(".checkall").click(function(e){
-                    $(this).parent(form).checkCheckboxes();
+                    e.preventDefault();
+                    $(this).parents('form').checkCheckboxes();
                     return false;
                 });
                 $(".uncheckall").click(function(e){
-                    $(this).parent(form).unCheckCheckboxes();
+                    e.preventDefault();
+                    $(this).parents('form').unCheckCheckboxes();
                     return false;
                 });
                 $(".other_reason").hide();
