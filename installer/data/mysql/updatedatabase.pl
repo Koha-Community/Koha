@@ -17542,6 +17542,17 @@ if( CheckVersion( $DBversion ) ) {
     }
 
     if ( column_exists( 'issuingrules', 'maxissueqty' ) ) {
+        # Cleaning invalid rules before, to avoid FK contraints to fail
+        $dbh->do(q|
+            DELETE FROM issuingrules WHERE categorycode != '*' AND categorycode NOT IN (SELECT categorycode FROM categories);
+        |);
+        $dbh->do(q|
+            DELETE FROM issuingrules WHERE branchcode != '*' AND branchcode NOT IN (SELECT branchcode FROM branches);
+        |);
+        $dbh->do(q|
+            DELETE FROM issuingrules WHERE itemtype != '*' AND itemtype NOT IN (SELECT itemtype FROM itemtypes);
+        |);
+
         $dbh->do("
             INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
             SELECT IF(categorycode='*', NULL, categorycode),
