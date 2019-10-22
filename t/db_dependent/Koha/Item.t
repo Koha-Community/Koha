@@ -74,7 +74,6 @@ subtest 'has_pending_hold() tests' => sub {
     my $item  = $builder->build_sample_item({ itemlost => 0 });
     my $itemnumber = $item->itemnumber;
 
-    # disable AllowItemsOnHoldCheckout as it ignores pending holds
     $dbh->do("INSERT INTO tmp_holdsqueue (surname,borrowernumber,itemnumber) VALUES ('Clamp',42,$itemnumber)");
     ok( $item->has_pending_hold, "Yes, we have a pending hold");
     $dbh->do("DELETE FROM tmp_holdsqueue WHERE itemnumber=$itemnumber");
