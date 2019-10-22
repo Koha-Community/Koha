@@ -19692,6 +19692,21 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22880: Allow granular control of socialnetworks preference)\n";
 }
 
+$DBversion = '19.06.00.042';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences
+            ( variable, value, options, explanation, type )
+        VALUES
+            ('CustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed in the staff client. CustomCoverImagesURL must be defined.','YesNo'),
+            ('OPACCustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed at the OPAC. CustomCoverImagesURL must be defined.','YesNo'),
+            ('CustomCoverImagesURL','',NULL,'Define an URL serving book cover images, using the following patterns: {issn}, {isbn}, {normalized_isbn}, {field$subfield} (use it with CustomCoverImages and/or OPACCustomCoverImages)','free')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22445 - Add new pref *CustomCoverImages*)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
