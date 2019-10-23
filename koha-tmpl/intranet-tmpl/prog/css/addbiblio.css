@@ -15,6 +15,49 @@ div#toolbar {
     margin: .3em 0;
 }
 
+ul.sortable_field, ul.sortable_subfield {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+ul li.tag, ul li.tag li.subfield_line {
+    list-style-type: none;
+    position: relative;
+    padding-left: 30px;
+}
+
+ul li.tag:before, ul li.tag li.subfield_line:before {
+    position: absolute;
+    font-family: 'FontAwesome';
+    font-size: .8em;
+    top: 0;
+    left: 10px;
+    content: "\f047";
+}
+
+ul li.tag:before {
+    padding-top: 1.7em;
+}
+
+li.ui-sortable-helper {
+    background-color: #e0e0e0;
+    max-height: 150px;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+li.ui-sortable-helper ul li {
+	display: none !important;
+}
+
+.sortable_subfield .ui-sortable-helper input.flat {
+	background-color: transparent;
+}
+
+ul li.tag li.subfield_line.ui-sortable-helper::before {
+    top: 5px;
+}
+
 .buttonPlus {
 	font-weight : bold;
 	text-decoration : none;
@@ -44,14 +87,14 @@ a.expandfield {
     padding: .7em 0;
 }
 
-div.subfield_line {
+li.subfield_line {
     padding-bottom: .3em;
     float: left;
     clear: left;
     width: 100%;
 }
 
-div.subfield_line label {
+li.subfield_line label {
     font-size:89%;
     float: left;
 	 padding-right : .4em;
@@ -266,7 +309,7 @@ tbody tr.active td {
 }
 
 @media (min-width: 768px) {
-    div.subfield_line label {
+    li.subfield_line label {
         width: 20em;
     }
 
@@ -280,7 +323,7 @@ tbody tr.active td {
 }
 
 @media (min-width: 1200px) {
-    div.subfield_line label {
+    li.subfield_line label {
         width: 25em;
     }
 
