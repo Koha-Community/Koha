@@ -511,7 +511,7 @@ sub build_tabs {
     for ( my $tabloop = 0 ; $tabloop <= $max_num_tab ; $tabloop++ ) {
         my @loop_data = (); #innerloop in the template.
         my $i = 0;
-        foreach my $tag (@tab_data) {
+        foreach my $tag (sort @tab_data) {
             $i++;
             next if ! $tag;
             my ($indicator1, $indicator2);

@@ -23,9 +23,11 @@
             $("#toolbar").hide();
         [% END %]
 
-        $('#addbibliotabs').tabs().bind('show.ui-tabs', function(e, ui) {
+        var $tabs = $('#addbibliotabs').tabs().bind('show.ui-tabs', function(e, ui) {
             $("#"+ui.panel.id+" input:eq(0)").focus();
         });
+        $( "ul.sortable_field", $tabs ).sortable();
+        $( "ul.sortable_subfield", $tabs ).sortable();
 
         [% IF tab %]
             link = $("a[href='#[% tab | html %]']");
@@ -658,9 +660,17 @@
                             [% IF ( BIG_LOOP.size > 1 ) %]
                                 <h3>Section [% BIG_LOO.number | html %]</h3>
                             [% END %]
+                            [% previous = "" %]
                             [% FOREACH innerloo IN BIG_LOO.innerloop %]
                                 [% IF ( innerloo.tag ) %]
-                                    <div class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                [% IF innerloo.tag != previous %]
+                                    [% IF previous != "" %]
+                                        </ul>
+                                    [% END %]
+                                    [% previous = innerloo.tag %]
+                                    <ul class="sortable_field">
+                                [% END %]
+                                    <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
                                         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
                                             [% IF advancedMARCEditor %]
                                                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
@@ -719,9 +729,10 @@
                                             </span> <!-- /.field_controls -->
                                         </div> <!-- /div.tag_title -->
 
+                                        <ul class="sortable_subfield">
                                         [% FOREACH subfield_loo IN innerloo.subfield_loop %]
                                             <!--  One line on the marc editor -->
-                                            <div class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
+                                            <li class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
                                                 [% UNLESS advancedMARCEditor %]
                                                     [% IF ( subfield_loo.fixedfield ) %]
                                                         <label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
@@ -731,11 +742,6 @@
                                                 [% END %]
 
                                                     <span class="subfieldcode">
-                                                        [% IF ( subfield_loo.fixedfield ) %]
-                                                            <img class="buttonUp" style="display:none;" src="[% interface | html %]/[% theme | html %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]')" alt="Move Up" title="Move Up" />
-                                                        [% ELSE %]
-                                                            <img class="buttonUp" src="[% interface | html %]/[% theme | html %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]')" alt="Move Up" title="Move Up" />
-                                                        [% END %]
                                                             <input type="text"
                                                                 title="[% subfield_loo.marc_lib | $raw %]"
                                                                 style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
@@ -807,12 +813,14 @@
                                                         </a>
                                                     [% END %]
                                                 </span>
-                                            </div> <!-- /.subfield_line -->
+                                            </li> <!-- /.subfield_line -->
                                             <!-- End of the line -->
                                         [% END # /FOREACH subfield_loop %]
-                                    </div> <!-- /.tag.clearfix -->
+                                        </ul> <!--  /.sortable_subfield -->
+                                    </li> <!-- /.tag.clearfix -->
                                 [% END %]<!-- if innerloo.tag -->
                             [% END # /FOREACH BIG_LOO.innerloop %]
+                            </ul> <!--  /.sortable_field -->
                         </div> <!-- /#tabXXX -->
                     [% END # /FOREACH BIG_LOOP %]
                 </div><!-- /#addbibliotabs -->

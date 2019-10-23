@@ -46,7 +46,7 @@
             } catch(e) {
                 return;
             }
-            var field_start = whichfield.parentNode.parentNode;
+            var field_start = whichfield.parentNode.parentNode.parentNode;
 
             // Sets the good number of form fields for the specified subfield
             // Returns false if the cloning failed
@@ -58,7 +58,7 @@
 
                 // Find the subfield we want to clone
                 var re = new RegExp('^subfield' + subfield_name,'g');
-                var subfields = $(field_start).children('div').filter( function() {
+                var subfields = $(field_start).children('ul').children('li').filter( function() {
                     return this.id.match(re);
                 });
 
@@ -89,7 +89,7 @@
 
                 // Find the subfields where we will add the new values
                 var re = new RegExp('^subfield' + subfield_name,'g');
-                var subfields = $(field_start).children('div').filter( function() {
+                var subfields = $(field_start).children('ul').children('li').filter( function() {
                     return this.id.match(re);
                 });
 
