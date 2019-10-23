@@ -159,7 +159,7 @@ if ( CheckVersion($DBversion) ) {
           FROM
             accountlines
           WHERE
-            amount > 0
+            amount >= 0
         }
     );
 
