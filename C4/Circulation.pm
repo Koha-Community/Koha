@@ -1530,6 +1530,9 @@ sub AddIssue {
                 UpdateTotalIssues( $item_object->biblionumber, 1 );
             }
 
+            # Record if item was lost
+            my $was_lost = $item_object->itemlost;
+
             $item_object->issues( ( $item_object->issues || 0 ) + 1);
             $item_object->holdingbranch(C4::Context->userenv->{'branch'});
             $item_object->itemlost(0);
@@ -1537,6 +1540,52 @@ sub AddIssue {
             $item_object->datelastborrowed( dt_from_string()->ymd() );
             $item_object->datelastseen( dt_from_string()->ymd() );
             $item_object->store({log_action => 0});
+
+            # If the item was lost, it has now been found, restore/charge the overdue if necessary
+            if ($was_lost) {
+                my $lostreturn_policy =
+                  Koha::CirculationRules->get_lostreturn_policy(
+                    {
+                        return_branch => C4::Context->userenv->{branch},
+                        item          => $item_object
+                    }
+                  );
+
+                if ($lostreturn_policy) {
+                    if ( $lostreturn_policy eq 'charge' ) {
+                        $actualissue //= Koha::Old::Checkouts->search(
+                            { itemnumber => $item_unblessed->{itemnumber} },
+                            {
+                                order_by => { '-desc' => 'returndate' },
+                                rows     => 1
+                            }
+                        )->single;
+                        unless ( exists( $borrower->{branchcode} ) ) {
+                            my $patron = $actualissue->patron;
+                            $borrower = $patron->unblessed;
+                        }
+                        _CalculateAndUpdateFine(
+                            {
+                                issue       => $actualissue,
+                                item        => $item_unblessed,
+                                borrower    => $borrower,
+                                return_date => $issuedate
+                            }
+                        );
+                        _FixOverduesOnReturn( $borrower->{borrowernumber},
+                            $item_object->itemnumber, undef, 'RENEWED' );
+                    }
+                    elsif ( $lostreturn_policy eq 'restore' ) {
+                        _RestoreOverdueForLostAndFound(
+                            $item_object->itemnumber );
+                    }
+
+                    if ( C4::Context->preference('AccountAutoReconcile') ) {
+                        $account->reconcile_balance;
+                    }
+                }
+
+            }
 
             # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $borrower->{'borrowernumber'} );
@@ -2048,6 +2097,42 @@ sub AddReturn {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
             $messages->{'LostItemFeeRefunded'} = $updated_item->{_refunded};
+
+            my $lostreturn_policy =
+              Koha::CirculationRules->get_lostreturn_policy(
+                {
+                    return_branch => C4::Context->userenv->{branch},
+                    item          => $updated_item
+                }
+              );
+
+            if ($lostreturn_policy) {
+                if ( $lostreturn_policy eq 'charge' ) {
+                    $issue //= Koha::Old::Checkouts->search(
+                        { itemnumber => $item->itemnumber },
+                        { order_by   => { '-desc' => 'returndate' }, rows => 1 }
+                    )->single;
+                    unless (exists($patron_unblessed->{branchcode})) {
+                        my $patron = $issue->patron;
+                        $patron_unblessed = $patron->unblessed;
+                    }
+                    _CalculateAndUpdateFine(
+                        {
+                            issue       => $issue,
+                            item        => $item->unblessed,
+                            borrower    => $patron_unblessed,
+                            return_date => $return_date
+                        }
+                    );
+                    _FixOverduesOnReturn( $patron_unblessed->{borrowernumber},
+                        $item->itemnumber, undef, 'RETURNED' );
+                    $messages->{'LostItemFeeCharged'} = 1;
+                }
+                elsif ( $lostreturn_policy eq 'restore' ) {
+                    _RestoreOverdueForLostAndFound( $item->itemnumber );
+                    $messages->{'LostItemFeeRestored'} = 1;
+                }
+            }
         }
     }
 
@@ -2477,6 +2562,7 @@ sub _FixOverduesOnReturn {
             my $amountoutstanding = $accountline->amountoutstanding;
             if ( $accountline->amount == 0 && $payments->count == 0 ) {
                 $accountline->delete;
+                return 0; # no warning, we've just removed a zero value fine (backdated return)
             } elsif ($exemptfine && ($amountoutstanding != 0)) {
                 my $account = Koha::Account->new({patron_id => $borrowernumber});
                 my $credit = $account->add_credit(
@@ -2495,14 +2581,70 @@ sub _FixOverduesOnReturn {
                 if (C4::Context->preference("FinesLog")) {
                     &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
                 }
-
-                $accountline->status('FORGIVEN');
-                $accountline->store();
-            } else {
-                $accountline->status($status);
-                $accountline->store();
-
             }
+
+            $accountline->status($status);
+            return $accountline->store();
+        }
+    );
+
+    return $result;
+}
+
+=head2 _RestoreOverdueForLostAndFound
+
+   &_RestoreOverdueForLostAndFound( $itemnumber );
+
+C<$itemnumber> itemnumber
+
+Internal function
+
+=cut
+
+sub _RestoreOverdueForLostAndFound {
+    my ( $item ) = @_;
+
+    unless( $item ) {
+        warn "_RestoreOverdueForLostAndFound() not supplied valid itemnumber";
+        return;
+    }
+
+    my $schema = Koha::Database->schema;
+
+    my $result = $schema->txn_do(
+        sub {
+            # check for lost overdue fine
+            my $accountlines = Koha::Account::Lines->search(
+                {
+                    itemnumber      => $item,
+                    debit_type_code => 'OVERDUE',
+                    status          => 'LOST'
+                },
+                {
+                    order_by => { '-desc' => 'date' },
+                    rows     => 1
+                }
+            );
+            return 0 unless $accountlines->count; # no warning, there's just nothing to fix
+
+            # Update status of fine
+            my $overdue = $accountlines->next;
+            $overdue->status('RETURNED')->store();
+
+            # Find related forgive credit
+            my $refunds = $overdue->credits(
+                {
+                    credit_type_code => 'FORGIVEN',
+                    itemnumber       => $item,
+                    status           => [ { '!=' => 'VOID' }, undef ]
+                },
+                { order_by => { '-desc' => 'date' }, rows => 1 }
+            );
+            return 0 unless $refunds->count; # no warning, there's just nothing to fix
+
+            # Revert the forgive credit
+            my $refund = $refunds->next;
+            return $refund->void();
         }
     );
 

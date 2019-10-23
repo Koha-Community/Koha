@@ -46,7 +46,7 @@ Any attempt to set a rule with a nonsensical scope (for instance, setting the C<
 =cut
 
 our $RULE_KINDS = {
-    refund => {
+    lostreturn => {
         scope => [ 'branchcode' ],
     },
 
@@ -433,7 +433,18 @@ sub get_onshelfholds_policy {
 
 =head3 get_lostreturn_policy
 
-  my $refund = Koha::CirculationRules->get_lostreturn_policy( { return_branch => $return_branch, item => $item } );
+  my $lostrefund_policy = Koha::CirculationRules->get_lostreturn_policy( { return_branch => $return_branch, item => $item } );
+
+Return values are:
+
+=over 2
+
+=item 0 - Do not refund
+=item refund - Refund the lost item charge
+=item restore - Refund the lost item charge and restore the original overdue fine
+=item charge - Refund the lost item charge and charge a new overdue fine
+
+=back
 
 =cut
 
@@ -454,11 +465,11 @@ sub get_lostreturn_policy {
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
             branchcode => $branch,
-            rule_name  => 'refund',
+            rule_name  => 'lostreturn',
         }
     );
 
-    return $rule ? $rule->rule_value : 1;
+    return $rule ? $rule->rule_value : 'refund';
 }
 
 =head3 article_requestable_rules

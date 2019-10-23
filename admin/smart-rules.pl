@@ -517,16 +517,16 @@ elsif ($op eq "add-branch-item") {
 }
 elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
 
-    my $refund = $input->param('refund');
+    my $lostreturn = $input->param('lostreturn');
 
-    if ( $refund eq '*' ) {
+    if ( $lostreturn eq '*' ) {
         if ( $branch ne '*' ) {
-            # only do something for $refund eq '*' if branch-specific
+            # only do something for $lostreturn eq '*' if branch-specific
             Koha::CirculationRules->set_rules(
                 {
                     branchcode   => $branch,
                     rules        => {
-                        refund => undef
+                        lostreturn => undef
                     }
                 }
             );
@@ -536,18 +536,18 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
             {
                 branchcode   => $branch,
                 rules        => {
-                    refund => $refund
+                    lostreturn => $lostreturn
                 }
             }
         );
     }
 }
 
-my $refundLostItemFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'refund' });
-my $defaultLostItemFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'refund' });
+my $refundLostItemFeeRule = Koha::CirculationRules->find({ branchcode => ($branch eq '*') ? undef : $branch, rule_name => 'lostreturn' });
+my $defaultLostItemFeeRule = Koha::CirculationRules->find({ branchcode => undef, rule_name => 'lostreturn' });
 $template->param(
     refundLostItemFeeRule => $refundLostItemFeeRule,
-    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 1
+    defaultRefundRule     => $defaultLostItemFeeRule ? $defaultLostItemFeeRule->rule_value : 'refund'
 );
 
 my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['description'] });
