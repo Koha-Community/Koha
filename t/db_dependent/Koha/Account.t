@@ -80,9 +80,32 @@ subtest 'outstanding_debits() tests' => sub {
         $i++;
     }
     my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -2, interface => 'commandline' })->store;
-    my $just_one = Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 3, amountoutstanding =>  3, interface => 'commandline' })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -6, amountoutstanding => -6, interface => 'commandline' })->store;
+    Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron_2->id,
+            amountoutstanding => -2,
+            interface         => 'commandline',
+            accounttype       => 'Pay'
+        }
+    )->store;
+    my $just_one = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron_2->id,
+            amount            => 3,
+            amountoutstanding => 3,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE'
+        }
+    )->store;
+    Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron_2->id,
+            amount            => -6,
+            amountoutstanding => -6,
+            interface         => 'commandline',
+            accounttype       => 'Pay'
+        }
+    )->store;
     $lines = $patron_2->account->outstanding_debits();
     is( $lines->total_outstanding, 3, "Total if some outstanding debits and some credits is only debits" );
     is( $lines->count, 1, "With 1 outstanding debits, we get back a Lines object with 1 lines" );
@@ -105,7 +128,15 @@ subtest 'outstanding_debits() tests' => sub {
     is( $lines->count, 0, "With no outstanding debits, we get back a Lines object with 0 lines" );
 
     # create a pathological credit with amountoutstanding > 0 (BZ 14591)
-    Koha::Account::Line->new({ borrowernumber => $patron_4->id, amount => -3, amountoutstanding => 3, interface => 'commandline' })->store();
+    Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron_4->id,
+            amount            => -3,
+            amountoutstanding => 3,
+            interface         => 'commandline',
+            accounttype       => 'Pay'
+        }
+    )->store();
     $lines = $account_4->outstanding_debits();
     is( $lines->count, 0, 'No credits are confused with debits because of the amountoutstanding value' );
 
@@ -149,7 +180,15 @@ subtest 'outstanding_credits() tests' => sub {
     is( $lines->count, 0, "With no outstanding credits, we get back a Lines object with 0 lines" );
 
     # create a pathological debit with amountoutstanding < 0 (BZ 14591)
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 2, amountoutstanding => -3, interface => 'commandline' })->store();
+    Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron_2->id,
+            amount            => 2,
+            amountoutstanding => -3,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE'
+        }
+    )->store();
     $lines = $account->outstanding_credits();
     is( $lines->count, 0, 'No debits are confused with credits because of the amountoutstanding value' );
 
@@ -447,8 +486,24 @@ subtest 'reconcile_balance' => sub {
         $account->add_debit({ amount => 4, interface => 'commandline', type => 'OVERDUE' });
 
         # Paid Off
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
+        Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                amount            => 1,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'OVERDUE'
+            }
+        )->store;
+        Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                amount            => 1,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'OVERDUE'
+            }
+        )->store;
 
         is( $account->balance(), -5, "Account balance is -5" );
         is( $account->outstanding_debits->total_outstanding, 10, 'Outstanding debits sum 10' );
@@ -485,8 +540,24 @@ subtest 'reconcile_balance' => sub {
         $account->add_debit({ amount => 4, interface => 'commandline', type => 'OVERDUE' });
 
         # Paid Off
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
+        Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                amount            => 1,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'OVERDUE'
+            }
+        )->store;
+        Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                amount            => 1,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'OVERDUE'
+            }
+        )->store;
 
         is( $account->balance(), 0, "Account balance is 0" );
         is( $account->outstanding_debits->total_outstanding, 10, 'Outstanding debits sum 10' );
@@ -524,8 +595,24 @@ subtest 'reconcile_balance' => sub {
         $account->add_debit({ amount => 5, interface => 'commandline', type => 'OVERDUE' });
 
         # Paid Off
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
+        Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                amount            => 1,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'OVERDUE'
+            }
+        )->store;
+        Koha::Account::Line->new(
+            {
+                borrowernumber    => $patron->id,
+                amount            => 1,
+                amountoutstanding => 0,
+                interface         => 'commandline',
+                debit_type_code   => 'OVERDUE'
+            }
+        )->store;
 
         is( $account->balance(), 5, "Account balance is 5" );
         is( $account->outstanding_debits->total_outstanding, 15, 'Outstanding debits sum 15' );
@@ -814,7 +901,8 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
             date              => '1900-01-01',
             amount            => "-0.500000",
             amountoutstanding => "-0.500000",
-            interface         => 'commandline'
+            interface         => 'commandline',
+            accounttype       => 'Pay'
         }
     )->store();
     my $debits = $account->outstanding_debits;
@@ -832,7 +920,8 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
             date              => '1900-01-01',
             amount            => "-0.500000",
             amountoutstanding => "-0.500000",
-            interface         => 'commandline'
+            interface         => 'commandline',
+            accounttype       => 'Pay'
         }
     )->store();
     $debits = $account->outstanding_debits;

@@ -539,8 +539,24 @@ subtest "void() tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 10, amountoutstanding => 10, interface => 'commandline' })->store();
-    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 20, amountoutstanding => 20, interface => 'commandline' })->store();
+    my $line1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => 10,
+            amountoutstanding => 10,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE'
+        }
+    )->store();
+    my $line2 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => 20,
+            amountoutstanding => 20,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE'
+        }
+    )->store();
 
     is( $account->balance(), 30, "Account balance is 30" );
     is( $line1->amountoutstanding, 10, 'First fee has amount outstanding of 10' );
