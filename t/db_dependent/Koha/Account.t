@@ -32,6 +32,7 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
+$schema->storage->dbh->{PrintError} = 0;
 my $builder = t::lib::TestBuilder->new;
 C4::Context->interface('commandline');
 
