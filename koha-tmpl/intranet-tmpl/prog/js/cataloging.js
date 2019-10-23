@@ -56,20 +56,20 @@ function openAuth(tagsubfieldid,authtype,source) {
 }
 
 function ExpandField(index) {
-    var original = document.getElementById(index); //original <div>
-    var divs = original.getElementsByTagName('div');
-    for(var i=0,divslen = divs.length ; i<divslen ; i++){   // foreach div
-        if(divs[i].hasAttribute('id') == 0 ) {continue; } // div element is specific to Select2
-        if(divs[i].getAttribute('id').match(/^subfield/)){  // if it s a subfield
-            if (!divs[i].style.display) {
+    var original = document.getElementById(index); //original <li>
+    var lis = original.getElementsByTagName('li');
+    for(var i=0,lislen = lis.length ; i<lislen ; i++){   // foreach li
+        if(lis[i].hasAttribute('id') == 0 ) {continue; } // li element is specific to Select2
+        if(lis[i].getAttribute('id').match(/^subfield/)){  // if it s a subfield
+            if (!lis[i].style.display) {
                 // first time => show all subfields
-                divs[i].style.display = 'block';
-            } else if (divs[i].style.display == 'none') {
+                lis[i].style.display = 'block';
+            } else if (lis[i].style.display == 'none') {
                 // show
-                divs[i].style.display = 'block';
+                lis[i].style.display = 'block';
             } else {
                 // hide
-                divs[i].style.display = 'none';
+                lis[i].style.display = 'none';
             }
         }
     }
@@ -101,16 +101,16 @@ var Select2Utils = {
  * @param advancedMARCEditor '0' for false, '1' for true
  */
 function CloneField(index, hideMarc, advancedMARCEditor) {
-    var original = document.getElementById(index); //original <div>
+    var original = document.getElementById(index); //original <li>
     Select2Utils.removeSelect2(original);
 
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     var new_id  = original.getAttribute('id')+new_key;
 
-    clone.setAttribute('id',new_id); // setting a new id for the parent div
+    clone.setAttribute('id',new_id); // setting a new id for the parent li
 
-    var divs = clone.getElementsByTagName('div');
+    var divs = Array.from(clone.getElementsByTagName('li')).concat(Array.from(clone.getElementsByTagName('div')));
 
     // if hide_marc, indicators are hidden fields
     // setting a new name for the new indicator
@@ -120,10 +120,10 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
     }
 
     // settings all subfields
-    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
+    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div/li
         if(divs[i].getAttribute("id").match(/^subfield/)){  // if it s a subfield
 
-            // set the attribute for the new 'div' subfields
+            // set the attribute for the new 'li' subfields
             divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
 
             var inputs   = divs[i].getElementsByTagName('input');
@@ -162,7 +162,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 }
             }
             if( $(inputs[1]).hasClass('framework_plugin') ) {
-                var olddiv= original.getElementsByTagName('div')[i];
+                var olddiv= original.getElementsByTagName('li')[i];
                 var oldcontrol= olddiv.getElementsByTagName('input')[1];
                 AddEventHandlers( oldcontrol,inputs[1],id_input );
             }
@@ -171,12 +171,6 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 // when cloning a subfield, re set its label too.
                 var labels = divs[i].getElementsByTagName('label');
                 labels[0].setAttribute('for',id_input);
-            }
-
-            if(hideMarc == '0') {
-                // updating javascript parameters on button up
-                var imgs = divs[i].getElementsByTagName('img');
-                imgs[0].setAttribute('onclick',"upSubfield(\'"+divs[i].getAttribute('id')+"\');");
             }
 
             // setting its '+' and '-' buttons
@@ -209,7 +203,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                         // 2 possibilities :
                         try{
                             if( $(buttonDot).hasClass('framework_plugin') ) {
-                                var olddiv= original.getElementsByTagName('div')[i];
+                                var olddiv= original.getElementsByTagName('li')[i];
                                 var oldcontrol= olddiv.getElementsByTagName('a')[0];
                                 AddEventHandlers(oldcontrol,buttonDot,id_input);
                             } else {
@@ -235,10 +229,6 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                         }catch(e){}
                     }
                 }
-            }
-            if(hideMarc == '0') {
-                var buttonUp = divs[i].getElementsByTagName('img')[0];
-                buttonUp.setAttribute('onclick',"upSubfield('" + divs[i].getAttribute('id') + "')");
             }
 
         } else { // it's a indicator div
@@ -275,6 +265,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 
+    $("ul.sortable_subfield", clone).sortable();
+
     Select2Utils.initSelect2(original);
     Select2Utils.initSelect2(clone);
 }
@@ -290,7 +282,7 @@ function CloneSubfield(index, advancedMARCEditor){
     Select2Utils.removeSelect2(original);
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
-    // set the attribute for the new 'div' subfields
+    // set the attribute for the new 'li' subfields
     var inputs     = clone.getElementsByTagName('input');
     var selects    = clone.getElementsByTagName('select');
     var textareas  = clone.getElementsByTagName('textarea');
@@ -351,8 +343,6 @@ function CloneSubfield(index, advancedMARCEditor){
     clone.setAttribute('id',new_id);
 
     try {
-        var buttonUp = clone.getElementsByTagName('img')[0];
-        buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
         var anchors = clone.getElementsByTagName('a');
         if(anchors.length){
             for(var i = 0 ,lenanchors = anchors.length ; i < lenanchors ; i++){
@@ -500,7 +490,7 @@ function CloneItemSubfield(original){
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
 
-    // set the attribute for the new 'div' subfields
+    // set the attribute for the new 'li' subfields
     var inputs     = clone.getElementsByTagName('input');
     var selects    = clone.getElementsByTagName('select');
     var textareas  = clone.getElementsByTagName('textarea');

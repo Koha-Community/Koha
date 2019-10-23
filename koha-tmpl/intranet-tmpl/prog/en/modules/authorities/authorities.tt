@@ -12,7 +12,9 @@
     });
     var Sticky;
 	 $(document).ready(function() {
-        $('#authoritytabs').tabs();
+        var tabs = $('#authoritytabs').tabs();
+        $( "ul.sortable_field", tabs ).sortable();
+        $( "ul.sortable_subfield", tabs ).sortable();
         Sticky = $("#toolbar");
         Sticky.hcSticky({
             stickTo: ".main",
@@ -235,9 +237,17 @@ function confirmnotdup(redirect){
 [% FOREACH BIG_LOO IN BIG_LOOP %]
     <div id="tab[% BIG_LOO.number | html %]XX">
 
+    [% previous = "" %]
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
     [% IF ( innerloo.tag ) %]
-    <div class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+    [% IF innerloo.tag != previous %]
+        [% IF previous != "" %]
+            </ul>
+        [% END %]
+        [% previous = innerloo.tag %]
+        <ul class="sortable_field">
+    [% END %]
+    <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
         [% UNLESS hide_marc %]
             [% IF advancedMARCEditor %]
@@ -316,9 +326,10 @@ function confirmnotdup(redirect){
 
         </div>
 
+        <ul class="sortable_subfield">
         [% FOREACH subfield_loo IN innerloo.subfield_loop %]
             <!--  One line on the marc editor -->
-            <div class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
+            <li class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
 
                 [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
@@ -328,11 +339,6 @@ function confirmnotdup(redirect){
                 
                 [% UNLESS hide_marc %]
                 <span class="subfieldcode">
-                    [% IF ( subfield_loo.fixedfield ) %]
-                        <img class="buttonUp" style="display:none;" src="[% interface | html %]/[% theme | html %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]')" alt="Move Up" title="Move Up" />
-                    [% ELSE %]
-                        <img class="buttonUp" src="[% interface | html %]/[% theme | html %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]')" alt="Move Up" title="Move Up" />
-                    [% END %]
                         <input type="text"
                             title="[% subfield_loo.marc_lib | $raw %]"
                             style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
@@ -400,12 +406,14 @@ function confirmnotdup(redirect){
                 [% END %]
                 </span>
                 
-            </div>
+            </li>
             <!-- End of the line -->
         [% END %]
 
-    </div>
+        </ul> <!-- /.sortable_subfield -->
+    </li>
     [% END %]<!-- if innerloo.tag -->
+    </ul> <!-- /.sortable_field -->
     [% END %]<!-- BIG_LOO.innerloop -->
     </div>
 [% END %]<!-- BIG_LOOP -->
