@@ -124,23 +124,31 @@ my $sth = $dbh->prepare(
 my $days = 5;
 
 my @test_data = (
-    { amount => 0     , days_ago => 0         , description =>'purge_zero_balance_fees should not delete 0 balance fees with date today'                     , delete => 0 } ,
-    { amount => 0     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete 0 balance fees with date before threshold day'      , delete => 0 } ,
-    { amount => 0     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0 } ,
-    { amount => 0     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1 } ,
-    { amount => undef , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete NULL balance fees with date after threshold day'        , delete => 1 } ,
-    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed before threshold day'  , delete => 0 } ,
-    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with positive amout owed on threshold day'      , delete => 0 } ,
-    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed after threshold day'   , delete => 0 } ,
-    { amount => -5    , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0 } ,
-    { amount => -5    , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0 } ,
-    { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0 }
+    { amount => 0     , days_ago => 0         , description =>'purge_zero_balance_fees should not delete 0 balance fees with date today'                     , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => 0     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete 0 balance fees with date before threshold day'      , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => 0     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete 0 balance fees with date on threshold day'          , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => 0     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete 0 balance fees with date after threshold day'           , delete => 1, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => undef , days_ago => $days + 1 , description =>'purge_zero_balance_fees should delete NULL balance fees with date after threshold day'        , delete => 1, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => 5     , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed before threshold day' , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => 5     , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with positive amout owed on threshold day'     , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => 5     , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with positive amout owed after threshold day'  , delete => 0, accounttype => undef, debit_type => 'OVERDUE' } ,
+    { amount => -5    , days_ago => $days - 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed before threshold day' , delete => 0, accounttype => 'Pay', debit_type => undef } ,
+    { amount => -5    , days_ago => $days     , description =>'purge_zero_balance_fees should not delete fees with negative amout owed on threshold day'     , delete => 0, accounttype => 'Pay', debit_type => undef } ,
+    { amount => -5    , days_ago => $days + 1 , description =>'purge_zero_balance_fees should not delete fees with negative amout owed after threshold day'  , delete => 0, accounttype => 'Pay', debit_type => undef }
 );
 my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $borrower = Koha::Patron->new( { firstname => 'Test', surname => 'Patron', categorycode => $categorycode, branchcode => $branchcode } )->store();
 
 for my $data ( @test_data ) {
-    $sth->execute($borrower->borrowernumber, $data->{amount}, $data->{days_ago}, $data->{description}, 'commandline', $data->{amount} > 0 ? 'W' : undef, $data->{amount} >= 0 ? undef : 'OVERDUE' );
+    $sth->execute(
+        $borrower->borrowernumber,
+        $data->{amount},
+        $data->{days_ago},
+        $data->{description},
+        'commandline',
+        $data->{accounttype},
+        $data->{debit_type}
+    );
 }
 
 purge_zero_balance_fees( $days );
