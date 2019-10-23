@@ -45,6 +45,7 @@ sub to_koha {
     my $prefix = '';
     my $suffix = '';
     my $term = $self->{'term'};
+    utf8::decode($term);
 
     if ($attrs) {
         foreach my $attr (@$attrs) {

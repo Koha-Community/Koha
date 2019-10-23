@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+use utf8;
 
 use Test::More tests => 3;
 use Test::WWW::Mechanize;
@@ -74,7 +75,7 @@ subtest 'test_search' => sub {
     $search->mock('simple_search_compat', sub {
         my ( $self, $query ) = @_;
 
-        return ('unexpected query', undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(another))))';
+        return ('unexpected query', undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(speciäl))))';
 
         my @records = ($marc_record_1, $marc_record_2);
         return (undef, \@records, 2);
@@ -103,7 +104,7 @@ subtest 'test_search' => sub {
     $Zconn->connect('localhost:42111', 0);
     is($Zconn->errcode(), 0, 'Connection is successful: ' . $Zconn->errmsg());
 
-    my $rs = $Zconn->search_pqf('@and @attr 1=1 @attr 4=1 author @or @attr 1=4 title(s) @attr 1=4 another');
+    my $rs = $Zconn->search_pqf('@and @attr 1=1 @attr 4=1 author @or @attr 1=4 title(s) @attr 1=4 speciäl');
     is($Zconn->errcode(), 0, 'Search is successful: ' . $Zconn->errmsg());
 
     is($rs->size(), 2, 'Two results returned');
@@ -132,7 +133,7 @@ subtest 'test_search' => sub {
     @nodes = $dom->getElementsByTagNameNS($ns, 'diagnostics');
     is(scalar(@nodes), 1, 'diagnostics returned for bad query');
 
-    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&version=1.1&maximumRecords=10&query=(dc.author%3dauthor AND (dc.title%3d\"title(s)\" OR dc.title%3danother))", 'Retrieve search results');
+    $agent->get_ok("$base/biblios?operation=searchRetrieve&recordSchema=marcxml&version=1.1&maximumRecords=10&query=(dc.author%3dauthor AND (dc.title%3d\"title(s)\" OR dc.title%3dspeciäl))", 'Retrieve search results');
     $dom = XML::LibXML->load_xml(string => $agent->content());
     @nodes = $dom->getElementsByTagNameNS($ns, 'searchRetrieveResponse');
     is(scalar(@nodes), 1, 'searchRetrieveResponse returned');
