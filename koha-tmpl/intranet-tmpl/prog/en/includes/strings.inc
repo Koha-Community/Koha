@@ -52,4 +52,7 @@
     var MSG_CHECKOUTS_BY_ITEMTYPE = _("Number of checkouts by item type");
     var PATRON_NOTE = _("Patron note");
     var CONFIRM_DELETE_RETURN_CLAIM = _("Are you sure you want to delete this return claim?");
+    var BROWSER_RETURN_TO_SEARCH = _("Results");
+    var BROWSER_PREVIOUS = _("Previous");
+    var BROWSER_NEXT = _("Next");
 </script>
