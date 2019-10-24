@@ -140,7 +140,6 @@ Return holds attached to an item, optionally accept a hashref of params to pass 
 sub holds {
     my ( $self,$params ) = @_;
     my $holds_rs = $self->_result->reserves->search($params);
-    return unless $holds_rs->count;
     return Koha::Holds->_new_from_dbic( $holds_rs );
 }
 
