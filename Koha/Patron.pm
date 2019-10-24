@@ -228,9 +228,6 @@ sub store {
                 # Make a copy of the plain text password for later use
                 $self->plain_text_password( $self->password );
 
-                logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
-                  if C4::Context->preference("BorrowersLog");
-
                 if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
                     # Call any check_password plugins
                     my @plugins = Koha::Plugins->new()->GetPlugins({
@@ -265,6 +262,8 @@ sub store {
 
                 $self->add_enrolment_fee_if_needed(0);
 
+                logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
+                  if C4::Context->preference("BorrowersLog");
             }
             else {    #ModMember
 
