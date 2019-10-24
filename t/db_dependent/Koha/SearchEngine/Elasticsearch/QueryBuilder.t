@@ -211,7 +211,7 @@ subtest 'build_query tests' => sub {
         $query->{sort},
         [
             {
-            'title__sort.phrase' => {
+            'title__sort' => {
                     'order' => 'asc'
                 }
             }
@@ -602,7 +602,7 @@ subtest "_sort_field() tests" => sub {
     my $f = $qb->_sort_field('title');
     is(
         $f,
-        'title__sort.phrase',
+        'title__sort',
         'title sort mapped correctly'
     );
 
