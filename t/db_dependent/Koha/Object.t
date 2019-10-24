@@ -399,17 +399,20 @@ subtest 'store() tests' => sub {
 
     subtest 'Bad value tests' => sub {
 
-        plan tests => 1;
+        plan tests => 3;
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
         my $print_error = $schema->storage->dbh->{PrintError};
         $schema->storage->dbh->{PrintError} = 0;
 
-        throws_ok
-            { $patron->lastseen('wrong_value')->store; }
-            'Koha::Exceptions::Object::BadValue',
-            'Exception thrown correctly';
+        try {
+            $patron->lastseen('wrong_value')->store;
+        } catch {
+            ok( $_->isa('Koha::Exceptions::Object::BadValue'), 'Exception thrown correctly' );
+            like( $_->property, qr/borrowers\W?\.\W?lastseen/, 'Column should be the expected one' ); # optional \W for quote or backtic
+            is( $_->value, 'wrong_value', 'Value should be the expected one' );
+        };
 
         $schema->storage->dbh->{PrintError} = $print_error;
     };
