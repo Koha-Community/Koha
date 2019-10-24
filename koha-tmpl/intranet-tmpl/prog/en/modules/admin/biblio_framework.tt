@@ -141,9 +141,9 @@
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="frameworkactions[% loo.frameworkcode | html %]">
               <li><a href="marctagstructure.pl?frameworkcode="><i class="fa fa-eye"></i> MARC structure</a></li>
               <!-- Trigger modal -->
-              <li><a href="#" data-toggle="modal" data-target="#exportModal_default" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-upload"></i> Export</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#exportModal_default" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv or .ods)"><i class="fa fa-upload"></i> Export</a></li>
               <!-- Trigger modal -->
-              <li><a href="#" data-toggle="modal" data-target="#importModal_[% framework.frameworkcode | html %][% frameworks.count | html %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-download"></i> Import</a></li>
+              <li><a href="#" data-toggle="modal" data-target="#importModal_[% framework.frameworkcode | html %][% frameworks.count | html %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv or .ods)"><i class="fa fa-download"></i> Import</a></li>
             </ul>
             <!-- Modal to export default framework -->
             <div class="modal" id="exportModal_default" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_default" aria-hidden="true">
@@ -158,7 +158,6 @@
                   <fieldset>
                     <input type="hidden" name="frameworkcode" value="" />
                     <p><label for="csv_type_export_default"><input type="radio" name="type_export_default" value="csv" id="csv_type_export_default" checked="checked" /> Export to CSV spreadsheet</label></p>
-                    <p><label for="xml_type_export_default"><input type="radio" name="type_export_default" value="excel" id="xml_type_export_default" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
                     <p><label for="ods_type_export_default"><input type="radio" name="type_export_default" value="ods" id="ods_type_export_default" /> Export to OpenDocument spreadsheet format</label></p>
                   </fieldset>
                 </div>
@@ -177,7 +176,7 @@
               <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="importLabelexportModal_[% framework.frameworkcode | html %][% frameworks.count | html %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h>
+                <h3 id="importLabelexportModal_[% framework.frameworkcode | html %][% frameworks.count | html %]">Import default framework structure (fields and subfields) from a spreadsheet file (.csv or .ods)</h>
               </div>
               <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_default" id="form_i_default" method="post" enctype="multipart/form-data" class="form_import">
                 <div class="modal-body">
@@ -212,9 +211,9 @@
                   <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
                   <li><a href="/cgi-bin/koha/admin/biblio_framework.pl?op=delete_confirm&amp;frameworkcode=[% loo.frameworkcode | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
                   <!-- Trigger modal -->
-                  <li><a href="#" data-toggle="modal" data-target="#exportModal_[% loo.frameworkcode | html %][% loop.count | html %]" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-upload"></i> Export</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#exportModal_[% loo.frameworkcode | html %][% loop.count | html %]" title="Export framework structure (fields, subfields) to a spreadsheet file (.csv or .ods)"><i class="fa fa-upload"></i> Export</a></li>
                   <!-- Trigger modal -->
-                  <li><a href="#" data-toggle="modal" data-target="#importModal_[% loo.frameworkcode | html %][% loop.count | html %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv, .xml, .ods)"><i class="fa fa-download"></i> Import</a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#importModal_[% loo.frameworkcode | html %][% loop.count | html %]" title="Import framework structure (fields, subfields) from a spreadsheet file (.csv or .ods)"><i class="fa fa-download"></i> Import</a></li>
                 </ul>
                 <!-- Modal to export other framework -->
                 <div class="modal" id="exportModal_[% loo.frameworkcode | html %][% loop.count | html %]" tabindex="-1" role="dialog" aria-labelledby="exportLabelexportModal_[% loo.frameworkcode | html %][% loop.count | html %]" aria-hidden="true">
@@ -229,7 +228,6 @@
                       <fieldset>
                         <input type="hidden" name="frameworkcode" value="[% loo.frameworkcode | html %]" />
                         <p><label for="csv_type_export_[% loo.frameworkcode | html %][% loop.count | html %]"><input type="radio" name="type_export_[% loo.frameworkcode | html %]" value="csv" id="csv_type_export_[% loo.frameworkcode | html %][% loop.count | html %]" checked="checked" /> Export to CSV spreadsheet</label></p>
-                        <p><label for="xml_type_export_[% loo.frameworkcode | html %][% loop.count | html %]"><input type="radio" name="type_export_[% loo.frameworkcode | html %]" value="excel" id="xml_type_export_[% loo.frameworkcode | html %][% loop.count | html %]" /> Export to Excel with XML format, compatible with OpenOffice/LibreOffice as well</label></p>
                         <p><label for="ods_type_export_[% loo.frameworkcode | html %][% loop.count | html %]"><input type="radio" name="type_export_[% loo.frameworkcode | html %]" value="ods" id="ods_type_export_[% loo.frameworkcode | html %][% loop.count | html %]" /> Export to OpenDocument spreadsheet format</label></p>
                       </fieldset>
                     </div>
@@ -248,7 +246,7 @@
                   <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="importLabelexportModal_[% loo.frameworkcode | html %][% loop.count | html %]">Import [% loo.frameworkcode | html %] framework structure (fields and subfields) from a spreadsheet file (.csv, .xml, .ods)</h3>
+                    <h3 id="importLabelexportModal_[% loo.frameworkcode | html %][% loop.count | html %]">Import [% loo.frameworkcode | html %] framework structure (fields and subfields) from a spreadsheet file (.csv or .ods)</h3>
                   </div>
                   <form action="/cgi-bin/koha/admin/import_export_framework.pl" name="form_i_[% loo.frameworkcode | html %]" id="form_i_[% loo.frameworkcode | html %]" method="post" enctype="multipart/form-data" class="form_import">
                     <div class="modal-body">
@@ -290,7 +288,7 @@
     <script>
         /* Set some variable needed in biblio_framework.js */
         var MSG_IMPORT_ERROR = _("Error importing the framework");
-        var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file.");
+        var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv) or ODS (.ods) spreadsheet file.");
         var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
         var template_path = "[% interface | html %]/[% theme | html %]";
     </script>
