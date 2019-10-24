@@ -277,7 +277,7 @@ __PACKAGE__->belongs_to(
   {
     is_deferrable => 1,
     join_type     => "LEFT",
-    on_delete     => "SET NULL",
+    on_delete     => "RESTRICT",
     on_update     => "CASCADE",
   },
 );
@@ -363,8 +363,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-17 11:33:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5FjSicyeyUnnNh/pGs78zQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-24 16:33:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q4Ahb8xIxAsjT/aF9yjrdQ
 
 sub koha_objects_class {
     'Koha::Account::Lines';
