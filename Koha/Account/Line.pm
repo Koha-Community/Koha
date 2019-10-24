@@ -422,7 +422,8 @@ on the API.
 sub to_api_mapping {
     return {
         accountlines_id   => 'account_line_id',
-        accounttype       => 'account_type',
+        credit_type_code  => 'credit_type',
+        debit_type_code   => 'debit_type',
         amountoutstanding => 'amount_outstanding',
         borrowernumber    => 'patron_id',
         branchcode        => 'library_id',
