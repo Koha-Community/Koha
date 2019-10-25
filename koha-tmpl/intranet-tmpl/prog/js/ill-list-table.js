@@ -126,7 +126,7 @@ $(document).ready(function() {
                 $('#illfilter_dateplaced_start, #illfilter_dateplaced_end').val('');
             }
         }
-    };
+    }; //END Filterable columns
 
     // Expand any fields we're expanding
     var expandExpand = function(row) {
@@ -154,6 +154,7 @@ $(document).ready(function() {
             }
         });
     };
+    //END Expand
 
     // Strip the expand prefix if it exists, we do this for display
     var stripPrefix = function(value) {
@@ -363,7 +364,7 @@ $(document).ready(function() {
     // it to datatables
     var filterParam = prefilters ? '&' + prefilters : '';
     // Only fire the request if we're on the ILL list page
-    if (window.location.search.length == 0) {}
+    if (window.location.search.length == 0) {
         var ajax = $.ajax(
             '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments,requested_partners'
             + filterParam
@@ -499,7 +500,7 @@ $(document).ready(function() {
             });
 
         });
-    }
+    } //END if window.location.search.length == 0
 
     var clearSearch = function() {
         table.api().search('').columns().search('');
