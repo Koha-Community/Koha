@@ -341,7 +341,7 @@ subtest 'purgeSelfRegistration' => sub {
     my $d=360;
     C4::Members::DeleteUnverifiedOpacRegistrations($d);
     foreach(1..3) {
-        $dbh->do("INSERT INTO borrower_modifications (timestamp, borrowernumber, verification_token) VALUES ('2014-01-01 01:02:03',0,?)", undef, (scalar localtime)."_$_");
+        $dbh->do("INSERT INTO borrower_modifications (timestamp, borrowernumber, verification_token, changed_fields) VALUES ('2014-01-01 01:02:03',0,?,'firstname,surname')", undef, (scalar localtime)."_$_");
     }
     is( C4::Members::DeleteUnverifiedOpacRegistrations($d), 3, 'Test for DeleteUnverifiedOpacRegistrations' );
 
