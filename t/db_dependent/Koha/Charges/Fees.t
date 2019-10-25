@@ -338,14 +338,16 @@ subtest 'accumulate_rentalcharge tests' => sub {
     );
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
+    my $day = $dt_from->day_of_week + 1;
     $calendar->insert_week_day_holiday(
-        weekday     => 3,
+        weekday     => $day,
         title       => 'Test holiday',
         description => 'Test holiday'
     );
     $charge = $fees->accumulate_rentalcharge();
+    my $dayname = $dt_from->clone->add( days => 1 )->day_name;
     is( $charge, 5.00,
-'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays'
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname"
     );
 
     # Hourly tests
@@ -379,10 +381,10 @@ subtest 'accumulate_rentalcharge tests' => sub {
     t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
     $charge = $fees->accumulate_rentalcharge();
     is( $charge, 18.00,
-'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays (96h - 24h * 0.25u)'
+"Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u)"
     );
 
-    $calendar->delete_holiday( weekday => 3);
+    $calendar->delete_holiday( weekday => $day );
     $charge = $fees->accumulate_rentalcharge();
     is( $charge, 24.00, 'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (96h - 0h * 0.25u)' );
 };
