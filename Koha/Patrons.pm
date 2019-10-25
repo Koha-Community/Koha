@@ -424,24 +424,10 @@ call search_patrons_to_update to filter the Koha::Patrons set
 
 sub update_category_to {
     my ( $self, $params ) = @_;
-    my $to = $params->{category};
-
-    my $to_cat = Koha::Patron::Categories->find($to);
-    return unless $to_cat;
-
     my $counter = 0;
-    my $remove_guarantor = ( $to_cat->category_type ne 'C' || $to_cat->category_type ne 'P' ) ? 1 : 0;
     while( my $patron = $self->next ) {
         $counter++;
-        if ( $remove_guarantor && ($patron->category->category_type eq 'C' || $patron->category->category_type eq 'P') ) {
-            $patron->guarantorid(0);
-            $patron->contactname('');
-            $patron->contactfirstname('');
-            $patron->contacttitle('');
-            $patron->relationship('');
-        }
-        $patron->categorycode($to);
-        $patron->store();
+        $patron->categorycode($params->{category})->store();
     }
     return $counter;
 }

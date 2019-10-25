@@ -254,11 +254,18 @@ sub store {
                 # Password must be updated using $self->set_password
                 $self->password($self_from_storage->password);
 
-                if ( C4::Context->preference('FeeOnChangePatronCategory')
-                    and $self->category->categorycode ne
+                if ( $self->category->categorycode ne
                     $self_from_storage->category->categorycode )
                 {
-                    $self->add_enrolment_fee_if_needed(1);
+                    # Add enrolement fee on category change if required
+                    $self->add_enrolment_fee_if_needed(1)
+                      if C4::Context->preference('FeeOnChangePatronCategory');
+
+                    # Clean up guarantors on category change if required
+                    $self->guarantor_relationships->delete
+                      if ( $self->category->category_type ne 'C'
+                        || $self->category->category_type ne 'P' );
+
                 }
 
                 # Actionlogs
