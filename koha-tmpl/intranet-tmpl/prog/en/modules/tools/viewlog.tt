@@ -39,6 +39,7 @@ fieldset.rows label.viewlog {
 
 [% BLOCK translate_log_module %]
 [%    SWITCH module %]
+[%        CASE 'AUTH'         %]Authentication
 [%        CASE 'CATALOGUING'  %]Catalog
 [%        CASE 'AUTHORITIES'  %]Authorities
 [%        CASE 'MEMBERS'      %]Patrons
@@ -123,7 +124,7 @@ fieldset.rows label.viewlog {
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
-                                        [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
+                                        [% FOREACH modx IN [ 'AUTH' 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
                                             [% IF modules.grep(modx).size %]
                                                 <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]
