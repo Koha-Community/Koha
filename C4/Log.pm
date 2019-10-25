@@ -84,7 +84,7 @@ sub logaction {
 
     my $logger = Koha::Logger->get(
         {
-            interface => 'intranet',
+            interface => $interface,
             category  => "ActionLogs.$modulename.$actionname"
         }
     );
