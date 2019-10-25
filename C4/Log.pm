@@ -122,7 +122,7 @@ sub cronlogaction {
 
 =item GetLogs
 
-$logs = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);
+$logs = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info,$interfaces);
 
 Return:
 C<$logs> is a ref to a hash which contains all columns from action_logs
