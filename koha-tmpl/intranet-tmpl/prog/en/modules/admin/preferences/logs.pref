@@ -78,6 +78,19 @@ Logging:
                   on: Log
                   off: "Don't log"
             - when reports are added, deleted or changed.
+        -
+            - pref: AuthFailureLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - " authentication failures"
+        -
+            - pref: AuthSuccessLog
+              choices:
+                  on: Log
+                  off: "Don't log"
+            - " successful authentications"
+
     Debugging:
         -
             - pref: DumpTemplateVarsIntranet
