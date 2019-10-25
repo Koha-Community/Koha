@@ -1,46 +1,39 @@
 #!/usr/bin/perl
 #
-# Copyright 2011 MJ Ray and software.coop
-# Koha is free software; you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
+# This file is part of Koha.
 #
-# Koha is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
 #
-# You should have received a copy of the GNU General Public License
-# along with Koha; if not, see <http://www.gnu.org/licenses>.
-
-# This Koha test module is a stub!
-# Add more tests here!!!
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
 use Test::More tests => 5;
 
 use C4::Context;
+use C4::Log;
 use Koha::Database;
 use Koha::DateUtils;
 
 use t::lib::Mocks qw/mock_preference/; # to mock CronjobLog
-
-$| = 1;
-
-BEGIN {
-    use_ok('C4::Log');
-}
-my $success;
+use t::lib::TestBuilder;
 
 # Make sure we can rollback.
-my $schema  = Koha::Database->new->schema;
+our $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
+our $dbh = C4::Context->dbh;
 
 subtest 'Existing tests' => sub {
     plan tests => 6;
 
+    my $success;
     eval {
         # FIXME: are we sure there is an member number 1?
         logaction("MEMBERS","MODIFY",1,"test operation");
@@ -166,6 +159,19 @@ subtest 'GetLogs() respects interface filters' => sub {
 
     $logs = GetLogs(undef,undef,undef,undef,undef,undef,undef,['commandline']);
     is( @{$logs}[0]->{ interface }, 'commandline', 'Interface correctly filtered (commandline)');
+};
+
+subtest 'GDPR logging' => sub {
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    t::lib::Mocks::mock_userenv({ patron => $patron });
+    logaction( 'AUTH', 'FAILURE', $patron->id, '', 'opac' );
+    my $logs = GetLogs( undef, undef, $patron->id, ['AUTH'], ['FAILURE'], $patron->id );
+    is( @$logs, 1, 'We should find one auth failure for this patron' );
+
 };
 
 $schema->storage->txn_rollback;
