@@ -471,15 +471,15 @@ subtest 'build_query tests' => sub {
     ( undef, $query ) = $qb->build_query_compat( ['AND'], ['title:"donald duck"'], undef, ['author:Dillinger Escaplan'] );
     is(
         $query->{query}{query_string}{query},
-        '(title:"donald duck") AND author:(Dillinger Escaplan)',
-        "Simplle query with limit's term in parentheses"
+        '(title:"donald duck") AND author:("Dillinger Escaplan")',
+        "Simple query with limit term quoted in parentheses"
     );
 
     ( undef, $query ) = $qb->build_query_compat( ['AND'], ['title:"donald duck"'], undef, ['author:Dillinger Escaplan', 'itype:BOOK'] );
     is(
         $query->{query}{query_string}{query},
-        '(title:"donald duck") AND (author:(Dillinger Escaplan)) AND (itype:(BOOK))',
-        "Simplle query with each limit's term in parentheses"
+        '(title:"donald duck") AND (author:("Dillinger Escaplan")) AND (itype:("BOOK"))',
+        "Simple query with each limit's term quoted in parentheses"
     );
     is($query_cgi, 'idx=&q=title%3A%22donald%20duck%22', 'query cgi');
     is($query_desc, 'title:"donald duck"', 'query desc ok');

@@ -1009,7 +1009,7 @@ sub _fix_limit_special_cases {
         else {
             my ( $field, $term ) = $l =~ /^\s*([\w,-]*?):(.*)/;
             if ( defined($field) && defined($term) ) {
-                push @new_lim, "$field:($term)";
+                push @new_lim, "$field:(\"$term\")";
             }
             else {
                 push @new_lim, $l;
