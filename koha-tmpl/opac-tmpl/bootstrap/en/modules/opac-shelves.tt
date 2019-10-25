@@ -154,7 +154,7 @@
                         <h3>
                             [% shelf.shelfname | html %]
                             <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint">
-                                <i class="fa fa-rss rsssearchicon" title="Subscribe to this list"></i>
+                                <i class="fa fa-fw fa-rss rsssearchicon" title="Subscribe to this list"></i>
                             </a>
                         </h3>
 
@@ -162,14 +162,14 @@
                             <div id="floating">
                              <div id="toolbar" class="toolbar clearfix">
                                  <div class="list-actions">
-                                    <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a> <span class="sep">|</span>
-                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | uri %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
+                                    <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus"></i> New list</a> <span class="sep">|</span>
+                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link download" data-toggle="modal" data-target="#modalWin"><i class="fa fa-fw fa-download"></i> Download list</a>
 
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
+                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="btn btn-link send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; "><i class="fa fa-fw fa-envelope"></i> Send list</a></span>
                                     [% END %]
 
-                                    <a class="print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction |uri %]&print=1">Print list</a>
+                                    <a class="btn btn-link print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction |uri %]&print=1"><i class="fa fa-fw fa-print"></i> Print list</a>
 
                                     [% IF can_manage_shelf %]
                                         <span class="sep">|</span>
@@ -178,7 +178,7 @@
                                             <input type="hidden" name="referer" value="view" />
                                             <input type='hidden' name='category' value='[% category | html %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <input type="submit" class="editshelf" value="Edit list" />
+                                            <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o"></i> Edit list</button>
                                         </form>
 
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
@@ -186,10 +186,10 @@
                                             <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category | html %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
+                                            <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-fw fa-remove"></i> Delete list</button>
                                         </form>
                                         [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="sharelist">Share list</a>
+                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="btn btn-link sharelist"><i class="fa fa-fw fa-share"></i> Share list</a>
                                         [% END %]
                                     [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
@@ -197,7 +197,7 @@
                                             <input type="hidden" name="referer" value="list" />
                                             <input type='hidden' name='category' value='[% category | html %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);" value="Remove share" />
+                                            <button type="submit" class="btn btn-link deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_REMOVE_SHARE);"><i class="fa fa-fw fa-remove"></i> Remove share</button>
                                         </form>
                                     [% END %]
                                 </div>
@@ -269,7 +269,7 @@
                                     [% END %]
                                     [% IF ( TagsInputEnabled && loggedinusername ) %]
                                         <span id="addtags">
-                                          <a id="tagsel_tag" href="#" class="disabled">Tag</a>
+                                          <a id="tagsel_tag" href="#" class="btn btn-link btn-disabled"><i class="fa fa-fw fa-tag"></i> Tag</a>
                                         </span>
                                         <span id="tagsel_form" style="display:none">
                                           <label for="tagsel_new">New tag(s), separated by a comma:</label>
@@ -453,10 +453,10 @@
                                                             [% UNLESS ( itemsloo.norequests ) %]
                                                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                                                     [% IF ( itemsloo.allow_onshelf_holds ) %]
-                                                                        <span class="actions"><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber | html %]">Place hold</a><!-- add back when available 0 holds in queue--></span>
+                                                                        <span class="actions"><a class="btn btn-link hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber | html %]"><i class="fa fa-fw fa-bookmark"></i> Place hold</a><!-- add back when available 0 holds in queue--></span>
                                                                     [% ELSE %]
                                                                         [% IF ( itemsloo.itemsissued ) %]
-                                                                            <span class="actions"><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber | html %]">Place hold</a><!-- add back when available 0 holds in queue--></span>
+                                                                            <span class="actions"><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber | html %]"><i class="fa fa-fw fa-bookmark"></i> Place hold</a><!-- add back when available 0 holds in queue--></span>
                                                                         [% END %]
                                                                     [% END %]
                                                                 [% END # / IF opacuserlogin %]
@@ -465,7 +465,7 @@
 
                                                         [% IF ( TagsInputEnabled ) %]
                                                             [% IF ( loggedinusername ) %]
-                                                                <span class="actions"><a class="tag_add hidden" id="tag_add[% itemsloo.biblionumber | html %]" href="#">Add tag</a></span>
+                                                                <span class="actions"><a class="btn btn-link tag_add hidden" id="tag_add[% itemsloo.biblionumber | html %]" href="#"><i class="fa fa-fw fa-tag"></i> Add tag</a></span>
                                                                 <div id="tagform[% itemsloo.biblionumber | html %]" class="tag_results_input" style="display:none;">
                                                                     <label for="newtag[% itemsloo.biblionumber | html %]">New tag(s), separated by a comma:</label>
                                                                     <input type="text" name="newtag[% itemsloo.biblionumber | html %]" id="newtag[% itemsloo.biblionumber | html %]" maxlength="100" />
@@ -481,18 +481,18 @@
                                                         [% END # / IF TagsInputEnabled %]
 
                                                         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                            <span class="actions"><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]'); return false;">Save to another list</a></span>
+                                                            <span class="actions"><a class="btn btn-link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | html %]'); return false;"><i class="fa fa-fw fa-list"></i> Save to another list</a></span>
                                                         [% END %]
 
                                                         [% IF can_remove_biblios %]
-                                                            <span class="actions"><a class="removefromlist" href="/cgi-bin/koha/opac-shelves.pl?op=remove_biblios&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;biblionumber=[% itemsloo.biblionumber | html %]">Remove from this list</a></span>
+                                                            <span class="actions"><a class="btn btn-link btn-disabled remove removefromlist" href="/cgi-bin/koha/opac-shelves.pl?op=remove_biblios&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;biblionumber=[% itemsloo.biblionumber | html %]"><i class="fa fa-fw fa-remove"></i> Remove from this list</a></span>
                                                         [% END %]
 
                                                         [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
                                                             [% IF ( itemsloo.incart ) %]
-                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#">In your cart</a> <a data-biblionumber="[% itemsloo.biblionumber | html %]" class="cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
+                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#"><i class="fa fa-fw fa-shopping-cart"></i> In your cart</a> <a data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
                                                             [% ELSE %]
-                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#">Add to cart</a> <a style="display:none;" data-biblionumber="[% itemsloo.biblionumber | html %]" class="cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
+                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#"><i class="fa fa-fw fa-shopping-cart"></i> Add to cart</a> <a style="display:none;" data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
                                                             [% END %]
                                                         [% END # / IF opacbookbag %]
                                                     </span> <!-- / .results_summary .actions -->
@@ -668,7 +668,7 @@
                         [% END %]
 
                             [% IF loggedinusername %]
-                                <div id="toolbar" class="toolbar"><a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a></div>
+                                <div id="toolbar" class="toolbar"><a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-plus"></i> New list</a></div>
                             [% ELSE %]
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     <div class="alert alert-info"><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new lists.</div>
@@ -705,7 +705,7 @@
                                                             <input type="hidden" name="category" value="[% s.category | html %]" />
                                                             <input type="hidden" name="op" value="edit_form" />
                                                             <input type="hidden" name="referer" value="list" />
-                                                            <input type="submit" class="editshelf" value="Edit" />
+                                                            <button type="submit" class="btn btn-link editshelf"><i class="fa fa-pencil-square-o"></i> Edit</button>
                                                         </form>
                                                     [% END %]
                                                     [% IF s.can_be_deleted( loggedinusernumber ) %]
@@ -714,7 +714,7 @@
                                                             <input type="hidden" name="referer" value="list" />
                                                             <input type='hidden' name='category' value='[% category | html %]' />
                                                             <input type="hidden" name="shelfnumber" value="[% s.shelfnumber | html %]" />
-                                                            <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
+                                                            <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-remove"></i> Delete</button>
                                                         </form>
                                                     [% END %]
                                                     [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
@@ -774,7 +774,6 @@
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.js("lib/hc-sticky.js") | $raw %]
 <script>
-//<![CDATA[
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
 var MSG_REMOVE_ONE_FROM_LIST = _("Are you sure you want to remove this item from the list?");
 var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
@@ -857,7 +856,7 @@ $(function() {
     $("a.print").show();
 
     [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) ) %]
-        $("#placehold").html("<a href=\"#\" class=\"hold tag_hides disabled\">"+_("Place hold")+"<\/a>");
+        $("#placehold").html("<a href=\"#\" class=\"btn btn-link hold tag_hides btn-disabled\"><i class=\"fa fa-fw fa-bookmark\"></i> "+_("Place hold")+"<\/a>");
         $("#selections-toolbar a.hold").click(function(){
             holdSelections();
             return false;
@@ -950,7 +949,7 @@ $(function() {
                 return false;
             }
         });
-        $("#removeitems").html("<a href=\"#\" class=\"removeitems tag_hides disabled\">"+_("Remove from list")+"</a>")
+        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link disabled removeitems tag_hides\"><i class=\"fa fa-fw fa-remove\"></i> "+_("Remove from list")+"</a>")
         .click(function(){
             $("#myform").submit();
             return false;
@@ -1003,6 +1002,5 @@ function AdjustRemark() {
         $("#anyone_remark").hide();
     }
 }
-//]]>
 </script>
 [% END %]

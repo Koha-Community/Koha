@@ -112,9 +112,11 @@
                     [% END %]
 
                     <div id="views">
-                        <span class="view current-view"><span id="Normalview">Normal view</span></span>
-                        <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]">MARC view</a></span>
-                        [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]">ISBD view</a></span>[% END %]
+                        <span class="view current-view"><span id="Normalview"><i class="fa fa-file-text-o"></i> Normal view</span></span>
+                        <span class="view">
+                            <a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-alt"></i> MARC view</a>
+                        </span>
+                        [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul"></i> ISBD view</a></span>[% END %]
                     </div>
                     [% IF ( OPACXSLTDetailsDisplay ) %]
                         [% XSLTBloc | $raw %]
@@ -1762,7 +1764,6 @@
 
 [% IF OPACPopupAuthorsSearch %]
     <script>
-    //<![CDATA[
         function showAuthors(element){
             var authornumber = $(element).attr("data-count");
 
@@ -1838,8 +1839,6 @@
                 showAuthors(this);
             });
         });
-
-    //]]>
     </script>
 [% END # / IF OPACPopupAuthorsSearch  %]
 [% END %]

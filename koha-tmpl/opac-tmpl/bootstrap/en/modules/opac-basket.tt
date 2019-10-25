@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Asset %]
+[% SET is_popup = 1 %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && TagsEnabled && TagsInputOnList ) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -18,18 +19,18 @@
                         <h2>Your cart</h2>
                             <div id="toolbar" class="toolbar noprint">
                                 [% IF ( verbose ) %]
-                                    <a href="opac-basket.pl" class="brief">Brief display</a>
+                                    <a href="opac-basket.pl" class="btn btn-link brief"><i class="fa fa-fw fa-search-minus"></i> Brief display</a>
                                 [% ELSE %]
-                                    <a href="opac-basket.pl" class="detail">More details</a>
+                                    <a href="opac-basket.pl" class="btn btn-link detail"><i class="fa fa-fw fa-search-plus"></i> More details</a>
                                 [% END %]
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    <a class="send" href="opac-basket.pl">Send</a>
+                                    <a class="btn btn-link send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope"></i> Send</a>
                                 [% END %]
-                                <a class="download" href="opac-basket.pl">Download</a>
-                                <a class="empty" href="opac-basket.pl">Empty and close</a>
-                                <a class="hide close" href="opac-basket.pl">Hide window</a>
+                                <a class="btn btn-link download" href="opac-basket.pl"><i class="fa fa-fw fa-download"></i> Download</a>
+                                <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash"></i> Empty and close</a>
+                                <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle"></i> Hide window</a>
                                 [% IF ( verbose ) %]
-                                    <a class="print-large" href="#">Print</a>
+                                    <a class="btn btn-link print-large" href="#"><i class="fa fa-fw fa-print"></i> Print</a>
                                 [% END %]
                             </div>
 
@@ -39,16 +40,16 @@
                                 <span class="sep">|</span>
                                 <span class="links" id="tag_hides">
                                     <span id="selections">Select titles to: </span>
-                                    <a href="#" class="deleteshelf disabled">Remove</a>
+                                    <a href="#" class="btn btn-link remove deleteshelf disabled"><i class="fa fa-remove"></i> Remove</a>
                                     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                         [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
-                                            <a href="#" class="newshelf disabled">Add to a list</a>
+                                            <a href="#" class="btn btn-link newshelf disabled"><i class="fa fa-fw fa-list"></i> Add to a list</a>
                                         [% END %]
                                         [% IF ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
-                                            <a href="#" class="hold disabled">Place hold</a>
+                                            <a href="#" class="btn btn-link hold disabled"><i class="fa fa-fw fa-bookmark"></i> Place hold</a>
                                         [% END %]
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <a href="#" id="tagsel_tag" class="disabled">Tag</a>
+                                            <a href="#" id="tagsel_tag" class="btn btn-link disabled"><i class="fa fa-fw fa-tag"></i> Tag</a>
                                         [% END %]
                                     [% END # / IF opacuserlogin %]
                                 </span>
@@ -305,8 +306,6 @@
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
         [% INCLUDE 'datatables.inc' %]
         <script>
-            //<![CDATA[
-
             [% IF ( TagsInputEnabled && loggedinusername ) %]
                 function tagSelected() {
                     var bibs = document.getElementById('records').value;
@@ -469,6 +468,5 @@
                   $("#selections-toolbar .links a").addClass("disabled");
                 }
             }
-            //]]>
         </script>
 [% END # / BLOCK jsinclude %]

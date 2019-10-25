@@ -5,45 +5,45 @@
         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
             [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                 [% IF ( ReservableItems ) %]
-                    <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber | html %]">Place hold</a></li>
+                    <li><a class="reserve btn btn-link btn-lg" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-bookmark"></i> Place hold</a></li>
                 [% END %]
             [% END %]
         [% END %]
     [% END %]
 
-    <li><a class="print-large" href="#">Print</a></li>
+    <li><a class="print-large btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-print"></i> Print</a></li>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF artreqpossible %]
-            <li><a class="article_request" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | html %]">Request article</a></li>
+            <li><a class="article_request btn btn-link btn-lg" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-file-text"></i> Request article</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
-            <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblio.biblionumber | html %]">Save to your lists</a></li>
+            <li><a class="addtoshelf btn btn-link btn-lg" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-list"></i> Save to your lists</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
         [% IF ( incart ) %]
-            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart incart cart[% biblio.biblionumber | html %] addrecord" href="#">In your cart</a> <a data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart incart cart[% biblio.biblionumber | html %] addrecord btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-shopping-cart"></i> In your cart</a> <a data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
         [% ELSE %]
-            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart cart[% biblio.biblionumber | html %] addrecord" href="#">Add to your cart</a>  <a style="display:none;" data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart cart[% biblio.biblionumber | html %] addrecord btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-shopping-cart"></i> Add to your cart</a>  <a style="display:none;" data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
         [% END %]
     [% END %]
 
     [% IF ( OpacHighlightedWords && query_desc ) %]
     <li>
-        <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
-        <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil"></i> Unhighlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil"></i> Highlight</a>
     </li>
     [% END %]
 
 
     [% IF ( Koha.Preference('OPACDetailQRCode' ) ) %]
         <li>
-            <a class="show_qrcode" href="#">Send to device</a>
+            <a class="show_qrcode btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-qrcode"></i> Send to device</a>
             <div id="qrcode" class="hidden"></div>
         </li>
     [% END %]
@@ -53,8 +53,8 @@
         <li>
             <div id="export">
                 <div class="dropdown">
-                    <a id="format" class="dropdown-toggle" data-toggle="dropdown" href="#">Save record <b class="caret"></b></a>
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="format">
+                    <a id="format" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-download"></i> Save record <b class="caret"></b></a>
+                        <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
                             [% FOREACH option IN export_options %]
                                 [% IF option == 'dc' %]
                                     <li><a role="menuitem" href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
@@ -86,8 +86,8 @@
         <li>
             <div id="moresearches_menu">
                 <div class="dropdown">
-                    <a id="furthersearches" class="dropdown-toggle" data-toggle="dropdown" href="#">More searches <b class="caret"></b></a>
-                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="furthersearches">
+                    <a id="furthersearches" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-search"></i> More searches <b class="caret"></b></a>
+                        <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="furthersearches">
                             <li><a href="#" class="menu-inactive">Search for this title in:</a></li>
                             [% OPACSearchForTitleIn | $raw %]
                         </ul>
@@ -121,7 +121,7 @@
     </div>
     <div class="modal-footer">
         <button type="submit" class="btn">Export</button>
-        <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-link btn-lg" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
     </form>
 </div>

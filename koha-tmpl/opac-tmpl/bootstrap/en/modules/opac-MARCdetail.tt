@@ -21,9 +21,9 @@
                         <div id="catalogue_detail_biblio">
 
                             <div id="views">
-                                <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]">Normal view</a></span>
-                                <span class="view current-view"><span id="MARCview">MARC view</span></span>
-                                [% IF ( ISBD ) %]<span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]">ISBD view</a></span>[% END %]
+                                <span class="view"><a id="Normalview" class="btn btn-link" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-file-text-o"></i> Normal view</a></span>
+                                <span class="view current-view"><span id="MARCview"><i class="fa fa-list-alt"></i> MARC view</span></span>
+                                [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul"></i> ISBD view</a></span>[% END %]
                             </div>
                             <h1 class="title">[% bibliotitle | html %] (Record no. [% biblio.biblionumber | html %])</h1>
 
@@ -171,7 +171,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 <script>
-//<![CDATA[
 [% IF ( OPACXSLTDetailsDisplay ) %]
 $(document).ready(function(){
     $.ajaxSetup({
@@ -210,6 +209,5 @@ $(document).ready(function(){
     });
 });
 [% END %]
-//]]>
 </script>
 [% END %]

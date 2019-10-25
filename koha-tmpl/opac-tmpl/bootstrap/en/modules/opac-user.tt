@@ -830,7 +830,7 @@
                     $("#renewall").submit();
                 });
                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                    $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
+                    $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" class=\"btn btn-link\" href=\"#\"><i class=\"fa fa-check\"></i> "+_("Renew selected")+"</a> <a id=\"renewall_link\" class=\"btn btn-link\" href=\"#\"><span class=\"fa-stack\"><i class=\"fa fa-check fa-stack-1x\"></i><i class=\"fa fa-check fa-stack-1x\"></i></span> "+_("Renew all")+"</a></div>");
                 [% END %]
             [% END %]
 

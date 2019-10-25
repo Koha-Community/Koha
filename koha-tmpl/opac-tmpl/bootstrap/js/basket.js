@@ -476,18 +476,18 @@ function hideCart(){
 function updateLink(val,op,target){
     if(target){
         if(op == "add"){
-            target.$("a.cart"+val).html(MSG_ITEM_IN_CART).addClass("incart");
+            target.$("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_IN_CART ).addClass("incart");
             target.$("a.cartR"+val).show();
         } else {
-            target.$("a.cart"+val).html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart cart"+val);
+            target.$("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart cart"+val);
             target.$("a.cartR"+val).hide();
         }
     } else {
         if(op == "add"){
-            $("a.cart"+val).html(MSG_ITEM_IN_CART).addClass("incart");
+            $("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_IN_CART ).addClass("incart");
             $("a.cartR"+val).show();
         } else {
-            $("a.cart"+val).html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart cart"+val);
+            $("a.cart"+val).html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart cart"+val);
             $("a.cartR"+val).hide();
         }
     }
@@ -495,10 +495,10 @@ function updateLink(val,op,target){
 
 function updateAllLinks(target){
     if(target){
-        target.$("a.incart").html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
+        target.$("a.incart").html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart");
         target.$("a.cartRemove").hide();
     } else {
-        $("a.incart").html(MSG_ITEM_NOT_IN_CART).removeClass("incart").addClass("addtocart");
+        $("a.incart").html( "<i class=\"fa fa-fw fa-shopping-cart\"></i> " + MSG_ITEM_NOT_IN_CART ).removeClass("incart").addClass("addtocart");
         $("a.cartRemove").hide();
     }
 }
