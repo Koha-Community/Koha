@@ -193,6 +193,7 @@ function normalizeSMS(value){
 
 var sms_input = document.getElementById('SMSnumber');
 
+if (typeof sms_input !== 'undefined' && sms_input !== null) {
 sms_input.addEventListener('keyup', function(){
   var field = sms_input.value;
   sms_input.value = normalizeSMS(field);
@@ -204,6 +205,7 @@ sms_input.addEventListener('paste', function(event) {
     sms_input.value = normalizeSMS(paste);
   }, 100);
 });
+}
 
 //]]>
 </script>
