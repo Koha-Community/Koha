@@ -18,7 +18,7 @@
 # Add more tests here!!!
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 5;
 
 use C4::Context;
 use Koha::Database;
@@ -29,7 +29,7 @@ use t::lib::Mocks qw/mock_preference/; # to mock CronjobLog
 $| = 1;
 
 BEGIN {
-	use_ok('C4::Log');
+    use_ok('C4::Log');
 }
 my $success;
 
@@ -38,55 +38,59 @@ my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
-eval {
-    # FIXME: are we sure there is an member number 1?
-    logaction("MEMBERS","MODIFY",1,"test operation");
-    $success = 1;
-} or do {
-    diag($@);
-    $success = 0;
+subtest 'Existing tests' => sub {
+    plan tests => 6;
+
+    eval {
+        # FIXME: are we sure there is an member number 1?
+        logaction("MEMBERS","MODIFY",1,"test operation");
+        $success = 1;
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "logaction seemed to work");
+
+    eval {
+        # FIXME: US formatted date hardcoded into test for now
+        $success = scalar(@{GetLogs("","","",undef,undef,"","")});
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "GetLogs returns results for an open search");
+
+    eval {
+        # FIXME: US formatted date hardcoded into test for now
+        my $date = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
+        $success = scalar(@{GetLogs( $date, $date, "", undef, undef, "", "") } );
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "GetLogs accepts dates in an All-matching search");
+
+    eval {
+        $success = scalar(@{GetLogs("","","",["MEMBERS"],["MODIFY"],1,"")});
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "GetLogs seemed to find ".$success." like our test record in a tighter search");
+
+    # We want numbers to be the same between runs.
+    $dbh->do("DELETE FROM action_logs;");
+
+    t::lib::Mocks::mock_preference('CronjobLog',0);
+    cronlogaction();
+    my $cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
+    is($cronJobCount,0,"Cronjob not logged as expected.");
+
+    t::lib::Mocks::mock_preference('CronjobLog',1);
+    cronlogaction();
+    $cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
+    is($cronJobCount,1,"Cronjob logged as expected.");
 };
-ok($success, "logaction seemed to work");
-
-eval {
-    # FIXME: US formatted date hardcoded into test for now
-    $success = scalar(@{GetLogs("","","",undef,undef,"","")});
-} or do {
-    diag($@);
-    $success = 0;
-};
-ok($success, "GetLogs returns results for an open search");
-
-eval {
-    # FIXME: US formatted date hardcoded into test for now
-    my $date = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } );
-    $success = scalar(@{GetLogs( $date, $date, "", undef, undef, "", "") } );
-} or do {
-    diag($@);
-    $success = 0;
-};
-ok($success, "GetLogs accepts dates in an All-matching search");
-
-eval {
-    $success = scalar(@{GetLogs("","","",["MEMBERS"],["MODIFY"],1,"")});
-} or do {
-    diag($@);
-    $success = 0;
-};
-ok($success, "GetLogs seemed to find ".$success." like our test record in a tighter search");
-
-# We want numbers to be the same between runs.
-$dbh->do("DELETE FROM action_logs;");
-
-t::lib::Mocks::mock_preference('CronjobLog',0);
-cronlogaction();
-my $cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
-is($cronJobCount,0,"Cronjob not logged as expected.");
-
-t::lib::Mocks::mock_preference('CronjobLog',1);
-cronlogaction();
-$cronJobCount = $dbh->selectrow_array("SELECT COUNT(*) FROM action_logs WHERE module='CRONJOBS';",{});
-is($cronJobCount,1,"Cronjob logged as expected.");
 
 subtest "GetLogs should return all logs if dates are not set" => sub {
     plan tests => 2;
