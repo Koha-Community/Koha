@@ -5,6 +5,17 @@ if( CheckVersion( $DBversion ) ) {
         INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Purchase' );
     });
 
+    my $sth = $dbh->prepare(q{
+        SELECT COUNT(*) FROM authorised_values WHERE category = 'PAYMENT_TYPE' AND authorised_value = 'CASH'
+    });
+    $sth->execute;
+    my $already_exists = $sth->fetchrow;
+    if ( not $already_exists ) {
+        $dbh->do(q{
+           INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('PAYMENT_TYPE','CASH','Cash')
+        });
+    }
+
     # Updating field in account_debit_types
     unless ( column_exists('account_debit_types', 'can_be_invoiced') ) {
         $dbh->do(
