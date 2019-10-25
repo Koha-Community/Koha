@@ -90,11 +90,11 @@ my $patron = $builder->build_object(
     }
 );
 
-my $dt = dt_from_string();
-Time::Fake->offset( $dt->epoch );
+my $now = dt_from_string()->set_time_zone('floating');
+Time::Fake->offset( $now->epoch );
 
-my $dt_from = dt_from_string()->subtract( days => 2 );
-my $dt_to = dt_from_string()->add( days => 4 );
+my $dt_from = $now->clone->subtract( days => 2 );
+my $dt_to = $now->clone->add( days => 4 );
 
 subtest 'new' => sub {
     plan tests => 9;
