@@ -106,9 +106,14 @@ foreach my $b ( $patrons->as_list() ) {
 }
 
 subtest "Update patron categories" => sub {
-    plan tests => 17;
+    plan tests => 19;
     t::lib::Mocks::mock_preference( 'borrowerRelationship', 'test' );
     my $c_categorycode = $builder->build({ source => 'Category', value => {
+            category_type=>'C',
+            upperagelimit=>17,
+            dateofbirthrequired=>5,
+        } })->{categorycode};
+    my $c_categorycode_2 = $builder->build({ source => 'Category', value => {
             category_type=>'C',
             upperagelimit=>17,
             dateofbirthrequired=>5,
@@ -179,7 +184,9 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update_category({from=>$a_categorycode,fine_max=>5})->next->borrowernumber,$adult1->borrowernumber,'One patron with fines under $5 is expected one');
 
     is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,3,'Guarantor has 3 guarantees');
-    is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode,too_young=>1})->update_category_to({category=>$a_categorycode}),1,'One child patron updated to adult category');
+    is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode})->update_category_to({category=>$c_categorycode_2}),3,'Three child patrons updated to another child category with no params passed');
+    is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,3,'Guarantees not removed when made changing child categories');
+    is( Koha::Patrons->search_patrons_to_update_category({from=>$c_categorycode_2,too_young=>1})->update_category_to({category=>$a_categorycode}),1,'One child patron updated to adult category');
     is( Koha::Patrons->find($adult1->borrowernumber)->guarantee_relationships->guarantees->count,2,'Guarantee was removed when made adult');
 
     is( Koha::Patrons->find($inst->borrowernumber)->guarantee_relationships->guarantees->count,1,'Guarantor has 1 guarantees');
