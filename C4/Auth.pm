@@ -45,6 +45,7 @@ use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
 use C4::Auth_with_shibboleth;
 use Net::CIDR;
+use C4::Log qw/logaction/;
 
 # use utf8;
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
@@ -1862,6 +1863,14 @@ sub checkpw {
             $patron->update({ login_attempts => $patron->login_attempts + 1 });
         }
     }
+
+    # Optionally log success or failure
+    if( $patron && $passwd_ok && C4::Context->preference('AuthSuccessLog') ) {
+        logaction( 'AUTH', 'SUCCESS', $patron->id, "Valid password for $userid", $type );
+    } elsif( !$passwd_ok && C4::Context->preference('AuthFailureLog') ) {
+        logaction( 'AUTH', 'FAILURE', 0, "Wrong password for $userid", $type );
+    }
+
     return @return;
 }
 
