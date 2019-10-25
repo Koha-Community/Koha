@@ -82,7 +82,7 @@ subtest 'holds' => sub {
         biblionumber => $biblio->biblionumber,
     });
     $nb_of_items++;
-    is($item->holds(), undef, "Nothing returned if no holds");
+    is($item->holds->count, 0, "Nothing returned if no holds");
     my $hold1 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'T' }});
     my $hold2 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
     my $hold3 = $builder->build({ source => 'Reserve', value => { itemnumber=>$item->itemnumber, found => 'W' }});
@@ -90,7 +90,7 @@ subtest 'holds' => sub {
     is($item->holds()->count,3,"Three holds found");
     is($item->holds({found => 'W'})->count,2,"Two waiting holds found");
     is_deeply($item->holds({found => 'T'})->next->unblessed,$hold1,"Found transit holds matches the hold");
-    is($item->holds({found => undef}),undef,"Nothing returned if no matching holds");
+    is($item->holds({found => undef})->count, 0,"Nothing returned if no matching holds");
 };
 
 subtest 'biblio' => sub {
