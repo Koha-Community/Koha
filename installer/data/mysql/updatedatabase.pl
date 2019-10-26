@@ -20015,9 +20015,8 @@ if ( CheckVersion($DBversion) ) {
         qq{
           ALTER TABLE
             accountlines
-          ADD CONSTRAINT
+          DROP CHECK
             `accountlines_check_type`
-          CHECK (credit_type_code IS NOT NULL OR debit_type_code IS NOT NULL)
         }
     );
 
@@ -20073,19 +20072,35 @@ if ( CheckVersion($DBversion) ) {
     # Populating credit_type_code
     $dbh->do(
         qq{
-        UPDATE accountlines SET credit_type_code = accounttype, accounttype = NULL WHERE accounttype IN (SELECT code from account_credit_types)
+          UPDATE
+            accountlines 
+          SET
+            credit_type_code = accounttype, accounttype = NULL
+          WHERE accounttype IN (SELECT code from account_credit_types)
         }
     );
 
     # Adding a check constraints to accountlines
     $dbh->do(
         qq{
-        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_check_type` CHECK (accounttype IS NOT NULL OR credit_type_code IS NOT NULL)
+          ALTER TABLE
+            accountlines 
+          ADD CONSTRAINT 
+            `accountlines_check_type`
+          CHECK (credit_type_code IS NOT NULL OR debit_type_code IS NOT NULL)
+        }
+    );
+
+    # Drop accounttype field
+    $dbh->do(
+        qq{
+          ALTER TABLE accountlines
+          DROP COLUMN `accounttype`
         }
     );
 
     SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 23049 - Add account credit_types)\n";
+    print "Upgrade to $DBversion done (Bug 23805 - Add account credit_types)\n";
 }
 
 # SEE bug 13068
