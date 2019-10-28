@@ -17,9 +17,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 25;
+use Test::More tests => 27;
 use Test::MockModule;
 use Test::Mojo;
+use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -97,18 +98,23 @@ $t->post_ok(
         created_by      => $librarian->id,
         notes           => "This is a test note."
     }
-)->status_is(201);
+)->status_is(201)
+ ->header_like( Location => qr|^\/api\/v1\/return_claims/\d*|, 'SWAGGER3.4.1');
+
 my $claim_id = $t->tx->res->json->{claim_id};
 
 ## Duplicate id
-$t->post_ok(
-    "//$userid:$password@/api/v1/return_claims" => json => {
-        item_id         => $itemnumber1,
-        charge_lost_fee => Mojo::JSON->false,
-        created_by      => $librarian->id,
-        notes           => "This is a test note."
+warning_like {
+        $t->post_ok(
+            "//$userid:$password@/api/v1/return_claims" => json => {
+                item_id         => $itemnumber1,
+                charge_lost_fee => Mojo::JSON->false,
+                created_by      => $librarian->id,
+                notes           => "This is a test note."
+            }
+        )->status_is(409)
     }
-)->status_is(400);
+    qr/^DBD::mysql::st execute failed: Duplicate entry/;
 
 # Test editing a claim note
 ## Valid claim id

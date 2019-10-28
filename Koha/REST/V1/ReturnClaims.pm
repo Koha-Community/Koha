@@ -57,17 +57,7 @@ sub claim_returned {
             status  => 404
         ) unless $checkout;
 
-        my $claim = Koha::Checkouts::ReturnClaims->find(
-            {
-                issue_id => $checkout->id
-            }
-        );
-        return $c->render(
-            openapi => { error => "Bad request - claim exists" },
-            status  => 400
-        ) if $claim;
-
-        $claim = $checkout->claim_returned(
+        my $claim = $checkout->claim_returned(
             {
                 charge_lost_fee => $charge_lost_fee,
                 created_by      => $created_by,
@@ -82,10 +72,16 @@ sub claim_returned {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Checkouts::ReturnClaims') ) {
+        if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
-                status  => 500,
+                status  => 409,
                 openapi => { error => "$_" }
+            );
+        }
+        elsif ( $_->isa('Koha::Exceptions::Checkouts::ReturnClaims::NoCreatedBy') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Mandatory attribute created_by missing" }
             );
         }
         else {

@@ -67,10 +67,16 @@
           }
         },
         "404": {
-          "description": "Checkout not found",
-          "schema": {
-            "$ref": "../definitions.json#/error"
-          }
+            "description": "Checkout not found",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
+        },
+        "409": {
+            "description": "Conflict creating the resource",
+            "schema": {
+                "$ref": "../definitions.json#/error"
+            }
         },
         "500": {
           "description": "Internal server error",
