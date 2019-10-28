@@ -150,7 +150,9 @@ if (C4::Context->preference('OpacSuppression')) {
     }
 }
 
-$template->param( biblio => $biblio );
+$template->param(
+    biblio => $biblio
+);
 
 # get biblionumbers stored in the cart
 my @cart_list;
