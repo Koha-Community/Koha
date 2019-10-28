@@ -174,12 +174,15 @@ sub store {
                     duplicate_id => $+{key}
                 );
             }
-            elsif( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/ ) {
-            # The optional \W in the regex might be a quote or backtick
+            elsif( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column \W?(?<property>\S+)/ ) { # The optional \W in the regex might be a quote or backtick
+                my $type = $+{type};
+                my $value = $+{value};
+                my $property = $+{property};
+                $property =~ s/['`]//g;
                 Koha::Exceptions::Object::BadValue->throw(
-                    type     => $+{type},
-                    value    => $+{value},
-                    property => $+{property},
+                    type     => $type,
+                    value    => $value,
+                    property => $property =~ /(\w+\.\w+)$/ ? $1 : $property, # results in table.column without quotes or backtics
                 );
             }
         }
