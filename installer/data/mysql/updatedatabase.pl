@@ -20011,14 +20011,33 @@ if ( CheckVersion($DBversion) ) {
     }
 
     # Dropping the check constraint in accountlines
-    $dbh->do(
-        qq{
-          ALTER TABLE
-            accountlines
-          DROP CHECK
-            `accountlines_check_type`
-        }
-    );
+    my ($raise_error) = $dbh->{RaiseError};
+    $dbh->{AutoCommit} = 0;
+    $dbh->{RaiseError} = 1;
+    eval {
+        # MariaDB Specific Drop
+        $dbh->do(
+          qq{
+            ALTER TABLE
+              accountlines
+            DROP CONSTRAINT
+              `accountlines_check_type`
+          }
+        );
+    };
+    if ($@) {
+        # MySQL Specific Drop
+        $dbh->do(
+          qq{
+            ALTER TABLE
+              accountlines
+            DROP CHECK
+              `accountlines_check_type`
+          }
+        );
+    }
+    $dbh->{AutoCommit} = 1;
+    $dbh->{RaiseError} = $raise_error;
 
     # Update accountype 'C' to 'CREDIT'
     $dbh->do(
