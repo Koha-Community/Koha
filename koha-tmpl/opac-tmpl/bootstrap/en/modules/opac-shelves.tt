@@ -207,52 +207,68 @@
                                     <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
 
                                     <label for="sortfield">Sort by: </label>
-                                    <select name="sortfield" id="sortfield" class="resort" onchange="$('#sorting-form').submit()">
+                                    <select name="sortfield" id="sortfield" class="resort">
                                         <option value="">Default sorting</option>
-
-                                        [% IF sortfield == 'author' %]
-                                            <option value="author" selected="selected">Author</option>
-                                        [% ELSE %]
-                                            <option value="author">Author</option>
-                                        [% END %]
-
-                                        [% IF sortfield == 'title' %]
-                                            <option value="title" selected="selected">Title</option>
-                                        [% ELSE %]
-                                            <option value="title">Title</option>
-                                        [% END %]
-
-                                        [% IF sortfield == 'itemcallnumber' %]
-                                            <option value="itemcallnumber" selected="selected">Call number</option>
-                                        [% ELSE %]
-                                            <option value="itemcallnumber">Call number</option>
-                                        [% END %]
-
-                                        [% IF sortfield == 'copyrightdate' %]
-                                            <option value="copyrightdate" selected="selected">Copyright date</option>
-                                        [% ELSE %]
-                                            <option value="copyrightdate">Copyright date</option>
-                                        [% END %]
-
-                                        [% IF sortfield == "dateadded" %]
-                                            <option value="dateadded" selected="selected">Date added</option>
-                                        [% ELSE %]
-                                            <option value="dateadded">Date added</option>
-                                        [% END %]
-                                    </select>
-
-                                    <select name="direction" class="resort" onchange="$('#sorting-form').submit()">
-                                        [% IF direction == 'asc' %]
-                                            <option value="asc" selected="selected">Ascending</option>
-                                        [% ELSE %]
-                                            <option value="asc">Ascending</option>
-                                        [% END %]
-
-                                        [% IF direction == 'desc' %]
-                                            <option value="desc" selected="selected">Descending</option>
-                                        [% ELSE %]
-                                            <option value="desc">Descending</option>
-                                        [% END %]
+                                        <optgroup label="Author">
+                                            [% IF sortfield == 'author' && direction == 'asc' %]
+                                                <option value="author:asc" selected="selected">Author (A-Z)</option>
+                                            [% ELSE %]
+                                                <option value="author:asc">Author (A-Z)</option>
+                                            [% END %]
+                                            [% IF sortfield == 'author' && direction == 'desc' %]
+                                                <option value="author:desc" selected="selected">Author (Z-A)</option>
+                                            [% ELSE %]
+                                                <option value="author:desc">Author (Z-A)</option>
+                                            [% END %]
+                                        </optgroup>
+                                        <optgroup label="Title">
+                                            [% IF sortfield == 'title' && direction == 'asc' %]
+                                                <option value="title:asc" selected="selected">Title (A-Z)</option>
+                                            [% ELSE %]
+                                                <option value="title:asc">Title (A-Z)</option>
+                                            [% END %]
+                                            [% IF sortfield == 'title' && direction == 'desc' %]
+                                                <option value="title:desc" selected="selected">Title (Z-A)</option>
+                                            [% ELSE %]
+                                                <option value="title:desc">Title (Z-A)</option>
+                                            [% END %]
+                                        </optgroup>
+                                        <optgroup label="Call number">
+                                            [% IF sortfield == 'itemcallnumber' && direction == 'asc' %]
+                                                <option value="itemcallnumber:asc" selected="selected">Call number (A-Z)</option>
+                                            [% ELSE %]
+                                                <option value="itemcallnumber:asc">Call number (A-Z)</option>
+                                            [% END %]
+                                            [% IF sortfield == 'itemcallnumber' && direction == 'desc' %]
+                                                <option value="itemcallnumber:desc" selected="selected">Call number (Z-A)</option>
+                                            [% ELSE %]
+                                                <option value="itemcallnumber:desc">Call number (Z-A)</option>
+                                            [% END %]
+                                        </optgroup>
+                                        <optgroup label="Copyright date">
+                                            [% IF sortfield == 'copyrightdate' && direction == 'asc' %]
+                                                <option value="copyrightdate:asc" selected="selected">Copyright date (newest to oldest)</option>
+                                            [% ELSE %]
+                                                <option value="copyrightdate:asc">Copyright date (newest to oldest)</option>
+                                            [% END %]
+                                            [% IF sortfield == 'copyrightdate' && direction == 'desc' %]
+                                                <option value="copyrightdate:desc" selected="selected">Copyright date (oldest to newest)</option>
+                                            [% ELSE %]
+                                                <option value="copyrightdate:desc">Copyright date (oldest to newest)</option>
+                                            [% END %]
+                                        </optgroup>
+                                        <optgroup label="Date added">
+                                            [% IF sortfield == "dateadded" && direction == 'asc' %]
+                                                <option value="dateadded:asc" selected="selected">Date added (newest to oldest)</option>
+                                            [% ELSE %]
+                                                <option value="dateadded:asc">Date added (newest to oldest)</option>
+                                            [% END %]
+                                            [% IF sortfield == "dateadded" && direction == 'desc' %]
+                                                <option value="dateadded:desc" selected="selected">Date added (oldest to newest)</option>
+                                            [% ELSE %]
+                                                <option value="dateadded:desc">Date added (oldest to newest)</option>
+                                            [% END %]
+                                        </optgroup>
                                     </select>
 
                                     <input type="submit" class="btn btn-small" id="sort-submit" value="Resort list" />
@@ -974,6 +990,10 @@ $(function() {
     Sticky.hcSticky({
         stickTo: "#usershelves",
         stickyClass: "floating"
+    });
+
+    $("#sortfield").on("change", function(){
+        $('#sorting-form').submit();
     });
 
 }); // document.ready
