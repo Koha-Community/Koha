@@ -338,14 +338,27 @@ subtest 'accumulate_rentalcharge tests' => sub {
     );
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
-    my $day = $dt_from->day_of_week + 1;
+    # DateTime 1..7 (Mon..Sun), C4::Calender 0..6 (Sun..Sat)
+    my $closed_day =
+        ( $dt_from->day_of_week == 6 ) ? 0
+      : ( $dt_from->day_of_week == 7 ) ? 1
+      :                                  $dt_from->day_of_week + 1;
     $calendar->insert_week_day_holiday(
-        weekday     => $day,
+        weekday     => $closed_day,
         title       => 'Test holiday',
         description => 'Test holiday'
     );
     $charge = $fees->accumulate_rentalcharge();
-    my $dayname = $dt_from->clone->add( days => 1 )->day_name;
+    my $day_names = {
+        0 => 'Sunday',
+        1 => 'Monday',
+        2 => 'Tuesday',
+        3 => 'Wednesday',
+        4 => 'Thursday',
+        5 => 'Friday',
+        6 => 'Saturday'
+    };
+    my $dayname = $day_names->{$closed_day};
     is( $charge, 5.00,
 "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname"
     );
@@ -384,7 +397,7 @@ subtest 'accumulate_rentalcharge tests' => sub {
 "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u)"
     );
 
-    $calendar->delete_holiday( weekday => $day );
+    $calendar->delete_holiday( weekday => $closed_day );
     $charge = $fees->accumulate_rentalcharge();
     is( $charge, 24.00, 'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (96h - 0h * 0.25u)' );
 };
