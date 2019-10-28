@@ -162,6 +162,20 @@ OPAC:
             - "for items on the OPAC record details page."
             - "<br />Note: If 'on a separate column' is selected, you still need to enable the item_shelving_location display on the <a href='/cgi-bin/koha/admin/columns_settings.pl'>configure columns</a> administration page"
         -
+            - pref: OPACShowMusicalInscripts
+              default: 0
+              choices:
+                yes: Show
+                no: "Don't show"
+            - musical inscripts on the OPAC record details page.
+        -
+            - pref: OPACPlayMusicalInscripts
+              default: 0,'','If displayed musical inscripts, play midi conversion for items on the OPAC record details page.'
+              choices:
+                yes: Play
+                no: "Don't play"
+            - MIDI representation of musical inscripts on the OPAC record details page.
+        -
             - pref: OpacKohaUrl
               default: 0
               choices:
