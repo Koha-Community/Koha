@@ -19,6 +19,7 @@ use Test::More tests => 5;
 
 use C4::Context;
 use C4::Log;
+use C4::Auth qw/checkpw/;
 use Koha::Database;
 use Koha::DateUtils;
 
@@ -162,7 +163,7 @@ subtest 'GetLogs() respects interface filters' => sub {
 };
 
 subtest 'GDPR logging' => sub {
-    plan tests => 1;
+    plan tests => 6;
 
     my $builder = t::lib::TestBuilder->new;
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -170,8 +171,26 @@ subtest 'GDPR logging' => sub {
     t::lib::Mocks::mock_userenv({ patron => $patron });
     logaction( 'AUTH', 'FAILURE', $patron->id, '', 'opac' );
     my $logs = GetLogs( undef, undef, $patron->id, ['AUTH'], ['FAILURE'], $patron->id );
-    is( @$logs, 1, 'We should find one auth failure for this patron' );
+    is( @$logs, 1, 'We should find one auth failure' );
 
+    t::lib::Mocks::mock_preference('AuthFailureLog', 1);
+    my $strong_password = 'N0tStr0ngAnyM0reN0w:)';
+    $patron->set_password({ password => $strong_password });
+    my @ret = checkpw( $dbh, $patron->userid, 'WrongPassword', undef, undef, 1);
+    is( $ret[0], 0, 'Authentication failed' );
+    # Look for auth failure but NOT on patron id, pass userid in info parameter
+    $logs = GetLogs( undef, undef, 0, ['AUTH'], ['FAILURE'], undef, $patron->userid );
+    is( @$logs, 1, 'We should find one auth failure with this userid' );
+    t::lib::Mocks::mock_preference('AuthFailureLog', 0);
+    @ret = checkpw( $dbh, $patron->userid, 'WrongPassword', undef, undef, 1);
+    $logs = GetLogs( undef, undef, 0, ['AUTH'], ['FAILURE'], undef, $patron->userid );
+    is( @$logs, 1, 'Still only one failure with this userid' );
+    t::lib::Mocks::mock_preference('AuthSuccessLog', 1);
+    @ret = checkpw( $dbh, $patron->userid, $strong_password, undef, undef, 1);
+    is( $ret[0], 1, 'Authentication succeeded' );
+    # Now we can look for patron id
+    $logs = GetLogs( undef, undef, $patron->id, ['AUTH'], ['SUCCESS'], $patron->id );
+    is( @$logs, 1, 'We expect only one auth success line for this patron' );
 };
 
 $schema->storage->txn_rollback;
