@@ -24,11 +24,8 @@ $footer-height: 45px;
 }
 
 .js {
-    .dateformat {
-        display: none;
-    }
-
-    #sortsubmit {
+    .dateformat,
+    #sorting-form {
         display: none;
     }
 }
@@ -608,6 +605,29 @@ th {
     border-color: #9FBA35;
     color: #333;
 }
+
+/* Add style for Bootstrap dropdown-header class */
+.dropdown-header {
+    border-top: 1px solid #eee;
+    color: #000;
+    display: block;
+    font-size: 90%;
+    font-weight: 700;
+    line-height: 1.42857143;
+    padding: 3px 20px;
+    padding-left: 10px;
+    white-space: nowrap;
+}
+
+.btn-group.open {
+    .btn-link {
+        &.dropdown-toggle {
+            background-image: none;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .25);
+        }
+    }
+}
+
 
 .breadcrumb {
     background-color: #F0F3F3;
@@ -1360,6 +1380,10 @@ div {
             a {
                 border-left: 0;
             }
+        }
+
+        &.dropdown-header {
+            display: block;
         }
     }
 

@@ -247,26 +247,26 @@
                                         </optgroup>
                                         <optgroup label="Copyright date">
                                             [% IF sortfield == 'copyrightdate' && direction == 'asc' %]
-                                                <option value="copyrightdate:asc" selected="selected">Copyright date (newest to oldest)</option>
+                                                <option value="copyrightdate:desc" selected="selected">Copyright date (newest to oldest)</option>
                                             [% ELSE %]
-                                                <option value="copyrightdate:asc">Copyright date (newest to oldest)</option>
+                                                <option value="copyrightdate:desc">Copyright date (newest to oldest)</option>
                                             [% END %]
                                             [% IF sortfield == 'copyrightdate' && direction == 'desc' %]
-                                                <option value="copyrightdate:desc" selected="selected">Copyright date (oldest to newest)</option>
+                                                <option value="copyrightdate:asc" selected="selected">Copyright date (oldest to newest)</option>
                                             [% ELSE %]
-                                                <option value="copyrightdate:desc">Copyright date (oldest to newest)</option>
+                                                <option value="copyrightdate:asc">Copyright date (oldest to newest)</option>
                                             [% END %]
                                         </optgroup>
                                         <optgroup label="Date added">
                                             [% IF sortfield == "dateadded" && direction == 'asc' %]
-                                                <option value="dateadded:asc" selected="selected">Date added (newest to oldest)</option>
+                                                <option value="dateadded:desc" selected="selected">Date added (newest to oldest)</option>
                                             [% ELSE %]
-                                                <option value="dateadded:asc">Date added (newest to oldest)</option>
+                                                <option value="dateadded:desc">Date added (newest to oldest)</option>
                                             [% END %]
                                             [% IF sortfield == "dateadded" && direction == 'desc' %]
-                                                <option value="dateadded:desc" selected="selected">Date added (oldest to newest)</option>
+                                                <option value="dateadded:asc" selected="selected">Date added (oldest to newest)</option>
                                             [% ELSE %]
-                                                <option value="dateadded:desc">Date added (oldest to newest)</option>
+                                                <option value="dateadded:asc">Date added (oldest to newest)</option>
                                             [% END %]
                                         </optgroup>
                                     </select>
@@ -929,8 +929,6 @@ $(function() {
         KOHA.coce.getURL('[% Koha.Preference('CoceHost') | html %]', '[% Koha.Preference('CoceProviders') | html %]');
     [% END %]
 
-    $('#sort-submit').hide();
-
     [% IF print %]
         window.print();
         window.onafterprint = function () {
@@ -947,11 +945,34 @@ $(function() {
         stickyClass: "floating"
     });
 
+    sortMenu( $("#sorting-form") );
+
     $("#sortfield").on("change", function(){
         $('#sorting-form').submit();
     });
 
 }); // document.ready
+
+function sortMenu( sorting_form ){
+    var shelfnumber = sorting_form.find("input[name='shelfnumber']").val();
+    var sort_link = "/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=" + shelfnumber + "&sortfield=";
+    var menu = "<div class=\"btn-group\"><button type=\"button\" class=\"btn btn-link dropdown-toggle\" data-toggle=\"dropdown\" id=\"sortmenu\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-sort\"></i> " + _("Sort") + "</span></button><ul class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"sortmenu\">";
+    $("#sortfield").children().each(function(){
+        if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
+            menu += "<li><a href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a></li>";
+        } else if( $(this)[0].tagName.toUpperCase() == "OPTGROUP" ){
+            menu += "<li class=\"dropdown-header\">" + $(this).attr("label") + "</li>";
+            $(this).children().each(function(){
+                if( $(this)[0].tagName.toUpperCase() == "OPTION" ){
+                    menu += "<li><a href=\"" + sort_link + $(this).val() + "\">" + $(this).text() + "</a></li>";
+                }
+            });
+        }
+    });
+    menu += "</ul></div>";
+    $(".list-actions").append( menu );
+    sorting_form.remove();
+}
 
 function AdjustRemark() {
     var category;
