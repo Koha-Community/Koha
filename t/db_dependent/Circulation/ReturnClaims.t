@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::MockModule;
 use Test::Warn;
 
@@ -84,6 +84,46 @@ subtest 'Test Koha::Checkout::claim_returned' => sub {
             notes      => "Test note",
         }
     );
+
+    is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
+    is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );
+    is( $claim->borrowernumber, $patron->id, "Claim borrowernumber matches" );
+    is( $claim->notes, "Test note", "Claim notes match" );
+    is( $claim->created_by, $patron->id, "Claim created_by matches" );
+    ok( $claim->created_on, "Claim created_on is set" );
+};
+
+subtest 'Test Koha::Patronn::return_claims' => sub {
+    plan tests => 7;
+
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', 1 );
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item   = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                biblionumber => $biblio->biblionumber,
+                notforloan   => 0,
+                itemlost     => 0,
+                withdrawn    => 0,
+            }
+        }
+    );
+    my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+
+    $checkout->claim_returned(
+        {
+            created_by => $patron->id,
+            notes      => "Test note",
+        }
+    );
+
+    my $claims = $patron->return_claims;
+
+    is( $claims->count, 1, "Got back correct number of claims" );
+
+    my $claim = $claims->next;
 
     is( $claim->issue_id, $checkout->id, "Claim issue id matches" );
     is( $claim->itemnumber, $item->id, "Claim itemnumber matches" );

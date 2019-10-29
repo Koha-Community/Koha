@@ -1129,6 +1129,18 @@ sub old_holds {
     return Koha::Old::Holds->_new_from_dbic($old_holds_rs);
 }
 
+=head3 return_claims
+
+my $return_claims = $patron->return_claims
+
+=cut
+
+sub return_claims {
+    my ($self) = @_;
+    my $return_claims = $self->_result->return_claims_borrowernumbers;
+    return Koha::Checkouts::ReturnClaims->_new_from_dbic( $return_claims );
+}
+
 =head3 notice_email_address
 
   my $email = $patron->notice_email_address;
