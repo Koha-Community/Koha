@@ -1,0 +1,93 @@
+{
+  "type": "object",
+  "properties": {
+    "claim_id": {
+      "type": [
+        "integer"
+      ],
+      "description": "internally assigned return claim identifier"
+    },
+    "item_id": {
+      "type": [
+        "integer"
+      ],
+      "description": "internal identifier of the claimed item"
+    },
+    "issue_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "internal identifier of the claimed checkout if still checked out"
+    },
+    "old_issue_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "internal identifier of the claimed checkout if not longer checked out"
+    },
+    "patron_id": {
+      "$ref": "../x-primitives.json#/patron_id"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "notes about this claim"
+    },
+    "created_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "date of claim creation"
+    },
+    "created_by": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "patron id of librarian who made the claim"
+    },
+    "updated_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "date the claim was last updated"
+    },
+    "updated_by": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "patron id of librarian who last updated the claim"
+    },
+    "resolution": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "code of resolution type for this claim"
+    },
+    "resolved_on": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "date the claim was resolved"
+    },
+    "resolved_by": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "patron id of librarian who resolved this claim"
+    }
+  }
+}

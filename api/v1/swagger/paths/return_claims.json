@@ -1,0 +1,355 @@
+{
+  "/return_claims": {
+    "post": {
+      "x-mojo-to": "ReturnClaims#claim_returned",
+      "operationId": "claimReturned",
+      "tags": [
+        "claims",
+        "returned",
+        "return",
+        "claim"
+      ],
+      "parameters": [
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "item_id" : {
+                "description": "Internal item id to claim as returned",
+                "type": "integer"
+              },
+              "notes": {
+                "description": "Notes about this return claim",
+                "type": "string"
+              },
+              "created_by": {
+                "description": "User id for the librarian submitting this claim",
+                "type": "string"
+              },
+              "charge_lost_fee": {
+                "description": "Charge a lost fee if true and Koha is set to allow a choice. Ignored otherwise.",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "201": {
+          "description": "Created claim",
+          "schema": {
+            "$ref": "../definitions.json#/return_claim"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Checkout not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  },
+  "/return_claims/{claim_id}/notes": {
+    "put": {
+      "x-mojo-to": "ReturnClaims#update_notes",
+      "operationId": "updateClaimNotes",
+      "tags": [
+        "claims",
+        "returned",
+        "return",
+        "claim",
+        "notes"
+      ],
+      "parameters": [
+        {
+          "name": "claim_id",
+          "in": "path",
+          "required": true,
+          "description": "Unique identifier for the claim whose notes are to be updated",
+          "type": "integer"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "notes": {
+                "description": "Notes about this return claim",
+                "type": "string"
+              },
+              "updated_by": {
+                "description": "User id for the librarian updating the claim notes",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Claim notes updated",
+          "schema": {
+            "$ref": "../definitions.json#/return_claim"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Claim not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  },
+  "/return_claims/{claim_id}": {
+    "delete": {
+      "x-mojo-to": "ReturnClaims#delete_claim",
+      "operationId": "deletedClaim",
+      "tags": [
+        "claims",
+        "returned",
+        "return",
+        "claim",
+        "delete"
+      ],
+      "parameters": [
+        {
+          "name": "claim_id",
+          "in": "path",
+          "required": true,
+          "description": "Unique identifier for the claim to be deleted",
+          "type": "integer"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Claim deleted",
+          "schema": {
+            "$ref": "../definitions.json#/return_claim"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Claim not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  },
+  "/return_claims/{claim_id}/resolve": {
+    "put": {
+      "x-mojo-to": "ReturnClaims#resolve_claim",
+      "operationId": "updateClaimResolve",
+      "tags": [
+        "claims",
+        "returned",
+        "return",
+        "claim",
+        "notes"
+      ],
+      "parameters": [
+        {
+          "name": "claim_id",
+          "in": "path",
+          "required": true,
+          "description": "Unique identifier for the claim to be resolved",
+          "type": "integer"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "resolution": {
+                "description": "The RETURN_CLAIM_RESOLUTION code to be used to resolve the calim",
+                "type": "string"
+              },
+              "resolved_by": {
+                "description": "User id for the librarian resolving the claim",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Claim resolved",
+          "schema": {
+            "$ref": "../definitions.json#/return_claim"
+          }
+        },
+        "400": {
+          "description": "Bad request",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Claim not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  }
+}
