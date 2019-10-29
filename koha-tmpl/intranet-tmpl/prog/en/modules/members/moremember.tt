@@ -715,6 +715,25 @@
                                     <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count | html %] Article requests</a>
                                 </li>
                             [% END %]
+
+                            <li>
+                                [% IF ( patron.return_claims.count ) %]
+                                    <a href="#return-claims" id="return-claims-tab">
+                                        <span id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
+                                        /
+                                        <span id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
+                                        Claim(s)
+                                    </a>
+                                [% ELSE %]
+                                    <a href="#return-claims" id="return-claims-tab">
+                                        <span id="return-claims-count-resolved">0</span>
+                                        /
+                                        <span id="return-claims-count-unresolved">0</span>
+                                        Claim(s)
+                                    </a>
+                                [% END %]
+                            </li>
+
                             <li>
                                 <a id="debarments-tab-link" href="#reldebarments">[% debarments.size | html %] Restrictions</a>
                             </li>
@@ -807,6 +826,8 @@
                             </div> [% # /div#reserves %]
                         [% END %]
 
+                        [% INCLUDE 'patron-return-claims.inc' %]
+
                         [% IF Koha.Preference('ArticleRequests') %]
                             [% INCLUDE 'patron-article-requests.inc' %]
                         [% END %]
@@ -839,6 +860,10 @@
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
     <script>
         /* Set some variable needed in circulation.js */
+        var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        var ClaimReturnedLostValue = "[% Koha.Preference('ClaimReturnedLostValue') | html %]";
+        var ClaimReturnedChargeFee = "[% Koha.Preference('ClaimReturnedChargeFee') | html %]";
+        var ClaimReturnedWarningThreshold = "[% Koha.Preference('ClaimReturnedWarningThreshold') | html %]";
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
         var borrowernumber = "[% patron.borrowernumber | html %]";

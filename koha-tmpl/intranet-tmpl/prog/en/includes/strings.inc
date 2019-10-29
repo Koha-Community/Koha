@@ -5,6 +5,10 @@
     var NOT_RENEWABLE_RESTRICTION = _("Not allowed: patron restricted");
     var CIRCULATION_RENEWED_DUE = _("Renewed, due:");
     var CIRCULATION_RENEW_FAILED = _("Renew failed:");
+    var RETURN_CLAIMED = _("Return claimed");
+    var RETURN_CLAIMED_FAILURE = _("Unable to claim as returned");
+    var RETURN_CLAIMED_MAKE = _("Claim returned");
+    var RETURN_CLAIMED_NOTES = _("Notes about return claim");
     var NOT_CHECKED_OUT = _("not checked out");
     var TOO_MANY_RENEWALS = _("too many renewals");
     var ON_RESERVE = _("on hold");
@@ -47,4 +51,5 @@
     var MSG_NO_ITEMTYPE = _("No itemtype");
     var MSG_CHECKOUTS_BY_ITEMTYPE = _("Number of checkouts by item type");
     var PATRON_NOTE = _("Patron note");
+    var CONFIRM_DELETE_RETURN_CLAIM = _("Are you sure you want to delete this return claim?");
 </script>

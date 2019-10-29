@@ -28,6 +28,7 @@
                         <th scope="col">Price</th>
                         <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllRenewals">select all</a> | <a href="#" id="UncheckAllRenewals">none</a></p></th>
                         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllCheckins">select all</a> | <a href="#" id="UncheckAllCheckins">none</a></p></th>
+                        <th scope="col">Return claims</th>
                         <th scope="col">Export <p class="column-tool"><a href="#" id="CheckAllExports">select all</a> | <a href="#" id="UncheckAllExports">none</a></p></th>
                     </tr>
                 </thead>
@@ -82,4 +83,74 @@
     [% ELSE %]
         <p>Patron has nothing checked out.</p>
     [% END %]
+</div>
+
+<!-- Claims Returned Modal -->
+<div class="modal fade" id="claims-returned-modal" tabindex="-1" role="dialog" aria-labelledby="claims-returned-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="claims-returned-modal-label">Claim returned</h4>
+      </div>
+      <div class="modal-body">
+
+          <div class="form-group">
+            <label for="claims-returned-notes" class="control-label">Notes</label>
+            <div>
+              <textarea id="claims-returned-notes" class="form-control" rows="3"></textarea>
+            </div>
+          </div>
+
+          [% IF Koha.Preference('ClaimReturnedChargeFee') == 'ask' %]
+            <div class="form-group">
+              <div class="checkbox">
+                <label for="claims-returned-charge-lost-fee">
+                  <input id="claims-returned-charge-lost-fee" type="checkbox" value="1">
+                  Charge lost fee
+                </label>
+              </div>
+            </div>
+          [% END %]
+
+          <input type="hidden" id="claims-returned-itemnumber" />
+      </div>
+      <div class="modal-footer">
+        <button id="claims-returned-modal-btn-submit" type="button" class="btn btn-primary"><i class="fa fa-exclamation-circle"></i> Make claim</button>
+        <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Resolve Return Claim Modal -->
+<div class="modal fade" id="claims-returned-resolved-modal" tabindex="-1" role="dialog" aria-labelledby="claims-returned-resolved-modal-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="claims-returned-resolved-modal-label">Resolve return claim</h4>
+      </div>
+      <div class="modal-body">
+
+          <div class="form-group">
+            <label for="claims-returned-resolved-code">Resolution</label>
+            [% SET resolutions = AuthorisedValues.GetAuthValueDropbox('RETURN_CLAIM_RESOLUTION') %]
+            <select class="form-control" id="claims-returned-resolved-modal-resolved-code">
+              [% FOREACH r IN resolutions %]
+                  <option value="[% r.authorised_value | html %]">[% r.lib | html %]</option>
+              [% END %]
+            </select>
+          </div>
+
+          <input type="hidden" id="claims-returned-resolved-modal-id"/>
+      </div>
+      <div class="modal-footer">
+        <button id="claims-returned-resolved-modal-btn-submit" type="button" class="btn btn-primary">
+          <i id="claims-returned-resolved-modal-btn-submit-icon" class="fa fa-exclamation-circle"></i>
+          <i id="claims-returned-resolved-modal-btn-submit-spinner" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i>
+          Resolve claim
+         </button>
+        <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
 </div>

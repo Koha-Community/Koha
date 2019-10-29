@@ -64,28 +64,28 @@ print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 my @parameters;
 my $sql = '
     SELECT
-        issuedate,
-        date_due,
-        date_due < now() as date_due_overdue,
+        issues.issuedate,
+        issues.date_due,
+        issues.date_due < now() as date_due_overdue,
         issues.timestamp,
 
-        onsite_checkout,
+        issues.onsite_checkout,
 
-        biblionumber,
+        biblio.biblionumber,
         biblio.title,
         biblio.subtitle,
         biblio.medium,
         biblio.part_number,
         biblio.part_name,
-        author,
+        biblio.author,
 
-        itemnumber,
-        barcode,
+        items.itemnumber,
+        items.barcode,
         branches2.branchname AS homebranch,
-        itemnotes,
-        itemnotes_nonpublic,
-        itemcallnumber,
-        replacementprice,
+        items.itemnotes,
+        items.itemnotes_nonpublic,
+        items.itemcallnumber,
+        items.replacementprice,
 
         issues.branchcode,
         branches.branchname,
@@ -95,17 +95,23 @@ my $sql = '
 
         items.ccode AS collection,
 
-        borrowernumber,
-        surname,
-        firstname,
-        cardnumber,
+        borrowers.borrowernumber,
+        borrowers.surname,
+        borrowers.firstname,
+        borrowers.cardnumber,
 
-        itemlost,
-        damaged,
-        location,
+        items.itemlost,
+        items.damaged,
+        items.location,
         items.enumchron,
 
-        DATEDIFF( issuedate, CURRENT_DATE() ) AS not_issued_today
+        DATEDIFF( issues.issuedate, CURRENT_DATE() ) AS not_issued_today,
+
+        return_claims.id AS return_claim_id,
+        return_claims.notes AS return_claim_notes,
+        return_claims.created_on AS return_claim_created_on,
+        return_claims.updated_on AS return_claim_updated_on
+
     FROM issues
         LEFT JOIN items USING ( itemnumber )
         LEFT JOIN biblio USING ( biblionumber )
@@ -113,7 +119,8 @@ my $sql = '
         LEFT JOIN borrowers USING ( borrowernumber )
         LEFT JOIN branches ON ( issues.branchcode = branches.branchcode )
         LEFT JOIN branches branches2 ON ( items.homebranch = branches2.branchcode )
-    WHERE borrowernumber
+        LEFT JOIN return_claims USING ( issue_id )
+    WHERE issues.borrowernumber
 ';
 
 if ( @borrowernumber == 1 ) {
@@ -131,6 +138,7 @@ my $sth = $dbh->prepare($sql);
 $sth->execute(@parameters);
 
 my $item_level_itypes = C4::Context->preference('item-level_itypes');
+my $claims_returned_lost_value = C4::Context->preference('ClaimReturnedLostValue');
 
 my @checkouts_today;
 my @checkouts_previous;
@@ -165,9 +173,11 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         $collection = $av->count ? $av->next->lib : '';
     }
     my $lost;
+    my $claims_returned;
     if ( $c->{itemlost} ) {
         my $av = Koha::AuthorisedValues->search({ category => 'LOST', authorised_value => $c->{itemlost} });
         $lost = $av->count ? $av->next->lib : '';
+        $claims_returned = $c->{itemlost} eq $claims_returned_lost_value;
     }
     my $damaged;
     if ( $c->{damaged} ) {
@@ -212,6 +222,14 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,
+
+        return_claim_id         => $c->{return_claim_id},
+        return_claim_notes      => $c->{return_claim_notes},
+        return_claim_created_on => $c->{return_claim_created_on},
+        return_claim_updated_on => $c->{return_claim_updated_on},
+        return_claim_created_on_formatted => $c->{return_claim_created_on} ? output_pref({ dt => dt_from_string( $c->{return_claim_created_on} ) }) : undef,
+        return_claim_updated_on_formatted => $c->{return_claim_updated_on} ? output_pref({ dt => dt_from_string( $c->{return_claim_updated_on} ) }) : undef,
+
         issuedate_formatted => output_pref(
             {
                 dt          => dt_from_string( $c->{issuedate} ),
@@ -225,6 +243,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
             }
         ),
         lost    => $lost,
+        claims_returned => $claims_returned,
         damaged => $damaged,
         borrower => {
             surname    => $c->{surname},

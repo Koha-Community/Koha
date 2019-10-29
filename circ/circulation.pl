@@ -643,6 +643,7 @@ $template->param(
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),
     autoswitched              => $autoswitched,
+    logged_in_user            => $logged_in_user,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

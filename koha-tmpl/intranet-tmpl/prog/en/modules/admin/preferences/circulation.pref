@@ -1085,3 +1085,22 @@ Circulation:
                 pages: Pages
                 chapters: Chapters
             -
+    Return Claims:
+        -
+            - When marking a checkout as "claims returned",
+            - pref: ClaimReturnedChargeFee
+              default: ask
+              choices:
+                  ask: ask if a lost fee should be charged
+                  charge: charge a lost fee
+                  no_charge: don't charge a lost fee
+            - .
+        -
+            - Use the LOST authorised value
+            - pref: ClaimReturnedLostValue
+            - to represent returns claims
+        -
+            - Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than
+            - pref: ClaimReturnedWarningThreshold
+              class: integer
+            - items.

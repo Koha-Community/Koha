@@ -732,6 +732,12 @@
                                         <li><span class="circ-hlt">Overdues: Patron has ITEMS OVERDUE.</span> <a href="#checkouts">See highlighted items below</a></li>
                                     [% END %]
 
+                                    [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
+                                    [% SET return_claims = patron.return_claims %]
+                                    [% IF return_claims.count %]
+                                        <li><span class="circ-hlt return-claims">Return claims: Patron has [% return_claims.count | html %] RETURN CLAIMS.</span>
+                                    [% END %]
+
                                     [% IF ( charges ) %]
                                         [% INCLUDE 'blocked-fines.inc' fines = chargesamount %]
                                     [% END %]
@@ -845,6 +851,30 @@
                                 </li>
                             [% END %]
 
+                            <li>
+                                [% IF ( patron.return_claims.count ) %]
+                                    <a href="#return-claims" id="return-claims-tab">
+                                        <span id="return-claims-count-resolved">[% patron.return_claims.resolved.count | html %]</span>
+                                        /
+                                        <span id="return-claims-count-unresolved">[% patron.return_claims.unresolved.count | html %]</span>
+                                        Claim(s)
+                                    </a>
+                                [% ELSE %]
+                                    <a href="#return-claims" id="return-claims-tab">
+                                        <span id="return-claims-count-resolved">0</span>
+                                        /
+                                        <span id="return-claims-count-unresolved">0</span>
+                                        Claim(s)
+                                    </a>
+                                [% END %]
+                            </li>
+
+                            [% IF Koha.Preference('ArticleRequests') %]
+                                <li>
+                                    <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count | html %] Article requests</a>
+                                </li>
+                            [% END %]
+
                             <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.count | html %] Restrictions</a></li>
 
                             [% SET enrollments = patron.get_club_enrollments(1) %]
@@ -928,6 +958,8 @@
                             [% END # /IF holds_count %]
                         </div> <!-- /#reserves -->
 
+                        [% INCLUDE 'patron-return-claims.inc' %]
+
                         [% IF Koha.Preference('ArticleRequests') %]
                             [% INCLUDE 'patron-article-requests.inc' %]
                         [% END %]
@@ -995,6 +1027,10 @@
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     <script type="text/javascript">
         /* Set some variable needed in circulation.js */
+        var logged_in_user_borrowernumber = "[% logged_in_user.borrowernumber | html %]";
+        var ClaimReturnedLostValue = "[% Koha.Preference('ClaimReturnedLostValue') | html %]";
+        var ClaimReturnedChargeFee = "[% Koha.Preference('ClaimReturnedChargeFee') | html %]";
+        var ClaimReturnedWarningThreshold = "[% Koha.Preference('ClaimReturnedWarningThreshold') | html %]";
         var MSG_DT_LOADING_RECORDS = _("Loading... you may continue scanning.");
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";

@@ -1,0 +1,127 @@
+#!/usr/bin/perl
+
+# Copyright 2019 ByWater Solutions
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+use Modern::Perl;
+
+use CGI;
+use JSON qw(to_json);
+
+use C4::Auth qw(check_cookie_auth haspermission get_session);
+use C4::Context;
+
+use Koha::AuthorisedValues;
+use Koha::DateUtils;
+use Koha::Patrons;
+
+my $input = new CGI;
+
+my ( $auth_status, $sessionID ) =
+  check_cookie_auth( $input->cookie('CGISESSID') );
+
+my $session = get_session($sessionID);
+my $userid  = $session->param('id');
+
+unless (
+    haspermission(
+        $userid, { circulate => 'circulate_remaining_permissions' }
+    )
+    || haspermission( $userid, { borrowers => 'edit_borrowers' } )
+  )
+{
+    exit 0;
+}
+
+my @sort_columns = qw/title notes created_on updated_on/;
+
+my $borrowernumber   = $input->param('borrowernumber');
+my $offset           = $input->param('iDisplayStart');
+my $results_per_page = $input->param('iDisplayLength') || -1;
+
+my $sorting_column = $input->param('iSortCol_0') || q{};
+$sorting_column =
+  ( $sorting_column && $sort_columns[$sorting_column] )
+  ? $sort_columns[$sorting_column]
+  : 'created_on';
+
+my $sorting_direction = $input->param('sSortDir_0') || q{};
+$sorting_direction = $sorting_direction eq 'asc' ? 'asc' : 'desc';
+
+$results_per_page = undef if ( $results_per_page == -1 );
+
+binmode STDOUT, ":encoding(UTF-8)";
+print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
+
+my $sql = qq{
+    SELECT
+        return_claims.*,
+
+        biblio.biblionumber,
+        biblio.title,
+        biblio.author,
+
+        items.enumchron,
+        items.barcode
+    FROM return_claims
+        LEFT JOIN items USING ( itemnumber )
+        LEFT JOIN biblio USING ( biblionumber )
+        LEFT JOIN biblioitems USING ( biblionumber )
+    WHERE return_claims.borrowernumber = ?
+    ORDER BY $sorting_column $sorting_direction
+};
+
+my $dbh = C4::Context->dbh();
+my $sth = $dbh->prepare($sql);
+$sth->execute($borrowernumber);
+
+my $resolved = 0;
+my $unresolved = 0;
+my @return_claims;
+while ( my $claim = $sth->fetchrow_hashref() ) {
+    $claim->{created_on_formatted}  = output_pref( { dt => dt_from_string( $claim->{created_on} ) } ) if $claim->{created_on};
+    $claim->{updated_on_formatted}  = output_pref( { dt => dt_from_string( $claim->{updated_on} ) } ) if $claim->{updated_on};
+    $claim->{resolved_on_formatted} = output_pref( { dt => dt_from_string( $claim->{resolved_on} ) } ) if $claim->{resolved_on};
+
+    my $patron = $claim->{resolved_by} ? Koha::Patrons->find( $claim->{resolved_by} ) : undef;
+    $claim->{resolved_by_data} = $patron->unblessed if $patron;
+
+    my $resolution = $claim->{resolution}
+      ? Koha::AuthorisedValues->find(
+        {
+            category         => 'RETURN_CLAIM_RESOLUTION',
+            authorised_value => $claim->{resolution},
+        }
+      )
+      : undef;
+    $claim->{resolution_data} = $resolution->unblessed if $resolution;
+
+    $claim->{resolved_on} ? $resolved++ : $unresolved++;
+
+    push( @return_claims, $claim );
+}
+
+my $data = {
+    iTotalRecords        => scalar @return_claims,
+    iTotalDisplayRecords => scalar @return_claims,
+    sEcho                => $input->param('sEcho') || undef,
+    aaData               => \@return_claims,
+    resolved             => $resolved,
+    unresolved           => $unresolved
+};
+
+print to_json($data);

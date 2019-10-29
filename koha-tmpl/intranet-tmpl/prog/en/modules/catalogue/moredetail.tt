@@ -100,21 +100,31 @@
                 <li><span class="label">Lost status:</span>
                     [% IF ( CAN_user_circulate ) %]
                         <form action="updateitem.pl" method="post">
-                        <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
-                        <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
-                        <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
-                        <select name="itemlost" >
-                                    <option value="">Choose</option>
-                        [% FOREACH itemlostloo IN itemlostloop %]
-                            [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
-                                    <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
+                            <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
+                            <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
+                            <input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber | html %]" />
+                            <select name="itemlost" >
+                                <option value="">Choose</option>
+                                [% FOREACH itemlostloo IN itemlostloop %]
+                                    [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
+                                        <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
+                                    [% ELSE %]
+                                        <option value="[% itemlostloo.authorised_value | html %]">[% itemlostloo.lib | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                            <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
+                            <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
+
+                            [% SET ClaimReturnedLostValue = Koha.Preference('ClaimReturnedLostValue') %]
+                            [% IF ClaimReturnedLostValue && ITEM_DAT.itemlost == ClaimReturnedLostValue %]
+                                <input type="submit" name="submit" class="submit" value="Set status" disabled="disabled"/>
+                                <p class="help-block">Item has been claimed as returned.</p>
                             [% ELSE %]
-                                    <option value="[% itemlostloo.authorised_value | html %]">[% itemlostloo.lib | html %]</option>
+                                <input type="hidden" name="op" value="set_lost" />
+                                <input type="submit" name="submit" class="submit" value="Set status" /></form>
                             [% END %]
-                        [% END %]
-                        </select>
-                        <input type="hidden" name="op" value="set_lost" />
-                        <input type="submit" name="submit" class="submit" value="Set status" /></form>
+                        </form>
                     [% ELSE %]
                         [% FOREACH itemlostloo IN itemlostloop %]
                             [% IF ( itemlostloo.selected ) %]

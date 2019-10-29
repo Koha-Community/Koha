@@ -209,6 +209,7 @@ $template->param(
     housebound_role => scalar $patron->housebound_role,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
+    logged_in_user => $logged_in_user,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
