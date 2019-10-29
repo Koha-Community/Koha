@@ -121,14 +121,14 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
 
     my $handle   = $input->upload('uploadborrowers');
     my %defaults = $input->Vars;
-
+    my $overwrite_passwords = defined $input->param('overwrite_passwords') ? 1 : 0;
     my $return = $Import->import_patrons(
         {
             file                         => $handle,
             defaults                     => \%defaults,
             matchpoint                   => $matchpoint,
             overwrite_cardnumber         => $input->param('overwrite_cardnumber'),
-            overwrite_passwords          => $input->param('overwrite_passwords'),
+            overwrite_passwords          => $overwrite_passwords,
             preserve_extended_attributes => $input->param('ext_preserve') || 0,
         }
     );
