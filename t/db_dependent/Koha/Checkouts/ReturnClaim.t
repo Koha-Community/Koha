@@ -30,7 +30,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest "store() tests" => sub {
 
-    plan tests => 6;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -82,7 +82,39 @@ subtest "store() tests" => sub {
         throws_ok {
             Koha::Checkouts::ReturnClaim->new(
                 {
-                    issue_id       => $checkout->id + 1000,
+                    issue_id       => $checkout->id,
+                    itemnumber     => $checkout->itemnumber,
+                    borrowernumber => $checkout->borrowernumber,
+                    notes          => 'Some notes',
+                    created_by     => $librarian->borrowernumber
+                }
+            )->store;
+        }
+        'Koha::Exceptions::Object::DuplicateID',
+            'An exception is thrown on duplicate issue_id';
+        close STDERR;
+
+        is(
+            $@->duplicate_id,
+            'issue_id',
+            'Exception field is correct'
+        );
+    }
+
+    {    # hide useless warnings
+        local *STDERR;
+        open STDERR, '>', '/dev/null';
+
+        my $another_checkout = $builder->build_object({ class => 'Koha::Checkouts' });
+        my $checkout_id = $another_checkout->id;
+        $another_checkout->delete;
+
+        my $THE_claim;
+
+        throws_ok {
+            $THE_claim = Koha::Checkouts::ReturnClaim->new(
+                {
+                    issue_id       => $checkout_id,
                     itemnumber     => $checkout->itemnumber,
                     borrowernumber => $checkout->borrowernumber,
                     notes          => 'Some notes',
@@ -91,14 +123,10 @@ subtest "store() tests" => sub {
             )->store;
         }
         'Koha::Exceptions::Object::FKConstraint',
-            'An exception is thrown on invalid issue_id';
+          'An exception is thrown on invalid issue_id';
         close STDERR;
 
-        is(
-            $@->broken_fk,
-            'issue_id',
-            'Exception field is correct'
-        );
+        is( $@->broken_fk, 'issue_id', 'Exception field is correct' );
     }
 
     $schema->storage->txn_rollback;
