@@ -7,5 +7,6 @@ values
 (5, 'Item_Check_in', 0),
 (6, 'Item_Checkout', 0),
 (7, 'Ill_ready', 0),
-(8, 'Ill_unavailable', 0);
+(8, 'Ill_unavailable', 0),
+(9, 'Auto_Renewals', 0);
 
