@@ -35,6 +35,11 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     $dbh->do(q{
+        INSERT IGNORE INTO authorised_value_categories ( category_name ) VALUES
+            ('RETURN_CLAIM_RESOLUTION');
+    });
+
+    $dbh->do(q{
         INSERT IGNORE INTO `authorised_values` ( category, authorised_value, lib )
         VALUES
           ('RETURN_CLAIM_RESOLUTION', 'RET_BY_PATRON', 'Returned by patron'),

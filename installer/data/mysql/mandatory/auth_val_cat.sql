@@ -61,3 +61,7 @@ INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
 -- For Interlibrary loans
 INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
     ('ILLSTATUS');
+
+-- For Claims returned
+INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
+    ('RETURN_CLAIM_RESOLUTION');
