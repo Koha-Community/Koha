@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 32;
 use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
@@ -88,7 +88,8 @@ $t->post_ok(
         created_by      => $librarian->id,
         notes           => "This is a test note."
     }
-)->status_is(404);
+)->status_is(404)
+ ->json_is( '/error' => 'Checkout not found' );
 
 ## Valid id
 $t->post_ok(
@@ -135,7 +136,8 @@ $t->put_ok(
         notes      => "This is a different test note.",
         updated_by => $librarian->id,
     }
-)->status_is(404);
+)->status_is(404)
+ ->json_is( '/error' => 'Claim not found' );
 
 # Resolve a claim
 ## Valid claim id
@@ -156,13 +158,16 @@ $t->put_ok(
         resolved_by => $librarian->id,
         resolution  => "FOUNDINLIB",
     }
-)->status_is(404);
+)->status_is(404)
+ ->json_is( '/error' => 'Claim not found' );
 
 # Test deleting a return claim
-$t = $t->delete_ok("//$userid:$password@/api/v1/return_claims/$claim_id")
-  ->status_is(200);
+$t->delete_ok("//$userid:$password@/api/v1/return_claims/$claim_id")
+  ->status_is( 204, 'SWAGGER3.2.4' )
+  ->content_is( '', 'SWAGGER3.3.4' );
 $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
 isnt( $claim, "Return claim was deleted" );
 
 $t->delete_ok("//$userid:$password@/api/v1/return_claims/$claim_id")
-  ->status_is(404);
+  ->status_is(404)
+  ->json_is( '/error' => 'Claim not found' );

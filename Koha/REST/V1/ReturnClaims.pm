@@ -29,7 +29,9 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 
 Koha::REST::V1::ReturnClaims
 
-=head2 Operations
+=head1 API
+
+=head2 Methods
 
 =head3 claim_returned
 
@@ -53,7 +55,7 @@ sub claim_returned {
         my $checkout = Koha::Checkouts->find( { itemnumber => $itemnumber } );
 
         return $c->render(
-            openapi => { error => "Not found - Checkout not found" },
+            openapi => { error => "Checkout not found" },
             status  => 404
         ) unless $checkout;
 
@@ -100,52 +102,45 @@ Update the notes of an existing claim
 =cut
 
 sub update_notes {
-    my $c     = shift->openapi->valid_input or return;
-    my $input = $c->validation->output;
-    my $body  = $c->validation->param('body');
+    my $c = shift->openapi->valid_input or return;
+
+    my $claim_id = $c->validation->param('claim_id');
+    my $body     = $c->validation->param('body');
+
+    my $claim = Koha::Checkouts::ReturnClaims->find( $claim_id );
+
+    return $c->render(
+        status  => 404,
+        openapi => {
+            error => "Claim not found"
+        }
+    ) unless $claim;
 
     return try {
-        my $id         = $input->{claim_id};
         my $updated_by = $body->{updated_by};
         my $notes      = $body->{notes};
 
-        $updated_by ||=
-          C4::Context->userenv ? C4::Context->userenv->{number} : undef;
-
-        my $claim = Koha::Checkouts::ReturnClaims->find($id);
-
-        return $c->render(
-            openapi => { error => "Not found - Claim not found" },
-            status  => 404
-        ) unless $claim;
+        my $user = $c->stash('koha.user');
+        $updated_by //= $user->borrowernumber;
 
         $claim->set(
             {
                 notes      => $notes,
-                updated_by => $updated_by,
-                updated_on => dt_from_string(),
+                updated_by => $updated_by
             }
+        )->store;
+        $claim->discard_changes;
+
+        return $c->render(
+            status  => 200,
+            openapi => $claim->to_api
         );
-        $claim->store();
-
-        my $data = $claim->unblessed;
-
-        my $c_dt = dt_from_string( $data->{created_on} );
-        my $u_dt = dt_from_string( $data->{updated_on} );
-
-        $data->{created_on_formatted} = output_pref( { dt => $c_dt } );
-        $data->{updated_on_formatted} = output_pref( { dt => $u_dt } );
-
-        $data->{created_on} = $c_dt->iso8601;
-        $data->{updated_on} = $u_dt->iso8601;
-
-        return $c->render( openapi => $data, status => 200 );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
+        if ( $_->isa('Koha::Exceptions::Exception') ) {
             return $c->render(
                 status  => 500,
-                openapi => { error => $_->{msg} }
+                openapi => { error => "$_" }
             );
         }
         else {
@@ -165,40 +160,46 @@ Marks a claim as resolved
 
 sub resolve_claim {
     my $c     = shift->openapi->valid_input or return;
-    my $input = $c->validation->output;
-    my $body  = $c->validation->param('body');
+
+    my $claim_id = $c->validation->param('claim_id');
+    my $body     = $c->validation->param('body');
+
+    my $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
+
+    return $c->render(
+            status => 404,
+            openapi => {
+                error => "Claim not found"
+            }
+    ) unless $claim;
 
     return try {
-        my $id          = $input->{claim_id};
+
         my $resolved_by = $body->{updated_by};
         my $resolution  = $body->{resolution};
 
-        $resolved_by ||=
-          C4::Context->userenv ? C4::Context->userenv->{number} : undef;
-
-        my $claim = Koha::Checkouts::ReturnClaims->find($id);
-
-        return $c->render(
-            openapi => { error => "Not found - Claim not found" },
-            status  => 404
-        ) unless $claim;
+        my $user = $c->stash('koha.user');
+        $resolved_by //= $user->borrowernumber;
 
         $claim->set(
             {
                 resolution  => $resolution,
                 resolved_by => $resolved_by,
-                resolved_on => dt_from_string(),
+                resolved_on => \'NOW()',
             }
-        );
-        $claim->store();
+        )->store;
+        $claim->discard_changes;
 
-        return $c->render( openapi => $claim, status => 200 );
+        return $c->render(
+            status  => 200,
+            openapi => $claim->to_api
+        );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
+        if ( $_->isa('Koha::Exceptions::Exception') ) {
             return $c->render(
                 status  => 500,
-                openapi => { error => $_->{msg} }
+                openapi => { error => "$_" }
             );
         }
         else {
@@ -217,28 +218,29 @@ Deletes the claim from the database
 =cut
 
 sub delete_claim {
-    my $c     = shift->openapi->valid_input or return;
-    my $input = $c->validation->output;
+    my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $id = $input->{claim_id};
 
-        my $claim = Koha::Checkouts::ReturnClaims->find($id);
+        my $claim = Koha::Checkouts::ReturnClaims->find( $c->validation->param('claim_id') );
 
         return $c->render(
-            openapi => { error => "Not found - Claim not found" },
-            status  => 404
+            status  => 404,
+            openapi => { error => "Claim not found" }
         ) unless $claim;
 
         $claim->delete();
 
-        return $c->render( openapi => $claim, status => 200 );
+        return $c->render(
+            status  => 204,
+            openapi => {}
+        );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
+        if ( $_->isa('Koha::Exceptions::Exception') ) {
             return $c->render(
                 status  => 500,
-                openapi => { error => $_->{msg} }
+                openapi => { error => "$_" }
             );
         }
         else {
