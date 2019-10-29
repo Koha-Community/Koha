@@ -17,21 +17,18 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
-use Test::MockModule;
+use Test::More tests => 4;
+
 use Test::Mojo;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use DateTime;
-
-use C4::Context;
-use C4::Circulation;
+use C4::Circulation qw(AddIssue);
 
 use Koha::Checkouts::ReturnClaims;
 use Koha::Database;
-use Koha::DateUtils;
+use Koha::DateUtils qw(dt_from_string);
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -39,76 +36,57 @@ my $builder = t::lib::TestBuilder->new;
 t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
 
-$schema->storage->txn_begin;
+subtest 'claim_returned() tests' => sub {
 
-my $dbh = C4::Context->dbh;
+    plan tests => 9;
 
-my $librarian = $builder->build_object(
-    {
-        class => 'Koha::Patrons',
-        value => { flags => 1 }
-    }
-);
-my $password = 'thePassword123';
-$librarian->set_password( { password => $password, skip_validation => 1 } );
-my $userid = $librarian->userid;
+    $schema->storage->txn_begin;
 
-my $patron = $builder->build_object(
-    {
-        class => 'Koha::Patrons',
-        value => { flags => 0 }
-    }
-);
-my $unauth_password = 'thePassword000';
-$patron->set_password(
-    { password => $unauth_password, skip_validattion => 1 } );
-my $unauth_userid = $patron->userid;
-my $patron_id     = $patron->borrowernumber;
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
 
-my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
-my $module     = new Test::MockModule('C4::Context');
-$module->mock( 'userenv', sub { { branch => $branchcode } } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 0 }
+        }
+    );
 
-my $item1       = $builder->build_sample_item;
-my $itemnumber1 = $item1->itemnumber;
+    t::lib::Mocks::mock_userenv({ branchcode => $librarian->branchcode });
 
-my $date_due = DateTime->now->add( weeks => 2 );
-my $issue1 =
-  C4::Circulation::AddIssue( $patron->unblessed, $item1->barcode, $date_due );
+    my $item  = $builder->build_sample_item;
+    my $issue = AddIssue( $patron->unblessed, $item->barcode, dt_from_string->add( weeks => 2 ) );
 
-t::lib::Mocks::mock_preference( 'ClaimReturnedChargeFee', 'ask' );
-t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', '99' );
+    t::lib::Mocks::mock_preference( 'ClaimReturnedChargeFee', 'ask' );
+    t::lib::Mocks::mock_preference( 'ClaimReturnedLostValue', '99' );
 
-# Test creating a return claim
-## Invalid id
-$t->post_ok(
-    "//$userid:$password@/api/v1/return_claims" => json => {
-        item_id         => 1,
-        charge_lost_fee => Mojo::JSON->false,
-        created_by      => $librarian->id,
-        notes           => "This is a test note."
-    }
-)->status_is(404)
- ->json_is( '/error' => 'Checkout not found' );
+    ## Valid id
+    $t->post_ok(
+        "//$userid:$password@/api/v1/return_claims" => json => {
+            item_id         => $item->itemnumber,
+            charge_lost_fee => Mojo::JSON->false,
+            created_by      => $librarian->id,
+            notes           => "This is a test note."
+        }
+    )->status_is(201)->header_like(
+        Location => qr|^\/api\/v1\/return_claims/\d*|,
+        'SWAGGER3.4.1'
+    );
 
-## Valid id
-$t->post_ok(
-    "//$userid:$password@/api/v1/return_claims" => json => {
-        item_id         => $itemnumber1,
-        charge_lost_fee => Mojo::JSON->false,
-        created_by      => $librarian->id,
-        notes           => "This is a test note."
-    }
-)->status_is(201)
- ->header_like( Location => qr|^\/api\/v1\/return_claims/\d*|, 'SWAGGER3.4.1');
+    my $claim_id = $t->tx->res->json->{claim_id};
 
-my $claim_id = $t->tx->res->json->{claim_id};
-
-## Duplicate id
-warning_like {
+    ## Duplicate id
+    warning_like {
         $t->post_ok(
             "//$userid:$password@/api/v1/return_claims" => json => {
-                item_id         => $itemnumber1,
+                item_id         => $item->itemnumber,
                 charge_lost_fee => Mojo::JSON->false,
                 created_by      => $librarian->id,
                 notes           => "This is a test note."
@@ -117,57 +95,185 @@ warning_like {
     }
     qr/^DBD::mysql::st execute failed: Duplicate entry/;
 
-# Test editing a claim note
-## Valid claim id
-$t->put_ok(
-    "//$userid:$password@/api/v1/return_claims/$claim_id/notes" => json => {
-        notes      => "This is a different test note.",
-        updated_by => $librarian->id,
-    }
-)->status_is(200);
-my $claim = Koha::Checkouts::ReturnClaims->find($claim_id);
-is( $claim->notes,      "This is a different test note." );
-is( $claim->updated_by, $librarian->id );
-ok( $claim->updated_on );
+    $issue->delete;
 
-## Bad claim id
-$t->put_ok(
-    "//$userid:$password@/api/v1/return_claims/99999999999/notes" => json => {
-        notes      => "This is a different test note.",
-        updated_by => $librarian->id,
-    }
-)->status_is(404)
- ->json_is( '/error' => 'Claim not found' );
+    $t->post_ok(
+        "//$userid:$password@/api/v1/return_claims" => json => {
+            item_id         => $item->itemnumber,
+            charge_lost_fee => Mojo::JSON->false,
+            created_by      => $librarian->id,
+            notes           => "This is a test note."
+        }
+    )->status_is(404)
+     ->json_is( '/error' => 'Checkout not found' );
 
-# Resolve a claim
-## Valid claim id
-$t->put_ok(
-    "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json => {
-        resolved_by => $librarian->id,
-        resolution  => "FOUNDINLIB",
-    }
-)->status_is(200);
-$claim = Koha::Checkouts::ReturnClaims->find($claim_id);
-is( $claim->resolution, "FOUNDINLIB" );
-is( $claim->updated_by, $librarian->id );
-ok( $claim->resolved_on );
+    $schema->storage->txn_rollback;
+};
 
-## Invalid claim id
-$t->put_ok(
-    "//$userid:$password@/api/v1/return_claims/999999999999/resolve" => json => {
-        resolved_by => $librarian->id,
-        resolution  => "FOUNDINLIB",
-    }
-)->status_is(404)
- ->json_is( '/error' => 'Claim not found' );
+subtest 'update_notes() tests' => sub {
 
-# Test deleting a return claim
-$t->delete_ok("//$userid:$password@/api/v1/return_claims/$claim_id")
-  ->status_is( 204, 'SWAGGER3.2.4' )
-  ->content_is( '', 'SWAGGER3.3.4' );
-$claim = Koha::Checkouts::ReturnClaims->find($claim_id);
-isnt( $claim, "Return claim was deleted" );
+    plan tests => 8;
 
-$t->delete_ok("//$userid:$password@/api/v1/return_claims/$claim_id")
-  ->status_is(404)
-  ->json_is( '/error' => 'Claim not found' );
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $item = $builder->build_sample_item;
+
+    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } )
+      ;    # needed by AddIssue
+
+    my $issue = AddIssue( $librarian->unblessed, $item->barcode,
+        dt_from_string->add( weeks => 2 ) );
+
+    my $claim = $issue->claim_returned(
+        {
+            created_by => $librarian->borrowernumber,
+            notes      => 'Dummy notes'
+        }
+    );
+
+    my $claim_id = $claim->id;
+
+    # Test editing a claim note
+    ## Valid claim id
+    $t->put_ok(
+        "//$userid:$password@/api/v1/return_claims/$claim_id/notes" => json => {
+            notes      => "This is a different test note.",
+            updated_by => $librarian->id,
+        }
+    )->status_is(200);
+
+    $claim->discard_changes;
+
+    is( $claim->notes,      "This is a different test note." );
+    is( $claim->updated_by, $librarian->id );
+    ok( $claim->updated_on );
+
+    # Make sure the claim doesn't exist on the DB anymore
+    $claim->delete;
+
+    ## Bad claim id
+    $t->put_ok(
+        "//$userid:$password@/api/v1/return_claims/$claim_id/notes" => json => {
+            notes      => "This is a different test note.",
+            updated_by => $librarian->id,
+        }
+    )->status_is(404)
+     ->json_is( '/error' => 'Claim not found' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'resolve_claim() tests' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $item = $builder->build_sample_item;
+
+    t::lib::Mocks::mock_userenv( { branchcode => $item->homebranch } ); # needed by AddIssue
+
+    my $issue = AddIssue( $librarian->unblessed, $item->barcode, dt_from_string->add( weeks => 2 ) );
+
+    my $claim = $issue->claim_returned(
+        {
+            created_by => $librarian->borrowernumber,
+            notes      => 'Dummy notes'
+        }
+    );
+
+    my $claim_id = $claim->id;
+
+    # Resolve a claim
+    $t->put_ok(
+        "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json => {
+            resolved_by => $librarian->id,
+            resolution  => "FOUNDINLIB",
+        }
+    )->status_is(200);
+
+    $claim->discard_changes;
+    is( $claim->resolution, "FOUNDINLIB" );
+    is( $claim->resolved_by, $librarian->id );
+    ok( $claim->resolved_on );
+
+    # Make sure the claim doesn't exist on the DB anymore
+    $claim->delete;
+
+    ## Invalid claim id
+    $t->put_ok(
+        "//$userid:$password@/api/v1/return_claims/$claim_id/resolve" => json =>
+        {
+            resolved_by => $librarian->id,
+            resolution  => "FOUNDINLIB",
+        }
+    )->status_is(404)
+     ->json_is( '/error' => 'Claim not found' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'delete() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    my $librarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { flags => 1 }
+        }
+    );
+    my $password = 'thePassword123';
+    $librarian->set_password( { password => $password, skip_validation => 1 } );
+    my $userid = $librarian->userid;
+
+    my $item = $builder->build_sample_item;
+
+    t::lib::Mocks::mock_userenv({ branchcode => $item->homebranch });
+
+    my $issue = C4::Circulation::AddIssue( $librarian->unblessed,
+        $item->barcode, dt_from_string->add( weeks => 2 ) );
+
+    my $claim = $issue->claim_returned(
+        {
+            created_by => $librarian->borrowernumber,
+            notes      => 'Dummy notes'
+        }
+    );
+
+    # Test deleting a return claim
+    $t->delete_ok("//$userid:$password@/api/v1/return_claims/" . $claim->id)
+      ->status_is( 204, 'SWAGGER3.2.4' )
+      ->content_is( '', 'SWAGGER3.3.4' );
+
+    my $THE_claim = Koha::Checkouts::ReturnClaims->find($claim->id);
+    isnt( $THE_claim, "Return claim was deleted" );
+
+    $t->delete_ok("//$userid:$password@/api/v1/return_claims/" . $claim->id)
+      ->status_is(404)
+      ->json_is( '/error' => 'Claim not found' );
+
+    $schema->storage->txn_rollback;
+};

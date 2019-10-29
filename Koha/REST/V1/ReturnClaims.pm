@@ -175,7 +175,7 @@ sub resolve_claim {
 
     return try {
 
-        my $resolved_by = $body->{updated_by};
+        my $resolved_by = $body->{resolved_by};
         my $resolution  = $body->{resolution};
 
         my $user = $c->stash('koha.user');
