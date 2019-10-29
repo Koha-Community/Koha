@@ -21,9 +21,11 @@ package Koha::Checkout;
 use Modern::Perl;
 
 use Carp;
-
-use Koha::Database;
 use DateTime;
+use Try::Tiny;
+
+use Koha::Checkouts::ReturnClaims;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Items;
 
@@ -35,7 +37,7 @@ Koha::Checkout - Koha Checkout object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -106,6 +108,56 @@ sub to_api_mapping {
         lastreneweddate => 'last_renewed_date',
         issuedate       => 'checkout_date',
         notedate        => 'note_date',
+    };
+}
+
+=head3 claim_returned
+
+my $return_claim = $checkout->claim_returned();
+
+=cut
+
+sub claim_returned {
+    my ( $self, $params ) = @_;
+
+    my $charge_lost_fee = $params->{charge_lost_fee};
+
+    try {
+        $self->_result->result_source->schema->txn_do(
+            sub {
+                my $claim = Koha::Checkouts::ReturnClaim->new(
+                    {
+                        issue_id       => $self->id,
+                        itemnumber     => $self->itemnumber,
+                        borrowernumber => $self->borrowernumber,
+                        notes          => $params->{notes},
+                        created_by     => $params->{created_by},
+                        created_on     => dt_from_string,
+                    }
+                )->store();
+
+                my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
+                C4::Items::ModItem( { itemlost => $ClaimReturnedLostValue }, undef, $self->itemnumber );
+
+                my $ClaimReturnedChargeFee = C4::Context->preference('ClaimReturnedChargeFee');
+                $charge_lost_fee =
+                    $ClaimReturnedChargeFee eq 'charge'    ? 1
+                : $ClaimReturnedChargeFee eq 'no_charge' ? 0
+                :   $charge_lost_fee;    # $ClaimReturnedChargeFee eq 'ask'
+                C4::Circulation::LostItem( $self->itemnumber, 'claim_returned' ) if $charge_lost_fee;
+
+                return $claim;
+            }
+        );
+    }
+    catch {
+        if ( $_->isa('Koha::Exceptions::Exception') ) {
+            $_->rethrow();
+        }
+        else {
+            # ?
+            Koha::Exceptions::Exception->throw( "Unhandled exception" );
+        }
     };
 }
 
