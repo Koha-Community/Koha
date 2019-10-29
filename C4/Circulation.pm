@@ -60,6 +60,7 @@ use Koha::Account::Offsets;
 use Koha::Config::SysPrefs;
 use Koha::Charges::Fees;
 use Koha::Util::SystemPreferences;
+use Koha::Checkouts::ReturnClaims;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -2124,6 +2125,19 @@ sub AddReturn {
             $messages->{'WasTransfered'} = 1;
         } else {
             $messages->{'NeedsTransfer'} = $returnbranch;
+        }
+    }
+
+    if ( C4::Context->preference('ClaimReturnedLostValue') ) {
+        my $claims = Koha::Checkouts::ReturnClaims->search(
+           {
+               itemnumber => $item->id,
+               resolution => undef,
+           }
+        );
+
+        if ( $claims->count ) {
+            $messages->{ReturnClaims} = $claims;
         }
     }
 

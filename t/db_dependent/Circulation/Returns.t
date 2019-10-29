@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 use Test::Warn;
 
@@ -337,6 +337,31 @@ subtest 'BlockReturnOfLostItems' => sub {
     t::lib::Mocks::mock_preference('BlockReturnOfLostItems', 0);
     ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 1, "Without BlockReturnOfLostItems, a checkin of a lost item should not be blocked");
+};
+
+subtest 'Checkin of an item claimed as returned should generate a message' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('ClaimReturnedLostValue', 1);
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item = $builder->build_object(
+        {
+            class  => 'Koha::Items',
+            value  => {
+                biblionumber => $biblio->biblionumber,
+                notforloan => 0,
+                itemlost   => 0,
+                withdrawn  => 0,
+        }
+    }
+    );
+    my $patron = $builder->build_object({class => 'Koha::Patrons'});
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+
+    $checkout->claim_returned({ created_by => $patron->id });
+
+    my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
+    ok( $messages->{ReturnClaims}, "ReturnClaims is in messages for return of a claimed as returned itm" );
 };
 
 $schema->storage->txn_rollback;
