@@ -27,7 +27,7 @@ use C4::Biblio;
 use Koha::Biblios;
 use Koha::DateUtils qw( dt_from_string );
 
-my ( $verbose, $help, $confirm, $where, @fields, $unless_exists_field );
+my ( $verbose, $help, $confirm, $where, @fields, $date_field, $unless_exists_field );
 my $dbh = C4::Context->dbh;
 
 GetOptions(
@@ -36,25 +36,29 @@ GetOptions(
     'confirm|c' => \$confirm,
     'where=s'   => \$where,
     'field=s@'  => \@fields,
+    'date-field=s' => \$date_field,
     'unless-exists=s' => \$unless_exists_field,
 ) || podusage(1);
 
 pod2usage(1) if $help;
 pod2usage("Parameter field is mandatory") unless @fields;
 
-my @fields_to_add;
-my $dt = dt_from_string;    # Could be an option of the script
-for my $field (@fields) {
-    my ( $f_sf, $value )    = split '=',  $field;
-    my ( $tag,  $subfield ) = split '\$', $f_sf;
-    push @fields_to_add,
-      MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
-}
-
 say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
-if ($verbose) {
-    say "The following MARC fields will be added:";
-    say "\t" . $_->as_formatted for @fields_to_add;
+
+my @fields_to_add;
+unless ( $date_field ) {
+    my $dt = dt_from_string;
+    for my $field (@fields) {
+        my ( $f_sf, $value )    = split '=',  $field;
+        my ( $tag,  $subfield ) = split '\$', $f_sf;
+        push @fields_to_add,
+          MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
+    }
+
+    if ($verbose) {
+        say "The following MARC fields will be added:";
+        say "\t" . $_->as_formatted for @fields_to_add;
+    }
 }
 
 $where = $where ? "WHERE $where" : '';
@@ -70,7 +74,26 @@ while ( my ( $biblionumber, $frameworkcode ) = $sth->fetchrow_array ) {
         my ( $tag,  $subfield ) = split '\$', $unless_exists_field;
         next if $marc_record->subfield($tag, $subfield);
     }
+    if ( $date_field ) {
+        my ( $tag,  $subfield ) = split '\$', $date_field;
+        my $date = $marc_record->subfield($tag, $subfield);
+        next unless $date;
+        warn $date;
+        my $dt = dt_from_string($date);
+        for my $field (@fields) {
+            my ( $f_sf, $value )    = split '=',  $field;
+            my ( $tag,  $subfield ) = split '\$', $f_sf;
+            push @fields_to_add,
+              MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
+        }
+        if ($verbose) {
+            say sprintf "The following MARC fields will be added to record %s:", $biblionumber;
+            say "\t" . $_->as_formatted for @fields_to_add;
+        }
+    }
+
     $marc_record->append_fields(@fields_to_add);
+
     if ($confirm) {
         my $modified =
           C4::Biblio::ModBiblio( $marc_record, $biblionumber, $frameworkcode );
@@ -93,6 +116,8 @@ add_date_fields_to_marc_records.pl
   perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --unless-exists='905$a' --verbose --confirm
 
   perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --unless-exists='905$a' --where "biblionumber=42" --verbose --confirm
+
+  perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --date-field='908$a' --verbose --confirm
 
 =head1 DESCRIPTION
 
@@ -141,6 +166,12 @@ Will only create the new fields if this field does not exist.
 For instance, if --field='905$a=0/%Y' and --unless-exists='905$a' are provided, a 905$a will be created unless there is already one.
 If --unless-exists is not passed, a new 905$a will be created in any case.
 
+=item B<--date-field>
+
+The date will be picked from a specific marc field.
+
+For instance, if the record contains a date formatted YYYY-MM-DD in 908$a, you can pass --date-field='908$a'
+Note that the date format used will be the one defined in the syspref 'dateformat', or iso format.
 
 =back
 
