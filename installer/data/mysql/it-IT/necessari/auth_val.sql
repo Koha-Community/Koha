@@ -118,3 +118,7 @@ SET FOREIGN_KEY_CHECKS=1;
 
 -- Housebound
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('HSBND_FREQ','EW','Ogni settimana');
+
+-- return claims
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'RET_BY_PATRON', 'Returned by patron');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'FOUND_IN_LIB',  'Found in library');

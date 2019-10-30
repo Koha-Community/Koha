@@ -4425,18 +4425,18 @@ CREATE TABLE itemtypes_branches( -- association table between authorised_values 
 
 DROP TABLE IF EXISTS `return_claims`;
 CREATE TABLE return_claims (
-    id int(11) auto_increment,
-    itemnumber int(11) NOT NULL,
-    issue_id int(11) NULL DEFAULT NULL,
-    borrowernumber int(11) NOT NULL,
-    notes MEDIUMTEXT DEFAULT NULL,
-    created_on TIMESTAMP NULL,
-    created_by int(11) NULL DEFAULT NULL,
-    updated_on TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-    updated_by int(11) NULL DEFAULT NULL,
-    resolution  varchar(80) NULL DEFAULT NULL,
-    resolved_on TIMESTAMP NULL DEFAULT NULL,
-    resolved_by int(11) NULL DEFAULT NULL,
+    id int(11) auto_increment,                             -- Unique ID of the return claim
+    itemnumber int(11) NOT NULL,                           -- ID of the item
+    issue_id int(11) NULL DEFAULT NULL,                    -- ID of the checkout that triggered the claim
+    borrowernumber int(11) NOT NULL,                       -- ID of the patron
+    notes MEDIUMTEXT DEFAULT NULL,                         -- Notes about the claim
+    created_on TIMESTAMP NULL,                             -- Time and date the claim was created
+    created_by int(11) NULL DEFAULT NULL,                  -- ID of the staff member that registered the claim
+    updated_on TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP, -- Time and date of the latest change on the claim (notes)
+    updated_by int(11) NULL DEFAULT NULL,                  -- ID of the staff member that updated the claim
+    resolution  varchar(80) NULL DEFAULT NULL,             -- Resolution code (RETURN_CLAIM_RESOLUTION AVs)
+    resolved_on TIMESTAMP NULL DEFAULT NULL,               -- Time and date the claim was resolved
+    resolved_by int(11) NULL DEFAULT NULL,                 -- ID of the staff member that resolved the claim
     PRIMARY KEY (`id`),
     KEY `itemnumber` (`itemnumber`),
     CONSTRAINT UNIQUE `issue_id` ( issue_id ),
