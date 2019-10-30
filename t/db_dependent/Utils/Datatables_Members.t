@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 50;
+use Test::More tests => 51;
 
 use C4::Context;
 use C4::Members;
@@ -57,7 +57,8 @@ my $john_doe = $builder->build({
             surname      => 'Doe',
             branchcode   => $branchcode,
             dateofbirth  => '1983-03-01',
-            userid       => 'john.doe'
+            userid       => 'john.doe',
+            initials     => 'pacman'
         },
 });
 
@@ -112,6 +113,8 @@ my %dt_params = (
     iDisplayLength   => 10,
     iDisplayStart    => 0
 );
+
+t::lib::Mocks::mock_preference('DefaultPatronSearchFields', '');
 
 # Search "John Doe"
 my $search_results = C4::Utils::DataTables::Members::search({
@@ -459,6 +462,21 @@ subtest 'ExtendedPatronAttributes' => sub {
 
     is( $search_results->{ iTotalDisplayRecords }, 1,
         "'Dupont' is contained in 2 surnames and a patron attribute. Patron attribute one should not be displayed if searching in specific fields (Bug 18094)");
+};
+
+subtest 'Search by any borrowers field (bug 17374)' => sub {
+    plan tests => 2;
+
+    my $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => "pacman",
+        searchfieldstype => 'initials',
+        searchtype       => 'contain',
+        branchcode       => $branchcode,
+        dt_params        => \%dt_params
+    });
+    is( $search_results->{ iTotalDisplayRecords }, 1, "We find only 1 patron when searching for initials 'pacman'" );
+
+    is( $search_results->{ patrons }[0]->{ cardnumber }, $john_doe->{cardnumber}, "We find the correct patron when sesrching by initials" )
 };
 
 # End

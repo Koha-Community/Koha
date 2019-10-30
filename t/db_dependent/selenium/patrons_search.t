@@ -40,7 +40,7 @@ my $builder       = t::lib::TestBuilder->new;
 
 our @cleanup;
 subtest 'Search patrons' => sub {
-    plan tests => 6;
+    plan tests => 12;
 
     my @patrons;
     my $borrowernotes           = q|<strong>just 'a" note</strong> \123 ❤|;
@@ -58,6 +58,7 @@ subtest 'Search patrons' => sub {
     my $library = $builder->build_object(
         { class => 'Koha::Libraries', value => { branchname => $branchname } }
     );
+    my $default_patron_search_fields = C4::Context->preference('DefaultPatronSearchFields');
     for my $i ( 1 .. 25 ) {
         push @patrons,
           $builder->build_object(
@@ -77,7 +78,25 @@ subtest 'Search patrons' => sub {
     }
 
     $s->auth;
+    C4::Context->set_preference('DefaultPatronSearchFields',"");
     $driver->get( $base_url . "/members/members-home.pl" );
+    my @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
+    my @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    is( scalar @adv_options, 11, 'All standard fields are searchable if DefaultPatronSearchFields not set');
+    is( scalar @filter_options, 11, 'All standard fields are searchable by filter if DefaultPatronSearchFields not set');
+    C4::Context->set_preference('DefaultPatronSearchFields',"initials");
+    $driver->get( $base_url . "/members/members-home.pl" );
+    @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
+    @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    is( scalar @adv_options, 12, 'New option added when DefaultPatronSearchFields is populated with a field');
+    is( scalar @filter_options, 12, 'New filter option added when DefaultPatronSearchFields is populated with a field');
+    C4::Context->set_preference('DefaultPatronSearchFields',"initials,horses");
+    $driver->get( $base_url . "/members/members-home.pl" );
+    @adv_options = $driver->find_elements('//select[@id="searchfieldstype"]/option');
+    @filter_options = $driver->find_elements('//select[@id="searchfieldstype_filter"]/option');
+    is( scalar @adv_options, 12, 'Invalid option not added when DefaultPatronSearchFields is populated with an invalid field');
+    is( scalar @filter_options, 12, 'Invalid filter option not added when DefaultPatronSearchFields is populated with an invalid field');
+    C4::Context->set_preference('DefaultPatronSearchFields',"");
     $s->fill_form( { searchmember_filter => 'test_patron' } );
     $s->submit_form;
     my $first_patron = $patrons[0];
@@ -114,6 +133,7 @@ subtest 'Search patrons' => sub {
     push @cleanup, $_ for @patrons;
     push @cleanup, $library;
     push @cleanup, $patron_category;
+    C4::Context->set_preference('DefaultPatronSearchFields',$default_patron_search_fields);
 };
 
 END {
