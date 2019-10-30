@@ -156,24 +156,22 @@
                                 </div>
                             [% END %]
 
-							<!-- Item has return claim(s) -->
-							[% IF ( ReturnClaims ) %]
-								<div class="dialog alert return-claim">
-									<h3>
-										This item has been claimed as returned by:
-										<ul>
-										[% FOREACH rc IN ReturnClaims %]
-											[% SET patron = rc.patron %]
-											<li>
-												<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
-													[% patron.firstname | html %] [% patron.surname | html %]
-												</a>
-											</li>
-										[% END %]
-										</ul>
-									</h3>
-								</div>
-							[% END %]
+                            <!-- Item has return claim(s) -->
+                            [% IF ( ReturnClaims ) %]
+                                <div class="dialog alert return-claim">
+                                    <h3>This item has been claimed as returned by:</h3>
+                                    <ul>
+                                        [% FOREACH rc IN ReturnClaims %]
+                                            [% SET patron = rc.patron %]
+                                            <li>
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
+                                                    [% patron.firstname | html %] [% patron.surname | html %]
+                                                </a>
+                                            </li>
+                                        [% END %]
+                                    </ul>
+                                </div>
+                            [% END %]
 
                             <!-- Patron has waiting holds -->
                             [% IF ( waiting_holds ) %]
