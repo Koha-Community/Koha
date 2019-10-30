@@ -3,13 +3,12 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 10;
+use Test::More tests => 13;
 
 BEGIN { use_ok('Koha::Edifact::Order') }
 
-
 # The following tests are for internal methods but they could
-# error spectacularly so yest
+# error spectacularly so best
 # Check that quoting is done correctly
 #
 my $processed_text =
@@ -58,10 +57,13 @@ cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
 # special case for text ending in apostrophe e.g. nuthin'
 $data_to_encode .= q{?'};
 @segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
-cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC???''},
-    'IMD segment deals with quoted apostrophe at end' );
+cmp_ok(
+    $segs[1], 'eq',
+    q{IMD+L+010+:::CCCCCCCCCC???''},
+    'IMD segment deals with quoted apostrophe at end'
+);
 
-$data_to_encode =~s/\?'$//;
+$data_to_encode =~ s/\?'$//;
 @segs = Koha::Edifact::Order::imd_segment( $code, $data_to_encode );
 cmp_ok( $segs[1], 'eq', q{IMD+L+010+:::CCCCCCCCCC??'},
     'IMD segment deals with apostrophe preceded by quoted ?  at end' );
@@ -76,3 +78,47 @@ cmp_ok( $seg, 'eq', q{PIA+5+3540556753:IB'},
 $seg = Koha::Edifact::Order::additional_product_id($ean);
 cmp_ok( $seg, 'eq', q{PIA+5+9783540556756:EN'},
     'ean correctly encoded in PIA segment' );
+
+my $orderfields = { budget_code => 'BUDGET', };
+my @items       = (
+    {
+        itype          => 'TYPE',
+        location       => 'LOCATION',
+        itemcallnumber => 'CALL',
+        branchcode     => 'BRANCH',
+    },
+    {
+        itype          => 'TYPE',
+        location       => 'LOCATION',
+        itemcallnumber => 'CALL',
+        branchcode     => 'BRANCH',
+    }
+);
+
+my @gsegs = Koha::Edifact::Order::gir_segments(
+    {
+        ol_fields => $orderfields,
+        items     => \@items
+    }
+);
+cmp_ok(
+    $gsegs[0], 'eq',
+    q{GIR+001+BUDGET:LFN+BRANCH:LLO+TYPE:LST+LOCATION:LSQ+CALL:LSM},
+    'Single Gir field OK'
+);
+
+$orderfields->{servicing_instruction} = 'S_I';
+@gsegs = Koha::Edifact::Order::gir_segments(
+    {
+        ol_fields => $orderfields,
+        items     => \@items
+    }
+);
+cmp_ok(
+    $gsegs[2], 'eq',
+    q{GIR+002+BUDGET:LFN+BRANCH:LLO+TYPE:LST+LOCATION:LSQ+CALL:LSM},
+    'First part of split Gir field OK'
+);
+
+cmp_ok( $gsegs[3], 'eq', q{GIR+002+S_I:LVT},
+    'Second part of split GIR field OK' );
