@@ -20111,6 +20111,22 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23866 - Set HEA syspref to prompt for review)\n";
 }
 
+$DBversion = '19.06.00.046';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(qq{
+        UPDATE systempreferences
+        SET 
+          options = "Calendar|Days|Datedue|Dayweek", 
+          explanation = "Choose the method for calculating due date: select Calendar, Datedue or Dayweek to use the holidays module, and Days to ignore the holidays module"
+        WHERE
+          variable = "useDaysMode"
+    });
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15260 - Option for extended loan with useDaysMode)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
