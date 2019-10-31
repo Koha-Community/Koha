@@ -44,7 +44,6 @@ use Koha::Patron::Images;
 use Koha::Patron::Relationships;
 use Koha::Patrons;
 use Koha::Plugins;
-use Koha::Plugins::Handler;
 use Koha::Subscription::Routinglists;
 use Koha::Token;
 use Koha::Virtualshelves;
@@ -237,14 +236,12 @@ sub store {
                         # This plugin hook will also be used by a plugin for the Norwegian national
                         # patron database. This is why we need to pass both the password and the
                         # borrowernumber to the plugin.
-                        my $ret = Koha::Plugins::Handler->run({
-                            class  => ref $plugin,
-                            method => 'check_password',
-                            params => {
+                        my $ret = $plugin->check_password(
+                            {
                                 password       => $self->plain_text_password,
-                                borrowernumber => $self->borrowernumber,
-                            },
-                        });
+                                borrowernumber => $self->borrowernumber
+                            }
+                        );
                         if ( $ret->{'error'} == 1 ) {
                             Koha::Exceptions::Password::Plugin->throw();
                         }
@@ -754,14 +751,12 @@ sub set_password {
             # This plugin hook will also be used by a plugin for the Norwegian national
             # patron database. This is why we need to pass both the password and the
             # borrowernumber to the plugin.
-            my $ret = Koha::Plugins::Handler->run({
-                class  => ref $plugin,
-                method => 'check_password',
-                params => {
+            my $ret = $plugin->check_password(
+                {
                     password       => $password,
-                    borrowernumber => $self->borrowernumber,
-                },
-            });
+                    borrowernumber => $self->borrowernumber
+                }
+            );
             # This plugin hook will also be used by a plugin for the Norwegian national
             # patron database. This is why we need to call the actual plugins and then
             # check skip_validation afterwards.
