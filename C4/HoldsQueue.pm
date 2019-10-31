@@ -400,7 +400,6 @@ sub MapItemsToHoldRequests {
           C4::Context->preference('LocalHoldsPriorityItemControl');
 
         foreach my $request (@$hold_requests) {
-            next if (defined($request->{itemnumber})); #skip item level holds in local priority checking
             last if $num_items_remaining == 0;
 
             my $local_hold_match;
