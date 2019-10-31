@@ -20103,6 +20103,14 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 23805 - Add account credit_types)\n";
 }
 
+$DBversion = '19.06.00.045';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET value = '2' WHERE value = '0' AND variable = 'UsageStats'" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23866 - Set HEA syspref to prompt for review)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
