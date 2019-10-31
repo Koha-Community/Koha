@@ -117,7 +117,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 50;
+    plan tests => 49;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -322,27 +322,26 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     # First record:
     is(scalar @{$docs}, 2, 'Two records converted to documents');
-    is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
 
-    is_deeply($docs->[0][1]->{control_number}, ['123'], 'First record control number should be set correctly');
+    is_deeply($docs->[0]->{control_number}, ['123'], 'First record control number should be set correctly');
 
-    is_deeply($docs->[0][1]->{'ff7-00'}, ['k'], 'First record ff7-00 should be set correctly');
+    is_deeply($docs->[0]->{'ff7-00'}, ['k'], 'First record ff7-00 should be set correctly');
 
-    is(scalar @{$docs->[0][1]->{author}}, 2, 'First document author field should contain two values');
-    is_deeply($docs->[0][1]->{author}, ['Author 1', 'Corp Author'], 'First document author field should be set correctly');
+    is(scalar @{$docs->[0]->{author}}, 2, 'First document author field should contain two values');
+    is_deeply($docs->[0]->{author}, ['Author 1', 'Corp Author'], 'First document author field should be set correctly');
 
-    is(scalar @{$docs->[0][1]->{author__sort}}, 1, 'First document author__sort field should have a single value');
-    is_deeply($docs->[0][1]->{author__sort}, ['Author 1 Corp Author'], 'First document author__sort field should be set correctly');
+    is(scalar @{$docs->[0]->{author__sort}}, 1, 'First document author__sort field should have a single value');
+    is_deeply($docs->[0]->{author__sort}, ['Author 1 Corp Author'], 'First document author__sort field should be set correctly');
 
-    is(scalar @{$docs->[0][1]->{title__sort}}, 1, 'First document title__sort field should have a single');
-    is_deeply($docs->[0][1]->{title__sort}, ['Title: first record Title: first record'], 'First document title__sort field should be set correctly');
+    is(scalar @{$docs->[0]->{title__sort}}, 1, 'First document title__sort field should have a single');
+    is_deeply($docs->[0]->{title__sort}, ['Title: first record Title: first record'], 'First document title__sort field should be set correctly');
 
-    is(scalar @{$docs->[0][1]->{title_wildcard}}, 2, 'First document title_wildcard field should have two values');
-    is_deeply($docs->[0][1]->{title_wildcard}, ['Title:', 'first record'], 'First document title_wildcard field should be set correctly');
+    is(scalar @{$docs->[0]->{title_wildcard}}, 2, 'First document title_wildcard field should have two values');
+    is_deeply($docs->[0]->{title_wildcard}, ['Title:', 'first record'], 'First document title_wildcard field should be set correctly');
 
-    is(scalar @{$docs->[0][1]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
+    is(scalar @{$docs->[0]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
     is_deeply(
-        $docs->[0][1]->{author__suggestion},
+        $docs->[0]->{author__suggestion},
         [
             {
                 'input' => 'Author 1'
@@ -354,9 +353,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'First document author__suggestion field should be set correctly'
     );
 
-    is(scalar @{$docs->[0][1]->{title__suggestion}}, 3, 'First document title__suggestion field should contain three values');
+    is(scalar @{$docs->[0]->{title__suggestion}}, 3, 'First document title__suggestion field should contain three values');
     is_deeply(
-        $docs->[0][1]->{title__suggestion},
+        $docs->[0]->{title__suggestion},
         [
             { 'input' => 'Title:' },
             { 'input' => 'first record' },
@@ -365,87 +364,87 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'First document title__suggestion field should be set correctly'
     );
 
-    ok(!(defined $docs->[0][1]->{title__facet}), 'First document should have no title__facet field');
+    ok(!(defined $docs->[0]->{title__facet}), 'First document should have no title__facet field');
 
-    is(scalar @{$docs->[0][1]->{author__facet}}, 2, 'First document author__facet field should have two values');
+    is(scalar @{$docs->[0]->{author__facet}}, 2, 'First document author__facet field should have two values');
     is_deeply(
-        $docs->[0][1]->{author__facet},
+        $docs->[0]->{author__facet},
         ['Author 1', 'Corp Author'],
         'First document author__facet field should be set correctly'
     );
 
-    is(scalar @{$docs->[0][1]->{items_withdrawn_status}}, 2, 'First document items_withdrawn_status field should have two values');
+    is(scalar @{$docs->[0]->{items_withdrawn_status}}, 2, 'First document items_withdrawn_status field should have two values');
     is_deeply(
-        $docs->[0][1]->{items_withdrawn_status},
+        $docs->[0]->{items_withdrawn_status},
         ['false', 'true'],
         'First document items_withdrawn_status field should be set correctly'
     );
 
     is(
-        $docs->[0][1]->{sum_item_price},
+        $docs->[0]->{sum_item_price},
         '250.5',
         'First document sum_item_price field should be set correctly'
     );
 
-    ok(defined $docs->[0][1]->{marc_data}, 'First document marc_data field should be set');
-    ok(defined $docs->[0][1]->{marc_format}, 'First document marc_format field should be set');
-    is($docs->[0][1]->{marc_format}, 'base64ISO2709', 'First document marc_format should be set correctly');
+    ok(defined $docs->[0]->{marc_data}, 'First document marc_data field should be set');
+    ok(defined $docs->[0]->{marc_format}, 'First document marc_format field should be set');
+    is($docs->[0]->{marc_format}, 'base64ISO2709', 'First document marc_format should be set correctly');
 
-    my $decoded_marc_record = $see->decode_record_from_result($docs->[0][1]);
+    my $decoded_marc_record = $see->decode_record_from_result($docs->[0]);
 
     ok($decoded_marc_record->isa('MARC::Record'), "base64ISO2709 record successfully decoded from result");
     is($decoded_marc_record->as_usmarc(), $marc_record_1->as_usmarc(), "Decoded base64ISO2709 record has same data as original record");
 
-    is(scalar @{$docs->[0][1]->{type_of_record}}, 1, 'First document type_of_record field should have one value');
+    is(scalar @{$docs->[0]->{type_of_record}}, 1, 'First document type_of_record field should have one value');
     is_deeply(
-        $docs->[0][1]->{type_of_record},
+        $docs->[0]->{type_of_record},
         ['a'],
         'First document type_of_record field should be set correctly'
     );
 
-    is(scalar @{$docs->[0][1]->{type_of_record_and_bib_level}}, 1, 'First document type_of_record_and_bib_level field should have one value');
+    is(scalar @{$docs->[0]->{type_of_record_and_bib_level}}, 1, 'First document type_of_record_and_bib_level field should have one value');
     is_deeply(
-        $docs->[0][1]->{type_of_record_and_bib_level},
+        $docs->[0]->{type_of_record_and_bib_level},
         ['am'],
         'First document type_of_record_and_bib_level field should be set correctly'
     );
 
-    is(scalar @{$docs->[0][1]->{isbn}}, 4, 'First document isbn field should contain four values');
-    is_deeply($docs->[0][1]->{isbn}, ['978-1-56619-909-4', '9781566199094', '1-56619-909-3', '1566199093'], 'First document isbn field should be set correctly');
+    is(scalar @{$docs->[0]->{isbn}}, 4, 'First document isbn field should contain four values');
+    is_deeply($docs->[0]->{isbn}, ['978-1-56619-909-4', '9781566199094', '1-56619-909-3', '1566199093'], 'First document isbn field should be set correctly');
 
     is_deeply(
-        $docs->[0][1]->{'local_classification'},
+        $docs->[0]->{'local_classification'},
         [$callno, $callno2, $long_callno],
         'First document local_classification field should be set correctly'
     );
 
     # Second record:
 
-    is(scalar @{$docs->[1][1]->{author}}, 1, 'Second document author field should contain one value');
-    is_deeply($docs->[1][1]->{author}, ['Author 2'], 'Second document author field should be set correctly');
+    is(scalar @{$docs->[1]->{author}}, 1, 'Second document author field should contain one value');
+    is_deeply($docs->[1]->{author}, ['Author 2'], 'Second document author field should be set correctly');
 
-    is(scalar @{$docs->[1][1]->{items_withdrawn_status}}, 1, 'Second document items_withdrawn_status field should have one value');
+    is(scalar @{$docs->[1]->{items_withdrawn_status}}, 1, 'Second document items_withdrawn_status field should have one value');
     is_deeply(
-        $docs->[1][1]->{items_withdrawn_status},
+        $docs->[1]->{items_withdrawn_status},
         ['true'],
         'Second document items_withdrawn_status field should be set correctly'
     );
 
     is(
-        $docs->[1][1]->{sum_item_price},
+        $docs->[1]->{sum_item_price},
         0,
         'Second document sum_item_price field should be set correctly'
     );
 
     is_deeply(
-        $docs->[1][1]->{local_classification__sort},
+        $docs->[1]->{local_classification__sort},
         [substr($long_callno, 0, 255)],
         'Second document local_classification__sort field should be set correctly'
     );
 
     # Mappings marc_type:
 
-    ok(!(defined $docs->[0][1]->{unimarc_title}), "No mapping when marc_type doesn't match marc flavour");
+    ok(!(defined $docs->[0]->{unimarc_title}), "No mapping when marc_type doesn't match marc flavour");
 
     # Marc serialization format fallback for records exceeding ISO2709 max record size
 
@@ -468,9 +467,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     $docs = $see->marc_records_to_documents([$large_marc_record]);
 
-    is($docs->[0][1]->{marc_format}, 'MARCXML', 'For record exceeding max record size marc_format should be set correctly');
+    is($docs->[0]->{marc_format}, 'MARCXML', 'For record exceeding max record size marc_format should be set correctly');
 
-    $decoded_marc_record = $see->decode_record_from_result($docs->[0][1]);
+    $decoded_marc_record = $see->decode_record_from_result($docs->[0]);
 
     ok($decoded_marc_record->isa('MARC::Record'), "MARCXML record successfully decoded from result");
     is($decoded_marc_record->as_xml_record(), $large_marc_record->as_xml_record(), "Decoded MARCXML record has same data as original record");
@@ -521,7 +520,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () tests' => sub {
 
-    plan tests => 6;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ARRAY');
@@ -588,13 +587,11 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
     # First record:
     is(scalar @{$docs}, 2, 'Two records converted to documents');
 
-    is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
+    is_deeply($docs->[0]->{control_number}, ['123'], 'First record control number should be set correctly');
 
-    is_deeply($docs->[0][1]->{control_number}, ['123'], 'First record control number should be set correctly');
+    is($docs->[0]->{marc_format}, 'ARRAY', 'First document marc_format should be set correctly');
 
-    is($docs->[0][1]->{marc_format}, 'ARRAY', 'First document marc_format should be set correctly');
-
-    my $decoded_marc_record = $see->decode_record_from_result($docs->[0][1]);
+    my $decoded_marc_record = $see->decode_record_from_result($docs->[0]);
 
     ok($decoded_marc_record->isa('MARC::Record'), "ARRAY record successfully decoded from result");
     is($decoded_marc_record->as_usmarc(), $marc_record_1->as_usmarc(), "Decoded ARRAY record has same data as original record");
