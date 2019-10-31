@@ -213,6 +213,21 @@ sub api_routes {
     return decode_json($spec);
 }
 
+sub check_password {
+    my ( $self, $args ) = @_;
+
+    my $password = $args->{'password'};
+    if ( $password && $password =~ m/^\d\d\d\d$/ ) {
+        return { error => 0 };
+    }
+    else {
+        return {
+            error => 1,
+            msg   => "PIN should be four digits"
+        };
+    }
+}
+
 sub _private_sub {
     return "";
 }
