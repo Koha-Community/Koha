@@ -58,6 +58,8 @@ my $toDate   = dt_from_string;
 
 my @debit_types =
   Koha::Account::DebitTypes->search()->as_list;
+my @credit_types =
+  Koha::Account::CreditTypes->search()->as_list;
 
 if ($do_it) {
 
@@ -187,6 +189,7 @@ $template->param(
     transaction_type => $transaction_type,
     branchloop       => Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed,
     debit_types      => \@debit_types,
+    credit_types     => \@credit_types,
     CGIsepChoice => GetDelimiterChoices,
 );
 

@@ -61,28 +61,10 @@
                         <option value="ACT">All payments to the library</option>
                         [% END %]
 
-                        [% IF transaction_type == "C" %]
-                        <option value="C" selected="selected">Credit</option>
-                        [% ELSE %]
-                        <option value="C">Credit</option>
-                        [% END %]
-
-                        [% IF transaction_type == "CR" %]
-                        <option value="CR" selected="selected">Credit (item returned)</option>
-                        [% ELSE %]
-                        <option value="CR">Credit (item returned)</option>
-                        [% END %]
-
                         [% IF transaction_type == "FORW" %]
                         <option value="FORW" selected="selected">Write off</option>
                         [% ELSE %]
                         <option value="FORW">Write off</option>
-                        [% END %]
-
-                        [% IF transaction_type == "PAY" %]
-                        <option value="PAY" selected="selected">Payment</option>
-                        [% ELSE %]
-                        <option value="PAY">Payment</option>
                         [% END %]
 
                         [% FOREACH debit_type IN debit_types %]
@@ -90,6 +72,14 @@
                             <option value="[% debit_type.code | html %]" selected="selected">[% debit_type.description | html %]</option>
                             [% ELSE %]
                             <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
+                            [% END %]
+                        [% END %]
+                        
+                        [% FOREACH credit_type IN credit_types %]
+                            [% IF transaction_type == credit_type.code %]
+                            <option value="[% credit_type.code | html %]" selected="selected">[% credit_type.description | html %]</option>
+                            [% ELSE %]
+                            <option value="[% credit_type.code | html %]">[% credit_type.description | html %]</option>
                             [% END %]
                         [% END %]
                     </select>
