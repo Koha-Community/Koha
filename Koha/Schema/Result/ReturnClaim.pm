@@ -38,6 +38,7 @@ __PACKAGE__->table("return_claims");
 =head2 issue_id
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 borrowernumber
@@ -101,7 +102,7 @@ __PACKAGE__->add_columns(
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "issue_id",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "notes",
@@ -197,6 +198,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 issue
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Issue>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "issue",
+  "Koha::Schema::Result::Issue",
+  { issue_id => "issue_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -253,8 +274,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-24 18:12:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ojrbFpQoVSmUMFJdNb6wTw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-31 12:18:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a1MJxAPCP8yuYvzkXp5q8w
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
