@@ -224,11 +224,11 @@ sub store {
                   :                                                   undef;
                 $self->privacy($default_privacy);
 
-                # Make a copy of the plain text password for later use
-                $self->plain_text_password( $self->password );
-
-                if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
-                    # Call any check_password plugins
+                # Call any check_password plugins if password is passed
+                if (   C4::Context->preference('UseKohaPlugins')
+                    && C4::Context->config("enable_plugins")
+                    && $self->password )
+                {
                     my @plugins = Koha::Plugins->new()->GetPlugins({
                         method => 'check_password',
                     });
@@ -238,7 +238,7 @@ sub store {
                         # borrowernumber to the plugin.
                         my $ret = $plugin->check_password(
                             {
-                                password       => $self->plain_text_password,
+                                password       => $self->password,
                                 borrowernumber => $self->borrowernumber
                             }
                         );
@@ -247,6 +247,9 @@ sub store {
                         }
                     }
                 }
+
+                # Make a copy of the plain text password for later use
+                $self->plain_text_password( $self->password );
 
                 # Create a disabled account if no password provided
                 $self->password( $self->password
