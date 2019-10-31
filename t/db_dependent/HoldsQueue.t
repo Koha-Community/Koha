@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 48;
+use Test::More tests => 51;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -794,33 +794,220 @@ Koha::Holds->find( $reserve_id )->cancel;
 # End testing hold itemtype limit
 
 
-# Test Local Holds Priority - Bug 18001
-t::lib::Mocks::mock_preference('LocalHoldsPriority', 1);
-t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'PickupLibrary');
-t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'homebranch');
+subtest "Test Local Holds Priority - Bib level" => sub {
+    plan tests => 2;
 
-$dbh->do("DELETE FROM tmp_holdsqueue");
-$dbh->do("DELETE FROM hold_fill_targets");
-$dbh->do("DELETE FROM reserves");
+    Koha::Biblios->delete();
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
+    my $branch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $local_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch->branchcode
+            }
+        }
+    );
+    my $other_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch2->branchcode
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch->branchcode,
+        }
+    );
 
-$item = Koha::Items->find( { biblionumber => $biblionumber } );
-$item->holdingbranch( $item->homebranch );
-$item->store();
+    my $reserve_id =
+      AddReserve( $branch2->branchcode, $other_patron->borrowernumber,
+        $biblio->biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+    my $reserve_id2 =
+      AddReserve( $item->homebranch, $local_patron->borrowernumber,
+        $biblio->biblionumber, '', 2, undef, undef, undef, undef, undef, undef, undef );
 
-my $item2 = Koha::Item->new( $item->unblessed );
-$item2->itemnumber( undef );
-$item2->store();
+    C4::HoldsQueue::CreateQueue();
 
-my $item3 = Koha::Item->new( $item->unblessed );
-$item3->itemnumber( undef );
-$item3->store();
+    my $queue_rs = $schema->resultset('TmpHoldsqueue');
+    is( $queue_rs->count(), 1,
+        "Hold queue contains one hold" );
+    is(
+        $queue_rs->next->borrowernumber,
+        $local_patron->borrowernumber,
+        "We should pick the local hold over the next available"
+    );
+};
 
-$reserve_id = AddReserve( $item->homebranch, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+subtest "Test Local Holds Priority - Item level" => sub {
+    plan tests => 2;
 
-C4::HoldsQueue::CreateQueue();
+    Koha::Biblios->delete();
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
+    my $branch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $local_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch->branchcode
+            }
+        }
+    );
+    my $other_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch2->branchcode
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch->branchcode,
+        }
+    );
 
-my $queue_rs = $schema->resultset('TmpHoldsqueue');
-is( $queue_rs->count(), 1, "Hold queue contains one hold from chosen from three possible items" );
+    my $reserve_id =
+      AddReserve( $branch2->branchcode, $other_patron->borrowernumber,
+        $biblio->biblionumber, '', 1, undef, undef, undef, undef, $item->id, undef, undef );
+    my $reserve_id2 =
+      AddReserve( $item->homebranch, $local_patron->borrowernumber,
+        $biblio->biblionumber, '', 2, undef, undef, undef, undef, $item->id, undef, undef );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue');
+    my $q = $queue_rs->next;
+    is( $queue_rs->count(), 1,
+        "Hold queue contains one hold" );
+    is(
+        $q->borrowernumber,
+        $local_patron->borrowernumber,
+        "We should pick the local hold over the next available"
+    );
+};
+
+subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug 23934)" => sub {
+    plan tests => 2;
+
+    Koha::Biblios->delete();
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
+    my $branch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $local_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch->branchcode
+            }
+        }
+    );
+    my $other_patron = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch2->branchcode
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+    my $item   = $builder->build_sample_item(
+        {
+            biblionumber  => $biblio->biblionumber,
+            library    => $branch->branchcode,
+        }
+    );
+
+    my $reserve_id =
+      AddReserve( $branch2->branchcode, $other_patron->borrowernumber,
+        $biblio->biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+    my $reserve_id2 =
+      AddReserve( $item->homebranch, $local_patron->borrowernumber,
+        $biblio->biblionumber, '', 2, undef, undef, undef, undef, $item->id, undef, undef );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue');
+    my $q = $queue_rs->next;
+    is( $queue_rs->count(), 1,
+        "Hold queue contains one hold" );
+    is(
+        $q->borrowernumber,
+        $local_patron->borrowernumber,
+        "We should pick the local hold over the next available"
+    );
+};
+
+subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue (Bug 18001)" => sub {
+    plan tests => 1;
+
+    $dbh->do("DELETE FROM tmp_holdsqueue");
+    $dbh->do("DELETE FROM hold_fill_targets");
+    $dbh->do("DELETE FROM reserves");
+    $dbh->do("DELETE FROM issuingrules");
+    $dbh->do("DELETE FROM circulation_rules");
+    Koha::Biblios->delete();
+
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriority', 1 );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'PickupLibrary' );
+    t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
+    my $branch  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $branch2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => "Koha::Patrons",
+            value => {
+                branchcode => $branch->branchcode
+            }
+        }
+    );
+    my $biblio = $builder->build_sample_biblio();
+    my $item1  = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $branch->branchcode,
+        }
+    );
+    my $item2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $branch->branchcode,
+        }
+    );
+
+    my $item3 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $branch->branchcode,
+        }
+    );
+
+    $reserve_id =
+      AddReserve( $item1->homebranch, $patron->borrowernumber, $biblio->id, '',
+        1, undef, undef, undef, undef, undef, undef, undef );
+
+    C4::HoldsQueue::CreateQueue();
+
+    my $queue_rs = $schema->resultset('TmpHoldsqueue');
+
+    is( $queue_rs->count(), 1,
+        "Hold queue contains one hold from chosen from three possible items" );
+};
+
 
 subtest 'Trivial test for UpdateTransportCostMatrix' => sub {
     plan tests => 1;
