@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 use Test::Exception;
+use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::More tests => 6;
@@ -50,6 +51,10 @@ $se->mock( 'get_elasticsearch_mappings', sub {
                     type => 'text',
                     facet => 1
                 },
+                'subject-heading-thesaurus' => {
+                    type => 'text',
+                    facet => 1
+                },
                 itemnumber => {
                     type => 'integer'
                 },
@@ -59,12 +64,24 @@ $se->mock( 'get_elasticsearch_mappings', sub {
                 sortablenumber__sort => {
                     type => 'integer'
                 },
-                Heading => {
+                heading => {
                     type => 'text'
                 },
-                Heading__sort => {
+                'heading-main' => {
                     type => 'text'
-                }
+                },
+                heading__sort => {
+                    type => 'text'
+                },
+                match => {
+                    type => 'text'
+                },
+                'match-heading' => {
+                    type => 'text'
+                },
+                'match-heading-see-from' => {
+                    type => 'text'
+                },
             }
         }
     };
@@ -92,7 +109,7 @@ my $clear_search_fields_cache = sub {
 
 subtest 'build_authorities_query_compat() tests' => sub {
 
-    plan tests => 56;
+    plan tests => 57;
 
     my $qb;
 
@@ -186,7 +203,11 @@ subtest 'build_authorities_query_compat() tests' => sub {
     );
 
     # Authorities marclist check
-    $query = $qb->build_authorities_query_compat( [ 'tomas','mainentry' ],  undef, undef, ['contains'], [$search_term,$search_term], 'AUTH_TYPE', 'asc' );
+    warning_like {
+        $query = $qb->build_authorities_query_compat( [ 'tomas','mainentry' ],  undef, undef, ['contains'], [$search_term,$search_term], 'AUTH_TYPE', 'asc' )
+    }
+    qr/Unknown search field tomas/,
+    "Warning for unknown field in marclist";
     is_deeply(
         $query->{query}->{bool}->{must}[0]->{query_string}->{default_field},
         'tomas',
