@@ -446,6 +446,13 @@ Circulation:
                   nothing : "do nothing"
             - .
         -
+            - "When issuing an item, "
+            - pref: RecordIssuer
+              choices:
+                  yes: "record"
+                  no: "don't record"
+            - "the user who issued the item."
+        -
             - "Mark items as returned when flagged as lost "
             - pref: MarkLostItemsAsReturned
               multiple:

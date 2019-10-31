@@ -536,6 +536,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('QueryWeightFields','1',NULL,'If ON, enables field weighting','YesNo'),
 ('QuoteOfTheDay','','intranet,opac','Enable or disable display of Quote of the Day on the OPAC and staff interface home page','multiple'),
 ('RandomizeHoldsQueueWeight','0',NULL,'if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight','YesNo'),
+('RecordIssuer','0',NULL,'If ON, when an item is issued, the user who issued the item is recorded','YesNo'),
 ('RecordLocalUseOnReturn','0',NULL,'If ON, statistically record returns of unissued items as local use, instead of return','YesNo'),
 ('RefundLostOnReturnControl','CheckinLibrary','CheckinLibrary|ItemHomeBranch|ItemHoldingBranch','If a lost item is returned, choose which branch to pick rules for refunding.','Choice'),
 ('RenewAccruingItemWhenPaid','0','','If enabled, when the fines on an item accruing is paid off, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue','YesNo'),
