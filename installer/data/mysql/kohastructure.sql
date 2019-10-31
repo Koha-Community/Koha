@@ -1618,6 +1618,7 @@ DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` ( -- information related to check outs or issues
   `issue_id` int(11) NOT NULL AUTO_INCREMENT, -- primary key for issues table
   `borrowernumber` int(11), -- foreign key, linking this to the borrowers table for the patron this item was checked out to
+  `issuer` int(11), -- foreign key, linking this to the borrowers table for the user who checked out this item
   `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- datetime the item is due (yyyy-mm-dd hh:mm::ss)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
@@ -1639,7 +1640,8 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   KEY `branchcode_idx` (`branchcode`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1650,6 +1652,7 @@ DROP TABLE IF EXISTS `old_issues`;
 CREATE TABLE `old_issues` ( -- lists items that were checked out and have been returned
   `issue_id` int(11) NOT NULL, -- primary key for issues table
   `borrowernumber` int(11) default NULL, -- foreign key, linking this to the borrowers table for the patron this item was checked out to
+  `issuer` int(11) default NULL, -- foreign key, linking this to the borrowers table for the user who checked out this item
   `itemnumber` int(11) default NULL, -- foreign key, linking this to the items table for the item that was checked out
   `date_due` datetime default NULL, -- date the item is due (yyyy-mm-dd)
   `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
@@ -1672,7 +1675,9 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   CONSTRAINT `old_issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
     ON DELETE SET NULL ON UPDATE SET NULL,
   CONSTRAINT `old_issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`)
-    ON DELETE SET NULL ON UPDATE SET NULL
+    ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `old_issues_ibfk_borrowers_borrowernumber` FOREIGN KEY (`issuer`) REFERENCES `borrowers` (`borrowernumber`)
+    ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
