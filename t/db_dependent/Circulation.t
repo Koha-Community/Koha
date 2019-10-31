@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 50;
+use Test::More tests => 51;
 use Test::Exception;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
@@ -121,6 +121,11 @@ for my $branch ( $branches->next ) {
 # Start with a clean slate
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM borrowers');
+
+# Disable recording of issuer until we're ready for it
+t::lib::Mocks::mock_preference('RecordIssuer', 0);
+
+my $module = new Test::MockModule('C4::Context');
 
 my $library = $builder->build({
     source => 'Branch',
@@ -3797,7 +3802,6 @@ subtest 'Incremented fee tests' => sub {
     my $library =
       $builder->build_object( { class => 'Koha::Libraries' } )->store;
 
-    my $module = Test::MockModule->new('C4::Context');
     $module->mock( 'userenv', sub { { branch => $library->id } } );
 
     my $patron = $builder->build_object(
@@ -4599,6 +4603,49 @@ subtest 'Checkout should correctly terminate a transfer' => sub {
     $hold = $hold->get_from_storage;
     is( $hold->found, undef, 'Hold is waiting' );
     is( $hold->priority, 1, );
+}
+
+subtest 'AddIssue records issuer if appropriate' => sub  {
+    plan tests => 2;
+
+    $module->mock( 'userenv', sub { { branch => $library->{id} } } );
+
+    my $library =
+      $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    )->store;
+    my $issuer = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    )->store;
+    my $item = $builder->build_sample_item(
+        {
+            library  => $library->{branchcode}
+        }
+    );
+
+    $module->mock( 'userenv', sub { { branch => $library->id, number => $issuer->{borrowernumber} } } );
+
+    my $dt_from     = dt_from_string();
+    my $dt_to       = dt_from_string()->add( days => 7 );
+
+    my $issue =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+
+    is( $issue->issuer, undef, "Issuer not recorded when RecordIssuer turned off" );
+
+    t::lib::Mocks::mock_preference('RecordIssuer', 1);
+
+    my $issue2 =
+      AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+
+    is( $issue->issuer, $issuer->{borrowernumber}, "Issuer recorded when RecordIssuer turned on" );
 };
 
 $schema->storage->txn_rollback;
