@@ -277,6 +277,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-31 12:18:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:a1MJxAPCP8yuYvzkXp5q8w
 
+sub koha_objects_class {
+    'Koha::Checkouts::ReturnClaims';
+}
+sub koha_object_class {
+    'Koha::Checkouts::ReturnClaim';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
