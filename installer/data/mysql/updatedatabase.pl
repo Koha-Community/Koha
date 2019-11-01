@@ -19894,13 +19894,6 @@ if ( CheckVersion($DBversion) ) {
         );
     }
 
-    # Adding a check constraints to accountlines
-    $dbh->do(
-        qq{
-        ALTER TABLE accountlines ADD CONSTRAINT `accountlines_check_type` CHECK (accounttype IS NOT NULL OR debit_type_code IS NOT NULL)
-        }
-    );
-
     # Populating debit_type_code
     $dbh->do(
         qq{
@@ -20010,35 +20003,6 @@ if ( CheckVersion($DBversion) ) {
         );
     }
 
-    # Dropping the check constraint in accountlines
-    my ($raise_error) = $dbh->{RaiseError};
-    $dbh->{AutoCommit} = 0;
-    $dbh->{RaiseError} = 1;
-    eval {
-        # MariaDB Specific Drop
-        $dbh->do(
-          qq{
-            ALTER TABLE
-              accountlines
-            DROP CONSTRAINT
-              `accountlines_check_type`
-          }
-        );
-    };
-    if ($@) {
-        # MySQL Specific Drop
-        $dbh->do(
-          qq{
-            ALTER TABLE
-              accountlines
-            DROP CHECK
-              `accountlines_check_type`
-          }
-        );
-    }
-    $dbh->{AutoCommit} = 1;
-    $dbh->{RaiseError} = $raise_error;
-
     # Update accountype 'C' to 'CREDIT'
     $dbh->do(
         qq{
@@ -20096,17 +20060,6 @@ if ( CheckVersion($DBversion) ) {
           SET
             credit_type_code = accounttype, accounttype = NULL
           WHERE accounttype IN (SELECT code from account_credit_types)
-        }
-    );
-
-    # Adding a check constraints to accountlines
-    $dbh->do(
-        qq{
-          ALTER TABLE
-            accountlines 
-          ADD CONSTRAINT 
-            `accountlines_check_type`
-          CHECK (credit_type_code IS NOT NULL OR debit_type_code IS NOT NULL)
         }
     );
 
