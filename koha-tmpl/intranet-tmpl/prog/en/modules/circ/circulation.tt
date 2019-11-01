@@ -1049,11 +1049,11 @@
         columns_settings_borrowers_table = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         [% IF borrowernumber and patron %]
-            if($.cookie("holdfor") != [% patron.borrowernumber | html %]){
-                $.removeCookie("holdfor", { path: '/' });
+            if( Cookies.get("holdfor") != [% patron.borrowernumber | html %]){
+                Cookies.remove("holdfor", { path: '/' });
             }
         [% ELSE %]
-            $.removeCookie("holdfor", { path: '/' });
+            Cookies.remove("holdfor", { path: '/' });
         [% END %]
 
         [% UNLESS ( patron.borrowernumber ) %][% UNLESS ( borrowers ) %]window.onload=function(){ $('#findborrower').focus(); };[% END %][% END %]
