@@ -218,12 +218,12 @@ $(document).ready(function() {
         return false;
     });
 
-    if ( $.cookie("issues-table-load-immediately-" + script) == "true" ) {
+    if ( Cookies.get("issues-table-load-immediately-" + script) == "true" ) {
         LoadIssuesTable();
         $('#issues-table-load-immediately').prop('checked', true);
     }
     $('#issues-table-load-immediately').on( "change", function(){
-        $.cookie("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365 });
+        Cookies.set("issues-table-load-immediately-" + script, $(this).is(':checked'), { expires: 365 });
     });
 
     function LoadIssuesTable() {
