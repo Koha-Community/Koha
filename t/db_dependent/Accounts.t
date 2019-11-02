@@ -1173,7 +1173,7 @@ subtest "Payment notice tests" => sub {
     )->store();
 
     my $letter = Koha::Notice::Templates->find( { code => 'ACCOUNT_PAYMENT' } );
-    $letter->content('[%- USE Price -%]A payment of [% credit.amount * -1 | $Price %] has been applied to your account.');
+    $letter->content('[%- USE Price -%]A payment of [% credit.amount * -1 | $Price %] has been applied to your account. Your [% branch.branchcode %]');
     $letter->store();
 
     t::lib::Mocks::mock_preference('UseEmailReceipts', '0');
@@ -1185,22 +1185,22 @@ subtest "Payment notice tests" => sub {
 
     t::lib::Mocks::mock_preference('UseEmailReceipts', '1');
 
-    $id = $account->pay( { amount => 12 } );
+    $id = $account->pay( { amount => 12, library_id => $branchcode } );
     my $notice = Koha::Notice::Messages->search()->next();
     is( $notice->subject, 'Account payment', 'Notice subject is correct for payment' );
     is( $notice->letter_code, 'ACCOUNT_PAYMENT', 'Notice letter code is correct for payment' );
-    is( $notice->content, 'A payment of 12.00 has been applied to your account.', 'Notice content is correct for payment' );
+    is( $notice->content, "A payment of 12.00 has been applied to your account. Your $branchcode", 'Notice content is correct for payment' );
     $notice->delete();
 
     $letter = Koha::Notice::Templates->find( { code => 'ACCOUNT_WRITEOFF' } );
-    $letter->content('[%- USE Price -%]A writeoff of [% credit.amount * -1 | $Price %] has been applied to your account.');
+    $letter->content('[%- USE Price -%]A writeoff of [% credit.amount * -1 | $Price %] has been applied to your account. Your [% branch.branchcode %]');
     $letter->store();
 
-    $id = $account->pay( { amount => 13, type => 'WRITEOFF' } );
+    $id = $account->pay( { amount => 13, type => 'WRITEOFF', library_id => $branchcode  } );
     $notice = Koha::Notice::Messages->search()->next();
     is( $notice->subject, 'Account writeoff', 'Notice subject is correct for payment' );
     is( $notice->letter_code, 'ACCOUNT_WRITEOFF', 'Notice letter code is correct for writeoff' );
-    is( $notice->content, 'A writeoff of 13.00 has been applied to your account.', 'Notice content is correct for writeoff' );
+    is( $notice->content, "A writeoff of 13.00 has been applied to your account. Your $branchcode", 'Notice content is correct for writeoff' );
 };
 
 1;
