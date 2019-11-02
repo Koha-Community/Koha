@@ -68,7 +68,7 @@
                         <tbody>
                             [% FOREACH cr IN course_reserves %]
                                 <tr>
-                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% cr.biblio.title | html %]</a></td>
+                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title-head.inc' biblio=cr.biblio %]</a></td>
                                     <td>[% cr.biblio.author | html %]</td>
                                     <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
                                     <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location, 1 ) | html %]</i></td>
