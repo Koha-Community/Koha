@@ -20161,6 +20161,19 @@ if ( CheckVersion($DBversion) ) {
 "Upgrade to $DBversion done (Bug 14697 - Extend and enhance 'Claims returned' lost status)\n";
 }
 
+$DBversion = '19.06.00.048';
+if( CheckVersion( $DBversion ) ) {
+    # you can use $dbh here like:
+    $dbh->do( qq{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES  ('OPACShowMusicalInscripts','0','','Display musical inscripts on the OPAC record details page when available.','YesNo'),
+                ('OPACPlayMusicalInscripts','0','','If displayed musical inscripts, play midi conversion on the OPAC record details page.','YesNo')
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22581 - add new OPACShowMusicalInscripts and OPACPlayMusicalInscripts system preferences)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
