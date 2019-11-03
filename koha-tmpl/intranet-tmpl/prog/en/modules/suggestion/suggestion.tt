@@ -26,7 +26,7 @@
 [% IF ( op_else ) %]
     <style>
         h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
-        .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } .note { -moz-border-radius: 3px; border-radius:3px; background: transparent url("[% interface | html %]/[% theme | html %]/img/famfamfam/silk/comment.png") top left no-repeat; padding : 1px 3px 1px 18px; font-size : 90%; }
+        .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } div.note { background: transparent none; border-style: dotted; border-width: 1px 0 0 0; font-size : 90%; padding: 2px 0 0 0; } div.note i { color: #CCC; }
     </style>
 [% END %]
 </head>
@@ -488,7 +488,7 @@
                     <br />
                     [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
                         [% IF ( suggestions_loo.volumedesc ) %]; Volume:<i>[% suggestions_loo.volumedesc | html %]</i> [% END %]
-                        [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn | html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode | html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle | html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<span class="note">[% suggestions_loo.note | html %]</span>[% END %]
+                        [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn | html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode | html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle | html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<div class="note"><i class="fa fa-comment"></i> [% suggestions_loo.note | html %]</div>[% END %]
                 </td>
                 <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby | html %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby | html %])[% END %]</a>
