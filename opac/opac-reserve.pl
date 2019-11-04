@@ -274,10 +274,10 @@ if ( $query->param('place_reserve') ) {
 
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
-            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum )->{status} eq 'OK';
+            $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum, $branch )->{status} eq 'OK';
         }
         else {
-            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum )->{status} eq 'OK';
+            $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum, $branch )->{status} eq 'OK';
 
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
