@@ -386,7 +386,7 @@
         [% END %]
         [% IF ( duplinbatch ) %]<div class="dialog alert">
         <h4>Duplicate warning</h4>
-        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" class="popup" style="margin-left:10px">Display them</a></p>
+        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" style="margin-left:10px"><i class="fa fa-window-restore"></i> Display them</a></p>
         </div>[% END %]
 
         <div id="acqui_basket_content">

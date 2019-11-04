@@ -434,7 +434,7 @@
                                                     [% FOREACH book IN options %]
                                                         <tr>
                                                             <td>
-                                                                <a class="popup" target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% book.biblionumber | html %]">[% book.title | html %]</a>
+                                                                <a target="_blank" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% book.biblionumber | html %]">[% book.title | html %] <i class="fa fa-window-restore"></i></a>
                                                                 [% book.barcode | html %]
                                                             </td>
                                                             <td>

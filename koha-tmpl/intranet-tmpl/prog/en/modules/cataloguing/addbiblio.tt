@@ -475,7 +475,7 @@
                     [% IF ( duplicatebiblionumber ) %]
                         <div class="dialog alert">
                             <h3>Duplicate record suspected</h3>
-                            <p>Is this a duplicate of <a class="popup" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | html %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | html %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle | html %]</a> ?</p>
+                            <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]" onclick="openWindow('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% duplicatebiblionumber | uri %]&amp;popup=1', 'DuplicateBiblio','800','600'); return false;">[% duplicatetitle | html %] <i class="fa fa-window-restore"></i></a> ?</p>
                             [% IF ( CAN_user_editcatalogue_edit_items ) %]
                                 <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                                     <input type="hidden" name="biblionumber" value="[% duplicatebiblionumber | html %]" />
