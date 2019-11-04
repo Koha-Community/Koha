@@ -58,8 +58,7 @@ sub process_request {
         $mana_request->content( to_json($content) );
     }
 
-    my $response = $userAgent->request($mana_request);
-
+    my $response = $userAgent->simple_request($mana_request);
     eval { $result = from_json( $response->decoded_content, { utf8 => 1} ); };
     $result->{code} = $response->code;
     if ( $@ ){
