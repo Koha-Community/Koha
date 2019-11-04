@@ -4,6 +4,8 @@ package Koha::Plugin::Test;
 use Modern::Perl;
 
 use Koha::Exceptions::Exception;
+use Koha::Plugins::Tab;
+
 use Mojo::JSON qw(decode_json);
 
 ## Required for all plugins
@@ -139,7 +141,6 @@ sub after_biblio_action {
     }
 }
 
-
 sub after_item_action {
     my ( $self, $params ) = @_;
     my $action  = $params->{action} // '';
@@ -226,6 +227,27 @@ sub check_password {
             msg   => "PIN should be four digits"
         };
     }
+}
+
+sub intranet_catalog_biblio_tab {
+    my @tabs;
+    push @tabs,
+      Koha::Plugins::Tab->new(
+        {
+            title   => 'Tab 1',
+            content => 'This is content for tab 1'
+        }
+      );
+
+    push @tabs,
+      Koha::Plugins::Tab->new(
+        {
+            title   => 'Tab 2',
+            content => 'This is content for tab 2'
+        }
+      );
+
+    return @tabs;
 }
 
 sub _private_sub {

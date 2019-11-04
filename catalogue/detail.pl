@@ -75,12 +75,20 @@ if ( C4::Context->preference('UseKohaPlugins') &&
     });
     my @tabs;
     foreach my $tab_plugin (@tab_plugins) {
-        my @biblio_tabs = $tab_plugin->intranet_catalog_biblio_tab();
-        foreach my $tab (@biblio_tabs) {
-            $tab->{id} = 'tab-' . $tab->{title};
-            $tab->{id} =~ s/[^0-9A-Za-z]+/-/g;
-            push @tabs, $tab,
+        my @biblio_tabs;
+
+        try {
+            @biblio_tabs = $tab_plugin->intranet_catalog_biblio_tab();
+            foreach my $tab (@biblio_tabs) {
+                my $tab_id = 'tab-' . $tab->title;
+                $tab_id =~ s/[^0-9A-Za-z]+/-/g;
+                $tab->id( $tab_id );
+                push @tabs, $tab,
+            }
         }
+        catch {
+            warn "Error calling 'intranet_catalog_biblio_tab' on the " . $tab_plugin->{class} . "plugin ($_)";
+        };
     }
 
     $template->param(
