@@ -334,7 +334,10 @@ sub buildKohaItemsNamespace {
         elsif ($item->onloan) {
             $status = "Checked out";
         }
-        elsif ( $item->notforloan && $item->notforloan > 0 || $item->itype && $itemtypes->{ $item->itype }->{notforloan} && $itemtypes->{ $item->itype }->{notforloan} == 1 ) {
+        elsif ( $item->notforloan && $item->notforloan > 0
+            || exists $itemtypes->{ $item->effective_itemtype }
+            && $itemtypes->{ $item->effective_itemtype }->{notforloan} == 1 )
+        {
             $status = "reference";
         }
         elsif ( $item->notforloan < 0) {
