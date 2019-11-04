@@ -575,7 +575,8 @@ sub AddAuthority {
         my $marcorgcode = C4::Context->preference('MARCOrgCode');
         if ( $userenv && $userenv->{'branch'} ) {
             $library = Koha::Libraries->find( $userenv->{'branch'} );
-            $marcorgcode = $library->get_effective_marcorgcode;
+            # userenv's library could not exist because of a trick in misc/commit_file.pl (see FIXME and set_userenv statement)
+            $marcorgcode = $library ? $library->get_effective_marcorgcode : $marcorgcode;
         }
 		if (!$record->leader) {
 			$record->leader($leader);
