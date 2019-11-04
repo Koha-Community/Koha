@@ -292,10 +292,14 @@ Is only used in this module currently.
 sub buildKohaItemsNamespace {
     my ($biblionumber, $hidden_items) = @_;
 
-    my $search_params;
-    $search_params->{'me.biblionumber'} = $biblionumber;
-    $search_params->{'me.itemnumber'} = { not_in => $hidden_items } if $hidden_items;
-    my @items = Koha::Items->search($search_params,{prefetch=>['branchtransfers','reserves']});
+    $hidden_items ||= [];
+    my @items = Koha::Items->search(
+        {
+            'me.biblionumber' => $biblionumber,
+            'me.itemnumber'   => { not_in => $hidden_items }
+        },
+        { prefetch => [ 'branchtransfers', 'reserves' ] }
+    );
 
     my $shelflocations =
       { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => "", kohafield => 'items.location' } ) };
@@ -305,13 +309,9 @@ sub buildKohaItemsNamespace {
     my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
 
     my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
-    my $location = "";
-    my $ccode = "";
     my $xml = '';
     for my $item (@items) {
         my $status;
-
-        my $reservestatus = C4::Reserves::GetReserveStatus( $item->itemnumber );
 
         if ($item->has_pending_hold) {
             $status = 'Pending hold';
@@ -343,12 +343,12 @@ sub buildKohaItemsNamespace {
         else {
             $status = "available";
         }
-        my $homebranch = $item->homebranch? xml_escape($branches{$item->homebranch}):'';
-        my $holdingbranch = $item->holdingbranch? xml_escape($branches{$item->holdingbranch}):'';
-        $location = $item->location? xml_escape($shelflocations->{$item->location}||$item->location):'';
-        $ccode = $item->ccode? xml_escape($ccodes->{$item->ccode}||$item->ccode):'';
+        my $homebranch     = xml_escape($branches{$item->homebranch});
+        my $holdingbranch  = xml_escape($branches{$item->holdingbranch});
+        my $location       = xml_escape($item->location && exists $shelflocations->{$item->location} ? $shelflocations->{$item->location} : $item->location);
+        my $ccode          = xml_escape($item->ccode    && exists $ccodes->{$item->ccode}            ? $ccodes->{$item->ccode}            : $item->ccode);
         my $itemcallnumber = xml_escape($item->itemcallnumber);
-        my $stocknumber = $item->stocknumber? xml_escape($item->stocknumber):'';
+        my $stocknumber    = xml_escape($item->stocknumber);
         $xml .=
             "<item>"
           . "<homebranch>$homebranch</homebranch>"
