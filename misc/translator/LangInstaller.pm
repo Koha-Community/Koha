@@ -185,7 +185,7 @@ sub add_prefs {
         for my $element ( @$pref ) {
             if ( ref( $element) eq 'HASH' ) {
                 while ( my ($key, $value) = each(%$element) ) {
-                    next unless $key eq 'choices';
+                    next unless $key eq 'choices' or $key eq 'multiple';
                     next unless ref($value) eq 'HASH';
                     for my $ckey ( keys %$value ) {
                         my $id = $self->{file} . "#$pref_name# " . $value->{$ckey};
@@ -226,7 +226,7 @@ sub update_tab_prefs {
             my $element = $p->[$i];
             if ( ref( $element) eq 'HASH' ) {
                 while ( my ($key, $value) = each(%$element) ) {
-                    next unless $key eq 'choices';
+                    next unless $key eq 'choices' or $key eq 'multiple';
                     next unless ref($value) eq 'HASH';
                     for my $ckey ( keys %$value ) {
                         my $id = $self->{file} . "#$pref_name# " . $value->{$ckey};
