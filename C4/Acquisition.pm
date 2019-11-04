@@ -3023,8 +3023,9 @@ $order = populate_order_with_prices({
 });
 
 
-Sets calculated values for an order - all values are stored with pull precision regardless of rounding preference except fot
-tax value which is calculated on rounded values if requested
+Sets calculated values for an order - all values are stored with full precision
+regardless of rounding preference except for tax value which is calculated
+on rounded values if requested
 
 For ordering the values set are:
     rrp_tax_included
@@ -3037,7 +3038,8 @@ For receiving the value set are:
     unitprice_tax_excluded
     tax_value_on_receiving
 
-Note: When receiving if the rounded value of the unitprice matches the rounded value of the ecost then then ecost (full precision) is used.
+Note: When receiving, if the rounded value of the unitprice matches the rounded
+value of the ecost then then ecost (full precision) is used.
 
 Returns a hashref of the order
 
