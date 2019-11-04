@@ -387,6 +387,7 @@ my $target_map = {
   './blib'                      => 'NONE',
   '.sass-lint.yml'              => 'NONE',
   '.scss-lint.yml'              => 'NONE',
+  '.eslintrc.json'              => 'NONE',
   'gulpfile.js'                 => 'NONE',
   'package.json'                => 'NONE',
   'yarn.lock'                   => 'NONE',
