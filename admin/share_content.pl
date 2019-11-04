@@ -65,7 +65,7 @@ if ( $op eq 'reset' ) {
     C4::Context->set_preference('ManaToken', '');
 }
 
-if ( $op eq 'send' ) {
+if ( $op eq 'send' && not $bad_url ) {
     my $name = $query->param('name');
     my $email = $query->param('email');
 
