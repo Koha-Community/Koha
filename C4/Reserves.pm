@@ -173,9 +173,9 @@ sub AddReserve {
     # if we have an item selectionned, and the pickup branch is the same as the holdingbranch
     # of the document, we force the value $priority and $found .
     if ( $checkitem and not C4::Context->preference('ReservesNeedReturns') ) {
-        $priority = 0;
         my $item = Koha::Items->find( $checkitem ); # FIXME Prevent bad calls
-        if ( $item->holdingbranch eq $branch ) {
+        if ( !$item->onloan && $item->holdingbranch eq $branch && ( $item->damaged && C4::Context->preference('AllowHoldsOnDamagedItems') || !$item->damaged ) && !$item->get_transfer && !$item->holds->count ) {
+            $priority = 0;
             $found = 'W';
         }
     }
