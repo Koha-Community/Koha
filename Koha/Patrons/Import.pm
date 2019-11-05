@@ -22,6 +22,7 @@ use namespace::clean;
 use Carp;
 use Text::CSV;
 use Encode qw( decode_utf8 );
+use Try::Tiny;
 
 use C4::Members;
 
@@ -303,7 +304,26 @@ sub import_patrons {
                 }
             }
             if ($overwrite_passwords){
-                $patron->set_password({ password => $borrower{password} });
+                try {
+                    $patron->set_password({ password => $borrower{password} });
+                }
+                catch {
+                    if ( $_->isa('Koha::Exceptions::Password::TooShort') ) {
+                        push @errors, { passwd_too_short => 1, borrowernumber => $borrowernumber, length => $_->{length}, min_length => $_->{min_length} };
+                    }
+                    elsif ( $_->isa('Koha::Exceptions::Password::WhitespaceCharacters') ) {
+                        push @errors, { passwd_whitespace => 1, borrowernumber => $borrowernumber } ;
+                    }
+                    elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
+                        push @errors, { passwd_too_weak => 1, borrowernumber => $borrowernumber } ;
+                    }
+                    elsif ( $_->isa('Koha::Exceptions::Password::Plugin') ) {
+                        push @errors, { passwd_plugin_err => 1, borrowernumber => $borrowernumber } ;
+                    }
+                    else {
+                        push @errors, { passwd_unknown_err => 1, borrowernumber => $borrowernumber } ;
+                    }
+                }
             }
             if ($extended) {
                 if ($ext_preserve) {

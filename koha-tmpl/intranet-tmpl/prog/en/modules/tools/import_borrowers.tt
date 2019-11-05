@@ -115,6 +115,31 @@
                             Userid [% e.userid | html %] is already used by another patron.
                         </li>
                     [% END %]
+                    [% IF e.passwd_too_short %]
+                        <li class="line_error">
+                            Password is too short for patron with borrowernumber [% e.borrowernumber | html %]. Minimum length is [% e.min_length %], length is [% e.length %]
+                        </li>
+                    [% END %]
+                    [% IF e.passwd_whitespace %]
+                        <li class="line_error">
+                            Password contains whitespace for patron with borrowernumber [% e.borrowernumber | html %].
+                        </li>
+                    [% END %]
+                    [% IF e.passwd_too_weak %]
+                        <li class="line_error">
+                            Password is too weak for patron with borrowernumber [% e.borrowernumber | html %].
+                        </li>
+                    [% END %]
+                    [% IF e.passwd_plugin_err %]
+                        <li class="line_error">
+                            Password plugin error for patron with borrowernumber [% e.borrowernumber | html %].
+                        </li>
+                    [% END %]
+                    [% IF e.passwd_unknown_err %]
+                        <li class="line_error">
+                            Password error for patron with borrowernumber [% e.borrowernumber | html %].
+                        </li>
+                    [% END %]
                 [% END %]
             </ul>
         </div>
