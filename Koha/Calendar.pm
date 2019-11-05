@@ -347,34 +347,33 @@ sub days_between {
     }
 
     # start and end should not be closed days
-    my $days = $start_dt->delta_days($end_dt)->delta_days;
+    my $delta_days = $start_dt->delta_days($end_dt)->delta_days;
     while( $start_dt->compare($end_dt) < 1 ) {
-        $days-- if $self->is_holiday($start_dt);
+        $delta_days-- if $self->is_holiday($start_dt);
         $start_dt->add( days => 1 );
     }
-    return DateTime::Duration->new( days => $days );
+    return DateTime::Duration->new( days => $delta_days );
 }
 
 sub hours_between {
     my ($self, $start_date, $end_date) = @_;
     my $start_dt = $start_date->clone()->set_time_zone('floating');
     my $end_dt = $end_date->clone()->set_time_zone('floating');
+
     my $duration = $end_dt->delta_ms($start_dt);
     $start_dt->truncate( to => 'day' );
     $end_dt->truncate( to => 'day' );
+
     # NB this is a kludge in that it assumes all days are 24 hours
     # However for hourly loans the logic should be expanded to
     # take into account open/close times then it would be a duration
     # of library open hours
     my $skipped_days = 0;
-    for (my $dt = $start_dt->clone();
-        $dt <= $end_dt;
-        $dt->add(days => 1)
-    ) {
-        if ($self->is_holiday($dt)) {
-            ++$skipped_days;
-        }
+    while( $start_dt->compare($end_dt) < 1 ) {
+        $skipped_days++ if $self->is_holiday($start_dt);
+        $start_dt->add( days => 1 );
     }
+
     if ($skipped_days) {
         $duration->subtract_duration(DateTime::Duration->new( hours => 24 * $skipped_days));
     }
