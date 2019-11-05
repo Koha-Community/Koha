@@ -133,6 +133,24 @@ Searching:
             - 'the operator "phr" in the callnumber and standard number staff client searches'
     Results Display:
         -
+            - pref: numSearchResultsDropdown
+              type: boolean
+              default: no
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - results per page dropdown on staff client search results.
+            - "Note: This does not work if ElasticSearch is activated."
+        -
+            - pref: OPACnumSearchResultsDropdown
+              type: boolean
+              default: no
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - results per page dropdown on OPAC search results.
+            - "Note: This does not work if ElasticSearch is activated."
+        -
             - By default, sort search results in the staff client by
             - pref: defaultSortField
               default: relevance

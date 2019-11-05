@@ -163,9 +163,29 @@
                                         [% UNLESS tag %]
                                             <div class="sort_by pull-right">
                                                 <select id="sort_by" class="resort" name="sort_by"> [% INCLUDE 'resort_form.inc' %] </select>
+
+                                                [% IF Koha.Preference('OPACnumSearchResultsDropdown') && Koha.Preference('SearchEngine') == "Zebra" %]
+                                                    <label for="results_per_page">Results per page: </label>
+                                                    <select id="results_per_page" name="count">
+                                                        [% IF Koha.Preference('OPACnumSearchResults') %]
+                                                            [% IF results_per_page == Koha.Preference('OPACnumSearchResults') %]
+                                                                <option value="[% Koha.Preference('OPACnumSearchResults') %]" selected="selected">Library default: [% Koha.Preference('OPACnumSearchResults') %]</option>
+                                                            [% ELSE %]
+                                                                <option value="[% Koha.Preference('OPACnumSearchResults') %]">Library default: [% Koha.Preference('OPACnumSearchResults') %]</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF results_per_page == '20' %]<option value="20" selected="selected">20</option>[% ELSE %]<option value="20">20</option>[% END %]
+                                                        [% IF results_per_page == '40' %]<option value="40" selected="selected">40</option>[% ELSE %]<option value="40">40</option>[% END %]
+                                                        [% IF results_per_page == '60' %]<option value="60" selected="selected">60</option>[% ELSE %]<option value="60">60</option>[% END %]
+                                                        [% IF results_per_page == '80' %]<option value="80" selected="selected">80</option>[% ELSE %]<option value="80">80</option>[% END %]
+                                                        [% IF results_per_page == '100' %]<option value="100" selected="selected">100</option>[% ELSE %]<option value="100">100</option>[% END %]
+                                                    </select>
+                                                [% END %]
+
                                                 <input type="submit" class="btn btn-sm clearfix" id="sortsubmit" value="Go" />
                                             </div>
                                         [% END %]
+                                        </div>
                                     </div> <!-- / #toolbar -->
 
                                     <div id="selections-toolbar" class="toolbar noprint">
@@ -758,6 +778,11 @@ $(document).ready(function(){
     $('.resort').change(function() {
         $('#bookbag_form').submit();
     });
+
+    $('#results_per_page').change(function() {
+        $('#bookbag_form').submit();
+    });
+
     $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear all")+"<\/a>");
     $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select all")+"<\/a>");
 

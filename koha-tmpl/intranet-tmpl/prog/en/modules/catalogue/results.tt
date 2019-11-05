@@ -268,6 +268,29 @@
                                     [% END %]
                                 </ul>
                             </div> <!-- /.btn-group -->
+
+                            [% IF Koha.Preference('numSearchResultsDropdown') && Koha.Preference('SearchEngine') == "Zebra" %]
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Results per page: [% results_per_page %] <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        [% IF Koha.Preference('numSearchResults') %]
+                                            <li><a href="#" id="resultsperpage-default">
+                                                [% IF results_per_page == Koha.Preference('numSearchResults') %]
+                                                    <i class="fa fa-check"></i>
+                                                [% END %] Library default: [% Koha.Preference('numSearchResults') %]
+                                            </a></li>
+                                        [% END %]
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=20[% PROCESS sort_search_query %]">[% IF results_per_page == '20' %]<i class="fa fa-check"></i>[% END %] 20</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=40[% PROCESS sort_search_query %]" id="resultsperpage-40">[% IF results_per_page == '40' %]<i class="fa fa-check"></i>[% END %] 40</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=60[% PROCESS sort_search_query %]" id="resultsperpage-60">[% IF results_per_page == '60' %]<i class="fa fa-check"></i>[% END %] 60</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=80[% PROCESS sort_search_query %]" id="resultsperpage-80">[% IF results_per_page == '80' %]<i class="fa fa-check"></i>[% END %] 80</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=100[% PROCESS sort_search_query %]" id="resultsperpage-100">[% IF results_per_page == '100' %]<i class="fa fa-check"></i>[% END %] 100</a></li>
+                                    </ul>
+                                </div> <!-- /.btn-group -->
+                            [% END %]
+
                         </div> <!-- /#selection_ops -->
                     </div> <!-- /#searchheader -->
 
