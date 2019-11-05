@@ -345,17 +345,21 @@ sub hours_between {
     # However for hourly loans the logic should be expanded to
     # take into account open/close times then it would be a duration
     # of library open hours
-    # start and end should not be closed days
     my $skipped_days = 0;
-    while( $start_dt->compare($end_dt) < 1 ) {
-        $start_dt->add( days => 1 );
-        $skipped_days++ if $self->is_holiday($start_dt);
+    for (my $dt = $start_dt->clone();
+        $dt <= $end_dt;
+        $dt->add(days => 1)
+    ) {
+        if ($self->is_holiday($dt)) {
+            ++$skipped_days;
+        }
     }
     if ($skipped_days) {
         $duration->subtract_duration(DateTime::Duration->new( hours => 24 * $skipped_days));
     }
 
     return $duration;
+
 }
 
 sub set_daysmode {
