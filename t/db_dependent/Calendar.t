@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Time::Fake;
 use t::lib::TestBuilder;
 
 use DateTime;
@@ -89,6 +90,147 @@ subtest 'crossing_DST' => sub {
         298 * 24 * 60 - 149,
         "Hours (in minutes) calculated correctly"
     );
+};
+
+subtest 'hours_between' => sub {
+
+    plan tests => 2;
+
+    #    November 2019
+    # Su Mo Tu We Th Fr Sa
+    #                 1  2
+    #  3  4 *5* 6  7  8  9
+    # 10 11 12 13 14 15 16
+    # 17 18 19 20 21 22 23
+    # 24 25 26 27 28 29 30
+
+    my $now    = dt_from_string('2019-11-05 12:34:56'); # Today is 2019 Nov 5th
+    my $nov_6  = dt_from_string('2019-11-06 12:34:56');
+    my $nov_7  = dt_from_string('2019-11-07 12:34:56');
+    my $nov_12 = dt_from_string('2019-11-12 12:34:56');
+    my $nov_13 = dt_from_string('2019-11-13 12:34:56');
+    my $nov_15 = dt_from_string('2019-11-15 12:34:56');
+    Time::Fake->offset($now->epoch);
+
+    subtest 'No holiday' => sub {
+
+        plan tests => 2;
+
+        my $library = $builder->build_object({ class => 'Koha::Libraries' });
+        my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
+
+        subtest 'Same hours' => sub {
+
+            plan tests => 4;
+
+            # Between 5th and 6th
+            my $diff_hours = $calendar->hours_between( $now, $nov_6 )->hours;
+            is( $diff_hours, 1 * 24, '' );
+
+            # Between 5th and 7th
+            $diff_hours = $calendar->hours_between( $now, $nov_7 )->hours;
+            is( $diff_hours, 2 * 24, '' );
+
+            # Between 5th and 12th
+            $diff_hours = $calendar->hours_between( $now, $nov_12 )->hours;
+            is( $diff_hours, 7 * 24, '' );
+
+            # Between 5th and 15th
+            $diff_hours = $calendar->hours_between( $now, $nov_15 )->hours;
+            is( $diff_hours, 10 * 24, '' );
+        };
+
+        subtest 'Different hours' => sub {
+
+            plan tests => 4;
+
+            # Between 5th and 6th
+            my $diff_hours = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 1 * 24 - 3, '' );
+
+            # Between 5th and 7th
+            $diff_hours = $calendar->hours_between( $now, $nov_7->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 2 * 24 - 3, '' );
+
+            # Between 5th and 12th
+            $diff_hours = $calendar->hours_between( $now, $nov_12->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 7 * 24 - 3, '' );
+
+            # Between 5th and 15th
+            $diff_hours = $calendar->hours_between( $now, $nov_15->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 10 * 24 - 3, '' );
+        };
+    };
+
+    subtest 'With holiday' => sub {
+        plan tests => 2;
+
+        my $library = $builder->build_object({ class => 'Koha::Libraries' });
+
+        # Wednesdays are closed
+        my $dbh = C4::Context->dbh;
+        $dbh->do(q|
+            INSERT INTO repeatable_holidays (branchcode,weekday,day,month,title,description)
+            VALUES ( ?, ?, NULL, NULL, ?, '' )
+        |, undef, $library->branchcode, 3, 'Closed on Wednesday');
+
+        my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
+
+        subtest 'Same hours' => sub {
+            plan tests => 5;
+
+            my $diff_hours;
+
+            # Between 5th and 6th
+            $diff_hours = $calendar->hours_between( $now, $nov_6 )->hours;
+            is( $diff_hours, 0 * 24, '' ); # FIXME Is this really should be 0?
+
+            # Between 5th and 7th
+            $diff_hours = $calendar->hours_between( $now, $nov_7 )->hours;
+            is( $diff_hours, 2 * 24 - 1 * 24, '' );
+
+            # Between 5th and 12th
+            $diff_hours = $calendar->hours_between( $now, $nov_12 )->hours;
+            is( $diff_hours, 7 * 24 - 1 * 24, '' );
+
+            # Between 5th and 13th
+            $diff_hours = $calendar->hours_between( $now, $nov_13 )->hours;
+            is( $diff_hours, 8 * 24 - 2 * 24, '' );
+
+            # Between 5th and 15th
+            $diff_hours = $calendar->hours_between( $now, $nov_15 )->hours;
+            is( $diff_hours, 10 * 24 - 2 * 24, '' );
+        };
+
+        subtest 'Different hours' => sub {
+            plan tests => 6;
+
+            my $diff_hours;
+
+            # Between 5th and 6th
+            my $duration = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) );
+            is( $duration->hours, abs(0 * 24 - 3), '' ); # FIXME $duration->hours always return a abs
+            is( $duration->is_negative, 1, ); # FIXME Do really test for that case in our calls to hours_between?
+
+            # Between 5th and 7th
+            $diff_hours = $calendar->hours_between( $now, $nov_7->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 2 * 24 - 1 * 24 - 3, '' );
+
+            # Between 5th and 12th
+            $diff_hours = $calendar->hours_between( $now, $nov_12->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 7 * 24 - 1 * 24 - 3, '' );
+
+            # Between 5th and 13th
+            $diff_hours = $calendar->hours_between( $now, $nov_13->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 8 * 24 - 2 * 24 - 3, '' );
+
+            # Between 5th and 15th
+            $diff_hours = $calendar->hours_between( $now, $nov_15->clone->subtract(hours => 3) )->hours;
+            is( $diff_hours, 10 * 24 - 2 * 24 - 3, '' );
+        };
+
+    };
+
 };
 
 $schema->storage->txn_rollback();
