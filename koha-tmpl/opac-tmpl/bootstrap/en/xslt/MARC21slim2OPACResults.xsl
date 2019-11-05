@@ -1343,7 +1343,11 @@
                               <br />
                              <xsl:variable name="reference_items" select="key('item-by-status', 'reallynotforloan')"/>
                              <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-substatus-and-branch', concat(items:substatus, ' ', items:homebranch))[1])]">
-                                <span class="ItemSummary">
+                                <span>
+                                    <xsl:attribute name="class">
+                                        ItemSummary
+                                        <xsl:value-of select="translate(items:substatus,' ','_')"/>
+                                    </xsl:attribute>
                                     <xsl:if test="$singleBranchMode=0">
 					    <span class="ItemBranch"><xsl:value-of select="items:homebranch"/><xsl:text> </xsl:text></span>
                                     </xsl:if>
