@@ -102,6 +102,9 @@ __PAZPAR2_TOGGLE_XML_POST__
  <logdir>__LOG_DIR__</logdir>
  <docdir>__DOC_DIR__</docdir>
  <backupdir>__BACKUP_DIR__</backupdir>
+ <!-- URL of the mana KB server -->
+ <!-- alternative value http://mana-test.koha-community.org to query the test server -->
+ <mana_config>https://mana-kb.koha-community.org</mana_config>
  <!-- Enable the two following to allow superlibrarians to download
       database and configuration dumps (respectively) from the Export
       tool -->
@@ -117,8 +120,14 @@ __PAZPAR2_TOGGLE_XML_POST__
  <useshibboleth>0</useshibboleth><!-- see C4::Auth_with_shibboleth for extra configs you must do to turn this on -->
  <zebra_lockdir>__ZEBRA_LOCK_DIR__</zebra_lockdir>
  <use_zebra_facets>1</use_zebra_facets>
+ <zebra_max_record_size>1024</zebra_max_record_size>
  <queryparser_config>__KOHA_CONF_DIR__/searchengine/queryparser.yaml</queryparser_config>
  <log4perl_conf>__KOHA_CONF_DIR__/log4perl.conf</log4perl_conf>
+ <!-- Uncomment/edit next setting if you want to adjust zebra log levels.
+      Default is: none,fatal,warn.
+      You can also include: debug,log,malloc,all,request.
+      Use a comma-separated list of levels to include. -->
+ <!-- <zebra_loglevels>none,fatal,warn</zebra_loglevels> -->
  <memcached_servers>__MEMCACHED_SERVERS__</memcached_servers>
  <memcached_namespace>__MEMCACHED_NAMESPACE__</memcached_namespace>
  <template_cache_dir>__TEMPLATE_CACHE_DIR__</template_cache_dir>
@@ -217,6 +226,13 @@ __PAZPAR2_TOGGLE_XML_POST__
       instance to be something other then the local timezone of the
       server. e.g. Antarctica/South_Pole -->
  <timezone></timezone>
+
+ <!-- flag for development purposes
+      dev_install is used to adjust some paths specific to dev installations
+      strict_sql_modes should not be used in a production environement
+                       developers use it to catch bugs related to strict SQL modes -->
+ <dev_install>0</dev_install>
+ <strict_sql_modes>0</strict_sql_modes>
 
 </config>
 </yazgfs>

@@ -269,6 +269,10 @@ __END_SRU_PUBLICSERVER__
  <port>3306</port>
  <user>__DB_USER__</user>
  <pass>__DB_PASS__</pass>
+ <tls>__DB_USE_TLS__</tls>
+ <ca>__DB_TLS_CA_CERTIFICATE__</ca>
+ <cert>__DB_TLS_CLIENT_CERTIFICATE__</cert>
+ <key>__DB_TLS_CLIENT_KEY__</key>
  <biblioserver>biblios</biblioserver>
  <biblioservershadow>1</biblioservershadow>
  <authorityserver>authorities</authorityserver>
@@ -398,6 +402,13 @@ __END_SRU_PUBLICSERVER__
       instance to be something other then the local timezone of the
       server. e.g. Antarctica/South_Pole -->
  <timezone>__TIMEZONE__</timezone>
+
+ <!-- flag for development purposes
+      dev_install is used to adjust some paths specific to dev installations
+      strict_sql_modes should not be used in a production environement
+                       developers use it to catch bugs related to strict SQL modes -->
+ <dev_install>0</dev_install>
+ <strict_sql_modes>0</strict_sql_modes>
 
 </config>
 </yazgfs>
