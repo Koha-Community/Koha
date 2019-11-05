@@ -37,6 +37,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 my $input           = new CGI;
 my $op              = $input->param('op');
+my $biblionumber    = $input->param('biblionumber');
 my $suggestion      = $input->Vars;
 my $negcaptcha      = $input->param('negcap');
 my $suggested_by_anyone = $input->param('suggested_by_anyone') || 0;
@@ -116,7 +117,7 @@ if ( $op eq 'else' ) {
     }
 }
 
-if ( $op eq "add_validate" ) {
+if ( $op eq "add_validate" && not $biblionumber ) { # If we are creating the suggestion from an existing record we do not want to search for duplicates
     $op = 'add_confirm';
     my $biblio = MarcRecordFromNewSuggestion($suggestion);
     if ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) {
@@ -228,6 +229,19 @@ my @mandatoryfields;
     @mandatoryfields = sort split(/\s*\,\s*/, $fldsreq_sp);
     foreach (@mandatoryfields) {
         $template->param( $_."_required" => 1);
+    }
+    if ( $biblionumber ) {
+        my $biblio = Koha::Biblios->find($biblionumber);
+        $template->param(
+            biblionumber    => $biblio->biblionumber,
+            title           => $biblio->title,
+            author          => $biblio->author,
+            copyrightdate   => $biblio->copyrightdate,
+            isbn            => $biblio->biblioitem->isbn,
+            publishercode   => $biblio->biblioitem->publishercode,
+            collectiontitle => $biblio->biblioitem->collectiontitle,
+            place           => $biblio->biblioitem->place,
+        );
     }
 }
 

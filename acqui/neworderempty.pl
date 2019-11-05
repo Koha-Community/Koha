@@ -255,7 +255,6 @@ if ( not $ordernumber ) {    # create order
 }
 else {    #modify order
     $data   = GetOrder($ordernumber);
-    $biblionumber = $data->{'biblionumber'};
     $budget_id = $data->{'budget_id'};
 
     $template->param(
@@ -272,6 +271,7 @@ else {    #modify order
         push @order_users, $order_patron if $order_patron;
     }
 }
+$biblionumber = $data->{biblionumber};
 
 # We can have:
 # - no ordernumber but a biblionumber: from a subscription, from an existing record
