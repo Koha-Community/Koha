@@ -410,7 +410,7 @@ subtest 'store() tests' => sub {
             $patron->lastseen('wrong_value')->store;
         } catch {
             ok( $_->isa('Koha::Exceptions::Object::BadValue'), 'Exception thrown correctly' );
-            like( $_->property, qr/borrowers\.lastseen/, 'Column should be the expected one' );
+            like( $_->property, qr/(borrowers\.)?lastseen/, 'Column should be the expected one' ); # The table name is not always displayed, it depends on the DBMS version
             is( $_->value, 'wrong_value', 'Value should be the expected one' );
         };
 
