@@ -142,7 +142,7 @@
                     <div class="alert alert-info" id="notesaved" style="display:none;"></div>
 
                     [% IF Koha.Preference('OPACMySummaryNote') %]
-                        [% Koha.Preference('OPACMySummaryNote') | $raw %]
+                        <div id="opac-my-summary-note">[% Koha.Preference('OPACMySummaryNote') | $raw %]</div>
                     [% END %]
 
                     <div id="opac-user-views" class="toptabs">
