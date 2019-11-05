@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 3;
 use t::lib::TestBuilder;
 
 use DateTime;
@@ -31,55 +31,64 @@ $schema->storage->txn_begin;
 
 my $today = dt_from_string();
 my $holiday_dt = $today->clone;
-$holiday_dt->add(days => 15);
+$holiday_dt->add(days => 3);
 
 Koha::Caches->get_instance()->flush_all();
 
 my $builder = t::lib::TestBuilder->new();
-my $holiday = $builder->build({
-    source => 'SpecialHoliday',
-    value => {
-        branchcode => 'LIB1',
-        day => $holiday_dt->day,
-        month => $holiday_dt->month,
-        year => $holiday_dt->year,
-        title => 'My holiday',
-        isexception => 0
-    },
-});
+my $library = $builder->build_object({ class => 'Koha::Libraries' });
+my $holiday = $builder->build(
+    {
+        source => 'SpecialHoliday',
+        value  => {
+            branchcode  => $library->branchcode,
+            day         => $holiday_dt->day,
+            month       => $holiday_dt->month,
+            year        => $holiday_dt->year,
+            title       => 'My holiday',
+            isexception => 0
+        },
+    }
+);
 
-my $calendar = Koha::Calendar->new( branchcode => 'LIB1');
-my $forwarded_dt = $calendar->days_forward($today, 10);
+my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
 
-my $expected = $today->clone;
-$expected->add(days => 10);
-is($forwarded_dt->ymd, $expected->ymd, 'With no holiday on the perioddays_forward should add 10 days');
+subtest 'days_forward' => sub {
 
-$forwarded_dt = $calendar->days_forward($today, 20);
+    plan tests => 4;
+    my $forwarded_dt = $calendar->days_forward( $today, 2 );
+    my $expected = $today->clone->add( days => 2 );
+    is( $forwarded_dt->ymd, $expected->ymd, 'With no holiday on the perioddays_forward should add 2 days' );
 
-$expected->add(days => 11);
-is($forwarded_dt->ymd, $expected->ymd, 'With holiday on the perioddays_forward should add 20 days + 1 day for holiday');
+    $forwarded_dt = $calendar->days_forward( $today, 5 );
+    $expected = $today->clone->add( days => 6 );
+    is( $forwarded_dt->ymd, $expected->ymd, 'With holiday on the perioddays_forward should add 5 days + 1 day for holiday'
+    );
 
-$forwarded_dt = $calendar->days_forward($today, 0);
-is($forwarded_dt->ymd, $today->ymd, '0 day should return start dt');
+    $forwarded_dt = $calendar->days_forward( $today, 0 );
+    is( $forwarded_dt->ymd, $today->ymd, '0 day should return start dt' );
 
-$forwarded_dt = $calendar->days_forward($today, -2);
-is($forwarded_dt->ymd, $today->ymd, 'negative day should return start dt');
+    $forwarded_dt = $calendar->days_forward( $today, -2 );
+    is( $forwarded_dt->ymd, $today->ymd, 'negative day should return start dt' );
+};
 
 subtest 'crossing_DST' => sub {
 
     plan tests => 3;
 
     my $tz = DateTime::TimeZone->new( name => 'America/New_York' );
-    my $start_date = dt_from_string( "2016-03-09 02:29:00",undef,$tz );
-    my $end_date = dt_from_string( "2017-01-01 00:00:00", undef, $tz );
-    my $days_between = $calendar->days_between($start_date,$end_date);
+    my $start_date = dt_from_string( "2016-03-09 02:29:00", undef, $tz );
+    my $end_date   = dt_from_string( "2017-01-01 00:00:00", undef, $tz );
+    my $days_between = $calendar->days_between( $start_date, $end_date );
     is( $days_between->delta_days, 298, "Days calculated correctly" );
-    $days_between = $calendar->days_between($end_date,$start_date);
+    $days_between = $calendar->days_between( $end_date, $start_date );
     is( $days_between->delta_days, 298, "Swapping returns the same" );
-    my $hours_between = $calendar->hours_between($start_date,$end_date);
-    is( $hours_between->delta_minutes, 298 * 24 * 60 - 149, "Hours (in minutes) calculated correctly" );
-
+    my $hours_between = $calendar->hours_between( $start_date, $end_date );
+    is(
+        $hours_between->delta_minutes,
+        298 * 24 * 60 - 149,
+        "Hours (in minutes) calculated correctly"
+    );
 };
 
 $schema->storage->txn_rollback();
