@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use HTML::Entities;
+use Try::Tiny;
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
