@@ -257,8 +257,7 @@ is($result_4a->{overwritten}, 0, 'Got the expected 0 overwritten result from imp
 
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
 
-my $surname ='Chloé';
-my $surname_utf8 = encode_utf8($surname);
+my $surname ='Chloé❤';
 # Given ... 3 new inputs. One with no branch code, one with unexpected branch code.
 my $input_no_branch   = qq|1002,$surname,Reynolds,Mr,Patricia,JR,12,Hill,Kennedy,Saint Louis,Colorado Springs,Missouri,63131,United States,preynolds2i\@washington.edu,7-(925)314-9514,0-(315)973-8956,4-(510)556-2323,09/18/1967,,PT,05/07/2015,07/01/2015,preynolds2,K3HiDzl|;
 my $input_good_branch = qq|1003,$surname,Richardson,Mr,Kimberly,LR,90,Place,Bayside,Atlanta,Erie,Georgia,31190,United States,krichardson3\@pcworld.com,8-(035)185-0387,4-(796)518-3676,3-(644)960-3789,04/13/1954,RPL,PT,06/06/2015,07/01/2015,krichardson3,P3EO0MVRPXbM|;
