@@ -92,7 +92,7 @@ subtest 'crossing_DST' => sub {
     );
 };
 
-subtest 'hours_between' => sub {
+subtest 'hours_between | days_between' => sub {
 
     plan tests => 2;
 
@@ -121,44 +121,60 @@ subtest 'hours_between' => sub {
 
         subtest 'Same hours' => sub {
 
-            plan tests => 4;
+            plan tests => 8;
 
             # Between 5th and 6th
             my $diff_hours = $calendar->hours_between( $now, $nov_6 )->hours;
             is( $diff_hours, 1 * 24, '' );
+            my $diff_days = $calendar->days_between( $now, $nov_6 )->delta_days;
+            is( $diff_days, 1, '' );
 
             # Between 5th and 7th
             $diff_hours = $calendar->hours_between( $now, $nov_7 )->hours;
             is( $diff_hours, 2 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_7 )->delta_days;
+            is( $diff_days, 2, '' );
 
             # Between 5th and 12th
             $diff_hours = $calendar->hours_between( $now, $nov_12 )->hours;
             is( $diff_hours, 7 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_12 )->delta_days;
+            is( $diff_days, 7, '' );
 
             # Between 5th and 15th
             $diff_hours = $calendar->hours_between( $now, $nov_15 )->hours;
             is( $diff_hours, 10 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_15 )->delta_days;
+            is( $diff_days, 10, '' );
         };
 
         subtest 'Different hours' => sub {
 
-            plan tests => 4;
+            plan tests => 8;
 
             # Between 5th and 6th
             my $diff_hours = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 1 * 24 - 3, '' );
+            my $diff_days = $calendar->days_between( $now, $nov_6->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 1, '' );
 
             # Between 5th and 7th
             $diff_hours = $calendar->hours_between( $now, $nov_7->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 2 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_7->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 2, '' );
 
             # Between 5th and 12th
             $diff_hours = $calendar->hours_between( $now, $nov_12->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 7 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_12->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 7, '' );
 
             # Between 5th and 15th
             $diff_hours = $calendar->hours_between( $now, $nov_15->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 10 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_15->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 10, '' );
         };
     };
 
@@ -177,56 +193,76 @@ subtest 'hours_between' => sub {
         my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
 
         subtest 'Same hours' => sub {
-            plan tests => 5;
+            plan tests => 10;
 
-            my $diff_hours;
+            my ( $diff_hours, $diff_days );
 
             # Between 5th and 6th
             $diff_hours = $calendar->hours_between( $now, $nov_6 )->hours;
             is( $diff_hours, 0 * 24, '' ); # FIXME Is this really should be 0?
+            $diff_days = $calendar->days_between( $now, $nov_6)->delta_days;
+            is( $diff_days, 0, '' ); # FIXME Is this really should be 0?
 
             # Between 5th and 7th
             $diff_hours = $calendar->hours_between( $now, $nov_7 )->hours;
             is( $diff_hours, 2 * 24 - 1 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_7)->delta_days;
+            is( $diff_days, 2 - 1, '' );
 
             # Between 5th and 12th
             $diff_hours = $calendar->hours_between( $now, $nov_12 )->hours;
             is( $diff_hours, 7 * 24 - 1 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_12)->delta_days;
+            is( $diff_days, 7 - 1, '' );
 
             # Between 5th and 13th
             $diff_hours = $calendar->hours_between( $now, $nov_13 )->hours;
             is( $diff_hours, 8 * 24 - 2 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_13)->delta_days;
+            is( $diff_days, 8 - 2, '' );
 
             # Between 5th and 15th
             $diff_hours = $calendar->hours_between( $now, $nov_15 )->hours;
             is( $diff_hours, 10 * 24 - 2 * 24, '' );
+            $diff_days = $calendar->days_between( $now, $nov_15)->delta_days;
+            is( $diff_days, 10 - 2, '' );
         };
 
         subtest 'Different hours' => sub {
-            plan tests => 6;
+            plan tests => 11;
 
-            my $diff_hours;
+            my ( $diff_hours, $diff_days );
 
             # Between 5th and 6th
             my $duration = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) );
             is( $duration->hours, abs(0 * 24 - 3), '' ); # FIXME $duration->hours always return a abs
             is( $duration->is_negative, 1, ); # FIXME Do really test for that case in our calls to hours_between?
+            $duration = $calendar->days_between( $now, $nov_6->clone->subtract(hours => 3) );
+            is( $duration->hours, abs(0), '' ); # FIXME Is this correct?
 
             # Between 5th and 7th
             $diff_hours = $calendar->hours_between( $now, $nov_7->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 2 * 24 - 1 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_7->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 2 - 1, '' );
 
             # Between 5th and 12th
             $diff_hours = $calendar->hours_between( $now, $nov_12->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 7 * 24 - 1 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_12->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 7 - 1, '' );
 
             # Between 5th and 13th
             $diff_hours = $calendar->hours_between( $now, $nov_13->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 8 * 24 - 2 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_13->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 8 - 1, '' );
 
             # Between 5th and 15th
             $diff_hours = $calendar->hours_between( $now, $nov_15->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 10 * 24 - 2 * 24 - 3, '' );
+            $diff_days = $calendar->days_between( $now, $nov_15->clone->subtract(hours => 3) )->delta_days;
+            is( $diff_days, 10 - 2, '' );
         };
 
     };
