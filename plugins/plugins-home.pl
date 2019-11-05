@@ -21,6 +21,9 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
+use JSON qw(from_json);
+use LWP::Simple qw(get);
+
 use Koha::Plugins;
 use C4::Auth;
 use C4::Output;
@@ -31,6 +34,7 @@ my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->
 
 my $input  = new CGI;
 my $method = $input->param('method');
+my $plugin_search = $input->param('plugin-search');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name => ($plugins_enabled) ? "plugins/plugins-home.tt" : "plugins/plugins-disabled.tt",
@@ -56,6 +60,25 @@ if ($plugins_enabled) {
 
     $template->param( plugins => \@plugins, );
 
+    my @results;
+    if ($plugin_search) {
+        my $repos = C4::Context->config('plugin_repos');
+        foreach my $r ( @{ $repos->{repo} } ) {
+            if ( $r->{service} eq 'github' ) {
+                my $url = "https://api.github.com/search/repositories?q=$plugin_search+user:$r->{org_name}+in:name,description";
+                my $response = from_json( get($url) );
+                foreach my $result ( @{ $response->{items} } ) {
+                    next unless $result->{name} =~ /^koha-plugin-/;
+                    push( @results, { repo => $r, result => $result } );
+                }
+            }
+        }
+
+        $template->param(
+            search_results => \@results,
+            search_term    => $plugin_search,
+        );
+    }
 }
 
 output_html_with_http_headers( $input, $cookie, $template->output );

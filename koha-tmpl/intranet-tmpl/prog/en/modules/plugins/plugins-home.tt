@@ -27,6 +27,7 @@
                     [% IF ( CAN_user_plugins_manage ) %]
                         <div class="btn-toolbar" id="toolbar">
                             <a href="/cgi-bin/koha/plugins/plugins-upload.pl" id="upload_plugin" class="btn btn-default"><i class="fa fa-upload"></i> Upload plugin</a>
+
                             <div class="btn-group">
                                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-eye"></i> View plugins by class <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
@@ -38,9 +39,43 @@
                                     <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=intranet_catalog_biblio_enhancements">View intranet catalog biblio enhancement plugins</a></li>
                                 </ul>
                             </div>
+
+                            <div class="btn-group">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="plugin-search" id="plugin-repo-search" placeholder="Search for plugins" value="[% search_term | html %]"/>
+                                            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     [% END %]
                     <h1>Plugins</h1>
+
+                    [% IF search_results %]
+                        <h2>Search results</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Organization</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+
+                            [% FOREACH sr IN search_results %]
+                                <tr>
+                                    <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name %]</a></td>
+                                    <td>[% sr.result.description %]</td>
+                                    <td>[% sr.repo.name %]</td>
+                                    <td><button class="btn btn-install-plugin"><i class="fa fa-download"></i> Install</button></td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    [% END %]
 
                     [% UNLESS ( plugins ) %]
                         [% UNLESS ( method ) %]
@@ -161,6 +196,7 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function(){
+            $(".btn-install-plugin").on("click", function() { alert("Sorry, this functionality doesn't exist yet!"); });
             $(".uninstall_plugin").on("click", function(){
                 $(".dropdown").removeClass("open");
                 var plugin_name = $(this).data("plugin-name");
