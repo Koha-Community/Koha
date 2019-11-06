@@ -788,8 +788,8 @@ subtest "CanBookBeRenewed tests" => sub {
             {
                 amount      => $fines_amount,
                 interface   => 'test',
-                type        => 'overdue',
-                description => "Some fines"
+                type        => 'PAYMENT',
+                description => "Some payment"
             }
         )->store;
         ( $renewokay, $error ) =
