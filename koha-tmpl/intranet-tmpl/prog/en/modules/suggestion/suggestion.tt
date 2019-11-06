@@ -240,12 +240,12 @@
 
 [% IF ( op_save ) %]
     [% FOR m IN messages %]
-        <div class="dialog [% m.type %]">
+        <div class="dialog [% m.type | html %]">
             [% SWITCH m.code %]
             [% CASE 'biblio_exists' %]
-                A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id %]">[% m.title %]</a>. Click on "Confirm your suggestion" to ignore this message.
+                A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.
             [% CASE %]
-                [% m.code %]
+                [% m.code | html %]
             [% END %]
         </div>
     [% END %]
@@ -457,7 +457,7 @@
         [% CASE 'already_exists' %]
             The suggestion has not been added. A suggestion with this title already exists (<a href='/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% m.id | html %]&op=show'>suggestion #[% m.id | html %]</a>)
         [% CASE 'biblio_exists' %]
-            A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id %]">[% m.title %]</a>. Click on "Confirm your suggestion" to ignore this message.
+            A similar document already exists: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% m.id | uri %]">[% m.title | html %]</a>. Click on "Confirm your suggestion" to ignore this message.
         [% CASE %]
             [% m.code | html %]
         [% END %]
