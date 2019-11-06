@@ -486,19 +486,24 @@ if (@searchCategories > 0) {
 
 my $branchfield = C4::Context->preference('AdvancedSearchBranchFieldToUse');
 
-if($params->{'multibranchlimit'}) {
+if ( $params->{'multibranchlimit'} ) {
+    my $branchfield  = C4::Context->preference('AdvancedSearchBranchFieldToUse');
     my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
-    my @libraries = $search_group->all_libraries;
 
-    if ( $branchfield eq "homebranch" ) {
-        my $multihomebranch = '('.join( " OR ", map { 'homebranch: ' . $_->branchcode } @libraries ) .')';
-        push @limits, $multihomebranch if ( $multihomebranch ne '()');
-    } elsif ( $branchfield eq "holdingbranch") {
-        my $multiholdingbranch = '('.join( " OR ", map { 'holdingbranch: ' . $_->branchcode } @libraries ) .')';
-        push @limits, $multiholdingbranch if ( $multiholdingbranch ne '()');
-    } else {
-        my $multihomeandholdingbranch = '('.join( " OR ", map { 'homebranch: ' . $_->branchcode, 'holdingbranch: ' . $_->branchcode}  @libraries ) .')';
-        push @limits, $multihomeandholdingbranch if ($multihomeandholdingbranch ne  '()');
+    my @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
+
+    if (@branchcodes) {
+        if ( $branchfield eq "homebranch" ) {
+            push @limits, sprintf "(%s)", join " or ", map { 'homebranch: ' . $_ } @branchcodes;
+        }
+        elsif ( $branchfield eq "holdingbranch" ) {
+            push @limits, sprintf "(%s)", join " or ", map { 'holdingbranch: ' . $_ } @branchcodes;
+        }
+        else {
+            push @limits, sprintf "(%s or %s)",
+              join( " or ", map { 'homebranch: ' . $_ } @branchcodes ),
+              join( " or ", map { 'holdingbranch: ' . $_ } @branchcodes );
+        }
     }
 }
 
