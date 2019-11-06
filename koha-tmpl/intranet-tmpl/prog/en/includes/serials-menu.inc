@@ -30,9 +30,7 @@
                     Manage numbering patterns
                 </a>
             </li>
-            [% IF Koha.Preference('Mana') == 1 %]
-                <li><a href="/cgi-bin/koha/serials/serials-search.pl?mana=1">Search on Mana</a></li>
-            [% END %]
+            <li><a href="/cgi-bin/koha/serials/add_fields.pl">Add subscription fields</a></li
         </ul>
     </div>
 </div>
