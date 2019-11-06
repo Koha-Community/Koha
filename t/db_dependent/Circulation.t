@@ -3177,8 +3177,14 @@ subtest 'Incremented fee tests' => sub {
     $issue->delete();
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
+    # DateTime 1..7 (Mon..Sun), C4::Calender 0..6 (Sun..Sat)
+    my $closed_day =
+        ( $dt_from->day_of_week == 6 ) ? 0
+      : ( $dt_from->day_of_week == 7 ) ? 1
+      :                                  $dt_from->day_of_week + 1;
+    my $closed_day_name = $dt_from->clone->add(days => 1)->day_name;
     $calendar->insert_week_day_holiday(
-        weekday     => 3,
+        weekday     => $closed_day,
         title       => 'Test holiday',
         description => 'Test holiday'
     );
@@ -3186,13 +3192,13 @@ subtest 'Incremented fee tests' => sub {
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is( $accountline->amount, '6.000000',
-"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays"
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $closed_day_name"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is( $accountline->amount, '5.000000',
-"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays, for renewal"
+"Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $closed_day_name, for renewal"
     );
     $accountline->delete();
     $issue->delete();
@@ -3255,16 +3261,16 @@ subtest 'Incremented fee tests' => sub {
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is( $accountline->amount + 0, 36,
-        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays (168h - 24h * 0.25u)" );
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $closed_day_name (168h - 24h * 0.25u)" );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
     is( $accountline->amount + 0, 30,
-        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays, for renewal (312h - 168h - 24h * 0.25u" );
+        "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $closed_day_name, for renewal (312h - 168h - 24h * 0.25u" );
     $accountline->delete();
     $issue->delete();
 
-    $calendar->delete_holiday( weekday => 3 );
+    $calendar->delete_holiday( weekday => $closed_day );
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
