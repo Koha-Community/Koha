@@ -910,7 +910,7 @@ our $PERL_DEPS = {
     },
     'Net::Netmask' => {
         'usage'    => 'Koha X-Forwarded-For support',
-        'required' => '0',
+        'required' => '1',
         'min_ver'  => '1.9022',
     },
     'Net::Z3950::SimpleServer' => {
