@@ -30,12 +30,14 @@ B<compare_es_to_db.pl>
 =cut
 
 use Modern::Perl;
-use Koha::Items;
-use Koha::SearchEngine::Elasticsearch;
 use Array::Utils qw( array_diff );
 
-use Koha::Biblios;
+use C4::Context;
+
 use Koha::Authorities;
+use Koha::Biblios;
+use Koha::Items;
+use Koha::SearchEngine::Elasticsearch;
 
 foreach my $index ( ('biblios','authorities') ){
     print "=================\n";
@@ -48,7 +50,8 @@ foreach my $index ( ('biblios','authorities') ){
         ->{_all}{primaries}{docs}{count};
     print "Count in db for $index is " . scalar @db_records . ", count in Elasticsearch is $count\n";
 
-    # Otherwise, lets find all the ES ids
+    # Now we get all the ids from Elasticsearch
+    # The scroll lets us iterate through, it fetches chunks of 'size' as we move through
     my $scroll = $es->scroll_helper(
         index => $searcher->get_elasticsearch_params->{index_name},
         size => 5000,
@@ -63,20 +66,41 @@ foreach my $index ( ('biblios','authorities') ){
 
     my @es_ids;
 
+    # Here is where we actually iterate through
+    # Fetching each record, pushing the id into the array
     my $i = 1;
     print "Fetching Elasticsearch records ids";
     while (my $doc = $scroll->next ){
         print "." if !($i % 500);
-        print "\nFetching next 5000" if !($i % 5000);
+        print "\n$i records retrieved" if !($i % 5000);
         push @es_ids, $doc->{_id};
         $i++;
     }
     print "\nComparing arrays, this may take a while\n";
 
     # And compare the arrays
+    # array_diff returns only a list of values which are not common to both arrays
     my @diff = array_diff(@db_records, @es_ids );
+
     print "All records match\n" unless @diff;
+
+    # Fetch values for providing record links
+    my $es_params = $searcher->get_elasticsearch_params;
+    my $es_base   = "$es_params->{nodes}[0]/$es_params->{index_name}";
+    my $opac_base = C4::Context->preference('OPACBaseURL');
+
+
     foreach my $problem (@diff){
-        print "Record #$problem is not in both sources\n";
+        if ( (grep /^$problem$/, @db_records) ){
+            print "Record $problem exists in Koha but not ES\n";
+            if ( $index eq 'biblios' ) {
+                print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-detail.pl?biblionumber=$problem\n";
+            } elsif ( $index eq 'authorities' ) {
+                print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-authoritiesdetail.pl?authid=$problem\n";
+            }
+        } else {
+            print "Record $problem exists in ES but not Koha\n";
+            print "  Enter this command to view record: curl $es_base/data/$problem?pretty=true\n";
+        }
     }
 }
