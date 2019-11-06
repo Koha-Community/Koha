@@ -131,8 +131,8 @@ if ( $borrowernumber && C4::Context->preference("MaxOpenSuggestions") ne '' ) {
     $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
 }
 
-my $suggestions_loop = &SearchSuggestion($suggestion);
 if ( $op eq "add_confirm" ) {
+    my $suggestions_loop = &SearchSuggestion($suggestion);
     if ( C4::Context->preference("MaxOpenSuggestions") ne '' && $patrons_pending_suggestions_count >= C4::Context->preference("MaxOpenSuggestions") ) #only check limit for signed in borrowers
     {
         push @messages, { type => 'error', code => 'too_many' };
