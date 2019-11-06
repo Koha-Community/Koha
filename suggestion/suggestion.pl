@@ -261,6 +261,14 @@ elsif ( $op eq 'update_itemtype' ) {
     }
     redirect_with_params($input);
 }
+elsif ( $op eq 'update_manager' ) {
+    my $managedby = $input->param('suggestion_managedby');
+    foreach my $suggestionid (@editsuggestions) {
+        next unless $suggestionid;
+        &ModSuggestion({ suggestionid => $suggestionid, managedby => $managedby });
+    }
+    redirect_with_params($input);
+}
 elsif ( $op eq 'show' ) {
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
     my $budget = GetBudget $$suggestion_ref{budgetid};
