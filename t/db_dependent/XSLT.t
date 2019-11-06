@@ -20,7 +20,9 @@ use Modern::Perl;
 use Test::More tests => 2;
 use Test::Warn;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
+use Koha::ItemTypes;
 
 BEGIN {
     use_ok('C4::XSLT');
@@ -32,20 +34,37 @@ my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
-    plan tests => 10;
-    my $item  = $builder->build_sample_item({
-    });
+    plan tests => 12;
+    my $item  = $builder->build_sample_item({});
 
     my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
     like($xml,qr/<status>available<\/status>/,"Item is available when no other status applied");
 
-    $item->notforloan(-1)->store;
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>On order<\/status>/,"On order if negative notforloan value");
+    # notforloan
+    {
 
-    $item->notforloan(1)->store;
-    $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>reference<\/status>/,"reference if positive notforloan value");
+        t::lib::Mocks::mock_preference('item-level_itypes', 0);
+        $item->notforloan(0)->store;
+        Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
+        Koha::ItemTypes->find($item->biblioitem->itemtype)->notforloan(1)->store;
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        like($xml,qr/<status>reference<\/status>/,"reference if positive itype notforloan value");
+
+        t::lib::Mocks::mock_preference('item-level_itypes', 1);
+        Koha::ItemTypes->find($item->itype)->notforloan(1)->store;
+        Koha::ItemTypes->find($item->biblioitem->itemtype)->notforloan(0)->store;
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        like($xml,qr/<status>reference<\/status>/,"reference if positive itemtype notforloan value");
+        Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
+
+        $item->notforloan(-1)->store;
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        like($xml,qr/<status>On order<\/status>/,"On order if negative notforloan value");
+
+        $item->notforloan(1)->store;
+        $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
+        like($xml,qr/<status>reference<\/status>/,"reference if positive notforloan value");
+    }
 
     $item->onloan('2001-01-01')->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
