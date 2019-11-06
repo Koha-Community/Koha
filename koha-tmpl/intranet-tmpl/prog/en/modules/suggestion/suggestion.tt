@@ -171,9 +171,9 @@
                 <th>[% tp('purchase suggestion created by', 'Created by:') | html %]</th>
                 <td>[% suggesteddate | $KohaDates %]</td>
                 <td>
-                    [% IF ( suggestedby_borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber | uri %]">[% suggestedby_surname | html %], [% suggestedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
-                        [% Branches.GetName( suggestedby_branchcode ) | html %] ([% suggestedby_description | html %])
+                    [% IF ( suggestedby_patron.borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_patron.borrowernumber | uri %]">[% suggestedby_patron.surname | html %], [% suggestedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>
+                        [% Branches.GetName( suggestedby_patron.branchcode ) | html %] ([% suggestedby_patron.category.description | html %])
                     [% END %]
                 </td>
             </tr>
@@ -181,9 +181,9 @@
                 <th>Managed by:</th>
                 <td>[% manageddate | $KohaDates %]</td>
                 <td>
-                        [% IF ( managedby_borrowernumber ) %]
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber | uri %]">[% managedby_surname | html %], [% managedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
-                            [% Branches.GetName( managedby_branchcode ) | html %] ([% managedby_description | html %])
+                        [% IF ( managedby_patron.borrowernumber ) %]
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_patron.borrowernumber | uri %]">[% managedby_patron.surname | html %], [% managedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>
+                            [% Branches.GetName( managedby_patron.branchcode ) | html %] ([% managedby_patron.category.description | html %])
                         [% END %]
                 </td>
             </tr>
@@ -191,9 +191,9 @@
                 <th>Accepted on:</th>
                 <td>[% accepteddate | $KohaDates %]</td>
                 <td>
-                    [% IF ( acceptedby_borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber | uri %]">[% acceptedby_surname | html %], [% acceptedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
-                        [% Branches.GetName( acceptedby_branchcode ) | html %] ([% acceptedby_description | html %])
+                    [% IF ( acceptedby_patron.borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>
+                        [% Branches.GetName( acceptedby_patron.branchcode ) | html %] ([% acceptedby_patron.category.description | html %])
                     [% END %]
                 </td>
             </tr>
@@ -368,13 +368,13 @@
             <tr>
                 <th><label for="suggesteddate">[% tp('purchase suggestion created by', 'Created by:') | html %]</label> </th>
                 <td><input type="text" id="suggesteddate" name="suggesteddate" class="datepicker" size="10" maxlength="10" value="[% suggesteddate | $KohaDates %]"/>[% INCLUDE 'date-format.inc' %]</td>
-                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby | html %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber | uri %]">[% suggestedby_surname | html %], [% suggestedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>  [% Branches.GetName( suggestedby_branchcode ) | html %] ([% suggestedby_description | html %])[% END %]
+                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby | html %]"/>[% IF ( suggestedby_patron.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_patron.borrowernumber | uri %]">[% suggestedby_patron.surname | html %], [% suggestedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>  [% Branches.GetName( suggestedby_patron.branchcode ) | html %] ([% suggestedby_patron.category.description | html %])[% END %]
                 </td>
             </tr>
             <tr>
                 <th><label for="accepteddate">Accepted on:</label> </th>
                 <td><input type="text" id="accepteddate" name="accepteddate" class="datepicker" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
-                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber | uri %]">[% acceptedby_surname | html %], [% acceptedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a> [% Branches.GetName( acceptedby_branchcode ) | html %] ([% acceptedby_description | html %])[% END %]</td>
+                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_patron.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a> [% Branches.GetName( acceptedby_patron.branchcode ) | html %] ([% acceptedby_patron.category.description | html %])[% END %]</td>
             </tr>
             </tbody>
         </table></li>
@@ -389,12 +389,12 @@
                     <span id="managedby_name">
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% logged_in_user.borrowernumber | uri %]">You</a>
                     </span>
-                    [% IF managedby_borrowernumber && logged_in_user.borrowernumber != managedby_borrowernumber %]
-                        | Previously was [% INCLUDE 'patron-title.inc' patron=managedby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( managedby_branchcode ) | html %] ([% managedby_description | html %])
+                    [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
+                        | Previously was [% INCLUDE 'patron-title.inc' patron=managedby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( managedby_patron.branchcode ) | html %] ([% managedby_patron.category.description | html %])
                     [% END %]
                     <br />
                     <a id="edit_manager" class="new_window" href="#"><i class="fa fa-search"></i> Select manager</a>
-                    [% IF managedby_borrowernumber && logged_in_user.borrowernumber != managedby_borrowernumber %]
+                    [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
                         <a id="restore_previous_manager" href="#"><i class="fa fa-trash"></i> Keep existing manager</a>
                     [% END %]
                     <input type="hidden" name="managedby" id="managedby" value="[% logged_in_user.borrowernumber | html %]" />
@@ -1034,12 +1034,12 @@
 
                     $("#managedby_name").empty();
                     $("#managedby").val('');
-                    var borrowername = "[% managedby_firstname | html %] [% managedby_surname | html %]";
+                    var borrowername = "[% managedby_patron.firstname | html %] [% managedby_patron.surname | html %]";
                     var managerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
-                        + '?borrowernumber=[% managedby_borrowernumber | html %]">'
+                        + '?borrowernumber=[% managedby_patron.borrowernumber | html %]">'
                         + borrowername + '</a>';
                     $('#managedby_name').html(managerlink);
-                    $('#managedby').val([% managedby_borrowernumber | html %]);
+                    $('#managedby').val([% managedby_patron.borrowernumber | html %]);
                 });
             });
         </script>

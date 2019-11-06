@@ -328,25 +328,12 @@ if ($op=~/else/) {
     );
 }
 
-foreach my $element ( qw(managedby suggestedby acceptedby) ) {
-#    $debug || warn $$suggestion_ref{$element};
-    if ($$suggestion_ref{$element}){
-        my $patron = Koha::Patrons->find( $$suggestion_ref{$element} );
-        my $category = $patron->category;
-        $template->param(
-            $element."_patron"=> $patron,
-            $element."_borrowernumber"=>$patron->borrowernumber,
-            $element."_firstname"=>$patron->firstname,
-            $element."_surname"=>$patron->surname,
-            $element."_cardnumber"=>$patron->cardnumber,
-            $element."_branchcode"=>$patron->branchcode,
-            $element."_description"=>$category->description,
-            $element."_category_type"=>$category->category_type,
-        );
-    }
-}
 $template->param(
-    %$suggestion_ref,  
+    "${_}_patron" => scalar Koha::Patrons->find( $suggestion_ref->{$_} ) )
+  for qw(managedby suggestedby acceptedby);
+
+$template->param(
+    %$suggestion_ref,
     "op_$op"                => 1,
     "op"             =>$op,
 );
