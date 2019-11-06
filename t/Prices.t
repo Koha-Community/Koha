@@ -253,14 +253,14 @@ for my $currency_format ( qw( US FR ) ) {
     };
 
     subtest 'Configuration 1: 1 0' => sub {
-        plan tests => 8;
+        plan tests => 9;
 
         my $biblionumber_1_0 = 44;
         my $order_1_0        = {
             biblionumber     => $biblionumber_1_0,
             quantity         => 2,
             listprice        => 82.000000,
-            unitprice        => 70.290000,
+            unitprice        => 0,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
             invoiceid        => $invoiceid_1_1,
@@ -311,10 +311,29 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'ecost_tax_excluded'
             }
         );
+        # If we order with unitprice = 0, tax is calculated from the ecost
+        # (note that in addorder.pl and addorderiso2709 the unitprice may/will be set to the ecost
         compare(
             {
                 got      => $order_1_0->{tax_value_on_ordering},
                 expected => 7.03,
+                conf     => '1 0',
+                field    => 'tax_value'
+            }
+        );
+        $order_1_0->{unitprice} = 70.29;
+        $order_1_0 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_1_0,
+                booksellerid => 3,
+                ordering    => 1,
+            }
+        );
+        # If a unitprice is provided at ordering, we calculate the tax from that
+        compare(
+            {
+                got      => $order_1_0->{tax_value_on_ordering},
+                expected => 6.69,
                 conf     => '1 0',
                 field    => 'tax_value'
             }
@@ -355,14 +374,14 @@ for my $currency_format ( qw( US FR ) ) {
     };
 
     subtest 'Configuration 1: 0 1' => sub {
-        plan tests => 8;
+        plan tests => 9;
 
         my $biblionumber_0_1 = 45;
         my $order_0_1        = {
             biblionumber     => $biblionumber_0_1,
             quantity         => 2,
             listprice        => 82.000000,
-            unitprice        => 77.490000,
+            unitprice        => 0,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
             invoiceid        => $invoiceid_1_1,
@@ -413,6 +432,8 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'ecost_tax_excluded'
             }
         );
+        # If we order with unitprice = 0, tax is calculated from the ecost
+        # (note that in addorder.pl and addorderiso2709 the unitprice may/will be set to the ecost
         compare(
             {
                 got      => $order_0_1->{tax_value_on_ordering},
@@ -421,7 +442,23 @@ for my $currency_format ( qw( US FR ) ) {
                 field    => 'tax_value'
             }
         );
-
+        $order_0_1->{unitprice} = 77.490000;
+        $order_0_1 = C4::Acquisition::populate_order_with_prices(
+            {
+                order        => $order_0_1,
+                booksellerid => 2,
+                ordering     => 1,
+            }
+        );
+        # If a unitprice is provided at ordering, we calculate the tax from that
+        compare(
+            {
+                got      => $order_0_1->{tax_value_on_ordering},
+                expected => 7.75,
+                conf     => '0 1',
+                field    => 'tax_value'
+            }
+        );
         $order_0_1 = C4::Acquisition::populate_order_with_prices(
             {
                 order        => $order_0_1,
