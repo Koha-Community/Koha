@@ -174,7 +174,23 @@ sub AddReserve {
     # of the document, we force the value $priority and $found .
     if ( $checkitem and not C4::Context->preference('ReservesNeedReturns') ) {
         my $item = Koha::Items->find( $checkitem ); # FIXME Prevent bad calls
-        if ( !$item->onloan && $item->holdingbranch eq $branch && ( $item->damaged && C4::Context->preference('AllowHoldsOnDamagedItems') || !$item->damaged ) && !$item->get_transfer && !$item->holds->count ) {
+
+        if (
+            # If item is already checked out, it cannot be set waiting
+            !$item->onloan
+
+            # The item can't be waiting if it needs a transfer
+            && $item->holdingbranch eq $branch
+
+            # Similarly, if in transit it can't be waiting
+            && !$item->get_transfer
+
+            # If we can't hold damaged items, and it is damaged, it can't be waiting
+            && ( $item->damaged && C4::Context->preference('AllowHoldsOnDamagedItems') || !$item->damaged )
+
+            # Lastly, if this already has holds, we shouldn't make it waiting for the new hold
+            && !$item->holds->count )
+        {
             $priority = 0;
             $found = 'W';
         }
