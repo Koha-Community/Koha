@@ -3,6 +3,8 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials [% biblionumber | html %]</title>
@@ -73,7 +75,7 @@
                                     [% END %]
                                     [% IF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid %]
                                         <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% sub.biblionumber | uri %]&amp;from_subscriptionid=[% sub.subscriptionid | uri %]" title="Order this one" class="btn btn-default btn-xs">
-                                            <i class="fa fa-plus"></i> Order
+                                            <i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]
                                         </a>
                                     [% ELSE %]
                                         <a title="This subscription depends on another supplier" style="cursor:help">Cannot be ordered</a>

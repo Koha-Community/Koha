@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( booksellername ) %]Orders with uncertain prices for vendor [% booksellername | html %][% ELSE %]Orders with uncertain prices[% END %]</title>
@@ -77,7 +79,7 @@
         <thead>
 	    <tr>
             <th>Basket</th>
-           <th>Order</th>
+           <th>[% tp('noun', 'Order') | html %]</th>
             <th>By</th>
             <th>Uncertain</th>
             <th>Price</th>

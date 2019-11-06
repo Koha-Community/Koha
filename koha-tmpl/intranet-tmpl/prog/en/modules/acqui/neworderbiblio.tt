@@ -1,5 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Search existing records</title>
@@ -68,7 +70,7 @@
             </td>
             <td class="actions">
                 <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | uri %]&amp;viewas=html" class="previewMARC btn btn-default btn-xs"><i class="fa fa-eye"></i> View MARC</a>
-                <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="Order this one" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
+                <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="Order this one" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
             </td>
         </tr>
       [% END %]

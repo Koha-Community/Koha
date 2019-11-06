@@ -4,6 +4,8 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE currency = format('%.2f') -%]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
@@ -165,7 +167,7 @@
                 [% END %]
                 </td>
                 <td>
-                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% loop_order.ordernumber | uri %]" class="previewData">Order</a><br>
+                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% loop_order.ordernumber | uri %]" class="previewData">[% tp('noun', 'Order') | html %]</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber | uri %]" class="previewData">MARC</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber | uri %]" class="previewData">Card</a>
                 </td>
@@ -329,7 +331,7 @@
                 [% END %]
                 </td>
                 <td>
-                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% order.ordernumber | uri %]" class="previewData">Order</a><br>
+                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% order.ordernumber | uri %]" class="previewData">[% tp('noun', 'Order') | html %]</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber | uri %]" class="previewData">MARC</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber | uri %]" class="previewData">Card</a>
                 </td>

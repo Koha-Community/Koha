@@ -3,6 +3,8 @@
 [% USE KohaDates %]
 [% USE ItemTypes %]
 [% USE Price %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Ordered</title>
@@ -27,7 +29,7 @@
     <thead>
     <tr>
     <th class="anti-the"> Title </th>
-    <th> Order </th>
+    <th> [% tp('noun', 'Order') | html %] </th>
     <th> Vendor </th>
     <th> Item types </th>
     <th> Left on order </th>

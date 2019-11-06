@@ -2,6 +2,8 @@
 [% USE Branches %]
 [% USE Price %]
 [% USE Asset %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Add order from a suggestion</title>
@@ -78,9 +80,9 @@
                 </td>
                 <td class="actions">
                     [% IF ( suggestions_loo.biblionumber ) %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]&amp;biblio=[% suggestions_loo.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]&amp;biblio=[% suggestions_loo.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
                     [% ELSE %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a>
                     [% END %]
                 </td>
             </tr>

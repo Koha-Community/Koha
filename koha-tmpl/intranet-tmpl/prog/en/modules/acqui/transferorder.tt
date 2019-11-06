@@ -1,3 +1,5 @@
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Transfer order</title>
@@ -13,7 +15,7 @@
                 <ul>
                   <li><span class="label">From vendor: </span>[% booksellerfromname | html %]</li>
                   <li><span class="label">Basket: </span>[% basketfromname | html %]</li>
-                  <li><span class="label">Order: </span>[% ordernumber | html %]</li>
+                  <li><span class="label">[% tp('noun', 'Order') | html %]: </span>[% ordernumber | html %]</li>
                 </ul>
               </div>
         [% ELSE %]
@@ -65,7 +67,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Order</th>
+                        <th>[% tp('noun', 'Order') | html %]</th>
                         <th>Summary</th>
                         <th>&nbsp;</th>
                     </tr>

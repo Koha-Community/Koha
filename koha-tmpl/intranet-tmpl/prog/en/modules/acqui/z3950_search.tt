@@ -1,5 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
+[%# USE the plugin and define some macros %]
+[% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]Order from external source &rsaquo; Search results[% END %]</title>
@@ -115,7 +117,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( breeding_loo.breedingid ) %]
 
         <tr>
-            <td>[% breeding_loo.server | html %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" class="previewData">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | html %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
+            <td>[% breeding_loo.server | html %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" class="previewData">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | html %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">[% tp('verb', 'Order') | html %]</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
             <td>[% breeding_loo.title | html %]</td>
             <td>[% breeding_loo.author | html %]</td>
             <td>[% breeding_loo.isbn | html %]</td>
@@ -143,7 +145,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                     </ul>
                 </div>
             </td>
-            <td class="actions"><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a></td>
+            <td class="actions"><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> [% tp('verb', 'Order') | html %]</a></td>
         </tr>
         [% END %]
     [% END %]</tbody>
