@@ -154,7 +154,7 @@ if ( $op =~ /save/i ) {
                 $suggestion_only->{ lc( $suggestion_only->{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
             }
             $suggestion_only->{manageddate} = dt_from_string;
-            $suggestion_only->{"managedby"}   = C4::Context->userenv->{number};
+            $suggestion_only->{"managedby"} ||= C4::Context->userenv->{number};
         }
 
         my $otherreason = $input->param('other_reason');
@@ -334,6 +334,7 @@ foreach my $element ( qw(managedby suggestedby acceptedby) ) {
         my $patron = Koha::Patrons->find( $$suggestion_ref{$element} );
         my $category = $patron->category;
         $template->param(
+            $element."_patron"=> $patron,
             $element."_borrowernumber"=>$patron->borrowernumber,
             $element."_firstname"=>$patron->firstname,
             $element."_surname"=>$patron->surname,
