@@ -334,7 +334,6 @@ $template->param(
 
 $template->param(
     %$suggestion_ref,
-    "op_$op"                => 1,
     "op"             =>$op,
 );
 

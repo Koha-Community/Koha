@@ -9,7 +9,7 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
-    [% IF ( op_save ) %]
+    [% IF op == 'save' %]
         [% IF ( suggestionid ) %]
             Suggestions &rsaquo;  Edit suggestion #[% suggestionid | html %]
         [% ELSE %]
@@ -22,9 +22,7 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( op_else ) %]
-[% END %]
-[% IF ( op_else ) %]
+[% IF op == 'else' %]
     <style>
         h4.local_collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
         .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } div.note { background: transparent none; border-style: dotted; border-width: 1px 0 0 0; font-size : 90%; padding: 2px 0 0 0; } div.note i { color: #CCC; }
@@ -37,7 +35,7 @@
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    [% IF ( op_save ) %]
+    [% IF op == 'save' %]
         [% IF ( suggestionid ) %]
             <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo;  Edit suggestion #[% suggestionid | html %]
         [% ELSE %]
@@ -232,7 +230,7 @@
 </div>
 [% ELSE %]
 
-[% IF ( op_save ) %]
+[% IF op == 'save' %]
     <div class="main container-fluid">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -244,7 +242,7 @@
 
 [% END %]
 
-[% IF ( op_save ) %]
+[% IF op == 'save' %]
     [% FOR m IN messages %]
         <div class="dialog [% m.type | html %]">
             [% SWITCH m.code %]
@@ -467,7 +465,7 @@
     </form>
 [% END %]
 
-[% IF ( op_else ) %]
+[% IF op == 'else' %]
 <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-default" id="newsuggestion" href="suggestion.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a>
 </div>
@@ -683,7 +681,7 @@
 [% END %]
 [% END %]
 
-[% UNLESS ( op_save ) %]
+[% UNLESS op == 'save' %]
     [% UNLESS ( op == 'show' ) %]
 
             </main>
@@ -846,7 +844,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    [% IF ( op == 'show' || op_else ) %]
+    [% IF ( op == 'show' || op == 'else' ) %]
         <script>
             $(document).ready(function(){
                 $(".deletesuggestion").on("click",function(){
@@ -855,7 +853,7 @@
             });
         </script>
     [% END %]
-    [% IF ( op_else ) %]
+    [% IF op == 'else' %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'columns_settings.inc' %]
         [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
@@ -978,7 +976,7 @@
             });
         </script>
     [% END %]
-    [% IF ( op_save )  %]
+    [% IF op == 'save'  %]
         <script>
 
             function editManagerPopup() {
