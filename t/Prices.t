@@ -48,7 +48,7 @@ my $today;
 
 for my $currency_format ( qw( US FR ) ) {
     t::lib::Mocks::mock_preference( 'CurrencyFormat', $currency_format );
-    subtest 'Configuration 1: 0 0' => sub {
+    subtest 'Configuration 1: 0 0 (Vendor List prices do not include tax / Invoice prices do not include tax)' => sub {
         plan tests => 8;
 
         my $biblionumber_0_0 = 42;
@@ -150,7 +150,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
     };
 
-    subtest 'Configuration 1: 1 1' => sub {
+    subtest 'Configuration 1: 1 1 (Vendor List prices do include tax / Invoice prices include tax)' => sub {
         plan tests => 8;
 
         my $biblionumber_1_1 = 43;
@@ -252,7 +252,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
     };
 
-    subtest 'Configuration 1: 1 0' => sub {
+    subtest 'Configuration 1: 1 0 (Vendor List prices include tax / Invoice prices do not include tax)' => sub {
         plan tests => 9;
 
         my $biblionumber_1_0 = 44;
@@ -373,7 +373,7 @@ for my $currency_format ( qw( US FR ) ) {
         );
     };
 
-    subtest 'Configuration 1: 0 1' => sub {
+    subtest 'Configuration 1: 0 1 (Vendor List prices do not include tax / Invoice prices include tax)' => sub {
         plan tests => 9;
 
         my $biblionumber_0_1 = 45;
