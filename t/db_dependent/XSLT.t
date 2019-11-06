@@ -38,7 +38,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
     my $item  = $builder->build_sample_item({});
 
     my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>available<\/status>/,"Item is available when no other status applied");
+    like($xml,qr{<status>available</status>},"Item is available when no other status applied");
 
     # notforloan
     {
@@ -48,39 +48,39 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
         Koha::ItemTypes->find($item->biblioitem->itemtype)->notforloan(1)->store;
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-        like($xml,qr/<status>reference<\/status>/,"reference if positive itype notforloan value");
+        like($xml,qr{<status>reference</status>},"reference if positive itype notforloan value");
 
         t::lib::Mocks::mock_preference('item-level_itypes', 1);
         Koha::ItemTypes->find($item->itype)->notforloan(1)->store;
         Koha::ItemTypes->find($item->biblioitem->itemtype)->notforloan(0)->store;
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-        like($xml,qr/<status>reference<\/status>/,"reference if positive itemtype notforloan value");
+        like($xml,qr{<status>reference</status>},"reference if positive itemtype notforloan value");
         Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
 
         $item->notforloan(-1)->store;
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-        like($xml,qr/<status>On order<\/status>/,"On order if negative notforloan value");
+        like($xml,qr{<status>On order</status>},"On order if negative notforloan value");
 
         $item->notforloan(1)->store;
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-        like($xml,qr/<status>reference<\/status>/,"reference if positive notforloan value");
+        like($xml,qr{<status>reference</status>},"reference if positive notforloan value");
     }
 
     $item->onloan('2001-01-01')->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>Checked out<\/status>/,"Checked out status takes precedence over Not for loan");
+    like($xml,qr{<status>Checked out</status>},"Checked out status takes precedence over Not for loan");
 
     $item->withdrawn(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>Withdrawn<\/status>/,"Withdrawn status takes precedence over Checked out");
+    like($xml,qr{<status>Withdrawn</status>},"Withdrawn status takes precedence over Checked out");
 
     $item->itemlost(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>Lost<\/status>/,"Lost status takes precedence over Withdrawn");
+    like($xml,qr{<status>Lost</status>},"Lost status takes precedence over Withdrawn");
 
     $item->damaged(1)->store;
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>Damaged<\/status>/,"Damaged status takes precedence over Lost");
+    like($xml,qr{<status>Damaged</status>},"Damaged status takes precedence over Lost");
 
     $builder->build({ source => "Branchtransfer", value => {
         itemnumber  => $item->itemnumber,
@@ -88,7 +88,7 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>In transit<\/status>/,"In-transit status takes precedence over Damaged");
+    like($xml,qr{<status>In transit</status>},"In-transit status takes precedence over Damaged");
 
     my $hold = $builder->build_object({ class => 'Koha::Holds', value => {
         biblionumber => $item->biblionumber,
@@ -98,14 +98,14 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>Waiting<\/status>/,"Waiting status takes precedence over In transit");
+    like($xml,qr{<status>Waiting</status>},"Waiting status takes precedence over In transit");
 
     $builder->build({ source => "TmpHoldsqueue", value => {
         itemnumber => $item->itemnumber
         }
     });
     $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-    like($xml,qr/<status>Pending hold<\/status>/,"Pending status takes precedence over all");
+    like($xml,qr{<status>Pending hold</status>},"Pending status takes precedence over all");
 
 
 };
