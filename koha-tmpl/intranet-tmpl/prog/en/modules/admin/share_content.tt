@@ -47,96 +47,96 @@
                 <p>Learn more about Mana KB on the <a href="https://wiki.koha-community.org/wiki/Mana_central_database">official Mana KB documentation</a>.</p>
 
                 [% IF mana_url && !bad_url %]
-                [% IF (mana_url) %]
-                    <p>Your Mana KB server is currently: <strong>[% mana_url | url %]</strong></p>
-                [% END %]
+                    [% IF (mana_url) %]
+                        <p>Your Mana KB server is currently: <strong>[% mana_url | url %]</strong></p>
+                    [% END %]
 
-                <form id="mana_preference" method="post" class="clearfix">
-                    <fieldset class="rows">
-                        <ol>
-                            <li>
-                                <label for="mana">Use Mana KB for sharing content: </label>
-                                <select name="mana" id="mana">
-                                    [% IF Koha.Preference('Mana') == 0 %]
-                                        <option value="0" selected="selected">No</option>
-                                    [% ELSE %]
-                                        <option value="0">No</option>
-                                    [% END %]
-
-                                    [% IF Koha.Preference('Mana') == 1 %]
-                                        <option value="1" selected="selected">Yes</option>
-                                    [% ELSE %]
-                                        <option value="1">Yes</option>
-                                    [% END %]
-                                    [% IF Koha.Preference('Mana') == 2 %]
-                                        <option value="2" selected="selected">No, let me think about it</option>
-                                    [% ELSE %]
-                                        <option value="2">No, let me think about it</option>
-                                    [% END %]
-                                </select>
-                                <div class="hint">Enable Mana KB in order to search, import, and comment on content from the Mana KB server, and to share your own.</div>
-                            </li>
-                            <li>
-                                <label for="autosharewithmana">Auto subscription sharing: </label>
-                                [% IF Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
-                                    <input id="autosharewithmana" type="checkbox" name="autosharewithmana">
-                                [% ELSE %]
-                                    <input id="autosharewithmana" type="checkbox" name="autosharewithmana" checked="checked">
-                                [% END %]
-                                <div class="hint">If checked, new subscriptions you create will be automatically shared with Mana KB.</div>
-                            </li>
-                        </ol>
-                        <fieldset class="action">
-                            <input type="hidden" name="op" value="save" />
-                            <input type="submit" value="Save" />
-                        </fieldset>
-                    </fieldset>
-                </form>
-
-                [% UNLESS Koha.Preference('ManaToken') %]
-                    <h3>Configure Mana KB</h3>
-
-                    <p>Once you have enabled Mana it must be configured. Type your name, and email address and submit. This will send an account creation request to Mana KB that will respond back with a Mana KB token (an encrypted ID that uniquely identifies your Koha installation). This token will automatically be saved in your database. After that you will receive an email. Read it and follow the instructions.</p>
-                [% END %]
-
-                [% IF Koha.Preference('ManaToken') %]
-                    <form id="mana_token" method="post" class="clearfix">
+                    <form id="mana_preference" method="post" class="clearfix">
                         <fieldset class="rows">
-                        <legend>Mana KB token</legend>
                             <ol>
                                 <li>
-                                    <label for="token">Mana token: </label>
-                                    <input type="text" id="token" name="token" value="[% Koha.Preference('ManaToken') | html %]" size="50" disabled="disabled" />
-                                    <div class="hint">Your unique security token used for authentication on Mana KB service (anti spam).</div>
+                                    <label for="mana">Use Mana KB for sharing content: </label>
+                                    <select name="mana" id="mana">
+                                        [% IF Koha.Preference('Mana') == 0 %]
+                                            <option value="0" selected="selected">No</option>
+                                        [% ELSE %]
+                                            <option value="0">No</option>
+                                        [% END %]
+
+                                        [% IF Koha.Preference('Mana') == 1 %]
+                                            <option value="1" selected="selected">Yes</option>
+                                        [% ELSE %]
+                                            <option value="1">Yes</option>
+                                        [% END %]
+                                        [% IF Koha.Preference('Mana') == 2 %]
+                                            <option value="2" selected="selected">No, let me think about it</option>
+                                        [% ELSE %]
+                                            <option value="2">No, let me think about it</option>
+                                        [% END %]
+                                    </select>
+                                    <div class="hint">Enable Mana KB in order to search, import, and comment on content from the Mana KB server, and to share your own.</div>
+                                </li>
+                                <li>
+                                    <label for="autosharewithmana">Auto subscription sharing: </label>
+                                    [% IF Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
+                                        <input id="autosharewithmana" type="checkbox" name="autosharewithmana">
+                                    [% ELSE %]
+                                        <input id="autosharewithmana" type="checkbox" name="autosharewithmana" checked="checked">
+                                    [% END %]
+                                    <div class="hint">If checked, new subscriptions you create will be automatically shared with Mana KB.</div>
                                 </li>
                             </ol>
                             <fieldset class="action">
-                                <input type="hidden" name="op" value="reset" />
-                                <input type="submit" value="Reset your token" />
+                                <input type="hidden" name="op" value="save" />
+                                <input type="submit" value="Save" />
                             </fieldset>
                         </fieldset>
                     </form>
-                [% ELSE %]
-                    <form id="mana_request" method="post" class="clearfix">
-                        <fieldset class="rows" id="mana_subscription">
-                            <ol>
-                                <li>
-                                    <label for="name">Your name: </label>
-                                    <input id="name" type="text" name="name" />
-                                    <div class="hint">Enter a personal or organization name.</div>
-                                </li>
-                                <li>
-                                    <label for="email">Email: </label>
-                                    <input id="email" type="text" name="email" size="45" required="required" />
-                                </li>
-                            </ol>
-                            <fieldset class="action">
-                                <input type="hidden" name="op" value="send" />
-                                <input type="submit" value="Send to Mana KB" />
+
+                    [% UNLESS Koha.Preference('ManaToken') %]
+                        <h3>Configure Mana KB</h3>
+
+                        <p>Once you have enabled Mana it must be configured. Type your name, and email address and submit. This will send an account creation request to Mana KB that will respond back with a Mana KB token (an encrypted ID that uniquely identifies your Koha installation). This token will automatically be saved in your database. After that you will receive an email. Read it and follow the instructions.</p>
+                    [% END %]
+
+                    [% IF Koha.Preference('ManaToken') %]
+                        <form id="mana_token" method="post" class="clearfix">
+                            <fieldset class="rows">
+                            <legend>Mana KB token</legend>
+                                <ol>
+                                    <li>
+                                        <label for="token">Mana token: </label>
+                                        <input type="text" id="token" name="token" value="[% Koha.Preference('ManaToken') | html %]" size="50" disabled="disabled" />
+                                        <div class="hint">Your unique security token used for authentication on Mana KB service (anti spam).</div>
+                                    </li>
+                                </ol>
+                                <fieldset class="action">
+                                    <input type="hidden" name="op" value="reset" />
+                                    <input type="submit" value="Reset your token" />
+                                </fieldset>
                             </fieldset>
-                        </fieldset>
-                    </form>
-                [% END %]
+                        </form>
+                    [% ELSE %]
+                        <form id="mana_request" method="post" class="clearfix">
+                            <fieldset class="rows" id="mana_subscription">
+                                <ol>
+                                    <li>
+                                        <label for="name">Your name: </label>
+                                        <input id="name" type="text" name="name" />
+                                        <div class="hint">Enter a personal or organization name.</div>
+                                    </li>
+                                    <li>
+                                        <label for="email">Email: </label>
+                                        <input id="email" type="text" name="email" size="45" required="required" />
+                                    </li>
+                                </ol>
+                                <fieldset class="action">
+                                    <input type="hidden" name="op" value="send" />
+                                    <input type="submit" value="Send to Mana KB" />
+                                </fieldset>
+                            </fieldset>
+                        </form>
+                    [% END %]
                 [% END # /IF mana_url && !bad_url %]
             </div>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
