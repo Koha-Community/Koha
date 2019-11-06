@@ -145,15 +145,17 @@
                 </div>
 <!-- End of Modal-->
             [% ELSE %]
-                [% UNLESS ( grouped ) %]
                 <div id="toolbar" class="btn-toolbar">
+                    [% IF grouped %]
+                        <div title="Can not reopen baskets that are part of a basket group." class="btn-group">
+                            <div class="btn-group"><a href="#" class="btn btn-default disabled" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
+                        </div>
+                    [% ELSE %]
+                        <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
 
-                    <div class="btn-group"><a href="#" class="btn btn-default" id="reopenbutton"><i class="fa fa-refresh"></i> Reopen this basket</a></div>
-
-                    [% PROCESS csv_export %]
-
+                        [% PROCESS csv_export %]
+                    [% END %]
                 </div>
-                [% END %]
             [% END %]
             [% END %]
 
