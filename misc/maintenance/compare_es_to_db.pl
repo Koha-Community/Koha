@@ -90,16 +90,34 @@ foreach my $index ( ('biblios','authorities') ){
     my $opac_base = C4::Context->preference('OPACBaseURL');
 
 
-    foreach my $problem (@diff){
+    my @koha_problems;
+    my @es_problems;
+    foreach my $problem ( sort { $a <=> $b } @diff){
         if ( (grep /^$problem$/, @db_records) ){
-            print "Record $problem exists in Koha but not ES\n";
+            push @koha_problems, $problem;
+        } else {
+            push @es_problems, $problem;
+        }
+    }
+
+    if ( @koha_problems ){
+        print "=================\n";
+        print "Records that exist in Koha but not in ES\n";
+        for my $problem ( @koha_problems ){
             if ( $index eq 'biblios' ) {
+                print "  #$problem";
                 print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-detail.pl?biblionumber=$problem\n";
             } elsif ( $index eq 'authorities' ) {
+                print "#$problem";
                 print "  Visit here to see record: $opac_base/cgi-bin/koha/opac-authoritiesdetail.pl?authid=$problem\n";
             }
-        } else {
-            print "Record $problem exists in ES but not Koha\n";
+        }
+    }
+    if ( @es_problems ){
+        print "=================\n";
+        print "Records that exist in ES but not in Koha\n";
+        for my $problem ( @es_problems ){
+            print "  #$problem";
             print "  Enter this command to view record: curl $es_base/data/$problem?pretty=true\n";
         }
     }
