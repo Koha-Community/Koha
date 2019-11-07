@@ -20174,6 +20174,25 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22581 - add new OPACShowMusicalInscripts and OPACPlayMusicalInscripts system preferences)\n";
 }
 
+$DBversion = '19.06.00.049';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        SELECT
+            'SuspensionsCalendar',
+            IF( value='noFinesWhenClosed', 'noSuspensionsWhenClosed', 'ignoreCalendar'),
+            'ignoreCalendar|noSuspensionsWhenClosed',
+            'Specify whether to use the Calendar in calculating suspensions',
+            'Choice'
+        FROM systempreferences
+        WHERE variable='finesCalendar';
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 13958 - Add a SuspensionsCalendar syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
