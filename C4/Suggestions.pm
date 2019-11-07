@@ -111,6 +111,8 @@ sub SearchSuggestion {
             U2.email            AS emailmanagedby,
             U2.branchcode       AS branchcodemanagedby,
             U2.borrowernumber   AS borrnummanagedby,
+            U3.surname          AS surnamelastmodificationby,
+            U3.firstname        AS firstnamelastmodificationby,
             BU.budget_name      AS budget_name
         FROM suggestions
             LEFT JOIN borrowers     AS U1 ON suggestedby=U1.borrowernumber
@@ -119,6 +121,7 @@ sub SearchSuggestion {
             LEFT JOIN borrowers     AS U2 ON managedby=U2.borrowernumber
             LEFT JOIN branches      AS B2 ON B2.branchcode=U2.branchcode
             LEFT JOIN categories    AS C2 ON C2.categorycode=U2.categorycode
+            LEFT JOIN borrowers     AS U3 ON lastmodificationby=U3.borrowernumber
             LEFT JOIN aqbudgets     AS BU ON budgetid=BU.budget_id
         WHERE 1=1
     }

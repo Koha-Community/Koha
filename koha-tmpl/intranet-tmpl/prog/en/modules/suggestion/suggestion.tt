@@ -195,6 +195,16 @@
                     [% END %]
                 </td>
             </tr>
+            <tr>
+                <th>Last modification on:</th>
+                <td>[% lastmodificationdate | $KohaDates %]</td>
+                <td>
+                    [% IF ( lastmodificationby_patron.borrowernumber ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% lastmodificationby_patron.borrowernumber | uri %]">[% lastmodificationby_patron.surname | html %], [% lastmodificationby_patron.firstname | html %] ([% lastmodificationby_patron.cardnumber | html %])</a>
+                        [% Branches.GetName( lastmodificationby_patron.branchcode ) | html %] ([% lastmodificationby_patron.category.description | html %])
+                    [% END %]
+                </td>
+            </tr>
             </tbody>
         </table></li></ol>
     </fieldset>
@@ -374,6 +384,11 @@
                 <td><input type="text" id="accepteddate" name="accepteddate" class="datepicker" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
                 <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_patron.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a> [% Branches.GetName( acceptedby_patron.branchcode ) | html %] ([% acceptedby_patron.category.description | html %])[% END %]</td>
             </tr>
+            <tr>
+                <th><label for="lastmodificationdate">Last modification on:</label> </th>
+                <td>[% lastmodificationdate | $KohaDates %]</td>
+                <td>[% INCLUDE 'patron-title.inc' patron=lastmodificationby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( lastmodificationby_patron.branchcode ) | html %] ([% lastmodificationby_patron.category.description | html %])</td>
+            </tr>
             </tbody>
         </table></li>
 
@@ -533,6 +548,8 @@
                 <th>Suggested on</th>
                 <th>Managed by</th>
                 <th>Managed on</th>
+                <th>Last modification by</th>
+                <th>Last modification on</th>
                 <th>Library</th>
                 <th>Fund</th>
                 <th>Status</th>
@@ -564,6 +581,12 @@
                 </td>
                 <td data-order="[% suggestions_loo.manageddate | html %]">
                     [% IF ( suggestions_loo.manageddate ) %][% suggestions_loo.manageddate | $KohaDates %][% END %]
+                </td>
+                <td>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.lastmodificationby | uri %]">[% suggestions_loo.surnamelastmodificationby | html %][% IF ( suggestions_loo.firstnamelastmodificationby ) %], [% suggestions_loo.firstnamelastmodificationby | html %][% END %]</a>
+                </td>
+                <td data-order="[% suggestions_loo.lastmodificationdate | html %]">
+                    [% IF ( suggestions_loo.lastmodificationdate ) %] - [% suggestions_loo.lastmodificationdate | $KohaDates %][% END %]
                 </td>
                 <td>
                     [% Branches.GetName( suggestions_loo.branchcode ) | html %]

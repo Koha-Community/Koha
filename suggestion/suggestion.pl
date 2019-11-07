@@ -165,6 +165,9 @@ if ( $op =~ /save/i ) {
 
         if ( $suggestion_only->{'suggestionid'} > 0 ) {
 
+            $suggestion_only->{lastmodificationdate} = dt_from_string;
+            $suggestion_only->{lastmodificationby}   = C4::Context->userenv->{number};
+
             &ModSuggestion($suggestion_only);
 
             if ( $notify ) {
@@ -371,7 +374,7 @@ if ($op=~/else/) {
 
 $template->param(
     "${_}_patron" => scalar Koha::Patrons->find( $suggestion_ref->{$_} ) )
-  for qw(managedby suggestedby acceptedby);
+  for qw(managedby suggestedby acceptedby lastmodificationby);
 
 $template->param(
     %$suggestion_ref,

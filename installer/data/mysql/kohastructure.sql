@@ -3015,6 +3015,8 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    accepteddate date default NULL, -- date the suggestion was marked as accepted
    rejectedby INT(11) default NULL, -- borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
    rejecteddate date default NULL, -- date the suggestion was marked as rejected
+   lastmodificationby INT(11) default NULL, -- borrowernumber for the librarian who edit the suggestion for the last time
+   lastmodificationdate date default NULL, -- date of the last modification
   `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)
   `note` LONGTEXT, -- note entered on the suggestion
   `author` varchar(80) default NULL, -- author of the suggested item
@@ -3050,6 +3052,7 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   CONSTRAINT `suggestions_ibfk_managedby` FOREIGN KEY (`managedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `suggestions_ibfk_acceptedby` FOREIGN KEY (`acceptedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `suggestions_ibfk_rejectedby` FOREIGN KEY (`rejectedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `suggestions_ibfk_lastmodificationby` FOREIGN KEY (`lastmodificationby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `suggestions_ibfk_biblionumber` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `suggestions_budget_id_fk` FOREIGN KEY (`budgetid`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `suggestions_ibfk_branchcode` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE
