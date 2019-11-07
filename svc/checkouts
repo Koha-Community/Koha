@@ -270,7 +270,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
   unless ( C4::Context->preference('todaysIssuesDefaultSortOrder') eq 'desc' );      # earliest to latest
 
 @checkouts_previous =
-  sort { $a->{date_due} eq $b->{date_due} ? $a->{timestamp} cmp $b->{timestamp} : $a->{date_due} cmp $b->{date_due} }
+  sort { $a->{date_due} cmp $b->{date_due} || $a->{timestamp} cmp $b->{timestamp} }
   @checkouts_previous;                                                               # latest to earliest
 @checkouts_previous = reverse(@checkouts_previous)
   unless ( C4::Context->preference('previousIssuesDefaultSortOrder') eq 'desc' );    # earliest to latest
