@@ -50,7 +50,7 @@ ok($result->{msg} =~ /Can\'t connect to foo.bar:443/, 'Unable to connect');
 is($result->{code}, 500, 'Code is 500');
 
 my $ua = Test::MockModule->new('LWP::UserAgent');
-$ua->mock('request', sub {
+$ua->mock('simple_request', sub {
         return mock_response();
 });
 
