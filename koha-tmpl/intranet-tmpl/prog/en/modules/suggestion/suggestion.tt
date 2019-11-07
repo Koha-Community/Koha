@@ -396,6 +396,10 @@
                         <a id="restore_previous_manager" href="#"><i class="fa fa-trash"></i> Keep existing manager</a>
                     [% END %]
                     <input type="hidden" name="managedby" id="managedby" value="[% logged_in_user.borrowernumber | html %]" />
+
+                    <br/>
+                    <label for="notify">Notify manager:</label>
+                    <input type="checkbox" id="notify" name="notify" value="notify" disabled="disabled" title="A TO_PROCESS notice will be generated and send to the manager if a valid email address is defined. This can be checked if a new manager has been selected." />
                 </div>
             </li>
         </ol>
@@ -876,6 +880,15 @@
                 $('#managedby_name').html(managerlink);
                 $('#managedby').val(borrowernumber);
             }
+
+            var notify = $('#notify');
+            if ( notify.length ) {
+                if ( borrowernumber == [% logged_in_user.borrowernumber | html %] || borrowernumber == [% managedby_patron.borrowernumber | html %] ) {
+                    $(notify).prop('checked', false).prop('disabled', true);
+                } else {
+                    $(notify).prop('disabled', false);
+                }
+            }
         }
 
         $(document).ready(function(){
@@ -1062,6 +1075,7 @@
                         + borrowername + '</a>';
                     $('#managedby_name').html(managerlink);
                     $('#managedby').val([% managedby_patron.borrowernumber | html %]);
+                    $('#notify').prop('checked', false).prop('disabled', true);
                 });
 
             });

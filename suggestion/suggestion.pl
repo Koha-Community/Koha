@@ -91,6 +91,7 @@ my $managedby       = $input->param('managedby');
 my $displayby       = $input->param('displayby') || '';
 my $tabcode         = $input->param('tabcode');
 my $save_confirmed  = $input->param('save_confirmed') || 0;
+my $notify          = $input->param('notify');
 
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
@@ -103,7 +104,7 @@ my $columns = ' '.join(' ', $schema->source('Suggestion')->columns).' ';
 my $suggestion_only = { map { $columns =~ / $_ / ? ($_ => $suggestion_ref->{$_}) : () } keys %$suggestion_ref };
 $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 
-delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
+delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field notify );
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' ));
 }
@@ -163,7 +164,39 @@ if ( $op =~ /save/i ) {
         }
 
         if ( $suggestion_only->{'suggestionid'} > 0 ) {
+
             &ModSuggestion($suggestion_only);
+
+            if ( $notify ) {
+                my $patron = Koha::Patrons->find( $suggestion_only->{managedby} );
+                my $email_address = $patron->notice_email_address;
+                if ($patron->notice_email_address) {
+                    my $budget = C4::Budgets::GetBudget( $suggestion_only->{budgetid} );
+                    my $library = $patron->library;
+                    my $admin_email_address = $library->branchemail
+                      || C4::Context->preference('KohaAdminEmailAddress');
+
+                    my $letter = C4::Letters::GetPreparedLetter(
+                        module      => 'suggestions',
+                        letter_code => 'TO_PROCESS',
+                        branchcode  => $patron->branchcode,
+                        lang        => $patron->lang,
+                        tables      => {
+                            suggestions => $suggestion_only->{suggestionid},
+                            branches    => $patron->branchcode,
+                            borrowers   => $patron->borrowernumber,
+                        },
+                    );
+                    C4::Letters::EnqueueLetter(
+                        {
+                            letter                 => $letter,
+                            borrowernumber         => $patron->borrowernumber,
+                            message_transport_type => 'email',
+                            from_address           => $admin_email_address,
+                        }
+                    );
+                }
+            }
         } else {
             ###FIXME:Search here if suggestion already exists.
             my $suggestions_loop =
