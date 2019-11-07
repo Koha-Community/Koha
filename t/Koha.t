@@ -91,7 +91,7 @@ ok($@ eq '', 'NormalizeISBN does not throw exception when converting to ISBN10 a
 ok(!defined $isbn, 'NormalizeISBN returns undef when converting to ISBN10 an ISBN starting with 979 (bug 13167)');
 
 @isbns = GetVariationsOfISBNs('abc');
-is(scalar(@isbns), 0, 'zero variations returned of invalid ISBN');
+is(@isbns == 1 && $isbns[0] eq 'abc', 1, 'The unaltered version should be returned if invalid');
 
 is( C4::Koha::GetNormalizedISBN('9780062059994 (hardcover bdg.) | 0062059998 (hardcover bdg.)'), '0062059998', 'Test GetNormalizedISBN' );
 is( C4::Koha::GetNormalizedISBN('9780385753067 (trade) | 0385753063 (trade) | 9780385753074 (lib. bdg.) | 0385753071 (lib. bdg.)'), '0385753063', 'Test GetNormalizedISBN' );
