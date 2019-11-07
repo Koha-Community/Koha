@@ -303,7 +303,7 @@ sub delete_index {
             )
         );
     }
-    $self->store->bag->delete($_) foreach @$biblionums;
+    $self->store->bag->delete("$_") foreach @$biblionums;
     $self->store->bag->commit;
 }
 
