@@ -20204,6 +20204,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 13958 - Add a SuspensionsCalendar syspref)\n";
 }
 
+$DBversion = '19.06.00.050';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+            INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+            VALUES ('OPACFineNoRenewalsIncludeCredits','1',NULL,'If enabled the value specified in OPACFineNoRenewals should include any unapplied account credits in the calculation','YesNo')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23293 - Add 'OPACFineNoRenewalsIncludeCredits' system preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
