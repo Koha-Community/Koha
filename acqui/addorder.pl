@@ -269,11 +269,19 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
 
         # create the record in catalogue, with framework ''
         my ($biblionumber,$bibitemnum) = AddBiblio($record,'');
-        # change suggestion status if applicable
-        if ($$orderinfo{suggestionid}) {
-            ModSuggestion( {suggestionid=>$$orderinfo{suggestionid}, STATUS=>'ORDERED', biblionumber=>$biblionumber} );
-        }
+
         $orderinfo->{biblionumber}=$biblionumber;
+    }
+
+    # change suggestion status if applicable
+    if ( $orderinfo->{suggestionid} ) {
+        ModSuggestion(
+            {
+                suggestionid => $orderinfo->{suggestionid},
+                biblionumber => $orderinfo->{biblionumber},
+                STATUS       => 'ORDERED',
+            }
+        );
     }
 
     $orderinfo->{unitprice} = $orderinfo->{ecost} if not defined $orderinfo->{unitprice} or $orderinfo->{unitprice} eq '';
