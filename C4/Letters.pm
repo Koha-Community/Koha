@@ -37,6 +37,7 @@ use Koha::SMS::Providers;
 
 use Koha::Email;
 use Koha::Notice::Messages;
+use Koha::Notice::Templates;
 use Koha::DateUtils qw( format_sqldatetime dt_from_string );
 use Koha::Patrons;
 use Koha::Subscriptions;
@@ -122,19 +123,18 @@ sub GetLetterTemplates {
     my $code      = $params->{code};
     my $branchcode = $params->{branchcode} // '';
     my $dbh       = C4::Context->dbh;
-    my $letters   = $dbh->selectall_arrayref(
-        q|
-            SELECT module, code, branchcode, name, is_html, title, content, message_transport_type, lang
-            FROM letter
-            WHERE module = ?
-            AND code = ?
-            and branchcode = ?
-        |
-        , { Slice => {} }
-        , $module, $code, $branchcode
-    );
-
-    return $letters;
+    return Koha::Notice::Templates->search(
+        {
+            module     => $module,
+            code       => $code,
+            branchcode => $branchcode,
+            (
+                C4::Context->preference('TranslateNotices')
+                ? ()
+                : ( lang => 'default' )
+            )
+        }
+    )->unblessed;
 }
 
 =head2 GetLettersAvailableForALibrary

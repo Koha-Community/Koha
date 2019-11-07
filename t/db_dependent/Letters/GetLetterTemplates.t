@@ -1,9 +1,10 @@
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use C4::Context;
 use C4::Letters qw( GetLetterTemplates );
 use Koha::Database;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -21,6 +22,7 @@ my $letters = [
         title                  => 'default title for code1 email',
         content                => 'default content for code1 email',
         message_transport_type => 'email',
+        lang                   => 'default',
     },
     {
         module                 => 'circulation',
@@ -31,6 +33,7 @@ my $letters = [
         title                  => 'default title for code1 sms',
         content                => 'default content for code1 sms',
         message_transport_type => 'sms',
+        lang                   => 'es-ES',
     },
     {
         module                 => 'circulation',
@@ -41,6 +44,7 @@ my $letters = [
         title                  => 'default title for code2 email',
         content                => 'default content for code2 email',
         message_transport_type => 'email',
+        lang                   => 'default',
     },
     {
         module                 => 'circulation',
@@ -51,6 +55,7 @@ my $letters = [
         title                  => 'default title for code3 email',
         content                => 'default content for code3 email',
         message_transport_type => 'email',
+        lang                   => 'default',
     },
 
     {
@@ -62,6 +67,7 @@ my $letters = [
         title                  => 'default title for code1 cat email',
         content                => 'default content for code1 cat email',
         message_transport_type => 'email',
+        lang                   => 'default',
     },
 
     {
@@ -73,6 +79,7 @@ my $letters = [
         title                  => 'CPL title for code1 email',
         content                => 'CPL content for code1 email',
         message_transport_type => 'email',
+        lang                   => 'default',
     },
     {
         module                 => 'circulation',
@@ -83,27 +90,19 @@ my $letters = [
         title                  => 'CPL title for code1 sms',
         content                => 'CPL content for code1 sms',
         message_transport_type => 'sms',
-    },
-    {
-        module                 => 'circulation',
-        code                   => 'code1',
-        branchcode             => 'MPL',
-        name                   => 'B MPL name for code1 circ',
-        is_html                => 0,
-        title                  => 'MPL title for code1 email',
-        content                => 'MPL content for code1 email',
-        message_transport_type => 'email',
+        lang                   => 'default',
     },
 ];
 
 my $sth = $dbh->prepare(
-q|INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type) VALUES (?, ?, ?, ?, ?, ?, ?)|
+q|INSERT INTO letter(module, code, branchcode, name, title, content, message_transport_type, lang) VALUES (?, ?, ?, ?, ?, ?, ?, ?)|
 );
 for my $l (@$letters) {
     $sth->execute( $l->{module}, $l->{code}, $l->{branchcode}, $l->{name},
-        $l->{title}, $l->{content}, $l->{message_transport_type} );
+        $l->{title}, $l->{content}, $l->{message_transport_type}, $l->{lang} );
 }
 
+t::lib::Mocks::mock_preference('TranslateNotices', 1);
 my $letter_templates;
 $letter_templates = C4::Letters::GetLetterTemplates;
 is_deeply( $letter_templates, [],
@@ -129,3 +128,9 @@ $letter_templates = C4::Letters::GetLetterTemplates(
     { module => 'circulation', code => 'code1' } );
 is( scalar( @$letter_templates ),
     2, '2 default templates should exist for circulation code1 (even if branchcode is not given)' );
+
+t::lib::Mocks::mock_preference('TranslateNotices', 0);
+$letter_templates = C4::Letters::GetLetterTemplates(
+    { module => 'circulation', code => 'code1' } );
+is( scalar( @$letter_templates ),
+    1, 'There should exist only 1 template circulation code1 for default language' );
