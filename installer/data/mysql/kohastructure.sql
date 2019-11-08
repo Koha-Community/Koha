@@ -3156,7 +3156,7 @@ CREATE TABLE aqinvoice_adjustments (
     reason varchar(80) default NULL, -- reason for adjustment defined by authorised values in ADJ_REASON category
     note mediumtext default NULL, -- text to explain adjustment
     budget_id int(11) default NULL, -- optional link to budget to apply adjustment to
-    encumber_open smallint(1) NOT NULL default 1, -- whether or not to encumber the finds when invoice is still open, 1 = yes, 0 = no
+    encumber_open smallint(1) NOT NULL default 1, -- whether or not to encumber the funds when invoice is still open, 1 = yes, 0 = no
     timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- timestamp  of last adjustment to adjustment
     PRIMARY KEY (adjustment_id),
     CONSTRAINT aqinvoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
