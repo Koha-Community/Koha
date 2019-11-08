@@ -19887,7 +19887,7 @@ if ( CheckVersion($DBversion) ) {
     unless ( column_exists('accountlines', 'debit_type_code') ) {
         $dbh->do(
             qq{
-                ALTER IGNORE TABLE accountlines
+                ALTER TABLE accountlines
                 ADD
                   debit_type_code varchar(80) DEFAULT NULL
                 AFTER
@@ -19991,7 +19991,7 @@ if ( CheckVersion($DBversion) ) {
     unless ( column_exists('accountlines', 'credit_type_code') ) {
         $dbh->do(
             qq{
-                ALTER IGNORE TABLE accountlines
+                ALTER TABLE accountlines
                 ADD
                   credit_type_code varchar(80) DEFAULT NULL
                 AFTER
