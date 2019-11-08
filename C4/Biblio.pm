@@ -3193,7 +3193,7 @@ sub CountBiblioInOrders {
     my $dbh            = C4::Context->dbh;
     my $query          = "SELECT count(*)
           FROM  aqorders 
-          WHERE biblionumber=? AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')";
+          WHERE biblionumber=? AND datecancellationprinted IS NULL";
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $count = $sth->fetchrow;
