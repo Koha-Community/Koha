@@ -1,5 +1,5 @@
 INSERT INTO z3950servers
-(host, port, db, userid, password, servername, checked, rank, syntax, encoding,recordtype) VALUES
+(host, port, db, userid, password, servername, checked, `rank`, syntax, encoding,recordtype) VALUES
 ('lx2.loc.gov',210,'LCDB','','','Bibliothèque du congrès',1,1,'USMARC','utf8','biblio'),
 ('lx2.loc.gov',210,'NAF','','','Bibliothèque du congrès NOMS',1,1,'USMARC','utf8','authority'),
 ('lx2.loc.gov',210,'SAF','','','Bibliothèque du congrès SUJETS',1,2,'USMARC','utf8','authority'),
