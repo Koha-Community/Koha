@@ -66,8 +66,7 @@ sub GetBooksellersWithLateOrders {
         FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
         LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
         WHERE
-            ( datereceived = ''
-            OR datereceived IS NULL
+            ( datereceived IS NULL
             OR aqorders.quantityreceived < aqorders.quantity
             )
             AND aqorders.quantity - COALESCE(aqorders.quantityreceived,0) <> 0
