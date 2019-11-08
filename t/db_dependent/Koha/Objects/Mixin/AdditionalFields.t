@@ -65,7 +65,7 @@ is_deeply(
                 record_id => $_->{record_id},
                 value     => $_->{value},
             }
-        } @{ $additional_fields->unblessed }
+        } sort{ $a->{id} <=> $b->{id} } @{ $additional_fields->unblessed }
     ],
     [
         {
