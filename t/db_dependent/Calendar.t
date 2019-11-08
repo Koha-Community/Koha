@@ -150,12 +150,18 @@ subtest 'hours_between | days_between' => sub {
 
         subtest 'Different hours' => sub {
 
-            plan tests => 8;
+            plan tests => 10;
+
+            # Between 5th and 5th (Same day short hours loan)
+            my $diff_hours = $calendar->hours_between( $now, $now->clone->add(hours => 3) )->hours;
+            is( $diff_hours, 3, '' );
+            my $diff_days = $calendar->days_between( $now, $now->clone->add(hours => 3) )->delta_days;
+            is( $diff_days, 0, '' );
 
             # Between 5th and 6th
-            my $diff_hours = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) )->hours;
+            $diff_hours = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) )->hours;
             is( $diff_hours, 1 * 24 - 3, '' );
-            my $diff_days = $calendar->days_between( $now, $nov_6->clone->subtract(hours => 3) )->delta_days;
+            $diff_days = $calendar->days_between( $now, $nov_6->clone->subtract(hours => 3) )->delta_days;
             is( $diff_days, 1, '' );
 
             # Between 5th and 7th
@@ -232,6 +238,9 @@ subtest 'hours_between | days_between' => sub {
             plan tests => 11;
 
             my ( $diff_hours, $diff_days );
+
+            # Between 5th and 5th (Same day short hours loan)
+            # No test - one cannot issue on a holiday and we do not yet record opening hours to take those into account
 
             # Between 5th and 6th
             my $duration = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) );
