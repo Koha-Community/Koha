@@ -202,7 +202,6 @@ sub GetNewsToDisplay {
      WHERE   (
         expirationdate >= CURRENT_DATE()
         OR    expirationdate IS NULL
-        OR    expirationdate = '00-00-0000'
      )
      AND   DATE(timestamp) < DATE_ADD(CURDATE(), INTERVAL 1 DAY)
      AND   (opac_news.lang = '' OR opac_news.lang = ?)
