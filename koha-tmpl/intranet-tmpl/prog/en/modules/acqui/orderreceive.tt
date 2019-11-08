@@ -42,13 +42,43 @@
     </ol>
 	</fieldset>
 
-    [% IF ( suggestionid ) %]
+    [% IF suggestion %]
         <fieldset class="rows">
         <legend>Suggestion</legend>
         <ol>
           <li>
             <span class="label">Suggested by: </span>
-            [% surnamesuggestedby | html %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid | uri %]&amp;op=show">suggestion #[% suggestionid | html %]</a>)
+            [% suggestion.surnamesuggestedby | html %][% IF suggestion.firstnamesuggestedby %], [% suggestion.firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show">suggestion #[% suggestion.suggestionid | html %]</a>)
+            [% IF suggestion.reason %]
+                <li>
+                    <span class="label">Reason:</span>
+                    [% SET avs = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
+                    [% SET other_reason = 1 %]
+                    <select class="select-reason" id="reason" name="reason">
+                        <option value=""> -- Choose a reason -- </option>
+                        [% FOREACH reason IN suggestion_reasons %]
+                            [% IF reason.lib == suggestion.reason %]
+                                <option value="[% reason.lib | html %]" selected="selected">[% reason.lib | html %]</option>
+                                [% SET other_reason = 0 %]
+                            [% ELSE %]
+                                <option value="[% reason.lib | html %]">[% reason.lib | html %]</option>
+                            [% END %]
+                        [% END %]
+                        <option value="other">Others...</option>
+                    </select>
+
+                    <span id="other_reason" name="other_reason">
+                        [% IF other_reason %]
+                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." value="[% suggestion.reason | html %]"/>
+                        [% ELSE %]
+                            <input type="text" size="31" id="select-other_reason" name="other_reason" placeholder="please note your reason here..." />
+                        [% END %]
+                        <a href="#back">Cancel</a>
+                    </span>
+
+                    <input type="hidden" name="suggestionid" value="[% suggestion.suggestionid | html %]" />
+                </li>
+            [% END %]
           </li>
         </ol>
         </fieldset>
@@ -469,6 +499,25 @@
             }
             $("select[name='currency']").on("change", function(){update_unitprice()} );
             $("#unitprice_currency").on("change", function(){update_unitprice()} );
+
+            [% IF other_reason %]
+                $(".select-reason").hide();
+                $(".select-reason").find("option[value='other']").attr("selected","selected");
+                $("#other_reason").show();
+            [% ELSE %]
+                $("#other_reason").hide();
+            [% END %]
+            $(".select-reason").change(function(){
+                if($(this).val() == "other"){
+                    $(this).hide();
+                    $("#other_reason").show();
+                }
+            });
+            $("a[href*=back]").click(function(){
+                $(".select-reason").show().find("option[value='']").attr("selected","selected");
+                $("#other_reason").hide();
+            });
+
         });
     </script>
 [% END %]

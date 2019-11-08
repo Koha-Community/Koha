@@ -56,6 +56,7 @@ my $invoiceno        = $invoice->{invoicenumber};
 my $booksellerid     = $input->param('booksellerid');
 my $cnt              = 0;
 my $bookfund         = $input->param("bookfund");
+my $suggestion_id    = $input->param("suggestionid");
 my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
 
@@ -179,6 +180,14 @@ while ( my $item = $items->next )  {
     $item->replacementprice($replacementprice);
     $item->replacementpricedate($datereceived);
     $item->store;
+}
+
+if ($suggestion_id) {
+    my $reason = $input->param("reason") || '';
+    my $other_reason = $input->param("other_reason");
+    $reason = $other_reason if $reason eq 'other';
+    my $suggestion = Koha::Suggestions->find($suggestion_id);
+    $suggestion->update( { reason => $reason } ) if $suggestion;
 }
 
 print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid&sticky_filters=1");

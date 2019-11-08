@@ -186,8 +186,6 @@ if( defined $order->{tax_rate_on_receiving} ) {
     $tax_rate = $order->{tax_rate_on_ordering} + 0.0;
 }
 
-my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
-
 my $creator = Koha::Patrons->find( $order->{created_by} );
 
 my $budget = GetBudget( $order->{budget_id} );
@@ -252,11 +250,13 @@ $template->param(
     datereceived          => $datereceived,
     order_internalnote    => $order_internalnote,
     order_vendornote      => $order_vendornote,
-    suggestionid          => $suggestion->{suggestionid},
-    surnamesuggestedby    => $suggestion->{surnamesuggestedby},
-    firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
     gst_values            => \@gst_values,
 );
+
+my $suggestion = GetSuggestionInfoFromBiblionumber($order->{biblionumber});
+if ( $suggestion ) {
+    $template->param( suggestion => $suggestion );
+}
 
 my $patron = Koha::Patrons->find( $loggedinuser )->unblessed;
 my @budget_loop;
