@@ -660,7 +660,7 @@ sub GetSerials {
         publisheddatetext, planneddate,notes, routingnotes
                         FROM   serial
                         WHERE  subscriptionid = ? AND status NOT IN ( $statuses )
-                        ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
+                        ORDER BY IF(publisheddate IS NULL,planneddate,publisheddate) DESC";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
 
@@ -682,7 +682,7 @@ sub GetSerials {
        FROM     serial
        WHERE    subscriptionid = ?
        AND      status IN ( $statuses )
-       ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC
+       ORDER BY IF(publisheddate IS NULL,planneddate,publisheddate) DESC
       ";
     $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
