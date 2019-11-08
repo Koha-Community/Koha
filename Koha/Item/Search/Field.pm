@@ -109,3 +109,5 @@ sub GetItemSearchFields {
 
     return @fields;
 }
+
+1;
