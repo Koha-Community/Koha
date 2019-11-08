@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 46;
+use Test::More tests => 45;
 use DateTime::Duration;
 
 use t::lib::Mocks;
