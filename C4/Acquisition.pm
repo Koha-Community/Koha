@@ -681,7 +681,7 @@ sub GetBasketsInfosByBookseller {
           COUNT(DISTINCT aqorders.biblionumber) AS total_biblios,
           SUM(
             IF(aqorders.datereceived IS NULL
-              AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
+              AND aqorders.datecancellationprinted IS NULL
             , aqorders.quantity
             , 0)
           ) AS expected_items,
@@ -697,7 +697,7 @@ sub GetBasketsInfosByBookseller {
         $query.=" HAVING (closedate IS NULL OR (
           SUM(
             IF(aqorders.datereceived IS NULL
-              AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
+              AND aqorders.datecancellationprinted IS NULL
             , aqorders.quantity
             , 0)
             ) > 0))"
@@ -1136,15 +1136,14 @@ sub GetOrders {
     if ($cancelled) {
         $orderby ||= q|biblioitems.publishercode, biblio.title|;
         $query .= q|
-            AND (datecancellationprinted IS NOT NULL
-               AND datecancellationprinted <> '0000-00-00')
+            AND datecancellationprinted IS NOT NULL
         |;
     }
     else {
         $orderby ||=
           q|aqorders.datecancellationprinted desc, aqorders.timestamp desc|;
         $query .= q|
-            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
+            AND datecancellationprinted IS NULL
         |;
     }
 
@@ -2188,7 +2187,7 @@ sub GetLateOrders {
             OR aqorders.quantityreceived < aqorders.quantity
         )
         AND aqbasket.closedate IS NOT NULL
-        AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
+        AND aqorders.datecancellationprinted IS NULL
     ";
     if ($dbdriver eq "mysql") {
         $select .= "
@@ -2396,7 +2395,7 @@ sub GetHistory {
     $query .= " WHERE 1 ";
 
     unless ($get_canceled_order or (defined $orderstatus and $orderstatus eq 'cancelled')) {
-        $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
+        $query .= " AND datecancellationprinted IS NULL ";
     }
 
     my @query_params  = ();
@@ -3005,7 +3004,7 @@ sub GetBiblioCountByBasketno {
         SELECT COUNT( DISTINCT( biblionumber ) )
         FROM   aqorders
         WHERE  basketno = ?
-            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
+            AND datecancellationprinted IS NULL
         ";
 
     my $sth = $dbh->prepare($query);
