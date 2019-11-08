@@ -343,16 +343,14 @@ sub buildKohaItemsNamespace {
             $status = "Checked out";
         }
         elsif ( $item->notforloan ) {
-                $status = "reallynotforloan";
-                $substatus = exists $descs{$item->{notforloan}} ? $descs{$item->{notforloan}}->{opac_description} : "Not for loan_$item->{notforloan}";
+                $status = $item->notforloan < 0 ? "reallynotforloan" : "reference";
+                $substatus = exists $descs{$item->notforloan} ? $descs{$item->notforloan}->{opac_description} : "Not for loan_".$item->notforloan;
         }
         elsif ( exists $itemtypes->{ $item->effective_itemtype }
             && $itemtypes->{ $item->effective_itemtype }->{notforloan} == 1 )
         {
             $status = "reference";
-        }
-        elsif ( $item->notforloan < 0) {
-            $status = "On order";
+            $substatus = "Not for loan";
         }
         else {
             $status = "available";
