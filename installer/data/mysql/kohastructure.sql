@@ -2711,8 +2711,7 @@ CREATE TABLE `accountlines` (
   CONSTRAINT `accountlines_ibfk_branches` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_registers` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_credit_type` FOREIGN KEY (`credit_type_code`) REFERENCES `account_credit_types` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type_code`) REFERENCES `account_debit_types` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `accountlines_check_type` CHECK (`credit_type_code` IS NOT NULL OR `debit_type_code` IS NOT NULL)
+  CONSTRAINT `accountlines_ibfk_debit_type` FOREIGN KEY (`debit_type_code`) REFERENCES `account_debit_types` (`code`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -3289,7 +3288,6 @@ CREATE TABLE transport_cost (
       tobranch varchar(10) NOT NULL,
       cost decimal(6,2) NOT NULL,
       disable_transfer tinyint(1) NOT NULL DEFAULT 0,
-      CHECK ( frombranch <> tobranch ), -- a dud check, mysql does not support that
       PRIMARY KEY (frombranch, tobranch),
       CONSTRAINT transport_cost_ibfk_1 FOREIGN KEY (frombranch) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE,
       CONSTRAINT transport_cost_ibfk_2 FOREIGN KEY (tobranch) REFERENCES branches (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
