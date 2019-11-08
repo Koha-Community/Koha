@@ -304,7 +304,7 @@ sub GetFullSubscription {
             serial.publisheddatetext,
             serial.status, 
             serial.notes as notes,
-            year(IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate)) as year,
+            year(IF(serial.publisheddate IS NULL,serial.publisheddate,serial.planneddate)) as year,
             aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
@@ -316,7 +316,7 @@ sub GetFullSubscription {
   LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
   WHERE     serial.subscriptionid = ? 
   ORDER BY year DESC,
-          IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
+          IF(serial.publisheddate IS NULL,serial.publisheddate,serial.planneddate) DESC,
           serial.subscriptionid
           |;
     $debug and warn "GetFullSubscription query: $query";
@@ -464,7 +464,7 @@ sub GetFullSubscriptionsFromBiblionumber {
             serial.publisheddatetext,
             serial.status, 
             serial.notes as notes,
-            year(IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate)) as year,
+            year(IF(serial.publisheddate IS NULL,serial.publisheddate,serial.planneddate)) as year,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
             subscription.subscriptionid AS subscriptionid
@@ -475,7 +475,7 @@ sub GetFullSubscriptionsFromBiblionumber {
   LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
   WHERE     subscription.biblionumber = ? 
   ORDER BY year DESC,
-          IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
+          IF(serial.publisheddate IS NULL,serial.publisheddate,serial.planneddate) DESC,
           serial.subscriptionid
           |;
     my $sth = $dbh->prepare($query);
