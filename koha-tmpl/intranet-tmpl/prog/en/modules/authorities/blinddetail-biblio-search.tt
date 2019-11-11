@@ -1,3 +1,4 @@
+[% USE To %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authority details</title>
@@ -108,9 +109,9 @@
             [% UNLESS ( clear ) %]
                 [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
                     SetSubfieldValues(
-                        "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]"
+                        "[% To.json(tag_number) | $raw %][% To.json(SUBFIELD_LOO.marc_subfield) | $raw %]"
                     [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
-                        ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]"
+                        ,"[% To.json( marc_value ) | $raw %]"
                     [% END %]
                     );
                 [% END %]
