@@ -262,19 +262,27 @@ if ($op eq "show"){
         if ($filecontent eq 'barcode_file') {
             @contentlist = grep /\S/, ( map { split /[$split_chars]/ } @contentlist );
             @contentlist = uniq @contentlist;
-            my $existing_items = Koha::Items->search({ barcode => \@contentlist });
-            @itemnumbers = $existing_items->get_column('itemnumber');
-            my %exists = map {lc($_)=>1} $existing_items->get_column('barcode');
+            my @existing_items = @{ Koha::Items->search({ barcode => \@contentlist })->unblessed };
+            @existing_items = map {
+                my $barcode = $_;
+                grep { $_->{barcode} eq $barcode ? $_ : () } @existing_items
+            } @contentlist;
+            @itemnumbers = map { $_->{itemnumber} } @existing_items;
+            my @barcodes = map { $_->{barcode}    } @existing_items;
             # to avoid problems with case sensitivity
-            foreach my $barcode (@contentlist) {
-                $barcode = lc($barcode);
-            }
+            my %exists = map { lc($_) => 1 } @barcodes;
+            @contentlist = map { lc($_) } @contentlist;
             @notfoundbarcodes = grep { !$exists{$_} } @contentlist;
         }
         elsif ( $filecontent eq 'itemid_file') {
             @contentlist = uniq @contentlist;
-            @itemnumbers = Koha::Items->search({ itemnumber => \@contentlist })->get_column('itemnumber');
-            my %exists = map {$_=>1} @itemnumbers;
+            my @existing_items = @{ Koha::Items->search({ itemnumber => \@contentlist })->unblessed };
+            @existing_items = map {
+                my $barcode = $_;
+                grep { $_->{barcode} eq $barcode ? $_ : () } @existing_items
+            } @contentlist;
+            @itemnumbers = map { $_->{itemnumber} } @existing_items;
+            my %exists = map { $_ => 1 } @itemnumbers;
             @notfounditemnumbers = grep { !$exists{$_} } @contentlist;
         }
     } else {
@@ -288,14 +296,16 @@ if ($op eq "show"){
             my @barcodelist = grep /\S/, ( split /[$split_chars]/, $list );
             @barcodelist = uniq @barcodelist;
 
-            my $existing_items = Koha::Items->search({ barcode => \@barcodelist });
-            @itemnumbers = $existing_items->get_column('itemnumber');
-            my @barcodes = $existing_items->get_column('barcode');
-            my %exists = map {lc($_)=>1} @barcodes;
+            my @existing_items = @{ Koha::Items->search({ barcode => \@barcodelist })->unblessed };
+            @existing_items = map {
+                my $barcode = $_;
+                grep { $_->{barcode} eq $barcode ? $_ : () } @existing_items
+            } @barcodelist;
+            @itemnumbers = map { $_->{itemnumber} } @existing_items;
+            my @barcodes = map { $_->{barcode}    } @existing_items;
             # to avoid problems with case sensitivity
-            foreach my $barcode (@barcodelist) {
-                $barcode = lc($barcode);
-            }
+            my %exists = map { lc($_) => 1 } @barcodes;
+            @barcodelist = map { lc($_) } @barcodelist;
             @notfoundbarcodes = grep { !$exists{$_} } @barcodelist;
         }
     }
