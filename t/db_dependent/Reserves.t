@@ -672,7 +672,7 @@ subtest '_koha_notify_reserve() tests' => sub {
 };
 
 subtest 'ReservesNeedReturns' => sub {
-    plan tests => 10;
+    plan tests => 13;
 
     my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item_info  = {
@@ -709,33 +709,36 @@ subtest 'ReservesNeedReturns' => sub {
 
     $item->onloan('2010-01-01')->store;
     $hold = place_item_hold( $patron, $item, $library, $priority );
-    isnt( $hold->priority, 0, 'If ReservesNeedReturns is 0 but item onloan priority must not be set to 0' );
+    is( $hold->priority, 1, 'If ReservesNeedReturns is 0 but item onloan priority must be set to 1' );
     $hold->delete;
 
     t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 0); # '0' means damaged holds not allowed
     $item->onloan(undef)->damaged(1)->store;
     $hold = place_item_hold( $patron, $item, $library, $priority );
-    isnt( $hold->priority, 0, 'If ReservesNeedReturns is 0 but item damaged and not allowed holds on damaged items priority must not be set to 0' );
+    is( $hold->priority, 1, 'If ReservesNeedReturns is 0 but item damaged and not allowed holds on damaged items priority must be set to 1' );
     $hold->delete;
     t::lib::Mocks::mock_preference('AllowHoldsOnDamagedItems', 1); # '0' means damaged holds not allowed
     $hold = place_item_hold( $patron, $item, $library, $priority );
     is( $hold->priority, 0, 'If ReservesNeedReturns is 0 and damaged holds allowed, priority must have been set to 0' );
-    is( $hold->found, 'W', 'If ReservesNeedReturns is 0 and damaged holds allowed, found must have been set waiting' );
+    is( $hold->found,  'W', 'If ReservesNeedReturns is 0 and damaged holds allowed, found must have been set waiting' );
+    $hold->delete;
 
     my $hold_1 = place_item_hold( $patron, $item, $library, $priority );
+    is( $hold_1->found,  'W', 'First hold on item is set to waiting with ReservesNeedReturns set to 0' );
+    is( $hold_1->priority, 0, 'First hold on item is set to waiting with ReservesNeedReturns set to 0' );
     $hold = place_item_hold( $patron_2, $item, $library, $priority );
-    isnt( $hold->priority, 0, 'If ReservesNeedReturns is 0 but item already on hold priority must not be set to 0' );
+    is( $hold->priority, 1, 'If ReservesNeedReturns is 0 but item already on hold priority must be set to 1' );
     $hold->delete;
     $hold_1->delete;
 
-    $hold->delete;
     $builder->build({ source => "Branchtransfer", value => {
         itemnumber  => $item->itemnumber,
         datearrived => undef,
     } });
     $item->damaged(0)->store;
     $hold = place_item_hold( $patron, $item, $library, $priority );
-    isnt( $hold->priority, 0, 'If ReservesNeedReturns is 0 but item in transit the hold must not be set to waiting' );
+    is( $hold->found, undef, 'If ReservesNeedReturns is 0 but item in transit the hold must not be set to waiting' );
+    is( $hold->priority, 1,  'If ReservesNeedReturns is 0 but item in transit the hold must not be set to waiting' );
 
     t::lib::Mocks::mock_preference('ReservesNeedReturns', 1); # Don't affect other tests
 };
