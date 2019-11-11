@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 16;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -260,7 +260,127 @@ subtest "to_api() tests" => sub {
 
     # Pick a class that won't have a mapping for the API
     my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
-    is_deeply( $illrequest->to_api, $illrequest->TO_JSON, 'If no to_api_method present, return TO_JSON' );
+    is_deeply( $illrequest->to_api, $illrequest->TO_JSON, 'If no overloaded to_api_mapping method, return TO_JSON' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "to_api_mapping() tests" => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
+    is_deeply( $illrequest->to_api_mapping, {}, 'If no to_api_mapping present, return empty hashref' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "from_api_mapping() tests" => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $city = $builder->build_object({ class => 'Koha::Cities' });
+
+    # Lets emulate an undef
+    my $city_class = Test::MockModule->new('Koha::City');
+    $city_class->mock( 'to_api_mapping',
+        sub {
+            return {
+                cityid       => 'city_id',
+                city_country => 'country',
+                city_zipcode => undef
+            };
+        }
+    );
+
+    is_deeply(
+        $city->from_api_mapping,
+        {
+            city_id => 'cityid',
+            country => 'city_country'
+        },
+        'Mapping returns correctly, undef ommited'
+    );
+
+    $city_class->unmock( 'to_api_mapping');
+    $city_class->mock( 'to_api_mapping',
+        sub {
+            return {
+                cityid       => 'city_id',
+                city_country => 'country',
+                city_zipcode => 'postal_code'
+            };
+        }
+    );
+
+    is_deeply(
+        $city->from_api_mapping,
+        {
+            city_id => 'cityid',
+            country => 'city_country'
+        },
+        'Reverse mapping is cached'
+    );
+
+    # Get a fresh object
+    $city = $builder->build_object({ class => 'Koha::Cities' });
+    is_deeply(
+        $city->from_api_mapping,
+        {
+            city_id     => 'cityid',
+            country     => 'city_country',
+            postal_code => 'city_zipcode'
+        },
+        'Fresh mapping loaded'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_from_api() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $city = $builder->build_object({ class => 'Koha::Cities' });
+    my $city_unblessed = $city->unblessed;
+    my $attrs = {
+        name        => 'Cordoba',
+        country     => 'Argentina',
+        postal_code => '5000'
+    };
+    $city->set_from_api($attrs);
+
+    is( $city->city_state, $city_unblessed->{city_state}, 'Untouched attributes are preserved' );
+    is( $city->city_name, $attrs->{name}, 'city_name updated correctly' );
+    is( $city->city_country, $attrs->{country}, 'city_country updated correctly' );
+    is( $city->city_zipcode, $attrs->{postal_code}, 'city_zipcode updated correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'new_from_api() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $attrs = {
+        name        => 'Cordoba',
+        country     => 'Argentina',
+        postal_code => '5000'
+    };
+    my $city = Koha::City->new_from_api($attrs);
+
+    is( ref($city), 'Koha::City', 'Object type is correct' );
+    is( $city->city_name,    $attrs->{name}, 'city_name updated correctly' );
+    is( $city->city_country, $attrs->{country}, 'city_country updated correctly' );
+    is( $city->city_zipcode, $attrs->{postal_code}, 'city_zipcode updated correctly' );
 
     $schema->storage->txn_rollback;
 };
