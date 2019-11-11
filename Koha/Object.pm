@@ -434,6 +434,64 @@ sub from_api_mapping {
     return $self->{_from_api_mapping};
 }
 
+=head3 new_from_api
+
+    my $object = Koha::Object->new_from_api;
+    my $object = Koha::Object->new_from_api( $attrs );
+
+Creates a new object, mapping the API attribute names to the ones on the DB schema.
+
+=cut
+
+sub new_from_api {
+    my ( $class, $params ) = @_;
+
+    my $self = $class->new;
+    return $self->set_from_api( $params );
+}
+
+=head3 set_from_api
+
+    my $object = Koha::Object->new(...);
+    $object->set_from_api( $attrs )
+
+Sets the object's attributes mapping API attribute names to the ones on the DB schema.
+
+=cut
+
+sub set_from_api {
+    my ( $self, $from_api_params ) = @_;
+
+    return $self->set( $self->attributes_from_api( $from_api_params ) );
+}
+
+=head3 attributes_from_api
+
+    my $attributes = attributes_from_api( $params );
+
+Returns the passed params, converted from API naming into the model.
+
+=cut
+
+sub attributes_from_api {
+    my ( $self, $from_api_params ) = @_;
+
+    my $from_api_mapping = $self->from_api_mapping;
+
+    my $params;
+
+    while (my ($key, $value) = each %{ $from_api_params } ) {
+        if ( exists $from_api_mapping->{$key} ) {
+            $params->{$from_api_mapping->{$key}} = $value;
+        }
+        else {
+            $params->{$key} = $value;
+        }
+    }
+
+    return $params;
+}
+
 =head3 $object->unblessed_all_relateds
 
 my $everything_into_one_hashref = $object->unblessed_all_relateds
@@ -544,38 +602,6 @@ sub AUTOLOAD {
         Koha::Exceptions::Object->throw( ref($self) . "::$method generated this error: " . $@ );
     }
     return $r;
-}
-
-=head3 attributes_from_api
-
-    my $attributes = attributes_from_api( $params );
-
-Returns the passed params, converted from API naming into the model.
-
-=cut
-
-sub attributes_from_api {
-    my ( $self, $attributes ) = @_;
-
-    my $mapping = $self->from_api_mapping;
-
-    foreach my $attribute ( keys %{$mapping} ) {
-        my $mapped_attribute = $mapping->{$attribute};
-        if ( exists $attributes->{$attribute}
-            && defined $mapped_attribute )
-        {
-            # key => !undef
-            $attributes->{$mapped_attribute} = delete $attributes->{$attribute};
-        }
-        elsif ( exists $attributes->{$attribute}
-            && !defined $mapped_attribute )
-        {
-            # key => undef / to be deleted
-            delete $attributes->{$attribute};
-        }
-    }
-
-    return $attributes;
 }
 
 =head3 _type
