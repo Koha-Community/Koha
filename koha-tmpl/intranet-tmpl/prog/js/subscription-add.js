@@ -46,9 +46,16 @@ function Clear(id) {
 }
 
 function Check_page1() {
-    if ( $("#aqbooksellerid").val().length == 0) {
+    var bookseller_id = $("#aqbooksellerid").val();
+    if ( bookseller_id.length == 0) {
         input_box = confirm( MSG_LINK_TO_VENDOR );
         if (input_box==false) {
+            return false;
+        }
+    } else {
+        var bookseller_ids = BOOKSELLER_IDS;
+        if ( $.inArray(Number(bookseller_id), bookseller_ids) == -1 ) {
+            alert ("The vendor does not exist");
             return false;
         }
     }

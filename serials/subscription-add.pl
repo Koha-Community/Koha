@@ -244,6 +244,9 @@ if ($op eq 'addsubscription') {
 
     $template->param( locales => $languages );
 
+    my @bookseller_ids = Koha::Acquisition::Booksellers->search->get_column('id');
+    $template->param( bookseller_ids => \@bookseller_ids );
+
     output_html_with_http_headers $query, $cookie, $template->output;
 }
 
