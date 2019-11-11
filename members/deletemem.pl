@@ -104,7 +104,7 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor ) 
         $template->param(ItemsOnHold => $countholds);
     }
     # This is silly written but reflect the same conditions as above
-    if ( not $countissues > 0 and not $charges and not $is_guarantor ) {
+    if ( not $countissues > 0 and not $charges > 0 and not $is_guarantor ) {
         $template->param(
             op         => 'delete_confirm',
             csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
