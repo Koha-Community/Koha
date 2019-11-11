@@ -691,7 +691,7 @@ for (my $i=0;$i<@servers;$i++) {
 
             if (C4::Context->preference('COinSinOPACResults')) {
                 my $biblio = Koha::Biblios->find( $res->{'biblionumber'} );
-                $res->{coins} = $biblio->get_coins;
+                $res->{coins} = $biblio ? $biblio->get_coins : q{}; # FIXME This should be moved at the beginning of the @newresults loop
             }
             if ( C4::Context->preference( "Babeltheque" ) and $res->{normalized_isbn} ) {
                 if( my $isbn = Business::ISBN->new( $res->{normalized_isbn} ) ) {
