@@ -372,26 +372,66 @@ sub to_api {
     my ( $self ) = @_;
     my $json_object = $self->TO_JSON;
 
+    my $to_api_mapping = $self->to_api_mapping;
+
     # Rename attributes if there's a mapping
-    if ( $self->can('to_api_mapping') ) {
-        foreach my $column ( keys %{$self->to_api_mapping} ) {
-            my $mapped_column = $self->to_api_mapping->{$column};
-            if ( exists $json_object->{$column}
-                && defined $mapped_column )
-            {
-                # key != undef
-                $json_object->{$mapped_column} = delete $json_object->{$column};
-            }
-            elsif ( exists $json_object->{$column}
-                && !defined $mapped_column )
-            {
-                # key == undef
-                delete $json_object->{$column};
-            }
+    foreach my $column ( keys %{$to_api_mapping} ) {
+        my $mapped_column = $to_api_mapping->{$column};
+        if ( exists $json_object->{$column}
+            && defined $mapped_column )
+        {
+            # key != undef
+            $json_object->{$mapped_column} = delete $json_object->{$column};
+        }
+        elsif ( exists $json_object->{$column}
+            && !defined $mapped_column )
+        {
+            # key == undef
+            delete $json_object->{$column};
         }
     }
 
     return $json_object;
+}
+
+=head3 to_api_mapping
+
+    my $mapping = $object->to_api_mapping;
+
+Generic method that returns the attribute name mappings required to
+render the object on the API.
+
+Note: this only returns an empty I<hashref>. Each class should have its
+own mapping returned.
+
+=cut
+
+sub to_api_mapping {
+    return {};
+}
+
+=head3 from_api_mapping
+
+    my $mapping = $object->from_api_mapping;
+
+Generic method that returns the attribute name mappings so the data that
+comes from the API is correctly renamed to match what is required for the DB.
+
+=cut
+
+sub from_api_mapping {
+    my ( $self ) = @_;
+
+    my $to_api_mapping = $self->to_api_mapping;
+
+    unless ( $self->{_from_api_mapping} ) {
+        while (my ($key, $value) = each %{ $to_api_mapping } ) {
+            $self->{_from_api_mapping}->{$value} = $key
+                if defined $value;
+        }
+    }
+
+    return $self->{_from_api_mapping};
 }
 
 =head3 $object->unblessed_all_relateds
@@ -504,6 +544,38 @@ sub AUTOLOAD {
         Koha::Exceptions::Object->throw( ref($self) . "::$method generated this error: " . $@ );
     }
     return $r;
+}
+
+=head3 attributes_from_api
+
+    my $attributes = attributes_from_api( $params );
+
+Returns the passed params, converted from API naming into the model.
+
+=cut
+
+sub attributes_from_api {
+    my ( $self, $attributes ) = @_;
+
+    my $mapping = $self->from_api_mapping;
+
+    foreach my $attribute ( keys %{$mapping} ) {
+        my $mapped_attribute = $mapping->{$attribute};
+        if ( exists $attributes->{$attribute}
+            && defined $mapped_attribute )
+        {
+            # key => !undef
+            $attributes->{$mapped_attribute} = delete $attributes->{$attribute};
+        }
+        elsif ( exists $attributes->{$attribute}
+            && !defined $mapped_attribute )
+        {
+            # key => undef / to be deleted
+            delete $attributes->{$attribute};
+        }
+    }
+
+    return $attributes;
 }
 
 =head3 _type
