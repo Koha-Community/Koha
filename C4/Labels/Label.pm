@@ -148,11 +148,16 @@ sub _get_barcode_data {
             next FIELD_LIST;
         }
         elsif ( $f =~ /^($match_kohatable).*/ ) {
-            if ($item->{$f}) {
-                $datastring .= $item->{$f};
-            } else {
-                $debug and warn sprintf("The '%s' field contains no data.", $f);
+            my @fields = split ' ', $f;
+            my @data;
+            for my $field ( @fields ) {
+                if ($item->{$field}) {
+                    push @data, $item->{$field};
+                } else {
+                    $debug and warn sprintf("The '%s' field contains no data.", $field);
+                }
             }
+            $datastring .= join ' ', @data;
             $f = $';
             next FIELD_LIST;
         }
