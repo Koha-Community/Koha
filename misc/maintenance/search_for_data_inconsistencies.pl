@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Koha::Script;
 use Koha::Items;
+use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::ItemTypes;
 use Koha::Authorities;
@@ -106,6 +107,18 @@ use Koha::Authorities;
             new_hint("The biblioitems must have a itemtype value that is defined in the item types of Koha (Home › Administration › Item types administration)");
         }
     }
+
+    my @decoding_errors;
+    my $biblios = Koha::Biblios->search;
+    while ( my $biblio = $biblios->next ) {
+        eval{$biblio->metadata->record;};
+        push @decoding_errors, $@ if $@;
+    }
+    if ( @decoding_errors ) {
+        new_section("Bibliographic records have invalid MARCXML");
+        new_item($_) for @decoding_errors;
+        new_hint("The bibliographic records must have a valid MARCXML or you will face encoding issues or wrong displays");
+    }
 }
 
 sub new_section {
@@ -140,5 +153,5 @@ Catch data inconsistencies in Koha database
   * if item types are defined at item level (item-level_itypes=specific item),
     then items.itype must be set else biblioitems.itemtype must be set
   * Item types defined in items or biblioitems must be defined in the itemtypes table
-
+* Invalid MARCXML in bibliographic records
 =cut
