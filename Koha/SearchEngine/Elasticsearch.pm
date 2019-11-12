@@ -263,10 +263,17 @@ sub raw_elasticsearch_mappings {
     my $mappings = {};
     while ( my $search_field = $search_fields->next ) {
 
-        my $marc_to_fields = $schema->resultset('SearchMarcToField')->search( { search_field_id => $search_field->id } );
+        my $marc_to_fields = $schema->resultset('SearchMarcToField')->search(
+            { search_field_id => $search_field->id },
+            {
+                join     => 'search_marc_map',
+                order_by => { -asc => 'search_marc_map.marc_field' }
+            }
+        );
 
         while ( my $marc_to_field = $marc_to_fields->next ) {
-            my $marc_map = Koha::SearchMarcMaps->find( $marc_to_field->search_marc_map_id );
+
+            my $marc_map = $marc_to_field->search_marc_map;
 
             next if $marc_type && $marc_map->marc_type ne $marc_type;
 
