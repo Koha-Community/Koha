@@ -65,7 +65,11 @@
             [% IF ( title ) %]
                 <li>
                     <span class="label">Title:</span>
-                    [% title | html %]
+                    [% IF suggestion.biblionumber %]
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% suggestion.biblionumber | uri %]">[% suggestion.title | html %]</a>
+                    [% ELSE %]
+                        [% title | html %]
+                    [% END %]
                 </li>
             [% END %]
             [% IF ( author ) %]
