@@ -319,7 +319,15 @@
                                                         </td>
                                                     [% END %]
                                                     <td>
-                                                        <p><label for="id[% suggestions_loo.suggestionid | html %]"><strong>[% suggestions_loo.title | html %]</strong></label></p>
+                                                        <p>
+                                                            <label for="id[% suggestions_loo.suggestionid | html %]">
+                                                                [% IF suggestions_loo.biblionumber %]
+                                                                    <strong><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% suggestions_loo.biblionumber | uri %]">[% suggestions_loo.title | html %]</a></strong>
+                                                                [% ELSE %]
+                                                                    <strong>[% suggestions_loo.title | html %]</strong>
+                                                                [% END %]
+                                                            </label>
+                                                        </p>
                                                             <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author | html %],[% END %]
                                                                 [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate | html %],[% END %]
                                                                 [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode | html %][% END %]
