@@ -154,4 +154,5 @@ Catch data inconsistencies in Koha database
     then items.itype must be set else biblioitems.itemtype must be set
   * Item types defined in items or biblioitems must be defined in the itemtypes table
 * Invalid MARCXML in bibliographic records
+
 =cut
