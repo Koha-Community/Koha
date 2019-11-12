@@ -796,7 +796,13 @@ sub CheckReserves {
                     next if ($branchitemrule->{'holdallowed'} == 0);
                     next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
                     my $hold_fulfillment_policy = $branchitemrule->{hold_fulfillment_policy};
-                    next if ( ($branchitemrule->{hold_fulfillment_policy} ne 'any') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
+                    next
+                      if $hold_fulfillment_policy ne 'any'
+                      && (
+                           $hold_fulfillment_policy eq ''
+                        || ( $res->{branchcode} ne
+                            $item->$hold_fulfillment_policy )
+                      );
                     next unless $item->can_be_transferred( { to => scalar Koha::Libraries->find( $res->{branchcode} ) } );
                     $priority = $res->{'priority'};
                     $highest  = $res;
