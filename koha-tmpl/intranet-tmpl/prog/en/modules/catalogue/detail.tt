@@ -71,7 +71,7 @@
     [% IF decoding_error %]
         <div>
             There is an error with this bibliographic record, the view may be degraded.
-            <br/> Error: [% decoding_error %]
+            <br/> Error: [% decoding_error | html %]
         </div>
     [% END %]
     [% IF ( ocoins ) %]

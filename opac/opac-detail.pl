@@ -845,8 +845,10 @@ $template->param(
 	content_identifier_exists =>  $content_identifier_exists,
 );
 
+# Catch the exception as Koha::Biblio::Metadata->record can explode if the MARCXML is invalid
 # COinS format FIXME: for books Only
-$template->param( ocoins => $biblio->get_coins );
+my $coins = eval { $biblio->get_coins };
+$template->param( ocoins => $coins );
 
 my ( $loggedincommenter, $reviews );
 if ( C4::Context->preference('reviewson') ) {
