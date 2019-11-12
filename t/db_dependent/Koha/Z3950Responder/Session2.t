@@ -17,6 +17,9 @@ my $schema  = Koha::Database->new->schema;
 
 $schema->storage->txn_begin;
 
+# Clear the cache, before and after
+Koha::Caches->get_instance->flush_all;
+
 subtest 'add_item_status' => sub {
 
     plan tests => 2;
@@ -39,10 +42,6 @@ subtest 'add_item_status' => sub {
             lib => "Borked completely"
         }
     });
-
-    # Clear the cache to make sure the above values take effect
-    my $cache = Koha::Caches->get_instance();
-    $cache->flush_all();
 
     ## FIRST ITEM HAS ALL THE STATUSES ##
     my $item_1 = $builder->build({
@@ -88,5 +87,8 @@ subtest 'add_item_status' => sub {
     is($item_field_2->subfield('k'),'Free as a bird',"Available status is 'Free as a bird' added as expected");
 
 };
+
+# Clear the cache, before and after
+Koha::Caches->get_instance->flush_all;
 
 $schema->storage->txn_rollback;
