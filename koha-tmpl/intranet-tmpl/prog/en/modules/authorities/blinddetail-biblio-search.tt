@@ -32,9 +32,9 @@
                 [% ELSE %]
                 var new_line = "
                 [%- FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP -%]‡
-                    [%- SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r    ') | html -%]
+                    [%- To.json( SUBFIELD_LOO.marc_subfield ) | $raw -%]
                     [%- FOREACH marc_value IN SUBFIELD_LOO.marc_values -%]
-                        [%- marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html -%]
+                        [%- To.json( marc_value ) | $raw -%]
                     [%- END -%]
                 [%- END -%]‡9[% authid | html %]";
                 [% END %]
@@ -137,7 +137,7 @@
                     if (subfield){subfield.value="" ;}
                 [% ELSE %]
                     if(code.value=='9'){
-                        subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
+                        subfield.value = "[% To.json(authid) | $raw %]";
                         break;
                     }
                 [% END %]
