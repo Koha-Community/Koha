@@ -1570,6 +1570,30 @@ sub to_api {
     return $json_patron;
 }
 
+sub attributes_from_api {
+    my ( $self, $attrs ) = @_;
+
+    $attrs = $self->SUPER::attributes_from_api( $attrs );
+
+    if ( exists $attrs->{lost} ) {
+        $attrs->{lost} = ($attrs->{lost}) ? 1 : 0;
+    }
+
+    if ( exists $attrs->{ gonenoaddress} ) {
+        $attrs->{gonenoaddress} = ($attrs->{gonenoaddress}) ? 1 : 0;
+    }
+
+    if ( exists $attrs->{lastseen} ) {
+        $attrs->{lastseen} = output_pref({ str => $attrs->{lastseen}, dateformat => 'sql' });
+    }
+
+    if ( exists $attrs->{updated_on} ) {
+        $attrs->{updated_on} = output_pref({ str => $attrs->{updated_on}, dateformat => 'sql' });
+    }
+
+    return $attrs;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Patron object
