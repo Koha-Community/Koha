@@ -64,6 +64,12 @@
 [% ELSE %]
 
 [% INCLUDE 'cat-toolbar.inc' %]
+    [% IF decoding_error %]
+        <div>
+            There is an error with this bibliographic record, the view may be degraded.
+            <br/> Error: [% decoding_error %]
+        </div>
+    [% END %]
     [% IF ( ocoins ) %]
         <!-- COinS / OpenURL -->
         <span class="Z3988" title="[% ocoins | html %]"></span>
