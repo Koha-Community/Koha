@@ -56,7 +56,7 @@ my $catcode        = $input->param('catcode');
 my $cattype        = $input->param('cattype');
 my $op             = $input->param('op');
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
 my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
 if ( $op eq 'multi' ) {

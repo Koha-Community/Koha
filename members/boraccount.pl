@@ -54,7 +54,7 @@ my $payment_id     = $input->param('payment_id');
 my $change_given   = $input->param('change_given');
 my $action         = $input->param('action') || '';
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $library_id = C4::Context->userenv->{'branch'};
 my $patron = Koha::Patrons->find( $borrowernumber );
 unless ( $patron ) {

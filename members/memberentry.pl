@@ -163,7 +163,7 @@ $template->param( "quickadd" => 1 ) if ( $quickadd );
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
 if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
-    my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+    my $logged_in_user = Koha::Patrons->find( $loggedinuser );
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
     $borrower_data = $patron->unblessed;

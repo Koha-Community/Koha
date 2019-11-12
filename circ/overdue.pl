@@ -77,7 +77,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-our $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+our $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
 my $dbh = C4::Context->dbh;
 

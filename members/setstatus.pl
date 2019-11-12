@@ -44,7 +44,7 @@ my $reregistration = $input->param('reregistration') || '';
 my $dbh = C4::Context->dbh;
 my $dateexpiry;
 
-my $logged_in_user = Koha::Patrons->find( { userid =>  $loggedinuserid } ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( { userid =>  $loggedinuserid } );
 my $patron         = Koha::Patrons->find( $borrowernumber );
 
 # Ideally we should display a warning on the interface if the logged in user is

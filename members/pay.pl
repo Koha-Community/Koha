@@ -67,7 +67,7 @@ my $payment_id = $input->param('payment_id');
 our $change_given = $input->param('change_given');
 
 # get borrower details
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 our $patron         = Koha::Patrons->find($borrowernumber);
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 

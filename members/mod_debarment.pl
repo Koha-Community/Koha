@@ -32,7 +32,7 @@ my ( $loggedinuserid, $cookie, $sessionID ) = checkauth( $cgi, 0, { borrowers =>
 my $borrowernumber = $cgi->param('borrowernumber');
 my $action         = $cgi->param('action');
 
-my $logged_in_user = Koha::Patrons->find( { userid => $loggedinuserid } ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( { userid => $loggedinuserid } );
 my $patron         = Koha::Patrons->find($borrowernumber);
 
 # Ideally we should display a warning on the interface if the patron is not allowed

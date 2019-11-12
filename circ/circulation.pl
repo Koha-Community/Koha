@@ -142,7 +142,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
         flagsrequired   => { circulate => 'circulate_remaining_permissions' },
     }
 );
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 
 my $force_allow_issue = $query->param('forceallow') || 0;
 if (!C4::Auth::haspermission( C4::Context->userenv->{id} , { circulate => 'force_checkout' } )) {

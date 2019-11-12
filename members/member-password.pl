@@ -46,7 +46,7 @@ my $new_user_id  = $input->param('newuserid');
 
 my @errors;
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $patron = Koha::Patrons->find( $patron_id );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 

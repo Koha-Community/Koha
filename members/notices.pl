@@ -47,7 +47,7 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => 
 				debug => 1,
 				});
 
-my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 # Allow resending of messages in Notices tab
