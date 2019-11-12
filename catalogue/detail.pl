@@ -112,6 +112,9 @@ if ( not defined $record ) {
     exit;
 }
 
+eval { $biblio->metadata->record };
+$template->param( decoding_error => $@ );
+
 if($query->cookie("holdfor")){ 
     my $holdfor_patron = Koha::Patrons->find( $query->cookie("holdfor") );
     $template->param(
@@ -143,7 +146,11 @@ if ( $xslfile ) {
 }
 
 $template->param( 'SpineLabelShowPrintOnBibDetails' => C4::Context->preference("SpineLabelShowPrintOnBibDetails") );
-$template->param( ocoins => $biblio->get_coins );
+
+# Catch the exception as Koha::Biblio::Metadata->record can explode if the MARCXML is invalid
+# Do not propagate it as we already deal with it previously in this script
+my $coins = eval { $biblio->get_coins };
+$template->param( ocoins => $coins );
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
