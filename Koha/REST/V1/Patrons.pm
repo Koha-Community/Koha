@@ -123,9 +123,7 @@ sub add {
 
     return try {
 
-        my $body = _to_model( $c->validation->param('body') );
-
-        my $patron = Koha::Patron->new( _to_model($body) )->store;
+        my $patron = Koha::Patron->new_from_api( $c->validation->param('body') )->store;
 
         $c->res->headers->location( $c->req->url->to_string . '/' . $patron->borrowernumber );
         return $c->render(
@@ -196,11 +194,10 @@ sub update {
      }
 
     return try {
-        my $body = _to_model($c->validation->param('body'));
 
-        $patron->set($body)->store;
+        $patron->set_from_api($c->validation->param('body'))->store;
         $patron->discard_changes;
-        return $c->render( status => 200, openapi => $patron );
+        return $c->render( status => 200, openapi => $patron->to_api );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
