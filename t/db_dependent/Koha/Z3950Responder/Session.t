@@ -19,9 +19,6 @@ subtest 'add_item_status' => sub {
 
     plan tests => 2;
 
-    # Make sure we are using default values set in code
-    $builder->schema->resultset( 'AuthorisedValue' )->delete_all;
-
     ## FIRST ITEM HAS ALL THE STATUSES ##
     my $item_1 = $builder->build({
         source => 'Item',
