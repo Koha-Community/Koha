@@ -90,7 +90,7 @@ subtest 'test_search' => sub {
         $z->start();
         exit;
     }
-    sleep(1);
+    sleep(10); # Just a try to see if it fixes Jenkins
 
     # Z39.50 protocol tests
     my $o = new ZOOM::Options();

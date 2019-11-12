@@ -88,7 +88,7 @@ subtest 'test_search' => sub {
         $z->start();
         exit;
     }
-    sleep(1);
+    sleep(10); # Just a try to see if it fixes Jenkins
 
     my $o = new ZOOM::Options();
     $o->option(preferredRecordSyntax => 'xml');
