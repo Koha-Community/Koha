@@ -76,7 +76,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $city = Koha::City->new( _to_model( $c->validation->param('body') ) );
+        my $city = Koha::City->new_from_api( $c->validation->param('body') );
         $city->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $city->cityid );
         return $c->render(
@@ -115,8 +115,7 @@ sub update {
     }
 
     return try {
-        my $params = $c->req->json;
-        $city->set( _to_model($params) );
+        $city->set_from_api( $c->validation->param('body') );
         $city->store();
         return $c->render( status => 200, openapi => $city->to_api );
     }
