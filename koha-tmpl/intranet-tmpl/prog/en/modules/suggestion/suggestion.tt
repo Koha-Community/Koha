@@ -399,7 +399,7 @@
             <li>
                 <label for="managedby_name">by:</label>
                 <div>
-                    <span id="managedby_name">
+                    <span id="managedby_name" name="managedby_name">
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% logged_in_user.borrowernumber | uri %]">You</a>
                     </span>
                     [% IF managedby_patron.borrowernumber && logged_in_user.borrowernumber != managedby_patron.borrowernumber %]
@@ -694,9 +694,9 @@
             <div class="col-sm-2">
                 <fieldset>
                     <label for="set_manager_[% loop.count %]">Update manager</label><br/>
-                    <a id="edit_manager" class="new_window" href="#"><i class="fa fa-search"></i> Select manager</a>
-                    <span id="managedby_name"></span>
-                    <input type="hidden" name="suggestion_managedby" id="managedby" value="[% logged_in_user.borrowernumber | html %]" />
+                    <a id="set_manager_[% loop.count %]" data-tab="[% loop.count %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
+                    <span id="managedby_name[% loop.count %]"></span>
+                    <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count %]" value="[% logged_in_user.borrowernumber | html %]" />
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="update_manager"/>Submit</button></fieldset>
                 </fieldset>
@@ -773,6 +773,7 @@
                     <ol>
                       <li>
                           <label for="STATUS"> Status:</label>
+
                           <select name="STATUS" id="STATUS">
                               <option value="">Any</option>
 
@@ -885,7 +886,9 @@
     [% INCLUDE 'calendar.inc' %]
 
     <script type="text/javascript">
-        function editManagerPopup() {
+        var tab = '';
+        function editManagerPopup(selected_tab) {
+            tab = selected_tab;
             window.open("/cgi-bin/koha/suggestion/add_user_search.pl?selection_type=select",
                 'PatronPopup',
                 'width=740,height=450,location=yes,toolbar=no,'
@@ -893,15 +896,17 @@
             );
         }
         function select_user(borrowernumber, borrower) {
-            $("#managedby_name").empty();
-            $("#managedby").val('');
+            var managedby_name = $("#managedby_name"+tab);
+            var managedby = $("#managedby"+tab);
+            managedby_name.empty();
+            managedby.val('');
             var borrowername = borrower.firstname + ' ' + borrower.surname;
             if (borrowernumber) {
                 var managerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                     + '?borrowernumber=' + borrowernumber + '">'
                     + borrowername + '</a>';
-                $('#managedby_name').html(managerlink);
-                $('#managedby').val(borrowernumber);
+                managedby_name.html(managerlink);
+                managedby.val(borrowernumber);
             }
 
             [% IF op == "save" %]
@@ -919,8 +924,14 @@
         $(document).ready(function(){
             $("#edit_manager").on("click",function(e){
                 e.preventDefault();
-                editManagerPopup();
+                editManagerPopup('');
             });
+            $(".set_manager").on("click",function(e){
+                e.preventDefault();
+                var selected_tab = $(this).data('tab');
+                editManagerPopup(selected_tab);
+            });
+
         });
     </script>
 
@@ -1025,8 +1036,9 @@
                 });
 
                 $("button[type='submit']").on("click", function(e) {
-                    var form = $(this).parents("form");
-                    var action = $(this).val();
+                    var submit_button = this;
+                    var form = $(submit_button).parents("form");
+                    var action = $(submit_button).val();
                     var selected_suggestions = $(form).find("input[name='suggestionid']:checked");
                     if ( selected_suggestions.length == 0 ) {
                         alert(_("Please select at least one suggestion"));
@@ -1046,7 +1058,8 @@
                             }
                         }
                     } else if ( action == "update_manager" ) {
-                        if ( $("#managedby").val() == "" ) {
+                        var managedby = $(submit_button).siblings("suggestion_managedby");
+                        if ( managedby.val() == "" ) {
                             alert(_("Please select a manager to assign to the selected suggestions"));
                             e.preventDefault();
                             return false;
