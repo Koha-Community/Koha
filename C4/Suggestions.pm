@@ -205,6 +205,11 @@ sub SearchSuggestion {
         }
     }
 
+    # By default do not search for archived suggestions
+    unless ( exists $suggestion->{archived} && $suggestion->{archived} ) {
+        push @query, q{ AND suggestions.archived = 0 };
+    }
+
     $debug && warn "@query";
     my $sth = $dbh->prepare("@query");
     $sth->execute(@sql_params);

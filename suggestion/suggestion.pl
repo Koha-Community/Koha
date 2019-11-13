@@ -92,6 +92,7 @@ my $displayby       = $input->param('displayby') || '';
 my $tabcode         = $input->param('tabcode');
 my $save_confirmed  = $input->param('save_confirmed') || 0;
 my $notify          = $input->param('notify');
+my $filter_archived = $input->param('filter_archived');
 
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
@@ -104,7 +105,7 @@ my $columns = ' '.join(' ', $schema->source('Suggestion')->columns).' ';
 my $suggestion_only = { map { $columns =~ / $_ / ? ($_ => $suggestion_ref->{$_}) : () } keys %$suggestion_ref };
 $suggestion_only->{STATUS} = $suggestion_ref->{STATUS};
 
-delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field notify );
+delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode notify filter_archived );
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' ));
 }
@@ -288,6 +289,16 @@ elsif ($op eq "update_status" ) {
     }
     redirect_with_params($input);
 }
+elsif ($op eq "archive" ) {
+    Koha::Suggestions->find($_)->update({ archived => 1 }) for @editsuggestions;
+
+    redirect_with_params($input);
+}
+elsif ($op eq "unarchive" ) {
+    Koha::Suggestions->find($_)->update({ archived => 0 }) for @editsuggestions;
+
+    redirect_with_params($input);
+}
 elsif ( $op eq 'update_itemtype' ) {
     my $new_itemtype = $input->param('suggestion_itemtype');
     foreach my $suggestionid (@editsuggestions) {
@@ -346,7 +357,7 @@ if ($op=~/else/) {
         next if ( $definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue ) and ($displayby ne 'branchcode' or $branchfilter ne '__ANY__' );
         $$suggestion_ref{$displayby} = $criteriumvalue;
 
-        my $suggestions = &SearchSuggestion($suggestion_ref);
+        my $suggestions = &SearchSuggestion({ %$suggestion_ref, archived => $filter_archived });
         foreach my $suggestion (@$suggestions) {
             if ($suggestion->{budgetid}){
                 my $bud = GetBudget( $suggestion->{budgetid} );
@@ -377,6 +388,7 @@ $template->param(
 
 $template->param(
     %$suggestion_ref,
+    filter_archived => $filter_archived,
     "op"             =>$op,
 );
 
@@ -455,7 +467,7 @@ sub redirect_with_params {
         displayby branchcode title author isbn publishercode copyrightdate
         collectiontitle suggestedby suggesteddate_from suggesteddate_to
         manageddate_from manageddate_to accepteddate_from
-        accepteddate_to budgetid
+        accepteddate_to budgetid filter_archived
         )
       )
     {

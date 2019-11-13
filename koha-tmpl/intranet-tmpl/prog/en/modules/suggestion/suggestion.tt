@@ -573,6 +573,7 @@
                     [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
                         [% IF ( suggestions_loo.volumedesc ) %]; Volume:<i>[% suggestions_loo.volumedesc | html %]</i> [% END %]
                         [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn | html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode | html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle | html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<div class="note"><i class="fa fa-comment"></i> [% suggestions_loo.note | html %]</div>[% END %]
+                        [% IF suggestions_loo.archived %]<br /><i class="fa fa-archive"> Archived[% END %]
                 </td>
                 <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby | html %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby | html %])[% END %]</a>
@@ -622,8 +623,19 @@
                     [% END %]
                 </td>
                 <td class="actions">
-                    <a class="btn btn-xs btn-default" href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil"></i> Edit</a>
-                    <a class="btn btn-default btn-xs deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% suggestions_loo.suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                    <div class="dropup">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-xs" role="button" href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid | html %]&amp;op=edit"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" id="more_actions_[% suggestions_loo.suggestionid | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="more_actions_[% suggestions_loo.suggestionid | html %]">
+                            <li><a class="deletesuggestion" href="suggestion.pl?op=delete&amp;suggestionid=[% suggestions_loo.suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                            [% UNLESS suggestions_loo.archived %]
+                                <li><a class="archivesuggestion" href="suggestion.pl?op=archive&amp;suggestionid=[% suggestions_loo.suggestionid | html %]"><i class="fa fa-archive"></i> Archive</a></li>
+                            [% ELSE %]
+                                <li><a class="unarchivesuggestion" href="suggestion.pl?op=unarchive&amp;suggestionid=[% suggestions_loo.suggestionid | html %]"><i class="fa fa-archive"></i> Unarchive</a></li>
+                            [% END %]
+                        </ul>
+                    </div>
+                    </div>
                 </td>
         </tr>
         [% END %]</tbody>
@@ -683,6 +695,7 @@
                     </div>
 
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                    <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="update_status"/>Submit</button></fieldset>
                 </fieldset>
             </div>
@@ -691,6 +704,7 @@
                     <label for="itemtype">Update item types with: </label>
                     [% PROCESS 'av-build-dropbox.inc' name="suggestion_itemtype", category="SUGGEST_FORMAT", size = 20  %]
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                    <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="update_itemtype"/>Submit</button></fieldset>
                 </fieldset>
             </div>
@@ -702,6 +716,7 @@
                     <span id="managedby_name[% loop.count | html %]"></span>
                     <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                    <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="update_manager"/>Submit</button></fieldset>
                 </fieldset>
             </div>
@@ -710,6 +725,7 @@
                 <fieldset>
                     <label for="delete_[% loop.count | html %]">Delete selected</label>
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
+                    <input type="hidden" name="filter_archived" value="[% filter_archived | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="delete"/>Delete</button></fieldset>
                 </fieldset>
             </div>
@@ -761,7 +777,12 @@
                     [% ELSE %]
                         <option value="acceptedby">Accepted by</option>
                     [% END %]
-                </select> <input type="submit" value="Go" /></li></ol></fieldset>
+                </select>
+                <input type="submit" value="Go" />
+                </li>
+                </ol>
+                </fieldset>
+
 <h4>Filter by: <a style="font-size:80%;font-weight:normal;" href="/cgi-bin/koha/suggestion/suggestion.pl">[clear]</a></h4>
                 <div style="display:block;" id="limits">
 
@@ -775,6 +796,14 @@
                 </fieldset>
 				 <fieldset class="brief"><h4 class="local_collapse"><a href="#">Suggestion information</a></h4>
                     <ol>
+                        <li>
+                            <label for="archived" style="display: inline;">Include archived:</label>
+                            [% IF filter_archived %]
+                                <input type="checkbox" id="archived" name="filter_archived" checked="checked" title="Include archived suggestions in the search" />
+                            [% ELSE %]
+                                <input type="checkbox" id="archived" name="filter_archived" title="Include archived suggestions in the search" />
+                            [% END %]
+                      </li>
                       <li>
                           <label for="STATUS"> Status:</label>
 
@@ -848,7 +877,10 @@
                         <label for="accepteddate_to">To:</label>
                         <input type="text" id="accepteddate_to" size="10" name="accepteddate_to" value="[% accepteddate_to | html %]" />
                     </li>
-                    <li><input type="submit" value="Go" /></li></ol>
+                    <li>
+                        <input type="submit" value="Go" />
+                    </li>
+                </ol>
                 </fieldset>
 
 				<fieldset class="brief"><h4 class="local_collapse"><a href="#">Acquisition information</a></h4>
@@ -872,7 +904,11 @@
                         [% ELSE %]
                             [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
                         [% END %]
-                    </select></li><li><input type="submit" value="Go" /></li></ol>
+                    </select></li>
+                    <li>
+                        <input type="submit" value="Go" />
+                    </li>
+                </ol>
                 </fieldset>
             </form>
         [% INCLUDE 'acquisitions-menu.inc' %]
