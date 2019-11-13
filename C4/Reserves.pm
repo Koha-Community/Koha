@@ -45,6 +45,7 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::Old::Hold;
 use Koha::Patrons;
+use Koha::Plugins;
 
 use Carp;
 use Data::Dumper;
@@ -295,6 +296,8 @@ sub AddReserve {
             );
         }
     }
+
+    Koha::Plugins->call('after_hold_create', $hold);
 
     return $reserve_id;
 }

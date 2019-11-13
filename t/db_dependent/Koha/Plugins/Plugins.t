@@ -25,7 +25,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 51;
+use Test::More tests => 52;
 
 use C4::Context;
 use Koha::Database;
@@ -45,6 +45,33 @@ BEGIN {
 }
 
 my $schema = Koha::Database->new->schema;
+
+subtest 'call() tests' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    # Temporarily remove any installed plugins data
+    Koha::Plugins::Methods->delete;
+
+    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
+    my @plugins = $plugins->InstallPlugins;
+    foreach my $plugin (@plugins) {
+        $plugin->enable();
+    }
+
+    my @responses = Koha::Plugins->call('check_password', { password => 'foo' });
+
+    my $expected = [ { error => 1, msg => 'PIN should be four digits' } ];
+    is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
+
+    # Make sure parameters are correctly passed to the plugin method
+    my @responses = Koha::Plugins->call('check_password', { password => '1234' });
+
+    my $expected = [ { error => 0 } ];
+    is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'GetPlugins() tests' => sub {
 

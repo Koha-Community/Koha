@@ -52,6 +52,29 @@ sub new {
     return bless( $args, $class );
 }
 
+=head2 call
+
+Calls a plugin method for all enabled plugins
+
+    @responses = Koha::Plugins->call($method, @args)
+
+=cut
+
+sub call {
+    my ($class, $method, @args) = @_;
+
+    if (C4::Context->preference('UseKohaPlugins') && C4::Context->config('enable_plugins')) {
+        my @plugins = $class->new({ enable_plugins => 1 })->GetPlugins({ method => $method });
+        my @responses;
+        foreach my $plugin (@plugins) {
+            my $response = $plugin->$method(@args);
+            push @responses, $response;
+        }
+
+        return @responses;
+    }
+}
+
 =head2 GetPlugins
 
 This will return a list of all available plugins, optionally limited by
@@ -160,6 +183,30 @@ sub InstallPlugins {
 
 1;
 __END__
+
+=head1 AVAILABLE HOOKS
+
+=head2 after_hold_create
+
+=head3 Parameters
+
+=over
+
+=item * C<$hold> - A Koha::Hold object that has just been inserted in database
+
+=back
+
+=head3 Return value
+
+None
+
+=head3 Example
+
+    sub after_hold_create {
+        my ($self, $hold) = @_;
+
+        warn "New hold for borrower " . $hold->borrower->borrowernumber;
+    }
 
 =head1 AUTHOR
 
