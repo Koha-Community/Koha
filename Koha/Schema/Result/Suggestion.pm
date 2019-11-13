@@ -491,6 +491,10 @@ __PACKAGE__->belongs_to(
   },
 );
 
+__PACKAGE__->add_columns(
+    '+archived' => { is_boolean => 1 },
+);
+
 sub koha_objects_class {
     'Koha::Suggestions';
 }
