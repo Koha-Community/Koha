@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 7;
 use t::lib::TestBuilder;
 
 use List::MoreUtils qw( any none );
@@ -43,22 +43,6 @@ can_ok('C4::Items','GetItemsForInventory');
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
-
-subtest 'Old version is unchanged' => sub {
-
-    plan tests => 1;
-
-    $schema->storage->txn_begin;
-
-    my $dbh = $schema->storage->dbh;
-
-    my ($oldResults, $oldCount) = OldWay($dbh);
-    my ($newResults, $newCount) = GetItemsForInventory;
-
-    is_deeply($newResults,$oldResults,"Inventory results unchanged.");
-
-    $schema->storage->txn_rollback;
-};
 
 subtest 'Skip items with waiting holds' => sub {
 
@@ -137,16 +121,6 @@ subtest 'Skip items with waiting holds' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Verify results with OldWay' => sub {
-    $schema->storage->txn_begin;
-    plan tests => 1;
-
-    my ($oldResults, $oldCount) = OldWay();
-    my ($newResults, $newCount) = GetItemsForInventory();
-    is_deeply($newResults,$oldResults,"Inventory results unchanged.");
-    $schema->storage->txn_rollback;
-};
-
 subtest 'Use cn_sort rather than callnumber to determine correct location' => sub {
     $schema->storage->txn_begin;
     plan tests => 1;
@@ -188,121 +162,3 @@ subtest 'Use cn_sort rather than callnumber to determine correct location' => su
     $schema->storage->txn_rollback;
 
 };
-
-sub OldWay { # FIXME Do we really still need so much code to check results ??
-    my $ldbh = C4::Context->dbh;
-
-    my $minlocation  = '';
-    my $maxlocation  = '';
-    my $location     = '';
-    my $itemtype     = '';
-    my $ignoreissued = '';
-    my $datelastseen = '';
-    my $branchcode   = '';
-    my $branch       = '';
-    my $offset       = '';
-    my $size         = '';
-    my $statushash   = '';
-
-    my ( @bind_params, @where_strings );
-
-    my $select_columns = q{
-        SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber
-    };
-    my $select_count = q{SELECT COUNT(*)};
-    my $query = q{
-        FROM items
-        LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
-        LEFT JOIN biblioitems on items.biblionumber = biblioitems.biblionumber
-    };
-    if ($statushash){
-        for my $authvfield (keys %$statushash){
-            if ( scalar @{$statushash->{$authvfield}} > 0 ){
-                my $joinedvals = join ',', @{$statushash->{$authvfield}};
-                push @where_strings, "$authvfield in (" . $joinedvals . ")";
-            }
-        }
-    }
-
-    if ($minlocation) {
-        push @where_strings, 'itemcallnumber >= ?';
-        push @bind_params, $minlocation;
-    }
-
-    if ($maxlocation) {
-        push @where_strings, 'itemcallnumber <= ?';
-        push @bind_params, $maxlocation;
-    }
-
-    if ($datelastseen) {
-        $datelastseen = output_pref({ str => $datelastseen, dateformat => 'iso', dateonly => 1 });
-        push @where_strings, '(datelastseen < ? OR datelastseen IS NULL)';
-        push @bind_params, $datelastseen;
-    }
-
-    if ( $location ) {
-        push @where_strings, 'items.location = ?';
-        push @bind_params, $location;
-    }
-
-    if ( $branchcode ) {
-        if($branch eq "homebranch"){
-        push @where_strings, 'items.homebranch = ?';
-        }else{
-            push @where_strings, 'items.holdingbranch = ?';
-        }
-        push @bind_params, $branchcode;
-    }
-
-    if ( $itemtype ) {
-        push @where_strings, 'biblioitems.itemtype = ?';
-        push @bind_params, $itemtype;
-    }
-
-    if ( $ignoreissued) {
-        $query .= "LEFT JOIN issues ON items.itemnumber = issues.itemnumber ";
-        push @where_strings, 'issues.date_due IS NULL';
-    }
-
-    if ( @where_strings ) {
-        $query .= 'WHERE ';
-        $query .= join ' AND ', @where_strings;
-    }
-    my $count_query = $select_count . $query;
-    $query .= ' ORDER BY items.cn_sort, itemcallnumber, title';
-    $query .= " LIMIT $offset, $size" if ($offset and $size);
-    $query = $select_columns . $query;
-    my $sth = $ldbh->prepare($query);
-    $sth->execute( @bind_params );
-
-    my @results = ();
-    my $tmpresults = $sth->fetchall_arrayref({});
-    $sth = $ldbh->prepare( $count_query );
-    $sth->execute( @bind_params );
-    my ($iTotalRecords) = $sth->fetchrow_array();
-
-    my $marc_field_mapping;
-    foreach my $row (@$tmpresults) {
-
-        # Auth values
-        foreach my $field (sort keys %$row) {
-            # If the koha field is mapped to a marc field
-            my ($f, $sf) = C4::Biblio::GetMarcFromKohaField( "items.$field" );
-            if (defined($f) and defined($sf)) {
-                # We replace the code with it's description
-                my $avs;
-                if ( exists $marc_field_mapping->{$row->{frameworkcode}}{$f}{$sf} ) {
-                    $avs = $marc_field_mapping->{$row->{frameworkcode}}{$f}{$sf};
-                } else {
-                    $avs = Koha::AuthorisedValues->search_by_marc_field({ frameworkcode => $row->{frameworkcode}, tagfield => $f, tagsubfield => $sf, });
-                    $marc_field_mapping->{$row->{frameworkcode}}{$f}{$sf} = $avs->unblessed;
-                }
-                my $authvals = { map { $_->{authorised_value} => $_->{lib} } @{ $marc_field_mapping->{$row->{frameworkcode}}{$f}{$sf} } };
-                $row->{$field} = $authvals->{$row->{$field}} if defined $authvals && defined $row->{$field} && defined $authvals->{$row->{$field}};
-            }
-        }
-        push @results, $row;
-    }
-
-    return (\@results, $iTotalRecords);
-}
