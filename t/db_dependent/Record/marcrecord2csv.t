@@ -101,7 +101,7 @@ my $authorised_value_1 =
   $builder->build( { source => 'AuthorisedValue', value => { category => 'MY_AV_1', authorised_value => 1, lib => 'This is an AV', lib_opac => 'This is an AV (opac)' } } );
 my $authorised_value_2 = $builder->build(
     { source => 'AuthorisedValue', value => { category => 'MY_AV_2', authorised_value => 2, lib => 'This is another AV', lib_opac => 'This is another AV (opac)' } } );
-$dbh->do(q|DELETE FROM marc_subfield_structure WHERE tagfield=998 and ( tagsubfield='8' or tagsubfield='9')|);
+$dbh->do(q|DELETE FROM marc_subfield_structure WHERE tagfield='998' and ( tagsubfield='8' or tagsubfield='9')|);
 $builder->build(
     { source => 'MarcSubfieldStructure', value => { authorised_value => $authorised_value_1->{category}, tagfield => 998, tagsubfield => '8', frameworkcode => $frameworkcode } }
 );
