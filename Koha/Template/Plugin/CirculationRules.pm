@@ -27,8 +27,8 @@ sub Get {
     my ( $self, $branchcode, $categorycode, $itemtype, $rule_name ) = @_;
 
     $branchcode   = undef if $branchcode eq q{}   or $branchcode eq q{*};
-    $categorycode = undef if $categorycode eq q{} or $branchcode eq q{*};
-    $itemtype     = undef if $itemtype eq q{}     or $branchcode eq q{*};
+    $categorycode = undef if $categorycode eq q{} or $categorycode eq q{*};
+    $itemtype     = undef if $itemtype eq q{}     or $itemtype  eq q{*};
 
     my $rule = Koha::CirculationRules->get_effective_rule(
         {
@@ -46,8 +46,8 @@ sub Search {
     my ( $self, $branchcode, $categorycode, $itemtype, $rule_name ) = @_;
 
     $branchcode   = undef if $branchcode eq q{}   or $branchcode eq q{*};
-    $categorycode = undef if $categorycode eq q{} or $branchcode eq q{*};
-    $itemtype     = undef if $itemtype eq q{}     or $branchcode eq q{*};
+    $categorycode = undef if $categorycode eq q{} or $categorycode eq q{*};
+    $itemtype     = undef if $itemtype eq q{}     or $itemtype eq q{*};
 
     my $rule = Koha::CirculationRules->search(
         {
