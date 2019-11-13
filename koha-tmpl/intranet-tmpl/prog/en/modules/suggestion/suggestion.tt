@@ -904,14 +904,16 @@
                 $('#managedby').val(borrowernumber);
             }
 
-            var notify = $('#notify');
-            if ( notify.length ) {
-                if ( borrowernumber == [% logged_in_user.borrowernumber | html %] || borrowernumber == [% managedby_patron.borrowernumber | html %] ) {
-                    $(notify).prop('checked', false).prop('disabled', true);
-                } else {
-                    $(notify).prop('disabled', false);
+            [% IF op == "save" %]
+                var notify = $('#notify');
+                if ( notify.length ) {
+                    if ( borrowernumber == [% logged_in_user.borrowernumber | html %] || borrowernumber == [% managedby_patron.borrowernumber | html %] ) {
+                        $(notify).prop('checked', false).prop('disabled', true);
+                    } else {
+                        $(notify).prop('disabled', false);
+                    }
                 }
-            }
+            [% END %]
         }
 
         $(document).ready(function(){
