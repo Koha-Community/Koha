@@ -137,7 +137,7 @@
                                                             [% ELSE %]&nbsp;[% END %]
                                                         </td>
                             <td>
-                                [% SET rule_value = CirculationRules.Get( rule.branchcode, rule.categorycode, rule.itemtype, 'maxissueqty' ) %]
+                                [% SET rule_value = CirculationRules.Search( rule.branchcode, rule.categorycode, rule.itemtype, 'maxissueqty' ) %]
                                 [% IF rule_value || rule_value == "0"  %]
                                     [% rule_value | html %]
                                 [% ELSE %]
@@ -145,7 +145,7 @@
                                 [% END %]
                             </td>
                             <td>
-                                [% SET rule_value = CirculationRules.Get( rule.branchcode, rule.categorycode, rule.itemtype, 'maxonsiteissueqty' ) %]
+                                [% SET rule_value = CirculationRules.Search( rule.branchcode, rule.categorycode, rule.itemtype, 'maxonsiteissueqty' ) %]
                                 [% IF rule_value || rule_value == "0" %]
                                     [% rule_value | html %]
                                 [% ELSE %]
