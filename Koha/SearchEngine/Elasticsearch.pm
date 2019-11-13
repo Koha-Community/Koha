@@ -228,7 +228,7 @@ sub get_elasticsearch_mappings {
                 # Sort is a bit special as it can be true, false, undef.
                 # We care about "true" or "undef",
                 # "undef" means to do the default thing, which is make it sortable.
-                if (!defined $sort || $sort) {
+                if (!defined $sort || $sort && $es_type ne 'integer') {
                     $mappings->{data}{properties}{ $name . '__sort' } = _get_elasticsearch_field_config('sort', $es_type);
                     $sort_fields{$self->index}{$name} = 1;
                 }
