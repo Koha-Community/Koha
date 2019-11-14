@@ -16,6 +16,7 @@ use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType qw( handle login_core );
+use Koha::Caches;
 
 use base qw(Net::Server::PreFork);
 
@@ -90,6 +91,9 @@ sub process_request {
     my $transport;
 
     $self->{config} = $config;
+
+    # Flushing L1 to make sure the request will be processed using the correct data
+    Koha::Caches->flush_L1_caches();
 
     my $sockname = getsockname(STDIN);
 
