@@ -142,12 +142,12 @@
                 [% IF ( lateorder.internalnote ) %]
                     <p class="ordernote">
                         <span id="internal-note-[% lateorder.ordernumber | html %]">[% lateorder.internalnote | html %]</span>
-                        <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Edit internal note">
+                        <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Edit internal note">
                             <i class="fa fa-pencil"></i> Edit internal note
                         </a>
                     </p>
                 [% ELSE %]
-                    <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Add internal note">
+                    <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="internal" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=internal" title="Add internal note">
                         <i class="fa fa-plus"></i> Add internal note
                     </a>
                 [% END %]
@@ -156,12 +156,12 @@
                 [% IF ( lateorder.vendornote ) %]
                     <p class="ordernote">
                         <span id="vendor-note-[% lateorder.ordernumber | html %]">[% lateorder.vendornote | html %]</span>
-                        <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Edit vendor note">
+                        <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Edit vendor note">
                             <i class="fa fa-pencil"></i> Edit vendor note
                         </a>
                     </p>
                 [% ELSE %]
-                    <a class="edit_note" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Add vendor note">
+                    <a class="edit_note noExport" data-ordernumber="[% lateorder.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% lateorder.ordernumber | html %]&type=vendor" title="Add vendor note">
                         <i class="fa fa-plus"></i> Add vendor note
                     </a>
                 [% END %]

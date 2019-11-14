@@ -27,33 +27,50 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         exportColumns = dt_parameters["exportColumns"];
     }
 
+    var export_format = {
+        body: function ( data, row, column, node ) {
+            var newnode = $(node);
+
+            if ( newnode.find(".noExport").length > 0 ) {
+                newnode = newnode.clone();
+                newnode.find(".noExport").remove();
+            }
+
+            return newnode.text().replace( /\n/g, ' ' ).trim();
+        }
+    }
+
     var export_buttons = [
         {
             extend: 'excelHtml5',
             text: _("Excel"),
             exportOptions: {
-                columns: exportColumns
+                columns: exportColumns,
+                format:  export_format
             },
         },
         {
             extend: 'csvHtml5',
             text: _("CSV"),
             exportOptions: {
-                columns: exportColumns
+                columns: exportColumns,
+                format:  export_format
             },
         },
         {
             extend: 'copyHtml5',
             text: _("Copy"),
             exportOptions: {
-                columns: exportColumns
+                columns: exportColumns,
+                format:  export_format
             },
         },
         {
             extend: 'print',
             text: _("Print"),
             exportOptions: {
-                columns: exportColumns
+                columns: exportColumns,
+                format:  export_format
             },
         }
     ];
