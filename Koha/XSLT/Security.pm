@@ -144,8 +144,9 @@ sub set_parser_options {
     my $conf = $self->{_options};
     return if !$conf;
 
-    if( exists $conf->{expand_entities} && $conf->{expand_entities} eq '0' ) {
-        # we only disable expanding, if we find an explicit 0
+    if( $conf->{expand_entities} ) {
+        _set_option($parser, 'expand_entities', 1);
+    } else {
         _set_option($parser, 'expand_entities', 0);
     }
 }
