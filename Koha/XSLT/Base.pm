@@ -1,4 +1,4 @@
-package Koha::XSLT_Handler;
+package Koha::XSLT::Base;
 
 # Copyright 2014 Rijksmuseum
 #
