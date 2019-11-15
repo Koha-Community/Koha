@@ -1,6 +1,6 @@
 package Koha::XSLT::Base;
 
-# Copyright 2014 Rijksmuseum
+# Copyright 2014, 2019 Rijksmuseum, Prosentient Systems
 #
 # This file is part of Koha.
 #
@@ -19,12 +19,12 @@ package Koha::XSLT::Base;
 
 =head1 NAME
 
-Koha::XSLT_Handler - Facilitate use of XSLT transformations
+Koha::XSLT::Base - Facilitate use of XSLT transformations
 
 =head1 SYNOPSIS
 
-    use Koha::XSLT_Handler;
-    my $xslt_engine = Koha::XSLT_Handler->new;
+    use Koha::XSLT::Base;
+    my $xslt_engine = Koha::XSLT::Base->new;
     my $output = $xslt_engine->transform($xml, $xsltfilename);
     $output = $xslt_engine->transform({ xml => $xml, file => $file });
     $output = $xslt_engine->transform({ xml => $xml, code => $code });
@@ -43,7 +43,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
 
 =head2 new
 
-    Create handler object (via Class::Accessor)
+    Create handler object
 
 =head2 transform
 
@@ -118,6 +118,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
 use Modern::Perl;
 use XML::LibXML;
 use XML::LibXSLT;
+use Koha::XSLT::Security;
 
 use base qw(Class::Accessor);
 
@@ -131,6 +132,20 @@ use constant XSLTH_ERR_4    => 'XSLTH_ERR_PARSING_CODE';
 use constant XSLTH_ERR_5    => 'XSLTH_ERR_PARSING_DATA';
 use constant XSLTH_ERR_6    => 'XSLTH_ERR_TRANSFORMING';
 use constant XSLTH_ERR_7    => 'XSLTH_NO_STRING_PASSED';
+
+=head2 new
+
+    my $xslt_engine = Koha::XSLT::Base->new;
+
+=cut
+
+sub new {
+    my ($class, $params) = @_;
+    my $self = $class->SUPER::new($params);
+    $self->{_security} = Koha::XSLT::Security->new;
+    $self->{_security}->register_callbacks;
+    return $self;
+}
 
 =head2 transform
 
@@ -195,6 +210,7 @@ sub transform {
 
     #parse input and transform
     my $parser = XML::LibXML->new();
+    $self->{_security}->set_parser_options($parser);
     my $source = eval { $parser->parse_string($xml) };
     if ($@) {
         $self->_set_error( XSLTH_ERR_5, $@ );
@@ -310,6 +326,7 @@ sub _load {
 
     #load sheet
     my $parser = XML::LibXML->new;
+    $self->{_security}->set_parser_options($parser);
     my $style_doc = eval {
         $parser->load_xml( $self->_load_xml_args($filename, $code) )
     };
@@ -318,40 +335,9 @@ sub _load {
         return;
     }
 
-    my $security = XML::LibXSLT::Security->new();
-    $security->register_callback( read_file  => sub {
-        warn "read_file called in XML::LibXSLT";
-        #i.e. when using the exsl:document() element or document() function (to read a XML file)
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-    $security->register_callback( write_file => sub {
-        warn "write_file called in XML::LibXSLT";
-        #i.e. when using the exsl:document element (or document() function?) (to write an output file of many possible types)
-        #e.g.
-        #<exsl:document href="file:///tmp/breached.txt">
-        #   <xsl:text>breached!</xsl:text>
-        #</exsl:document>
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-    $security->register_callback( read_net   => sub {
-        warn "read_net called in XML::LibXSLT";
-        #i.e. when using the document() function (to read XML from the network)
-        #e.g. <xsl:copy-of select="document('http://localhost')" />
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-    $security->register_callback( write_net  => sub {
-        warn "write_net called in XML::LibXSLT";
-        #NOTE: it's unknown how one would invoke this, but covering our bases anyway
-        my ($tctxt,$value) = @_;
-        return 0;
-    });
-
     #parse sheet
     my $xslt = XML::LibXSLT->new;
-    $xslt->security_callbacks( $security );
+    $self->{_security}->set_callbacks($xslt);
 
     $rv = $code? $digest.$codelen: $filename;
     $self->{xslt_hash}->{$rv} = eval { $xslt->parse_stylesheet($style_doc) };
@@ -375,12 +361,13 @@ sub _set_error {
     my ( $self, $errcode, $warn ) = @_;
 
     $self->{err} = $errcode; #set or clear error
-    warn 'XSLT_Handler: '. $warn if $warn && $self->{print_warns};
+    warn 'XSLT::Base: '. $warn if $warn && $self->{print_warns};
 }
 
 =head1 AUTHOR
 
     Marcel de Rooy, Rijksmuseum Netherlands
+    David Cook, Prosentient Systems
 
 =cut
 
