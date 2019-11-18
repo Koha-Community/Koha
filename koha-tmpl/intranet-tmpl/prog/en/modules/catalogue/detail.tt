@@ -359,10 +359,12 @@
                         [% IF hold %]
                             [% IF hold.waitingdate %]
                                 Waiting at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %].
-                            [% ELSE %]
+                            [% ELSIF hold.priority == 1 %]
                                 Item-level hold (placed [% hold.reservedate | $KohaDates %]) for delivery at [% Branches.GetName( hold.branchcode ) | html %].
+                            [% ELSE %]
+                                There is an item level hold on this item (priority = [% hold.priority %]).
                             [% END %]
-                            [% IF ( canreservefromotherbranches ) %]
+                            [% IF canreservefromotherbranches AND ( hold.waitingdate OR hold.priority == 1 ) %]
                                 Hold for:
                                 [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]
                             [% END %]
