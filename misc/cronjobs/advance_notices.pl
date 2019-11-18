@@ -391,7 +391,7 @@ if ($digest_per_branch) {
         send_digests({
             sth => $sth_digest,
             digest => $due_digest,
-            letter_code => 'DUEGST',
+            letter_code => 'DUEDGST',
             branchcode => $branchcode,
             get_item_info => sub {
                 my $params = shift;
@@ -420,7 +420,7 @@ if ($digest_per_branch) {
     send_digests({
         sth => $sth_digest,
         digest => $due_digest,
-        letter_code => 'DUEGST',
+        letter_code => 'DUEDGST',
         get_item_info => sub {
             my $params = shift;
             $params->{sth}->execute($params->{borrowernumber}, 0);
