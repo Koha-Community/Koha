@@ -132,7 +132,7 @@ if ( $op =~ /save/i ) {
             itemtype => $suggestion_only->{itemtype},
     });
 
-    if ( ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) && !$save_confirmed ) {
+    if ( !$suggestion_only->{suggestionid} && ( my ($duplicatebiblionumber, $duplicatetitle) = FindDuplicate($biblio) ) && !$save_confirmed ) {
         push @messages, { type => 'error', code => 'biblio_exists', id => $duplicatebiblionumber, title => $duplicatetitle };
         $template->param(
             messages => \@messages,
