@@ -632,7 +632,7 @@ sub BuildItemsData{
             $this_row{isbn}         = $biblio->biblioitem->isbn;
             $this_row{biblionumber} = $biblio->biblionumber;
             $this_row{holds}        = $biblio->holds->count;
-            $this_row{item_holds}   = Koha::Holds->search( itemnumber => $itemnumber )->count;
+            $this_row{item_holds}   = Koha::Holds->search( { itemnumber => $itemnumber } )->count;
 
 			if (%this_row) {
 				push(@big_array, \%this_row);
