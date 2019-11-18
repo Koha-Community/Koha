@@ -246,6 +246,18 @@ if ( C4::Context->preference('AcquisitionDetails') ) {
     );
 }
 
+if ( C4::Context->preference('suggestion') ) {
+    my $suggestions = Koha::Suggestions->search(
+        {
+            biblionumber => $biblionumber,
+        },
+        {
+            order_by => { -desc => 'suggesteddate' }
+        }
+    );
+    $template->param( suggestions => $suggestions );
+}
+
 if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
 }

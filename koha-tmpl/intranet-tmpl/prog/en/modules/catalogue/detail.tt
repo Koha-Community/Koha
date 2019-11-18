@@ -185,6 +185,7 @@
 [% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
+[% IF suggestions.count %]<li><a href="#suggestion_details">Suggestion details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
 [% IF ( LocalCoverImages ) %]
     [% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]
@@ -695,6 +696,74 @@ Note that permanent location is a code, and location may be an authval.
 </div>
 [% END %]
 
+[% IF suggestions.count %]
+    <div id="suggestion_details">
+        <table id="suggestions" class="sorted">
+            <thead>
+                <tr>
+                    <th class="NoSort">&nbsp;</th>
+                    <th class="anti-the">Suggestion</th>
+                    <th>Suggested by - on</th>
+                    <th>Managed by - on</th>
+                    <th>Last modification by - on</th>
+                    <th>Library</th>
+                    <th>Fund</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            [% FOREACH suggestion IN suggestions %]
+                <tr>
+                    <td>[% suggestion.suggestionid | html %]</td>
+                    <td>
+                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestion.suggestionid | uri %]&amp;op=show" title="suggestion" >
+                            [% suggestion.title | html %][% IF ( suggestion.author ) %], by [% suggestion.author | html %][% END %]</a>
+                        <br />
+                        [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
+                        [% IF ( suggestion.volumedesc ) %]; Volume:<i>[% suggestion.volumedesc | html %]</i> [% END %]
+                        [% IF ( suggestion.isbn ) %]; ISBN:<i>[% suggestion.isbn | html %]</i> [% END %][% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %][% IF ( suggestion.publicationyear ) %] in <i>[% suggestion.publicationyear | html %]</i> [% END %][% IF ( suggestion.place ) %] in <i>[% suggestion.place | html %]</i> [% END %][% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %][% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestion.note ) %]<div class="note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
+                        [% IF suggestion.archived %]<br /><i class="fa fa-archive"> Archived[% END %]
+                    </td>
+                    <td>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>
+                        [% IF suggestion.suggesteddate %] - [% suggestion.suggesteddate | $KohaDates %][% END %]
+                    </td>
+                    <td>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.managedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.manager %]</a>
+                        [% IF suggestion.manageddate %] - [% suggestion.manageddate | $KohaDates %][% END %]
+                    </td>
+                    <td>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.lastmodificationby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.last_modifier %]</a>
+                        [% IF suggestion.lastmodificationdate %] - [% suggestion.lastmodificationdate | $KohaDates %][% END %]
+                    </td>
+                    <td>
+                        [% Branches.GetName( suggestion.branchcode ) | html %]
+                    </td>
+                    <td>
+                        [% suggestion.fund.budget_name | html %]
+                    </td>
+                    <td>
+                        [% IF    suggestion.STATUS == 'ASKED'     %]Pending
+                        [% ELSIF suggestion.STATUS == 'ACCEPTED'  %]Accepted
+                        [% ELSIF suggestion.STATUS == 'ORDERED'   %]Ordered
+                        [% ELSIF suggestion.STATUS == 'REJECTED'  %]Rejected
+                        [% ELSIF suggestion.STATUS == 'CHECKED'   %]Checked
+                        [% ELSIF suggestion.STATUS == 'AVAILABLE' %]Available
+                        [% ELSIF AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) %]
+                            [% AuthorisedValues.GetByCode( 'SUGGEST_STATUS', suggestion.STATUS ) | html %]
+                        [% ELSE %]Status unknown
+                        [% END %]
+                        [% IF suggestion.reason %]
+                            <br />([% suggestion.reason | html %])
+                        [% END %]
+                    </td>
+                </tr>
+                [% END %]
+            </tbody>
+        </table>
+    </div>
+[% END %]
+
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions"><h4>Editions</h4>
 <table>
@@ -1064,6 +1133,16 @@ Note that permanent location is a code, and location may be an authval.
                         { "aTargets": "title-string", "sType": "title-string" }
                     ]
                 }, columns_settings);
+            [% END %]
+
+            [% IF suggestions.count %]
+                $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "aoColumnDefs": [
+                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                    ],
+                    "sPaginationType": "full"
+                }));
             [% END %]
         });
     </script>
