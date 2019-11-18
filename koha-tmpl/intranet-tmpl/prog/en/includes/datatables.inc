@@ -28,5 +28,8 @@
     var MSG_DT_COPY_KEYS = _("Press ctrl or ⌘ + C to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.");
     var MSG_DT_COPY_SUCCESS_ONE = _("Copied one row to clipboard");
     var MSG_DT_COPY_SUCCESS_X = _("Copied %d rows to clipboard");
+    var MSG_CLEAR_FILTER = _("Clear filter");
+    var MSG_ACTIVATE_FILTERS = _("Activate filters");
+    var MSG_DEACTIVATE_FILTERS = _("Deactivate filters");
 </script>
 [% Asset.js("js/datatables.js") | $raw %]
