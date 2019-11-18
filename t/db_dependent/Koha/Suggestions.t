@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2015 Koha Development team
+# Copyright 2015-2019 Koha Development team
 #
 # This file is part of Koha
 #
@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Test::Exception;
 
 use Koha::Suggestion;
@@ -169,5 +169,64 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related budget is deleted" );
 
     $schema->storage->dbh->{PrintError} = $print_error;
+    $schema->storage->txn_rollback;
+};
+
+subtest 'manager, suggester, rejecter, last_modifier' => sub {
+    plan tests => 8;
+    $schema->storage->txn_begin;
+
+    my $suggestion = $builder->build_object( { class => 'Koha::Suggestions' } );
+
+    is( ref( $suggestion->manager ),
+        'Koha::Patron',
+        '->manager should have returned a Koha::Patron object' );
+    is( ref( $suggestion->rejecter ),
+        'Koha::Patron',
+        '->rejecter should have returned a Koha::Patron object' );
+    is( ref( $suggestion->suggester ),
+        'Koha::Patron',
+        '->suggester should have returned a Koha::Patron object' );
+    is( ref( $suggestion->last_modifier ),
+        'Koha::Patron',
+        '->last_modifier should have returned a Koha::Patron object' );
+
+    $suggestion->set(
+        {
+            managedby          => undef,
+            rejectedby         => undef,
+            suggestedby        => undef,
+            lastmodificationby => undef
+        }
+    );
+
+    is( $suggestion->manager, undef,
+        '->manager should have returned undef if no manager set' );
+    is( $suggestion->rejecter, undef,
+        '->rejecter should have returned undef if no rejecter set' );
+    is( $suggestion->suggester, undef,
+        '->suggester should have returned undef if no suggester set' );
+    is( $suggestion->last_modifier,
+        undef,
+        '->last_modifier should have returned undef if no last_modifier set' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'fund' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $suggestion = $builder->build_object( { class => 'Koha::Suggestions' } );
+    is( ref( $suggestion->fund ),
+        'Koha::Acquisition::Fund',
+        '->fund should have returned a Koha::Acquisition::Fund object' );
+
+    $suggestion->set( { budgetid => undef } );
+
+    is( $suggestion->fund, undef,
+        '->fund should have returned undef if not fund set' );
+
     $schema->storage->txn_rollback;
 };

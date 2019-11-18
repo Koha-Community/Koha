@@ -71,9 +71,67 @@ sub suggester {
     return Koha::Patron->_new_from_dbic($suggester_rs);
 }
 
-=head2 Internal methods
+=head3 manager
 
-=head3 _type
+my $manager = $suggestion->manager;
+
+Returns the manager of the suggestion (Koha::Patron for managedby field)
+
+=cut
+
+sub manager {
+    my ($self) = @_;
+    my $manager_rs = $self->_result->managedby;
+    return unless $manager_rs;
+    return Koha::Patron->_new_from_dbic($manager_rs);
+}
+
+=head3 rejecter
+
+my $rejecter = $suggestion->rejecter;
+
+Returns the rejecter of the suggestion (Koha::Patron for rejectebby field)
+
+=cut
+
+sub rejecter {
+    my ($self) = @_;
+    my $rejecter_rs = $self->_result->managedby;
+    return unless $rejecter_rs;
+    return Koha::Patron->_new_from_dbic($rejecter_rs);
+}
+
+=head3 last_modifier
+
+my $last_modifier = $suggestion->last_modifier;
+
+Returns the librarian who last modified the suggestion (Koha::Patron for lastmodificationby field)
+
+=cut
+
+sub last_modifier {
+    my ($self) = @_;
+    my $last_modifier_rs = $self->_result->managedby;
+    return unless $last_modifier_rs;
+    return Koha::Patron->_new_from_dbic($last_modifier_rs);
+}
+
+=head3 fund
+
+my $fund = $suggestion->fund;
+
+Return the fund associated to the suggestion
+
+=cut
+
+sub fund {
+    my ($self) = @_;
+    my $fund_rs = $self->_result->budgetid;
+    return unless $fund_rs;
+    return Koha::Acquisition::Fund->_new_from_dbic($fund_rs);
+}
+
+=head3 type
 
 =cut
 
