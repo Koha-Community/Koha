@@ -580,7 +580,7 @@
 
 [% IF Koha.Preference('AcquisitionDetails') %]
 <div id="acq_details">
-  [% IF orders %]
+  [% IF orders.count %]
     <table id="orders">
       <thead>
         <tr>
