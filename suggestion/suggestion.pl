@@ -370,7 +370,7 @@ if ($op=~/else/) {
                             "suggestionscount"=>scalar(@$suggestions),             
                             'suggestions_loop'=>$suggestions,
                             'reasonsloop'     => $reasonsloop,
-                            };
+                            } if @$suggestions;
 
         delete $$suggestion_ref{$displayby} unless $definedvalue;
     }
