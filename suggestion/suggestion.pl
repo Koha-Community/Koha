@@ -97,7 +97,7 @@ my $filter_archived = $input->param('filter_archived');
 my $reasonsloop     = GetAuthorisedValues("SUGGEST");
 
 # filter informations which are not suggestion related.
-my $suggestion_ref  = $input->Vars;
+my $suggestion_ref  = { %{$input->Vars} }; # Copying, otherwise $input will be modified
 
 # get only the columns of Suggestion
 my $schema = Koha::Database->new()->schema;
