@@ -425,19 +425,37 @@ sub nb_rows {
         $derived_name .= 'x';
     }
 
-    my $sth = C4::Context->dbh->prepare(qq{
-        SELECT COUNT(*) FROM
-        ( $sql ) $derived_name
-    });
 
-    $sth->execute();
+    my $dbh = C4::Context->dbh;
+    my ( $sth, $n );
 
-    if ( $sth->errstr ) {
-        return 0;
+    my $RaiseError = $dbh->{RaiseError};
+    my $PrintError = $dbh->{PrintError};
+    $dbh->{RaiseError} = 1;
+    $dbh->{PrintError} = 0;
+    eval {
+        $sth = $dbh->prepare(qq{
+            SELECT COUNT(*) FROM
+            ( $sql ) $derived_name
+        });
+
+        $sth->execute();
+    };
+    $dbh->{RaiseError} = $RaiseError;
+    $dbh->{PrintError} = $PrintError;
+    if ($@) { # To catch "Duplicate column name" caused by the derived table, or any other syntax error
+        $sth = $dbh->prepare($sql);
+        $sth->execute;
+        # Loop through the complete results, fetching 1,000 rows at a time.  This
+        # lowers memory requirements but increases execution time.
+        while (my $rows = $sth->fetchall_arrayref(undef, 1000)) {
+            $n += @$rows;
+        }
+        return $n;
     }
-    else {
-       return $sth->fetch->[0];
-    }
+
+    my $results = $sth->fetch;
+    return $results ? $results->[0] : 0;
 }
 
 =head2 execute_query
