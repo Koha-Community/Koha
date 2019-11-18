@@ -314,13 +314,7 @@ foreach my $item (@items) {
     my $item_object = Koha::Items->find( $item->{itemnumber} );
     my $holds = $item_object->current_holds;
     if ( my $first_hold = $holds->next ) {
-        my $patron = Koha::Patrons->find( $first_hold->borrowernumber );
-        $item->{backgroundcolor} = 'reserved';
-        $item->{reservedate}     = $first_hold->reservedate;
-        $item->{ReservedFor}     = $patron,
-        $item->{ExpectedAtLibrary}      = $first_hold->branchcode;
-        # Check waiting status
-        $item->{waitingdate} = $first_hold->waitingdate;
+        $item->{first_hold} = $first_hold;
     }
 
     if ( my $checkout = $item_object->checkout ) {

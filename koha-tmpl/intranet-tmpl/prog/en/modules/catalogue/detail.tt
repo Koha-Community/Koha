@@ -355,18 +355,19 @@
                             [% END %]
                         [% END %]
 
-                        [% IF ( item.reservedate ) %]
-                            [% IF ( item.waitingdate ) %]
-                                Waiting at [% Branches.GetName( item.ExpectedAtLibrary ) | html %] since [% item.waitingdate | $KohaDates %].
+                        [% SET hold = item.first_hold %]
+                        [% IF hold %]
+                            [% IF hold.waitingdate %]
+                                Waiting at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %].
                             [% ELSE %]
-                                Item-level hold (placed [% item.reservedate | $KohaDates %]) for delivery at [% Branches.GetName( item.ExpectedAtLibrary ) | html %].
+                                Item-level hold (placed [% hold.reservedate | $KohaDates %]) for delivery at [% Branches.GetName( hold.branchcode ) | html %].
                             [% END %]
                             [% IF ( canreservefromotherbranches ) %]
                                 Hold for:
-                                [% INCLUDE 'patron-title.inc' patron=item.ReservedFor hide_patron_infos_if_needed=1 %]
+                                [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]
                             [% END %]
                         [% END %]
-                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) %]
+                        [% UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold ) %]
                             Available
                         [% END %]
 
