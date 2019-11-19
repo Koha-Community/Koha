@@ -222,14 +222,14 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 22;
+        plan tests => 25;
 
         $schema->storage->txn_begin;
 
         my $authorized_patron = $builder->build_object(
             {
                 class => 'Koha::Patrons',
-                value => { flags => 2**4 } # borrowers flag = 4
+                value => { flags => 1 }
             }
         );
         my $password = 'thePassword123';
@@ -329,6 +329,22 @@ subtest 'update() tests' => sub {
 
         is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
+
+        my $superlibrarian = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { flags => 1 }
+            }
+        );
+
+        $newpatron->{cardnumber} = $superlibrarian->cardnumber;
+        $newpatron->{userid}     = $superlibrarian->userid;
+        $newpatron->{email}      = 'nosense@no.no';
+
+        $authorized_patron->flags( 2**4 )->store; # borrowers flag = 4
+        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $superlibrarian->borrowernumber => json => $newpatron )
+          ->status_is(403, "Non-superlibrarian user change of superlibrarian email forbidden")
+          ->json_is( { error => "Not enough privileges to change a superlibrarian's email" } );
 
         $schema->storage->txn_rollback;
     };
