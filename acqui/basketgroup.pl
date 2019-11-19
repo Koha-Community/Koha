@@ -330,9 +330,10 @@ if ( $op eq "add" ) {
 # export a closed basketgroup in csv
 #
     my $basketgroupid = $input->param('basketgroupid');
+    my $basketgroup = GetBasketgroup($basketgroupid);
     print $input->header(
         -type       => 'text/csv',
-        -attachment => 'basketgroup' . $basketgroupid . '.csv',
+        -attachment => ( $basketgroup->{name} || $basketgroupid ) . '.csv'
     );
     print GetBasketGroupAsCSV( $basketgroupid, $input );
     exit;
