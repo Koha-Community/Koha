@@ -1361,6 +1361,19 @@ sub has_permission {
     return C4::Auth::haspermission( $self->userid, $flagsrequired );
 }
 
+=head3 is_superlibrarian
+
+  my $is_superlibrarian = $patron->is_superlibrarian;
+
+Return true if the patron is a superlibrarian.
+
+=cut
+
+sub is_superlibrarian {
+    my ($self) = @_;
+    return $self->has_permission( { superlibrarian => 1 } );
+}
+
 =head3 is_adult
 
 my $is_adult = $patron->is_adult
