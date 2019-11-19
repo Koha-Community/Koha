@@ -520,6 +520,13 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         }
 
         my $patron = Koha::Patrons->find( $borrowernumber );
+
+        if ($NoUpdateEmail) {
+            delete $newdata{'email'};
+            delete $newdata{'emailpro'};
+            delete $newdata{'B_email'};
+        }
+
         $newdata{debarredcomment} = $newdata{debarred_comment};
         delete $newdata{debarred_comment};
         delete $newdata{password2};
