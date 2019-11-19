@@ -480,7 +480,11 @@
       <label for="email">
       [% END %]
       Primary email: </label>
-        <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
+      [% IF ( NoUpdateEmail ) %]
+          <input type="text" id="email" name="email" size="45" value="[% email | html %]" disabled="disabled" />
+      [% ELSE %]
+          <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
+      [% END %]
 	  [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
     </li>
@@ -493,7 +497,11 @@
       <label for="emailpro">
       [% END %]
       Secondary email: </label>
-        <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
+      [% IF ( NoUpdateEmail ) %]
+          <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" disabled="disabled" />
+      [% ELSE %]
+          <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
+      [% END %]
 	  [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
