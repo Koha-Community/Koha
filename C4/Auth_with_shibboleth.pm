@@ -103,9 +103,14 @@ sub checkpw_shib {
     $debug and warn "User Shibboleth-authenticated as: $match";
 
     # Does the given shibboleth attribute value ($match) match a valid koha user ?
-    my $borrower =
-      Koha::Database->new()->schema()->resultset('Borrower')
-      ->find( { $config->{matchpoint} => $match } );
+    my $borrowers = Koha::Patrons->search( { $config->{matchpoint} => $match } );
+    if ( $borrowers->count > 1 ){
+        # If we have more than 1 borrower the matchpoint is not unique
+        # we cannot know which patron is the correct one, so we should fail
+         $debug and warn "There are several users with $config->{matchpoint} of $match, matchpoints must be unique";
+        return 0;
+    }
+    my $borrower = $borrowers->next;
     if ( defined($borrower) ) {
         if ($config->{'sync'}) {
             _sync($borrower->borrowernumber, $config, $match);

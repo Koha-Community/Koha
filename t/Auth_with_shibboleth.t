@@ -166,7 +166,7 @@ subtest "get_login_shib tests" => sub {
 
 ## checkpw_shib
 subtest "checkpw_shib tests" => sub {
-    plan tests => 21;
+    plan tests => 24;
 
     my $shib_login;
     my ( $retval, $retcard, $retuserid );
@@ -174,8 +174,10 @@ subtest "checkpw_shib tests" => sub {
     # Setup Mock Database Data
     fixtures_ok [
         'Borrower' => [
-            [qw/cardnumber userid surname address city/],
-            [qw/testcardnumber test1234 renvoize myaddress johnston/],
+            [qw/cardnumber userid surname address city email/],
+            [qw/testcardnumber test1234 renvoize myaddress johnston  /],
+            [qw/testcardnumber1 test12345 clamp1 myaddress quechee kid@clamp.io/],
+            [qw/testcardnumber2 test123456 clamp2 myaddress quechee kid@clamp.io/],
         ],
         'Category' => [ [qw/categorycode default_privacy/], [qw/S never/], ]
       ],
@@ -201,6 +203,29 @@ subtest "checkpw_shib tests" => sub {
     }
     [], "bad user with no debug";
     is( $retval, "0", "user not authenticated" );
+
+    # duplicated matchpoint
+    $matchpoint = 'email';
+    $mapping{'email'} = { is => 'email' };
+    $shib_login = 'kid@clamp.io';
+    warnings_are {
+        ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    }
+    [], "bad user with no debug";
+    is( $retval, "0", "user not authenticated if duplicated matchpoint" );
+    $C4::Auth_with_shibboleth::debug = '1';
+    warnings_are {
+        ( $retval, $retcard, $retuserid ) = checkpw_shib($shib_login);
+    }
+    [
+        q/checkpw_shib/,
+        q/koha borrower field to match: email/,
+        q/shibboleth attribute to match: email/,
+        q/User Shibboleth-authenticated as: kid@clamp.io/,
+        q/There are several users with email of kid@clamp.io, matchpoints must be unique/
+    ], "duplicated matchpoint warned with debug";
+    $C4::Auth_with_shibboleth::debug = '0';
+    reset_config();
 
     # autocreate user
     $autocreate  = 1;
