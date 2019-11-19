@@ -7,7 +7,7 @@
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
 [% IF firstPage %]
-     [% SET OverDriveEnabled = Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
+     [% SET OverDriveEnabled = Koha.Preference('OverDriveLibraryID') && Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
      [% SET RecordedBooksEnabled = Koha.Preference('RecordedBooksLibraryID') && Koha.Preference('RecordedBooksClientSecret') %]
 [% END %]
 
