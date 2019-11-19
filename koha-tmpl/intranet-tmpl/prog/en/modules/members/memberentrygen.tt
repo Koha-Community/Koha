@@ -693,7 +693,11 @@ legend:hover {
                                                     [% END %]
                                                         Primary email:
                                                     </label>
+                                                    [% IF ( NoUpdateEmail ) %]
+                                                    <input type="text" id="email" name="email" size="45" value="[% patron.email | html %]" disabled="disabled" />
+                                                    [% ELSE %]
                                                     <input type="text" id="email" name="email" size="45" value="[% patron.email | html %]" />
+                                                    [% END %]
                                                     [% IF ( mandatoryemail ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -710,12 +714,16 @@ legend:hover {
                                                     [% END %]
                                                         Secondary email:
                                                     </label>
+                                                    [% IF ( NoUpdateEmail ) %]
+                                                    <input type="text" id="emailpro" name="emailpro" size="45" value="[% patron.emailpro | html %]" disabled="disabled"/>
+                                                    [% ELSE %]
                                                     <input type="text" id="emailpro" name="emailpro" size="45" value="[% patron.emailpro | html %]" />
+                                                    [% END %]
                                                     [% IF ( mandatoryemailpro ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
                                                 </li>
-                                            [% END # /UNLESS noemailpro %]
+                                            [% END #/UNLESS noemailpro %]
 
                                             [% UNLESS nofax %]
                                                 <li>

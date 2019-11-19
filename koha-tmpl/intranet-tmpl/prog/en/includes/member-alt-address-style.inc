@@ -222,7 +222,11 @@
                 <label for="B_email">
             [% END %]
             Email: </label>
+            [% IF ( NoUpdateEmail ) %]
+            <input type="text" id="B_email" name="B_email" size="45" value="[% patron.B_email | html %]" disabled="disabled"/>
+            [% ELSE %]
             <input type="text" id="B_email" name="B_email" size="45" value="[% patron.B_email | html %]" />
+            [% END %]
             [% IF ( mandatoryB_email ) %]<span class="required">Required</span>[% END %]
         </li>
     [% END %]
