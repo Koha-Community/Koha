@@ -1331,6 +1331,14 @@ sub libraries_where_can_see_patrons {
     return @restricted_branchcodes;
 }
 
+=head3 has_permission
+
+my $permission = $patron->has_permission($required);
+
+See C4::Auth::haspermission for details of syntax for $required
+
+=cut
+
 sub has_permission {
     my ( $self, $flagsrequired ) = @_;
     return unless $self->userid;
