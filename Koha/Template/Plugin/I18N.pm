@@ -117,7 +117,7 @@ sub tpx {
 
 =head2 tnp
 
-    [% I18N.tnp("context", "item", "items") %]
+    [% I18N.tnp("context", "item", "items", count) %]
 
 =cut
 
@@ -128,13 +128,13 @@ sub tnp {
 
 =head2 tnpx
 
-    [% I18N.tnpx("context", "{count} item", "{count} items", { count = count }) %]
+    [% I18N.tnpx("context", "{count} item", "{count} items", count, { count = count }) %]
 
 =cut
 
 sub tnpx {
     my ($self, $msgctxt, $msgid, $msgid_plural, $count, $vars) = @_;
-    return __np($msgctxt, $msgid, $msgid_plural, $count, %$vars);
+    return __npx($msgctxt, $msgid, $msgid_plural, $count, %$vars);
 }
 
 1;
