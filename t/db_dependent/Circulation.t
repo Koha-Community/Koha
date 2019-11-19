@@ -1955,34 +1955,31 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
 subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
     plan tests => 2;
 
-    my $library = $builder->build( { source => 'Branch' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron1 = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value  => {
-                branchcode => $library->{branchcode},
-                firstname => "Happy",
-                surname => "Gilmore",
+            value => {
+                library      => $library->branchcode,
+                categorycode => $patron_category->{categorycode}
             }
         }
     );
     my $patron2 = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value  => {
-                branchcode => $library->{branchcode},
-                firstname => "Billy",
-                surname => "Madison",
+            value => {
+                library      => $library->branchcode,
+                categorycode => $patron_category->{categorycode}
             }
         }
     );
 
-    C4::Context->_new_userenv('xxx');
-    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Random Library', '', '', '');
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
 
     my $item = $builder->build_sample_item(
         {
-            library      => $library->{branchcode},
+            library      => $library->branchcode,
         }
     )->unblessed;
 
