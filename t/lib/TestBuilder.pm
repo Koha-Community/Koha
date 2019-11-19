@@ -401,7 +401,9 @@ sub _buildColumnValue {
         }
         push @$retvalue, $value->{$col_name};
     } elsif( exists $self->{default_values}{$source}{$col_name} ) {
-        push @$retvalue, $self->{default_values}{$source}{$col_name};
+        my $v = $self->{default_values}{$source}{$col_name};
+        $v = &$v() if ref($v) eq 'CODE';
+        push @$retvalue, $v;
     } else {
         my $data_type = $col_info->{data_type};
         $data_type =~ s| |_|;
@@ -550,6 +552,8 @@ sub _gen_default_values {
         Category => {
             enrolmentfee => 0,
             reservefee   => 0,
+            # Not X, used for statistics
+            category_type => sub { return [ qw( A C S I P ) ]->[int(rand(5))] },
         },
         Itemtype => {
             rentalcharge => 0,

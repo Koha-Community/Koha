@@ -339,12 +339,23 @@ subtest 'Date handling' => sub {
 };
 
 subtest 'Default values' => sub {
-    plan tests => 2;
+    plan tests => 3;
+
     $builder = t::lib::TestBuilder->new;
     my $item = $builder->build( { source => 'Item' } );
     is( $item->{more_subfields_xml}, undef, 'This xml field should be undef' );
     $item = $builder->build( { source => 'Item', value => { more_subfields_xml => 'some xml' } } );
     is( $item->{more_subfields_xml}, 'some xml', 'Default should not overwrite assigned value' );
+
+    subtest 'generated dynamically (coderef)' => sub {
+        plan tests => 2;
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        like( $patron->category->category_type, qr{^(A|C|S|I|P|)$}, );
+
+        my $patron_category_X = $builder->build_object({ class => 'Koha::Patron::Categories', value => { category_type => 'X' } });
+        $patron = $builder->build_object({ class => 'Koha::Patrons', value => {categorycode => $patron_category_X->categorycode} });
+        is( $patron->category->category_type, 'X', );
+    };
 };
 
 subtest 'build_object() tests' => sub {
