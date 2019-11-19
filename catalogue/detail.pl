@@ -250,12 +250,14 @@ if ( C4::Context->preference('suggestion') ) {
     my $suggestions = Koha::Suggestions->search(
         {
             biblionumber => $biblionumber,
+            archived     => 0,
         },
         {
             order_by => { -desc => 'suggesteddate' }
         }
     );
-    $template->param( suggestions => $suggestions );
+    my $nb_archived_suggestions = Koha::Suggestions->search({ biblionumber => $biblionumber, archived => 1 })->count;
+    $template->param( suggestions => $suggestions, nb_archived_suggestions => $nb_archived_suggestions );
 }
 
 if ( defined $dat->{'itemtype'} ) {

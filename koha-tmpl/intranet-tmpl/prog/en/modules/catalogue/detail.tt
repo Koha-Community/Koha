@@ -6,6 +6,7 @@
 [% USE Branches %]
 [% USE Biblio %]
 [% USE ColumnsSettings %]
+[% PROCESS 'i18n.inc' %]
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
@@ -698,6 +699,9 @@ Note that permanent location is a code, and location may be an authval.
 
 [% IF suggestions.count %]
     <div id="suggestion_details">
+        [% IF nb_archived_suggestions > 0 %]
+            <p>[% tnpx('pluralization', 'There is one archived suggestion.', 'There are {count} archived suggestions.', nb_archived_suggestions, { count = nb_archived_suggestions }) | $raw  %]
+        [% END %]
         <table id="suggestions" class="sorted">
             <thead>
                 <tr>
@@ -722,7 +726,6 @@ Note that permanent location is a code, and location may be an authval.
                         [% IF ( suggestion.copyrightdate ) %]&copy; [% suggestion.copyrightdate | html %] [% END %]
                         [% IF ( suggestion.volumedesc ) %]; Volume:<i>[% suggestion.volumedesc | html %]</i> [% END %]
                         [% IF ( suggestion.isbn ) %]; ISBN:<i>[% suggestion.isbn | html %]</i> [% END %][% IF ( suggestion.publishercode ) %]; Published by [% suggestion.publishercode | html %] [% END %][% IF ( suggestion.publicationyear ) %] in <i>[% suggestion.publicationyear | html %]</i> [% END %][% IF ( suggestion.place ) %] in <i>[% suggestion.place | html %]</i> [% END %][% IF ( suggestion.collectiontitle ) %]; [% suggestion.collectiontitle | html %] [% END %][% IF ( suggestion.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestion.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestion.note ) %]<div class="suggestion_note"><i class="fa fa-comment"></i> [% suggestion.note | html %]</div>[% END %]
-                        [% IF suggestion.archived %]<br /><i class="fa fa-archive"> Archived[% END %]
                     </td>
                     <td>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestion.suggestedby | uri %]">[% INCLUDE 'patron-title.inc' patron => suggestion.suggester %]</a>
