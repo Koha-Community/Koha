@@ -193,21 +193,25 @@ subtest 'to_api() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'login_attempts tests' => sub {
-    plan tests => 1;
+subtest 'is_superlibrarian() tests' => sub {
+
+    plan tests => 2;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
+            value => {
+                flags => 16
+            }
         }
     );
-    my $patron_info = $patron->unblessed;
-    $patron->delete;
-    delete $patron_info->{login_attempts};
-    my $new_patron = Koha::Patron->new($patron_info)->store;
-    is( $new_patron->discard_changes->login_attempts, 0, "login_attempts defaults to 0 as expected");
+
+    ok( !$patron->is_superlibrarian, 'Patron is not a superlibrarian and the method returns the correct value' );
+
+    $patron->flags(1)->store->discard_changes;
+    ok( $patron->is_superlibrarian, 'Patron is a superlibrarian and the method returns the correct value' );
 
     $schema->storage->txn_rollback;
 };
