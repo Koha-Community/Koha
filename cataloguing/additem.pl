@@ -154,17 +154,23 @@ sub generate_subfield_form {
 
         my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
         if (!$value && $subfieldlib->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
-            my $CNtag       = substr($pref_itemcallnumber, 0, 3);
-            my $CNsubfield  = substr($pref_itemcallnumber, 3, 1);
-            my $CNsubfield2 = substr($pref_itemcallnumber, 4, 1);
+            my $CNtag       = substr( $pref_itemcallnumber, 0, 3 ); # 3-digit tag number
+            my $CNsubfields = substr( $pref_itemcallnumber, 3 ); # Any and all subfields
+            my @subfields = ( $CNsubfields =~ m/./g ); # Split into single-character elements
             my $temp2 = $temp->field($CNtag);
+
             if ($temp2) {
-                $value = join ' ', $temp2->subfield($CNsubfield) || q{}, $temp2->subfield($CNsubfield2) || q{};
+                my @selectedsubfields;
+                foreach my $subfieldcode( @subfields ){
+                    push @selectedsubfields, $temp2->subfield( $subfieldcode );
+                }
+                $value = join( ' ', @selectedsubfields );
+
                 #remove any trailing space incase one subfield is used
                 $value =~ s/^\s+|\s+$//g;
             }
         }
-        
+
         if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode' && !$value){
 	    my $input = new CGI;
 	    $value = $input->param('barcode');
