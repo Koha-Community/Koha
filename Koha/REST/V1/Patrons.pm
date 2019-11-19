@@ -194,7 +194,18 @@ sub update {
      }
 
     return try {
-        my $body = _to_model($c->validation->param('body'));
+
+        my $body = $c->validation->param('body');
+        my $user = $c->stash('koha.user');
+
+        if ( $patron->is_superlibrarian and !$user->is_superlibrarian ) {
+            return $c->render(
+                status  => 403,
+                openapi => { error => "Not enough privileges to change a superlibrarian's email" }
+            ) if $body->{email} ne $patron->email ;
+        }
+
+        $body = _to_model($c->validation->param('body'));
 
         $patron->set($body)->store;
         $patron->discard_changes;
