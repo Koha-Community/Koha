@@ -122,6 +122,7 @@ $(document).ready(function() {
                     },
                     {
                         "bSortable": false,
+                        "visible": SuspendHoldsIntranet,
                         "mDataProp": function( oObj ) {
                             holds[oObj.reserve_id] = oObj; //Store holds for later use
 
