@@ -22,6 +22,7 @@ use Data::Dumper;
 
 use C4::Log qw(logaction);
 
+use Koha::Account::CreditType;
 use Koha::Account::DebitType;
 use Koha::Account::Offsets;
 use Koha::Database;
@@ -81,6 +82,19 @@ sub checkout {
     $self->{_checkout} ||= Koha::Checkouts->find( $self->issue_id );
     $self->{_checkout} ||= Koha::Old::Checkouts->find( $self->issue_id );
     return $self->{_checkout};
+}
+
+=head3 credit_type
+
+Return the credit_type linked to this account line
+
+=cut
+
+sub credit_type {
+    my ( $self ) = @_;
+    my $rs = $self->_result->credit_type_code;
+    return unless $rs;
+    return Koha::Account::CreditType->_new_from_dbic( $rs );
 }
 
 =head3 debit_type
