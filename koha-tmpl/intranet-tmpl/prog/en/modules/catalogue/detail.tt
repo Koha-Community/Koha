@@ -872,7 +872,7 @@
                 if (itemnumbers.length > 0) {
                     var url = '/cgi-bin/koha/tools/batchMod.pl?op=show&del=1';
                     url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
-                    url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
+                    url += '&src=CATALOGUING';
                     $('a.itemselection_action_delete').attr('href', url);
                 } else {
                     return false;
@@ -888,7 +888,7 @@
                 if (itemnumbers.length > 0) {
                     var url = '/cgi-bin/koha/tools/batchMod.pl?op=show';
                     url += '&itemnumber=' + itemnumbers.join('&itemnumber=');
-                    url += '&src=' + '[% "/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber" |uri %]';
+                    url += '&src=CATALOGUING';
                     $('a.itemselection_action_modify').attr('href', url);
                 } else {
                     return false;
