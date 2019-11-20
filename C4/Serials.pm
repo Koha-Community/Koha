@@ -1305,37 +1305,53 @@ sub ModSubscription {
     $itemtype, $previousitemtype, $mana_id
     ) = @_;
 
-    my $dbh   = C4::Context->dbh;
-    my $query = "UPDATE subscription
-        SET librarian=?, branchcode=?, aqbooksellerid=?, cost=?, aqbudgetid=?,
-            startdate=?, periodicity=?, firstacquidate=?, irregularity=?,
-            numberpattern=?, locale=?, numberlength=?, weeklength=?, monthlength=?,
-            lastvalue1=?, innerloop1=?, lastvalue2=?, innerloop2=?,
-            lastvalue3=?, innerloop3=?, status=?, biblionumber=?,
-            callnumber=?, notes=?, letter=?, manualhistory=?,
-            internalnotes=?, serialsadditems=?, staffdisplaycount=?,
-            opacdisplaycount=?, graceperiod=?, location = ?, enddate=?,
-            skip_serialseq=?, itemtype=?, previousitemtype=?, mana_id=?
-        WHERE subscriptionid = ?";
-
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $auser,           $branchcode,     $aqbooksellerid, $cost,
-        $aqbudgetid,      $startdate,      $periodicity,    $firstacquidate,
-        $irregularity,    $numberpattern,  $locale,         $numberlength,
-        $weeklength,      $monthlength,    $lastvalue1,     $innerloop1,
-        $lastvalue2,      $innerloop2,     $lastvalue3,     $innerloop3,
-        $status,          $biblionumber,   $callnumber,     $notes,
-        $letter,          ($manualhistory ? $manualhistory : 0),
-        $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
-        $graceperiod,     $location,       $enddate,        $skip_serialseq,
-        $itemtype,        $previousitemtype, $mana_id,
-        $subscriptionid
-    );
-    my $rows = $sth->rows;
+    my $subscription = Koha::Subscriptions->find($subscriptionid);
+    $subscription->set(
+        {
+            librarian         => $auser,
+            branchcode        => $branchcode,
+            aqbooksellerid    => $aqbooksellerid,
+            cost              => $cost,
+            aqbudgetid        => $aqbudgetid,
+            biblionumber      => $biblionumber,
+            startdate         => $startdate,
+            periodicity       => $periodicity,
+            numberlength      => $numberlength,
+            weeklength        => $weeklength,
+            monthlength       => $monthlength,
+            lastvalue1        => $lastvalue1,
+            innerloop1        => $innerloop1,
+            lastvalue2        => $lastvalue2,
+            innerloop2        => $innerloop2,
+            lastvalue3        => $lastvalue3,
+            innerloop3        => $innerloop3,
+            status            => $status,
+            notes             => $notes,
+            letter            => $letter,
+            firstacquidate    => $firstacquidate,
+            irregularity      => $irregularity,
+            numberpattern     => $numberpattern,
+            locale            => $locale,
+            callnumber        => $callnumber,
+            manualhistory     => $manualhistory,
+            internalnotes     => $internalnotes,
+            serialsadditems   => $serialsadditems,
+            staffdisplaycount => $staffdisplaycount,
+            opacdisplaycount  => $opacdisplaycount,
+            graceperiod       => $graceperiod,
+            location          => $location,
+            enddate           => $enddate,
+            skip_serialseq    => $skip_serialseq,
+            itemtype          => $itemtype,
+            previousitemtype  => $previousitemtype,
+            mana_id           => $mana_id,
+        }
+    )->store;
 
     logaction( "SERIAL", "MODIFY", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
-    return $rows;
+
+    $subscription->discard_changes;
+    return $subscription;
 }
 
 =head2 NewSubscription
