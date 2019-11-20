@@ -72,6 +72,7 @@
                                     <th>Quantity</th>
                                     <th>Total</th>
                                     <th>Action</th>
+                                    <th>CODE</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,6 +80,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="3">Total payable:</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -181,14 +183,15 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script>
-    function fnClickAddRow( table, invoiceTitle, invoicePrice ) {
+    function fnClickAddRow( table, invoiceCode, invoiceTitle, invoicePrice ) {
       table.fnAddData( [
         invoiceTitle,
         invoicePrice,
         1,
         null,
-        '<button class="drop"><i class="fa fa-trash"></i> Remove</button>'
-         ]
+        '<button class="drop"><i class="fa fa-trash"></i> Remove</button>',
+        invoiceCode
+        ]
       );
     }
 
@@ -263,21 +266,25 @@
             "bInfo": false,
             "bAutoWidth": false,
             "aoColumnDefs": [{
-                "aTargets": [-2],
+                "aTargets": [-3],
                 "bSortable": false,
                 "bSearchable": false,
             }, {
-                "aTargets": [-2],
+                "aTargets": [-3],
                 "mRender": function ( data, type, full ) {
                     var price = Number.parseFloat(data);
                     return price.format_price();
                 }
             }, {
-                "aTargets": [-4],
+                "aTargets": [-5],
                 "sClass" : "editable",
             }, {
-                "aTargets": [-3],
+                "aTargets": [-4],
                 "sClass" : "editable_int",
+            }, {
+                "targets": [-1],
+                "visible": false,
+                "searchable": false
             }],
             "aaSorting": [
                 [1, "asc"]
@@ -335,7 +342,7 @@
 
         $(".add_button").on("click", function(e) {
             e.preventDefault();
-            fnClickAddRow(sale_table, $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
+            fnClickAddRow(sale_table, $( this ).data('invoiceCode'), $( this ).data('invoiceTitle'), $( this ).data('invoicePrice') );
             items_table.fnFilter( '' );
         });
 
@@ -362,7 +369,7 @@
                 var rows = sale_table.fnGetData();
                 rows.forEach(function (row, index) {
                     var sale = {
-                        code: row[0],
+                        code: row[5],
                         price: row[1],
                         quantity: row[2]
                     };
