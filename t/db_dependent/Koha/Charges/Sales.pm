@@ -138,21 +138,19 @@ subtest 'add_item (_get_valid_items) tests' => sub {
       'Exception thrown if `code` parameter is missing';
 
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $av = Koha::AuthorisedValue->new(
+    my $dt = Koha::Account::DebitType->new(
         {
-            category         => 'MANUAL_INV',
-            authorised_value => 'BOBBYRANDOM',
-            lib              => 'Test bobbyrandom',
-            lib_opac         => 'Test bobbyrandom',
+            code        => 'BOBBYRANDOM',
+            description => 'Test bobbyrandom',
         }
     )->store;
-    $av->replace_library_limits( [ $library2->branchcode ] );
+    $dt->replace_library_limits( [ $library2->branchcode ] );
 
     throws_ok { $sale->add_item( { code => 'BOBBYRANDOM' } ) }
     'Koha::Exceptions::Account::UnrecognisedType',
 'Exception thrown if passed an item code that is not valid for the cash registers branch';
 
-    $av->replace_library_limits();
+    $dt->replace_library_limits();
     $sale->{valid_items} = undef;    # Flush object cache for 'valid_items'
 
     throws_ok {
@@ -205,20 +203,16 @@ subtest 'purchase tests' => sub {
         }
     )->store;
 
-    my $item1 = Koha::AuthorisedValue->new(
+    my $item1 = Koha::Account::DebitType->new(
         {
-            category         => 'MANUAL_INV',
-            authorised_value => 'COPYRANDOM',
-            lib              => 'Copier fee',
-            lib_opac         => 'Copier fee',
+            code        => 'COPYRANDOM',
+            description => 'Copier fee',
         }
     )->store;
-    my $item2 = Koha::AuthorisedValue->new(
+    my $item2 = Koha::Account::DebitType->new(
         {
-            category         => 'MANUAL_INV',
-            authorised_value => 'CARDRANDOM',
-            lib              => 'New card fee',
-            lib_opac         => 'New card fee',
+            code        => 'CARDRANDOM',
+            description => 'New card fee',
         }
     )->store;
 
@@ -250,7 +244,7 @@ subtest 'purchase tests' => sub {
 
     is(ref($credit), 'Koha::Account::Line', "Koha::Account::Line returned");
     ok($credit->is_credit, "return is a credit for payment");
-    is($credit->accounttype, 'Purchase', "accounttype set correctly to 'Purchase' for payment");
+    is($credit->credit_type_code, 'PURCHASE', "credit_type_code set correctly to 'PURCHASE' for payment");
     is($credit->amount, -5.00, "amount is calculated correctly for payment");
     is($credit->amountoutstanding, 0.00, "amountoutstanding is set to zero for payment");
     is($credit->manager_id, $staff->borrowernumber, "manager_id set correctionly for payment");
@@ -258,7 +252,7 @@ subtest 'purchase tests' => sub {
     is($credit->payment_type, 'CASH', "payment_type set correctly for payment");
 
     my $offsets = Koha::Account::Offsets->search({credit_id => $credit->accountlines_id});
-    is($offsets->count, 2, "One offset was added for each item added");
+    is($offsets->count, 3, "One offset was added for each item added"); # 2 items + 1 purchase
 
 #ensure relevant fields are set
 #ensure register_id is only ever set with a corresponding payment_type having been set

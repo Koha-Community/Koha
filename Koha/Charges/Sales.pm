@@ -20,6 +20,7 @@ package Koha::Charges::Sales;
 use Modern::Perl;
 
 use Koha::Account::Lines;
+use Koha::Account::DebitTypes;
 use Koha::Account::Offsets;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
@@ -210,7 +211,7 @@ sub purchase {
                 my $debit = Koha::Account::Line->new(
                     {
                         amount            => $amount,
-                        accounttype       => $item->{code},
+                        debit_type_code   => $item->{code},
                         amountoutstanding => 0,
                         note              => $item->{quantity},
                         manager_id        => $self->{staff_id},
@@ -235,7 +236,7 @@ sub purchase {
             $credit = Koha::Account::Line->new(
                 {
                     amount            => 0 - $total_owed,
-                    accounttype       => 'Purchase',
+                    credit_type_code  => 'PURCHASE',
                     payment_type      => $self->{payment_type},
                     amountoutstanding => 0,
                     manager_id        => $self->{staff_id},

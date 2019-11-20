@@ -5,6 +5,11 @@ if( CheckVersion( $DBversion ) ) {
         INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Purchase' );
     });
 
+    $dbh->do(q{
+        INSERT INTO account_credit_types ( code, description, can_be_added_manually, is_system )
+        VALUES ('PURCHASE', 'Purchase', 0, 1);
+    });
+
     my $sth = $dbh->prepare(q{
         SELECT COUNT(*) FROM authorised_values WHERE category = 'PAYMENT_TYPE' AND authorised_value = 'CASH'
     });
@@ -40,7 +45,8 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q{
 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '<table>
+('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '[% PROCESS "accounts.inc" %]
+<table>
 [% IF ( LibraryName ) %]
  <tr>
     <th colspan="2" class="centerednames">
@@ -83,7 +89,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   [% FOREACH offset IN offsets %]
     <tr>
-        <td>[% offset.debit.accounttype %]</td>
+        <td>[% PROCESS account_type_description account=offset.debit %]</td>
         <td>[% offset.amount * -1 | $Price %]</td>
     </tr>
   [% END %]

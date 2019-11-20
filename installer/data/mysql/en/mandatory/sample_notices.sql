@@ -318,7 +318,8 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'SR_SLIP', '', 'Stock rotation slip', 0, 'Stock rotation report', 'Stock rotation report for [% branch.name %]:\r\n\r\n[% IF branch.items.size %][% branch.items.size %] items to be processed for this branch.\r\n[% ELSE %]No items to be processed for this branch\r\n[% END %][% FOREACH item IN branch.items %][% IF item.reason != \'in-demand\' %]Title: [% item.title %]\r\nAuthor: [% item.author %]\r\nCallnumber: [% item.callnumber %]\r\nLocation: [% item.location %]\r\nBarcode: [% item.barcode %]\r\nOn loan?: [% item.onloan %]\r\nStatus: [% item.reason %]\r\nCurrent library: [% item.branch.branchname %] [% item.branch.branchcode %]\r\n\r\n[% END %][% END %]', 'email');
 
 INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
-('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '<table>
+('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '[% PROCESS "accounts.inc" %]
+<table>
 [% IF ( LibraryName ) %]
  <tr>
     <th colspan="2" class="centerednames">
@@ -361,7 +362,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   [% FOREACH offset IN offsets %]
     <tr>
-        <td>[% offset.debit.accounttype %]</td>
+        <td>[% PROCESS account_type_description account=offset.debit %]</td>
         <td>[% offset.amount * -1 | $Price %]</td>
     </tr>
   [% END %]
