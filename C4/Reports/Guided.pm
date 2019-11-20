@@ -427,7 +427,8 @@ sub nb_rows {
 
 
     my $dbh = C4::Context->dbh;
-    my ( $sth, $n );
+    my $sth;
+    my $n = 0;
 
     my $RaiseError = $dbh->{RaiseError};
     my $PrintError = $dbh->{PrintError};
