@@ -319,7 +319,6 @@ sub transferbook {
     }
 
     my $itemnumber = $item->itemnumber;
-    my $issue = GetOpenIssue($itemnumber);
     # get branches of book...
     my $hbr = $item->homebranch;
     my $fbr = $item->holdingbranch;
@@ -345,6 +344,7 @@ sub transferbook {
     }
 
     # check if it is still issued to someone, return it...
+    my $issue = Koha::Checkouts->find({ itemnumber => $itemnumber });
     if ( $issue ) {
         AddReturn( $barcode, $fbr );
         $messages->{'WasReturned'} = $issue->borrowernumber;
