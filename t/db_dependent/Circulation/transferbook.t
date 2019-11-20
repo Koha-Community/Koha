@@ -17,10 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Circulation;
+use Koha::DateUtils qw( dt_from_string );
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -33,3 +35,32 @@ my $badbc = 'wherethehelldoyoucomefrom';
 @got = C4::Circulation::transferbook( $library->{branchcode}, $badbc );
 @wanted = ( 0, { 'BadBarcode' => $badbc } );
 is_deeply( \@got , \@wanted, 'bad barcode case');
+
+subtest 'transfer an issued item' => sub {
+    plan tests => 1;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $dt_to = dt_from_string();
+    my $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to );
+
+    # We are making sure there is no regression, feel free to change the behavior if needed.
+    # * WasReturned does not seem like a variable that should contain a borrowernumber
+    # * Should we return even if the transfer did not happen? (same branches)
+    my @got = transferbook( $library->branchcode, $item->barcode );
+    is( $got[1]->{WasReturned}, $patron->borrowernumber, 'transferbook should have return a WasReturned flag is the item was issued before the transferbook call');
+};
