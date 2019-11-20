@@ -31,6 +31,7 @@
         <table id="mappings">
           <thead>
             <tr>
+              <th>Rule operator</th>
               <th>Field</th>
               <th>Subfield</th>
               <th>Operator</th>
@@ -43,6 +44,12 @@
             [% IF ( mappings ) %]
               [% FOREACH mapping IN mappings %]
                 <tr>
+                  <td>
+                  <select name="rule_operator">
+                    <option value="and" [% IF (mapping.rule_operator == 'and') %] selected="selected" [% END %]>and</option>
+                    <option value="or" [% IF (mapping.rule_operator == 'or') %] selected="selected" [% END %]>or</option>
+                  </select>
+                  </td>
                   <td><input type="text" name="marcfield" size="3" value="[% mapping.marcfield | html %]" /></td>
                   <td style="text-align:center"><input type="text" name="marcsubfield" size="1" value="[% mapping.marcsubfield | html %]" /></td>
                   <td><select name=operator>
@@ -57,9 +64,7 @@
                   <td><input type="text" name="marcvalue" value="[% mapping.marcvalue | html %]" /></td>
                   <td style="text-align:center">
                     [% IF ( loop.last ) %]
-                      <input type="button" id="ORbutton" value="OR" title="Add another condition" />
-                    [% ELSE %]
-                      OR
+                      <input type="button" id="new_rule_button" value="add" title="Add another condition" />
                     [% END %]
                   </td>
                   <td><button class="btn btn-default btn-xs clear-field" type="button"><i class="fa fa-trash"></i> Delete</button></td>
@@ -67,6 +72,12 @@
               [% END %]
             [% ELSE %]
               <tr>
+                <td>
+                  <select name="rule_operator">
+                    <option value="and" [% IF (mapping.rule_operator == 'and') %] selected="selected" [% END %]>and</option>
+                    <option value="or" [% IF (mapping.rule_operator == 'or') %] selected="selected" [% END %]>or</option>
+                  </select>
+                </td>
                 <td><input type="text" name="marcfield" size="3" /></td>
                 <td style="text-align:center"><input type="text" name="marcsubfield" size="1" /></td>
                 <td><select name=operator>
@@ -74,7 +85,7 @@
                     <option value="notequal">not equal to</option>
                     </select></td>
                 <td><input type="text" name="marcvalue" /></td>
-                <td><input type="button" id="ORbutton" value="OR" /></td>
+                <td><input type="button" id="new_rule_button" value="Add" /></td>
                 <td><button class="btn btn-default btn-xs clear-field" type="button"><i class="fa fa-trash"></i> Delete</button></td>
               </tr>
             [% END %]
@@ -104,7 +115,7 @@
             $("#mappingform").submit(function(){
               hideDialogBox();
             });
-            $("body").on("click","#ORbutton", function(e){
+            $("body").on("click","#new_rule_button", function(e){
                 e.preventDefault();
                 newCondition();
             });
@@ -112,22 +123,25 @@
                 e.preventDefault();
                 clearRow(e.target);
             });
+            $("#mappings tbody tr:first-child td:first-child select").hide();
         });
 
         function newCondition() {
-            var tr = $('#ORbutton').parents('tr');
+            var tr = $('#new_rule_button').parents('tr');
             var clone = $(tr).clone();
-            $("#ORbutton").parent('td').replaceWith('<td style="text-align:center">OR</td>');
+            $("#new_rule_button").parent('td').find("#new_rule_button").remove();
+            $(clone).find("select").show();
             $(tr).parent('tbody').append(clone);
         }
         function clearRow(link){
             var tr = $(link).parent().parent();
-            var found = tr.find('#ORbutton');
+            var found = tr.find('#new_rule_button');
             if( found.length ){
               tr.find('input[type="text"]').attr("value","");
             } else {
-              tr.find('input[type="text"]').attr("value","").end().hide();
+              tr.remove();
             }
+            $("#mappings tbody tr:first-child td:first-child select").hide();
         }
         function hideDialogBox() {
             $('div.dialog').remove();

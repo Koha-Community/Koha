@@ -290,19 +290,19 @@ sub AddOAISet {
 GetOAISetsMappings returns mappings for all OAI Sets.
 
 Mappings define how biblios are categorized in sets.
-A mapping is defined by four properties:
+A mapping is defined by six properties:
 
     {
-        marcfield => 'XXX',     # the MARC field to check
-        marcsubfield => 'Y',    # the MARC subfield to check
-        operator => 'A',        # the operator 'equal' or 'notequal'; 'equal' if ''
-        marcvalue => 'zzzz',    # the value to check
+        marcfield => 'XXX',              # the MARC field to check
+        marcsubfield => 'Y',             # the MARC subfield to check
+        operator => 'A',                 # the operator 'equal' or 'notequal'; 'equal' if ''
+        marcvalue => 'zzzz',             # the value to check
+        rule_operator => 'and|or|undef', # the operator between the rules
+        rule_order    => 'n'             # the order of the rule for the mapping
     }
 
 If defined in a set mapping, a biblio which have at least one 'Y' subfield of
 one 'XXX' field equal to 'zzzz' will belong to this set.
-If multiple mappings are defined in a set, the biblio will belong to this set
-if at least one condition is matched.
 
 GetOAISetsMappings returns a hashref of arrayrefs of hashrefs.
 The first hashref keys are the sets IDs, so it looks like this:
@@ -313,7 +313,9 @@ The first hashref keys are the sets IDs, so it looks like this:
                 marcfield => 'XXX',
                 marcsubfield => 'Y',
                 operator => 'A',
-                marcvalue => 'zzzz'
+                marcvalue => 'zzzz',
+                rule_operator => 'and|or|undef',
+                rule_order => 'n'
             },
             {
                 ...
@@ -329,7 +331,7 @@ The first hashref keys are the sets IDs, so it looks like this:
 sub GetOAISetsMappings {
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        SELECT * FROM oai_sets_mappings
+        SELECT * FROM oai_sets_mappings ORDER BY set_id, rule_order
     };
     my $sth = $dbh->prepare($query);
     $sth->execute;
@@ -340,7 +342,9 @@ sub GetOAISetsMappings {
             marcfield => $result->{'marcfield'},
             marcsubfield => $result->{'marcsubfield'},
             operator => $result->{'operator'},
-            marcvalue => $result->{'marcvalue'}
+            marcvalue => $result->{'marcvalue'},
+            rule_operator => $result->{'rule_operator'},
+            rule_order => $result->{'rule_order'}
         };
     }
 
@@ -365,6 +369,7 @@ sub GetOAISetMappings {
         SELECT *
         FROM oai_sets_mappings
         WHERE set_id = ?
+        ORDER BY rule_order
     };
     my $sth = $dbh->prepare($query);
     $sth->execute($set_id);
@@ -375,7 +380,9 @@ sub GetOAISetMappings {
             marcfield => $result->{'marcfield'},
             marcsubfield => $result->{'marcsubfield'},
             operator => $result->{'operator'},
-            marcvalue => $result->{'marcvalue'}
+            marcvalue => $result->{'marcvalue'},
+            rule_operator => $result->{'rule_operator'},
+            rule_order => $result->{'rule_order'}
         };
     }
 
@@ -411,15 +418,14 @@ sub ModOAISetMappings {
     };
     my $sth = $dbh->prepare($query);
     $sth->execute($set_id);
-
     if(scalar @$mappings > 0) {
         $query = qq{
-            INSERT INTO oai_sets_mappings (set_id, marcfield, marcsubfield, operator, marcvalue)
-            VALUES (?,?,?,?,?)
+            INSERT INTO oai_sets_mappings (set_id, marcfield, marcsubfield, operator, marcvalue, rule_operator, rule_order)
+            VALUES (?,?,?,?,?,?,?)
         };
         $sth = $dbh->prepare($query);
         foreach (@$mappings) {
-            $sth->execute($set_id, $_->{'marcfield'}, $_->{'marcsubfield'}, $_->{'operator'}, $_->{'marcvalue'});
+            $sth->execute($set_id, $_->{'marcfield'}, $_->{'marcsubfield'}, $_->{'operator'}, $_->{'marcvalue'}, $_->{'rule_operator'}, $_->{'rule_order'});
         }
     }
 }
@@ -492,29 +498,63 @@ sub CalcOAISetsBiblio {
 
     my @biblio_sets;
     foreach my $set_id (keys %$oai_sets_mappings) {
+
+        my $rules = [];
         foreach my $mapping (@{ $oai_sets_mappings->{$set_id} }) {
             next if not $mapping;
-            my $field = $mapping->{'marcfield'};
-            my $subfield = $mapping->{'marcsubfield'};
-            my $operator = $mapping->{'operator'};
-            my $value = $mapping->{'marcvalue'};
-            my @subfield_values = $record->subfield($field, $subfield);
-            if ($operator eq 'notequal') {
-                if(0 == grep /^$value$/, @subfield_values) {
-                    push @biblio_sets, $set_id;
-                    last;
-                }
+            my $rule_operator = $mapping->{'rule_operator'};
+            my $result = _evalRule($record, $mapping);
+
+            # First rule or 'or' rule is always pushed
+            if (!@$rules || $rule_operator eq 'or') {
+                push @$rules, [$result];
+                next;
             }
-            else {
-                if(0 < grep /^$value$/, @subfield_values) {
-                    push @biblio_sets, $set_id;
-                    last;
-                }
+
+            # 'and' rule is pushed in the last 'or' rule
+            push @{$rules->[-1]}, $result;
+        }
+
+        my @evaluated_and;
+        foreach my $ruleset (@$rules) {
+           if (0 < grep /0/, @{$ruleset}) {
+                push @evaluated_and, 0;
+            } else {
+                push @evaluated_and, 1;
             }
         }
+
+        if (grep /1/, @evaluated_and) {
+            push @biblio_sets, $set_id;
+        }
+
     }
     return @biblio_sets;
 }
+
+# Does the record match a given mapping rule?
+sub _evalRule {
+    my $record = shift;
+    my $mapping = shift;
+
+    my $field = $mapping->{'marcfield'};
+    my $subfield = $mapping->{'marcsubfield'};
+    my $operator = $mapping->{'operator'};
+    my $value = $mapping->{'marcvalue'};
+    my @subfield_values = $record->subfield($field, $subfield);
+    if ($operator eq 'notequal') {
+        if(0 == grep /^$value$/, @subfield_values) {
+            return 1;
+        }
+    }
+    else {
+        if(0 < grep /^$value$/, @subfield_values) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 =head2 ModOAISetsBiblios
 

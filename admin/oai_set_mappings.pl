@@ -57,20 +57,25 @@ if($op && $op eq "save") {
     my @marcsubfields = $input->multi_param('marcsubfield');
     my @operators = $input->multi_param('operator');
     my @marcvalues = $input->multi_param('marcvalue');
+    my @ruleoperators = $input->multi_param('rule_operator');
+    my @ruleorders = $input->multi_param('rule_order');
 
     my @mappings;
     my $i = 0;
     while($i < @marcfields and $i < @marcsubfields and $i < @marcvalues) {
         if($marcfields[$i] and $marcsubfields[$i]) {
             push @mappings, {
-                marcfield    => $marcfields[$i],
-                marcsubfield => $marcsubfields[$i],
-                operator     => $operators[$i],
-                marcvalue    => $marcvalues[$i]
+                marcfield     => $marcfields[$i],
+                marcsubfield  => $marcsubfields[$i],
+                operator      => $operators[$i],
+                marcvalue     => $marcvalues[$i],
+                rule_operator => $ruleoperators[$i],
+                rule_order    => $i
             };
         }
         $i++;
     }
+    $mappings[0]{'rule_operator'} = undef if (@mappings);
     ModOAISetMappings($id, \@mappings);
     $template->param(mappings_saved => 1);
 }
