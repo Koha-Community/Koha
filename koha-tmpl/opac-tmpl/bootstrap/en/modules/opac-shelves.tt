@@ -981,7 +981,9 @@ $(function() {
 
     [% IF print %]
         window.print();
-        setTimeout('window.close()', 1);
+        window.onafterprint = function () {
+            window.close();
+        }
     [% END %]
 
     AdjustRemark();
