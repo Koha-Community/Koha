@@ -478,12 +478,6 @@
                     { 'mDataProp': 'dt_borrowernotes' },
                     { 'mDataProp': 'dt_action', 'bSortable': false, 'sClass': 'actions' }
                 ],
-                'fnRowCallback': function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                    /* Center text for 6th column */
-                    $("td:eq(5)", nRow).css("text-align", "center");
-
-                    return nRow;
-                },
                 'bFilter': false,
                 'bAutoWidth': false,
                 [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
