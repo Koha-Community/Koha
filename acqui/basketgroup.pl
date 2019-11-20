@@ -285,12 +285,12 @@ if ( $op eq "add" ) {
         $freedeliveryplace = $basketgroup->{freedeliveryplace};
         $template->param( closedbg => ($basketgroup ->{'closed'}) ? 1 : 0);
     } else {
+        # When creating a new basket group preselect billing and delivery place based on logged-in user
+        my $patron = Koha::Patrons->find( $loggedinuser );
+        $billingplace  = $patron->branchcode;
+        $deliveryplace = $patron->branchcode;
         $template->param( closedbg => 0);
     }
-    # determine default billing and delivery places depending on librarian homebranch and existing basketgroup data
-    my $patron = Koha::Patrons->find( $loggedinuser ); # FIXME Not needed if billingplace and deliveryplace are set
-    $billingplace  = $billingplace  || $patron->branchcode;
-    $deliveryplace = $deliveryplace || $patron->branchcode;
 
     $template->param( billingplace => $billingplace );
     $template->param( deliveryplace => $deliveryplace );
