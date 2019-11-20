@@ -113,11 +113,11 @@
 
     <li>
         <label for="paid">Amount being paid: </label>
-        <input name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
+        <input name="paid" id="paid" type="text" step="0.01" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label for="collected">Collected from patron: </label>
-        <input id="collected" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
+        <input name="collected" id="collected" type="text" step="0.01" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label>Change to give: </label>
@@ -237,17 +237,16 @@
         </li>
     <li>
         [% IF type == 'WRITEOFF' %]
-            <label for="paid">Writeoff amount:</label>
+            <label for="paid">Writeoff amount: </label>
         [% ELSE %]
-            <label for="paid">Amount paid: </label>
+            <label for="paid">Amount being paid: </label>
         [% END %]
-        <input name="paid" id="paid" value="[% total | $Price on_editing => 1 %]"/>
+        <input name="paid" id="paid" type="text" step="0.01" value="[% total | $Price on_editing => 1 %]"/>
     </li>
-
     [% IF type != 'WRITEOFF' %]
         <li>
             <label for="collected">Collected from patron: </label>
-            <input id="collected" value="[% total | $Price on_editing => 1 %]"/>
+            <input name="collected" id="collected" type="text" step="0.01" value="[% total | $Price on_editing => 1 %]"/>
         </li>
         <li>
             <label>Change to give: </label>
@@ -366,6 +365,15 @@
             $('#modal_submit').click(function() {
                 forms[0].submit();
             });
+
+            $( "#payindivfine, #payfine" ).validate({
+                rules: {
+                    paid: { required: true },
+                    collected: {
+                        required: true
+                    }
+                }
+            });
         });
 
         prevent_default = 1;
@@ -439,6 +447,10 @@
             var change = $('#change')[0];
             change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
             if (change.innerHTML <= 0) {
+                var paid = $('#paid')[0];
+                moneyFormat(paid);
+                $('#collected').rules( "add", { min: Number(paid.value) });
+                $( "#payindivfine, #payfine" ).valid();
                 change.innerHTML = "0.00";
                 $('input[name="change_given"]').val('0.00');
             } else {
