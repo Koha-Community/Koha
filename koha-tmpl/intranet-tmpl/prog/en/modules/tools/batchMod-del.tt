@@ -200,7 +200,11 @@
             <p>[% deleted_items | html %] item(s) deleted.</p>
             [% IF delete_records %] <p>[% deleted_records | html %] record(s) deleted.</p> [% END %]
             [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
+                [% IF biblio_deleted %]
+                    <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Return to the cataloging module</a>
+                [% ELSE %]
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
+                [% END %]
             [% ELSIF src %]
                 <a href="[% src | url %]">Return to where you were</a>
             [% ELSE %]
@@ -235,7 +239,11 @@
 
     <p>
         [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
-           <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+            [% IF biblio_deleted %]
+                <a class="btn btn-default" href="/cgi-bin/koha/cataloguing/addbooks.pl"><i class="fa fa-check-square-o"></i> Return to the cataloging module</a>
+            [% ELSE %]
+               <a class="btn btn-default" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]"><i class="fa fa-check-square-o"></i> Return to the record</a>
+            [% END %]
         [% ELSIF src %]
            <a class="btn btn-default" href="[% src | url %]"><i class="fa fa-check-square-o"></i> Return to where you were</a>
         [% ELSE %]

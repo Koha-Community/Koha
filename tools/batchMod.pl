@@ -200,14 +200,20 @@ if ($op eq "action") {
 				};
 			}
 
-			# If there are no items left, delete the biblio
-			if ( $del_records ) {
-                            my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
-                            if ( $itemscount == 0 ) {
-			        my $error = DelBiblio($itemdata->{'biblionumber'});
-			        $deleted_records++ unless ( $error );
+                # If there are no items left, delete the biblio
+                if ($del_records) {
+                    my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
+                    if ( $itemscount == 0 ) {
+                        my $error = DelBiblio( $itemdata->{'biblionumber'} );
+                        unless ($error) {
+                            $deleted_records++;
+                            if ( $src eq 'CATALOGUING' ) {
+                                # We are coming catalogue/detail.pl, there were items from a single bib record
+                                $template->param( biblio_deleted => 1 );
                             }
                         }
+                    }
+                }
 		} else {
             if ($values_to_modify || $values_to_blank) {
                 my $localmarcitem = Item2Marc($itemdata);
