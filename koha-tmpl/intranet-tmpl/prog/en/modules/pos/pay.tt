@@ -183,18 +183,6 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.jeditable.mini.js") | $raw %]
     <script>
-    function fnClickAddRow( table, invoiceCode, invoiceTitle, invoicePrice ) {
-      table.fnAddData( [
-        invoiceTitle,
-        invoicePrice,
-        1,
-        null,
-        '<button class="drop"><i class="fa fa-trash"></i> Remove</button>',
-        invoiceCode
-        ]
-      );
-    }
-
     function moneyFormat(textObj) {
         var newValue = textObj.value;
         var decAmount = "";
@@ -242,6 +230,20 @@
         }
 
         textObj.value = dolAmount + "." + decAmount;
+    }
+
+    function fnClickAddRow( table, invoiceCode, invoiceTitle, invoicePrice ) {
+      var defaultPrice = { value: invoicePrice };
+      moneyFormat(defaultPrice);
+      table.fnAddData( [
+        invoiceTitle,
+        defaultPrice.value,
+        1,
+        null,
+        '<button class="drop"><i class="fa fa-trash"></i> Remove</button>',
+        invoiceCode
+        ]
+      );
     }
 
     function updateChangeValues() {
