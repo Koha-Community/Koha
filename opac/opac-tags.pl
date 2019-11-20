@@ -38,7 +38,7 @@ use CGI::Cookie; # need to check cookies before having CGI parse the POST reques
 use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
 use C4::Debug;
-use C4::Output qw(:html :ajax pagination_bar);
+use C4::Output qw(:html :ajax );
 use C4::Scrubber;
 use C4::Biblio;
 use C4::Items qw(GetItemsInfo GetHiddenItemnumbers);
@@ -86,24 +86,19 @@ sub ajax_auth_cgi {     # returns CGI object
 my $is_ajax = is_ajax();
 my $openadds = C4::Context->preference('TagsModeration') ? 0 : 1;
 my $query = ($is_ajax) ? &ajax_auth_cgi({}) : CGI->new();
-unless (C4::Context->preference('TagsEnabled')) {
-	push @errors, {+ tagsdisabled=>1 };
-    push @globalErrorIndexes, $#errors;
-} else {
-	foreach ($query->param) {
-		if (/^newtag(.*)/) {
-			my $biblionumber = $1;
-			unless ($biblionumber =~ /^\d+$/) {
-				$debug and warn "$_ references non numerical biblionumber '$biblionumber'";
-				push @errors, {+'badparam' => $_ };
-                push @globalErrorIndexes, $#errors;
-				next;
-			}
-			$newtags{$biblionumber} = $query->param($_);
-		} elsif (/^del(\d+)$/) {
-			push @deltags, $1;
-		}
-	}
+foreach ($query->param) {
+    if (/^newtag(.*)/) {
+        my $biblionumber = $1;
+        unless ($biblionumber =~ /^\d+$/) {
+            $debug and warn "$_ references non numerical biblionumber '$biblionumber'";
+            push @errors, {+'badparam' => $_ };
+            push @globalErrorIndexes, $#errors;
+            next;
+        }
+        $newtags{$biblionumber} = $query->param($_);
+    } elsif (/^del(\d+)$/) {
+        push @deltags, $1;
+    }
 }
 
 my $add_op = (scalar(keys %newtags) + scalar(@deltags)) ? 1 : 0;
@@ -119,6 +114,11 @@ if ($is_ajax) {
         authnotrequired => ($add_op ? 0 : 1), # auth required to add tags
         debug           => 1,
 	});
+}
+
+unless ( C4::Context->preference('TagsEnabled') ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
 }
 
 if ($add_op) {
