@@ -54,9 +54,7 @@
                             [% FOREACH ERROR IN ERRORS %]
                                 <div class="alert">
                                     There was a problem with this operation:
-                                    [% IF ( ERROR.tagsdisabled ) %]
-                                        Sorry, tags are not enabled on this system.
-                                    [% ELSIF ( ERROR.badparam ) %]
+                                    [% IF ( ERROR.badparam ) %]
                                         ERROR: illegal parameter [% ERROR.badparam | html %]
                                     [% ELSIF ( ERROR.login ) %]
                                         ERROR: You must log in to complete that action.
