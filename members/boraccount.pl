@@ -118,6 +118,39 @@ if ( $action eq 'payout' ) {
     );
 }
 
+if ( $action eq 'refund' ) {
+    my $charge_id        = scalar $input->param('accountlines_id');
+    my $charge           = Koha::Account::Lines->find($charge_id);
+    my $amount           = scalar $input->param('amount');
+    my $transaction_type = scalar $input->param('transaction_type');
+    $schema->txn_do(
+        sub {
+
+            my $refund = $charge->reduce(
+                {
+                    reduction_type => 'REFUND',
+                    branch         => $library_id,
+                    staff_id       => $logged_in_user->id,
+                    interface      => 'intranet',
+                    amount         => $amount
+                }
+            );
+            unless ( $transaction_type eq 'AC' ) {
+                my $payout = $refund->payout(
+                    {
+                        payout_type   => $transaction_type,
+                        branch        => $library_id,
+                        staff_id      => $logged_in_user->id,
+                        cash_register => $registerid,
+                        interface     => 'intranet',
+                        amount        => $amount
+                    }
+                );
+            }
+        }
+    );
+}
+
 #get account details
 my $total = $patron->account->balance;
 
