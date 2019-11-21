@@ -96,7 +96,7 @@ sub new {
     if ($issue) {
         $self->{due_date} = dt_from_string( $issue->date_due, 'sql' )->truncate( to => 'minute' );
         my $patron = Koha::Patrons->find( $issue->borrowernumber );
-        $self->{patron} = $patron->cardnumber;
+        $self->{borrowernumber} = $patron->borrowernumber;
     }
     my $biblio = Koha::Biblios->find( $self->{biblionumber} );
     my $holds = $biblio->current_holds->unblessed;
@@ -254,7 +254,7 @@ sub title_id {
 
 sub sip_circulation_status {
     my $self = shift;
-    if ( $self->{patron} ) {
+    if ( $self->{borrowernumber} ) {
         return '04';    # charged
     }
     elsif ( grep { $_->{itemnumber} == $self->{itemnumber}  } @{ $self->{hold_shelf} } ) {
@@ -355,8 +355,8 @@ sub available {
 	my $count  = (defined $self->{pending_queue}) ? scalar @{$self->{pending_queue}} : 0;
 	my $count2 = (defined $self->{hold_shelf}   ) ? scalar @{$self->{hold_shelf}   } : 0;
 	$debug and print STDERR "availability check: pending_queue size $count, hold_shelf size $count2\n";
-    if (defined($self->{patron_id})) {
-	 	($self->{patron_id} eq $for_patron) or return 0;
+    if (defined($self->{borrowernumber})) {
+        ($self->{borrowernumber} eq $for_patron) or return 0;
 		return ($count ? 0 : 1);
 	} else {	# not checked out
         ($count2) and return $self->barcode_is_borrowernumber($for_patron, $self->{hold_shelf}[0]->{borrowernumber});

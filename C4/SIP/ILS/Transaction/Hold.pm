@@ -37,14 +37,9 @@ sub queue_position {
 
 sub do_hold {
     my $self = shift;
-    unless ( $self->{patron} ) {
+    my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
+    unless ( $patron ) {
         $self->screen_msg('do_hold called with undefined patron');
-        $self->ok(0);
-        return $self;
-    }
-    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
-    unless ($patron) {
-        $self->screen_msg( 'No borrower matches cardnumber "' . $self->{patron}->id . '".' );
         $self->ok(0);
         return $self;
     }
@@ -83,14 +78,9 @@ sub do_hold {
 
 sub drop_hold {
 	my $self = shift;
-	unless ($self->{patron}) {
-		$self->screen_msg('drop_hold called with undefined patron');
-		$self->ok(0);
-		return $self;
-	}
-    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
     unless ($patron) {
-		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
+		$self->screen_msg('drop_hold called with undefined patron');
 		$self->ok(0);
 		return $self;
 	}
@@ -108,14 +98,9 @@ sub drop_hold {
 
 sub change_hold {
 	my $self = shift;
-	unless ($self->{patron}) {
-		$self->screen_msg('change_hold called with undefined patron');
-		$self->ok(0);
-		return $self;
-	}
-    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
     unless ($patron) {
-		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
+		$self->screen_msg('change_hold called with undefined patron');
 		$self->ok(0);
 		return $self;
 	}
