@@ -320,6 +320,12 @@ Circulation:
                   no: "Don't send"
             - "a renewal notice according to patron's messaging preferences for 'Item checkout'."
         -
+            - pref: UnseenRenewals
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - renewals to be recorded as "unseen" by the library, and count against the borrowers unseen renewals limit
+        -
             - Prevent patrons from making holds on the OPAC if they owe more than
             - pref: maxoutstanding
               class: currency

@@ -1652,6 +1652,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `renewals` tinyint(4) NOT NULL default 0, -- lists the number of times the item was renewed
   `auto_renew` tinyint(1) default FALSE, -- automatic renewal
+  `unseen_renewals` tinyint(4) NOT NULL default 0, -- lists the number of consecutive times the item was renewed without being seen
   `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL, -- automatic renewal error
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
@@ -1686,6 +1687,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `renewals` tinyint(4) NOT NULL default 0, -- lists the number of times the item was renewed
   `auto_renew` tinyint(1) default FALSE, -- automatic renewal
+  `unseen_renewals` tinyint(4) NOT NULL default 0, -- lists the number of consecutive times the item was renewed without being seen
   `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL, -- automatic renewal error
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
