@@ -61,7 +61,8 @@ sub do_renew_for  {
 
 sub do_renew {
     my $self = shift;
-    my $patron = Koha::Patrons->find( { cardnumber => $self->{patron}->id } );
+    my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
+    $patron or return; # FIXME we should log that
     return $self->do_renew_for($patron->unblessed);
 }
 
