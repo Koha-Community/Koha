@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Exception;
 
 use C4::Circulation qw/AddIssue AddReturn/;
@@ -1025,6 +1025,164 @@ subtest "payout() tests" => sub {
     is( $credit1->amountoutstanding,
         -10, 'Credit has an new amount outstanding of -10' );
     is( $credit1->status(), 'PAID', "Credit has a new status of PAID" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "reduce() tests" => sub {
+
+    plan tests => 25;
+
+    $schema->storage->txn_begin;
+
+    # Create a borrower
+    my $categorycode =
+      $builder->build( { source => 'Category' } )->{categorycode};
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    my $borrower = Koha::Patron->new(
+        {
+            cardnumber => 'dariahall',
+            surname    => 'Hall',
+            firstname  => 'Daria',
+        }
+    );
+    $borrower->categorycode($categorycode);
+    $borrower->branchcode($branchcode);
+    $borrower->store;
+
+    my $staff = Koha::Patron->new(
+        {
+            cardnumber => 'bobby',
+            surname    => 'Bloggs',
+            firstname  => 'Bobby',
+        }
+    );
+    $staff->categorycode($categorycode);
+    $staff->branchcode($branchcode);
+    $staff->store;
+
+    my $account = Koha::Account->new( { patron_id => $borrower->id } );
+
+    my $debit1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => 20,
+            amountoutstanding => 20,
+            interface         => 'commandline',
+            debit_type_code   => 'LOST'
+        }
+    )->store();
+    my $credit1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => -20,
+            amountoutstanding => -20,
+            interface         => 'commandline',
+            credit_type_code  => 'CREDIT'
+        }
+    )->store();
+
+    is( $account->balance(), 0, "Account balance is 0" );
+    is( $debit1->amountoutstanding,
+        20, 'Overdue fee has an amount outstanding of 20' );
+    is( $credit1->amountoutstanding,
+        -20, 'Credit has an amount outstanding of -20' );
+
+    my $reduce_params = {
+        interface      => 'commandline',
+        reduction_type => 'REFUND',
+        amount         => 5,
+        staff_id       => $staff->borrowernumber,
+        branch         => $branchcode
+    };
+
+    throws_ok { $credit1->reduce($reduce_params); }
+    'Koha::Exceptions::Account::IsNotDebit',
+      '->reduce() can only be used with debits';
+
+    my @required = ( 'interface', 'reduction_type', 'amount' );
+    for my $required (@required) {
+        my $params = {%$reduce_params};
+        delete( $params->{$required} );
+        throws_ok {
+            $debit1->reduce($params);
+        }
+        'Koha::Exceptions::MissingParameter',
+          "->reduce() requires the `$required` parameter is passed";
+    }
+
+    $reduce_params->{interface} = 'intranet';
+    my @dependant_required = ( 'staff_id', 'branch' );
+    for my $d (@dependant_required) {
+        my $params = {%$reduce_params};
+        delete( $params->{$d} );
+        throws_ok {
+            $debit1->reduce($params);
+        }
+        'Koha::Exceptions::MissingParameter',
+"->reduce() requires the `$d` parameter is passed when interface is intranet";
+    }
+
+    throws_ok {
+        $debit1->reduce(
+            {
+                interface      => 'intranet',
+                staff_id       => $staff->borrowernumber,
+                branch         => $branchcode,
+                reduction_type => 'REFUND',
+                amount         => 25
+            }
+        );
+    }
+    'Koha::Exceptions::ParameterTooHigh',
+      '->reduce() cannot reduce more than original amount';
+
+    # Partial Reduction
+    # (Refund 5 on debt of 20)
+    my $reduction = $debit1->reduce($reduce_params);
+
+    is( $reduction->amount() * 1, -5, "Reduce amount is -5" );
+    is( $reduction->amountoutstanding() * 1,
+        0, "Reduce amountoutstanding is 0" );
+    is( $debit1->amountoutstanding() * 1,
+        15, "Debit amountoutstanding reduced by 5 to 15" );
+    is( $account->balance() * 1, -5,       "Account balance is -5" );
+    is( $reduction->status(),    'APPLIED', "Reduction status is 'APPLIED'" );
+
+    my $offsets = Koha::Account::Offsets->search(
+        { credit_id => $reduction->id, debit_id => $debit1->id } );
+    is( $offsets->count, 1, 'Only one offset is generated' );
+    my $THE_offset = $offsets->next;
+    is( $THE_offset->amount * 1,
+        -5, 'Correct amount was applied against debit' );
+    is( $THE_offset->type, 'REFUND', "Offset type set to 'REFUND'" );
+
+    # Zero offset created when zero outstanding
+    # (Refund another 5 on paid debt of 20)
+    $credit1->apply( { debits => [ $debit1 ] } );
+    is($debit1->amountoutstanding + 0, 0, 'Debit1 amountoutstanding reduced to 0');
+    $reduction = $debit1->reduce($reduce_params);
+    is( $reduction->amount() * 1, -5, "Reduce amount is -5" );
+    is( $reduction->amountoutstanding() * 1,
+        -5, "Reduce amountoutstanding is -5" );
+
+    $offsets = Koha::Account::Offsets->search(
+        { credit_id => $reduction->id, debit_id => $debit1->id } );
+    is( $offsets->count, 1, 'Only one new offset is generated' );
+    $THE_offset = $offsets->next;
+    is( $THE_offset->amount * 1,
+        0, 'Zero offset created for already paid off debit' );
+    is( $THE_offset->type, 'REFUND', "Offset type set to 'REFUND'" );
+
+    # Compound reduction should not allow more than original amount
+    # (Reduction of 5 + 5 + 20 > 20)
+    $reduce_params->{amount} = 20;
+    throws_ok {
+        $debit1->reduce($reduce_params);
+    }
+    'Koha::Exceptions::ParameterTooHigh',
+'->reduce cannot reduce mor than the original amount (combined reductions test)';
 
     $schema->storage->txn_rollback;
 };

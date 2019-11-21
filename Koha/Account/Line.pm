@@ -270,6 +270,140 @@ sub void {
 
 }
 
+=head3 reduce
+
+  $charge_accountline->reduce({
+      reduction_type => $reduction_type
+  });
+
+Used to 'reduce' a charge/debit by adding a credit to offset against the amount
+outstanding.
+
+May be used to apply a discount whilst retaining the original debit amounts or
+to apply a full or partial refund for example when a lost item is found and
+returned.
+
+It will immediately be applied to the given debit unless the debit has already
+been paid, in which case a 'zero' offset will be added to maintain a link to
+the debit but the outstanding credit will be left so it may be applied to other
+debts.
+
+Reduction type may be one of:
+
+* REFUND
+
+Returns the reduction accountline (which will be a credit)
+
+=cut
+
+sub reduce {
+    my ( $self, $params ) = @_;
+
+    # Make sure it is a charge we are reducing
+    unless ( $self->is_debit ) {
+        Koha::Exceptions::Account::IsNotDebit->throw(
+            error => 'Account line ' . $self->id . 'is not a debit' );
+    }
+
+    # Check for mandatory parameters
+    my @mandatory = ( 'interface', 'reduction_type', 'amount' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    # More mandatory parameters
+    if ( $params->{interface} eq 'intranet' ) {
+        my @optional = ( 'staff_id', 'branch' );
+        for my $param (@optional) {
+            unless ( defined( $params->{$param} ) ) {
+                Koha::Exceptions::MissingParameter->throw( error =>
+"The $param parameter is mandatory when interface is set to 'intranet'"
+                );
+            }
+        }
+    }
+
+    # Make sure the reduction isn't more than the original
+    my $original = $self->amount;
+    Koha::Exceptions::Account::AmountNotPositive->throw(
+        error => 'Reduce amount passed is not positive' )
+      unless ( $params->{amount} > 0 );
+    Koha::Exceptions::ParameterTooHigh->throw( error =>
+"Amount to reduce ($params->{amount}) is higher than original amount ($original)"
+    ) unless ( $original >= $params->{amount} );
+    my $reduced =
+      $self->credits( { credit_type_code => [ 'REFUND' ] } )->total;
+    Koha::Exceptions::ParameterTooHigh->throw( error =>
+"Combined reduction ($params->{amount} + $reduced) is higher than original amount ("
+          . abs($original)
+          . ")" )
+      unless ( $original >= ( $params->{amount} + abs($reduced) ) );
+
+    my $status = { 'REFUND' => 'REFUNDED' };
+
+    my $reduction;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+
+            # A 'reduction' is a 'credit'
+            $reduction = Koha::Account::Line->new(
+                {
+                    date              => \'NOW()',
+                    amount            => 0 - $params->{amount},
+                    credit_type_code  => $params->{reduction_type},
+                    status            => 'ADDED',
+                    amountoutstanding => 0 - $params->{amount},
+                    manager_id        => $params->{staff_id},
+                    borrowernumber    => $self->borrowernumber,
+                    interface         => $params->{interface},
+                    branchcode        => $params->{branch},
+                }
+            )->store();
+
+            my $reduction_offset = Koha::Account::Offset->new(
+                {
+                    credit_id => $reduction->accountlines_id,
+                    type      => uc( $params->{reduction_type} ),
+                    amount    => $params->{amount}
+                }
+            )->store();
+
+            # Link reduction to charge (and apply as required)
+            my $debit_outstanding = $self->amountoutstanding;
+            if ( $debit_outstanding >= $params->{amount} ) {
+
+                $reduction->apply(
+                    {
+                        debits      => [$self],
+                        offset_type => $params->{reduction_type}
+                    }
+                );
+                $reduction->status('APPLIED')->store();
+            }
+            else {
+
+        # Zero amount offset used to link original 'debit' to reduction 'credit'
+                my $link_reduction_offset = Koha::Account::Offset->new(
+                    {
+                        credit_id => $reduction->accountlines_id,
+                        debit_id  => $self->accountlines_id,
+                        type      => $params->{reduction_type},
+                        amount    => 0
+                    }
+                )->store();
+            }
+
+            # Update status of original debit
+            $self->status( $status->{ $params->{reduction_type} } )->store;
+        }
+    );
+
+    return $reduction->discard_changes;
+}
+
 =head3 apply
 
     my $debits = $account->outstanding_debits;
