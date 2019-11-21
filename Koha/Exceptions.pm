@@ -26,6 +26,10 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Exception',
         description => 'A required parameter is missing'
     },
+    'Koha::Exceptions::ParameterTooHigh' => {
+        isa => 'Koha::Exceptions::Exception',
+        description => 'A passed parameter value is too high'
+    },
     'Koha::Exceptions::NoChanges' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'No changes were made',

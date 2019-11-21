@@ -278,6 +278,99 @@ sub apply {
     return $available_credit;
 }
 
+=head3 payout
+
+  $credit_accountline->payout(
+    {
+        payout_type => $payout_type,
+        register_id => $register_id,
+        staff_id    => $staff_id,
+        interface   => 'intranet',
+        amount      => $amount
+    }
+  );
+
+Used to 'pay out' a credit to a user.
+
+Payout type may be one of any existing payment types
+
+Returns the payout debit line that is created via this transaction.
+
+=cut
+
+sub payout {
+    my ( $self, $params ) = @_;
+
+    # Make sure it is a credit we are paying out
+    unless ( $self->is_credit ) {
+        Koha::Exceptions::Account::IsNotCredit->throw(
+            error => 'Account line ' . $self->id . ' is not a credit' );
+    }
+
+    # Check for mandatory parameters
+    my @mandatory =
+      ( 'interface', 'staff_id', 'branch', 'payout_type', 'amount' );
+    for my $param (@mandatory) {
+        unless ( defined( $params->{$param} ) ) {
+            Koha::Exceptions::MissingParameter->throw(
+                error => "The $param parameter is mandatory" );
+        }
+    }
+
+    # Make sure there is outstanding credit to pay out
+    my $outstanding = -1 * $self->amountoutstanding;
+    my $amount =
+      $params->{amount} ? $params->{amount} : $outstanding;
+    Koha::Exceptions::Account::AmountNotPositive->throw(
+        error => 'Payout amount passed is not positive' )
+      unless ( $amount > 0 );
+    Koha::Exceptions::ParameterTooHigh->throw(
+        error => "Amount to payout ($amount) is higher than amountoutstanding ($outstanding)" )
+      unless ($outstanding >= $amount );
+
+    # Make sure we record the cash register for cash transactions
+    Koha::Exceptions::Account::RegisterRequired->throw()
+      if ( C4::Context->preference("UseCashRegisters")
+        && defined( $params->{payout_type} )
+        && ( $params->{payout_type} eq 'CASH' )
+        && !defined( $params->{cash_register} ) );
+
+    my $payout;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+
+            # A 'payout' is a 'debit'
+            $payout = Koha::Account::Line->new(
+                {
+                    date              => \'NOW()',
+                    amount            => $amount,
+                    debit_type_code   => 'PAYOUT',
+                    payment_type      => $params->{payout_type},
+                    amountoutstanding => $amount,
+                    manager_id        => $params->{staff_id},
+                    borrowernumber    => $self->borrowernumber,
+                    interface         => $params->{interface},
+                    branchcode        => $params->{branch},
+                    register_id       => $params->{cash_register}
+                }
+            )->store();
+
+            my $payout_offset = Koha::Account::Offset->new(
+                {
+                    debit_id => $payout->accountlines_id,
+                    type     => 'PAYOUT',
+                    amount   => $amount
+                }
+            )->store();
+
+            $self->apply( { debits => [$payout], offset_type => 'PAYOUT' } );
+            $self->status('PAID')->store;
+        }
+    );
+
+    return $payout;
+}
+
 =head3 adjust
 
 This method allows updating a debit or credit on a patron's account

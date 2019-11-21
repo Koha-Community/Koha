@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::Exception;
 
 use C4::Circulation qw/AddIssue AddReturn/;
@@ -602,6 +602,142 @@ subtest "void() tests" => sub {
     my $line1_post = $line1->unblessed();
     is( $ret, undef, 'Attempted void on non-credit returns undef' );
     is_deeply( $line1_pre, $line1_post, 'Non-credit account line cannot be voided' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "payout() tests" => sub {
+
+    plan tests => 17;
+
+    $schema->storage->txn_begin;
+
+    # Create a borrower
+    my $categorycode =
+      $builder->build( { source => 'Category' } )->{categorycode};
+    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+
+    my $borrower = Koha::Patron->new(
+        {
+            cardnumber => 'dariahall',
+            surname    => 'Hall',
+            firstname  => 'Daria',
+        }
+    );
+    $borrower->categorycode($categorycode);
+    $borrower->branchcode($branchcode);
+    $borrower->store;
+
+    my $staff = Koha::Patron->new(
+        {
+            cardnumber => 'bobby',
+            surname    => 'Bloggs',
+            firstname  => 'Bobby',
+        }
+    );
+    $staff->categorycode($categorycode);
+    $staff->branchcode($branchcode);
+    $staff->store;
+
+    my $account = Koha::Account->new( { patron_id => $borrower->id } );
+
+    my $debit1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => 10,
+            amountoutstanding => 10,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE'
+        }
+    )->store();
+    my $credit1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => -20,
+            amountoutstanding => -20,
+            interface         => 'commandline',
+            credit_type_code  => 'CREDIT'
+        }
+    )->store();
+
+    is( $account->balance(), -10, "Account balance is -10" );
+    is( $debit1->amountoutstanding,
+        10, 'Overdue fee has an amount outstanding of 10' );
+    is( $credit1->amountoutstanding,
+        -20, 'Credit has an amount outstanding of -20' );
+
+    my $pay_params = {
+        interface   => 'intranet',
+        staff_id    => $staff->borrowernumber,
+        branch      => $branchcode,
+        payout_type => 'CASH',
+        amount      => 20
+    };
+
+    throws_ok { $debit1->payout($pay_params); }
+    'Koha::Exceptions::Account::IsNotCredit',
+      '->payout() can only be used with credits';
+
+    my @required =
+      ( 'interface', 'staff_id', 'branch', 'payout_type', 'amount' );
+    for my $required (@required) {
+        my $params = {%$pay_params};
+        delete( $params->{$required} );
+        throws_ok {
+            $credit1->payout($params);
+        }
+        'Koha::Exceptions::MissingParameter',
+          "->payout() requires the `$required` parameter is passed";
+    }
+
+    throws_ok {
+        $credit1->payout(
+            {
+                interface   => 'intranet',
+                staff_id    => $staff->borrowernumber,
+                branch      => $branchcode,
+                payout_type => 'CASH',
+                amount      => 25
+            }
+        );
+    }
+    'Koha::Exceptions::ParameterTooHigh',
+      '->payout() cannot pay out more than the amountoutstanding';
+
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 1 );
+    throws_ok {
+        $credit1->payout(
+            {
+                interface   => 'intranet',
+                staff_id    => $staff->borrowernumber,
+                branch      => $branchcode,
+                payout_type => 'CASH',
+                amount      => 10
+            }
+        );
+    }
+    'Koha::Exceptions::Account::RegisterRequired',
+      '->payout() requires a cash_register if payout_type is `CASH`';
+
+    t::lib::Mocks::mock_preference( 'UseCashRegisters', 0 );
+    my $payout = $credit1->payout(
+        {
+            interface   => 'intranet',
+            staff_id    => $staff->borrowernumber,
+            branch      => $branchcode,
+            payout_type => 'CASH',
+            amount      => 10
+        }
+    );
+
+    is( $payout->amount(),            10, "Payout amount is 10" );
+    is( $payout->amountoutstanding(), 0,  "Payout amountoutstanding is 0" );
+    is( $account->balance(),          0,  "Account balance is 0" );
+    is( $debit1->amountoutstanding,
+        10, 'Overdue fee still has an amount outstanding of 10' );
+    is( $credit1->amountoutstanding,
+        -10, 'Credit has an new amount outstanding of -10' );
+    is( $credit1->status(), 'PAID', "Credit has a new status of PAID" );
 
     $schema->storage->txn_rollback;
 };
