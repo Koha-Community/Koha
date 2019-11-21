@@ -65,9 +65,9 @@ subtest 'call() tests' => sub {
     is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
 
     # Make sure parameters are correctly passed to the plugin method
-    my @responses = Koha::Plugins->call('check_password', { password => '1234' });
+    @responses = Koha::Plugins->call('check_password', { password => '1234' });
 
-    my $expected = [ { error => 0 } ];
+    $expected = [ { error => 0 } ];
     is_deeply(\@responses, $expected, 'call() should return all responses from plugins');
 
     $schema->storage->txn_rollback;
