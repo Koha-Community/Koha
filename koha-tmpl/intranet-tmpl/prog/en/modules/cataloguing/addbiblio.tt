@@ -220,6 +220,12 @@
     function _MARC21FieldDoc(field) {
         if(field == 0) {
             window.open("http://www.loc.gov/marc/bibliographic/bdleader.html");
+        } else if (field >= 90 && field <= 99 ){
+            window.open("http://www.loc.gov/marc/bibliographic/bd09x.html");
+        } else if (field >= 590 && field <= 599 ){
+            window.open("http://www.loc.gov/marc/bibliographic/bd59x.html");
+        } else if (field >= 690 && field <= 699 ){
+            window.open("http://www.loc.gov/marc/bibliographic/bd69x.html");
         } else if (field < 900) {
             window.open("http://www.loc.gov/marc/bibliographic/bd" + ("000"+field).slice(-3) + ".html");
         } else {
