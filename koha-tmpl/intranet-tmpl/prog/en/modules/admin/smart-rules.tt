@@ -113,6 +113,9 @@
                 <th>Max. suspension duration (day)</th>
                 <th>Suspension charging interval</th>
                 <th>Renewals allowed (count)</th>
+                [% IF Koha.Preference('UnseenRenewals') %]
+                <th>Unseen renewals allowed (count)</th>
+                [% END %]
                 <th>Renewal period</th>
                 <th>No renewal before</th>
                 <th>Automatic renewal</th>
@@ -152,6 +155,7 @@
                         [% SET maxsuspensiondays = all_rules.$c.$i.maxsuspensiondays %]
                         [% SET suspension_chargeperiod = all_rules.$c.$i.suspension_chargeperiod %]
                         [% SET renewalsallowed = all_rules.$c.$i.renewalsallowed %]
+                        [% SET unseenrenewalsallowed = all_rules.$c.$i.unseen_renewals_allowed %]
                         [% SET renewalperiod = all_rules.$c.$i.renewalperiod %]
                         [% SET norenewalbefore = all_rules.$c.$i.norenewalbefore %]
                         [% SET auto_renew = all_rules.$c.$i.auto_renew %]
@@ -166,7 +170,7 @@
                         [% SET rentaldiscount = all_rules.$c.$i.rentaldiscount %]
                         [% SET decreaseloanholds = all_rules.$c.$i.decreaseloanholds %]
 
-                        [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds %]
+                        [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds %]
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count | html %]">
@@ -261,6 +265,9 @@
                                     <td>[% maxsuspensiondays | html %]</td>
                                     <td>[% suspension_chargeperiod | html %]</td>
                                     <td>[% renewalsallowed | html %]</td>
+                                    [% IF Koha.Preference('UnseenRenewals') %]
+                                        <td>[% unseenrenewalsallowed | html %]</td>
+                                    [% END %]
                                     <td>[% renewalperiod | html %]</td>
                                     <td>[% norenewalbefore | html %]</td>
                                     <td>
@@ -410,6 +417,7 @@
                     <td><input type="text" name="maxsuspensiondays" id="maxsuspensiondays" size="3" /> </td>
                     <td><input type="text" name="suspension_chargeperiod" id="suspension_chargeperiod" size="3" /> </td>
                     <td><input type="text" name="renewalsallowed" id="renewalsallowed" size="2" /></td>
+                    <td><input type="text" name="unseen_renewals_allowed" id="unseen_renewals_allowed" size="2" /></td>
                     <td><input type="text" name="renewalperiod" id="renewalperiod" size="3" /></td>
                     <td><input type="text" name="norenewalbefore" id="norenewalbefore" size="3" /></td>
                     <td>
@@ -480,6 +488,9 @@
                       <th>Max. suspension duration (day)</th>
                       <th>Suspension charging interval</th>
                       <th>Renewals allowed (count)</th>
+                      [% IF Koha.Preference('UnseenRenewals') %]
+                      <th>Unseen renewals allowed (count)</th>
+                      [% END %]
                       <th>Renewal period</th>
                       <th>No renewal before</th>
                       <th>Automatic renewal</th>
