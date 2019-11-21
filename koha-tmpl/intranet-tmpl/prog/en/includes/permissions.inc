@@ -309,6 +309,11 @@
             Payout credits to patrons
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'refund' -%]
+        <span class="sub_permission refund_subpermission">
+            Refund payments to patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'writeoff' -%]
         <span class="sub_permission writeoff_subpermission">
             Write off fines and fees
