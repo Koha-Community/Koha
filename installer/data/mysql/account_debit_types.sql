@@ -6,6 +6,7 @@ INSERT INTO account_debit_types ( code, description, can_be_added_manually, defa
 ('NEW_CARD', 'New card fee', 1, NULL, 1),
 ('OVERDUE', 'Overdue fine', 0, NULL, 1),
 ('PROCESSING', 'Lost item processing fee', 0, NULL, 1),
+('PAYOUT', 'Payment from library to patron', 0, NULL, 1),
 ('RENT', 'Rental fee', 0, NULL, 1),
 ('RENT_DAILY', 'Daily rental fee', 0, NULL, 1),
 ('RENT_RENEW', 'Renewal of rental item', 0, NULL, 1),
