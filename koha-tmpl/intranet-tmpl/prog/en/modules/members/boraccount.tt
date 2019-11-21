@@ -84,6 +84,9 @@
         [% IF account.is_credit %]
           <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void</a>
         [% END %]
+        [% IF CAN_user_updatecharges_payout && account.is_credit && ( account.amountoutstanding < 0 ) %]
+          <button type="button" data-toggle="modal" data-target="#issuePayoutModal" data-account="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Issue payout</button>
+        [% END %]
       </td>
     </tr>
 
@@ -112,6 +115,73 @@
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
      </div> <!-- /.row -->
+
+    <!-- Issue payout modal -->
+    <div class="modal" id="issuePayoutModal" tabindex="-1" role="dialog" aria-labelledby="issuePayoutLabel">
+        <form  id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="get" enctype="multipart/form-data" class="validated">
+            <input type="hidden" name="accountlines_id" value="" id="payoutline">
+            <input type="hidden" name="action" value="payout">
+            <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="issuePayoutLabel">Issue payout</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <span id="item" class="label">Account: </span><span></span>
+                                </li>
+                                <li>
+                                    <span id="paid" class="label">Amount outstanding: </span><span>[% payout.amount | $Price %]</span>
+                                </li>
+                                <li>
+                                    <label class="required" for="amount">Returned to patron: </label>
+                                    <input type="number" step="0.01" id="amount" name="amount" min="0.00" required="required">
+                                    <span class="required">Required</span>
+                                </li>
+                                [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
+                                [% IF payment_types %]
+                                <li>
+                                    <label for="transaction_type">Transaction type: </label>
+                                    <select name="transaction_type" id="transaction_type">
+                                        [% FOREACH pt IN payment_types %]
+                                            <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
+                                        [% END %]
+                                    </select>
+                                </li>
+                                [% END %]
+
+                                [% IF Koha.Preference('UseCashRegisters') %]
+                                <li>
+                                    <label for="cash_register">Cash register: </label>
+                                    <select name="cash_register" id="cash_register">
+                                        [% FOREACH register IN registers %]
+                                          [% IF register.id == registerid %]
+                                        <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
+                                          [% ELSE %]
+                                        <option value="[% register.id | html %]">[% register.name | html %]</option>
+                                          [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                                [% END %]
+
+                            </ol>
+                        </fieldset> <!-- /.rows -->
+                    </div> <!-- /.modal-body -->
+                    <div class="modal-footer">
+                        <input type="hidden" name="registerid" value="[% register.id | html %]">
+                        <input type="hidden" name="op" value="payout">
+                        <button type="submit" class="btn btn-default">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div> <!-- /.modal-footer -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </form> <!-- /#payout_form -->
+    </div> <!-- /#issuePayoutModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -156,6 +226,18 @@
                 } else {
                     e.preventDefault();
                 }
+            });
+
+            $("#issuePayoutModal").on("shown.bs.modal", function(e){
+                var button = $(e.relatedTarget);
+                var account = button.data('account');
+                $("#account + span").replaceWith(account);
+                var accountline = button.data('accountline');
+                $('#payoutline').val(accountline);
+                var amount = button.data('amount') * -1;
+                $("#paid + span").replaceWith(amount);
+                $("#amount").attr({ "value": amount, "max": amount });
+                $("#amount, #transaction_type").focus();
             });
         });
     </script>

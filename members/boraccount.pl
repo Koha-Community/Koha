@@ -29,6 +29,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
+use Koha::Cash::Registers;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
@@ -47,12 +48,14 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
+my $schema         = Koha::Database->new->schema;
 my $borrowernumber = $input->param('borrowernumber');
 my $payment_id     = $input->param('payment_id');
 my $change_given   = $input->param('change_given');
 my $action         = $input->param('action') || '';
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+my $library_id = C4::Context->userenv->{'branch'};
 my $patron = Koha::Patrons->find( $borrowernumber );
 unless ( $patron ) {
     print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
@@ -61,10 +64,58 @@ unless ( $patron ) {
 
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
+my $registerid;
+if ( C4::Context->preference('UseCashRegisters') ) {
+    $registerid = scalar $input->param('registerid');
+    my $registers  = Koha::Cash::Registers->search(
+        { branch   => $library_id, archived => 0 },
+        { order_by => { '-asc' => 'name' } }
+    );
+
+    if ( !$registers->count ) {
+        $template->param( error_registers => 1 );
+    }
+    else {
+
+        if ( !$registerid ) {
+            my $default_register = Koha::Cash::Registers->find(
+                { branch => $library_id, branch_default => 1 } );
+            $registerid = $default_register->id if $default_register;
+        }
+        $registerid = $registers->next->id if !$registerid;
+
+        $template->param(
+            registerid => $registerid,
+            registers  => $registers,
+        );
+    }
+}
+
 if ( $action eq 'void' ) {
     my $payment_id = scalar $input->param('accountlines_id');
     my $payment    = Koha::Account::Lines->find( $payment_id );
     $payment->void();
+}
+
+if ( $action eq 'payout' ) {
+    my $payment_id        = scalar $input->param('accountlines_id');
+    my $payment           = Koha::Account::Lines->find($payment_id);
+    my $amount           = scalar $input->param('amount');
+    my $transaction_type = scalar $input->param('transaction_type');
+    $schema->txn_do(
+        sub {
+            my $payout = $payment->payout(
+                {
+                    payout_type   => $transaction_type,
+                    branch        => $library_id,
+                    staff_id      => $logged_in_user->id,
+                    cash_register => $registerid,
+                    interface     => 'intranet',
+                    amount        => $amount
+                }
+            );
+        }
+    );
 }
 
 #get account details
