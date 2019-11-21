@@ -196,7 +196,21 @@
             $(".flag").on("change",function(e){
                 e.preventDefault();
                 if( $(this).hasClass("child") ){
-                    $(this).closest(".parent").find(".flag.parent").prop("checked", false);
+                    if( $(this).prop("checked") ){
+                        // If this is the last of all the child boxes to be checked the parent should be checked too
+                        var unchecked = 0;
+                        $(this).closest(".children").find(".child").each(function(){
+                            if( !$(this).prop("checked") ){
+                                // There are still unchecked checkboxes in this group
+                                unchecked = 1;
+                            }
+                        });
+                        if( unchecked === 0 ){
+                            $(this).closest(".parent").find(".flag.parent").prop("checked", true);
+                        }
+                    } else {
+                        $(this).closest(".parent").find(".flag.parent").prop("checked", false);
+                    }
                 } else {
                     var bit = $(this).data("bit");
                     if( $(this).is(":checked") ){
