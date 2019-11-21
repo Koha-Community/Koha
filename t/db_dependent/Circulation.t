@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 45;
+use Test::More tests => 46;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -3339,6 +3339,49 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
     is_deeply( $needsconfirmation, { RENTALCHARGE => '3' }, 'Item needs rentalcharge confirmation to be issued, increment' );
     $itemtype->rentalcharge_daily('0')->store;
+};
+
+subtest "Test Backdating of Returns" => sub {
+    plan tests => 2;
+
+    my $branch = $library2->{branchcode};
+    my $biblio = $builder->build_sample_biblio();
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $branch,
+            itype            => $itemtype,
+        }
+    );
+
+    my %a_borrower_data = (
+        firstname =>  'Kyle',
+        surname => 'Hall',
+        categorycode => $patron_category->{categorycode},
+        branchcode => $branch,
+    );
+    my $borrowernumber = Koha::Patron->new(\%a_borrower_data)->store->borrowernumber;
+    my $borrower = Koha::Patrons->find( $borrowernumber )->unblessed;
+
+    my $due_date = dt_from_string;
+    my $issue = AddIssue( $borrower, $item->barcode, $due_date );
+    UpdateFine(
+        {
+            issue_id          => $issue->id(),
+            itemnumber        => $item->itemnumber,
+            borrowernumber    => $borrowernumber,
+            amount            => .25,
+            amountoutstanding => .25,
+            type              => q{}
+        }
+    );
+
+
+    my ( undef, $message ) = AddReturn( $item->barcode, $branch, undef, $due_date );
+
+    my $accountline = Koha::Account::Lines->find( { issue_id => $issue->id } );
+    is( $accountline->amountoutstanding, '0.000000', 'Fee amount outstanding was reduced to 0' );
+    is( $accountline->amount, '0.000000', 'Fee amount was reduced to 0' );
 };
 
 $schema->storage->txn_rollback;
