@@ -304,6 +304,11 @@
             Remaining permissions for managing fines and fees
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'payout' -%]
+        <span class="sub_permission payout_subpermission">
+            Payout credits to patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'writeoff' -%]
         <span class="sub_permission writeoff_subpermission">
             Write off fines and fees

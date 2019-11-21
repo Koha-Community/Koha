@@ -19,7 +19,14 @@ if ( CheckVersion($DBversion) ) {
         INSERT IGNORE INTO account_offset_types ( type ) VALUES ('PAYOUT');
     });
 
+    $dbh->do(qq{
+        INSERT IGNORE permissions (module_bit, code, description)
+        VALUES
+        (10, 'payout', 'Perform account payout action')
+    });
+
     SetVersion($DBversion);
     print "Upgrade to $DBversion done (Bug 24080 - Add PAYOUT account_debit_type)\n";
     print "Upgrade to $DBversion done (Bug 24080 - Add PAYOUT account_offset_type)\n";
+    print "Upgrade to $DBversion done (Bug 24080 - Add accounts payout permission)\n";
 }
