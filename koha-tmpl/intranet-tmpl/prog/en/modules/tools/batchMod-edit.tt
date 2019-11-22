@@ -268,7 +268,7 @@ $(document).ready(function(){
                 </select>
               [% ELSIF ( mv.type == 'text1' ) %]
                 <input type="text" tabindex="1" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
-                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode | html -%]&index=[%- mv.id | html -%]','[%- mv.id | html -%]'); return false;" title="Tag editor">...</a>
+                <a href="#" class="buttonDot" onclick="Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=[%- mv.authtypecode | uri -%]&index=[%- mv.id | uri -%]','[%- mv.id | uri -%]'); return false;" title="Tag editor">...</a>
               [% ELSIF ( mv.type == 'text2' ) %]
                 <input type="text" id="[%- mv.id | html -%]" name="field_value" class="input_marceditor" size="50" maxlength="255" value="[%- mv.value | html -%]" />
                 [% IF mv.noclick %]

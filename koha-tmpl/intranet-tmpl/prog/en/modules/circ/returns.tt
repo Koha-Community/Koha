@@ -124,7 +124,7 @@
         <h3>Please transfer item to: [% Branches.GetName( collectionBranch ) | html %]</h3>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
             <p>This item is part of a rotating collection.</p>
-            <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% collectionBranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
+            <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% collectionBranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
 </div>
 [% END %]
 
@@ -232,7 +232,7 @@
                     </form>
                     <!-- PRINT SLIP -->
                     <form method="post" action="returns.pl" name="mainform">
-                        <button type="submit" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
+                        <button type="submit" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% TransferWaitingAt | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
                         [% FOREACH inputloo IN inputloop %]
                             <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
                             <input type="hidden" name="dd-[% inputloo.counter | html %]" value="[% inputloo.duedate | html %]" />
@@ -421,10 +421,10 @@
                     <div class="modal-footer">
                         [% IF !transfer %]
                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve"><i class="fa fa-check"></i> Yes</button>
-                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button><button type="submit" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
+                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button><button type="submit" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
                         [% ELSE %]
                         <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
+                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
                         [% END %]
                         <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                         <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
@@ -870,11 +870,11 @@
 
             $(".print-slip").on('click', function(e) {
                 e.preventDefault();
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;biblionumber=[% biblionumber | html %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;biblionumber=[% biblionumber | uri %]');
             });
 
             [% IF print_slip %]
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber | html %]&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% itemnumber | html %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber | uri %]&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]');
             [% END %]
 
             var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
