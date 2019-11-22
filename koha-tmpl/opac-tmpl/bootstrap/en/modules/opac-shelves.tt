@@ -968,6 +968,7 @@ $(function() {
         window.onafterprint = function () {
             window.close();
         }
+        setTimeout('window.close()', 1000); // Hack for Chrome < 63
     [% END %]
 
     AdjustRemark();
