@@ -3,6 +3,7 @@
 # Converted to new plugin style (Bug 13437)
 
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright Athens County Public Libraries 2019
 #
 # This file is part of Koha.
 #
@@ -32,13 +33,21 @@ my $builder = sub {
 <script>
 // from: cataloguing/value_builder/dateaccessioned.pl
 
+\$(document).ready(function(){
+    \$("#$function_name").datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+});
+
 function Focus$function_name(event) {
     set_to_today(event.data.id);
+    \$("#$function_name").datepicker("show");
+
 }
 
 function Click$function_name(event) {
+    event.preventDefault();
     set_to_today(event.data.id, 1);
-    return false; // prevent page scroll
 }
 
 function set_to_today( id, force ) {
