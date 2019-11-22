@@ -614,7 +614,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( save ) %]
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
 <input type="hidden" name="sql" value="[% sql | html %]" />
 <input type="hidden" name="type" value="[% type | html %]" />
 <input type="hidden" name="area" value="[% area | html %]" />
@@ -893,7 +893,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( create ) %]
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
 <fieldset class="rows">
 <legend>Create report from SQL</legend>
 <ol>
@@ -970,7 +970,7 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( editsql ) %]
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
 <input type="hidden" name="phase" value="Update SQL" />
 <input type="hidden" name="id" value="[% id | html %]"/>
 <fieldset class="rows">
@@ -1131,6 +1131,20 @@ canned reports and writing custom SQL reports.</p>
                 mode: "text/x-sql",
                 lineWrapping: true
             });
+
+            // https://stackoverflow.com/questions/2086287/how-to-clear-jquery-validation-error-messages#answer-16025232
+            function clearValidation( formElement ){
+                // formElement should be a jQuery object
+                var validator = formElement.validate();
+                // Iterate through named elements inside of the form, and mark them as error free
+                $('[name]',formElement).each(function(){
+                    validator.successList.push(this);//mark as error free
+                    validator.showErrors();//remove error messages if present
+                });
+                validator.resetForm();//remove error class on name elements and clear history
+                validator.reset();//remove all error and success data
+            }
+
         [% END %]
 
         [% IF ( showsql ) %]
@@ -1466,11 +1480,31 @@ canned reports and writing custom SQL reports.</p>
             });
 
             [% IF (create || editsql || save) %]
+
+                var validated_form = $("#sql_report_form").validate({
+                    reportname: "required",
+                    group_input: {
+                        required: {
+                            depends: function(element) {
+                                return $("#create_group").prop("checked") && $("#groupdesc_input").val() != '';
+                            }
+                        }
+                    },
+                    groupdesc_input: {
+                        required: {
+                            depends: function(element) {
+                                return $("#create_group").prop("checked") && $("#group_input").val() != '';
+                            }
+                        }
+                    }
+                });
+
                 $("#select_group").change(function() {
                     if($(this).prop('checked')) {
-                        $("#group_input").prop('disabled', true);
-                        $("#groupdesc_input").prop('disabled', true);
+                        $("#group_input").attr("class","").prop('disabled', true).prop("required", false);
+                        $("#groupdesc_input").attr("class","").prop('disabled', true).prop("required", false);
                         $("#group_select").prop('disabled', false);
+                        clearValidation( $("#sql_report_form") );
                         if ($("#group_select").val().length > 0) {
                             $("#select_subgroup").prop('checked', true);
                             $("#select_subgroup").change();
@@ -1482,30 +1516,46 @@ canned reports and writing custom SQL reports.</p>
                 });
                 $("#create_group").change(function() {
                     if($(this).prop('checked')) {
-                        $("#group_input").prop('disabled', false);
-                        $("#groupdesc_input").prop('disabled', false);
+                        $("#group_input").prop('disabled', false).prop("required", true );
+                        $("#groupdesc_input").prop('disabled', false).prop("required", true );
                         $("#group_select").prop('disabled', true);
-                        $("#create_subgroup").prop('checked', true).change();
+                        // $("#create_subgroup").prop('checked', true).change();
                         $("#subgroup_select").hide();
                         $("#subgroup input[type='radio']").hide();
                         $("#subgroup label[for]").hide();
-                        $("#subgroup_input").show();
-                        $("#subgroupdesc_input").show();
+                        $("#subgroup_input").prop("required", false ).prop("disabled", false).show();
+                        $("#subgroupdesc_input").prop("required", false ).prop("disabled", false).show();
                         $("#subgroup").show();
+                        // Add validation rules for fields which were previously hidden
+                        $("#subgroup_input").rules("add", {
+                            required: {
+                                depends: function(element) {
+                                    return $("#create_group").prop("checked") &&  $("#subgroupdesc_input").val() != '';
+                                }
+                            }
+                        });
+                        $("#subgroupdesc_input").rules("add", {
+                            required: {
+                                depends: function(element) {
+                                    return $("#create_group").prop("checked") &&  $("#subgroup_input").val() != '';
+                                }
+                            }
+                        });
                     }
                 });
                 $("#select_subgroup").change(function() {
                     if($(this).prop('checked')) {
                         $("#subgroup_select").prop('disabled', false);
-                        $("#subgroup_input").prop('disabled', true);
-                        $("#subgroupdesc_input").prop('disabled', true);
+                        $("#subgroup_input").prop('disabled', true).prop("required", false );
+                        $("#subgroupdesc_input").prop('disabled', true).prop("required", false );
+                        clearValidation( $("#sql_report_form") );
                     }
                 });
                 $("#create_subgroup").change(function() {
                     if($(this).prop('checked')) {
-                        $("#subgroup_input").prop('disabled', false);
-                        $("#subgroupdesc_input").prop('disabled', false);
-                        $("#subgroup_select").prop('disabled', true);
+                        $("#subgroup_input").prop('disabled', false).prop("required", true );
+                        $("#subgroupdesc_input").prop('disabled', false).prop("required", true );
+                        $("#subgroup_select").val("").prop('disabled', true);
                     }
                 });
                 $("#select_group").change();
