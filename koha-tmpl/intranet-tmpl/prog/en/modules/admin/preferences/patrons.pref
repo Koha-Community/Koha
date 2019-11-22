@@ -321,3 +321,36 @@ Patrons:
          - pref: FailedLoginAttempts
            class: integer
          - failed login attempts.
+     -
+         - pref: Pseudonymization
+           choices:
+               yes: Enable
+               no: Disable
+         - "pseudonymization to comply with GDPR for personal information."
+         - "Patrons and transactions will be copied to a separate table for statistics purpose."
+         - "<br/>Use the following fields for patrons:"
+         - pref: PseudonymizationPatronFields
+           multiple:
+             title: "Patron's title"
+             city: "City"
+             state: "State"
+             zipcode: "Zipcode"
+             country: "Country"
+             branchcode: "Patron's library"
+             categorycode: "Patron's category"
+             dateenrolled: "Date the patron was added to Koha"
+             sex: "Patron's gender"
+             sort1: "Sort1"
+             sort2: "Sort2"
+         - "<br/> And the following fields for the transactions:"
+         - pref: PseudonymizationTransactionFields
+           multiple:
+             datetime: "Date and time of the transaction"
+             transaction_branchcode: "Library where the transaction occurred"
+             transaction_type: "Transaction type"
+             itemnumber: "Itemnumber"
+             itemtype: "Item type"
+             holdingbranch: "Holding branch"
+             location: "Location"
+             itemcallnumber: "Item's callnumber"
+             ccode: "Collection code"
