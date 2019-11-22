@@ -18,12 +18,16 @@ package C4::Stats;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 require Exporter;
 use Carp;
 use C4::Context;
 use C4::Debug;
+
+use Koha::DateUtils qw( dt_from_string );
+use Koha::Statistics;
+use Koha::PseudonymizedTransactions;
+
 use vars qw(@ISA @EXPORT);
 
 our $debug;
@@ -124,20 +128,27 @@ sub UpdateStats {
     my $location          = exists $params->{location}       ? $params->{location}       : undef;
     my $ccode             = exists $params->{ccode}          ? $params->{ccode}          : '';
 
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "INSERT INTO statistics
-        (datetime,
-         branch,          type,        value,
-         other,           itemnumber,  itemtype, location,
-         borrowernumber,  ccode)
-         VALUES (now(),?,?,?,?,?,?,?,?,?)"
-    );
-    $sth->execute(
-        $branch,     $type,     $amount,   $other,
-        $itemnumber, $itemtype, $location, $borrowernumber,
-        $ccode
-    );
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my $statistic = Koha::Statistic->new(
+        {
+            datetime       => $dtf->format_datetime( dt_from_string ),
+            branch         => $branch,
+            type           => $type,
+            value          => $amount,
+            other          => $other,
+            itemnumber     => $itemnumber,
+            itemtype       => $itemtype,
+            location       => $location,
+            borrowernumber => $borrowernumber,
+            ccode          => $ccode,
+        }
+    )->store;
+
+    Koha::PseudonymizedTransaction->new_from_statistic($statistic)->store
+      if C4::Context->preference('Pseudonymization')
+        && $borrowernumber # Not a real transaction if the patron does not exist
+                           # For instance can be a transfer, or hold trigger
+        && grep { $_ eq $params->{type} } qw(renew issue return onsite_checkout);
 }
 
 1;
