@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2019-07-11 19:21+0000\n"
-"Last-Translator: KnowledgeWare Technologies Est. <massoudalshareef@kwareict.com>\n"
+"PO-Revision-Date: 2019-10-15 19:35+0000\n"
+"Last-Translator: bright <bright92dream@hotmail.com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1562872895.615377\n"
+"X-POOTLE-MTIME: 1571168103.654328\n"
 "X-Pootle-Path: /ar/18.05/ar-Arab-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1734,7 +1734,7 @@ msgstr " استخدام"
 
 # Authorities > General
 msgid "authorities.pref#UseAuthoritiesForTracings# authority record numbers instead of text strings for searches from subject tracings."
-msgstr "أرقام نسجيلة الاستناد بدلا من من المقاطع النصية للبحث من تعقب الموضوع."
+msgstr "أرقام تسجيلة الاستناد بدلا من من المقاطع النصية لعمليات البحث من تعقب الموضوع."
 
 # Cataloging
 msgid "cataloguing.pref"
@@ -3290,11 +3290,11 @@ msgstr " استخدام قواعد الإعارة والغرامات الخاص�
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# the item's holding library (holdingbranch)."
-msgstr ""
+msgstr "المكتبة المقتنية للمادة (الفرع المقتني)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# the item's home library (homebranch)."
-msgstr ""
+msgstr "مكتبة المادة الرئيسية (الفرع الرئيسي)"
 
 # Circulation > Housebound module
 msgid "circulation.pref#HouseboundModule# Disable"
@@ -3789,6 +3789,18 @@ msgstr "عدم السماح"
 msgid "circulation.pref#RotationPreventTransfers# library transfers on items in stockrotation rotas"
 msgstr "عمليات نقل المكتبة على المواد الموجودة في لوائح تدوير المخزون"
 
+# Circulation > Self check-in module
+msgid "circulation.pref#RoundFinesAtPayment# Do"
+msgstr ""
+
+# Circulation > Self check-in module
+msgid "circulation.pref#RoundFinesAtPayment# Don't"
+msgstr ""
+
+# Circulation > Self check-in module
+msgid "circulation.pref#RoundFinesAtPayment# round fines to the nearest cent when collecting payments. Enabling this preference allows paying fines of partial cents which may not be visible in the interface."
+msgstr ""
+
 # Circulation > Self Checkout
 msgid "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-based self checkout screen:"
 msgstr "قم بإدراج الHTML التالي في شاشة الإعارة الذاتية على الويب:"
@@ -4115,7 +4127,7 @@ msgstr "عدم القيام"
 
 # Circulation > Interface
 msgid "circulation.pref#UpdateTotalIssuesOnCirc# update a bibliographic record's total issues count whenever an item is issued (WARNING! This increases server load significantly; if performance is a concern, use the update_totalissues.pl cron job to update the total issues count)."
-msgstr "حدِّث إجمالي مجموع الإعارات للتسجيلة الببليوغرافية عند إعارة مادة ما (تحذير! هذا سيزيد من الحمل على المخدم بشكل ملحوظ؛ إذا ما كان يقلقكم موضوع الأداء استخدم المهمة المجدولة update_totalissues.pl لتحدث إجمالي عدد الإعارات)."
+msgstr "قم بتحديث إجمالي مجموع الإعارات للتسجيلة البيبليوغرافية عند إعارة مادة ما (تحذير! سيؤدي ذلك إلى زيادة الحمل على الخادم بشكل ملحوظ؛ إذا كنت مهتمًا بالأداء، قم باستخدام كرون update_totalissues.pl لتحديث إجمالي عدد الإعارات)."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#UseBranchTransferLimits# ."
@@ -6124,7 +6136,7 @@ msgstr "عد عرض"
 
 # OPAC > Features
 msgid "opac.pref#OPACPopupAuthorsSearch# the list of authors/subjects in a popup for a combined search on OPAC detail pages."
-msgstr "قائمة المؤلمفين / الموضوعات في نافذة منبثقة للبحث المدمج في صفحات تفاصيل الأوباك."
+msgstr "قائمة المؤلفين/الموضوعات في نافذة منبثقة للبحث المدمج في صفحات تفاصيل الأوباك."
 
 # OPAC > Privacy
 msgid "opac.pref#OPACPrivacy# Allow"
@@ -6987,8 +6999,8 @@ msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
 msgstr "للمستفيدين بوضع حجوزات على المواد من واجهة المستفيد OPAC."
 
 # OPAC > Restricted page
-msgid "opac.pref#RestrictedPageContent# HTML content of your restricted page"
-msgstr "محتوى HTML لصفحتك المقيدة"
+msgid "opac.pref#RestrictedPageContent# HTML content of your restricted page (available at /cgi-bin/koha/opac-restrictedpage.pl)"
+msgstr "تفضيلات الاوباك#ضبط محتوى الصفحة# محتوى HTML لضبط الصفحة (متاح على /cgi-bin/koha/opac-restrictedpage.pl)"
 
 # OPAC > Restricted page
 msgid "opac.pref#RestrictedPageLocalIPs# Access from IP addresses beginning with"
@@ -8016,7 +8028,7 @@ msgstr "تنازلي هجائي."
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# relevance"
-msgstr "حسب الإتصال بالموضوع"
+msgstr "الصلة"
 
 # Searching > Results Display
 msgid "searching.pref#OPACdefaultSortField# title"
@@ -8124,7 +8136,7 @@ msgstr " فرض"
 
 # Searching > Features
 msgid "searching.pref#TraceCompleteSubfields# subject tracings in the OPAC and Staff Client to search only for complete-subfield matches."
-msgstr " تعقب الموضوع في الأوباك وبرنامج العميل للبحث عن مضاهاة للحقل الفرعي-التام فقط."
+msgstr "تعقب الموضوع في الأوباك وبرنامج العميل للبحث عن مضاهاة للحقل الفرعي-التام فقط."
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# Don't include"
@@ -8136,7 +8148,7 @@ msgstr " إدراج"
 
 # Searching > Features
 msgid "searching.pref#TraceSubjectSubdivisions# subdivisions for searches generated by clicking on subject tracings."
-msgstr "أقسام البحث المولدة بالنقر على تعقب الموضوع."
+msgstr "الأقسام الفرعية لعمليات البحث المولدة بالنقر على تعقب الموضوع."
 
 # Searching > Results Display
 msgid "searching.pref#UNIMARCAuthorsFacetsSeparator# Use the following text as separator for UNIMARC authors facets"
@@ -8284,15 +8296,15 @@ msgstr " الأعداد السابقة من دورية في الأوباك."
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# Do"
-msgstr ""
+msgstr "القيام بـ"
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# Do not"
-msgstr ""
+msgstr "عدم القيام بـ"
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# prefill the notes from the last 'Arrived' serial when generating the next 'Expected' issue."
-msgstr ""
+msgstr "ملء الملاحظات مسبقًا من آخر دورية 'وصلت' عند توليد العدد التالي 'المتوقع'"
 
 # Serials
 msgid "serials.pref#RenewSerialAddsSuggestion# Add"
@@ -8652,7 +8664,7 @@ msgstr " قم باستخدام الـ"
 
 # Staff Client > Appearance
 msgid "staff_client.pref#template# theme on the staff interface."
-msgstr " موضوع واجهة العميل."
+msgstr "نسق واجهة العميل."
 
 # Staff Client > Options
 msgid "staff_client.pref#viewISBD# Allow"

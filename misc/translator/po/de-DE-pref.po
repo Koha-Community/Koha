@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2019-09-17 04:59+0000\n"
+"PO-Revision-Date: 2019-11-14 16:39+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1568696376.871108\n"
+"X-POOTLE-MTIME: 1573749578.990327\n"
 "X-Pootle-Path: /de/18.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -3790,6 +3790,18 @@ msgstr "Erlaube nicht,"
 msgid "circulation.pref#RotationPreventTransfers# library transfers on items in stockrotation rotas"
 msgstr "dass Bibliotheken Exemplare in Bestandsrotationsplänen an andere Bibliotheken geschickt werden"
 
+# Circulation > Self check-in module
+msgid "circulation.pref#RoundFinesAtPayment# Do"
+msgstr "Runde"
+
+# Circulation > Self check-in module
+msgid "circulation.pref#RoundFinesAtPayment# Don't"
+msgstr "Runde nicht"
+
+# Circulation > Self check-in module
+msgid "circulation.pref#RoundFinesAtPayment# round fines to the nearest cent when collecting payments. Enabling this preference allows paying fines of partial cents which may not be visible in the interface."
+msgstr "Gebühren bei Zahlungen auf den nächsten Cent. Wenn diese Funktion aktiv ist, können Zahlungen auch für Teilbeträge von Cents erfolgen, auch wenn dies in der Oberfläche nicht sichtbar ist."
+
 # Circulation > Self Checkout
 msgid "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-based self checkout screen:"
 msgstr "Inkludiere folgendes HTML bei der Anzeige der Selbstausleihe:"
@@ -6988,8 +7000,8 @@ msgid "opac.pref#RequestOnOpac# patrons to place holds on items from the OPAC."
 msgstr "dass Benutzer im OPAC vormerken können."
 
 # OPAC > Restricted page
-msgid "opac.pref#RestrictedPageContent# HTML content of your restricted page"
-msgstr "HTML-Code der Proxy-Seite:"
+msgid "opac.pref#RestrictedPageContent# HTML content of your restricted page (available at /cgi-bin/koha/opac-restrictedpage.pl)"
+msgstr "HTML für die login-geschützte Seite (verfügbar unter /cgi-bin/koha/opac-restrictedpage.pl)"
 
 # OPAC > Restricted page
 msgid "opac.pref#RestrictedPageLocalIPs# Access from IP addresses beginning with"
@@ -7565,11 +7577,11 @@ msgstr "um auf die lokale Datenschutzerklärung in den Mitteilungen zu Datenschu
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# <br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
-msgstr "<br><strong>HINWEIS:</strong> Ein zugelassener Benutzer muss über die Berechtigung 'permissions' verfügen (wenn wer nicht superlibrarian ist)."
+msgstr "<br><strong>HINWEIS:</strong> Ein berechtigter Benutzer muss über die Berechtigung 'permissions' verfügen (wenn wer nicht superlibrarian ist)."
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow all permitted users"
-msgstr "Erlaube allen zugelassenen Benutzern"
+msgstr "Erlaube allen berechtigten Benutzern"
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow only superlibrarians"
@@ -7577,7 +7589,7 @@ msgstr "Erlaube nur Benutzern mit superlibrarian-Berechtigung"
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# to access/change superlibrarian privileges."
-msgstr "um die Berechtigung superlibrarian zu vergeben oder zu entziehen."
+msgstr "die Berechtigung superlibrarian zu vergeben oder zu entziehen."
 
 # Patrons > General
 msgid "patrons.pref#RequireStrongPassword# (Must contain at least one digit, one lowercase and one uppercase)."

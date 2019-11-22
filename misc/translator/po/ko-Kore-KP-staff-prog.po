@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-09-17 09:31-0300\n"
+"POT-Creation-Date: 2019-11-16 08:41-0300\n"
 "PO-Revision-Date: 2015-10-07 15:49+0000\n"
 "Last-Translator: Vinea-Hgi <dopple813@naver.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1135,7 +1135,7 @@ msgstr "%s %s %s 이름 없음, 바스켓번호: %s %s "
 #. %2$s:  PROCESS items_table tab="otherholdings" items=otheritemloop 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:459
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:465
 #, c-format
 msgid "%s %s %s No other items. %s "
 msgstr "%s %s %s 다른 항목 없음. %s "
@@ -1162,7 +1162,7 @@ msgstr "%s %s %s 다른 항목 없음. %s "
 #. %20$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) 
 #. %21$s:  END 
 #. %22$s:  IF ( item.restricted ) 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:316
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:322
 #, fuzzy, c-format
 msgid ""
 "%s %s %s Not for loan %s (%s) %s %s %s %s Waiting at %s since %s. %s Item-"
@@ -2530,30 +2530,15 @@ msgstr "%s %s %s 바스켓 그룹 번호. %s %s "
 msgid "%s %s before %s "
 msgstr "%s %s 이전에 %s "
 
-#. For the first occurrence,
-#. %1$s:  IF branch_limitations.size > 1 
-#. %2$s:  branch_limitations.size | html 
+#. %1$s:  IF item.branches.size > 1 
+#. %2$s:  item.branches.size | html 
 #. %3$s:  ELSE 
-#. %4$s:  branch_limitations.size | html 
+#. %4$s:  item.branches.size | html 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:506
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:267
 #, c-format
 msgid "%s %s branches limitations %s %s branch limitation %s "
 msgstr "%s %s 분관 제한 %s %s 분관 제한 %s "
-
-#. %1$s:  IF loo.branches.size > 1 
-#. %2$s:  loo.branches.size | html 
-#. %3$s:  ELSE 
-#. %4$s:  loo.branches.size | html 
-#. %5$s:  END 
-#. %6$s:  ELSE 
-#. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:234
-#, c-format
-msgid ""
-"%s %s branches limitations %s %s branch limitation %s %s No limitation %s "
-msgstr "%s %s 분관 제한 %s %s 분관 제한 %s %s 제한 없음 %s "
 
 #. For the first occurrence,
 #. %1$s:  IF l.shared 
@@ -2633,6 +2618,29 @@ msgstr "%s %s in "
 msgid ""
 "%s %s item(s) modified (with %s field(s) modified). %s No items modified. %s "
 msgstr "%s 항목 수정됨 (%s 필드 수정됨) "
+
+#. %1$s:  IF branch_limitations.size > 1 
+#. %2$s:  branch_limitations.size | html 
+#. %3$s:  ELSE 
+#. %4$s:  branch_limitations.size | html 
+#. %5$s:  END 
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:506
+#, fuzzy, c-format
+msgid "%s %s library limitations %s %s library limitation %s "
+msgstr "%s %s 분관 제한 %s %s 분관 제한 %s "
+
+#. %1$s:  IF loo.branches.size > 1 
+#. %2$s:  loo.branches.size | html 
+#. %3$s:  ELSE 
+#. %4$s:  loo.branches.size | html 
+#. %5$s:  END 
+#. %6$s:  ELSE 
+#. %7$s:  END 
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:238
+#, fuzzy, c-format
+msgid ""
+"%s %s library limitations %s %s library limitation %s %s No limitation %s "
+msgstr "%s %s 분관 제한 %s %s 분관 제한 %s %s 제한 없음 %s "
 
 #. %1$s:  IF items.count
 #. %2$s:  items.count | html 
@@ -2939,7 +2947,7 @@ msgstr "%s %s항목%s항목%s 연체로 간주 %s%s "
 #. %5$s:  CASE 'complete' 
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:605
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:611
 #, c-format
 msgid "%s %sNew %sOrdered %sPartial %sComplete %sCancelled %s "
 msgstr "%s %s신규 %s주문 %s일부 %s완전 %s취소 %s "
@@ -3366,7 +3374,7 @@ msgstr "%s (%s ) %s %s청구기호: %s%s"
 msgid "%s (%s)%s %s callnumber: %s%s"
 msgstr "%s ( %s ) %s %s 청구기호: %s%s"
 
-#. %1$s:  issue.item.biblioitemnumber.biblionumber.title | html 
+#. %1$s:  issue.item.biblio.title | html 
 #. %2$s:  issue.item.barcode | html 
 #. %3$s:  issue.date_due | $KohaDates as_due_date => 1 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:632
@@ -4402,7 +4410,7 @@ msgstr "%s 예약 할 수 없습니다"
 #. %1$s:  ELSE # - No image passed JavaScript takes care 
 #. %2$s:  END 
 #. %3$s:  IF ( CAN_user_tools_upload_local_cover_images ) 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:670
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:676
 #, c-format
 msgid ""
 "%s No images have been uploaded for this bibliographic record yet. %s %s "
@@ -5109,7 +5117,7 @@ msgstr "%s 이 도서에 대한 주문이 없습니다. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:629
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:635
 #, c-format
 msgid "%s There is no order for this biblio. %s "
 msgstr "%s 이 도서에 대한 주문이 없습니다. %s "
@@ -5374,7 +5382,7 @@ msgid "%s already in your cart"
 msgstr "%s 이미 내 책바구니에"
 
 #. %1$s:  item.countanalytics | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:377
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:383
 #, c-format
 msgid "%s analytics"
 msgstr "%s 분석"
@@ -5592,7 +5600,7 @@ msgstr ""
 
 #. %1$s:  LoginBranchname | html 
 #. %2$s:  itemloop.size() || 0 | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:147
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:153
 #, fuzzy, c-format
 msgid "%s holdings (%s)"
 msgstr "%s 예약 중"
@@ -6986,7 +6994,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( latestserial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:523
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:529
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:223
 #, c-format
 msgid ""
@@ -7115,7 +7123,7 @@ msgstr "%s항목 형식별 예약정책 %s%s항목 형식별 기본예약정책%
 #. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
 #. %7$s:  ELSE 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:18
+#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:17
 #, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
@@ -9734,8 +9742,8 @@ msgstr ""
 msgid "(Indonesian)"
 msgstr "(인도네시아어)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1517
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1539
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1532
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1554
 #, c-format
 msgid "(None)"
 msgstr "(없음)"
@@ -9787,7 +9795,7 @@ msgid "(Tax inc.)"
 msgstr "(세금 포함.)"
 
 #. %1$s:  subscriptionsnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:497
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:503
 #, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "(이 표제와 연관된 %s 구독이 있습니다)."
@@ -10429,7 +10437,7 @@ msgstr ": 항목이 대출중입니다."
 #. %3$s:  HTML5MediaSet.srcblock | html 
 #. %4$s:  HTML5MediaSet.typeblock | html 
 #. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:684
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:690
 #, fuzzy, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
@@ -10467,7 +10475,7 @@ msgstr "글자코드 기본값 '%s'는 이미 존재합니다."
 msgid "A field name is required"
 msgstr "이 필드는 채워야합니다."
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:416
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:421
 #, c-format
 msgid ""
 "A generic authorized value field that can be used anywhere you need a simple "
@@ -10490,14 +10498,14 @@ msgstr "이 항목들은 예약을 요청할 수 없습니다."
 msgid "A letter with the code '%s' already exists for '%s'."
 msgstr "글자코드 '%s' 가 이미 '%s'에 존재합니다."
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:410
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:415
 #, c-format
 msgid ""
 "A list of additional custom status values for suggestions that can be used "
 "in addition to the default values."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:384
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:389
 #, c-format
 msgid "A list of reasons displayed in the suggestion form on the OPAC."
 msgstr ""
@@ -10531,7 +10539,7 @@ msgstr "대출 이용자의 계정에 반환되었습니다."
 msgid "A translation already exists for this language."
 msgstr "번역 관리자:"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:394
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:399
 #, c-format
 msgid ""
 "A way to sort and filter your reports, the default values in this category "
@@ -10810,7 +10818,7 @@ msgstr "수서일: 신-구 순으로"
 msgid "Acquisition date: oldest to newest"
 msgstr "수서일: 구-신 순으로"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:159
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:165
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:78
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:349
 #, c-format
@@ -10956,7 +10964,7 @@ msgstr "잋리하는 것을 찾을 수 없을 경우 동작:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:94
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:261
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:355
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:41
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:115
@@ -11014,7 +11022,7 @@ msgstr "동작"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:212
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:92
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:138
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:207
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:206
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:207
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:174
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:8
@@ -11115,7 +11123,7 @@ msgstr "실제 비용:"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:791
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:26
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:339
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:278
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:282
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:445
 #: intranet-tmpl/prog/en/modules/labels/result.tt:86
 #, c-format
@@ -11186,7 +11194,7 @@ msgstr "신규 OAI 설정 추가"
 msgid "Add a new action"
 msgstr "신규 동작 추가"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:255
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:259
 #, fuzzy, c-format
 msgid "Add a new authorized value"
 msgstr "검정된 제목들"
@@ -11971,7 +11979,7 @@ msgstr ""
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:386
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:130
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:136
 #, fuzzy
 msgid "Adlibris cover image"
 msgstr "지역 표지 이미지 업로드"
@@ -12305,8 +12313,6 @@ msgstr "모든 전거 형식"
 msgid "All available funds%s for %s%s"
 msgstr "모든 사용가능한 자금 %s %s%s"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:156
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:155
 #, c-format
 msgid "All branches"
@@ -12378,6 +12384,8 @@ msgstr "모든 항목 형식"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:19
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:243
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:66
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:156
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:165
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:74
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:148
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:85
@@ -12504,7 +12512,7 @@ msgstr "전송을 허용하시겠습니까?"
 msgid "Allowed"
 msgstr "허용"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:370
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:375
 #, c-format
 msgid ""
 "Allows multiple Item types to be searched in a category. Categories can be "
@@ -12745,7 +12753,7 @@ msgstr "총량:"
 msgid "Amount: "
 msgstr "총량:"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:340
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:345
 #, c-format
 msgid ""
 "An authorized value attached to patrons, that can be used for statistical "
@@ -12805,7 +12813,7 @@ msgstr "에러가 발생했습니다. 청구서를 만들수 없습니다."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 msgid "An error occurred on deleting this image"
 msgstr "이미지를 삭제하는중에 오류가 발생했습니다"
 
@@ -13360,7 +13368,7 @@ msgid "Are you sure you want to delete this authority?"
 msgstr "정말로 이 전거를 삭제하시겠습니까?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:301
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:305
 #, fuzzy
 msgid "Are you sure you want to delete this authorized value?"
 msgstr "정말로 이 전거를 삭제하시겠습니까?"
@@ -13398,7 +13406,7 @@ msgstr "정말로 삭제하시겠습니까 %s 첨부된 항목을?"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 msgid "Are you sure you want to delete this cover image?"
 msgstr "정말로 이 표지 이미지를 삭제하시겠습니까?"
 
@@ -13816,7 +13824,7 @@ msgstr ""
 msgid "Article requests (%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:117
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:123
 #, c-format
 msgid "Article requests:"
 msgstr ""
@@ -13858,7 +13866,7 @@ msgid "At least two records must be selected for merging."
 msgstr "병합하기 위해서 두개의 레코드를 선택해야 합니다."
 
 #. %1$s:  Branches.GetName(subscription.branchcode) || subscription.branchcode | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:500
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:506
 #, c-format
 msgid "At library: %s"
 msgstr "도서관: %s"
@@ -14545,7 +14553,7 @@ msgstr "3월"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:205
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:211
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:31
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
@@ -14730,7 +14738,7 @@ msgid "Basic parameters"
 msgstr "기본 매개변수"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:17
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:557
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:563
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:360
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:263
@@ -14806,7 +14814,7 @@ msgstr "바스켓 삭제"
 msgid "Basket details"
 msgstr "바스켓 세부사항"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:556
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:562
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:265
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:116
@@ -15511,17 +15519,10 @@ msgstr "분관"
 msgid "Branches limitation"
 msgstr "분관 제한"
 
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:154
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:153
 #, c-format
 msgid "Branches limitation: "
 msgstr "분관 제한:"
-
-#: intranet-tmpl/prog/en/modules/admin/categories.tt:421
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:218
-#, c-format
-msgid "Branches limitations"
-msgstr "분관 제한"
 
 #: intranet-tmpl/prog/en/modules/about.tt:469
 #, c-format
@@ -15960,7 +15961,7 @@ msgstr "청구기호"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:8
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:206
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:200
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:206
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:58
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:45
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:42
@@ -16048,7 +16049,7 @@ msgid "Callnumber classification scheme"
 msgstr "신규 분류 소스"
 
 #. %1$s:  subscription.callnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:504
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:510
 #, c-format
 msgid "Callnumber: %s "
 msgstr "청구기호: %s "
@@ -16068,7 +16069,7 @@ msgstr ""
 msgid "Can be entered as a single IP, or a subnet such as 192.168.1.*"
 msgstr "192.168.1.*처럼 단일 IP 또는 서브넷 IP를 입력할 수 있습니다"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:396
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:401
 #, c-format
 msgid ""
 "Can be used to further sort and filter your reports. This category is empty "
@@ -16181,7 +16182,7 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/includes/holds_table.inc:187
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:172
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:147
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:153
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:135
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:151
 #: intranet-tmpl/prog/en/includes/modals/serials_multi_receiving.inc:26
@@ -16260,8 +16261,8 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:224
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:78
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:139
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:141
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:311
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:285
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:106
@@ -16321,8 +16322,8 @@ msgstr "다음의 필드가 채워지지 않아서 이 레코드를 저장할 �
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:54
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:314
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:167
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:238
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:236
 #: intranet-tmpl/prog/en/modules/admin/didyoumean.tt:64
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:80
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
@@ -17031,7 +17032,7 @@ msgstr "Catalyst IT, 뉴질랜드"
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:64
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:51
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:66
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:265
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:269
 #, c-format
 msgid "Category"
 msgstr "분류"
@@ -17594,7 +17595,7 @@ msgstr "대출됨"
 #. %6$s:  INCLUDE 'patron-title.inc' patron=item.CheckedOutFor hide_patron_infos_if_needed=1 
 #. %7$s:  END 
 #. %8$s:  item.datedue | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:268
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:274
 #, fuzzy, c-format
 msgid "Checked out %s %s %s by %s to %s %s %s : due %s "
 msgstr "대출 %s %s %s "
@@ -18363,7 +18364,7 @@ msgstr "제거"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:144
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:109
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:68
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:180
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:186
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:58
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:66
@@ -18487,7 +18488,7 @@ msgstr "서점 페이지로 돌아가기위해 여기를 클릭"
 msgid "Click here to see the merged record."
 msgstr "병합한 레코드를 보려면 여기를 클릭하세요."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:656
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:662
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "이미지 뷰어에서 보기 위해 이미지를 클릭하세요"
@@ -18685,13 +18686,13 @@ msgstr "발행 규칙 복제가 실패했습니다!"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:63
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:119
-#: intranet-tmpl/prog/en/includes/chart.inc:100
+#: intranet-tmpl/prog/en/includes/chart.inc:106
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:422
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:127
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:172
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:739
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:435
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:459
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -18708,8 +18709,8 @@ msgstr "발행 규칙 복제가 실패했습니다!"
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:261
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:93
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:191
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:262
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:260
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:28
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:84
 #: intranet-tmpl/prog/en/modules/labels/result.tt:102
@@ -18859,8 +18860,8 @@ msgstr "등록비:"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:338
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1530
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1557
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1545
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1572
 #, c-format
 msgid "Code"
 msgstr "코드"
@@ -18907,7 +18908,7 @@ msgstr "이용자로부터 수집:"
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:14
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:199
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:205
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:309
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:126
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:54
@@ -18956,7 +18957,7 @@ msgstr "장서 코드:"
 msgid "Collection code: "
 msgstr "장서 코드:"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:344
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:349
 #, c-format
 msgid "Collection codes (appears when cataloging and working with items)"
 msgstr ""
@@ -19022,7 +19023,7 @@ msgid "Column"
 msgstr "열"
 
 #. %1$s:  column | html 
-#: intranet-tmpl/prog/en/includes/chart.inc:49
+#: intranet-tmpl/prog/en/includes/chart.inc:55
 #, fuzzy, c-format
 msgid "Column %s "
 msgstr "열"
@@ -19325,7 +19326,7 @@ msgid "Confirm deletion of tag "
 msgstr "태그 삭제 확인"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:392
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:396
 msgid "Confirm deletion of this vendor ?"
 msgstr "이 판매업체의 삭제를 확인하시겠습니까 ?"
 
@@ -19730,7 +19731,7 @@ msgstr "알림 복사"
 
 #: intranet-tmpl/prog/en/columns.def:108
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:14
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:207
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:213
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:312
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:170
@@ -19997,7 +19998,7 @@ msgstr "신규 생성"
 msgid "Course #"
 msgstr "코스 #"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:215
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:221
 #, c-format
 msgid "Course Reserves"
 msgstr "코스 예약"
@@ -20108,7 +20109,7 @@ msgstr "신규 템플릿 생성"
 msgid "Create an item record when receiving this serial"
 msgstr "이 연속간행물을 받았을 때 항목 레코드 생성"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:382
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:388
 #, c-format
 msgid "Create analytics"
 msgstr "분석 생성"
@@ -20153,7 +20154,8 @@ msgstr ""
 msgid "Create authority framework for %s using "
 msgstr "%s 사용할 전거 프레임워크 생성"
 
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:110
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:111
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:113
 #, fuzzy, c-format
 msgid "Create chart"
 msgstr "레코드 생성"
@@ -20191,7 +20193,7 @@ msgstr "항목 선택 :"
 msgid "Create item when receiving: "
 msgstr "항목 선택 :"
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:115
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:117
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:298
 #, fuzzy, c-format
 msgid "Create items when:"
@@ -20308,7 +20310,7 @@ msgid "Created by:"
 msgstr "작성자:"
 
 #: intranet-tmpl/prog/en/columns.def:119
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:559
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:565
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:362
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:65
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:199
@@ -20468,7 +20470,7 @@ msgstr "현재 도서관: %s"
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:31
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:18
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:197
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:203
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:87
 #, c-format
 msgid "Current location"
@@ -20538,7 +20540,7 @@ msgid "Currently available templates"
 msgstr "현재 사용 가능한 템플릿"
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:266
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:272
 #, c-format
 msgid "Currently in local use %s "
 msgstr "현재 지역사용 %s"
@@ -20628,7 +20630,7 @@ msgstr "대여비용:"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:187
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:28
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:316
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:322
 #, c-format
 msgid "Damaged"
 msgstr "손상"
@@ -20780,7 +20782,7 @@ msgstr "데이터베이스:"
 msgid "Date"
 msgstr "날짜"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:204
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:210
 #, fuzzy, c-format
 msgid "Date accessioned"
 msgstr "취득일"
@@ -20808,7 +20810,7 @@ msgstr "날짜 추가"
 msgid "Date and time: "
 msgstr "반납예정일:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:513
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:519
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, c-format
 msgid "Date arrived"
@@ -20925,7 +20927,7 @@ msgstr "주문 일자"
 msgid "Date placed between:"
 msgstr "최근 본 날짜"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:514
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:520
 #, c-format
 msgid "Date published"
 msgstr "발행일"
@@ -21480,7 +21482,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:368
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:371
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:73
@@ -21521,12 +21523,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:280
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:96
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:304
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:213
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:213
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:180
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:182
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:245
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:249
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:110
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:158
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:403
@@ -21700,7 +21702,7 @@ msgid "Delete group"
 msgstr "이용자 삭제"
 
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:69
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:665
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:671
 #, c-format
 msgid "Delete image"
 msgstr "이미지 삭제"
@@ -21814,7 +21816,7 @@ msgstr "선택된 레코드 삭제"
 
 #. INPUT type=submit name=mainformsubmit
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:185
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:184
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:190
 #, c-format
 msgid "Delete selected items"
 msgstr "선택한 항목 삭제"
@@ -22052,7 +22054,7 @@ msgstr "부서"
 msgid "Department:"
 msgstr "부서:"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:354
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:359
 #, c-format
 msgid ""
 "Departments are required by and will be used in the Course Reserves module"
@@ -22102,7 +22104,7 @@ msgstr "부서"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
 #: intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:41
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:215
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:266
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:270
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:310
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:339
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
@@ -22135,7 +22137,7 @@ msgstr "설명이 필요함"
 msgid "Description missing"
 msgstr "설명이 없습니다"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:414
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:419
 #, c-format
 msgid ""
 "Description of a withdrawn item (appears when adding or editing an item)"
@@ -22203,19 +22205,19 @@ msgstr "설명:"
 msgid "Description: %s"
 msgstr "설명: %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:157
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:163
 #, c-format
 msgid "Descriptions"
 msgstr "설명"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:352
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:357
 #, c-format
 msgid ""
 "Descriptions for items marked as damaged (appears when cataloging and "
 "working with items)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:378
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:383
 #, c-format
 msgid ""
 "Descriptions for the items marked as lost (appears when adding or editing an "
@@ -22592,11 +22594,6 @@ msgstr "이 연속간행물을 받았을 때 항목 형식을 생성하지 않�
 msgid "Do not look for matching records"
 msgstr "일치하는 레코드를 찾을 수 없습니다"
 
-#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:14
-#, c-format
-msgid "Do not notify"
-msgstr "알리지 않음"
-
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:85
 #, fuzzy, c-format
 msgid "Do not use plugin"
@@ -22798,7 +22795,7 @@ msgid "Download list "
 msgstr "목록 다운로드"
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:713
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:719
 #, fuzzy
 msgid "Download record"
 msgstr "레코드 다운로드"
@@ -22823,7 +22820,7 @@ msgstr "레코드를 다운로드하는 중입니다. 기다려주십시오..."
 msgid "Drag and drop to move this stage to another position"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/chart.inc:99
+#: intranet-tmpl/prog/en/includes/chart.inc:105
 #, c-format
 msgid "Draw"
 msgstr ""
@@ -22834,7 +22831,7 @@ msgid "Draw guide boxes: "
 msgstr "안내 상자 그리기:"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:709
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:715
 #, fuzzy, c-format
 msgid "Dublin Core"
 msgstr "더블린 코어 (XML)"
@@ -23113,7 +23110,7 @@ msgstr "최초 예약일자"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:406
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:412
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:91
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
@@ -23134,7 +23131,7 @@ msgstr "최초 예약일자"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:400
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:332
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:367
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:179
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:294
@@ -23156,10 +23153,10 @@ msgstr "최초 예약일자"
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:216
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:279
 #: intranet-tmpl/prog/en/modules/admin/oai_sets.tt:95
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:212
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:211
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:156
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:178
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:244
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:248
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:109
 #: intranet-tmpl/prog/en/modules/admin/cities.tt:157
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:402
@@ -23595,8 +23592,8 @@ msgstr "판"
 msgid "Edition: "
 msgstr "판:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:160
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:637
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:166
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:643
 #, c-format
 msgid "Editions"
 msgstr "판"
@@ -24132,7 +24129,7 @@ msgid "Error downloading the file"
 msgstr "파일을 다운로드하는 중 오류가 발생했습니다"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:290
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
 #, fuzzy
 msgid "Error importing the framework"
 msgstr "프레임워크를 가져오는데 오류가 발생했습니다 %s"
@@ -24206,7 +24203,9 @@ msgstr "오류: "
 msgid "Error: %s"
 msgstr "오류: %s"
 
-#. %1$s:  ELSIF ( loopfilte.sql ) 
+#. For the first occurrence,
+#. %1$s:  decoding_error | html 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:70
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:30
 #, fuzzy, c-format
 msgid "Error: %s "
@@ -24389,7 +24388,7 @@ msgstr "예외: %s"
 msgid "Exceptions"
 msgstr "예외"
 
-#: intranet-tmpl/prog/en/includes/chart.inc:42
+#: intranet-tmpl/prog/en/includes/chart.inc:48
 #, c-format
 msgid "Exclude last line (Rollup): "
 msgstr ""
@@ -24536,9 +24535,9 @@ msgstr "설명:"
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:247
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:249
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:166
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:215
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:237
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:165
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:235
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:155
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:161
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:261
@@ -24563,7 +24562,7 @@ msgid "Export "
 msgstr "출력"
 
 #. %1$s:  loo.frameworktext | html 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:225
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
 #, c-format
 msgid "Export %s framework"
 msgstr "출력 %s 프레임워크"
@@ -24643,10 +24642,11 @@ msgstr "기본 프레임워크 출력"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:215
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
+#, fuzzy
 msgid ""
-"Export framework structure (fields, subfields) to a spreadsheet file (.csv, ."
-"xml, .ods)"
+"Export framework structure (fields, subfields) to a spreadsheet file (.csv "
+"or .ods)"
 msgstr ""
 "프레임워크 구조 출력 (필드, 하위분야) 스프레드 시트 파일에서 (.csv, .xml, ."
 "ods)"
@@ -24745,21 +24745,13 @@ msgid "Export to CSV file: "
 msgstr "CSV 파일 출력:"
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:160
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:231
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:230
 #, c-format
 msgid "Export to CSV spreadsheet"
 msgstr "CSV 스프레드 시트 출력"
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:161
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:232
-#, c-format
-msgid ""
-"Export to Excel with XML format, compatible with OpenOffice/LibreOffice as "
-"well"
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:162
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:233
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:231
 #, c-format
 msgid "Export to OpenDocument spreadsheet format"
 msgstr "공개문서 스프레드 시트 형식 출력"
@@ -25004,6 +24996,11 @@ msgstr "여성"
 #, c-format
 msgid "Female "
 msgstr "여성"
+
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:114
+#, c-format
+msgid "Fetch all data for chart"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:35
 #, fuzzy, c-format
@@ -25804,7 +25801,7 @@ msgstr "Fran&ccedil;ais (프랑스어) "
 msgid "Free"
 msgstr "자유"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:392
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:397
 #, fuzzy, c-format
 msgid "French terms of relations"
 msgstr "분관 제한"
@@ -25815,7 +25812,7 @@ msgstr "분관 제한"
 msgid "Frequencies"
 msgstr "진동수"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:368
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:373
 #, c-format
 msgid ""
 "Frequencies used by the housebound module. They are displayed on the "
@@ -26036,7 +26033,7 @@ msgstr "으로부터:"
 msgid "Front "
 msgstr "정면"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:390
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:395
 #, c-format
 msgid ""
 "Function codes (author, editor, collaborator, etc.) used in UNIMARC 7XX $4 "
@@ -26247,26 +26244,26 @@ msgstr "성별:"
 msgid "General"
 msgstr "일반"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:358
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:363
 #, c-format
 msgid ""
 "General holdings: acquisition status designator :: This data element "
 "specifies acquisition status for the unit at the time of the holdings report."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:360
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:365
 #, c-format
 msgid "General holdings: completeness designator"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:364
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:369
 #, c-format
 msgid ""
 "General holdings: retention designator :: This data element specifies the "
 "retention policy for the unit at the time of the holdings report."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:366
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:371
 #, c-format
 msgid "General holdings: type of unit designator"
 msgstr ""
@@ -26478,12 +26475,12 @@ msgid ""
 msgstr ""
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1530
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1545
 msgid "Group code"
 msgstr "그룹 코드"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1531
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1546
 msgid "Group name"
 msgstr "그룹 이름"
 
@@ -26492,7 +26489,7 @@ msgstr "그룹 이름"
 msgid "Group(s):"
 msgstr "그룹:"
 
-#: intranet-tmpl/prog/en/includes/chart.inc:71
+#: intranet-tmpl/prog/en/includes/chart.inc:77
 #, fuzzy, c-format
 msgid "Group:"
 msgstr "그룹"
@@ -27021,12 +27018,12 @@ msgid "Holding library:"
 msgstr "도서관예약:"
 
 #. %1$s:  itemloop.size() || 0 | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:154
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:160
 #, fuzzy, c-format
 msgid "Holdings (%s)"
 msgstr "총 (%s)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:443
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:449
 #, c-format
 msgid "Holdings:"
 msgstr "예약:"
@@ -27172,7 +27169,7 @@ msgstr "예약 대기중:"
 msgid "Holds waiting: %s"
 msgstr "예약 대기중:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:104
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:110
 #, c-format
 msgid "Holds:"
 msgstr "예약:"
@@ -27503,7 +27500,7 @@ msgstr "지정 도서관"
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:57
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:198
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:204
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:52
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:306
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
@@ -27562,7 +27559,7 @@ msgstr "수평:"
 msgid "Horowhenua Library Trust"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:213
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:219
 #, c-format
 msgid "Host records"
 msgstr "호스트 레코드"
@@ -27853,7 +27850,7 @@ msgstr "ISBN: %s %s %s; %s %s "
 msgid "ISO 5426"
 msgstr "ISO 5426"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:374
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:379
 #, c-format
 msgid "ISO 639-2 standard language codes"
 msgstr ""
@@ -28361,7 +28358,7 @@ msgid "Images"
 msgstr "이미지"
 
 #. %1$s:  localimages.size() || 0 | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:164
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:170
 #, fuzzy, c-format
 msgid "Images (%s)"
 msgstr "이미지"
@@ -28379,19 +28376,19 @@ msgstr "이미지"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/installer/step3.tt:156
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:190
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:217
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:261
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:189
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:216
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:259
 #, c-format
 msgid "Import"
 msgstr "가져오기"
 
 #. %1$s:  loo.frameworkcode | html 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:251
-#, c-format
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:249
+#, fuzzy, c-format
 msgid ""
 "Import %s framework structure (fields and subfields) from a spreadsheet file "
-"(.csv, .xml, .ods)"
+"(.csv or .ods)"
 msgstr ""
 "가져오기 %s 프레임워크 구조 (필드와 하위필드) 스프레드시트 파일로부터 (."
 "csv, .xml, .ods)"
@@ -28419,21 +28416,22 @@ msgstr ""
 msgid "Import batch deleted successfully"
 msgstr "장서가 성공적으로 삭제되었습니다"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:180
-#, c-format
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:179
+#, fuzzy, c-format
 msgid ""
 "Import default framework structure (fields and subfields) from a spreadsheet "
-"file (.csv, .xml, .ods)"
+"file (.csv or .ods)"
 msgstr ""
 "스프레드시트 파일 (.csv, .xml, .ods)에서 프레임워크 구조 기본값 가져오기 (필"
 "드와 하위필드)"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:217
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:216
+#, fuzzy
 msgid ""
-"Import framework structure (fields, subfields) from a spreadsheet file (."
-"csv, .xml, .ods)"
+"Import framework structure (fields, subfields) from a spreadsheet file (.csv "
+"or .ods)"
 msgstr ""
 "프레임워크 구조 가져오기 (필드, 하위필드) 스프레드시트 파일로부터 (.csv, ."
 "xml, .ods)"
@@ -28505,7 +28503,7 @@ msgid "Imported"
 msgstr "가져옴"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:290
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
 #, fuzzy
 msgid "Importing to framework: %s. Importing from file: %s."
 msgstr "프레임워크 가져오기: %s. 파일로부터 가져오기: %s"
@@ -28554,7 +28552,7 @@ msgstr "수송 중"
 #. %1$s:  Branches.GetName( item.transfertfrom ) | html 
 #. %2$s:  Branches.GetName( item.transfertto ) | html 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:281
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:287
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "%s 이후 %s에서 %s까지 수송"
@@ -28589,7 +28587,7 @@ msgstr "비활성"
 msgid "Inactive budgets"
 msgstr "비활성 예산"
 
-#: intranet-tmpl/prog/en/includes/chart.inc:37
+#: intranet-tmpl/prog/en/includes/chart.inc:38
 #, c-format
 msgid "Include all rows (ignore pagination):"
 msgstr ""
@@ -28817,7 +28815,7 @@ msgid "Internal Server Error, please reload the page"
 msgstr "내부 서버 오류입니다, 페이지를 리로드해주세요"
 
 #: intranet-tmpl/prog/en/columns.def:93
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:563
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:569
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:365
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:70
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:51
@@ -28975,7 +28973,7 @@ msgstr "인벤토리"
 #: intranet-tmpl/prog/en/columns.def:101
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:9
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:208
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:214
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:128
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:270
@@ -28983,7 +28981,7 @@ msgstr "인벤토리"
 msgid "Inventory number"
 msgstr "인벤토리 번호"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:555
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:561
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:359
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:63
@@ -28992,7 +28990,7 @@ msgid "Invoice"
 msgstr "청구서"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:579
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:585
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:410
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:79
 #, fuzzy
@@ -29142,7 +29140,7 @@ msgstr "발행"
 msgid "Issue "
 msgstr "발행"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:512
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:518
 #, c-format
 msgid "Issue #"
 msgstr "발행 #"
@@ -29613,7 +29611,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:81
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:196
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:202
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:39
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:303
@@ -33055,7 +33053,7 @@ msgid "Last run"
 msgstr "마지막 화면"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:189
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:203
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:209
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:41
 #, c-format
 msgid "Last seen"
@@ -33293,11 +33291,6 @@ msgstr "도서관과 그룹"
 msgid "Libraries informations: "
 msgstr "도서관 규제:"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:83
-#, c-format
-msgid "Libraries limitation: "
-msgstr "도서관 규제:"
-
 #: intranet-tmpl/prog/en/columns.def:110 intranet-tmpl/prog/en/columns.def:150
 #: intranet-tmpl/prog/en/includes/circ-patron-search-results.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:84
@@ -33414,6 +33407,18 @@ msgstr "도서관이 잘못되었습니다."
 msgid ""
 "Library is not set, please set your library before adding items to a batch."
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:421
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:218
+#, fuzzy, c-format
+msgid "Library limitations"
+msgstr "도서관 규제:"
+
+#: intranet-tmpl/prog/en/modules/admin/categories.tt:154
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:83
+#, fuzzy, c-format
+msgid "Library limitations: "
+msgstr "도서관 규제:"
 
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:543
 #, c-format
@@ -33628,7 +33633,7 @@ msgstr "선"
 msgid "Line "
 msgstr "선"
 
-#: intranet-tmpl/prog/en/includes/chart.inc:85
+#: intranet-tmpl/prog/en/includes/chart.inc:91
 #, fuzzy, c-format
 msgid "Line:"
 msgstr "선"
@@ -33710,7 +33715,7 @@ msgstr ""
 msgid "List name: "
 msgstr "목록 이름:"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:408
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:413
 #, c-format
 msgid ""
 "List of Item types to display in a drop down menu on the Purchase suggestion "
@@ -33724,7 +33729,7 @@ msgstr ""
 msgid "List of biblionumbers or authority ids (one per line): "
 msgstr "레코드 번호 목록 (라인당 하나):"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:406
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:411
 #, fuzzy, c-format
 msgid ""
 "List of patron suggestion reject or accept reasons (appears when managing "
@@ -33772,7 +33777,7 @@ msgstr "최근 업데이트"
 msgid "Lists"
 msgstr "목록"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:81
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:87
 #, c-format
 msgid "Lists that include this title: "
 msgstr "이 표제를 포함한 목록:"
@@ -33785,7 +33790,7 @@ msgstr "이 표제를 포함한 목록:"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:288
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -33796,13 +33801,13 @@ msgstr "이 표제를 포함한 목록:"
 msgid "Loading"
 msgstr "불러오는 중"
 
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:140
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:146
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:419
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:169
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:736
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -33991,7 +33996,7 @@ msgid "Location: "
 msgstr "위치:"
 
 #. %1$s:  AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:503
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:509
 #, fuzzy, c-format
 msgid "Location: %s"
 msgstr "위치:"
@@ -34219,7 +34224,7 @@ msgstr "MALMARC"
 #: intranet-tmpl/prog/en/modules/tools/export.tt:141
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:59
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:60
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:100
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:106
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:141
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:169
@@ -34233,7 +34238,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:712
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -34245,7 +34250,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:711
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:717
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -34275,7 +34280,7 @@ msgstr "MARC 카드 보기"
 msgid "MARC Framework for %s%s (%s)%sdefault MARC framework%s"
 msgstr "MARC 프레임워크 %s%s (%s)%sMARC 프레임워크 기본값%s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:100
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:106
 #, c-format
 msgid "MARC Preview:"
 msgstr "MARC 미리 보기:"
@@ -34345,7 +34350,7 @@ msgstr "기관"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:416
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:733
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -34381,7 +34386,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:157
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:142
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:211
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:210
 #, c-format
 msgid "MARC structure"
 msgstr "MARC 구조"
@@ -34427,7 +34432,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:710
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -34462,7 +34467,7 @@ msgid "MIT license"
 msgstr "MIT 라이선스"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:708
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:714
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -34600,7 +34605,7 @@ msgid ""
 "contact your site administrator. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:124
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:130
 #, fuzzy, c-format
 msgid "Mana search"
 msgstr "검색"
@@ -35383,7 +35388,7 @@ msgid "Materials"
 msgstr "자료"
 
 #: intranet-tmpl/prog/en/columns.def:104
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:209
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:215
 #, c-format
 msgid "Materials specified"
 msgstr "명기된 자료"
@@ -35668,7 +35673,7 @@ msgid "Missing issues:"
 msgstr "빠진 호:"
 
 #. %1$s:  subscription.missinglist | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:506
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:512
 #, c-format
 msgid "Missing issues: %s "
 msgstr "빠진 호: %s"
@@ -35887,7 +35892,7 @@ msgstr "레코드 일치규칙 수정"
 msgid "Modify record using the following template: "
 msgstr "다음 템플릿을 사용하여 레코드 수정:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:187
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:193
 #, c-format
 msgid "Modify selected items"
 msgstr "선택한 항목 수정"
@@ -36294,8 +36299,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:66
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1531
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1558
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1546
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1573
 #, c-format
 msgid "Name"
 msgstr "이름"
@@ -37465,7 +37470,7 @@ msgid "No images are currently available. "
 msgstr "현재 사용할 수 있는 이미지가 없습니다."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr ""
 
@@ -37721,7 +37726,7 @@ msgstr "보류중인 현장 대출이 없습니다."
 msgid "No phone stored."
 msgstr "전화가 저장되지 않았습니다."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:446
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:452
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:142
 #, c-format
 msgid "No physical items for this record"
@@ -38056,7 +38061,7 @@ msgstr "비공개 주기:"
 msgid "Non-public note:"
 msgstr "비공개 주기:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:211
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:217
 #, fuzzy, c-format
 msgid "Non-public notes"
 msgstr "비공개 주기:"
@@ -38325,7 +38330,7 @@ msgstr "갱신할 수 없음"
 msgid "Not seen"
 msgstr "마지막 화면"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:516
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:522
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:53
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:38
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:48
@@ -38633,13 +38638,13 @@ msgstr ""
 msgid "Nov"
 msgstr "11월"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:170
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:176
 #, fuzzy, c-format
 msgid "NoveList Select"
 msgstr "바스켓 삭제"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:420
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:452
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:426
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:458
 #, c-format
 msgid "Novelist Select: "
 msgstr ""
@@ -39654,7 +39659,7 @@ msgstr "주문순서:"
 msgid "Order note"
 msgstr "주문비용"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:558
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:564
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:361
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:64
 #, c-format
@@ -39854,7 +39859,7 @@ msgid "Other data"
 msgstr "다른 데이터"
 
 #. %1$s:  otheritemloop.size() || 0 | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:150
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:156
 #, fuzzy, c-format
 msgid "Other holdings (%s)"
 msgstr "다른 예약"
@@ -41419,7 +41424,7 @@ msgstr "물리적 주소:"
 msgid "Physical details:"
 msgstr "물리적 세부사항: "
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:362
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:367
 #, fuzzy, c-format
 msgid "Physical form designators"
 msgstr "물리적 세부사항: "
@@ -41644,7 +41649,7 @@ msgstr "계획 %s %s"
 msgid "Plano Independent School, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:168
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:174
 #, c-format
 msgid "Play media"
 msgstr "미디어 재생"
@@ -42136,9 +42141,9 @@ msgid "Please select a %s."
 msgstr "%s를 선택해주세요."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:290
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
 #, fuzzy
-msgid "Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."
+msgid "Please select a CSV (.csv) or ODS (.ods) spreadsheet file."
 msgstr "ods 또는 xml파일을 선택해주세요"
 
 #. SCRIPT
@@ -42389,7 +42394,7 @@ msgstr "인기도 (최고에서 최저)"
 msgid "Populate fields with default values from default framework "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:388
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:393
 #, c-format
 msgid "Populates a dropdown list of custom payment types when paying fines"
 msgstr ""
@@ -42716,7 +42721,7 @@ msgstr "검색 시작 "
 msgid "Print card number as text under barcode: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:369
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:375
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:93
 #, c-format
 msgid "Print label"
@@ -43115,7 +43120,7 @@ msgstr "공개 주기:"
 msgid "Public note: "
 msgstr "공개 주기:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:210
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:216
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:40
 #, c-format
 msgid "Public notes"
@@ -43366,7 +43371,7 @@ msgstr "품질 보증 팀:"
 msgid "Quality assurance team:"
 msgstr "품질 보증 팀:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:562
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:568
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:368
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
@@ -43579,12 +43584,12 @@ msgstr "제안 이유"
 msgid "Reason: "
 msgstr "이유"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:382
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:387
 #, fuzzy, c-format
 msgid "Reasons why a title is not for loan"
 msgstr "왜 대출 불가능한 항목인지 설명된 항목 상태"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:386
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:391
 #, c-format
 msgid "Reasons why an order might have been cancelled"
 msgstr ""
@@ -43606,7 +43611,7 @@ msgstr "받기"
 msgid "Receive a new shipment"
 msgstr "신규 선적 받기"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:560
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:566
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:66
 #, c-format
@@ -44522,7 +44527,7 @@ msgid ""
 "%s)"
 msgstr "예산에서 받지 않은 주문을 이동후에 보고 %s (%s - %s) to %s (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1512
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1527
 #, c-format
 msgid "Report group:"
 msgstr "보고서 그룹:"
@@ -44568,7 +44573,7 @@ msgstr "보고서 이름:"
 msgid "Report plugins"
 msgstr "보고서 플러그인"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1534
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1549
 #, c-format
 msgid "Report subgroup:"
 msgstr "하위그룹 보고서:"
@@ -45095,7 +45100,7 @@ msgstr "제한됨"
 msgid "Restricted [until] flag"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:398
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:403
 #, fuzzy, c-format
 msgid "Restricted status of an item"
 msgstr "데이터베이스에 이미지를 저장할 수 없습니다."
@@ -45376,7 +45381,7 @@ msgstr ""
 msgid "Rijksmuseum, Amsterdam, The Netherlands"
 msgstr "암스테르담 국립박물관, 네덜란드"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:400
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:405
 #, c-format
 msgid "Road types to be used in patron addresses"
 msgstr ""
@@ -45742,7 +45747,7 @@ msgstr "토요일"
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:180
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:86
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:137
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:139
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:310
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:285
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:757
@@ -45888,7 +45893,7 @@ msgstr "구독 저장"
 msgid "Save quotes"
 msgstr "인용부호 저장"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:706
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:712
 #, fuzzy, c-format
 msgid "Save record"
 msgstr "레코드 저장"
@@ -46069,7 +46074,7 @@ msgstr "화면"
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:161
 #: intranet-tmpl/prog/en/includes/patron-search.inc:16
 #: intranet-tmpl/prog/en/includes/contracts-admin-search.inc:10
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:139
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:145
 #: intranet-tmpl/prog/en/includes/patrons-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/z3950-admin-search.inc:9
 #: intranet-tmpl/prog/en/includes/currencies-admin-search.inc:9
@@ -46434,7 +46439,7 @@ msgstr "이용자분류 검색"
 msgid "Search patrons"
 msgstr "이용자 검색"
 
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:136
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:142
 #, fuzzy, c-format
 msgid "Search reports by keyword: "
 msgstr "검색 키워드 입력:"
@@ -46723,8 +46728,8 @@ msgstr "보았음"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1515
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1537
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1530
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1552
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:116
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -46911,7 +46916,7 @@ msgstr "템플릿 선택"
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:144
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:108
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:66
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:179
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:185
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:57
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:65
@@ -46976,7 +46981,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "날짜 선택:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:707
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:713
 #, c-format
 msgid "Select download format: "
 msgstr "다운로드 형식 선택:"
@@ -47328,7 +47333,7 @@ msgstr "소장 연속간행물 정보"
 msgid "Serial edition "
 msgstr "연속간행물 판"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:201
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:207
 #, fuzzy, c-format
 msgid "Serial enumeration / chronology"
 msgstr "로케이션"
@@ -47719,7 +47724,7 @@ msgid "Sharp (#)"
 msgstr "Sharp (#)"
 
 #: intranet-tmpl/prog/en/columns.def:78
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:404
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:409
 #, c-format
 msgid "Shelving control number"
 msgstr "배가 제어번호"
@@ -47745,7 +47750,7 @@ msgstr "배가 위치"
 msgid "Shelving location (items.location) is: "
 msgstr "배가 위치 (items.location) 는: "
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:376
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:381
 #, c-format
 msgid ""
 "Shelving location (usually appears when adding or editing an item). LOC maps "
@@ -47868,7 +47873,7 @@ msgstr ""
 msgid "Shortened due date would have been %s (%s days)."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:100
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:106
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:280
 #, c-format
 msgid "Show"
@@ -47970,7 +47975,7 @@ msgstr "모든 항목 보기"
 
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:430
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:436
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
 #, c-format
 msgid "Show all items (%s hidden)"
@@ -48523,7 +48528,7 @@ msgstr "지출"
 msgid "Spent amount:"
 msgstr "총 지출액"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:212
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:218
 #, fuzzy, c-format
 msgid "Spine label"
 msgstr "사용가능함"
@@ -48907,9 +48912,9 @@ msgstr "통계 마법사"
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:332
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:402
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:202
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:515
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:561
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:208
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:521
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:567
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:119
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:93
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:279
@@ -49221,12 +49226,12 @@ msgid "Subgroup"
 msgstr "하위그룹"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1557
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1572
 msgid "Subgroup code"
 msgstr "하위그룹 코드"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1558
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1573
 msgid "Subgroup name"
 msgstr "하위그룹 이름"
 
@@ -49427,7 +49432,7 @@ msgstr "제안 제출"
 msgid "Submitting comment "
 msgstr "배열 규칙 코드:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:564
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:570
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:149
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:151
 #, fuzzy, c-format
@@ -49461,7 +49466,7 @@ msgstr "구독 시작일"
 msgid "Subscription begin"
 msgstr "구독 시작"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:565
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:571
 #, fuzzy, c-format
 msgid "Subscription callnumber"
 msgstr "구독 번호."
@@ -49472,7 +49477,7 @@ msgstr "구독 번호."
 msgid "Subscription closed %s "
 msgstr "구독 중단 %s"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:542
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:548
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:52
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:336
 #, c-format
@@ -49599,7 +49604,7 @@ msgstr "구독이 만료될 것입니다 %s."
 msgid "Subscription:"
 msgstr "구독:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:158
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:164
 #, c-format
 msgid "Subscriptions"
 msgstr "구독"
@@ -50269,7 +50274,7 @@ msgstr "태그"
 msgid "Tags pending approval"
 msgstr "태그 보류 승인"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:89
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:95
 #, c-format
 msgid "Tags:"
 msgstr "태그:"
@@ -50427,7 +50432,7 @@ msgstr "용어:"
 msgid "Terms summary"
 msgstr "요약 용어"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:412
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:417
 #, c-format
 msgid ""
 "Terms to be used in Course Reserves module. Enter terms that will show in "
@@ -50574,7 +50579,7 @@ msgid "The "
 msgstr "서가에 추가하세요 "
 
 #. %1$s:  subscription.staffdisplaycount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:509
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:515
 #, c-format
 msgid "The %s latest issues related to this subscription:"
 msgstr "이 %s 구독과 관련된 최신의 호:"
@@ -51667,7 +51672,7 @@ msgid "There are no article requests in processing at this time. "
 msgstr "이 이용자에 대한 통계가 없습니다."
 
 #. %1$s:  category | html 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:251
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:255
 #, c-format
 msgid "There are no authorized values defined for %s"
 msgstr ""
@@ -51873,6 +51878,12 @@ msgstr "이 이용자에 대한 통계가 없습니다."
 msgid "There are no titles tagged with the term "
 msgstr "용어가 태그된 표제가 없습니다"
 
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:68
+#, c-format
+msgid ""
+"There is an error with this bibliographic record, the view may be degraded. "
+msgstr ""
+
 #. %1$s:  itemtags | html 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:58
 #, c-format
@@ -52056,6 +52067,13 @@ msgstr ""
 msgid "This category is used %s times"
 msgstr "이 분류는 %s번 이용되었습니다"
 
+#: intranet-tmpl/prog/en/includes/chart.inc:43
+#, c-format
+msgid ""
+"This chart will use only visible rows, click 'Fetch all data' to chart the "
+"full report"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:18
 #, c-format
 msgid "This course already has this item on reserve."
@@ -52145,7 +52163,7 @@ msgid ""
 "existing invoice?"
 msgstr "이 청구서 번호가 이미 사용되었습니다. 기존의 청구서를 받으시겠습니까?"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:496
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:502
 #, c-format
 msgid "This is a serial subscription"
 msgstr "이것은 연속간행물 구독입니다"
@@ -52479,7 +52497,7 @@ msgstr "이 레코드는 이용되었습니다"
 msgid "This record is used %s times"
 msgstr "이 레코드는 %s번 이용되었습니다"
 
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:131
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:137
 #, fuzzy, c-format
 msgid "This report could not be imported. Please try again later. "
 msgstr "이름 또는 바코드를 찾지 못했습니다. 다른것을 시도해주세요"
@@ -52523,7 +52541,7 @@ msgstr "이 하위필드는 삭제될 것입니다"
 msgid "This subscription depends on another supplier"
 msgstr "이 구독은 다른 공급자에게 의존하고 있습니다"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:502
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:508
 #, c-format
 msgid "This subscription is closed."
 msgstr "이 구독은 중단되었습니다."
@@ -53861,7 +53879,7 @@ msgid "UNIMARC"
 msgstr "UNIMARC"
 
 #: intranet-tmpl/prog/en/columns.def:143
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:206
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:212
 #, c-format
 msgid "URL"
 msgstr "인터넷 주소"
@@ -53984,7 +54002,7 @@ msgstr "허용안됨"
 msgid "Unauthorized user "
 msgstr "승인된 사용자"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:292
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:298
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "사용 불가 (분실 또는 없음)"
@@ -54434,7 +54452,7 @@ msgstr "데이터베이스 구조 업데이트"
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:681
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:310
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:45
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:184
@@ -54471,13 +54489,13 @@ msgstr "이용자 이미지를 한번에 한개 또는 묶음으로 업로드"
 
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:681
 #, fuzzy, c-format
 msgid "Upload an image file: "
 msgstr "파일 업로드"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:755
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:761
 #, fuzzy
 msgid "Upload an image file: %sUpload%s"
 msgstr "이용자 이미지를 한번에 한개 또는 묶음으로 업로드"
@@ -54520,8 +54538,8 @@ msgstr "업로드 진행:"
 msgid "Upload file"
 msgstr "파일 업로드"
 
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:186
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:257
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:185
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:255
 #, c-format
 msgid "Upload file:"
 msgstr "파일 업로드:"
@@ -54878,8 +54896,8 @@ msgstr "사용함"
 msgid "Used For"
 msgstr "사용"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:330
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:332
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:335
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:337
 #, fuzzy, c-format
 msgid "Used for acquisitions statistical purposes"
 msgstr "수서 통계"
@@ -54891,24 +54909,24 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:177
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:35
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:214
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:220
 #, c-format
 msgid "Used in"
 msgstr "사용"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:356
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:361
 #, c-format
 msgid ""
 "Used in French UNIMARC installations in field 995 $o to identify item "
 "status. Similar to NOT_LOAN"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:350
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:355
 #, c-format
 msgid "Used in UNIMARC 102 $a"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:402
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:407
 #, c-format
 msgid ""
 "Used when creating or editing an item type to assign a SIP specific media "
@@ -55050,7 +55068,7 @@ msgstr "값"
 msgid "Values are comma-separated."
 msgstr "값은 콤마로-구분됨."
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:334
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:339
 #, c-format
 msgid ""
 "Values for custom patron messages that appear on the circulation screen and "
@@ -55058,12 +55076,12 @@ msgid ""
 "is limited to 200 characters"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:380
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:385
 #, fuzzy, c-format
 msgid "Values for manual invoicing types"
 msgstr "청구서 매뉴얼 형식의 추가적인 값"
 
-#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:338
+#: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:343
 #, c-format
 msgid "Values that can be entered to fill in the patron’s sort 2 field"
 msgstr ""
@@ -55095,7 +55113,7 @@ msgid "Variable: "
 msgstr "변수:"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:23
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:554
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:560
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:88
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:23
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:36
@@ -55126,7 +55144,7 @@ msgid "Vendor EDI accounts"
 msgstr "판매업체를 찾을 수 없음"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:574
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:580
 #, fuzzy
 msgid "Vendor detail page"
 msgstr "판매업체 세부사항"
@@ -56073,7 +56091,7 @@ msgid "With selected search: "
 msgstr "검색 결과와:"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:188
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:304
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:310
 #, c-format
 msgid "Withdrawn"
 msgstr "중지"
@@ -57233,7 +57251,7 @@ msgstr "당신의 보고서는 다음 SQL문과 만들어질 것입니다."
 msgid "Your request gave the following results:"
 msgstr "다음 템플릿을 사용하여 레코드 수정:"
 
-#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:127
+#: intranet-tmpl/prog/en/includes/reports-toolbar.inc:133
 #, fuzzy, c-format
 msgid "Your search could not be completed. Please try again later. "
 msgstr "이름 또는 바코드를 찾지 못했습니다. 다른것을 시도해주세요"
@@ -57853,7 +57871,7 @@ msgstr "%s%s 환영합니다"
 #. %24$s:  IF ( XISBN.size ) 
 #. %25$s:  END 
 #. %26$s:  XISBN.size | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:641
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:647
 #, c-format
 msgid ""
 "by %s &copy;%s %s %s %s(%s)%s %s, %s%s %s%s%s %s%s%s %s %s %s%s %s%s%s %s, %s"
@@ -57992,7 +58010,7 @@ msgstr ""
 msgid "cannot be repeated"
 msgstr "주문할 수 없습니다"
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:124
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:126
 #, fuzzy, c-format
 msgid "cataloging the record"
 msgstr "편목 검색"
@@ -58724,12 +58742,12 @@ msgstr "항목 지정 도서관:"
 msgid "item's home library "
 msgstr "항목 지정 도서관:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:436
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:442
 #, c-format
 msgid "itemdata_copynumber"
 msgstr "itemdata_copynumber"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:435
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:441
 #, c-format
 msgid "itemdata_enumchron"
 msgstr "itemdata_enumchron"
@@ -59193,12 +59211,12 @@ msgstr "또는 MARC 하위분야."
 msgid "or any available"
 msgstr "또는 어떤 사용 가능한것"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1556
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1571
 #, c-format
 msgid "or create"
 msgstr "또는 생성"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1529
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1544
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "또는 생성"
@@ -59249,7 +59267,7 @@ msgstr "phony_submit"
 msgid "pie chart"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:122
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:124
 #, fuzzy, c-format
 msgid "placing an order"
 msgstr "주문 청구"
@@ -59322,7 +59340,7 @@ msgstr ""
 msgid "reason unknown"
 msgstr "알 수 없는 이유"
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:123
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:125
 #, fuzzy, c-format
 msgid "receiving an order"
 msgstr "받지 않은 주문"
@@ -59474,7 +59492,7 @@ msgstr "선택"
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "빈 칸으로 구분. (예를 들어, 100a 200 606)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:437
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:443
 #, c-format
 msgid "serial"
 msgstr "연속간행물"
@@ -59824,17 +59842,17 @@ msgstr "성공적으로 업데이트되었습니다"
 msgid "uri"
 msgstr "금요일"
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:119
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:121
 #, fuzzy, c-format
 msgid "use default (cataloging the record)"
 msgstr "주문과 목록레코드를 삭제할 수 없습니다"
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:120
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:122
 #, c-format
 msgid "use default (placing an order)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:118
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:120
 #, c-format
 msgid "use default (receiving an order)"
 msgstr ""
@@ -59991,7 +60009,7 @@ msgstr "열:"
 msgid "xml"
 msgstr "xml"
 
-#: intranet-tmpl/prog/en/includes/chart.inc:56
+#: intranet-tmpl/prog/en/includes/chart.inc:62
 #, fuzzy, c-format
 msgid "y:"
 msgstr "미안합니다 "
@@ -60037,7 +60055,7 @@ msgid "| Actions: "
 msgstr "| 동작: %s "
 
 #. %1$s:  IF CAN_user_tools_items_batchdel 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:181
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:187
 #, c-format
 msgid "| Actions: %s "
 msgstr "| 동작: %s "
@@ -60060,7 +60078,7 @@ msgstr "%s %s to %s %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:165
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:732
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:445
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175
@@ -60076,9 +60094,9 @@ msgstr "%s %s to %s %s "
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:82
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:153
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:179
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:224
-#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:250
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:178
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:223
+#: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:248
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:76
 #, c-format
 msgid "×"
