@@ -30,17 +30,35 @@ Koha::Template::Plugin::I18N - Translate strings in templates
 
 =head1 SYNOPSIS
 
+    [% PROCESS 'i18n.inc' %]
+
+    . . .
+
+    [% I18N.t("Hello!") %]
+    [% I18N.tx("Hello {name}", { name = name }) %]
+    [% I18N.tn("Hello friend", "Hello friends", count) %]
+    [% I18N.tnx("Hello my {count} friend", "Hello my {count} friends", count, { count = count }) %]
+    [% I18N.tp('verb', 'Item') # to order %]
+    [% I18N.tnp('bibliographic material', "item", "items", count) %]
+    [% I18N.tnpx('bibliographic material', "{count} item", "{count} items", count, { count = count }) %]
+
 Do not use this plugin directly. Add the following directive
 
     [% PROCESS 'i18n.inc' %]
 
-and use the macros defined here
+and use the macros defined.
+
+See: https://wiki.koha-community.org/wiki/Internationalization,_plural_forms,_context,_and_more_(RFC)
+for further context.
 
 =head1 METHODS
 
 =head2 t
 
     [% I18N.t("hello") %]
+
+Translate - The simplest type of translatable string where
+there are no variables and not pluralisations to consider.
 
 =cut
 
@@ -53,6 +71,9 @@ sub t {
 
     [% I18N.tx("hello {name}", { name = name }) %]
 
+Translate with variable - A translatable string that
+includes a variable
+
 =cut
 
 sub tx {
@@ -64,6 +85,9 @@ sub tx {
 
     [% I18N.tn("item", "items", count) %]
 
+Translate with plural - A translatable string that needs
+singular and plural forms
+
 =cut
 
 sub tn {
@@ -74,6 +98,9 @@ sub tn {
 =head2 tnx
 
     [% I18N.tnx("{count} item", "{count} items", count, { count = count }) %]
+
+Translate with plural and variable - A translatable string
+that needs singular and plural forms and includes a variable
 
 =cut
 
@@ -97,6 +124,14 @@ sub txn {
 
     [% I18N.tp("context", "hello") %]
 
+Translate with context - A translatable string where a
+context hint would be helpful to translators.
+
+An example would be where in english a single word may be
+be used as both a verb and a noun. You may want to add a
+note to distinguish this particular use case so translators
+can understand the context correctly.
+
 =cut
 
 sub tp {
@@ -107,6 +142,9 @@ sub tp {
 =head2 tpx
 
     [% I18N.tpx("context", "hello {name}", { name = name }) %]
+
+Translate with context and variable - A translatable string
+that needs both a contextual hint and includes a variable.
 
 =cut
 
@@ -119,6 +157,10 @@ sub tpx {
 
     [% I18N.tnp("context", "item", "items", count) %]
 
+Translate with context and plural - A translatable string
+that needs both a contextual hints and singular and plural
+forms.
+
 =cut
 
 sub tnp {
@@ -129,6 +171,10 @@ sub tnp {
 =head2 tnpx
 
     [% I18N.tnpx("context", "{count} item", "{count} items", count, { count = count }) %]
+
+Translate with context, plural and variables - A translatable
+string that needs contextual hints, singular and plural forms
+and also includes variables.
 
 =cut
 
