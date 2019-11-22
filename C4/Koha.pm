@@ -373,12 +373,6 @@ sub getFacets {
                 sep   => ' - ',
             },
             {
-                idx   => 'su-ut',
-                label => 'Titles',
-                tags  => [ qw/ 500a 501a 503a / ],
-                sep   => ', ',
-            },
-            {
                 idx   => 'au',
                 label => 'Authors',
                 tags  => [ qw/ 700ab 701ab 702ab / ],
