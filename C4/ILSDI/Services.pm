@@ -669,7 +669,7 @@ sub RenewLoan {
 
     # Add renewal if possible
     my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
-    if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber ); }
+    if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber, undef, undef, undef, 0 ); }
 
     my $issue = $item->checkout;
     return unless $issue; # FIXME should be handled

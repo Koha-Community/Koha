@@ -2773,6 +2773,7 @@ sub CanBookBeRenewed {
                     'no_auto_renewal_after_hard_limit',
                     'lengthunit',
                     'norenewalbefore',
+                    'unseen_renewals_allowed'
                 ]
             }
         );
@@ -2951,12 +2952,124 @@ sub CanBookBeRenewed {
 
     return ( 0, "auto_renew" ) if $auto_renew eq "ok" && !$override_limit; # 0 if auto-renewal should not succeed
 
+    return ( 1, undef ) if $override_limit;
+
+    my $branchcode = _GetCircControlBranch( $item->unblessed, $patron->unblessed );
+    my $issuing_rule = Koha::CirculationRules->get_effective_rules(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            branchcode   => $branchcode,
+            rules => [
+                'renewalsallowed',
+                'no_auto_renewal_after',
+                'no_auto_renewal_after_hard_limit',
+                'lengthunit',
+                'norenewalbefore',
+                'unseen_renewals_allowed'
+            ]
+        }
+    );
+
+    return ( 0, "too_many" )
+      if not $issuing_rule->{renewalsallowed} or $issuing_rule->{renewalsallowed} <= $issue->renewals;
+
+    return ( 0, "too_unseen" )
+      if C4::Context->preference('UnseenRenewals') &&
+        $issuing_rule->{unseen_renewals_allowed} &&
+        $issuing_rule->{unseen_renewals_allowed} <= $issue->unseen_renewals;
+
+    my $overduesblockrenewing = C4::Context->preference('OverduesBlockRenewing');
+    my $restrictionblockrenewing = C4::Context->preference('RestrictionBlockRenewing');
+    $patron         = Koha::Patrons->find($borrowernumber); # FIXME Is this really useful?
+    my $restricted  = $patron->is_debarred;
+    my $hasoverdues = $patron->has_overdues;
+
+    if ( $restricted and $restrictionblockrenewing ) {
+        return ( 0, 'restriction');
+    } elsif ( ($hasoverdues and $overduesblockrenewing eq 'block') || ($issue->is_overdue and $overduesblockrenewing eq 'blockitem') ) {
+        return ( 0, 'overdue');
+    }
+
+    if ( $issue->auto_renew ) {
+
+        if ( $patron->category->effective_BlockExpiredPatronOpacActions and $patron->is_expired ) {
+            return ( 0, 'auto_account_expired' );
+        }
+
+        if ( defined $issuing_rule->{no_auto_renewal_after}
+                and $issuing_rule->{no_auto_renewal_after} ne "" ) {
+            # Get issue_date and add no_auto_renewal_after
+            # If this is greater than today, it's too late for renewal.
+            my $maximum_renewal_date = dt_from_string($issue->issuedate, 'sql');
+            $maximum_renewal_date->add(
+                $issuing_rule->{lengthunit} => $issuing_rule->{no_auto_renewal_after}
+            );
+            my $now = dt_from_string;
+            if ( $now >= $maximum_renewal_date ) {
+                return ( 0, "auto_too_late" );
+            }
+        }
+        if ( defined $issuing_rule->{no_auto_renewal_after_hard_limit}
+                      and $issuing_rule->{no_auto_renewal_after_hard_limit} ne "" ) {
+            # If no_auto_renewal_after_hard_limit is >= today, it's also too late for renewal
+            if ( dt_from_string >= dt_from_string( $issuing_rule->{no_auto_renewal_after_hard_limit} ) ) {
+                return ( 0, "auto_too_late" );
+            }
+        }
+
+        if ( C4::Context->preference('OPACFineNoRenewalsBlockAutoRenew') ) {
+            my $fine_no_renewals = C4::Context->preference("OPACFineNoRenewals");
+            my $amountoutstanding =
+              C4::Context->preference("OPACFineNoRenewalsIncludeCredit")
+              ? $patron->account->balance
+              : $patron->account->outstanding_debits->total_outstanding;
+            if ( $amountoutstanding and $amountoutstanding > $fine_no_renewals ) {
+                return ( 0, "auto_too_much_oweing" );
+            }
+        }
+    }
+
+    if ( defined $issuing_rule->{norenewalbefore}
+        and $issuing_rule->{norenewalbefore} ne "" )
+    {
+
+        # Calculate soonest renewal by subtracting 'No renewal before' from due date
+        my $soonestrenewal = dt_from_string( $issue->date_due, 'sql' )->subtract(
+            $issuing_rule->{lengthunit} => $issuing_rule->{norenewalbefore} );
+
+        # Depending on syspref reset the exact time, only check the date
+        if ( C4::Context->preference('NoRenewalBeforePrecision') eq 'date'
+            and $issuing_rule->{lengthunit} eq 'days' )
+        {
+            $soonestrenewal->truncate( to => 'day' );
+        }
+
+        if ( $soonestrenewal > DateTime->now( time_zone => C4::Context->tz() ) )
+        {
+            return ( 0, "auto_too_soon" ) if $issue->auto_renew;
+            return ( 0, "too_soon" );
+        }
+        elsif ( $issue->auto_renew ) {
+            return ( 0, "auto_renew" );
+        }
+    }
+
+    # Fallback for automatic renewals:
+    # If norenewalbefore is undef, don't renew before due date.
+    if ( $issue->auto_renew ) {
+        my $now = dt_from_string;
+        return ( 0, "auto_renew" )
+          if $now >= dt_from_string( $issue->date_due, 'sql' );
+        return ( 0, "auto_too_soon" );
+    }
+
     return ( 1, undef );
 }
 
 =head2 AddRenewal
 
-  &AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate]);
+  &AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate], [$seen]);
 
 Renews a loan.
 
@@ -2981,6 +3094,10 @@ syspref)
 If C<$datedue> is the empty string, C<&AddRenewal> will calculate the due date automatically
 from the book's item type.
 
+C<$seen> is a boolean flag indicating if the item was seen or not during the renewal. This
+informs the incrementing of the unseen_renewals column. If this flag is not supplied, we
+fallback to a true value
+
 =cut
 
 sub AddRenewal {
@@ -2990,6 +3107,10 @@ sub AddRenewal {
     my $datedue         = shift;
     my $lastreneweddate = shift || dt_from_string();
     my $skipfinecalc    = shift;
+    my $seen            = shift;
+
+    # Fallback on a 'seen' renewal
+    $seen = defined $seen && $seen == 0 ? 0 : 1;
 
     my $item_object   = Koha::Items->find($itemnumber) or return;
     my $biblio = $item_object->biblio;
@@ -3042,15 +3163,35 @@ sub AddRenewal {
             }
         );
 
+        # Increment the unseen renewals, if appropriate
+        # We only do so if the syspref is enabled and
+        # a maximum value has been set in the circ rules
+        my $unseen_renewals = $issue->unseen_renewals;
+        if (C4::Context->preference('UnseenRenewals')) {
+            my $rule = Koha::CirculationRules->get_effective_rule(
+                {   categorycode => $patron->categorycode,
+                    itemtype     => $item_object->effective_itemtype,
+                    branchcode   => $circ_library->branchcode,
+                    rule_name    => 'unseen_renewals_allowed'
+                }
+            );
+            if (!$seen && $rule && $rule->rule_value) {
+                $unseen_renewals++;
+            } else {
+                # If the renewal is seen, unseen should revert to 0
+                $unseen_renewals = 0;
+            }
+        }
+
         # Update the issues record to have the new due date, and a new count
         # of how many times it has been renewed.
         my $renews = ( $issue->renewals || 0 ) + 1;
-        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
+        my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, unseen_renewals = ?, lastreneweddate = ?
                                 WHERE borrowernumber=?
                                 AND itemnumber=?"
         );
 
-        $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
+        $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $unseen_renewals, $lastreneweddate, $borrowernumber, $itemnumber );
 
         # Update the renewal count on the item, and tell zebra to reindex
         $renews = ( $item_object->renewals || 0 ) + 1;
@@ -3137,8 +3278,11 @@ sub GetRenewCount {
     my ( $bornum, $itemno ) = @_;
     my $dbh           = C4::Context->dbh;
     my $renewcount    = 0;
+    my $unseencount    = 0;
     my $renewsallowed = 0;
+    my $unseenallowed = 0;
     my $renewsleft    = 0;
+    my $unseenleft    = 0;
 
     my $patron = Koha::Patrons->find( $bornum );
     my $item   = Koha::Items->find($itemno);
@@ -3157,22 +3301,34 @@ sub GetRenewCount {
     $sth->execute( $bornum, $itemno );
     my $data = $sth->fetchrow_hashref;
     $renewcount = $data->{'renewals'} if $data->{'renewals'};
+    $unseencount = $data->{'unseen_renewals'} if $data->{'unseen_renewals'};
     # $item and $borrower should be calculated
     my $branchcode = _GetCircControlBranch($item->unblessed, $patron->unblessed);
 
-    my $rule = Koha::CirculationRules->get_effective_rule(
+    my $rules = Koha::CirculationRules->get_effective_rules(
         {
             categorycode => $patron->categorycode,
             itemtype     => $item->effective_itemtype,
             branchcode   => $branchcode,
-            rule_name    => 'renewalsallowed',
+            rules        => [ 'renewalsallowed', 'unseen_renewals_allowed' ]
         }
     );
-
-    $renewsallowed = $rule ? $rule->rule_value : 0;
+    $renewsallowed = $rules ? $rules->{renewalsallowed} : 0;
+    $unseenallowed = $rules->{unseen_renewals_allowed} ?
+        $rules->{unseen_renewals_allowed} :
+        0;
     $renewsleft    = $renewsallowed - $renewcount;
+    $unseenleft    = $unseenallowed - $unseencount;
     if($renewsleft < 0){ $renewsleft = 0; }
-    return ( $renewcount, $renewsallowed, $renewsleft );
+    if($unseenleft < 0){ $unseenleft = 0; }
+    return (
+        $renewcount,
+        $renewsallowed,
+        $renewsleft,
+        $unseencount,
+        $unseenallowed,
+        $unseenleft
+    );
 }
 
 =head2 GetSoonestRenewDate

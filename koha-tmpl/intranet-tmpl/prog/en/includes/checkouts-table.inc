@@ -49,6 +49,10 @@
                         [% END %]
                     [% END %]
                     [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
+                        [% IF Koha.Preference( 'UnseenRenewals' ) %]
+                            <label id="renew_as_unseen_label" for="override_limit">Renew as &quot;unseen&quot; if appropriate:</label>
+                            <input type="checkbox" name="renew_as_unseen" id="renew_as_unseen_checkbox" value="1" />
+                        [% END %]
                         <button class="btn btn-default" id="RenewCheckinChecked"><i class="fa fa-check"></i> Renew or check in selected items</button>
                         <button class="btn btn-default" id="RenewAll"><i class="fa fa-book"></i> Renew all</button>
                     [% END %]

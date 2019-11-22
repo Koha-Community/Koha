@@ -151,6 +151,9 @@ our $RULE_KINDS = {
     renewalsallowed => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    unseen_renewals_allowed => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     rentaldiscount => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },

@@ -146,6 +146,7 @@ sub renew {
     my $c = shift->openapi->valid_input or return;
 
     my $checkout_id = $c->validation->param('checkout_id');
+    my $seen = $c->validation->param('seen') || 1;
     my $checkout = Koha::Checkouts->find( $checkout_id );
 
     unless ($checkout) {
@@ -169,7 +170,14 @@ sub renew {
             );
         }
 
-        AddRenewal($borrowernumber, $itemnumber, $checkout->branchcode);
+        AddRenewal(
+            $borrowernumber,
+            $itemnumber,
+            $checkout->branchcode,
+            undef,
+            undef,
+            $seen
+        );
         $checkout = Koha::Checkouts->find($checkout_id);
 
         $c->res->headers->location( $c->req->url->to_string );
@@ -223,6 +231,7 @@ sub allows_renewal {
                 allows_renewal => $renewable,
                 max_renewals => $rule->rule_value,
                 current_renewals => $checkout->renewals,
+                unseen_renewals => $checkout->unseen_renewals,
                 error => $error
             }
         );

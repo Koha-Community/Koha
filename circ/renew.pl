@@ -43,6 +43,7 @@ my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
 my $schema = Koha::Database->new()->schema();
 
 my $barcode        = $cgi->param('barcode');
+my $unseen         = $cgi->param('unseen') || 0;
 $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespae
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
 my $override_limit = $cgi->param('override_limit');
@@ -102,7 +103,15 @@ if ($barcode) {
                     if ( C4::Context->preference('SpecifyDueDate') && $hard_due_date ) {
                         $date_due = dt_from_string( $hard_due_date );
                     }
-                    $date_due = AddRenewal( undef, $item->itemnumber(), $branchcode, $date_due );
+                    $date_due = AddRenewal(
+                        undef,
+                        $item->itemnumber(),
+                        $branchcode,
+                        $date_due,
+                        undef,
+                        undef,
+                        !$unseen
+                    );
                     $template->param( date_due => $date_due );
                 }
             }

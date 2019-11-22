@@ -95,6 +95,8 @@
                                             <li>Your account has expired. Please contact the library for more information.</li>
                                         [% ELSIF error == 'too_many' %]
                                             <li>You have renewed this item the maximum number of times allowed.</li>
+                                        [% ELSIF error == 'too_unseen' %]
+                                            <li>You have renewed this item the maximum number of consecutive times without it being seen by the library.</li>
                                         [% ELSIF error == 'too_soon' %]
                                             <li>It is too soon after the checkout date for this item to be renewed.</li>
                                         [% ELSIF error == 'on_reserve' %]
@@ -366,7 +368,12 @@
                                                             [% IF ISSUE.itemtype_object.rentalcharge_hourly > 0 %]
                                                                 <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
                                                             [% END %]
-                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                            <span class="renewals">(
+                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
+                                                                    / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
+                                                                [% END %]
+                                                            )</span>
                                                         [% ELSIF ( ISSUE.on_reserve ) %]
                                                             Not renewable <span class="renewals">(on hold)</span>
                                                         [% ELSIF ( ISSUE.too_many ) %]
@@ -377,16 +384,36 @@
                                                             No longer renewable
                                                         [% ELSIF ISSUE.auto_too_much_oweing %]
                                                             Automatic renewal failed, you have unpaid fines.
-                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                            <span class="renewals">(
+                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
+                                                                    / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
+                                                                [% END %]
+                                                            )</span>
                                                         [% ELSIF ISSUE.auto_account_expired %]
                                                             Automatic renewal failed, your account is expired.
-                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                            <span class="renewals">(
+                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
+                                                                    / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
+                                                                [% END %]
+                                                            )</span>
                                                         [% ELSIF ( ISSUE.too_soon ) %]
                                                             No renewal before [% ISSUE.soonestrenewdate | html %]
-                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                            <span class="renewals">(
+                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
+                                                                    / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
+                                                                [% END %]
+                                                            )</span>
                                                         [% ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) %]
                                                             Automatic renewal
-                                                            <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
+                                                            <span class="renewals">(
+                                                                [% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining
+                                                                [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
+                                                                    / [% ISSUE.unseenleft | html %] of [% ISSUE.unseenallowed | html %] renewals left before the item must be seen by the library
+                                                                [% END %]
+                                                            )</span>
                                                         [% ELSIF ( ISSUE.item_denied_renewal ) %]
                                                             Renewal not allowed
                                                         [% END %]
@@ -641,7 +668,12 @@
                                                             [% IF ( canrenew ) %]
                                                                 <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber | uri %]&amp;bornum=[% OVERDUE.borrowernumber | uri %]">Renew</a>
                                                             [% END %]
-                                                                <span class="renewals">([% OVERDUE.renewsleft | html %] of [% OVERDUE.renewsallowed | html %] renewals remaining)</span>
+                                                                <span class="renewals">(
+                                                                    [% OVERDUE.renewsleft | html %] of [% OVERDUE.renewsallowed | html %] renewals remaining
+                                                                    [% IF Koha.Preference('UnseenRenewals') && ISSUE.unseenallowed %]
+                                                                        / [% OVERDUE.unseenleft | html %] of [% OVERDUE.unseenallowed | html %] renewals left before the item must be seen by the library
+                                                                    [% END %]
+                                                                )</span>
                                                         [% ELSIF ( OVERDUE.norenew_overdue ) %]
                                                             Not allowed<span class="renewals">(overdue)</span>
                                                         [% ELSIF ( OVERDUE.onreserve ) %]

@@ -152,8 +152,14 @@ $(document).ready(function() {
                 itemnumber:      itemnumber,
                 borrowernumber:  borrowernumber,
                 branchcode:      branchcode,
-                override_limit:  override_limit,
+                override_limit:  override_limit
             };
+
+            if (UnseenRenewals) {
+                var ren = $("#renew_as_unseen_checkbox");
+                var renew_unseen = ren.length > 0 && ren.is(':checked') ? 1 : 0;
+                params.seen = renew_unseen === 1 ? 0 : 1;
+            }
 
             // Determine which due date we need to use
             var dueDate = isOnReserve ?
@@ -177,6 +183,8 @@ $(document).ready(function() {
                         content += __("not checked out");
                     } else if ( data.error == "too_many" ) {
                         content += __("too many renewals");
+                    } else if ( data.error == "too_unseen" ) {
+                        content += __("too many consecutive renewals without being seen by the library");
                     } else if ( data.error == "on_reserve" ) {
                         content += __("on hold");
                     } else if ( data.error == "restriction" ) {
@@ -447,6 +455,13 @@ $(document).ready(function() {
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
+                        } else if ( oObj.can_renew_error == "too_unseen" ) {
+                            msg += "<span class='renewals-disabled'>"
+                                    + __("Must be renewed at the library")
+                                    + "</span>";
+
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "restriction" ) {
                             msg += "<span class='renewals-disabled'>"
                                     + __("Not allowed: patron restricted")
@@ -541,8 +556,11 @@ $(document).ready(function() {
                         }
                         content += msg;
                         if ( can_renew || can_force_renew ) {
-                            content += "<span class='renewals'>("
-                                    + __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed)
+                            content += "<span class='renewals'>(";
+                            content + __("%s of %s renewals remaining").format(oObj.renewals_remaining, oObj.renewals_allowed);
+                            if (UnseenRenewals && oObj.unseen_allowed) {
+                                content += __(" / %s of %s unseen renewals remaining").format(oObj.unseen_remaining, oObj.unseen_allowed);
+                            }
                                     + ")</span>";
                         }
 

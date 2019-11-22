@@ -223,7 +223,14 @@ if ( $pending_checkouts->count ) { # Useless test
 
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
-        ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
+        (
+            $issue->{'renewcount'},
+            $issue->{'renewsallowed'},
+            $issue->{'renewsleft'},
+            $issue->{'unseencount'},
+            $issue->{'unseenallowed'},
+            $issue->{'unseenleft'}
+        ) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
         ( $issue->{'renewalfee'}, $issue->{'renewalitemtype'} ) = GetIssuingCharges( $issue->{'itemnumber'}, $borrowernumber );
         $issue->{itemtype_object} = Koha::ItemTypes->find( Koha::Items->find( $issue->{itemnumber} )->effective_itemtype );
         if($status && C4::Context->preference("OpacRenewalAllowed")){
@@ -235,6 +242,7 @@ if ( $pending_checkouts->count ) { # Useless test
 
         if ($renewerror) {
             $issue->{'too_many'}       = 1 if $renewerror eq 'too_many';
+            $issue->{'too_unseen'}     = 1 if $renewerror eq 'too_unseen';
             $issue->{'on_reserve'}     = 1 if $renewerror eq 'on_reserve';
             $issue->{'norenew_overdue'} = 1 if $renewerror eq 'overdue';
             $issue->{'auto_renew'}     = 1 if $renewerror eq 'auto_renew';

@@ -87,9 +87,10 @@
       "x-mojo-to": "Checkouts#renew",
       "operationId": "renewCheckout",
       "tags": ["patrons", "checkouts"],
-      "parameters": [{
-        "$ref": "../parameters.json#/checkout_id_pp"
-      }],
+      "parameters": [
+        { "$ref": "../parameters.json#/checkout_id_pp" },
+        { "$ref": "../parameters.json#/seen_pp" }
+      ],
       "produces": ["application/json"],
       "responses": {
         "201": {

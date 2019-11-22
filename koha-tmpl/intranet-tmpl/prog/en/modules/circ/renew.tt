@@ -52,6 +52,18 @@
                                     </form>
                                 [% END %]
 
+                            [% ELSIF error == "too_unseen" %]
+
+                                <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio %] ( [% item.barcode | html %] ) has been renewed the maximum number of consecutive times without being seen by the library )</p>
+
+                                [% IF Koha.Preference('AllowRenewalLimitOverride') %]
+                                    <form method="post" action="/cgi-bin/koha/circ/renew.pl">
+                                        <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
+                                        <input type="hidden" name="override_limit" value="1" />
+                                        <button type="submit" class="approve"><i class="fa fa-check"></i> Override limit and renew</button>
+                                    </form>
+                                [% END %]
+
                             [% ELSIF error == "too_soon" %]
 
                                 <p>[% INCLUDE 'biblio-title.inc' biblio=item.biblio link = 1 %] ( [% item.barcode | html %] ) cannot be renewed before [% soonestrenewdate | $KohaDates %]. </p>
@@ -169,12 +181,25 @@
                     <fieldset>
                         <h2>Renew</h2>
 
-                        <div>
-                            <label for="barcode" class="hint">Enter item barcode: </label>
-                        </div>
+                        [% IF Koha.Preference('UnseenRenewals') %]
+                            <div class="renew_formfield">
+                                <div>
+                                    <label for="barcode" class="hint">Enter item barcode: </label>
+                                </div>
+                                <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" />
+                            </div>
+                            <div class="renew_formfield">
+                                <label for="unseen" class="hint">Record renewal as unseen if appropriate: </label>
+                                <input value="1" name="unseen" id="unseen" type="checkbox" />
+                            </div>
+                        [% ELSE %]
+                            <div>
+                                <label for="barcode" class="hint">Enter item barcode: </label>
+                            </div>
 
-                        <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" />
+                            <input name="barcode" id="barcode" size="14" class="barcode focus" type="text" />
 
+                        [% END %]
                         <button type="submit" class="btn btn-default">Submit</button>
 
                         <div class="circ-settings show">
@@ -184,7 +209,6 @@
                                 <button type="button" class="action btn btn-default btn-xs" id="cleardate" name="cleardate">Clear</button>
                             </div> <!-- /.date-select -->
                         </div>
-
                     </fieldset>
 
 

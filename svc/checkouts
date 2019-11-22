@@ -163,7 +163,14 @@ while ( my $c = $sth->fetchrow_hashref() ) {
       )
       : undef;
 
-    my ( $renewals_count, $renewals_allowed, $renewals_remaining ) =
+    my (
+        $renewals_count,
+        $renewals_allowed,
+        $renewals_remaining,
+        $unseen_count,
+        $unseen_allowed,
+        $unseen_remaining
+    ) =
       GetRenewCount( $c->{borrowernumber}, $c->{itemnumber} );
 
     my ( $itemtype, $recordtype, $type_for_stat );
@@ -242,6 +249,9 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         renewals_count      => $renewals_count,
         renewals_allowed    => $renewals_allowed,
         renewals_remaining  => $renewals_remaining,
+        unseen_count        => $unseen_count,
+        unseen_allowed      => $unseen_allowed,
+        unseen_remaining    => $unseen_remaining,
 
         return_claim_id         => $c->{return_claim_id},
         return_claim_notes      => $c->{return_claim_notes},
