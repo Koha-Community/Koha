@@ -232,6 +232,10 @@ or "Final Notice".  But CalcFine never defined any value.
 
 sub CalcFine {
     my ( $item, $bortype, $branchcode, $due_dt, $end_date  ) = @_;
+
+    # Skip calculations if item is not overdue
+    return ( 0, 0, 0 ) unless (DateTime->compare( $due_dt, $end_date ) == -1);
+
     my $start_date = $due_dt->clone();
     # get issuingrules (fines part will be used)
     my $itemtype = $item->{itemtype} || $item->{itype};

@@ -1953,17 +1953,15 @@ sub AddReturn {
 
     # case of a return of document (deal with issues and holdingbranch)
     if ($doreturn) {
-        my $is_overdue;
         die "The item is not issed and cannot be returned" unless $issue; # Just in case...
         $patron or warn "AddReturn without current borrower";
-        $is_overdue = $issue->is_overdue( $return_date );
 
         if ($patron) {
             eval {
                 MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy );
             };
             unless ( $@ ) {
-                if ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue && !$item->itemlost ) {
+                if ( C4::Context->preference('CalculateFinesOnReturn') && !$item->itemlost ) {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed, return_date => $return_date } );
                 }
             } else {
@@ -2890,7 +2888,7 @@ sub AddRenewal {
     my $schema = Koha::Database->schema;
     $schema->txn_do(sub{
 
-        if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
+        if ( C4::Context->preference('CalculateFinesOnReturn') ) {
             _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
         }
         _FixOverduesOnReturn( $borrowernumber, $itemnumber, undef, 'RENEWED' );
