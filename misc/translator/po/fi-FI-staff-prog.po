@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-09-17 10:00-0300\n"
+"POT-Creation-Date: 2019-11-15 08:56-0300\n"
 "PO-Revision-Date: 2019-04-29 09:29+0000\n"
 "Last-Translator: vilu <vilu@mail.suomi.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,7 +222,7 @@ msgstr "Aloituspäivämäärä ei ole kelvollinen arvo (\"%s\"). %s"
 msgid "\"Date to\" is not a legal value (\"%s\"). %s"
 msgstr "Lopetuspäivämäärä ei ole kelvollinen arvo (\"%s\"). %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:489
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:493
 #, fuzzy, c-format
 msgid "# Bibliographic records"
 msgstr "Nimeketietue"
@@ -252,7 +252,7 @@ msgstr "# / % valittu"
 msgid "# of students"
 msgstr "opiskelijoista"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:223
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:227
 #, c-format
 msgid "%% (If empty, discount rate from vendor will be used) "
 msgstr "%% (Jos tyhjä, käytetään toimittajan alennushintaa) "
@@ -946,19 +946,20 @@ msgstr "%s %s %s %s&amp;sql_params=%s%s %s&amp;param_name=%s%s %s "
 #. %6$s:         CASE 'upper_case'     
 #. %7$s:         CASE 'lower_case'     
 #. %8$s:         CASE 'legacy_default' 
-#. %9$s:         CASE 
-#. %10$s:  norm | html 
-#. %11$s:     END 
-#. %12$s:  END 
-#. %13$s:  BLOCK norms_options 
-#. %14$s: # PARAMS: selected_norm 
-#. %15$s:     FOREACH norm IN valid_norms 
-#. %16$s:         IF ( norm == selected_norm ) 
+#. %9$s:         CASE 'ISBN' 
+#. %10$s:         CASE 
+#. %11$s:  norm | html 
+#. %12$s:     END 
+#. %13$s:  END 
+#. %14$s:  BLOCK norms_options 
+#. %15$s: # PARAMS: selected_norm 
+#. %16$s:     FOREACH norm IN valid_norms 
+#. %17$s:         IF ( norm == selected_norm ) 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default %s"
-"%s %s %s %s %s %s %s "
+"%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default "
+"%sISBN %s%s %s %s %s %s %s %s "
 msgstr ""
 "%s %s %s %sEi yhtään %sPoista välilyönnit %sIsot kirjaimet %sPienet "
 "kirjaimet %sVanha oletus %s%s %s %s %s %s %s %s "
@@ -1029,7 +1030,7 @@ msgstr ""
 #. %7$s:  IF ( delete_matching_rule_form ) 
 #. %8$s:  code | html 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #, c-format
 msgid ""
 "%s %s %s &rsaquo; Modify record matching rule %s &rsaquo; Add record "
@@ -2962,7 +2963,7 @@ msgstr "%s %sEi määritelty"
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:791
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:796
 #, c-format
 msgid "%s %sNot checked out%s"
 msgstr "%s %sEi lainassa%s"
@@ -3324,7 +3325,7 @@ msgstr ""
 #. %1$s:  IF query_type == 'create' 
 #. %2$s:  ELSIF query_type == 'status' 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:320
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:330
 #, c-format
 msgid "%s &rsaquo; New request %s &rsaquo; Status %s "
 msgstr "%s &rsaquo; Uusi pyyntö %s &rsaquo; Tila %s "
@@ -3504,9 +3505,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:206
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:62
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:165
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:238
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:444
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:246
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:448
 #, c-format
 msgid "%s (inactive)"
 msgstr "%s (ei käytössä)"
@@ -3521,7 +3522,7 @@ msgid "%s (inactive) %s %s %s "
 msgstr "%s (ei käytössä) %s %s %s "
 
 #. %1$s:  riloo.duedate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:764
 #, c-format
 msgid "%s (overdue)"
 msgstr "%s (myöhässä)"
@@ -3882,7 +3883,7 @@ msgstr "%s Kunta: "
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:345
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:498
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:502
 #, c-format
 msgid ""
 "%s Cleaned %s Imported %s Importing %s Reverted %s Reverting %s Staged %s %s "
@@ -5528,7 +5529,7 @@ msgid "%s can't be opened"
 msgstr "%s ei aukea"
 
 #. %1$s:  request.illcomments.count | html 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:632
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:642
 #, c-format
 msgid "%s comments"
 msgstr "%s kommenttia"
@@ -6264,7 +6265,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:764
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %sEi lainassa%s "
@@ -6766,7 +6767,7 @@ msgstr "%s / %s%s"
 #. %4$s:  IF ( overdueloo.enumchron ) 
 #. %5$s:  overdueloo.enumchron | html 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:72
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:76
 #, c-format
 msgid "%s, by %s%s%s, %s%s"
 msgstr "%s, / %s%s%s, %s%s"
@@ -7217,7 +7218,7 @@ msgstr ""
 #. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
 #. %7$s:  ELSE 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:18
+#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:17
 #, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
@@ -7237,7 +7238,7 @@ msgstr "%sNide on lainassa%sNiteestä on varaus%s"
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:259
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:263
 #, c-format
 msgid ""
 "%sItem records could not be processed because the number of item fields was "
@@ -7389,13 +7390,13 @@ msgstr "%sPalautettiin myöhässä.%s&nbsp;%s"
 
 #. %1$s: - BLOCK subject -
 #. %2$s: - END -
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:59
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:63
 #, c-format
 msgid "%sOverdue:%s "
 msgstr "%sMyöhässä:%s "
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/includes/holds_table.inc:205
+#: intranet-tmpl/prog/en/includes/holds_table.inc:207
 #, fuzzy
 msgid "%sRevert transit status%sRevert waiting status%s"
 msgstr "Peruuta odottava-tila"
@@ -7959,7 +7960,7 @@ msgstr "&nbsp;Näytä käytöstä poistetut tilit:"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:66
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:371
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:169
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:448
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:452
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:102
 #, c-format
 msgid "&nbsp;Show inactive:"
@@ -8388,7 +8389,7 @@ msgstr ""
 
 #. %1$s:  IF ( display_list ) 
 #. %2$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #, c-format
 msgid "&rsaquo; %sRecord matching rules%s"
 msgstr "&rsaquo; %sTietueiden yhdistämissäännöt%s"
@@ -10636,7 +10637,7 @@ msgstr ""
 msgid "A pattern with this name already exists."
 msgstr "Tämän niminen ilmestymistiheys on jo olemassa."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:622
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:627
 #, c-format
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr "Lainaajan tilille on maksettu hyvitys."
@@ -10861,7 +10862,7 @@ msgstr "Tilin tyyppi"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:211
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:298
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:415
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:419
 #, c-format
 msgid "Accounting details"
 msgstr "Tilitystiedot"
@@ -11059,7 +11060,7 @@ msgstr "Toiminto, jos ei osumaa: "
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:386
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:95
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:356
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:42
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:115
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:223
@@ -11079,7 +11080,7 @@ msgstr "Toiminto, jos ei osumaa: "
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:297
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:320
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:341
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:454
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:455
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:262
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:253
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:77
@@ -11215,7 +11216,7 @@ msgstr "Adam Thick"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:562
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:635
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:21
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:145
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:46
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:565
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:761
@@ -11428,7 +11429,7 @@ msgstr "Lisää alitili"
 msgid "Add classification source"
 msgstr "Lisää luokitusjärjestelmä"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:647
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, fuzzy, c-format
 msgid "Add comment"
 msgstr "Hyväksytyt kommentit"
@@ -11552,18 +11553,18 @@ msgstr "kirjastossa "
 msgid "Add manual restriction"
 msgstr "Lisää rajoitus"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:249
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:250
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:255
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:251
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:349
 #, c-format
 msgid "Add match check"
 msgstr "Lisää vastaavuustarkistus"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:128
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:129
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:134
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:202
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:130
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:203
 #, c-format
 msgid "Add match point"
 msgstr "Lisää vastaavuuspiste"
@@ -11649,7 +11650,7 @@ msgstr "Lisää tilaus tilauskoriin"
 msgid "Add order to basket %s"
 msgstr "Lisää tilaus tilauskoriin %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:517
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:521
 #, c-format
 msgid "Add orders"
 msgstr "Lisää tilauksia"
@@ -11698,7 +11699,7 @@ msgstr "Lisää sitaatti"
 msgid "Add recipients"
 msgstr "Lisää vastaanottajia"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:86
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:87
 #, c-format
 msgid "Add record matching rule"
 msgstr "Lisää tietueiden yhdistämissääntö"
@@ -11752,6 +11753,11 @@ msgstr "Lisää tilaus tilauskoriin"
 #, fuzzy, c-format
 msgid "Add sub-group "
 msgstr "Lisää uusi ryhmä"
+
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:33
+#, fuzzy, c-format
+msgid "Add subscription fields"
+msgstr "Muut kentät"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:104
 #, c-format
@@ -11881,7 +11887,7 @@ msgid "Added patron attribute type &quot;%s&quot;"
 msgstr "Lisättiin asiakasmääre &quot;%s&quot;"
 
 #. %1$s:  added_matching_rule | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:441
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:442
 #, c-format
 msgid "Added record matching rule &quot;%s&quot;"
 msgstr "Lisättiin tietueiden yhdistämissääntö &quot;%s&quot;"
@@ -11996,8 +12002,8 @@ msgstr "Osoite 2"
 msgid "Address 2: "
 msgstr "Osoite 2: "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:122
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:123
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:126
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:127
 #, c-format
 msgid "Address in question"
 msgstr "Osoite epävarma"
@@ -12075,7 +12081,7 @@ msgstr "Paikallisten kansikuvien lataus"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:14
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:35
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:15
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:17
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
@@ -13120,11 +13126,11 @@ msgstr "Antoine Farnault"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:78
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:80
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:118
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:113
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:157
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:168
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:176
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:184
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:117
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:161
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:172
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:180
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:188
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:369
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:379
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:660
@@ -13200,7 +13206,7 @@ msgstr ""
 msgid "Any library"
 msgstr "Kaikki kirjastot"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:627
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:632
 #, c-format
 msgid "Any lost item fees for this item will remain on the patron's account."
 msgstr ""
@@ -13271,7 +13277,7 @@ msgid "Apply different matching rules"
 msgstr "Käytä eri yhdistämissääntöjä"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:202
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 msgid "Apply filter"
 msgstr "Suodata"
@@ -13658,8 +13664,8 @@ msgstr "Haluatko varmasti poistaa tämän viestin?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 msgid "Are you sure you want to delete this message? This cannot be undone."
 msgstr ""
 "Haluatko varmasti poistaa tämän asiakkaan viestin? Poistoa ei voi peruuttaa."
@@ -13682,7 +13688,7 @@ msgid "Are you sure you want to delete this patron from the card batch?"
 msgstr "Haluatko varmasti poistaa tämän asiakkaan korttien eräajosta?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
 msgid ""
 "Are you sure you want to delete this patron image? This cannot be undone."
 msgstr ""
@@ -13868,7 +13874,7 @@ msgid "Are you sure you want to reopen this subscription?"
 msgstr "Haluatko varmasti avata tämän tilauksen uudestaan?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
 msgid ""
 "Are you sure you want to replace the current patron image? This cannot be "
 "undone."
@@ -13916,7 +13922,7 @@ msgstr ""
 msgid "Are you sure you wish to delete quote(s) %s?"
 msgstr "Haluatko varmasti poistaa sitaatit %s?"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:494
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:504
 #, c-format
 msgid "Are you sure you wish to delete this request?"
 msgstr "Haluatko varmasti poistaa tämän pyynnön?"
@@ -14138,7 +14144,7 @@ msgstr "Auktorisointi"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:184
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:300
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:301
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:680
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:690
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
@@ -14148,7 +14154,7 @@ msgstr "Auktorisointi"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:174
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
@@ -14381,8 +14387,8 @@ msgstr "Auktoriteettityyppi"
 msgid "Authority field to copy: "
 msgstr "Kopioitava auktoriteettikenttä: "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:115
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:118
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:116
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:119
 #, c-format
 msgid "Authority record"
 msgstr "Auktoriteettitietue"
@@ -14710,14 +14716,14 @@ msgstr "Maalis"
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:32
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:735
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:714
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:294
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:261
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:892
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:870
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:58
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:102
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:156
@@ -14725,7 +14731,7 @@ msgstr "Maalis"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:175
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:94
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:112
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:220
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
@@ -14792,7 +14798,7 @@ msgstr "Viivakoodeja ei löytynyt"
 msgid "Barcode not found. The following items were found by searching:"
 msgstr "Viivakoodia ei löytynyt. Seuraavat niteet löytyivät haulla: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:948
 #, c-format
 msgid "Barcode submitted"
 msgstr "Viivakoodi syötetty"
@@ -15290,7 +15296,7 @@ msgstr "Eräajot"
 msgid "BdP de la Meuse, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:420
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:430
 #, fuzzy, c-format
 msgid "Be sure to provide email addresses for these patrons."
 msgstr "Tällä asiakkaalla ei ole tilastoja."
@@ -15442,8 +15448,8 @@ msgstr "Tulostettava bibliografinen tieto"
 msgid "Bibliographic information"
 msgstr "Aineiston tiedot"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:114
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:117
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:115
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:118
 #, c-format
 msgid "Bibliographic record"
 msgstr "Nimeketietue"
@@ -15457,13 +15463,13 @@ msgstr "Nimeketietue %s"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:683
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:693
 #, fuzzy, c-format
 msgid "Bibliographic record ID"
 msgstr "Nimeketietue"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:546
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:556
 #, fuzzy, c-format
 msgid "Bibliographic record ID:"
 msgstr "Nimeketietue"
@@ -15625,13 +15631,13 @@ msgstr "Estetty"
 msgid "Bonnie Crawford"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:733
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:738
 #, c-format
 msgid "Book drop mode"
 msgstr "Palautuslaatikkotila"
 
 #. %1$s:  dropboxdate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:671
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:676
 #, c-format
 msgid "Book drop mode. (Effective checkin date is %s )."
 msgstr "Palautuslaatikkotila (Palautuspvm on %s )."
@@ -16211,9 +16217,8 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Luokka (nouseva)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:697
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:16
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:42
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:863
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:160
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:178
 #, c-format
@@ -16239,19 +16244,19 @@ msgstr "Luokka"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:58
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:46
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:41
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:734
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:713
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:39
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:891
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:55
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:869
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:59
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:187
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:177
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:52
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:109
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:217
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:161
@@ -16489,9 +16494,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:96
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:99
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:74
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:487
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:431
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:497
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:352
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:362
@@ -16544,7 +16549,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:175
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:476
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:480
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:79
@@ -16575,7 +16580,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:156
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:202
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:276
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:414
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:415
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:129
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:186
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:207
@@ -16629,7 +16634,7 @@ msgstr "Peruuta"
 msgid "Cancel "
 msgstr "Peruuta "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:355
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:365
 #, c-format
 msgid "Cancel a confirmed request"
 msgstr "Peruuta vahvistettu pyyntö"
@@ -16681,7 +16686,7 @@ msgstr "Peruuta suodatus"
 msgid "Cancel hold"
 msgstr "Poista varaus"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:345
 #, c-format
 msgid "Cancel hold "
 msgstr "Poista varaus "
@@ -16704,8 +16709,8 @@ msgid "Cancel import"
 msgstr "Peru tuonti"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:746
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:903
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:725
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
 msgid "Cancel marked holds"
 msgstr "Poista valitut varaukset"
 
@@ -16757,7 +16762,7 @@ msgid "Cancel reservation and then attempt transfer:"
 msgstr "Peruuta varaus ja yritä sitten kuljetusta:"
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:73
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:240
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:245
 #, c-format
 msgid "Cancel transfer"
 msgstr "Peruuta kuljetus"
@@ -16767,7 +16772,7 @@ msgstr "Peruuta kuljetus"
 msgid "Cancel upload"
 msgstr "Peru lataus"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:896
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:874
 #, c-format
 msgid "Cancel?"
 msgstr "Peruuta?"
@@ -16843,8 +16848,8 @@ msgstr "Ei voi vaihtaa"
 msgid "Cannot cancel receipt. Possible reasons : "
 msgstr "Kuittia ei voida peruuttaa. Mahdollisesti, koska : "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:632
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:629
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:637
 #, c-format
 msgid "Cannot check in"
 msgstr "Ei voi palauttaa"
@@ -17565,9 +17570,8 @@ msgid "Character encoding: "
 msgstr "Merkistökoodaus: "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:26
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:698
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:17
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:46
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:864
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:161
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:179
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:333
@@ -17637,7 +17641,7 @@ msgstr ""
 msgid "Check boxes to duplicate the original values"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:23
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:21
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:20
 #, c-format
 msgid "Check expiration"
@@ -17663,7 +17667,7 @@ msgstr "Tarkasta edelliset lainat: "
 #: intranet-tmpl/prog/en/includes/circ-search.inc:36
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:26
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:47
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:678
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:683
 #, c-format
 msgid "Check in"
 msgstr "Palautus"
@@ -17676,7 +17680,7 @@ msgstr "Palautus "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:580
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:585
 #, c-format
 msgid "Check in message"
 msgstr "Palautusviesti"
@@ -17913,10 +17917,9 @@ msgid "Checked out %s times"
 msgstr "Lainattu %s kertaa"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:696
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:177
 #, c-format
@@ -17924,14 +17927,18 @@ msgid "Checked out from"
 msgstr "Lainauspiste"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:695
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:861
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
 #, c-format
 msgid "Checked out on"
 msgstr "Lainattu"
+
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:13
+#, fuzzy, c-format
+msgid "Checked out on (hidden, unformatted)"
+msgstr "Eräpäivä, piilotettu, alustamaton"
 
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:25
 #, c-format
@@ -17944,7 +17951,7 @@ msgid "Checked out: "
 msgstr "Lainattu: "
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:105
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:751
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:756
 #, c-format
 msgid "Checked-in items"
 msgstr "Palautetut niteet"
@@ -18114,7 +18121,7 @@ msgstr "Lainaus on estetty, koska asiakkaalla on liikaa maksuja."
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr "Lainaus estetty - asiakkaalla on erääntyneitä lainoja."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:787
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:792
 #, c-format
 msgid "Checkouts:"
 msgstr "Lainat:"
@@ -18269,7 +18276,7 @@ msgstr ""
 msgid "Choose order of text fields to print"
 msgstr "Valitse tulostettavien tekstikenttien järjestys"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:481
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:485
 #, c-format
 msgid "Choose the file to add to the basket"
 msgstr "Valitse tilausryhmään lisättävä tiedosto"
@@ -18633,7 +18640,7 @@ msgstr "Reklamoitu"
 msgid "Claimed date"
 msgstr "Reklamointipvm"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:20
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:18
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:23
 #, c-format
 msgid "Claims"
@@ -18748,7 +18755,7 @@ msgstr "Siistitty tuontierä #%s"
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:205
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:555
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:137
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:702
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:707
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -19106,7 +19113,7 @@ msgstr "Sääntöjen kopiointi epäonnistui."
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:132
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:32
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:624
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:634
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:142
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:24
@@ -19117,7 +19124,7 @@ msgstr "Sääntöjen kopiointi epäonnistui."
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:156
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:87
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:355
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:359
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:94
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:192
@@ -19263,7 +19270,7 @@ msgstr "Kerhot, joihin ei ilmoittautumisia"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:292
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:317
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:338
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:452
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:453
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:35
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:250
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
@@ -19345,11 +19352,11 @@ msgid "Collection "
 msgstr "Kokoelma "
 
 #: intranet-tmpl/prog/en/columns.def:99
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:24
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:270
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:859
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:179
 #, c-format
 msgid "Collection code"
@@ -19502,7 +19509,7 @@ msgstr "Selitys"
 msgid "Comment "
 msgstr "Kommentti "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:638
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #, fuzzy, c-format
 msgid "Comment by: "
 msgstr "Kommentti: "
@@ -19514,7 +19521,7 @@ msgstr "Kommentti: "
 msgid "Comment:"
 msgstr "Selitys:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:666
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:971
 #, c-format
 msgid "Comment: "
@@ -19528,8 +19535,8 @@ msgstr "Kommentoija "
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:20
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:688
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:486
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:698
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:490
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:20
 #, c-format
@@ -19644,12 +19651,12 @@ msgstr ""
 #. INPUT type=submit name=submitbutton
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:370
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:375
 #, c-format
 msgid "Confirm"
 msgstr "Hyväksy"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:351
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:361
 #, fuzzy, c-format
 msgid "Confirm ILL request"
 msgstr "Vahvista poisto"
@@ -19697,7 +19704,7 @@ msgstr "Vahvista asiakasmääreen poisto "
 msgid "Confirm deletion of printer "
 msgstr "Vahvista tulostimen poisto "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:421
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:422
 #, c-format
 msgid "Confirm deletion of record matching rule "
 msgstr "Vahvista tietueiden yhdistämissäännön poisto "
@@ -19714,17 +19721,17 @@ msgid "Confirm deletion of tag "
 msgstr "Vahvista tämän kentän poisto "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:398
 msgid "Confirm deletion of this vendor ?"
 msgstr "Vahvista tämän toimittajan poisto?"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:331
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:560
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:565
 #, c-format
 msgid "Confirm hold "
 msgstr "Vahvista varaus "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:553
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
 #, c-format
 msgid "Confirm hold and transfer "
 msgstr "Vahvista varaus ja kuljetus "
@@ -20235,8 +20242,8 @@ msgstr "Cory Jaeger"
 msgid "Cost must be expressed as a decimal number >= 0"
 msgstr "Hinta pitää ilmaista desimaalinumeroina >= 0"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:460
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:571
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:470
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:581
 #, fuzzy, c-format
 msgid "Cost:"
 msgstr "Kadonnut: "
@@ -20815,7 +20822,7 @@ msgstr "Rahayksikkö = %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:380
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:427
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:431
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:386
 #, c-format
@@ -21215,7 +21222,7 @@ msgid "Date accessioned"
 msgstr "Hankintapvm"
 
 #: intranet-tmpl/prog/en/columns.def:70
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #, c-format
 msgid "Date acquired"
 msgstr "Hankintapvm"
@@ -21262,7 +21269,7 @@ msgstr "Poistopvm (nide)"
 msgid "Date due"
 msgstr "Eräpäivä"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
 #, c-format
 msgid "Date due:"
 msgstr "Eräpäivä:"
@@ -21982,15 +21989,15 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:339
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:373
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:74
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:59
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:792
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:147
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:151
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:153
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:155
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:477
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:65
@@ -22013,7 +22020,7 @@ msgstr "Viive on aika (päivissä) eräpäivän jälkeen kun toiminto laukaistaa
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:308
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:329
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:350
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:464
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:206
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:49
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:8
@@ -22413,7 +22420,7 @@ msgid "Delete vendor"
 msgstr "Poista toimittaja"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:8
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:739
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:718
 #, c-format
 msgid "Delete?"
 msgstr "Poista?"
@@ -22432,7 +22439,7 @@ msgid "Deleted patron attribute type &quot;%s&quot;"
 msgstr "Poistettiin asiakasmääre &quot;%s&quot;"
 
 #. %1$s:  deleted_matching_rule | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:447
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:448
 #, c-format
 msgid "Deleted record matching rule &quot;%s&quot;"
 msgstr "Poistettiin tietueiden yhdistämissääntö &quot;%s&quot;"
@@ -22589,7 +22596,7 @@ msgstr "Osasto"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:293
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:318
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:339
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:453
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:454
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:62
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:220
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:248
@@ -22624,7 +22631,7 @@ msgstr "Kuvaus vaaditaan"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Description missing"
 msgstr "Kuvaus puuttuu"
 
@@ -22672,7 +22679,7 @@ msgstr "Kuvaus:"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:182
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:228
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:103
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:104
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:98
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:155
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:99
@@ -22732,7 +22739,7 @@ msgstr "Kohdetietue"
 msgid "Details"
 msgstr "Tiedot"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:675
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:685
 #, c-format
 msgid "Details for all requests"
 msgstr "Kaikkien pyyntöjen tiedot"
@@ -22747,13 +22754,13 @@ msgstr "Tiedot maksulle"
 msgid "Details for payment"
 msgstr "Tiedot maksusuoritukselle"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:530
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:540
 #, fuzzy, c-format
 msgid "Details from library"
 msgstr "Kohdekirjasto:"
 
 #. %1$s:  request.backend | html 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:593
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:603
 #, c-format
 msgid "Details from supplier (%s)"
 msgstr ""
@@ -22924,7 +22931,7 @@ msgstr "Diskografiat"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:433
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:315
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:222
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:226
 #, c-format
 msgid "Discount: "
 msgstr "Alennus: "
@@ -23008,11 +23015,11 @@ msgid "Display order: "
 msgstr "Järjestys: "
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:520
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:530
 msgid "Display supplier metadata"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:521
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:531
 #, c-format
 msgid "Display supplier metadata "
 msgstr ""
@@ -23066,11 +23073,6 @@ msgstr ""
 #, c-format
 msgid "Do not look for matching records"
 msgstr "Älä etsi vastaavia tietueita"
-
-#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:14
-#, c-format
-msgid "Do not notify"
-msgstr "Ei ilmoitusta"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:85
 #, c-format
@@ -23275,12 +23277,12 @@ msgstr "Lataushakemisto"
 msgid "Download directory: "
 msgstr "Lataushakemisto: "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:41
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:45
 #, c-format
 msgid "Download file of all overdues"
 msgstr "Lataa tiedosto kaikista myöhässä olevista"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:39
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:43
 #, c-format
 msgid "Download file of displayed overdues"
 msgstr "Lataa tiedosto näytetyistä myöhässä olevista"
@@ -23340,27 +23342,21 @@ msgstr "Eräpäivä %s"
 #: intranet-tmpl/prog/en/columns.def:79
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:691
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:856
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:50
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:154
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:172
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #, c-format
 msgid "Due date"
 msgstr "Eräpäivä"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:855
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:7
 #, c-format
 msgid "Due date (unformatted, hidden)"
 msgstr "Eräpäivä (alustamaton, piilotettu)"
-
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:690
-#, c-format
-msgid "Due date hidden not formatted"
-msgstr "Eräpäivä, piilotettu, alustamaton"
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:258
@@ -23373,6 +23369,9 @@ msgstr "Eräpäivä %s"
 msgid "Duncan Tyler"
 msgstr "Duncan Tyler"
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:25
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
@@ -23403,7 +23402,7 @@ msgid "Duplicate budget"
 msgstr "Kopioi budjetti"
 
 #. %1$s:  budget_period_description | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:21
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:24
 #, c-format
 msgid "Duplicate budget %s"
 msgstr "Kopioi budjetti %s"
@@ -23640,7 +23639,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:403
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:183
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:337
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:369
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:372
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:184
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:476
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:294
@@ -23657,7 +23656,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:307
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:328
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:349
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:462
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:310
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:217
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:279
@@ -23685,7 +23684,7 @@ msgstr "Muokkaa"
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:9
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:27
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:18
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:18
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:21
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:28
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:76
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:232
@@ -23804,7 +23803,7 @@ msgid "Edit biblio"
 msgstr "Muokkaa tietuetta"
 
 #. %1$s:  budget_period_description | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:20
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:23
 #, c-format
 msgid "Edit budget %s"
 msgstr "Muokkaa budjettia %s"
@@ -23939,11 +23938,11 @@ msgid "Edit record"
 msgstr "Muokkaa tietuetta"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:508
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:518
 msgid "Edit request"
 msgstr "Muokkaa pyyntöä"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:509
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:519
 #, c-format
 msgid "Edit request "
 msgstr "Muokkaa pyyntöä "
@@ -24148,7 +24147,7 @@ msgstr "Sähköposti on lähetetty."
 msgid "Email required"
 msgstr "Sähköpostiosoite pakollinen"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:403
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
 #, c-format
 msgid "Email text:"
 msgstr "Sähköpostiteksti:"
@@ -24442,7 +24441,7 @@ msgstr "Syötä niteen viivakoodi:"
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:161
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:96
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:679
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:684
 #, c-format
 msgid "Enter item barcode: "
 msgstr "Syötä niteen viivakoodi: "
@@ -24650,7 +24649,7 @@ msgstr "Virhe tuotaessa pohjaa"
 msgid "Error message from Zebra: %s "
 msgstr "Zebra-virhe: %s "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:338
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:348
 #, fuzzy, c-format
 msgid "Error performing operation"
 msgstr "Virhe tuotaessa pohjaa"
@@ -24947,8 +24946,8 @@ msgstr "Odotetaan saapuvaksi"
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: intranet-tmpl/prog/en/includes/holds_table.inc:13
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:737
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:894
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:716
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
 #, c-format
 msgid "Expiration"
 msgstr "Vanhenee"
@@ -25697,7 +25696,7 @@ msgstr "Kansioon ei voi kirjoittaa"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:485
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:489
 #, c-format
 msgid "File name"
 msgstr "Tiedostonimi"
@@ -25801,7 +25800,7 @@ msgid "Filing rule"
 msgstr "Luokitussääntö"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Filing rule code missing"
 msgstr "Luokitusoppaan tunnus puuttuu"
 
@@ -25856,7 +25855,7 @@ msgstr "Suodata: "
 msgid "Filter location"
 msgstr "Suodata kirjaston mukaan"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:100
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
 #, c-format
 msgid "Filter on:"
 msgstr "Suodata:"
@@ -25866,7 +25865,7 @@ msgstr "Suodata:"
 msgid "Filter paid transactions"
 msgstr "Lähetystapahtumat"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:384
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:394
 #, fuzzy, c-format
 msgid "Filter partner libraries:"
 msgstr "FileSaver library"
@@ -25910,7 +25909,7 @@ msgid "Filters :"
 msgstr "Suodattimet :"
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:942
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:920
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:280
 #, c-format
 msgid "Find another patron?"
@@ -25918,9 +25917,8 @@ msgstr "Etsi toinen asiakas?"
 
 #: intranet-tmpl/prog/en/includes/accounts.inc:9
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:27
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:18
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:48
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:699
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:865
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:83
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:85
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:206
@@ -25967,12 +25965,12 @@ msgstr "Maksut"
 msgid "Fines &amp; charges"
 msgstr "Maksut"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:668
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:673
 #, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr "Maksuja ei peritä käsin peruutetuista varauksista."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:665
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:670
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr "Palautetusta aineistosta aiheutuneet maksut poistetaan."
@@ -26201,7 +26199,7 @@ msgstr "Aina"
 msgid "Forget %s %s (%s)"
 msgstr "Unohda %s %s (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:742
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:747
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr "Poista käsin poistettujen varausten maksut"
@@ -26211,7 +26209,7 @@ msgstr "Poista käsin poistettujen varausten maksut"
 msgid "Forgive fines on return: "
 msgstr "Mitätöi maksut palautettaessa: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:724
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #, c-format
 msgid "Forgive overdue charges"
 msgstr "Poista myöhästymismaksut"
@@ -26229,7 +26227,7 @@ msgstr "Maksun mitätöinti"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:334
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:401
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:461
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:270
 msgid "Form not submitted because of the following problem(s)"
@@ -26552,7 +26550,7 @@ msgstr "Toimittajalta: "
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:251
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:190
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:103
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:107
 #, c-format
 msgid "From:"
 msgstr "Alkaen:"
@@ -26700,9 +26698,9 @@ msgstr "Tili:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:217
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:338
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:341
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:423
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:439
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:427
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:87
 #, c-format
 msgid "Fund: "
@@ -27424,16 +27422,16 @@ msgid "Hold"
 msgstr "Varaus"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:97
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:305
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:366
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:526
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:310
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:371
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:531
 #, c-format
 msgid "Hold at"
 msgstr "Varaus"
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:732
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:889
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:711
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:867
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:98
 #, c-format
 msgid "Hold date"
@@ -27465,19 +27463,19 @@ msgstr "Varausmaksu: "
 msgid "Hold filled for:"
 msgstr "Varaus:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:278
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:448
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:489
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:283
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:453
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:494
 #, c-format
 msgid "Hold for:"
 msgstr "Varaus:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:354
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:359
 #, c-format
 msgid "Hold for: "
 msgstr "Varaus: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:264
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:269
 #, c-format
 msgid "Hold found (item is already waiting): "
 msgstr "Teoksessa varaus: "
@@ -27488,7 +27486,7 @@ msgstr "Teoksessa varaus: "
 msgid "Hold found for (%s), please transfer"
 msgstr "Varaus niteestä %s, siirrä nide"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:477
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:482
 #, c-format
 msgid "Hold found: "
 msgstr "Teoksessa varaus: "
@@ -27503,7 +27501,7 @@ msgstr "Varaus on <strong>keskeytetty</strong>"
 msgid "Hold must be record level "
 msgstr "Varaus pitää tehdä tietueeseen "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:352
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:357
 #, c-format
 msgid "Hold needing transfer found"
 msgstr "Löytyi varaus, joka täytyy kuljettaa"
@@ -27580,7 +27578,7 @@ msgstr "Nykyinen paikka"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:263
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:172
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:252
 #, c-format
@@ -27869,7 +27867,7 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:13
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:319
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:329
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:149
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -27998,7 +27996,7 @@ msgstr "Kiinni aikavälillä joka vuosi"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:14
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:34
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:15
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:16
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
@@ -28090,7 +28088,7 @@ msgstr "Kotikirjasto"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:262
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:39
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
@@ -28278,13 +28276,13 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "ID"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:343
 #, c-format
 msgid "ILL module configuration problem. Take a look at the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/header.inc:37
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:320
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:330
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:75
 #, fuzzy, c-format
 msgid "ILL requests"
@@ -28747,7 +28745,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Älä huomioi"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #, c-format
 msgid "Ignore "
 msgstr "Älä huomioi "
@@ -28951,7 +28949,7 @@ msgstr ""
 "Tuo %s luettelointipohjan rakenne (kentät ja osakentät) "
 "taulukkolaskentatiedoston muodossa (.csv, .xml, .ods)"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:413
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:417
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following accounting "
@@ -28960,7 +28958,7 @@ msgstr ""
 "Tuo valitut tilauskorin nimekkeet seuraavien merkintöjen mukaisesti "
 "(käytetään vain, jos nimekkeille ei ole täytetty tietoja):"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:364
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
@@ -29366,8 +29364,8 @@ msgstr "Käyttöliittymä"
 msgid "Interface:"
 msgstr "Käyttöliittymä:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:381
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:418
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:391
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:428
 #, c-format
 msgid "Interlibrary loan request details"
 msgstr ""
@@ -29403,7 +29401,7 @@ msgstr "Sisäinen huomautus:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:302
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:475
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:454
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
 #, c-format
 msgid "Internal note: "
 msgstr "Sisäinen huomautus: "
@@ -29796,7 +29794,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:371
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:144
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:283
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:372
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:38
 #, c-format
@@ -29820,7 +29818,7 @@ msgid "Item %s"
 msgstr "Nide %s"
 
 #. %1$s:  item.item_id | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:263
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
 #, c-format
 msgid "Item Record %s"
 msgstr "Nidetietue %s"
@@ -29879,7 +29877,7 @@ msgstr "Nide lainattu"
 msgid "Item circulation alerts"
 msgstr "Nidekierron huomautukset"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:444
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:449
 #, c-format
 msgid "Item consigned:"
 msgstr "Kuljetus:"
@@ -29927,7 +29925,7 @@ msgstr "Nide on poistettu kierrosta."
 msgid "Item hasn't been transferred yet from %s"
 msgstr "Nidettä ei vielä ole siirretty kohteesta %s"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:174
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
 #, c-format
 msgid "Item holding library:"
 msgstr "Niteen sijainti:"
@@ -29940,13 +29938,13 @@ msgstr "Niteen sijainti:"
 msgid "Item holds / Total holds"
 msgstr "Nidevaraukset"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:166
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:170
 #, c-format
 msgid "Item home library:"
 msgstr "Niteen kotikirjasto:"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:141
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:363
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:367
 #, c-format
 msgid "Item information"
 msgstr "Nidetiedot"
@@ -29979,7 +29977,7 @@ msgstr "Nide <strong>odottaa</strong>"
 msgid "Item is already at destination library."
 msgstr "Nide on jo kohdekirjastossa."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:616
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:621
 #, fuzzy, c-format
 msgid "Item is lost, cannot be checked in."
 msgstr "Nide ei ole lainassa."
@@ -30012,7 +30010,7 @@ msgstr "Niteellä on rajoituksia (tapahtuma tallennettiin kuitenkin)"
 msgid "Item is restricted."
 msgstr "Niteellä on rajoituksia."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:635
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:640
 #, c-format
 msgid "Item is withdrawn."
 msgstr "Nide on poistettu kierrosta."
@@ -30178,11 +30176,11 @@ msgid "Item tags cannot currently be saved"
 msgstr "Nimekkeiden tageja ei voi tällä hetkellä tallentaa"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:693
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:292
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:446
@@ -30191,7 +30189,6 @@ msgstr "Nimekkeiden tageja ei voi tällä hetkellä tallentaa"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:174
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:271
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:253
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:157
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:175
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:178
@@ -30259,7 +30256,7 @@ msgstr "Aineistolaji ei ole lainattavissa."
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:167
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:275
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:201
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:157
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:161
 #, c-format
 msgid "Item type:"
 msgstr "Aineistolaji:"
@@ -30304,7 +30301,7 @@ msgstr ""
 "Aineistolajeja käytetään ryhmittämään samankaltaisia aineistoja. "
 "Aineistolajeja ovat esimerkiksi kirjat, CD:t ja DVD:t."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:618
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:623
 #, c-format
 msgid "Item was lost, now found."
 msgstr "Nide oli kadonnut, nyt löytynyt."
@@ -33998,8 +33995,8 @@ msgstr "Viimeisin päivitys: "
 msgid "Last updated"
 msgstr "Viimeisin päivitys"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:452
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:562
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:462
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:572
 #, fuzzy, c-format
 msgid "Last updated:"
 msgstr "Viimeisin päivitys: "
@@ -34146,15 +34143,15 @@ msgstr "Lait, säädökset"
 msgid "Leire Diez"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:177
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:230
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:283
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:325
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:366
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:392
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:503
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:536
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:561
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:178
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:231
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:284
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:326
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:367
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:393
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:504
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:537
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:562
 #, c-format
 msgid "Length: "
 msgstr "Pituus: "
@@ -34235,7 +34232,7 @@ msgstr "Kirjastorajoitus: "
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:217
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:127
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:684
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:79
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:90
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:56
@@ -34252,7 +34249,7 @@ msgstr "Kirjastorajoitus: "
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:67
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:86
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:52
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:53
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:29
@@ -34368,7 +34365,7 @@ msgstr "Asiakkaan kirjasto:"
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:182
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:186
 #, c-format
 msgid "Library of the patron:"
 msgstr "Asiakkaan kirjasto:"
@@ -34402,8 +34399,8 @@ msgstr "Kirjastotiedot"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:212
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:184
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:264
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:441
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:554
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:451
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:564
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:33
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:114
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:248
@@ -34744,7 +34741,7 @@ msgstr "Ladataan"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:103
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:153
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:385
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:352
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:356
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:91
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:82
@@ -34790,21 +34787,21 @@ msgstr "Ladataan, ole hyvä ja odota..."
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:238
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:164
 #, c-format
 msgid "Loading..."
 msgstr "Ladataan..."
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:717
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:696
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
 #, c-format
 msgid "Loading... "
 msgstr "Ladataan... "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 msgid "Loading... you may continue scanning."
 msgstr "Ladataan... voit jatkaa skannausta."
 
@@ -34855,7 +34852,7 @@ msgid "Local use preferences"
 msgstr "Paikallisten tietojen oletusarvot"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:310
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:612
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:617
 #, c-format
 msgid "Local use recorded"
 msgstr "Sisäinen käyttö tilastoitu"
@@ -34877,6 +34874,7 @@ msgstr "Kieli: "
 
 #: intranet-tmpl/prog/en/columns.def:151
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:12
 #: intranet-tmpl/prog/en/modules/tags/list.tt:29
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:84
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:163
@@ -34884,11 +34882,9 @@ msgstr "Kieli: "
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:70
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:57
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:36
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:694
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:126
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:266
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:860
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:46
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:39
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:74
@@ -35001,8 +34997,8 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 msgid "Lost"
 msgstr "Kadonnut"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:126
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:127
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:130
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:131
 #, c-format
 msgid "Lost card"
 msgstr "Kortti kadonnut"
@@ -35271,7 +35267,7 @@ msgstr "MARC-yhteisökoodi"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:178
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:349
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:353
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:87
 #, c-format
 msgid "MARC preview"
@@ -35539,7 +35535,7 @@ msgstr "Hakukoneen asetukset"
 msgid "Manage EDIFACT transmissions"
 msgstr "Hallinnoi EDIFACT-siirtoja"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:506
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:516
 #, c-format
 msgid "Manage ILL request"
 msgstr "Hallinnoi kaukolainapyyntöjä"
@@ -35682,7 +35678,7 @@ msgstr "Hallinnoi nidehaun mukautettuja kenttiä."
 msgid "Manage extended patron attributes"
 msgstr "Korvaa vain mainitut asiakasmääreet"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:26
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:24
 #, c-format
 msgid "Manage frequencies "
 msgstr "Ilmestymistiheys "
@@ -35780,7 +35776,7 @@ msgstr "Hallinnoi asiakaslistoja"
 msgid "Manage marc modification templates"
 msgstr "Hallinnoi MARC-muokkauksen pohjia"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:31
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:29
 #, c-format
 msgid "Manage numbering patterns "
 msgstr "Numerointikaavat "
@@ -36208,18 +36204,18 @@ msgstr ""
 msgid "Match applied"
 msgstr "Osuma toteutettu"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:518
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:519
 #, c-format
 msgid "Match check "
 msgstr "Osumien tarkistus "
 
 #. %1$s:  matchcheck.mc_num | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:255
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
 #, c-format
 msgid "Match check %s"
 msgstr "Osumien tarkistus %s"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:349
 #, c-format
 msgid "Match check 1 | "
 msgstr "Osumien tarkistus 1 | "
@@ -36234,28 +36230,28 @@ msgstr "Osuman tiedot"
 msgid "Match found"
 msgstr "Osuma löytyi"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:475
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:476
 #, c-format
 msgid "Match point "
 msgstr "Osumapiste "
 
 #. %1$s:  matchpoint.mp_num | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:134
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
 #, c-format
 msgid "Match point %s | "
 msgstr "Osumapiste %s | "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:202
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:203
 #, c-format
 msgid "Match point 1 | "
 msgstr "Osumapiste 1 | "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:126
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:127
 #, c-format
 msgid "Match points"
 msgstr "Osuman pisteytys"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:107
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:108
 #, c-format
 msgid "Match threshold: "
 msgstr "Osumaraja: "
@@ -36287,12 +36283,12 @@ msgid "Matching rule applied:"
 msgstr "Yhdistämissäntö toteutettu:"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Matching rule code missing"
 msgstr "Yhdistämissäännön tunnus puuttuu"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:94
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:99
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:95
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:100
 #, c-format
 msgid "Matching rule code: "
 msgstr "Yhdistämissäännön tunnus: "
@@ -36302,9 +36298,9 @@ msgstr "Yhdistämissäännön tunnus: "
 msgid "Matching:"
 msgstr "Täsmää:"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:153
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:215
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:488
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:154
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:216
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:489
 #, c-format
 msgid "Matchpoint components"
 msgstr "Osumapisteen osat"
@@ -36747,7 +36743,7 @@ msgid "Modified patron attribute type &quot;%s&quot;"
 msgstr "Muokattu asiakasmääre &quot;%s&quot;"
 
 #. %1$s:  edited_matching_rule | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:444
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:445
 #, c-format
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr "Muokattu tietueiden yhdistämissääntö &quot;%s&quot;"
@@ -36883,7 +36879,7 @@ msgstr "Muokkaa numerointikaavaa: %s"
 msgid "Modify printer"
 msgstr "Muokkaa tulostinta"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:84
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:85
 #, c-format
 msgid "Modify record matching rule"
 msgstr "Muokkaa tietueiden yhdistämissääntöä"
@@ -37205,13 +37201,13 @@ msgstr "MySQL-tieto lisättiin"
 msgid "MySQL version: "
 msgstr "MySQL versio: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:457
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:535
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:550
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:568
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:572
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:576
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:467
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:471
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:545
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:560
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:578
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:582
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:586
 #, c-format
 msgid "N/A"
 msgstr ""
@@ -37226,8 +37222,8 @@ msgstr "EI NIMEÄ"
 msgid "NORMARC"
 msgstr "NORMARC"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:625
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:633
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:630
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:638
 #, c-format
 msgid "NOT CHECKED IN"
 msgstr "EI PALAUTETTU"
@@ -37381,7 +37377,7 @@ msgstr "Nimi tai ISSN: "
 msgid "Name or barcode not found. Please try an other "
 msgstr "Nimeä tai viivakoodia ei löytynyt. Yritä uudelleen. "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:112
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:116
 #, c-format
 msgid "Name or cardnumber:"
 msgstr "Nimi tai kortin numero:"
@@ -37542,7 +37538,7 @@ msgstr "Uusi CSV-profiili"
 msgid "New EAN "
 msgstr "Uusi EAN "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:347
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:357
 #, fuzzy, c-format
 msgid "New ILL request"
 msgstr "Tee pyyntö"
@@ -37651,7 +37647,7 @@ msgid "New batch record modification"
 msgstr "Uusi tietueiden muokkaus eräajona"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:7
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:59
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:62
 #, c-format
 msgid "New budget"
 msgstr "Uusi budjetti"
@@ -37780,8 +37776,10 @@ msgstr "Luo uusi"
 msgid "New from Z39.50/SRU"
 msgstr "Uusi Z39.50/SRU-haku"
 
+#. For the first occurrence,
 #. %1$s:  budget_period_description | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:13
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:10
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:14
 #, c-format
 msgid "New fund for %s"
 msgstr "Uusi tili kohteelle %s"
@@ -37894,7 +37892,7 @@ msgstr "Uusi tietue"
 msgid "New record "
 msgstr "Uusi tietue "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:436
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:437
 #, c-format
 msgid "New record matching rule"
 msgstr "Uusi yhdistämissääntö"
@@ -37979,7 +37977,7 @@ msgstr "Uusi arvo"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:594
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:599
 #, c-format
 msgid "New value: %s %s. %s Available for loan. %s "
 msgstr "Uusi arvo: %s %s. %s Lainattavissa. %s "
@@ -38122,7 +38120,7 @@ msgstr "Nicole C. Engard (3.0 - 16.11 Documentation Manager)"
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:411
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:425
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:117
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:120
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:62
@@ -38169,7 +38167,7 @@ msgid "No (default)"
 msgstr "Ei (oletus)"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:285
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:370
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:374
 #, c-format
 msgid ""
 "No ACQ framework, using default. You should create a framework with code "
@@ -38520,7 +38518,7 @@ msgstr ""
 "(tapahtuma kuitenkin tallennettiin): %s"
 
 #. %1$s:  errmsgloo.msg | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:603
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:608
 #, c-format
 msgid "No item with barcode: %s"
 msgstr "Ei nidettä viivakoodilla: %s"
@@ -38674,12 +38672,12 @@ msgstr "Ei valittuja tilauksia"
 msgid "No orders yet"
 msgstr "Ei tilauksia"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:712
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:691
 #, c-format
 msgid "No outstanding charges"
 msgstr "Ei maksuja"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:419
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:429
 #, c-format
 msgid ""
 "No partners have been defined yet. Please create appropriate patron records "
@@ -38913,7 +38911,7 @@ msgstr "Haullasi ei löytynyt yhtään tallennettua raporttia. "
 msgid "No system preferences matched your search for: "
 msgstr "Hakuasi vastaavaa järjestelmäasetusta ei löytynyt: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:372
 #, c-format
 msgid ""
 "No target email addresses found. Either select at least one partner or check "
@@ -38951,7 +38949,7 @@ msgid "No, do not Delete"
 msgstr "Ei, älä poista"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:455
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:501
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:511
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:255
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:48
@@ -38962,7 +38960,7 @@ msgstr "Ei, älä poista"
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:129
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:127
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:179
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:428
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:429
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:236
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:136
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:213
@@ -39056,7 +39054,7 @@ msgstr "Tietokirjallisuus"
 msgid "Non-musical recording"
 msgstr "Puheäänite"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:57
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:61
 #, fuzzy, c-format
 msgid "Non-public note"
 msgstr "Viesti virkailijalle:"
@@ -39089,7 +39087,7 @@ msgstr "Viesti virkailijalle"
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:156
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:199
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:121
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:125
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:68
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:242
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:92
@@ -39173,15 +39171,15 @@ msgstr "Normaalipäivä"
 msgid "Normal text"
 msgstr "Tavallinen teksti"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:185
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:234
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:291
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:333
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:370
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:396
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:507
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:540
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:565
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:186
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:235
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:292
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:334
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:371
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:397
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:508
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:541
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
 #, c-format
 msgid "Normalization rule: "
 msgstr "Normalisointisääntö: "
@@ -39269,7 +39267,7 @@ msgstr "Ei saatavilla"
 msgid "Not checked out since: "
 msgstr "Lainattu viimeksi: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:614
 #, c-format
 msgid "Not checked out."
 msgstr "Ei lainattu."
@@ -39295,7 +39293,7 @@ msgstr "Ei lainattavissa: "
 msgid "Not for loan status"
 msgstr "Ei lainattavissa tila päivitetty. "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:586
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:591
 #, c-format
 msgid "Not for loan status updated. "
 msgstr "Ei lainattavissa tila päivitetty. "
@@ -39331,7 +39329,7 @@ msgstr "Viimeisin havainto"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:106
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:64
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:73
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:126
@@ -39534,7 +39532,7 @@ msgstr "Huomautukset"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:250
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:42
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:587
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:85
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:32
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:181
@@ -39566,8 +39564,8 @@ msgstr "Muuta: "
 #. For the first occurrence,
 #. %1$s:  reservenotes | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:58
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:275
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:487
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:280
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:492
 #, c-format
 msgid "Notes: %s"
 msgstr "Huomautukset: %s"
@@ -39999,8 +39997,8 @@ msgstr "POIS"
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:194
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:422
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:427
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:457
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:30
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:318
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:249
@@ -40218,15 +40216,15 @@ msgstr "Yhteydettömän tilan lainaustapahtumat viety"
 msgid "Offset:"
 msgstr "Siirros:"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:170
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:226
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:276
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:318
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:362
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:388
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:499
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:532
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:557
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:171
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:227
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:277
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:319
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:363
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:389
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:500
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:533
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:558
 #, c-format
 msgid "Offset: "
 msgstr "Vastaa: "
@@ -40241,7 +40239,7 @@ msgstr "Vanha arvo"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:588
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #, c-format
 msgid "Old value: %s %s. %s Available for loan. %s "
 msgstr "Vanha arvo: %s %s. %s Lainattavissa. %s "
@@ -40440,7 +40438,7 @@ msgstr ""
 msgid "Opac Note"
 msgstr "Viesti verkkokirjastossa"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:476
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:486
 #, fuzzy, c-format
 msgid "Opac notes:"
 msgstr "Viesti verkkokirjastossa"
@@ -40531,7 +40529,7 @@ msgstr "Valinnainen osio puuttuu"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:95
 #: intranet-tmpl/prog/en/modules/tools/export.tt:119
 #: intranet-tmpl/prog/en/modules/tools/export.tt:202
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:716
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:721
 #, c-format
 msgid "Options"
 msgstr "Asetukset"
@@ -40584,7 +40582,7 @@ msgstr "Tilaus"
 msgid "Order "
 msgstr "Tilaus "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:534
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:544
 #, fuzzy, c-format
 msgid "Order ID:"
 msgstr "Tilaus "
@@ -40978,7 +40976,7 @@ msgid "Overdue notice/status triggers"
 msgstr "Myöhästymisilmoitusten määrittely"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:29
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:85
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:89
 #, c-format
 msgid "Overdue report"
 msgstr "Myöhästymisraportti"
@@ -41284,17 +41282,16 @@ msgid "Patricio Marrone"
 msgstr "Patricio Marrone"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:10
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:20
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:8
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:682
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:692
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:27
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:701
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:867
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:51
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:99
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:221
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
@@ -41320,7 +41317,7 @@ msgstr "Asiakas '%s' lisätty."
 msgid "Patron '%s' is already in the list."
 msgstr "Asiakas '%s' on jo listalla."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:433
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
 #, c-format
 msgid "Patron ID:"
 msgstr "Asiakasnro:"
@@ -41413,7 +41410,7 @@ msgstr "Asiakastyyppi on jo olemassa ja sitä ei voi muokata."
 msgid "Patron category created!"
 msgstr "Asiakastyyppi luotu"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:113
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:117
 #, c-format
 msgid "Patron category:"
 msgstr "Asiakastyyppi:"
@@ -41457,7 +41454,7 @@ msgstr "Asiakas ei kuulu yhteenkään lehtikiertolistaan."
 msgid "Patron fines are over limit: %s"
 msgstr "Asiakkaan maksut ylittävät lainauskieltorajan: %s"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:119
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:123
 #, c-format
 msgid "Patron flags:"
 msgstr "Asiakastietojen ilmoitukset:"
@@ -41514,7 +41511,7 @@ msgstr ""
 "%s "
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:407
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
 #, c-format
 msgid "Patron has an indefinite restriction."
 msgstr "Asiakkaalla on toistaiseksi määrätty lainauskielto."
@@ -41544,8 +41541,8 @@ msgstr ""
 msgid "Patron has nothing checked out."
 msgstr "Asiakkaalla ei ole lainoja."
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:776
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:755
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr "Asiakkaalla ei ole varauksia."
@@ -41611,9 +41608,9 @@ msgstr "Asiakkaan kuvissa oli virheitä"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:87
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:294
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:360
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:516
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:299
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:365
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:521
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr "Asiakkaalla on LAINARAJOITUS"
@@ -41804,7 +41801,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  errmsgloo.prevdebarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:646
 #, c-format
 msgid "Patron was earlier restricted until %s."
 msgstr "Asiakas oli aikaisemmin lainauskiellossa %s asti."
@@ -41840,9 +41837,9 @@ msgstr "Tarkista osoite"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:363
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:91
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:361
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:520
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:303
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:366
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:525
 #, c-format
 msgid "Patron's address is in doubt"
 msgstr "Tarkista osoite"
@@ -41936,7 +41933,7 @@ msgstr "Asiakkaan kotikirjasto on (%s / %s )"
 msgid "Patron's record has guaranteed accounts attached."
 msgstr "Asiakkaalla on huollettavia."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:538
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:548
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:183
 #, c-format
 msgid "Patron:"
@@ -42466,8 +42463,8 @@ msgstr "Valitse"
 msgid "Pick up location"
 msgstr "Noutopaikka"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:736
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:893
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:715
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
 #, c-format
 msgid "Pickup at"
 msgstr "Noutopaikka:"
@@ -42623,7 +42620,7 @@ msgstr "Varaa "
 msgid "Place request"
 msgstr "Tee pyyntö"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:359
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:369
 #, c-format
 msgid "Place request with partner libraries"
 msgstr ""
@@ -42645,22 +42642,22 @@ msgid "Places"
 msgstr "Paikat"
 
 #. %1$s:  auth_cats_loo | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:52
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:55
 #, c-format
 msgid "Plan by %s"
 msgstr "Suunnittele %s"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:45
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:48
 #, c-format
 msgid "Plan by item types"
 msgstr "Suunnittele aineistoittain"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:39
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:42
 #, c-format
 msgid "Plan by libraries"
 msgstr "Suunnittele kirjastoittain"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:33
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:36
 #, c-format
 msgid "Plan by months"
 msgstr "Suunnittele kuukausittain"
@@ -42676,7 +42673,7 @@ msgstr "Arvioitu pvm"
 msgid "Planning"
 msgstr "Suunnittelu"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:26
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:29
 #, c-format
 msgid "Planning "
 msgstr "Suunnittelu "
@@ -42748,7 +42745,7 @@ msgid "Please choose a cache_expiry less than 30 days "
 msgstr "Valitse cache_expiry ajaksi vähemmän kuin 30 päivää "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
 msgid "Please choose a file to upload"
 msgstr "Valitse tuotava tiedosto"
 
@@ -43105,7 +43102,7 @@ msgid "Please return item to home library: %s"
 msgstr "Palauta nide kotikirjastoonsa: %s"
 
 #. %1$s:  Branches.GetName( errmsgloo.msg ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:606
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:611
 #, c-format
 msgid "Please return item to: %s"
 msgstr "Palauta nide kirjastoon %s"
@@ -43117,7 +43114,7 @@ msgid "Please return item to: %s "
 msgstr "Palauta nide kirjastoon %s"
 
 #. %1$s:  Branches.GetName( returnbranch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:398
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:403
 #, fuzzy, c-format
 msgid "Please return this item to %s "
 msgstr "Palauta nide kirjastoon %s"
@@ -43625,11 +43622,10 @@ msgstr "Edelliset istunnot"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:28
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:700
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:19
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:84
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:866
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:56
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:60
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:83
 #, c-format
 msgid "Price"
@@ -43640,8 +43636,8 @@ msgstr "Hinta"
 msgid "Price effective from"
 msgstr "Hinta voimassa alkaen"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:464
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:575
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:474
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:585
 #, fuzzy, c-format
 msgid "Price paid:"
 msgstr "Hinta:"
@@ -43781,7 +43777,7 @@ msgstr "Tulosta kuitti %s"
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:33
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:123
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:423
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:428
 #, c-format
 msgid "Print slip"
 msgstr "Tulosta kuitti"
@@ -43791,18 +43787,18 @@ msgstr "Tulosta kuitti"
 msgid "Print slip "
 msgstr "Tulosta kuitti "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:563
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:341
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
 #, c-format
 msgid "Print slip and confirm "
 msgstr "Tulosta kuitti ja vahvista "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:374
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:379
 #, c-format
 msgid "Print slip and continue"
 msgstr "Tulosta kuitti ja jatka"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:556
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:561
 #, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Tulosta kuitti, kuljeta ja vahvista "
@@ -43822,7 +43818,7 @@ msgstr "Tulosta tämä tilausryhmä PDF-muodossa"
 msgid "Print this label"
 msgstr "Tulosta tämä tarra"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:231
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:233
 #, c-format
 msgid "Print transfer slip"
 msgstr "Tulosta kuljetuskuitti"
@@ -43889,9 +43885,9 @@ msgid "Printers"
 msgstr "Tulostimet"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:5
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:738
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:717
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:873
 #, c-format
 msgid "Priority"
 msgstr "Sija jonossa"
@@ -44786,8 +44782,8 @@ msgid "Record matching rule:"
 msgstr "Tietueiden yhdistämissääntö:"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:72
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:439
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:440
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:119
 #, c-format
 msgid "Record matching rules"
@@ -44832,7 +44828,7 @@ msgid "Record type:"
 msgstr "Tietuetyyppi:"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:122
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:111
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:112
 #, c-format
 msgid "Record type: "
 msgstr "Tietuetyyppi: "
@@ -45023,7 +45019,7 @@ msgstr "Maksujen hallinnan jäljelle jäävät oikeudet"
 msgid "Remaining system parameters permissions"
 msgstr "Jäljellä olevat järjestelmäasetusten oikeudet"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:695
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:700
 #, c-format
 msgid "Remember for next check in:"
 msgstr "Muista seuraavalle palautukselle:"
@@ -45049,8 +45045,8 @@ msgstr "Remi Mayrand-Provencher"
 msgid "Reminder date"
 msgstr "Muistutuspvm"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:646
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
 #, c-format
 msgid "Reminder: "
 msgstr "Muistutus: "
@@ -45212,16 +45208,16 @@ msgstr "Poista korvaavuus"
 msgid "Remove tag"
 msgstr "Poista asiasana"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:255
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:518
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:349
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:519
 #, c-format
 msgid "Remove this match check"
 msgstr "Poista tämä tarkistus"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:134
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:202
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:475
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:203
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:476
 #, c-format
 msgid "Remove this match point"
 msgstr "Poista tämä tarkistuspiste"
@@ -45502,6 +45498,11 @@ msgstr "Korvaushinta"
 msgid "Replacement price:"
 msgstr "Korvaushinta:"
 
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:222
+#, fuzzy, c-format
+msgid "Replacement price: "
+msgstr "Korvaushinta:"
+
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:142
 #, c-format
 msgid "Reply-To: "
@@ -45652,8 +45653,8 @@ msgstr "Pyydä artikkelia"
 msgid "Request article from "
 msgstr "Pyydä artikkelia teoksesta "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:429
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:527
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:537
 #, c-format
 msgid "Request details"
 msgstr "Pyynnön tiedot"
@@ -45661,13 +45662,13 @@ msgstr "Pyynnön tiedot"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:687
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, c-format
 msgid "Request number"
 msgstr "Pyynnön numero"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:579
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:478
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:589
 #, c-format
 msgid "Request number:"
 msgstr "Pyynnön numero:"
@@ -45682,8 +45683,8 @@ msgstr "Pyyntö palautettu"
 msgid "Request specific item type:"
 msgstr "Pyydä tiettyä aineistolajia:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:456
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:566
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:466
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:576
 #, c-format
 msgid "Request type:"
 msgstr "Pyynnön tyyppi:"
@@ -45833,7 +45834,7 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:274
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:279
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:668
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:327
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:705
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
@@ -45907,7 +45908,7 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:759
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:406
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:64
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:72
@@ -45938,10 +45939,10 @@ msgstr "Require.js JS module system"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:230
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:242
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:263
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:100
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:105
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:109
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:120
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:101
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:106
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:110
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:121
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:95
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:151
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:75
@@ -45995,7 +45996,7 @@ msgstr "Pakollinen tieto"
 msgid "Required for staff login."
 msgstr "Vaaditaan virkailijatyökaluun kirjautumisessa."
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:247
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:248
 #, c-format
 msgid "Required match checks"
 msgstr "Vaaditut osumatarkistukset"
@@ -46056,7 +46057,7 @@ msgid "Reset Mappings"
 msgstr "OAI-joukkojen vastaavuudet"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:35
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:91
 #, c-format
 msgid "Reset filter"
 msgstr "Poista suodatus"
@@ -46084,8 +46085,8 @@ msgstr "Rajoita käyttö: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:168
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:265
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:124
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:125
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:128
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:129
 #, c-format
 msgid "Restricted"
 msgstr "Rajoitettu"
@@ -46172,8 +46173,8 @@ msgid "Resume"
 msgstr "Jatka"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:770
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:905
 msgid "Resume all suspended holds"
 msgstr "Jatka kaikki keskeytetyt varaukset"
 
@@ -46230,8 +46231,8 @@ msgid "Return to previous page"
 msgstr "Palaa edelliselle sivulle"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:431
 #, fuzzy
 msgid "Return to request details"
 msgstr "Palaa asiakastietoihin"
@@ -46815,7 +46816,7 @@ msgstr "Lauantai"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:130
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:476
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:480
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:149
@@ -46833,8 +46834,8 @@ msgstr "Lauantai"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:155
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:201
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:275
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:408
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:411
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:409
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:412
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:128
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:339
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:154
@@ -47106,9 +47107,9 @@ msgstr "Ajastettu automaattista uusintaa varten"
 msgid "School"
 msgstr "Koulu"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:144
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:210
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:483
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:145
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:211
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:484
 #, c-format
 msgid "Score: "
 msgstr "Pisteytys: "
@@ -47394,9 +47395,9 @@ msgstr "Hakuhistoria"
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr "Hae kalenterista päivä, jonka haluat asettaa kiinniolopäiväksi."
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:137
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:205
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:478
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:138
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:206
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:479
 #, c-format
 msgid "Search index: "
 msgstr "Hakuindeksi: "
@@ -47457,11 +47458,6 @@ msgstr "Hae"
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:81
 #, fuzzy
 msgid "Search on %s"
-msgstr "Hae"
-
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
-#, fuzzy, c-format
-msgid "Search on Mana"
 msgstr "Hae"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:12
@@ -47862,9 +47858,9 @@ msgstr "Valitse käyntitiheys"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:203
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:349
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:328
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:441
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:236
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:332
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:445
 #, c-format
 msgid "Select a fund"
 msgstr "Valitse tili"
@@ -48064,7 +48060,7 @@ msgstr "Valitse tilaavan kirjaston tili: "
 msgid "Select owner"
 msgstr "Valitse omistaja"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:388
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:398
 #, fuzzy, c-format
 msgid "Select partner libraries:"
 msgstr "Valitse kirjasto:"
@@ -48238,7 +48234,7 @@ msgid "Send EDI order"
 msgstr "Lähetä EDI-tilaus"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:412
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:422
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:29
 #, c-format
 msgid "Send email"
@@ -48708,7 +48704,7 @@ msgstr "Hyllytyksen kontrollinumero"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:176
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:204
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:199
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:134
@@ -48963,7 +48959,7 @@ msgstr "Näytä kaikki tapahtumat"
 msgid "Show all vendors"
 msgstr "Näytä kaikki toimittajat"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:189
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:193
 #, c-format
 msgid "Show any items currently checked out:"
 msgstr "Näytä lainassa oleva aineisto:"
@@ -49349,7 +49345,7 @@ msgid "Sort field 2:"
 msgstr "Lajittelukenttä 2:"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Sort routine missing"
 msgstr "Järjestysohjelma puuttuu"
 
@@ -49407,9 +49403,9 @@ msgstr "Ääni: "
 msgid "Source"
 msgstr "Lähde"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:259
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:351
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:521
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:260
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:352
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:522
 #, c-format
 msgid "Source (incoming) record check field"
 msgstr "Lähdetietueen (tuotavan tietueen) tarkistuskenttä"
@@ -49477,8 +49473,8 @@ msgstr "Erityisryhmä"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:760
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:917
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:739
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr "Määritä päivämäärä, jolloin varauksia jatketaan %s: "
@@ -49497,7 +49493,7 @@ msgid "Specify how the holiday should repeat."
 msgstr "Määrittele, kuinka kiinniolo toistuu."
 
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:691
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:696
 #, c-format
 msgid "Specify return date %s: "
 msgstr "Määrittele palautuspäivä %s: "
@@ -49640,8 +49636,8 @@ msgstr "Virkailijan viesti"
 msgid "Staff note:"
 msgstr "Virkailijan viesti:"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:472
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:583
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:482
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:593
 #, c-format
 msgid "Staff notes:"
 msgstr "Virkailijahuomautus:"
@@ -49686,7 +49682,7 @@ msgstr "Vie tietueita säilöön"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:492
 #, c-format
 msgid "Staged"
 msgstr "Välivarastoitu"
@@ -49868,8 +49864,8 @@ msgstr "Tilasto 1:n muoto: "
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:228
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:483
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:250
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:463
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:467
 #, c-format
 msgid "Statistic 1: "
 msgstr "Tilasto 1: "
@@ -49881,8 +49877,8 @@ msgstr "Tilasto 2:n muoto: "
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:235
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:486
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:467
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:471
 #, c-format
 msgid "Statistic 2: "
 msgstr "Tilasto 2: "
@@ -49928,7 +49924,7 @@ msgstr "Tilastovelho"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:685
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:120
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:94
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:281
@@ -49942,7 +49938,7 @@ msgstr "Tilastovelho"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:37
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:487
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:491
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:38
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:238
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:67
@@ -49960,8 +49956,8 @@ msgstr "Tila "
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:195
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:558
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:457
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:568
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:72
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:77
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:131
@@ -50268,15 +50264,15 @@ msgstr "Osakenttä: %s"
 msgid "Subfields"
 msgstr "Osakentät"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:163
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:222
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:269
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:311
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:358
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:384
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:495
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:528
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:553
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:164
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:223
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:270
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:312
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:359
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:385
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:496
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:554
 #, c-format
 msgid "Subfields: "
 msgstr "Osakentät: "
@@ -50311,7 +50307,7 @@ msgstr "Alaryhmä:"
 msgid "Subject"
 msgstr "Asiasana"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:399
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:409
 #, c-format
 msgid "Subject Line"
 msgstr "Aiherivi"
@@ -50422,8 +50418,8 @@ msgstr "Asiasanat:"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:204
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:87
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:486
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:496
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:74
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:86
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:45
@@ -50440,7 +50436,7 @@ msgstr "Asiasanat:"
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:98
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:155
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:184
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:687
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:692
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:35
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
@@ -50900,7 +50896,7 @@ msgstr "Muu maksu"
 msgid "Supplemental issue "
 msgstr "Lisänumero "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:621
 #, fuzzy, c-format
 msgid "Supplier metadata"
 msgstr "Toimittajaraportti"
@@ -50945,8 +50941,8 @@ msgid "Suspend"
 msgstr "Keskeytä"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:755
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:912
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:734
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:890
 msgid "Suspend all holds"
 msgstr "Keskeytä kaikki varaukset"
 
@@ -50961,8 +50957,8 @@ msgstr "Keskeytä varaus"
 msgid "Suspend until:"
 msgstr "Keskeytä"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:740
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:719
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
 #, c-format
 msgid "Suspend?"
 msgstr "Keskeytä?"
@@ -51284,15 +51280,15 @@ msgstr "Tagien hyväksyntä"
 msgid "Tag:"
 msgstr "Kenttä:"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:156
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:218
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:262
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:304
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:354
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:380
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:491
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:524
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:549
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:157
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:219
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:263
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:305
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:355
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:381
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:492
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:525
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:550
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:79
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:85
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:128
@@ -51345,9 +51341,9 @@ msgstr "Tamil, France"
 msgid "Target"
 msgstr "Kohde"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:301
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:377
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:546
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:302
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:378
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:547
 #, c-format
 msgid "Target (database) record check field"
 msgstr "Kohdetietueen (tietokannassa jo olevan tietueen) tarkistuskenttä"
@@ -51673,7 +51669,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:482
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:466
 #, c-format
 msgid ""
 "The 2 following fields are available for your own usage. They can be useful "
@@ -51813,6 +51809,16 @@ msgid ""
 msgstr ""
 "biblio.biblionumber ja biblioitems.biblioitemnumber osoittavat MARC-"
 "osakenttiin,"
+
+#. A
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:10
+msgid "The budget is locked"
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:17
+#, fuzzy, c-format
+msgid "The budget is locked, fund creation is not possible."
+msgstr ". Poisto ei ole mahdollista."
 
 #. %1$s:  email_add | html 
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:10
@@ -52168,7 +52174,7 @@ msgstr "Nimeke poistettiin listalta."
 msgid "The item has been removed from your cart"
 msgstr "Nimeke poistettiin koristasi"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
 #, c-format
 msgid ""
 "The item has not been checked in due to a configuration issue in your "
@@ -52795,12 +52801,12 @@ msgstr "Ei avoinna olevia tilauskoreja tälle toimittajalle."
 msgid "There are no overdues for today%s at the selected location%s."
 msgstr "Ei myöhässä olevia lainoja tänään%s valitussa toimipisteessä%s."
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:91
 #, c-format
 msgid "There are no overdues matching your search. "
 msgstr "Ei hakuasi vastaavia myöhässä olevia niteitä. "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:89
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:93
 #, c-format
 msgid "There are no overdues."
 msgstr "Ei myöhässä olevia niteitä."
@@ -52862,7 +52868,7 @@ msgstr "Ei määritettyjä sääntöjä. "
 msgid "There are no saved definitions. "
 msgstr "Ei tallennettuja määritelmiä. "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:467
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:468
 #, c-format
 msgid "There are no saved matching rules."
 msgstr "Ei tallennettuja yhdistämissääntöjä."
@@ -53348,7 +53354,7 @@ msgstr ""
 "estävät sen."
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:942
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:920
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:280
 #, c-format
 msgid "This patron does not exist. "
@@ -53613,7 +53619,7 @@ msgid "Those items won't be deleted"
 msgstr "Näitä niteitä ei poisteta"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Threshold missing"
 msgstr "Alaraja puuttuu"
 
@@ -53716,6 +53722,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:54
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:56
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:17
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:9
 #: intranet-tmpl/prog/en/includes/resort_form.inc:75
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:7
 #: intranet-tmpl/prog/en/modules/tags/list.tt:28
@@ -53738,7 +53745,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:237
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:296
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:297
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:681
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:691
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:29
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
@@ -53751,8 +53758,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:42
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:22
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:692
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:733
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:712
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:81
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:444
@@ -53761,9 +53767,8 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:35
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:252
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:857
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:890
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:53
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:57
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:37
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:103
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:59
@@ -53775,7 +53780,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:173
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:49
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:105
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
@@ -54091,7 +54096,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:240
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:255
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:191
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:107
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:111
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:74
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:704
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:715
@@ -54458,7 +54463,7 @@ msgid "Total due:"
 msgstr "Yhteensä:"
 
 #. %1$s:  totaldue | html 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:710
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:689
 #, c-format
 msgid "Total due: %s"
 msgstr "Yhteensä: %s"
@@ -54630,7 +54635,7 @@ msgstr "Kuljetus on %s päivää myöhässä"
 msgid "Transfer is not allowed for: "
 msgstr "Kuljetusta ei ole sallittu: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:409
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:414
 #, fuzzy, c-format
 msgid "Transfer now? "
 msgstr "Kuljeta nyt?"
@@ -54641,9 +54646,9 @@ msgid "Transfer order to this basket?"
 msgstr "Siirrä tilaus tähän tilauskoriin?"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:303
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:364
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:524
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:308
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:369
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:529
 #, c-format
 msgid "Transfer to:"
 msgstr "Siirrä pisteeseen:"
@@ -54812,7 +54817,7 @@ msgstr "Tumer Garip"
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:36
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:346
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:159
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:147
@@ -55212,7 +55217,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:371
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:381
 #, c-format
 msgid "Unknown error processing your request. Contact your administrator. "
 msgstr ""
@@ -55399,7 +55404,7 @@ msgstr "Päivitä: %s"
 msgid "Updated SQL"
 msgstr "Päivitä SQL"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:686
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
 #, fuzzy, c-format
 msgid "Updated on"
 msgstr "Päivitä "
@@ -56108,7 +56113,7 @@ msgstr "Huomautus toimittajalle:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:304
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:479
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
 #, c-format
 msgid "Vendor note: "
 msgstr "Huomautus toimittajalle: "
@@ -56247,7 +56252,7 @@ msgstr "Näytä "
 msgid "View All"
 msgstr "Näytä kaikki"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:683
 #, c-format
 msgid "View ILL requests"
 msgstr "Kaukolainapyynnöt"
@@ -56301,8 +56306,8 @@ msgstr "Tarkastele asiakkaan tietoja"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:540
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:639
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:550
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:649
 msgid "View borrower details"
 msgstr "Tarkastele asiakkaan tietoja"
 
@@ -56776,7 +56781,7 @@ msgstr "Olemme valmiina tekemään joitain perusasetuksia."
 msgid "We are upgrading from Koha %s to %s"
 msgstr "Päivitämme Kohan versiosta %s versioon %s"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:340
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:350
 #, fuzzy, c-format
 msgid "We encountered an error:"
 msgstr "Tuli muutamia ongelmia."
@@ -57231,7 +57236,7 @@ msgstr "Vuosittainen kiinniolo: %s"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:419
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:121
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:61
@@ -57313,7 +57318,7 @@ msgstr "Kyllä, sulje (Y)"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:229
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:451
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:499
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:509
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:119
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:252
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:44
@@ -57345,7 +57350,7 @@ msgstr "Poista sopimus"
 msgid "Yes, delete patron attribute type"
 msgstr "Kyllä, poista asiakasmääretyyppi"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:425
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:426
 #, c-format
 msgid "Yes, delete record matching rule"
 msgstr "Kyllä, poista yhdistämissääntö"
@@ -57386,7 +57391,7 @@ msgstr "Kyllä, poista tämä kenttä"
 msgid "Yes, edit existing items"
 msgstr "Kyllä, muokkaa olemassa olevia niteitä"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:425
 #, c-format
 msgid "Yes, print slip"
 msgstr "Kyllä, tulosta kuitti"
@@ -57762,7 +57767,7 @@ msgid ""
 "using Koha"
 msgstr "MARC-asetuksissa on %s virhettä. Korjaa ne ennen Kohan käyttämistä."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:974
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:952
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -57968,8 +57973,8 @@ msgstr "Valitse vähintään kaksi yhteenliitettävää laskua."
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 msgid "You must select checkout(s) to export"
 msgstr "Valitse vietävät lainaustapahtumat"
 
@@ -58140,7 +58145,7 @@ msgstr ""
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr "Sinun koha-conf.xml ei sisällä oikeanlaista upload_path."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:367
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:377
 #, c-format
 msgid "Your library has no usable email address. Please set it. "
 msgstr ""
@@ -58539,8 +58544,8 @@ msgstr "_ vastaa vain yhtä merkkiä"
 msgid "a an the"
 msgstr "a an the"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:343
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
 #, c-format
 msgid "about page"
 msgstr "tietoja"
@@ -58625,7 +58630,7 @@ msgstr "ja on palautettu."
 msgid "and mark one currency as active."
 msgstr "ja merkitse yksi rahayksikkö aktiiviseksi."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
 #, c-format
 msgid "and search for the \"data problems\" section"
 msgstr "ja etsi \"Tietoon liittyviä ongelmia\" -osio"
@@ -58787,7 +58792,7 @@ msgstr "biblionumber ja biblioitemnumber liitetty oikein"
 msgid "biblionumber|borrowernumber"
 msgstr "nimeke ja nimeketunnus"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:327
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:331
 #, c-format
 msgid "budget_code"
 msgstr "budget_code"
@@ -58941,7 +58946,7 @@ msgstr "by the Bridge Consortium of Carleton College and St. Olaf College."
 msgid "call.ogg"
 msgstr "call.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:338
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:342
 #, c-format
 msgid "callnumber"
 msgstr "Luokka"
@@ -58980,7 +58985,7 @@ msgstr "ei voi toistaa"
 msgid "cataloging the record"
 msgstr "luettelointitietojen muokkaus"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:308
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:312
 #, c-format
 msgid "ccode"
 msgstr "ccode"
@@ -59078,7 +59083,7 @@ msgstr "sisältää"
 msgid "controls for column visiblity in DataTables"
 msgstr "kontrolloi sarakkeen näkymistä DataTables-tauluissa"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:326
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:330
 #, c-format
 msgid "copyno"
 msgstr "copyno"
@@ -59252,7 +59257,7 @@ msgstr "Hinta-arvio (verollinen)"
 msgid "edit items"
 msgstr "muokkaa niteitä"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:68
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:72
 #, c-format
 msgid "email"
 msgstr "sähköposti"
@@ -59462,7 +59467,7 @@ msgstr "liikaa varauksia."
 msgid "here"
 msgstr "tästä"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:277
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:281
 #, c-format
 msgid "holdingbranch"
 msgstr "holdingbranch"
@@ -59477,7 +59482,7 @@ msgstr "nykyinen paikka ei määritetty"
 msgid "holdingbranch defined"
 msgstr "nykyinen paikka määritetty"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:266
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
 #, c-format
 msgid "homebranch"
 msgstr "homebranch"
@@ -59637,7 +59642,7 @@ msgid "is not"
 msgstr "ei ole"
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:638
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:643
 #, c-format
 msgid "is now debarred until %s."
 msgstr "on nyt lukittu %s asti."
@@ -59747,7 +59752,7 @@ msgstr "items.permanent_location liitetty"
 msgid "itemtype NOT mapped"
 msgstr "itemtypeä ei ole liitetty"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:287
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:291
 #, c-format
 msgid "itype"
 msgstr "itype"
@@ -59917,7 +59922,7 @@ msgstr "loading.ogg"
 msgid "loading_2.ogg"
 msgstr "loading_2.ogg"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:300
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:304
 #, c-format
 msgid "loc"
 msgstr "loc"
@@ -60038,7 +60043,7 @@ msgstr "noItemTypeImages"
 msgid "none"
 msgstr "ei valintaa"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:298
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:302
 #, c-format
 msgid "nonpublic_note"
 msgstr "nonpublic_note"
@@ -60081,7 +60086,7 @@ msgstr "ei omistaja"
 msgid "not running"
 msgstr "ei toiminnassa"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:315
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:319
 #, c-format
 msgid "notforloan"
 msgstr "notforloan"
@@ -60260,7 +60265,7 @@ msgstr "popup.ogg"
 msgid "previous"
 msgstr "edellinen"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:336
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:340
 #, c-format
 msgid "price"
 msgstr "price"
@@ -60277,7 +60282,7 @@ msgstr "hintalappu"
 msgid "pt"
 msgstr "pt"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:299
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:303
 #, c-format
 msgid "public_note"
 msgstr "public_note"
@@ -60347,7 +60352,7 @@ msgstr "poistettu onnistuneesti"
 msgid "reopen basketgroup"
 msgstr "avaa tilausryhmä uudestaan"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:337
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:341
 #, c-format
 msgid "replacement price"
 msgstr "replacement price"
@@ -60776,8 +60781,8 @@ msgstr "paitsi"
 msgid "unrecognized command"
 msgstr "tuntematon komento"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:758
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:737
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:893
 #, c-format
 msgid "until"
 msgstr "tähän päivämäärään asti"
@@ -60792,7 +60797,7 @@ msgstr "tähän päivämäärään %s asti"
 msgid "updated successfully"
 msgstr "päivitys onnistui"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:325
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:329
 #, c-format
 msgid "uri"
 msgstr "uri"
@@ -61039,7 +61044,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:24
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:610
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:620
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:122
@@ -61050,7 +61055,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:149
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:381
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:100
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:348
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:352
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:86
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:180
