@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-17 10:20-0300\n"
+"POT-Creation-Date: 2019-11-15 09:13-0300\n"
 "PO-Revision-Date: 2019-02-25 05:25+0000\n"
 "Last-Translator: 9985767 <9985767@mail.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
@@ -219,7 +219,7 @@ msgstr "ОШИБКА: <em>«Дата c»</em> не является правил
 msgid "\"Date to\" is not a legal value (\"%s\"). %s"
 msgstr "ОШИБКА: <em>«Дата по»</em> не является правильной датой («%s»). %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:489
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:493
 #, fuzzy, c-format
 msgid "# Bibliographic records"
 msgstr "библиографической записи № %s"
@@ -249,7 +249,7 @@ msgstr "# из % выбранных"
 msgid "# of students"
 msgstr "# из Студентов"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:223
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:227
 #, c-format
 msgid "%% (If empty, discount rate from vendor will be used) "
 msgstr "%% (Если пусто, то будет использоваться учётная ставка вендора)"
@@ -942,19 +942,20 @@ msgstr "%s %s %s %s (%s)"
 #. %6$s:         CASE 'upper_case'     
 #. %7$s:         CASE 'lower_case'     
 #. %8$s:         CASE 'legacy_default' 
-#. %9$s:         CASE 
-#. %10$s:  norm | html 
-#. %11$s:     END 
-#. %12$s:  END 
-#. %13$s:  BLOCK norms_options 
-#. %14$s: # PARAMS: selected_norm 
-#. %15$s:     FOREACH norm IN valid_norms 
-#. %16$s:         IF ( norm == selected_norm ) 
+#. %9$s:         CASE 'ISBN' 
+#. %10$s:         CASE 
+#. %11$s:  norm | html 
+#. %12$s:     END 
+#. %13$s:  END 
+#. %14$s:  BLOCK norms_options 
+#. %15$s: # PARAMS: selected_norm 
+#. %16$s:     FOREACH norm IN valid_norms 
+#. %17$s:         IF ( norm == selected_norm ) 
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:16
 #, fuzzy, c-format
 msgid ""
-"%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default %s"
-"%s %s %s %s %s %s %s "
+"%s %s %s %sNone %sRemove spaces %sUppercase %sLowercase %sLegacy default "
+"%sISBN %s%s %s %s %s %s %s %s "
 msgstr ""
 "%s %sОжидает %sПринято %sПроверено %sОтклонено %sДоступно %sЗаказано%s %s%s "
 "%sБез названия%s (%s)"
@@ -1026,7 +1027,7 @@ msgstr ""
 #. %7$s:  IF ( delete_matching_rule_form ) 
 #. %8$s:  code | html 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #, c-format
 msgid ""
 "%s %s %s &rsaquo; Modify record matching rule %s &rsaquo; Add record "
@@ -2832,7 +2833,7 @@ msgstr "%s %s не применяется"
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:791
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:796
 #, fuzzy, c-format
 msgid "%s %sNot checked out%s"
 msgstr "%s Не было выдано %s"
@@ -3180,7 +3181,7 @@ msgstr "Коха &rsaquo; Сериальные издания &rsaquo; Пров�
 #. %1$s:  IF query_type == 'create' 
 #. %2$s:  ELSIF query_type == 'status' 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:320
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:330
 #, fuzzy, c-format
 msgid "%s &rsaquo; New request %s &rsaquo; Status %s "
 msgstr "%s &rsaquo; Новый признак%s %s "
@@ -3362,9 +3363,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:206
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:62
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:165
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:238
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:242
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:444
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:246
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:448
 #, fuzzy, c-format
 msgid "%s (inactive)"
 msgstr "Не задействовано"
@@ -3379,7 +3380,7 @@ msgid "%s (inactive) %s %s %s "
 msgstr "Не задействовано"
 
 #. %1$s:  riloo.duedate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:764
 #, c-format
 msgid "%s (overdue)"
 msgstr "%s (просроченный)"
@@ -3739,7 +3740,7 @@ msgstr "%s Населённый пункт: "
 #. %9$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:345
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:498
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:502
 #, c-format
 msgid ""
 "%s Cleaned %s Imported %s Importing %s Reverted %s Reverting %s Staged %s %s "
@@ -5355,7 +5356,7 @@ msgid "%s can't be opened"
 msgstr "файл %s не удаётся открыть"
 
 #. %1$s:  request.illcomments.count | html 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:632
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:642
 #, fuzzy, c-format
 msgid "%s comments"
 msgstr "Комментарии"
@@ -6105,7 +6106,7 @@ msgstr ""
 #. %3$s:  END 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:759
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:764
 #, c-format
 msgid "%s%s %s %sNot checked out %s "
 msgstr "%s%s %s %s Не было выдано %s "
@@ -6603,7 +6604,7 @@ msgstr ", %s"
 #. %4$s:  IF ( overdueloo.enumchron ) 
 #. %5$s:  overdueloo.enumchron | html 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:72
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:76
 #, fuzzy, c-format
 msgid "%s, by %s%s%s, %s%s"
 msgstr "%s / %s%s%s, %s%s "
@@ -7041,7 +7042,7 @@ msgstr ""
 #. %6$s:  ELSIF ( messaging_preference.Item_Checkout ) 
 #. %7$s:  ELSE 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:18
+#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:17
 #, c-format
 msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
@@ -7062,7 +7063,7 @@ msgstr "Экземпляр был изъят"
 #. %1$s:  IF biblio.item_error 
 #. %2$s:  END 
 #. %3$s:  FOREACH item IN biblio.iteminfos 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:259
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:263
 #, c-format
 msgid ""
 "%sItem records could not be processed because the number of item fields was "
@@ -7215,13 +7216,13 @@ msgstr "%sПросрочка!%s&nbsp;%s"
 
 #. %1$s: - BLOCK subject -
 #. %2$s: - END -
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:59
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:63
 #, fuzzy, c-format
 msgid "%sOverdue:%s "
 msgstr "Просрочки"
 
 #. INPUT type=button
-#: intranet-tmpl/prog/en/includes/holds_table.inc:205
+#: intranet-tmpl/prog/en/includes/holds_table.inc:207
 #, fuzzy
 msgid "%sRevert transit status%sRevert waiting status%s"
 msgstr "Ожидание %s"
@@ -7780,7 +7781,7 @@ msgstr "&nbsp;Показать все: "
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:66
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:371
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:169
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:448
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:452
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:102
 #, fuzzy, c-format
 msgid "&nbsp;Show inactive:"
@@ -8215,7 +8216,7 @@ msgstr ""
 
 #. %1$s:  IF ( display_list ) 
 #. %2$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #, fuzzy, c-format
 msgid "&rsaquo; %sRecord matching rules%s"
 msgstr "&rsaquo; Добавление правила соответствия записей"
@@ -10473,7 +10474,7 @@ msgstr ""
 msgid "A pattern with this name already exists."
 msgstr "Список с названием «%s» уже существует!"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:622
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:627
 #, c-format
 msgid "A refund has been applied to the borrowing patron's account."
 msgstr ""
@@ -10701,7 +10702,7 @@ msgstr "Тип счёта"
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:211
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:298
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:415
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:419
 #, c-format
 msgid "Accounting details"
 msgstr "Подробности учёта"
@@ -10899,7 +10900,7 @@ msgstr "Действие, если соответствия не найдено:
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:386
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:95
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:356
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:357
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:42
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:115
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:223
@@ -10919,7 +10920,7 @@ msgstr "Действие, если соответствия не найдено:
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:297
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:320
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:341
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:454
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:455
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:262
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:253
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:77
@@ -11055,7 +11056,7 @@ msgstr "Адам Тик {Адам Thick}"
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:562
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:635
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:21
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:145
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:46
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:565
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:761
@@ -11273,7 +11274,7 @@ msgstr "Добавление средств"
 msgid "Add classification source"
 msgstr "Добавление источника классификации"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:647
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:657
 #, fuzzy, c-format
 msgid "Add comment"
 msgstr "Одобренные комментарии"
@@ -11395,18 +11396,18 @@ msgstr "Моя библиотека"
 msgid "Add manual restriction"
 msgstr "Добавить ограничение вручную"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:249
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:250
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:255
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:251
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:349
 #, fuzzy, c-format
 msgid "Add match check"
 msgstr "Добавить ребёнка"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:128
 #: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:129
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:134
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:202
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:130
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:203
 #, fuzzy, c-format
 msgid "Add match point"
 msgstr "Прибавить авторитетный источник"
@@ -11494,7 +11495,7 @@ msgstr "Добавляем в корзину заказа"
 msgid "Add order to basket %s"
 msgstr "Добавляем в корзину заказа"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:517
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:521
 #, fuzzy, c-format
 msgid "Add orders"
 msgstr "Добавить заказ"
@@ -11541,7 +11542,7 @@ msgstr "Добавить цитату"
 msgid "Add recipients"
 msgstr "контейнеры, тара"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:86
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:87
 #, c-format
 msgid "Add record matching rule"
 msgstr "Добавляем правило соответствия записей"
@@ -11596,6 +11597,11 @@ msgstr "Добавляем в корзину заказа"
 #, fuzzy, c-format
 msgid "Add sub-group "
 msgstr "Добавление средств"
+
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:33
+#, fuzzy, c-format
+msgid "Add subscription fields"
+msgstr "Редактировать подполя"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:104
 #, c-format
@@ -11726,7 +11732,7 @@ msgid "Added patron attribute type &quot;%s&quot;"
 msgstr "Добавлено вид атрибута посетителя «%s»"
 
 #. %1$s:  added_matching_rule | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:441
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:442
 #, c-format
 msgid "Added record matching rule &quot;%s&quot;"
 msgstr "Добавлено правило соответствия записей &quot;%s&quot;"
@@ -11843,8 +11849,8 @@ msgstr "Адрес, остальное: "
 msgid "Address 2: "
 msgstr "Адрес, остальное: "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:122
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:123
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:126
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:127
 #, c-format
 msgid "Address in question"
 msgstr "Адрес под вопросом"
@@ -11922,7 +11928,7 @@ msgstr "Загрузка локальных изображений обложе�
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:14
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:35
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:15
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:17
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
@@ -12976,11 +12982,11 @@ msgstr "Энтони Фарнсворт {Antoine Farnault}"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:78
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:80
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:118
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:113
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:157
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:168
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:176
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:184
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:117
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:161
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:172
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:180
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:188
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:369
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:379
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:660
@@ -13057,7 +13063,7 @@ msgstr ""
 msgid "Any library"
 msgstr "Любая библиотека"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:627
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:632
 #, c-format
 msgid "Any lost item fees for this item will remain on the patron's account."
 msgstr ""
@@ -13128,7 +13134,7 @@ msgid "Apply different matching rules"
 msgstr "Применить другое правило соответствия"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:198
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:202
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
 msgid "Apply filter"
 msgstr "Применить фильтр"
@@ -13550,8 +13556,8 @@ msgstr "Вы действительно хотите удалить этот э�
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 #, fuzzy
 msgid "Are you sure you want to delete this message? This cannot be undone."
 msgstr ""
@@ -13581,7 +13587,7 @@ msgid "Are you sure you want to delete this patron from the card batch?"
 msgstr "Вы уверены, что хотите удалить эту запись?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
 msgid ""
 "Are you sure you want to delete this patron image? This cannot be undone."
 msgstr ""
@@ -13788,7 +13794,7 @@ msgid "Are you sure you want to reopen this subscription?"
 msgstr "Действительно ли Вы хотите заново открыть эту подписку?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
 msgid ""
 "Are you sure you want to replace the current patron image? This cannot be "
 "undone."
@@ -13843,7 +13849,7 @@ msgstr ""
 msgid "Are you sure you wish to delete quote(s) %s?"
 msgstr "Действительно ли Вы хотите удалить этот список?"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:494
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:504
 #, fuzzy, c-format
 msgid "Are you sure you wish to delete this request?"
 msgstr "Вы действительно хотите удалить этот экземпляр?"
@@ -14066,7 +14072,7 @@ msgstr "Авторитетное значение"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:184
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:300
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:301
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:680
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:690
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:120
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:54
@@ -14076,7 +14082,7 @@ msgstr "Авторитетное значение"
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:106
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:174
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:68
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:77
@@ -14311,8 +14317,8 @@ msgstr "Типы авторитетных источников"
 msgid "Authority field to copy: "
 msgstr "Поле авторитетного источника для копирования: "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:115
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:118
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:116
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:119
 #, fuzzy, c-format
 msgid "Authority record"
 msgstr "Добавление авторитетного источника (%s)"
@@ -14644,14 +14650,14 @@ msgstr "Март"
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:32
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:56
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:735
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:714
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:45
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:294
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:261
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:892
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:870
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:58
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:102
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:156
@@ -14659,7 +14665,7 @@ msgstr "Март"
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:175
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:94
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:112
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:220
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
@@ -14726,7 +14732,7 @@ msgstr ": штрих-код не найден"
 msgid "Barcode not found. The following items were found by searching:"
 msgstr "Штрих-код не найден"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:970
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:948
 #, fuzzy, c-format
 msgid "Barcode submitted"
 msgstr "Штрих-код «%s»"
@@ -15228,7 +15234,7 @@ msgstr "Партии"
 msgid "BdP de la Meuse, France"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:420
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:430
 #, fuzzy, c-format
 msgid "Be sure to provide email addresses for these patrons."
 msgstr "Нет изображений для этой записи."
@@ -15388,8 +15394,8 @@ msgstr "Библиографические данные, что необходи
 msgid "Bibliographic information"
 msgstr "Библиографической информацией…"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:114
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:117
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:115
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:118
 #, fuzzy, c-format
 msgid "Bibliographic record"
 msgstr "библиографической записи № %s"
@@ -15403,13 +15409,13 @@ msgstr "библиографической записи № %s"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:683
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:693
 #, fuzzy, c-format
 msgid "Bibliographic record ID"
 msgstr "библиографической записи № %s"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:437
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:546
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:556
 #, fuzzy, c-format
 msgid "Bibliographic record ID:"
 msgstr "библиографической записи № %s"
@@ -15571,13 +15577,13 @@ msgstr "Заблокирован!"
 msgid "Bonnie Crawford"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:733
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:738
 #, fuzzy, c-format
 msgid "Book drop mode"
 msgstr "режим возвращение в «книжный ящик»"
 
 #. %1$s:  dropboxdate | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:671
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:676
 #, fuzzy, c-format
 msgid "Book drop mode. (Effective checkin date is %s )."
 msgstr "режим возвращение в «книжный ящик» (датой возвращения считается %s)."
@@ -16139,9 +16145,8 @@ msgid "Call Number (0-9 to A-Z)"
 msgstr "Шифр хранения (от 0-9 к A-Z,А-Я)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:25
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:697
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:16
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:42
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:863
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:160
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:178
 #, c-format
@@ -16167,19 +16172,19 @@ msgstr "Шифр для заказа"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:58
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:46
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:41
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:734
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:713
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:39
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:891
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:55
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:869
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:59
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:187
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:177
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:52
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:79
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:109
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:217
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:161
@@ -16404,9 +16409,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:96
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:99
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:74
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:487
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:431
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:497
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:77
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:352
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:362
@@ -16459,7 +16464,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:175
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:476
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:480
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:79
@@ -16490,7 +16495,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:156
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:202
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:276
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:414
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:415
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:129
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:186
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:207
@@ -16544,7 +16549,7 @@ msgstr "Отмена"
 msgid "Cancel "
 msgstr "Отмена"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:355
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:365
 #, fuzzy, c-format
 msgid "Cancel a confirmed request"
 msgstr "Отмена"
@@ -16601,7 +16606,7 @@ msgstr "Отмена фильтрации"
 msgid "Cancel hold"
 msgstr "Отмена"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:340
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:345
 #, fuzzy, c-format
 msgid "Cancel hold "
 msgstr "Отмена"
@@ -16624,8 +16629,8 @@ msgid "Cancel import"
 msgstr "Отмена фильтрации"
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:746
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:903
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:725
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
 #, fuzzy
 msgid "Cancel marked holds"
 msgstr "Отмена"
@@ -16680,7 +16685,7 @@ msgid "Cancel reservation and then attempt transfer:"
 msgstr "Отменить резервирование и тогда попробовать переместить: "
 
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:73
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:240
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:245
 #, fuzzy, c-format
 msgid "Cancel transfer"
 msgstr " Отменить перемещение "
@@ -16690,7 +16695,7 @@ msgstr " Отменить перемещение "
 msgid "Cancel upload"
 msgstr "Отмена"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:896
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:874
 #, fuzzy, c-format
 msgid "Cancel?"
 msgstr "Отмена"
@@ -16765,8 +16770,8 @@ msgstr "Дата получения"
 msgid "Cannot cancel receipt. Possible reasons : "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:624
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:632
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:629
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:637
 #, fuzzy, c-format
 msgid "Cannot check in"
 msgstr "Возвращение"
@@ -17487,9 +17492,8 @@ msgid "Character encoding: "
 msgstr "Кодировка символов: "
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:26
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:698
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:17
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:46
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:864
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:161
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:179
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:333
@@ -17559,7 +17563,7 @@ msgstr ""
 msgid "Check boxes to duplicate the original values"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:23
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:21
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:20
 #, c-format
 msgid "Check expiration"
@@ -17585,7 +17589,7 @@ msgstr "Предыдущие выдачи"
 #: intranet-tmpl/prog/en/includes/circ-search.inc:36
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:26
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:47
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:678
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:683
 #, c-format
 msgid "Check in"
 msgstr "Возвращение"
@@ -17598,7 +17602,7 @@ msgstr "Возвращение "
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:580
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:585
 #, fuzzy, c-format
 msgid "Check in message"
 msgstr "Возвращение"
@@ -17846,10 +17850,9 @@ msgid "Checked out %s times"
 msgstr "Было выдано %s раз(а)"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:24
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:15
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:59
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:696
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:862
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:159
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:177
 #, c-format
@@ -17857,14 +17860,18 @@ msgid "Checked out from"
 msgstr "Откуда выдано"
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:23
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:14
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:58
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:695
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:861
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:158
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:176
 #, c-format
 msgid "Checked out on"
 msgstr "Дата выдачи"
+
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:13
+#, c-format
+msgid "Checked out on (hidden, unformatted)"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:25
 #, c-format
@@ -17877,7 +17884,7 @@ msgid "Checked out: "
 msgstr "На выдаче"
 
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:105
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:751
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:756
 #, c-format
 msgid "Checked-in items"
 msgstr "Возвращенные экземпляры"
@@ -18043,7 +18050,7 @@ msgstr ""
 msgid "Checkouts are BLOCKED because patron has overdue items."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:787
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:792
 #, fuzzy, c-format
 msgid "Checkouts:"
 msgstr "Выдачи"
@@ -18200,7 +18207,7 @@ msgstr ""
 msgid "Choose order of text fields to print"
 msgstr "Определение порядка текстовых полей для печати"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:481
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:485
 #, fuzzy, c-format
 msgid "Choose the file to add to the basket"
 msgstr "Выберите отчет для запуска из списка"
@@ -18565,7 +18572,7 @@ msgstr "Есть претензия"
 msgid "Claimed date"
 msgstr "Дата создания"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:20
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:18
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:23
 #, c-format
 msgid "Claims"
@@ -18681,7 +18688,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:205
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:555
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:137
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:702
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:707
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
@@ -19028,7 +19035,7 @@ msgstr "Сдублировать правила выдачи не удалось
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:132
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:32
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:624
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:634
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:142
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:24
@@ -19039,7 +19046,7 @@ msgstr "Сдублировать правила выдачи не удалось
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:156
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:388
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:87
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:355
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:359
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:93
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:94
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:192
@@ -19187,7 +19194,7 @@ msgstr "Плата за регистрацию: "
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:292
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:317
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:338
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:452
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:453
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:35
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:250
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
@@ -19269,11 +19276,11 @@ msgid "Collection "
 msgstr "Собрание: "
 
 #: intranet-tmpl/prog/en/columns.def:99
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:11
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:24
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:270
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:859
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:179
 #, fuzzy, c-format
 msgid "Collection code"
@@ -19425,7 +19432,7 @@ msgstr "Коментарий "
 msgid "Comment "
 msgstr "Коментарий "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:638
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:648
 #, fuzzy, c-format
 msgid "Comment by: "
 msgstr "Комментарий: "
@@ -19437,7 +19444,7 @@ msgstr "Комментарий: "
 msgid "Comment:"
 msgstr "Комментарий: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:656
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:666
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:971
 #, c-format
 msgid "Comment: "
@@ -19451,8 +19458,8 @@ msgstr "Комментатор "
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:20
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:331
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:33
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:688
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:486
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:698
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:490
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:13
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:20
 #, c-format
@@ -19563,12 +19570,12 @@ msgstr ""
 #. INPUT type=submit name=submitbutton
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:121
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:370
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:375
 #, c-format
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:351
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:361
 #, fuzzy, c-format
 msgid "Confirm ILL request"
 msgstr "Подтвердите удаление"
@@ -19616,7 +19623,7 @@ msgstr "Подтвердите удаление вида атрибута пос
 msgid "Confirm deletion of printer "
 msgstr "Подтверждение удаления of Printer <em>%s</em>"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:421
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:422
 #, fuzzy, c-format
 msgid "Confirm deletion of record matching rule "
 msgstr "Подтвердите удаление  правила соответствия записей"
@@ -19633,17 +19640,17 @@ msgid "Confirm deletion of tag "
 msgstr "Подтверждаете удаление признака "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:394
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:398
 msgid "Confirm deletion of this vendor ?"
 msgstr "Подтверждаете удаление этого поставщика?"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:331
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:560
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:565
 #, fuzzy, c-format
 msgid "Confirm hold "
 msgstr "Подтвердите удаление:"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:553
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:558
 #, fuzzy, c-format
 msgid "Confirm hold and transfer "
 msgstr "<a1></a>Оборотные перемещения"
@@ -20152,8 +20159,8 @@ msgstr "Кори Егерь {Cory Jaeger}"
 msgid "Cost must be expressed as a decimal number >= 0"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:460
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:571
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:470
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:581
 #, fuzzy, c-format
 msgid "Cost:"
 msgstr "Протоколы"
@@ -20727,7 +20734,7 @@ msgstr "Денежная единица = %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:380
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:427
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:431
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:204
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:386
 #, c-format
@@ -21130,7 +21137,7 @@ msgid "Date accessioned"
 msgstr "Дата прибытия "
 
 #: intranet-tmpl/prog/en/columns.def:70
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #, fuzzy, c-format
 msgid "Date acquired"
 msgstr "Дата прибытия "
@@ -21180,7 +21187,7 @@ msgid "Date due"
 msgstr "Ожидается на дату"
 
 # --Дата возвращения (конфликт с Return date)
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:101
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:105
 #, c-format
 msgid "Date due:"
 msgstr "Ожидается на дату: "
@@ -21905,15 +21912,15 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:164
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:339
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:373
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:55
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:74
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:59
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:792
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:147
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:149
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:151
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:153
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:155
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:186
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:477
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:65
@@ -21936,7 +21943,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:308
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:329
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:350
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:464
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:206
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:49
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:8
@@ -22335,7 +22342,7 @@ msgid "Delete vendor"
 msgstr "Удалить поставщика"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:8
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:739
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:718
 #, c-format
 msgid "Delete?"
 msgstr "Удалить?"
@@ -22354,7 +22361,7 @@ msgid "Deleted patron attribute type &quot;%s&quot;"
 msgstr "Удален вид атрибута посетителя «%s»"
 
 #. %1$s:  deleted_matching_rule | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:447
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:448
 #, c-format
 msgid "Deleted record matching rule &quot;%s&quot;"
 msgstr "Удалено правило соответствия записей &quot;%s&quot;"
@@ -22511,7 +22518,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:293
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:318
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:339
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:453
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:454
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:62
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:220
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:248
@@ -22547,7 +22554,7 @@ msgstr "Отсутствует описание"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Description missing"
 msgstr "Отсутствует описание"
 
@@ -22595,7 +22602,7 @@ msgstr "Описание: "
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:118
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:182
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:228
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:103
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:104
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:98
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:155
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:99
@@ -22655,7 +22662,7 @@ msgstr "Библиотека-назначение: "
 msgid "Details"
 msgstr "Подробности"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:675
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:685
 #, c-format
 msgid "Details for all requests"
 msgstr ""
@@ -22670,13 +22677,13 @@ msgstr "Подробности"
 msgid "Details for payment"
 msgstr "Библиотека-назначение: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:530
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:540
 #, fuzzy, c-format
 msgid "Details from library"
 msgstr "Библиотека-назначение: "
 
 #. %1$s:  request.backend | html 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:593
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:603
 #, c-format
 msgid "Details from supplier (%s)"
 msgstr ""
@@ -22850,7 +22857,7 @@ msgstr "дискография"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:433
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:267
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:315
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:222
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:226
 #, c-format
 msgid "Discount: "
 msgstr "Скидка: "
@@ -22936,11 +22943,11 @@ msgid "Display order: "
 msgstr "Показать по: "
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:520
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:530
 msgid "Display supplier metadata"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:521
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:531
 #, c-format
 msgid "Display supplier metadata "
 msgstr ""
@@ -22993,11 +23000,6 @@ msgstr "Не проверялось на соответствие с сущес�
 #, c-format
 msgid "Do not look for matching records"
 msgstr "Не искать соответствия записей"
-
-#: intranet-tmpl/prog/en/includes/messaging-preference-form.inc:14
-#, c-format
-msgid "Do not notify"
-msgstr "Не сообщать"
 
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:85
 #, fuzzy, c-format
@@ -23207,12 +23209,12 @@ msgstr "звукозаписи"
 msgid "Download directory: "
 msgstr "звукозаписи"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:41
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:45
 #, c-format
 msgid "Download file of all overdues"
 msgstr "Скачать файл со всеми просрочками"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:39
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:43
 #, c-format
 msgid "Download file of displayed overdues"
 msgstr "Скачать файл выведённых просрочек"
@@ -23273,26 +23275,20 @@ msgstr "Возвращение %s"
 #: intranet-tmpl/prog/en/columns.def:79
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:15
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:16
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:8
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:44
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:691
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:238
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:856
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:50
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:54
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:154
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:172
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #, c-format
 msgid "Due date"
 msgstr "Ожидается на дату"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:855
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:7
 #, c-format
 msgid "Due date (unformatted, hidden)"
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:690
-#, c-format
-msgid "Due date hidden not formatted"
 msgstr ""
 
 #. %1$s:  checkout_info.issue.date_due | $KohaDates 
@@ -23306,6 +23302,9 @@ msgstr "Возвращение %s"
 msgid "Duncan Tyler"
 msgstr ""
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:25
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:216
@@ -23336,7 +23335,7 @@ msgid "Duplicate budget"
 msgstr "Сдублировать смету"
 
 #. %1$s:  budget_period_description | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:21
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:24
 #, fuzzy, c-format
 msgid "Duplicate budget %s"
 msgstr "Сдублировать смету"
@@ -23580,7 +23579,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:403
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:183
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:337
-#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:369
+#: intranet-tmpl/prog/en/modules/acqui/supplier.tt:372
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:184
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:476
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:294
@@ -23597,7 +23596,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:307
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:328
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:349
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:462
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:463
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:310
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:217
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:279
@@ -23625,7 +23624,7 @@ msgstr "Редактировать"
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:9
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:27
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:18
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:18
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:21
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:28
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:76
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:232
@@ -23745,7 +23744,7 @@ msgid "Edit biblio"
 msgstr "Правка библиографической записи"
 
 #. %1$s:  budget_period_description | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:20
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:23
 #, fuzzy, c-format
 msgid "Edit budget %s"
 msgstr "Править смету"
@@ -23881,12 +23880,12 @@ msgid "Edit record"
 msgstr "Править запись"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:508
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:518
 #, fuzzy
 msgid "Edit request"
 msgstr "Правка списка"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:509
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:519
 #, fuzzy, c-format
 msgid "Edit request "
 msgstr "Правка списка"
@@ -24095,7 +24094,7 @@ msgstr "Было направлено сообщение по электронн
 msgid "Email required"
 msgstr "Обязательный возраст"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:403
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
 #, fuzzy, c-format
 msgid "Email text:"
 msgstr "Обычно"
@@ -24391,7 +24390,7 @@ msgstr "Вводим штрих-код единицы: "
 
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:161
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:96
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:679
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:684
 #, c-format
 msgid "Enter item barcode: "
 msgstr "Вводим штрих-код единицы: "
@@ -24602,7 +24601,7 @@ msgstr "Ошибка при импорте структуры "
 msgid "Error message from Zebra: %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:338
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:348
 #, fuzzy, c-format
 msgid "Error performing operation"
 msgstr "Ошибка при импорте структуры "
@@ -24900,8 +24899,8 @@ msgstr "Ожидается на "
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:11
 #: intranet-tmpl/prog/en/includes/holds_table.inc:13
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:931
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:737
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:894
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:716
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
 #, fuzzy, c-format
 msgid "Expiration"
 msgstr "Срок действия: "
@@ -25655,7 +25654,7 @@ msgstr "У этой записи нет экземпляров."
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:330
 #: intranet-tmpl/prog/en/modules/tools/picture-upload.tt:49
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:485
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:489
 #, c-format
 msgid "File name"
 msgstr "Имя файла"
@@ -25760,7 +25759,7 @@ msgid "Filing rule"
 msgstr "Дата начала: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Filing rule code missing"
 msgstr ""
 
@@ -25815,7 +25814,7 @@ msgstr "Фильтровать по: "
 msgid "Filter location"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:100
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:104
 #, c-format
 msgid "Filter on:"
 msgstr "Фильтровать по: "
@@ -25826,7 +25825,7 @@ msgstr "Фильтровать по: "
 msgid "Filter paid transactions"
 msgstr "язык оригинала и/или промежуточных переводов текста"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:384
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:394
 #, fuzzy, c-format
 msgid "Filter partner libraries:"
 msgstr "Выбор библиотеки"
@@ -25870,7 +25869,7 @@ msgid "Filters :"
 msgstr "Фильтры"
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:942
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:920
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:280
 #, fuzzy, c-format
 msgid "Find another patron?"
@@ -25878,9 +25877,8 @@ msgstr "Добавить другое поле"
 
 #: intranet-tmpl/prog/en/includes/accounts.inc:9
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:27
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:18
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:48
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:699
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:865
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:83
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:85
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:206
@@ -25927,12 +25925,12 @@ msgstr "Пеня и сплаты"
 msgid "Fines &amp; charges"
 msgstr "Пеня и сплаты"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:668
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:673
 #, c-format
 msgid "Fines are not charged for manually cancelled holds."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:665
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:670
 #, c-format
 msgid "Fines for returned items are forgiven."
 msgstr ""
@@ -26161,7 +26159,7 @@ msgstr "Навсегда"
 msgid "Forget %s %s (%s)"
 msgstr "%s %s (%s)"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:742
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:747
 #, c-format
 msgid "Forgive fees for manually expired holds"
 msgstr ""
@@ -26171,7 +26169,7 @@ msgstr ""
 msgid "Forgive fines on return: "
 msgstr "Не взыскивать пеню при возвращении: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:724
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:729
 #, c-format
 msgid "Forgive overdue charges"
 msgstr "не взыскивать плату за просрочку"
@@ -26189,7 +26187,7 @@ msgstr "Прощено"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:334
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:401
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:461
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:270
 msgid "Form not submitted because of the following problem(s)"
@@ -26513,7 +26511,7 @@ msgstr "Поставщик: "
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:236
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:251
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:190
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:103
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:107
 #, c-format
 msgid "From:"
 msgstr "от: "
@@ -26660,9 +26658,9 @@ msgstr "Средства: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:217
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:338
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:341
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:227
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:423
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:439
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:427
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:87
 #, c-format
 msgid "Fund: "
@@ -27390,16 +27388,16 @@ msgid "Hold"
 msgstr "Резервирование"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:97
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:305
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:366
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:526
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:310
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:371
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:531
 #, c-format
 msgid "Hold at"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:732
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:889
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:711
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:867
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:98
 #, c-format
 msgid "Hold date"
@@ -27431,19 +27429,19 @@ msgstr "Плата за резервирование: "
 msgid "Hold filled for:"
 msgstr "Очередь "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:278
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:448
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:489
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:283
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:453
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:494
 #, c-format
 msgid "Hold for:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:354
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:359
 #, fuzzy, c-format
 msgid "Hold for: "
 msgstr "Очередь "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:264
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:269
 #, fuzzy, c-format
 msgid "Hold found (item is already waiting): "
 msgstr "Единица обозначена как 'ожидающая' в (<a1>%s</a>)."
@@ -27454,7 +27452,7 @@ msgstr "Единица обозначена как 'ожидающая' в (<a1>
 msgid "Hold found for (%s), please transfer"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:477
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:482
 #, fuzzy, c-format
 msgid "Hold found: "
 msgstr "Выдано <a1>%s</a>"
@@ -27469,7 +27467,7 @@ msgstr ""
 msgid "Hold must be record level "
 msgstr "Местное использование"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:352
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:357
 #, fuzzy, c-format
 msgid "Hold needing transfer found"
 msgstr "Заглавие <a1>сортировать</a>%s"
@@ -27546,7 +27544,7 @@ msgstr "Подразделение-фондодержатель"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:263
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:172
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:252
 #, c-format
@@ -27842,7 +27840,7 @@ msgstr "Исключение праздника"
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:13
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:20
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:15
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:319
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:329
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:149
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
@@ -27971,7 +27969,7 @@ msgstr "Исключение праздника"
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:14
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:34
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:15
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:16
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:68
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:13
@@ -28063,7 +28061,7 @@ msgstr "Исходная библиотека"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:262
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:39
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
@@ -28251,13 +28249,13 @@ msgstr "IBERMARC"
 msgid "ID"
 msgstr "Идентификатор"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:343
 #, c-format
 msgid "ILL module configuration problem. Take a look at the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/header.inc:37
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:320
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:330
 #: intranet-tmpl/prog/en/modules/intranet-main.tt:75
 #, fuzzy, c-format
 msgid "ILL requests"
@@ -28703,7 +28701,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Игнорировать"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #, fuzzy, c-format
 msgid "Ignore "
 msgstr "Игнорировать"
@@ -28910,14 +28908,14 @@ msgstr ""
 "Импорт структуры (поля, подполя) из файла электронной таблицы (*.csv, *.xml, "
 "*.ods) или SQL-файла"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:413
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:417
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following accounting "
 "details (used only if no information is filled for the item):"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:364
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
 #, c-format
 msgid ""
 "Import all the checked items in the basket with the following parameters:"
@@ -29312,8 +29310,8 @@ msgstr "Внутреннее примечание: "
 msgid "Interface:"
 msgstr "Внутреннее примечание: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:381
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:418
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:391
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:428
 #, c-format
 msgid "Interlibrary loan request details"
 msgstr ""
@@ -29349,7 +29347,7 @@ msgstr "Внутреннее примечание: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:302
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:475
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:454
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
 #, c-format
 msgid "Internal note: "
 msgstr "Внутреннее примечание: "
@@ -29751,7 +29749,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:371
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:144
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:283
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:368
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:372
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:38
 #, c-format
@@ -29775,7 +29773,7 @@ msgid "Item %s"
 msgstr "Экземпляр %s"
 
 #. %1$s:  item.item_id | html 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:263
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
 #, fuzzy, c-format
 msgid "Item Record %s"
 msgstr "# Записи"
@@ -29838,7 +29836,7 @@ msgstr "Экземпляры, которые не были выданы"
 msgid "Item circulation alerts"
 msgstr "Предупреждения при обороте экземпляров"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:444
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:449
 #, fuzzy, c-format
 msgid "Item consigned:"
 msgstr "Обработка экземпляров: "
@@ -29887,7 +29885,7 @@ msgstr "Экземпляр был изъят"
 msgid "Item hasn't been transferred yet from %s"
 msgstr "Экземпляр ещё не был перемещён с %s"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:174
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:178
 #, fuzzy, c-format
 msgid "Item holding library:"
 msgstr "Библиотека врем. хранения/выдачи"
@@ -29900,13 +29898,13 @@ msgstr "Библиотека врем. хранения/выдачи"
 msgid "Item holds / Total holds"
 msgstr "Резервирование экземпляров"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:166
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:170
 #, fuzzy, c-format
 msgid "Item home library:"
 msgstr "С исходной библиотеки: "
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:141
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:363
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:367
 #, fuzzy, c-format
 msgid "Item information"
 msgstr "Системная информация"
@@ -29941,7 +29939,7 @@ msgstr ""
 msgid "Item is already at destination library."
 msgstr "Единица уже находится в библиотеке назначения."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:616
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:621
 #, fuzzy, c-format
 msgid "Item is lost, cannot be checked in."
 msgstr "Экземпляры, которые не были выданы"
@@ -29974,7 +29972,7 @@ msgstr ""
 msgid "Item is restricted."
 msgstr "Экземпляр заблокированный"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:635
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:640
 #, c-format
 msgid "Item is withdrawn."
 msgstr "Экземпляр изъят."
@@ -30146,11 +30144,11 @@ msgid "Item tags cannot currently be saved"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:18
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:10
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:82
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:22
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:356
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:693
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:292
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:446
@@ -30159,7 +30157,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:174
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:271
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:253
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:858
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:157
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:175
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:178
@@ -30227,7 +30224,7 @@ msgstr "Тип единиц не для выдачи."
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:167
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:275
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:201
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:157
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:161
 #, c-format
 msgid "Item type:"
 msgstr "Тип единицы: "
@@ -30270,7 +30267,7 @@ msgid ""
 "books, CDs, or DVDs."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:618
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:623
 #, c-format
 msgid "Item was lost, now found."
 msgstr "Единица была потеряна, а теперь найденная."
@@ -33976,8 +33973,8 @@ msgstr "Последнее обновление: "
 msgid "Last updated"
 msgstr "Последнее обновление"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:452
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:562
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:462
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:572
 #, fuzzy, c-format
 msgid "Last updated:"
 msgstr "Последнее обновление: "
@@ -34124,15 +34121,15 @@ msgstr "законодательство"
 msgid "Leire Diez"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:177
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:230
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:283
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:325
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:366
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:392
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:503
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:536
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:561
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:178
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:231
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:284
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:326
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:367
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:393
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:504
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:537
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:562
 #, fuzzy, c-format
 msgid "Length: "
 msgstr "Длина"
@@ -34213,7 +34210,7 @@ msgstr "воспроизведенный: имитация"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:217
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:127
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:684
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:694
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:79
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:90
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:56
@@ -34230,7 +34227,7 @@ msgstr "воспроизведенный: имитация"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:67
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:86
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:52
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:53
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:29
@@ -34345,7 +34342,7 @@ msgstr "Библиотека посетителя: "
 msgid "Library of the Józef Piłsudski Institute of America, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:182
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:186
 #, c-format
 msgid "Library of the patron:"
 msgstr "Библиотека посетителя: "
@@ -34379,8 +34376,8 @@ msgstr "Библиотечное использование"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:212
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:184
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:264
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:441
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:554
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:451
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:564
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:33
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:114
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:248
@@ -34715,7 +34712,7 @@ msgstr "Загружается"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:103
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:153
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:385
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:352
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:356
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:91
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:82
@@ -34764,21 +34761,21 @@ msgstr "Загружается, пожалуйста, подождите… "
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:238
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:164
 #, c-format
 msgid "Loading..."
 msgstr "Идёт загрузка…"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:717
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:696
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "Идёт загрузка…"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 msgid "Loading... you may continue scanning."
 msgstr ""
 
@@ -34832,7 +34829,7 @@ msgid "Local use preferences"
 msgstr "Общие параметры системы"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:310
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:612
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:617
 #, fuzzy, c-format
 msgid "Local use recorded"
 msgstr "Местное использование"
@@ -34854,6 +34851,7 @@ msgstr "l — местная (муниципальная)"
 
 #: intranet-tmpl/prog/en/columns.def:151
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:20
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:12
 #: intranet-tmpl/prog/en/modules/tags/list.tt:29
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:84
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:163
@@ -34861,11 +34859,9 @@ msgstr "l — местная (муниципальная)"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:70
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:57
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:36
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:694
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:126
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:266
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:860
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:46
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:39
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:74
@@ -34978,8 +34974,8 @@ msgstr "Публичная библиотека Нельсовиля, Огайо
 msgid "Lost"
 msgstr "Протоколы"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:126
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:127
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:130
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:131
 #, c-format
 msgid "Lost card"
 msgstr "Потерянный билет"
@@ -35250,7 +35246,7 @@ msgstr "Коллектив"
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:178
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:150
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:382
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:349
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:353
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:87
 #, fuzzy, c-format
 msgid "MARC preview"
@@ -35524,7 +35520,7 @@ msgstr "Конфигурация принтера"
 msgid "Manage EDIFACT transmissions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:506
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:516
 #, fuzzy, c-format
 msgid "Manage ILL request"
 msgstr "Управление профилями"
@@ -35664,7 +35660,7 @@ msgstr ""
 msgid "Manage extended patron attributes"
 msgstr "заменить только имеющиеся атрибуты посетителя"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:26
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:24
 #, fuzzy, c-format
 msgid "Manage frequencies "
 msgstr "Управление профилями"
@@ -35760,7 +35756,7 @@ msgstr "Данные посетителя - %s %s (%s)"
 msgid "Manage marc modification templates"
 msgstr "Управление шаблонами"
 
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:31
+#: intranet-tmpl/prog/en/includes/serials-menu.inc:29
 #, fuzzy, c-format
 msgid "Manage numbering patterns "
 msgstr "Схема нумерации"
@@ -36194,18 +36190,18 @@ msgstr ""
 msgid "Match applied"
 msgstr "Употреблено правило соответствия: "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:518
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:519
 #, fuzzy, c-format
 msgid "Match check "
 msgstr "Добавить ребёнка"
 
 #. %1$s:  matchcheck.mc_num | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:255
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
 #, fuzzy, c-format
 msgid "Match check %s"
 msgstr "Добавить ребёнка"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:349
 #, fuzzy, c-format
 msgid "Match check 1 | "
 msgstr "Добавить ребёнка"
@@ -36221,28 +36217,28 @@ msgstr "Подробности о корзине заказов"
 msgid "Match found"
 msgstr " — партия"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:475
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:476
 #, fuzzy, c-format
 msgid "Match point "
 msgstr " — партия"
 
 #. %1$s:  matchpoint.mp_num | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:134
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
 #, fuzzy, c-format
 msgid "Match point %s | "
 msgstr "Поиск принтеров"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:202
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:203
 #, fuzzy, c-format
 msgid "Match point 1 | "
 msgstr "Поиск принтеров"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:126
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:127
 #, fuzzy, c-format
 msgid "Match points"
 msgstr "точечная карта"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:107
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:108
 #, fuzzy, c-format
 msgid "Match threshold: "
 msgstr "Порог соответствия: "
@@ -36275,12 +36271,12 @@ msgid "Matching rule applied:"
 msgstr "Употребленное правило соответствия: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Matching rule code missing"
 msgstr "Код правила соответствия отсутствует"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:94
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:99
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:95
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:100
 #, fuzzy, c-format
 msgid "Matching rule code: "
 msgstr "Код правила соответствия: "
@@ -36290,9 +36286,9 @@ msgstr "Код правила соответствия: "
 msgid "Matching:"
 msgstr " — партия"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:153
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:215
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:488
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:154
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:216
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:489
 #, fuzzy, c-format
 msgid "Matchpoint components"
 msgstr "Регулирование комментариев посетителей"
@@ -36741,7 +36737,7 @@ msgid "Modified patron attribute type &quot;%s&quot;"
 msgstr "Изменён вид атрибута посетителя «%s»"
 
 #. %1$s:  edited_matching_rule | html 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:444
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:445
 #, c-format
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr "Изменено правило соответствия записей &quot;%s&quot;"
@@ -36877,7 +36873,7 @@ msgstr "Правка категории %s"
 msgid "Modify printer"
 msgstr "Изменить принтер"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:84
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:85
 #, c-format
 msgid "Modify record matching rule"
 msgstr "Правим правило соответствия записей"
@@ -37214,13 +37210,13 @@ msgstr "Данные «%s» добавлены:"
 msgid "MySQL version: "
 msgstr "Версия MySQL: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:457
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:461
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:535
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:550
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:568
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:572
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:576
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:467
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:471
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:545
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:560
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:578
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:582
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:586
 #, c-format
 msgid "N/A"
 msgstr ""
@@ -37235,8 +37231,8 @@ msgstr ""
 msgid "NORMARC"
 msgstr "NORMARC"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:625
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:633
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:630
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:638
 #, c-format
 msgid "NOT CHECKED IN"
 msgstr ""
@@ -37389,7 +37385,7 @@ msgstr "Название или ISSN: "
 msgid "Name or barcode not found. Please try an other "
 msgstr "Нет посетителя с таким именем, пожалуйста, попробуйте другое"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:112
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:116
 #, c-format
 msgid "Name or cardnumber:"
 msgstr "Наименование или номер билета: "
@@ -37551,7 +37547,7 @@ msgstr "Новый профиль"
 msgid "New EAN "
 msgstr "Новый "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:347
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:357
 #, fuzzy, c-format
 msgid "New ILL request"
 msgstr "Места"
@@ -37661,7 +37657,7 @@ msgid "New batch record modification"
 msgstr "Пакетное изменение экземпляров"
 
 #: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:7
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:59
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:62
 #, c-format
 msgid "New budget"
 msgstr "Новая смета"
@@ -37791,8 +37787,10 @@ msgstr "Частота"
 msgid "New from Z39.50/SRU"
 msgstr "Добавить с помощью Z39.50"
 
+#. For the first occurrence,
 #. %1$s:  budget_period_description | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:13
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:10
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:14
 #, fuzzy, c-format
 msgid "New fund for %s"
 msgstr "Новые средства для "
@@ -37908,7 +37906,7 @@ msgstr "Новая запись"
 msgid "New record "
 msgstr "Новая запись "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:436
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:437
 #, fuzzy, c-format
 msgid "New record matching rule"
 msgstr "Добавляем правило соответствия записей"
@@ -37993,7 +37991,7 @@ msgstr "значение"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.to ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:594
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:599
 #, c-format
 msgid "New value: %s %s. %s Available for loan. %s "
 msgstr ""
@@ -38139,7 +38137,7 @@ msgstr " (ответственный за подготовку документ�
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:411
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:49
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:52
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:425
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:117
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:120
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:62
@@ -38187,7 +38185,7 @@ msgid "No (default)"
 msgstr "нет (по умолчанию)"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:285
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:370
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:374
 #, c-format
 msgid ""
 "No ACQ framework, using default. You should create a framework with code "
@@ -38539,7 +38537,7 @@ msgid ""
 msgstr "Экземпляр был изъят"
 
 #. %1$s:  errmsgloo.msg | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:603
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:608
 #, fuzzy, c-format
 msgid "No item with barcode: %s"
 msgstr "Нет единицы со штрих-кодом: «%s»"
@@ -38690,12 +38688,12 @@ msgstr "без упорядочивания"
 msgid "No orders yet"
 msgstr "без упорядочивания"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:712
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:691
 #, c-format
 msgid "No outstanding charges"
 msgstr "Нет неуплаченных уплат"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:419
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:429
 #, c-format
 msgid ""
 "No partners have been defined yet. Please create appropriate patron records "
@@ -38930,7 +38928,7 @@ msgstr "Нет сохранённых отчётов, которые соотв�
 msgid "No system preferences matched your search for: "
 msgstr "Нет системных параметров, чтобы отвечали Вашему поиску по "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:362
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:372
 #, c-format
 msgid ""
 "No target email addresses found. Either select at least one partner or check "
@@ -38970,7 +38968,7 @@ msgid "No, do not Delete"
 msgstr "Нет, не удалять"
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:455
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:501
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:511
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:122
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:255
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:48
@@ -38981,7 +38979,7 @@ msgstr "Нет, не удалять"
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:129
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:127
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:179
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:428
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:429
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:236
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:136
 #: intranet-tmpl/prog/en/modules/admin/patron-attr-types.tt:213
@@ -39076,7 +39074,7 @@ msgstr "научная литература"
 msgid "Non-musical recording"
 msgstr "немузыкальная запись"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:57
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:61
 #, fuzzy, c-format
 msgid "Non-public note"
 msgstr "Непубличная заметка: "
@@ -39110,7 +39108,7 @@ msgstr "Непубличная заметка: "
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:156
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:199
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:121
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:125
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:68
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:242
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:92
@@ -39195,15 +39193,15 @@ msgstr "Обычно"
 msgid "Normal text"
 msgstr "Обычно"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:185
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:234
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:291
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:333
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:370
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:396
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:507
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:540
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:565
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:186
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:235
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:292
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:334
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:371
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:397
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:508
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:541
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:566
 #, fuzzy, c-format
 msgid "Normalization rule: "
 msgstr "Правило соответствия записей: "
@@ -39295,7 +39293,7 @@ msgstr "Не доступно"
 msgid "Not checked out since: "
 msgstr "Не было выдач от времени: "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:609
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:614
 #, c-format
 msgid "Not checked out."
 msgstr "Не выдано."
@@ -39321,7 +39319,7 @@ msgstr "Не для выдачи: "
 msgid "Not for loan status"
 msgstr "Статус \"Не для выдачи\" обновлён. "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:586
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:591
 #, c-format
 msgid "Not for loan status updated. "
 msgstr "Статус \"Не для выдачи\" обновлён. "
@@ -39358,7 +39356,7 @@ msgstr "Последний просмотр"
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:106
 #: intranet-tmpl/prog/en/modules/members/printfeercpt.tt:49
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:64
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:73
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:126
@@ -39558,7 +39556,7 @@ msgstr "Заметки/комментарии"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:250
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:42
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:587
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:597
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:85
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:32
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:181
@@ -39590,8 +39588,8 @@ msgstr "Заметки: "
 #. For the first occurrence,
 #. %1$s:  reservenotes | html 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:58
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:275
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:487
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:280
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:492
 #, c-format
 msgid "Notes: %s"
 msgstr "Заметки: %s"
@@ -40025,8 +40023,8 @@ msgstr "Выкл."
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:194
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:222
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:422
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:452
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:427
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:457
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:30
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:318
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:249
@@ -40241,15 +40239,15 @@ msgstr "Выгрузка файла автономного оборота"
 msgid "Offset:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:170
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:226
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:276
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:318
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:362
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:388
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:499
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:532
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:557
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:171
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:227
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:277
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:319
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:363
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:389
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:500
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:533
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:558
 #, c-format
 msgid "Offset: "
 msgstr ""
@@ -40264,7 +40262,7 @@ msgstr "значение"
 #. %2$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', errmsgloo.NotForLoanStatusUpdated.from ) | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:588
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:593
 #, c-format
 msgid "Old value: %s %s. %s Available for loan. %s "
 msgstr ""
@@ -40466,7 +40464,7 @@ msgstr ""
 msgid "Opac Note"
 msgstr "Заметка"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:476
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:486
 #, fuzzy, c-format
 msgid "Opac notes:"
 msgstr "Заметка"
@@ -40558,7 +40556,7 @@ msgstr "Отсутствует необязательный модуль"
 #: intranet-tmpl/prog/en/modules/tools/upload-images.tt:95
 #: intranet-tmpl/prog/en/modules/tools/export.tt:119
 #: intranet-tmpl/prog/en/modules/tools/export.tt:202
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:716
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:721
 #, c-format
 msgid "Options"
 msgstr "Параметры"
@@ -40611,7 +40609,7 @@ msgstr "Заказ"
 msgid "Order "
 msgstr "Заказ "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:534
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:544
 #, fuzzy, c-format
 msgid "Order ID:"
 msgstr "Заказ "
@@ -41007,7 +41005,7 @@ msgid "Overdue notice/status triggers"
 msgstr "Включатели оповещений/статусов просрочек"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:29
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:85
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:89
 #, c-format
 msgid "Overdue report"
 msgstr "Отчёт о просрочке"
@@ -41313,17 +41311,16 @@ msgid "Patricio Marrone"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:10
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:20
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:8
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:682
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:692
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:27
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:701
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:867
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:51
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:55
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:56
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:99
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:113
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:221
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
@@ -41351,7 +41348,7 @@ msgstr "Эта единица уже есть в Вашей корзине"
 msgid "Patron '%s' is already in the list."
 msgstr "Эта единица уже есть в Вашей корзине"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:433
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:443
 #, fuzzy, c-format
 msgid "Patron ID:"
 msgstr "Посетитель №: "
@@ -41444,7 +41441,7 @@ msgstr ""
 msgid "Patron category created!"
 msgstr "Категория посетителя: "
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:113
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:117
 #, c-format
 msgid "Patron category:"
 msgstr "Категория посетителя: "
@@ -41489,7 +41486,7 @@ msgstr "подробность подписки"
 msgid "Patron fines are over limit: %s"
 msgstr "Посетитель заблокирован"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:119
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:123
 #, c-format
 msgid "Patron flags:"
 msgstr "Отметки посетителей:  "
@@ -41544,7 +41541,7 @@ msgid ""
 msgstr "Посетитель has %s item(s) checked out."
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:407
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
 #, fuzzy, c-format
 msgid "Patron has an indefinite restriction."
 msgstr "Посетитель has %s item(s) checked out."
@@ -41571,8 +41568,8 @@ msgstr ""
 msgid "Patron has nothing checked out."
 msgstr "Посетителю ещё ничего не было выдано."
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:776
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:755
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr "Посетитель ничего не резервировал."
@@ -41639,9 +41636,9 @@ msgstr "Изображения посетителя(ей) загружено с 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:225
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:87
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:294
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:360
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:516
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:299
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:365
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:521
 #, c-format
 msgid "Patron is RESTRICTED"
 msgstr "Посетитель ЗАБЛОКИРОВАН"
@@ -41835,7 +41832,7 @@ msgid ""
 msgstr ""
 
 #. %1$s:  errmsgloo.prevdebarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:646
 #, fuzzy, c-format
 msgid "Patron was earlier restricted until %s."
 msgstr "Посетитель has %s item(s) checked out."
@@ -41871,9 +41868,9 @@ msgstr "посетитель's address in doubt"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:363
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:91
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:298
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:361
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:520
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:303
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:366
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:525
 #, fuzzy, c-format
 msgid "Patron's address is in doubt"
 msgstr "посетитель's address is in doubt"
@@ -41978,7 +41975,7 @@ msgstr ""
 "С записью посетителя соединены посетители, для которых он является "
 "поручителем."
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:538
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:548
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:183
 #, c-format
 msgid "Patron:"
@@ -42513,8 +42510,8 @@ msgstr ""
 msgid "Pick up location"
 msgstr "Место получения: "
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:736
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:893
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:715
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:871
 #, fuzzy, c-format
 msgid "Pickup at"
 msgstr "Место получения: "
@@ -42674,7 +42671,7 @@ msgstr "Установить резервирование "
 msgid "Place request"
 msgstr "Места"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:359
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:369
 #, c-format
 msgid "Place request with partner libraries"
 msgstr ""
@@ -42696,22 +42693,22 @@ msgid "Places"
 msgstr "Места"
 
 #. %1$s:  auth_cats_loo | html 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:52
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:55
 #, fuzzy, c-format
 msgid "Plan by %s"
 msgstr "Распланировать по месяцам"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:45
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:48
 #, c-format
 msgid "Plan by item types"
 msgstr "Распланировать по типам единиц"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:39
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:42
 #, c-format
 msgid "Plan by libraries"
 msgstr "Распланировать по библиотекам"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:33
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:36
 #, c-format
 msgid "Plan by months"
 msgstr "Распланировать по месяцам"
@@ -42727,7 +42724,7 @@ msgstr "Планируемая дата"
 msgid "Planning"
 msgstr "Планирование"
 
-#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:26
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:29
 #, fuzzy, c-format
 msgid "Planning "
 msgstr "Планирование"
@@ -42800,7 +42797,7 @@ msgid "Please choose a cache_expiry less than 30 days "
 msgstr "Пожалуйста, выберите срок актуальности кэша меньше 30 дней "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
 msgid "Please choose a file to upload"
 msgstr "Пожалуйста, выберите файл для выгрузки: "
 
@@ -43171,7 +43168,7 @@ msgid "Please return item to home library: %s"
 msgstr "Пожалуйста, верните экземпляр в исходную библиотеку: %s"
 
 #. %1$s:  Branches.GetName( errmsgloo.msg ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:606
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:611
 #, fuzzy, c-format
 msgid "Please return item to: %s"
 msgstr "Пожалуйста, вернитесь к %s"
@@ -43183,7 +43180,7 @@ msgid "Please return item to: %s "
 msgstr "Пожалуйста, вернитесь к %s"
 
 #. %1$s:  Branches.GetName( returnbranch ) | html 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:398
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:403
 #, fuzzy, c-format
 msgid "Please return this item to %s "
 msgstr "Пожалуйста, вернитесь к %s"
@@ -43714,11 +43711,10 @@ msgstr "Предыдущие сеансы"
 
 #: intranet-tmpl/prog/en/columns.def:73
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:28
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:700
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:19
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:84
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:866
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:56
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:60
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:83
 #, c-format
 msgid "Price"
@@ -43729,8 +43725,8 @@ msgstr "Цена"
 msgid "Price effective from"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:464
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:575
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:474
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:585
 #, fuzzy, c-format
 msgid "Price paid:"
 msgstr "Цена: "
@@ -43875,7 +43871,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/members-toolbar.inc:33
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:123
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:423
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:428
 #, c-format
 msgid "Print slip"
 msgstr "Распечатать квитанцию"
@@ -43885,18 +43881,18 @@ msgstr "Распечатать квитанцию"
 msgid "Print slip "
 msgstr "Распечатать квитанцию"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:336
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:563
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:341
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:568
 #, fuzzy, c-format
 msgid "Print slip and confirm "
 msgstr "Распечатать карточку и"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:374
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:379
 #, fuzzy, c-format
 msgid "Print slip and continue"
 msgstr "Распечатать карточку и"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:556
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:561
 #, fuzzy, c-format
 msgid "Print slip, transfer, and confirm "
 msgstr "Распечатать карточку и"
@@ -43916,7 +43912,7 @@ msgstr "%s %s %s %s (%s)"
 msgid "Print this label"
 msgstr "Распечатать страницу"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:231
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:233
 #, fuzzy, c-format
 msgid "Print transfer slip"
 msgstr "Распечатать квитанцию"
@@ -43983,9 +43979,9 @@ msgid "Printers"
 msgstr "Принтеры"
 
 #: intranet-tmpl/prog/en/includes/holds_table.inc:5
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:738
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:717
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:873
 #, c-format
 msgid "Priority"
 msgstr "Приоритет"
@@ -44898,8 +44894,8 @@ msgid "Record matching rule:"
 msgstr "Правило соответствия записей: "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:72
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:64
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:439
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:65
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:440
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:119
 #, c-format
 msgid "Record matching rules"
@@ -44945,7 +44941,7 @@ msgid "Record type:"
 msgstr "Тип дороги: "
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:122
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:111
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:112
 #, fuzzy, c-format
 msgid "Record type: "
 msgstr "Тип дороги: "
@@ -45136,7 +45132,7 @@ msgstr ""
 msgid "Remaining system parameters permissions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:695
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:700
 #, fuzzy, c-format
 msgid "Remember for next check in:"
 msgstr "Запомнить на сеанс: "
@@ -45162,8 +45158,8 @@ msgstr ""
 msgid "Reminder date"
 msgstr "Дата напоминания"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:641
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:644
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:646
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:649
 #, fuzzy, c-format
 msgid "Reminder: "
 msgstr "Дата напоминания"
@@ -45323,16 +45319,16 @@ msgstr "инструкция к выполнению"
 msgid "Remove tag"
 msgstr "Получение"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:255
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:348
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:518
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:256
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:349
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:519
 #, c-format
 msgid "Remove this match check"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:134
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:202
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:475
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:135
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:203
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:476
 #, c-format
 msgid "Remove this match point"
 msgstr ""
@@ -45620,6 +45616,11 @@ msgstr "Цена для замены"
 msgid "Replacement price:"
 msgstr "Цена для замены: "
 
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:222
+#, fuzzy, c-format
+msgid "Replacement price: "
+msgstr "Цена для замены: "
+
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:142
 #, c-format
 msgid "Reply-To: "
@@ -45768,8 +45769,8 @@ msgstr "обязательно"
 msgid "Request article from "
 msgstr "Дата выдачи, от: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:429
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:527
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:439
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:537
 #, fuzzy, c-format
 msgid "Request details"
 msgstr "обязательно"
@@ -45777,13 +45778,13 @@ msgstr "обязательно"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:687
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:697
 #, fuzzy, c-format
 msgid "Request number"
 msgstr "%s Номер дома: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:468
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:579
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:478
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:589
 #, fuzzy, c-format
 msgid "Request number:"
 msgstr "Порядковий номер комплекту/примірника"
@@ -45799,8 +45800,8 @@ msgstr "обязательно"
 msgid "Request specific item type:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:456
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:566
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:466
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:576
 #, fuzzy, c-format
 msgid "Request type:"
 msgstr "обязательно"
@@ -45950,7 +45951,7 @@ msgstr "Отсутствует обязательный модуль"
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:274
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:279
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:658
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:668
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:327
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:705
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
@@ -46024,7 +46025,7 @@ msgstr "Отсутствует обязательный модуль"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:759
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:112
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:406
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:64
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:72
@@ -46055,10 +46056,10 @@ msgstr "Отсутствует обязательный модуль"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:230
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:242
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:263
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:100
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:105
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:109
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:120
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:101
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:106
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:110
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:121
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:95
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:151
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:75
@@ -46112,7 +46113,7 @@ msgstr "обязательно"
 msgid "Required for staff login."
 msgstr "Требуется для входа в раздел для сотрудников."
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:247
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:248
 #, fuzzy, c-format
 msgid "Required match checks"
 msgstr "Правила соответствия записей"
@@ -46173,7 +46174,7 @@ msgid "Reset Mappings"
 msgstr "Добавляем отображение"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:35
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:91
 #, c-format
 msgid "Reset filter"
 msgstr "Снять фильтр"
@@ -46201,8 +46202,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:168
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:265
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:124
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:125
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:128
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:129
 #, c-format
 msgid "Restricted"
 msgstr "Заблокированно"
@@ -46290,8 +46291,8 @@ msgid "Resume"
 msgstr "Результат"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:770
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:927
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:749
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:905
 msgid "Resume all suspended holds"
 msgstr "Восстановить все приостановленые резервирования"
 
@@ -46348,8 +46349,8 @@ msgid "Return to previous page"
 msgstr "Вернуться к инструментам"
 
 #. A
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:413
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:423
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:431
 #, fuzzy
 msgid "Return to request details"
 msgstr "Вернуться к данным посетителя"
@@ -46938,7 +46939,7 @@ msgstr "Суббота"
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:277
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:130
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:476
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:480
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:149
@@ -46956,8 +46957,8 @@ msgstr "Суббота"
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:155
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:201
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:275
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:408
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:411
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:409
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:412
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:128
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:339
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:154
@@ -47235,9 +47236,9 @@ msgstr ""
 msgid "School"
 msgstr "для детей ясельного возраста от 0 до 5 лет"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:144
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:210
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:483
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:145
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:211
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:484
 #, fuzzy, c-format
 msgid "Score: "
 msgstr "политурный картон"
@@ -47535,9 +47536,9 @@ msgstr "История поисков"
 msgid "Search in the calendar the day you want to set as holiday."
 msgstr "Найдите в календаре день, который Вы хотите установить как праздник."
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:137
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:205
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:478
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:138
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:206
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:479
 #, fuzzy, c-format
 msgid "Search index: "
 msgstr "Искание"
@@ -47602,11 +47603,6 @@ msgstr "Поиск за"
 #: intranet-tmpl/prog/en/modules/catalogue/MARCdetail.tt:81
 #, fuzzy
 msgid "Search on %s"
-msgstr "Поиск за"
-
-#: intranet-tmpl/prog/en/includes/serials-menu.inc:36
-#, fuzzy, c-format
-msgid "Search on Mana"
 msgstr "Поиск за"
 
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:12
@@ -48019,9 +48015,9 @@ msgstr "выберите средства"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:203
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:349
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:232
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:328
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:441
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:236
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:332
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:445
 #, c-format
 msgid "Select a fund"
 msgstr "выберите средства"
@@ -48222,7 +48218,7 @@ msgstr "Выбираем библиотеку: "
 msgid "Select owner"
 msgstr "Выбор"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:388
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:398
 #, fuzzy, c-format
 msgid "Select partner libraries:"
 msgstr "Выбираем библиотеку: "
@@ -48397,7 +48393,7 @@ msgid "Send EDI order"
 msgstr "Получение заказов"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:412
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:422
 #: intranet-tmpl/prog/en/modules/errors/errorpage.tt:29
 #, fuzzy, c-format
 msgid "Send email"
@@ -48873,7 +48869,7 @@ msgstr "Стандартный номер"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:176
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:204
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:199
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:134
@@ -49130,7 +49126,7 @@ msgstr "язык оригинала и/или промежуточных пер�
 msgid "Show all vendors"
 msgstr "Добавляем поставщика"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:189
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:193
 #, c-format
 msgid "Show any items currently checked out:"
 msgstr "Показывать любые выданные экземпляры: "
@@ -49509,7 +49505,7 @@ msgid "Sort field 2:"
 msgstr "Сортировальное поле 2: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Sort routine missing"
 msgstr ""
 
@@ -49567,9 +49563,9 @@ msgstr "Средства: "
 msgid "Source"
 msgstr "политурный картон"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:259
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:351
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:521
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:260
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:352
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:522
 #, c-format
 msgid "Source (incoming) record check field"
 msgstr ""
@@ -49638,8 +49634,8 @@ msgstr "для специалистов"
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:760
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:917
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:739
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:895
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr ""
@@ -49660,7 +49656,7 @@ msgstr ""
 
 # --Дата возвращения (конфликт с Return Date)
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:691
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:696
 #, fuzzy, c-format
 msgid "Specify return date %s: "
 msgstr "Указание даты возвращения %s: "
@@ -49801,8 +49797,8 @@ msgstr "Работник библиотеки"
 msgid "Staff note:"
 msgstr "Клиент для библиотекарей: "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:472
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:583
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:482
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:593
 #, fuzzy, c-format
 msgid "Staff notes:"
 msgstr "Клиент для библиотекарей: "
@@ -49847,7 +49843,7 @@ msgstr "Заготавливаем записи в хранилище"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:334
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:443
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:488
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:492
 #, c-format
 msgid "Staged"
 msgstr "Заготовлено"
@@ -50033,8 +50029,8 @@ msgstr "статистические данные"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:228
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:483
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:250
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:463
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:467
 #, c-format
 msgid "Statistic 1: "
 msgstr "Поле статистики № 1: "
@@ -50046,8 +50042,8 @@ msgstr "статистические данные"
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:235
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:486
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:254
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:467
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:258
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:471
 #, c-format
 msgid "Statistic 2: "
 msgstr "Поле статистики № 2:  "
@@ -50093,7 +50089,7 @@ msgstr "Мастера статистики"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:685
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:120
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:94
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:281
@@ -50107,7 +50103,7 @@ msgstr "Мастера статистики"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:42
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:37
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:487
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:491
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:38
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:238
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:67
@@ -50125,8 +50121,8 @@ msgstr "Состояние "
 
 #: intranet-tmpl/prog/en/modules/tags/review.tt:195
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:105
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:447
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:558
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:457
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:568
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:72
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:77
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:131
@@ -50439,15 +50435,15 @@ msgstr "Подполе: %s"
 msgid "Subfields"
 msgstr "Подполя"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:163
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:222
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:269
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:311
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:358
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:384
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:495
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:528
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:553
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:164
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:223
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:270
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:312
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:359
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:385
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:496
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:529
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:554
 #, fuzzy, c-format
 msgid "Subfields: "
 msgstr "Подполя: "
@@ -50483,7 +50479,7 @@ msgstr "Подгруппа: "
 msgid "Subject"
 msgstr "Тематика"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:399
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:409
 #, fuzzy, c-format
 msgid "Subject Line"
 msgstr "Предмет: "
@@ -50594,8 +50590,8 @@ msgstr "Темы: "
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:204
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:87
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:486
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:663
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:496
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:74
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:86
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:45
@@ -50612,7 +50608,7 @@ msgstr "Темы: "
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:98
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:155
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:184
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:687
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:692
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:35
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:119
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:103
@@ -51077,7 +51073,7 @@ msgstr "Всякая всячина"
 msgid "Supplemental issue "
 msgstr "Дополняющий выпуск %S"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:611
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:621
 #, fuzzy, c-format
 msgid "Supplier metadata"
 msgstr "Сохранённые отчёты"
@@ -51122,8 +51118,8 @@ msgid "Suspend"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:755
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:912
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:734
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:890
 msgid "Suspend all holds"
 msgstr "Приостановить все резервирования"
 
@@ -51139,8 +51135,8 @@ msgstr "Приостановить все резервирования"
 msgid "Suspend until:"
 msgstr "Приостановить все резервирования"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:740
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:897
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:719
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
 #, c-format
 msgid "Suspend?"
 msgstr ""
@@ -51452,15 +51448,15 @@ msgstr "Регулирование меток"
 msgid "Tag:"
 msgstr "Признак: "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:156
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:218
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:262
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:304
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:354
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:380
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:491
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:524
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:549
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:157
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:219
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:263
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:305
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:355
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:381
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:492
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:525
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:550
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:79
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:85
 #: intranet-tmpl/prog/en/modules/admin/auth_tag_structure.tt:128
@@ -51513,9 +51509,9 @@ msgstr "Tamil, Франция"
 msgid "Target"
 msgstr "Цель"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:301
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:377
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:546
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:302
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:378
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:547
 #, c-format
 msgid "Target (database) record check field"
 msgstr ""
@@ -51838,7 +51834,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:227
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:482
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:466
 #, c-format
 msgid ""
 "The 2 following fields are available for your own usage. They can be useful "
@@ -51974,6 +51970,16 @@ msgstr ""
 msgid ""
 "The biblio.biblionumber and biblioitems.biblioitemnumber fields be mapped to "
 "a MARC subfield,"
+msgstr ""
+
+#. A
+#: intranet-tmpl/prog/en/includes/budgets-admin-toolbar.inc:10
+msgid "The budget is locked"
+msgstr ""
+
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:17
+#, c-format
+msgid "The budget is locked, fund creation is not possible."
 msgstr ""
 
 #. %1$s:  email_add | html 
@@ -52322,7 +52328,7 @@ msgstr "Эта единица была добавлена в Вашу корзи
 msgid "The item has been removed from your cart"
 msgstr "Эта единица была добавлена в Вашу корзину"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
 #, c-format
 msgid ""
 "The item has not been checked in due to a configuration issue in your "
@@ -52919,12 +52925,12 @@ msgstr "Нет изображений для этой записи."
 msgid "There are no overdues for today%s at the selected location%s."
 msgstr "Нет сохраненных правил соответствия."
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:87
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:91
 #, fuzzy, c-format
 msgid "There are no overdues matching your search. "
 msgstr "Нет сохраненных правил соответствия."
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:89
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:93
 #, fuzzy, c-format
 msgid "There are no overdues."
 msgstr "Нет задержанных заказов."
@@ -52985,7 +52991,7 @@ msgstr "Не обозначено ни одного набора."
 msgid "There are no saved definitions. "
 msgstr "Еще нет сохраненных отчётов. "
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:467
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:468
 #, c-format
 msgid "There are no saved matching rules."
 msgstr "Нет сохраненных правил соответствия."
@@ -53473,7 +53479,7 @@ msgid "This patron can't check out this item per library circulation policy."
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:942
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:920
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:280
 #, fuzzy, c-format
 msgid "This patron does not exist. "
@@ -53723,7 +53729,7 @@ msgid "Those items won't be deleted"
 msgstr "Кажется, загруженный файл пустой."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:587
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:588
 msgid "Threshold missing"
 msgstr ""
 
@@ -53828,6 +53834,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:54
 #: intranet-tmpl/prog/en/includes/search_indexes.inc:56
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:17
+#: intranet-tmpl/prog/en/includes/relatives-issues-table.inc:9
 #: intranet-tmpl/prog/en/includes/resort_form.inc:75
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:7
 #: intranet-tmpl/prog/en/modules/tags/list.tt:28
@@ -53850,7 +53857,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:237
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:296
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:297
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:681
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:691
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:29
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
@@ -53863,8 +53870,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:42
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:22
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:692
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:733
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:712
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:81
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:444
@@ -53873,9 +53879,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:124
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:35
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:252
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:857
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:890
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:53
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:57
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:37
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:103
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:59
@@ -53887,7 +53892,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:173
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:49
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:64
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:105
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:213
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
@@ -54205,7 +54210,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:240
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:255
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:191
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:107
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:111
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:74
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:704
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:715
@@ -54568,7 +54573,7 @@ msgid "Total due:"
 msgstr "Всего подлежит платежу"
 
 #. %1$s:  totaldue | html 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:710
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:689
 #, c-format
 msgid "Total due: %s"
 msgstr "Всего подлежит платежу: %s"
@@ -54742,7 +54747,7 @@ msgstr "Перемещения"
 msgid "Transfer is not allowed for: "
 msgstr "Передать собрание"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:409
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:414
 #, fuzzy, c-format
 msgid "Transfer now? "
 msgstr "Перемещаем сейчас?"
@@ -54754,9 +54759,9 @@ msgid "Transfer order to this basket?"
 msgstr "Управление заказами"
 
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:95
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:303
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:364
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:524
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:308
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:369
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:529
 #, c-format
 msgid "Transfer to:"
 msgstr ""
@@ -54926,7 +54931,7 @@ msgstr "Тюмер Гарп {Tumer Garip}"
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:36
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:108
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:753
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:758
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:346
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:159
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:147
@@ -55335,7 +55340,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "неизвестно"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:371
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:381
 #, c-format
 msgid "Unknown error processing your request. Contact your administrator. "
 msgstr ""
@@ -55531,7 +55536,7 @@ msgstr "Обновление: %s"
 msgid "Updated SQL"
 msgstr "Обновить SQL"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:686
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:696
 #, fuzzy, c-format
 msgid "Updated on"
 msgstr "Обновить"
@@ -56245,7 +56250,7 @@ msgstr "Примечание касательно поставщика: "
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:304
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:479
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
 #, c-format
 msgid "Vendor note: "
 msgstr "Примечание касательно поставщика: "
@@ -56385,7 +56390,7 @@ msgstr "Просмотр"
 msgid "View All"
 msgstr "Просмотреть все"
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:673
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:683
 #, fuzzy, c-format
 msgid "View ILL requests"
 msgstr "Места"
@@ -56438,8 +56443,8 @@ msgstr "Данные поставщика"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:540
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:639
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:550
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:649
 #, fuzzy
 msgid "View borrower details"
 msgstr "Данные поставщика"
@@ -56908,7 +56913,7 @@ msgstr "Предостережения относительно настройк
 msgid "We are upgrading from Koha %s to %s"
 msgstr "Мы модернизируем Коха от версии %s к %s, Вы должны также "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:340
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:350
 #, fuzzy, c-format
 msgid "We encountered an error:"
 msgstr "Я столкнулся с некоторыми проблемами."
@@ -57368,7 +57373,7 @@ msgstr "Ежегодно — повторяющиеся праздники"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:116
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:53
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:419
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:424
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:118
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:121
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:61
@@ -57451,7 +57456,7 @@ msgstr "Да, закрыть (Y)"
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:229
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:451
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:499
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:509
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:119
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:252
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:44
@@ -57483,7 +57488,7 @@ msgstr "Запасные данные для связи"
 msgid "Yes, delete patron attribute type"
 msgstr "Удалить вид атрибута посетителя"
 
-#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:425
+#: intranet-tmpl/prog/en/modules/admin/matching-rules.tt:426
 #, fuzzy, c-format
 msgid "Yes, delete record matching rule"
 msgstr "Удалить правило соответствия записей"
@@ -57524,7 +57529,7 @@ msgstr "Да, удалить этот признак"
 msgid "Yes, edit existing items"
 msgstr "Из существующей записи - "
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:420
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:425
 #, fuzzy, c-format
 msgid "Yes, print slip"
 msgstr "Распечатать карточку"
@@ -57884,7 +57889,7 @@ msgstr ""
 "У Вас есть %s ошибка(и) в Вашей МАРК-конфигурации. Исправьте их перед "
 "использованием Коха."
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:974
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:952
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -58076,8 +58081,8 @@ msgstr "Пожалуйста, выберите хотя бы один элеме
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:809
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:993
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
 #, fuzzy
 msgid "You must select checkout(s) to export"
 msgstr "Вы должны выбрать смету"
@@ -58250,7 +58255,7 @@ msgstr ""
 msgid "Your koha-conf.xml does not contain a valid upload_path."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:367
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:377
 #, c-format
 msgid "Your library has no usable email address. Please set it. "
 msgstr ""
@@ -58612,8 +58617,8 @@ msgstr ""
 msgid "a an the"
 msgstr " и "
 
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:343
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
 #, fuzzy, c-format
 msgid "about page"
 msgstr "Распечатать страницу"
@@ -58700,7 +58705,7 @@ msgid "and mark one currency as active."
 msgstr ""
 "Пожалуйста, отредактируйте одну денежную единицу и отметьте ее как активную."
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:648
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:653
 #, c-format
 msgid "and search for the \"data problems\" section"
 msgstr ""
@@ -58869,7 +58874,7 @@ msgstr ""
 msgid "biblionumber|borrowernumber"
 msgstr "biblio и biblionumber"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:327
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:331
 #, fuzzy, c-format
 msgid "budget_code"
 msgstr "Смета"
@@ -59025,7 +59030,7 @@ msgstr ""
 msgid "call.ogg"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:338
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:342
 #, fuzzy, c-format
 msgid "callnumber"
 msgstr "Шифр хранения"
@@ -59064,7 +59069,7 @@ msgstr "Дата получения"
 msgid "cataloging the record"
 msgstr "Поиск для каталогизации"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:308
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:312
 #, fuzzy, c-format
 msgid "ccode"
 msgstr "Штрих-код"
@@ -59164,7 +59169,7 @@ msgstr "содержит"
 msgid "controls for column visiblity in DataTables"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:326
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:330
 #, c-format
 msgid "copyno"
 msgstr ""
@@ -59344,7 +59349,7 @@ msgstr "Всего с учётом налогов (%s)"
 msgid "edit items"
 msgstr "Править экземпляры"
 
-#: intranet-tmpl/prog/en/modules/circ/overdue.tt:68
+#: intranet-tmpl/prog/en/modules/circ/overdue.tt:72
 #, c-format
 msgid "email"
 msgstr "email"
@@ -59549,7 +59554,7 @@ msgstr " имеет слишком много резервирований."
 msgid "here"
 msgstr "сдесь"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:277
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:281
 #, fuzzy, c-format
 msgid "holdingbranch"
 msgstr "Подразделение врем. хранения/выдачи"
@@ -59565,7 +59570,7 @@ msgstr ""
 msgid "holdingbranch defined"
 msgstr "подразделение врем. хранения/выдачи {holdingbranch} определено"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:266
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:270
 #, fuzzy, c-format
 msgid "homebranch"
 msgstr "Исходное подразделение"
@@ -59727,7 +59732,7 @@ msgid "is not"
 msgstr "Примечание для оборота"
 
 #. %1$s:  errmsgloo.debarred | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:638
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:643
 #, fuzzy, c-format
 msgid "is now debarred until %s."
 msgstr "%s %s месяц(а) %s до %s %s "
@@ -59836,7 +59841,7 @@ msgstr ""
 msgid "itemtype NOT mapped"
 msgstr "itemtype НЕ спроектирован"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:287
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:291
 #, fuzzy, c-format
 msgid "itype"
 msgstr "Тип единицы"
@@ -60004,7 +60009,7 @@ msgstr "Идёт загрузка…"
 msgid "loading_2.ogg"
 msgstr "Идёт загрузка…"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:300
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:304
 #, c-format
 msgid "loc"
 msgstr ""
@@ -60128,7 +60133,7 @@ msgstr "Добавление системного параметра"
 msgid "none"
 msgstr "ничего"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:298
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:302
 #, fuzzy, c-format
 msgid "nonpublic_note"
 msgstr "Непубличная заметка: "
@@ -60173,7 +60178,7 @@ msgstr "не известно"
 msgid "not running"
 msgstr "Нет предупреждений "
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:315
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:319
 #, fuzzy, c-format
 msgid "notforloan"
 msgstr "Не для выдачи"
@@ -60353,7 +60358,7 @@ msgstr ""
 msgid "previous"
 msgstr "назад"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:336
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:340
 #, fuzzy, c-format
 msgid "price"
 msgstr "Цена"
@@ -60372,7 +60377,7 @@ msgstr "pst"
 
 # Общедоступная заметка:
 # (длинное)
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:299
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:303
 #, fuzzy, c-format
 msgid "public_note"
 msgstr "Общедоступн. заметка:"
@@ -60454,7 +60459,7 @@ msgstr "Изображение успешно загружено."
 msgid "reopen basketgroup"
 msgstr "Закрыть группу пакетов"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:337
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:341
 #, fuzzy, c-format
 msgid "replacement price"
 msgstr "Цена для замены"
@@ -60895,8 +60900,8 @@ msgstr ""
 msgid "unrecognized command"
 msgstr "Возобновить посетителя"
 
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:758
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:737
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:893
 #, fuzzy, c-format
 msgid "until"
 msgstr "для юношества"
@@ -60912,7 +60917,7 @@ msgstr "для юношества"
 msgid "updated successfully"
 msgstr "Собрание «%s» обновлено успешно!"
 
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:325
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:329
 #, fuzzy, c-format
 msgid "uri"
 msgstr "Птн"
@@ -61160,7 +61165,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:24
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
-#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:610
+#: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:620
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:122
@@ -61171,7 +61176,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:149
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:381
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:100
-#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:348
+#: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:352
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:86
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:154
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:180
