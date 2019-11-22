@@ -4899,8 +4899,8 @@ CREATE TABLE `subscription` (
   `branchcode` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'default branches (items.homebranch)',
   `lastbranch` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `serialsadditems` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'does receiving this serial create an item record',
-  `staffdisplaycount` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'how many issues to show to the staff',
-  `opacdisplaycount` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'how many issues to show to the public',
+  `staffdisplaycount` INT(11) NULL DEFAULT NULL, -- how many issues to show to the staff
+  `opacdisplaycount` INT(11) NULL DEFAULT NULL, -- how many issues to show to the public
   `graceperiod` int(11) NOT NULL DEFAULT 0 COMMENT 'grace period in days',
   `enddate` date DEFAULT NULL COMMENT 'subscription end date',
   `closed` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'yes / no if the subscription is closed',
