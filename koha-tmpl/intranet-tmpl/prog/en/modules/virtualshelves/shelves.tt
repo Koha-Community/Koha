@@ -159,44 +159,42 @@
     </div>
 [% END %]
 
-    <table id="searchresults">
+    <table id="searchresults" class="dataTable">
+        <thead>
             <tr>
                 [% IF ( itemsloop ) %]<th class="checkall">&nbsp;</th>[% END %]
 
                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                <th>
+                [% IF sortfield == 'title' %]
+                    <th class="sorting_[% direction | html %]">
+                [% ELSE %]
+                    <th class="sorting">
+                [% END %]
                     <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
-                    [% IF sortfield == 'title' %]
-                        <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
-                    [% ELSE %]
-                        <img src="[% interface | html %]/[% theme | html %]/img/ascdesc.gif" alt="" />
-                    [% END %]
                 </th>
-                <th>
+                [% IF sortfield == 'author' %]
+                    <th class="sorting_[% direction | html %]">
+                [% ELSE %]
+                    <th class="sorting">
+                [% END %]
                     <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
-                   [% IF sortfield == 'author' %]
-                        <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
-                   [% ELSE %]
-                       <img src="[% interface | html %]/[% theme | html %]/img/ascdesc.gif" alt="" />
-                   [% END %]
-                 </th>
-                <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
-                    [% IF sortfield == 'dateadded' %]
-                        <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
-                    [% ELSE %]
-                        <img src="[% interface | html %]/[% theme | html %]/img/ascdesc.gif" alt="" />
-                    [% END %]
                 </th>
-                <th>
+                [% IF sortfield == 'dateadded' %]
+                    <th class="sorting_[% direction | html %]">
+                [% ELSE %]
+                    <th class="sorting">
+                [% END %]
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
+                </th>
+                [% IF sortfield == 'itemcallnumber' %]
+                     <th class="sorting_[% direction | html %]">
+                [% ELSE %]
+                    <th class="sorting">
+                [% END %]
                     <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
-                   [% IF sortfield == 'itemcallnumber' %]
-                        <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
-                   [% ELSE %]
-                       <img src="[% interface | html %]/[% theme | html %]/img/ascdesc.gif" alt="" />
-                   [% END %]
                  </th>
             </tr>
+        </thead>
         [% FOREACH itemsloo IN itemsloop %]
                 <tr>
             [% IF itemsloop %]
