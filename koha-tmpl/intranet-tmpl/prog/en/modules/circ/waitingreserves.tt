@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
@@ -27,7 +28,7 @@
                 [% IF Koha.Preference('CircSidebar') %]
                     <div class="col-sm-10 col-sm-push-2">
                 [% ELSE %]
-                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                    <div class="col-sm-12">
                 [% END %]
 
         <h2>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]
@@ -120,18 +121,33 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
+        var holdst_columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
+        var holdso_columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
+
         $(document).ready(function() {
-            $('#resultlist').tabs();
-            $("th a").hide();
-            $("#holdst,#holdso").dataTable($.extend(true, {}, dataTablesDefaults, {
+
+            KohaTable("holdst", {
                 "aoColumnDefs": [
-                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
-                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                    { "type": "anti-the", "targets" : [ "anti-the" ] },
+                    { "type": "title-string", "targets" : [ "title-string" ] }
                 ],
-                "sPaginationType": "four_button"
-            }));
+                "sPaginationType": "full"
+            }, holdst_columns_settings);
+
+            KohaTable("holdso", {
+                "aoColumnDefs": [
+                    { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                    { "type": "anti-the", "targets" : [ "anti-the" ] },
+                    { "type": "title-string", "targets" : [ "title-string" ] }
+                ],
+                "sPaginationType": "full"
+            }, holdso_columns_settings);
+
+            $('#resultlist').tabs();
+
         });
     </script>
 [% END %]

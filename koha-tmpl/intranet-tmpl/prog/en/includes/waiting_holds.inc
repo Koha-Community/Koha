@@ -13,7 +13,7 @@
             <th>Call number</th>
             <th>Copy number</th>
             <th>Enumeration</th>
-            <th>Action</th>
+            <th class="NoSort noExport">Actions</th>
         </tr>
     </thead>
     <tbody>
