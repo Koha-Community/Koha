@@ -104,6 +104,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
     <script>
     $(document).ready(function() {
         var suggestionst = $("#suggestionst").dataTable($.extend(true, {}, dataTablesDefaults, {

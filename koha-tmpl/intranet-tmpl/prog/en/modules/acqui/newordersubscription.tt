@@ -104,6 +104,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
     <script>
         function updateRowsVisibility(show_only_renewed) {
             if ( show_only_renewed ) {
