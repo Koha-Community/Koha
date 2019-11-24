@@ -85,7 +85,7 @@ sub printorders {
         my $pdftable = new PDF::Table();
         my $abaskets;
         my $arrbasket;
-        my @keys = ('Document', 'Qty', 'RRP tax exc.', 'RRP tax inc.', 'Discount', 'Discount price', 'GST rate', 'Total tax exc.', 'Total tax inc.');
+        my @keys = ('Document', 'Qty', 'RRP tax exc.', 'RRP tax inc.', 'Discount', 'Discount price', 'Tax rate', 'Total tax exc.', 'Total tax inc.');
         for my $bkey (@keys) {
             push(@$arrbasket, $bkey);
         }
@@ -204,7 +204,7 @@ sub printbaskets {
     my $abaskets;
     my $arrbasket;
     # header of the table
-    my @keys = ('Lot',  'Basket (No.)','Total RRP tax exc.', 'Total RRP tax inc.', 'GST rate', 'GST', 'Total discount', 'Total tax exc.', 'Total tax inc.');
+    my @keys = ('Lot',  'Basket (No.)','Total RRP tax exc.', 'Total RRP tax inc.', 'Tax rate', 'Tax', 'Total discount', 'Total tax exc.', 'Total tax inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
