@@ -61,7 +61,7 @@ sub printorders {
     
     my $abaskets;
     my $arrbasket;
-    my @keys = ('Basket (No.)', 'Document', 'Qty', 'RRP tax inc.', 'Discount', 'GST', 'Total tax exc.', 'Total tax inc.');
+    my @keys = ('Basket (no.)', 'Document', 'Qty', 'RRP tax inc.', 'Discount', 'Tax', 'Total tax exc.', 'Total tax inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
