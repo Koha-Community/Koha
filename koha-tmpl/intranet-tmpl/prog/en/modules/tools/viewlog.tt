@@ -232,7 +232,8 @@
                                         [% ELSE %]
                                                 [% IF ( loopro.module == 'CATALOGUING' ) %]
                                                     [% IF ( loopro.info.substr(0, 4) == 'item' ) %]
-                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.object | uri %]">Item [% loopro.object | html %]</a>
+                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object | uri %]&amp;biblionumber=[% loopro.biblionumber | uri %]&amp;bi=[% loopro.biblioitemnumber | uri %]#item[% loopro.object | uri %]">Item [% loopro.object | html %]</a> from
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]" title="Display detail for this biblio">Biblio [% loopro.biblionumber | html %]</a>
                                                     [% ELSIF ( loopro.info.substr(0, 6) == 'biblio' ) %]
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object | uri %]" title="Display detail for this biblio">Biblio [% loopro.object | html %]</a>
                                                     [% ELSE %]
