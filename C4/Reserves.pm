@@ -189,7 +189,7 @@ sub AddReserve {
             && ( $item->damaged && C4::Context->preference('AllowHoldsOnDamagedItems') || !$item->damaged )
 
             # Lastly, if this already has holds, we shouldn't make it waiting for the new hold
-            && !$item->holds->count )
+            && !$item->current_holds->count )
         {
             $priority = 0;
             $found = 'W';

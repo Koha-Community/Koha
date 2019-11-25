@@ -672,7 +672,7 @@ subtest '_koha_notify_reserve() tests' => sub {
 };
 
 subtest 'ReservesNeedReturns' => sub {
-    plan tests => 13;
+    plan tests => 18;
 
     my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
     my $item_info  = {
@@ -731,14 +731,33 @@ subtest 'ReservesNeedReturns' => sub {
     $hold->delete;
     $hold_1->delete;
 
-    $builder->build({ source => "Branchtransfer", value => {
-        itemnumber  => $item->itemnumber,
-        datearrived => undef,
-    } });
+    my $transfer = $builder->build_object({
+        class => "Koha::Item::Transfers",
+        value => {
+          itemnumber  => $item->itemnumber,
+          datearrived => undef,
+        }
+    });
     $item->damaged(0)->store;
     $hold = place_item_hold( $patron, $item, $library, $priority );
     is( $hold->found, undef, 'If ReservesNeedReturns is 0 but item in transit the hold must not be set to waiting' );
     is( $hold->priority, 1,  'If ReservesNeedReturns is 0 but item in transit the hold must not be set to waiting' );
+    $hold->delete;
+    $transfer->delete;
+
+    $hold = place_item_hold( $patron, $item, $library, $priority );
+    is( $hold->priority, 0, 'If ReservesNeedReturns is 0 and no other status, priority must have been set to 0' );
+    is( $hold->found, 'W', 'If ReservesNeedReturns is 0 and no other status, found must have been set waiting' );
+    $hold_1 = place_item_hold( $patron, $item, $library, $priority );
+    is( $hold_1->priority, 1, 'If ReservesNeedReturns is 0 but item has a hold priority is 1' );
+    $hold_1->suspend(1)->store; # We suspend the hold
+    $hold->delete; # Delete the waiting hold
+    $hold = place_item_hold( $patron, $item, $library, $priority );
+    is( $hold->priority, 0, 'If ReservesNeedReturns is 0 and other hold(s) suspended, priority must have been set to 0' );
+    is( $hold->found, 'W', 'If ReservesNeedReturns is 0 and other  hold(s) suspended, found must have been set waiting' );
+
+
+
 
     t::lib::Mocks::mock_preference('ReservesNeedReturns', 1); # Don't affect other tests
 };
