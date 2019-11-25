@@ -71,8 +71,8 @@ GetOptions(
     'category=s'      => $borrower_category,
     'skip-category=s' => $skip_borrower_category,
     'list-categories' => \$list_categories,
-    'itemtype=s'      => \$itemtype,
-    'skip-itemtype=s' => \$skip_itemtype,
+    'itemtype=s'      => $itemtype,
+    'skip-itemtype=s' => $skip_itemtype,
     'list-itemtypes'  => \$list_itemtypes,
 );
 
