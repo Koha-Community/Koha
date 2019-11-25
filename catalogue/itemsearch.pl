@@ -143,10 +143,11 @@ if (scalar keys %params > 0) {
         my $q = shift @q;
         my $op = shift @op;
         if (defined $q and $q ne '') {
+            if (C4::Context->preference("marcflavour") ne "UNIMARC" && $field eq 'publicationyear') {
+                $field = 'copyrightdate';
+            }
+
             if ($i == 0) {
-                if (C4::Context->preference("marcflavour") ne "UNIMARC" && $field eq 'publicationyear') {
-                    $field = 'copyrightdate';
-                }
                 $f = {
                     field => $field,
                     query => $q,
