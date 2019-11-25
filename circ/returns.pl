@@ -627,19 +627,21 @@ $template->param(
     AudioAlerts        => C4::Context->preference("AudioAlerts"),
 );
 
-my $item_from_barcode = Koha::Items->find({barcode => $barcode }); # How many times do we fetch this item?!?
-if ( $item_from_barcode ) {
-    $itemnumber = $item_from_barcode->itemnumber;
-    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
-    if ( $holdingBranch and $collectionBranch ) {
-        $holdingBranch //= '';
-        $collectionBranch //= $returnbranch;
-        if ( ! ( $holdingBranch eq $collectionBranch ) ) {
-            $template->param(
-              collectionItemNeedsTransferred => 1,
-              collectionBranch => $collectionBranch,
-              itemnumber => $itemnumber,
-            );
+if ( $barcode ) {
+    my $item_from_barcode = Koha::Items->find({barcode => $barcode }); # How many times do we fetch this item?!?
+    if ( $item_from_barcode ) {
+        $itemnumber = $item_from_barcode->itemnumber;
+        my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+        if ( $holdingBranch and $collectionBranch ) {
+            $holdingBranch //= '';
+            $collectionBranch //= $returnbranch;
+            if ( ! ( $holdingBranch eq $collectionBranch ) ) {
+                $template->param(
+                  collectionItemNeedsTransferred => 1,
+                  collectionBranch => $collectionBranch,
+                  itemnumber => $itemnumber,
+                );
+            }
         }
     }
 }
