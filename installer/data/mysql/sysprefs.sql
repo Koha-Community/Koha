@@ -160,6 +160,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('DisplayLibraryFacets',  'holding',  'home|holding|both',  'Defines which library facets to display.',  'Choice'),
 ('DisplayMultiPlaceHold','1','','Display the ability to place multiple holds or not','YesNo'),
 ('DisplayOPACiconsXSLT','1','','If ON, displays the format, audience, and material type icons in XSLT MARC21 results and detail pages in the OPAC.','YesNo'),
+('DumpSearchQueryTemplate',0,'','Add the search query being passed to the search engine into the template for debugging','YesNo'),
 ('DumpTemplateVarsIntranet',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the staff intranet.',  'YesNo'),
 ('DumpTemplateVarsOpac',  '0', NULL ,  'If enabled, dump all Template Toolkit variable to a comment in the html source for the opac.',  'YesNo'),
 ('EasyAnalyticalRecords','0','','If on, display in the catalogue screens tools to easily setup analytical record relationships','YesNo'),

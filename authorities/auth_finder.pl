@@ -77,6 +77,7 @@ if ( $op eq "do_search" ) {
         \@marclist, \@and_or, \@excluding, \@operator,
         \@value, $authtypecode, $orderby
     );
+    $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');
     my $offset = $startfrom * $resultsperpage;
     my ( $results, $total ) =
         $searcher->search_auth_compat( $search_query, $offset,
