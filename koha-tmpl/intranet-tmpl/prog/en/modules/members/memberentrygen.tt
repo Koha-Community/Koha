@@ -320,6 +320,7 @@
 
 [% IF show_guarantor || guarantor %]
     [% SET possible_relationships = Koha.Preference('borrowerRelationship') %]
+    <span id="memberentry_guarantor_anchor">
     <fieldset id="memberentry_guarantor" class="rows">
         <legend>Guarantor information</legend>
 
@@ -357,6 +358,7 @@
                             [% END %]
 
                             <li>
+                            </span>
                                 <label for="relationship">Relationship: </label>
                                 <span>[% r.relationship | html %]</span>
                             </li>
@@ -446,6 +448,7 @@
                 [% END %]
             </ol>
     </fieldset>
+    </span>
 [% END %]
 
 
@@ -1273,9 +1276,11 @@
                 if( $("#entryform:visible").length ) {
                     toggle_to = "#quick_add_form label";
                     toggle_from = "#entryform label";
+                    $("#memberentry_guarantor").appendTo("#quick_add_form");
                 } else {
                     toggle_to="#entryform label";
                     toggle_from = "#quick_add_form label";
+                    $("#memberentry_guarantor").appendTo("#memberentry_guarantor_anchor");
                 }
                 $(toggle_from).each(function() {
                     var input_label = $(this).attr('for');
@@ -1293,6 +1298,7 @@
                 $("#quick_add_form").validate();
                 if( $("#quick_add_form").valid()){
                     $('.toggle_quick_add').click();
+                    $("#memberentry_guarantor").appendTo("#memberentry_guarantor_anchor");
                     $('#saverecord').click();
                 }
                 else {return false;}
@@ -1340,7 +1346,6 @@
                 $("#entryform,#saverecord").hide();
                 [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
                 var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field | html %]",[% END %]];
-                var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
                 $("#entryform label").each(function () {
                     var input_label = $(this).attr('for');
                     if ( input_label == 'sex-female' ) {
@@ -1349,7 +1354,6 @@
                     else if ( input_label == 'btitle' ) {
                         input_label='title';
                     }
-                    if ( skipped_fields.indexOf( input_label ) != -1 ) { input_label=""; }
                     if( qaddfields.indexOf( input_label ) != -1 || $(this).attr('class') == 'required' ){
                        $(this).parent().clone().appendTo("#quick_add_list");
                        [% UNLESS mandatorypassword %]
@@ -1357,15 +1361,13 @@
                        [% END %]
                     }
                 });
-                    if( $("#memberentry_guarantor").length ) {
-                        $("#memberentry_guarantor").clone().appendTo("#quick_add_list").css("margin",0);
-                        $("#quick_add_form #memberentry_guarantor").append("<p>" + _("Note: Quick add guarantor form populates address fields in full form") + "</p>");
-                        $("#quick_add_list #guarantordelete").prop('id','qagd');
-                    }
-                $("#qagd").click(function() { $("#guarantordelete").click(); });
+                if ( $("#memberentry_guarantor").length ) {
+                    $("#memberentry_guarantor").appendTo("#quick_add_form");
+                }
                 $("#quick_add_form").show();
             });
         [% END %]
+        $("#guarantor_template").hide();
 
     </script>
     [% Asset.js("js/members.js") | $raw %]

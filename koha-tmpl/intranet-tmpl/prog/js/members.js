@@ -281,9 +281,7 @@ $(document).ready(function(){
 
     $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
 
-    $('#guarantor_template').hide();
-
-    $('#guarantor_search').on('click', function(e) {
+    $('body').on('click', '#guarantor_search', function(e) {
         e.preventDefault();
         var newin = window.open('guarantor_search.pl','popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
     });
