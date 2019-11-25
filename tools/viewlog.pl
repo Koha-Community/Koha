@@ -54,6 +54,7 @@ my $user     = $input->param("user") // '';
 my @actions  = $input->multi_param("actions");
 my @interfaces  = $input->multi_param("interfaces");
 my $object   = $input->param("object");
+my $object_type = $input->param("object_type");
 my $info     = $input->param("info");
 my $datefrom = $input->param("from");
 my $dateto   = $input->param("to");
@@ -135,7 +136,7 @@ if ($do_it) {
     $search_params{interface} = { -in => [ @interfaces ] } if ( defined $interfaces[0] && $interfaces[0] ne '' );
 
 
-    if ( @modules == 1 && $modules[0] eq 'CATALOGUING' ) {
+    if ( @modules == 1 && $object_type eq 'biblio' ) {
         # Handle 'Modification log' from cataloguing
         my @itemnumbers = Koha::Items->search({ biblionumber => $object })->get_column('itemnumber');
         $search_params{'-or'} = [
