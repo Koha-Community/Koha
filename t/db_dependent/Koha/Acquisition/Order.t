@@ -174,7 +174,7 @@ subtest 'subscription' => sub {
 };
 
 subtest 'duplicate_to | add_item' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -239,6 +239,13 @@ subtest 'duplicate_to | add_item' => sub {
         is( $duplicated_order->items->count, 0,
             'Items should never be copied if the original order is created from a subscription'
         );
+    };
+
+    subtest 'Regression tests' => sub {
+        plan tests => 1;
+
+        my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
+        is($duplicated_order->invoiceid, undef, "invoiceid should be set to null for a new duplicated order");
     };
 
     $schema->storage->txn_rollback;
