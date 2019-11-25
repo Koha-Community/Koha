@@ -83,6 +83,9 @@ if ($query) {
         ( undef, $builtquery, undef, $query_cgi, undef, undef, undef, undef, undef, undef ) =
           $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
     }
+
+    $template->param( search_query => $builtquery ) if C4::Context->preference('DumpSearchQueryTemplate');
+
     # find results
     my ( $error, $marcresults, $total_hits ) = $searcher->simple_search_compat($builtquery, $results_per_page * ($page - 1), $results_per_page);
 

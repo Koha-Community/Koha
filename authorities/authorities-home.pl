@@ -111,6 +111,7 @@ if ( $op eq "do_search" ) {
         }
     );
 
+    $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');
     $template->param(
         csrf_token => Koha::Token->new->generate_csrf({
             session_id => scalar $query->cookie('CGISESSID'),

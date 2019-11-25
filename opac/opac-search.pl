@@ -565,6 +565,8 @@ if (C4::Context->preference('OpacSuppression')) {
     }
 );
 
+$template->param( search_query => $query ) if C4::Context->preference('DumpSearchQueryTemplate');
+
 sub _input_cgi_parse {
     my @elements;
     my $query_cgi = shift or return @elements;
