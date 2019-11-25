@@ -223,6 +223,7 @@ sub duplicate_to {
                 ordernumber
                 received_on
                 datereceived
+                invoiceid
                 datecancellationprinted
                 cancellationreason
                 purchaseordernumber
