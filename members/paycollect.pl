@@ -143,7 +143,7 @@ if ( $selected_accts ) {
     }
     my @acc = split /,/, $selected_accts;
 
-    @selected_accountlines = koha::account::lines->search(
+    @selected_accountlines = Koha::Account::Lines->search(
         {
             borrowernumber    => $borrowernumber,
             amountoutstanding => { '<>' => 0 },
