@@ -22,9 +22,11 @@ BEGIN {
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-my $search_module = new Test::MockModule('C4::Search');
+my $engine = C4::Context->preference("SearchEngine") // 'Zebra';
+my $search_module = new Test::MockModule("Koha::SearchEngine::${engine}::Search");
 
-$search_module->mock('SimpleSearch', \&Mock_SimpleSearch );
+$search_module->mock('simple_search_compat', \&Mock_simple_search_compat );
+
 my $errors;
 my $context = C4::Context->new;
 
@@ -95,8 +97,9 @@ sub _add_biblio_with_isbn {
 
 # Mocked subs
 
-# C4::Search::SimpleSearch
-sub Mock_SimpleSearch {
+# Koha::SearchEngine::${SearchEngine}::Search::simple_search_compat
+sub Mock_simple_search_compat {
+    my $self = shift;
     my $query = shift;
     my @results;
 
