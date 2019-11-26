@@ -331,12 +331,24 @@ if($allDebarments) {
 }
 
 # Handle unsubscribe requests from GDPR consent form, depends on UnsubscribeReflectionDelay preference
-Koha::Patrons->search_unsubscribed->lock({ expire => 1, remove => 1, verbose => $verbose });
+my $unsubscribed_patrons = Koha::Patrons->search_unsubscribed;
+$unsubscribed_patrons->lock( { expire => 1, remove => 1 } );
+say sprintf "Locked %d patrons", $unsubscribed_patrons->count if $verbose;
+
 # Anonymize patron data, depending on PatronAnonymizeDelay
-Koha::Patrons->search_anonymize_candidates({ locked => 1 })->anonymize({ verbose => $verbose });
+my $anonymize_candidates = Koha::Patrons->search_anonymize_candidates( { locked => 1 } );
+$anonymize_candidates->anonymize;
+say sprintf "Anonymized %s patrons", $anonymize_candidates->count if $verbose;
+
 # Remove patron data, depending on PatronRemovalDelay (will raise an exception if problem encountered
-eval { Koha::Patrons->search_anonymized->delete({ move => 1, verbose => $verbose }) };
-warn $@ if $@;
+my $anonymized_patrons = Koha::Patrons->search_anonymized;
+$anonymized_patrons->delete( { move => 1 } );
+if ($@) {
+    warn $@;
+}
+elsif ($verbose) {
+    say sprintf "Deleted %d patrons", $anonymized_patrons->count;
+}
 
 if( $pExpSelfReg ) {
     DeleteExpiredSelfRegs();
