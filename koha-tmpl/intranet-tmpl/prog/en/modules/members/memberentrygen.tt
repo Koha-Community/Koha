@@ -1247,8 +1247,10 @@
                 }
             [% END %]
 
-            [% IF guarantor %]
-                select_user( '[% guarantor.borrowernumber | html %]', [% To.json( guarantor.unblessed ) | $raw %] );
+            [% IF new_guarantors %]
+                [% FOREACH g IN new_guarantors %]
+                    select_user( '[% g.patron.borrowernumber | html %]', [% To.json( g.patron.unblessed ) | $raw %], '[% g.relationship | html %]' );
+                [% END %]
             [% END %]
 
             $("#cn_max").hide();

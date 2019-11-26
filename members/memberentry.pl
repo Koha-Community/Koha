@@ -261,6 +261,19 @@ if ( ( $op eq 'insert' ) and !$nodouble ) {
     if ( $patrons->count > 0) {
         $nodouble = 0;
         $check_member = $patrons->next->borrowernumber;
+
+
+        my @new_guarantors;
+        my @new_guarantor_id           = $input->multi_param('new_guarantor_id');
+        my @new_guarantor_relationship = $input->multi_param('new_guarantor_relationship');
+        foreach my $gid ( @new_guarantor_id ) {
+            my $patron = Koha::Patrons->find( $gid );
+            my $relationship = shift( @new_guarantor_relationship );
+            next unless $patron;
+            my $g = { patron => $patron, relationship => $relationship };
+            push( @new_guarantors, $g );
+        }
+        $template->param( new_guarantors => \@new_guarantors );
     }
 }
 

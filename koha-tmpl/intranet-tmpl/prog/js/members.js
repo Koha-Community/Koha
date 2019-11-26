@@ -165,7 +165,7 @@ function update_category_code(category_code) {
     $(mytables).find(" li[data-category_code='']").show();
 }
 
-function select_user(borrowernumber, borrower) {
+function select_user(borrowernumber, borrower, relationship) {
     let is_guarantor = $(`.guarantor-details[data-borrowernumber=${borrower.borrowernumber}]`).length;
 
     if ( is_guarantor ) {
@@ -205,6 +205,10 @@ function select_user(borrowernumber, borrower) {
 
         $('#guarantor_relationships').append( fieldset );
         fieldset.show();
+
+        if ( relationship ) {
+            fieldset.find('.new_guarantor_relationship').val(relationship);
+        }
     }
 
     return 0;
