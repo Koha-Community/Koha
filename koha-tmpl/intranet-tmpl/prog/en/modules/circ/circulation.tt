@@ -869,12 +869,6 @@
                                 [% END %]
                             </li>
 
-                            [% IF Koha.Preference('ArticleRequests') %]
-                                <li>
-                                    <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count | html %] Article requests</a>
-                                </li>
-                            [% END %]
-
                             <li><a id="debarments-tab-link" href="#reldebarments">[% debarments.count | html %] Restrictions</a></li>
 
                             [% SET enrollments = patron.get_club_enrollments(1) %]
