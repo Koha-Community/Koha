@@ -167,7 +167,6 @@ function update_category_code(category_code) {
 
 function select_user(borrowernumber, borrower) {
     let is_guarantor = $(`.guarantor-details[data-borrowernumber=${borrower.borrowernumber}]`).length;
-    console.log("LEN: "  + is_guarantor );
 
     if ( is_guarantor ) {
         alert("Patron is already a guarantor for this patron");
@@ -203,7 +202,6 @@ function select_user(borrowernumber, borrower) {
         $('#relationship').find('option:eq(0)').prop('selected', true);
 
         fieldset.find('.guarantor-details').first().attr( 'data-borrowernumber', borrower.borrowernumber );
-        console.log( fieldset.find('.guarantor-details').first().data() );
 
         $('#guarantor_relationships').append( fieldset );
         fieldset.show();
