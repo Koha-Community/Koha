@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- TEMPLATE FILE: [% template.name.split('/').last | html %] -->
 
+[% USE raw %]
 [% USE Koha %]
 [% IF Koha.Preference('DumpTemplateVarsOpac') %]
     [% TRY %]
@@ -9,7 +10,7 @@
         <!--
         [% FILTER replace('<!--', '<!- -') %]
             [% FILTER replace('-->', '- ->') %]
-                [% Dumper.dump( Stash.stash() ) | html %]
+                [% Dumper.dump( Stash.stash() ) | $raw %]
             [% END %]
         [% END %]
         -->
