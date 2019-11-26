@@ -2,6 +2,7 @@
 <!-- TEMPLATE FILE: [% template.name.split('/').last | html %] -->
 
 [% USE Koha %]
+[% USE raw %]
 [% IF Koha.Preference('DumpTemplateVarsIntranet') %]
     [% TRY %]
         [% USE Stash %]
@@ -9,7 +10,7 @@
         <!--
         [% FILTER replace('<!--', '<!- -') %]
             [% FILTER replace('-->', '- ->') %]
-                [% Dumper.dump( Stash.stash() ) | html %]
+                [% Dumper.dump( Stash.stash() ) | $raw %]
             [% END %]
         [% END %]
         -->
