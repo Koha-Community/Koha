@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Items;
 
 use base qw(Koha::Object);
 
@@ -30,6 +31,19 @@ Koha::Statistic - Koha Statistic Object class
 =head1 API
 
 =head2 Class methods
+
+=head3 item
+
+my $item = $statistic->item;
+
+Return the item associated to this statistic.
+
+=cut
+
+sub item {
+    my ( $self ) = @_;
+    return Koha::Items->find( $self->itemnumber );
+}
 
 =head2 Internal methods
 
