@@ -177,7 +177,7 @@
                                       <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' | html %]&amp;categorycode=[% rule.categorycode || '*' | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
                                     <td>
-                                        [% IF note.defined %]
+                                        [% IF note.defined && note != '' %]
                                             <a name="viewnote" data-toggle="popover" title="Note" data-content="[% note | html %]" data-placement="top" data-trigger="hover">View note</a>
                                         [% ELSE %]<span>&nbsp;</span>[% END %]
                                     </td>
@@ -247,10 +247,10 @@
                                         [% END %]
                                     </td>
                                     <td>[% no_auto_renewal_after | html %]</td>
-                                    <td>[% no_auto_renewal_after_hard_limit | html %]</td>
+                                    <td>[% no_auto_renewal_after_hard_limit | $KohaDates %]</td>
                                     <td>[% reservesallowed | html %]</td>
                                     <td>
-                                        [% IF holds_per_day.defined && holds != '' %]
+                                        [% IF holds_per_day.defined && holds_per_day != '' %]
                                             [% holds_per_day | html %]
                                         [% ELSE %]
                                             <span>Unlimited</span>
