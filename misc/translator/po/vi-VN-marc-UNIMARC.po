@@ -6,24 +6,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-05-20 00:04-0300\n"
-"PO-Revision-Date: 2014-10-08 03:44+0000\n"
-"Last-Translator: dhoang <dung.hoang@dlcorp.com.vn>\n"
+"POT-Creation-Date: 2019-11-14 21:29-0300\n"
+"PO-Revision-Date: 2019-10-14 04:55+0000\n"
+"Last-Translator: GI_Hanoi <bibliothek-hanoi@goethe.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Pootle 2.5.0\n"
-"X-POOTLE-MTIME: 1412739873.0\n"
+"X-Generator: Pootle 2.8\n"
+"X-POOTLE-MTIME: 1571028914.119077\n"
 "X-Pootle-Path: /vi/18.05/vi-VN-marc-UNIMARC.po\n"
 "X-Pootle-Revision: 1\n"
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:368
 #, c-format
 msgid "%%20"
-msgstr ""
+msgstr "%%20"
 
 #. %1$s:  ELSE 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:51
@@ -1011,6 +1011,14 @@ msgid ""
 "@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
 "\"/> </xsl:for-each> "
 msgstr ""
+"<xsl:variable name=\"title\" select=\"marc:subfield[@code='a']\"/> <xsl:"
+"variable name=\"ntitle\" select=\"translate($title, '&#x0098;&#x009C;&#xC29C;"
+"&#xC29B;&#xC298;&#xC288;&#xC289;','')\"/> <xsl:value-of select=\"$ntitle\" /"
+"> <xsl:if test=\"marc:subfield[@code='e']\"> <xsl:text> : </xsl:text> <xsl:"
+"for-each select=\"marc:subfield[@code='e']\"> <xsl:value-of select=\".\"/> </"
+"xsl:for-each> </xsl:if> <xsl:for-each select=\"marc:subfield[@code='h' or "
+"@code='i' or @code='v']\"> <xsl:text>, </xsl:text> <xsl:value-of select=\"."
+"\"/> </xsl:for-each> "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:21
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124f.tt:23
@@ -1195,6 +1203,11 @@ msgstr "Bạn đọc"
 msgid "Audience: "
 msgstr "Bạn đọc: "
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:509
+#, c-format
+msgid "Audio file"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:45
 #, c-format
 msgid "Authority search results"
@@ -1343,9 +1356,9 @@ msgid "Biography:"
 msgstr "Biography:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:58
-#, fuzzy, c-format
+#, c-format
 msgid "Biography: "
-msgstr "Biography:"
+msgstr "Tiểu sử:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:152
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:146
@@ -2319,9 +2332,9 @@ msgid "Hemisphere:"
 msgstr "Hemisphere:"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:3
-#, fuzzy, c-format
+#, c-format
 msgid "Hide coded information filters"
-msgstr "Lọc thông tin mã hóa"
+msgstr "Ẩn các bộ lọc thông tin mã hóa"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:22
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:24
@@ -2357,12 +2370,12 @@ msgstr "Số ISSN: "
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:394
 #, c-format
 msgid "IdRef"
-msgstr ""
+msgstr "IdRef"
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:396
 #, c-format
 msgid "Idref"
-msgstr ""
+msgstr "IdRef"
 
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:63
 #, c-format
@@ -2499,9 +2512,9 @@ msgid "Items available for loan: "
 msgstr "Tài liệu sẵn sàng cho mượn: "
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:256
-#, fuzzy, c-format
+#, c-format
 msgid "Items available for reference: "
-msgstr "Tài liệu sẵn sàng khác: "
+msgstr "(Các) Tài liệu sẵn sàng cho tham khảo: "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:749
@@ -3159,7 +3172,7 @@ msgstr "Nguồn trực tuyến: "
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACResults.xsl:114
 #, c-format
 msgid "OpenURL"
-msgstr ""
+msgstr "OpenURL"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:267
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:269
@@ -3285,9 +3298,9 @@ msgid "Periodicity"
 msgstr "Thời gian phát hành"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:146
-#, fuzzy, c-format
+#, c-format
 msgid "Periodicity: "
-msgstr "Thời gian phát hành"
+msgstr "Thời gian phát hành:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:816
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:818
@@ -3318,9 +3331,9 @@ msgid "Physical presentation"
 msgstr "Mô tả vật lý"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:24
-#, fuzzy, c-format
+#, c-format
 msgid "Physical presentation: "
-msgstr "Mô tả vật lý"
+msgstr "Mô tả vật lý:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:262
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128b.tt:264
@@ -3355,6 +3368,11 @@ msgstr "Piece-Analytic Level"
 #, c-format
 msgid "Plate Carree"
 msgstr "Plate Carree"
+
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:532
+#, fuzzy, c-format
+msgid "Play this sample"
+msgstr "l - samples"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:12
 #, c-format
@@ -3520,9 +3538,9 @@ msgid "Regularity"
 msgstr "Quy tắc"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:170
-#, fuzzy, c-format
+#, c-format
 msgid "Regularity: "
-msgstr "Quy tắc"
+msgstr "Quy tắc:"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_120.tt:73
 #, c-format
@@ -3694,9 +3712,9 @@ msgid "Serial type"
 msgstr "Phân loại kiểu Ấn Phẩm"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:133
-#, fuzzy, c-format
+#, c-format
 msgid "Serial type: "
-msgstr "Phân loại kiểu Ấn Phẩm"
+msgstr "Loại tài liệu"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:131
 #: opac-tmpl/bootstrap/en/includes/subtypes_unimarc.inc:125
@@ -3717,9 +3735,9 @@ msgid "Set Level"
 msgstr "Set Level"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "Show coded information filters"
-msgstr "Lọc thông tin mã hóa"
+msgstr "Hiện các bộ lọc thông tin mã hóa"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:52
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_124g.tt:54
@@ -5002,7 +5020,7 @@ msgid "ac- sticker"
 msgstr "ac- sticker"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:426
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:530
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:580
 #, c-format
 msgid "acdeq"
 msgstr "acdeq"
@@ -5190,7 +5208,7 @@ msgid "aperture card"
 msgstr "aperture card"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:398
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:502
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:552
 #, c-format
 msgid "aq"
 msgstr "aq"
@@ -5434,7 +5452,7 @@ msgid "bathymetry - soundings"
 msgstr "bathymetry - soundings"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:434
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:538
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:588
 #, c-format
 msgid "bc"
 msgstr "bc"
@@ -5902,7 +5920,7 @@ msgid "catechism"
 msgstr "catechism"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:419
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:523
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:573
 #, c-format
 msgid "cdn"
 msgstr "cdn"
@@ -6106,9 +6124,9 @@ msgid "coats of arms"
 msgstr "coats of arms"
 
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:103
-#, fuzzy, c-format
+#, c-format
 msgid "coauthor"
-msgstr "Coauthor"
+msgstr "coauthor"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:104
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_117.tt:106
@@ -7152,8 +7170,8 @@ msgstr "felt-tip pen"
 
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:446
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:453
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:550
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:557
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:600
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:607
 #, c-format
 msgid "fghkdlmor"
 msgstr "fghkdlmor"
@@ -7373,7 +7391,7 @@ msgstr "games and recreation"
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:395
 #, c-format
 msgid "gb_page_center[600,500]"
-msgstr ""
+msgstr "gb_page_center[600,500]"
 
 #: intranet-tmpl/prog/en/includes/subtypes_unimarc.inc:81
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_140.tt:91
