@@ -165,6 +165,10 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-25 20:32:12
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gsPR8PuUUZHFUkr3MIbTpw
 
+__PACKAGE__->add_columns(
+    '+keep_for_pseudonymization' => { is_boolean => 1 },
+);
+
 sub koha_object_class {
     'Koha::Patron::Attribute::Type';
 }

@@ -60,6 +60,12 @@ if( CheckVersion( $DBversion ) ) {
         |);
     }
 
+    unless( column_exists('borrower_attribute_types', 'keep_for_pseudonymization') ) {
+        $dbh->do(q|
+            ALTER TABLE borrower_attribute_types ADD COLUMN `keep_for_pseudonymization` TINYINT(1) NOT NULL DEFAULT 0 AFTER `class`
+        |);
+    }
+
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 24151 - Add pseudonymized_transactions tables and sysprefs for Pseudonymization)\n";

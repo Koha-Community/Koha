@@ -228,6 +228,7 @@ CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron field
   `display_checkout` tinyint(1) NOT NULL default 0,-- defines if this field displays in checkout screens
   `category_code` VARCHAR(10) NULL DEFAULT NULL,-- defines a category for an attribute_type
   `class` VARCHAR(255) NOT NULL DEFAULT '',-- defines a class for an attribute_type
+  `keep_for_pseudonymization` tinyint(1) NOT NULL default 0, -- defines if this field is copied to anonymized_borrower_attributes (1 for yes, 0 for no)
   PRIMARY KEY  (`code`),
   KEY `auth_val_cat_idx` (`authorised_value_category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
