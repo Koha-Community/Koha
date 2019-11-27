@@ -174,8 +174,14 @@ sub import_patrons {
         elsif ($extended) {
             if ( defined($matchpoint_attr_type) ) {
                 foreach my $attr (@$patron_attributes) {
-                    if ( $attr->{code} eq $matchpoint and $attr->{value} ne '' ) {
-                        my @borrowernumbers = $matchpoint_attr_type->get_patrons( $attr->{value} );
+                    if ( $attr->{code} eq $matchpoint and $attr->{attribute} ne '' ) {
+                        my @borrowernumbers = Koha::Patron::Attributes->search(
+                            {
+                                code      => $matchpoint_attr_type->code,
+                                attribute => $attr->{attribute}
+                            }
+                        )->get_column('borrowernumber');
+
                         $borrowernumber = $borrowernumbers[0] if scalar(@borrowernumbers) == 1;
                         $patron = Koha::Patrons->find( $borrowernumber );
                         last;

@@ -217,7 +217,6 @@ my $params_4 = { file => $handle_4, matchpoint => $attribute->{code}, };
 
 # When ...
 my $result_4 = $patrons_import->import_patrons($params_4);
-use Data::Printer colored => 1; warn p $result_4;
 
 # Then ...
 is($result_4->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons with extended user');
