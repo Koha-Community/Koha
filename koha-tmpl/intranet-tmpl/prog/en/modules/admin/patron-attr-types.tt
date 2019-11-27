@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE scalar %]
@@ -134,6 +135,18 @@
 	    [% END %]
             <span>Check to show this attribute in the brief information panel in the patron's record (staff interface).</span>
        </li>
+
+        [% IF Koha.Preference('Pseudonymization') %]
+            <li>
+                <label for="keep_for_pseudonymization">Keep for pseudonymization: </label>
+                [% IF attribute_type AND attribute_type.keep_for_pseudonymization %]
+                    <input type="checkbox" id="keep_for_pseudonymization" name="keep_for_pseudonymization" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" id="keep_for_pseudonymization" name="keep_for_pseudonymization" />
+                [% END %]
+                <span>Check to make this attribute copied to the patron's pseudonymized attributes.</span>
+            </li>
+        [% END %]
 
         <li><label for="authorised_value_category">Authorized value category: </label>
             <select name="authorised_value_category" id="authorised_value_category">
