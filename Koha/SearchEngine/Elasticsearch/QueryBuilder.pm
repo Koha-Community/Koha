@@ -632,6 +632,7 @@ our %index_field_convert = (
     'mus' => 'rtype',
     'lc-card' => 'lc-card-number',
     'sn' => 'local-number',
+    'biblionumber' => 'local-number',
     'yr' => 'date-of-publication',
     'pubdate' => 'date-of-publication',
     'acqdate' => 'date-of-acquisition',
