@@ -1916,6 +1916,20 @@ CREATE TABLE `pseudonymized_transactions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table borrower_attributes
+--
+
+DROP TABLE IF EXISTS pseudonymized_borrower_attributes;
+CREATE TABLE pseudonymized_borrower_attributes ( -- association table between pseudonymized_transactions and borrower_attributes
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Row id field
+  `transaction_id` int(11) NOT NULL,
+  `code` varchar(10) NOT NULL, -- foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
+  `attribute` varchar(255) default NULL, -- custom patron field value
+  CONSTRAINT `pseudonymized_borrower_attributes_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `pseudonymized_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `anonymized_borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table subscription_frequencies
 --
 

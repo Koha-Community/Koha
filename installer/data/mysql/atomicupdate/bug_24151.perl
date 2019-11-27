@@ -47,6 +47,19 @@ if( CheckVersion( $DBversion ) ) {
         VALUES ('PseudonymizationTransactionFields','','datetime,transaction_branchcode,transaction_type,itemnumber,itemtype,holdingbranch,location,itemcallnumber,ccode','Transaction fields to copy to the pseudonymized_transactions table','multiple')
     |);
 
+    unless( TableExists( 'pseudonymized_borrower_attributes' ) ) {
+        $dbh->do(q|
+            CREATE TABLE pseudonymized_borrower_attributes (
+              `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Row id field
+              `transaction_id` int(11) NOT NULL,
+              `code` varchar(10) NOT NULL,
+              `attribute` varchar(255) default NULL,
+              CONSTRAINT `pseudonymized_borrower_attributes_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `pseudonymized_transactions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `anonymized_borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        |);
+    }
+
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 24151 - Add pseudonymized_transactions tables and sysprefs for Pseudonymization)\n";
