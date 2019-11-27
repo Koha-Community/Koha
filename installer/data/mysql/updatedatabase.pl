@@ -17632,6 +17632,17 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '18.12.00.024';
 if ( CheckVersion($DBversion) ) {
 
+    # Fixup any pre-existing bad suggestedby, manageddate, accepteddate dates
+    $dbh->do(
+        "UPDATE suggestions SET suggesteddate = '1970-01-01' WHERE suggesteddate = '0000-00-00';"    
+    );
+    $dbh->do(
+        "UPDATE suggestions SET manageddate = '1970-01-01' WHERE manageddate = '0000-00-00';"    
+    );
+    $dbh->do(
+        "UPDATE suggestions SET accepteddate = '1970-01-01' WHERE accepteddate = '0000-00-00';"    
+    );
+
     # Add constraint for suggestedby
     unless ( foreign_key_exists( 'suggestions', 'suggestions_ibfk_suggestedby' ) )
     {
