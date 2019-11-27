@@ -495,7 +495,8 @@ sub parse_extended_patron_attributes {
 sub patron_attributes_form {
     my $template = shift;
 
-    my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+    my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+    my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
 
     my %items_by_class;
     while ( my $attr_type = $attribute_types->next ) {

@@ -166,7 +166,8 @@ foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
 my $CGIextChoice = ( 'CSV' ); # FIXME translation
 my $CGIsepChoice=GetDelimiterChoices;
 
-my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
 my %attribute_types_by_class;
 while ( my ( $attribute_type ) = $attribute_types->next ) {
     $attribute_type = $attribute_type->unblessed;

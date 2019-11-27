@@ -154,7 +154,8 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
         attributes_loop => \@attributes_loop
     );
 
-    my $nb_of_attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations->count;
+    my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+    my $nb_of_attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id)->count;
     if ( $nb_of_attribute_types == 0 ) {
         $template->param(no_patron_attribute_types => 1);
     }

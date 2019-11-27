@@ -231,7 +231,8 @@ sub checkpw_ldap {
         return 0;   # B2, D2
     }
     if (C4::Context->preference('ExtendedPatronAttributes') && $borrowernumber && ($config{update} ||$config{replicate})) {
-        my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+        my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+        my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
         while ( my $attribute_type = $attribute_types->next ) {
             my $code = $attribute_type->code;
             unless (exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) {
@@ -374,7 +375,8 @@ sub update_local {
     # skip extended patron attributes in 'borrowers' attribute update
     my @keys = keys %$borrower;
     if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+        my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+        my $attribute_types = Koha::Patron::Attribute::Types->search_with_library_limits({}, {}, $library_id);
         while ( my $attribute_type = $attribute_types->next ) {
            my $code = $attribute_type->code;
            @keys = grep { $_ ne $code } @keys;
