@@ -1,0 +1,289 @@
+---
+#
+#  Copyright 2019 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Some basic default authorised values for library locations, item lost status, etc."
+  - "You can change these at any time after installation."
+
+tables:
+  - authorised_values:
+      translatable: [ lib ]
+      rows:
+        # Reasons for acceptance or rejection of suggestions in acquisitions
+        - category: "SUGGEST"
+          authorised_value: "BSELL"
+          lib: "Bestseller"
+
+        - category: "SUGGEST"
+          authorised_value: "SCD"
+          lib: "Shelf Copy Damaged"
+
+        - category: "SUGGEST"
+          authorised_value: "LCL"
+          lib: "Library Copy Lost"
+
+        - category: "SUGGEST"
+          authorised_value: "AVILL"
+          lib: "Available via ILL"
+
+  - authorised_values:
+      translatable: [ lib, lib_opac ]
+      rows:
+        # Desired formats for requesting new materials
+        - category: "SUGGEST_FORMAT"
+          authorised_value: "BOOK"
+          lib: "Book"
+          lib_opac: "Book"
+
+        - category: "SUGGEST_FORMAT"
+          authorised_value: "LP"
+          lib: "Large print"
+          lib_opac: "Large print"
+
+        - category: "SUGGEST_FORMAT"
+          authorised_value: "EBOOK"
+          lib: "EBook"
+          lib_opac: "Ebook"
+
+        - category: "SUGGEST_FORMAT"
+          authorised_value: "AUDIOBOOK"
+          lib: "Audiobook"
+          lib_opac: "Audiobook"
+
+        - category: "SUGGEST_FORMAT"
+          authorised_value: "DVD"
+          lib: "DVD"
+          lib_opac: "DVD"
+
+  - authorised_values :
+      translatable: [ lib ]
+      rows:
+        # availability statuses
+        - category: "LOST"
+          authorised_value: "2"
+          lib: "Long Overdue (Lost)"
+
+        - category: "LOST"
+          authorised_value: "1"
+          lib: "Lost"
+
+        - category: "LOST"
+          authorised_value: "3"
+          lib : "Lost and Paid For"
+
+        - category: "LOST"
+          authorised_value: "4"
+          lib : "Missing"
+
+        # damaged status of an item
+        - category: "DAMAGED"
+          authorised_value: "1"
+          lib: "Damaged"
+
+        # location qualification for an item,departments are linked by default to items.location
+        - category: "LOC"
+          authorised_value: "FIC"
+          lib: "Fiction"
+
+        - category: "LOC"
+          authorised_value: "CHILD"
+          lib: "Children's Area"
+
+        - category: "LOC"
+          authorised_value: "DISPLAY"
+          lib: "On Display"
+
+        - category: "LOC"
+          authorised_value: "NEW"
+          lib: "New Materials Shelf"
+
+        - category: "LOC"
+          authorised_value: "STAFF"
+          lib: "Staff Office"
+
+        - category: "LOC"
+          authorised_value: "GEN"
+          lib: "General Stacks"
+
+        - category: "LOC"
+          authorised_value: "AV"
+          lib: "Audio Visual"
+
+        - category: "LOC"
+          authorised_value: "REF"
+          lib: "Reference"
+
+        - category: "LOC"
+          authorised_value: "CART"
+          lib: "Book Cart"
+
+        - category: "LOC"
+          authorised_value: "PROC"
+          lib: "Processing Center"
+
+        # collection codes for an item
+        - category: "CCODE"
+          authorised_value: "FIC"
+          lib: "Fiction"
+
+        - category: "CCODE"
+          authorised_value: "REF"
+          lib: "Reference"
+
+        - category: "CCODE"
+          authorised_value: "NFIC"
+          lib: "Non-fiction"
+
+        # withdrawn status of an item,linked to items.withdrawn
+        - category: "WITHDRAWN"
+          authorised_value: "1"
+          lib: "Withdrawn"
+
+        # loanability status of an item,linked to items.notforloan
+        - category: "NOT_LOAN"
+          authorised_value: "-1"
+          lib: "Ordered"
+
+        - category: "NOT_LOAN"
+          authorised_value: "1"
+          lib: "Not For Loan"
+
+        - category: "NOT_LOAN"
+          authorised_value: "2"
+          lib: "Staff Collection"
+
+        # restricted status of an item,linked to items.restricted
+        - category: "RESTRICTED"
+          authorised_value: "1"
+          lib: "Restricted Access"
+
+        # custom borrower notes
+        - category: "BOR_NOTES"
+          authorised_value: "ADDR"
+          lib: "Address Notes"
+
+  - authorised_values:
+      translatable: [ lib, lib_opac ]
+      rows:
+        # OPAC Suggestions reasons
+        - category: "OPAC_SUG"
+          authorised_value: "damaged"
+          lib: "The copy on the shelf is damaged"
+          lib_opac: "The copy on the shelf is damaged"
+
+        - category: "OPAC_SUG"
+          authorised_value: "bestseller"
+          lib: "Upcoming title by popular author"
+          lib_opac: "Upcoming title by popular author"
+
+  - authorised_values:
+      translatable: [ lib ]
+      rows:
+        # Report groups
+        - category: "REPORT_GROUP"
+          authorised_value: "CIRC"
+          lib: "Circulation"
+
+        - category: "REPORT_GROUP"
+          authorised_value: "CAT"
+          lib: "Catalog"
+
+        - category: "REPORT_GROUP"
+          authorised_value: "PAT"
+          lib: "Patrons"
+
+        - category: "REPORT_GROUP"
+          authorised_value: "ACQ"
+          lib: "Acquisitions"
+
+        - category: "REPORT_GROUP"
+          authorised_value: "ACC"
+          lib: "Accounts"
+
+        - category: "REPORT_GROUP"
+          authorised_value: "SER"
+          lib: "Serials"
+
+        # SIP2 media types
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "000"
+          lib: "Other"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "001"
+          lib: "Book"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "002"
+          lib: "Magazine"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "003"
+          lib: "Bound journal"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "004"
+          lib: "Audio tape"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "005"
+          lib: "Video tape"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "006"
+          lib: "CD/CDROM"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "007"
+          lib: "Diskette"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "008"
+          lib: "Book with diskette"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "009"
+          lib: "Book with CD"
+
+        - category: "SIP_MEDIA_TYPE"
+          authorised_value: "010"
+          lib: "Book with audio tape"
+
+        # order cancellation reasons
+        - category: "ORDER_CANCELLATION_REASON"
+          authorised_value: 0
+          lib: "No reason provided"
+
+        - category: "ORDER_CANCELLATION_REASON"
+          authorised_value: 1
+          lib: "Out of stock"
+
+        - category: "ORDER_CANCELLATION_REASON"
+          authorised_value: 2
+          lib: "Restocking"
+
+        # return claims
+        - category: "RETURN_CLAIM_RESOLUTION"
+          authorised_value: "RET_BY_PATRON"
+          lib: "Returned by patron"
+
+        - category: "RETURN_CLAIM_RESOLUTION"
+          authorised_value: "FOUND_IN_LIB"
+          lib: "Found in library"

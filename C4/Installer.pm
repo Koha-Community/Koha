@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Encode qw( encode is_utf8 );
 use DBIx::RunSQL;
+use YAML::Syck qw( LoadFile );
 use C4::Context;
 use DBI;
 use Koha;
@@ -144,12 +145,12 @@ sub marc_framework_sql_list {
 
     foreach my $requirelevel (@listdir) {
         opendir( MYDIR, "$dir/$requirelevel" );
-        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ } readdir(MYDIR);
+        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.(sql|yml)$/ } readdir(MYDIR);
         closedir MYDIR;
         my %cell;
         my @frameworklist;
         map {
-            my $name = substr( $_, 0, -4 );
+            my $name = substr( $_, 0, -4 ); # FIXME: restricted to 3 letter extension
             open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
             my $line = <$fh>;
             $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
@@ -221,16 +222,22 @@ sub sample_data_sql_list {
 
     foreach my $requirelevel (@listdir) {
         opendir( MYDIR, "$dir/$requirelevel" );
-        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ } readdir(MYDIR);
+        my @listname = grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.(sql|yml)$/ } readdir(MYDIR);
         closedir MYDIR;
         my %cell;
         my @frameworklist;
         map {
-            my $name = substr( $_, 0, -4 );
-            open my $fh , "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
-            my $line = <$fh>;
-            $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
-            my @lines = split /\n/, $line;
+            my ( $name, $ext ) = split /\./, $_;
+            my @lines;
+            if ( $ext =~ /yml/ ) {
+                my $yaml = LoadFile("$dir/$requirelevel/$name\.$ext");
+                @lines = @{ $yaml->{'description'} };
+            } else {
+                open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
+                my $line = <$fh>;
+                $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
+                @lines = split /\n/, $line;
+            }
             my $mandatory = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i);
             push @frameworklist,
               {
@@ -438,7 +445,7 @@ sub set_version_syspref {
 
   my $error = $installer->load_sql($filename);
 
-Runs a the specified SQL file using a sql loader DBIx::RunSQL
+Runs the specified input file using a sql loader DBIx::RunSQL, or a yaml loader
 Returns any strings sent to STDERR
 
 # FIXME This should be improved: sometimes the caller and load_sql warn the same
@@ -458,12 +465,32 @@ sub load_sql {
         local *STDERR;
         open STDERR, ">>", \$dup_stderr;
 
-        eval {
-            DBIx::RunSQL->run_sql_file(
-                dbh     => $dbh,
-                sql     => $filename,
-            );
-        };
+        if ( $filename =~ /sql$/ ) {                                                        # SQL files
+            eval {
+                DBIx::RunSQL->run_sql_file(
+                    dbh     => $dbh,
+                    sql     => $filename,
+                );
+            };
+        }
+        else {                                                                       # YAML files
+            eval {
+                my $yaml         = LoadFile( $filename );                            # Load YAML
+                for my $table ( @{ $yaml->{'tables'} } ) {
+                    my $table_name   = ( keys %$table )[0];                          # table name
+                    my @rows         = @{ $table->{$table_name}->{rows} };           #
+                    my @columns      = ( sort keys %{$rows[0]} );                    # column names
+                    my $fields       = join ",", @columns;                           # idem, joined
+                    my $placeholders = join ",", map { "?" } @columns;               # '?,..,?' string
+                    my $query        = "INSERT INTO $table_name ( $fields ) VALUES ( $placeholders )";
+                    my $sth          = $dbh->prepare($query);
+                    foreach my $row ( @rows ) {
+                        my @values = map { $row->{$_} } @columns;
+                        $sth->execute( @values );
+                    }
+                }
+            };
+        }
     };
     #   errors thrown while loading installer data should be logged
     if( $dup_stderr ) {
