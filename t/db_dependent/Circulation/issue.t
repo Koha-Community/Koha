@@ -32,6 +32,7 @@ use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
+use Koha::IssuingRules;
 use Koha::Items;
 use Koha::Library;
 use Koha::Patrons;
@@ -296,6 +297,20 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
         }
     }
 };
+
+# Unseen rewnewals
+t::lib::Mocks::mock_preference('UnseenRenewals', 1);
+
+# Does an unseen renewal increment the issue's count
+my ( $unseen_before ) = ( C4::Circulation::GetRenewCount( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber} ) )[3];
+AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, $branchcode_1, undef, undef, 0 );
+my ( $unseen_after ) = ( C4::Circulation::GetRenewCount( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber} ) )[3];
+is( $unseen_after, $unseen_before + 1, 'unseen_renewals increments' );
+
+# Does a seen renewal reset the unseen count
+AddRenewal( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber}, $branchcode_1, undef, undef, 1 );
+my ( $unseen_reset ) = ( C4::Circulation::GetRenewCount( $opac_renew_issue->{borrowernumber}, $opac_renew_issue->{itemnumber} ) )[3];
+is( $unseen_reset, 0, 'seen renewal resets the unseen count' );
 
 #Test GetBiblioIssues
 is( GetBiblioIssues(), undef, "GetBiblio Issues without parameters" );
