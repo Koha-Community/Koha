@@ -68,14 +68,28 @@
             team will be elected.</p>
 
             <li><strong>Release maintainer:</strong>
-                <ul>
                   [% FOREACH m IN t.maintainer %]
-                    [% IF m.version == ( v - 0.01 ) %]
-                      <li>[% INCLUDE person p=m %]</li>
+                    [% IF m.version == ( v ) %]
+                      [% INCLUDE person p=m %]
                     [% END %]
                   [% END %]
-                </ul>
             </li>
+            
+            [% IF t.maintainer_assistants %]
+              [% FOREACH m IN t.maintainer_assistants %]
+                [% IF m.version == ( v ) %]
+                <ul><li><strong>Assistant:</strong> [% INCLUDE person p=m %]</li></ul>
+                [% END %]
+              [% END %]
+            [% END %]
+            
+            [% IF t.maintainer_mentors %]
+              [% FOREACH m IN t.maintainer_mentors %]
+                [% IF m.version == ( v ) %]
+                <ul><li><strong>Mentor:</strong> [% INCLUDE person p=m %]</li></ul>
+                [% END %]
+              [% END %]
+            [% END %]
         [% END %]
 
         [% IF t.qa_manager %]
@@ -173,10 +187,24 @@
             <ul>
                 [% FOREACH m IN t.maintainer %]
                 <li>[% m.version | html %] - [% INCLUDE person p=m %]</li>
+                  [% IF t.maintainer_assistants %]
+                    [% FOREACH ma IN t.maintainer_assistants %]
+                      [% IF ma.version == ( m.version ) %]
+                      <ul><li><strong>Assistant:</strong> [% INCLUDE person p=ma %]</li></ul>
+                      [% END %]
+                    [% END %]
+                  [% END %]
+                  
+                  [% IF t.maintainer_mentors %]
+                    [% FOREACH mm IN t.maintainer_mentors %]
+                      [% IF m.version == ( mm.version ) %]
+                      <ul><li><strong>Mentor:</strong> [% INCLUDE person p=mm %]</li></ul>
+                      [% END %]
+                    [% END %]
+                  [% END %]
                 [% END %]
             </ul>
         </li>
         [% END %]
-
     </ul>
 [%- END -%]
