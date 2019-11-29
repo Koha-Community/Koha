@@ -2233,14 +2233,15 @@ Internal function, called only by AddReturn that calculates and updates
 
 Should only be called for overdue returns
 
+Calculation of the debarment date has been moved to a separate subroutine _calculate_new_debar_dt
+to ease testing.
+
 =cut
 
-sub _debar_user_on_return {
+sub _calculate_new_debar_dt {
     my ( $borrower, $item, $dt_due, $return_date ) = @_;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
-    $return_date //= dt_from_string();
-
     my $circcontrol = C4::Context->preference('CircControl');
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
         {   categorycode => $borrower->{categorycode},
@@ -2252,79 +2253,89 @@ sub _debar_user_on_return {
     my $unit     = $issuing_rule ? $issuing_rule->lengthunit : undef;
     my $chargeable_units = C4::Overdues::get_chargeable_units($unit, $dt_due, $return_date, $branchcode);
 
-    if ($finedays) {
+    return unless $finedays;
 
-        # finedays is in days, so hourly loans must multiply by 24
-        # thus 1 hour late equals 1 day suspension * finedays rate
-        $finedays = $finedays * 24 if ( $unit eq 'hours' );
+    # finedays is in days, so hourly loans must multiply by 24
+    # thus 1 hour late equals 1 day suspension * finedays rate
+    $finedays = $finedays * 24 if ( $unit eq 'hours' );
 
-        # grace period is measured in the same units as the loan
-        my $grace =
-          DateTime::Duration->new( $unit => $issuing_rule->firstremind );
+    # grace period is measured in the same units as the loan
+    my $grace =
+      DateTime::Duration->new( $unit => $issuing_rule->firstremind );
 
-        my $deltadays = DateTime::Duration->new(
-            days => $chargeable_units
-        );
-        if ( $deltadays->subtract($grace)->is_positive() ) {
-            my $suspension_days = $deltadays * $finedays;
+    my $deltadays = DateTime::Duration->new(
+        days => $chargeable_units
+    );
+    if ( $deltadays->subtract($grace)->is_positive() ) {
+        my $suspension_days = $deltadays * $finedays;
 
-            # If the max suspension days is < than the suspension days
-            # the suspension days is limited to this maximum period.
-            my $max_sd = $issuing_rule->maxsuspensiondays;
-            if ( defined $max_sd ) {
-                $max_sd = DateTime::Duration->new( days => $max_sd );
-                $suspension_days = $max_sd
-                  if DateTime::Duration->compare( $max_sd, $suspension_days ) < 0;
-            }
-
-            my ( $has_been_extended, $is_a_reminder );
-            if ( C4::Context->preference('CumulativeRestrictionPeriods') and $borrower->{debarred} ) {
-                my $debarment = @{ GetDebarments( { borrowernumber => $borrower->{borrowernumber}, type => 'SUSPENSION' } ) }[0];
-                if ( $debarment ) {
-                    $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
-                    $has_been_extended = 1;
-                }
-            }
-
-            if ( $issuing_rule->suspension_chargeperiod > 1 ) {
-                # No need to / 1 and do not consider / 0
-                $suspension_days = DateTime::Duration->new(
-                    days => floor( $suspension_days->in_units('days') / $issuing_rule->suspension_chargeperiod )
-                );
-            }
-
-            my $new_debar_dt;
-            # Use the calendar or not to calculate the debarment date
-            if ( C4::Context->preference('SuspensionsCalendar') eq 'noSuspensionsWhenClosed' ) {
-                my $calendar = Koha::Calendar->new(
-                    branchcode => $branchcode,
-                    days_mode  => 'Calendar'
-                );
-                $new_debar_dt = $calendar->addDate( $return_date, $suspension_days );
-            }
-            else {
-                $new_debar_dt = $return_date->clone()->add_duration($suspension_days);
-            }
-
-            Koha::Patron::Debarments::AddUniqueDebarment({
-                borrowernumber => $borrower->{borrowernumber},
-                expiration     => $new_debar_dt->ymd(),
-                type           => 'SUSPENSION',
-            });
-            # if borrower was already debarred but does not get an extra debarment
-            my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
-            my $new_debarment_str;
-            if ( $borrower->{debarred} eq $patron->is_debarred ) {
-                $is_a_reminder = 1;
-                $new_debarment_str = $borrower->{debarred};
-            } else {
-                $new_debarment_str = $new_debar_dt->ymd();
-            }
-            # FIXME Should return a DateTime object
-            return $new_debarment_str, $is_a_reminder;
+        # If the max suspension days is < than the suspension days
+        # the suspension days is limited to this maximum period.
+        my $max_sd = $issuing_rule->maxsuspensiondays;
+        if ( defined $max_sd ) {
+            $max_sd = DateTime::Duration->new( days => $max_sd );
+            $suspension_days = $max_sd
+              if DateTime::Duration->compare( $max_sd, $suspension_days ) < 0;
         }
+
+        my ( $has_been_extended );
+        if ( C4::Context->preference('CumulativeRestrictionPeriods') and $borrower->{debarred} ) {
+            my $debarment = @{ GetDebarments( { borrowernumber => $borrower->{borrowernumber}, type => 'SUSPENSION' } ) }[0];
+            if ( $debarment ) {
+                $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
+                $has_been_extended = 1;
+            }
+        }
+
+        if ( $issuing_rule->suspension_chargeperiod > 1 ) {
+            # No need to / 1 and do not consider / 0
+            $suspension_days = DateTime::Duration->new(
+                days => floor( $suspension_days->in_units('days') / $issuing_rule->suspension_chargeperiod )
+            );
+        }
+
+        my $new_debar_dt;
+        # Use the calendar or not to calculate the debarment date
+        if ( C4::Context->preference('SuspensionsCalendar') eq 'noSuspensionsWhenClosed' ) {
+            my $calendar = Koha::Calendar->new(
+                branchcode => $branchcode,
+                days_mode  => 'Calendar'
+            );
+            $new_debar_dt = $calendar->addDate( $return_date, $suspension_days );
+        }
+        else {
+            $new_debar_dt = $return_date->clone()->add_duration($suspension_days);
+        }
+        return $new_debar_dt;
     }
     return;
+}
+
+sub _debar_user_on_return {
+    my ( $borrower, $item, $dt_due, $return_date ) = @_;
+
+    $return_date //= dt_from_string();
+
+    my $new_debar_dt = _calculate_new_debar_dt ($borrower, $item, $dt_due, $return_date);
+
+    return unless $new_debar_dt;
+
+    Koha::Patron::Debarments::AddUniqueDebarment({
+        borrowernumber => $borrower->{borrowernumber},
+        expiration     => $new_debar_dt->ymd(),
+        type           => 'SUSPENSION',
+    });
+    # if borrower was already debarred but does not get an extra debarment
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    my ($new_debarment_str, $is_a_reminder);
+    if ( $borrower->{debarred} eq $patron->is_debarred ) {
+        $is_a_reminder = 1;
+        $new_debarment_str = $borrower->{debarred};
+    } else {
+        $new_debarment_str = $new_debar_dt->ymd();
+    }
+    # FIXME Should return a DateTime object
+    return $new_debarment_str, $is_a_reminder;
 }
 
 =head2 _FixOverduesOnReturn
