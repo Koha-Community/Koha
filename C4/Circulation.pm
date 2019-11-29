@@ -2266,8 +2266,16 @@ sub _calculate_new_debar_dt {
     my $deltadays = DateTime::Duration->new(
         days => $chargeable_units
     );
+
     if ( $deltadays->subtract($grace)->is_positive() ) {
         my $suspension_days = $deltadays * $finedays;
+
+        if ( $issuing_rule->suspension_chargeperiod > 1 ) {
+            # No need to / 1 and do not consider / 0
+            $suspension_days = DateTime::Duration->new(
+                days => floor( $suspension_days->in_units('days') / $issuing_rule->suspension_chargeperiod )
+            );
+        }
 
         # If the max suspension days is < than the suspension days
         # the suspension days is limited to this maximum period.
@@ -2285,13 +2293,6 @@ sub _calculate_new_debar_dt {
                 $return_date = dt_from_string( $debarment->{expiration}, 'sql' );
                 $has_been_extended = 1;
             }
-        }
-
-        if ( $issuing_rule->suspension_chargeperiod > 1 ) {
-            # No need to / 1 and do not consider / 0
-            $suspension_days = DateTime::Duration->new(
-                days => floor( $suspension_days->in_units('days') / $issuing_rule->suspension_chargeperiod )
-            );
         }
 
         my $new_debar_dt;
