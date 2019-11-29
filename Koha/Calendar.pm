@@ -379,7 +379,6 @@ sub hours_between {
     }
 
     return $duration;
-
 }
 
 sub set_daysmode {
@@ -499,7 +498,19 @@ $duration = $calendar->days_between($start_dt, $end_dt);
 
 Passed two dates returns a DateTime::Duration object measuring the length between them
 ignoring closed days. Always returns a positive number irrespective of the
-relative order of the parameters
+relative order of the parameters.
+
+Note: This routine assumes neither the passed start_dt nor end_dt can be a closed day
+
+=head2 hours_between
+
+$duration = $calendar->hours_between($start_dt, $end_dt);
+
+Passed two dates returns a DateTime::Duration object measuring the length between them
+ignoring closed days. Always returns a positive number irrespective of the
+relative order of the parameters.
+
+Note: This routine assumes neither the passed start_dt nor end_dt can be a closed day
 
 =head2 next_open_days
 
