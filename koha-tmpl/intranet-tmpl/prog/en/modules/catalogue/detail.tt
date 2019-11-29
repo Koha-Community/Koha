@@ -267,19 +267,18 @@
                     <td class="homebranch">
                         [% Branches.GetName(item.homebranch) | html %]
                         <span class="shelvingloc">
-                            [%# 1 - If permanent location is defined %]
-                            [%#   a - display the description if available, display the code if not %]
-                            [%#   b - display the current location in parens %]
-                            [%# 2 - If permanent location is not defined, but location is defined %]
-                            [%#   a - display the current location description if available, display the code if not %]
-                            [%# 3 - If neither are defined, show nothing %]
+<!--
+If permanent location is defined, show description or code and display current location in parentheses. If not, display current location.
+Note that permanent location is a code, and location may be an authval.
+-->
                             [% IF item.permanent_location %]
-                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) | html %]
-                                [% IF item.location AND item.location != item.permanent_location %]
-                                    ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %])
+                                [% SET permloc_authval = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) %]
+                                [% permloc_authval | html %]
+                                [% IF item.location AND item.location != permloc_authval AND item.location != item.permanent_location %]
+                                    ([% item.location | html %])
                                 [% END %]
-                            [% ELSIF item.location %]
-                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) | html %]
+                            [% ELSE %]
+                                [% item.location | html %]
                             [% END %]
                         </span>
                     </td>
