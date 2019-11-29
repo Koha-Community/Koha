@@ -203,7 +203,7 @@ subtest 'hours_between | days_between' => sub {
 
             my ( $diff_hours, $diff_days );
 
-            # Between 5th and 6th
+            # Between 5th and 6th (This case should never happen in real code, one cannot return on a closed day)
             $diff_hours = $calendar->hours_between( $now, $nov_6 )->hours;
             is( $diff_hours, 0 * 24, '' ); # FIXME Is this really should be 0?
             $diff_days = $calendar->days_between( $now, $nov_6)->delta_days;
@@ -240,9 +240,9 @@ subtest 'hours_between | days_between' => sub {
             my ( $diff_hours, $diff_days );
 
             # Between 5th and 5th (Same day short hours loan)
-            # No test - one cannot issue on a holiday and we do not yet record opening hours to take those into account
+            # No test - Tested above as 5th is an open day
 
-            # Between 5th and 6th
+            # Between 5th and 6th (This case should never happen in real code, one cannot return on a closed day)
             my $duration = $calendar->hours_between( $now, $nov_6->clone->subtract(hours => 3) );
             is( $duration->hours, abs(0 * 24 - 3), '' ); # FIXME $duration->hours always return a abs
             is( $duration->is_negative, 1, ); # FIXME Do really test for that case in our calls to hours_between?
