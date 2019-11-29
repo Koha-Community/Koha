@@ -1845,7 +1845,7 @@ subtest 'search_unsubscribed' => sub {
 };
 
 subtest 'search_anonymize_candidates' => sub {
-    plan tests => 5;
+    plan tests => 7;
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
     $patron1->anonymized(0);
@@ -1887,6 +1887,15 @@ subtest 'search_anonymize_candidates' => sub {
     $patron1->login_attempts(3)->store;
     is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
         $cnt+1, 'Locked flag' );
+
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', q{} );
+    # Patron 1 still on 3 == locked
+    is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
+        $cnt+1, 'Still expect same number for FailedLoginAttempts empty' );
+    $patron1->login_attempts(0)->store;
+    # Patron 1 unlocked
+    is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
+        $cnt, 'Patron 1 unlocked' );
 };
 
 subtest 'search_anonymized' => sub {
