@@ -2,6 +2,7 @@
   [%- SWITCH role.key -%]
     [%- CASE 'manager'               -%]Release manager
     [%- CASE 'manager_assistant'     -%]Release manager assistant
+    [%- CASE 'manager_mentor'        -%]Release manager mentor
     [%- CASE 'qa_manager'            -%]Quality assurance manager
     [%- CASE 'qa'                    -%]Quality assurance team
     [%- CASE 'documentation'         -%]Documentation manager
@@ -12,6 +13,7 @@
     [%- CASE 'bugwrangler'           -%]Bug wrangler
     [%- CASE 'maintainer'            -%]Release maintainer
     [%- CASE 'maintainer_assistant'  -%]Release maintainer assistant
+    [%- CASE 'maintainer_mentor'     -%]Release maintainer mentor
     [%- CASE 'wiki'                  -%]Wiki curator
     [%- CASE 'ci'                    -%]Continuous integration manager
     [%- CASE 'packaging'             -%]Packaging manager
