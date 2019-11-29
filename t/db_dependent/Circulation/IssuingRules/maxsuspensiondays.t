@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 4;
 
 use MARC::Record;
 use MARC::Field;
@@ -100,5 +100,60 @@ is(
     'calculate suspension with a maximum set'
 );
 DelDebarment( $debarments->[0]->{borrower_debarment_id} );
+
+subtest "suspension_chargeperiod" => sub {
+    Koha::IssuingRules->search->delete;
+    $builder->build(
+        {
+            source => 'Issuingrule',
+            value  => {
+                categorycode => '*',
+                itemtype     => '*',
+                branchcode   => '*',
+                firstremind  => 0,
+                finedays     => 7,
+                lengthunit   => 'days',
+                suspension_chargeperiod => 15,
+                maxsuspensiondays => 333,
+            }
+        }
+    );
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item = $builder->build_sample_item;
+
+    my $last_year = dt_from_string->clone->subtract( years => 1 );
+    my $today = dt_from_string;
+    my $new_debar_dt = C4::Circulation::_calculate_new_debar_dt( $patron->unblessed, $item->unblessed, $last_year, $today );
+    is( $new_debar_dt->truncate( to => 'day' ),
+        $today->clone->add( days => 365 / 15 * 7 )->truncate( to => 'day' ) );
+
+};
+
+subtest "maxsuspensiondays" => sub {
+    Koha::IssuingRules->search->delete;
+    $builder->build(
+        {
+            source => 'Issuingrule',
+            value  => {
+                categorycode => '*',
+                itemtype     => '*',
+                branchcode   => '*',
+                firstremind  => 0,
+                finedays     => 15,
+                lengthunit   => 'days',
+                suspension_chargeperiod => 7,
+                maxsuspensiondays => 333,
+            }
+        }
+    );
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item = $builder->build_sample_item;
+
+    my $last_year = dt_from_string->clone->subtract( years => 1 );
+    my $today = dt_from_string;
+    my $new_debar_dt = C4::Circulation::_calculate_new_debar_dt( $patron->unblessed, $item->unblessed, $last_year, $today );
+    is( $new_debar_dt->truncate( to => 'day' ),
+        $today->clone->add( days => 333 )->truncate( to => 'day' ) );
+};
 
 $schema->storage->txn_rollback;
