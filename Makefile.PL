@@ -320,6 +320,7 @@ my $target_map = {
   './offline_circ'              => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
+  './etc/z3950'                 => { target => 'Z3950_CONF_DIR', trimdir => -1 },
   './etc/pazpar2'               => { target => 'PAZPAR2_CONF_DIR', trimdir => -1 },
   './help.pl'                   => 'INTRANET_CGI_DIR',
   './ill'                       => 'INTRANET_CGI_DIR',
@@ -661,6 +662,7 @@ $config{ZEBRA_PTOKENIZER_STMT} = $config{ZEBRA_TOKENIZER} eq 'icu'
 my %test_suite_override_dirs = (
     KOHA_CONF_DIR  => ['etc'],
     ZEBRA_CONF_DIR => ['etc', 'zebradb'],
+    Z3950_CONF_DIR => ['etc', 'z3950'],
     LOG_DIR        => ['var', 'log'],
     BACKUP_DIR     => ['var', 'spool'],
     SCRIPT_DIR     => ['bin'],
@@ -1382,6 +1384,7 @@ sub get_target_directories {
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
+        $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'z3950');
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
@@ -1414,6 +1417,7 @@ sub get_target_directories {
         $skipdirs{'PERL_MODULE_DIR'} = 1;
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
+        $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'z3950');
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
@@ -1441,6 +1445,7 @@ sub get_target_directories {
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'zebradb');
+        $dirmap{'Z3950_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'z3950');
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
