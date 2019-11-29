@@ -126,6 +126,7 @@ use C4::Biblio;         # AddBiblio TransformKohaToMarc
 use C4::Budgets;
 use C4::Items;
 use C4::Output;
+use C4::Log qw(logaction);
 use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use C4::Barcodes;
@@ -358,6 +359,15 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
         }
     }
 
+}
+
+if (C4::Context->preference("AcqLog") && $basketno) {
+    logaction(
+        'ACQUISITIONS',
+        'MODIFY_BASKET',
+        $basketno,
+        sprintf("%010d", $loggedinuser)
+    );
 }
 
 my $booksellerid=$$orderinfo{booksellerid};

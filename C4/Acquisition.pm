@@ -27,6 +27,7 @@ use C4::Suggestions;
 use C4::Biblio;
 use C4::Contract;
 use C4::Debug;
+use C4::Log qw(logaction);
 use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Baskets;
@@ -203,6 +204,12 @@ sub NewBasket {
     $basketbooksellernote ||= q{};
     ModBasketHeader( $basket, $basketname, $basketnote, $basketbooksellernote,
         $basketcontractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items );
+
+    # Log the basket creation
+    if (C4::Context->preference("AcqLog")) {
+        logaction('ACQUISITIONS', 'ADD_BASKET', $basket);
+    }
+
     return $basket;
 }
 
@@ -500,6 +507,19 @@ sub ModBasket {
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
 
+    # Log the basket update
+    if (C4::Context->preference("AcqLog")) {
+        my $infos = $basketinfo->{borrowernumber} ?
+            sprintf("%010d", $basketinfo->{borrowernumber}) :
+            undef;
+        logaction(
+            'ACQUISITIONS',
+            'MODIFY_BASKET',
+            $basketinfo->{'basketno'},
+            $infos
+        );
+    }
+
     return;
 }
 
@@ -539,7 +559,7 @@ case the AcqCreateItem syspref takes precedence).
 =cut
 
 sub ModBasketHeader {
-    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items) = @_;
+    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items, $borrowernumber) = @_;
 
     $is_standing ||= 0;
     my $query = qq{
@@ -557,6 +577,7 @@ sub ModBasketHeader {
         my $sth2 = $dbh->prepare($query2);
         $sth2->execute($contractnumber,$basketno);
     }
+
     return;
 }
 

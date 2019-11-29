@@ -117,6 +117,10 @@
 [%        CASE 'DELCIRCMESSAGE' %]Delete circulation message
 [%        CASE 'STATUS_CHANGE'  %]Change ILL request status
 [%        CASE 'PATRON_NOTICE'  %]ILL notice sent to patron
+[%        CASE 'ADD_BASKET' %]Create an acquisitions basket
+[%        CASE 'MODIFY_BASKET' %]Modify an acquisitions basket
+[%        CASE 'CLOSE_BASKET' %]Close an acquisitions basket
+[%        CASE 'APPROVE_BASKET' %]Approve an acquisitions basket
 [%        CASE 'Run'    %]Run
 [%        CASE 'EDIT_MAPPINGS' %]Edit mappings
 [%        CASE 'RESET_MAPPINGS' %]Reset mappings
@@ -211,7 +215,7 @@
                                         <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value=""> All</label>
                                     [% END %]
 
-                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'PATRON_NOTICE' 'CHANGE PASS' 'Run' 'EDIT_MAPPINGS' 'RESET_MAPPINGS' ] %]
+                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'PATRON_NOTICE' 'CHANGE PASS' 'Run' 'EDIT_MAPPINGS' 'RESET_MAPPINGS', 'ADD_BASKET' 'MODIFY_BASKET' 'CLOSE_BASKET' 'APPROVE_BASKET' ] %]
                                         [% IF actions.grep(actx).size %]
                                             <label for="action[% actx| replace('\s+', '_') | html %]" class="viewlog"><input type="checkbox" id="action[% actx | replace('\s+', '_') | html %]" name="actions" value="[% actx | html %]" checked="checked"> [% PROCESS translate_log_action action=actx %]</label>
                                         [% ELSE %]
