@@ -25,6 +25,7 @@ use Class::Inspector;
 
 use Koha::Database;
 use Koha::Exceptions::Object;
+use Koha::DateUtils qw( dt_from_string );
 
 =head1 NAME
 
@@ -252,15 +253,42 @@ sub update {
     return $self->_resultset->update($fields);
 }
 
+=head3 filter_by_last_update
+
+my $filtered_objects = $objects->filter_by_last_update
+
+days exclusive
+from inclusive
+to   inclusive
+
+=cut
+
 sub filter_by_last_update {
     my ( $self, $params ) = @_;
     my $timestamp_column_name = $params->{timestamp_column_name} || 'timestamp';
+    my $conditions;
+    Koha::Exceptions::MissingParameter->throw(
+        "Missing mandatory parameter: days or from or to")
+      unless exists $params->{days}
+          or exists $params->{from}
+          or exists $params->{to};
+
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    if ( exists $params->{days} ) {
+        $conditions->{'<'} = $dtf->format_date( dt_from_string->subtract( days => $params->{days} ) );
+    }
+    if ( exists $params->{from} ) {
+        my $from = ref($params->{from}) ? $params->{from} : dt_from_string($params->{from});
+        $conditions->{'>='} = $dtf->format_date( $from );
+    }
+    if ( exists $params->{to} ) {
+        my $to = ref($params->{to}) ? $params->{to} : dt_from_string($params->{to});
+        $conditions->{'<='} = $dtf->format_date( $to );
+    }
+
     return $self->_resultset->search(
         {
-            $timestamp_column_name => {
-                '<' =>
-                  [ \'DATE_SUB(CURDATE(), INTERVAL ? DAY)', $params->{days} ]
-            }
+            $timestamp_column_name => $conditions
         }
     );
 }

@@ -49,7 +49,7 @@ use Koha::Old::Checkouts;
 use Koha::Old::Holds;
 use Koha::Old::Patrons;
 use Koha::Item::Transfers;
-
+use Koha::PseudonymizedTransactions;
 
 sub usage {
     print STDERR <<USAGE;
@@ -99,6 +99,9 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --old-issues DAYS       Purge checkouts (old_issues) returned more than DAYS days ago.
    --old-reserves DAYS     Purge reserves (old_reserves) more than DAYS old.
    --transfers DAYS        Purge transfers completed more than DAYS day ago.
+   --pseudo-transactions DAYS   Purge the pseudonymized transactions that have been originally created more than DAYS days ago
+                                DAYS is optional and can be replaced by:
+                                    --pseudo-transactions-from YYYY-MM-DD and/or --pseudo-transactions-to YYYY-MM-DD
 USAGE
     exit $_[0];
 }
@@ -131,6 +134,7 @@ my $pDeletedPatrons;
 my $pOldIssues;
 my $pOldReserves;
 my $pTransfers;
+my ( $pPseudoTransactions, $pPseudoTransactionsFrom, $pPseudoTransactionsTo );
 
 GetOptions(
     'h|help'            => \$help,
@@ -160,7 +164,10 @@ GetOptions(
     'deleted-patrons:i' => \$pDeletedPatrons,
     'old-issues:i'      => \$pOldIssues,
     'old-reserves:i'    => \$pOldReserves,
-    'transfers:i'    => \$pTransfers,
+    'transfers:i'       => \$pTransfers,
+    'pseudo-transactions:i'      => \$pPseudoTransactions,
+    'pseudo-transactions-from:s' => \$pPseudoTransactionsFrom,
+    'pseudo-transactions-to:s'   => \$pPseudoTransactionsTo,
 ) || usage(1);
 
 # Use default values
@@ -201,6 +208,7 @@ unless ( $sessions
     || $pOldIssues
     || $pOldReserves
     || $pTransfers
+    || defined $pPseudoTransactions
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -446,6 +454,19 @@ if ($pTransfers) {
         }
     )->delete;
     print "Done with purging transfers.\n" if $verbose;
+}
+
+if (defined $pPseudoTransactions) {
+    print "Purging pseudonymized transactions older than $pPseudoTransactions days.\n" if $verbose;
+    Koha::PseudonymizedTransactions->filter_by_last_update(
+        {
+            timestamp_column_name => 'datetime',
+            ( $pPseudoTransactions     ? ( days => $pPseudoTransactions     ) : () ),
+            ( $pPseudoTransactionsFrom ? ( from => $pPseudoTransactionsFrom ) : () ),
+            ( $pPseudoTransactionsTo   ? ( to   => $pPseudoTransactionsTo   ) : () ),
+        }
+    )->delete;
+    print "Done with purging pseudonymized transactions.\n" if $verbose;
 }
 
 exit(0);

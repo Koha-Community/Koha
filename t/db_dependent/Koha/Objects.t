@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2015 Koha Development team
+# Copyright 2019 Koha Development team
 #
 # This file is part of Koha
 #
@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 23;
+use Test::More tests => 24;
 use Test::Exception;
 use Test::MockModule;
 use Test::Warn;
@@ -31,6 +31,7 @@ use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patrons;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -1034,6 +1035,96 @@ subtest "attributes_from_api() tests" => sub {
         $cities_rs->attributes_from_api($api_attributes),
         $city->attributes_from_api($api_attributes)
     );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest "filter_by_last_update" => sub {
+
+    $schema->storage->txn_begin;
+
+    my $now = dt_from_string->truncate( to => 'day' );
+    my @borrowernumbers;
+    # Building 6 patrons that have been created today, yesterday, ... 1 per day
+    for my $i ( 0 .. 5 ) {
+        push @borrowernumbers,
+          $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { updated_on => $now->clone->subtract( days => $i ) }
+            }
+          )->borrowernumber;
+    }
+
+    my $patrons = Koha::Patrons->search(
+        { borrowernumber => { -in => \@borrowernumbers } } );
+
+    try {
+        $patrons->filter_by_last_update( { timestamp_column_name => 'updated_on' } )
+          ->count;
+    }
+    catch {
+        ok(
+            $_->isa('Koha::Exceptions::MissingParameter'),
+            'Should raise an exception if no parameter given'
+        );
+    };
+
+    my $count = $patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', days => 2 } )->count;
+    is( $count, 3, '3 patrons have been updated before the last 2 days (exclusive)' );
+
+    $count = $patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', days => 1 } )->count;
+    is( $count, 4, '4 patrons have been updated before yesterday (exclusive)' );
+
+    $count = $patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', days => 0 } )->count;
+    is( $count, 5, '5 patrons have been updated before today (exclusive)' );
+
+    $count = $patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', from => $now } )->count;
+    is( $count, 1, '1 patron has been updated "from today" (inclusive)' );
+
+    $count = $patrons->filter_by_last_update(
+        { timestamp_column_name => 'updated_on', to => $now } )->count;
+    is( $count, 6, '6 patrons have been updated "to today" (inclusive)' );
+
+    $count = $patrons->filter_by_last_update(
+        {
+            timestamp_column_name => 'updated_on',
+            from                  => $now->clone->subtract( days => 4 ),
+            to                    => $now->clone->subtract( days => 2 )
+        }
+    )->count;
+    is( $count, 3, '3 patrons have been updated between D-4 and D-2' );
+
+    t::lib::Mocks::mock_preference( 'dateformat', 'metric' );
+    try {
+        $count = $patrons->filter_by_last_update(
+            { timestamp_column_name => 'updated_on', from => '1970-12-31' } )
+          ->count;
+    }
+    catch {
+        ok(
+            $_->isa(
+                'No exception raised, from and to parameters can take an iso formatted date'
+            )
+        );
+    };
+    try {
+        $count = $patrons->filter_by_last_update(
+            { timestamp_column_name => 'updated_on', from => '31/12/1970' } )
+          ->count;
+    }
+    catch {
+        ok(
+            $_->isa(
+                'No exception raised, from and to parameters can take an metric formatted date (depending on dateformat syspref)'
+            )
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
