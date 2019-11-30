@@ -19,9 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Try::Tiny;
 
 use C4::Circulation;
+use C4::Stats;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -34,7 +36,41 @@ use t::lib::Mocks;
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'Koha::PseudonymizedTransactions tests' => sub {
+subtest 'Config does not exist' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_config( 'key', '' );
+    t::lib::Mocks::mock_preference( 'Pseudonymization', 1 );
+    t::lib::Mocks::mock_preference( 'PseudonymizationPatronFields', 'branchcode,categorycode,sort1' );
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item    = $builder->build_sample_item;
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    try{
+        C4::Stats::UpdateStats(
+            {
+                type           => 'issue',
+                branch         => 'BBB',
+                itemnumber     => $item->itemnumber,
+                borrowernumber => $patron->borrowernumber,
+                itemtype       => $item->effective_itemtype,
+                location       => $item->location,
+            }
+        );
+
+    } catch {
+        ok($_->isa('Koha::Exceptions::Config::MissingEntry'), "Koha::Patron->store should raise a Koha::Exceptions::Config::MissingEntry if 'key' is not defined in the config");
+        is( $_->message, "Missing 'key' entry in config file");
+    };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Koha::Anonymized::Transactions tests' => sub {
 
     plan tests => 11;
 
