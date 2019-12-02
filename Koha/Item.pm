@@ -603,16 +603,6 @@ sub current_holds {
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
 
-=head3 holds
-
-=cut
-
-sub holds {
-    my ( $self ) = @_;
-    my $hold_rs = $self->_result->reserves->search;
-    return Koha::Holds->_new_from_dbic($hold_rs);
-}
-
 =head3 stockrotationitem
 
   my $sritem = Koha::Item->stockrotationitem;

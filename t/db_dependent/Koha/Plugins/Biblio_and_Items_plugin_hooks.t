@@ -68,11 +68,11 @@ subtest 'after_biblio_action() and after_item_action() hooks tests' => sub {
             qr/after_item_action called with action: create, ref: Koha::Item/,
             'AddItem calls the hook with action=create';
 
-    warning_like { C4::Items::ModItem({ location => 'shelves' }, $biblio_id, $item->itemnumber); }
+    warning_like { $item->location('shelves')->store; }
             qr/after_item_action called with action: modify, ref: Koha::Item/,
             'ModItem calls the hook with action=modify';
 
-    warning_like { C4::Items::DelItem({ itemnumber => $item->itemnumber }); }
+    warning_like { $item->delete; }
             qr/after_item_action called with action: delete/,
             'DelItem calls the hook with action=delete, item_id passed';
 

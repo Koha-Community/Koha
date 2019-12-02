@@ -3007,7 +3007,7 @@ subtest 'Cancel transfers on lost items' => sub {
     is( $itemcheck->holdingbranch, $library_1->{branchcode}, 'Items holding branch is the transfers origin branch before it is marked as lost' );
 
     #Simulate item being marked as lost and confirm the transfer is deleted and the items holding branch is the transfers source branch
-    ModItem( { itemlost => 1 }, $item->biblionumber, $item->itemnumber );
+    $item->itemlost(1)->store;
     LostItem( $item->itemnumber, 'test', 1 );
     ($datesent,$frombranch,$tobranch) = GetTransfers($item->itemnumber);
     is( $tobranch, undef, 'The transfer on the lost item has been deleted as the LostItemCancelOutstandingTransfer is enabled');
