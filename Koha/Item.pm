@@ -77,8 +77,10 @@ sub store {
     }
 
     my %updated_columns = $self->_result->get_dirty_columns;
-    if ( exists $updated_columns{itemcallnumber} ) {
-        my $cn_sort = GetClassSort($self->cn_source, $self->itemcallnumber, "");
+    if (   exists $updated_columns{itemcallnumber}
+        or exists $updated_columns{cn_source} )
+    {
+        my $cn_sort = GetClassSort( $self->cn_source, $self->itemcallnumber, "" );
         $self->cn_sort($cn_sort);
     }
 
