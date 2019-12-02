@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item deletion</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -108,9 +109,22 @@
               <tr>
                 [% IF show %]
                   [% IF item_loo.nomod %]
-                    <td class="error">Cannot edit</td>
-                  [% ELSE %]
-                    <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" data-is-onloan="[% item_loo.onloan | html %]" /></td>
+                    <td class="error">Cannot delete</td>
+                [% ELSE %]
+                    [% SET can_be_deleted = item_loo.item.safe_to_delete %]
+                    [% IF can_be_deleted == 1 %]
+                        <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" /></td>
+                    [% ELSE %]
+                        [% SWITCH can_be_deleted %]
+                        [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
+                        [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belongs to your library") %]
+                        [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
+                        [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
+                        [% CASE %][% SET cannot_delete_reason = t("Unknown reason") %]
+                        [% END %]
+
+                        <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" disabled="disabled" title="[% cannot_delete_reason %]"/></td>
+                    [% END %]
                   [% END %]
                 [% ELSE %]
                   <td>&nbsp;</td>
