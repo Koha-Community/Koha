@@ -234,6 +234,8 @@ returns 1 if the item is safe to delete,
 
 "linked_analytics" if the item has linked analytic records.
 
+"last_item_for_hold" if the item is the last one on a record on which a biblio-level hold is placed
+
 =cut
 
 sub safe_to_delete {
@@ -253,6 +255,14 @@ sub safe_to_delete {
 
     return "linked_analytics"
       if C4::Items::GetAnalyticsCount( $self->itemnumber ) > 0;
+
+    return "last_item_for_hold"
+      if $self->biblio->items->count == 1
+      && $self->biblio->holds->search(
+          {
+              itemnumber => undef,
+          }
+        )->count;
 
     return 1;
 }

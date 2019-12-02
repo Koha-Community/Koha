@@ -342,7 +342,7 @@ subtest 'pickup_locations' => sub {
 };
 
 subtest 'deletion' => sub {
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -428,6 +428,14 @@ subtest 'deletion' => sub {
             'Linked analytics prevents deletion of item',
         );
 
+    }
+
+    { # last_item_for_hold
+        C4::Reserves::AddReserve($patron->branchcode, $patron->borrowernumber, $item->biblionumber );
+        is( $item->safe_to_delete, 'last_item_for_hold', 'Item cannot be deleted if a biblio-level is placed on the biblio and there is only 1 item attached to the biblio' );
+
+        # With another item attached to the biblio, the item can be deleted
+        $builder->build_sample_item({ biblionumber => $item->biblionumber });
     }
 
     is(
