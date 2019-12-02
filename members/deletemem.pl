@@ -56,7 +56,8 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser );
 my $patron         = Koha::Patrons->find( $member );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $charges = $patron->account->non_issues_charges;
+my $debits = $patron->account->outstanding_debits->total_outstanding;
+my $credits = $patron->account->outstanding_credits->total_outstanding;
 my $countissues = $patron->checkouts->count;
 my $userenv = C4::Context->userenv;
 
@@ -86,32 +87,22 @@ my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $patron->guarantee_relationships->count;
 my $countholds = $dbh->selectrow_array("SELECT COUNT(*) FROM reserves WHERE borrowernumber=?", undef, $member);
-if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor ) {
 
+$template->param(
+    patron        => $patron,
+    ItemsOnIssues => $countissues,
+    debits        => $debits,
+    credits       => $credits,
+    is_guarantor  => $is_guarantor,
+    ItemsOnHold   => $countholds,
+);
+
+if ( $op eq 'delete_confirm' or $countissues > 0 or $debits or $is_guarantor ) {
     $template->param(
-        patron => $patron,
+        op         => 'delete_confirm',
+        csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
     );
-    if ($countissues >0) {
-        $template->param(ItemsOnIssues => $countissues);
-    }
-    if ( $charges > 0 ) {
-        $template->param(charges => $charges);
-    }
-    if ( $is_guarantor ) {
-        $template->param( guarantees => 1 );
-    }
-    if($countholds > 0){
-        $template->param(ItemsOnHold => $countholds);
-    }
-    # This is silly written but reflect the same conditions as above
-    if ( not $countissues > 0 and not $charges > 0 and not $is_guarantor ) {
-        $template->param(
-            op         => 'delete_confirm',
-            csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
-        );
-    }
 } elsif ( $op eq 'delete_confirmed' ) {
-
     output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf( {
             session_id => $input->cookie('CGISESSID'),

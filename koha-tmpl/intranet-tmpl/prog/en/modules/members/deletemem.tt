@@ -19,17 +19,17 @@
             <main>
 
     [% INCLUDE 'members-toolbar.inc' %]
-    [% IF ( ItemsOnIssues || charges || guarantees ) %]
+    [% IF ItemsOnIssues || debits || is_guarantor %]
         <div class="dialog alert">
         <h3>Cannot delete patron</h3>
             <ul>
             [% IF ( ItemsOnIssues ) %]
                 <li>Patron has [% ItemsOnIssues | html %] item(s) checked out.</li>
             [% END %]
-            [% IF ( charges ) %]
-                <li>Patron has [% charges | $Price %] in fines.</li>
+            [% IF debits %]
+                <li>Patron has [% debits | $Price %] in fines.</li>
             [% END %]
-            [% IF ( guarantees ) %]
+            [% IF is_guarantor %]
                 <li>Patron's record has guaranteed accounts attached.</li>
             [% END %]
             </ul>
@@ -41,6 +41,10 @@
             <h3>Patron has [% ItemsOnHold | html %] hold(s). Deleting patron cancels all their holds.</h3></br>
             [% END %]
             <h3>Are you sure you want to delete the patron [% patron.firstname | html %] [% patron.surname | html %]? This cannot be undone.</h3>
+
+            [% IF credits %]
+                <h4>Patron has a [% credits | $Price %] credit.</h4>
+            [% END %]
             <form action="/cgi-bin/koha/members/deletemem.pl">
                 <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                 <input type="hidden" name="member" value="[% patron.borrowernumber | html %]"/>
