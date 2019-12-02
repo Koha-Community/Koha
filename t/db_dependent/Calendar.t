@@ -199,7 +199,7 @@ subtest 'hours_between | days_between' => sub {
         my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
 
         subtest 'Same hours' => sub {
-            plan tests => 10;
+            plan tests => 12;
 
             my ( $diff_hours, $diff_days );
 
@@ -209,10 +209,16 @@ subtest 'hours_between | days_between' => sub {
             $diff_days = $calendar->days_between( $now, $nov_6)->delta_days;
             is( $diff_days, 0, '' ); # FIXME Is this really should be 0?
 
+            # Between 6th and 7th (This case should never happen in real code, one cannot issue on a closed day)
+            $diff_hours = $calendar->hours_between( $nov_6, $nov_7 )->hours;
+            is( $diff_hours, 0 * 24, '' ); # FIXME Is this really should be 0?
+            $diff_days = $calendar->days_between( $nov_6, $nov_7 )->delta_days;
+            is( $diff_days, 0, '' ); # FIXME Is this really should be 0?
+
             # Between 5th and 7th
             $diff_hours = $calendar->hours_between( $now, $nov_7 )->hours;
             is( $diff_hours, 2 * 24 - 1 * 24, '' );
-            $diff_days = $calendar->days_between( $now, $nov_7)->delta_days;
+            $diff_days = $calendar->days_between( $now, $nov_7 )->delta_days;
             is( $diff_days, 2 - 1, '' );
 
             # Between 5th and 12th
@@ -235,7 +241,7 @@ subtest 'hours_between | days_between' => sub {
         };
 
         subtest 'Different hours' => sub {
-            plan tests => 11;
+            plan tests => 14;
 
             my ( $diff_hours, $diff_days );
 
@@ -247,6 +253,13 @@ subtest 'hours_between | days_between' => sub {
             is( $duration->hours, abs(0 * 24 - 3), '' ); # FIXME $duration->hours always return a abs
             is( $duration->is_negative, 1, ); # FIXME Do really test for that case in our calls to hours_between?
             $duration = $calendar->days_between( $now, $nov_6->clone->subtract(hours => 3) );
+            is( $duration->hours, abs(0), '' ); # FIXME Is this correct?
+
+            # Between 6th and 7th (This case should never happen in real code, one cannot issue on a closed day)
+            $duration = $calendar->hours_between( $nov_6, $nov_7->clone->subtract(hours => 3) );
+            is( $duration->hours, abs(0 * 24 - 3), '' ); # FIXME $duration->hours always return a abs
+            is( $duration->is_negative, 1, ); # FIXME Do really test for that case in our calls to hours_between?
+            $duration = $calendar->days_between( $nov_6, $nov_7->clone->subtract(hours => 3) );
             is( $duration->hours, abs(0), '' ); # FIXME Is this correct?
 
             # Between 5th and 7th
