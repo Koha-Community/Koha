@@ -39,11 +39,17 @@ subtest 'checkauth() tests' => sub {
 
     plan tests => 3;
 
-    my $patron = $builder->build({ source => 'Borrower', value => { flags => undef } })->{userid};
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => undef } });
 
     # Mock a CGI object with real userid param
     my $cgi = Test::MockObject->new();
-    $cgi->mock( 'param', sub { return $patron; } );
+    $cgi->mock(
+        'param',
+        sub {
+            my $var = shift;
+            if ( $var eq 'userid' ) { return $patron->userid; }
+        }
+    );
     $cgi->mock( 'cookie', sub { return; } );
 
     my $authnotrequired = 1;
