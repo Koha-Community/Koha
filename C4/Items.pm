@@ -1608,6 +1608,23 @@ sub PrepareItemrecordDisplay {
                     $defaultvalue = q||;
                 } else {
                     $defaultvalue =~ s/"/&quot;/g;
+                    # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
+                    my $today_dt = dt_from_string;
+                    my $year     = $today_dt->strftime('%Y');
+                    my $shortyear     = $today_dt->strftime('%y');
+                    my $month    = $today_dt->strftime('%m');
+                    my $day      = $today_dt->strftime('%d');
+                    $defaultvalue =~ s/<<YYYY>>/$year/g;
+                    $defaultvalue =~ s/<<YY>>/$shortyear/g;
+                    $defaultvalue =~ s/<<MM>>/$month/g;
+                    $defaultvalue =~ s/<<DD>>/$day/g;
+
+                    # And <<USER>> with surname (?)
+                    my $username =
+                      (   C4::Context->userenv
+                        ? C4::Context->userenv->{'surname'}
+                        : "superlibrarian" );
+                    $defaultvalue =~ s/<<USER>>/$username/g;
                 }
 
                 my $maxlength = $tagslib->{$tag}->{$subfield}->{maxlength};

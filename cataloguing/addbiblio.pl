@@ -279,12 +279,14 @@ sub create_input {
     if ( $value eq '' ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} // q{};
 
-        # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
+        # get today date & replace <<YYYY>>, <<YY>>, <<MM>>, <<DD>> if provided in the default value
         my $today_dt = dt_from_string;
         my $year = $today_dt->strftime('%Y');
+        my $shortyear = $today_dt->strftime('%y');
         my $month = $today_dt->strftime('%m');
         my $day = $today_dt->strftime('%d');
         $value =~ s/<<YYYY>>/$year/g;
+        $value =~ s/<<YY>>/$shortyear/g;
         $value =~ s/<<MM>>/$month/g;
         $value =~ s/<<DD>>/$day/g;
         # And <<USER>> with surname (?)
