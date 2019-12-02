@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Biblio;
 
 use Koha::Database;
+use Koha::Caches;
 
 use MARC::Field;
 
@@ -94,23 +95,24 @@ subtest 'open redirection vulnerabilities in tracklinks' => sub {
       '/cgi-bin/koha/tracklinks.pl?uri=http://www.google.com&itemnumber='
       . $itemnumber1;
 
+    Koha::Caches->flush_L1_caches;
     # Don't Track
-    t::lib::Mocks::mock_preference( 'TrackClicks', '' );
+    C4::Context->set_preference( 'TrackClicks', '' );
     $t->get_ok( $opac . $no_biblionumber )
       ->status_is( 404, "404 for no biblionumber" );
     $t->get_ok( $opac . $bad_biblionumber1 )
-      ->status_is( 404, "404 for biblionumber containing no URI" );
+      ->status_is( 404, "404 for biblionumber containing no URI - pref off" );
     $t->get_ok( $opac . $bad_biblionumber2 )
-      ->status_is( 404, "404 for biblionumber containing different URI" );
+      ->status_is( 404, "404 for biblionumber containing different URI - pref off" );
     $t->get_ok( $opac . $good_biblionumber )
-      ->status_is( 302, "302 for biblionumber with matching URI" );
+      ->status_is( 404, "404 for biblionumber with matching URI - pref off" );
     $t->get_ok( $opac . $bad_itemnumber )
-      ->status_is( 404, "404 for itemnumber containing different URI" );
+      ->status_is( 404, "404 for itemnumber containing different URI- pref off" );
     $t->get_ok( $opac . $good_itemnumber )
-      ->status_is( 302, "302 for itemnumber with matching URI" );
+      ->status_is( 404, "404 for itemnumber with matching URI - pref off" );
 
     # Track
-    t::lib::Mocks::mock_preference( 'TrackClicks', 'track' );
+    C4::Context->set_preference( 'TrackClicks', 'track' );
     $t->get_ok( $opac . $no_biblionumber )
       ->status_is( 404, "404 for no biblionumber" );
     $t->get_ok( $opac . $bad_biblionumber1 )
@@ -125,7 +127,7 @@ subtest 'open redirection vulnerabilities in tracklinks' => sub {
       ->status_is( 302, "302 for itemnumber with matching URI" );
 
     # Track Anonymous
-    t::lib::Mocks::mock_preference( 'TrackClicks', 'anonymous' );
+    C4::Context->set_preference( 'TrackClicks', 'anonymous' );
     $t->get_ok( $opac . $no_biblionumber )
       ->status_is( 404, "404 for no biblionumber" );
     $t->get_ok( $opac . $bad_biblionumber1 )
