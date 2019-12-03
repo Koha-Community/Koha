@@ -21,7 +21,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Warn;
@@ -167,6 +167,35 @@ subtest 'Lastseen response' => sub {
     $schema->storage->txn_rollback;
 
 };
+
+subtest "Test build_additional_item_fields_string" => sub {
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    my $item = $builder->build( { source => 'Item' } );
+    my $ils_item = C4::SIP::ILS::Item->new( $item->{barcode} );
+
+    my $server = {};
+    $server->{account}->{item_field}->{code} = 'itemnumber';
+    $server->{account}->{item_field}->{field} = 'XY';
+    my $attribute_string = $ils_item->build_additional_item_fields_string( $server );
+    is( $attribute_string, "XY$item->{itemnumber}|", 'Attribute field generated correctly with single param' );
+
+    $server = {};
+    $server->{account}->{item_field}->[0]->{code} = 'itemnumber';
+    $server->{account}->{item_field}->[0]->{field} = 'XY';
+    $server->{account}->{item_field}->[1]->{code} = 'biblionumber';
+    $server->{account}->{item_field}->[1]->{field} = 'YZ';
+    $attribute_string = $ils_item->build_additional_item_fields_string( $server );
+    is( $attribute_string, "XY$item->{itemnumber}|YZ$item->{biblionumber}|", 'Attribute field generated correctly with multiple params' );
+
+    $schema->storage->txn_rollback;
+};
+
 # Here is room for some more subtests
 
 # END of main code
