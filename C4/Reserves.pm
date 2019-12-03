@@ -1987,24 +1987,18 @@ sub RevertWaitingStatus {
     $sth = $dbh->prepare( $query );
     $sth->execute( $reserve->{'biblionumber'} );
 
-    ## Fix up the currently waiting reserve
-    $query = "
-    UPDATE reserves
-    SET
-      priority = 1,
-      found = NULL,
-      waitingdate = NULL
-    WHERE
-      reserve_id = ?
-    ";
-    $sth = $dbh->prepare( $query );
-    $sth->execute( $reserve->{'reserve_id'} );
-
-    unless ( $hold->item_level_hold ) {
-        $hold->itemnumber(undef)->store;
-    }
+    $hold->set(
+        {
+            priority    => 1,
+            found       => undef,
+            waitingdate => undef,
+            itemnumber  => $hold->item_level_hold ? $hold->itemnumber : undef,
+        }
+    )->store();
 
     _FixPriority( { biblionumber => $reserve->{biblionumber} } );
+
+    return $hold;
 }
 
 =head2 ReserveSlip
