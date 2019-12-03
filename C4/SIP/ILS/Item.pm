@@ -14,6 +14,7 @@ use Carp;
 use Template;
 
 use C4::SIP::ILS::Transaction;
+use C4::SIP::Sip qw(add_field);
 
 use C4::Debug;
 use C4::Context;
@@ -86,6 +87,8 @@ sub new {
     $self->{permanent_location}= $item->homebranch;
     $self->{'collection_code'} = $item->ccode;
     $self->{  'call_number'  } = $item->itemcallnumber;
+
+    $self->{object} = $item;
 
     my $it = $item->effective_itemtype;
     my $itemtype = Koha::Database->new()->schema()->resultset('Itemtype')->find( $it );
@@ -387,6 +390,35 @@ sub fill_reserve {
     }
     return ModReserveFill($hold);
 }
+
+=head2 build_additional_item_fields_string
+
+This method builds the part of the sip message for additional item fields
+to send in the item related message responses
+
+=cut
+
+sub build_additional_item_fields_string {
+    my ( $self, $server ) = @_;
+
+    my $string = q{};
+
+    if ( $server->{account}->{item_field} ) {
+        my @fields_to_send =
+          ref $server->{account}->{item_field} eq "ARRAY"
+          ? @{ $server->{account}->{item_field} }
+          : ( $server->{account}->{item_field} );
+
+        foreach my $f ( @fields_to_send ) {
+            my $code = $f->{code};
+            my $value = $self->{object}->$code;
+            $string .= add_field( $f->{field}, $value );
+        }
+    }
+
+    return $string;
+}
+
 1;
 __END__
 
