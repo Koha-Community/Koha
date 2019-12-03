@@ -2595,7 +2595,7 @@ subtest '_FixAccountForLostAndReturned returns undef if patron is deleted' => su
 };
 
 subtest 'Set waiting flag' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     my $library_1 = $builder->build( { source => 'Branch' } );
     my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} } } );
@@ -2639,10 +2639,11 @@ subtest 'Set waiting flag' => sub {
     $hold = Koha::Holds->find( $reserve_id );
     is( $hold->found, undef, 'Hold is no longer marked waiting' );
     is( $hold->priority, 1,  "Hold is now priority one again");
+    is( $hold->waitingdate, undef, "Hold no longer has a waiting date");
+    is( $hold->itemnumber, $item->{itemnumber}, "Hold has retained its' itemnumber");
     is( $messages->{ResFound}->{ResFound}, "Reserved", "Hold is still returned");
     is( $messages->{ResFound}->{found}, undef, "Hold is no longer marked found in return message");
     is( $messages->{ResFound}->{priority}, 1, "Hold is priority 1 in return message");
-
 };
 
 subtest 'Cancel transfers on lost items' => sub {
