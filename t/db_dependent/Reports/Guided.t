@@ -361,11 +361,12 @@ count(h.reservedate) AS 'holds'
 
 subtest 'Email report test' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     my $id1 = $builder->build({ source => 'Borrower',value => { surname => 'mailer', email => 'a@b.com' } })->{ borrowernumber };
     my $id2 = $builder->build({ source => 'Borrower',value => { surname => 'nomailer', email => undef } })->{ borrowernumber };
-    my $report1 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT surname,borrowernumber,email FROM borrowers WHERE borrowernumber IN ($id1,$id2)" } })->{ id };
+    my $id3 = $builder->build({ source => 'Borrower',value => { surname => 'norman', email => 'a@b.com' } })->{ borrowernumber };
+    my $report1 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT surname,borrowernumber,email FROM borrowers WHERE borrowernumber IN ($id1,$id2,$id3)" } })->{ id };
     my $report2 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT potato FROM mashed" } })->{ id };
 
     my $letter1 = $builder->build({
@@ -408,6 +409,7 @@ subtest 'Email report test' => sub {
 
     ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh' });
     is( $emails->[0]{letter}->{content}, "mailer", "Message has expected content");
+    is( $emails->[1]{letter}->{content}, "norman", "Message has expected content");
 
 };
 
