@@ -1029,7 +1029,7 @@ sub EmailReport {
 
         $letter->{content}       = $content;
         $email->{borrowernumber} = $row->{borrowernumber};
-        $email->{letter}         = $letter;
+        $email->{letter}         = { %$letter };
         $email->{from_address}   = $from_address;
         $email->{to_address}     = $to_address;
 
