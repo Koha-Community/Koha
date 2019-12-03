@@ -20,6 +20,8 @@
 
 use CGI qw ( -utf8 );
 use Modern::Perl;
+use Try::Tiny;
+
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
@@ -34,6 +36,8 @@ use C4::Members;
 use MARC::File::XML;
 use List::MoreUtils qw/uniq/;
 
+use Koha::Database;
+use Koha::Exceptions::Exception;
 use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::DateUtils;
@@ -181,107 +185,140 @@ if ($op eq "action") {
 	    }
         }
 
-	# For each item
-	my $i = 1; 
-	foreach my $itemnumber(@itemnumbers){
+        try {
+            my $schema = Koha::Database->new->schema;
+            $schema->txn_do(
+                sub {
+                    # For each item
+                    my $i = 1;
+                    foreach my $itemnumber (@itemnumbers) {
+                        $job->progress($i) if $runinbackground;
+                        my $item = Koha::Items->find($itemnumber);
+                        next
+                          unless $item
+                          ; # Should have been tested earlier, but just in case...
+                        my $itemdata = $item->unblessed;
+                        if ($del) {
+                            my $return = $item->safe_delete;
+                            if ( ref( $return ) ) {
+                                $deleted_items++;
+                            }
+                            else {
+                                $not_deleted_items++;
+                                push @not_deleted,
+                                  {
+                                    biblionumber => $itemdata->{'biblionumber'},
+                                    itemnumber   => $itemdata->{'itemnumber'},
+                                    barcode      => $itemdata->{'barcode'},
+                                    title        => $itemdata->{'title'},
+                                    reason       => $return,
+                                  };
+                            }
 
-		$job->progress($i) if $runinbackground;
-        my $item = Koha::Items->find($itemnumber);
-        next unless $item; # Should have been tested earlier, but just in case...
-        my $itemdata = $item->unblessed;
-        if ( $del ){
-            my $return = $item->safe_delete;
-            if (ref($return)) {
-			    $deleted_items++;
-			} else {
-			    $not_deleted_items++;
-			    push @not_deleted,
-				{ biblionumber => $itemdata->{'biblionumber'},
-				  itemnumber => $itemdata->{'itemnumber'},
-				  barcode => $itemdata->{'barcode'},
-				  title => $itemdata->{'title'},
-				  $return => 1
-				};
-			}
-
-                # If there are no items left, delete the biblio
-                if ($del_records) {
-                    my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
-                    if ( $itemscount == 0 ) {
-                        my $error = DelBiblio( $itemdata->{'biblionumber'} );
-                        unless ($error) {
-                            $deleted_records++;
-                            if ( $src eq 'CATALOGUING' ) {
-                                # We are coming catalogue/detail.pl, there were items from a single bib record
-                                $template->param( biblio_deleted => 1 );
+                            # If there are no items left, delete the biblio
+                            if ($del_records) {
+                                my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
+                                if ( $itemscount == 0 ) {
+                                    my $error = DelBiblio( $itemdata->{'biblionumber'} );
+                                    unless ($error) {
+                                        $deleted_records++;
+                                        if ( $src eq 'CATALOGUING' ) {
+                                            # We are coming catalogue/detail.pl, there were items from a single bib record
+                                            $template->param( biblio_deleted => 1 );
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
-                }
-		} else {
-            if ($values_to_modify || $values_to_blank) {
-                my $localmarcitem = Item2Marc($itemdata);
-                my $modified = 0;
+                        else {
+                            if ( $values_to_modify || $values_to_blank ) {
+                                my $localmarcitem = Item2Marc($itemdata);
+                                my $modified = 0;
 
-                for ( my $i = 0 ; $i < @tags ; $i++ ) {
-                    my $search = $searches[$i];
-                    next unless $search;
+                                for ( my $i = 0 ; $i < @tags ; $i++ ) {
+                                    my $search = $searches[$i];
+                                    next unless $search;
 
-                    my $tag = $tags[$i];
-                    my $subfield = $subfields[$i];
-                    my $replace = $replaces[$i];
+                                    my $tag = $tags[$i];
+                                    my $subfield = $subfields[$i];
+                                    my $replace = $replaces[$i];
 
-                    my $value = $localmarcitem->field( $tag )->subfield( $subfield );
-                    my $old_value = $value;
+                                    my $value = $localmarcitem->field( $tag )->subfield( $subfield );
+                                    my $old_value = $value;
 
-                    my @available_modifiers = qw( i g );
-                    my $retained_modifiers = q||;
-                    for my $modifier ( split //, $modifiers[$i] ) {
-                        $retained_modifiers .= $modifier
-                            if grep {/$modifier/} @available_modifiers;
-                    }
-                    if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
-                        $value =~ s/$search/$replace/ig;
-                    }
-                    elsif ( $retained_modifiers eq 'i' ) {
-                        $value =~ s/$search/$replace/i;
-                    }
-                    elsif ( $retained_modifiers eq 'g' ) {
-                        $value =~ s/$search/$replace/g;
-                    }
-                    else {
-                        $value =~ s/$search/$replace/;
-                    }
+                                    my @available_modifiers = qw( i g );
+                                    my $retained_modifiers = q||;
+                                    for my $modifier ( split //, $modifiers[$i] ) {
+                                        $retained_modifiers .= $modifier
+                                            if grep {/$modifier/} @available_modifiers;
+                                    }
+                                    if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
+                                        $value =~ s/$search/$replace/ig;
+                                    }
+                                    elsif ( $retained_modifiers eq 'i' ) {
+                                        $value =~ s/$search/$replace/i;
+                                    }
+                                    elsif ( $retained_modifiers eq 'g' ) {
+                                        $value =~ s/$search/$replace/g;
+                                    }
+                                    else {
+                                        $value =~ s/$search/$replace/;
+                                    }
 
-                    my @fields_to = $localmarcitem->field($tag);
-                    foreach my $field_to_update ( @fields_to ) {
-                        unless ( $old_value eq $value ) {
-                            $modified++;
-                            $field_to_update->update( $subfield => $value );
+                                    my @fields_to = $localmarcitem->field($tag);
+                                    foreach my $field_to_update ( @fields_to ) {
+                                        unless ( $old_value eq $value ) {
+                                            $modified++;
+                                            $field_to_update->update( $subfield => $value );
+                                        }
+                                    }
+                                }
+
+                                $modified += UpdateMarcWith( $marcitem, $localmarcitem );
+                                if ($modified) {
+                                    eval {
+                                        if (
+                                            my $item = ModItemFromMarc(
+                                                $localmarcitem,
+                                                $itemdata->{biblionumber},
+                                                $itemnumber
+                                            )
+                                          )
+                                        {
+                                            LostItem( $itemnumber, 'batchmod' )
+                                              if $item->{itemlost}
+                                              and not $itemdata->{itemlost};
+                                        }
+                                    };
+                                }
+                                if ($runinbackground) {
+                                    $modified_items++ if $modified;
+                                    $modified_fields += $modified;
+                                    $job->set(
+                                        {
+                                            modified_items  => $modified_items,
+                                            modified_fields => $modified_fields,
+                                        }
+                                    );
+                                }
+                            }
                         }
+                        $i++;
+                    }
+                    if (@not_deleted) {
+                        Koha::Exceptions::Exception->throw(
+                            'Some items have not been deleted, rolling back');
                     }
                 }
-
-                $modified += UpdateMarcWith( $marcitem, $localmarcitem );
-                if ( $modified ) {
-                    eval {
-                        if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
-                            LostItem($itemnumber, 'batchmod') if $item->{itemlost} and not $itemdata->{itemlost};
-                        }
-                    };
-                }
-                if ( $runinbackground ) {
-                    $modified_items++ if $modified;
-                    $modified_fields += $modified;
-                    $job->set({
-                        modified_items  => $modified_items,
-                        modified_fields => $modified_fields,
-                    });
-                }
-		    }
-		}
-		$i++;
-	}
+            );
+        }
+        catch {
+            if ( $_->isa('Koha::Exceptions::Exception') ) {
+                $template->param( deletion_failed => 1 );
+            }
+            die "Something terrible has happened!"
+                if ($_ =~ /Rollback failed/); # Rollback failed
+        }
     }
 }
 #

@@ -120,7 +120,8 @@
                         [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belongs to your library") %]
                         [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
                         [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
-                        [% CASE %][% SET cannot_delete_reason = t("Unknown reason") %]
+                        [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record wich biblio-level hold on it") %]
+                        [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ can_be_deleted _ ')' %]
                         [% END %]
 
                         <td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" disabled="disabled" title="[% cannot_delete_reason %]"/></td>
@@ -210,7 +211,12 @@
     [% END %]
 
 [% IF ( action ) %]
-    <div class="dialog message">
+    [% IF deletion_failed %]
+        <div class="dialog alert">
+            At least one item blocked the deletion. The operation rolled back and nothing happened!
+        </div>
+    [% ELSE %]
+        <div class="dialog message">
             <p>[% deleted_items | html %] item(s) deleted.</p>
             [% IF delete_records %] <p>[% deleted_records | html %] record(s) deleted.</p> [% END %]
             [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
@@ -225,6 +231,7 @@
                 <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a>
             [% END %]
         </div>
+    [% END %]
     [% IF ( not_deleted_items ) %]
     <div style="width:55%;margin:auto;">
         <p>[% not_deleted_items | html %] item(s) could not be deleted: [% FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers %][% not_deleted_itemnumber.itemnumber | html %][% END %]</p>
@@ -242,7 +249,17 @@
             <tr>
                 <td>[% not_deleted_loo.itemnumber | html %]</td>
                 <td>[% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber | uri %]&amp;itemnumber=[% not_deleted_loo.itemnumber | uri %]">[% not_deleted_loo.barcode | html %]</a>[% ELSE %][% not_deleted_loo.barcode | html %][% END %]</td>
-                <td>[% IF ( not_deleted_loo.book_on_loan ) %]Item is checked out[% ELSIF ( not_deleted_loo.book_reserved ) %]Item has a waiting hold[% END %]</td>
+                <td>
+                    [% SWITCH not_deleted_loo.reason %]
+                    [% CASE "book_on_loan" %][% SET cannot_delete_reason = t("Item is checked out") %]
+                    [% CASE "not_same_branch" %][% SET cannot_delete_reason = t("Item does not belongs to your library") %]
+                    [% CASE "book_reserved" %][% SET cannot_delete_reason = t("Item has a waiting hold") %]
+                    [% CASE "linked_analytics" %][% SET cannot_delete_reason = t("Item has linked analytics") %]
+                    [% CASE "last_item_for_hold" %][% SET cannot_delete_reason = t("Last item for bibliographic record wich biblio-level hold on it") %]
+                    [% CASE %][% SET cannot_delete_reason = t("Unknown reason") _ '(' _ can_be_deleted _ ')' %]
+                    [% END %]
+                    [% cannot_delete_reason %]
+                </td>
             </tr>
             [% END %]
         </tbody>
