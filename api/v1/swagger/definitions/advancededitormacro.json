@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "macro_id": {
+      "$ref": "../x-primitives.json#/advancededitormacro_id"
+    },
+    "name": {
+      "description": "macro name",
+      "type": "string"
+    },
+    "macro_text": {
+      "description": "macro text",
+      "type": ["string", "null"]
+    },
+    "patron_id": {
+      "description": "borrower number",
+      "type": ["integer", "null"]
+    },
+    "shared": {
+        "description": "is macro shared",
+        "type": ["boolean", "null"]
+    }
+  },
+  "additionalProperties": false,
+  "required": ["name", "macro_text", "patron_id", "shared"]
+}
