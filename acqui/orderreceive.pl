@@ -114,7 +114,8 @@ unless ( $results and @$results) {
 my $order = $results->[0];
 my $order_object = Koha::Acquisition::Orders->find( $ordernumber );
 my $basket = $order_object->basket;
-my $active_currency = Koha::Acquisition::Currencies->get_active;
+my $currencies = Koha::Acquisition::Currencies->search;
+my $active_currency = $currencies->get_active;
 
 # Check if ACQ framework exists
 my $acq_fw = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
@@ -228,8 +229,8 @@ $template->param(
     booksellerid          => $order->{'booksellerid'},
     freight               => $freight,
     name                  => $bookseller->name,
-    cur_active_sym        => $active_currency->symbol,
-    cur_active            => $active_currency->currency,
+    active_currency       => $active_currency,
+    currencies            => scalar $currencies->search({ rate => { '!=' => 1 } }),
     invoiceincgst         => $bookseller->invoiceincgst,
     title                 => $order->{'title'},
     author                => $order->{'author'},

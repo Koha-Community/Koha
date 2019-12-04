@@ -288,7 +288,7 @@
             <input type="hidden" name="tax_rate" value="0" />
         [% END %]
 
-        <li><label for="rrp">Retail price: </label>[% rrp | $Price %] <span class="hint">(adjusted for [% cur_active | html %], [% IF (invoiceincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])</span></li>
+        <li><label for="rrp">Retail price: </label>[% rrp | $Price %] <span class="hint">(adjusted for [% active_currency.currency | html %], [% IF (invoiceincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])</span></li>
         <li>
             <label for="replacementprice">Replacement price:</label>
             <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price on_editing => 1 %]" />
@@ -296,7 +296,21 @@
         <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %] <span class="hint">[% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span></li>
         <li>
             <label for="unitprice">Actual cost:</label>
-            <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 %]" /> <span class="hint">[% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span>
+            <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 %]" />
+            <span class="hint">[% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span>
+            <label style="font-weight: inherit; float:none;"><input type="checkbox" name="change_currency">Change currency</label>
+        </li>
+        <li id="select_currency">
+            <label for="unitprice_currency"></label>
+            <input type="text" size="20" name="unitprice" id="unitprice_currency" value="" />
+            [% IF currencies.count %]
+                <select name="currency">
+                    <option value="[% active_currency.rate %]" selected="selected">[% active_currency.currency %] ([% active_currency.symbol %])</option>
+                    [% FOR currency IN currencies %]
+                        <option value="[% currency.rate %]">[% currency.currency %] ([% currency.symbol %])</option>
+                    [% END %]
+                </select>
+            [% END %]
         </li>
         <li><label for="order_internalnote">Internal note: </label><textarea name="order_internalnote" width="40" rows="8" >[% order_internalnote | html %]</textarea></li>
         [% IF order_vendornote %]
@@ -436,6 +450,25 @@
                     CheckNItems($(this).val());
                 });
             [% END %]
+
+            $("input[name='change_currency']").on("change", function(){
+                if ( $(this).is(":checked") ) {
+                    $("#select_currency").show();
+                    $("#unitprice").prop("readonly", "true");
+                } else {
+                    $("#select_currency").hide();
+                    $("#unitprice").prop("readonly", "");
+                }
+            }).change();
+
+            function update_unitprice() {
+                var rate = Number($("select[name='currency'] option:selected").val());
+                var unitprice = $("#unitprice_currency").val();
+                var new_unitprice = Number( unitprice * rate ).toFixed(2);
+                $("#unitprice").val(new_unitprice);
+            }
+            $("select[name='currency']").on("change", function(){update_unitprice()} );
+            $("#unitprice_currency").on("change", function(){update_unitprice()} );
         });
     </script>
 [% END %]
