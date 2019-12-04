@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -13,6 +13,7 @@ use C4::SIP::ILS::Patron;
 use C4::SIP::ILS::Transaction::RenewAll;
 use C4::SIP::ILS::Transaction::Checkout;
 use C4::SIP::ILS::Transaction::FeePayment;
+use C4::SIP::ILS::Transaction::Hold;
 
 use C4::Reserves;
 use Koha::IssuingRules;
@@ -134,6 +135,54 @@ subtest "FeePayment->pay tests" => sub {
     is( $offsets->count, 1, "FeePayment produced an offset line correctly" );
     my $credit = $offsets->next->credit;
     is( $credit->payment_type, 'SIP00', "Payment type was set correctly" );
+};
+
+subtest cancel_hold => sub {
+    plan tests => 7;
+
+    my $category = $builder->build({ source => 'Category', value => { category_type => 'A' }});
+    my $branch   = $builder->build({ source => 'Branch' });
+    my $borrower = $builder->build({ source => 'Borrower', value =>{
+        branchcode => $branch->{branchcode},
+        categorycode=>$category->{categorycode}
+        }
+    });
+    t::lib::Mocks::mock_userenv({ branchcode => $branch->{branchcode}, flags => 1 });
+
+    my $itype = $builder->build({ source => 'Itemtype', value =>{notforloan=>0} });
+    my $biblio = $builder->build_sample_biblio();
+    my $item = $builder->build_sample_item({
+        homebranch    => $branch->{branchcode},
+        holdingbranch => $branch->{branchcode},
+        biblionumber  => $biblio->biblionumber,
+        itype         => $itype->{itemtype},
+        notforloan       => 0,
+    });
+
+    Koha::IssuingRule->new({
+        categorycode     => $borrower->{categorycode},
+        itemtype         => $itype->{itemtype},
+        branchcode       => $branch->{branchcode},
+        onshelfholds     => 1,
+        reservesallowed  => 3,
+        holds_per_record => 3,
+        issuelength      => 5,
+        lengthunit       => 'days',
+    })->store;
+
+    my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->biblionumber,undef,undef,undef,undef,undef,undef,$item->itemnumber);
+    is( $biblio->holds->count(), 1, "Hold was placed on bib");
+    is( $item->holds->count(),1,"Hold was placed on specific item");
+
+    my $sip_patron = C4::SIP::ILS::Patron->new( $borrower->{cardnumber} );
+    my $sip_item   = C4::SIP::ILS::Item->new( $item->barcode );
+    my $transaction = C4::SIP::ILS::Transaction::Hold->new();
+    is( ref $transaction, "C4::SIP::ILS::Transaction::Hold", "New transaction created" );
+    is( $transaction->patron( $sip_patron ), $sip_patron, "Patron assigned to transaction" );
+    is( $transaction->item( $sip_item ), $sip_item, "Item assigned to transaction" );
+    my $hold = $transaction->drop_hold();
+    is( $biblio->holds->count(), 0, "Bib has 0 holds remaining");
+    is( $item->holds->count(), 0,  "Item has 0 holds remaining");
 };
 
 $schema->storage->txn_rollback;
