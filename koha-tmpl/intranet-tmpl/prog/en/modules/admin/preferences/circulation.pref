@@ -280,13 +280,13 @@ Circulation:
                   homebranch: the library the item is from.
                   holdingbranch: the library the item is held by.
         -
-            - Calculate the due date using 
             - pref: useDaysMode
               choices:
-                  Days: circulation rules only.
-                  Calendar: the calendar to skip all days the library is closed.
-                  Datedue: the calendar to push the due date to the next open day
-                  Dayweek: the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise
+                  Days: Ignore the calendar
+                  Calendar: Use the calendar to skip days the library is closed
+                  Datedue: Use the calendar to push the due date to the next open day
+                  Dayweek: Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise
+            - when calculating the date due.
         -
             - Calculate "No renewal before" based on
             - pref: NoRenewalBeforePrecision
@@ -735,9 +735,9 @@ Circulation:
         -
             - pref: ExcludeHolidaysFromMaxPickUpDelay
               choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - Closed days to be taken into account in reserves max pickup delay.
+                  yes: Ignore the calendar
+                  no: Use the calendar
+            - when calculating the period for reserves max pickup delay.
         -
             - pref: decreaseLoanHighHolds
               choices:
@@ -834,19 +834,19 @@ Circulation:
             - unmediated Interlibrary loan requests. If enabled and the ILL backend supports it, the newly created requests are immediately requested by backend.
     Fines Policy:
         -
-            - Calculate fines based on days overdue
             - pref: finesCalendar
               type: choice
               choices:
-                  ignoreCalendar: directly.
-                  noFinesWhenClosed: not including days the library is closed.
+                  ignoreCalendar: Ignore the calendar
+                  noFinesWhenClosed: Use the calendar
+            - when calculating the period for fines.
         -
-            - Calculate suspension expiration based on days overdue
             - pref: SuspensionsCalendar
               type: choice
               choices:
-                  ignoreCalendar: directly.
-                  noSuspensionsWhenClosed: not including days the library is closed.
+                  ignoreCalendar: Ignore the calendar
+                  noSuspensionsWhenClosed: Use the calendar
+            - when calculating the period for suspension expiration.
         -
             - pref: finesMode
               type: choice
