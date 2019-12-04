@@ -229,7 +229,7 @@ sub SearchPrefs {
     my %tab_files = _get_pref_files( $input );
     our @terms = split( /\s+/, $searchfield );
 
-    foreach my $tab_name ( keys %tab_files ) {
+    foreach my $tab_name ( sort keys %tab_files ) {
         # Force list context to remove 'uninitialized value in goto' warn coming from YAML::Syck; note that the other GetTab call is in list context too. The actual cause however is the null value for the pref OpacRenewalBranch in opac.pref
         my ($data) = GetTab( $input, $tab_name );
         my $title = ( keys( %$data ) )[0];
