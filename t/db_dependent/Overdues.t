@@ -132,7 +132,7 @@ $schema->storage->txn_rollback;
 
 subtest 'UpdateFine tests' => sub {
 
-    plan tests => 25;
+    plan tests => 53;
 
     $schema->storage->txn_begin;
 
@@ -168,8 +168,10 @@ subtest 'UpdateFine tests' => sub {
     my $fines = Koha::Account::Lines->search(
         { borrowernumber => $patron->borrowernumber } );
     is( $fines->count, 0, "No fine added when amount is 0" );
+    # Total : Outstanding : MaxFine
+    #   0   :      0      :   100
 
-    # Add fine 1
+    # Add fine 1 - First Item Overdue
     UpdateFine(
         {
             issue_id       => $checkout1->issue_id,
@@ -185,10 +187,13 @@ subtest 'UpdateFine tests' => sub {
     is( $fines->count, 1, "Fine added when amount is greater than 0" );
     my $fine = $fines->next;
     is( $fine->amount, '50.000000', "Fine amount correctly set to 50" );
+    is( $fine->amountoutstanding, '50.000000', "Fine amountoutstanding correctly set to 50" );
     is( $fine->issue_id, $checkout1->issue_id, "Fine is associated with the correct issue" );
     is( $fine->itemnumber, $checkout1->itemnumber, "Fine is associated with the correct item" );
+    # Total : Outstanding : MaxFine
+    #  50   :     50      :   100
 
-    # Increase fine 1
+    # Increase fine 1 - First Item Overdue
     UpdateFine(
         {
             issue_id       => $checkout1->issue_id,
@@ -204,8 +209,11 @@ subtest 'UpdateFine tests' => sub {
     is( $fines->count, 1, "Existing fine updated" );
     $fine = $fines->next;
     is( $fine->amount, '80.000000', "Fine amount correctly updated to 80" );
+    is( $fine->amountoutstanding, '80.000000', "Fine amountoutstanding correctly updated to 80" );
+    # Total : Outstanding : MaxFine
+    #  80   :     80      :   100
 
-    # Add fine 2
+    # Add fine 2 - Second Item Overdue
     UpdateFine(
         {
             issue_id       => $checkout2->issue_id,
@@ -223,13 +231,23 @@ subtest 'UpdateFine tests' => sub {
     is( $fines->count,        2,    "New fine added for second checkout" );
     $fine = $fines->next;
     is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    is( $fine->amountoutstanding, '80.000000', "First fine amountoutstanding unchanged" );
     my $fine2 = $fines->next;
     is( $fine2->amount, '20.000000', "Second fine capped at '20' by MaxFine" );
+    is( $fine2->amountoutstanding, '20.000000', "Second fine amountoutstanding capped at '20' by MaxFine" );
     is( $fine2->issue_id, $checkout2->issue_id, "Second fine is associated with the correct issue" );
     is( $fine2->itemnumber, $checkout2->itemnumber, "Second fine is associated with the correct item" );
+    is( $fine->amount + $fine2->amount, '100', "Total fines = 100" );
+    is( $fine->amountoutstanding + $fine2->amountoutstanding, '100', "Total outstanding = 100" );
+    # Total : Outstanding : MaxFine
+    #  100  :     100     :   100
 
     # Partial pay fine 1
-    $fine->amountoutstanding('50')->store;
+    $fine->amountoutstanding('50.000000')->store;
+    # Total : Outstanding : MaxFine
+    #  100  :     50      :   100
+
+    # Increase fine 2 - Second item overdue
     UpdateFine(
         {
             issue_id       => $checkout2->issue_id,
@@ -247,11 +265,19 @@ subtest 'UpdateFine tests' => sub {
     is( $fines->count,        2,    "Still two fines after second checkout update" );
     $fine = $fines->next;
     is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    is( $fine->amountoutstanding, '50.000000', "First fine amountoutstanding unchanged" );
     $fine2 = $fines->next;
     is( $fine2->amount, '30.000000', "Second fine increased after partial payment of first" );
+    is( $fine2->amountoutstanding, '30.000000', "Second fine amountoutstanding increased after partial payment of first" );
+    is( $fine->amount + $fine2->amount, '110', "Total fines = 100" );
+    is( $fine->amountoutstanding + $fine2->amountoutstanding, '80', "Total outstanding = 80" );
+    # Total : Outstanding : MaxFine
+    #  110  :     80      :   100
 
-    # Fix fine 1, create third fine
+    # Fix fine 1 - First item renewed
     $fine->status('RETURNED')->store;
+
+    # Add fine 3 - First item second overdue
     UpdateFine(
         {
             issue_id       => $checkout1->issue_id,
@@ -269,12 +295,58 @@ subtest 'UpdateFine tests' => sub {
     is( $fines->count,        3,    "Third fine added for overdue renewal" );
     $fine = $fines->next;
     is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    is( $fine->amountoutstanding, '50.000000', "First fine amountoutstanding unchanged" );
     $fine2 = $fines->next;
     is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    is( $fine2->amountoutstanding, '30.000000', "Second fine amountoutstanding unchanged" );
     my $fine3 = $fines->next;
     is( $fine3->amount, '20.000000', "Third fine amount capped due to MaxFine" );
+    is( $fine3->amountoutstanding, '20.000000', "Third fine amountoutstanding capped at '20' by MaxFine" );
     is( $fine3->issue_id, $checkout1->issue_id, "Third fine is associated with the correct issue" );
     is( $fine3->itemnumber, $checkout1->itemnumber, "Third fine is associated with the correct item" );
+    is( $fine->amount + $fine2->amount + $fine3->amount, '130', "Total fines = 130" );
+    is( $fine->amountoutstanding + $fine2->amountoutstanding + $fine3->amountoutstanding, '100', "Total outstanding = 100" );
+    # Total : Outstanding : MaxFine
+    #  130  :     100     :   100
+
+    # Payoff accruing fine and ensure next increment doesn't create a new one (bug #24146)
+    $fine3->amountoutstanding('0')->store;
+    is( $fine->amount + $fine2->amount + $fine3->amount, '130', "Total fines = 130" );
+    is( $fine->amountoutstanding + $fine2->amountoutstanding + $fine3->amountoutstanding, '80', "Total outstanding = 80" );
+    # Total : Outstanding : MaxFine
+    #  130  :      80     :   100
+
+    # Increase fine 3 - First item, second overdue increase
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '50',
+            due            => $checkout1->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        3,    "Still three fines after third checkout update" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    is( $fine->amountoutstanding, '50.000000', "First fine amountoutstanding unchanged" );
+    $fine2 = $fines->next;
+    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    is( $fine2->amountoutstanding, '30.000000', "Second fine amountoutstanding unchanged" );
+    $fine3 = $fines->next;
+    is( $fine3->amount, '40.000000', "Third fine amount capped due to MaxFine" );
+    is( $fine3->amountoutstanding, '20.000000', "Third fine amountoutstanding increased ..." );
+    is( $fine3->issue_id, $checkout1->issue_id, "Third fine is associated with the correct issue" );
+    is( $fine3->itemnumber, $checkout1->itemnumber, "Third fine is associated with the correct item" );
+    is( $fine->amount + $fine2->amount + $fine3->amount, '150', "Total fines = 150" );
+    is( $fine->amountoutstanding + $fine2->amountoutstanding + $fine3->amountoutstanding, '100', "Total outstanding = 100" );
+    # Total : Outstanding : MaxFine
+    #  150  :      100     :   100
 
     # FIXME: Add test to check whether sundry/manual charges are included within MaxFine.
     # FIXME: Add test to ensure other charges are not included within MaxFine.
