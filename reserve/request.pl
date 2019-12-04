@@ -548,8 +548,8 @@ foreach my $biblionumber (@biblionumbers) {
 
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $pickup );
-                $item->{not_holdable} = $can_item_be_reserved->{status} unless ( $can_item_be_reserved->{status} eq 'OK' );
+                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $pickup )->{status};
+                $item->{not_holdable} = $can_item_be_reserved unless $can_item_be_reserved eq 'OK';
 
                 $item->{item_level_holds} = Koha::IssuingRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
 
@@ -557,7 +557,7 @@ foreach my $biblionumber (@biblionumbers) {
                        !$item->{cantreserve}
                     && !$exceeded_maxreserves
                     && IsAvailableForItemLevelRequest($item_object, $patron)
-                    && $can_item_be_reserved->{status} eq 'OK'
+                    && $can_item_be_reserved eq 'OK'
                   )
                 {
                     $item->{available} = 1;
