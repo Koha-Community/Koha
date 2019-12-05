@@ -1,7 +1,7 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::MockModule;
 
 use C4::Context;
@@ -22,38 +22,41 @@ $module->mock(
             modules => {
                 admin => {
                     currency => {
-                        'currencies-table' => [
-                            {
-                                columnname         => 'currency',
-                                cannot_be_toggled  => '1',
-                                cannot_be_modified => '1'
-                            },
-                            {
-                                columnname         => 'rate',
-                                cannot_be_toggled  => '1',
-                                cannot_be_modified => '1'
-                            },
-                            {
-                                columnname => 'symbol'
-                            },
-                            {
-                                is_hidden  => '1',
-                                columnname => 'iso_code'
-                            },
-                            {
-                                columnname => 'last_updated'
-                            },
-                            {
-                                columnname => 'active'
-                            },
-                            {
-                                columnname => 'actions'
-                            }
-                        ]
+                        'currencies-table' => {
+                            default_display_length => 20,
+                            default_sort_order => 1,
+                            columns => [
+                                {
+                                    columnname         => 'currency',
+                                    cannot_be_toggled  => '1',
+                                    cannot_be_modified => '1'
+                                },
+                                {
+                                    columnname         => 'rate',
+                                    cannot_be_toggled  => '1',
+                                    cannot_be_modified => '1'
+                                },
+                                {
+                                    columnname => 'symbol'
+                                },
+                                {
+                                    is_hidden  => '1',
+                                    columnname => 'iso_code'
+                                },
+                                {
+                                    columnname => 'last_updated'
+                                },
+                                {
+                                    columnname => 'active'
+                                },
+                                {
+                                    columnname => 'actions'
+                                }
+                            ]
+                        }
                     }
-                }
-              }
-
+                },
+            }
         };
     }
 );
@@ -119,50 +122,54 @@ my $modules = C4::Utils::DataTables::TablesSettings::get_modules();
 my $modules_expected = {
     'admin' => {
         'currency' => {
-            'currencies-table' => [
-                {
-                    columnname         => 'currency',
-                    cannot_be_toggled  => 1,
-                    cannot_be_modified => 1,
-                    is_hidden  => 0,
-                },
-                {
-                    columnname         => 'rate',
-                    cannot_be_toggled  => 1,
-                    cannot_be_modified => 1,
-                    is_hidden  => 0,
-                },
-                {
-                    columnname => 'symbol',
-                    cannot_be_toggled  => 0,
-                    cannot_be_modified => 0,
-                    is_hidden  => 0,
-                },
-                {
-                    columnname => 'iso_code',
-                    cannot_be_toggled  => 0,
-                    cannot_be_modified => 0,
-                    is_hidden  => 0,
-                },
-                {
-                    columnname => 'last_updated',
-                    cannot_be_toggled  => 0,
-                    cannot_be_modified => 0,
-                    is_hidden  => 0,
-                },
-                {
-                    columnname => 'active',
-                    cannot_be_toggled  => 0,
-                    cannot_be_modified => 0,
-                    is_hidden  => 1,
-                },
-                {
-                    columnname        => 'actions',
-                    cannot_be_toggled => 1,
-                    cannot_be_modified => 0,
-                    is_hidden  => 0,
-                },
-            ]
+            'currencies-table' => {
+                default_display_length => 20,
+                default_sort_order => 1,
+                columns => [
+                    {
+                        columnname         => 'currency',
+                        cannot_be_toggled  => 1,
+                        cannot_be_modified => 1,
+                        is_hidden  => 0,
+                    },
+                    {
+                        columnname         => 'rate',
+                        cannot_be_toggled  => 1,
+                        cannot_be_modified => 1,
+                        is_hidden  => 0,
+                    },
+                    {
+                        columnname => 'symbol',
+                        cannot_be_toggled  => 0,
+                        cannot_be_modified => 0,
+                        is_hidden  => 0,
+                    },
+                    {
+                        columnname => 'iso_code',
+                        cannot_be_toggled  => 0,
+                        cannot_be_modified => 0,
+                        is_hidden  => 0,
+                    },
+                    {
+                        columnname => 'last_updated',
+                        cannot_be_toggled  => 0,
+                        cannot_be_modified => 0,
+                        is_hidden  => 0,
+                    },
+                    {
+                        columnname => 'active',
+                        cannot_be_toggled  => 0,
+                        cannot_be_modified => 0,
+                        is_hidden  => 1,
+                    },
+                    {
+                        columnname        => 'actions',
+                        cannot_be_toggled => 1,
+                        cannot_be_modified => 0,
+                        is_hidden  => 0,
+                    },
+                ]
+            }
         }
     }
 };
@@ -176,8 +183,20 @@ for my $m ( keys %$modules ) {
               C4::Utils::DataTables::TablesSettings::get_columns( $m, $p, $t );
             is_deeply(
                 $columns,
-                $modules->{$m}{$p}{$t},
+                $modules->{$m}{$p}{$t}{columns},
                 "columns for $m>$p>$t"
+            );
+            my $table_settings =
+              C4::Utils::DataTables::TablesSettings::get_table_settings( $m, $p, $t );
+            is_deeply(
+                {
+                    default_display_length => $table_settings->{default_display_length},
+                    default_sort_order     => $table_settings->{default_sort_order}
+                },
+                {
+                    default_display_length => $modules->{$m}{$p}{$t}{default_display_length},
+                    default_sort_order     => $modules->{$m}{$p}{$t}{default_sort_order},
+                }
             );
         }
     }

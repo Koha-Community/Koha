@@ -48,6 +48,24 @@ if ( $action eq 'save' ) {
         }
     );
 
+    my @table_ids = $input->multi_param('table_id');
+    for my $table_id (@table_ids) {
+        next unless $table_id =~ m|^([^#]*)#(.*)$|;
+        my $default_display_length = $input->param( $table_id . '_default_display_length' );
+        my $default_sort_order     = $input->param( $table_id . '_default_sort_order' );
+        if ( $default_display_length && $default_sort_order ) {
+            C4::Utils::DataTables::TablesSettings::update_table_settings(
+                {
+                    module                 => $module,
+                    page                   => $1,
+                    tablename              => $2,
+                    default_display_length => $default_display_length,
+                    default_sort_order     => $default_sort_order,
+                }
+            );
+        }
+    }
+
     $action = 'list';
 }
 

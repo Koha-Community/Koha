@@ -74,6 +74,17 @@ datatables instantiator.
 
 =cut
 
+=head3 GetColumns
+
+var columns_settings = [% TablesSettings.GetColumns( module, page, table 'json' ) | $raw%]
+
+This method is usually be used to retrieve the columns settings for a DataTable init.
+
+So the 'json' format will be provided and the columns_settings JS var will be
+passed as argument of the constructor.
+
+=cut
+
 sub GetColumns {
     my ( $self, $module, $page, $table, $format ) = @_;
     $format //= q{};
@@ -105,6 +116,27 @@ sub is_hidden {
         }
     }
     return 0;
+}
+
+=head3 GetTableSettings
+
+[% SET table_settings = GetTableSettings( module, page, table ) %]
+
+This method is used to retrieve the tables settings (like table_settings.default_display_length and
+table_settings.default_sort_order).
+They can be passed to the DataTable constructor (for iDisplayLength and order parameters)
+
+=cut
+
+sub GetTableSettings {
+    my ( $self, $module, $page, $table, $format ) = @_;
+    $format //= q{};
+
+    my $settings = C4::Utils::DataTables::TablesSettings::get_table_settings( $module, $page, $table );
+
+    return $format eq 'json'
+        ? to_json( $settings || {} )
+        : $settings
 }
 
 1;

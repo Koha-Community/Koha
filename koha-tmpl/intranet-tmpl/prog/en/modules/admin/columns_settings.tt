@@ -1,7 +1,9 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% SET panel_id = 0 %]
+[% USE Dumper %]
 [% BLOCK pagelist %]
     [% IF module.keys and module.keys.size > 0 %]
         Jump to:
@@ -22,72 +24,123 @@
                     [% SET tables = module %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
-                            [% IF pagename == 'additem' AND tablename == 'itemst' %]
-                                <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
-                            [% END %]
-                            <table>
-                                <caption>
-                                    [% IF tablename == 'currencies-table' %]
-                                        Currency
-                                    [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
-                                        Items Editor
-                                    [% ELSE %]
-                                        Table id: [% tablename | html %]
-                                    [% END %]
-                                </caption>
-                                <thead>
-                                    <tr>
-                                        <th>Column name</th>
-                                        <th>Is hidden by default</th>
-                                        <th>Cannot be toggled</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    [% FOR column IN tables.$pagename.$tablename %]
-                                        [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
+                            [% SET table_id = pagename _ '#' _ tablename %]
+                            <div class="datatable_config" id="[% table_id | html %]" style="border:1px solid #7EA6B2; padding: 1em;">
+                                <input type="hidden" name="table_id" value="[% table_id| html %]" />
+                                [% IF pagename == 'additem' AND tablename == 'itemst' %]
+                                    <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
+                                [% END %]
+                                <table>
+                                    <caption>
+                                        [% IF tablename == 'currencies-table' %]
+                                            Currency
+                                        [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
+                                            Items Editor
+                                        [% ELSE %]
+                                            Table id: [% tablename | html %]
+                                        [% END %]
+                                    </caption>
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                [% column.columnname | html %]
-                                                <input type="hidden" name="columnid" value="[% value | html %]" />
-                                            </td>
-                                            <td>
-                                                [% IF column.is_hidden %]
-                                                    [% IF column.cannot_be_modified %]
-                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" disabled="disabled" />
-                                                        <input type="hidden" name="[% value | html %]_hidden" value="1" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" />
-                                                    [% END %]
-                                                [% ELSE %]
-                                                    [% IF column.cannot_be_modified %]
-                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" disabled="disabled" />
-                                                        <input type="hidden" name="[% value | html %]_hidden" value="0" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" />
-                                                    [% END %]
-                                                [% END %]
-                                            </td>
-                                            <td>
-                                                [% IF column.cannot_be_toggled %]
-                                                    [% IF column.cannot_be_modified %]
-                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
-                                                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="1" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" />
-                                                    [% END %]
-                                                [% ELSE %]
-                                                    [% IF column.cannot_be_modified %]
-                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" disabled="disabled" />
-                                                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="0" />
-                                                    [% ELSE %]
-                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" />
-                                                    [% END %]
-                                                [% END %]
-                                            </td>
+                                            <th>Column name</th>
+                                            <th>Is hidden by default</th>
+                                            <th>Cannot be toggled</th>
                                         </tr>
-                                    [% END %]
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        [% FOR column IN tables.$pagename.$tablename.columns %]
+                                            [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
+                                            <tr>
+                                                <td>
+                                                    [% column.columnname | html %]
+                                                    <input type="hidden" name="columnid" value="[% value | html %]" />
+                                                </td>
+                                                <td>
+                                                    [% IF column.is_hidden %]
+                                                        [% IF column.cannot_be_modified %]
+                                                            <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" disabled="disabled" />
+                                                            <input type="hidden" name="[% value | html %]_hidden" value="1" />
+                                                        [% ELSE %]
+                                                            <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" />
+                                                        [% END %]
+                                                    [% ELSE %]
+                                                        [% IF column.cannot_be_modified %]
+                                                            <input type="checkbox" name="[% value | html %]_hidden" value="1" disabled="disabled" />
+                                                            <input type="hidden" name="[% value | html %]_hidden" value="0" />
+                                                        [% ELSE %]
+                                                            <input type="checkbox" name="[% value | html %]_hidden" value="1" />
+                                                        [% END %]
+                                                    [% END %]
+                                                </td>
+                                                <td>
+                                                    [% IF column.cannot_be_toggled %]
+                                                        [% IF column.cannot_be_modified %]
+                                                            <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
+                                                            <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="1" />
+                                                        [% ELSE %]
+                                                            <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" />
+                                                        [% END %]
+                                                    [% ELSE %]
+                                                        [% IF column.cannot_be_modified %]
+                                                            <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" disabled="disabled" />
+                                                            <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="0" />
+                                                        [% ELSE %]
+                                                            <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" />
+                                                        [% END %]
+                                                    [% END %]
+                                                </td>
+                                            </tr>
+                                        [% END %]
+                                    </tbody>
+                                </table>
+                                [% SET table_settings = TablesSettings.GetTableSettings( modulename, pagename, tablename ) %]
+                                [% IF table_settings.default_display_length %]
+                                    <p>
+                                        Default display length:
+                                        <select name="[% table_id | html %]_default_display_length">
+                                            [% IF table_settings.default_display_length == 10 %]
+                                                <option value="10" selected="selected">10</option>
+                                            [% ELSE %]
+                                            [% END %]
+                                            [% IF table_settings.default_display_length == 20 %]
+                                                <option value="20" selected="selected">20</option>
+                                            [% ELSE %]
+                                                <option value="20">20</option>
+                                            [% END %]
+                                            [% IF table_settings.default_display_length == 50 %]
+                                                <option value="50" selected="selected">50</option>
+                                            [% ELSE %]
+                                                <option value="50">50</option>
+                                            [% END %]
+                                            [% IF table_settings.default_display_length == 100 %]
+                                                <option value="100" selected="selected">100</option>
+                                            [% ELSE %]
+                                                <option value="100">100</option>
+                                            [% END %]
+                                            [% IF table_settings.default_display_length == -1 %]
+                                                <option value="-1" selected="selected">All</option>
+                                            [% ELSE %]
+                                                <option value="-1">All</option>
+                                            [% END %]
+                                        </select>
+                                    </p>
+                                [% END %]
+                                [% IF table_settings.default_sort_order.defined %]
+                                    <p>
+                                        Default sort order:
+                                        <select name="[% pagename | html %]#[% tablename | html %]_default_sort_order">
+                                            [% FOR column IN tables.$pagename.$tablename.columns %]
+                                                [% IF table_settings.default_sort_order == loop.count - 1 %]
+                                                    <option value="[% loop.count - 1 %]" selected="selected">[% column.columnname | html %]</option>
+                                                [% ELSE %]
+                                                    <option value="[% loop.count - 1 %]">[% column.columnname | html %]</option>
+                                                [% END %]
+                                            [% END %]
+                                        </select>
+                                    </p>
+                                [% END %]
+
+                            </div>
                         [% END %]
                         <fieldset class="action">
                             <input type="submit" value="Save" />

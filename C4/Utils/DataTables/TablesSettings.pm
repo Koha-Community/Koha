@@ -14,7 +14,7 @@ sub get_yaml {
 
     unless ($yaml) {
         $yaml = eval { YAML::LoadFile($yml_path) };
-        warn "ERROR: the yaml file for DT::TablesSettings is not correctly formated: $@"
+        warn "ERROR: the yaml file for DT::TablesSettings is not correctly formatted: $@"
           if $@;
         $cache->set_in_cache( 'TablesSettingsYaml', $yaml, { expiry => 3600 } );
     }
@@ -39,12 +39,12 @@ sub get_columns {
 
     while ( my $c = $rs->next ) {
         my $column = first { $c->columnname eq $_->{columnname} }
-        @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename } };
+        @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename }{ columns } };
         $column->{is_hidden}         = $c->is_hidden;
         $column->{cannot_be_toggled} = $c->cannot_be_toggled;
     }
 
-    my $columns = $list->{modules}{$module}{$page}{$tablename} || [];
+    my $columns = $list->{modules}{$module}{$page}{$tablename}{columns} || [];
 
     # Assign default value if does not exist
     $columns = [ map {
@@ -59,6 +59,22 @@ sub get_columns {
     return $columns;
 }
 
+sub get_table_settings {
+    my ( $module, $page, $tablename ) = @_;
+    my $list = get_yaml;
+
+    my $schema = Koha::Database->new->schema;
+
+    my $rs = $schema->resultset('TablesSetting')->search(
+        {
+            module    => $module,
+            page      => $page,
+            tablename => $tablename,
+        }
+    )->next;
+    return $rs ? $rs : $list->{modules}{$module}{$page}{$tablename};
+}
+
 sub get_modules {
     my $list = get_yaml;
 
@@ -67,7 +83,7 @@ sub get_modules {
 
     while ( my $c = $rs->next ) {
         my $column = first { $c->columnname eq $_->{columnname} }
-        @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename } };
+        @{ $list->{modules}{ $c->module }{ $c->page }{ $c->tablename }{columns} };
         $column->{is_hidden}         = $c->is_hidden;
         $column->{cannot_be_toggled} = $c->cannot_be_toggled;
         $column->{cannot_be_modified} = 0
@@ -98,6 +114,43 @@ sub update_columns {
             }
         );
     }
+}
+
+=head3 update_table_settings
+
+C4::Utils::DataTables::TablesSettings::update_table_settings(
+    {
+        module                 => $module,
+        pag                    => $page,
+        tablename              => $tablename,
+        default_display_length => $default_display_length,
+        default_sort_order     => $default_sort_order
+    }
+);
+
+Will update the default_display_length and default_sort_order for the given table.
+
+=cut
+
+sub update_table_settings {
+    my ($params)               = @_;
+    my $module                 = $params->{module};
+    my $page                   = $params->{page};
+    my $tablename              = $params->{tablename};
+    my $default_display_length = $params->{default_display_length};
+    my $default_sort_order     = $params->{default_sort_order};
+
+    my $schema = Koha::Database->new->schema;
+
+    $schema->resultset('TablesSetting')->update_or_create(
+        {
+            module                 => $module,
+            page                   => $page,
+            tablename              => $tablename,
+            default_display_length => $default_display_length,
+            default_sort_order     => $default_sort_order,
+        }
+    );
 }
 
 1;
