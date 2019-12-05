@@ -599,14 +599,15 @@
 
                     [% END # / IF total %]
 
-                    [% IF Koha.Preference( 'suggestion' ) == 1 && ( Koha.Preference( 'AnonSuggestions' ) == 1 || loggedinusername )   %]
+                    [%# Display "Not finding what you're looking for" for suggestion or ILL %]
+                    [% IF Koha.Preference( 'suggestion' ) == 1 && ( Koha.Preference( 'AnonSuggestions' ) == 1 || loggedinusername ) || ( Koha.Preference( 'ILLModule' ) == 1 && loggedinusername ) %]
                         <div class="suggestion">
                             Not finding what you're looking for?
                             <ul>
-                                [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
-                                    <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
-                                [% ELSE %]
-                                    [% IF ( loggedinusername ) %]
+                                [% IF Koha.Preference( 'suggestion' ) == 1 %]
+                                    [% IF Koha.Preference( 'AnonSuggestions' ) == 1 %]
+                                        <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
+                                    [% ELSIF loggedinusername %]
                                         <li>Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></li>
                                     [% END %]
                                 [% END %]
