@@ -1,12 +1,12 @@
 use utf8;
-package Koha::Schema::Result::ColumnsSetting;
+package Koha::Schema::Result::TablesSetting;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-Koha::Schema::Result::ColumnsSetting
+Koha::Schema::Result::TablesSetting
 
 =cut
 
@@ -15,11 +15,11 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<columns_settings>
+=head1 TABLE: C<tables_settings>
 
 =cut
 
-__PACKAGE__->table("columns_settings");
+__PACKAGE__->table("tables_settings");
 
 =head1 ACCESSORS
 
@@ -41,23 +41,17 @@ __PACKAGE__->table("columns_settings");
   is_nullable: 0
   size: 255
 
-=head2 columnname
+=head2 default_display_length
+
+  data_type: 'smallint'
+  default_value: 20
+  is_nullable: 0
+
+=head2 default_sort_order
 
   data_type: 'varchar'
-  is_nullable: 0
+  is_nullable: 1
   size: 255
-
-=head2 cannot_be_toggled
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 0
-
-=head2 is_hidden
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 0
 
 =cut
 
@@ -68,12 +62,10 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "tablename",
   { data_type => "varchar", is_nullable => 0, size => 255 },
-  "columnname",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
-  "cannot_be_toggled",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
-  "is_hidden",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  "default_display_length",
+  { data_type => "smallint", default_value => 20, is_nullable => 0 },
+  "default_sort_order",
+  { data_type => "varchar", is_nullable => 1, size => 255 },
 );
 
 =head1 PRIMARY KEY
@@ -86,17 +78,15 @@ __PACKAGE__->add_columns(
 
 =item * L</tablename>
 
-=item * L</columnname>
-
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("module", "page", "tablename", "columnname");
+__PACKAGE__->set_primary_key("module", "page", "tablename");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-12 16:06:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IhREpW2PRxxFF9EYOGt2Qg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-10 17:22:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A2GDoSG702QYDH8nYPEJ2Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
