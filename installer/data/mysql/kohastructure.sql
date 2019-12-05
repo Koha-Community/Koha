@@ -3663,6 +3663,19 @@ CREATE TABLE IF NOT EXISTS columns_settings (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `tables_settings`
+--
+
+CREATE TABLE IF NOT EXISTS tables_settings (
+    module varchar(255) NOT NULL,
+    page varchar(255) NOT NULL,
+    tablename varchar(255) NOT NULL,
+    default_display_length smallint(6) NOT NULL DEFAULT 20 ,
+    default_sort_order varchar(255),
+    PRIMARY KEY(module (191), page (191), tablename (191) )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table 'items_search_fields'
 --
 
