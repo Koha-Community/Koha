@@ -319,7 +319,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
         var MSG_NO_FUND_SELECTED = _("No fund selected.");
         $(document).ready(function() {
             $('span.hint').hide();
-            var columns_settings;// = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
+            var columns_settings;// = [% TablesSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("table_orders", {
                 "aoColumnDefs": [
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

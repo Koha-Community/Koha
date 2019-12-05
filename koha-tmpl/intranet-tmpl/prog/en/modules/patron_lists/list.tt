@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
@@ -186,7 +186,7 @@
         $(document).ready(function() {
             $('#patrons_to_add_fieldset').hide();
 
-                var columns_settings_table = [% ColumnsSettings.GetColumns('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
+                var columns_settings_table = [% TablesSettings.GetColumns('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
                 KohaTable('patron-list-table', {
                     "order": [[ 3, "asc" ]],
                     "aoColumns": [

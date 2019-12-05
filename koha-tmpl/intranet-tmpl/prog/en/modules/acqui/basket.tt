@@ -19,7 +19,7 @@
 [% USE Branches %]
 [% USE Price %]
 [% USE AuthorisedValues %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for [% booksellername | html %]</title>
@@ -924,7 +924,7 @@
         [% END %]
     [% END %]
     <script>
-        var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
         $(document).ready(function() {
             KohaTable("orders", {
                 [% IF ( active ) %]

@@ -5,7 +5,7 @@ use Test::More tests => 2;
 use Test::MockModule;
 
 use C4::Context;
-use C4::Utils::DataTables::ColumnsSettings;
+use C4::Utils::DataTables::TablesSettings;
 use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
@@ -14,7 +14,7 @@ my $dbh = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM columns_settings|);
 
-my $module = new Test::MockModule('C4::Utils::DataTables::ColumnsSettings');
+my $module = new Test::MockModule('C4::Utils::DataTables::TablesSettings');
 $module->mock(
     'get_yaml',
     sub {
@@ -58,7 +58,7 @@ $module->mock(
     }
 );
 
-C4::Utils::DataTables::ColumnsSettings::update_columns(
+C4::Utils::DataTables::TablesSettings::update_columns(
     {
         columns => [
             {
@@ -114,7 +114,7 @@ C4::Utils::DataTables::ColumnsSettings::update_columns(
     }
 );
 
-my $modules = C4::Utils::DataTables::ColumnsSettings::get_modules();
+my $modules = C4::Utils::DataTables::TablesSettings::get_modules();
 
 my $modules_expected = {
     'admin' => {
@@ -173,7 +173,7 @@ for my $m ( keys %$modules ) {
     for my $p ( keys %{ $modules->{$m} } ) {
         for my $t ( keys %{ $modules->{$m}{$p} } ) {
             my $columns =
-              C4::Utils::DataTables::ColumnsSettings::get_columns( $m, $p, $t );
+              C4::Utils::DataTables::TablesSettings::get_columns( $m, $p, $t );
             is_deeply(
                 $columns,
                 $modules->{$m}{$p}{$t},

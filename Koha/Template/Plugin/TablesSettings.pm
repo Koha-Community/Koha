@@ -1,4 +1,4 @@
-package Koha::Template::Plugin::ColumnsSettings;
+package Koha::Template::Plugin::TablesSettings;
 
 # This file is part of Koha.
 #
@@ -19,28 +19,28 @@ package Koha::Template::Plugin::ColumnsSettings;
 
 =head1 NAME
 
-Koha::Template::Plugin::ColumnsSettings
+Koha::Template::Plugin::TablesSettings
 
 =head2 SYNOPSYS
 
-    [% USE ColumnsSettings %]
+    [% USE TablesSettings %]
 
     . . .
 
-    [% UNLESS ColumnsSettings.is_hidden( 'module', 'page', 'table', 'column') %]
+    [% UNLESS TablesSettings.is_hidden( 'module', 'page', 'table', 'column') %]
         <th id="column" data-colname="column">Column title</th>
     [% END %]
 
     . . .
 
-    [% UNLESS ColumnsSettings.is_hidden( 'module', 'page', 'table', 'column') %]
+    [% UNLESS TablesSettings.is_hidden( 'module', 'page', 'table', 'column') %]
         <td>[% row.column %]</td>
     [% END %]
 
     . . .
 
     <script>
-        var columns_settings = [% ColumnsSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
         var table = KohaTable("id", { "bAutoWidth": false }, columns_settings );
     </script>
 
@@ -58,15 +58,15 @@ use YAML qw( LoadFile );
 use JSON qw( to_json );
 
 use C4::Context qw( config );
-use C4::Utils::DataTables::ColumnsSettings;
+use C4::Utils::DataTables::TablesSettings;
 
 =head1 FUNCTIONS
 
 =head2 GetColumns
 
     <script>
-        var columns_settings = [% ColumnsSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
-        var table = KohaTable("id", { "bAutoWidth": false }, columns_settings );
+        var tables_settings = [% TablesSettings.GetColumns( 'module', 'page', 'table', 'json' ) | $raw %];
+        var table = KohaTable("id", { "bAutoWidth": false }, tables_settings );
     </script>
 
 Used to get the full column settings configuration for datatables, usually requires a format of 'json' to pass into
@@ -78,7 +78,7 @@ sub GetColumns {
     my ( $self, $module, $page, $table, $format ) = @_;
     $format //= q{};
 
-    my $columns = C4::Utils::DataTables::ColumnsSettings::get_columns( $module, $page, $table );
+    my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
 
     return $format eq 'json'
         ? to_json( $columns )
@@ -87,7 +87,7 @@ sub GetColumns {
 
 =head2 is_hidden
 
-    [% UNLESS ColumnsSettings.is_hidden( 'module', 'page', 'table', 'column') %]
+    [% UNLESS TablesSettings.is_hidden( 'module', 'page', 'table', 'column') %]
         <th id="column" data-colname="column">Column title</th>
     [% END %]
 
@@ -98,7 +98,7 @@ it may contain confidential information and should be fully hidden rather than j
 
 sub is_hidden {
     my ( $self, $module, $page, $table, $column_name ) = @_;
-    my $columns = C4::Utils::DataTables::ColumnsSettings::get_columns( $module, $page, $table );
+    my $columns = C4::Utils::DataTables::TablesSettings::get_columns( $module, $page, $table );
     foreach my $keys(@$columns){
         if($keys->{'columnname'} eq $column_name){
             return $keys->{'is_hidden'};

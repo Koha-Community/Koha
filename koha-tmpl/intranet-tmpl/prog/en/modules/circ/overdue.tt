@@ -5,7 +5,7 @@
 [%- USE Price -%]
 [%- USE ItemTypes -%]
 [%- USE Categories -%]
-[%- USE ColumnsSettings -%]
+[%- USE TablesSettings -%]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate | html %]</title>
@@ -278,7 +278,7 @@
         }
 
         $(document).ready(function(){
-            var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
             KohaTable("overduest", {
                 "sPaginationType": "full",
                 "aaSorting": [[0, 'asc']],

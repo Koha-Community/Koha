@@ -5,7 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Biblio %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% PROCESS 'i18n.inc' %]
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
@@ -1122,7 +1122,7 @@ Note that permanent location is a code, and location may be an authval.
 
         $(document).ready(function() {
             var ids = ['holdings_table', 'otherholdings_table'];
-            var columns_settings = [ [% ColumnsSettings.GetColumns('catalogue', 'detail','holdings_table','json') | $raw %], [% ColumnsSettings.GetColumns('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
+            var columns_settings = [ [% TablesSettings.GetColumns('catalogue', 'detail','holdings_table','json') | $raw %], [% TablesSettings.GetColumns('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
             for (var i in ids) {
                 var id = ids[i];
                 var dt_parameters = {
@@ -1140,7 +1140,7 @@ Note that permanent location is a code, and location may be an authval.
             }
 
             [% IF Koha.Preference('AcquisitionDetails') %]
-                var columns_settings = [% ColumnsSettings.GetColumns('catalogue', 'detail', 'acquisitiondetails-table', 'json') %];
+                var columns_settings = [% TablesSettings.GetColumns('catalogue', 'detail', 'acquisitiondetails-table', 'json') %];
                 var acquisitiondetails_table = KohaTable("orders", {
                     "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                     'bPaginate': false,

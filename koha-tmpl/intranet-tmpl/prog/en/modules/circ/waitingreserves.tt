@@ -3,7 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
@@ -123,8 +123,8 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var holdst_columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
-        var holdso_columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
+        var holdst_columns_settings = [% TablesSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdst', 'json' ) | $raw %];
+        var holdso_columns_settings = [% TablesSettings.GetColumns( 'circ', 'holds_awaiting_pickup', 'holdso', 'json' ) | $raw %];
 
         $(document).ready(function() {
 

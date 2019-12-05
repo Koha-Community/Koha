@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE Koha %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50/SRU search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -242,7 +242,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function(){
-            var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns( 'cataloguing', 'z3950_search', 'resultst', 'json' ) | $raw %];
             var thetable = KohaTable("resultst", {
                 "aoColumnDefs": [
                     { "targets": [ "NoSort" ],"sortable": false,"searchable": false },

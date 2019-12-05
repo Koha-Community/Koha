@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -558,7 +558,7 @@
         var MSG_EMPTY_TEMPLATES = _("Please fill at least one template.");
         var MSG_LOADING = _("Loading");
         var MSG_NO_NOTICE_FOUND = _("No matching notices found");
-        var columns_settings = [% ColumnsSettings.GetColumns( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
      </script>
     [% Asset.js("js/letter.js") | $raw %]
 [% END %]

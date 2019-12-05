@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -130,7 +130,7 @@
     <script>
         var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
-            var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("histsearcht", {
                 "aoColumnDefs": [
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

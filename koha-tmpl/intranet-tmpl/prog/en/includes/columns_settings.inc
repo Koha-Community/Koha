@@ -1,5 +1,6 @@
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 <!-- columns_settings.inc -->
+
 <script>
 function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
     var counter = 0;

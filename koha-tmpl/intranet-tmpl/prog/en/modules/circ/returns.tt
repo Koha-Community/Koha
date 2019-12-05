@@ -5,7 +5,7 @@
 [% USE Koha %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% PROCESS 'member-display-address-style.inc' %]
 [% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
@@ -933,7 +933,7 @@
                 Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
             [% END %]
 
-            var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
+            var columns_settings = [% TablesSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]
             var returns_table = KohaTable("checkedintable", {
                     "bFilter":false,
                     "bPaginate":false,

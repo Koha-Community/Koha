@@ -6,7 +6,7 @@ use YAML qw( LoadFile );
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Utils::DataTables::ColumnsSettings qw( get_modules );
+use C4::Utils::DataTables::TablesSettings qw( get_modules );
 my $input = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -42,7 +42,7 @@ if ( $action eq 'save' ) {
           };
     }
 
-    C4::Utils::DataTables::ColumnsSettings::update_columns(
+    C4::Utils::DataTables::TablesSettings::update_columns(
         {
             columns => \@columns,
         }
@@ -52,7 +52,7 @@ if ( $action eq 'save' ) {
 }
 
 if ( $action eq 'list' ) {
-    my $modules = C4::Utils::DataTables::ColumnsSettings::get_modules;
+    my $modules = C4::Utils::DataTables::TablesSettings::get_modules;
     $template->param(
         panel   => ( $input->param('panel') || 0 ),
         modules => $modules,

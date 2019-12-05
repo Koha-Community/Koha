@@ -3,7 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Checkout history for [% INCLUDE 'biblio-title-head.inc' %]</title>
@@ -110,7 +110,7 @@
 [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
-            var columns_settings = [% ColumnsSettings.GetColumns('catalogue', 'detail', 'checkoutshistory-table', 'json') %];
+            var columns_settings = [% TablesSettings.GetColumns('catalogue', 'detail', 'checkoutshistory-table', 'json') %];
             [% UNLESS show_patron_column %]
             // Remove the patron column definition
             columns_settings.splice(0,1);

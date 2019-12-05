@@ -4,7 +4,7 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE Price %]
 [% PROCESS 'member-display-address-style.inc' %]
 [% PROCESS 'member-display-alt-address-style.inc' %]
@@ -907,7 +907,7 @@
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
     <script>
 
-        columns_settings_issues_table = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
+        columns_settings_issues_table = [% TablesSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
 

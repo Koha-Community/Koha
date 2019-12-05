@@ -5,7 +5,7 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE Price %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -772,7 +772,7 @@
     <script>
         var prefilters = '[% prefilters | $raw %]';
         // Set column settings
-        var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+        var columns_settings = [% TablesSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
         $("#ill_checkout_duedate_input").datetimepicker({
             hour: 23,
             minute: 59

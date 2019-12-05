@@ -5,7 +5,7 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; ILL requests history for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
@@ -50,7 +50,7 @@
         <script>
             var prefilters = '[% prefilters | html %]';
             // Set column settings
-            var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+            var columns_settings = [% TablesSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
         </script>
         [% INCLUDE 'ill-list-table-strings.inc' %]
         [% Asset.js("js/ill-list-table.js") | $raw %]

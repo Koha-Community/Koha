@@ -4,7 +4,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE ItemTypes %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
@@ -178,7 +178,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
         $(document).ready(function() {
             $(".ratiolimit").on("click", function(e) {
                 e.preventDefault();

@@ -4,7 +4,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
@@ -131,7 +131,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script id="js">
         $(document).ready(function() {
-            var columns_settings = [% ColumnsSettings.GetColumns('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
+            var columns_settings = [% TablesSettings.GetColumns('members', 'checkouthistory', 'checkouthistory-table', 'json') %];
             var table = KohaTable("table_readingrec", {
                 "sPaginationType": "full",
                 "aaSorting": [[10, 'desc']],

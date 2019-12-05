@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Koha %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE JSON.Escape %]
 [% SET footerjs = 1 %]
 
@@ -1494,7 +1494,7 @@
             [% END %]
 
             $('[data-toggle="tooltip"]').tooltip();
-            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
 
             $('#limit').change(function() {
                 $('#limitselect').submit();

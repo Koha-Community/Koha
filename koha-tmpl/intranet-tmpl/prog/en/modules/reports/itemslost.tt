@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE KohaDates %]
 [% USE ItemTypes %]
 [% USE Price %]
@@ -194,7 +194,7 @@
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         $(document).ready(function() {
-            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns( 'reports', 'lostitems', 'lostitems-table', 'json' ) | $raw %];
             var lostitems_table = KohaTable("lostitems-table", {
                 "dom": 'B<"clearfix">t',
                 "aaSorting": [],

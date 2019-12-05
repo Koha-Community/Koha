@@ -3,7 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; Course details for [% course.course_name | html %]</title>
@@ -269,7 +269,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script>
-        var columns_settings = [% ColumnsSettings.GetColumns( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function(){
             var rtable = KohaTable("course_reserves_table", {
                 "sPaginationType": "full",

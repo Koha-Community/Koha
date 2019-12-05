@@ -3,7 +3,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE AuthorisedValues %]
 [% USE Price %]
 [% USE Branches %]
@@ -313,7 +313,7 @@
 
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
-            var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns('members', 'fines', 'account-fines', 'json') | $raw %];
             var table_account_fines = KohaTable("table_account_fines", {
                 "sPaginationType": "full",
                 'aaSorting': [[0, 'desc']],

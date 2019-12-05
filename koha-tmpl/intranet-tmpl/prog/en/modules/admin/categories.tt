@@ -3,7 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron categories &rsaquo; [% IF op == 'add_form' %][% IF ( categorycode ) %]Modify category '[% categorycode | html %]'[% ELSE %]New category[% END %][% END %]
@@ -568,7 +568,7 @@
     <script>
         var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
         var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
-        var columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'admin', 'categories', 'patron_categories', 'json' ) | $raw %];
     </script>
     [% Asset.js("js/categories.js") | $raw %]
 [% END %]

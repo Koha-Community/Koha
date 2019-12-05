@@ -4,7 +4,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE AuthorisedValues %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
@@ -1148,7 +1148,7 @@
         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
                 <th id="item_shelving_location" data-colname="item_shelving_location" class="shelving_location">Shelving location</th>[% END %]
                 <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
-        [% UNLESS ColumnsSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
+        [% UNLESS TablesSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
                 <th id="item_materials" data-colname="item_materials" class="materials">Materials specified</th>[% END %]
         [% IF ( itemdata_enumchron ) %]
                 <th id="item_enumchron" data-colname="item_enumchron" class="vol_info">Vol info</th>[% END %]
@@ -1252,7 +1252,7 @@
                             [% END %]
                         [% END %]
                     </td>
-                    [% UNLESS ColumnsSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
+                    [% UNLESS TablesSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
                         <td class="materials">[% ITEM_RESULT.materials | html %]</td>
                     [% END %]
                     [% IF ( itemdata_enumchron ) %]
@@ -1463,7 +1463,7 @@
             });
         [% END %]
 
-        var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
+        var columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
 
         KohaTable("#holdingst", {
             dom: '<"clearfix">t',
@@ -1485,7 +1485,7 @@
             "autoWidth": false
         }, columns_settings);
 
-        var serial_column_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
+        var serial_column_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
 
         KohaTable("#subscriptionst", {
             dom: '<"clearfix">t',

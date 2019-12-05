@@ -4,7 +4,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% PROCESS 'accounts.inc' %]
@@ -220,7 +220,7 @@
                 $(".add-note").show();
             });
 
-            var columns_settings = [% ColumnsSettings.GetColumns('members', 'pay', 'pay-fines-table', 'json') | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns('members', 'pay', 'pay-fines-table', 'json') | $raw %];
             KohaTable("finest", {
                 "columnDefs": [
                     { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },

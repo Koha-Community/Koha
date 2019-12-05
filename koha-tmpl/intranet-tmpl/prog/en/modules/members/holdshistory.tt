@@ -4,7 +4,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -130,7 +130,7 @@
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
         $(document).ready(function() {
-            var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
+            var columns_settings = [% TablesSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
             [% UNLESS show_itemtype_column %]
               //Remove item type column settings
               columns_settings = columns_settings.filter(function(c){return c['columnname'] != 'itemtype';});

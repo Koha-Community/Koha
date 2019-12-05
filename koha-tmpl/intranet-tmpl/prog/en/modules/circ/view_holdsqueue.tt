@@ -5,7 +5,7 @@
 [% USE ItemTypes %]
 [% USE Branches %]
 [% USE AuthorisedValues %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -228,7 +228,7 @@
             };
             $('#holdst thead input').on('change keyup keydown', filterColumn);
 
-            var columns_settings = [% ColumnsSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns('circ', 'view_holdsqueue', 'holds-table', 'json') | $raw %];
             var holdst = KohaTable("holdst", {
                 "aaSorting": [[ 3, "asc" ]],
                 "aoColumns": [

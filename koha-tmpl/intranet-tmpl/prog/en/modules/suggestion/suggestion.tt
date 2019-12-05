@@ -5,7 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Price %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
@@ -1004,7 +1004,7 @@
             $(document).ready(function() {
                 $('#suggestiontabs').tabs();
 
-                columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
+                columns_settings = [% TablesSettings.GetColumns( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
                 [% FOREACH suggestion IN suggestions %]
                     [% IF ( suggestion.suggestions_loop ) %]
                         KohaTable("table_[% loop.count| html %]", {

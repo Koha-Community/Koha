@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE AuthorisedValues %]
 [%- USE Branches -%]
 [%- USE ItemTypes -%]
@@ -247,7 +247,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
         $(document).ready(function() {
-          var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
+          var columns_settings = [% TablesSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') | $raw %];
           var holdst = KohaTable("holdst", {
             "aoColumnDefs": [
                 { "sType": "anti-the", "aTargets" : [ "anti-the" ] },

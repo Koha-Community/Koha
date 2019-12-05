@@ -1,4 +1,4 @@
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 
 <script>
 function KohaTable(selector, dt_parameters, columns_settings) {

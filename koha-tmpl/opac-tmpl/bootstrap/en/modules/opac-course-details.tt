@@ -5,7 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% USE Branches %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -111,7 +111,7 @@
     [% INCLUDE 'columns_settings.inc' %]
     <script>
     $(document).ready(function() {
-        columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
+        columns_settings = [% TablesSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
         KohaTable("#course-items-table", {
             "dom": '<"top"flp>rt<"clear">',
             "sorting": [[ 1, "asc" ]],

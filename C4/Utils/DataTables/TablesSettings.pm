@@ -1,4 +1,4 @@
-package C4::Utils::DataTables::ColumnsSettings;
+package C4::Utils::DataTables::TablesSettings;
 
 use Modern::Perl;
 use List::Util qw( first );
@@ -10,13 +10,13 @@ use Koha::Caches;
 sub get_yaml {
     my $yml_path = C4::Context->config('intranetdir') . '/admin/columns_settings.yml';
     my $cache = Koha::Caches->get_instance();
-    my $yaml  = $cache->get_from_cache('ColumnsSettingsYaml');
+    my $yaml  = $cache->get_from_cache('TablesSettingsYaml');
 
     unless ($yaml) {
         $yaml = eval { YAML::LoadFile($yml_path) };
-        warn "ERROR: the yaml file for DT::ColumnsSettings is not correctly formated: $@"
+        warn "ERROR: the yaml file for DT::TablesSettings is not correctly formated: $@"
           if $@;
-        $cache->set_in_cache( 'ColumnsSettingsYaml', $yaml, { expiry => 3600 } );
+        $cache->set_in_cache( 'TablesSettingsYaml', $yaml, { expiry => 3600 } );
     }
 
     return $yaml;

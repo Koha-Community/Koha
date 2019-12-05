@@ -3,7 +3,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Price %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Item types [% IF op == 'add_form' %]&rsaquo;
@@ -483,7 +483,7 @@ Item types administration
     <script>
          $(document).ready(function() {
             $('#icons').tabs();
-            var columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
+            var columns_settings = [% TablesSettings.GetColumns( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
             [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
                 columns_settings.shift(); // Remove item type image column from configuration
             [% END %]

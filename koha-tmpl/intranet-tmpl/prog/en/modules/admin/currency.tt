@@ -1,7 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
-[% USE ColumnsSettings %]
+[% USE TablesSettings %]
 [% USE HtmlTags %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -246,7 +246,7 @@
         }
 
         $(document).ready(function() {
-            columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
+            columns_settings = [% TablesSettings.GetColumns( 'admin', 'currency', 'currencies-table', 'json' ) | $raw %]
             var issuest = KohaTable("currencies-table", {
                 dom: 'B<"clearfix">t',
                 "columnDefs": [
