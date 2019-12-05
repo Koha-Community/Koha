@@ -60,6 +60,7 @@ sub build_tokens{
     $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, original text )
     $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
     $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
+    $self->handler(process => "process", "self, line, text, is_cdata"); # processing statement <?...?>
 #    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
     $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a C4::TmplTokenType::CDATA
     $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
@@ -115,6 +116,15 @@ sub comment {
     my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
+
+sub process {
+    my $self = shift;
+    my $line = shift;
+    my $work = shift; #original text
+    my $is_cdata = shift;
+    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
+    push @tokens, $t;
+}
 
 sub default {
     my $self = shift;
