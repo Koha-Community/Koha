@@ -44,6 +44,7 @@ sub string_negligible_p {
 	    || $t =~ /^[A-Za-z]$/		# single letters
             || $t =~ /^(&[a-z]+;|&#\d+;|&#x[0-9a-fA-F]+;|%%|%s|\s|[[:punct:]])*$/ # html entities,placeholder,punct, ...
         || ( $t =~ /^\[\%.*\%\]$/ and $t !~ /\%\].*\[\%/ )    # pure TT entities
+        || $t =~ /^\s*<\?.*\?>/                               # ignore xml prolog
 	)
 }
 
