@@ -160,7 +160,10 @@ function(value, element, params) {
 $(document).ready(function(){
 
 $.datepicker.setDefaults({
-        showOn: "focus",
+        showOn: "both",
+        buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAT0lEQVQ4jWNgoAZYd/LVf3IwigGkAuwGLE4hDg9eA4il8RqADVdtLYVjZLVEuwDZAKJcgKxh+zkyXIBuI8lhgG4jOqZdLJACMAygKDNRAgBj9qOB+rWnhAAAAABJRU5ErkJggg==",
+        buttonImageOnly: true,
+        buttonText: _("Select date"),
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
