@@ -526,8 +526,7 @@ sub UpdateFine {
     my $overdues = Koha::Account::Lines->search(
         {
             borrowernumber    => $borrowernumber,
-            debit_type_code   => 'OVERDUE',
-            amountoutstanding => { '<>' => 0 }
+            debit_type_code   => 'OVERDUE'
         }
     );
 
@@ -560,7 +559,6 @@ sub UpdateFine {
             $amount = $new_amount;
         }
     }
-
 
     if ( $accountline ) {
         if ( $accountline->amount != $amount ) {
