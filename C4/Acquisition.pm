@@ -509,14 +509,10 @@ sub ModBasket {
 
     # Log the basket update
     if (C4::Context->preference("AcqLog")) {
-        my $infos = $basketinfo->{borrowernumber} ?
-            sprintf("%010d", $basketinfo->{borrowernumber}) :
-            undef;
         logaction(
             'ACQUISITIONS',
             'MODIFY_BASKET',
-            $basketinfo->{'basketno'},
-            $infos
+            $basketinfo->{'basketno'}
         );
     }
 
@@ -559,7 +555,7 @@ case the AcqCreateItem syspref takes precedence).
 =cut
 
 sub ModBasketHeader {
-    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items, $borrowernumber) = @_;
+    my ($basketno, $basketname, $note, $booksellernote, $contractnumber, $booksellerid, $deliveryplace, $billingplace, $is_standing, $create_items) = @_;
 
     $is_standing ||= 0;
     my $query = qq{

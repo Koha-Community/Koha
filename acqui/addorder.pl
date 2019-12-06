@@ -365,8 +365,7 @@ if (C4::Context->preference("AcqLog") && $basketno) {
     logaction(
         'ACQUISITIONS',
         'MODIFY_BASKET',
-        $basketno,
-        sprintf("%010d", $loggedinuser)
+        $basketno
     );
 }
 

@@ -210,8 +210,7 @@ if ( $op eq 'delete_confirm' ) {
                             closed => 1,
                             });
             ModBasket( { basketno => $basketno,
-                         basketgroupid => $basketgroupid,
-                         borrowernumber => $loggedinuser } );
+                         basketgroupid => $basketgroupid } );
             print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid='.$booksellerid.'&closed=1');
         } else {
             print $query->redirect('/cgi-bin/koha/acqui/booksellers.pl?booksellerid=' . $booksellerid);
@@ -244,8 +243,7 @@ elsif ( $op eq 'ediorder' ) {
     $branch = undef if(defined $branch and $branch eq '');
     ModBasket({
         basketno => $basket->{basketno},
-        branch   => $branch,
-        borrowernumber => $loggedinuser
+        branch   => $branch
     });
     print $query->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
     exit;
@@ -561,8 +559,7 @@ sub edi_close_and_order {
             ModBasket(
                 {
                     basketno       => $basketno,
-                    basketgroupid  => $basketgroupid,
-                    borrowernumber => $loggedinuser
+                    basketgroupid  => $basketgroupid
                 }
             );
             print $query->redirect(
