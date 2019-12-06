@@ -132,7 +132,7 @@ $schema->storage->txn_rollback;
 
 subtest 'UpdateFine tests' => sub {
 
-    plan tests => 53;
+    plan tests => 59;
 
     $schema->storage->txn_begin;
 
@@ -358,7 +358,7 @@ subtest 'UpdateFine tests' => sub {
             issue_id       => $checkout1->issue_id,
             itemnumber     => $item1->itemnumber,
             borrowernumber => $patron->borrowernumber,
-            amount         => '30',
+            amount         => '50',
             due            => $checkout1->date_due
         }
     );
@@ -373,7 +373,34 @@ subtest 'UpdateFine tests' => sub {
     $fine2 = $fines->next;
     is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
     $fine3 = $fines->next;
-    is( $fine3->amount, '30.000000', "Third fine increased now MaxFine cap is disabled" );
+    is( $fine3->amount, '50.000000', "Third fine increased now MaxFine cap is disabled" );
+    is( $fine3->amountoutstanding, '30.000000', "Third fine increased now MaxFine cap is disabled" );
+
+    # If somehow the fine should be reduced, we changed rules or checkout date or something
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '30',
+            due            => $checkout1->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        3,    "Still only three fines after MaxFine cap removed and third fine altered" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    $fine2 = $fines->next;
+    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    $fine3 = $fines->next;
+    is( $fine3->amount, '30.000000', "Third fine reduced" );
+    is( $fine3->amountoutstanding, '10.000000', "Third fine amount outstanding is reduced" );
+
+
 
     $schema->storage->txn_rollback;
 };
