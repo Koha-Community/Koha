@@ -232,6 +232,15 @@ sub ReopenBasket {
         WHERE basketno = ?
         AND orderstatus NOT IN ( 'complete', 'cancelled' )
         }, {}, $basketno);
+
+    # Log the basket reopening
+    if (C4::Context->preference("AcqLog")) {
+        logaction(
+            'ACQUISITIONS',
+            'REOPEN_BASKET',
+            $basketno
+        );
+    }
     return;
 }
 
@@ -574,6 +583,16 @@ sub ModBasketHeader {
         $sth2->execute($contractnumber,$basketno);
     }
 
+    # Log the basket update
+    if (C4::Context->preference("AcqLog")) {
+        logaction(
+            'ACQUISITIONS',
+            'MODIFY_BASKET_HEADER',
+            $basketno
+        );
+    }
+
+    return;
     return;
 }
 
@@ -754,6 +773,16 @@ sub ModBasketUsers {
     foreach my $basketuser_id (@basketusers_ids) {
         $sth->execute($basketno, $basketuser_id);
     }
+
+    # Log the basket update
+    if (C4::Context->preference("AcqLog")) {
+        logaction(
+            'ACQUISITIONS',
+            'MODIFY_BASKET_USERS',
+            $basketno
+        );
+    }
+
     return;
 }
 
