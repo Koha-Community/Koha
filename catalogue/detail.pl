@@ -43,6 +43,7 @@ use C4::CourseReserves qw(GetItemCourseReservesInfo);
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 use Koha::AuthorisedValues;
 use Koha::Biblios;
+use Koha::Illrequests;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -537,6 +538,10 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 #we only need to pass the number of holds to the template
 my $holds = $biblio->holds;
 $template->param( holdcount => $holds->count );
+
+# Check if there are any ILL requests connected to the biblio
+my $illrequests = Koha::Illrequests->search({ biblio_id => $biblionumber });
+$template->param( illrequests => $illrequests );
 
 my $StaffDetailItemSelection = C4::Context->preference('StaffDetailItemSelection');
 if ($StaffDetailItemSelection) {

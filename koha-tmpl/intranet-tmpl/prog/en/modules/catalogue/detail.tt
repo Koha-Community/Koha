@@ -128,6 +128,21 @@
             </span>
         [% END %]
 
+        [% IF ( illrequests ) %]
+            <span class="results_summary">
+                <span class="label">ILL requests:</span>
+                [% IF CAN_user_ill %]
+                    [% FOREACH ill IN illrequests %]
+                        <a href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id=[% ill.illrequest_id | uri %]">Request [% ill.illrequest_id | html %]</a>[% IF ! loop.last %], [% END %]
+                    [% END %]
+                [% ELSE %]
+                    [% FOREACH ill IN illrequests %]
+                        <span>Request [% ill.illrequest_id | html %]</span>[% IF ! loop.last %], [% END %]
+                    [% END %]
+                [% END %]
+            </span>
+        [% END %]
+
         [% IF ( article_requests_count = Biblio.ArticleRequestsActiveCount( biblionumber ) ) %]
             <span class="results_summary">
                 <span class="label">Article requests:</span>
