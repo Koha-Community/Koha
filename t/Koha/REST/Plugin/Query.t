@@ -80,6 +80,31 @@ get '/dbic_merge_sorting' => sub {
     $c->render( json => $attributes, status => 200 );
 };
 
+get '/dbic_merge_sorting_single' => sub {
+    my $c = shift;
+    my $attributes = { a => 'a', b => 'b' };
+    $attributes = $c->dbic_merge_sorting(
+        {
+            attributes => $attributes,
+            params     => { _match => 'exact', _order_by => '-uno' }
+        }
+    );
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_sorting_to_model' => sub {
+    my $c = shift;
+    my $attributes = { a => 'a', b => 'b' };
+    $attributes = $c->dbic_merge_sorting(
+        {
+            attributes => $attributes,
+            params     => { _match => 'exact', _order_by => [ 'uno', '-dos', '+tres', ' cuatro' ] },
+            to_model   => \&to_model
+        }
+    );
+    $c->render( json => $attributes, status => 200 );
+};
+
 get '/build_query' => sub {
     my $c = shift;
     my ( $filtered_params, $reserved_params ) =
@@ -96,6 +121,13 @@ get '/build_query' => sub {
         );
     };
 };
+
+sub to_model {
+    my ($args) = @_;
+    $args->{three} = delete $args->{tres}
+        if exists $args->{tres};
+    return $args;
+}
 
 # The tests
 
@@ -131,7 +163,7 @@ subtest 'extract_reserved_params() tests' => sub {
 
 subtest 'dbic_merge_sorting() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 15;
 
     my $t = Test::Mojo->new;
 
@@ -144,6 +176,23 @@ subtest 'dbic_merge_sorting() tests' => sub {
             { -asc  => 'tres' },
             { -asc  => 'cuatro' }
         ]
+      );
+
+    $t->get_ok('/dbic_merge_sorting_to_model')->status_is(200)
+      ->json_is( '/a' => 'a', 'Existing values are kept (a)' )
+      ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
+        '/order_by' => [
+            'uno',
+            { -desc => 'dos' },
+            { -asc  => 'three' },
+            { -asc  => 'cuatro' }
+        ]
+      );
+
+    $t->get_ok('/dbic_merge_sorting_single')->status_is(200)
+      ->json_is( '/a' => 'a', 'Existing values are kept (a)' )
+      ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
+        '/order_by' => { '-desc' => 'uno' }
       );
 };
 
