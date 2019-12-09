@@ -50,6 +50,14 @@ get '/cities_to_model_to_api' => sub {
     $c->render( status => 200, json => $cities );
 };
 
+get '/cities_sorted' => sub {
+    my $c = shift;
+    $c->validation->output($c->req->params->to_hash);
+    my $cities_set = Koha::Cities->new;
+    my $cities = $c->objects->search( $cities_set, \&to_model, \&to_api );
+    $c->render( status => 200, json => $cities );
+};
+
 sub to_model {
     my $params = shift;
 
@@ -71,7 +79,7 @@ sub to_api {
 }
 
 # The tests
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -233,3 +241,36 @@ subtest 'objects.search helper' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'objects.search helper, sorting on mapped column' => sub {
+
+    plan tests => 14;
+
+    my $t = Test::Mojo->new;
+
+    $schema->storage->txn_begin;
+
+    # Have complete control over the existing cities to ease testing
+    Koha::Cities->delete;
+
+    $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'A', city_country => 'Argentina' } });
+    $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'B', city_country => 'Argentina' } });
+
+    $t->get_ok('/cities_sorted?_order_by=%2Bnombre&_order_by=+city_country')
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_hasnt('/2')
+      ->json_is('/0/nombre' => 'A')
+      ->json_is('/1/nombre' => 'B');
+
+    $t->get_ok('/cities_sorted?_order_by=-nombre')
+      ->status_is(200)
+      ->json_has('/0')
+      ->json_has('/1')
+      ->json_hasnt('/2')
+      ->json_is('/0/nombre' => 'B')
+      ->json_is('/1/nombre' => 'A');
+
+    $schema->storage->txn_rollback;
+}
