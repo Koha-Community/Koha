@@ -60,7 +60,8 @@ sub register {
             $c->dbic_merge_sorting(
                 {
                     attributes => $attributes,
-                    params     => $reserved_params
+                    params     => $reserved_params,
+                    to_model   => $to_model
                 }
             );
 
