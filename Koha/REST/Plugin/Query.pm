@@ -18,6 +18,7 @@ package Koha::REST::Plugin::Query;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
+use Scalar::Util qw(reftype);
 
 use Koha::Exceptions;
 
@@ -80,11 +81,18 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
         'dbic_merge_sorting' => sub {
             my ( $c, $args ) = @_;
             my $attributes = $args->{attributes};
+            my $to_model   = $args->{to_model};
 
             if ( defined $args->{params}->{_order_by} ) {
-                my @order_by = map { _build_order_atom($_) }
-                               @{ $args->{params}->{_order_by} };
-                $attributes->{order_by} = \@order_by;
+                my $order_by = $args->{params}->{_order_by};
+                if ( reftype($order_by) and reftype($order_by) eq 'ARRAY' ) {
+                    my @order_by = map { _build_order_atom( $_, $to_model) }
+                                @{ $args->{params}->{_order_by} };
+                    $attributes->{order_by} = \@order_by;
+                }
+                else {
+                    $attributes->{order_by} = _build_order_atom( $order_by, $to_model );
+                }
             }
 
             return $attributes;
@@ -166,21 +174,27 @@ according to the following rules:
 
 sub _build_order_atom {
     my $string = shift;
+    my $to_model = shift;
+
+    # FIXME: This should be done differently once 23893 is pushed
+    #        and we have access to the to_model_mapping hash
+    my $param = $string;
+    $param =~ s/^(\+|\-|\s)//;
+    $param = (keys %{$to_model->({ $param => 1 })})[0]
+        if $to_model;
 
     if ( $string =~ m/^\+/ or
          $string =~ m/^\s/ ) {
         # asc order operator present
-        $string =~ s/^(\+|\s)//;
-        return { -asc => $string };
+        return { -asc => $param };
     }
     elsif ( $string =~ m/^\-/ ) {
         # desc order operator present
-        $string =~ s/^\-//;
-        return { -desc => $string };
+        return { -desc => $param };
     }
     else {
         # no order operator present
-        return $string;
+        return $param;
     }
 }
 
