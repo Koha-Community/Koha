@@ -337,12 +337,12 @@ if (defined $href) {
 # set our charset in to UTF-8
 if (!defined $charset_in) {
     $charset_in = TmplTokenizer::charset_canon 'UTF-8';
-    warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
+    warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n" unless ( $quiet );
 }
 # set our charset out to UTF-8
 if (!defined $charset_out) {
     $charset_out = TmplTokenizer::charset_canon 'UTF-8';
-    warn "Warning: Charset Out defaulting to $charset_out\n";
+    warn "Warning: Charset Out defaulting to $charset_out\n" unless ( $quiet );
 }
 my $xgettext = './xgettext.pl'; # actual text extractor script
 my $st;
@@ -350,7 +350,7 @@ my $st;
 if ($action eq 'create')  {
     # updates the list. As the list is empty, every entry will be added
     if (!-s $str_file) {
-    warn "Removing empty file $str_file\n";
+    warn "Removing empty file $str_file\n" unless ( $quiet );
     unlink $str_file || die "$str_file: $!\n";
     }
     die "$str_file: Output file already exists\n" if -f $str_file;
@@ -362,7 +362,7 @@ if ($action eq 'create')  {
     print $tmph1 "$input\n";
     }
     close $tmph1;
-    warn "I $charset_in O $charset_out";
+    warn "I $charset_in O $charset_out" unless ( $quiet );
     # Generate the specified po file ($str_file)
     $st = system ($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
             (defined $charset_in? ('-I', $charset_in): ()),
