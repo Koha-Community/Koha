@@ -493,7 +493,8 @@ sub create_messages {
 
     say "Create messages ($self->{lang})" if $self->{verbose};
     my $locale = $self->locale_name();
-    system "$self->{msginit} -i $pot -o $po -l $locale --no-translator";
+    system "$self->{msginit} -i $pot -o $po -l $locale --no-translator 2> /dev/null";
+    warn "Problems creating $pot ".$? if ( $? == -1 );
 
     # If msginit failed to correctly set Plural-Forms, set a default one
     system "$self->{sed} --in-place $po "
@@ -512,7 +513,7 @@ sub update_messages {
 
     if ( -f $po ) {
         say "Update messages ($self->{lang})" if $self->{verbose};
-        system "$self->{msgmerge} --quiet -U $po $pot";
+        system "$self->{msgmerge} --backup=off --quiet -U $po $pot";
     } else {
         $self->create_messages();
     }
