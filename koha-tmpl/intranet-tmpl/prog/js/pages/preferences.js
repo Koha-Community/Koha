@@ -49,6 +49,21 @@ KOHA.Preferences = {
     }
 };
 
+function mark_modified() {
+    $( this.form ).find( '.save-all' ).prop('disabled', false);
+    $( this ).addClass( 'modified' );
+    var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
+    if ( !name_cell.find( '.modified-warning' ).length )
+        name_cell.append( '<em class="modified-warning">('+MSG_MODIFIED+')</em>' );
+    KOHA.Preferences.Modified = true;
+}
+
+window.onbeforeunload = function () {
+    if ( KOHA.Preferences.Modified ) {
+        return MSG_MADE_CHANGES;
+    }
+};
+
 $( document ).ready( function () {
 
     $("table.preferences").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -58,15 +73,6 @@ $( document ).ready( function () {
         ],
         "bPaginate": false
     }));
-
-    function mark_modified() {
-        $( this.form ).find( '.save-all' ).prop('disabled', false);
-        $( this ).addClass( 'modified' );
-        var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
-        if ( !name_cell.find( '.modified-warning' ).length )
-            name_cell.append( '<em class="modified-warning">('+MSG_MODIFIED+')</em>' );
-        KOHA.Preferences.Modified = true;
-    }
 
     $( '.prefs-tab' )
         .find( 'input.preference, textarea.preference' ).on('input', function () {
@@ -94,18 +100,12 @@ $( document ).ready( function () {
         $(ui.item.find('input:first')).change();
     } );
 
-    window.onbeforeunload = function () {
-        if ( KOHA.Preferences.Modified ) {
-            return MSG_MADE_CHANGES;
-        }
-    };
-
     $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
 
     $( '.prefs-tab .save-all' ).prop('disabled', true).click( function () {
         KOHA.Preferences.Save( this.form );
         return false;
-    } );
+    });
 
     $( ".expand-textarea" ).on("click", function(e){
         e.preventDefault();
@@ -119,6 +119,8 @@ $( document ).ready( function () {
                 mode: syntax,
                 lineWrapping: true,
                 viewportMargin: Infinity,
+                gutters: ["CodeMirror-lint-markers"],
+                lint: true
             });
             editor.on("change", function(){
                 mark_modified.call( $("#pref_" + target )[0]);

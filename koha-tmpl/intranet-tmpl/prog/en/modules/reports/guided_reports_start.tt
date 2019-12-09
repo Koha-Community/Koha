@@ -34,7 +34,7 @@
 [%- END -%]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("lib/codemirror/codemirror.css") | $raw %]
+[% Asset.css("lib/codemirror/codemirror.min.css") | $raw %]
 <style>
 .CodeMirror {
     resize:  vertical;
@@ -1086,7 +1086,7 @@ canned reports and writing custom SQL reports.</p>
     [% IF ( saved1 ) %]
         [% INCLUDE 'columns_settings.inc' %]
     [% END %]
-    [% Asset.js( "lib/codemirror/codemirror-compressed.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/codemirror.min.js" ) | $raw %]
     [% Asset.js( "lib/codemirror/sql.min.js" ) | $raw %]
     [% Asset.js( "js/mana.js" ) | $raw %]
     <script>
