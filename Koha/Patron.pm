@@ -770,11 +770,11 @@ sub set_password {
     }
 
     my $digest = Koha::AuthUtils::hash_password($password);
-    $self->update(
-        {   password       => $digest,
-            login_attempts => 0,
-        }
-    );
+
+    # We do not want to call $self->store and retrieve password from DB
+    $self->password($digest);
+    $self->login_attempts(0);
+    $self->SUPER::store;
 
     logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" )
         if C4::Context->preference("BorrowersLog");
