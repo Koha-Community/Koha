@@ -362,7 +362,7 @@
                             [% ELSIF hold.priority == 1 %]
                                 Item-level hold (placed [% hold.reservedate | $KohaDates %]) for delivery at [% Branches.GetName( hold.branchcode ) | html %].
                             [% ELSE %]
-                                There is an item level hold on this item (priority = [% hold.priority %]).
+                                There is an item level hold on this item (priority = [% hold.priority | html %]).
                             [% END %]
                             [% IF canreservefromotherbranches AND ( hold.waitingdate OR hold.priority == 1 ) %]
                                 Hold for:
