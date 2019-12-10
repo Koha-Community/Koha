@@ -64,9 +64,9 @@ my @credit_types =
 
 if ($do_it) {
 
-    $fromDate = output_pref({ dt => eval { dt_from_string($input->param("from")) } || dt_from_string,
+    $fromDate = output_pref({ dt => eval { dt_from_string(scalar $input->param("from")) } || dt_from_string,
             dateformat => 'sql', dateonly => 1 }); #for sql query
-    $toDate   = output_pref({ dt => eval { dt_from_string($input->param("to")) } || dt_from_string,
+    $toDate   = output_pref({ dt => eval { dt_from_string(scalar $input->param("to")) } || dt_from_string,
             dateformat => 'sql', dateonly => 1 }); #for sql query
 
     my $whereTType = q{};
