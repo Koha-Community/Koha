@@ -199,6 +199,17 @@ if ($test_parameter) {
 
 my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 
+# The definition of $searcher must be before MARC::Batch->new
+my $searcher = Koha::SearchEngine::Search->new(
+    {
+        index => (
+              $authorities
+            ? $Koha::SearchEngine::AUTHORITIES_INDEX
+            : $Koha::SearchEngine::BIBLIOS_INDEX
+        )
+    }
+);
+
 print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch;
@@ -253,16 +264,6 @@ if ($logfile){
    $loghandle= IO::File->new($logfile, $writemode) ;
    print $loghandle "id;operation;status\n";
 }
-
-my $searcher = Koha::SearchEngine::Search->new(
-    {
-        index => (
-              $authorities
-            ? $Koha::SearchEngine::AUTHORITIES_INDEX
-            : $Koha::SearchEngine::BIBLIOS_INDEX
-        )
-    }
-);
 
 RECORD: while (  ) {
     my $record;
