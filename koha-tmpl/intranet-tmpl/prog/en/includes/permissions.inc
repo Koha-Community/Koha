@@ -695,6 +695,11 @@
             Reopen closed invoices
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_invoices' -%]
+        <span class="sub_permission edit_invoices_subpermission">
+            Edit invoices
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%# self_check %]
     [%- CASE 'self_checkin_module' -%]
         <span class="sub_permission self_checkin_module_subpermission">

@@ -53,9 +53,12 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
 );
 
 my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
-
 my $invoiceid = $input->param('invoiceid');
 my $op        = $input->param('op');
+
+output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+  if $op
+  && not $logged_in_patron->has_permission( { acquisition => 'edit_invoices' } );
 
 my $invoice_files;
 if ( C4::Context->preference('AcqEnableFiles') ) {
@@ -242,6 +245,7 @@ $template->param(
     invoiceincgst               => $bookseller->invoiceincgst,
     currency                    => Koha::Acquisition::Currencies->get_active,
     budgets                     => $budget_loop,
+    budget                      => GetBudget( $shipmentcost_budgetid ),
 );
 
 defined( $invoice_files ) && $template->param( files => $invoice_files->GetFilesInfo() );

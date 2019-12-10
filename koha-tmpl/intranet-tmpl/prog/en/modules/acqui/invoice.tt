@@ -36,42 +36,63 @@
         <fieldset class="rows">
             <ol>
             <li>
-                <label for="shipmentdate" class="required">Invoice number:</label>
                 [% IF readonly %]
+                    <label for="shipmentdate">Invoice number:</label>
                     [% invoicenumber | html %]
                 [% ELSE %]
+                    <label for="shipmentdate" class="required">Invoice number:</label>
                     <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
                     <span class="required">Required</span>
                 [% END %]
             </li>
 
-            <li><label for="shipmentdate">Shipment date:</label>
-                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" class="datepicker" /></li>
-
-            <li><label for="billingdate">Billing date:</label>
-                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | $KohaDates %]" class="datepicker" /></li>
-
-            <li><label for="shipmentcost">Shipping cost:</label>
-                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" /></li>
-
-        <li>
-            <label for="shipment_budget_id">Shipping fund: </label>
-            <select id="shipment_budget_id" name="shipment_budget_id">
-                <option value="">No fund</option>
-                [% FOREACH budget IN budgets %]
-                    [% IF ( budget.selected ) %]
-                        <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
-                    [% ELSIF ( budget.b_active ) %]
-                        <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
-                    [% ELSE %]
-                        <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
-                    [% END %]
+            <li>
+                <label for="shipmentdate">Shipment date:</label>
+                [% IF readonly %]
+                    [% shipmentdate | $KohaDates %]
+                [% ELSE %]
+                    <input type="text" size="10" id="shipmentdate" name="shipmentdate" value="[% shipmentdate | $KohaDates %]" class="datepicker" />
                 [% END %]
-            </select>
-            <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-            <input type="checkbox" id="showallfunds" />
+            </li>
 
-        </li>
+            <li>
+                <label for="billingdate">Billing date:</label>
+                [% IF readonly %]
+                    [% billingdate | $KohaDates %]
+                [% ELSE %]
+                    <input type="text" size="10" id="billingdate" name="billingdate" value="[% billingdate | $KohaDates %]" class="datepicker" />
+                [% END %]
+            </li>
+
+            <li>
+                <label for="shipmentcost">Shipping cost:</label>
+                [% IF readonly %]
+                    [% shipmentcost | $Price %]
+                [% ELSE %]
+                    <input type="text" size="10" id="shipmentcost" name="shipmentcost" value="[% shipmentcost | $Price on_editing => 1 %]" />
+                [% END %]
+            </li>
+            <li>
+                <label for="shipment_budget_id">Shipping fund: </label>
+                [% IF readonly %]
+                    [% budget.budget_name | html %]
+                [% ELSE %]
+                    <select id="shipment_budget_id" name="shipment_budget_id">
+                        <option value="">No fund</option>
+                        [% FOREACH budget IN budgets %]
+                            [% IF ( budget.selected ) %]
+                                <option value="[% budget.b_id | html %]" selected="selected">[% budget.b_txt | html %] [% IF ( !budget.b_active ) %](inactive)[% END %]</option>
+                            [% ELSIF ( budget.b_active ) %]
+                                <option value="[% budget.b_id | html %]">[% budget.b_txt | html %]</option>
+                            [% ELSE %]
+                                <option value="[% budget.b_id | html %]" class="b_inactive">[% budget.b_txt | html %] (inactive)</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                    <label for="showallfunds" style="float:none;width:auto;">&nbsp;Show inactive:</label>
+                    <input type="checkbox" id="showallfunds" />
+                [% END %]
+            </li>
 
             [% IF ( invoiceclosedate ) %]
             <li><span class="label">Status:</span>
@@ -79,20 +100,21 @@
 
             <li>
                 <label for="reopen">Reopen: </label>
-                [% IF CAN_user_acquisition_reopen_closed_invoices %]
+                [% IF CAN_user_acquisition_reopen_closed_invoices AND NOT readonly %]
                     <input type="checkbox" name="reopen" id="reopen" />
                 [% ELSE %]
-                    <input type="checkbox" name="reopen" id="reopen" readonly="readonly" />
+                    <input type="checkbox" name="reopen" id="reopen" readonly="disabled" />
                 [% END %]
             </li>
             [% ELSE %]
             <li><span class="label">Status:</span>
                 Open</li>
 
-            <li><label for="close">Close: </label> <input type="checkbox" name="close" id="close" />
-                </li>
+                <li><label for="close">Close: </label> <input type="checkbox" name="close" id="close" />
+                    </li>
             [% END %]
             </ol>
+        [% UNLESS readonly %]
           <input type="hidden" name="op" value="mod" />
           <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
             <fieldset class="action">
@@ -101,6 +123,7 @@
                 <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | uri %]" id="delete">Delete</a>
                 [% END %]
             </fieldset>
+        [% END %]
         </fieldset>
       </form>
 
@@ -120,128 +143,160 @@
                              <th>Note</th>
                              <th>Fund</th>
                              <th>Encumber while invoice open</th>
-                             <th>&nbsp</th>
+                             [% UNLESS readonly %]<th>&nbsp</th>[% END %]
                           </tr>
                           [% total_adj = 0 %]
                           [% FOREACH adjustment IN adjustments %]
                               [% total_adj = total_adj + adjustment.adjustment %]
                               <tr>
                                   <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]</td>
-                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" /></td>
                                   <td>
-                                      [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
-                                      [% IF reasons.0 %]
-                                          <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
-                                              <option value="">No reason</option>
-                                              [% FOREACH reason IN reasons %]
-                                                  [% IF ( adjustment.reason == reason.authorised_value ) %]
-                                                      <option selected="selected" value="[% reason.authorised_value | html %]">
-                                                  [% ELSE %]
-                                                      <option value="[% reason.authorised_value | html %]">
+                                    [% IF readonly %]
+                                        [% adjustment.adjustment | $Price %]
+                                    [% ELSE %]
+                                        <input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" />
+                                    [% END %]
+                                  </td>
+                                  <td>
+                                      [% IF readonly %]
+                                          [% AuthorisedValues.GetByCode('ADJ_REASON', adjustment.reason) | html %]
+                                      [% ELSE %]
+                                          [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                                          [% IF reasons.0 %]
+                                              <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
+                                                  <option value="">No reason</option>
+                                                  [% FOREACH reason IN reasons %]
+                                                      [% IF ( adjustment.reason == reason.authorised_value ) %]
+                                                          <option selected="selected" value="[% reason.authorised_value | html %]">
+                                                      [% ELSE %]
+                                                          <option value="[% reason.authorised_value | html %]">
+                                                      [% END %]
+                                                      [% reason.lib | html %]
+                                                      </option>
                                                   [% END %]
-                                                  [% reason.lib | html %]
+                                              </select>
+                                          [% ELSE %]
+                                              <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
+                                              <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id | html %]" value="" />
+                                          [% END %]
+                                        [% END %]
+                                  </td>
+                                  <td>
+                                      [% IF readonly %]
+                                          [% adjustment.note | html %]
+                                      [% ELSE %]
+                                          <input type="text" name="note" id="note_new" value="[% adjustment.note | html %]"/>
+                                      [% END %]
+                                  </td>
+                                  <td>
+                                      [% IF readonly %]
+                                          [% adjustement.fund.budget_name | html %]
+                                      [% ELSE %]
+                                          <select id="budget_id_[% adjustment.adjustment_id | html %]" name="budget_id">
+                                              <option value="">No fund</option>
+                                              [% FOREACH budget IN budgets %]
+                                                  [% IF ( budget.b_id == adjustment.budget_id ) %]
+                                                      <option selected="selected" value="[% budget.b_id | html %]">
+                                                  [% ELSE %]
+                                                      <option value="[% budget.b_id | html %]">
+                                                  [% END %]
+                                                  [% budget.b_txt | html %]
                                                   </option>
                                               [% END %]
                                           </select>
-                                      [% ELSE %]
-                                          <p title="Define values in authorised value category ADJ_REASON to enable">None</p>
-                                          <input type="hidden" name="reason" id="reason_[% adjustment.adjustment_id | html %]" value="" />
-                                  [% END %]
-                                  </td>
-                                  <td><input type="text" name="note" id="note_new" value="[% adjustment.note | html %]"/></td>
-                                  <td>
-                                      <select id="budget_id_[% adjustment.adjustment_id | html %]" name="budget_id">
-                                              <option value="">No fund</option>
-                                          [% FOREACH budget IN budgets %]
-                                              [% IF ( budget.b_id == adjustment.budget_id ) %]
-                                                  <option selected="selected" value="[% budget.b_id | html %]">
-                                              [% ELSE %]
-                                                  <option value="[% budget.b_id | html %]">
-                                              [% END %]
-                                              [% budget.b_txt | html %]
-                                              </option>
-                                          [% END %]
-                                      </select>
+                                      [% END %]
                                   </td>
                                   [% IF adjustment.encumber_open %]
                                       <td>
+                                        [% IF readonly %]
+                                          <input type="checkbox" checked="checked" readonly="readonly" />
+                                        [% ELSE %]
                                           <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" checked/>
+                                        [% END %]
                                       </td>
                                   [% ELSE %]
                                       <td>
+                                        [% IF readonly %]
+                                          <input type="checkbox" disabled="disabled" />
+                                        [% ELSE %]
                                           <input type="checkbox" name="encumber_open" id="encumber_[% adjustment.adjustment_id | html %]"  value="[% adjustment.adjustment_id | html %]" />
+                                        [% END %]
                                       </td>
                                   [% END %]
-                                  <td>
-                                     <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash"></i> Delete</a>
-                                  </td>
+                                  [% UNLESS readonly %]
+                                      <td>
+                                         <a class="btn btn-default btn-xs delete_adjustment" href="/cgi-bin/koha/acqui/invoice.pl?op=del_adj&adjustment_id=[% adjustment.adjustment_id | html %]&invoiceid=[% invoiceid | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                      </td>
+                                  [% END %]
                               </tr>
                           [% END %]
                       </table>
                   [% END %]
 
-                  <p>
-                      <a href="#" id="show_invoice_adjustment" class="toggle_invoice_adjustment"><i class="fa fa-plus"></i> Add an adjustment</a>
-                  </p>
+                  [% UNLESS readonly %]
+                      <p>
+                          <a href="#" id="show_invoice_adjustment" class="toggle_invoice_adjustment"><i class="fa fa-plus"></i> Add an adjustment</a>
+                      </p>
 
-                  <fieldset id="add_invoice_adjustment" style="display:none">
-                      <h4>Add an adjustment</h4>
-                      <input type="hidden" name="adjustment_id" value="new" />
-                          <ol>
-                              <li>
-                                  <label for="adjustment_new">Amount: </label>
-                                  <input type="text" name="adjustment" id="adjustment_new" />
-                              </li>
-                              [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
-                              [% IF reasons.0 %]
+                      <fieldset id="add_invoice_adjustment" style="display:none">
+                          <h4>Add an adjustment</h4>
+                          <input type="hidden" name="adjustment_id" value="new" />
+                              <ol>
                                   <li>
-                                      <label for="reason_[% adjustment.adjustment_id | html %]">Reason: </label>
-                                      <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
-                                          <option value="">No reason</option>
-                                          [% FOREACH reason IN reasons %]
-                                              <option value="[% reason.authorised_value | html %]">
-                                                  [% reason.lib | html %]
+                                      <label for="adjustment_new">Amount: </label>
+                                      <input type="text" name="adjustment" id="adjustment_new" />
+                                  </li>
+                                  [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
+                                  [% IF reasons.0 %]
+                                      <li>
+                                          <label for="reason_[% adjustment.adjustment_id | html %]">Reason: </label>
+                                          <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
+                                              <option value="">No reason</option>
+                                              [% FOREACH reason IN reasons %]
+                                                  <option value="[% reason.authorised_value | html %]">
+                                                      [% reason.lib | html %]
+                                                  </option>
+                                              [% END %]
+                                          </select>
+                                      </li>
+                                  [% ELSE %]
+                                      <li>
+                                          <span class="label">Reason: </span>
+                                          <span>None</span>
+                                          <div class="hint">Define values in authorised value category ADJ_REASON to enable</div>
+                                      </li>
+                                  [% END %]
+                                  <li>
+                                      <label for="note_new">Note: </label>
+                                      <input type="text" name="note" id="note_new" value=""/>
+                                  </li>
+                                  <li>
+                                      <label for="budget_id_new">Fund: </label>
+                                      <select id="budget_id_new" name="budget_id">
+                                          <option selected="selected" value="">No fund</option>
+                                          [% FOREACH budget IN budgets %]
+                                              <option value="[% budget.b_id | html %]">
+                                              [% budget.b_txt | html %]
                                               </option>
                                           [% END %]
                                       </select>
                                   </li>
-                              [% ELSE %]
                                   <li>
-                                      <span class="label">Reason: </span>
-                                      <span>None</span>
-                                      <div class="hint">Define values in authorised value category ADJ_REASON to enable</div>
+                                      <label for="encumber_new">Encumber while invoice open? </label>
+                                      <input type="checkbox" name="encumber_open" id="encumber_new" value="new" />
+                                      <input type="hidden" name="delete" value="">
                                   </li>
-                              [% END %]
-                              <li>
-                                  <label for="note_new">Note: </label>
-                                  <input type="text" name="note" id="note_new" value=""/>
-                              </li>
-                              <li>
-                                  <label for="budget_id_new">Fund: </label>
-                                  <select id="budget_id_new" name="budget_id">
-                                      <option selected="selected" value="">No fund</option>
-                                      [% FOREACH budget IN budgets %]
-                                          <option value="[% budget.b_id | html %]">
-                                          [% budget.b_txt | html %]
-                                          </option>
-                                      [% END %]
-                                  </select>
-                              </li>
-                              <li>
-                                  <label for="encumber_new">Encumber while invoice open? </label>
-                                  <input type="checkbox" name="encumber_open" id="encumber_new" value="new" />
-                                  <input type="hidden" name="delete" value="">
-                              </li>
-                              <li>
-                                  <span class="label">&nbsp;</span>
-                                  <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment" style="display:none"><i class="fa fa-remove"></i> Cancel</a>
-                              </li>
-                          </ol>
-                      </fieldset>
-                      <fieldset class="action">
-                          <input type="hidden" name="op" value="mod_adj" />
-                          <input type="submit" value="Update adjustments" />
-                      </fieldset>
+                                  <li>
+                                      <span class="label">&nbsp;</span>
+                                      <a href="#" id="cancel_invoice_adjustment" class="toggle_invoice_adjustment" style="display:none"><i class="fa fa-remove"></i> Cancel</a>
+                                  </li>
+                              </ol>
+                          </fieldset>
+                          <fieldset class="action">
+                              <input type="hidden" name="op" value="mod_adj" />
+                              <input type="submit" value="Update adjustments" />
+                          </fieldset>
+                    [% END %]
                   </fieldset>
               </form>
       <p>

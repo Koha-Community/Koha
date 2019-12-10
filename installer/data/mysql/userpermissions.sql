@@ -66,6 +66,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'budget_manage_all', 'Manage all funds'),
    (11, 'edi_manage', 'Manage EDIFACT transmissions'),
    (11, 'reopen_closed_invoices', 'Reopen closed invoices'),
+   (11, 'edit_invoices', 'Edit invoices'),
    (12, 'suggestions_manage', 'Manage purchase suggestions'),
    (13, 'edit_news', 'Write news for the OPAC and staff interfaces'),
    (13, 'label_creator', 'Create printable labels and barcodes from catalog and patron data'),

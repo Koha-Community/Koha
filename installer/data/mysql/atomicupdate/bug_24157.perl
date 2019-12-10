@@ -5,6 +5,12 @@ if( CheckVersion( $DBversion ) ) {
         (11, 'reopen_closed_invoices', 'Reopen closed invoices')
     |);
 
+    $dbh->do(q|
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES
+        (11, 'edit_invoices', 'Edit invoices')
+    |);
+
+
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24157: Add new permission reopen_closed_invoices)\n";
+    print "Upgrade to $DBversion done (Bug 24157: Add new permissions reopen_closed_invoices, edit_invoices)\n";
 }
