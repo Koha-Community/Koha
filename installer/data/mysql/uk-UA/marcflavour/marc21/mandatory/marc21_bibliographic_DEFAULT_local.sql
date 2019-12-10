@@ -1023,7 +1023,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '991', '', '', 'Ознака експрес-каталогізації', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '991', 'a', 0, 0, 'Ознака експрес-каталогізації', '',         9, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+ ('', '', '991', 'a', 0, 0, 'Ознака експрес-каталогізації', '',         9, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '995', '', 1, 'Рекомендація 995 (локальне, UNIMARC Франція та ін.)', '', '');
