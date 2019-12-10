@@ -27,6 +27,7 @@ use Koha::DateUtils;
 use Text::CSV::Encoded;
 use List::Util qw/any/;
 
+use Koha::Account::CreditTypes;
 use Koha::Account::DebitTypes;
 
 my $input            = new CGI;
