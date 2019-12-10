@@ -690,6 +690,11 @@
             Manage EDIFACT transmissions
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'reopen_closed_invoices' -%]
+        <span class="sub_permission reopen_closed_invoices_subpermission">
+            Reopen closed invoices
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%# self_check %]
     [%- CASE 'self_checkin_module' -%]
         <span class="sub_permission self_checkin_module_subpermission">

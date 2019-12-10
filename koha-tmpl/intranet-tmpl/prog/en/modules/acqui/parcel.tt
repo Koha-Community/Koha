@@ -213,7 +213,9 @@
 [% ELSE %]
     <p>
         Invoice is closed, so you can't receive orders anymore.
-        <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid | uri %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]">Reopen it</a>.
+        [% IF CAN_user_acquisition_reopen_closed_invoices %]
+            <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid | uri %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]">Reopen it</a>.
+        [% END %]
     </p>
 [% END %]
 

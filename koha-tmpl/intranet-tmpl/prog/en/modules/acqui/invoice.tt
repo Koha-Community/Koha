@@ -15,6 +15,8 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
+[% SET readonly = NOT CAN_user_acquisition_edit_invoices %]
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | html %]">[% invoicenumber | html %]</a></div>
 
 <div class="main container-fluid">
@@ -35,8 +37,12 @@
             <ol>
             <li>
                 <label for="shipmentdate" class="required">Invoice number:</label>
-                <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
-                <span class="required">Required</span>
+                [% IF readonly %]
+                    [% invoicenumber | html %]
+                [% ELSE %]
+                    <input type="text" id="invoicenumber" name="invoicenumber" value="[% invoicenumber | html %]" class="required" required="required"/>
+                    <span class="required">Required</span>
+                [% END %]
             </li>
 
             <li><label for="shipmentdate">Shipment date:</label>
@@ -71,7 +77,14 @@
             <li><span class="label">Status:</span>
                 Closed on [% invoiceclosedate | $KohaDates %]</li>
 
-            <li><label for="reopen">Reopen: </label> <input type="checkbox" name="reopen" id="reopen" /></li>
+            <li>
+                <label for="reopen">Reopen: </label>
+                [% IF CAN_user_acquisition_reopen_closed_invoices %]
+                    <input type="checkbox" name="reopen" id="reopen" />
+                [% ELSE %]
+                    <input type="checkbox" name="reopen" id="reopen" readonly="readonly" />
+                [% END %]
+            </li>
             [% ELSE %]
             <li><span class="label">Status:</span>
                 Open</li>

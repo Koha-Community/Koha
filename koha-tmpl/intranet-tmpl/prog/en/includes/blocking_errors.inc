@@ -19,6 +19,8 @@
         <div class="dialog message">The budget is locked, fund creation is not possible.</div>
     [% CASE 'missing_es_modules' %]
         <div class="dialog message">Necessary Elasticsearch packages are not installed on your server. Please contact your server admin if you wish to configure Elasticsearch</div>
+    [% CASE 'insufficient_permission' %]
+        <div class="dialog message">You do not have sufficient permission to continue.</div>
     [% CASE %][% blocking_error | html %]
     [% END %]
 

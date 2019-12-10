@@ -52,6 +52,8 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     }
 );
 
+my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
+
 my $invoiceid = $input->param('invoiceid');
 my $op        = $input->param('op');
 
@@ -70,6 +72,9 @@ if ( $op && $op eq 'close' ) {
     }
 }
 elsif ( $op && $op eq 'reopen' ) {
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
+
     ReopenInvoice($invoiceid);
     my $referer = $input->param('referer');
     if ($referer) {
@@ -90,7 +95,8 @@ elsif ( $op && $op eq 'mod' ) {
         shipmentcost_budgetid => $shipment_budget_id
     );
     if ($input->param('reopen')) {
-        ReopenInvoice($invoiceid);
+        ReopenInvoice($invoiceid)
+            if $logged_in_patron->has_permission( { acquisition => 'reopen_closed_invoices' } );
     } elsif ($input->param('close')) {
         CloseInvoice($invoiceid);
     } elsif ($input->param('merge')) {
