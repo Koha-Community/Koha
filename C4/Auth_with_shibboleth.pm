@@ -194,7 +194,7 @@ sub _get_return {
     my $uri_base_part = _get_uri() . get_script_name();
 
     my $uri_params_part = '';
-    foreach my $param ( $query->url_param() ) {
+    foreach my $param ( sort $query->url_param() ) {
         # url_param() always returns parameters that were deleted by delete()
         # This additional check ensure that parameter was not deleted.
         my $uriPiece = $query->param($param);
