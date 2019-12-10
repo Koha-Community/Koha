@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Branches %]
+[% USE Desks %]
 [% USE Koha %]
 <nav class="navbar">
     <div class="navbar-header">
@@ -85,6 +86,17 @@
                                 <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                             </strong>
                         [% END %]
+                        [% IF (Desks.defined) %]
+                            <span class="separator">|</span>
+                            <strong>
+                                [% IF ( LoginDeskname == '') %]
+                                   <span class="logged-in-desk-name">NO DESK SET</span>
+                                [% ELSE %]
+                                    <span class="logged-in-desk-name">[% LoginDeskname | html %]</span>
+                                    <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
+                                [% END %]
+                            </strong>
+                         [% END %]
                     </span>
                     <b class="caret"></b>
                 </a>
@@ -116,6 +128,11 @@
                     [% ELSE %]
                     <li>
                         <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
+                    </li>
+                    [% END %]
+                    [% IF Desks.defined %]
+                    <li>
+                        <a class="toplinks" href="/cgi-bin/koha/circ/selectdesk.pl">Set desk</a>
                     </li>
                     [% END %]
                     [% IF EnableSearchHistory %]
