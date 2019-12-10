@@ -37,14 +37,18 @@
     [% ELSIF op == 'delete_confirm' and patron %]
         [%# TODO add "patron does not exist" unless patron %]
         <div class="dialog alert">
-            [% IF ( ItemsOnHold ) %]
-            <h3>Patron has [% ItemsOnHold | html %] hold(s). Deleting patron cancels all their holds.</h3></br>
+            [% IF ItemsOnHold or credits %]
+                <ul>
+                    [% IF ItemsOnHold %]
+                        <li>Patron has [% ItemsOnHold | html %] hold(s). Deleting patron cancels all their holds.</li>
+                    [% END %]
+                    [% IF credits %]
+                        <li>Patron has a [% credits | $Price %] credit.</li>
+                    [% END %]
+                <ul>
             [% END %]
             <h3>Are you sure you want to delete the patron [% patron.firstname | html %] [% patron.surname | html %]? This cannot be undone.</h3>
 
-            [% IF credits %]
-                <h4>Patron has a [% credits | $Price %] credit.</h4>
-            [% END %]
             <form action="/cgi-bin/koha/members/deletemem.pl">
                 <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                 <input type="hidden" name="member" value="[% patron.borrowernumber | html %]"/>
