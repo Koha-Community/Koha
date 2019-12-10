@@ -215,7 +215,7 @@
 
     <fieldset class="rows">
     [% IF ( selected_accts ) %]
-        [% IF type == 'writeoff' %]
+        [% IF type == 'WRITEOFF' %]
             <legend>Write off an amount toward selected fines</legend>
         [% ELSE %]
             <legend>Pay an amount toward selected fines</legend>
@@ -230,23 +230,23 @@
             <span class="debit">[% total | format('%.2f') %]</span>
         </li>
     <li>
-        <label for="paid">Amount paid :</label>
+        [% IF type == 'WRITEOFF' %]
+            <label for="paid">Writeoff amount:</label>
+        [% ELSE %]
+            <label for="paid">Amount paid: </label>
+        [% END %]
         <input name="paid" id="paid" value="[% total | $Price on_editing => 1 %]"/>
     </li>
-    <li>
-        [% IF type == 'writeoff' %]
-            <label for="collected">Writeoff amount: </label>
-        [% ELSE %]
-            <label for="collected">Collect from patron: </label>
-        [% END %]
-        <input id="collected" value="[% total | $Price on_editing => 1 %]"/>
-    </li>
-    <li>
-        <label>Change to give: </label>
-        <span id="change">0.00</span>
-    </li>
 
-    [% IF type != 'writeoff' %]
+    [% IF type != 'WRITEOFF' %]
+        <li>
+            <label for="collected">Collected from patron: </label>
+            <input id="collected" value="[% total | $Price on_editing => 1 %]"/>
+        </li>
+        <li>
+            <label>Change to give: </label>
+            <span id="change">0.00</span>
+        </li>
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
         <li>
