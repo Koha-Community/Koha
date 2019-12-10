@@ -2,73 +2,75 @@ modules:
   acqui:
     histsearch:
       histsearcht:
-        -
-          columnname: order_line
-        -
-          columnname: status
-        -
-          columnname: basket
-        -
-          columnname: basket_creator
-        -
-          columnname: basket_group
-        -
-          columnname: invoice_number
-        -
-          columnname: summary
-        -
-          columnname: vendor
-        -
-          columnname: placed_on
-        -
-          columnname: received_on
-        -
-          columnname: quantity_received
-        -
-          columnname: pending_order
-        -
-          columnname: unit_cost
-        -
-          columnname: fund
+        columns:
+            -
+              columnname: order_line
+            -
+              columnname: status
+            -
+              columnname: basket
+            -
+              columnname: basket_creator
+            -
+              columnname: basket_group
+            -
+              columnname: invoice_number
+            -
+              columnname: summary
+            -
+              columnname: vendor
+            -
+              columnname: placed_on
+            -
+              columnname: received_on
+            -
+              columnname: quantity_received
+            -
+              columnname: pending_order
+            -
+              columnname: unit_cost
+            -
+              columnname: fund
 
     lateorders:
       late_orders:
-        -
-          columnname: checkbox
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: order_line
-        -
-          columnname: order_date
-        -
-          columnname: estimated_delivery_date
-        -
-          columnname: vendor
-        -
-          columnname: information
-        -
-          columnname: quantity
-        -
-          columnname: total_cost
-        -
-          columnname: basket
-        -
-          columnname: basket_group
-        -
-          columnname: library
-        -
-          columnname: fund
-        -
-          columnname: claims_count
-        -
-          columnname: claimed_date
-        -
-          columnname: internal_note
-        -
-          columnname: vendor_note
-        -
-          columnname: isbn
+        columns:
+            -
+              columnname: checkbox
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: order_line
+            -
+              columnname: order_date
+            -
+              columnname: estimated_delivery_date
+            -
+              columnname: vendor
+            -
+              columnname: information
+            -
+              columnname: quantity
+            -
+              columnname: total_cost
+            -
+              columnname: basket
+            -
+              columnname: basket_group
+            -
+              columnname: library
+            -
+              columnname: fund
+            -
+              columnname: claims_count
+            -
+              columnname: claimed_date
+            -
+              columnname: internal_note
+            -
+              columnname: vendor_note
+            -
+              columnname: isbn
 
     basket:
       orders:
@@ -121,294 +123,302 @@ modules:
 
     suggestions:
       suggestions:
-        -
-          columnname: selections
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: suggestion
-        -
-          columnname: suggested_by
-        -
-          columnname: suggested_on
-        -
-          columnname: managed_by
-        -
-          columnname: managed_on
-        -
-          columnname: lastmodificationby
-        -
-          columnname: lastmodificationdate
-        -
-          columnname: library
-        -
-          columnname: library_fund
-        -
-          columnname: suggestion_status
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-
+        columns:
+            -
+              columnname: selections
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: suggestion
+            -
+              columnname: suggested_by
+            -
+              columnname: suggested_on
+            -
+              columnname: managed_by
+            -
+              columnname: managed_on
+            -
+              columnname: lastmodificationby
+            -
+              columnname: lastmodificationdate
+            -
+              columnname: library
+            -
+              columnname: library_fund
+            -
+              columnname: suggestion_status
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
   admin:
     currency:
       currencies-table:
-        -
-          columnname: currency
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: rate
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: symbol
-        -
-          columnname: iso_code
-          is_hidden: 1
-        -
-          columnname: last_updated
-        -
-          columnname: active
-        -
-          columnname: actions
+        columns:
+            -
+              columnname: currency
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: rate
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: symbol
+            -
+              columnname: iso_code
+              is_hidden: 1
+            -
+              columnname: last_updated
+            -
+              columnname: active
+            -
+              columnname: actions
 
     categories:
       patron_categories:
-        -
-          columnname: code
-        -
-          columnname: category_name
-        -
-          columnname: type
-        -
-          columnname: enrollment_period
-        -
-          columnname: age_required
-        -
-          columnname: upper_age_limit
-        -
-          columnname: enrollment_fee
-        -
-          columnname: overdue
-        -
-          columnname: lost_items
-        -
-          columnname: hold_fee
-        -
-          columnname: messaging
-        -
-          columnname: branches_limitations
-        -
-          columnname: default_privacy
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: code
+            -
+              columnname: category_name
+            -
+              columnname: type
+            -
+              columnname: enrollment_period
+            -
+              columnname: age_required
+            -
+              columnname: upper_age_limit
+            -
+              columnname: enrollment_fee
+            -
+              columnname: overdue
+            -
+              columnname: lost_items
+            -
+              columnname: hold_fee
+            -
+              columnname: messaging
+            -
+              columnname: branches_limitations
+            -
+              columnname: default_privacy
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
     itemtypes:
       table_item_type:
-        -
-          columnname: image
-        -
-          columnname: code
-        -
-          columnname: description
-        -
-          columnname: search_category
-        -
-          columnname: not_for_loan
-        -
-          columnname: hide_in_opac
-        -
-          columnname: rental_charge
-        -
-          columnname: daily_rental_charge
-        -
-          columnname: hourly_rental_charge
-        -
-          columnname: default_replacement_cost
-        -
-          columnname: lost_processing_fee
-        -
-          columnname: checkin_message
-        -
-          columnname: library_limitations
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: image
+            -
+              columnname: code
+            -
+              columnname: description
+            -
+              columnname: search_category
+            -
+              columnname: not_for_loan
+            -
+              columnname: hide_in_opac
+            -
+              columnname: rental_charge
+            -
+              columnname: daily_rental_charge
+            -
+              columnname: hourly_rental_charge
+            -
+              columnname: default_replacement_cost
+            -
+              columnname: lost_processing_fee
+            -
+              columnname: checkin_message
+            -
+              columnname: library_limitations
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
     libraries:
       libraries:
-        -
-          columnname: library_name
-        -
-          columnname: library_code
-        -
-          columnname: library_address
-        -
-          columnname: marc_organization_code
-        -
-          columnname: library_ip
-        -
-          columnname: is_pickup_location
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: library_name
+            -
+              columnname: library_code
+            -
+              columnname: library_address
+            -
+              columnname: marc_organization_code
+            -
+              columnname: library_ip
+            -
+              columnname: is_pickup_location
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
   catalogue:
     detail:
       holdings_table:
-        -
-          columnname: holdings_checkbox
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: holdings_itype
-        -
-          columnname: holdings_holdingbranch
-        -
-          columnname: holdings_homebranch
-        -
-          columnname: holdings_ccode
-        -
-          columnname: holdings_itemcallnumber
-        -
-          columnname: holdings_status
-        -
-          columnname: holdings_lastseen
-        -
-          columnname: holdings_dateaccessioned
-        -
-          columnname: holdings_barcode
-        -
-          columnname: holdings_enumchron
-        -
-          columnname: holdings_uri
-        -
-          columnname: holdings_copynumber
-        -
-          columnname: holdings_stocknumber
-        -
-          columnname: holdings_materials
-        -
-          columnname: holdings_itemnotes
-        -
-          columnname: holdings_itemnotes_nonpublic
-        -
-          columnname: holdings_hostrecord
-        -
-          columnname: holdings_usedin
-        -
-          columnname: holdings_usedin_col
-        -
-          columnname: holdings_course_reserves
-        -
-          columnname: holdings_spinelabel
-        -
-          columnname: holdings_actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: holdings_checkbox
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: holdings_itype
+            -
+              columnname: holdings_holdingbranch
+            -
+              columnname: holdings_homebranch
+            -
+              columnname: holdings_ccode
+            -
+              columnname: holdings_itemcallnumber
+            -
+              columnname: holdings_status
+            -
+              columnname: holdings_lastseen
+            -
+              columnname: holdings_dateaccessioned
+            -
+              columnname: holdings_barcode
+            -
+              columnname: holdings_enumchron
+            -
+              columnname: holdings_uri
+            -
+              columnname: holdings_copynumber
+            -
+              columnname: holdings_stocknumber
+            -
+              columnname: holdings_materials
+            -
+              columnname: holdings_itemnotes
+            -
+              columnname: holdings_itemnotes_nonpublic
+            -
+              columnname: holdings_hostrecord
+            -
+              columnname: holdings_usedin
+            -
+              columnname: holdings_usedin_col
+            -
+              columnname: holdings_course_reserves
+            -
+              columnname: holdings_spinelabel
+            -
+              columnname: holdings_actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
       otherholdings_table:
-        -
-          columnname: otherholdings_checkbox
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: otherholdings_itype
-        -
-          columnname: otherholdings_holdingbranch
-        -
-          columnname: otherholdings_homebranch
-        -
-          columnname: otherholdings_ccode
-        -
-          columnname: otherholdings_itemcallnumber
-        -
-          columnname: otherholdings_status
-        -
-          columnname: otherholdings_lastseen
-        -
-          columnname: otherholdings_dateaccessioned
-        -
-          columnname: otherholdings_barcode
-        -
-          columnname: otherholdings_enumchron
-        -
-          columnname: otherholdings_uri
-        -
-          columnname: otherholdings_copynumber
-        -
-          columnname: otherholdings_stocknumber
-        -
-          columnname: otherholdings_materials
-        -
-          columnname: otherholdings_itemnotes
-        -
-          columnname: otherholdings_itemnotes_nonpublic
-        -
-          columnname: otherholdings_hostrecord
-        -
-          columnname: otherholdings_usedin
-        -
-          columnname: otherholdings_usedin_col
-        -
-          columnname: otherholdings_course_reserves
-        -
-          columnname: otherholdings_spinelabel
-        -
-          columnname: otherholdings_actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: otherholdings_checkbox
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: otherholdings_itype
+            -
+              columnname: otherholdings_holdingbranch
+            -
+              columnname: otherholdings_homebranch
+            -
+              columnname: otherholdings_ccode
+            -
+              columnname: otherholdings_itemcallnumber
+            -
+              columnname: otherholdings_status
+            -
+              columnname: otherholdings_lastseen
+            -
+              columnname: otherholdings_dateaccessioned
+            -
+              columnname: otherholdings_barcode
+            -
+              columnname: otherholdings_enumchron
+            -
+              columnname: otherholdings_uri
+            -
+              columnname: otherholdings_copynumber
+            -
+              columnname: otherholdings_stocknumber
+            -
+              columnname: otherholdings_materials
+            -
+              columnname: otherholdings_itemnotes
+            -
+              columnname: otherholdings_itemnotes_nonpublic
+            -
+              columnname: otherholdings_hostrecord
+            -
+              columnname: otherholdings_usedin
+            -
+              columnname: otherholdings_usedin_col
+            -
+              columnname: otherholdings_course_reserves
+            -
+              columnname: otherholdings_spinelabel
+            -
+              columnname: otherholdings_actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
       acquisitiondetails-table:
-        -
-          columnname: vendor
-        -
-          columnname: invoice
-        -
-          columnname: basketgroup
-        -
-          columnname: basket
-        -
-          columnname: ordernumber
-        -
-          columnname: creation_date
-        -
-          columnname: received_data
-        -
-          columnname: status
-        -
-          columnname: quantity
-        -
-          columnname: order_internalnote
-        -
-          columnname: subscription
-        -
-          columnname: subscription_callnumber
+        columns:
+            -
+              columnname: vendor
+            -
+              columnname: invoice
+            -
+              columnname: basketgroup
+            -
+              columnname: basket
+            -
+              columnname: ordernumber
+            -
+              columnname: creation_date
+            -
+              columnname: received_data
+            -
+              columnname: status
+            -
+              columnname: quantity
+            -
+              columnname: order_internalnote
+            -
+              columnname: subscription
+            -
+              columnname: subscription_callnumber
 
       checkoutshistory-table:
-        -
-          columnname: patron
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: barcode
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: checked_out_from
-        -
-          columnname: renewed
-        -
-          columnname: checkout_on
-        -
-          columnname: due_date
-        -
-          columnname: checkin_on
+        columns:
+            -
+              columnname: patron
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: barcode
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: checked_out_from
+            -
+              columnname: renewed
+            -
+              columnname: checkout_on
+            -
+              columnname: due_date
+            -
+              columnname: checkin_on
 
   cataloguing:
     additem:
@@ -417,959 +427,991 @@ modules:
         # columns except for the following internal/obsolete fields: stack, more_subfields_xml,
         # cn_sort, permanent_location, damaged_on itemlost_on, withdrawn_on, issues, renewals and
         # reserves.
-        -
-          columnname: barcode
-        -
-          columnname: dateaccessioned
-        -
-          columnname: booksellerid
-        -
-          columnname: homebranch
-        -
-          columnname: price
-        -
-          columnname: replacementprice
-        -
-          columnname: replacementpricedate
-        -
-          columnname: datelastborrowed
-        -
-          columnname: datelastseen
-        -
-          columnname: stack
-        -
-          columnname: notforloan
-        -
-          columnname: damaged
-        -
-          columnname: itemlost
-        -
-          columnname: withdrawn
-        -
-          columnname: itemcallnumber
-        -
-          columnname: coded_location_qualifier
-        -
-          columnname: restricted
-        -
-          columnname: itemnotes
-        -
-          columnname: itemnotes_nonpublic
-        -
-          columnname: holdingbranch
-        -
-          columnname: timestamp
-        -
-          columnname: location
-        -
-          columnname: onloan
-        -
-          columnname: cn_source
-        -
-          columnname: ccode
-        -
-          columnname: materials
-        -
-          columnname: uri
-        -
-          columnname: itype
-        -
-          columnname: enumchron
-        -
-          columnname: copynumber
-        -
-          columnname: stocknumber
+        columns:
+            -
+              columnname: barcode
+            -
+              columnname: dateaccessioned
+            -
+              columnname: booksellerid
+            -
+              columnname: homebranch
+            -
+              columnname: price
+            -
+              columnname: replacementprice
+            -
+              columnname: replacementpricedate
+            -
+              columnname: datelastborrowed
+            -
+              columnname: datelastseen
+            -
+              columnname: stack
+            -
+              columnname: notforloan
+            -
+              columnname: damaged
+            -
+              columnname: itemlost
+            -
+              columnname: withdrawn
+            -
+              columnname: itemcallnumber
+            -
+              columnname: coded_location_qualifier
+            -
+              columnname: restricted
+            -
+              columnname: itemnotes
+            -
+              columnname: itemnotes_nonpublic
+            -
+              columnname: holdingbranch
+            -
+              columnname: timestamp
+            -
+              columnname: location
+            -
+              columnname: onloan
+            -
+              columnname: cn_source
+            -
+              columnname: ccode
+            -
+              columnname: materials
+            -
+              columnname: uri
+            -
+              columnname: itype
+            -
+              columnname: enumchron
+            -
+              columnname: copynumber
+            -
+              columnname: stocknumber
 
     z3950_search:
       resultst:
-        -
-          columnname: server
-        -
-          columnname: title
-        -
-          columnname: author
-        -
-          columnname: date
-        -
-          columnname: edition
-        -
-          columnname: isbn
-        -
-          columnname: lccn
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: server
+            -
+              columnname: title
+            -
+              columnname: author
+            -
+              columnname: date
+            -
+              columnname: edition
+            -
+              columnname: isbn
+            -
+              columnname: lccn
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
   coursereserves:
     courses:
       course_reserves_table:
-        -
-          columnname: name
-        -
-          columnname: department
-        -
-          columnname: course_no
-        -
-          columnname: section
-        -
-          columnname: term
-        -
-          columnname: instructors
-        -
-          columnname: staff_note
-        -
-          columnname: public_note
-        -
-          columnname: no_of_students
-        -
-          columnname: enabled
+        columns:
+            -
+              columnname: name
+            -
+              columnname: department
+            -
+              columnname: course_no
+            -
+              columnname: section
+            -
+              columnname: term
+            -
+              columnname: instructors
+            -
+              columnname: staff_note
+            -
+              columnname: public_note
+            -
+              columnname: no_of_students
+            -
+              columnname: enabled
 
     reserves:
       course_reserves_table:
-        -
-          columnname: title
-        -
-         columnname: author
-        -
-          columnname: barcode
-        -
-          columnname: call_number
-        -
-          columnname: item_type
-        -
-          columnname: collection
-        -
-          columnname: location
-        -
-          columnname: library
-        -
-          columnname: staff_note
-        -
-          columnname: public_note
-        -
-          columnname: link
-        -
-          columnname: other_course_reserves
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: title
+            -
+             columnname: author
+            -
+              columnname: barcode
+            -
+              columnname: call_number
+            -
+              columnname: item_type
+            -
+              columnname: collection
+            -
+              columnname: location
+            -
+              columnname: library
+            -
+              columnname: staff_note
+            -
+              columnname: public_note
+            -
+              columnname: link
+            -
+              columnname: other_course_reserves
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
   illrequests:
     ill-requests:
       ill-requests:
-        -
-          columnname: illrequest_id
-        -
-          columnname: metadata_author
-        -
-          columnname: metadata_title
-        -
-          columnname: metadata_article_title
-        -
-          columnname: metadata_issue
-        -
-          columnname: metadata_volume
-        -
-          columnname: metadata_year
-        -
-          columnname: metadata_pages
-        -
-          columnname: metadata_type
-        -
-          columnname: orderid
-        -
-          columnname: patron
-        -
-          columnname: biblio_id
-        -
-          columnname: library_branchname
-        -
-          columnname: status
-        -
-          columnname: placed
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: placed_formatted
-        -
-          columnname: updated
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: updated_formatted
-        -
-          columnname: replied
-        -
-          columnname: completed
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: completed_formatted
-        -
-          columnname: accessurl
-        -
-          columnname: cost
-        -
-          columnname: comments
-        -
-          columnname: notesopac
-        -
-          columnname: notesstaff
-        -
-          columnname: backend
-        -
-          columnname: action
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: illrequest_id
+            -
+              columnname: metadata_author
+            -
+              columnname: metadata_title
+            -
+              columnname: metadata_article_title
+            -
+              columnname: metadata_issue
+            -
+              columnname: metadata_volume
+            -
+              columnname: metadata_year
+            -
+              columnname: metadata_pages
+            -
+              columnname: metadata_type
+            -
+              columnname: orderid
+            -
+              columnname: patron
+            -
+              columnname: biblio_id
+            -
+              columnname: library_branchname
+            -
+              columnname: status
+            -
+              columnname: placed
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: placed_formatted
+            -
+              columnname: updated
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: updated_formatted
+            -
+              columnname: replied
+            -
+              columnname: completed
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: completed_formatted
+            -
+              columnname: accessurl
+            -
+              columnname: cost
+            -
+              columnname: comments
+            -
+              columnname: notesopac
+            -
+              columnname: notesstaff
+            -
+              columnname: backend
+            -
+              columnname: action
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
   members:
     fines:
       account-fines:
-        -
-          columnname: date
-        -
-          columnname: account_type
-        -
-          columnname: description
-        -
-          columnname: barcode
-        -
-          columnname: date_due
-        -
-          columnname: returndate
-        -
-          columnname: issuedate
-        -
-          columnname: note
-        -
-          columnname: amount
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: amountoutstanding
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: date
+            -
+              columnname: account_type
+            -
+              columnname: description
+            -
+              columnname: barcode
+            -
+              columnname: date_due
+            -
+              columnname: returndate
+            -
+              columnname: issuedate
+            -
+              columnname: note
+            -
+              columnname: amount
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: amountoutstanding
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
     pay:
       pay-fines-table:
-        -
-          columnname: checkbox
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: account_type
-        -
-          columnname: description
-        -
-          columnname: date
-        -
-          columnname: barcode
-        -
-          columnname: date_due
-        -
-          columnname: returndate
-        -
-          columnname: issuedate
-        -
-          columnname: note
-        -
-          columnname: amount
-        -
-          columnname: amountoutstanding
+        columns:
+            -
+              columnname: checkbox
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: account_type
+            -
+              columnname: description
+            -
+              columnname: date
+            -
+              columnname: barcode
+            -
+              columnname: date_due
+            -
+              columnname: returndate
+            -
+              columnname: issuedate
+            -
+              columnname: note
+            -
+              columnname: amount
+            -
+              columnname: amountoutstanding
 
     member:
       memberresultst:
-        -
-          columnname: checkbox
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: cardnumber
-        -
-          columnname: name
-        -
-          columnname: dateofbirth
-        -
-          columnname: category
-        -
-          columnname: library
-        -
-          columnname: expires_on
-        -
-          columnname: od_checkouts
-        -
-          columnname: fines
-        -
-          columnname: circ_notes
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: checkbox
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: cardnumber
+            -
+              columnname: name
+            -
+              columnname: dateofbirth
+            -
+              columnname: category
+            -
+              columnname: library
+            -
+              columnname: expires_on
+            -
+              columnname: od_checkouts
+            -
+              columnname: fines
+            -
+              columnname: circ_notes
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
     moremember:
       issues-table:
-        -
-          columnname: sort_order
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: todays_or_previous_checkouts
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: due_date_unformatted
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: due_date
-        -
-          columnname: title
-        -
-          columnname: record_type
-        -
-          columnname: item_type
-        -
-          columnname: collection
-        -
-          columnname: location
-        -
-          columnname: homebranch
-        -
-          columnname: checkout_on_unformatted
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: checkout_on
-        -
-          columnname: checkout_from
-        -
-          columnname: callno
-        -
-          columnname: charge
-        -
-          columnname: fine
-        -
-          columnname: price
-        -
-          columnname: renew
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: checkin
-        -
-          columnname: claims_returned
-        -
-          columnname: export
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: sort_order
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: todays_or_previous_checkouts
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: due_date_unformatted
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: due_date
+            -
+              columnname: title
+            -
+              columnname: record_type
+            -
+              columnname: item_type
+            -
+              columnname: collection
+            -
+              columnname: location
+            -
+              columnname: homebranch
+            -
+              columnname: checkout_on_unformatted
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: checkout_on
+            -
+              columnname: checkout_from
+            -
+              columnname: callno
+            -
+              columnname: charge
+            -
+              columnname: fine
+            -
+              columnname: price
+            -
+              columnname: renew
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: checkin
+            -
+              columnname: claims_returned
+            -
+              columnname: export
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
     holdshistory:
       holdshistory-table:
-        -
-          columnname: title
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: author
-        -
-          columnname: barcode
-        -
-          columnname: branch
-        -
-          columnname: reservedate
-        -
-          columnname: expirationdate
-        -
-          columnname: waitingdate
-        -
-          columnname: cancellationdate
-        -
-          columnname: itemtype
-        -
-          columnname: status
+        columns:
+            -
+              columnname: title
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: author
+            -
+              columnname: barcode
+            -
+              columnname: branch
+            -
+              columnname: reservedate
+            -
+              columnname: expirationdate
+            -
+              columnname: waitingdate
+            -
+              columnname: cancellationdate
+            -
+              columnname: itemtype
+            -
+              columnname: status
 
     checkouthistory:
       checkouthistory-table:
-        - columnname: type
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: date
-        -
-          columnname: title
-        -
-          columnname: author
-        -
-          columnname: call_number
-        -
-          columnname: barcode
-        -
-          columnname: number_of_renewals
-        -
-          columnname: checked_out_on
-        -
-          columnname: checked_out_from
-        -
-          columnname: date_due
-        -
-          columnname: return_date
+        columns:
+            - columnname: type
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: date
+            -
+              columnname: title
+            -
+              columnname: author
+            -
+              columnname: call_number
+            -
+              columnname: barcode
+            -
+              columnname: number_of_renewals
+            -
+              columnname: checked_out_on
+            -
+              columnname: checked_out_from
+            -
+              columnname: date_due
+            -
+              columnname: return_date
 
     patron-lists:
       patron-list-table:
-        -
-          columnname: checkbox
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: card
-        -
-          columnname: firstname
-        -
-          columnname: surname
-        -
-          columnname: address
-        -
-          columnname: category
-        -
-          columnname: library
-        -
-          columnname: expires_on
-        -
-          columnname: circ_notes
+        columns:
+            -
+              columnname: checkbox
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: card
+            -
+              columnname: firstname
+            -
+              columnname: surname
+            -
+              columnname: address
+            -
+              columnname: category
+            -
+              columnname: library
+            -
+              columnname: expires_on
+            -
+              columnname: circ_notes
 
   reports:
     lostitems:
       lostitems-table:
-        -
-          columnname: title
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: author
-        -
-          columnname: lostcode
-        -
-          columnname: itemlost_on
-        -
-          columnname: barcode
-        -
-          columnname: callnumber
-        -
-          columnname: datelastseen
-        -
-          columnname: price
-        -
-          columnname: replacementprice
-        -
-          columnname: library
-        -
-          columnname: itemtype
-        -
-          columnname: collection_code
-        -
-          columnname: current_location
-        -
-          columnname: location
-        -
-          columnname: notforloan
-        -
-          columnname: notes
+        columns:
+            -
+              columnname: title
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: author
+            -
+              columnname: lostcode
+            -
+              columnname: itemlost_on
+            -
+              columnname: barcode
+            -
+              columnname: callnumber
+            -
+              columnname: datelastseen
+            -
+              columnname: price
+            -
+              columnname: replacementprice
+            -
+              columnname: library
+            -
+              columnname: itemtype
+            -
+              columnname: collection_code
+            -
+              columnname: current_location
+            -
+              columnname: location
+            -
+              columnname: notforloan
+            -
+              columnname: notes
 
     saved-sql:
       table_reports:
-        -
-          columnname: selection
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: report_id
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: report_name
-        -
-          columnname: type
-        -
-          columnname: group
-        -
-          columnname: subgroup
-        -
-          columnname: notes
-        -
-          columnname: author
-        -
-          columnname: creation_date
-        -
-          columnname: last_edit
-        -
-          columnname: last_run
-        -
-          columnname: public
-        -
-          columnname: json_url
-        -
-          columnname: cache_expiry
-        -
-          columnname: saved_results
-        -
-          columnname: update
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: selection
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: report_id
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: report_name
+            -
+              columnname: type
+            -
+              columnname: group
+            -
+              columnname: subgroup
+            -
+              columnname: notes
+            -
+              columnname: author
+            -
+              columnname: creation_date
+            -
+              columnname: last_edit
+            -
+              columnname: last_run
+            -
+              columnname: public
+            -
+              columnname: json_url
+            -
+              columnname: cache_expiry
+            -
+              columnname: saved_results
+            -
+              columnname: update
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
   circ:
     circulation:
       issues-table:
-        -
-          columnname: sort_order
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: todays_or_previous_checkouts
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: due_date_unformatted
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: due_date
-        -
-          columnname: title
-        -
-          columnname: record_type
-        -
-          columnname: item_type
-        -
-          columnname: collection
-        -
-          columnname: location
-        -
-          columnname: homebranch
-        -
-          columnname: checkout_on_unformatted
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-          is_hidden: 1
-        -
-          columnname: checkout_on
-        -
-          columnname: checkout_from
-        -
-          columnname: callno
-        -
-          columnname: charge
-        -
-          columnname: fine
-        -
-          columnname: price
-        -
-          columnname: renew
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: checkin
-        -
-          columnname: claims_returned
-        -
-          columnname: export
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: sort_order
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: todays_or_previous_checkouts
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: due_date_unformatted
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: due_date
+            -
+              columnname: title
+            -
+              columnname: record_type
+            -
+              columnname: item_type
+            -
+              columnname: collection
+            -
+              columnname: location
+            -
+              columnname: homebranch
+            -
+              columnname: checkout_on_unformatted
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+              is_hidden: 1
+            -
+              columnname: checkout_on
+            -
+              columnname: checkout_from
+            -
+              columnname: callno
+            -
+              columnname: charge
+            -
+              columnname: fine
+            -
+              columnname: price
+            -
+              columnname: renew
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: checkin
+            -
+              columnname: claims_returned
+            -
+              columnname: export
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
       table_borrowers:
-        -
-          columnname: name
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
-        -
-          columnname: cardnumber
-        -
-          columnname: date_of_birth
-        -
-          columnname: category
-        -
-          columnname: library
-        -
-          columnname: address
-        -
-          columnname: phone
-          is_hidden: 1
+        columns:
+            -
+              columnname: name
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
+            -
+              columnname: cardnumber
+            -
+              columnname: date_of_birth
+            -
+              columnname: category
+            -
+              columnname: library
+            -
+              columnname: address
+            -
+              columnname: phone
+              is_hidden: 1
+
     returns:
       checkedintable:
-        -
-          columnname: due_date
-        -
-          columnname: title
-        -
-          columnname: author
-        -
-          columnname: barcode
-        -
-          columnname: homelibrary
-        -
-          columnname: holdinglibrary
-        -
-          columnname: location
-        -
-          columnname: itemcallnumber
-        -
-          columnname: dateaccessioned
-          is_hidden: 1
-        -
-          columnname: record_type
-        -
-          columnname: itype
-        -
-          columnname: borrower
-        -
-          columnname: itemnote
+        columns:
+            -
+              columnname: due_date
+            -
+              columnname: title
+            -
+              columnname: author
+            -
+              columnname: barcode
+            -
+              columnname: homelibrary
+            -
+              columnname: holdinglibrary
+            -
+              columnname: location
+            -
+              columnname: itemcallnumber
+            -
+              columnname: dateaccessioned
+              is_hidden: 1
+            -
+              columnname: record_type
+            -
+              columnname: itype
+            -
+              columnname: borrower
+            -
+              columnname: itemnote
 
     view_holdsqueue:
       holds-table:
-        -
-          columnname: title
-        -
-          columnname: collection
-        -
-          columnname: document_type
-        -
-          columnname: callnumber
-        -
-          columnname: copynumber
-        -
-          columnname: enumeration
-        -
-          columnname: barcode
-        -
-          columnname: patron
-        -
-          columnname: send_to
-        -
-          columnname: date
-        -
-          columnname: notes
+        columns:
+            -
+              columnname: title
+            -
+              columnname: collection
+            -
+              columnname: document_type
+            -
+              columnname: callnumber
+            -
+              columnname: copynumber
+            -
+              columnname: enumeration
+            -
+              columnname: barcode
+            -
+              columnname: patron
+            -
+              columnname: send_to
+            -
+              columnname: date
+            -
+              columnname: notes
 
     holds:
       holds-to-pull:
-        -
-          columnname: pull_items
-        -
-          columnname: avalaible_items
-        -
-          columnname: patrons
-        -
-          columnname: patron
-        -
-          columnname: title
-        -
-          columnname: libraries
-        -
-          columnname: call_numbers
-        -
-          columnname: copy_numbers
-        -
-          columnname: enumeration
-        -
-          columnname: itemtypes
-        -
-          columnname: locations
-        -
-          columnname: hold_date
-        -
-          columnname: action
+        columns:
+            -
+              columnname: pull_items
+            -
+              columnname: avalaible_items
+            -
+              columnname: patrons
+            -
+              columnname: patron
+            -
+              columnname: title
+            -
+              columnname: libraries
+            -
+              columnname: call_numbers
+            -
+              columnname: copy_numbers
+            -
+              columnname: enumeration
+            -
+              columnname: itemtypes
+            -
+              columnname: locations
+            -
+              columnname: hold_date
+            -
+              columnname: action
 
     holdsratios:
       holds-ratios:
-        -
-          columnname: holds
-        -
-          columnname: items
-        -
-          columnname: holds_ratio
-        -
-          columnname: title
-        -
-          columnname: home_libraries
-        -
-          columnname: holding_libraries
-        -
-          columnname: location
-        -
-          columnname: itemtype
-        -
-          columnname: call_numbers
-        -
-          columnname: items_needed
+        columns:
+            -
+              columnname: holds
+            -
+              columnname: items
+            -
+              columnname: holds_ratio
+            -
+              columnname: title
+            -
+              columnname: home_libraries
+            -
+              columnname: holding_libraries
+            -
+              columnname: location
+            -
+              columnname: itemtype
+            -
+              columnname: call_numbers
+            -
+              columnname: items_needed
 
     holds_awaiting_pickup:
       holdst:
-        -
-          columnname: waiting_since
-        -
-          columnname: date_hold_placed
-        -
-          columnname: title
-        -
-          columnname: patron
-        -
-          columnname: home_library
-        -
-          columnname: current_location
-        -
-          columnname: shelving_location
-        -
-          columnname: call_number
-        -
-          columnname: copy_number
-        -
-          columnname: enumeration
-        -
-          columnname: action
+        columns:
+            -
+              columnname: waiting_since
+            -
+              columnname: date_hold_placed
+            -
+              columnname: title
+            -
+              columnname: patron
+            -
+              columnname: home_library
+            -
+              columnname: current_location
+            -
+              columnname: shelving_location
+            -
+              columnname: call_number
+            -
+              columnname: copy_number
+            -
+              columnname: enumeration
+            -
+              columnname: action
 
       holdso:
-        -
-          columnname: waiting_since
-        -
-          columnname: date_hold_placed
-        -
-          columnname: title
-        -
-          columnname: patron
-        -
-          columnname: home_library
-        -
-          columnname: current_location
-        -
-          columnname: shelving_location
-        -
-          columnname: call_number
-        -
-          columnname: copy_number
-        -
-          columnname: enumeration
-        -
-          columnname: action
+        columns:
+            -
+              columnname: waiting_since
+            -
+              columnname: date_hold_placed
+            -
+              columnname: title
+            -
+              columnname: patron
+            -
+              columnname: home_library
+            -
+              columnname: current_location
+            -
+              columnname: shelving_location
+            -
+              columnname: call_number
+            -
+              columnname: copy_number
+            -
+              columnname: enumeration
+            -
+              columnname: action
 
     overdues:
       circ-overdues:
-        -
-          columnname: due_date
-        -
-          columnname: patron
-        -
-          columnname: patron_category
-          is_hidden: 1
-        -
-          columnname: patron_library
-        -
-          columnname: title
-        -
-          columnname: home_library
-          is_hidden: 1
-        -
-          columnname: holding_library
-          is_hidden: 1
-        -
-          columnname: barcode
-        -
-          columnname: call_number
-        -
-          columnname: item_type
-          is_hidden: 1
-        -
-          columnname: price
-        -
-          columnname: non-public_note
+        columns:
+            -
+              columnname: due_date
+            -
+              columnname: patron
+            -
+              columnname: patron_category
+              is_hidden: 1
+            -
+              columnname: patron_library
+            -
+              columnname: title
+            -
+              columnname: home_library
+              is_hidden: 1
+            -
+              columnname: holding_library
+              is_hidden: 1
+            -
+              columnname: barcode
+            -
+              columnname: call_number
+            -
+              columnname: item_type
+              is_hidden: 1
+            -
+              columnname: price
+            -
+              columnname: non-public_note
 
   opac:
     biblio-detail:
       holdingst:
-        -
-          columnname: item_itemtype
-        -
-          columnname: item_current_location
-        -
-          columnname: item_home_location
-        -
-          columnname: item_shelving_location
-          is_hidden: 1
-        -
-          columnname: item_ccode
-        -
-          columnname: item_callnumber
-        -
-          columnname: item_materials
-          is_hidden: 1
-        -
-          columnname: item_enumchron
-        -
-          columnname: item_url
-        -
-          columnname: item_copy
-        -
-          columnname: item_status
-        -
-          columnname: item_notes
-        -
-          columnname: item_datedue
-        -
-          columnname: item_barcode
-          is_hidden: 1
-        -
-          columnname: item_holds
-        -
-          columnname: item_priority
-        -
-          columnname: item_coursereserves
+        columns:
+            -
+              columnname: item_itemtype
+            -
+              columnname: item_current_location
+            -
+              columnname: item_home_location
+            -
+              columnname: item_shelving_location
+              is_hidden: 1
+            -
+              columnname: item_ccode
+            -
+              columnname: item_callnumber
+            -
+              columnname: item_materials
+              is_hidden: 1
+            -
+              columnname: item_enumchron
+            -
+              columnname: item_url
+            -
+              columnname: item_copy
+            -
+              columnname: item_status
+            -
+              columnname: item_notes
+            -
+              columnname: item_datedue
+            -
+              columnname: item_barcode
+              is_hidden: 1
+            -
+              columnname: item_holds
+            -
+              columnname: item_priority
+            -
+              columnname: item_coursereserves
 
       course_reserves_table:
-        -
-          columnname: coursename
-        -
-          columnname: department
-        -
-          columnname: course_number
-        -
-          columnname: section
-        -
-          columnname: term
-        -
-          columnname: instructor
-        -
-          columnname: notes
+        columns:
+            -
+              columnname: coursename
+            -
+              columnname: department
+            -
+              columnname: course_number
+            -
+              columnname: section
+            -
+              columnname: term
+            -
+              columnname: instructor
+            -
+              columnname: notes
 
       subscriptionst:
-        -
-          columnname: serial_serialseq
-        -
-          columnname: serial_publisheddate
-        -
-          columnname: serial_planneddate
-        -
-          columnname: serial_status
-        -
-          columnname: serial_notes
+        columns:
+            -
+              columnname: serial_serialseq
+            -
+              columnname: serial_publisheddate
+            -
+              columnname: serial_planneddate
+            -
+              columnname: serial_status
+            -
+              columnname: serial_notes
 
       course-items-table:
-        -
-          columnname: title
-        -
-          columnname: author
-        -
-          columnname: itemtype
-        -
-          columnname: location
-        -
-          columnname: collection
-        -
-          columnname: callnumber
-        -
-          columnname: copynumber
-        -
-          columnname: status
-        -
-          columnname: datedue
-        -
-          columnname: notes
-        -
-          columnname: link
+        columns:
+            -
+              columnname: title
+            -
+              columnname: author
+            -
+              columnname: itemtype
+            -
+              columnname: location
+            -
+              columnname: collection
+            -
+              columnname: callnumber
+            -
+              columnname: copynumber
+            -
+              columnname: status
+            -
+              columnname: datedue
+            -
+              columnname: notes
+            -
+              columnname: link
 
   serials:
     subscription-detail:
       orders:
-        -
-          columnname: invoice
-        -
-          columnname: basket
-        -
-          columnname: ordernumber
-        -
-          columnname: creation_date
-        -
-          columnname: receive_date
-        -
-          columnname: status
-        -
-          columnname: order_internalnote
-        -
-          columnname: order_vendornote
-        -
-          columnname: fund
-        -
-          columnname: ordered
-        -
-          columnname: spent
+        columns:
+            -
+              columnname: invoice
+            -
+              columnname: basket
+            -
+              columnname: ordernumber
+            -
+              columnname: creation_date
+            -
+              columnname: receive_date
+            -
+              columnname: status
+            -
+              columnname: order_internalnote
+            -
+              columnname: order_vendornote
+            -
+              columnname: fund
+            -
+              columnname: ordered
+            -
+              columnname: spent
 
   tools:
     notices:
       lettert:
-        -
-          columnname: library
-        -
-          columnname: module
-        -
-          columnname: code
-        -
-          columnname: name
-        -
-          columnname: copy_notice
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: library
+            -
+              columnname: module
+            -
+              columnname: code
+            -
+              columnname: name
+            -
+              columnname: copy_notice
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
     stockrotation:
       stock_rotation:
-        -
-          columnname: name
-        -
-          columnname: cyclical
-        -
-          columnname: active
-        -
-          columnname: description
-        -
-          columnname: number_of_items
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: name
+            -
+              columnname: cyclical
+            -
+              columnname: active
+            -
+              columnname: description
+            -
+              columnname: number_of_items
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
 
       stock_rotation_manage_items:
-        -
-          columnname: barcode
-        -
-          columnname: title
-        -
-          columnname: author
-        -
-          columnname: call_number
-        -
-          columnname: in_transit
-        -
-          columnname: stages
-        -
-          columnname: actions
-          cannot_be_toggled: 1
-          cannot_be_modified: 1
+        columns:
+            -
+              columnname: barcode
+            -
+              columnname: title
+            -
+              columnname: author
+            -
+              columnname: call_number
+            -
+              columnname: in_transit
+            -
+              columnname: stages
+            -
+              columnname: actions
+              cannot_be_toggled: 1
+              cannot_be_modified: 1
