@@ -12,22 +12,22 @@ DELETE FROM marc_subfield_structure WHERE frameworkcode='';
 
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '000', 1, '', 'Маркер запису', '', '');
+ ('', '000', 1, 0, 'Маркер запису', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '000', '@', 1, 0, 'Контрольне поле сталої довжини', 'Контрольне поле сталої довжини', 0, 0, '', '', 'marc21_leader.pl', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '001', 0, '', 'Контрольний номер', '', '');
+ ('', '001', 0, 0, 'Контрольний номер', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '001', '@', 0, 0, 'Контрольне поле', 'Контрольне поле',       0, 0, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '003', 0, '', 'Належність контрольного номера', 'Належність контрольного номера', '');
+ ('', '003', 0, 0, 'Належність контрольного номера', 'Належність контрольного номера', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '003', '@', 0, 0, 'Контрольне поле', 'Контрольне поле',       0, 0, '', '', 'marc21_orgcode.pl', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '005', 0, '', 'Дата коректування', '', '');
+ ('', '005', 0, 0, 'Дата коректування', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '005', '@', 0, 0, 'Контрольне поле', 'Контрольне поле',       0, 0, '', '', 'marc21_field_005.pl', 0, '', '', NULL);
 
@@ -42,7 +42,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '007', '@', 0, 0, 'Контрольне поле сталої довжини', 'Контрольне поле сталої довжини', 0, 0, '', '', 'marc21_field_007.pl', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '008', 1, '', 'Кодовані дані', '', '');
+ ('', '008', 1, 0, 'Кодовані дані', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '008', '@', 1, 0, 'Контрольне поле сталої довжини', 'Контрольне поле сталої довжини', 0, 0, '', '', 'marc21_field_008.pl', 0, '', '', NULL);
 
@@ -52,7 +52,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '009', '@', 0, 0, 'Контрольне поле сталої довжини', 'Контрольне поле сталої довжини', 0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '010', 0, '', 'Контрольний номер запису в Бібліотеці Конгресу США', '', '');
+ ('', '010', 0, 0, 'Контрольний номер запису в Бібліотеці Конгресу США', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '010', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', NULL, 0, '', '', NULL),
  ('', '', '010', 'a', 0, 0, 'Контрольний номер запису БК', '',          0, 0, 'biblioitems.lccn', '', '', 0, '', '', NULL),
@@ -60,7 +60,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '010', 'z', 0, 1, 'Скасований/помилковий контрольний номер БК', '', 0, -1, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '011', 0, '', 'Контрольний номер посилання Бібліотеки Конгресу (застаріле)', '', '');
+ ('', '011', 0, 0, 'Контрольний номер посилання Бібліотеки Конгресу (застаріле)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '011', 'a', 0, 1, 'Контрольний номер запису БК', '',          0, -6, '', '', '', 0, '', '', NULL);
 
@@ -106,7 +106,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '017', 'i', 0, 0, 'Пояснювальний текст/ввідні слова', '',     0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '018', 0, '', 'Код плати за копіювання статті у відповідності до авторського права', '', '');
+ ('', '018', 0, 0, 'Код плати за копіювання статті у відповідності до авторського права', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '018', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '018', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
@@ -277,7 +277,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '035', 'z', 0, 1, 'Анульов. контрольний номер', '',           0, -1, '', '', '', 0, NULL, '', '');
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '036', 0, '', 'Первісний номер, присв. комп’ют. файлу', '', '');
+ ('', '036', 0, 0, 'Первісний номер, присв. комп’ют. файлу', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '036', '6', 0, 1, 'Елемент полів', '',                        0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '036', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
@@ -297,14 +297,14 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '037', 'n', 0, 1, 'Примітка', '',                             0, -1, '', '', '', 0, NULL, '', '');
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '038', 0, '', 'Установа, що надала права інтелектуальної власності на вміст запису', '', '');
+ ('', '038', 0, 0, 'Установа, що надала права інтелектуальної власності на вміст запису', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '038', '6', 0, 0, 'Зв’язок', '',                              0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '038', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '038', 'a', 0, 0, 'Код установи, що надала права інтелектуальної власності на вміст запису', '', 0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '039', 0, '', 'Рівень бібліографічного контролю та кодування (застаріле)', '', '');
+ ('', '039', 0, 0, 'Рівень бібліографічного контролю та кодування (застаріле)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '039', 'a', 0, 0, 'Level of rules in bibliographic description', 'Level of rules in bibliographic description', 0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '039', 'b', 0, 0, 'Level of effort used to assign nonsubject heading access points', 'Level of effort used to assign nonsubject heading access points', 0, -6, '', '', '', 0, '', '', NULL),
@@ -313,7 +313,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '039', 'e', 0, 0, 'Number of fixed field character positions coded', '', 0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '040', 0, '', 'Джерело каталогіз.', '', '');
+ ('', '040', 0, 0, 'Джерело каталогіз.', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '040', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '040', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
@@ -339,12 +339,12 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '041', 'h', 0, 1, 'Код мови оригіналу', '',                   0, -1, '', 'LANG', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '042', 0, '', 'Код автентичності запису', '', '');
+ ('', '042', 0, 0, 'Код автентичності запису', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '042', 'a', 0, 0, 'Код автентичності', '',                    0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '043', 0, '', 'Код географічного регіону', '', '');
+ ('', '043', 0, 0, 'Код географічного регіону', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '043', '2', 0, 1, 'Джерело локального коду', '',              0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '043', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),
@@ -354,7 +354,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '043', 'c', 0, 1, 'ISO code', 'ISO code',                     0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '044', 0, '', 'Код країни публікації', '', '');
+ ('', '044', 0, 0, 'Код країни публікації', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '044', '2', 0, 1, 'Джерело локального коду', '',              0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '044', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),
@@ -364,7 +364,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '044', 'c', 0, 1, 'Код місця видання за ISO', '',             0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '045', 0, '', 'Період часу, охоплений змістом документа', '', '');
+ ('', '045', 0, 0, 'Період часу, охоплений змістом документа', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '045', '6', 0, 0, 'Зв’язок', '',                              0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '045', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
@@ -406,7 +406,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '048', 'c', 0, 1, 'Соліст', '',                               0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '049', 0, '', 'Локальне зберігання (OCLC)', '', '');
+ ('', '049', 0, 0, 'Локальне зберігання (OCLC)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '049', 'a', 0, 1, 'Holding library', 'Holding library',       0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '049', 'c', 0, 1, 'Copy statement', 'Copy statement',         0, -6, '', '', '', 0, '', '', NULL),
@@ -478,7 +478,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '061', 'c', 0, 0, 'Відомості про копії', '',                  0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '066', 0, '', 'Використовувані набори символів', '', '');
+ ('', '066', 0, 0, 'Використовувані набори символів', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '066', 'a', 0, 0, 'Набір символів G0', '',                  0, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '066', 'b', 0, 0, 'Набір символів G1', '',                  0, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -598,7 +598,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '088', 'z', 0, 1, 'Скасований/помилковий номер звіту', '',  0, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '091', 0, '', 'Індекси/коди', '', '');
+ ('', '091', 0, 0, 'Індекси/коди', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '091', 'a', 0, 0, 'Індекс ББК', '',                           0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '091', 'b', 0, 0, 'Індекс ТБК', '',                           0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -647,7 +647,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '098', 'f', 0, 0, 'Filing suffix', 'Filing suffix',           0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '100', 0, '', 'Автор', '', '');
+ ('', '100', 0, 0, 'Автор', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '100', '4', 0, 0, 'Код відношення', '',                       1, 0, '', '', '', 0, '', '', NULL),
  ('', '', '100', '6', 0, 0, 'Зв’язок', '',                              1, -6, '', '', '', 0, '', '', NULL),
@@ -672,7 +672,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '100', 'u', 0, 0, 'Доповнення', '',                           1, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '110', 0, '', 'Автор — організація', '', '');
+ ('', '110', 0, 0, 'Автор — організація', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '110', '4', 0, 1, 'Код відношення', '',                       1, 0, '', '', '', NULL, '', '', NULL),
  ('', '', '110', '6', 0, 0, 'Зв’язок', '',                              1, -6, '', '', '', NULL, '', '', NULL),
@@ -692,7 +692,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '110', 'u', 0, 0, 'Додаткові відомості', '',                  1, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '111', 0, '', 'Автор-захід', '', '');
+ ('', '111', 0, 0, 'Автор-захід', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '111', '4', 0, 1, 'Код відношення', '',                     1, 0, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '111', '6', 0, 0, 'Зв’язок', '',                            1, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -714,7 +714,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '111', 'u', 0, 0, 'Додаткові відомості', '',                1, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '130', 0, '', 'Заголовок — уніфікована назва', '', '');
+ ('', '130', 0, 0, 'Заголовок — уніфікована назва', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '130', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',     1, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '130', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 1, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -769,7 +769,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '222', 'b', 0, 0, 'Ідентифікаційні ознаки', '',             2, -1, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '240', 0, '', 'Умовна назва', '', '');
+ ('', '240', 0, 0, 'Умовна назва', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '240', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       2, -6, '', '', '', 0, '', '', NULL),
  ('', '', '240', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', 0, '', '', NULL),
@@ -788,7 +788,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '240', 's', 0, 0, 'Версія, видання і т.ін.', '',              2, -1, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '241', 0, '', 'Ліцензована назва (застаріле)', '', '');
+ ('', '241', 0, 0, 'Ліцензована назва (застаріле)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '241', 'a', 0, 0, 'Ліцензована назва', '',                  2, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '241', 'h', 0, 0, 'Фізичний носій', '',                     2, -6, NULL, NULL, '', NULL, '', '', NULL);
@@ -809,7 +809,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '242', 'y', 0, 0, 'Код мови перекладу', '',                   2, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '243', 0, '', 'Узагальнююча назва', '', '');
+ ('', '243', 0, 0, 'Узагальнююча назва', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '243', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', 0, '', '', NULL),
  ('', '', '243', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', 0, '', '', NULL),
@@ -828,7 +828,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '243', 's', 0, 0, 'Версія, видання', '',                      2, -1, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '245', 1, '', 'Назва', '', '');
+ ('', '245', 1, 0, 'Назва', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '245', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', 0, NULL, '', ''),
  ('', '', '245', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', 0, NULL, '', ''),
@@ -879,7 +879,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '247', 'x', 0, 0, 'International Standard Serial Number', 'International Standard Serial Number', 2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '250', 0, '', 'Відомості про видання', '', '');
+ ('', '250', 0, 0, 'Відомості про видання', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '250', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '250', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
@@ -887,7 +887,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '250', 'b', 0, 0, 'Додаткові відомості про видання', '',      2, 0, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '254', 0, '', 'Представл. музичного твору', '', '');
+ ('', '254', 0, 0, 'Представл. музичного твору', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '254', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '254', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
@@ -907,14 +907,14 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '255', 'g', 0, 0, 'Викл. коорд. пари G-кілець', '',           2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '256', 0, '', 'Характ. комп’ютерного файлу', '', '');
+ ('', '256', 0, 0, 'Характ. комп’ютерного файлу', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '256', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '256', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '256', 'a', 0, 0, 'Характ. комп’ютерного файлу', '',          2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '257', 0, '', 'Країна виробник арх. фільмів', '', '');
+ ('', '257', 0, 0, 'Країна виробник арх. фільмів', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '257', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '257', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
@@ -944,7 +944,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '260', 'l', 0, 0, 'Matrix and/or take number [OBSOLETE, CAN/MARC]', 'Matrix and/or take number [OBSOLETE, CAN/MARC]', 2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '261', 0, '', 'Вихідні дані фільму (застаріле, Канада) (локальне, США)', '', NULL);
+ ('', '261', 0, 0, 'Вихідні дані фільму (застаріле, Канада) (локальне, США)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '261', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '261', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
@@ -956,7 +956,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '261', 'f', 0, 1, 'Place of production, release, etc.', 'Place of production, release, etc.', 2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '262', 0, '', 'Вихідні дані звукозапису (локальне, США)', '', NULL);
+ ('', '262', 0, 0, 'Вихідні дані звукозапису (локальне, США)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '262', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '262', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
@@ -967,14 +967,14 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '262', 'l', 0, 0, 'Matrix and/or take number', 'Matrix and/or take number', 2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '263', 0, '', 'Запланована дата публікації', '', NULL);
+ ('', '263', 0, 0, 'Запланована дата публікації', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '263', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '263', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '263', 'a', 0, 0, 'Запланована дата публікації', '',          2, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '265', 0, '', 'Джерело придбання / підписка на розсилання (застаріле)', '', NULL);
+ ('', '265', 0, 0, 'Джерело придбання / підписка на розсилання (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '265', '6', 0, 0, 'Елемент зв’язку (застаріле)', '',          2, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '265', 'a', 0, 1, 'Джерело придбання / підписка на розсилання (застаріле)', '', 2, -6, '', '', '', NULL, '', '', NULL);
@@ -1022,7 +1022,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '300', 'n', 0, 0, 'Matrix and/or take number [Sound recordings, pre-AACR2 records only] [OBSOLETE, CAN/MARC]', 'Matrix and/or take number [Sound recordings, pre-AACR2 records only] [OBSOLETE, CAN/MARC]', 3, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '301', 0, '', 'Фізичний опис фільму (застаріле, USMARC)', '', NULL);
+ ('', '301', 0, 0, 'Фізичний опис фільму (застаріле, USMARC)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '301', 'a', 0, 0, 'Extent of item', 'Extent of item',         3, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '301', 'b', 0, 0, 'Sound characteristics', 'Sound characteristics', 3, -6, '', '', '', NULL, '', '', NULL),
@@ -1032,22 +1032,22 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '301', 'f', 0, 0, 'Speed', 'Speed',                           3, -6, '', '', NULL, NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '302', 0, '', 'Кількість сторінок чи елементів (застаріле)', '', NULL);
+ ('', '302', 0, 0, 'Кількість сторінок чи елементів (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '302', 'a', 0, 0, 'Кількість сторінок', '',                   3, -6, '', '', NULL, NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '303', 0, '', 'Одиниця виміру (застаріле, USMARC)', '', NULL);
+ ('', '303', 0, 0, 'Одиниця виміру (застаріле, USMARC)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '303', 'a', 0, 0, 'Unit count', 'Unit count',                 3, -6, '', '', NULL, NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '304', 0, '', 'Лінійний розмір (застаріле, USMARC)', '', NULL);
+ ('', '304', 0, 0, 'Лінійний розмір (застаріле, USMARC)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '304', 'a', 0, 0, 'Linear footage', 'Linear footage',         3, -6, '', '', NULL, NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '305', 0, '', 'Фізичні характеристики звукового запису (застаріле)', '', NULL);
+ ('', '305', 0, 0, 'Фізичні характеристики звукового запису (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '305', '6', 0, 0, 'Елемент зв’язку', '',                      3, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '305', 'a', 0, 0, 'Extent', 'Extent',                         3, -6, '', '', '', NULL, '', '', NULL),
@@ -1060,7 +1060,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '305', 'n', 0, 0, 'Matrix and/or take number', 'Matrix and/or take number', 3, -6, '', '', NULL, NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '306', 0, '', 'Тривалість звукового запису', '', NULL);
+ ('', '306', 0, 0, 'Тривалість звукового запису', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '306', '6', 0, 0, 'Елемент зв’язку', '',                      3, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '306', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 3, -6, '', '', '', NULL, '', '', NULL),
@@ -1087,7 +1087,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '308', 'f', 0, 0, 'Presentation format', 'Presentation format', 3, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '310', 0, '', 'Періодичність п.в.', '', '');
+ ('', '310', 0, 0, 'Періодичність п.в.', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '310', '6', 0, 0, 'Елемент зв’язку', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '310', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 3, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -1095,7 +1095,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '310', 'b', 0, 0, 'Дата введення період.', '',              3, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '315', 0, '', 'Частотність (застаріле)', '', NULL);
+ ('', '315', 0, 0, 'Частотність (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '315', '6', 0, 0, 'Елемент зв’язку', '',                      3, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '315', 'a', 0, 1, 'Frequency', 'Frequency',                   3, -6, '', '', '', NULL, '', '', NULL),
@@ -1314,7 +1314,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '355', 'j', 0, 1, 'Санкціонування', '',                     3, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '357', 0, '', 'Авторський контроль за розповсюдженням', '', '');
+ ('', '357', 0, 0, 'Авторський контроль за розповсюдженням', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '357', '6', 0, 0, 'Елемент зв’язку', '',                    3, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '357', '8', 0, 1, 'Зв’язок полів і номер послідовності', '', 3, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -1324,7 +1324,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '357', 'g', 0, 0, 'Інші обмеження', '',                     3, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '359', 0, '', 'Ціна орендної плати (застаріле)', '', NULL);
+ ('', '359', 0, 0, 'Ціна орендної плати (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '359', 'a', 0, 0, 'Ціна орендної плати', '',                3, -6, NULL, NULL, '', NULL, '', '', NULL);
 
@@ -1673,7 +1673,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '506', 'u', 0, 1, 'Уніфікований визначник ресурсу (URI)', '', 5, -6, '', '', '', 1, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '507', 0, '', 'Примітка про масштаб для графічного матеріалу', '', NULL);
+ ('', '507', 0, 0, 'Примітка про масштаб для графічного матеріалу', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '507', '6', 0, 0, 'Елемент зв’язку', '',                      5, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '507', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 5, -6, '', '', '', NULL, '', '', NULL),
@@ -1688,7 +1688,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '508', 'a', 0, 0, 'Примітка про співвиконавців твору', '',    5, -1, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '509', 0, '', 'Примітка у довільній формі', '', NULL);
+ ('', '509', 0, 0, 'Примітка у довільній формі', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '509', 'a', 0, 0, 'Примітка у довільній формі', '',           5, -6, NULL, NULL, '', NULL, '', '', NULL);
 
@@ -1725,7 +1725,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '513', 'b', 0, 0, 'Period covered', 'Period covered',         5, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '514', 0, '', 'Примітка про якість даних', '', NULL);
+ ('', '514', 0, 0, 'Примітка про якість даних', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '514', '6', 0, 0, 'Елемент зв’язку', '',                      5, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '514', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 5, -6, '', '', '', NULL, '', '', NULL),
@@ -1760,7 +1760,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '516', 'a', 0, 0, 'Примітка про тип комп’ютерних файлу/даних', '', 5, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '517', 0, '', 'Примітка про категорію фільму (застаріле)', '', NULL);
+ ('', '517', 0, 0, 'Примітка про категорію фільму (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '517', 'a', 0, 0, 'Different formats', 'Different formats',   5, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '517', 'b', 0, 1, 'Content descriptors', 'Content descriptors', 5, -6, '', '', '', NULL, '', '', NULL),
@@ -1802,7 +1802,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '522', 'a', 0, 0, 'Примітка про географічне охоплення', '', 5, -1, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '523', 0, '', 'Примітка про період часу у змісті (застаріле)', '', NULL);
+ ('', '523', 0, 0, 'Примітка про період часу у змісті (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '523', '6', 0, 0, 'Елемент зв’язку', '',                    5, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '523', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 5, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -1818,7 +1818,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '524', 'a', 0, 0, 'Примітка про форму посилання на матеріали, що описуються, якій надається перевага', '', 5, 0, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '525', 0, '', 'Примітка про додаток', '', '');
+ ('', '525', 0, 0, 'Примітка про додаток', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '525', '6', 0, 0, 'Елемент зв’язку', '',                    5, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '525', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 5, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -1826,7 +1826,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '525', 'z', 0, 0, 'Source of note information (SE) [OBSOLETE]', 'Source of note information (SE) [OBSOLETE]', 5, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '526', 0, '', 'Інформаційна примітка про навчальну програму', '', NULL);
+ ('', '526', 0, 0, 'Інформаційна примітка про навчальну програму', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '526', '5', 0, 0, 'Приналежність поля організації', '',       5, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '526', '6', 0, 0, 'Елемент зв’язку', '',                      5, -6, '', '', '', NULL, '', '', NULL),
@@ -1920,7 +1920,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '536', 'h', 0, 1, 'Work unit number', 'Work unit number',   5, -6, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '537', 0, '', 'Примітка про джерело дати (застаріле)', '', NULL);
+ ('', '537', 0, 0, 'Примітка про джерело дати (застаріле)', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', NULL, '537', '6', 0, 0, 'Елемент зв’язку', '',                    5, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '537', 'a', 0, 0, 'Примітка про джерело дати', '',          5, -6, NULL, NULL, '', NULL, '', '', NULL);
@@ -3584,14 +3584,14 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '840', 'v', 0, 0, 'Позначення та номер тому / порядкове позначення', '', 8, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '841', 0, '', 'Значення кодованих даних про фонди', '', NULL);
+ ('', '841', 0, 0, 'Значення кодованих даних про фонди', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '841', 'a', 0, 0, 'Type of record', 'Type of record',         8, 5, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '841', 'b', 0, 0, 'Fixed-length data elements', 'Fixed-length data elements', 8, 5, NULL, NULL, '', NULL, '', '', NULL),
  ('', '', '841', 'e', 0, 0, 'Encoding level', 'Encoding level',         8, 5, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '842', 0, '', 'Позначення текстової фізичної форми', '', NULL);
+ ('', '842', 0, 0, 'Позначення текстової фізичної форми', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '842', '6', 0, 0, 'Елемент зв’язку', '',                      8, 5, '', '', '', NULL, '', '', NULL),
  ('', '', '842', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 8, 5, '', '', '', NULL, '', '', NULL),
@@ -3614,7 +3614,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '843', 'n', 0, 1, 'Note about reproduction', 'Note about reproduction', 8, 5, NULL, NULL, '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '844', 0, '', 'Назва одиниці', '', NULL);
+ ('', '844', 0, 0, 'Назва одиниці', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '844', '6', 0, 0, 'Елемент зв’язку', '',                      8, 5, '', '', '', NULL, '', '', NULL),
  ('', '', '844', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 8, 5, '', '', '', NULL, '', '', NULL),
