@@ -183,7 +183,7 @@ if ( $op eq 'form' ) {
                         type => 'error',
                         code => 'item_not_deleted',
                         biblionumber => $biblionumber,
-                        itemnumber => $itemnumber,
+                        itemnumber => $item->itemnumber,
                         error => ($@ ? $@ : $error),
                     };
                     $schema->storage->txn_rollback;
