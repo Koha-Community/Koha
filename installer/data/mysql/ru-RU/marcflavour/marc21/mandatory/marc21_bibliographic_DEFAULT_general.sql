@@ -106,7 +106,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '018', 'a', 0, 0, 'Код копирайта', '',                        0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '01e', '', 1, 'Ошибка кодированного имени', '', '');
+ ('', '01e', 0, 1, 'Ошибка кодированного имени', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '01e', 'a', 0, 0, 'Ошибка кодированного имени', '',           0, -6, '', '', '', 0, '', '', NULL);
 
@@ -168,7 +168,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '027', 0, 1, 'Стандартный номер технического отчёта (STRN)', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '027', '2', 0, 0, 'Источник номера', '',                      0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '027', '2', 0, 0, 'Источник номера', '',                      0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', '', '027', '6', 0, 0, 'Связь', '',                                0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '027', '8', 0, 1, 'Связь поля и её порядковый номер', '',     0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '027', 'a', 0, 0, 'Стандартный номер технического отчёта (STRN)', '', 0, -1, '', '', '', 0, '', '', NULL),
@@ -396,7 +396,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '048', '8', 0, 1, 'Связь поля и её порядковый номер', '',     0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '048', 'a', 0, 1, 'Исполнитель или ансамбль', '',             0, -1, '', '', '', 0, '', '', NULL),
  ('', '', '048', 'b', 0, 1, 'Soloist', 'Soloist',                       0, -1, '', '', '', 0, '', '', NULL),
- ('', '', '048', 'c', 0, 1, 'Солист', '',                               0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+ ('', '', '048', 'c', 0, 1, 'Солист', '',                               0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '049', 0, 0, 'Локальное хранение (OCLC)', '', '');
@@ -563,13 +563,13 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
  ('', '091', 0, 0, 'Индексы/коды', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '091', 'a', 0, 0, 'Индекс ББК', '',                           0, -6, '', '', '', 0, '', '', NULL),
- ('', '', '091', 'b', 0, 0, 'Индекс ТБК', '',                           0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '091', 'c', 0, 0, 'Код МКИ', '',                              0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '091', 'd', 0, 0, 'Индекс ГРНТИ', '',                         0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '091', 'e', 0, 0, 'Индикатор ценности', '',                   0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '091', 'f', 0, 0, 'Приоритет рубрики', '',                    0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '091', 'g', 0, 0, 'Приоритет док-та', '',                     0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '091', 'i', 0, 0, 'Возрастная адресация', '',                 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+ ('', '', '091', 'b', 0, 0, 'Индекс ТБК', '',                           0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '091', 'c', 0, 0, 'Код МКИ', '',                              0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '091', 'd', 0, 0, 'Индекс ГРНТИ', '',                         0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '091', 'e', 0, 0, 'Индикатор ценности', '',                   0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '091', 'f', 0, 0, 'Приоритет рубрики', '',                    0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '091', 'g', 0, 0, 'Приоритет док-та', '',                     0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '091', 'i', 0, 0, 'Возрастная адресация', '',                 0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '092', 0, 1, 'Индексы/коды (МАРС)', '', '');
@@ -583,10 +583,10 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '094', 1, 1, 'Сохранность', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '094', 'a', 0, 0, 'Сохранность', '',                          0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '094', 'b', 0, 0, 'Дата получения', '',                       0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '094', 'c', 0, 0, 'Дата списания', '',                        0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
- ('', '', '094', 'd', 0, 0, 'Дата передачи', '',                        0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+ ('', '', '094', 'a', 0, 0, 'Сохранность', '',                          0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '094', 'b', 0, 0, 'Дата получения', '',                       0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '094', 'c', 0, 0, 'Дата списания', '',                        0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '094', 'd', 0, 0, 'Дата передачи', '',                        0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '096', 0, 1, 'Локально присвоенный NLM-номер заявки (OCLC)', '', '');
@@ -599,7 +599,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '097', 1, 1, 'Оператор', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '097', 'b', 0, 0, 'Оператор', '',                             0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+ ('', '', '097', 'b', 0, 0, 'Оператор', '',                             0, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '098', 0, 1, 'Другие схемы классификации (OCLC)', '', '');
@@ -2854,7 +2854,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '777', 'w', 0, 1, 'Контрольный номер связываемой записи', '', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '777', 'x', 0, 0, 'ISSN', '',                               7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '777', 'y', 0, 0, 'CODEN designation', 'CODEN designation', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', '', '777', 'z', 0, 1, 'ISBN', '',                                 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+ ('', '', '777', 'z', 0, 1, 'ISBN', '',                                 7, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '780', 0, 1, 'Поисковый признак на предшествующее издание', '', NULL);
@@ -2933,7 +2933,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '786', 's', 0, 0, 'Условное или обобщающее заглавие', '',   7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '786', 't', 0, 0, 'Заглавие', '',                           7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '786', 'u', 0, 0, 'Standard Technical Report Number', 'Standard Technical Report Number', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', '', '786', 'v', 0, 0, 'Вклад источника в содержание', '',         7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '786', 'v', 0, 0, 'Вклад источника в содержание', '',         7, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', NULL, '786', 'w', 0, 1, 'Контрольный номер связываемой записи', '', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '786', 'x', 0, 0, 'ISSN', '',                               7, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '786', 'y', 0, 0, 'CODEN designation', 'CODEN designation', 7, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -3164,7 +3164,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '810', 'n', 0, 1, 'Номер части/раздела работы', '',           8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '810', 'o', 0, 0, 'Сведения об аранжировке музыкального произведения', '', 8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '810', 'p', 0, 1, 'Название части/раздела работы', '',        8, -6, '', '', '', NULL, '', '', NULL),
- ('', '', '810', 'q', 0, 0, 'Более полная форма имени', '',             8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '810', 'q', 0, 0, 'Более полная форма имени', '',             8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', '', '810', 'r', 0, 0, 'Музыкальный ключ', '',                     8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '810', 's', 0, 0, 'Версия', '',                               8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '810', 't', 0, 0, 'Заглавие работы', '',                      8, -6, '', '', '', NULL, '', '', NULL),
@@ -3189,12 +3189,12 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', NULL, '811', 'j', 0, 1, 'Термин отношений (роль)', '',            8, -1, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '811', 'k', 0, 1, 'Подзаголовок формы', '',                 8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '811', 'l', 0, 0, 'Язык работы', '',                        8, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', '', '811', 'm', 0, 1, 'Средство для исполнения муз. произведения', '', 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '811', 'm', 0, 1, 'Средство для исполнения муз. произведения', '', 8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', NULL, '811', 'n', 0, 1, 'Номер части/раздела работы', '',         8, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', '', '811', 'o', 0, 0, 'Сведения об аранжировке музыкального произведения', '', 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '811', 'o', 0, 0, 'Сведения об аранжировке музыкального произведения', '', 8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', NULL, '811', 'p', 0, 1, 'Название части/раздела работы', '',      8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '811', 'q', 0, 0, 'Более полная форма имени', '',           8, -6, NULL, NULL, '', NULL, '', '', NULL),
- ('', '', '811', 'r', 0, 0, 'Музыкальный ключ', '',                     8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '811', 'r', 0, 0, 'Музыкальный ключ', '',                     8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', NULL, '811', 's', 0, 0, 'Версия', '',                             8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '811', 't', 0, 0, 'Заглавие работы', '',                    8, -6, NULL, NULL, '', NULL, '', '', NULL),
  ('', NULL, '811', 'u', 0, 0, 'Дополнительные сведения', '',            8, -6, NULL, NULL, '', NULL, '', '', NULL),
@@ -3204,7 +3204,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '830', 0, 1, 'Заголовок добавочной библ.записи на серию — унифицированное заглавие', '', NULL);
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '830', '4', 0, 1, 'Код отношений', '',                        8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '830', '4', 0, 1, 'Код отношений', '',                        8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', '', '830', '6', 0, 0, 'Элемент связи', '',                        8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '830', '8', 0, 1, 'Связь поля и ее порядковый номер', '',     8, -6, '', '', '', NULL, '', '', NULL),
  ('', 'UNIF_TITLE', '830', 'a', 0, 0, 'Унифицированное заглавие', '',   8, -1, '', '', '', NULL, '', '', NULL),
@@ -3218,11 +3218,11 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '830', 'n', 0, 1, 'Номер части/раздела работы', '',           8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '830', 'o', 0, 0, 'Сведения об аранжировке музыкального произведения', '', 8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '830', 'p', 0, 1, 'Название части/раздела работы', '',        8, -6, '', '', '', NULL, '', '', NULL),
- ('', '', '830', 'q', 0, 0, 'Более полная форма имени', '',             8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '830', 'q', 0, 0, 'Более полная форма имени', '',             8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', '', '830', 'r', 0, 0, 'Музыкальный ключ', '',                     8, -1, '', '', '', NULL, '', '', NULL),
  ('', '', '830', 's', 0, 0, 'Версия', '',                               8, -1, '', '', '', NULL, '', '', NULL),
  ('', '', '830', 't', 0, 0, 'Заглавие работы', '',                      8, -6, '', '', '', NULL, '', '', NULL),
- ('', '', '830', 'u', 0, 0, 'Дополнительные сведения', '',              8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+ ('', '', '830', 'u', 0, 0, 'Дополнительные сведения', '',              8, -6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
  ('', '', '830', 'v', 0, 0, 'Номер тома/последовательное обозначение', '', 8, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '830', 'w', 0, 1, 'Bibliographic record control number', 'Bibliographic record control number', 8, -6, NULL, NULL, '', NULL, '', '', NULL);
 
