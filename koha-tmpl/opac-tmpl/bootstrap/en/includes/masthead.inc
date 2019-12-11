@@ -6,6 +6,7 @@
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
 [% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
+[% SET OpacCustomSearch = KohaNews.get( location => "OpacCustomSearch", lang => lang, library => branchcode, blocktitle => 0 ) %]
 
 <div id="wrap">
     <div id="header-region" class="noprint">
@@ -169,7 +170,9 @@
                         [% ELSE %]
                             <div class="mastheadsearch">
                         [% END %]
-                        [% IF Koha.Preference('OpacCustomSearch') == '' %]
+                        [% IF ( OpacCustomSearch ) %]
+                            [% PROCESS koha_news_block news => OpacCustomSearch %]
+                        [% ELSE %]
                             <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform" class="form-inline">
                                 <label for="masthead_search"> Search
                                     [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
@@ -291,9 +294,7 @@
                                 [% END # / OpacAddMastheadLibraryPulldown %]
 
                             </form>
-                        [% ELSE # / Koha.Preference('OpacCustomSearch') == '' %]
-                            [% Koha.Preference('OpacCustomSearch') | $raw %]
-                        [% END # / Koha.Preference('OpacCustomSearch') == '' %]
+                        [% END # / ( OpacCustomSearch ) %]
                         </div> <!-- / .mastheadsearch -->
                     [% END # / UNLESS advsearch %]
 
