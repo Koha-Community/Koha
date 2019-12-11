@@ -82,12 +82,16 @@ sub new {
     $self->{xgettext}        = `which xgettext`;
     $self->{sed}             = `which sed`;
     $self->{po2json}         = "$Bin/po2json";
+    $self->{gzip}            = `which gzip`;
+    $self->{gunzip}          = `which gunzip`;
     chomp $self->{cp};
     chomp $self->{msgmerge};
     chomp $self->{msgfmt};
     chomp $self->{msginit};
     chomp $self->{xgettext};
     chomp $self->{sed};
+    chomp $self->{gzip};
+    chomp $self->{gunzip};
 
     unless ($self->{xgettext}) {
         die "Missing 'xgettext' executable. Have you installed the gettext package?\n";
@@ -766,9 +770,38 @@ sub remove_pot {
     unlink "$Bin/$self->{domain}-js.pot";
 }
 
+sub compress {
+    my ($self, $files) = @_;
+    my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
+    for my $lang ( @langs ) {
+        $self->set_lang( $lang );
+        opendir( my $dh, $self->{path_po} );
+        my @files = grep { $_ =~ /^$self->{lang}.*po$/ } readdir $dh;
+        foreach my $file ( @files ) {
+            say "Compress file $file" if $self->{verbose};
+            system "$self->{gzip} -9 $self->{path_po}/$file";
+        }
+    }
+}
+
+sub uncompress {
+    my ($self, $files) = @_;
+    my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
+    for my $lang ( @langs ) {
+        opendir( my $dh, $self->{path_po} );
+        $self->set_lang( $lang );
+        my @files = grep { $_ =~ /^$self->{lang}.*po.gz$/ } readdir $dh;
+        foreach my $file ( @files ) {
+            say "Uncompress file $file" if $self->{verbose};
+            system "$self->{gunzip} $self->{path_po}/$file";
+        }
+    }
+}
+
 sub install {
     my ($self, $files) = @_;
     return unless $self->{lang};
+    $self->uncompress();
     $self->install_tmpl($files) unless $self->{pref_only};
     $self->install_prefs();
     $self->install_messages();
@@ -779,9 +812,9 @@ sub install {
 sub get_all_langs {
     my $self = shift;
     opendir( my $dh, $self->{path_po} );
-    my @files = grep { $_ =~ /-pref.po$/ }
+    my @files = grep { $_ =~ /-pref.(po|po.gz)$/ }
         readdir $dh;
-    @files = map { $_ =~ s/-pref.po$//; $_ } @files;
+    @files = map { $_ =~ s/-pref.(po|po.gz)$//; $_ } @files;
 }
 
 
@@ -790,6 +823,7 @@ sub update {
     my @langs = $self->{lang} ? ($self->{lang}) : $self->get_all_langs();
     for my $lang ( @langs ) {
         $self->set_lang( $lang );
+        $self->uncompress();
         $self->update_tmpl($files) unless $self->{pref_only};
         $self->update_prefs();
         $self->update_messages();

@@ -52,7 +52,7 @@ usage() if $#ARGV != 1 && $#ARGV != 0;
 
 my ($cmd, $lang) = @ARGV;
 $cmd = lc $cmd;
-if ( $cmd =~ /create|install|update/ ) {
+if ( $cmd =~ /^(create|install|update|compress|uncompress)$/ ) {
     my $installer = LangInstaller->new( $lang, $pref, $verbose );
     if ( $cmd ne 'create' and $lang and not grep( {$_ eq $lang} @{ $installer->{langs} } ) ) {
         print "Unsupported language: $lang\n";
@@ -87,6 +87,8 @@ translate - Handle templates and preferences translation
   translate install fr-FR -f search -f memberentry
   translate -p install fr-FR
   translate install
+  translate compress [fr-FR]
+  translate uncompress [fr-FR]
 
 =head1 DESCRIPTION
 
@@ -142,6 +144,17 @@ updated.
 
 With -f parameter (repeatable) you can specify specific files to translate. For
 example, -f search will translate all templates containing 'search'.
+
+=item translate compress F<lang>
+
+Compress .po files in F<po> directory, named F<lang>-*.po. Without F<lang>, files
+from all available languages are compressed.
+
+=item translate uncompress F<lang>
+
+Uncompress .po.gz files in F<po> directory, named F<lang>-*.po.gz. Without F<lang>,
+files from all available languages are uncompressed.
+
 
 =back
 
