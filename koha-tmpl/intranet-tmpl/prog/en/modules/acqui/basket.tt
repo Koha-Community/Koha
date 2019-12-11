@@ -59,8 +59,9 @@
                         <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                     [% END %]
                     <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
-                    [%# FIXME This action should not be available for everyone %]
-                    <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete this basket</a></div>
+                    [% IF CAN_user_acquisition_delete_baskets %]
+                        <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete this basket</a></div>
+                    [% END %]
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
                         <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | uri %]&amp;owner=1" class="btn btn-default" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>

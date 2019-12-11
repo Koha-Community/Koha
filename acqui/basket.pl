@@ -91,6 +91,8 @@ our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     }
 );
 
+my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
+
 our $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
@@ -123,6 +125,10 @@ $template->param( skip_confirm_reopen => 1) if $confirm_pref eq '2';
 my @messages;
 
 if ( $op eq 'delete_confirm' ) {
+
+    output_and_exit( $query, $cookie, $template, 'insufficient_permission' )
+      unless $logged_in_patron->has_permission( { acquisition => 'delete_baskets' } );
+
     my $basketno = $query->param('basketno');
     my $delbiblio = $query->param('delbiblio');
     my @orders = GetOrders($basketno);
