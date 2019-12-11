@@ -3828,6 +3828,8 @@ sub ProcessOfflineReturn {
         my $itemnumber = $item->itemnumber;
         my $issue = GetOpenIssue( $itemnumber );
         if ( $issue ) {
+            my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
+            ModDateLastSeen( $itemnumber, $leave_item_lost );
             MarkIssueReturned(
                 $issue->{borrowernumber},
                 $itemnumber,
