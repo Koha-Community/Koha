@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -412,6 +412,29 @@ subtest 'unblessed_all_relateds' => sub {
     is( $overdue->{issue_id}, $issue->issue_id, 'unblessed_all_relateds has field from the original table (issues)' );
     is( $overdue->{title}, $biblio->title, 'unblessed_all_relateds has field from other tables (biblio)' );
     is( $overdue->{homebranch}, $item->homebranch, 'unblessed_all_relateds has field from other tables (items)' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_from_storage' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $old_title = $biblio->title;
+    my $new_title = 'new_title';
+    Koha::Biblios->find( $biblio->biblionumber )->title($new_title)->store;
+
+    is( $biblio->title, $old_title, 'current $biblio should not be modified' );
+    is( $biblio->get_from_storage->title,
+        $new_title, 'get_from_storage should return an updated object' );
+
+    Koha::Biblios->find( $biblio->biblionumber )->delete;
+    is( ref($biblio), 'Koha::Biblio', 'current $biblio should not be deleted' );
+    is( $biblio->get_from_storage, undef,
+        'get_from_storage should return undef if the object has been deleted' );
 
     $schema->storage->txn_rollback;
 };
