@@ -379,7 +379,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the OPAC', 'YesNo'),
 ('OPACCustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed at the OPAC. CustomCoverImagesURL must be defined.','YesNo'),
 ('OpacCustomSearch','','70|10','Replace the search box on the OPAC with the provided HTML','Textarea'),
-('opaccredits','','70|10','Define HTML Credits at the bottom of the OPAC page','Textarea'),
 ('OPACdefaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),
 ('OPACdidyoumean','',NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),

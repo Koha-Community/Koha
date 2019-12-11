@@ -1,16 +1,17 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE KohaNews %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
+[% SET opaccredits = KohaNews.get( location => "opaccredits", lang => lang, library => branchcode ) %]
+[% PROCESS 'html_helpers.inc' %]
 [% UNLESS ( is_popup ) %]
     [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
     [% IF ( opaccredits ) %]
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span12">
-                    <div id="opaccredits" class="noprint">
-                        [% opaccredits | $raw %]
-                    </div>
+                <div id="opaccredits">
+                    [% PROCESS koha_news_block news => opaccredits %]
                 </div>
             </div>
         </div>
