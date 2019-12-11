@@ -376,7 +376,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OpacAdditionalStylesheet','','','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server\'s css directory) or a complete URL beginning with http (if the file lives on a remote server).','free'),
 ('OpacCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the OPAC', 'YesNo'),
 ('OPACCustomCoverImages','0',NULL,'If enabled, the custom cover images will be displayed at the OPAC. CustomCoverImagesURL must be defined.','YesNo'),
-('OpacCustomSearch','','70|10','Replace the search box on the OPAC with the provided HTML','Textarea'),
 ('OPACdefaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specify the default field used for sorting','Choice'),
 ('OPACdefaultSortOrder','dsc','asc|dsc|za|az','Specify the default sort order','Choice'),
 ('OPACdidyoumean','',NULL,'Did you mean? configuration for the OPAC. Do not change, as this is controlled by /cgi-bin/koha/admin/didyoumean.pl.','Free'),
