@@ -4287,7 +4287,8 @@ CREATE TABLE library_groups (
     PRIMARY KEY id ( id ),
     FOREIGN KEY (parent_id) REFERENCES library_groups(id) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON UPDATE CASCADE ON DELETE CASCADE,
-    UNIQUE KEY title ( title )
+    UNIQUE KEY title ( title ),
+    UNIQUE KEY library_groups_uniq_2 ( parent_id, branchcode )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
