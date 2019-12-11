@@ -1420,30 +1420,6 @@ CREATE TABLE `search_marc_to_field` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `serial`
---
-
-DROP TABLE IF EXISTS `serial`;
-CREATE TABLE `serial` ( -- issues related to subscriptions
-  `serialid` int(11) NOT NULL auto_increment, -- unique key for the issue
-  `biblionumber` varchar(100) NOT NULL default '', -- foreign key for the biblio.biblionumber that this issue is attached to
-  `subscriptionid` varchar(100) NOT NULL default '', -- foreign key to the subscription.subscriptionid that this issue is part of
-  `serialseq` varchar(100) NOT NULL default '', -- issue information (volume, number, etc)
-  `serialseq_x` varchar( 100 ) NULL DEFAULT NULL, -- first part of issue information
-  `serialseq_y` varchar( 100 ) NULL DEFAULT NULL, -- second part of issue information
-  `serialseq_z` varchar( 100 ) NULL DEFAULT NULL, -- third part of issue information
-  `status` tinyint(4) NOT NULL default 0, -- status code for this issue (see manual for full descriptions)
-  `planneddate` date default NULL, -- date expected
-  `notes` MEDIUMTEXT, -- notes
-  `publisheddate` date default NULL, -- date published
-  publisheddatetext varchar(100) default NULL, -- date published (descriptive)
-  `claimdate` date default NULL, -- date claimed
-  claims_count int(11) default 0, -- number of claims made related to this issue
-  `routingnotes` MEDIUMTEXT, -- notes from the routing list
-  PRIMARY KEY (`serialid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `sessions`
 --
 
@@ -1956,7 +1932,7 @@ CREATE TABLE subscription_numberpatterns (
 
 DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` ( -- information related to the subscription
-  `biblionumber` int(11) NOT NULL default 0, -- foreign key for biblio.biblionumber that this subscription is attached to
+  `biblionumber` int(11) NOT NULL, -- foreign key for biblio.biblionumber that this subscription is attached to
   `subscriptionid` int(11) NOT NULL auto_increment, -- unique key for this subscription
   `librarian` varchar(100) default '', -- the librarian's username from borrowers.userid
   `startdate` date default NULL, -- start date for this subscription
@@ -2000,9 +1976,35 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `previousitemtype` VARCHAR( 10 ) NULL,
   `mana_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY  (`subscriptionid`),
-  KEY `by_biblionumber` (`biblionumber`),
   CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT subscription_ibfk_3 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table `serial`
+--
+
+DROP TABLE IF EXISTS `serial`;
+CREATE TABLE `serial` ( -- issues related to subscriptions
+  `serialid` int(11) NOT NULL auto_increment, -- unique key for the issue
+  `biblionumber` int(11) NOT NULL, -- foreign key for the biblio.biblionumber that this issue is attached to
+  `subscriptionid` int(11) NOT NULL, -- foreign key to the subscription.subscriptionid that this issue is part of
+  `serialseq` varchar(100) NOT NULL default '', -- issue information (volume, number, etc)
+  `serialseq_x` varchar( 100 ) NULL DEFAULT NULL, -- first part of issue information
+  `serialseq_y` varchar( 100 ) NULL DEFAULT NULL, -- second part of issue information
+  `serialseq_z` varchar( 100 ) NULL DEFAULT NULL, -- third part of issue information
+  `status` tinyint(4) NOT NULL default 0, -- status code for this issue (see manual for full descriptions)
+  `planneddate` date default NULL, -- date expected
+  `notes` MEDIUMTEXT, -- notes
+  `publisheddate` date default NULL, -- date published
+  publisheddatetext varchar(100) default NULL, -- date published (descriptive)
+  `claimdate` date default NULL, -- date claimed
+  claims_count int(11) default 0, -- number of claims made related to this issue
+  `routingnotes` MEDIUMTEXT, -- notes from the routing list
+  PRIMARY KEY (`serialid`),
+  CONSTRAINT serial_ibfk_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT serial_ibfk_2 FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -2011,8 +2013,8 @@ CREATE TABLE `subscription` ( -- information related to the subscription
 
 DROP TABLE IF EXISTS `subscriptionhistory`;
 CREATE TABLE `subscriptionhistory` (
-  `biblionumber` int(11) NOT NULL default 0,
-  `subscriptionid` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL,
+  `subscriptionid` int(11) NOT NULL,
   `histstartdate` date default NULL,
   `histenddate` date default NULL,
   `missinglist` LONGTEXT NOT NULL,
@@ -2020,7 +2022,8 @@ CREATE TABLE `subscriptionhistory` (
   `opacnote` LONGTEXT NULL,
   `librariannote` LONGTEXT NULL,
   PRIMARY KEY  (`subscriptionid`),
-  KEY `biblionumber` (`biblionumber`)
+  CONSTRAINT subscription_history_ibfk_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT subscription_history_ibfk_2 FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

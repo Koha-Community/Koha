@@ -38,6 +38,8 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
+my $builder = t::lib::TestBuilder->new;
+
 subtest 'GetMarcSubfieldStructureFromKohaField' => sub {
     plan tests => 25;
 
@@ -588,7 +590,7 @@ subtest 'deletedbiblio_metadata' => sub {
 };
 
 subtest 'DelBiblio' => sub {
-    plan tests => 2;
+    plan tests => 5;
 
     my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio(MARC::Record->new, '');
     my $deleted = C4::Biblio::DelBiblio( $biblionumber );
@@ -596,6 +598,36 @@ subtest 'DelBiblio' => sub {
 
     $deleted = C4::Biblio::DelBiblio( $biblionumber );
     is( $deleted, undef, 'DelBiblo should return undef is the record did not exist');
+
+    my $biblio       = $builder->build_sample_biblio;
+    my $subscription = $builder->build_object(
+        {
+            class => 'Koha::Subscriptions',
+            value => { biblionumber => $biblio->biblionumber }
+        }
+    );
+    my $serial = $builder->build_object(
+        {
+            class => 'Koha::Serials',
+            value => {
+                biblionumber   => $biblio->biblionumber,
+                subscriptionid => $subscription->subscriptionid
+            }
+        }
+    );
+    my $subscription_history = $builder->build_object(
+        {
+            class => 'Koha::Subscription::Histories',
+            value => {
+                biblionumber   => $biblio->biblionumber,
+                subscriptionid => $subscription->subscriptionid
+            }
+        }
+    );
+    C4::Biblio::DelBiblio($biblio->biblionumber); # Or $biblio->delete
+    is( $subscription->get_from_storage, undef, 'subscription should be deleted on biblio deletion' );
+    is( $serial->get_from_storage, undef, 'serial should be deleted on biblio deletion' );
+    is( $subscription_history->get_from_storage, undef, 'subscription history should be deleted on biblio deletion' );
 };
 
 subtest 'MarcFieldForCreatorAndModifier' => sub {

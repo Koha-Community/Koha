@@ -1769,8 +1769,6 @@ sub DelSubscription {
     my ($subscriptionid) = @_;
     my $dbh = C4::Context->dbh;
     $dbh->do("DELETE FROM subscription WHERE subscriptionid=?", undef, $subscriptionid);
-    $dbh->do("DELETE FROM subscriptionhistory WHERE subscriptionid=?", undef, $subscriptionid);
-    $dbh->do("DELETE FROM serial WHERE subscriptionid=?", undef, $subscriptionid);
 
     Koha::AdditionalFieldValues->search({
         'field.tablename' => 'subscription',

@@ -386,13 +386,6 @@ sub DelBiblio {
 
     return $error if $error;
 
-    # We delete attached subscriptions
-    require C4::Serials;
-    my $subscriptions = C4::Serials::GetFullSubscriptionsFromBiblionumber($biblionumber);
-    foreach my $subscription (@$subscriptions) {
-        C4::Serials::DelSubscription( $subscription->{subscriptionid} );
-    }
-
     # We delete any existing holds
     my $holds = $biblio->holds;
     while ( my $hold = $holds->next ) {
