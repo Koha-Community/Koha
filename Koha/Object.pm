@@ -263,6 +263,7 @@ sub unblessed {
 sub get_from_storage {
     my ( $self, $attrs ) = @_;
     my $stored_object = $self->_result->get_from_storage($attrs);
+    return unless $stored_object;
     my $object_class  = Koha::Object::_get_object_class( $self->_result->result_class );
     return $object_class->_new_from_dbic($stored_object);
 }
