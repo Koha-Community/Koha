@@ -110,6 +110,10 @@ elsif ( $op && $op eq 'mod' ) {
     $template->param( modified => 1 );
 }
 elsif ( $op && $op eq 'delete' ) {
+
+    output_and_exit( $input, $cookie, $template, 'insufficient_permission' )
+        unless $logged_in_patron->has_permission( { acquisition => 'delete_invoices' } );
+
     DelInvoice($invoiceid);
     defined($invoice_files) && $invoice_files->DelAllFiles();
     my $referer = $input->param('referer') || 'invoices.pl';
