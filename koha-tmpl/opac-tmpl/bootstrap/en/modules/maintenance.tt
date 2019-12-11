@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE KohaNews %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
@@ -21,8 +23,14 @@
 [% END %]
 </head>
 <body id="opac_maintenance" class="opac">
-    [% IF ( opacheader ) %]
-        [% opacheader | $raw %]
+    [% IF ( OpacHeader ) %]
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div id="opacheader">
+                    [% PROCESS koha_news_block news => OpacHeader %]
+                </div>
+            </div>
+        </div>
     [% END %]
     <div class="container-fluid">
         <div class="row-fluid">

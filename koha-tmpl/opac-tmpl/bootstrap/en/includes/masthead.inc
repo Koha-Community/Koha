@@ -4,6 +4,7 @@
 [% USE Categories %]
 [% USE KohaNews %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
+[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 <div id="wrap">
     <div id="header-region" class="noprint">
         <div class="navbar navbar-inverse navbar-static-top">

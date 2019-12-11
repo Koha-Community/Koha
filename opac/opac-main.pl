@@ -48,10 +48,6 @@ $template->param(
     casAuthentication   => $casAuthentication,
 );
 
-# display news
-# use cookie setting for language, bug default to syspref if it's not set
-my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Context->config('opachtdocs'),'opac-main.tt','opac',$input);
-
 my $homebranch;
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
@@ -74,7 +70,7 @@ if (defined $news_id){
         $template->param( single_news_error => 1 );
     }
 } else {
-    @all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
+    @all_koha_news   = &GetNewsToDisplay( $template->lang, $homebranch);
 }
 
 my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
@@ -104,7 +100,6 @@ if ( $patron ) {
 
 $template->param(
     koha_news           => @all_koha_news,
-    news_lang           => $news_lang,
     branchcode          => $homebranch,
     display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
     daily_quote         => $quote,

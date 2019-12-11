@@ -1,6 +1,9 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE KohaNews %]
+[% PROCESS 'html_helpers.inc' %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
+[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 <div id="wrap">
     <div class="navbar navbar-inverse navbar-static-top">
         <div class="navbar-inner">
@@ -24,11 +27,11 @@
         </div> <!-- /navbar-inner -->
     </div> <!-- /navbar -->
 
-    [% IF ( opacheader ) %]
+    [% IF ( OpacHeader ) %]
         <div class="container-fluid">
             <div class="row-fluid">
                 <div id="opacheader">
-                    [% opacheader | $raw %]
+                    [% PROCESS koha_news_block news => OpacHeader %]
                 </div>
             </div>
         </div>

@@ -8,8 +8,11 @@ if( CheckVersion( $DBversion ) ) {
         SELECT value FROM systempreferences WHERE variable='opacheader';
     |);
     if( $opacheader ){
-        # If there is a value in the opacheader preference, insert it into opac_news
-        $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, 'opacheader_$langs[0]', '', '$opacheader')");
+        foreach my $lang ( @langs ) {
+            print "Inserting opacheader contents into $lang news item...\n";
+            # If there is a value in the opacheader preference, insert it into opac_news
+            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, 'opacheader $lang', ?)", undef, "opacheader_$lang", $opacheader);
+        }
     }
     # Remove the opacheader system preference
     $dbh->do("DELETE FROM systempreferences WHERE variable='opacheader'");

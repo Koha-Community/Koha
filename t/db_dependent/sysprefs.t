@@ -27,19 +27,19 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
-my $opacheader    = C4::Context->preference('opacheader');
-my $newopacheader = "newopacheader";
+my $URLLinkText    = C4::Context->preference('URLLinkText');
+my $newURLLinkText = "newURLLinkText";
 
-C4::Context->set_preference( 'OPACHEADER', $newopacheader );
-is( C4::Context->preference('opacheader'), $newopacheader, 'The pref should have been set correctly' );
+C4::Context->set_preference( 'URLLINKTEXT', $newURLLinkText );
+is( C4::Context->preference('URLLinkText'), $newURLLinkText, 'The pref should have been set correctly' );
 
-C4::Context->set_preference( 'opacheader', $opacheader );
-is( C4::Context->preference('OPACHEADER'), $opacheader, 'A pref name should be case insensitive');
+C4::Context->set_preference( 'URLLinkText', $URLLinkText );
+is( C4::Context->preference('URLLINKTEXT'), $URLLinkText, 'A pref name should be case insensitive');
 
-$ENV{OVERRIDE_SYSPREF_opacheader} = 'this is an override';
+$ENV{OVERRIDE_SYSPREF_URLLinkText} = 'this is an override';
 C4::Context->clear_syspref_cache();
 is(
-    C4::Context->preference('opacheader'),
+    C4::Context->preference('URLLinkText'),
     'this is an override',
     'system preference value overridden from environment'
 );

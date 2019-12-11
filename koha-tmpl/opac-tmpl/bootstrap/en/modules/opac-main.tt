@@ -42,7 +42,7 @@
         </div>
     [% END %]
 
-    [% SET OpacNavRight = KohaNews.get( location => "OpacNavRight", lang => news_lang, library => branchcode ) %]
+    [% SET OpacNavRight = KohaNews.get( location => "OpacNavRight", lang => lang, library => branchcode ) %]
     [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
         <div class="span7">
     [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]

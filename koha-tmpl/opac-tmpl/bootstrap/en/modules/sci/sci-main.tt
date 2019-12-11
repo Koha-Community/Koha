@@ -3,6 +3,7 @@
 [%# Includes %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE KohaNews %]
 [%# Helper template functions %]
 [% BLOCK error_message %]
     [% IF messages.BadBarcode %]
@@ -17,7 +18,8 @@
         <span>(There was a problem returning this item, please see library staff for assistance)</span>
     [% END %]
 [% END %]
-
+[% PROCESS 'html_helpers.inc' %]
+[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self check-in</title>
@@ -71,15 +73,15 @@
         </div> <!-- /.navbar-inner -->
     </div> <!-- /.navbar -->
 
-[% IF Koha.Preference( 'opacheader' ) %]
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div id="opacheader">
-                [% Koha.Preference( 'opacheader' ) | $raw %]
+    [% IF ( OpacHeader ) %]
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div id="opacheader">
+                    [% PROCESS koha_news_block news => OpacHeader %]
+                </div>
             </div>
         </div>
-    </div>
-[% END %]
+    [% END %]
 
     <div class="main">
         <div class="container-fluid">
