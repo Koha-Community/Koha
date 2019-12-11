@@ -18,6 +18,17 @@
     &rsaquo; <a href="/cgi-bin/koha/admin/library_groups.pl">Library groups</a>
 </div>
 
+[% FOR m IN messages %]
+    <div class="dialog [% m.type | html %]">
+        [% SWITCH m.code %]
+        [% CASE 'error_on_insert' %]
+            An error occurred when adding this library. The library id might already exist in this group.
+        [% CASE %]
+            [% m.code | html %]
+        [% END %]
+    </div>
+[% END %]
+
 [% IF added %]
     <div class="dialog message group-added">
         [% IF added.branchcode %]

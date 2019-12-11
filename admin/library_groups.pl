@@ -41,6 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $action = $cgi->param('action') || q{};
+my @messages;
 
 if ( $action eq 'add' ) {
     my $parent_id   = $cgi->param('parent_id')   || undef;
@@ -56,20 +57,26 @@ if ( $action eq 'add' ) {
         $template->param( error_duplicate_title => $title );
     }
     else {
-        my $group = Koha::Library::Group->new(
-            {
-                parent_id   => $parent_id,
-                title       => $title,
-                description => $description,
-                ft_hide_patron_info    => $ft_hide_patron_info,
-                ft_search_groups_opac  => $ft_search_groups_opac,
-                ft_search_groups_staff => $ft_search_groups_staff,
-                ft_local_hold_group => $ft_local_hold_group,
-                branchcode  => $branchcode,
-            }
-        )->store();
-
-        $template->param( added => $group );
+        my $group = eval {
+            Koha::Library::Group->new(
+                {
+                    parent_id              => $parent_id,
+                    title                  => $title,
+                    description            => $description,
+                    ft_hide_patron_info    => $ft_hide_patron_info,
+                    ft_search_groups_opac  => $ft_search_groups_opac,
+                    ft_search_groups_staff => $ft_search_groups_staff,
+                    ft_local_hold_group    => $ft_local_hold_group,
+                    branchcode             => $branchcode,
+                }
+            )->store();
+        };
+        if ($@) {
+            push @messages, { type => 'alert', code => 'error_on_insert' };
+        }
+        else {
+            $template->param( added => $group );
+        }
     }
 }
 elsif ( $action eq 'edit' ) {
@@ -118,6 +125,6 @@ elsif ( $action eq 'delete' ) {
 
 my $root_groups = Koha::Library::Groups->get_root_groups();
 
-$template->param( root_groups => $root_groups, );
+$template->param( root_groups => $root_groups, messages => \@messages, );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
