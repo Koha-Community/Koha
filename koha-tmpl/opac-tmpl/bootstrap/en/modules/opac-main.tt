@@ -5,6 +5,8 @@
 [% USE Categories %]
 [% USE Price %]
 [% USE KohaNews %]
+[% SET OpacNavRight = KohaNews.get( location => "OpacNavRight", lang => lang, library => branchcode ) %]
+[% SET OpacMainUserBlock = KohaNews.get( location => "OpacMainUserBlock", lang => lang, library => branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -42,7 +44,6 @@
         </div>
     [% END %]
 
-    [% SET OpacNavRight = KohaNews.get( location => "OpacNavRight", lang => lang, library => branchcode ) %]
     [% IF ( OpacNav ||  OpacNavBottom  ) && (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
         <div class="span7">
     [% ELSIF (Koha.Preference( 'opacuserlogin' ) == 1 || OpacNavRight) %]
@@ -150,7 +151,11 @@
                 </div>
             [% END %]
 
-            [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock | $raw %]</div>[% END %]
+            [% IF ( OpacMainUserBlock ) %]
+                <div id="opacmainuserblock">
+                    [% PROCESS koha_news_block news => OpacMainUserBlock %]
+                </div>
+            [% END %]
         [% END %]
 
         </div> <!-- / .span 7/9 -->
