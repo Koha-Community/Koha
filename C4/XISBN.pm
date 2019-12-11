@@ -17,6 +17,7 @@ package C4::XISBN;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Modern::Perl;
 use XML::Simple;
 #use LWP::Simple;
 use C4::Biblio;
@@ -30,8 +31,6 @@ use Koha::Biblios;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 
-use strict;
-#use warnings; FIXME - Bug 2505
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {

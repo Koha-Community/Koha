@@ -25,8 +25,7 @@ package C4::Output;
 # NOTE: I'm pretty sure this module is deprecated in favor of
 # templates.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use URI::Escape;
 use Scalar::Util qw( looks_like_number );

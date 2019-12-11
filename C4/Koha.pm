@@ -20,8 +20,7 @@ package C4::Koha;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 use C4::Context;
 use Koha::Caches;

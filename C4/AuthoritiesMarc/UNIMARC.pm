@@ -17,8 +17,7 @@ package C4::AuthoritiesMarc::UNIMARC;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 
 =head1 NAME
 

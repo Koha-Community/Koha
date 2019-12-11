@@ -1,7 +1,6 @@
 package VerboseWarnings;
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 require Exporter;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);

@@ -1,7 +1,6 @@
 package TmplTokenizer;
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::TmplTokenType;
 use C4::TmplToken;
 use C4::TTParser;

@@ -20,8 +20,7 @@ package C4::Members;
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 
-use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 use C4::Context;
 use String::Random qw( random_string );
 use Scalar::Util qw( looks_like_number );
