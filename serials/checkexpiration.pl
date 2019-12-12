@@ -69,7 +69,7 @@ my $issn  = $query->param('issn');
 my $branch = $query->param('branch');
 my $date = $query->param('date');
 $date = eval { dt_from_string( scalar $query->param('date') ) } if $date;
-my $showhistoricexpired = $query->param('showhistoryexpired');
+my $showhistoricexpired = $query->param('showhistoricexpired');
 
 if ($date) {
     my @subscriptions = SearchSubscriptions({ title => $title, issn => $issn, orderby => 'title' });
@@ -96,7 +96,7 @@ if ($date) {
         my $expirationdate_dt = dt_from_string( $expirationdate, 'iso' );
         my $today_dt = dt_from_string();
         if (   DateTime->compare( $date, $expirationdate_dt ) == 1
-            && ( $showhistoricexpired || DateTime->compare( $expiration_dt, $today_dt ) == 1 )
+            && ( $showhistoricexpired || DateTime->compare( $expirationdate_dt, $today_dt ) == 1 )
             && ( !$branch || ( $subscription->{'branchcode'} eq $branch ) ) ) {
             push @subscriptions_loop, $subscription;
         }

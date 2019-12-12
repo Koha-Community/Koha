@@ -61,8 +61,11 @@
 
         <li>
             <label for="showhistoricexpired">Include historic expirations:</label>
-            <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired"
-            [% IF ( showhistoricexpired ) %] checked="checked" [% END %]/>
+            [% IF showhistoricexpired %]
+                <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired" checked="checked" />
+            [% ELSE %]
+                <input id="showhistoricexpired" type="checkbox" name="showhistoricexpired" />
+            [% END %]
         </li>
         </ol>
 </fieldset>
