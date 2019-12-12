@@ -92,7 +92,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '200', 'Vedette', '', 1, 0, NULL);
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '200', 'Vedette', '', 1, 1, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('NP', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -131,7 +131,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '200', 'Vedette', '', 1, 0, NULL);
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '200', 'Vedette', '', 1, 1, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUT', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -170,7 +170,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '240', 'Vedette', '', 1, 0, NULL);
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '240', 'Vedette', '', 1, 1, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SAUTTIT', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -209,7 +209,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '210', 'Vedette-Nom de collectivité', '', 1, 0, NULL);
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '210', 'Vedette-Nom de collectivité', '', 1, 1, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SCO', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -248,7 +248,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '250', 'Vedette-Matière nom commun', '', 1, 0, '');
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '250', 'Vedette-Matière nom commun', '', 1, 1, '');
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNC', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -287,7 +287,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '215', 'Vedette', '', 1, 0, '');
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '215', 'Vedette', '', 1, 1, '');
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('SNG', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -326,7 +326,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '230', 'Vedette', '', 1, 0, NULL);
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '230', 'Vedette', '', 1, 1, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('STU', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
@@ -365,7 +365,7 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '152', 'Règles', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '154', 'Zone de données codées : titre uniforme', '', 0, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '160', 'Code d''aire géographique', '', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '230', 'Vedette', '', 1, 0, NULL);
+INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '230', 'Vedette', '', 1, 1, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '300', 'Note d''information', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '305', 'Note de renvoi textuel "Voir aussi"', '', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`) VALUES ('TU', '310', 'Note de renvoi textuel "Voir"', '', 1, 0, NULL);
