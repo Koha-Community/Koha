@@ -1,8 +1,17 @@
 $DBversion = 'XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
-    my $opaclang = C4::Context->preference("opaclanguages");
+
+    # get list of installed translations
+    use C4::Languages qw(getTranslatedLanguages);
     my @langs;
-    push @langs, split ( '\,', $opaclang );
+    my $tlangs = getTranslatedLanguages();
+
+    foreach my $language ( @$tlangs ) {
+        foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
+            push @langs, $sublanguage->{'rfc4646_subtag'};
+        }
+    }
+
     # Get any existing value from the opacheader system preference
     my ($opacheader) = $dbh->selectrow_array( q|
         SELECT value FROM systempreferences WHERE variable='opacheader';
