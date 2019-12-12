@@ -216,11 +216,7 @@ Returns:
 sub delete {
     my ($self) = @_;
 
-    # Deleting something not in storage throws an exception
-    return -1 unless $self->_result()->in_storage();
-
-    # Return a boolean for succcess
-    return $self->_result()->delete() ? 1 : 0;
+    return $self->_result()->delete;
 }
 
 =head3 $object->set( $properties_hashref )

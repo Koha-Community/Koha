@@ -220,9 +220,13 @@ sub delete {
     $self->_resultset->result_source->schema->txn_do( sub {
         my ( $set, $params ) = @_;
         my $count = $set->count;
-        while( my $patron = $set->next ) {
+        while ( my $patron = $set->next ) {
+
+            next unless $patron->in_storage;
+
             $patron->move_to_deleted if $params->{move};
-            $patron->delete == 1 || Koha::Exceptions::Patron::FailedDelete->throw;
+            $patron->delete;
+
             $patrons_deleted++;
         }
         warn "Deleted $count patrons\n" if $params->{verbose};

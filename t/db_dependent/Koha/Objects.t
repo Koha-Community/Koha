@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Test::Exception;
 use Test::Warn;
 
@@ -341,86 +341,331 @@ subtest 'Return same values as DBIx::Class' => sub {
         $schema->storage->txn_begin;
 
         subtest 'Simple Koha::Objects - Koha::Cities' => sub {
-            plan tests => 3;
+            plan tests => 2;
 
-            my ( $r_us, $e_us, $r_them, $e_them );
-            {
-                my $c = Koha::City->new({ city_name => 'city4test' });
-                try {$r_us = $c->delete;} catch { $e_us = ref($_) };
+            subtest 'Koha::Object->delete' => sub {
 
+                plan tests => 4;
 
-                $c = $schema->resultset('City')->new({ city_name => 'city4test' });
-                try {$r_them = $c->delete;} catch { $e_them = ref($_) };
+                my ( $r_us, $e_us, $r_them, $e_them );
 
-                is( $r_us, $r_them );
-                is( $e_us, $e_them ); # FIXME This is need adjustment, we want to throw a Koha::Exception
-            }
+                # CASE 1 - Delete an existing object
+                my $c = Koha::City->new( { city_name => 'city4test' } )->store;
+                try { $r_us = $c->delete; } catch { $e_us = $_ };
+                $c = $schema->resultset('City')->new( { city_name => 'city4test_2' } )->update_or_insert;
+                try { $r_them = $c->delete; } catch { $e_them = $_ };
+                ok( ref($r_us) && ref($r_them),
+                    'Successful delete should return the object ' );
+                ok( !defined $e_us && !defined $e_them,
+                    'Successful delete should not raise an exception' );
 
-            {
+                # CASE 2 - Delete an object that is not in storage
+                try { $r_us   = $r_us->delete;   } catch { $e_us   = $_ };
+                try { $r_them = $r_them->delete; } catch { $e_them = $_ };
+                ok(
+                    defined $e_us && defined $e_them,
+                    'Delete an object that is not in storage should raise an exception'
+                );
+                is( ref($e_us), 'DBIx::Class::Exception' )
+                  ; # FIXME This needs adjustement, we want to throw a Koha::Exception
 
-                my $city = $builder->build_object({ class => 'Koha::Cities' });
-                try{
-                    $schema->storage->txn_do(sub{
-                        my $c = Koha::Cities->find($city->cityid);
-                        $r_us = $c->delete;
-                        $c->update({force_fail=>'foo'});
-                    });};
-                try{
-                $schema->storage->txn_do(sub{
-                    my $c = $schema->resultset('City')->find($city->cityid);
-                    $r_them = $c->delete;
-                    $c->update({force_fail=>'foo'});
-                });};
-                is( $r_us, $r_them );
-            }
+            };
+
+            subtest 'Koha::Objects->delete' => sub {
+
+                plan tests => 4;
+
+                my ( $r_us, $e_us, $r_them, $e_them );
+
+                # CASE 1 - Delete existing objects
+                my $city_1 = $builder->build_object({ class => 'Koha::Cities' });
+                my $city_2 = $builder->build_object({ class => 'Koha::Cities' });
+                my $city_3 = $builder->build_object({ class => 'Koha::Cities' });
+                my $cities = Koha::Cities->search(
+                    {
+                        cityid => {
+                            -in => [
+                                $city_1->cityid,
+                                $city_2->cityid,
+                                $city_3->cityid,
+                            ]
+                        }
+                    }
+                );
+
+                try { $r_us = $cities->delete; } catch { $e_us = $_ };
+
+                $city_1 = $builder->build_object({ class => 'Koha::Cities' });
+                $city_2 = $builder->build_object({ class => 'Koha::Cities' });
+                $city_3 = $builder->build_object({ class => 'Koha::Cities' });
+                $cities = $schema->resultset('City')->search(
+                    {
+                        cityid => {
+                            -in => [
+                                $city_1->cityid,
+                                $city_2->cityid,
+                                $city_3->cityid,
+                            ]
+                        }
+                    }
+                );
+
+                try { $r_them = $cities->delete; } catch { $e_them = $_ };
+
+                ok( $r_us == 3 && $r_them == 3 );
+                ok (!defined($e_us) && !defined($e_them));
+
+                # CASE 2 - One of the object is not in storage
+                $city_1 = $builder->build_object({ class => 'Koha::Cities' });
+                $city_2 = $builder->build_object({ class => 'Koha::Cities' });
+                $city_3 = $builder->build_object({ class => 'Koha::Cities' });
+                $cities = Koha::Cities->search(
+                    {
+                        cityid => {
+                            -in => [
+                                $city_1->cityid,
+                                $city_2->cityid,
+                                $city_3->cityid,
+                            ]
+                        }
+                    }
+                );
+
+                $city_2->delete; # We delete one of the object
+                try { $r_us = $cities->delete; } catch { $e_us = $_ };
+
+                $city_1 = $builder->build_object({ class => 'Koha::Cities' });
+                $city_2 = $builder->build_object({ class => 'Koha::Cities' });
+                $city_3 = $builder->build_object({ class => 'Koha::Cities' });
+                $cities = $schema->resultset('City')->search(
+                    {
+                        cityid => {
+                            -in => [
+                                $city_1->cityid,
+                                $city_2->cityid,
+                                $city_3->cityid,
+                            ]
+                        }
+                    }
+                );
+
+                $city_2->delete; # We delete one of the object
+                try { $r_them = $cities->delete; } catch { $e_them = $_ };
+
+                ok( $r_us == 2 && $r_them == 2 );
+                ok (!defined($e_us) && !defined($e_them));
+            };
         };
 
         subtest 'Overwritten Koha::Objects->delete - Koha::Patrons' => sub {
-            plan tests => 4;
 
-            my ( $r_us, $e_us, $r_them, $e_them );
+            plan tests => 2;
 
-            my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-            my $patron_data = $patron->unblessed;
-            $patron->delete;
+            subtest 'Koha::Object->delete' => sub {
 
-            {
-                my $p = Koha::Patron->new( $patron_data );
-                try {$r_us = $p->delete;} catch { $e_us = ref($_) };
+                plan tests => 6;
 
+                my ( $r_us, $e_us, $r_them, $e_them );
 
-                $p = $schema->resultset('Borrower')->new( $patron_data );
-                try {$r_them = $p->delete;} catch { $e_them = ref($_) };
+                # CASE 1 - Delete an existing patron
+                my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+                my $patron_data = $patron->unblessed;
+                $patron->delete;
 
-                is( $r_us, $r_them );
-                is( $e_us, $e_them ); # FIXME This is need adjustment, we want to throw a Koha::Exception
-            }
+                $patron = Koha::Patron->new( $patron_data )->store;
+                try {$r_us = $patron->delete;} catch { $e_us = $_ };
+                $patron = $schema->resultset('Borrower')->new( $patron_data )->update_or_insert;
+                try {$r_them = $patron->delete;} catch { $e_them = $_ };
+                ok( ref($r_us) && ref($r_them),
+                    'Successful delete should return the patron object' );
+                ok( !defined $e_us && !defined $e_them,
+                    'Successful delete should not raise an exception' );
 
-            {
-                try {
-                    $schema->storage->txn_do(
-                        sub {
-                            my $p = Koha::Patrons->find( $patron->borrowernumber );
-                            $r_us = $p->delete;
-                            $p->update( { force_fail => 'foo' } );
+                # CASE 2 - Delete a patron that is not in storage
+                try { $r_us   = $r_us->delete;   } catch { $e_us   = $_ };
+                try { $r_them = $r_them->delete; } catch { $e_them = $_ };
+                ok(
+                    defined $e_us && defined $e_them,
+                    'Delete a patron that is not in storage should raise an exception'
+                );
+                is( ref($e_us), 'DBIx::Class::Exception' )
+                  ; # FIXME This needs adjustement, we want to throw a Koha::Exception
+
+                # CASE 3 - Delete a patron that cannot be deleted (as a checkout)
+                $patron = Koha::Patron->new($patron_data)->store;
+                $builder->build_object(
+                    {
+                        class => 'Koha::Checkouts',
+                        value => { borrowernumber => $patron->borrowernumber }
+                    }
+                );
+                try { $r_us = $r_us->delete; } catch { $e_us = $_ };
+                $patron = $schema->resultset('Borrower')->find( $patron->borrowernumber );
+                try { $r_them = $r_them->delete; } catch { $e_them = $_ };
+                ok(
+                    defined $e_us && defined $e_them,
+                    'Delete a patron that cannot be deleted should raise an exception'
+                );
+                is( ref($e_us), 'DBIx::Class::Exception' )
+                  ; # FIXME This needs adjustement, we want to throw a Koha::Exception
+            };
+
+            subtest 'Koha::Objects->delete' => sub {
+
+                plan tests => 9;
+
+                my ( $r_us, $e_us, $r_them, $e_them );
+
+                # CASE 1 - Delete existing objects
+                my $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+                my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+                my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+                my $patrons = Koha::Patrons->search(
+                    {
+                        borrowernumber => {
+                            -in => [
+                                $patron_1->borrowernumber,
+                                $patron_2->borrowernumber,
+                                $patron_3->borrowernumber
+                            ]
                         }
-                    );
-                };
-                try {
-                    $schema->storage->txn_do(
-                        sub {
-                            my $p = $schema->resultset('City')->find( $patron->borrowernumber );
-                            $r_them = $p->delete;
-                            $p->update( { force_fail => 'foo' } );
+                    }
+                );
+
+                try { $r_us = $patrons->delete; } catch { $e_us = $_ };
+
+                $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patrons = $schema->resultset('Borrower')->search(
+                    {
+                        borrowernumber => {
+                            -in => [
+                                $patron_1->borrowernumber,
+                                $patron_2->borrowernumber,
+                                $patron_3->borrowernumber
+                            ]
                         }
-                    );
-                };
-                is( $r_us, $r_them );
-            }
+                    }
+                );
 
-            # TODO Test value of Koha::Object->delete when the row cannot be deleted
+                try { $r_them = $patrons->delete; } catch { $e_them = $_ };
 
-            # TODO Add tests for Koha::Objects->delete
+                ok( $r_us == 3 && $r_them == 3, '->delete should return the number of deleted patrons' );
+                ok (!defined($e_us) && !defined($e_them), '->delete should not raise exception if everything went well');
+
+                # CASE 2 - One of the patrons is not in storage
+                undef $_ for $r_us, $e_us, $r_them, $e_them;
+                $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patrons = Koha::Patrons->search(
+                    {
+                        borrowernumber => {
+                            -in => [
+                                $patron_1->borrowernumber,
+                                $patron_2->borrowernumber,
+                                $patron_3->borrowernumber
+                            ]
+                        }
+                    }
+                );
+
+                $patron_2->delete; # We delete one of the patron
+                try { $r_us = $patrons->delete; } catch { $e_us = $_ };
+
+                $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patrons = $schema->resultset('Borrower')->search(
+                    {
+                        borrowernumber => {
+                            -in => [
+                                $patron_1->borrowernumber,
+                                $patron_2->borrowernumber,
+                                $patron_3->borrowernumber
+                            ]
+                        }
+                    }
+                );
+
+                $patron_2->delete; # We delete one of the patron
+                try { $r_them = $patrons->delete; } catch { $e_them = $_ };
+
+                ok( $r_us == 2 && $r_them == 2, 'Delete patrons with one that was not in storage should delete the patrons' );
+                ok (!defined($e_us) && !defined($e_them), 'no exception should be raised if at least one patron was not in storage');
+
+                # CASE 3 - Delete a set of patrons with one that that cannot be deleted (as a checkout)
+                undef $_ for $r_us, $e_us, $r_them, $e_them;
+                $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patrons = Koha::Patrons->search(
+                    {
+                        borrowernumber => {
+                            -in => [
+                                $patron_1->borrowernumber,
+                                $patron_2->borrowernumber,
+                                $patron_3->borrowernumber
+                            ]
+                        }
+                    }
+                );
+
+                # Adding a checkout to patron_2
+                $builder->build_object(
+                    {
+                        class => 'Koha::Checkouts',
+                        value => { borrowernumber => $patron_2->borrowernumber }
+                    }
+                );
+
+                warning_like {
+                    try { $r_us = $patrons->delete; } catch { $e_us = $_ };
+                }
+                qr{DBD::mysql::st execute failed: Cannot delete or update a parent row: a foreign key constraint fails},
+                  "Foreign key constraint DBI error should be logged";
+                my $not_deleted_us = $patron_1->in_storage + $patron_2->in_storage + $patron_3->in_storage;
+
+                $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
+                $patrons = $schema->resultset('Borrower')->search(
+                    {
+                        borrowernumber => {
+                            -in => [
+                                $patron_1->borrowernumber,
+                                $patron_2->borrowernumber,
+                                $patron_3->borrowernumber
+                            ]
+                        }
+                    }
+                );
+
+                # Adding a checkout to patron_2
+                $builder->build_object(
+                    {
+                        class => 'Koha::Checkouts',
+                        value => { borrowernumber => $patron_2->borrowernumber }
+                    }
+                );
+
+                warning_like {
+                    try { $r_them = $patrons->delete; } catch { $e_them = $_ };
+                }
+                qr{DBD::mysql::st execute failed: Cannot delete or update a parent row: a foreign key constraint fails},
+                  "Foreign key constraint DBI error should be logged";
+
+                my $not_deleted_them = $patron_1->in_storage + $patron_2->in_storage + $patron_3->in_storage;
+                ok(
+                    defined $e_us && defined $e_them,
+                    'Delete patrons with one that cannot be deleted should raise an exception'
+                );
+                is( ref($e_us), 'DBIx::Class::Exception' )
+                  ; # FIXME This needs adjustement, we want to throw a Koha::Exception
+
+                ok($not_deleted_us == 3 && $not_deleted_them == 3, 'If one patron cannot be deleted, none should have been deleted');
+            };
         };
 
         $schema->storage->txn_rollback;
