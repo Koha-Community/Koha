@@ -455,8 +455,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '100', 'y', 0, 1, 'Хронологічний підзаголовок', 'Хронологічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '100', 'z', 0, 1, 'Географічний підзаголовок', 'Географічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '110', '', '', 'Заголовок — найменування організації', 'Заголовок — найменування організації', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '110', '', '', 'Заголовок — найменування організації', 'Заголовок — найменування організації', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '110', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '110', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -482,8 +482,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '110', 'y', 0, 1, 'Хронологічний підзаголовок', 'Хронологічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '110', 'z', 0, 1, 'Географічний підзаголовок', 'Географічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '111', '', '', 'Заголовок – назва заходу', 'Заголовок – назва заходу', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '111', '', '', 'Заголовок – назва заходу', 'Заголовок – назва заходу', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '111', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '111', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -508,8 +508,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '111', 'y', 0, 1, 'Хронологічний підзаголовок', 'Хронологічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '111', 'z', 0, 1, 'Географічний підзаголовок', 'Географічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '130', '', '', 'Заголовок — уніфікований заголовок', 'Заголовок — уніфікований заголовок', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '130', '', '', 'Заголовок — уніфікований заголовок', 'Заголовок — уніфікований заголовок', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '130', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '130', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -568,8 +568,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '143', 'r', 0, 0, 'Музичний ключ', 'Музичний ключ',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '143', 's', 0, 1, 'Версія', 'Версія',                         1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '148', '', '', 'HEADING--CHRONOLOGICAL TERM', 'HEADING--CHRONOLOGICAL TERM', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '148', '', '', 'HEADING--CHRONOLOGICAL TERM', 'HEADING--CHRONOLOGICAL TERM', 1,  NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '148', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '148', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -579,8 +579,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '148', 'y', 0, 1, 'Хронологічний підзаголовок', 'Хронологічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '148', 'z', 0, 1, 'Географічний підзаголовок', 'Географічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '150', '', '', 'Заголовок — тематичний термін', 'Заголовок — тематичний термін', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '150', '', '', 'Заголовок — тематичний термін', 'Заголовок — тематичний термін', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '150', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '150', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -591,8 +591,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '150', 'y', 0, 1, 'Хронологічний підзаголовок', 'Хронологічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '150', 'z', 0, 1, 'Географічний підзаголовок', 'Географічний підзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '151', '', '', 'Заголовок — географічна назва', 'Заголовок — географічна назва', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '151', '', '', 'Заголовок — географічна назва', 'Заголовок — географічна назва', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '151', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '151', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -624,8 +624,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '154', 'b', 0, 1, 'General explanatory index term--Succeeding level', 'General explanatory index term--Succeeding level', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '154', 'f', 0, 1, 'Schedule identification', 'Schedule identification', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '155', '', '', 'HEADING--GENRE/FORM TERM', 'HEADING--GENRE/FORM TERM', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '155', '', '', 'HEADING--GENRE/FORM TERM', 'HEADING--GENRE/FORM TERM', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '155', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '155', '8', 0, 1, 'Номер зв’язку та порядковий номер', 'Номер зв’язку та порядковий номер', 1, 0, '', NULL, NULL, 0, NULL, 0),

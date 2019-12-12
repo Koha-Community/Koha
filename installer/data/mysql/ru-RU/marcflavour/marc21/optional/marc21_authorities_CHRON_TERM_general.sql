@@ -337,8 +337,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', 'CHRON_TERM', '098', 'e', 0, 0, 'Feature heading', 'Feature heading', 0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'CHRON_TERM', '098', 'f', 0, 0, 'Filing suffix', 'Filing suffix', 0, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('CHRON_TERM', '148', '', '', 'HEADING--CHRONOLOGICAL TERM', 'HEADING--CHRONOLOGICAL TERM', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('CHRON_TERM', '148', '', '', 'HEADING--CHRONOLOGICAL TERM', 'HEADING--CHRONOLOGICAL TERM', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', 'CHRON_TERM', '148', '6', 0, 0, 'Элемент связи', 'Элемент связи', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', 'CHRON_TERM', '148', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),

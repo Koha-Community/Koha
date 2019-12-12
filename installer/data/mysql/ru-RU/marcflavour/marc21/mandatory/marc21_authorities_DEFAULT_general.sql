@@ -426,8 +426,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '098', 'e', 0, 0, 'Feature heading', 'Feature heading',       0, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '098', 'f', 0, 0, 'Filing suffix', 'Filing suffix',           0, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '100', '', '', 'Заголовок – имя лица', 'Заголовок – имя лица', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '100', '', '', 'Заголовок – имя лица', 'Заголовок – имя лица', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '100', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '100', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -455,8 +455,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '100', 'y', 0, 1, 'Хронологический подзаголовок', 'Хронологический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '100', 'z', 0, 1, 'Географический подзаголовок', 'Географический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '110', '', '', 'Заголовок – наименование организации', 'Заголовок – наименование организации', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '110', '', '', 'Заголовок – наименование организации', 'Заголовок – наименование организации', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '110', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '110', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -482,8 +482,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '110', 'y', 0, 1, 'Хронологический подзаголовок', 'Хронологический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '110', 'z', 0, 1, 'Географический подзаголовок', 'Географический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '111', '', '', 'Заголовок – наименование мероприятия', 'Заголовок – наименование мероприятия', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '111', '', '', 'Заголовок – наименование мероприятия', 'Заголовок – наименование мероприятия', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '111', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '111', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -508,8 +508,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '111', 'y', 0, 1, 'Хронологический подзаголовок', 'Хронологический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '111', 'z', 0, 1, 'Географический подзаголовок', 'Географический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '130', '', '', 'Заголовок – унифицированное заглавие', 'Заголовок – унифицированное заглавие', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '130', '', '', 'Заголовок – унифицированное заглавие', 'Заголовок – унифицированное заглавие', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '130', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '130', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -568,8 +568,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '143', 'r', 0, 0, 'Музыкальный ключ', 'Музыкальный ключ',     1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '143', 's', 0, 1, 'Версия', 'Версия',                         1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '148', '', '', 'HEADING--CHRONOLOGICAL TERM', 'HEADING--CHRONOLOGICAL TERM', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '148', '', '', 'HEADING--CHRONOLOGICAL TERM', 'HEADING--CHRONOLOGICAL TERM', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '148', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '148', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -591,8 +591,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '150', 'y', 0, 1, 'Хронологический подзаголовок', 'Хронологический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '150', 'z', 0, 1, 'Географический подзаголовок', 'Географический подзаголовок', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '151', '', '', 'Заголовок – географическое название', 'Заголовок – географическое название', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '151', '', '', 'Заголовок – географическое название', 'Заголовок – географическое название', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '151', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '151', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
@@ -624,8 +624,8 @@ INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '154', 'b', 0, 1, 'General explanatory index term--Succeeding level', 'General explanatory index term--Succeeding level', 1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '154', 'f', 0, 1, 'Schedule identification', 'Schedule identification', 1, 0, '', NULL, NULL, 0, NULL, 0);
 
-INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '155', '', '', 'HEADING--GENRE/FORM TERM', 'HEADING--GENRE/FORM TERM', NULL);
+INSERT INTO auth_tag_structure  (authtypecode, tagfield, mandatory, repeatable, liblibrarian, libopac, mandatory, authorised_value) VALUES
+ ('', '155', '', '', 'HEADING--GENRE/FORM TERM', 'HEADING--GENRE/FORM TERM', 1, NULL);
 INSERT INTO  auth_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, linkid) VALUES
  ('', '', '155', '6', 0, 0, 'Элемент связи', 'Элемент связи',           1, 0, '', NULL, NULL, 0, NULL, 0),
  ('', '', '155', '8', 0, 1, 'Номер связи и порядковый номер', 'Номер связи и порядковый номер', 1, 0, '', NULL, NULL, 0, NULL, 0),
