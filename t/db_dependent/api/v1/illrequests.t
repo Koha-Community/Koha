@@ -40,7 +40,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 24;
+    plan tests => 30;
 
     # Mock ILLBackend (as object)
     my $backend = Test::MockObject->new;
@@ -91,7 +91,8 @@ subtest 'list() tests' => sub {
             value => {
                 backend        => 'Mock',
                 branchcode     => $library->branchcode,
-                borrowernumber => $patron_1->borrowernumber
+                borrowernumber => $patron_1->borrowernumber,
+                status         => 'STATUS1',
             }
         }
     );
@@ -129,7 +130,8 @@ subtest 'list() tests' => sub {
             value => {
                 backend        => 'Mock',
                 branchcode     => $library->branchcode,
-                borrowernumber => $patron_2->borrowernumber
+                borrowernumber => $patron_2->borrowernumber,
+                status         => 'STATUS2',
             }
         }
     );
@@ -161,6 +163,21 @@ subtest 'list() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)->json_is( [ $response2 ] );
+
+    # Test the ILLHiddenRequestStatuses syspref
+    t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'STATUS1' );
+    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200)
+      ->json_is( [ $req2_formatted ] );
+
+    t::lib::Mocks::mock_preference( 'ILLHiddenRequestStatuses', 'STATUS2' );
+    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200)
+      ->json_is( [ $req_formatted ] );
 
     $schema->storage->txn_rollback;
 };

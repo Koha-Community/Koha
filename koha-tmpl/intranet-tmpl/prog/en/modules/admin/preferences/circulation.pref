@@ -894,7 +894,12 @@ Circulation:
                   yes: Check
                   no: Don't check
             - external sources for availability during the request process
-    Fines policy:
+        -
+            - "ILL statuses that are considered finished and should not be displayed in the ILL module: "
+            - pref: ILLHiddenRequestStatuses
+              class: multi
+            - (separated with |). If left empty, all ILL requests will be displayed.
+    Fines Policy:
         -
             - pref: finesCalendar
               type: choice

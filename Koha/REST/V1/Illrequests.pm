@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use C4::Context;
 use Koha::Illrequests;
 use Koha::Illrequestattributes;
 use Koha::Libraries;
@@ -54,9 +55,17 @@ sub list {
         delete $args->{embed};
     }
 
+    # Get the pipe-separated string of hidden ILL statuses
+    my $hidden_statuses_string = C4::Context->preference('ILLHiddenRequestStatuses');
+    # Turn into arrayref
+    my $hidden_statuses = [ split /\|/, $hidden_statuses_string ];
+
     # Get all requests
     # If necessary, only get those from a specified patron
     my @requests = Koha::Illrequests->search({
+        $hidden_statuses
+        ? ( status => { 'not in' => $hidden_statuses } )
+        : (),
         $args->{borrowernumber}
         ? ( borrowernumber => $args->{borrowernumber} )
         : ()
