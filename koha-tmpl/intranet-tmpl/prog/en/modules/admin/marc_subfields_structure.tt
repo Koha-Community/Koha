@@ -5,6 +5,7 @@
 <title>Koha &rsaquo; Administration &rsaquo;[% IF ( add_form ) %][% IF ( use_heading_flags_p ) %][% IF ( heading_edit_subfields_p ) %] MARC subfield structure &rsaquo; Edit MARC subfields constraints[% END %][% ELSE %] MARC subfield structure &rsaquo; [% action | html %][% END %][% END %]
 [% IF ( delete_confirm ) %] MARC subfield structure &rsaquo; Confirm deletion of subfield [% tagsubfield | html %][% END %][% IF ( delete_confirmed ) %] MARC subfield structure &rsaquo; Subfield deleted[% END %][% IF ( else ) %]MARC subfield structure[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<style>.constraints::after { content:  " "; clear: both; display:block; }</style>
 </head>
 
 <body id="admin_marc_subfields_structure" class="admin">
@@ -60,9 +61,9 @@
     [% FOREACH loo IN loop %] 
         <div class="constraints" id="sub[% loo.urisubfieldcode | html %]field">
 
-               <h3><a href="#basic[% loo.urisubfieldcode | uri %]">Basic constraints</a></h3>
-                    <div id="basic[% loo.urisubfieldcode | html %]">
+                    <div id="basic[% loo.urisubfieldcode | html %]" class="contraints">
                     <fieldset class="rows">
+                        <legend>Basic constraints</legend>
                 	<ol>
                 		[% IF ( subfieldcode == 0 || subfieldcode ) %] 
                 		<li><span class="label">Subfield code:</span> [% loo.subfieldcode | html %] <input type="hidden" name="tagsubfield" value="[% loo.subfieldcode | html %]" /></li>
@@ -114,9 +115,9 @@
                     </div>
 
 
-            <h3><a href="#advanced[% loo.urisubfieldcode | uri %]">Advanced constraints</a></h3>
-            <div id="advanced[% loo.urisubfieldcode | html %]">
+            <div id="advanced[% loo.urisubfieldcode | html %]" class="contraints">
             <fieldset class="rows">
+                <legend>Advanced constraints</legend>
                 <ol><li><label for="defaultvalue[% loo.row | html %]">Default value:</label>
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row | html %]" value="[% loo.defaultvalue | html %]" /></li>
 				<li><label for="maxlength[% loo.row | html %]">Max length:</label><input type="text" id="maxlength[% loo.row | html %]" name="maxlength" value="[% loo.maxlength | html %]" size="4" /> (see online help)</li>
@@ -161,9 +162,10 @@
 			</ol>
             </fieldset>
             </div>
-            <h3><a href="#oth[% loo.urisubfieldcode | uri %]">Other options (choose one)</a></h3>
-            <div id="oth[% loo.urisubfieldcode | html %]">
+
+            <div id="oth[% loo.urisubfieldcode | html %]" class="contraints">
             <fieldset class="rows">
+                <legend>Other options (choose one)</legend>
                     	<ol>
                             <li>
                                 <label for="authorised_value[% loo.row | html %]">Authorized value:</label>
