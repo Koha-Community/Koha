@@ -448,6 +448,8 @@ sub NewSuggestion {
 
     $suggestion->{suggesteddate} = dt_from_string unless $suggestion->{suggesteddate};
 
+    delete $suggestion->{branchcode} if $suggestion->{branchcode} eq '';
+
     my $suggestion_object = Koha::Suggestion->new( $suggestion )->store;
     my $suggestion_id = $suggestion_object->suggestionid;
 
