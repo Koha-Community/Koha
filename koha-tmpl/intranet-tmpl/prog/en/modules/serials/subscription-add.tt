@@ -61,6 +61,7 @@ fieldset.rows table { clear: none; margin: 0; }
                                     <label for="biblionumber" class="required">Record:</label>
                                     <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum | html %]" size="8" />
                                     (<input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
+                                    <span id="error_bib_not_exist"></span>
                                     <div class="hint">Subscriptions must be associated with a bibliographic record</div>
                                     <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
