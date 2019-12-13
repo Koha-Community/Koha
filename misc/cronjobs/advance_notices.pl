@@ -375,6 +375,7 @@ if ($digest_per_branch) {
             sth => $sth_digest,
             digests => $digests,
             letter_code => 'PREDUEDGST',
+            message_name => 'advance_notice',
             branchcode => $branchcode,
             get_item_info => sub {
                 my $params = shift;
@@ -393,6 +394,7 @@ if ($digest_per_branch) {
             digests => $due_digest,
             letter_code => 'DUEDGST',
             branchcode => $branchcode,
+            message_name => 'item_due',
             get_item_info => sub {
                 my $params = shift;
                 $params->{sth}->execute($params->{borrowernumber}, 0);
@@ -407,6 +409,7 @@ if ($digest_per_branch) {
         sth => $sth_digest,
         digests => $upcoming_digest,
         letter_code => 'PREDUEDGST',
+        message_name => 'advance_notice',
         get_item_info => sub {
             my $params = shift;
             $params->{sth}->execute($params->{borrowernumber},
@@ -421,6 +424,7 @@ if ($digest_per_branch) {
         sth => $sth_digest,
         digests => $due_digest,
         letter_code => 'DUEDGST',
+        message_name => 'item_due',
         get_item_info => sub {
             my $params = shift;
             $params->{sth}->execute($params->{borrowernumber}, 0);
@@ -549,7 +553,7 @@ sub send_digests {
             C4::Members::Messaging::GetMessagingPreferences(
                 {
                     borrowernumber => $borrowernumber,
-                    message_name   => 'advance_notice'
+                    message_name   => $params->{message_name}
                 }
             );
 
