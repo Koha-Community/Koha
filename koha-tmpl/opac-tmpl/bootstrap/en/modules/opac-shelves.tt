@@ -547,15 +547,14 @@
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                         <input type="hidden" name="modifyshelfcontents" value="1" />
                         <input type="submit" value="Remove selected items" id="remove-selected" class="btn btn-danger"/>
-                        </form>
                     [% ELSIF !itemsloop && can_manage_shelf %]
                         <form method="post" action="opac-shelves.pl">
                         <input type="hidden" name="op" value="delete" />
                         <input type="hidden" name="referer" value="list" />
                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]"/>
                         <input type="submit" class="btn btn-danger" value="Delete this list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
-                        </form>
                     [% END %]
+                            </form> <!-- / myform -->
 
                     [% IF op == 'add_form' OR op == 'edit_form' %]
                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
