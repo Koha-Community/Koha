@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use Koha::Database;
 
@@ -70,6 +70,14 @@ subtest 'invoice' => sub {
     my $invoice = $retrieved_adj->invoice;
     is( ref( $invoice ), 'Koha::Acquisition::Invoice', 'Koha::Acquisition::Invoice::Adjustment->invoice should return a Koha::Acquisition::Invoice' );
     is( $invoice->invoiceid, $retrieved_adj->invoiceid, 'Koha::Acquisition::Invoice::Adjustment->invoice should return the correct invoice' );
+};
+
+subtest 'fund' => sub {
+    plan tests => 2;
+
+    my $fund = $retrieved_adj->fund;
+    is( ref( $fund ), 'Koha::Acquisition::Fund', 'Koha::Acquisition::Invoice::Adjustment->fund should return a Koha::Acquisition::Fund' );
+    is( $fund->budget_id, $retrieved_adj->budget_id, 'Koha::Acquisition::Invoice::Adjustment->fund should return the correct fund ' );
 };
 
 $schema->storage->txn_rollback;

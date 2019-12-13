@@ -20,7 +20,8 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-use Koha::Acquisition::Invoice;
+use Koha::Acquisition::Invoices;
+use Koha::Acquisition::Funds;
 
 use base qw(Koha::Object);
 
@@ -46,6 +47,21 @@ sub invoice {
     my ( $self ) = @_;
     my $invoice_rs = $self->_result->invoiceid;
     return Koha::Acquisition::Invoice->_new_from_dbic( $invoice_rs );
+}
+
+=head3 fund
+
+my $fund = $adjustment->fund;
+
+Return the fund for this adjustment
+
+=cut
+
+sub fund {
+    my ( $self ) = @_;
+    my $fund_rs = $self->_result->budget;
+    return unless $fund_rs;
+    return Koha::Acquisition::Fund->_new_from_dbic( $fund_rs );
 }
 
 =head3 type
