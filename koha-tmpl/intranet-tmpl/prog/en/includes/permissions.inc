@@ -104,6 +104,11 @@
             Mark checkout notes as seen/not seen
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_accounts' -%]
+        <span class="sub_permission manage_accounts_subpermission">
+            Manage account debit and credit types
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_circ_rules' -%]
         <span class="sub_permission manage_circ_rules_subpermission">
             Manage circulation rules
