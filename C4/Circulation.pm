@@ -1544,6 +1544,25 @@ sub AddIssue {
                 $datedue = CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
             }
+
+            # Check if we need to use an exact due date set by the ILL module
+            if ( C4::Context->preference('ILLModule') ) {
+                # Check if there is an ILL connected with the biblio of the item we are issuing
+                my $ill_request = Koha::Illrequests->search({
+                    biblio_id => $item_object->biblionumber,
+                    borrowernumber => $borrower->{'borrowernumber'},
+                    completed => undef,
+                    date_due => { '!=', undef },
+                })->next;
+
+                if ( $ill_request and length( $ill_request->date_due ) > 0 ) {
+                    my $ill_dt = dt_from_string( $ill_request->date_due );
+                    $ill_dt->set_hour(23);
+                    $ill_dt->set_minute(59);
+                    $datedue = $ill_dt;
+                }
+            }
+
             $datedue->truncate( to => 'minute' );
 
             my $patron = Koha::Patrons->find( $borrower );
