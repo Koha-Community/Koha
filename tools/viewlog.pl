@@ -140,8 +140,8 @@ if ($do_it) {
         # Handle 'Modification log' from cataloguing
         my @itemnumbers = Koha::Items->search({ biblionumber => $object })->get_column('itemnumber');
         $search_params{'-or'} = [
-            { -and => { object => $object, info => { -like => 'biblio %' }}},
-            { -and => { object => \@itemnumbers, info => { -like => 'item %' }}},
+            { -and => { object => $object, info => { -like => 'biblio%' }}},
+            { -and => { object => \@itemnumbers, info => { -like => 'item%' }}},
         ];
     } else {
         $search_params{info} = $info if $info;
