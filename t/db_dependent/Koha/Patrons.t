@@ -36,6 +36,7 @@ use Koha::ActionLogs;
 use Koha::Holds;
 use Koha::Old::Holds;
 use Koha::Patrons;
+use Koha::Old::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patron::Relationship;
 use Koha::Database;
@@ -479,7 +480,7 @@ subtest "delete" => sub {
     );
 
     my $deleted = $retrieved_patron->delete;
-    is( $deleted, 1, 'Koha::Patron->delete should return 1 if the patron has been correctly deleted' );
+    is( ref($deleted), 'Koha::Patron', 'Koha::Patron->delete should return the deleted patron object if the patron has been correctly deleted' );
 
     is( Koha::Patrons->find( $patron->{borrowernumber} ), undef, 'Koha::Patron->delete should have deleted the patron' );
 
@@ -494,27 +495,18 @@ subtest "delete" => sub {
 };
 
 subtest 'Koha::Patrons->delete' => sub {
-    plan tests => 4;
-
-    my $mod_patron = Test::MockModule->new( 'Koha::Patron' );
-    my $moved_to_deleted = 0;
-    $mod_patron->mock( 'move_to_deleted', sub { $moved_to_deleted++; } );
+    plan tests => 3;
 
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
     my $id1 = $patron1->borrowernumber;
-    my $set = Koha::Patrons->search({ borrowernumber => { '>=' => $id1 }});
+    my $set = Koha::Patrons->search({ borrowernumber => { -in => [$patron1->borrowernumber, $patron2->borrowernumber]}});
     is( $set->count, 2, 'Two patrons found as expected' );
     is( $set->delete({ move => 1 }), 2, 'Two patrons deleted' );
-    is( $moved_to_deleted, 2, 'Patrons moved to deletedborrowers' );
+    my $deleted_patrons = Koha::Old::Patrons->search({ borrowernumber => { -in => [$patron1->borrowernumber, $patron2->borrowernumber]}});
+    is( $deleted_patrons->count, 2, 'Patrons moved to deletedborrowers' );
 
-    # Add again, test if we can raise an exception
-    $mod_patron->mock( 'delete', sub { return -1; } );
-    $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
-    $id1 = $patron1->borrowernumber;
-    $set = Koha::Patrons->search({ borrowernumber => { '>=' => $id1 }});
-    throws_ok { $set->delete } 'Koha::Exceptions::Patron::FailedDelete',
-        'Exception raised for deleting patron';
+    # See other tests in t/db_dependent/Koha/Objects.t
 };
 
 subtest 'add_enrolment_fee_if_needed' => sub {

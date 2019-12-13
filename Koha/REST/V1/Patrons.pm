@@ -276,7 +276,7 @@ sub delete {
         $patron = Koha::Patrons->find( $c->validation->param('patron_id') );
 
         # check if loans, reservations, debarrment, etc. before deletion!
-        my $res = $patron->delete;
+        $patron->delete;
         return $c->render( status => 200, openapi => {} );
     }
     catch {

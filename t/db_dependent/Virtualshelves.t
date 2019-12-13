@@ -84,7 +84,7 @@ subtest 'CRUD' => sub {
     is( $number_of_shelves, 2, 'Another patron should be able to create a shelf with an existing shelfname');
 
     my $is_deleted = Koha::Virtualshelves->find( $shelf->shelfnumber )->delete;
-    is( $is_deleted, 1, 'The shelf has been deleted correctly' );
+    ok( $is_deleted, 'The shelf has been deleted correctly' );
     $number_of_shelves = Koha::Virtualshelves->search->count;
     is( $number_of_shelves, 1, 'To be sure the shelf has been deleted' );
 
@@ -162,7 +162,7 @@ subtest 'Sharing' => sub {
     is( Koha::Virtualshelfshares->search->count, 2, 'Check that number of shares went down again' );
 
     # Remove the first accept
-    is( $shelf_to_share->remove_share( $share_with_me->{borrowernumber} ), 1, '1 share should have been removed if the shelf was shared with this patron' );
+    ok( $shelf_to_share->remove_share( $share_with_me->{borrowernumber} ), '1 share should have been removed if the shelf was shared with this patron' );
     $number_of_shelves_shared = Koha::Virtualshelfshares->search->count;
     is( $number_of_shelves_shared, 1, 'To be sure the share has been removed' );
 

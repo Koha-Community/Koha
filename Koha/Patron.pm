@@ -357,7 +357,6 @@ other lists are kept.
 sub delete {
     my ($self) = @_;
 
-    my $deleted;
     $self->_result->result_source->schema->txn_do(
         sub {
             # Cancel Patron's holds
@@ -382,12 +381,12 @@ sub delete {
             # FIXME Could be $patron->get_lists
             $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } );
 
-            $deleted = $self->SUPER::delete;
+            $self->SUPER::delete;
 
             logaction( "MEMBERS", "DELETE", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
         }
     );
-    return $deleted;
+    return $self;
 }
 
 
