@@ -52,12 +52,17 @@ function Check_page1() {
             return false;
         }
     }
-    if ($("#biblionumber").val().length == 0) {
+
+    var biblionumber = $("#biblionumber").val()
+    if ( biblionumber.length == 0 ) {
         alert( MSG_LINK_BIBLIO );
         return false;
     }
 
-    return true;
+    var bib_exists = $("input[name='title']").val().length;
+
+    if (!bib_exists) alert(_("Bibliographic record does not exist!"));
+    return bib_exists;
 }
 
 function Check_page2(){
@@ -694,4 +699,25 @@ $(document).ready(function() {
         e.preventDefault();
         hidePredcitionPatternTest();
     });
+
+    $("#biblionumber").on("change", function(){
+        var biblionumber = $(this).val();
+        $.ajax({
+            url: "/api/v1/biblios/" + biblionumber,
+            type: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+            contentType: "application/json",
+            success: function (biblio) {
+                $("input[name='title']").val(biblio['title']);
+                $("#error_bib_not_exist").html("");
+            },
+            error: function (x) {
+                $("input[name='title']").val('');
+                $("#error_bib_not_exist").html("This bibliographic record does not exist");
+            }
+        });
+    });
+
 });
