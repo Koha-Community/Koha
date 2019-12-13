@@ -27,6 +27,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use URI::Escape;
 use C4::Auth;
 use C4::Biblio;
 use C4::Breeding;
@@ -70,14 +71,16 @@ if ($query) {
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     my $builtquery;
+    my $query_cgi;
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     if ($QParser) {
         $builtquery = $query;
+        $query_cgi = "q=".uri_escape_utf8($query);
     } else {
-        ( undef, $builtquery, undef, undef, undef, undef, undef, undef, undef, undef ) =
+        ( undef, $builtquery, undef, $query_cgi, undef, undef, undef, undef, undef, undef ) =
           $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
     }
     # find results
@@ -101,7 +104,7 @@ if ($query) {
         total          => $total_hits,
         query          => $query,
         resultsloop    => \@newresults,
-        pagination_bar => pagination_bar( "/cgi-bin/koha/cataloguing/addbooks.pl?q=$query&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
+        pagination_bar => pagination_bar( "/cgi-bin/koha/cataloguing/addbooks.pl?$query_cgi&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
     );
 }
 
