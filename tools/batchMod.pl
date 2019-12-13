@@ -264,7 +264,6 @@ if ($op eq "show"){
             @contentlist = uniq @contentlist;
             # Note: adding lc for case insensitivity
             my %itemdata = map { lc($_->{barcode}) => $_->{itemnumber} } @{ Koha::Items->search({ barcode => \@contentlist }, { columns => [ 'itemnumber', 'barcode' ] } )->unblessed };
-            my @barcodes = grep { exists $itemdata{lc $_} } @contentlist;
             @itemnumbers = map { exists $itemdata{lc $_} ? $itemdata{lc $_} : () } @contentlist;
             @notfoundbarcodes = grep { !exists $itemdata{lc $_} } @contentlist;
         }
