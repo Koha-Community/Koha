@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    $( ".constraints" ).accordion();
     $('#subfieldtabs').tabs();
     $("input[id^='hidden_']").click(setHiddenValue);
     $("input[id^='hidden-']").each(function() {
