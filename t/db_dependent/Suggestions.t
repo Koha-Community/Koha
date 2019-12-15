@@ -125,6 +125,7 @@ my $my_suggestion_with_budget = {
     author        => 'my author 2',
     publishercode => 'my publishercode 2',
     suggestedby   => $borrowernumber,
+    branchcode    => '', # This should not fail be set to undef instead
     biblionumber  => $biblio_1->biblionumber,
     managedby     => '',
     manageddate   => '',
