@@ -351,14 +351,7 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 $template->param(patron_reason_loop=>$patron_reason_loop);
 
 #Budgets management
-my $budgets = [];
-if ($branchfilter) {
-    my $searchbudgets = { budget_branchcode => $branchfilter };
-    $budgets = GetBudgets($searchbudgets);
-} else {
-    $budgets = GetBudgets(undef);
-}
-
+my $budgets = GetBudgets;
 my @budgets_loop;
 foreach my $budget ( @{$budgets} ) {
     next unless (CanUserUseBudget($borrowernumber, $budget, $userflags));
