@@ -745,8 +745,8 @@
                       [% ELSE %]
                           <option value="__NONE__">None</option>
                       [% END %]
-                    [% FOREACH budgetid_loo IN budgetid_loop %]
-                        [% IF ( budgetid_loo.selected ) %] <option value="[% budgetid_loo.code | html %]" selected="selected">[% budgetid_loo.desc | html %]</option>[% ELSE %]<option value="[% budgetid_loo.code | html %]">[% budgetid_loo.desc | html %]</option>[% END %]
+                    [% FOREACH budgetsloo IN budgetsloop %]
+                        [% IF ( budgetsloo.selected ) %]<option value="[% budgetsloo.budget_id | html %]" selected="selected">[% budgetsloo.budget_name | html %]</option>[% ELSE %]<option value="[% budgetsloo.budget_id | html %]">[% budgetsloo.budget_name | html %]</option>[% END %]
                         [% END %]
                     </select></li>
                     <li><label for="branchcode">Library:</label>
