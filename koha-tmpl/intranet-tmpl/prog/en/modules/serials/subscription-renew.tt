@@ -48,7 +48,7 @@
      [% END %]
      [% IF CAN_user_serials_superserials %]
         [% FOREACH library IN libraries %]
-             <option value="[% library.branchcode %]"> [% library.branchname %] </option>
+             <option value="[% library.branchcode | html %]"> [% library.branchname | html %] </option>
         [% END %]
      [% END %]
 </select> (select a library)
