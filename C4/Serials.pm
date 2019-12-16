@@ -1469,15 +1469,25 @@ sub NewSubscription {
 
 =head2 ReNewSubscription
 
-ReNewSubscription($subscriptionid,$user,$startdate,$numberlength,$weeklength,$monthlength,$note)
+ReNewSubscription($params);
+
+$params is a hashref with the following keys: subscriptionid, user, startdate, numberlength, weeklength, monthlength, note, branchcode
 
 this function renew a subscription with values given on input args.
 
 =cut
 
 sub ReNewSubscription {
-    my ( $subscriptionid, $user, $startdate, $numberlength, $weeklength, $monthlength, $note, $branchcode ) = @_;
-    warn $note;
+    my ( $params ) = @_;
+    my $subscriptionid = $params->{subscriptionid};
+    my $user           = $params->{user};
+    my $startdate      = $params->{startdate};
+    my $numberlength   = $params->{numberlength};
+    my $weeklength     = $params->{weeklength};
+    my $monthlength    = $params->{monthlength};
+    my $note           = $params->{note};
+    my $branchcode     = $params->{branchcode};
+
     my $dbh          = C4::Context->dbh;
     my $subscription = GetSubscription($subscriptionid);
     my $query        = qq|

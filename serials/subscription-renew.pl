@@ -81,19 +81,30 @@ if ( $op eq "renew" ) {
     output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless $subscription;
     my $startdate = output_pref( { str => scalar $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
     ReNewSubscription(
-        $subscriptionid, $loggedinuser,
-        $startdate, scalar $query->param('numberlength'),
-        scalar $query->param('weeklength'), scalar $query->param('monthlength'),
-        scalar $query->param('note'), $branchcode
+        {
+            subscriptionid => $subscriptionid,
+            user           => $loggedinuser,
+            startdate      => $startdate,
+            numberlength   => scalar $query->param('numberlength'),
+            weeklength     => scalar $query->param('weeklength'),
+            monthlength    => scalar $query->param('monthlength'),
+            note           => scalar $query->param('note'),
+            branchcode     => $branchcode
+        }
     );
 } elsif ( $op eq 'multi_renew' ) {
     for my $subscriptionid ( @subscriptionids ) {
         my $subscription = GetSubscription( $subscriptionid );
         next unless $subscription;
         ReNewSubscription(
-            $subscriptionid, $loggedinuser,
-            $subscription->{enddate}, $subscription->{numberlength},
-            $subscription->{weeklength}, $subscription->{monthlength},
+            {
+                subscriptionid => $subscriptionid,
+                user           => $loggedinuser,
+                startdate      => $subscription->{enddate},
+                numberlength   => $subscription->{numberlength},
+                weeklength     => $subscription->{weeklength},
+                monthlength    => $subscription->{monthlength},
+            }
         );
     }
 } else {

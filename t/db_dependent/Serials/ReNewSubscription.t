@@ -84,7 +84,13 @@ my $subscriptionhistory = $builder->build({
 # Actual testing starts here!
 
 # Renew the subscription and check that enddate has not been set
-ReNewSubscription($subscription->{subscriptionid},'',"2016-01-01",'','',12,'');
+ReNewSubscription(
+    {
+        subscriptionid => $subscription->{subscriptionid},
+        startdate      => "2016-01-01",
+        monthlength    => 12
+    }
+);
 my $history = Koha::Subscription::Histories->find($subscription->{subscriptionid});
 
 is ( $history->histenddate(), undef, 'subscription history not empty after renewal');
