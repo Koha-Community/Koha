@@ -50,14 +50,25 @@ if ( ! C4::Context->preference('virtualshelves') ) {
     exit;
 }
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
-        template_name   => $template_name,
-        query           => $query,
-        type            => "opac",
-        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
-    });
+my $op = $query->param('op') || 'list';
+my ( $template, $loggedinuser, $cookie );
 
-my $op       = $query->param('op')       || 'list';
+if( $op eq 'view' || $op eq 'list' ){
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+            template_name   => $template_name,
+            query           => $query,
+            type            => "opac",
+            authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
+        });
+} else {
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+            template_name   => $template_name,
+            query           => $query,
+            type            => "opac",
+            authnotrequired => 0,
+        });
+}
+
 my $referer  = $query->param('referer')  || $op;
 my $category = $query->param('category') || 1;
 my ( $shelf, $shelfnumber, @messages );
