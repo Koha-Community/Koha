@@ -58,11 +58,13 @@ my $pattern = $builder->build({
     }
 });
 
+my $biblio = $builder->build_sample_biblio();
+
 # Create fake subscription, daily subscription, duration 12 months, issues startint at #100
 my $subscription = $builder->build({
     source => 'Subscription',
     value  => {
-        biblionumber    => 1,
+        biblionumber    => $biblio->biblionumber,
         startdate       => '2015-01-01',
         enddate         => '2015-12-31',
         aqbooksellerid  => 1,
@@ -75,6 +77,7 @@ my $subscription = $builder->build({
 my $subscriptionhistory = $builder->build({
     source => 'Subscriptionhistory',
     value  => {
+        biblionumber   => $biblio->biblionumber,
         subscriptionid => $subscription->{subscriptionid},
         histenddate    => undef,
         opacnote       => 'Testing',
@@ -82,7 +85,6 @@ my $subscriptionhistory = $builder->build({
 });
 
 # Actual testing starts here!
-
 # Renew the subscription and check that enddate has not been set
 ReNewSubscription(
     {
