@@ -143,7 +143,7 @@ __PACKAGE__->table("aqorders");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 rrp
@@ -271,18 +271,6 @@ __PACKAGE__->table("aqorders");
   data_type: 'tinyint'
   is_nullable: 1
 
-=head2 claims_count
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 1
-
-=head2 claimed_date
-
-  data_type: 'date'
-  datetime_undef_if_invalid: 1
-  is_nullable: 1
-
 =head2 subscriptionid
 
   data_type: 'integer'
@@ -371,7 +359,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "rrp",
@@ -416,10 +404,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "uncertainprice",
   { data_type => "tinyint", is_nullable => 1 },
-  "claims_count",
-  { data_type => "integer", default_value => 0, is_nullable => 1 },
-  "claimed_date",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "subscriptionid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "parent_ordernumber",
@@ -466,6 +450,21 @@ Related object: L<Koha::Schema::Result::AqorderUser>
 __PACKAGE__->has_many(
   "aqorder_users",
   "Koha::Schema::Result::AqorderUser",
+  { "foreign.ordernumber" => "self.ordernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 aqorders_claims
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AqordersClaim>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqorders_claims",
+  "Koha::Schema::Result::AqordersClaim",
   { "foreign.ordernumber" => "self.ordernumber" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -661,8 +660,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-08-31 11:51:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GQEXetlivZm7buQohl8m4A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-17 14:58:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:B/pTQKIu8guDBN3uLBkI6Q
 
 __PACKAGE__->belongs_to(
   "basket",
