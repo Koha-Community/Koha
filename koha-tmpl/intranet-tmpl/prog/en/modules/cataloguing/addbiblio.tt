@@ -26,8 +26,14 @@
         var $tabs = $('#addbibliotabs').tabs().bind('show.ui-tabs', function(e, ui) {
             $("#"+ui.panel.id+" input:eq(0)").focus();
         });
-        $( "ul.sortable_field", $tabs ).sortable();
-        $( "ul.sortable_subfield", $tabs ).sortable();
+        $( "ul.sortable_field", $tabs ).sortable({
+            axis: "y",
+            containment: $("#addbibliotabs")
+        });
+        $( "ul.sortable_subfield", $tabs ).sortable({
+            axis: "y",
+            containment: "parent"
+        });
 
         [% IF tab %]
             link = $("a[href='#[% tab | html %]']");

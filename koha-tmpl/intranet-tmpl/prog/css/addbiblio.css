@@ -26,16 +26,19 @@ ul li.tag, ul li.tag li.subfield_line {
     padding-left: 30px;
 }
 
-ul li.tag:before, ul li.tag li.subfield_line:before {
+ul li.tag::before,
+ul li.tag li.subfield_line::before {
+    color: #999;
+    cursor: move;
     position: absolute;
     font-family: 'FontAwesome';
     font-size: .8em;
     top: 0;
     left: 10px;
-    content: "\f047";
+    content: "\f0c9";
 }
 
-ul li.tag:before {
+ul li.tag::before {
     padding-top: 1.7em;
 }
 
