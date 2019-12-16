@@ -3204,8 +3204,6 @@ CREATE TABLE `aqorders` ( -- information related to the basket line items
   `sort1_authcat` varchar(10) default NULL,
   `sort2_authcat` varchar(10) default NULL,
   `uncertainprice` tinyint(1), -- was this price uncertain (1 for yes, 0 for no)
-  `claims_count` int(11) default 0, -- count of claim letters generated
-  `claimed_date` date default NULL, -- last date a claim was generated
   `subscriptionid` int(11) default NULL, -- links this order line to a subscription (subscription.subscriptionid)
   parent_ordernumber int(11) default NULL, -- ordernumber of parent order line, or same as ordernumber if no parent
   `orderstatus` varchar(16) default 'new', -- the current status for this line item. Can be 'new', 'ordered', 'partial', 'complete' or 'cancelled'
@@ -3270,6 +3268,18 @@ CREATE TABLE aqorders_transfers (
   CONSTRAINT aqorders_transfers_ordernumber_to FOREIGN KEY (ordernumber_to) REFERENCES aqorders (ordernumber) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table aqorders_claims
+--
+
+DROP TABLE IF EXISTS aqorders_claims;
+CREATE TABLE aqorders_claims (
+    id int(11) AUTO_INCREMENT,
+    ordernumber INT(11) NOT NULL,
+    claimed_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT aqorders_claims_ibfk_1 FOREIGN KEY (ordernumber) REFERENCES aqorders (ordernumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `transport_cost`
