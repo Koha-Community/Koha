@@ -20,6 +20,7 @@ package Koha::Acquisition::Basket;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::BasketGroups;
 use Koha::Patrons;
 
@@ -87,6 +88,56 @@ sub effective_create_items {
 
     return $self->create_items || C4::Context->preference('AcqCreateItem');
 }
+
+=head3 estimated_delivery_date
+
+my $estimated_delivery_date = $basket->estimated_delivery_date;
+
+Return the estimated delivery date for this basket.
+
+It is calculated adding the delivery time of the vendor to the close date of this basket.
+
+Return implicit undef if the basket is not closed, or the vendor does not have a delivery time.
+
+=cut
+
+sub estimated_delivery_date {
+    my ( $self ) = @_;
+    return unless $self->closedate and $self->bookseller->deliverytime;
+    return dt_from_string($self->closedate)->add( days => $self->bookseller->deliverytime);
+}
+
+=head3 late_since_days
+
+my $number_of_days_late = $basket->late_since_days;
+
+Return the number of days the basket is late.
+
+Return implicit undef if the basket is not closed.
+
+=cut
+
+sub late_since_days {
+    my ( $self ) = @_;
+    return unless $self->closedate;
+    return dt_from_string->delta_days(dt_from_string($self->closedate))->delta_days();
+}
+
+=head3 authorizer
+
+my $authorizer = $basket->authorizer;
+
+Returns the patron who authorized/created this basket.
+
+=cut
+
+sub authorizer {
+    my ($self) = @_;
+    # FIXME We should use a DBIC rs, but the FK is missing
+    return unless $self->authorisedby;
+    return scalar Koha::Patrons->find($self->authorisedby);
+}
+
 
 =head3 to_api
 

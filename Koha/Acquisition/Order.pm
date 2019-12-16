@@ -22,6 +22,7 @@ use Carp qw( croak );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
 use Koha::Acquisition::Invoices;
+use Koha::Acquisition::Order::Claims;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
@@ -237,6 +238,62 @@ sub biblio {
     my $biblio_rs= $self->_result->biblio;
     return unless $biblio_rs;
     return Koha::Biblio->_new_from_dbic( $biblio_rs );
+}
+
+=head3 claims
+
+    my $claims = $order->claims
+
+Return the claims history for this order
+
+=cut
+
+sub claims {
+    my ( $self ) = @_;
+    my $claims_rs = $self->_result->aqorders_claims;
+    return Koha::Acquisition::Order::Claims->_new_from_dbic( $claims_rs );
+}
+
+=head3 claim
+
+    my $claim = $order->claim
+
+Do claim for this order
+
+=cut
+
+sub claim {
+    my ( $self ) = @_;
+    my $claim_rs = $self->_result->create_related('aqorders_claims', {});
+    return Koha::Acquisition::Order::Claim->_new_from_dbic($claim_rs);
+}
+
+=head3 claims_count
+
+my $nb_of_claims = $order->claims_count;
+
+This is the equivalent of $order->claims->count. Keeping it for retrocompatibilty.
+
+=cut
+
+sub claims_count {
+    my ( $self ) = @_;
+    return $self->claims->count;
+}
+
+=head3 claimed_date
+
+my $last_claim_date = $order->claimed_date;
+
+This is the equivalent of $order->claims->last->claimed_on. Keeping it for retrocompatibilty.
+
+=cut
+
+sub claimed_date {
+    my ( $self ) = @_;
+    my $last_claim = $self->claims->last;
+    return unless $last_claim;
+    return $last_claim->claimed_on;
 }
 
 =head3 duplicate_to

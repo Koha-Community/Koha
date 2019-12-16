@@ -108,7 +108,7 @@ if ($op and $op eq "send_alert"){
     eval {
         $err = SendAlerts( 'claimacquisition', \@ordernums, $input->param("letter_code") );
         if ( not ref $err or not exists $err->{error} ) {
-            AddClaim ( $_ ) for @ordernums;
+            Koha::Acquisition::Orders->find($_)->claim() for @ordernums;
         }
     };
 
@@ -145,34 +145,32 @@ $template->param(SUPPLIER_LOOP => \@sloopy);
 $template->param(Supplier=>$supplierlist{$booksellerid}) if ($booksellerid);
 $template->param(booksellerid=>$booksellerid) if ($booksellerid);
 
-@parameters =
-  ( $delay, $booksellerid, $branch );
-if ($estimateddeliverydatefrom_dt) {
-    push @parameters, $estimateddeliverydatefrom_dt->ymd();
-}
-else {
-    push @parameters, undef;
-}
-if ($estimateddeliverydateto_dt) {
-    push @parameters, $estimateddeliverydateto_dt->ymd();
-}
-my @lateorders = GetLateOrders( @parameters );
-
-my $total;
-foreach (@lateorders){
-	$total += $_->{subtotal};
-}
+my $lateorders = Koha::Acquisition::Orders->filter_by_lates(
+    {
+        delay        => $delay,
+        booksellerid => $booksellerid,
+        (
+            $estimateddeliverydatefrom_dt
+            ? ( estimated_from => $estimateddeliverydatefrom_dt )
+            : ()
+        ),
+        (
+            $estimateddeliverydateto_dt
+            ? ( estimated_to => $estimateddeliverydateto_dt )
+            : ()
+        )
+    }
+);
 
 my $letters = GetLetters({ module => "claimacquisition" });
 
 $template->param(ERROR_LOOP => \@errors) if (@errors);
 $template->param(
-	lateorders => \@lateorders,
+    lateorders => $lateorders,
 	delay => $delay,
     letters => $letters,
     estimateddeliverydatefrom => $estimateddeliverydatefrom,
     estimateddeliverydateto   => $estimateddeliverydateto,
-	total => $total,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 );
 output_html_with_http_headers $input, $cookie, $template->output;

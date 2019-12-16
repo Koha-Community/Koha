@@ -524,6 +524,12 @@
                                 </span>
                               </p>
                             [% END %]
+                            [% SET claims = books_loo.order_object.claims %]
+                            [% IF claims.count %]
+                                <p>
+                                    This order has been claimed [% claims.count | html %] times. On [% FOR c IN claims %][% c.claimed_on | $KohaDates %][% UNLESS loop.last %], [% END %][% END %]
+                                </p>
+                            [% END %]
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]

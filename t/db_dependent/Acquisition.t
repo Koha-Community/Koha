@@ -391,16 +391,16 @@ is( scalar (@$search_orders), 0, "SearchOrders takes into account the biblionumb
 ok( GetBudgetByOrderNumber( $ordernumbers[0] )->{'budget_id'} eq $budgetid,
     "GetBudgetByOrderNumber returns expected budget" );
 
-my @lateorders = GetLateOrders(0);
-is( scalar grep ( $_->{basketno} eq $basketno, @lateorders ),
+my $lateorders = Koha::Acquisition::Orders->filter_by_lates({ delay => 0 });
+is( $lateorders->search({ 'me.basketno' => $basketno })->count,
     0, "GetLateOrders does not get orders from opened baskets" );
 C4::Acquisition::CloseBasket($basketno);
-@lateorders = GetLateOrders(0);
-isnt( scalar grep ( $_->{basketno} eq $basketno, @lateorders ),
+$lateorders = Koha::Acquisition::Orders->filter_by_lates({ delay => 0 });
+isnt( $lateorders->search({ 'me.basketno' => $basketno })->count,
     0, "GetLateOrders gets orders from closed baskets" );
-ok( !grep ( $_->{ordernumber} eq $ordernumbers[3], @lateorders ),
+is( $lateorders->search({ ordernumber => $ordernumbers[3] })->count, 0,
     "GetLateOrders does not get cancelled orders" );
-ok( !grep ( $_->{ordernumber} eq $ordernumbers[4], @lateorders ),
+is( $lateorders->search({ ordernumber => $ordernumbers[4] })->count, 0,
     "GetLateOrders does not get received orders" );
 
 $search_orders = SearchOrders({
@@ -415,13 +415,12 @@ is( scalar (@$search_orders), 4, "SearchOrders with pending and ordered params g
 # Test AddClaim
 #
 
-my $order = $lateorders[0];
-AddClaim( $order->{ordernumber} );
-my $neworder = GetOrder( $order->{ordernumber} );
+my $order = $lateorders->next;
+$order->claim();
 is(
-    $neworder->{claimed_date},
+    output_pref({ str => $order->claimed_date, dateformat => 'iso', dateonly => 1 }),
     strftime( "%Y-%m-%d", localtime(time) ),
-    "AddClaim : Check claimed_date"
+    "Koha::Acquisition::Order->claim: Check claimed_date"
 );
 
 my $order2 = Koha::Acquisition::Orders->find( $ordernumbers[1] )->unblessed;
@@ -449,7 +448,7 @@ is(
     "ModReceiveOrder only changes the supplied orders internal notes"
 );
 
-$neworder = GetOrder($new_ordernumber);
+my $neworder = GetOrder($new_ordernumber);
 is( $neworder->{'quantity'}, 2, '2 items on new order' );
 is( $neworder->{'quantityreceived'},
     2, 'Splitting up order received items on new order' );

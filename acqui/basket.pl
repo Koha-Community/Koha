@@ -498,6 +498,7 @@ sub get_order_infos {
         $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
         $line{holds}                = $holds_count;
         $line{holds_on_order}       = $itemholds?$itemholds:$holds_count if $line{left_holds_on_order};
+        $line{order_object}         = $order;
     }
 
 

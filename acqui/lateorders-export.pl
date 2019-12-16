@@ -36,6 +36,8 @@ my @ordernumbers = $input->multi_param('ordernumber');
 my @orders;
 for my $ordernumber ( @ordernumbers ) {
     my $order = GetOrder $ordernumber;
+    my $order_object = Koha::Acquisition::Orders->find($ordernumber);
+    my $claims = $order_object->claims;
     push @orders, {
             orderdate => $order->{orderdate},
             latesince => $order->{latesince},
@@ -51,8 +53,8 @@ for my $ordernumber ( @ordernumbers ) {
             budget => $order->{budget},
             basketname => $order->{basketname},
             basketno => $order->{basketno},
-            claims_count => $order->{claims_count},
-            claimed_date => $order->{claimed_date},
+            claims_count => $claims->count,
+            claimed_date => $claims->count ? $claims->last->claimed_on : undef,
             internalnote => $order->{order_internalnote},
             vendornote   => $order->{order_vendornote},
             isbn => $order->{isbn},

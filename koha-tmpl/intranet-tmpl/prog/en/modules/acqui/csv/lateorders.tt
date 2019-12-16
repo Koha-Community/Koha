@@ -6,14 +6,14 @@
 [%- INCLUDE empty_line.inc -%]
 
 [%- FOREACH o IN orders -%]
-"[% o.orderdate | html %] ([% o.latesince | html %] days)"[%- delimiter | html -%]
+"[% o.orderdate | $KohaDates %] ([% o.latesince | html %] days)"[%- delimiter | html -%]
 "[% o.estimateddeliverydate | $KohaDates %]"[%- delimiter | html -%]
 "[% o.supplier (o.supplierid) | html %]"[%- delimiter | html -%]
 "[% o.title | html %] [% IF o.author %]Author: [% o.author | html %].[% END %][% IF o.publisher %]Published by: [% o.publisher | html %].[% END %]"[%- delimiter | html -%]
 "[% o.unitpricesupplier | html %] x [% o.quantity_to_receive | html %] = [% o.subtotal | html %] ([% o.budget | html %])"[%- delimiter | html -%]
 "[% o.basketname | html %] ([% o.basketno | html %])"[%- delimiter | html -%]
 "[% o.claims_count | html %]"[%- delimiter | html -%]
-"[% o.claimed_date | html %]"[%- delimiter | html -%]
+"[% o.claimed_date | $KohaDates %]"[%- delimiter | html -%]
 "[% o.internalnote | html %]"[%- delimiter | html -%]
 "[% o.vendornote | html %]"[%- delimiter | html -%]
 "[% o.isbn | html %]"

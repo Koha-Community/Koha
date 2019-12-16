@@ -17,11 +17,11 @@
                     </li>
                     <li>
                         <span class="label">Claims count: </span>
-                        [% order.claims_count | html %]
+                        [% order.claims.count | html %]
                     </li>
                     <li>
                         <span class="label">Last claim date: </span>
-                        [% order.claimed_date | html %]
+                        [% order.claims.last.claimed_on | html %]
                     </li>
             </ol>
           </fieldset>

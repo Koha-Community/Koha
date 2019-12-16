@@ -1222,8 +1222,6 @@ sub GetOrder {
                 biblioitems.publishercode,
                 aqorders.rrp              AS unitpricesupplier,
                 aqorders.ecost            AS unitpricelib,
-                aqorders.claims_count     AS claims_count,
-                aqorders.claimed_date     AS claimed_date,
                 aqbudgets.budget_name     AS budget,
                 aqbooksellers.name        AS supplier,
                 aqbooksellers.id          AS supplierid,
