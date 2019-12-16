@@ -20245,6 +20245,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17831 - Remove non-existing bibliosubject.subject from frameworks)\n";
 }
 
+$DBversion = '19.12.00.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET
+        variable = 'AllowItemsOnHoldCheckoutSIP',
+        explanation = 'Do not generate RESERVE_WAITING and RESERVED warning when checking out items reserved to someone else via SIP. This allows self checkouts for those items.'
+        WHERE variable = 'AllowItemsOnHoldCheckout'
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23233 - Rename AllowItemsOnHoldCheckout syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
