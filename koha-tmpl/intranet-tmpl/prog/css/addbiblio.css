@@ -15,7 +15,7 @@ div#toolbar {
     margin: .3em 0;
 }
 
-ul.sortable_field, ul.sortable_subfield {
+.ui-tabs-panel ul {
     margin-bottom: 0;
     padding-left: 0;
 }
@@ -26,7 +26,16 @@ ul li.tag, ul li.tag li.subfield_line {
     padding-left: 30px;
 }
 
-ul li.tag::before,
+ul li.tag::before {
+    position: absolute;
+    font-size: .8em;
+    top: 0;
+    left: 10px;
+    content: " ";
+}
+
+
+ul li.tag.sortable_tag::before,
 ul li.tag li.subfield_line::before {
     color: #999;
     cursor: move;
