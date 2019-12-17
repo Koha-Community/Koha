@@ -386,7 +386,7 @@ sub mocking_systempreferences_to_a_set_value {
         AgeRestrictionOverride
         AllFinesNeedOverride
         AllowFineOverride
-        AllowItemsOnHoldCheckout
+        AllowItemsOnHoldCheckoutSIP
         AllowItemsOnHoldCheckoutSCO
         AllowNotForLoanOverride
         AllowRenewalLimitOverride
