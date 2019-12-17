@@ -26,7 +26,7 @@
                 <div class="span10">
                     <div id="recordedbooks-results-content" class="maincontent searchresults">
                         <h1>RecordedBooks search for '[% q | html %]'</h1>
-                            [% UNLESS ( loggedinusername ) %]
+                            [% UNLESS ( logged_in_user ) %]
                                  <h3 class="rb_login">Sign in to view availability and checkout items or place holds</h3>
                             [% END %]
 
@@ -140,6 +140,10 @@ function search( page ) {
 
         if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
 
+        if( KOHA.RecordedBooks.is_identified() == false ){
+            $("#breadcrumbs").before('<h3 class="rb_register"><a href="https://[% Koha.Preference('RecordedBooksDomain') %]">To see availability you must register for RecordedBooks using your cardnumber and the email associated with your Koha account</a></h3>');
+        }
+
     } );
 }
 
@@ -153,13 +157,10 @@ $( document ).ready( function() {
         return false;
     });
 
-    [% IF ( loggedinusername ) %]
+    [% IF ( logged_in_user ) %]
     KOHA.RecordedBooks.with_account_details("#breadcrumbs", function() {
         search( 1 );
     });
-    if( KOHA.RecordedBooks.is_identified() == 'false' ){
-        $("#breadcrumbs").before('<h3 class="rb_register"><a href="https://[% Koha.Preference('RecordedBooksDomain') %]">To see availability you must register for RecordedBooks using your cardnumber and the email associated with your Koha account</a></h3>');
-    }
     [% ELSE %]
         search( 1 );
     [% END %]
