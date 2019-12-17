@@ -674,9 +674,17 @@
                                         </ul>
                                     [% END %]
                                     [% previous = innerloo.tag %]
-                                    <ul class="sortable_field">
+                                    [% IF ( innerloo.repeatable ) %]
+                                        <ul class="sortable_field">
+                                    [% ELSE %]
+                                        <ul>
+                                    [% END %]
                                 [% END %]
-                                    <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                    [% IF ( innerloo.repeatable ) %]
+                                        <li class="tag sortable_tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                    [% ELSE %]
+                                        <li class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+                                    [% END %]
                                         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
                                             [% IF advancedMARCEditor %]
                                                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
