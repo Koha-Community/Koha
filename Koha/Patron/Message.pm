@@ -49,9 +49,9 @@ sub store {
               and $self->message_type
               and $self->branchcode;
 
-    unless (defined $self->manager_id) {
+    unless ( defined $self->manager_id ) {
         my $userenv = C4::Context->userenv;
-        $self->manager_id( $userenv ? $userenv->{number} : undef);
+        $self->manager_id( $userenv ? $userenv->{number} : undef );
     }
 
     C4::Log::logaction( "MEMBERS", "ADDCIRCMESSAGE", $self->borrowernumber, $self->message )
