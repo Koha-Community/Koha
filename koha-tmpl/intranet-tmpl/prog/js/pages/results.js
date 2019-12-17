@@ -104,7 +104,7 @@ $(document).ready(function() {
 
     if( SEARCH_RESULTS ){
         var browser = KOHA.browser( search_result.searchid, parseInt( biblionumber, 10));
-        browser.create( search_result.first_result_number, search_result.query_cgi, search_result.limit_cgi, search_result.sort_cgi, new_results_browser, search_result.total );
+        browser.create( search_result.first_result_number, search_result.query_cgi, search_result.limit_cgi, search_result.sort_by, new_results_browser, search_result.total );
     }
 
     if( search_result.gotoPage && search_result.gotoNumber){
@@ -245,7 +245,7 @@ function browse_selection () {
     var bibnums = getContextBiblioNumbers();
     if ( bibnums && bibnums.length > 0 ) {
         var browser = KOHA.browser('', parseInt( biblionumber, 10));
-        browser.create(1, search_result.query_cgi, search_result.limit_cgi, search_result.sort_cgi, bibnums, bibnums.length);
+        browser.create(1, search_result.query_cgi, search_result.limit_cgi, search_result.sort_by, bibnums, bibnums.length);
         window.location = '/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + bibnums[0] + '&searchid='+browser.searchid;
     } else {
         alert(MSG_NO_ITEM_SELECTED);
