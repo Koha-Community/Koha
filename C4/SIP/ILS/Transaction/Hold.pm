@@ -86,14 +86,10 @@ sub drop_hold {
 		$self->ok(0);
 		return $self;
 	}
+
     my $item = Koha::Items->find({ barcode => $self->{item}->id });
-    my $holds = Koha::Holds->search(
-        {
-            biblionumber   => $item->biblionumber,
-            itemnumber     => $item->itemnumber,
-            borrowernumber => $patron->borrowernumber
-        }
-    );
+    my $holds = $item->holds->search({ borrowernumber => $patron->borrowernumber });
+
     return $self unless $holds->count;
 
     $holds->next->cancel;
