@@ -204,6 +204,8 @@ else {
     $session->clear('auto_renew');
 }
 
+$template->param( auto_renew => $session->param('auto_renew') );
+
 my ($datedue,$invalidduedate);
 
 my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
@@ -427,7 +429,6 @@ if (@$barcodes) {
                 $template_params->{getTitleMessageIteminfo} = $biblio->title;
                 $template_params->{getBarcodeMessageIteminfo} = $item->barcode;
                 $template_params->{NEEDSCONFIRMATION} = 1;
-                $template_params->{auto_renew} = $session->param('auto_renew');
                 $confirm_required = 1;
             }
         }
