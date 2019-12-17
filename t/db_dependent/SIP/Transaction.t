@@ -140,29 +140,25 @@ subtest "FeePayment->pay tests" => sub {
 subtest cancel_hold => sub {
     plan tests => 7;
 
-    my $category = $builder->build({ source => 'Category', value => { category_type => 'A' }});
-    my $branch   = $builder->build({ source => 'Branch' });
-    my $borrower = $builder->build({ source => 'Borrower', value =>{
-        branchcode => $branch->{branchcode},
-        categorycode=>$category->{categorycode}
+    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
         }
-    });
-    t::lib::Mocks::mock_userenv({ branchcode => $branch->{branchcode}, flags => 1 });
+    );
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
 
-    my $itype = $builder->build({ source => 'Itemtype', value =>{notforloan=>0} });
-    my $biblio = $builder->build_sample_biblio();
     my $item = $builder->build_sample_item({
-        homebranch    => $branch->{branchcode},
-        holdingbranch => $branch->{branchcode},
-        biblionumber  => $biblio->biblionumber,
-        itype         => $itype->{itemtype},
-        notforloan       => 0,
+        library       => $library->branchcode,
     });
 
     Koha::IssuingRule->new({
-        categorycode     => $borrower->{categorycode},
-        itemtype         => $itype->{itemtype},
-        branchcode       => $branch->{branchcode},
+        categorycode     => $patron->categorycode,
+        itemtype         => $item->effective_itemtype,
+        branchcode       => $library->branchcode,
         onshelfholds     => 1,
         reservesallowed  => 3,
         holds_per_record => 3,
@@ -170,18 +166,21 @@ subtest cancel_hold => sub {
         lengthunit       => 'days',
     })->store;
 
-    my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->biblionumber,undef,undef,undef,undef,undef,undef,$item->itemnumber);
-    is( $biblio->holds->count(), 1, "Hold was placed on bib");
+    my $reserve1 =
+      AddReserve( $library->branchcode, $patron->borrowernumber,
+        $item->biblio->biblionumber,
+        undef, undef, undef, undef, undef, undef, $item->itemnumber );
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
     is( $item->holds->count(),1,"Hold was placed on specific item");
 
-    my $sip_patron = C4::SIP::ILS::Patron->new( $borrower->{cardnumber} );
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
     my $sip_item   = C4::SIP::ILS::Item->new( $item->barcode );
     my $transaction = C4::SIP::ILS::Transaction::Hold->new();
     is( ref $transaction, "C4::SIP::ILS::Transaction::Hold", "New transaction created" );
     is( $transaction->patron( $sip_patron ), $sip_patron, "Patron assigned to transaction" );
     is( $transaction->item( $sip_item ), $sip_item, "Item assigned to transaction" );
     my $hold = $transaction->drop_hold();
-    is( $biblio->holds->count(), 0, "Bib has 0 holds remaining");
+    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
     is( $item->holds->count(), 0,  "Item has 0 holds remaining");
 };
 
