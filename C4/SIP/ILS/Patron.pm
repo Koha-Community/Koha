@@ -125,7 +125,7 @@ sub new {
     if ( $circ_blocked ) {
         $ilspatron{screen_msg} .= " -- " . "Patron has overdues";
     }
-    for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
+    for (qw(EXPIRED CHARGES CREDITS GNA LOST NOTES)) {
         ($flags->{$_}) or next;
         if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
             $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};  # show all but internal NOTES
