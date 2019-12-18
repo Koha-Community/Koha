@@ -1305,6 +1305,7 @@ CREATE TABLE `borrower_modifications` (
   `privacy` int(11) DEFAULT NULL,
   `extended_attributes` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `gdpr_proc_consent` datetime DEFAULT NULL COMMENT 'data processing consent',
+  `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
   PRIMARY KEY (`verification_token`(191),`borrowernumber`),
   KEY `verification_token` (`verification_token`(191)),
   KEY `borrowernumber` (`borrowernumber`)
@@ -1431,6 +1432,7 @@ CREATE TABLE `borrowers` (
   `overdrive_auth_token` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'persist OverDrive auth token',
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',
+  `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
   PRIMARY KEY (`borrowernumber`),
   UNIQUE KEY `cardnumber` (`cardnumber`),
   UNIQUE KEY `userid` (`userid`),
@@ -2437,6 +2439,7 @@ CREATE TABLE `deletedborrowers` (
   `overdrive_auth_token` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'persist OverDrive auth token',
   `anonymized` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'flag for data anonymization',
   `autorenew_checkouts` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'flag for allowing auto-renewal',
+  `primary_contact_method` varchar(45) DEFAULT NULL COMMENT 'useful for reporting purposes',
   KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)

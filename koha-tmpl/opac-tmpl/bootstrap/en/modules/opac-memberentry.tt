@@ -578,6 +578,65 @@
                                                 <div class="required_label [% required.fax | html %]">Required</div>
                                             </li>
                                         [% END %]
+
+                                        [% UNLESS hidden.defined('primary_contact_method') %]
+                                            <li>
+                                                [% IF ( mandatory.defined('primary_contact_method') ) %]
+                                                    <label for="borrower_primary_contact_method" class="required">Main contact method:</label>
+                                                [% ELSE %]
+                                                    <label for="borrower_primary_contact_method">Main contact method:</label>
+                                                [% END %]
+
+                                                <select id="borrower_primary_contact_method" name="borrower_primary_contact_method">
+                                                    <option value=""></option>
+                                                    [% FOREACH contactprincipalloo IN contactprincipalloop %]
+                                                        [% IF ( contactprincipalloo.currentis_phone ) %]
+                                                            [% IF ( borrower.primary_contact_method == 'phone' ) %]
+                                                                <option value="phone" selected="selected">Primary phone</option>
+                                                            [% ELSE %]
+                                                                <option value="phone">Primary phone</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( contactprincipalloo.currentis_phonepro ) %]
+                                                            [% IF ( borrower.primary_contact_method == 'phonepro' ) %]
+                                                                <option value="phonepro" selected="selected">Secondary phone</option>
+                                                            [% ELSE %]
+                                                                <option value="phonepro">Secondary phone</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( contactprincipalloo.currentis_mobile ) %]
+                                                            [% IF ( borrower.primary_contact_method == 'mobile' ) %]
+                                                                <option value="mobile" selected="selected">Other phone</option>
+                                                            [% ELSE %]
+                                                                <option value="mobile">Other phone</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( contactprincipalloo.currentis_email ) %]
+                                                            [% IF ( borrower.primary_contact_method == 'email' ) %]
+                                                                <option value="email" selected="selected">Primary email</option>
+                                                            [% ELSE %]
+                                                                <option value="email">Primary email</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( contactprincipalloo.currentis_emailpro ) %]
+                                                            [% IF ( borrower.primary_contact_method == 'emailpro' ) %]
+                                                                <option value="emailpro" selected="selected">Secondary email</option>
+                                                            [% ELSE %]
+                                                                <option value="emailpro">Secondary email</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                        [% IF ( contactprincipalloo.currentis_fax ) %]
+                                                            [% IF ( borrower.primary_contact_method == 'fax' ) %]
+                                                                <option value="fax" selected="selected">Fax</option>
+                                                            [% ELSE %]
+                                                                <option value="fax">Fax</option>
+                                                            [% END %]
+                                                        [% END %]
+                                                    [% END %]
+                                                </select>
+                                                [% IF ( mandatory.defined('primary_contact_method') ) %]<span class="required">Required</span>[% END %]
+                                            </li>
+                                        [% END %]
                                     </ol>
                                 </fieldset>
                             </div> <!-- /.col -->

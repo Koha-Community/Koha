@@ -102,6 +102,20 @@ $template->param(
     defaultCategory  => $defaultCategory,
 );
 
+my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
+my @field_check=split(/\|/,$check_BorrowerMandatoryField);
+my @contactprincipalloop;
+my @fieldArray = qw(phone phonepro mobile email emailpro fax);
+foreach my $field (@fieldArray) {
+   if ( !(grep { $field eq $_ } @field_check)){
+        push @contactprincipalloop,{
+            'currentis_' . $field => 1
+        };
+    }
+}
+
+$template->param('contactprincipalloop' => \@contactprincipalloop);
+
 my $attributes = ParsePatronAttributes($borrowernumber,$cgi);
 my $conflicting_attribute = 0;
 
