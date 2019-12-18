@@ -578,7 +578,11 @@ sub send_digests {
                     branchcode     => $branchcode,
                     message_transport_type => $transport
                 }
-            ) || warn "no letter of type '$params->{letter_type}' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
+            );
+            unless ( $letter ){
+                warn "no letter of type '$params->{letter_type}' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
+                next;
+            }
             push @letters, $letter if $letter;
         }
 
