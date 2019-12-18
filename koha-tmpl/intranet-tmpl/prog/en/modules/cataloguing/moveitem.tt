@@ -52,7 +52,7 @@
 
 	[% ELSE %]
 	    [% IF ( success ) %]
-            [% IF from_biblio.items.count == 0 %]
+            [% IF from_biblio.items.count == 0 && CAN_user_editcatalogue_edit_catalogue %]
                 <div class="dialog alert" id="del-bib-alert">
                     <div id="del-bib-action">
                         The record <em><a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% from_biblio.id | html %]">[% from_biblio.title | html %]</a></em> has [% from_biblio.items.count | html %] attached items.
