@@ -282,7 +282,7 @@ $(document).ready(function() {
                               + "#"
                               + oObj.itemnumber
                               + "'>"
-                              + oObj.barcode.escapeHtml()
+                              + (oObj.barcode ? oObj.barcode.escapeHtml() : "")
                               + "</a>"
                               + onsite_checkout
 
@@ -637,7 +637,7 @@ $(document).ready(function() {
                                   + "#"
                                   + oObj.itemnumber
                                   + "'>"
-                                  + oObj.barcode.escapeHtml()
+                                  + (oObj.barcode ? oObj.barcode.escapeHtml() : "")
                                   + "</a>"
                                   + onsite_checkout;
 
