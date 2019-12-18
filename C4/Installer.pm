@@ -491,6 +491,9 @@ sub load_sql {
                 }
             };
         }
+        if ($@){
+            warn "Something went wrong loading file $filename ($@)";
+        }
     };
     #   errors thrown while loading installer data should be logged
     if( $dup_stderr ) {
