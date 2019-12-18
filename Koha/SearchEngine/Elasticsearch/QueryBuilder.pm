@@ -355,7 +355,7 @@ sub build_authorities_query {
                  }
              };
     if ( $search->{authtypecode} ) {
-        $query->{query}->{bool}->{filter} = { term => { 'authtype' => lc $search->{authtypecode} } };
+        $query->{query}->{bool}->{filter} = { term => { 'authtype.raw' => $search->{authtypecode} } };
     }
 
     my %s;
