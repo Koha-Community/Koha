@@ -110,6 +110,15 @@ DELETESQL
         }
     });
 
+    #Adding a second preference for a notice that isn't defined, should just be skipped
+    my $borrower_message_transport_preference_1 = $builder->build({
+        source => 'BorrowerMessageTransportPreference',
+        value => {
+            borrower_message_preference_id => $borrower_message_preference->{borrower_message_preference_id},
+            message_transport_type => 'phone'
+        }
+    });
+
     my $biblio = $builder->build({
         source => 'Biblio',
     });
