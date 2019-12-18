@@ -1623,48 +1623,50 @@ sub CancelReceipt {
     } else {
         # The order line has a parent, increase parent quantity and delete
         # the order line.
-        $query = qq{
-            SELECT quantity, datereceived
-            FROM aqorders
-            WHERE ordernumber = ?
-        };
-        $sth = $dbh->prepare($query);
-        $sth->execute($parent_ordernumber);
-        my $parent_order = $sth->fetchrow_hashref;
-        unless($parent_order) {
-            warn "Parent order $parent_ordernumber does not exist.";
-            return;
-        }
-        if($parent_order->{'datereceived'}) {
-            warn "CancelReceipt: parent order is received.".
-                " Can't cancel receipt.";
-            return;
-        }
-        $query = qq{
-            UPDATE aqorders
-            SET quantity = ?,
-                orderstatus = 'ordered'
-            WHERE ordernumber = ?
-        };
-        $sth = $dbh->prepare($query);
-        my $rv = $sth->execute(
-            $order->{'quantity'} + $parent_order->{'quantity'},
-            $parent_ordernumber
-        );
-        unless($rv) {
-            warn "Cannot update parent order line, so do not cancel".
-                " receipt";
-            return;
-        }
+        unless ( $order_obj->basket->is_standing ) {
+            $query = qq{
+                SELECT quantity, datereceived
+                FROM aqorders
+                WHERE ordernumber = ?
+            };
+            $sth = $dbh->prepare($query);
+            $sth->execute($parent_ordernumber);
+            my $parent_order = $sth->fetchrow_hashref;
+            unless($parent_order) {
+                warn "Parent order $parent_ordernumber does not exist.";
+                return;
+            }
+            if($parent_order->{'datereceived'}) {
+                warn "CancelReceipt: parent order is received.".
+                    " Can't cancel receipt.";
+                return;
+            }
+            $query = qq{
+                UPDATE aqorders
+                SET quantity = ?,
+                    orderstatus = 'ordered'
+                WHERE ordernumber = ?
+            };
+            $sth = $dbh->prepare($query);
+            my $rv = $sth->execute(
+                $order->{'quantity'} + $parent_order->{'quantity'},
+                $parent_ordernumber
+            );
+            unless($rv) {
+                warn "Cannot update parent order line, so do not cancel".
+                    " receipt";
+                return;
+            }
 
-        # Recalculate tax_value
-        $dbh->do(q|
-            UPDATE aqorders
-            SET
-                tax_value_on_ordering = quantity * | . get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
-                tax_value_on_receiving = quantity * | . get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
-            WHERE ordernumber = ?
-        |, undef, $parent_ordernumber);
+            # Recalculate tax_value
+            $dbh->do(q|
+                UPDATE aqorders
+                SET
+                    tax_value_on_ordering = quantity * | . get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
+                    tax_value_on_receiving = quantity * | . get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
+                WHERE ordernumber = ?
+            |, undef, $parent_ordernumber);
+        }
 
         _cancel_items_receipt( $order_obj, $parent_ordernumber );
         # Delete order line
