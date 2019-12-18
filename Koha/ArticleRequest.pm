@@ -189,7 +189,7 @@ sub branch {
 
 =head3 store
 
-Override the default store behavior so that new opan requests
+Override the default store behavior so that new opac requests
 will have notifications sent.
 
 =cut
