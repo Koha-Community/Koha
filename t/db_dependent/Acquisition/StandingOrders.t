@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
@@ -130,5 +130,10 @@ $search_orders = SearchOrders( {
 
 is( scalar @$search_orders, 1, 'only one pending order after receive' );
 is( $search_orders->[0]->{ordernumber}, $ordernumber, 'original order is only pending order' );
+
+CancelReceipt($new_ordernumber);
+$order = Koha::Acquisition::Orders->find( $ordernumber );
+is( $order->quantity, 1, 'CancelReceipt should not have increased the quantity if order is standing');
+
 
 $schema->storage->txn_rollback();
