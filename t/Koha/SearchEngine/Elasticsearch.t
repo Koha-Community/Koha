@@ -117,7 +117,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 51;
+    plan tests => 52;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -332,13 +332,13 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is(scalar @{$docs->[0][1]->{title__sort}}, 1, 'First document title__sort field should have a single');
     is_deeply($docs->[0][1]->{title__sort}, ['Title: first record Title: first record'], 'First document title__sort field should be set correctly');
 
-    is($docs->[0]->{issues}, 6, 'Issues field should be sum of the issues for each item');
-    is($docs->[0]->{issues__sort}, 6, 'Issues sort field should also be a sum of the issues');
+    is($docs->[0][1]->{issues}, 6, 'Issues field should be sum of the issues for each item');
+    is($docs->[0][1]->{issues__sort}, 6, 'Issues sort field should also be a sum of the issues');
 
-    is(scalar @{$docs->[0]->{title_wildcard}}, 2, 'First document title_wildcard field should have two values');
-    is_deeply($docs->[0]->{title_wildcard}, ['Title:', 'first record'], 'First document title_wildcard field should be set correctly');
+    is(scalar @{$docs->[0][1]->{title_wildcard}}, 2, 'First document title_wildcard field should have two values');
+    is_deeply($docs->[0][1]->{title_wildcard}, ['Title:', 'first record'], 'First document title_wildcard field should be set correctly');
 
-    is(scalar @{$docs->[0]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
+    is(scalar @{$docs->[0][1]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
     is_deeply(
         $docs->[0][1]->{author__suggestion},
         [
