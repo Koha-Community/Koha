@@ -62,6 +62,7 @@ sub handle_hit {
 
     my %fetch = (
         title => 'biblio.title',
+        subtitle => 'biblio.subtitle',
         seriestitle => 'biblio.seriestitle',
         author => 'biblio.author',
         isbn =>'biblioitems.isbn',
