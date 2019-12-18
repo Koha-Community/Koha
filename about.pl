@@ -486,7 +486,7 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
     $valid_relationships{ _bad_data } = 1; # we handle this case in another way
 
     my $wrong_relationships = [ grep { !$valid_relationships{ $_->[0] } } @{$existing_relationships} ];
-    if ( $wrong_relationships or $bad_relationships_count ) {
+    if ( @$wrong_relationships or $bad_relationships_count ) {
 
         $template->param(
             warnRelationships => 1,
