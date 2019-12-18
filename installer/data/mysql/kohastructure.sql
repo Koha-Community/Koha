@@ -3979,8 +3979,8 @@ CREATE TABLE `article_requests` (
   `patron_notes` MEDIUMTEXT,
   `status` enum('PENDING','PROCESSING','COMPLETED','CANCELED') NOT NULL DEFAULT 'PENDING',
   `notes` MEDIUMTEXT,
-  `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `updated_on` timestamp NULL DEFAULT NULL,
+  `created_on` timestamp NULL DEFAULT NULL, -- Be careful with two timestamps in one table not allowing NULL
+  `updated_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),
