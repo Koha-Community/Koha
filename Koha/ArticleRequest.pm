@@ -196,16 +196,11 @@ will have notifications sent.
 
 sub store {
     my ($self) = @_;
-
-    if ( $self->in_storage() ) {
-        my $now = dt_from_string();
-        $self->updated_on($now);
-
-        return $self->SUPER::store();
-    }
-    else {
-        $self->open();
-        return $self->SUPER::store();
+    if ( $self->in_storage ) {
+        return $self->SUPER::store;
+    } else {
+        $self->created_on( dt_from_string() );
+        return $self->open;
     }
 }
 

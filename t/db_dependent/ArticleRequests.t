@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 56;
+use Test::More tests => 57;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -101,7 +101,8 @@ like( $notify_message->content, qr{Title: $article_request_title}, 'Values from 
 $article_request = Koha::ArticleRequests->find( $article_request->id );
 ok( $article_request->id, 'Koha::ArticleRequest created' );
 is( $article_request->status, Koha::ArticleRequest::Status::Pending, 'New article request has status of Open' );
-is( $article_request->updated_on, undef, 'New article request has not an updated_on date set yet' );
+isnt( $article_request->created_on, undef, 'New article request has created_on date set' );
+isnt( $article_request->updated_on, undef, 'New article request has updated_on date set' );
 
 # process
 Koha::Notice::Messages->delete;
