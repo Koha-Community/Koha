@@ -182,8 +182,20 @@
     <div class="spacer"></div>
 
     <p style="display:block;">
-        <input type="button" value="Export as CSV" id="ExportSelected" />
-        <input type="submit"  value="Claim order" />
+        <div class="btn-group">
+          <a id="exportbutton" class="btn btn-default" href="/cgi-bin/koha/acqui/lateorders-export.pl"><i class="fa fa-download"></i> Export as CSV</a>
+          <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+          <ul class="dropdown-menu" id="export-csv-menu">
+              <li><a href="#">Default</a></li>
+              [% IF csv_profiles %]
+                  [% FOR csv IN csv_profiles %]
+                    <li><a href="#" data-value="[% csv.export_format_id | html %]">[% csv.profile | html %]</a></li>
+                  [% END %]
+              [% END %]
+           </ul>
+        </div>
+
+        <input type="submit"  class="btn btn-default" value="Claim order" />
     </p>
 </form>
 [% ELSE %]<p>There are no late orders.</p>
@@ -293,7 +305,7 @@
             $('#CheckNone').click(function(){ $(late_orderst.fnGetNodes()).find("td").unCheckCheckboxes();});
 
             // Generates a dynamic link for exporting the selection's data as CSV
-            $("#ExportSelected").click(function() {
+            $("#exportbutton, #export-csv-menu a").click(function() {
                 var all_nodes = $(late_orderst.fnGetNodes());
                 var selected = $(all_nodes).find("input[name='ordernumber']:checked");
 
@@ -302,10 +314,13 @@
                     return false;
                 }
 
+                var url = $('#exportbutton').attr('href') + '?';
                 // Building the url from currently checked boxes
-                var url = '/cgi-bin/koha/acqui/lateorders-export.pl?op=export';
                 for (var i = 0; i < selected.length; i++) {
                     url += '&amp;ordernumber=' + selected[i].value;
+                }
+                if($(this).attr("data-value")) {
+                    url += '&amp;csv_profile=' + $(this).attr("data-value");
                 }
                 // And redirecting to the CSV page
                 location.href = url;

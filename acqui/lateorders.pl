@@ -54,6 +54,7 @@ use C4::Acquisition;
 use C4::Letters;
 use Koha::DateUtils;
 use Koha::Acquisition::Orders;
+use Koha::CsvProfiles;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
@@ -172,5 +173,6 @@ $template->param(
     estimateddeliverydatefrom => $estimateddeliverydatefrom,
     estimateddeliverydateto   => $estimateddeliverydateto,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+    csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'late_orders' }) ],
 );
 output_html_with_http_headers $input, $cookie, $template->output;

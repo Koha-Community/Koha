@@ -92,6 +92,7 @@
 [% BLOCK used_for_description %]
     [% IF used_for_code == 'export_records' %] Export records
     [% ELSIF used_for_code == 'late_issues' %] Late serial issues claims
+    [% ELSIF used_for_code == 'late_orders' %] Export late orders
     [% ELSIF used_for_code == 'export_basket' %] Basket export in acquisition
     [% ELSIF used_for_code == 'export_lost_items' %] Export lost items in report
     [% ELSE %] Unknown usage
@@ -134,7 +135,7 @@
                 <li class="sql_specific">
                     <label for="used_for_sql">Usage: </label>
                     <select id="used_for_sql" name="used_for_sql">
-                        [% FOREACH used_for IN [ 'late_issues' 'export_basket' 'export_lost_items' ] %]
+                        [% FOREACH used_for IN [ 'late_issues' 'late_orders', 'export_basket' 'export_lost_items' ] %]
                         [% IF csv_profile.used_for == used_for %]
                             <option value="[% used_for | html %]" selected="selected">[% PROCESS used_for_description used_for_code = used_for %]</option>
                         [% ELSE %]
@@ -202,13 +203,14 @@
                 </li>
 
                 <li class="sql_specific">
-                    <label for="late_issues_content" class="required">Profile SQL fields: </label>
+                    <label for="sql_content" class="required">Profile SQL fields: </label>
                     <textarea cols="50" rows="2" name="sql_content" id="sql_content">[% csv_profile.content | html %]</textarea>
                     <p>You have to define which fields you want to export, separated by pipes.</p>
                     <p>You can also use your own headers (instead of the ones from Koha) by prefixing the field name with an header, followed by the equal sign.</p>
                     <p>Example: Name=subscription.name|Title=subscription.title|Issue number=serial.serialseq</p>
                     <p>For late issues claims you can use data from following tables: serial, subscription, biblio, biblioitems and aqbookseller.</p>
                     <p>For basket exports you can use data from following tables: biblio, biblioitems, aqorders, aqbudgets and aqbasket.</p>
+                    <p>For late orders exports you must provide a Template Toolkit syntax that will generate the whole CSV file..</p>
                 </li>
             </ol>
         </fieldset>
@@ -263,7 +265,7 @@
                     <td>[% csv_profile.export_format_id | html %]</td>
                     <td>[% csv_profile.profile | html %]</td>
                     <td>[% csv_profile.description | html %]</td>
-                    <td>[% csv_profile.content | html %]</td>
+                    <td>[% csv_profile.content | html | html_line_break %]</td>
                     <td>[% csv_profile.csv_separator | html %]</td>
                     <td>[% PROCESS type_description type_code = csv_profile.type %]</td>
                     <td>[% PROCESS used_for_description used_for_code = csv_profile.used_for %]</td>
