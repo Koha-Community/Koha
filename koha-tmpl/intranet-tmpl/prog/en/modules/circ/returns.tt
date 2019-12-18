@@ -497,6 +497,9 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" name="mainform" id="mainform">
+
+                                                <input type="hidden" name="print_slip" value="0" />
+
                                                 <div class="modal-header">
                                                     <h3>
                                                         Please return this item to [% Branches.GetName( returnbranch ) | html %]
@@ -551,6 +554,9 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <form method="post" action="returns.pl" class="confirm">
+
+                                                <input type="hidden" name="print_slip" value="0" />
+
                                                 <div class="modal-header">
                                                     <h3>
                                                         Hold found:
@@ -608,9 +614,6 @@
                                                     [% ELSE %]
                                                         <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                                                     [% END %]
-
-                                                    <input type="hidden" name="print_slip" value="0" />
-
 
                                                     [% FOREACH inputloo IN inputloop %]
                                                         <input type="hidden" name="ri-[% inputloo.counter | html %]" value="[% inputloo.barcode | html %]" />
