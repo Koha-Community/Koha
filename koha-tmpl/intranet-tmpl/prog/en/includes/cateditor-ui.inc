@@ -59,6 +59,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     var z3950Labels = [
         [ "local_number", _("Local number") ],
         [ "title", _("Title") ],
+        [ "subtitle",_("Subtitle") ],
         [ "series", _("Series title") ],
         [ "author", _("Author") ],
         [ "lccn", _("LCCN") ],
@@ -66,6 +67,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         [ "issn", _("ISSN") ],
         [ "medium", _("Medium") ],
         [ "edition", _("Edition") ],
+        [ "date", _("Published") ],
         [ "notes", _("Notes") ],
     ];
 
