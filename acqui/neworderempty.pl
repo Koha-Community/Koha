@@ -163,12 +163,12 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
         exit;
     }
     #from this point: add a new record
-        my $bibitemnum;
-        $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
-        ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
-        # get the price if there is one.
-        $listprice = GetMarcPrice($marcrecord, $marcflavour);
-        SetImportRecordStatus($params->{'breedingid'}, 'imported');
+    my $bibitemnum;
+    $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
+    ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
+    # get the price if there is one.
+    $listprice = GetMarcPrice($marcrecord, $marcflavour);
+    SetImportRecordStatus($params->{'breedingid'}, 'imported');
 }
 
 
