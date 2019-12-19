@@ -215,7 +215,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 11;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -261,6 +261,44 @@ subtest "to_api() tests" => sub {
     # Pick a class that won't have a mapping for the API
     my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
     is_deeply( $illrequest->to_api, $illrequest->TO_JSON, 'If no overloaded to_api_mapping method, return TO_JSON' );
+
+    my $item_class = Test::MockModule->new('Koha::Item');
+    $item_class->mock( 'to_api_mapping',
+        sub {
+            return {
+                itemnumber       => 'item_id'
+            };
+        }
+    );
+
+    my $hold_class = Test::MockModule->new('Koha::Hold');
+    $hold_class->mock( 'to_api_mapping',
+        sub {
+            return {
+                reserve_id       => 'hold_id'
+            };
+        }
+    );
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $hold = $builder->build_object({ class => 'Koha::Holds', value => { itemnumber => $item->itemnumber } });
+
+    my @embeds = ('items');
+
+    my $biblio_api = $biblio->to_api(\@embeds);
+
+    ok(exists $biblio_api->{items}, 'Items where embedded in biblio results');
+    is($biblio_api->{items}->[0]->{item_id}, $item->itemnumber, 'Item matches');
+    ok(!exists $biblio_api->{items}->[0]->{holds}, 'No holds info should be embedded yet');
+
+    @embeds = ('items.holds');
+    $biblio_api = $biblio->to_api(\@embeds);
+
+    ok(exists $biblio_api->{items}, 'Items where embedded in biblio results');
+    is($biblio_api->{items}->[0]->{item_id}, $item->itemnumber, 'Item still matches');
+    ok(exists $biblio_api->{items}->[0]->{holds}, 'Holds info should be embedded');
+    is($biblio_api->{items}->[0]->{holds}->[0]->{hold_id}, $hold->reserve_id, 'Hold matches');
 
     $schema->storage->txn_rollback;
 };
