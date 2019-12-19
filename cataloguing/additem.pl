@@ -156,18 +156,10 @@ sub generate_subfield_form {
         if (!$value && $subfieldlib->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
             my $CNtag       = substr( $pref_itemcallnumber, 0, 3 ); # 3-digit tag number
             my $CNsubfields = substr( $pref_itemcallnumber, 3 ); # Any and all subfields
-            my @subfields = ( $CNsubfields =~ m/./g ); # Split into single-character elements
             my $temp2 = $temp->field($CNtag);
 
             if ($temp2) {
-                my @selectedsubfields;
-                foreach my $subfieldcode( @subfields ){
-                    push @selectedsubfields, $temp2->subfield( $subfieldcode );
-                }
-                $value = join( ' ', @selectedsubfields );
-
-                #remove any trailing space incase one subfield is used
-                $value =~ s/^\s+|\s+$//g;
+                $value = $temp2->as_string( $CNsubfields, ' ' );
             }
         }
 
