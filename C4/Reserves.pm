@@ -1241,8 +1241,6 @@ sub IsAvailableForItemLevelRequest {
         $item->withdrawn        ||
         ($item->damaged && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
-    my $on_shelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
-
     if ($pickup_branchcode) {
         my $destination = Koha::Libraries->find($pickup_branchcode);
         return 0 unless $destination;
@@ -1255,6 +1253,8 @@ sub IsAvailableForItemLevelRequest {
         my $home_library = Koka::Libraries->find( {branchcode => $item->homebranch} );
         return 0 unless $branchitemrule->{hold_fulfillment_policy} ne 'holdgroup' || $home_library->validate_hold_sibling( {branchcode => $pickup_branchcode} );
     }
+
+    my $on_shelf_holds = Koha::CirculationRules->get_onshelfholds_policy( { item => $item, patron => $patron } );
 
     if ( $on_shelf_holds == 1 ) {
         return 1;
