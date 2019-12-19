@@ -113,12 +113,8 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '018', 'a', 0, 0, 'Код копірайту', '',                        0, -6, '', '', '', 0, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('', '01e', 0, 1, 'Помилка кодованого імені', '', '');
-INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('', '', '01e', 'a', 0, 0, 'Помилка кодованого імені', '',             0, -6, '', '', '', 0, '', '', NULL);
-
-INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '020', 0, 1, 'Індекс ISBN', '', '');
+
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '020', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),
  ('', '', '020', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 0, -6, '', '', '', 0, '', '', NULL),
@@ -128,6 +124,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '022', 0, 1, 'Індекс ISSN', '', '');
+
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '022', '2', 0, 0, 'Source', 'Source',                         0, 0, '', '', '', 0, '', '', NULL),
  ('', '', '022', '6', 0, 0, 'Елемент зв’язку', 'Елемент зв’язку',       0, -6, '', '', '', 0, '', '', NULL),

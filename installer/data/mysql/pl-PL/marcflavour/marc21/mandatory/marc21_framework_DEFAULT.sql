@@ -537,7 +537,6 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('018', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('018', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('018', 'a', 'Copyright article-fee code', 'Copyright article-fee code', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
-		('01e', 'a', 'Coded field error', 'Coded field error', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('020', '6', 'Linkage', 'Linkage', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('020', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('020', 'a', 'International Standard Book Number', 'International Standard Book Number', 0, 0, 'biblioitems.isbn', 0, '', '', '', 0, 0, '', '', '', NULL),
