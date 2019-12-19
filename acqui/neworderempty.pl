@@ -163,6 +163,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
         exit;
     }
     #from this point: add a new record
+    C4::Acquisition::FillWithDefaultValues($marcrecord, {only_mandatory => 1});
     my $bibitemnum;
     $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
     ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );

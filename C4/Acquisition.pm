@@ -3259,16 +3259,20 @@ sub NotifyOrderUsers {
 
 =head3 FillWithDefaultValues
 
-FillWithDefaultValues( $marc_record );
+FillWithDefaultValues( $marc_record, $params );
 
 This will update the record with default value defined in the ACQ framework.
 For all existing fields, if a default value exists and there are no subfield, it will be created.
 If the field does not exist, it will be created too.
 
+If the parameter only_mandatory => 1 is passed via $params, only the mandatory
+defaults are being applied to the record.
+
 =cut
 
 sub FillWithDefaultValues {
-    my ($record) = @_;
+    my ( $record, $params ) = @_;
+    my $mandatory = $params->{only_mandatory};
     my $tagslib = C4::Biblio::GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
     if ($tagslib) {
         my ($itemfield) =
@@ -3278,6 +3282,7 @@ sub FillWithDefaultValues {
             next if $tag == $itemfield;
             for my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
                 next if IsMarcStructureInternal($tagslib->{$tag}{$subfield});
+                next if $mandatory && !$tagslib->{$tag}{$subfield}{mandatory};
                 my $defaultvalue = $tagslib->{$tag}{$subfield}{defaultvalue};
                 if ( defined $defaultvalue and $defaultvalue ne '' ) {
                     my @fields = $record->field($tag);
