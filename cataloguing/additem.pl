@@ -154,12 +154,14 @@ sub generate_subfield_form {
 
         my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
         if (!$value && $subfieldlib->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
-            my $CNtag       = substr( $pref_itemcallnumber, 0, 3 ); # 3-digit tag number
-            my $CNsubfields = substr( $pref_itemcallnumber, 3 ); # Any and all subfields
-            my $temp2 = $temp->field($CNtag);
+            foreach my $pref_itemcallnumber_part (split(/,/, $pref_itemcallnumber)){
+                my $CNtag       = substr( $pref_itemcallnumber_part, 0, 3 ); # 3-digit tag number
+                my $CNsubfields = substr( $pref_itemcallnumber_part, 3 ); # Any and all subfields
+                my $temp2 = $temp->field($CNtag);
 
-            if ($temp2) {
+                next unless $temp2;
                 $value = $temp2->as_string( $CNsubfields, ' ' );
+                last if $value;
             }
         }
 
@@ -880,8 +882,6 @@ foreach my $subfield_code (sort keys(%witness)) {
 # now, build the item form for entering a new item
 my @loop_data =();
 my $i=0;
-
-my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
 my $branch = $input->param('branch') || C4::Context->userenv->{branch};
 my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.

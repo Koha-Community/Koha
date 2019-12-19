@@ -2402,11 +2402,13 @@ sub PrepareItemrecordDisplay {
 
                 # search for itemcallnumber if applicable
                 if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
-                    && C4::Context->preference('itemcallnumber') ) {
-                    my $CNtag      = substr( C4::Context->preference('itemcallnumber'), 0, 3 );
-                    my $CNsubfield = substr( C4::Context->preference('itemcallnumber'), 3, 1 );
-                    if ( $itemrecord and my $field = $itemrecord->field($CNtag) ) {
-                        $defaultvalue = $field->subfield($CNsubfield);
+                    && C4::Context->preference('itemcallnumber') && $itemrecord) {
+                    foreach my $itemcn_pref (split(/,/,C4::Context->preference('itemcallnumber'))){
+                        my $CNtag      = substr( $itemcn_pref, 0, 3 );
+                        next unless my $field = $itemrecord->field($CNtag);
+                        my $CNsubfields = substr( $itemcn_pref, 3 );
+                        $defaultvalue = $field->as_string( $CNsubfields, ' ');
+                        last if $defaultvalue;
                     }
                 }
                 if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
