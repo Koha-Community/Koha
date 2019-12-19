@@ -369,25 +369,57 @@ Returns a representation of the object, suitable for API output.
 =cut
 
 sub to_api {
-    my ( $self ) = @_;
+    my ( $self, $embeds ) = @_;
     my $json_object = $self->TO_JSON;
 
     my $to_api_mapping = $self->to_api_mapping;
 
     # Rename attributes if there's a mapping
-    foreach my $column ( keys %{$to_api_mapping} ) {
-        my $mapped_column = $to_api_mapping->{$column};
-        if ( exists $json_object->{$column}
-            && defined $mapped_column )
-        {
-            # key != undef
-            $json_object->{$mapped_column} = delete $json_object->{$column};
+    if ( $self->can('to_api_mapping') ) {
+        foreach my $column ( keys %{ $self->to_api_mapping } ) {
+            my $mapped_column = $self->to_api_mapping->{$column};
+            if ( exists $json_object->{$column}
+                && defined $mapped_column )
+            {
+                # key != undef
+                $json_object->{$mapped_column} = delete $json_object->{$column};
+            }
+            elsif ( exists $json_object->{$column}
+                && !defined $mapped_column )
+            {
+                # key == undef
+                delete $json_object->{$column};
+            }
         }
-        elsif ( exists $json_object->{$column}
-            && !defined $mapped_column )
-        {
-            # key == undef
-            delete $json_object->{$column};
+    }
+
+    if ($embeds) {
+        foreach my $embed (@$embeds) {
+            my ( $curr, $next ) = split /\s*\.\s*/, $embed, 2;
+            my @nxembeds;
+
+            @nxembeds = ($next) if $next;
+
+            my $children = $self->$curr;
+            if ( ref $children eq 'ARRAY' ) {
+                my @list;
+                my $pos = 0;
+                foreach my $child (@$children) {
+                    my $res = $child->to_api( \@nxembeds );
+                    $res = { $json_object->{$curr}->[$pos], $res }
+                      if defined $json_object->{$curr}
+                      && defined $json_object->{$curr}->[$pos];
+                    push @list, $res;
+                    $pos++;
+                }
+                $json_object->{$curr} = \@list;
+            }
+            else {
+                my $res = $children->to_api( \@nxembeds );
+                $res = { $json_object->{$curr}, $res }
+                  if defined $json_object->{$curr};
+                $json_object->{$curr} = $res;
+            }
         }
     }
 

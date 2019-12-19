@@ -315,9 +315,9 @@ Returns a representation of the objects, suitable for API output .
 =cut
 
 sub to_api {
-    my ($self) = @_;
+    my ($self, $embeds) = @_;
 
-    return [ map { $_->to_api } $self->as_list ];
+    return [ map { $_->to_api($embeds) } $self->as_list ];
 }
 
 =head3 Koha::Objects->_wrap
