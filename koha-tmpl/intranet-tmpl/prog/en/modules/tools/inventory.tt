@@ -181,7 +181,7 @@
             <th>Barcode</th>
             <th>Call number</th>
             <th>Library</th>
-            <th>Title</th>
+            <th class="anti-the">Title</th>
             <th>Not for loan</th>
             <th>Lost</th>
             <th>Damaged</th>
@@ -305,6 +305,7 @@
                 [% ELSE %]
                     // first column contains checkboxes
                     "aoColumnDefs": [
+                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                         { "bSortable": false, "bSearchable": false, "aTargets": [ 0 ] },
                     ],
                     // 3rd column is callnumber
