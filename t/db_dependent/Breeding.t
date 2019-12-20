@@ -17,6 +17,13 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# Main object of this unit test is the Breeding module and its subroutines
+# A start has been made to define tests for subroutines of Z3950Search.
+# These subroutines are actually internal, but these tests may pave the way for
+# a more comprehensive test of Z3950Search itself.
+#
+# TODO We need additional tests for Z3950SearchAuth, BreedingSearch
+
 use Modern::Perl;
 
 use FindBin;
@@ -26,15 +33,11 @@ use t::lib::Mocks qw( mock_preference );
 
 use C4::Context;
 use C4::Breeding;
+use Koha::Database;
 use Koha::XSLT_Handler;
 
-#Main object of this unit test is the Breeding module and its subroutines
-#A start has been made to define tests for subroutines of Z3950Search.
-#These subroutines are actually internal, but these tests may pave the way for
-#a more comprehensive test of Z3950Search itself.
-#TODO
-#Furthermore, we need additional tests for:
-#Z3950SearchAuth, BreedingSearch, ImportBreedingAuth
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 #Group 1: testing _build_query and _translate_query (part of Z3950Search)
 subtest '_build_query' => sub {
@@ -66,20 +69,22 @@ subtest ImportBreedingAuth => sub {
         MARC::Field->new('100', ' ', ' ', a => 'Jansson, Tove'),
     );
 
-    my $breedingid = C4::Breeding::ImportBreedingAuth($record,"kidclamp","UTF8");
+    my $breedingid = C4::Breeding::ImportBreedingAuth($record,"kidclamp","UTF-8",'Jansson, Tove' );
     ok( $breedingid, "We got a breeding id back");
-    my $breedingid_1 = C4::Breeding::ImportBreedingAuth($record,"kidclamp","UTF8");
+    my $breedingid_1 = C4::Breeding::ImportBreedingAuth($record,"kidclamp","UTF-8",'Jansson, Tove' );
     is( $breedingid, $breedingid_1, "For the same record, we get the same id");
-    $breedingid_1 = C4::Breeding::ImportBreedingAuth($record,"marcelr","UTF8");
+    $breedingid_1 = C4::Breeding::ImportBreedingAuth($record,"marcelr","UTF-8",'Jansson, Tove' );
     is( $breedingid, $breedingid_1, "For the same record in a different file, we get a new id");
     my $record_1 = MARC::Record->new();
     $record_1->append_fields(
         MARC::Field->new('001', '8675309'),
         MARC::Field->new('100', ' ', ' ', a => 'Cooper, Susan'),
     );
-    my $breedingid_2 = C4::Breeding::ImportBreedingAuth($record_1,"kidclamp","UTF8");
+    my $breedingid_2 = C4::Breeding::ImportBreedingAuth($record_1,"kidclamp","UTF-8",'Cooper, Susan' );
     isnt( $breedingid, $breedingid_2, "For a new record, we get a new id");
 };
+
+$schema->storage->txn_rollback;
 
 #-------------------------------------------------------------------------------
 
