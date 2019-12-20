@@ -20232,6 +20232,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (19.11.00 release)\n";
 }
 
+$DBversion = '19.11.00.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE marc_subfield_structure SET kohafield = NULL WHERE kohafield = 'bibliosubject.subject';" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17831 - Remove non-existing bibliosubject.subject from frameworks)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
