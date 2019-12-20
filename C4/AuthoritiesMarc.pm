@@ -766,6 +766,7 @@ sub FindDuplicateAuthority {
     } else {
         $op = 'AND';
     }
+    $authtypecode =~ s#/#\\/#; # GENRE/FORM contains forward slash which is a reserved character
     my $query='at:'.$authtypecode.' ';
     my $filtervalues=qr([\001-\040\Q!'"`#$%&*+,-./:;<=>?@(){[}_|~\E\]]);
     if ($record->field($auth_tag_to_report)) {
