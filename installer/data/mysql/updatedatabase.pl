@@ -18865,6 +18865,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 13958 - Add a SuspensionsCalendar syspref)\n";
 }
 
+$DBversion = '19.05.05.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE marc_subfield_structure SET kohafield = NULL WHERE kohafield = 'bibliosubject.subject';" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17831 - Remove non-existing bibliosubject.subject from frameworks)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
