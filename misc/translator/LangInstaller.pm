@@ -22,17 +22,19 @@ use Modern::Perl;
 use C4::Context;
 # WARNING: Any other tested YAML library fails to work properly in this
 # script content
-use YAML::Syck qw( Dump LoadFile );
+use YAML::Syck qw( Dump LoadFile DumpFile );
 use Locale::PO;
 use FindBin qw( $Bin );
 use File::Basename;
 use File::Find;
 use File::Path qw( make_path );
+use File::Copy;
 use File::Slurp;
 use File::Spec;
-use File::Temp qw( tempdir );
+use File::Temp qw( tempdir tempfile );
 use Template::Parser;
 use PPI;
+
 
 $YAML::Syck::ImplicitTyping = 1;
 
@@ -79,6 +81,7 @@ sub new {
     $self->{msgmerge}        = `which msgmerge`;
     $self->{msgfmt}          = `which msgfmt`;
     $self->{msginit}         = `which msginit`;
+    $self->{msgattrib}       = `which msgattrib`;
     $self->{xgettext}        = `which xgettext`;
     $self->{sed}             = `which sed`;
     $self->{po2json}         = "$Bin/po2json";
@@ -88,6 +91,7 @@ sub new {
     chomp $self->{msgmerge};
     chomp $self->{msgfmt};
     chomp $self->{msginit};
+    chomp $self->{msgattrib};
     chomp $self->{xgettext};
     chomp $self->{sed};
     chomp $self->{gzip};
@@ -145,16 +149,40 @@ sub new {
         };
     }
 
+    # EN YAML installer files
+    push @{$self->{installer}}, {
+        name   => "YAML installer files",
+        dirs   => [ 'installer/data/mysql/en/mandatory',
+                    'installer/data/mysql/en/optional'],
+        suffix => "-installer.po",
+    };
+
+    # EN MARC21 YAML installer files
+    push @{$self->{installer}}, {
+        name   => "MARC21 YAML installer files",
+        dirs   => [ 'installer/data/mysql/en/marcflavour/marc21/mandatory',
+                    'installer/data/mysql/en/marcflavour/marc21/optional'],
+        suffix => "-installer-MARC21.po",
+    };
+
+    # EN UNIMARC YAML installer files
+    push @{$self->{installer}}, {
+        name   => "UNIMARC YAML installer files",
+        dirs   => [ 'installer/data/mysql/en/marcflavour/unimarc/mandatory', ],
+        suffix => "-installer-UNIMARC.po",
+    };
+
     bless $self, $class;
 }
 
 
 sub po_filename {
-    my $self = shift;
+    my $self   = shift;
+    my $suffix = shift;
 
     my $context    = C4::Context->new;
     my $trans_path = $Bin . '/po';
-    my $trans_file = "$trans_path/" . $self->{lang} . "-pref.po";
+    my $trans_file = "$trans_path/" . $self->{lang} . $suffix;
     return $trans_file;
 }
 
@@ -281,8 +309,8 @@ sub save_po {
     $po->{''} ||= $default_pref_po_header;
 
     # Write .po entries into a file put in Koha standard po directory
-    Locale::PO->save_file_fromhash( $self->po_filename, $po );
-    say "Saved in file: ", $self->po_filename if $self->{verbose};
+    Locale::PO->save_file_fromhash( $self->po_filename("-pref.po"), $po );
+    say "Saved in file: ", $self->po_filename("-pref.po") if $self->{verbose};
 }
 
 
@@ -294,7 +322,7 @@ sub get_po_merged_with_en {
     my $po_current = $self->{po};
 
     # Get po from previous generation
-    my $po_previous = Locale::PO->load_file_ashash( $self->po_filename );
+    my $po_previous = Locale::PO->load_file_ashash( $self->po_filename("-pref.po") );
 
     for my $id ( keys %$po_current ) {
         my $po =  $po_previous->{Locale::PO->quote($id)};
@@ -435,7 +463,7 @@ sub update_tmpl {
 sub create_prefs {
     my $self = shift;
 
-    if ( -e $self->po_filename ) {
+    if ( -e $self->po_filename("-pref.po") ) {
         say "Preferences .po file already exists. Delete it if you want to recreate it.";
         return;
     }
@@ -443,6 +471,249 @@ sub create_prefs {
     $self->save_po();
 }
 
+sub get_po_from_target {
+    my $self   = shift;
+    my $target = shift;
+
+    my $po;
+    my $po_head = new Locale::PO;
+    $po_head->{msgid}  = "\"\"";
+    $po_head->{msgstr} = "".
+        "Project-Id-Version: Koha Project - Installation files\\n" .
+        "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\\n" .
+        "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\\n" .
+        "Language-Team: Koha Translation Team\\n" .
+        "Language: ".$self->{lang}."\\n" .
+        "MIME-Version: 1.0\\n" .
+        "Content-Type: text/plain; charset=UTF-8\\n" .
+        "Content-Transfer-Encoding: 8bit\\n";
+
+    my @dirs = @{ $target->{dirs} };
+    my $intradir = $self->{context}->config('intranetdir');
+    for my $dir ( @dirs ) {                                                     # each dir
+        opendir( my $dh, "$intradir/$dir" ) or die ("Can't open $intradir/$dir");
+        my @filelist = grep { $_ =~ m/\.yml/ } readdir($dh);                    # Just yaml files
+        close($dh);
+        for my $file ( @filelist ) {                                            # each file
+            my $yaml   = LoadFile( "$intradir/$dir/$file" );
+            my @tables = @{ $yaml->{'tables'} };
+            my $tablec;
+            for my $table ( @tables ) {                                         # each table
+                $tablec++;
+                my $table_name = ( keys %$table )[0];
+                my @translatable = @{ $table->{$table_name}->{translatable} };
+                my @rows = @{ $table->{$table_name}->{rows} };
+                my @multiline = @{ $table->{$table_name}->{'multiline'} };      # to check multiline values
+                my $rowc;
+                for my $row ( @rows ) {                                         # each row
+                    $rowc++;
+                    for my $field ( @translatable ) {                           # each field
+                        if ( @multiline and grep { $_ eq $field } @multiline ) {    # multiline fields, only notices ATM
+                            my $mulc;
+                            foreach my $line ( @{$row->{$field}} ) {
+                                $mulc++;
+                                next if ( $line =~ /^(\s*<.*?>\s*$|^\s*\[.*?\]\s*|\s*)$/ );                     # discard pure html, TT, empty
+                                $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/g;                                   # put placeholders
+                                next if ( $line =~ /^(\s|%s|-|[[:punct:]]|\(|\))*$/ or length($line) < 2 );     # discard non strings
+                                if ( not $po->{ $line } ) {
+                                    my $msg = new Locale::PO(
+                                                -msgid => $line, -msgstr => '',
+                                                -reference => "$dir/$file:$table_name:$tablec:row:$rowc:mul:$mulc" );
+                                    $po->{ $line } = $msg;
+                                }
+                            }
+                        } else {
+                            if ( length($row->{$field}) > 1                         # discard small strings
+                                 and not $po->{ $row->{$field} } ) {
+                                my $msg = new Locale::PO(
+                                            -msgid => $row->{$field}, -msgstr => '',
+                                            -reference => "$dir/$file:$table_name:$tablec:row:$rowc" );
+                                $po->{ $row->{$field} } = $msg;
+                            }
+                        }
+                    }
+                }
+            }
+            my $desccount;
+            for my $description ( @{ $yaml->{'description'} } ) {
+                $desccount++;
+                if ( length($description) > 1 and not $po->{ $description } ) {
+                    my $msg = new Locale::PO(
+                                -msgid => $description, -msgstr => '',
+                                -reference => "$dir/$file:description:$desccount" );
+                    $po->{ $description } = $msg;
+                }
+            }
+        }
+    }
+    $po->{''} = $po_head if ( $po );
+
+    return $po;
+}
+
+sub create_installer {
+    my $self = shift;
+    return unless ( $self->{installer} );
+
+    say "Create installer translation files\n" if $self->{verbose};
+
+    my @targets = @{ $self->{installer} };             # each installer target (common,marc21,unimarc)
+
+    for my $target ( @targets ) {
+        if ( -e $self->po_filename( $target->{suffix} ) ) {
+            say "$self->{lang}$target->{suffix} file already exists. Delete it if you want to recreate it.";
+            return;
+        }
+    }
+
+    for my $target ( @targets ) {
+        my $po = get_po_from_target( $self, $target );
+        # create output file only if there is something to write
+        if ( $po ) {
+            my $po_file = $self->po_filename( $target->{suffix} );
+            Locale::PO->save_file_fromhash( $po_file, $po );
+            say "Saved in file: ", $po_file if $self->{verbose};
+        }
+    }
+}
+
+sub update_installer {
+    my $self = shift;
+    return unless ( $self->{installer} );
+
+    say "Update installer translation files\n" if $self->{verbose};
+
+    my @targets = @{ $self->{installer} };             # each installer target (common,marc21,unimarc)
+
+    for my $target ( @targets ) {
+        return unless ( -e $self->po_filename( $target->{suffix} ) );
+        my $po = get_po_from_target( $self, $target );
+        # update file only if there is something to update
+        if ( $po ) {
+            my ( $fh, $po_temp ) = tempfile();
+            binmode( $fh, ":encoding(UTF-8)" );
+            Locale::PO->save_file_fromhash( $po_temp, $po );
+            my $po_file = $self->po_filename( $target->{suffix} );
+            eval {
+                my $st = system($self->{msgmerge}." ".($self->{verbose}?'':'-q').
+                         " -s $po_file $po_temp -o - | ".$self->{msgattrib}." --no-obsolete -o $po_file");
+            };
+            say "Updated file: ", $po_file if $self->{verbose};
+        }
+    }
+}
+
+sub translate_yaml {
+    my $self   = shift;
+    my $target = shift;
+    my $srcyml = shift;
+
+    my $po_file = $self->po_filename( $target->{suffix} );
+    return $srcyml unless ( -e $po_file );
+
+    my $po_ref  = Locale::PO->load_file_ashash( $po_file );
+
+    my $dstyml   = LoadFile( $srcyml );
+
+    # translate fields in table rows
+    my @tables = @{ $dstyml->{'tables'} };
+    for my $table ( @tables ) {                                                         # each table
+        my $table_name = ( keys %$table )[0];
+        my @translatable = @{ $table->{$table_name}->{translatable} };
+        my @rows = @{ $table->{$table_name}->{rows} };
+        my @multiline = @{ $table->{$table_name}->{'multiline'} };                      # to check multiline values
+        for my $row ( @rows ) {                                                         # each row
+            for my $field ( @translatable ) {                                           # each translatable field
+                if ( @multiline and grep { $_ eq $field } @multiline ) {                # multiline fields, only notices ATM
+                    foreach my $line ( @{$row->{$field}} ) {
+                        next if ( $line =~ /^(\s*<.*?>\s*$|^\s*\[.*?\]\s*|\s*)$/ );     # discard pure html, TT, empty
+                        my @ttvar;
+                        while ( $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/ ) {         # put placeholders, save matches
+                            my $var = $1;
+                            push @ttvar, $var;
+                        }
+
+                        if ( $line =~ /^(\s|%s|-|[[:punct:]]|\(|\))*$/ ) {              # ignore non strings
+                            while ( @ttvar ) {                                          # restore placeholders
+                                my $var = shift @ttvar;
+                                $line =~ s/\%s/$var/;
+                            }
+                            next;
+                        } else {
+                            my $po = $po_ref->{"\"$line\""};                            # quoted key
+                            if ( $po  and not defined( $po->fuzzy() )                   # not fuzzy
+                                      and length( $po->msgid() ) > 2                    # not empty msgid
+                                      and length( $po->msgstr() ) > 2 ) {               # not empty msgstr
+                                $line = $po->dequote( $po->msgstr() );
+                            }
+                            while ( @ttvar ) {                                          # restore placeholders
+                                my $var = shift @ttvar;
+                                $line =~ s/\%s/$var/;
+                            }
+                        }
+                    }
+                } else {
+                    my $po = $po_ref->{"\"$row->{$field}\""};                           # quoted key
+                    if ( $po  and not defined( $po->fuzzy() )                           # not fuzzy
+                              and length( $po->msgid() ) > 2                            # not empty msgid
+                              and length( $po->msgstr() ) > 2 ) {                       # not empty msgstr
+                        $row->{$field} = $po->dequote( $po->msgstr() );
+                    }
+                }
+            }
+        }
+    }
+
+    # translate descriptions
+    for my $description ( @{ $dstyml->{'description'} } ) {
+        my $po = $po_ref->{"\"$description\""};
+        if ( $po  and not defined( $po->fuzzy() )
+                  and length( $po->msgid() ) > 2
+                  and length( $po->msgstr() ) > 2 ) {
+            $description = $po->dequote( $po->msgstr() );
+        }
+    }
+
+    return $dstyml;
+}
+
+sub install_installer {
+    my $self = shift;
+    return unless ( $self->{installer} );
+
+    my $intradir  = $self->{context}->config('intranetdir');
+    my $db_scheme = $self->{context}->config('db_scheme');
+    my $langdir  = "$intradir/installer/data/$db_scheme/$self->{lang}";
+    if ( -d $langdir ) {
+        say "$self->{lang} installer dir $langdir already exists.\nDelete it if you want to recreate it.";
+        return;
+    }
+
+    say "Install installer files\n" if $self->{verbose};
+
+    for my $target ( @{ $self->{installer} } ) {
+        return unless ( -e $self->po_filename( $target->{suffix} ) );
+        for my $dir ( @{ $target->{dirs} } ) {
+            ( my $tdir = "$dir" ) =~ s|/en/|/$self->{lang}/|;
+            make_path("$intradir/$tdir");
+
+            opendir( my $dh, "$intradir/$dir" ) or die ("Can't open $intradir/$dir");
+            my @files = grep { ! /^\.+$/ } readdir($dh);
+            close($dh);
+
+            for my $file ( @files ) {
+                if ( $file =~ /yml$/ ) {
+                    my $translated_yaml = translate_yaml( $self, $target, "$intradir/$dir/$file" );
+                    open(my $fh, ">:encoding(UTF-8)", "$intradir/$tdir/$file");
+                    DumpFile( $fh, $translated_yaml );
+                    close($fh);
+                } else {
+                    File::Copy::copy( "$intradir/$dir/$file", "$intradir/$tdir/$file" );
+                }
+            }
+        }
+    }
+}
 
 sub create_tmpl {
     my ($self, $files) = @_;
@@ -806,6 +1077,7 @@ sub install {
     $self->install_prefs();
     $self->install_messages();
     $self->remove_pot();
+    $self->install_installer();
 }
 
 
@@ -827,6 +1099,7 @@ sub update {
         $self->update_tmpl($files) unless $self->{pref_only};
         $self->update_prefs();
         $self->update_messages();
+        $self->update_installer();
     }
     $self->remove_pot();
 }
@@ -839,6 +1112,7 @@ sub create {
     $self->create_prefs();
     $self->create_messages();
     $self->remove_pot();
+    $self->create_installer();
 }
 
 
