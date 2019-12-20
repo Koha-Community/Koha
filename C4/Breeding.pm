@@ -483,34 +483,26 @@ sub _translate_query { #SRU query adjusted per server cf. srufields column
 
 =head2 ImportBreedingAuth
 
-ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding);
+ImportBreedingAuth( $marcrecord, $filename, $encoding, $heading );
 
     ImportBreedingAuth imports MARC records in the reservoir (import_records table) or returns their id if they already exist.
 
 =cut
 
 sub ImportBreedingAuth {
-    my ($marcrecord,$filename,$encoding) = @_;
+    my ( $marcrecord, $filename, $encoding, $heading ) = @_;
     my $dbh = C4::Context->dbh;
 
     my $batch_id = GetZ3950BatchId($filename);
     my $searchbreeding = $dbh->prepare("select import_record_id from import_auths where control_number=? and authorized_heading=?");
 
-    my $marcflavour = C4::Context->preference('marcflavour');
-    my $marc_type = $marcflavour eq 'UNIMARC' ? 'UNIMARCAUTH' : $marcflavour;
-
-    my $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
-
-    my $heading_authtype_code = GuessAuthTypeCode($marcrecord);
-
     my $controlnumber = $marcrecord->field('001')->data;
-    my $breedingid;
 
     # Normalize the record so it doesn't have separated diacritics
     SetUTF8Flag($marcrecord);
 
     $searchbreeding->execute($controlnumber,$heading);
-    ($breedingid) = $searchbreeding->fetchrow;
+    my ($breedingid) = $searchbreeding->fetchrow;
 
     return $breedingid if $breedingid;
     $breedingid = AddAuthToBatch($batch_id, 0, $marcrecord, $encoding);
@@ -614,7 +606,7 @@ sub Z3950SearchAuth {
                             $heading_authtype_code = GuessAuthTypeCode($marcrecord);
                             $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
 
-                            my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], $encoding[$k]);
+                            my $breedingid = ImportBreedingAuth( $marcrecord, $serverhost[$k], $encoding[$k], $heading );
                             my %row_data;
                             $row_data{server}       = $servers[$k]->{'servername'};
                             $row_data{breedingid}   = $breedingid;
