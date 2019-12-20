@@ -747,7 +747,7 @@
                     filmstrip
                 </xsl:when>
                 <xsl:when test="$controlField008-33='g'">
-                    legal article
+                    game
                 </xsl:when>
                 <xsl:when test="$controlField008-33='i'">
                     picture
