@@ -951,6 +951,7 @@ CREATE TABLE `branchtransfers` ( -- information for items that are in transit be
   `datearrived` datetime default NULL, -- the date the transfer arrived at its destination
   `tobranch` varchar(10) NOT NULL default '', -- the branch the transfer was going to
   `comments` LONGTEXT, -- any comments related to the transfer
+  `reason` ENUM('Manual'), -- what triggered the transfer
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
