@@ -342,7 +342,7 @@ sub pickup_locations {
     my @pickup_locations;
     foreach my $library (@libs) {
         if ($library->pickup_location && $self->can_be_transferred({ to => $library })) {
-            push @pickup_locations, $library->unblessed;
+            push @pickup_locations, $library;
         }
     }
 

@@ -44,7 +44,7 @@ Koha::Libraries - Koha Library Object set class
 
 =head3 pickup_locations
 
-Returns available pickup locations for
+Returns available pickup locations (Koha::Library objects) for
     A. a specific item
     B. a biblio
     C. none of the above, simply all libraries with pickup_location => 1
@@ -86,17 +86,17 @@ sub pickup_locations {
         order_by => ['branchname']
     });
 
-    return $libraries->unblessed unless $item or $biblio;
+    return $libraries unless $item or $biblio;
     if($item) {
         unless (ref($item) eq 'Koha::Item') {
             $item = Koha::Items->find($item);
-            return $libraries->unblessed unless $item;
+            return $libraries unless $item;
         }
         return $item->pickup_locations( {patron => $patron} );
     } else {
         unless (ref($biblio) eq 'Koha::Biblio') {
             $biblio = Koha::Biblios->find($biblio);
-            return $libraries->unblessed unless $biblio;
+            return $libraries unless $biblio;
         }
         return $biblio->pickup_locations( {patron => $patron} );
     }

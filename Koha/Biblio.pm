@@ -191,7 +191,7 @@ sub pickup_locations {
 
     my %seen;
     @pickup_locations =
-      grep { !$seen{ $_->{branchcode} }++ } @pickup_locations;
+      grep { !$seen{ $_->branchcode }++ } @pickup_locations;
 
     return wantarray ? @pickup_locations : \@pickup_locations;
 }

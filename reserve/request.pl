@@ -549,7 +549,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
                 my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber )->{status};
-                $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved->{status} eq 'OK' );
+                $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved eq 'OK' );
 
                 $item->{item_level_holds} = Koha::IssuingRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
 
@@ -566,8 +566,14 @@ foreach my $biblionumber (@biblionumbers) {
                         $item->{pickup_locations} = 'Any library';
                         $item->{pickup_locations_code} = 'all';
                     } else {
-                        $item->{pickup_locations} = join (', ', map { $_->{branchname} } Koha::Items->find($itemnumber)->pickup_locations({ patron => $patron }));
-                        $item->{pickup_locations_code} = join (',', map { $_->{branchcode} } Koha::Items->find($itemnumber)->pickup_locations({ patron => $patron }));
+                        $item->{pickup_locations} = join( ', ',
+                            map { $_->unblessed->{branchname} }
+                              Koha::Items->find($itemnumber)
+                              ->pickup_locations( { patron => $patron } ) );
+                        $item->{pickup_locations_code} = join( ',',
+                            map { $_->unblessed->{branchcode} }
+                              Koha::Items->find($itemnumber)
+                              ->pickup_locations( { patron => $patron } ) );
                     }
 
                     push( @available_itemtypes, $item->{itype} );
