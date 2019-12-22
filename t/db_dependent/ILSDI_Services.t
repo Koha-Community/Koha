@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -543,6 +543,85 @@ subtest 'Holds test for branch transfer limits' => sub {
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, undef, "Record hold, Item con be transferred" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Holds test with start_date and end_date' => sub {
+
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $pickup_branch = $builder->build(
+        {
+            source => 'Branch',
+            value  => {
+                pickup_location => 1,
+            }
+        }
+    );
+
+    my $patron = $builder->build({
+        source => 'Borrower',
+    });
+
+    my $biblio = $builder->build({
+        source => 'Biblio',
+    });
+
+    my $biblioitems = $builder->build({
+        source => 'Biblioitem',
+        value => {
+            biblionumber => $biblio->{biblionumber},
+        }
+    });
+
+    my $item = $builder->build({
+        source => 'Item',
+        value => {
+            homebranch => $pickup_branch->{branchcode},
+            holdingbranch => $pickup_branch->{branchcode},
+            biblionumber => $biblio->{biblionumber},
+            damaged => 0,
+        }
+    });
+
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rule_name    => 'reservesallowed',
+            rule_value   => 99,
+        }
+    );
+
+    my $query = new CGI;
+    $query->param( 'pickup_location', $pickup_branch->{branchcode} );
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $biblio->{biblionumber});
+    $query->param( 'item_id', $item->{itemnumber});
+    $query->param( 'start_date', '2020-03-20');
+    $query->param( 'expiry_date', '2020-04-22');
+
+    my $reply = C4::ILSDI::Services::HoldItem( $query );
+    is ($reply->{pickup_location}, $pickup_branch->{branchname}, "Item hold with date parameters was placed");
+    my $hold = Koha::Holds->search({ biblionumber => $biblio->{biblionumber}})->next();
+    use Data::Dumper;
+    print Dumper($hold);
+    is( $hold->biblionumber, $biblio->{biblionumber}, "correct biblionumber");
+    is( $hold->reservedate, '2020-03-20', "Item hold has correct start date" );
+    is( $hold->expirationdate, '2020-04-22', "Item hold has correct end date" );
+
+    $hold->delete();
+
+    $reply = C4::ILSDI::Services::HoldTitle( $query );
+    is ($reply->{pickup_location}, $pickup_branch->{branchname}, "Record hold with date parameters was placed");
+    $hold = Koha::Holds->search({ biblionumber => $biblio->{biblionumber}})->next();
+    is( $hold->biblionumber, $biblio->{biblionumber}, "correct biblionumber");
+    is( $hold->reservedate, '2020-03-20', "Record hold has correct start date" );
+    is( $hold->expirationdate, '2020-04-22', "Record hold has correct end date" );
 
     $schema->storage->txn_rollback;
 };
