@@ -227,8 +227,6 @@
 
             $("#issuePayoutModal").on("shown.bs.modal", function(e){
                 var button = $(e.relatedTarget);
-                var account = button.data('account');
-                $("#account + span").replaceWith(account);
                 var accountline = button.data('accountline');
                 $('#payoutline').val(accountline);
                 var amount = button.data('amount') * -1;
