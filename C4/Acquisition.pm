@@ -1395,8 +1395,8 @@ sub ModItemOrder {
             user                 => $user,
             invoice              => $invoice,
             budget_id            => $budget_id,
+            datereceived         => $datereceived,
             received_itemnumbers => \@received_itemnumbers,
-            order_internalnote   => $order_internalnote,
         }
     );
 
@@ -1419,10 +1419,18 @@ sub ModReceiveOrder {
     my $quantrec       = $params->{quantityreceived};
     my $user           = $params->{user};
     my $budget_id      = $params->{budget_id};
+    my $datereceived   = $params->{datereceived};
     my $received_items = $params->{received_items};
 
     my $dbh = C4::Context->dbh;
-    my $datereceived = ( $invoice and $invoice->{datereceived} ) ? $invoice->{datereceived} : dt_from_string;
+    $datereceived = output_pref(
+        {
+            dt => ( $datereceived ? dt_from_string( $datereceived ) : dt_from_string ),
+            dateformat => 'iso',
+            dateonly => 1,
+        }
+    );
+
     my $suggestionid = GetSuggestionFromBiblionumber( $biblionumber );
     if ($suggestionid) {
         ModSuggestion( {suggestionid=>$suggestionid,
