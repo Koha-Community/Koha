@@ -123,6 +123,7 @@ if ($quantityrec > $origquantityrec ) {
                 user             => $user,
                 invoice          => $invoice,
                 budget_id        => $bookfund,
+                datereceived     => $datereceived,
                 received_items   => \@received_items,
             }
         );
