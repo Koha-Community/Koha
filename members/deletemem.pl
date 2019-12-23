@@ -57,7 +57,7 @@ my $patron         = Koha::Patrons->find( $member );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $debits = $patron->account->outstanding_debits->total_outstanding;
-my $credits = $patron->account->outstanding_credits->total_outstanding;
+my $credits = abs $patron->account->outstanding_credits->total_outstanding;
 my $countissues = $patron->checkouts->count;
 my $userenv = C4::Context->userenv;
 
