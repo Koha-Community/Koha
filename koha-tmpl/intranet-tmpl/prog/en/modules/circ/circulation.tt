@@ -566,9 +566,17 @@
                                                     [% UNLESS ( noissues ) %]
                                                         <div id="set-automatic-renewal" class="circ-setting">
                                                             [% IF NEEDSCONFIRMATION %]
-                                                                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
+                                                                [% IF auto_renew %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" checked="checked" />
+                                                                [% ELSE %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
+                                                                [% END %]
                                                             [% ELSE %]
-                                                                <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" />
+                                                                [% IF auto_renew %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" checked="checked" />
+                                                                [% ELSE %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" />
+                                                                [% END %]
                                                             [% END %]
 
                                                             <label for="auto_renew">Automatic renewal</label>
