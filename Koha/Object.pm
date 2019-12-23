@@ -22,7 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use Mojo::JSON;
-use Scalar::Util qw( looks_like_number );
+use Scalar::Util qw( blessed looks_like_number );
 use Try::Tiny;
 
 use Koha::Database;
@@ -362,14 +362,33 @@ sub _numeric_column_type {
 
 =head3 to_api
 
-    my $object_for_api = $object->to_api;
+    my $object_for_api = $object->to_api(
+        {
+          [ embed => {
+                items => {
+                    children => {
+                        holds => {,
+                            children => {
+                              ...
+                            }
+                        }
+                    }
+                },
+                library => {
+                    ...
+                }
+            },
+            ...
+         ]
+        }
+    );
 
 Returns a representation of the object, suitable for API output.
 
 =cut
 
 sub to_api {
-    my ( $self, $embeds ) = @_;
+    my ( $self, $params ) = @_;
     my $json_object = $self->TO_JSON;
 
     my $to_api_mapping = $self->to_api_mapping;
@@ -393,35 +412,30 @@ sub to_api {
         }
     }
 
-    if ($embeds) {
-        foreach my $embed (@$embeds) {
-            my ( $curr, $next ) = split /\s*\.\s*/, $embed, 2;
-            my @nxembeds;
+    my $embeds = $params->{embed};
 
-            @nxembeds = ($next) if $next;
+    if ($embeds) {
+        foreach my $embed ( keys %{$embeds} ) {
+            my $curr = $embed;
+            my $next = $embeds->{$curr}->{children};
 
             my $children = $self->$curr;
-            if ( ref $children eq 'ARRAY' ) {
-                my @list;
-                my $pos = 0;
-                foreach my $child (@$children) {
-                    my $res = $child->to_api( \@nxembeds );
-                    $res = { $json_object->{$curr}->[$pos], $res }
-                      if defined $json_object->{$curr}
-                      && defined $json_object->{$curr}->[$pos];
-                    push @list, $res;
-                    $pos++;
-                }
+
+            if ( defined $children and ref($children) eq 'ARRAY' ) {
+                my @list = map {
+                    $self->_handle_to_api_child(
+                        { child => $_, next => $next, curr => $curr } )
+                } @{$children};
                 $json_object->{$curr} = \@list;
             }
             else {
-                my $res = $children->to_api( \@nxembeds );
-                $res = { $json_object->{$curr}, $res }
-                  if defined $json_object->{$curr};
-                $json_object->{$curr} = $res;
+                $json_object->{$curr} = $self->_handle_to_api_child(
+                    { child => $children, next => $next, curr => $curr } );
             }
         }
     }
+
+
 
     return $json_object;
 }
@@ -659,6 +673,35 @@ For example, for borrowers, the _type method will return "Borrower".
 =cut
 
 sub _type { }
+
+=head3 _handle_to_api_child
+
+=cut
+
+sub _handle_to_api_child {
+    my ($self, $args ) = @_;
+
+    my $child = $args->{child};
+    my $next  = $args->{next};
+    my $curr  = $args->{curr};
+
+    my $res;
+
+    if ( defined $child ) {
+
+        Koha::Exceptions::Exception->throw( "Asked to embed $curr but its return value doesn't implement to_api" )
+            if defined $next and blessed $child and !$child->can('to_api');
+
+        if ( blessed $child ) {
+            $res = $child->to_api({ embed => $next });
+        }
+        else {
+            $res = $child;
+        }
+    }
+
+    return $res;
+}
 
 sub DESTROY { }
 

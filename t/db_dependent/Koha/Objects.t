@@ -283,7 +283,7 @@ subtest '->search() tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 4;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -302,6 +302,69 @@ subtest "to_api() tests" => sub {
     is( ref( $cities_api ), 'ARRAY', 'to_api returns an array' );
     is_deeply( $cities_api->[0], $city_1->to_api, 'to_api returns the individual objects with ->to_api' );
     is_deeply( $cities_api->[1], $city_2->to_api, 'to_api returns the individual objects with ->to_api' );
+
+    my $biblio_1 = $builder->build_sample_biblio();
+    my $item_1   = $builder->build_sample_item({ biblionumber => $biblio_1->biblionumber });
+    my $hold_1   = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { itemnumber => $item_1->itemnumber }
+        }
+    );
+
+    my $biblio_2 = $builder->build_sample_biblio();
+    my $item_2   = $builder->build_sample_item({ biblionumber => $biblio_2->biblionumber });
+    my $hold_2   = $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => { itemnumber => $item_2->itemnumber }
+        }
+    );
+
+    my $embed = { 'items' => {} };
+
+    my $i = 0;
+    my @items = ( $item_1, $item_2 );
+    my @holds = ( $hold_1, $hold_2 );
+
+    my $biblios_api = Koha::Biblios->search(
+        {
+            biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ]
+        }
+    )->to_api( { embed => $embed } );
+
+    foreach my $biblio_api ( @{ $biblios_api } ) {
+        ok(exists $biblio_api->{items}, 'Items where embedded in biblio results');
+        is($biblio_api->{items}->[0]->{item_id}, $items[$i]->itemnumber, 'Item matches');
+        ok(!exists $biblio_api->{items}->[0]->{holds}, 'No holds info should be embedded yet');
+
+        $i++;
+    }
+
+    # One more level
+    $embed = {
+        'items' => {
+            children => { 'holds' => {} }
+        }
+    };
+
+    $i = 0;
+
+    $biblios_api = Koha::Biblios->search(
+        {
+            biblionumber => [ $biblio_1->biblionumber, $biblio_2->biblionumber ]
+        }
+    )->to_api( { embed => $embed } );
+
+    foreach my $biblio_api ( @{ $biblios_api } ) {
+
+        ok(exists $biblio_api->{items}, 'Items where embedded in biblio results');
+        is($biblio_api->{items}->[0]->{item_id}, $items[$i]->itemnumber, 'Item still matches');
+        ok(exists $biblio_api->{items}->[0]->{holds}, 'Holds info should be embedded');
+        is($biblio_api->{items}->[0]->{holds}->[0]->{hold_id}, $holds[$i]->reserve_id, 'Hold matches');
+
+        $i++;
+    }
 
     $schema->storage->txn_rollback;
 };

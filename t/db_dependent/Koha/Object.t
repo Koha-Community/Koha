@@ -215,7 +215,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 18;
+    plan tests => 26;
 
     $schema->storage->txn_begin;
 
@@ -262,43 +262,73 @@ subtest "to_api() tests" => sub {
     my $illrequest = $builder->build_object({ class => 'Koha::Illrequests' });
     is_deeply( $illrequest->to_api, $illrequest->TO_JSON, 'If no overloaded to_api_mapping method, return TO_JSON' );
 
-    my $item_class = Test::MockModule->new('Koha::Item');
-    $item_class->mock( 'to_api_mapping',
-        sub {
-            return {
-                itemnumber       => 'item_id'
-            };
-        }
-    );
-
-    my $hold_class = Test::MockModule->new('Koha::Hold');
-    $hold_class->mock( 'to_api_mapping',
-        sub {
-            return {
-                reserve_id       => 'hold_id'
-            };
-        }
-    );
-
     my $biblio = $builder->build_sample_biblio();
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $hold = $builder->build_object({ class => 'Koha::Holds', value => { itemnumber => $item->itemnumber } });
 
-    my @embeds = ('items');
+    my $embeds = { 'items' => {} };
 
-    my $biblio_api = $biblio->to_api(\@embeds);
+    my $biblio_api = $biblio->to_api({ embed => $embeds });
 
     ok(exists $biblio_api->{items}, 'Items where embedded in biblio results');
     is($biblio_api->{items}->[0]->{item_id}, $item->itemnumber, 'Item matches');
     ok(!exists $biblio_api->{items}->[0]->{holds}, 'No holds info should be embedded yet');
 
-    @embeds = ('items.holds');
-    $biblio_api = $biblio->to_api(\@embeds);
+    $embeds = (
+        {
+            'items' => {
+                'children' => {
+                    'holds' => {}
+                }
+            },
+            'biblioitem' => {}
+        }
+    );
+    $biblio_api = $biblio->to_api({ embed => $embeds });
 
     ok(exists $biblio_api->{items}, 'Items where embedded in biblio results');
     is($biblio_api->{items}->[0]->{item_id}, $item->itemnumber, 'Item still matches');
     ok(exists $biblio_api->{items}->[0]->{holds}, 'Holds info should be embedded');
     is($biblio_api->{items}->[0]->{holds}->[0]->{hold_id}, $hold->reserve_id, 'Hold matches');
+    is_deeply($biblio_api->{biblioitem}, $biblio->biblioitem->to_api, 'More than one root');
+
+    my $hold_api = $hold->to_api(
+        {
+            embed => { 'item' => {} }
+        }
+    );
+
+    is( ref($hold_api->{item}), 'HASH', 'Single nested object works correctly' );
+    is( $hold_api->{item}->{item_id}, $item->itemnumber, 'Object embedded correctly' );
+
+    # biblio with no items
+    my $new_biblio = $builder->build_sample_biblio;
+    my $new_biblio_api = $new_biblio->to_api({ embed => $embeds });
+
+    is_deeply( $new_biblio_api->{items}, [], 'Empty list if no items' );
+
+    my $biblio_class = Test::MockModule->new('Koha::Biblio');
+    $biblio_class->mock( 'undef_result', sub { return; } );
+
+    $new_biblio_api = $new_biblio->to_api({ embed => ( { 'undef_result' => {} } ) });
+    ok( exists $new_biblio_api->{undef_result}, 'If a method returns undef, then the attribute is defined' );
+    is( $new_biblio_api->{undef_result}, undef, 'If a method returns undef, then the attribute is undef' );
+
+    $biblio_class->mock( 'items',
+        sub { return [ bless { itemnumber => 1 }, 'Somethings' ]; } );
+
+    throws_ok {
+        $new_biblio_api = $new_biblio->to_api(
+            { embed => { 'items' => { children => { asd => {} } } } } );
+    }
+    'Koha::Exceptions::Exception',
+"An exception is thrown if a blessed object to embed doesn't implement to_api";
+
+    is(
+        "$@",
+        "Asked to embed items but its return value doesn't implement to_api",
+        "Exception message correct"
+    );
 
     $schema->storage->txn_rollback;
 };
