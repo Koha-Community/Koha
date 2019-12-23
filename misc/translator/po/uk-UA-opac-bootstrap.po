@@ -9,19 +9,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-11-14 21:03-0300\n"
-"PO-Revision-Date: 2019-11-16 12:27+0000\n"
+"POT-Creation-Date: 2019-12-17 10:05-0300\n"
+"PO-Revision-Date: 2019-12-10 15:15+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1573907247.563570\n"
+"X-POOTLE-MTIME: 1575990954.019177\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -50,9 +50,9 @@ msgstr ""
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s by "
-msgstr "%s %s за %s %s "
+msgstr "%s %s %s %s / "
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" | html -
@@ -120,11 +120,10 @@ msgstr "%s %s %s Коха електронний %s каталог %s &rsaquo; %
 #. %20$s:  i = i + 1 
 #. %21$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title-head.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s No title %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgstr ""
-"%s Додано %s Вами %s %s Додано %s від %s %s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s "
+"%s %s %s Немає назви %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -348,9 +347,10 @@ msgstr "%s %s за %s %s "
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
-msgstr "Ви на поточний момент заборгували штраф і маєте сплатити:"
+msgstr ""
+"%s %s на даний момент має заборгованість (штрафи та сплати) у розмірі: "
 
 #. %1$s:  firstname | $raw 
 #. %2$s:  surname | $raw 
@@ -372,9 +372,9 @@ msgstr ""
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:88
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s's fines and charges"
-msgstr "(нарахування пені та сплати)"
+msgstr "%s %s — штрафи та сплати"
 
 # Див. також: http://www.gpntb.ru/win/usmarc/ch2/box6.html
 #. %1$s:  SWITCH type 
@@ -715,7 +715,7 @@ msgstr "%s Без результатів, спробуйте змінити фі
 #: opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
 #, c-format
 msgid "%s No title %s %s%s,%s "
-msgstr "%s Без заголовку %s %s%s,%s "
+msgstr "%s Немає назви %s %s%s,%s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
@@ -970,7 +970,7 @@ msgstr "%s Витяги з відео"
 #. %13$s:  END 
 #. %14$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:404
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
 "%s %s %s %s %s. "
@@ -1530,10 +1530,10 @@ msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог &rsaqu
 #. %4$s:  END 
 #. %5$s:  INCLUDE 'biblio-title-head.inc' 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s"
 msgstr ""
-"%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Зображення для: „%s“ "
+"%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Подробиці для: „%s“ "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1786,9 +1786,9 @@ msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог &rsaqu
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your charges"
-msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Ваш кошик"
+msgstr "%s%s%s Коха %s &rsaquo; Електронний каталог &rsaquo; Ваші сплати"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -2206,8 +2206,8 @@ msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;CancelHold&gt; "
-"&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
+"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;CancelHold&gt; &lt;"
+"message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:535
 #, c-format
@@ -2379,7 +2379,7 @@ msgstr ""
 "status&gt;<br/> &lt;type&gt;ST&lt;/type&gt;<br/>&lt;/GetPatronStatus&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:210
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
 "&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
@@ -2862,9 +2862,9 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Автор як фраза"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Ключове слово як фраза"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:76
 #, c-format
@@ -2982,7 +2982,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:212
 #, c-format
 msgid "(Lost)"
-msgstr ""
+msgstr "(Втрачено)"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:823
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:824
@@ -3609,9 +3609,9 @@ msgstr "Дозволити Вашому поручителю перегляда�
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:141
-#, fuzzy, c-format
+#, c-format
 msgid "Allow your guarantor to view your current fines?"
-msgstr "Дозволити Вашому поручителю переглядати Ваші поточні випожичання?"
+msgstr "Дозволити Вашому поручителю переглядати Ваші поточні штрафи?"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:64
 #, c-format
@@ -4382,7 +4382,7 @@ msgstr "CancelRecall "
 msgid "Cancels an active hold request for the patron."
 msgstr "Скасовує активний запит на резервування для відвідувача."
 
-#. IMG
+#. I
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 msgid "Cannot be put on hold"
 msgstr "Неможливо встановити резервування"
@@ -4470,17 +4470,17 @@ msgstr "Розділи: "
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:1
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:396
-#, fuzzy, c-format
+#, c-format
 msgid "Charges"
-msgstr "Розрахування"
+msgstr "Сплати"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
-#, fuzzy, c-format
+#, c-format
 msgid "Charges (%s)"
-msgstr "Кредити (%s)"
+msgstr "Сплати (%s)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -5827,12 +5827,12 @@ msgstr "фільмографії"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:80
 msgid "Filter paid transactions"
-msgstr ""
+msgstr "Фільтрувати оплачені операції"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:96
 #, c-format
 msgid "Fine amount"
-msgstr ""
+msgstr "Сума штрафу"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:205
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:506
@@ -5844,7 +5844,7 @@ msgstr "Пені"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
 #, c-format
 msgid "Fines and charges"
-msgstr "Пеня та плати"
+msgstr "Штрафи та сплати"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:340
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:597
@@ -6162,9 +6162,9 @@ msgstr "Групи бібліотек"
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:158
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "Опубліковано: %s %s у %s %s %s, %s %s %s, %s %s "
+msgstr "Поручителі: %s %s %s %s %s, %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
@@ -7032,7 +7032,7 @@ msgid "Last"
 msgstr "Останнє"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "Last "
 msgstr "Останнє"
 
@@ -7534,7 +7534,7 @@ msgstr "Повідомлення для Вас"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:80
 msgid "Minimum amount needed by this service is %s"
-msgstr ""
+msgstr "Мінімальна сума, необхідна для цієї послуги — %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
 #, c-format
@@ -7686,9 +7686,9 @@ msgstr "Нове"
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' biblio=review 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s"
-msgstr "Новий коментар на заголовок: %s %s, %s%s"
+msgstr "Новий коментар на заголовок: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:58
@@ -8563,7 +8563,7 @@ msgstr "Коментар відвідувача від %s"
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:139
 #, c-format
 msgid "Pay selected fines and charges"
-msgstr "Оплатити вибрані пені та збори"
+msgstr "Оплатити вибрані штрафи та сплати"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:146
@@ -9363,9 +9363,9 @@ msgid "Relatives' checkouts"
 msgstr "Видачі родичів"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
-#, fuzzy, c-format
+#, c-format
 msgid "Relatives' fines"
-msgstr "Видачі родичів"
+msgstr "Штрафи родичів"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
@@ -10119,7 +10119,7 @@ msgstr "Вислати список"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:46
 #, c-format
 msgid "Send to device"
-msgstr ""
+msgstr "Надіслати на пристрій"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:30
 #, c-format
@@ -10237,9 +10237,8 @@ msgstr "Поділитися на LinkedIn"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
-#, fuzzy
 msgid "Share on Twitter"
-msgstr "Поділитися на LinkedIn"
+msgstr "Поділитися в Twitter"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1223
 #, c-format
@@ -10279,9 +10278,8 @@ msgstr "Показати усі новини"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:80
-#, fuzzy
 msgid "Show all transactions"
-msgstr "Показати усі новини"
+msgstr "Показати усі операції"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
@@ -10289,9 +10287,9 @@ msgid "Show last 50 items"
 msgstr "Показати останні 50 примірників"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Show less"
-msgstr "Показати списки"
+msgstr "Показати менше"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
@@ -10362,7 +10360,7 @@ msgid ""
 "Some charges for text messages may be incurred when using this service. "
 "Please check with your mobile service provider if you have questions."
 msgstr ""
-"Деякі слати за текстові повідомлення можуть виникнути при використанні цієї "
+"Деякі сплати за текстові повідомлення можуть виникнути при використанні цієї "
 "служби. Будь ласка, зв’яжіться з постачальником послуг мобільного зв’язку, "
 "якщо у Вас є питання."
 
@@ -12265,7 +12263,7 @@ msgstr "Вам наразі ще не нічого не було видано."
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:401
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
-msgstr "Ви на поточний момент заборгували штраф і маєте сплатити:"
+msgstr "Ви на поточний момент заборгували (штрафи і сплати) у розмірі: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:51
 #, c-format
@@ -12515,9 +12513,9 @@ msgid "You will receive an email shortly. "
 msgstr "Ви отримаєте електронний лист незабаром. "
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:116
-#, fuzzy, c-format
+#, c-format
 msgid "Your account"
-msgstr "Меню мого облікового запису"
+msgstr "Мій обліковий запис"
 
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment 
@@ -12600,9 +12598,9 @@ msgid "Your catalog search history is empty."
 msgstr "Ваша історія пошуків у каталозі порожня."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Your charges"
-msgstr "Ваш кошик"
+msgstr "Ваші сплати"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:26
 #, c-format
@@ -13698,9 +13696,9 @@ msgstr ""
 "з примірників, на які Ви не потребуєте тримати резервування."
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "your charges"
-msgstr "мої мітки"
+msgstr "мої сплати"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:30
 #, c-format

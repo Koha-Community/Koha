@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-14 19:08-0300\n"
-"PO-Revision-Date: 2019-11-27 10:34+0000\n"
-"Last-Translator: jessica.andersson <jessica.andersson@alingsas.se>\n"
+"POT-Creation-Date: 2019-12-17 10:01-0300\n"
+"PO-Revision-Date: 2019-12-09 10:38+0000\n"
+"Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1574850859.469558\n"
+"X-POOTLE-MTIME: 1575887930.070662\n"
 "X-Pootle-Path: /sv/18.05/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -39,9 +39,9 @@ msgstr "%s %s %s %s Du prenumererar på e-postmeddelande om nya nummer/häften "
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s by "
-msgstr "%s %s av %s %s "
+msgstr "%s %s %s %s av "
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" | html -
@@ -109,11 +109,10 @@ msgstr "%s %s %s Koha online %s-katalog %s &rsaquo; %s %s "
 #. %20$s:  i = i + 1 
 #. %21$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title-head.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s No title %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgstr ""
-"%s Upplagd %s av dig %s %s upplagd %s av %s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s%s"
+"%s %s %s Ingen titel %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -190,9 +189,9 @@ msgstr "%s %s (inte godkänd) %s"
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Did you mean: "
-msgstr "%s Menade du: "
+msgstr "%s %s Menade du: "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -337,9 +336,9 @@ msgstr "%s %s av %s %s "
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
-msgstr "Summa avgifter just nu"
+msgstr "%s %s är skyldig förseningsavgifter om totalt:"
 
 #. %1$s:  firstname | $raw 
 #. %2$s:  surname | $raw 
@@ -2044,8 +2043,8 @@ msgid ""
 "%s(%s)%s "
 msgstr ""
 "%sFörslag inskickat %sKontrollerat av biblioteket %sAccepterat av "
-"biblioteket %sBeställt av biblioteket %sInköpsförslaget avvisat %"
-"sTillgänglig i biblioteket %s %s %s %s(%s)%s "
+"biblioteket %sBeställt av biblioteket %sInköpsförslaget avvisat "
+"%sTillgänglig i biblioteket %s %s %s %s(%s)%s "
 
 #. %1$s:  IF ( typeissue ) 
 #. %2$s:  ELSIF ( typeissuecancel ) 
@@ -3416,7 +3415,7 @@ msgstr "Tillåt din målsman att se dina nuvarande lån? "
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:141
 #, c-format
 msgid "Allow your guarantor to view your current fines?"
-msgstr "Tillåt målsman att se aktuella avgifter? "
+msgstr "Tillåt målsman att se aktuella avgifter?"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:64
 #, c-format
@@ -3653,7 +3652,7 @@ msgstr "Artikelbeställningar"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:168
 #, c-format
 msgid "Article requests (%s)"
-msgstr "Artikelbeställningar(%s) "
+msgstr "Artikelbeställningar (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:45
 #, c-format
@@ -4179,7 +4178,7 @@ msgstr "CancelRecall "
 msgid "Cancels an active hold request for the patron."
 msgstr "Avbryter en aktiv reservationsbeställning för låntagaren. "
 
-#. IMG
+#. I
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 msgid "Cannot be put on hold"
 msgstr "Kan inte reserveras "
@@ -4347,9 +4346,8 @@ msgstr "Utlånad till och med %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:122
-#, fuzzy
 msgid "Checked out until: "
-msgstr "Utlånad till och med %s"
+msgstr "Utlånad till och med: "
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:4
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:15
@@ -5946,9 +5944,9 @@ msgstr "Biblioteksgrupper "
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:158
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "Förlag: %s %s in %s %s %s , %s %s %s , %s %s "
+msgstr "Garanterat av %s %s %s %s %s, %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
@@ -6514,14 +6512,14 @@ msgstr "Instruktörer:"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:275
 #, c-format
 msgid "Interlibrary loan request"
-msgstr "Fjärrlånebeställning "
+msgstr "Fjärrlånebeställning"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:26
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:33
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:93
 #, c-format
 msgid "Interlibrary loan requests"
-msgstr "Fjärrlånebeställningar "
+msgstr "Fjärrlånebeställningar"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:39
 #, c-format
@@ -7450,15 +7448,15 @@ msgstr "Ny "
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' biblio=review 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s"
-msgstr "Ny kommentar på %s %s, %s%s"
+msgstr "Ny kommentar på %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:58
 #, c-format
 msgid "New interlibrary loan request"
-msgstr "Ny fjärrlånebeställning "
+msgstr "Ny fjärrlånebeställning"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:69
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:165
@@ -9162,7 +9160,7 @@ msgstr "Ta bort delning "
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:285
 #, c-format
 msgid "Renew"
-msgstr "Låna om "
+msgstr "Förnya"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
@@ -9194,7 +9192,7 @@ msgstr "LånaOm"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
 #, c-format
 msgid "Renewed!"
-msgstr "Omlånad! "
+msgstr "Omlånad!"
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:67
 #, c-format
@@ -9256,7 +9254,7 @@ msgstr "Materialtyp:"
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:12
 #, c-format
 msgid "Request updated"
-msgstr "Beställningen uppdaterad "
+msgstr "Beställning uppdaterad"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:119
 #, c-format
@@ -9271,7 +9269,7 @@ msgstr "Beställd från: "
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:172
 #, c-format
 msgid "Requested item:"
-msgstr "Beställ en särskild exemplartyp:"
+msgstr "Beställt exemplar:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:20
@@ -11140,7 +11138,7 @@ msgstr "Denna e-postadress finns redan i vår databas. "
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:330
 #, c-format
 msgid "This is a on-site checkout, it cannot be renewed."
-msgstr "Detta är ett lån på plats och kan inte lånas om. "
+msgstr "Detta är ett lån på plats och kan inte lånas om."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:812
 #, c-format
@@ -11219,7 +11217,8 @@ msgstr "Denna prenumeration är avslutad. "
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:190
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
-msgstr "Den här titeln kan inte beställas eftersom du redan har den. "
+msgstr ""
+"Den här titeln kan inte beställas eftersom den redan är utlånad till dig. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:192
 #, c-format
@@ -11624,7 +11623,7 @@ msgstr "Visa information om den här titeln"
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:154
 #, c-format
 msgid "View interlibrary loan request"
-msgstr "Visa fjärrlåneförfrågan"
+msgstr "Visa fjärrlånebeställning"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:224
@@ -12233,7 +12232,7 @@ msgid ""
 "renew your account."
 msgstr ""
 "Giltighetstiden på ditt bibliotekskort gick ut %s. Vänligen kontakta "
-"biblioteket för att förnya det. "
+"biblioteket för att förnya det."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:81
 #, c-format
@@ -12375,7 +12374,7 @@ msgid ""
 "renew your card. "
 msgstr ""
 "Ditt bibliotekskort har gått ut. Vänligen kontakta personalen om du vill "
-"förnya ditt bibliotekskort."
+"förnya ditt bibliotekskort. "
 
 #. %1$s:  shelfname | $raw 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:2
@@ -13379,7 +13378,7 @@ msgstr "Dina medgivanden"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:131
 #, c-format
 msgid "your interlibrary loan requests"
-msgstr "dina fjärrlåneförfrågningar"
+msgstr "dina fjärrlånebeställningar"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:104
 #, c-format

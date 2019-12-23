@@ -6,9 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-11-14 06:18-0300\n"
-"PO-Revision-Date: 2019-10-15 19:29+0000\n"
-"Last-Translator: bright <bright92dream@hotmail.com>\n"
+"POT-Creation-Date: 2019-12-17 09:29-0300\n"
+"PO-Revision-Date: 2019-12-09 12:29+0000\n"
+"Last-Translator: KnowledgeWare Technologies Est. <massoudalshareef@kwareict."
+"com>\n"
 "Language-Team: za\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1571167779.665970\n"
+"X-POOTLE-MTIME: 1575894557.550730\n"
 "X-Pootle-Path: /ar/18.05/ar-Arab-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -46,9 +47,9 @@ msgstr ""
 #. %3$s:  INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT 
 #. %4$s:  IF ( SEARCH_RESULT.author ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:359
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s %s by "
-msgstr "%s %s بواسطة%s %s"
+msgstr "%s %s %s %s بواسطة "
 
 #. %1$s: # First line will be summary, second line will be description. Avoid indenting. Var newline added to avoid translating problems. -
 #. %2$s: - newline="\n" | html -
@@ -115,11 +116,10 @@ msgstr "%s %s %s كوها على الخط المباشر %s الفهرس %s &rsa
 #. %20$s:  i = i + 1 
 #. %21$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title-head.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s No title %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgstr ""
-"%s مضاف %s بواسطتك %s %s مضاف %s بواسطة%s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s"
+"%s %s %s بدون عنوان %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -169,6 +169,11 @@ msgid ""
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
 "%sHold waiting too long %s%s %s %s %s "
 msgstr ""
+"%s %s %sسداد %sشطب %sمعفي %sائتمان %sاستعادة رسم المادة المفقودة %s%s %s %s "
+"%s %sرسم إنشاء الحساب %sرسم تجديد الحساب %sمادة مفقودة %sرسم يدوي %sبطاقة "
+"جديدة %sغرامة %sرسم معالجة مادة مفقودة %sرسم إيجار %sرسم إيجار يومي %sتجديد "
+"مادة إيجار %sتجديد مادة إيجار يومي%sرسم حجز %sالحجز في الانتظار لمدة طويلة %s"
+"%s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
@@ -196,9 +201,9 @@ msgstr "%s %s (غير مقبول) %s"
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Did you mean: "
-msgstr "%s هل تعني: "
+msgstr "%s %s هل تعني:"
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -342,9 +347,9 @@ msgstr "%s %s بواسطة%s %s"
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
-msgstr "عليك رسوماتك / غرامات تأخير بمبلغ اجمالي وقدره:"
+msgstr "%s %s مدين حاليًا برسوم قدرها:"
 
 #. %1$s:  firstname | $raw 
 #. %2$s:  surname | $raw 
@@ -364,9 +369,9 @@ msgstr "%s %s مرسل لك من فهرسنا على الخط المباشر، �
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:88
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s's fines and charges"
-msgstr "المستحق في الغرامات والرسوم"
+msgstr "الرسوم الخاصة بـ%s %s"
 
 #. %1$s:  SWITCH type 
 #. %2$s:  CASE 'earlier' 
@@ -696,9 +701,9 @@ msgstr "%s لا توجد نتائج، حاول تغيير المرشحات  %s"
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s No title %s %s%s,%s "
-msgstr "%s %s %s%s%sبدون عنوان%s %s %s%s "
+msgstr "%s بدون عنوان %s %s%s,%s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
@@ -1480,9 +1485,9 @@ msgstr "%s%s%sكوها على الخط المباشر%s الفهرس&rsaquo; ا�
 #. %4$s:  END 
 #. %5$s:  INCLUDE 'biblio-title-head.inc' 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:33
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Details for: %s"
-msgstr "%s%s%sكوها على الخط المباشر%s الفهرس&rsaquo;صور لـ: %s"
+msgstr "%s%s%sكوها على الخط المباشر%s الفهرس &rsaquo; تفاصيل لـ: %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1713,9 +1718,9 @@ msgstr "%s%s%sكوها على الخط المباشر%s الفهرس&rsaquo; س�
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:10
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your charges"
-msgstr "%s%s%sكوها على الخط المباشر%s الفهرس&rsaquo; سلتك"
+msgstr "%s%s%sكوها على الخط المباشر%s الفهرس &rsaquo; تغييراتك"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -2280,7 +2285,7 @@ msgstr ""
 "GetPatronStatus&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:210
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
 "&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
@@ -2433,21 +2438,25 @@ msgstr ""
 "biblionumber&gt;1&lt;/biblionumber&gt; &lt;timestamp&gt;2008-09-03 "
 "18:43:19&lt;/timestamp&gt; &lt;cn_sort&gt;_&lt;/cn_sort&gt; &lt;"
 "publishercode&gt;cherche midi éditeur&lt;/publishercode&gt; &lt;reserves&gt; "
-"&lt;/reserves&gt; &lt;items&gt; &lt;item&gt; &lt;biblioitemnumber&gt;1&lt;/"
-"biblioitemnumber&gt; &lt;withdrawn&gt;0&lt;/withdrawn&gt; &lt;"
-"holdingbranchname&gt;Bibliothèque Jean Prunier&lt;/holdingbranchname&gt; &lt;"
-"notforloan&gt;0&lt;/notforloan&gt; &lt;"
-"replacementpricedate&gt;2008-08-20&lt;/replacementpricedate&gt; &lt;"
-"itemnumber&gt;1&lt;/itemnumber&gt; &lt;location&gt;Secteur Adulte&lt;/"
-"location&gt; &lt;itemcallnumber&gt;R ABE&lt;/itemcallnumber&gt; &lt;"
-"date_due&gt;&lt;/date_due&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;"
-"datelastseen&gt;2008-08-20&lt;/datelastseen&gt; &lt;homebranch&gt;BIB&lt;/"
-"homebranch&gt; &lt;homebranchname&gt;Bibliothèque Jean Prunier&lt;/"
-"homebranchname&gt; &lt;biblionumber&gt;1&lt;/biblionumber&gt; &lt;"
-"holdingbranch&gt;BIB&lt;/holdingbranch&gt; &lt;timestamp&gt;2008-08-20 "
-"17:15:51&lt;/timestamp&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;cn_sort&gt;"
-"R_ABE&lt;/cn_sort&gt; &lt;dateaccessioned&gt;2008-08-20&lt;/"
-"dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
+"&lt;/reserves&gt; &lt;items&gt; &lt;item&gt; &lt;onloan&gt;2019-10-01&lt;/"
+"onloan&gt; &lt;holdingbranch&gt;BIB&lt;/holdingbranch&gt; &lt;location&gt;"
+"Secteur Adulte&lt;/location&gt; &lt;datelastborrowed&gt;2019-07-18&lt;/"
+"datelastborrowed&gt; &lt;biblioitemnumber&gt;526315&lt;/biblioitemnumber&gt; "
+"&lt;permanent_location&gt;Secteur Adulte&lt;/permanent_location&gt; &lt;"
+"datelastseen&gt;2019-07-18&lt;/datelastseen&gt; &lt;withdrawn&gt;0&lt;/"
+"withdrawn&gt; &lt;itype&gt;LONG&lt;/itype&gt; &lt;notforloan&gt;0&lt;/"
+"notforloan&gt; &lt;biblionumber&gt;526315&lt;/biblionumber&gt; &lt;"
+"itemnumber&gt;847332&lt;/itemnumber&gt; &lt;price&gt;22.17&lt;/price&gt; &lt;"
+"dateaccessioned&gt;2016-09-13&lt;/dateaccessioned&gt; &lt;issues&gt;10&lt;/"
+"issues&gt; &lt;homebranchname&gt;Bibliothèque Jean Prunier&lt;/"
+"homebranchname&gt; &lt;homebranch&gt;BIB&lt;/homebranch&gt; &lt;"
+"timestamp&gt;2019-07-18 17:03:03&lt;/timestamp&gt; &lt;cn_sort&gt;R_ABE&lt;/"
+"cn_sort&gt; &lt;itemlost&gt;0&lt;/itemlost&gt; &lt;renewals&gt;28&lt;/"
+"renewals&gt; &lt;barcode&gt;040444587X&lt;/barcode&gt; &lt;damaged&gt;0&lt;/"
+"damaged&gt; &lt;replacementpricedate&gt;2018-02-01&lt;/"
+"replacementpricedate&gt; &lt;itemcallnumber&gt;005.55 SPS/BRA&lt;/"
+"itemcallnumber&gt; &lt;holdingbranchname&gt;Bibliothèque Jean Prunier&lt;/"
+"holdingbranchname&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
 "record&gt; &lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt; &lt;"
 "isbn&gt;9782265078031&lt;/isbn&gt; &lt;marcxml&gt; &lt;?xml version=\"1.0\" "
 "encoding=\"UTF-8\" ?&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
@@ -2500,7 +2509,7 @@ msgstr ""
 "17:15:51&lt;/timestamp&gt; &lt;damaged&gt;0&lt;/damaged&gt; &lt;cn_sort&gt;"
 "R_ABE&lt;/cn_sort&gt; &lt;dateaccessioned&gt;2008-08-20&lt;/"
 "dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
-"record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
+"record&gt;RecordNotFound&lt;/record&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:678
 #, c-format
@@ -2675,9 +2684,9 @@ msgid "&nbsp;&nbsp;&nbsp;&nbsp; ISSN"
 msgstr "&nbsp;&nbsp;&nbsp;&nbsp; تدمد"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:50
-#, fuzzy, c-format
+#, c-format
 msgid "&nbsp;&nbsp;&nbsp;&nbsp; Keyword phrase"
-msgstr "&nbsp;&nbsp;&nbsp;&nbsp; عبارة المؤلف"
+msgstr "&nbsp;&nbsp;&nbsp;&nbsp; عبارة كلمة مفتاحية"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:76
 #, c-format
@@ -2794,7 +2803,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:212
 #, c-format
 msgid "(Lost)"
-msgstr ""
+msgstr "(مفقودة)"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:823
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:824
@@ -3403,9 +3412,9 @@ msgstr "السماح لولي أمرك بمشاهدة استعاراتك الح�
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:89
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:141
-#, fuzzy, c-format
+#, c-format
 msgid "Allow your guarantor to view your current fines?"
-msgstr "السماح لولي أمرك بمشاهدة استعاراتك الحالية؟"
+msgstr "السماح لكفيلك بعرض غراماتك الحالية؟"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:64
 #, c-format
@@ -4162,7 +4171,7 @@ msgstr "إلغاء استدعاء "
 msgid "Cancels an active hold request for the patron."
 msgstr "إلغاء طلب حجز نشط للمستفيد"
 
-#. IMG
+#. I
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:357
 msgid "Cannot be put on hold"
 msgstr "لا يمكن تأجيلها"
@@ -4248,17 +4257,17 @@ msgstr "فصول"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:1
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:396
-#, fuzzy, c-format
+#, c-format
 msgid "Charges"
-msgstr "إخلاء الطرف"
+msgstr "الرسوم"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:154
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
-#, fuzzy, c-format
+#, c-format
 msgid "Charges (%s)"
-msgstr "الاعتمادات (%s)"
+msgstr "الرسوم (%s)"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -5593,12 +5602,12 @@ msgstr "Filmographies"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:80
 msgid "Filter paid transactions"
-msgstr ""
+msgstr "تنقيح عمليات الدفع"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:96
 #, c-format
 msgid "Fine amount"
-msgstr ""
+msgstr "مبلغ الغرامة"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:205
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:506
@@ -5916,9 +5925,9 @@ msgstr "مجموعات المكتبات"
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:158
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "منشور بواسطة: %s %s in %s %s %s , %s %s %s , %s %s "
+msgstr "مضمون بواسطة %s %s %s %s %s, %s %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
@@ -6758,9 +6767,9 @@ msgid "Last"
 msgstr "الأخير"
 
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "Last "
-msgstr "الأخير"
+msgstr "آخر"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
 #, c-format
@@ -7259,7 +7268,7 @@ msgstr "رسائل من أجلك"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:80
 msgid "Minimum amount needed by this service is %s"
-msgstr ""
+msgstr "الحد الأدنى للمبلغ المطلوب لهذه الخدمة هو %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
 #, c-format
@@ -7411,9 +7420,9 @@ msgstr "جديد"
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' biblio=review 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s"
-msgstr "تعليقات جديدة على  %s %s, %s%s"
+msgstr "تعليق جديد على %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:58
@@ -9059,9 +9068,9 @@ msgid "Relatives' checkouts"
 msgstr "إستعارات الأقارب"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:156
-#, fuzzy, c-format
+#, c-format
 msgid "Relatives' fines"
-msgstr "إستعارات الأقارب"
+msgstr "غرامات الأقارب"
 
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:1
 #, c-format
@@ -9806,7 +9815,7 @@ msgstr "ارسل القائمة"
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:46
 #, c-format
 msgid "Send to device"
-msgstr ""
+msgstr "إرسال إلى جهاز"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:30
 #, c-format
@@ -9924,9 +9933,8 @@ msgstr "شارك على LinkedIn"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1180
-#, fuzzy
 msgid "Share on Twitter"
-msgstr "شارك على LinkedIn"
+msgstr "شارك على تويتر"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1223
 #, c-format
@@ -9966,9 +9974,8 @@ msgstr "عرض كل الأخبار"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:80
-#, fuzzy
 msgid "Show all transactions"
-msgstr "عرض كل الأخبار"
+msgstr "عرض كل العمليات"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:62
 #, c-format
@@ -9976,9 +9983,9 @@ msgid "Show last 50 items"
 msgstr "عرض آخر 50 مادة"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Show less"
-msgstr "عرض القوائم"
+msgstr "عرض أقل"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
@@ -11642,9 +11649,9 @@ msgstr "مرحـــبــا "
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:96
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome, %s"
-msgstr "مرحـــبــا "
+msgstr "مرحـبـاً %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:44
 #, c-format
@@ -12147,9 +12154,9 @@ msgid "You will receive an email shortly. "
 msgstr "سوف تتلقى بريدا الكترونيا بعد قليل."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:116
-#, fuzzy, c-format
+#, c-format
 msgid "Your account"
-msgstr "قائمة حسابك"
+msgstr "حسابك"
 
 #. For the first occurrence,
 #. %1$s:  IF debarred_comment 
@@ -12228,9 +12235,9 @@ msgid "Your catalog search history is empty."
 msgstr "سِجل بحث فهرسك فارغ."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:24
-#, fuzzy, c-format
+#, c-format
 msgid "Your charges"
-msgstr "سلتك"
+msgstr "رسومك"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:26
 #, c-format
@@ -13282,9 +13289,9 @@ msgstr ""
 "لا ترغب في وضع حجز عليها."
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:18
-#, fuzzy, c-format
+#, c-format
 msgid "your charges"
-msgstr "وسومك"
+msgstr "رسومك"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:30
 #, c-format
