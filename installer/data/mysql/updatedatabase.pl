@@ -18872,6 +18872,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17831 - Remove non-existing bibliosubject.subject from frameworks)\n";
 }
 
+$DBversion = "19.05.06.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (19.05.06 release)\n";
+            SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
