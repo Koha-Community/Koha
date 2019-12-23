@@ -18,6 +18,7 @@ package Koha::REST::Plugin::Query;
 use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
+use List::MoreUtils qw(any);
 use Scalar::Util qw(reftype);
 
 use Koha::Exceptions;
@@ -143,6 +144,45 @@ is raised.
             return $params;
         }
     );
+
+=head3 stash_embed
+
+    $c->stash_embed( $c->match->endpoint->pattern->defaults->{'openapi.op_spec'} );
+
+=cut
+
+    $app->helper(
+        'stash_embed' => sub {
+
+            my ( $c, $args ) = @_;
+
+            my $spec = $args->{spec} // {};
+
+            my $embed_spec   = $spec->{'x-koha-embed'};
+            my $embed_header = $c->req->headers->header('x-koha-embed');
+
+            Koha::Exceptions::BadParameter->throw("Embedding objects is not allowed on this endpoint.")
+                if $embed_header and !defined $embed_spec;
+
+            if ( $embed_header ) {
+                my $THE_embed = {};
+                foreach my $embed_req ( split /\s*,\s*/, $embed_header ) {
+                    my $matches = grep {lc $_ eq lc $embed_req} @{ $embed_spec };
+
+                    Koha::Exceptions::BadParameter->throw(
+                        error => 'Embeding '.$embed_req. ' is not authorised. Check your x-koha-embed headers or remove it.'
+                    ) unless $matches;
+
+                    _merge_embed( _parse_embed($embed_req), $THE_embed);
+                }
+
+                $c->stash( 'koha.embed' => $THE_embed )
+                    if $THE_embed;
+            }
+
+            return $c;
+        }
+    );
 }
 
 =head2 Internal methods
@@ -195,6 +235,54 @@ sub _build_order_atom {
     else {
         # no order operator present
         return $param;
+    }
+}
+
+=head3 _parse_embed
+
+    my $embed = _parse_embed( $string );
+
+Parses I<$string> and outputs data valid for passing to the Kohaa::Object(s)->to_api
+method.
+
+=cut
+
+sub _parse_embed {
+    my $string = shift;
+
+    my $result;
+    my ( $curr, $next ) = split /\s*\.\s*/, $string, 2;
+
+    if ( $next ) {
+        $result->{$curr} = { children => _parse_embed( $next ) };
+    }
+    else {
+        $result->{$curr} = {};
+    }
+
+    return $result;
+}
+
+=head3 _merge_embed
+
+    _merge_embed( $parsed_embed, $global_embed );
+
+Merges the hash referenced by I<$parsed_embed> into I<$global_embed>.
+
+=cut
+
+sub _merge_embed {
+    my ( $structure, $embed ) = @_;
+
+    my ($root) = keys %{ $structure };
+
+    if ( any { $root eq $_ } keys %{ $embed } ) {
+        # Recurse
+        _merge_embed( $structure->{$root}, $embed->{$root} );
+    }
+    else {
+        # Embed
+        $embed->{$root} = $structure->{$root};
     }
 }
 
