@@ -185,6 +185,9 @@ while [ $# -gt 0 ]; do
         --status)
             set_action "status"
             shift ;;
+        --debug)
+            DEBUG="-v -v"
+            shift ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
@@ -216,7 +219,7 @@ fi
 
 if [ -z $INDEXER_PARAMS ]; then
     # Default to the parameters required by rebuild_zebra.pl
-    INDEXER_PARAMS="-daemon -sleep $INDEXER_TIMEOUT"
+    INDEXER_PARAMS="-daemon -sleep $INDEXER_TIMEOUT $DEBUG"
 fi
 
 # PERL5LIB has been read from etc/default
