@@ -473,8 +473,10 @@
             <tr>
                 <th class="NoSort">&nbsp;</th>
                 <th class="anti-the">Suggestion</th>
-                <th>Suggested by - on</th>
-                <th>Managed by - on</th>
+                <th>Suggested by</th>
+                <th>Suggested on</th>
+                <th>Managed by</th>
+                <th>Managed on</th>
                 <th>Library</th>
                 <th>Fund</th>
                 <th>Status</th>
@@ -497,11 +499,15 @@
                 </td>
                 <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby | html %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby | html %])[% END %]</a>
-                    [% IF ( suggestions_loo.suggesteddate ) %] - [% suggestions_loo.suggesteddate | $KohaDates %][% END %]
+                </td>
+                <td data-order="[% suggestions_loo.suggesteddate | html %]">
+                    [% IF ( suggestions_loo.suggesteddate ) %][% suggestions_loo.suggesteddate | $KohaDates %][% END %]
                 </td>
                 <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby | html %][% END %]</a>
-                    [% IF ( suggestions_loo.manageddate ) %] - [% suggestions_loo.manageddate | $KohaDates %][% END %]
+                </td>
+                <td data-order="[% suggestions_loo.manageddate | html %]">
+                    [% IF ( suggestions_loo.manageddate ) %][% suggestions_loo.manageddate | $KohaDates %][% END %]
                 </td>
                 <td>
                     [% Branches.GetName( suggestions_loo.branchcode ) | html %]
