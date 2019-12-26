@@ -755,8 +755,10 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 [% FOREACH cells IN result.cells %]
                     [% place = loop.index %]
+                    [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
                     [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
                         [% SET batch_itemnumbers = 1 %]
+                        [% SET header_row.$place.has_itemnumbers = 1 %]
                         <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                     [% END %]
                 [% END %]
@@ -769,8 +771,10 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 [% FOREACH cells IN result.cells %]
                     [% place = loop.index %]
+                    [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
                     [% IF header_row.$place.cell == 'itemnumber' || header_types.item(header_row.$place.cell) == 'itemnumber'  %]
                         [% SET batch_itemnumbers = 1 %]
+                        [% SET header_row.$place.has_itemnumbers = 1 %]
                         <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                     [% END %]
                 [% END %]
@@ -781,8 +785,10 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 [% FOREACH cells IN result.cells %]
                     [% place = loop.index %]
+                    [% NEXT UNLESS cells.cell.match('^(\d+)$') %]
                     [% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
                         [% SET batch_biblionumbers = 1 %]
+                        [% SET header_row.$place.has_biblionumbers = 1 %]
                         <input type="hidden" class="bib_to_list" name="biblionumber" value="[% cells.cell | html %]" />
                     [% END %]
                 [% END %]
@@ -805,7 +811,7 @@ canned reports and writing custom SQL reports.</p>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="batch_mod_menu">
                         [% FOREACH header_ro IN header_row %]
-                            [% IF header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' %]
+                            [% IF header_ro.has_biblionumbers && ( header_ro.cell == 'biblionumber' || header_types.item( header_ro.cell ) == 'biblionumber' ) %]
                                 <li class="dropdown-header">Bibliographic records</li>
                                 <li>
                                     <a href="#" data-submit="batch_record_modification" data-toggle="tooltip" data-placement="right" title="Send visible records to batch record modification" class="batch_op send_to_record_mod">Batch record modification</a>
@@ -817,7 +823,7 @@ canned reports and writing custom SQL reports.</p>
                                     <a href="#" data-submit="batch_add_to_list" data-toggle="tooltip" data-placement="right" title="Send visible records to a list" class="batch_op send_to_list">Add to list</a>
                                 </li>
                             [% END %]
-                            [% IF header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' %]
+                            [% IF header_ro.has_itemnumbers && ( header_ro.cell == 'itemnumber' || header_types.item( header_ro.cell ) == 'itemnumber' ) %]
                                 [% IF ( batch_biblionumbers ) %]
                                     <li role="separator" class="divider"></li>
                                 [% END %]
