@@ -1318,13 +1318,14 @@ CREATE TABLE `printers_profile` (
 DROP TABLE IF EXISTS `repeatable_holidays`;
 CREATE TABLE `repeatable_holidays` ( -- information for the days the library is closed
   `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, defines which branch this closing is for
+  `branchcode` varchar(10) NOT NULL, -- foreign key from the branches table, defines which branch this closing is for
   `weekday` smallint(6) default NULL, -- day of the week (0=Sunday, 1=Monday, etc) this closing is repeated on
   `day` smallint(6) default NULL, -- day of the month this closing is on
   `month` smallint(6) default NULL, -- month this closing is in
   `title` varchar(50) NOT NULL default '', -- title of this closing
   `description` MEDIUMTEXT NOT NULL, -- description for this closing
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `repeatable_holidays_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1900,14 +1901,15 @@ CREATE TABLE `reviews` ( -- patron opac comments
 DROP TABLE IF EXISTS `special_holidays`;
 CREATE TABLE `special_holidays` ( -- non repeatable holidays/library closings
   `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, defines which branch this closing is for
+  `branchcode` varchar(10) NOT NULL, -- foreign key from the branches table, defines which branch this closing is for
   `day` smallint(6) NOT NULL default 0, -- day of the month this closing is on
   `month` smallint(6) NOT NULL default 0, -- month this closing is in
   `year` smallint(6) NOT NULL default 0, -- year this closing is in
   `isexception` smallint(1) NOT NULL default 1, -- is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
   `title` varchar(50) NOT NULL default '', -- title for this closing
   `description` MEDIUMTEXT NOT NULL, -- description of this closing
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  CONSTRAINT `special_holidays_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
