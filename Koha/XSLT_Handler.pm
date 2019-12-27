@@ -264,9 +264,7 @@ sub _init {
 
     $self->_set_error;
     $self->{xslt_hash} = {};
-    $self->{print_warns} = exists $self->{print_warns}
-        ? $self->{print_warns}
-        : $ENV{DEBUG} // 0;
+    $self->{print_warns} = 1 unless exists $self->{print_warns};
     $self->{do_not_return_source} = 0
       unless exists $self->{do_not_return_source};
 
