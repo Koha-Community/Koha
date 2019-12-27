@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -383,6 +383,74 @@ subtest 'new_from_api() tests' => sub {
     is( $city->city_zipcode, $attrs->{postal_code}, 'city_zipcode updated correctly' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'attributes_from_api() tests' => sub {
+
+    plan tests => 8;
+
+    my $patron = Koha::Patron->new();
+
+    use Data::Printer colored => 1;
+
+    my $attrs = $patron->attributes_from_api(
+        {
+            updated_on  => '2019-12-27T14:53:00'
+        }
+    );
+
+    ok( exists $attrs->{updated_on},
+        'No translation takes place if no mapping' );
+    is(
+        ref( $attrs->{updated_on} ),
+        'DateTime',
+        'Given a string, a timestamp field is converted into a DateTime object'
+    );
+
+    $attrs = $patron->attributes_from_api(
+        {
+            last_seen  => '2019-12-27T14:53:00'
+        }
+    );
+
+    ok( exists $attrs->{lastseen},
+        'Translation takes place because of the defined mapping' );
+    is(
+        ref( $attrs->{lastseen} ),
+        'DateTime',
+        'Given a string, a datetime field is converted into a DateTime object'
+    );
+
+    $attrs = $patron->attributes_from_api(
+        {
+            date_of_birth  => '2019-12-27'
+        }
+    );
+
+    ok( exists $attrs->{dateofbirth},
+        'Translation takes place because of the defined mapping' );
+    is(
+        ref( $attrs->{dateofbirth} ),
+        'DateTime',
+        'Given a string, a date field is converted into a DateTime object'
+    );
+
+    throws_ok
+        {
+            $attrs = $patron->attributes_from_api(
+                {
+                    date_of_birth => '20141205',
+                }
+            );
+        }
+        'Koha::Exceptions::BadParameter',
+        'Bad date throws an exception';
+
+    is(
+        $@->parameter,
+        'date_of_birth',
+        'Exception parameter is the API field name, not the DB one'
+    );
 };
 
 subtest "Test update method" => sub {
