@@ -488,7 +488,12 @@ sub attributes_from_api {
           : $key;
 
         if ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
-            $value = dt_from_string($value, 'rfc3339');
+            try {
+                $value = dt_from_string($value, 'rfc3339');
+            }
+            catch {
+                Koha::Exceptions::BadParameter->throw( parameter => $key );
+            };
         }
 
         $params->{$koha_field_name} = $value;
