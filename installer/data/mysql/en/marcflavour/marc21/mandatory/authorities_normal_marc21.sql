@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 27 (November 2018)
+--        Revised to Update No. 29 (November 2019)
 -- *******************************************************
 
 -- ******************************************************
@@ -311,7 +311,9 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '024', 'd', 'Additional codes following the standard number or code', 'Additional codes following the standard number or code', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '024', 'q', 'Qualifying information', 'Qualifying information', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '024', 'z', 'Canceled/invalid standard number or code', 'Canceled/invalid standard number or code', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('', '024', '2', 'Source of number or code', 'Source of number or code', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
+		('', '024', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '024', '1', 'Real World Object URI', 'Real World Object URI', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '024', '2', 'Source', 'Source', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '024', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '031', 'a', 'Number of work', 'Number of work', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
@@ -2047,6 +2049,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '856', '2', 'Access method', 'Access method', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '856', '3', 'Materials specified', 'Materials specified', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '856', '6', 'Linkage', 'Linkage', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
+		('', '856', '7', 'Access status', 'Access status', 0, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '856', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '880', 'a', 'a', 'a', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '880', 'b', 'b', 'b', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
