@@ -1575,20 +1575,12 @@ sub attributes_from_api {
 
     $attrs = $self->SUPER::attributes_from_api( $attrs );
 
-    if ( exists $attrs->{lost} ) {
-        $attrs->{lost} = ($attrs->{lost}) ? 1 : 0;
-    }
-
-    if ( exists $attrs->{ gonenoaddress} ) {
-        $attrs->{gonenoaddress} = ($attrs->{gonenoaddress}) ? 1 : 0;
-    }
-
     if ( exists $attrs->{lastseen} ) {
-        $attrs->{lastseen} = output_pref({ str => $attrs->{lastseen}, dateformat => 'sql' });
+        $attrs->{lastseen} = dt_from_string($attrs->{lastseen});
     }
 
     if ( exists $attrs->{updated_on} ) {
-        $attrs->{updated_on} = output_pref({ str => $attrs->{updated_on}, dateformat => 'sql' });
+        $attrs->{updated_on} = dt_from_string($attrs->{updated_on});
     }
 
     return $attrs;
