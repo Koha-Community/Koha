@@ -479,14 +479,19 @@ sub attributes_from_api {
     my $from_api_mapping = $self->from_api_mapping;
 
     my $params;
+    my $columns_info = $self->_result->result_source->columns_info;
 
     while (my ($key, $value) = each %{ $from_api_params } ) {
-        if ( exists $from_api_mapping->{$key} ) {
-            $params->{$from_api_mapping->{$key}} = $value;
+        my $koha_field_name =
+          exists $from_api_mapping->{$key}
+          ? $from_api_mapping->{$key}
+          : $key;
+
+        if ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
+            $value = dt_from_string($value, 'rfc3339');
         }
-        else {
-            $params->{$key} = $value;
-        }
+
+        $params->{$koha_field_name} = $value;
     }
 
     return $params;

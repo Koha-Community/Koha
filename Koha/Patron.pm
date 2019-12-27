@@ -1570,31 +1570,6 @@ sub to_api {
     return $json_patron;
 }
 
-=head3 attributes_from_api
-
-    my $attrs = $patron->attributes_from_api( $attrs );
-
-Overloaded method that implement specific data transformations after
-calling the original Koha::Object->attributes_from_api method.
-
-=cut
-
-sub attributes_from_api {
-    my ( $self, $attrs ) = @_;
-
-    $attrs = $self->SUPER::attributes_from_api( $attrs );
-
-    if ( exists $attrs->{lastseen} ) {
-        $attrs->{lastseen} = dt_from_string($attrs->{lastseen}, 'rfc3339');
-    }
-
-    if ( exists $attrs->{updated_on} ) {
-        $attrs->{updated_on} = dt_from_string($attrs->{updated_on}, 'rfc3339');
-    }
-
-    return $attrs;
-}
-
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Patron object
