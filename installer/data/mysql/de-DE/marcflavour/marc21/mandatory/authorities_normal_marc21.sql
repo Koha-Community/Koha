@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 26 (April 2018)
+--        Revised to Update No. 29 (November 2019)
 -- *******************************************************
 
 -- ******************************************************
@@ -311,7 +311,9 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '024', 'd', 'Zusätzliche Codes zur Standardnummer oder dem Code', 'Zusätzliche Codes zur Standardnummer oder dem Code', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '024', 'q', 'Nähere Angaben', 'Nähere Angaben', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '024', 'z', 'Gelöschte(r)/ungültige(r) Standardnummer oder Code', 'Gelöschte(r)/ungültige(r) Standardnummer oder Code', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
-		('', '024', '2', 'Quelle der Nummer oder des Codes', 'Quelle der Nummer oder des Codes', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
+		('', '024', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '024', '1', 'URI des Realweltobjects', 'URI des Realweltobjects', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '024', '2', 'Quelle', 'Quelle', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '024', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '024', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '031', 'a', 'Anzahl der Werke', 'Anzahl der Werke', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
@@ -425,6 +427,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '055', 'd', 'Bände/Datumsangaben, auf die sich die Signatur bezieht', 'Bände/Datumsangaben, auf die sich die Signatur bezieht', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '1', 'URI des Realweltobjects', 'URI des Realweltobjects', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
+		('', '055', '2', 'Quelle der Nummer', 'Quelle der Nummer', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '5', 'Das Unterfeld gibt die Institution an, auf die sich das Feld bezieht', 'Das Unterfeld gibt die Institution an, auf die sich das Feld bezieht', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
@@ -2046,6 +2049,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '856', '2', 'Zugriffsart', 'Zugriffsart', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '856', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '856', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
+		('', '856', '7', 'Zugangsstatus', 'Zugangsstatus', 0, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '856', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '880', 'a', 'a', 'a', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '880', 'b', 'b', 'b', 1, 0, 8, NULL, NULL, NULL, 0, 0, 0, '', ''),
