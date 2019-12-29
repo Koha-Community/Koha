@@ -4,6 +4,13 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','LCL','Bibliotheksexemplar vermisst');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','AVILL','Über Fernleihe bestellbar');
 
+-- Desired formats for requesting new materials
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'BOOK', 'Buch', 'Buch');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'LP', 'Großdruck', 'Großdruck');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'EBOOK', 'E-Book', 'E-Book');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'AUDIOBOOK', 'Hörbuch', 'Hörbuch');
+INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'DVD', 'DVD', 'DVD');
+
 -- availability statuses
 INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST','2','Lange überfällig (Verloren)');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Verloren');
@@ -41,9 +48,6 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_L
 -- restricted status of an item, linked to items.restricted
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Eingeschränkt zugänglich');
 
--- manual invoice types
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUAL_INV','Kopiergebühren','.25');
-
 -- custom borrower notes
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Adresse kontrollieren');
 
@@ -77,13 +81,6 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_C
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 1, 'Nicht lieferbar');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('ORDER_CANCELLATION_REASON', 2, 'Nicht auf Lager');
 
--- Desired formats for requesting new materials
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'BOOK', 'Buch', 'Buch');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'LP', 'Großdruck', 'Großdruck');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'EBOOK', 'E-Book', 'E-Book');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'AUDIOBOOK', 'Hörbuch', 'Hörbuch');
-INSERT INTO authorised_values (category, authorised_value, lib, lib_opac) VALUES ('SUGGEST_FORMAT', 'DVD', 'DVD', 'DVD');
-
 -- return claims
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'RET_BY_PATRON', 'Returned by patron');
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'FOUND_IN_LIB',  'Found in library');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'RET_BY_PATRON', 'Von Benutzer/in zurückgegeben');
+INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RETURN_CLAIM_RESOLUTION', 'FOUND_IN_LIB',  'In Bibliothek gefunden');

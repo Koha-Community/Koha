@@ -52,9 +52,6 @@ INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('NOT_LOA
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RESTRICTED','0','Nessuna restrizione');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RESTRICTED','1','Accesso limitato');
 
--- manual invoice types
-INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('MANUAL_INV','Costo fotocopie','.25');
-
 -- custom borrower notes
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Indirizzo (Nota)');
 
