@@ -56,9 +56,6 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 -- Statut Limité
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('RESTRICTED','1','Exclu du prêt');
 
--- Facture manuelle
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUAL_INV','Frais de copie','.25');
-
 -- Message personnalisable aux utilisateurs
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Address Notes');
 

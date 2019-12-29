@@ -41,9 +41,6 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_L
 -- restricted status of an item, linked to items.restricted
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Ograniczony dostęp');
 
--- manual invoice types
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUAL_INV','Opłata za ksero','.25');
-
 -- custom borrower notes
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Uwagi do adresu');
 
