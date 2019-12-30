@@ -137,6 +137,9 @@ sub authenticate_api_request {
     my $user;
 
     my $spec = $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
+
+    $c->stash_embed({ spec => $spec });
+
     my $authorization = $spec->{'x-koha-authorization'};
 
     my $authorization_header = $c->req->headers->authorization;
