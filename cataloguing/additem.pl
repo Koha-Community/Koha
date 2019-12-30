@@ -170,7 +170,17 @@ sub generate_subfield_form {
             my @authorised_values;
             my %authorised_lib;
             # builds list, depending on authorised value...
-            if ( $subfieldlib->{authorised_value} eq "branches" ) {
+            if ( $subfieldlib->{authorised_value} eq "LOST" ) {
+                  my $ClaimReturnedLostValue = C4::Context->preference('ClaimReturnedLostValue');
+                  push @authorised_values, qq{};
+                  my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
+                  for my $r ( @$av ) {
+                      next if $ClaimReturnedLostValue && $r->{authorised_value} eq $ClaimReturnedLostValue;
+                      push @authorised_values, $r->{authorised_value};
+                      $authorised_lib{$r->{authorised_value}} = $r->{lib};
+                  }
+            }
+            elsif ( $subfieldlib->{authorised_value} eq "branches" ) {
                 foreach my $thisbranch (@$branches) {
                     push @authorised_values, $thisbranch->{branchcode};
                     $authorised_lib{$thisbranch->{branchcode}} = $thisbranch->{branchname};
