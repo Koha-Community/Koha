@@ -99,6 +99,7 @@
             [% IF itemlostloop %]
                 <li><span class="label">Lost status:</span>
                     [% IF ( CAN_user_circulate ) %]
+                        [% SET ClaimReturnedLostValue = Koha.Preference('ClaimReturnedLostValue') %]
                         <form action="updateitem.pl" method="post">
                             <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber | html %]" />
                             <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber | html %]" />
@@ -106,6 +107,7 @@
                             <select name="itemlost" >
                                 <option value="">Choose</option>
                                 [% FOREACH itemlostloo IN itemlostloop %]
+                                    [% NEXT IF ClaimReturnedLostValue && !ITEM_DAT.itemlost && itemlostloo.authorised_value == ClaimReturnedLostValue #Filter claims returned status from pulldown %]
                                     [% IF itemlostloo.authorised_value == ITEM_DAT.itemlost %]
                                         <option value="[% itemlostloo.authorised_value | html %]" selected="selected">[% itemlostloo.lib | html %]</option>
                                     [% ELSE %]
@@ -116,7 +118,6 @@
                             <input type="hidden" name="withdrawn" value="[% ITEM_DAT.withdrawn | html %]" />
                             <input type="hidden" name="damaged" value="[% ITEM_DAT.damaged | html %]" />
 
-                            [% SET ClaimReturnedLostValue = Koha.Preference('ClaimReturnedLostValue') %]
                             [% IF ClaimReturnedLostValue && ITEM_DAT.itemlost == ClaimReturnedLostValue %]
                                 <input type="submit" name="submit" class="submit" value="Set status" disabled="disabled"/>
                                 <p class="help-block">Item has been claimed as returned.</p>
