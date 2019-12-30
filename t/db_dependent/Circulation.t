@@ -277,7 +277,7 @@ $dbh->do(
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 71;
+    plan tests => 77;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -606,6 +606,24 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 0, 'Bug 14101: Cannot renew, renewal is automatic and premature' );
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = undef (returned code is auto_too_soon)' );
+    AddReserve(
+        $branch, $reserving_borrowernumber, $biblio->biblionumber,
+        $bibitems,  $priority, $resdate, $expdate, $notes,
+        'a title', $item_4->itemnumber, $found
+    );
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
+    is( $renewokay, 0, 'Still should not be able to renew' );
+    is( $error, 'auto_too_soon', 'returned code is auto_too_soon, reserve not checked' );
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
+    is( $renewokay, 0, 'Still should not be able to renew' );
+    is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
+    $dbh->do('UPDATE circulation_rules SET rule_value = 0 where rule_name = "norenewalbefore"');
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
+    is( $renewokay, 0, 'Still should not be able to renew' );
+    is( $error, 'on_reserve', 'returned code is on_reserve, auto_renew only happens if not on reserve' );
+    ModReserveCancelAll($item_4->itemnumber, $reserving_borrowernumber);
+
+
 
     # Bug 7413
     # Test premature manual renewal
