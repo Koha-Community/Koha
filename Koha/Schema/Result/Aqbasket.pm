@@ -335,4 +335,8 @@ sub koha_objects_class {
     'Koha::Acquisition::Baskets';
 }
 
+__PACKAGE__->add_columns(
+    '+is_standing' => { is_boolean => 1 }
+);
+
 1;

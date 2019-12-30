@@ -27,6 +27,49 @@ Koha::Acquisition::Invoice object class
 
 =head1 API
 
+
+=head3 to_api
+
+    my $json = $invoice->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Acquisition::Invoice object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self ) = @_;
+
+    my $json = $self->SUPER::to_api;
+
+    $json->{closed} = ( $self->closedate )
+                                    ? Mojo::JSON->true
+                                    : Mojo::JSON->false;
+
+    return $json;
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Acquisition::Invoice object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        invoiceid             => 'invoice_id',
+        invoicenumber         => 'invoice_number',
+        booksellerid          => 'vendor_id',
+        shipmentdate          => 'shipping_date',
+        billingdate           => 'invoice_date',
+        closedate             => 'close_date',
+        shipmentcost          => 'shipping_cost',
+        shipmentcost_budgetid => 'shipping_cost_budget_id',
+        message_id            => undef
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type

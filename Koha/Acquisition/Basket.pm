@@ -71,6 +71,53 @@ sub effective_create_items {
     return $self->create_items || C4::Context->preference('AcqCreateItem');
 }
 
+=head3 to_api
+
+    my $json = $basket->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Acquisition::Basket object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self ) = @_;
+
+    my $json = $self->SUPER::to_api;
+
+    $json->{closed} = ( $self->closedate )
+                                    ? Mojo::JSON->true
+                                    : Mojo::JSON->false;
+
+    return $json;
+}
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Acquisition::Basket object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        basketno                => 'basket_id',
+        basketname              => 'name',
+        booksellernote          => 'vendor_note',
+        contractnumber          => 'contract_id',
+        creationdate            => 'creation_date',
+        closedate               => 'close_date',
+        booksellerid            => 'vendor_id',
+        authorisedby            => 'authorised_by',
+        booksellerinvoicenumber => undef,
+        basketgroupid           => 'basket_group_id',
+        deliveryplace           => 'delivery_place',
+        billingplace            => 'billing_place',
+        branch                  => 'library_id',
+        is_standing             => 'standing'
+    };
+}
+
 =head2 Internal methods
 
 =head3 _type
