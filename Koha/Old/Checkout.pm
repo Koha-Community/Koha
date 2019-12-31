@@ -27,7 +27,7 @@ Koha::Old:Checkout - Koha checkout object for returned items
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =head3 item
 
@@ -57,6 +57,33 @@ sub patron {
     return unless $patron_rs;
     return Koha::Patron->_new_from_dbic( $patron_rs );
 }
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Old::Checkout object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        issue_id        => 'checkout_id',
+        borrowernumber  => 'patron_id',
+        itemnumber      => 'item_id',
+        date_due        => 'due_date',
+        branchcode      => 'library_id',
+        returndate      => 'checkin_date',
+        lastreneweddate => 'last_renewed_date',
+        issuedate       => 'checkout_date',
+        notedate        => 'note_date',
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
 
 sub _type {
     return 'OldIssue';

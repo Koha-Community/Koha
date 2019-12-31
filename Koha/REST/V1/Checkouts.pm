@@ -45,16 +45,61 @@ List Koha::Checkout objects
 
 sub list {
     my $c = shift->openapi->valid_input or return;
+
     my $checked_in = $c->validation->param('checked_in');
+
     try {
         my $checkouts_set;
+
         if ( $checked_in ) {
             $checkouts_set = Koha::Old::Checkouts->new;
         } else {
             $checkouts_set = Koha::Checkouts->new;
         }
-        my $checkouts = $c->objects->search( $checkouts_set, \&_to_model, \&_to_api );
-        return $c->render( status => 200, openapi => $checkouts );
+
+        my $args = $c->validation->output;
+        my $attributes = {};
+
+        # Extract reserved params
+        my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
+
+        # Merge sorting into query attributes
+        $c->dbic_merge_sorting(
+            {
+                attributes => $attributes,
+                params     => $reserved_params,
+                result_set => $checkouts_set
+            }
+        );
+
+        # Merge pagination into query attributes
+        $c->dbic_merge_pagination(
+            {
+                filter => $attributes,
+                params => $reserved_params
+            }
+        );
+
+        # Call the to_model function by reference, if defined
+        if ( defined $filtered_params ) {
+            # remove checked_in
+            delete $filtered_params->{checked_in};
+            # Apply the mapping function to the passed params
+            $filtered_params = $checkouts_set->attributes_from_api($filtered_params);
+            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+        }
+
+        # Perform search
+        my $checkouts = $checkouts_set->search( $filtered_params, $attributes );
+
+        if ($checkouts->is_paged) {
+            $c->add_pagination_headers({
+                total => $checkouts->pager->total_entries,
+                params => $args,
+            });
+        }
+
+        return $c->render( status => 200, openapi => $checkouts->to_api );
     } catch {
         if ( $_->isa('DBIx::Class::Exception') ) {
             return $c->render(
@@ -181,87 +226,5 @@ sub allows_renewal {
         }
     );
 }
-
-=head3 _to_api
-
-Helper function that maps a hashref of Koha::Checkout attributes into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $checkout = shift;
-
-    foreach my $column ( keys %{ $Koha::REST::V1::Checkouts::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Checkouts::to_api_mapping->{$column};
-        if ( exists $checkout->{ $column } && defined $mapped_column )
-        {
-            $checkout->{ $mapped_column } = delete $checkout->{ $column };
-        }
-        elsif ( exists $checkout->{ $column } && !defined $mapped_column ) {
-            delete $checkout->{ $column };
-        }
-    }
-    return $checkout;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::Checkouts
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $checkout = shift;
-
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Checkouts::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Checkouts::to_model_mapping->{$attribute};
-        if ( exists $checkout->{ $attribute } && defined $mapped_attribute )
-        {
-            $checkout->{ $mapped_attribute } = delete $checkout->{ $attribute };
-        }
-        elsif ( exists $checkout->{ $attribute } && !defined $mapped_attribute )
-        {
-            delete $checkout->{ $attribute };
-        }
-    }
-    return $checkout;
-}
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    issue_id        => 'checkout_id',
-    borrowernumber  => 'patron_id',
-    itemnumber      => 'item_id',
-    date_due        => 'due_date',
-    branchcode      => 'library_id',
-    returndate      => 'checkin_date',
-    lastreneweddate => 'last_renewed_date',
-    issuedate       => 'checkout_date',
-    notedate        => 'note_date',
-};
-
-=head3 $to_model_mapping
-
-=cut
-
-our $to_model_mapping = {
-    checkout_id       => 'issue_id',
-    patron_id         => 'borrowernumber',
-    item_id           => 'itemnumber',
-    due_date          => 'date_due',
-    library_id        => 'branchcode',
-    checkin_date      => 'returndate',
-    last_renewed_date => 'lastreneweddate',
-    checkout_date     => 'issuedate',
-    note_date         => 'notedate',
-    checked_in        => undef,
-};
 
 1;
