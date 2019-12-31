@@ -97,8 +97,8 @@ subtest 'get_balance() tests' => sub {
             outstanding_debits => {
                 total => 100.01,
                 lines => [
-                    Koha::REST::V1::Patrons::Account::_to_api( $account_line_1->TO_JSON ),
-                    Koha::REST::V1::Patrons::Account::_to_api( $account_line_2->TO_JSON )
+                    $account_line_1->to_api,
+                    $account_line_2->to_api
                 ]
             },
             outstanding_credits => {
@@ -144,7 +144,7 @@ subtest 'get_balance() tests' => sub {
             },
             outstanding_credits => {
                 total => -10,
-                lines => [ Koha::REST::V1::Patrons::Account::_to_api( $credit_line->TO_JSON ) ]
+                lines => [ $credit_line->to_api ]
             }
         }
     );
