@@ -675,3 +675,25 @@ subtest 'Return same values as DBIx::Class' => sub {
 
     };
 };
+
+subtest "attributes_from_api() tests" => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $cities_rs = Koha::Cities->new;
+    my $city      = Koha::City->new;
+
+    my $api_attributes = {
+        name        => 'Cordoba',
+        postal_code => 5000
+    };
+
+    is_deeply(
+        $cities_rs->attributes_from_api($api_attributes),
+        $city->attributes_from_api($api_attributes)
+    );
+
+    $schema->storage->txn_rollback;
+};
