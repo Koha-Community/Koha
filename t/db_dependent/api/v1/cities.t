@@ -71,7 +71,7 @@ subtest 'list() tests' => sub {
     # One city created, should get returned
     $t->get_ok("//$userid:$password@/api/v1/cities")
       ->status_is(200)
-      ->json_is( [Koha::REST::V1::Cities::_to_api( $city->TO_JSON )] );
+      ->json_is( [$city->to_api] );
 
     my $another_city = $builder->build_object(
         { class => 'Koha::Cities', value => { city_country => $city->city_country } } );
@@ -80,21 +80,21 @@ subtest 'list() tests' => sub {
     # Two cities created, they should both be returned
     $t->get_ok("//$userid:$password@/api/v1/cities")
       ->status_is(200)
-      ->json_is([Koha::REST::V1::Cities::_to_api($city->TO_JSON),
-                 Koha::REST::V1::Cities::_to_api($another_city->TO_JSON),
-                 Koha::REST::V1::Cities::_to_api($city_with_another_country->TO_JSON)
+      ->json_is([$city->to_api,
+                 $another_city->to_api,
+                 $city_with_another_country->to_api
                  ] );
 
     # Filtering works, two cities sharing city_country
     $t->get_ok("//$userid:$password@/api/v1/cities?country=" . $city->city_country )
       ->status_is(200)
-      ->json_is([ Koha::REST::V1::Cities::_to_api($city->TO_JSON),
-                  Koha::REST::V1::Cities::_to_api($another_city->TO_JSON)
+      ->json_is([ $city->to_api,
+                  $another_city->to_api
                   ]);
 
     $t->get_ok("//$userid:$password@/api/v1/cities?name=" . $city->city_name )
       ->status_is(200)
-      ->json_is( [Koha::REST::V1::Cities::_to_api($city->TO_JSON)] );
+      ->json_is( [$city->to_api] );
 
     # Warn on unsupported query parameter
     $t->get_ok("//$userid:$password@/api/v1/cities?city_blah=blah" )
@@ -137,7 +137,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/cities/" . $city->cityid )
       ->status_is(200)
-      ->json_is(Koha::REST::V1::Cities::_to_api($city->TO_JSON));
+      ->json_is($city->to_api);
 
     $t->get_ok( "//$unauth_userid:$password@/api/v1/cities/" . $city->cityid )
       ->status_is(403);

@@ -25,7 +25,7 @@ use Try::Tiny;
 
 =head1 API
 
-=head2 Class Methods
+=head2 Methods
 
 =head3 list
 
@@ -36,7 +36,7 @@ sub list {
 
     return try {
         my $cities_set = Koha::Cities->new;
-        my $cities = $c->objects->search( $cities_set, \&_to_model, \&_to_api );
+        my $cities = $c->objects->search( $cities_set );
         return $c->render( status => 200, openapi => $cities );
     }
     catch {
@@ -159,90 +159,5 @@ sub delete {
         }
     };
 }
-
-=head3 _to_api
-
-Helper function that maps a hashref of Koha::City attributes into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $city    = shift;
-
-    # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::Cities::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Cities::to_api_mapping->{$column};
-        if (    exists $city->{ $column }
-             && defined $mapped_column )
-        {
-            # key /= undef
-            $city->{ $mapped_column } = delete $city->{ $column };
-        }
-        elsif (    exists $city->{ $column }
-                && !defined $mapped_column )
-        {
-            # key == undef => to be deleted
-            delete $city->{ $column };
-        }
-    }
-
-    return $city;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::Cities
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $city = shift;
-
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Cities::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Cities::to_model_mapping->{$attribute};
-        if (    exists $city->{ $attribute }
-             && defined $mapped_attribute )
-        {
-            # key /= undef
-            $city->{ $mapped_attribute } = delete $city->{ $attribute };
-        }
-        elsif (    exists $city->{ $attribute }
-                && !defined $mapped_attribute )
-        {
-            # key == undef => to be deleted
-            delete $city->{ $attribute };
-        }
-    }
-
-    return $city;
-}
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    cityid       => 'city_id',
-    city_country => 'country',
-    city_name    => 'name',
-    city_state   => 'state',
-    city_zipcode => 'postal_code'
-};
-
-=head3 $to_model_mapping
-
-=cut
-
-our $to_model_mapping = {
-    city_id     => 'cityid',
-    country     => 'city_country',
-    name        => 'city_name',
-    postal_code => 'city_zipcode',
-    state       => 'city_state'
-};
 
 1;
