@@ -31,7 +31,7 @@ use Try::Tiny;
 
 =head1 API
 
-=head2 Class methods
+=head2 Methods
 
 =head3 list
 
@@ -44,7 +44,7 @@ sub list {
 
     return try {
         my $holds_set = Koha::Holds->new;
-        my $holds     = $c->objects->search( $holds_set, \&_to_model, \&_to_api );
+        my $holds     = $c->objects->search( $holds_set );
         return $c->render( status => 200, openapi => $holds );
     }
     catch {
@@ -194,10 +194,10 @@ sub add {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 my $broken_fk = $_->broken_fk;
 
-                if ( grep { $_ eq $broken_fk } keys %{$Koha::REST::V1::Holds::to_api_mapping} ) {
+                if ( grep { $_ eq $broken_fk } keys %{Koha::Holds->new->to_api_mapping} ) {
                     $c->render(
                         status  => 404,
-                        openapi => $Koha::REST::V1::Holds::to_api_mapping->{$broken_fk} . ' not found.'
+                        openapi => Koha::Holds->new->to_api_mapping->{$broken_fk} . ' not found.'
                     );
                 }
                 else {
@@ -402,148 +402,5 @@ sub update_priority {
         );
     };
 }
-
-=head2 Internal methods
-
-=head3 _to_api
-
-Helper function that maps unblessed Koha::Hold objects into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $hold = shift;
-
-    # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::Holds::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Holds::to_api_mapping->{$column};
-        if (    exists $hold->{ $column }
-             && defined $mapped_column )
-        {
-            # key != undef
-            $hold->{ $mapped_column } = delete $hold->{ $column };
-        }
-        elsif (    exists $hold->{ $column }
-                && !defined $mapped_column )
-        {
-            # key == undef
-            delete $hold->{ $column };
-        }
-    }
-
-    return $hold;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::Hold
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $hold = shift;
-
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Holds::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Holds::to_model_mapping->{$attribute};
-        if (    exists $hold->{ $attribute }
-             && defined $mapped_attribute )
-        {
-            # key => !undef
-            $hold->{ $mapped_attribute } = delete $hold->{ $attribute };
-        }
-        elsif (    exists $hold->{ $attribute }
-                && !defined $mapped_attribute )
-        {
-            # key => undef / to be deleted
-            delete $hold->{ $attribute };
-        }
-    }
-
-    if ( exists $hold->{lowestPriority} ) {
-        $hold->{lowestPriority} = ($hold->{lowestPriority}) ? 1 : 0;
-    }
-
-    if ( exists $hold->{suspend} ) {
-        $hold->{suspend} = ($hold->{suspend}) ? 1 : 0;
-    }
-
-    if ( exists $hold->{reservedate} ) {
-        $hold->{reservedate} = output_pref({ str => $hold->{reservedate}, dateformat => 'sql' });
-    }
-
-    if ( exists $hold->{cancellationdate} ) {
-        $hold->{cancellationdate} = output_pref({ str => $hold->{cancellationdate}, dateformat => 'sql' });
-    }
-
-    if ( exists $hold->{timestamp} ) {
-        $hold->{timestamp} = output_pref({ str => $hold->{timestamp}, dateformat => 'sql' });
-    }
-
-    if ( exists $hold->{waitingdate} ) {
-        $hold->{waitingdate} = output_pref({ str => $hold->{waitingdate}, dateformat => 'sql' });
-    }
-
-    if ( exists $hold->{expirationdate} ) {
-        $hold->{expirationdate} = output_pref({ str => $hold->{expirationdate}, dateformat => 'sql' });
-    }
-
-    if ( exists $hold->{suspend_until} ) {
-        $hold->{suspend_until} = output_pref({ str => $hold->{suspend_until}, dateformat => 'sql' });
-    }
-
-    return $hold;
-}
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    reserve_id       => 'hold_id',
-    borrowernumber   => 'patron_id',
-    reservedate      => 'hold_date',
-    biblionumber     => 'biblio_id',
-    branchcode       => 'pickup_library_id',
-    notificationdate => undef,
-    reminderdate     => undef,
-    cancellationdate => 'cancelation_date',
-    reservenotes     => 'notes',
-    found            => 'status',
-    itemnumber       => 'item_id',
-    waitingdate      => 'waiting_date',
-    expirationdate   => 'expiration_date',
-    lowestPriority   => 'lowest_priority',
-    suspend          => 'suspended',
-    suspend_until    => 'suspended_until',
-    itemtype         => 'item_type',
-    item_level_hold  => 'item_level',
-};
-
-=head3 $to_model_mapping
-
-=cut
-
-our $to_model_mapping = {
-    hold_id           => 'reserve_id',
-    patron_id         => 'borrowernumber',
-    hold_date         => 'reservedate',
-    biblio_id         => 'biblionumber',
-    pickup_library_id => 'branchcode',
-    cancelation_date  => 'cancellationdate',
-    notes             => 'reservenotes',
-    status            => 'found',
-    item_id           => 'itemnumber',
-    waiting_date      => 'waitingdate',
-    expiration_date   => 'expirationdate',
-    lowest_priority   => 'lowestPriority',
-    suspended         => 'suspend',
-    suspended_until   => 'suspend_until',
-    item_type         => 'itemtype',
-    item_level        => 'item_level_hold',
-};
 
 1;
