@@ -34,50 +34,6 @@ get '/cities' => sub {
     $c->render( status => 200, json => $cities );
 };
 
-get '/cities_to_model' => sub {
-    my $c = shift;
-    $c->validation->output($c->req->params->to_hash);
-    my $cities_set = Koha::Cities->new;
-    my $cities = $c->objects->search( $cities_set, \&to_model );
-    $c->render( status => 200, json => $cities );
-};
-
-get '/cities_to_model_to_api' => sub {
-    my $c = shift;
-    $c->validation->output($c->req->params->to_hash);
-    my $cities_set = Koha::Cities->new;
-    my $cities = $c->objects->search( $cities_set, \&to_model, \&to_api );
-    $c->render( status => 200, json => $cities );
-};
-
-get '/cities_sorted' => sub {
-    my $c = shift;
-    $c->validation->output($c->req->params->to_hash);
-    my $cities_set = Koha::Cities->new;
-    my $cities = $c->objects->search( $cities_set, \&to_model, \&to_api );
-    $c->render( status => 200, json => $cities );
-};
-
-sub to_model {
-    my $params = shift;
-
-    if ( exists $params->{nombre} ) {
-        $params->{city_name} = delete $params->{nombre};
-    }
-
-    return $params;
-}
-
-sub to_api {
-    my $params = shift;
-
-    if ( exists $params->{city_name} ) {
-        $params->{nombre} = delete $params->{city_name};
-    }
-
-    return $params;
-}
-
 # The tests
 use Test::More tests => 2;
 use Test::Mojo;
@@ -92,7 +48,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 90;
+    plan tests => 34;
 
     my $t = Test::Mojo->new;
 
@@ -115,12 +71,12 @@ subtest 'objects.search helper' => sub {
         }
     });
 
-    $t->get_ok('/cities?city_name=manuel&_per_page=1&_page=1')
+    $t->get_ok('/cities?name=manuel&_per_page=1&_page=1')
         ->status_is(200)
         ->header_like( 'Link' => qr/<http:\/\/.*\?.*&_page=2.*>; rel="next",/ )
         ->json_has('/0')
         ->json_hasnt('/1')
-        ->json_is('/0/city_name' => 'Manuel');
+        ->json_is('/0/name' => 'Manuel');
 
     $builder->build_object({
         class => 'Koha::Cities',
@@ -130,114 +86,40 @@ subtest 'objects.search helper' => sub {
     });
 
     # _match=starts_with
-    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=starts_with')
+    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=starts_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_hasnt('/2')
-        ->json_is('/0/city_name' => 'Manuel')
-        ->json_is('/1/city_name' => 'Manuela');
+        ->json_is('/0/name' => 'Manuel')
+        ->json_is('/1/name' => 'Manuela');
 
     # _match=ends_with
-    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=ends_with')
+    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=ends_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_hasnt('/2')
-        ->json_is('/0/city_name' => 'Manuel')
-        ->json_is('/1/city_name' => 'Emanuel');
+        ->json_is('/0/name' => 'Manuel')
+        ->json_is('/1/name' => 'Emanuel');
 
     # _match=exact
-    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=exact')
+    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=exact')
         ->status_is(200)
         ->json_has('/0')
         ->json_hasnt('/1')
-        ->json_is('/0/city_name' => 'Manuel');
+        ->json_is('/0/name' => 'Manuel');
 
     # _match=contains
-    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=contains')
+    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_has('/2')
         ->json_hasnt('/3')
-        ->json_is('/0/city_name' => 'Manuel')
-        ->json_is('/1/city_name' => 'Manuela')
-        ->json_is('/2/city_name' => 'Emanuel');
-
-    ## _to_model tests
-    # _match=starts_with
-    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_has('/1')
-        ->json_hasnt('/2')
-        ->json_is('/0/city_name' => 'Manuel')
-        ->json_is('/1/city_name' => 'Manuela');
-
-    # _match=ends_with
-    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_has('/1')
-        ->json_hasnt('/2')
-        ->json_is('/0/city_name' => 'Manuel')
-        ->json_is('/1/city_name' => 'Emanuel');
-
-    # _match=exact
-    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=exact')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_hasnt('/1')
-        ->json_is('/0/city_name' => 'Manuel');
-
-    # _match=contains
-    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=contains')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_has('/1')
-        ->json_has('/2')
-        ->json_hasnt('/3')
-        ->json_is('/0/city_name' => 'Manuel')
-        ->json_is('/1/city_name' => 'Manuela')
-        ->json_is('/2/city_name' => 'Emanuel');
-
-    ## _to_model && _to_api tests
-    # _match=starts_with
-    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_has('/1')
-        ->json_hasnt('/2')
-        ->json_is('/0/nombre' => 'Manuel')
-        ->json_is('/1/nombre' => 'Manuela');
-
-    # _match=ends_with
-    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_has('/1')
-        ->json_hasnt('/2')
-        ->json_is('/0/nombre' => 'Manuel')
-        ->json_is('/1/nombre' => 'Emanuel');
-
-    # _match=exact
-    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=exact')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_hasnt('/1')
-        ->json_is('/0/nombre' => 'Manuel');
-
-    # _match=contains
-    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=contains')
-        ->status_is(200)
-        ->json_has('/0')
-        ->json_has('/1')
-        ->json_has('/2')
-        ->json_hasnt('/3')
-        ->json_is('/0/nombre' => 'Manuel')
-        ->json_is('/1/nombre' => 'Manuela')
-        ->json_is('/2/nombre' => 'Emanuel');
+        ->json_is('/0/name' => 'Manuel')
+        ->json_is('/1/name' => 'Manuela')
+        ->json_is('/2/name' => 'Emanuel');
 
     $schema->storage->txn_rollback;
 };
@@ -256,21 +138,21 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'A', city_country => 'Argentina' } });
     $builder->build_object({ class => 'Koha::Cities', value => { city_name => 'B', city_country => 'Argentina' } });
 
-    $t->get_ok('/cities_sorted?_order_by=%2Bnombre&_order_by=+city_country')
+    $t->get_ok('/cities?_order_by=%2Bname&_order_by=+country')
       ->status_is(200)
       ->json_has('/0')
       ->json_has('/1')
       ->json_hasnt('/2')
-      ->json_is('/0/nombre' => 'A')
-      ->json_is('/1/nombre' => 'B');
+      ->json_is('/0/name' => 'A')
+      ->json_is('/1/name' => 'B');
 
-    $t->get_ok('/cities_sorted?_order_by=-nombre')
+    $t->get_ok('/cities?_order_by=-name')
       ->status_is(200)
       ->json_has('/0')
       ->json_has('/1')
       ->json_hasnt('/2')
-      ->json_is('/0/nombre' => 'B')
-      ->json_is('/1/nombre' => 'A');
+      ->json_is('/0/name' => 'B')
+      ->json_is('/1/name' => 'A');
 
     $schema->storage->txn_rollback;
 }
