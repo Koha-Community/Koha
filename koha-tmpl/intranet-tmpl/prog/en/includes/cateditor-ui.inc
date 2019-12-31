@@ -881,6 +881,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     humanMsg.displayAlert( _("Incorrect syntax, cannot save"), { className: 'humanError' } );
                 } else if ( result.error == 'invalid' ) {
                     humanMsg.displayAlert( _("Record structure invalid, cannot save"), { className: 'humanError' } );
+                } else if ( result.error ) {
+                    humanMsg.displayAlert( _("Something went wrong, cannot save"), { className: 'humanError' } );
                 } else if ( !result.error ) {
                     humanMsg.displayAlert( _("Record saved "), { className: 'humanSuccess' } );
                 }
