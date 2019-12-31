@@ -28,7 +28,7 @@ use Try::Tiny;
 
 =head1 API
 
-=head2 Class methods
+=head2 Methods
 
 =head3 get
 
@@ -150,38 +150,6 @@ sub delete {
 
 =head2 Internal methods
 
-
-=head3 _to_api
-
-Helper function that maps unblessed Koha::Patron objects into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $biblio = shift;
-
-    # Rename attributes
-    foreach my $column ( keys %{$Koha::REST::V1::Biblios::to_api_mapping} ) {
-        my $mapped_column = $Koha::REST::V1::Biblios::to_api_mapping->{$column};
-        if ( exists $biblio->{$column}
-            && defined $mapped_column )
-        {
-            # key != undef
-            $biblio->{$mapped_column} = delete $biblio->{$column};
-        }
-        elsif ( exists $biblio->{$column}
-            && !defined $mapped_column )
-        {
-            # key == undef
-            delete $biblio->{$column};
-        }
-    }
-
-    return $biblio;
-}
-
-
 =head3 build_json_biblio
 
 Internal method that returns all the attributes from the biblio and biblioitems tables
@@ -193,47 +161,14 @@ sub build_json_biblio {
 
     my $biblio = $args->{biblio};
 
-    my $response = $biblio->TO_JSON;
-    my $biblioitem = $biblio->biblioitem->TO_JSON;
+    my $response = $biblio->to_api;
+    my $biblioitem = $biblio->biblioitem->to_api;
 
     foreach my $key ( keys %{ $biblioitem } ) {
         $response->{$key} = $biblioitem->{$key};
     }
 
-    return _to_api($response);
+    return $response;
 }
-
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    agerestriction   => 'age_restriction',
-    biblioitemnumber => undef, # meaningless
-    biblionumber     => 'biblio_id',
-    collectionissn   => 'collection_issn',
-    collectiontitle  => 'collection_title',
-    collectionvolume => 'collection_volume',
-    copyrightdate    => 'copyright_date',
-    datecreated      => 'creation_date',
-    editionresponsibility => undef, # obsolete, not mapped
-    editionstatement => 'edition_statement',
-    frameworkcode    => 'framework_id',
-    illus            => 'illustrations',
-    itemtype         => 'item_type',
-    lccn             => 'lc_control_number',
-    place            => 'publication_place',
-    publicationyear  => 'publication_year',
-    publishercode    => 'publisher',
-    seriestitle      => 'series_title',
-    size             => 'material_size',
-    totalissues      => 'serial_total_issues',
-    unititle         => 'uniform_title',
-    volumedate       => 'volume_date',
-    volumedesc       => 'volume_description',
-};
 
 1;

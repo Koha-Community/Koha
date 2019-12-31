@@ -29,11 +29,41 @@ Koha::Biblioitem - Koha Biblioitem Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
+
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Biblioitem object
+on the API.
 
 =cut
 
-=head3 type
+sub to_api_mapping {
+    return {
+        agerestriction   => 'age_restriction',
+        biblioitemnumber => undef, # meaningless
+        collectionissn   => 'collection_issn',
+        collectiontitle  => 'collection_title',
+        collectionvolume => 'collection_volume',
+        editionresponsibility => undef, # obsolete, not mapped
+        editionstatement => 'edition_statement',
+        illus            => 'illustrations',
+        itemtype         => 'item_type',
+        lccn             => 'lc_control_number',
+        place            => 'publication_place',
+        publicationyear  => 'publication_year',
+        publishercode    => 'publisher',
+        size             => 'material_size',
+        totalissues      => 'serial_total_issues',
+        volumedate       => 'volume_date',
+        volumedesc       => 'volume_description',
+
+    };
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 

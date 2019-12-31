@@ -724,6 +724,26 @@ sub custom_cover_image_url {
     return $url;
 }
 
+=head3 to_api_mapping
+
+This method returns the mapping for representing a Koha::Biblio object
+on the API.
+
+=cut
+
+sub to_api_mapping {
+    return {
+        biblionumber     => 'biblio_id',
+        frameworkcode    => 'framework_id',
+        unititle         => 'uniform_title',
+        seriestitle      => 'series_title',
+        copyrightdate    => 'copyright_date',
+        datecreated      => 'creation_date'
+    };
+}
+
+=head2 Internal methods
+
 =head3 type
 
 =cut
