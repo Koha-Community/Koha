@@ -21,6 +21,8 @@ use Modern::Perl;
 use Mojolicious::Lite;
 use Try::Tiny;
 
+use Koha::Cities;
+
 app->log->level('error');
 
 plugin 'Koha::REST::Plugin::Query';
@@ -92,14 +94,15 @@ get '/dbic_merge_sorting_single' => sub {
     $c->render( json => $attributes, status => 200 );
 };
 
-get '/dbic_merge_sorting_to_model' => sub {
+get '/dbic_merge_sorting_result_set' => sub {
     my $c = shift;
     my $attributes = { a => 'a', b => 'b' };
+    my $result_set = Koha::Cities->new;
     $attributes = $c->dbic_merge_sorting(
         {
             attributes => $attributes,
-            params     => { _match => 'exact', _order_by => [ 'uno', '-dos', '+tres', ' cuatro' ] },
-            to_model   => \&to_model
+            params     => { _match => 'exact', _order_by => [ 'name', '-postal_code', '+country', ' state' ] },
+            result_set => $result_set
         }
     );
     $c->render( json => $attributes, status => 200 );
@@ -121,13 +124,6 @@ get '/build_query' => sub {
         );
     };
 };
-
-sub to_model {
-    my ($args) = @_;
-    $args->{three} = delete $args->{tres}
-        if exists $args->{tres};
-    return $args;
-}
 
 # The tests
 
@@ -178,14 +174,14 @@ subtest 'dbic_merge_sorting() tests' => sub {
         ]
       );
 
-    $t->get_ok('/dbic_merge_sorting_to_model')->status_is(200)
+    $t->get_ok('/dbic_merge_sorting_result_set')->status_is(200)
       ->json_is( '/a' => 'a', 'Existing values are kept (a)' )
       ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
         '/order_by' => [
-            'uno',
-            { -desc => 'dos' },
-            { -asc  => 'three' },
-            { -asc  => 'cuatro' }
+            'city_name',
+            { -desc => 'city_zipcode' },
+            { -asc  => 'city_country' },
+            { -asc  => 'city_state' }
         ]
       );
 
