@@ -31,28 +31,21 @@ Koha::REST::V1::Acquisitions::Vendors
 
 =head2 Methods
 
-=head3 list_vendors
+=head3 list
 
 Controller function that handles listing Koha::Acquisition::Bookseller objects
 
 =cut
 
-sub list_vendors {
+sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $args = _to_model($c->req->params->to_hash);
-    my $filter;
-
-    for my $filter_param ( keys %$args ) {
-        $filter->{$filter_param} = { LIKE => $args->{$filter_param} . "%" }
-            if $args->{$filter_param};
-    }
-
     return try {
-        my $vendors = Koha::Acquisition::Booksellers->search($filter);
+        my $vendors_rs = Koha::Acquisition::Booksellers->new;
+        my $vendors    = $c->objects->search( $vendors_rs );
         return $c->render(
             status  => 200,
-            openapi => $vendors->to_api
+            openapi => $vendors
         );
     }
     catch {
@@ -67,13 +60,13 @@ sub list_vendors {
     };
 }
 
-=head3 get_vendor
+=head3 get
 
 Controller function that handles retrieving a single Koha::Acquisition::Bookseller
 
 =cut
 
-sub get_vendor {
+sub get {
     my $c = shift->openapi->valid_input or return;
 
     my $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
@@ -88,16 +81,16 @@ sub get_vendor {
     );
 }
 
-=head3 add_vendor
+=head3 add
 
 Controller function that handles adding a new Koha::Acquisition::Bookseller object
 
 =cut
 
-sub add_vendor {
+sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor = Koha::Acquisition::Bookseller->new( _to_model( $c->validation->param('body') ) );
+    my $vendor = Koha::Acquisition::Bookseller->new_from_api( $c->validation->param('body') );
 
     return try {
         $vendor->store;
@@ -119,20 +112,20 @@ sub add_vendor {
     };
 }
 
-=head3 update_vendor
+=head3 update
 
 Controller function that handles updating a Koha::Acquisition::Bookseller object
 
 =cut
 
-sub update_vendor {
+sub update {
     my $c = shift->openapi->valid_input or return;
 
     my $vendor;
 
     return try {
         $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
-        $vendor->set( _to_model( $c->validation->param('body') ) );
+        $vendor->set_from_api( $c->validation->param('body') );
         $vendor->store();
         return $c->render(
             status  => 200,
@@ -156,13 +149,13 @@ sub update_vendor {
 
 }
 
-=head3 delete_vendor
+=head3 delete
 
 Controller function that handles deleting a Koha::Acquisition::Bookseller object
 
 =cut
 
-sub delete_vendor {
+sub delete {
     my $c = shift->openapi->valid_input or return;
 
     my $vendor;
@@ -188,53 +181,6 @@ sub delete_vendor {
         }
     };
 
-}
-
-=head3 _to_api
-
-Helper function that maps a Koha::Acquisition::Bookseller object into
-the attribute names the exposed REST api spec.
-
-=cut
-
-sub _to_api {
-    my $vendor = shift;
-
-    # Delete unused fields
-    delete $vendor->{booksellerfax};
-    delete $vendor->{bookselleremail};
-    delete $vendor->{booksellerurl};
-    delete $vendor->{currency};
-    delete $vendor->{othersupplier};
-
-    # Rename changed fields
-    $vendor->{list_currency}        = delete $vendor->{listprice};
-    $vendor->{invoice_currency}     = delete $vendor->{invoiceprice};
-    $vendor->{gst}                  = delete $vendor->{gstreg};
-    $vendor->{list_includes_gst}    = delete $vendor->{listincgst};
-    $vendor->{invoice_includes_gst} = delete $vendor->{invoiceincgst};
-
-    return $vendor;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::Acquisition::Bookseller
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $vendor = shift;
-
-    # Rename back
-    $vendor->{listprice}     = delete $vendor->{list_currency};
-    $vendor->{invoiceprice}  = delete $vendor->{invoice_currency};
-    $vendor->{gstreg}        = delete $vendor->{gst};
-    $vendor->{listincgst}    = delete $vendor->{list_includes_gst};
-    $vendor->{invoiceincgst} = delete $vendor->{invoice_includes_gst};
-
-    return $vendor;
 }
 
 1;

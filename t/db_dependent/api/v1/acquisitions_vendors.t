@@ -156,7 +156,7 @@ subtest 'get() test' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
       ->status_is(200)
-      ->json_is( Koha::REST::V1::Acquisitions::Vendors::_to_api( $vendor->TO_JSON ) );
+      ->json_is( $vendor->to_api );
 
     my $non_existent_id = $vendor->id + 1;
     $tx = $t->ua->build_tx( GET => "/api/v1/acquisitions/vendors/" . $non_existent_id );
