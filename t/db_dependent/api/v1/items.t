@@ -82,7 +82,7 @@ subtest 'list() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/items?external_id=" . $item->barcode )
       ->status_is(200)
-      ->json_is( '' => [ Koha::REST::V1::Items::_to_api( $item->TO_JSON ) ], 'SWAGGER3.3.2');
+      ->json_is( '' => [ $item->to_api ], 'SWAGGER3.3.2');
 
     my $barcode = $item->barcode;
     $item->delete;
@@ -126,7 +126,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/items/" . $item->itemnumber )
       ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '' => Koha::REST::V1::Items::_to_api( $item->TO_JSON ), 'SWAGGER3.3.2' );
+      ->json_is( '' => $item->to_api, 'SWAGGER3.3.2' );
 
     my $non_existent_code = $item->itemnumber;
     $item->delete;
