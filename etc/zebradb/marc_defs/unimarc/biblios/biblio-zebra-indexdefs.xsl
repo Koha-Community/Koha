@@ -2553,27 +2553,6 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       </z:index>
     </xslo:if>
   </xslo:template>
-  <xslo:template mode="index_facets" match="marc:datafield[@tag='500']">
-    <xslo:if test="not(@ind1='z')">
-      <z:index name="su-ut:0">
-        <xslo:value-of select="marc:subfield[@code='a']"/>
-      </z:index>
-    </xslo:if>
-  </xslo:template>
-  <xslo:template mode="index_facets" match="marc:datafield[@tag='501']">
-    <xslo:if test="not(@ind1='z')">
-      <z:index name="su-ut:0">
-        <xslo:value-of select="marc:subfield[@code='a']"/>
-      </z:index>
-    </xslo:if>
-  </xslo:template>
-  <xslo:template mode="index_facets" match="marc:datafield[@tag='503']">
-    <xslo:if test="not(@ind1='z')">
-      <z:index name="su-ut:0">
-        <xslo:value-of select="marc:subfield[@code='a']"/>
-      </z:index>
-    </xslo:if>
-  </xslo:template>
   <xslo:template mode="index_facets" match="marc:datafield[@tag='600']">
     <xslo:if test="not(@ind1='z')">
       <z:index name="su-to:0">
