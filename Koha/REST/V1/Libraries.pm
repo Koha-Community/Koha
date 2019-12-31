@@ -1,4 +1,4 @@
-package Koha::REST::V1::Library;
+package Koha::REST::V1::Libraries;
 
 # This file is part of Koha.
 #
@@ -45,7 +45,7 @@ sub list {
 
     return try {
         my $libraries_set = Koha::Libraries->new;
-        my $libraries     = $c->objects->search( $libraries_set, \&_to_model, \&_to_api );
+        my $libraries     = $c->objects->search( $libraries_set );
         return $c->render( status => 200, openapi => $libraries );
     }
     catch {
@@ -95,7 +95,7 @@ sub add {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $library = Koha::Library->new( _to_model( $c->validation->param('body') ) );
+        my $library = Koha::Library->new_from_api( $c->validation->param('body') );
         $library->store;
         $c->res->headers->location( $c->req->url->to_string . '/' . $library->branchcode );
 
@@ -146,7 +146,7 @@ sub update {
 
     return try {
         my $params = $c->req->json;
-        $library->set( _to_model($params) );
+        $library->set_from_api( $params );
         $library->store();
         return $c->render(
             status  => 200,
@@ -202,123 +202,5 @@ sub delete {
         );
     };
 }
-
-=head3 _to_api
-
-Helper function that maps a hashref of Koha::Library attributes into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $library = shift;
-
-    # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::Library::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Library::to_api_mapping->{$column};
-        if (    exists $library->{ $column }
-             && defined $mapped_column )
-        {
-            # key /= undef
-            $library->{ $mapped_column } = delete $library->{ $column };
-        }
-        elsif (    exists $library->{ $column }
-                && !defined $mapped_column )
-        {
-            # key == undef => to be deleted
-            delete $library->{ $column };
-        }
-    }
-
-    return $library;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::Library
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $library = shift;
-
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Library::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Library::to_model_mapping->{$attribute};
-        if (    exists $library->{ $attribute }
-             && defined $mapped_attribute )
-        {
-            # key /= undef
-            $library->{ $mapped_attribute } = delete $library->{ $attribute };
-        }
-        elsif (    exists $library->{ $attribute }
-                && !defined $mapped_attribute )
-        {
-            # key == undef => to be deleted
-            delete $library->{ $attribute };
-        }
-    }
-
-    if ( exists $library->{pickup_location} ) {
-        $library->{pickup_location} = ( $library->{pickup_location} ) ? 1 : 0;
-    }
-
-    return $library;
-}
-
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    branchcode       => 'library_id',
-    branchname       => 'name',
-    branchaddress1   => 'address1',
-    branchaddress2   => 'address2',
-    branchaddress3   => 'address3',
-    branchzip        => 'postal_code',
-    branchcity       => 'city',
-    branchstate      => 'state',
-    branchcountry    => 'country',
-    branchphone      => 'phone',
-    branchfax        => 'fax',
-    branchemail      => 'email',
-    branchreplyto    => 'reply_to_email',
-    branchreturnpath => 'return_path_email',
-    branchurl        => 'url',
-    issuing          => undef,
-    branchip         => 'ip',
-    branchprinter    => undef,
-    branchnotes      => 'notes',
-    marcorgcode      => 'marc_org_code',
-};
-
-=head3 $to_model_mapping
-
-=cut
-
-our $to_model_mapping = {
-    library_id        => 'branchcode',
-    name              => 'branchname',
-    address1          => 'branchaddress1',
-    address2          => 'branchaddress2',
-    address3          => 'branchaddress3',
-    postal_code       => 'branchzip',
-    city              => 'branchcity',
-    state             => 'branchstate',
-    country           => 'branchcountry',
-    phone             => 'branchphone',
-    fax               => 'branchfax',
-    email             => 'branchemail',
-    reply_to_email    => 'branchreplyto',
-    return_path_email => 'branchreturnpath',
-    url               => 'branchurl',
-    ip                => 'branchip',
-    notes             => 'branchnotes',
-    marc_org_code     => 'marcorgcode',
-};
 
 1;

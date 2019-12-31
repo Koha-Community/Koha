@@ -1,8 +1,8 @@
 {
   "/libraries": {
     "get": {
-      "x-mojo-to": "Library#list",
-      "operationId": "listLibrary",
+      "x-mojo-to": "Libraries#list",
+      "operationId": "listLibraries",
       "tags": [
         "library"
       ],
@@ -125,6 +125,18 @@
           "description": "Case insensitive 'starts-with' search on OPAC info",
           "required": false,
           "type": "string"
+        },
+        {
+          "$ref": "../parameters.json#/match"
+        },
+        {
+          "$ref": "../parameters.json#/order_by"
+        },
+        {
+          "$ref": "../parameters.json#/page"
+        },
+        {
+          "$ref": "../parameters.json#/per_page"
         }
       ],
       "produces": [
@@ -160,7 +172,7 @@
       }
     },
     "post": {
-      "x-mojo-to": "Library#add",
+      "x-mojo-to": "Libraries#add",
       "operationId": "addLibrary",
       "tags": [
         "library"
@@ -232,7 +244,7 @@
   },
   "/libraries/{library_id}": {
     "get": {
-      "x-mojo-to": "Library#get",
+      "x-mojo-to": "Libraries#get",
       "operationId": "getLibrary",
       "tags": [
         "library"
@@ -266,7 +278,7 @@
       }
     },
     "put": {
-      "x-mojo-to": "Library#update",
+      "x-mojo-to": "Libraries#update",
       "operationId": "updateLibrary",
       "tags": [
         "library"
@@ -342,7 +354,7 @@
       }
     },
     "delete": {
-      "x-mojo-to": "Library#delete",
+      "x-mojo-to": "Libraries#delete",
       "operationId": "deleteLibrary",
       "tags": [
         "library"

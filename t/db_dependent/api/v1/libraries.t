@@ -121,7 +121,7 @@ subtest 'get() tests' => sub {
 
     $t->get_ok( "//$userid:$password@/api/v1/libraries/" . $library->branchcode )
       ->status_is( 200, 'SWAGGER3.2.2' )
-      ->json_is( '' => Koha::REST::V1::Library::_to_api( $library->TO_JSON ), 'SWAGGER3.3.2' );
+      ->json_is( '' => $library->to_api, 'SWAGGER3.3.2' );
 
     my $non_existent_code = $library->branchcode;
     $library->delete;
@@ -155,7 +155,7 @@ subtest 'add() tests' => sub {
     my $unauth_userid = $unauthorized_patron->userid;
 
     my $library_obj = $builder->build_object({ class => 'Koha::Libraries' });
-    my $library     = Koha::REST::V1::Library::_to_api( $library_obj->TO_JSON );
+    my $library     = $library_obj->to_api;
     $library_obj->delete;
 
     # Unauthorized attempt to write
@@ -245,7 +245,7 @@ subtest 'update() tests' => sub {
       );
 
     my $deleted_library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $library_with_updated_field = Koha::REST::V1::Library::_to_api( $deleted_library->TO_JSON );
+    my $library_with_updated_field = $deleted_library->to_api;
     $library_with_updated_field->{library_id} = $library_id;
     $deleted_library->delete;
 
