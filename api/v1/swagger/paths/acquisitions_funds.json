@@ -1,7 +1,7 @@
 {
   "/acquisitions/funds": {
     "get": {
-      "x-mojo-to": "Acquisitions::Funds#list_funds",
+      "x-mojo-to": "Acquisitions::Funds#list",
       "operationId": "listFunds",
       "tags": ["acquisitions","funds"],
       "produces": [
@@ -20,6 +20,18 @@
         "description": "Display only the funds that belongs to the given patron ID",
         "required": false,
         "type": "integer"
+      },
+      {
+        "$ref": "../parameters.json#/match"
+      },
+      {
+        "$ref": "../parameters.json#/order_by"
+      },
+      {
+        "$ref": "../parameters.json#/page"
+      },
+      {
+        "$ref": "../parameters.json#/per_page"
       }
       ],
       "responses": {
