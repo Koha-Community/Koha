@@ -19,6 +19,11 @@ $biblio_module->mock(
     'GetMarcStructure',
     sub {
         {
+            # default for a control field
+            '008' => {
+                x => { defaultvalue => $default_x },
+            },
+
             # default value for an existing field
             '245' => {
                 c          => { defaultvalue => $default_author },
@@ -39,6 +44,10 @@ $biblio_module->mock(
 my $record = MARC::Record->new;
 $record->leader('03174nam a2200445 a 4500');
 my @fields = (
+    MARC::Field->new(
+        '008', '1', ' ',
+        '@' => '120829t20132012nyu bk 001 0ceng',
+    ),
     MARC::Field->new(
         100, '1', ' ',
         a => 'Knuth, Donald Ervin',

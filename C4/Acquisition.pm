@@ -3279,18 +3279,30 @@ sub FillWithDefaultValues {
                     my @fields = $record->field($tag);
                     if (@fields) {
                         for my $field (@fields) {
-                            unless ( defined $field->subfield($subfield) ) {
+                            if ( $field->is_control_field ) {
+                                $field->update($defaultvalue) if not defined $field->data;
+                            }
+                            elsif ( not defined $field->subfield($subfield) ) {
                                 $field->add_subfields(
                                     $subfield => $defaultvalue );
                             }
                         }
                     }
                     else {
-                        $record->insert_fields_ordered(
-                            MARC::Field->new(
-                                $tag, '', '', $subfield => $defaultvalue
-                            )
-                        );
+                        if ( $tag < 10 ) { # is_control_field
+                            $record->insert_fields_ordered(
+                                MARC::Field->new(
+                                    $tag, $defaultvalue
+                                )
+                            );
+                        }
+                        else {
+                            $record->insert_fields_ordered(
+                                MARC::Field->new(
+                                    $tag, '', '', $subfield => $defaultvalue
+                                )
+                            );
+                        }
                     }
                 }
             }
