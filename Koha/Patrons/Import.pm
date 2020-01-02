@@ -404,6 +404,7 @@ sub prepare_columns {
     foreach my $keycol (@csvcolumns) {
         # columnkeys don't contain whitespace, but some stupid tools add it
         $keycol =~ s/ +//g;
+        $keycol =~ s/^\N{BOM}//; # Strip BOM if exists, otherwise it will be part of first column key
         $params->{keycol}->{$keycol} = $col++;
     }
 
