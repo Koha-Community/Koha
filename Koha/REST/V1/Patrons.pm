@@ -43,29 +43,46 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $attributes = {};
+
+        my $patrons_rs = Koha::Patrons->new;
         my $args = $c->validation->output;
-        my ( $params, $reserved_params ) = $c->extract_reserved_params( $args );
+        my $attributes = {};
+
+        # Extract reserved params
+        my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
+
+        my $restricted = delete $filtered_params->{restricted};
 
         # Merge sorting into query attributes
-        $c->dbic_merge_sorting({ attributes => $attributes, params => $reserved_params });
+        $c->dbic_merge_sorting(
+            {
+                attributes => $attributes,
+                params     => $reserved_params,
+                result_set => $patrons_rs
+            }
+        );
 
         # Merge pagination into query attributes
-        $c->dbic_merge_pagination({ filter => $attributes, params => $reserved_params });
+        $c->dbic_merge_pagination(
+            {
+                filter => $attributes,
+                params => $reserved_params
+            }
+        );
 
-        my $restricted = $args->{restricted};
+        if ( defined $filtered_params ) {
 
-        $params = _to_model($params)
-            if defined $params;
-        # deal with string params
-        $params = $c->build_query_params( $params, $reserved_params );
+            # Apply the mapping function to the passed params
+            $filtered_params = $patrons_rs->attributes_from_api($filtered_params);
+            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+        }
 
         # translate 'restricted' => 'debarred'
-        $params->{debarred} = { '!=' => undef }
+        $filtered_params->{debarred} = { '!=' => undef }
           if $restricted;
 
-        my $patrons = Koha::Patrons->search( $params, $attributes );
-        if ( $patrons->is_paged ) {
+        my $patrons = $patrons_rs->search( $filtered_params, $attributes );
+        if ( $patrons_rs->is_paged ) {
             $c->add_pagination_headers(
                 {
                     total  => $patrons->pager->total_entries,
@@ -132,6 +149,9 @@ sub add {
         );
     }
     catch {
+
+        my $to_api_mapping = Koha::Patron->new->to_api_mapping;
+
         unless ( blessed $_ && $_->can('rethrow') ) {
             return $c->render(
                 status  => 500,
@@ -149,7 +169,7 @@ sub add {
                 status  => 400,
                 openapi => {
                           error => "Given "
-                        . $Koha::REST::V1::Patrons::to_api_mapping->{ $_->broken_fk }
+                        . $to_api_mapping->{ $_->broken_fk }
                         . " does not exist"
                 }
             );
@@ -159,7 +179,7 @@ sub add {
                 status  => 400,
                 openapi => {
                           error => "Given "
-                        . $Koha::REST::V1::Patrons::to_api_mapping->{ $_->parameter }
+                        . $to_api_mapping->{ $_->parameter }
                         . " does not exist"
                 }
             );
@@ -218,7 +238,7 @@ sub update {
             return $c->render(
                 status  => 400,
                 openapi => { error => "Given " .
-                            $Koha::REST::V1::Patrons::to_api_mapping->{$_->broken_fk}
+                            $patron->to_api_mapping->{$_->broken_fk}
                             . " does not exist" }
             );
         }
@@ -378,200 +398,5 @@ sub guarantors_can_see_checkouts {
         );
     };
 }
-
-=head2 Internal methods
-
-=head3 _to_api
-
-Helper function that maps unblessed Koha::Patron objects into REST api
-attribute names.
-
-=cut
-
-sub _to_api {
-    my $patron    = shift;
-    my $patron_id = $patron->{ borrowernumber };
-
-    # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::Patrons::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Patrons::to_api_mapping->{$column};
-        if (    exists $patron->{ $column }
-             && defined $mapped_column )
-        {
-            # key != undef
-            $patron->{ $mapped_column } = delete $patron->{ $column };
-        }
-        elsif (    exists $patron->{ $column }
-                && !defined $mapped_column )
-        {
-            # key == undef
-            delete $patron->{ $column };
-        }
-    }
-
-    # Calculate the 'restricted' field
-    my $patron_obj = Koha::Patrons->find( $patron_id );
-    $patron->{ restricted } = ($patron_obj->is_debarred) ? Mojo::JSON->true : Mojo::JSON->false;
-
-    return $patron;
-}
-
-=head3 _to_model
-
-Helper function that maps REST api objects into Koha::Patron
-attribute names.
-
-=cut
-
-sub _to_model {
-    my $patron = shift;
-
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Patrons::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Patrons::to_model_mapping->{$attribute};
-        if (    exists $patron->{ $attribute }
-             && defined $mapped_attribute )
-        {
-            # key => !undef
-            $patron->{ $mapped_attribute } = delete $patron->{ $attribute };
-        }
-        elsif (    exists $patron->{ $attribute }
-                && !defined $mapped_attribute )
-        {
-            # key => undef / to be deleted
-            delete $patron->{ $attribute };
-        }
-    }
-
-    # TODO: Get rid of this once write operations are based on Koha::Patron
-    if ( exists $patron->{lost} ) {
-        $patron->{lost} = ($patron->{lost}) ? 1 : 0;
-    }
-
-    if ( exists $patron->{ gonenoaddress} ) {
-        $patron->{gonenoaddress} = ($patron->{gonenoaddress}) ? 1 : 0;
-    }
-
-    if ( exists $patron->{lastseen} ) {
-        $patron->{lastseen} = output_pref({ str => $patron->{lastseen}, dateformat => 'sql' });
-    }
-
-    if ( exists $patron->{updated_on} ) {
-        $patron->{updated_on} = output_pref({ str => $patron->{updated_on}, dateformat => 'sql' });
-    }
-
-    return $patron;
-}
-
-=head2 Global variables
-
-=head3 $to_api_mapping
-
-=cut
-
-our $to_api_mapping = {
-    borrowernotes       => 'staff_notes',
-    borrowernumber      => 'patron_id',
-    branchcode          => 'library_id',
-    categorycode        => 'category_id',
-    checkprevcheckout   => 'check_previous_checkout',
-    contactfirstname    => undef, # Unused
-    contactname         => undef, # Unused
-    contactnote         => 'altaddress_notes',
-    contacttitle        => undef, # Unused
-    dateenrolled        => 'date_enrolled',
-    dateexpiry          => 'expiry_date',
-    dateofbirth         => 'date_of_birth',
-    debarred            => undef, # replaced by 'restricted'
-    debarredcomment     => undef, # calculated, API consumers will use /restrictions instead
-    emailpro            => 'secondary_email',
-    flags               => undef, # permissions manipulation handled in /permissions
-    gonenoaddress       => 'incorrect_address',
-    guarantorid         => 'guarantor_id',
-    lastseen            => 'last_seen',
-    lost                => 'patron_card_lost',
-    opacnote            => 'opac_notes',
-    othernames          => 'other_name',
-    password            => undef, # password manipulation handled in /password
-    phonepro            => 'secondary_phone',
-    relationship        => 'relationship_type',
-    sex                 => 'gender',
-    smsalertnumber      => 'sms_number',
-    sort1               => 'statistics_1',
-    sort2               => 'statistics_2',
-    streetnumber        => 'street_number',
-    streettype          => 'street_type',
-    zipcode             => 'postal_code',
-    B_address           => 'altaddress_address',
-    B_address2          => 'altaddress_address2',
-    B_city              => 'altaddress_city',
-    B_country           => 'altaddress_country',
-    B_email             => 'altaddress_email',
-    B_phone             => 'altaddress_phone',
-    B_state             => 'altaddress_state',
-    B_streetnumber      => 'altaddress_street_number',
-    B_streettype        => 'altaddress_street_type',
-    B_zipcode           => 'altaddress_postal_code',
-    altcontactaddress1  => 'altcontact_address',
-    altcontactaddress2  => 'altcontact_address2',
-    altcontactaddress3  => 'altcontact_city',
-    altcontactcountry   => 'altcontact_country',
-    altcontactfirstname => 'altcontact_firstname',
-    altcontactphone     => 'altcontact_phone',
-    altcontactsurname   => 'altcontact_surname',
-    altcontactstate     => 'altcontact_state',
-    altcontactzipcode   => 'altcontact_postal_code'
-};
-
-=head3 $to_model_mapping
-
-=cut
-
-our $to_model_mapping = {
-    altaddress_notes         => 'contactnote',
-    category_id              => 'categorycode',
-    check_previous_checkout  => 'checkprevcheckout',
-    date_enrolled            => 'dateenrolled',
-    date_of_birth            => 'dateofbirth',
-    expiry_date              => 'dateexpiry',
-    gender                   => 'sex',
-    guarantor_id             => 'guarantorid',
-    incorrect_address        => 'gonenoaddress',
-    last_seen                => 'lastseen',
-    library_id               => 'branchcode',
-    opac_notes               => 'opacnote',
-    other_name               => 'othernames',
-    patron_card_lost         => 'lost',
-    patron_id                => 'borrowernumber',
-    postal_code              => 'zipcode',
-    relationship_type        => 'relationship',
-    restricted               => undef,
-    secondary_email          => 'emailpro',
-    secondary_phone          => 'phonepro',
-    sms_number               => 'smsalertnumber',
-    staff_notes              => 'borrowernotes',
-    statistics_1             => 'sort1',
-    statistics_2             => 'sort2',
-    street_number            => 'streetnumber',
-    street_type              => 'streettype',
-    altaddress_address       => 'B_address',
-    altaddress_address2      => 'B_address2',
-    altaddress_city          => 'B_city',
-    altaddress_country       => 'B_country',
-    altaddress_email         => 'B_email',
-    altaddress_phone         => 'B_phone',
-    altaddress_state         => 'B_state',
-    altaddress_street_number => 'B_streetnumber',
-    altaddress_street_type   => 'B_streettype',
-    altaddress_postal_code   => 'B_zipcode',
-    altcontact_firstname     => 'altcontactfirstname',
-    altcontact_surname       => 'altcontactsurname',
-    altcontact_address       => 'altcontactaddress1',
-    altcontact_address2      => 'altcontactaddress2',
-    altcontact_city          => 'altcontactaddress3',
-    altcontact_state         => 'altcontactstate',
-    altcontact_postal_code   => 'altcontactzipcode',
-    altcontact_country       => 'altcontactcountry',
-    altcontact_phone         => 'altcontactphone'
-};
 
 1;
