@@ -63,7 +63,7 @@ my ( $template, $borrowernumber, $cookie, @messages );
 my $deleted = $input->param('deleted');
 my $submitted = $input->param('submitted');
 
-if ( C4::Context->preference("AnonSuggestions") or ( C4::Context->preference("OPACViewOthersSuggestions") and $op eq 'else' ) ) {
+if ( ( C4::Context->preference("AnonSuggestions") and Koha::Patrons->find( C4::Context->preference("AnonymousPatron") ) ) or ( C4::Context->preference("OPACViewOthersSuggestions") and $op eq 'else' ) ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-suggestions.tt",
