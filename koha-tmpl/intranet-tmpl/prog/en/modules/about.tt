@@ -184,7 +184,7 @@
         </div>
 
         <div id="sysinfo">
-    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships %]
+    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -246,7 +246,7 @@
             [% END %]
         [% END %]
 
-        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatron || warnPrefAnonymousPatron_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules %]
             <h2>Warnings regarding the system configuration</h2>
             <table>
                 <caption>Preferences and parameters</caption>
@@ -256,11 +256,17 @@
                 [% IF (warnPrefEasyAnalyticalRecords) %]
                 <tr><th scope="row"><b>Warning</b> </th><td>System preference 'EasyAnalyticalRecords' set, but UseControlNumber preference is set to 'Use'. Set it to 'Don't use' or else the 'Show analytics' links in the staff client and the OPAC will be broken.</td></tr>
                 [% END %]
-                [% IF warnPrefAnonymousPatron %]
+                [% IF warnPrefAnonymousPatronOPACPrivacy %]
                     <tr><th scope="row"><b>Warning</b> </th><td>System preference 'OPACPrivacy' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
-                [% IF warnPrefAnonymousPatron_PatronDoesNotExist %]
+                [% IF warnPrefAnonymousPatronAnonSuggestions %]
+                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is set to '0'. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                [% END %]
+                [% IF warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist %]
                     <tr><th scope="row"><b>Warning</b> </th><td>Some patrons have requested a privacy on returning item but the AnonymousPatron pref is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
+                [% END %]
+                [% IF warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist %]
+                    <tr><th scope="row"><b>Warning</b> </th><td>System preference 'AnonSuggestions' set, but AnonymousPatron preference is not set correctly. Set it to a valid borrower number if you want that this feature works correctly.</td></tr>
                 [% END %]
                 [% IF warnNoActiveCurrency %]
                     <tr><th scope="row"><b>Warning</b> </th><td>No active currency is defined. Please go to <a href="/cgi-bin/koha/admin/currency.pl">Administration &gt; Currencies and exchange rates</a> and mark one currency as active.</td></tr>

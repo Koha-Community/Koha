@@ -159,13 +159,21 @@ my $warnPrefBiblioAddsAuthorities = ( $prefAutoCreateAuthorities && ( !$prefBibl
 my $prefEasyAnalyticalRecords  = C4::Context->preference('EasyAnalyticalRecords');
 my $prefUseControlNumber  = C4::Context->preference('UseControlNumber');
 my $warnPrefEasyAnalyticalRecords  = ( $prefEasyAnalyticalRecords  && $prefUseControlNumber );
-my $warnPrefAnonymousPatron = (
+
+my $AnonymousPatron = C4::Context->preference('AnonymousPatron');
+my $warnPrefAnonymousPatronOPACPrivacy = (
     C4::Context->preference('OPACPrivacy')
-        and not C4::Context->preference('AnonymousPatron')
+        and not $AnonymousPatron
+);
+my $warnPrefAnonymousPatronAnonSuggestions = (
+    C4::Context->preference('AnonSuggestions')
+        and not $AnonymousPatron
 );
 
-my $anonymous_patron = Koha::Patrons->find( C4::Context->preference('AnonymousPatron') );
-my $warnPrefAnonymousPatron_PatronDoesNotExist = ( not $anonymous_patron and Koha::Patrons->search({ privacy => 2 })->count );
+my $anonymous_patron = Koha::Patrons->find( $AnonymousPatron );
+my $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist = ( $AnonymousPatron && C4::Context->preference('AnonSuggestions') && not $anonymous_patron );
+
+my $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist = ( not $anonymous_patron and Koha::Patrons->search({ privacy => 2 })->count );
 
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 
@@ -520,8 +528,10 @@ $template->param(
     prefAutoCreateAuthorities => $prefAutoCreateAuthorities,
     warnPrefBiblioAddsAuthorities => $warnPrefBiblioAddsAuthorities,
     warnPrefEasyAnalyticalRecords  => $warnPrefEasyAnalyticalRecords,
-    warnPrefAnonymousPatron => $warnPrefAnonymousPatron,
-    warnPrefAnonymousPatron_PatronDoesNotExist => $warnPrefAnonymousPatron_PatronDoesNotExist,
+    warnPrefAnonymousPatronOPACPrivacy        => $warnPrefAnonymousPatronOPACPrivacy,
+    warnPrefAnonymousPatronAnonSuggestions    => $warnPrefAnonymousPatronAnonSuggestions,
+    warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist     => $warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist,
+    warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist => $warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist,
     errZebraConnection => $errZebraConnection,
     warnIsRootUser => $warnIsRootUser,
     warnNoActiveCurrency => $warnNoActiveCurrency,
