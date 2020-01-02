@@ -2749,7 +2749,7 @@ CREATE TABLE `account_offsets` (
 DROP TABLE IF EXISTS `action_logs`;
 CREATE TABLE `action_logs` ( -- logs of actions taken in Koha (requires that the logs be turned on)
   `action_id` int(11) NOT NULL auto_increment, -- unique identifier for each action
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time the action took place
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date and time the action took place
   `user` int(11) NOT NULL default 0, -- the staff member who performed the action (borrowers.borrowernumber)
   `module` MEDIUMTEXT, -- the module this action was taken against
   `action` MEDIUMTEXT, -- the action (includes things like DELETED, ADDED, MODIFY, etc)
