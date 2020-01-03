@@ -46,8 +46,16 @@
                 <tr>
                   <td>
                   <select name="rule_operator">
-                    <option value="and" [% IF (mapping.rule_operator == 'and') %] selected="selected" [% END %]>and</option>
-                    <option value="or" [% IF (mapping.rule_operator == 'or') %] selected="selected" [% END %]>or</option>
+                    [% IF (mapping.rule_operator == 'and') %]
+                    <option value="and" selected="selected">and</option>
+                    [% ELSE %]
+                    <option value="and">and</option>
+                    [% END %]
+                    [% IF (mapping.rule_operator == 'or') %]
+                    <option value="or" selected="selected">or</option>
+                    [% ELSE %]
+                    <option value="or">or</option>
+                    [% END %]
                   </select>
                   </td>
                   <td><input type="text" name="marcfield" size="3" value="[% mapping.marcfield | html %]" /></td>
@@ -74,8 +82,16 @@
               <tr>
                 <td>
                   <select name="rule_operator">
-                    <option value="and" [% IF (mapping.rule_operator == 'and') %] selected="selected" [% END %]>and</option>
-                    <option value="or" [% IF (mapping.rule_operator == 'or') %] selected="selected" [% END %]>or</option>
+                    [% IF (mapping.rule_operator == 'and') %]
+                    <option value="and" selected="selected">and</option>
+                    [% ELSE %]
+                    <option value="and">and</option>
+                    [% END %]
+                    [% IF (mapping.rule_operator == 'or') %]
+                    <option value="or" selected="selected">or</option>
+                    [% ELSE %]
+                    <option value="or">or</option>
+                    [% END %]
                   </select>
                 </td>
                 <td><input type="text" name="marcfield" size="3" /></td>
