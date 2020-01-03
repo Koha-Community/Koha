@@ -76,7 +76,6 @@ my $usage = << 'ENDUSAGE';
 This script calculates and charges overdue fines to patron accounts.
 
 If the Koha System Preference 'finesMode' is set to 'production', the fines are charged to the patron accounts.
-If set to 'test', the fines are calculated but not applied.
 
 Please note that the fines won't be applied on a holiday.
 
