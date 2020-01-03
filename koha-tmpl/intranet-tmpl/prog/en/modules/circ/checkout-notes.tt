@@ -50,8 +50,8 @@
             [% IF ( notes.count ) %]
                 <form id="mark_selected" method="post" action="/cgi-bin/koha/circ/checkout-notes.pl">
                     <div id="toolbar" class="btn-toolbar">
-                        <button type="submit" class="btn btn-default" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
-                        <button type="submit" class="btn btn-default" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                        <button type="submit" class="btn btn-default markseen" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
+                        <button type="submit" class="btn btn-default markseen" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
                     </div>
 
                     <fieldset class="action" style="cursor:pointer;">
@@ -140,12 +140,12 @@
 
             $(".SelectAll").on("click", function(){
                 $("input[name='issue_ids'][type='checkbox']").prop("checked", true);
-                $(".btn-sm").prop("disabled", false);
+                $(".markseen").prop("disabled", false);
             });
 
             $(".ClearAll").on("click", function(){
                 $("input[name='issue_ids'][type='checkbox']").prop("checked", false);
-                $(".btn-sm").prop("disabled", true);
+                $(".markseen").prop("disabled", true);
             });
 
             $(".HideSeen").on("click", function(){
@@ -158,11 +158,11 @@
 
             $("#error").hide();
 
-            $("input[type='checkbox']").click(function(event){
+            $("#notestable").on("change", "input[type='checkbox']", function(){
                 if ( $("input[type='checkbox']").is(":checked") ) {
-                    $(".btn-sm").prop("disabled", false);
+                    $(".markseen").prop("disabled", false);
                 } else {
-                    $(".btn-sm").prop("disabled", true);
+                    $(".markseen").prop("disabled", true);
                 }
             });
 
