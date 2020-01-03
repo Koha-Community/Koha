@@ -20258,6 +20258,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23233 - Rename AllowItemsOnHoldCheckout syspref)\n";
 }
 
+$DBversion = '19.12.00.003';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'library_groups', 'ft_local_hold_group' ) ) {
+        $dbh->do( "ALTER TABLE library_groups ADD COLUMN ft_local_hold_group tinyint(1) NOT NULL DEFAULT 0 AFTER ft_search_groups_staff" );
+    }
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22284 - Add ft_local_hold_group column to library_groups)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
