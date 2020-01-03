@@ -166,7 +166,7 @@
                 }
             });
 
-            $("button.seen, button.notseen").click(function(event){
+            $("#notestable").on("click", "button.seen, button.notseen", function(event){
                 event.preventDefault(); // prevent form submission
                 var $action = $(this).attr("name");
                 var $issue_id = $(this).data('issue_id');
