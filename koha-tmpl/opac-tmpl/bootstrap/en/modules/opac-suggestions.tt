@@ -274,14 +274,14 @@
                                         [% END %]
                                     </fieldset>
                                 </form>
-                                <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="myform">
+                                <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="delete_suggestions">
                                     <input type="hidden" name="op" value="delete_confirm" />
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">
                                         [% IF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
                                                 <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
                                         [% ELSE %]
-                                                <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>
+                                                <a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a>
                                         [% END %]
                                         </div>
                                     [% END %]
@@ -314,12 +314,12 @@
                                                     [% IF ( loggedinusername ) %]
                                                         <td>
                                                             [% IF ( suggestions_loo.showcheckbox ) %]
-                                                                <input type="checkbox" class="cb" name="delete_field" value="[% suggestions_loo.suggestionid | html %]" />
+                                                                <input type="checkbox" class="cb" id="id[% suggestions_loo.suggestionid | html %]" name="delete_field" data-title="[% suggestions_loo.title | html %]" value="[% suggestions_loo.suggestionid | html %]" />
                                                             [% END %]
                                                         </td>
                                                     [% END %]
                                                     <td>
-                                                        <p><strong>[% suggestions_loo.title | html %]</strong></p>
+                                                        <p><label for="id[% suggestions_loo.suggestionid | html %]"><strong>[% suggestions_loo.title | html %]</strong></label></p>
                                                             <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author | html %],[% END %]
                                                                 [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate | html %],[% END %]
                                                                 [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode | html %][% END %]
@@ -373,7 +373,7 @@
 
                                     [% IF ( loggedinusername ) %]
                                         <fieldset class="action">
-                                            <input type="submit" class="btn btn-danger" value="Delete selected" />
+                                            <input type="submit" class="btn btn-danger removeitems" value="Delete selected" />
                                         </fieldset>
                                     [% END %]
                                 </form>
@@ -387,7 +387,7 @@
                                     [% IF ( Koha.Preference('MaxOpenSuggestions') != ''  && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
                                         <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more.</p>
                                     [% ELSE %]
-                                        <p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>
+                                        <p><a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a></p>
                                     [% END %]
                                 [% END %]
                             [% END # / IF suggestions_loop %]
@@ -404,7 +404,6 @@
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 <script>
-    //<![CDATA[
     [% IF ( loggedinusername ) %]
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked
@@ -450,22 +449,45 @@
         $(".cb").click(function(){
           enableCheckboxActions();
         });
-        $("#removeitems").html("<a href=\"#\" class=\"removeitems tag_hides disabled\">"+_("Delete")+"</a>")
-        .click(function(e){
-          e.preventDefault();
-          $("#myform").submit();
-          return false;
-        });
+        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link removeitems tag_hides btn-disabled\"><i class=\"fa fa-trash\"></i> "+_("Delete")+"</a>");
+
         enableCheckboxActions();
-        $("#myform").on('submit', function() {
-          if ( $("input:checked").size() < 1 ) {
-            alert(MSG_NO_SUGGESTION_SELECTED);
-            return false;
-          }
-          return true;
+
+        $(".removeitems").on("click", function(e) {
+            e.preventDefault();
+            var selected_titles = $("input:checked");
+            var title;
+            var yes_label;
+            var no_label;
+            var message = "";
+            if ( selected_titles.size() < 1 ) {
+                alert(MSG_NO_SUGGESTION_SELECTED);
+                return false;
+            } else {
+                if( selected_titles.size() > 1 ){
+                    message = $("<ul></ul>");
+                    title = _("Are you sure you want to delete these suggestions?");
+                    yes_label = _("Yes, delete suggestions");
+                    no_label = _("No, do not delete suggestions");
+                    selected_titles.each(function(){
+                        message.append( "<li>" +  $(this).data("title") + "</li>" );
+                    });
+                } else {
+                    title = _("Are you sure you want to delete this suggestion?");
+                    yes_label = _("Yes, delete suggestion");
+                    no_label = _("No, do not delete suggestion");
+                    selected_titles.each(function(){
+                        message += $(this).data("title");
+                    });
+                }
+                confirmModal( message, title, yes_label, no_label, function( result ){
+                    if( result ){
+                        $("#delete_suggestions").submit();
+                    }
+                });
+            }
         });
         [% END %]
     });
-//]]>
 </script>
 [% END %]
