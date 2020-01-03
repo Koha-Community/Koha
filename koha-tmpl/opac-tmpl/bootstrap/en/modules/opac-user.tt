@@ -750,7 +750,6 @@
                 e.preventDefault();
                 var hold_title = $(this).data("title");
                 var reserve_id = $(this).data("reserve_id");
-                var body = "<p><strong>" + hold_title + "</strong></p>";
                 confirmModal( hold_title, _("Are you sure you want to cancel this hold?"), _("Yes, cancel hold"), _("No, do not cancel hold"), function( result ){
                         if( result ){
                             $("#delete_hold_" + reserve_id ).submit();
@@ -761,10 +760,9 @@
 
             $(".btn-delete-article-request").on("click", function(e){
                 e.preventDefault();
-                var hold_title = $(this).data("title");
+                var article_request = $(this).data("title");
                 var article_request_id = $(this).data("article-request_id");
-                var body = "<p><strong>" + hold_title + "</strong></p>";
-                confirmModal( hold_title, _("Are you sure you want to cancel this article request?"), _("Yes, cancel article request"), _("No, do not cancel article request"), function( result ){
+                confirmModal( article_request, _("Are you sure you want to cancel this article request?"), _("Yes, cancel article request"), _("No, do not cancel article request"), function( result ){
                         if( result ){
                             $("#delete_article_request_" + article_request_id ).submit();
                         }
