@@ -141,7 +141,7 @@ function search( page ) {
         if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
 
         if( KOHA.RecordedBooks.is_identified() == false ){
-            $("#breadcrumbs").before('<h3 class="rb_register"><a href="https://[% Koha.Preference('RecordedBooksDomain') %]">To see availability you must register for RecordedBooks using your cardnumber and the email associated with your Koha account</a></h3>');
+            $("#breadcrumbs").before('<h3 class="rb_register"><a href="https://[% Koha.Preference('RecordedBooksDomain') | uri %]">To see availability you must register for RecordedBooks using your cardnumber and the email associated with your Koha account</a></h3>');
         }
 
     } );
