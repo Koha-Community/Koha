@@ -59,7 +59,7 @@ my $usage = << 'ENDUSAGE';
 This script calculates and charges overdue fines
 to patron accounts.  The Koha system preference 'finesMode' controls
 whether the fines are calculated and charged to the patron accounts ("Calculate and charge");
-calculated and emailed to the admin but not applied ("Calculate (but only for mailing to the admin)"); or not calculated ("Don't calculate").
+or not calculated ("Don't calculate").
 
 This script has the following parameters :
     -h --help: this message
