@@ -39,6 +39,7 @@ use C4::Items;
 use Koha::Database;
 use Koha::Biblios;
 use Koha::Biblio::Metadatas;
+use Koha::Items;
 
 my $delete_items;
 my $confirm;
@@ -86,7 +87,6 @@ my $total_records_count   = @metadatas;
 my $deleted_records_count = 0;
 my $total_items_count     = 0;
 my $deleted_items_count   = 0;
-
 foreach my $m (@metadatas) {
     my $biblionumber = $m->get_column('biblionumber');
 
@@ -95,9 +95,9 @@ foreach my $m (@metadatas) {
     if ($delete_items) {
         my $deleted_count = 0;
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my @items = $biblio ? $biblio->items : ();
+        my @items = Koha::Items->search( { biblionumber => $biblionumber } );
         foreach my $item ( @items ) {
-            my $itemnumber = $item->itemnumber();
+            my $itemnumber = $item->itemnumber;
 
             my $error = $test ? "Test mode enabled" : $item->safe_delete;
             $error = undef if $error eq '1';
