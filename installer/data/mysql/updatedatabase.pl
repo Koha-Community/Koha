@@ -20270,6 +20270,39 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22284 - Add ft_local_hold_group column to library_groups)\n";
 }
 
+$DBversion = '19.12.00.004';
+if ( CheckVersion($DBversion) ) {
+
+    $dbh->do(
+        qq{
+            INSERT IGNORE INTO account_debit_types (
+              code,
+              description,
+              can_be_added_manually,
+              default_amount,
+              is_system
+            )
+            VALUES
+              ('PAYOUT', 'Payment from library to patron', 0, NULL, 1)
+        }
+    );
+
+    $dbh->do(qq{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ('PAYOUT');
+    });
+
+    $dbh->do(qq{
+        INSERT IGNORE permissions (module_bit, code, description)
+        VALUES
+        (10, 'payout', 'Perform account payout action')
+    });
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 24080 - Add PAYOUT account_debit_type)\n";
+    print "Upgrade to $DBversion done (Bug 24080 - Add PAYOUT account_offset_type)\n";
+    print "Upgrade to $DBversion done (Bug 24080 - Add accounts payout permission)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
