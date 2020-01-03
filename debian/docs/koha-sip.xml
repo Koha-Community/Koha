@@ -27,6 +27,7 @@
       <arg><option>--start</option>|<option>--stop</option>|<option>--restart</option></arg>
       <arg><option>--status</option></arg>
       <arg><option>--enable</option></arg>
+      <arg><option>--disable</option></arg>
       <arg><option>--verbose</option>|<option>-v</option></arg>
       <arg><option>-h</option>|<option>--help</option></arg>
     </cmdsynopsis>
@@ -56,9 +57,15 @@
     <varlistentry>
       <term><option>--enable</option></term>
       <listitem>
-        <para>Copies the default SIP configuration file (/etc/koha/SIPconfig.xml) to the instance's configuration directory (/etc/koha/sites/)</para>
+          <para>Enables the Koha SIP server, installing a default config at /etc/koha/sites/instance/SIPconfig.xml if it doesn't already exist.</para>
       </listitem>
     </varlistentry>
+    <varlistentry>
+      <term><option>--disable</option></term>
+      <listitem>
+        <para>Disables the SIP server and shuts down running SIP processes.</para>
+      </listitem>
+  </varlistentry>
     <varlistentry>
       <term><option>--status</option></term>
       <listitem>

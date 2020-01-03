@@ -139,7 +139,7 @@ is_sip_enabled()
 {
     local instancename=$1
 
-    if [ -e /etc/koha/sites/$instancename/SIPconfig.xml ]; then
+    if [ -e /var/lib/koha/$instancename/sip.enabled ]; then
         return 0
     else
         return 1

@@ -45,6 +45,8 @@ Usage:
 $scriptname [--start|--stop|--restart] instancename1 [instancename2...]
 $scriptname -h|--help
 
+    --enable              Enable the Koha SIP server.
+    --disable             Disable and stop the Koha SIP server.
     --start               Start the SIP server for the specified instance(s)
     --stop                Stop the SIP server for the specified instance(s)
     --restart             Restart the SIP server for the specified instance(s)
@@ -62,17 +64,19 @@ start_sip()
     _check_and_fix_perms $name
 
     if ! is_sip_running $name; then
-
-        adjust_paths_dev_install $name
-        export KOHA_HOME PERL5LIB
-
-        if [ "$DEV_INSTALL" = "" ]; then
-            LIBDIR=$KOHA_HOME/lib
+        if [ ! -f "/etc/koha/sites/${name}/SIPconfig.xml" ] || [ ! -f "/var/lib/koha/${name}/sip.enabled" ] ; then
+            echo "SIP is disabled, or you do not have a SIPconfig.xml file."
         else
-            LIBDIR=$KOHA_HOME
-        fi
+            adjust_paths_dev_install $name
+            export KOHA_HOME PERL5LIB
 
-        DAEMONOPTS="--name=${name}-koha-sip \
+            if [ "$DEV_INSTALL" = "" ]; then
+                LIBDIR=$KOHA_HOME/lib
+            else
+                LIBDIR=$KOHA_HOME
+            fi
+
+            DAEMONOPTS="--name=${name}-koha-sip \
                     --errlog=/var/log/koha/${name}/sip-error.log \
                     --stdout=/var/log/koha/${name}/sip.log \
                     --output=/var/log/koha/${name}/sip-output.log \
@@ -82,18 +86,19 @@ start_sip()
                     --pidfiles=/var/run/koha/${name} \
                     --user=${name}-koha.${name}-koha"
 
-        SIP_PARAMS="$LIBDIR/C4/SIP/SIPServer.pm \
+            SIP_PARAMS="$LIBDIR/C4/SIP/SIPServer.pm \
                     /etc/koha/sites/${name}/SIPconfig.xml"
 
-        [ "$verbose" != "no" ] && \
-            log_daemon_msg "Starting SIP server for ${name}"
+            [ "$verbose" != "no" ] && \
+                log_daemon_msg "Starting SIP server for ${name}"
 
-        if daemon $DAEMONOPTS -- perl $SIP_PARAMS; then
-            ([ "$verbose" != "no" ] && \
-                log_end_msg 0) || return 0
-        else
-            ([ "$verbose" != "no" ] && \
-                log_end_msg 1) || return 1
+            if daemon $DAEMONOPTS -- perl $SIP_PARAMS; then
+                ([ "$verbose" != "no" ] && \
+                    log_end_msg 0) || return 0
+            else
+                ([ "$verbose" != "no" ] && \
+                    log_end_msg 1) || return 1
+            fi
         fi
     else
         if [ "$verbose" != "no" ]; then
@@ -176,6 +181,7 @@ sip_status()
 enable_sip()
 {
     local name=$1
+    local libdir=/var/lib/koha/${name}
 
     sipfile=/etc/koha/sites/${name}/SIPconfig.xml
 
@@ -183,11 +189,32 @@ enable_sip()
         echo "Warning: SIP server already enabled for ${name}"
     else
         echo "Enabling SIP server for ${name} - edit ${sipfile} to configure"
-        cp -v /etc/koha/SIPconfig.xml ${sipfile}
-        chown ${name}-koha:${name}-koha ${sipfile}
-        chmod 600 ${sipfile}
+        touch $libdir/sip.enabled
+        if [[ ! -f "/etc/koha/sites/${name}/SIPconfig.xml" ]]; then
+            cp -v /etc/koha/SIPconfig.xml ${sipfile}
+            chown ${name}-koha:${name}-koha ${sipfile}
+            chmod 600 ${sipfile}
+            echo "This is the first time SIP has been enabled. Please check the configurations in /etc/koha/sites/${name}/SIPconfig.xml"
+        fi
     fi
 }
+
+disable_sip()
+{
+    local name=$1
+    local libdir=/var/lib/koha/${name}
+
+    if is_sip_enabled ${name}; then
+        # SIP is enabled, we should disable it
+        echo "Stopping running SIP"
+        stop_sip ${name}
+        rm ${libdir}/sip.enabled
+        echo "Information: SIP server disabled for ${name}"
+    else
+        echo " SIP server for ${name} not enabled - use koha-sip --enable <instance> to enable."
+    fi
+}
+
 
 _check_and_fix_perms()
 {
@@ -262,6 +289,9 @@ while [ $# -gt 0 ]; do
         --enable)
             set_action "enable"
             shift ;;
+        --disable)
+            set_action "disable"
+            shift ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
@@ -294,6 +324,9 @@ if [ $# -gt 0 ]; then
                     ;;
                 "enable")
                     enable_sip $name
+                    ;;
+                "disable")
+                    disable_sip $name
             esac
 
         else
