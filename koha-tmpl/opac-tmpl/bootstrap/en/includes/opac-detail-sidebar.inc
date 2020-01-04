@@ -34,7 +34,7 @@
     [% END %]
 
     [% IF Koha.Preference('suggestion') %]
-        <li><a class="btn btn-link btn-lg" href="/cgi-bin/koha/opac-suggestions.pl?op=add&biblionumber=[% biblio.biblionumber | url %]"><i class="fa fa-fw fa-money"></i> New purchase suggestion for this title</a></li>
+        <li><a class="btn btn-link btn-lg" href="/cgi-bin/koha/opac-suggestions.pl?op=add&biblionumber=[% biblio.biblionumber | url %]"><i class="fa fa-fw fa-gift"></i> Suggest for purchase</a></li>
     [% END %]
 
     [% IF ( OpacHighlightedWords && query_desc ) %]
