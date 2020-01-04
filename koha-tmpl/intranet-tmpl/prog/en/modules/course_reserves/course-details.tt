@@ -95,7 +95,7 @@
                 <tbody>
                     [% FOREACH cr IN course_reserves %]
                         <tr>
-                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% cr.biblio.title | html %]</a></td>
+                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' biblio=cr.biblio %]</a></td>
                             <td>[% cr.biblio.author | html %]</td>
                             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | uri %]&amp;biblionumber=[% cr.biblio.biblionumber | uri %]&amp;bi=[% cr.biblioitem.biblioitemnumber | uri %]">[% cr.item.barcode | html %]</a></td>
                             <td>[% cr.item.itemcallnumber | html %]</td>
