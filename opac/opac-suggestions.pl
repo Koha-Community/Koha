@@ -47,10 +47,6 @@ my $need_confirm    = 0;
 if ($negcaptcha ) {
     print $input->redirect("/cgi-bin/koha/opac-suggestions.pl");
     exit;
-} else {
-    # don't pass 'negcap' column to DB, else DBI::Class will error
-    # DBIx::Class::Row::store_column(): No such column 'negcap' on Koha::Schema::Result::Suggestion at  Koha/C4/Suggestions.pm
-    delete $suggestion->{negcap};
 }
 
 #If suggestions are turned off we redirect to 404 error. This will also redirect guest suggestions
@@ -58,9 +54,6 @@ if ( ! C4::Context->preference('suggestion') ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
-
-delete $suggestion->{$_} foreach qw<op suggested_by_anyone confirm>;
-$op = 'else' unless $op;
 
 my ( $template, $borrowernumber, $cookie, @messages );
 my $deleted = $input->param('deleted');
@@ -86,6 +79,12 @@ else {
         }
     );
 }
+
+# don't pass 'negcap' column to DB, else DBI::Class will error
+# DBIx::Class::Row::store_column(): No such column 'negcap' on Koha::Schema::Result::Suggestion at  Koha/C4/Suggestions.pm
+delete $suggestion->{negcap};
+delete $suggestion->{$_} foreach qw<op suggested_by_anyone confirm>;
+$op = 'else' unless $op;
 
 if ( $op eq 'else' ) {
     if ( C4::Context->preference("OPACViewOthersSuggestions") ) {
