@@ -22,6 +22,7 @@ use Test::More tests => 3;
 use C4::Context;
 use C4::Log;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 
@@ -33,7 +34,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'store() tests' => sub {
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -47,6 +48,12 @@ subtest 'store() tests' => sub {
 
     is( ref($log), 'Koha::ActionLog', 'Log object creation success');
     is( Koha::ActionLogs->count, $logs_count + 1, 'Exactly one log was saved');
+
+    my $yesterday = dt_from_string->subtract( days => 1 );
+    $log->timestamp($yesterday)->store;
+    $log->info("a new info")->store;    # Must be 2 different store calls
+    is( dt_from_string( $log->get_from_storage->timestamp ), $yesterday,
+        'timestamp column should not be updated to current_timestamp' );
 
     $schema->storage->txn_rollback;
 };
