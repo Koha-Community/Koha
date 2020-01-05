@@ -727,7 +727,7 @@ sub get_matches {
         # get rid of any that don't meet the required checks
         $matches = {
             map {
-                _passes_required_checks( $source_record, $_, $self->{'required_checks'} )
+                _passes_required_checks( $source_record, $matches->{$_}->{'record'}, $self->{'required_checks'} )
                   ? ( $_ => $matches->{$_} )
                   : ()
             } keys %$matches
@@ -791,8 +791,7 @@ sub dump {
 }
 
 sub _passes_required_checks {
-    my ($source_record, $target_blob, $matchchecks) = @_;
-    my $target_record = MARC::Record->new_from_usmarc($target_blob); # FIXME -- need to avoid parsing record twice
+    my ($source_record, $target_record, $matchchecks) = @_;
 
     # no checks supplied == automatic pass
     return 1 if $#{ $matchchecks } == -1;
