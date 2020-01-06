@@ -32,9 +32,7 @@ It is called by :
 
 =over
 
-=item neworderbiblio.pl to add an order from nothing.
-
-=item neworderempty.pl to add an order from an existing biblio.
+=item neworderempty.pl to add an order from an existing record or from nothing.
 
 =item newordersuggestion.pl to add an order from an existing suggestion.
 
