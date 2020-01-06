@@ -113,7 +113,7 @@
 
                 [% ELSIF query_type == 'check_out' and !whole.error %]
                     [% IF !whole.stage || whole.stage == 'form' %]
-                        <h1 id="ill-issue-title">Issue requested item to [% request.patron.firstname %] [% request.patron.surname %]</h1>
+                        <h1 id="ill-issue-title">Issue requested item to [% INCLUDE 'patron-title.inc' patron = request.patron %]</h1>
                         [% IF !request.biblio_id || request.biblio_id.length == 0 %]
                         <div class="alert">This item cannot be issued as it has no biblio record associated with it</div>
                         [% END %]
@@ -163,7 +163,7 @@
                                             [% IF whole.value.errors.inhouse %]
                                             <span class="required">You must choose a valid patron</span>
                                             [% END %]
-                                            <div class="hint">If you do not wish to check out the item to [% request.patron.firstname | html %] [% request.patron.surname | html %] and would rather issue it to an in-house statistical patron, choose the patron here</div>
+                                            <div class="hint">If you do not wish to check out the item to [% INCLUDE 'patron-title.inc' patron = request.patron %] and would rather issue it to an in-house statistical patron, choose the patron here</div>
                                         </li>
                                         <li class="ill_checkout_item_type">
                                             <label for="item_type" class="ill_checkout_item_type_label required">Item type:</label>
@@ -244,7 +244,7 @@
                             <ol>
                                 <li>
                                     <label>Checked out to:</label>
-                                    [% whole.value.patron.firstname | html %] [% whole.value.patron.surname | html %]
+                                    [% INCLUDE 'patron-title.inc' patron = whole.value.patron %]
                                 </li>
                                 <li>
                                     <label>Due date:</label>
@@ -720,7 +720,6 @@
     </script>
     [% INCLUDE 'ill-list-table-strings.inc' %]
     [% Asset.js("js/ill-list-table.js") | $raw %]
-    [% Asset.js("js/ill-check-out.js") | $raw %]
 [% END %]
 
 [% TRY %]
