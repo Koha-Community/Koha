@@ -139,6 +139,14 @@ CAN_user_serials_create_subscription ) %]
     <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
 [% END %]
 
+[% IF ( CAN_user_acquisition_order_manage ) %]
+    [% IF ( searchtoorder_basketno && searchtoorder_vendorid ) %]
+        <div class="btn-group">
+            <a class="btn btn-default" href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% searchtoorder_vendorid | uri %]&amp;basketno=[% searchtoorder_basketno | uri %]&amp;biblionumber=[% biblionumber | uri %]"><i class="fa fa-shopping-basket"></i> Add order</a>
+        </div>
+    [% END %]
+[% END %]
+
 [% FOREACH p IN plugins %]
     [% p.intranet_catalog_biblio_enhancements_toolbar_button | $raw %]
 [% END %]

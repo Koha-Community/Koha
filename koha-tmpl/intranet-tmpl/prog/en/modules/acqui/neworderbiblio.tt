@@ -109,6 +109,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/acq.js") | $raw %]
     <script>
          $(document).ready(function() {
             var resultst = $("#resultst").dataTable($.extend(true, {}, dataTablesDefaults, {

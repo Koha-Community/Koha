@@ -60,6 +60,14 @@ if($query->cookie("holdfor")){
     );
 }
 
+if( $query->cookie("searchToOrder") ){
+    my ( $basketno, $vendorid ) = split( /\//, $query->cookie("searchToOrder") );
+    $template->param(
+        searchtoorder_basketno => $basketno,
+        searchtoorder_vendorid => $vendorid
+    );
+}
+
 # get variables
 
 my $biblionumber=$query->param('biblionumber');

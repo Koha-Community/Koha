@@ -473,6 +473,12 @@
                                                         | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">Edit items</a>
                                                     [% END %]
 
+                                                    [% IF ( CAN_user_acquisition_order_manage ) %]
+                                                        [% IF ( searchtoorder_basketno && searchtoorder_vendorid ) %]
+                                                            | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% searchtoorder_vendorid | uri %]&amp;basketno=[% searchtoorder_basketno | uri %]&amp;biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">Add order</a>
+                                                        [% END %]
+                                                    [% END %]
+
                                                     [% IF ( OPACBaseURL ) %]
                                                         <span class="view-in-opac">
                                                             | <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" target="_blank">OPAC view</a>

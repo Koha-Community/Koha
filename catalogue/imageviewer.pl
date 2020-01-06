@@ -67,6 +67,14 @@ if ( $query->cookie("holdfor") ) {
     );
 }
 
+if( $query->cookie("searchToOrder") ){
+    my ( $basketno, $vendorid ) = split( /\//, $query->cookie("searchToOrder") );
+    $template->param(
+        searchtoorder_basketno => $basketno,
+        searchtoorder_vendorid => $vendorid
+    );
+}
+
 if ( C4::Context->preference("LocalCoverImages") ) {
     my @images = ListImagesForBiblio($biblionumber);
     $template->{VARS}->{'LocalCoverImages'} = 1;

@@ -211,6 +211,14 @@ if($cgi->cookie("holdforclub")){
     );
 }
 
+if($cgi->cookie("searchToOrder")){
+    my ( $basketno, $vendorid ) = split( /\//, $cgi->cookie("searchToOrder") );
+    $template->param(
+        searchtoorder_basketno => $basketno,
+        searchtoorder_vendorid => $vendorid
+    );
+}
+
 # get biblionumbers stored in the cart
 my @cart_list;
 

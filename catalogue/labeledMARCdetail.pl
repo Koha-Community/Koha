@@ -79,6 +79,14 @@ if($query->cookie("holdfor")){
     );
 }
 
+if( $query->cookie("searchToOrder") ){
+    my ( $basketno, $vendorid ) = split( /\//, $query->cookie("searchToOrder") );
+    $template->param(
+        searchtoorder_basketno => $basketno,
+        searchtoorder_vendorid => $vendorid
+    );
+}
+
 #count of item linked
 my $itemcount = $biblio_object->items->count;
 $template->param( count => $itemcount,
