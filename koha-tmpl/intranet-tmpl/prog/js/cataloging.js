@@ -1,3 +1,5 @@
+/* exported openAuth ExpandField CloneField CloneSubfield UnCloneField CloneItemSubfield CheckMandatorySubfields */
+
 /*
  * Unified file for catalogue edition
  */
@@ -52,7 +54,7 @@ function openAuth(tagsubfieldid,authtype,source) {
         }
     }
     mainstring = mainstring.join(' ');
-    newin=window.open("../authorities/auth_finder.pl?source="+source+"&authtypecode="+authtype+"&index="+tagsubfieldid+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
+    window.open("../authorities/auth_finder.pl?source="+source+"&authtypecode="+authtype+"&index="+tagsubfieldid+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
 function ExpandField(index) {
@@ -120,7 +122,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
     }
 
     // settings all subfields
-    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div/li
+    var divslen = divs.length;
+    for( i=0; i < divslen ; i++ ){      // foreach div/li
         if(divs[i].getAttribute("id").match(/^subfield/)){  // if it s a subfield
 
             // set the attribute for the new 'li' subfields
@@ -128,6 +131,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
             var inputs   = divs[i].getElementsByTagName('input');
             var id_input = "";
+            var olddiv;
+            var oldcontrol;
 
             for( j = 0 ; j < inputs.length ; j++ ) {
                 if(inputs[j].getAttribute("id") && inputs[j].getAttribute("id").match(/^tag_/) ){
@@ -143,7 +148,7 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
 
             inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
             inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
-            var id_input;
+
             try {
                 id_input = inputs[1].getAttribute('id')+new_key;
                 inputs[1].setAttribute('id',id_input);
@@ -162,8 +167,8 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 }
             }
             if( $(inputs[1]).hasClass('framework_plugin') ) {
-                var olddiv= original.getElementsByTagName('li')[i];
-                var oldcontrol= olddiv.getElementsByTagName('input')[1];
+                olddiv= original.getElementsByTagName('li')[i];
+                oldcontrol= olddiv.getElementsByTagName('input')[1];
                 AddEventHandlers( oldcontrol,inputs[1],id_input );
             }
 
@@ -203,21 +208,9 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                         // 2 possibilities :
                         try{
                             if( $(buttonDot).hasClass('framework_plugin') ) {
-                                var olddiv= original.getElementsByTagName('li')[i];
-                                var oldcontrol= olddiv.getElementsByTagName('a')[0];
+                                olddiv= original.getElementsByTagName('li')[i];
+                                oldcontrol= olddiv.getElementsByTagName('a')[0];
                                 AddEventHandlers(oldcontrol,buttonDot,id_input);
-                            } else {
-                                if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
-                                    var re1 = /&index=.*',/;
-                                    var re2 = /,.*\)/;
-
-                                    buttonDotOnClick = buttonDotOnClick.replace(re1,"&index="+inputs[1].getAttribute('id')+"',");
-                                    buttonDotOnClick = buttonDotOnClick.replace(re2,",'"+inputs[1].getAttribute('id')+"')");
-
-                                    if(buttonDotOnClick){
-                                        buttonDot.setAttribute('onclick',buttonDotOnClick);
-                                    }
-                                }
                             }
                             try {
                                 // do not copy the script section.
@@ -226,7 +219,9 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                             } catch(e) {
                                 // do nothing if there is no script
                             }
-                        }catch(e){}
+                        } catch(e){
+                            //
+                        }
                     }
                 }
             }
@@ -237,14 +232,14 @@ function CloneField(index, hideMarc, advancedMARCEditor) {
                 // setting a new id for the indicator div
                 divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
 
-                var inputs = divs[i].getElementsByTagName('input');
+                inputs = divs[i].getElementsByTagName('input');
                 inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
                 inputs[1].setAttribute('id',inputs[1].getAttribute('id')+new_key);
 
                 var CloneButtonPlus;
                 try {
-                    var anchors = divs[i].getElementsByTagName('a');
-                    for (var j = 0; j < anchors.length; j++) {
+                    anchors = divs[i].getElementsByTagName('a');
+                    for ( j = 0; j < anchors.length; j++) {
                         if (anchors[j].getAttribute('class') == 'buttonPlus') {
                             anchors[j].setAttribute('onclick',"CloneField('" + new_id + "','" + hideMarc + "','" + advancedMARCEditor + "'); return false;");
                         } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
@@ -287,6 +282,7 @@ function CloneSubfield(index, advancedMARCEditor){
     var selects    = clone.getElementsByTagName('select');
     var textareas  = clone.getElementsByTagName('textarea');
     var linkid;
+    var oldcontrol;
 
     // input
     var id_input = "";
@@ -302,12 +298,12 @@ function CloneSubfield(index, advancedMARCEditor){
 
     // Plugin input
     if( $(inputs[1]).hasClass('framework_plugin') ) {
-        var oldcontrol= original.getElementsByTagName('input')[1];
+        oldcontrol= original.getElementsByTagName('input')[1];
         AddEventHandlers( oldcontrol, inputs[1], linkid );
     }
 
     // select
-    for(var i=0,len=selects.length; i<len ; i++ ){
+    for(i=0,len=selects.length; i<len ; i++ ){
         id_input = selects[i].getAttribute('id')+new_key;
         selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
         selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
@@ -315,7 +311,7 @@ function CloneSubfield(index, advancedMARCEditor){
     }
 
     // textarea
-    for(var i=0,len=textareas.length; i<len ; i++ ){
+    for( i=0,len=textareas.length; i<len ; i++ ){
         id_input = textareas[i].getAttribute('id')+new_key;
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
         textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
@@ -328,7 +324,7 @@ function CloneSubfield(index, advancedMARCEditor){
     // Handle click event on buttonDot for plugin
     var links  = clone.getElementsByTagName('a');
     if( $(links[0]).hasClass('framework_plugin') ) {
-        var oldcontrol= original.getElementsByTagName('a')[0];
+        oldcontrol= original.getElementsByTagName('a')[0];
         AddEventHandlers( oldcontrol, links[0], linkid );
     }
 
@@ -345,7 +341,7 @@ function CloneSubfield(index, advancedMARCEditor){
     try {
         var anchors = clone.getElementsByTagName('a');
         if(anchors.length){
-            for(var i = 0 ,lenanchors = anchors.length ; i < lenanchors ; i++){
+            for( i = 0 ,len = anchors.length ; i < len ; i++){
                 if(anchors[i].getAttribute('class') == 'buttonPlus'){
                     anchors[i].setAttribute('onclick',"CloneSubfield('" + new_id + "','" + advancedMARCEditor + "'); return false;");
                 } else if (anchors[i].getAttribute('class') == 'buttonMinus') {
@@ -385,7 +381,7 @@ function AddEventHandlers (oldcontrol, newcontrol, newinputid ) {
     }
 }
 
- /**
+/**
  * This function removes or clears unwanted subfields
  */
 function UnCloneField(index) {
@@ -439,46 +435,6 @@ function CreateKey(){
     return parseInt(Math.random() * 100000);
 }
 
-/**
- * This function allows to move a subfield up by clickink on the 'up' button .
- */
-function upSubfield(index) {
-    try{
-        var line = document.getElementById(index); // get the line where the user has clicked.
-    } catch(e) {
-        return; // this line doesn't exist...
-    }
-    var tag = line.parentNode; // get the dad of this line. (should be "<div id='tag_...'>")
-
-    // getting all visible subfields for this tag
-    var subfields = tag.querySelectorAll("div.subfield_line:not( [style*='display:none;'] )");
-    var subfieldsLength = subfields.length;
-
-    if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
-
-    // among all subfields
-    for(var i=0;i<subfieldsLength;i++){
-        if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
-            if(i==0){ // if the clicked subfield is on the top
-                tag.appendChild(subfields[0]);
-                return;
-            } else {
-                var lineAbove = subfields[i-1];
-                tag.insertBefore(line,lineAbove);
-                return;
-            }
-        }
-    }
-}
-
-// FIXME :: is it used ?
-function unHideSubfield(index,labelindex) {
-    subfield = document.getElementById(index);
-    subfield.style.display = 'block';
-    label = document.getElementById(labelindex);
-    label.style.display='none';
-}
-
 /* Functions developed for additem.tt */
 
 /**
@@ -505,13 +461,13 @@ function CloneItemSubfield(original){
     }
 
     // select
-    for(var i=0,len=selects.length; i<len ; i++ ){
+    for( i=0,len=selects.length; i<len ; i++ ){
         id_input = selects[i].getAttribute('id')+new_key;
         selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
     }
 
     // textarea
-    for(var i=0,len=textareas.length; i<len ; i++ ){
+    for( i=0,len=textareas.length; i<len ; i++ ){
         id_input = textareas[i].getAttribute('id')+new_key;
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
     }
@@ -537,7 +493,7 @@ function CloneItemSubfield(original){
  */
 function CheckMandatorySubfields(p){
     var total = 0;
-    $(p).find(".subfield_line input[name='mandatory'][value='1']").each(function(i){
+    $(p).find(".subfield_line input[name='mandatory'][value='1']").each(function(){
         var editor = $(this).siblings("[name='field_value']");
         if (!editor.val()) {
             editor.addClass("missing");
