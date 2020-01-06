@@ -51,6 +51,8 @@ sub register {
 
             # Extract reserved params
             my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
+            # Look for embeds
+            my $embed = $c->stash('koha.embed');
 
             # Merge sorting into query attributes
             $c->dbic_merge_sorting(
@@ -87,7 +89,7 @@ sub register {
                 });
             }
 
-            return $objects->to_api;
+            return $objects->to_api({ embed => $embed });
         }
     );
 }

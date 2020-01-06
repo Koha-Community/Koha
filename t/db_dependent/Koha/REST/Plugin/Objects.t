@@ -16,6 +16,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
+use Koha::Acquisition::Orders;
 use Koha::Cities;
 
 # Dummy app for testing the plugin
@@ -34,23 +36,29 @@ get '/cities' => sub {
     $c->render( status => 200, json => $cities );
 };
 
+get '/orders' => sub {
+    my $c = shift;
+    $c->stash('koha.embed', ( { fund => {} } ) );
+    $c->validation->output($c->req->params->to_hash);
+    my $orders = $c->objects->search(Koha::Acquisition::Orders->new);
+    $c->render( status => 200, json => $orders );
+};
+
 # The tests
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
 use Koha::Database;
 
-my $schema = Koha::Database->new()->schema();
+my $t = Test::Mojo->new;
 
-
+my $schema  = Koha::Database->new()->schema();
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
 
     plan tests => 34;
-
-    my $t = Test::Mojo->new;
 
     $schema->storage->txn_begin;
 
@@ -128,8 +136,6 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
 
     plan tests => 14;
 
-    my $t = Test::Mojo->new;
-
     $schema->storage->txn_begin;
 
     # Have complete control over the existing cities to ease testing
@@ -155,4 +161,18 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
       ->json_is('/1/name' => 'A');
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest 'objects.search helper, embed' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $order = $builder->build_object({ class => 'Koha::Acquisition::Orders' });
+
+    $t->get_ok('/orders?order_id=' . $order->ordernumber)
+      ->json_is('/0',$order->to_api({ embed => ( { fund => {} } ) }));
+
+    $schema->storage->txn_rollback;
+};
