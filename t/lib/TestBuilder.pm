@@ -81,16 +81,20 @@ sub build_object {
 
     load $class;
     my $source = $class->_type;
-    my @pks = $self->schema->source( $class->_type )->primary_columns;
 
     my $hashref = $self->build({ source => $source, value => $value });
-    my @ids;
+    my $object;
+    if ( $class eq 'Koha::Old::Patrons' ) {
+        $object = $class->search({ borrowernumber => $hashref->{borrowernumber} })->next;
+    } else {
+        my @ids;
+        my @pks = $self->schema->source( $class->_type )->primary_columns;
+        foreach my $pk ( @pks ) {
+            push @ids, $hashref->{ $pk };
+        }
 
-    foreach my $pk ( @pks ) {
-        push @ids, $hashref->{ $pk };
+        $object = $class->find( @ids );
     }
-
-    my $object = $class->find( @ids );
 
     return $object;
 }

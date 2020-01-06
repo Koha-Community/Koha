@@ -410,6 +410,11 @@ __PACKAGE__->set_primary_key("itemnumber");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L7G0HG5gvgyhfpKb7LcUFw
 
+sub koha_objects_class {
+    'Koha::Old::Items';
+}
+sub koha_object_class {
+    'Koha::Old::Item';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
