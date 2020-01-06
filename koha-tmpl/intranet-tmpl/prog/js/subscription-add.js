@@ -1,4 +1,4 @@
-/* global _ irregularity more_than_one_serial subscriptionid tags interface theme mana_enabled MSG_FREQUENCY_LENGTH_ERROR */
+/* global _ irregularity more_than_one_serial subscriptionid tags interface theme mana_enabled MSG_FREQUENCY_LENGTH_ERROR MSG_BIBLIO_NOT_EXIST */
 
 var globalnumpatterndata;
 var globalfreqdata;
@@ -61,7 +61,7 @@ function Check_page1() {
 
     var bib_exists = $("input[name='title']").val().length;
 
-    if (!bib_exists) alert(_("Bibliographic record does not exist!"));
+    if (!bib_exists) alert(MSG_BIBLIO_NOT_EXIST);
     return bib_exists;
 }
 
