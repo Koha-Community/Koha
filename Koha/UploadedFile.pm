@@ -75,13 +75,6 @@ sub delete {
     my $file = $self->full_path;
 
     my $retval = $self->SUPER::delete;
-    if( !defined($retval) ) { # undef is Unknown (-1)
-        $retval = -1;
-    } elsif( $retval eq '0' ) { # 0 => 0E0
-        $retval = "0E0";
-    } elsif( $retval !~ /^(0E0|1)$/ ) { # Unknown too
-        $retval = -1;
-    }
     return $retval if $params->{keep_file};
 
     if( ! -e $file ) {

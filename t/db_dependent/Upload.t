@@ -4,6 +4,7 @@ use Modern::Perl;
 use File::Temp qw/ tempdir /;
 use Test::More tests => 13;
 use Test::Warn;
+use Try::Tiny;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -171,7 +172,7 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
     my $kohaobj = Koha::UploadedFiles->find( $upl->result );
     $path = $kohaobj->full_path;
     $delete = $kohaobj->delete;
-    ok( $delete=~/^-?1$/, 'Delete successful' );
+    ok( $delete, 'Delete successful' );
     isnt( -e $path, 1, 'File no longer found after delete' );
 
     # add another record with TestBuilder, so file does not exist
@@ -180,16 +181,18 @@ subtest 'Test delete via UploadedFile as well as UploadedFiles' => sub {
     warning_like { $delete = Koha::UploadedFiles->find( $upload01->{id} )->delete; }
         qr/file was missing/,
         'delete warns when file is missing';
-    ok( $delete=~/^-?1$/, 'Deleting record was successful' );
+    ok( $delete, 'Deleting record was successful' );
     is( Koha::UploadedFiles->count, 4, 'Back to four uploads now' );
 
     # add another one with TestBuilder and delete twice (file does not exist)
     $upload01 = $builder->build({ source => 'UploadedFile' });
     $kohaobj = Koha::UploadedFiles->find( $upload01->{id} );
     $delete = $kohaobj->delete({ keep_file => 1 });
-    $delete = $kohaobj->delete({ keep_file => 1 });
-    ok( $delete =~ /^(0E0|-1)$/, 'Repeated delete unsuccessful' );
-    # NOTE: Koha::Object->delete does not return 0E0 (yet?)
+    try {
+        $delete = $kohaobj->delete({ keep_file => 1 });
+    } catch {
+        ok( $_->isa("DBIx::Class::Exception"), 'Repeated delete unsuccessful' );
+    }
 };
 
 subtest 'Test delete_missing' => sub {
@@ -203,7 +206,7 @@ subtest 'Test delete_missing' => sub {
     is( $deleted, 2, 'Expect two records with missing files' );
     isnt( Koha::UploadedFiles->find( $upload01->{id} ), undef, 'Not deleted' );
     $deleted = Koha::UploadedFiles->delete_missing;
-    ok( $deleted =~ /^(2|-1)$/, 'Deleted two records with missing files' );
+    ok( $deleted =~ /^(2)$/, 'Deleted two records with missing files' );
     is( Koha::UploadedFiles->search({
         id => [ $upload01->{id}, $upload02->{id} ],
     })->count, 0, 'Records are gone' );
@@ -300,17 +303,17 @@ subtest 'Testing delete_temporary' => sub {
     # Now call delete_temporary with 6, 5 and 0
     t::lib::Mocks::mock_preference('UploadPurgeTemporaryFilesDays', 6 );
     my $delete = Koha::UploadedFiles->delete_temporary;
-    ok( $delete =~ /^(-1|0E0)$/, 'Check return value with 6' );
+    is( $delete, '0E0', 'Check return value with 6' );
     is( Koha::UploadedFiles->search->count, 6, 'Delete with pref==6' );
 
     # use override parameter
     $delete = Koha::UploadedFiles->delete_temporary({ override_pref => 5 });
-    ok( $delete =~ /^(2|-1)$/, 'Check return value with 5' );
+    is( $delete, 2, 'Check return value with 5' );
     is( Koha::UploadedFiles->search->count, 4, 'Delete with override==5' );
 
     t::lib::Mocks::mock_preference('UploadPurgeTemporaryFilesDays', 0 );
     $delete = Koha::UploadedFiles->delete_temporary;
-    ok( $delete =~ /^(-1|1)$/, 'Check return value with 0' );
+    is( $delete, 1, 'Check return value with 0' );
     is( Koha::UploadedFiles->search->count, 3, 'Delete with pref==0 makes 3' );
     is( Koha::UploadedFiles->search({ permanent => 1 })->count, 3,
         'Still 3 permanent uploads' );

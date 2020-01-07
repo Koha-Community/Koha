@@ -72,8 +72,8 @@ sub delete {
     # We use the individual delete on each resultset record
     my $rv = 0;
     while( my $row = $self->next ) {
-        my $delete= $row->delete( $params ); # 1, 0E0 or -1
-        $rv = ( $delete < 0 || $rv < 0 ) ? -1 : ( $rv + $delete );
+        my $deleted = eval { $row->delete( $params ) };
+        $rv++ if $deleted && !$@;
     }
     return $rv==0 ? "0E0" : $rv;
 }
@@ -135,8 +135,8 @@ sub delete_missing {
         # We are passing keep_file since we already know that the file
         # is missing and we do not want to see the warning
         # Apply the same logic as in delete for the return value
-        my $delete = $row->delete({ keep_file => 1 }); # 1, 0E0 or -1
-        $rv = ( $delete < 0 || $rv < 0 ) ? -1 : ( $rv + $delete );
+        my $deleted = eval { $row->delete({ keep_file => 1 }) };
+        $rv++ if $deleted && !$@;
     }
     return $rv==0 ? "0E0" : $rv;
 }
