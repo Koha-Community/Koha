@@ -552,7 +552,7 @@ sub ModItemTransfer {
     my $item = Koha::Items->find( $itemnumber );
 
     # Remove the 'shelving cart' location status if it is being used.
-    CartToShelf( $itemnumber ) if ( $item->location eq 'CART' && $item->permanent_location ne 'CART' );
+    CartToShelf( $itemnumber ) if $item->location && $item->location eq 'CART' && ( !$item->permanent_location || $item->permanent_location ne 'CART' );
 
     $dbh->do("UPDATE branchtransfers SET datearrived = NOW(), comments = ? WHERE itemnumber = ? AND datearrived IS NULL", undef, "Canceled, new transfer from $frombranch to $tobranch created", $itemnumber);
 
@@ -1445,11 +1445,13 @@ sub _do_column_fixes_for_mod {
         (not defined $item->{'withdrawn'} or $item->{'withdrawn'} eq '')) {
         $item->{'withdrawn'} = 0;
     }
-    if (exists $item->{location}
-        and $item->{location} ne 'CART'
-        and $item->{location} ne 'PROC'
+    if (
+        exists $item->{location}
+        and ( !defined $item->{location}
+            || ( $item->{location} ne 'CART' and $item->{location} ne 'PROC' ) )
         and not $item->{permanent_location}
-    ) {
+      )
+    {
         $item->{'permanent_location'} = $item->{'location'};
     }
     if (exists $item->{'timestamp'}) {
@@ -2515,7 +2517,7 @@ sub PrepareItemrecordDisplay {
                     $subfield_data{marc_value} = {
                         type    => 'select',
                         values  => \@authorised_values,
-                        default => "$defaultvalue",
+                        default => $defaultvalue // q{},
                         labels  => \%authorised_lib,
                     };
                 } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
@@ -2528,7 +2530,7 @@ sub PrepareItemrecordDisplay {
                     my $pars = { dbh => $dbh, record => undef, tagslib =>$tagslib, id => $subfield_data{id}, tabloop => undef };
                     $plugin->build( $pars );
                     if ( $itemrecord and my $field = $itemrecord->field($tag) ) {
-                        $defaultvalue = $field->subfield($subfield);
+                        $defaultvalue = $field->subfield($subfield) || q{};
                     }
                     if( !$plugin->errstr ) {
                         #TODO Move html to template; see report 12176/13397

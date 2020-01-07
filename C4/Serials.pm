@@ -2144,7 +2144,7 @@ sub abouttoexpire {
             }
         }
 
-    } elsif ($subscription->{numberlength}>0) {
+    } elsif ( $subscription->{numberlength} && $subscription->{numberlength}>0) {
         return (countissuesfrom($subscriptionid,$subscription->{'startdate'}) >=$subscription->{numberlength}-1);
     }
 

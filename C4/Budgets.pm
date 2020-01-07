@@ -342,7 +342,7 @@ sub GetBudgetSpent {
             datecancellationprinted IS NULL
     |);
 	$sth->execute($budget_id);
-    my $sum = 0 + $sth->fetchrow_array;
+    my $sum = ( $sth->fetchrow_array || 0 ) + 0;
 
     $sth = $dbh->prepare(qq|
         SELECT SUM(shipmentcost) AS sum
@@ -352,7 +352,7 @@ sub GetBudgetSpent {
 
     $sth->execute($budget_id);
     my ($shipmentcost_sum) = $sth->fetchrow_array;
-    $sum += $shipmentcost_sum;
+    $sum += ( $shipmentcost_sum || 0 ) + 0;
 
     my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $budget_id, closedate => { '!=' => undef } },{ join => 'invoiceid' });
     while ( my $adj = $adjustments->next ){
@@ -373,7 +373,7 @@ sub GetBudgetOrdered {
             datecancellationprinted IS NULL
     |);
 	$sth->execute($budget_id);
-    my $sum =  0 + $sth->fetchrow_array;
+    my $sum =  ( $sth->fetchrow_array || 0 ) + 0;
 
     my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $budget_id, encumber_open => 1, closedate => undef},{ join => 'invoiceid' });
     while ( my $adj = $adjustments->next ){
@@ -606,12 +606,12 @@ sub _recursiveAdd {
         _recursiveAdd($child, $budget, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
     }
 
-    $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent};
-    $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost};
-    $budget->{budget_spent} += $hr_budget_spent_adjustment->{$budget->{budget_id}}->{adjustments};
-    $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered};
-    $budget->{budget_ordered} += $hr_budget_ordered_shipment->{$budget->{budget_id}}->{shipmentcost};
-    $budget->{budget_ordered} += $hr_budget_ordered_adjustment->{$budget->{budget_id}}->{adjustments};
+    $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent}               || 0;
+    $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost}      || 0;
+    $budget->{budget_spent} += $hr_budget_spent_adjustment->{$budget->{budget_id}}->{adjustments}     || 0;
+    $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered}         || 0;
+    $budget->{budget_ordered} += $hr_budget_ordered_shipment->{$budget->{budget_id}}->{shipmentcost}  || 0;
+    $budget->{budget_ordered} += $hr_budget_ordered_adjustment->{$budget->{budget_id}}->{adjustments} || 0;
 
     $budget->{total_spent} += $budget->{budget_spent};
     $budget->{total_ordered} += $budget->{budget_ordered};
@@ -636,30 +636,32 @@ sub _add_budget_children {
 }
 
 # -------------------------------------------------------------------
-
+# FIXME Must be replaced by Koha::Acquisition::Fund->store
 sub AddBudget {
     my ($budget) = @_;
     return unless ($budget);
 
-    undef $budget->{budget_encumb} if $budget->{budget_encumb} eq '';
-    undef $budget->{budget_owner_id} if $budget->{budget_owner_id} eq '';
+    undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb}   eq '';
+    undef $budget->{budget_owner_id} if defined $budget->{budget_owner_id} && $budget->{budget_owner_id} eq '';
     my $resultset = Koha::Database->new()->schema->resultset('Aqbudget');
     return $resultset->create($budget)->id;
 }
 
 # -------------------------------------------------------------------
+# FIXME Must be replaced by Koha::Acquisition::Fund->store
 sub ModBudget {
     my ($budget) = @_;
     my $result = Koha::Database->new()->schema->resultset('Aqbudget')->find($budget);
     return unless($result);
 
-    undef $budget->{budget_encumb} if $budget->{budget_encumb} eq '';
-    undef $budget->{budget_owner_id} if $budget->{budget_owner_id} eq '';
+    undef $budget->{budget_encumb}   if defined $budget->{budget_encumb}   && $budget->{budget_encumb}   eq '';
+    undef $budget->{budget_owner_id} if defined $budget->{budget_owner_id} && $budget->{budget_owner_id} eq '';
     $result = $result->update($budget);
     return $result->in_storage;
 }
 
 # -------------------------------------------------------------------
+# FIXME Must be replaced by Koha::Acquisition::Fund->delete
 sub DelBudget {
 	my ($budget_id) = @_;
 	my $dbh         = C4::Context->dbh;
@@ -809,14 +811,14 @@ sub GetBudgetsReport {
         ON bp.budget_period_id = b.budget_period_id
         INNER JOIN aqorders o
         ON b.budget_id = o.budget_id ';
-    if($activity ne ''){
+    if ( $activity && $activity ne '' ) {
         $query .= 'WHERE  bp.budget_period_active=? ';
     }
     $query .= 'AND (o.orderstatus != "cancelled")
                ORDER BY b.budget_name';
 
     my $sth = $dbh->prepare($query);
-    if($activity ne ''){
+    if ( $activity && $activity ne '' ) {
         $sth->execute($activity);
     }
     else{
@@ -1221,7 +1223,7 @@ sub CloneBudgetHierarchy {
     my @first_level_budgets =
       ( not defined $children_of )
       ? map { ( not $_->{budget_parent_id} )             ? $_ : () } @$budgets
-      : map { ( $_->{budget_parent_id} == $children_of ) ? $_ : () } @$budgets;
+      : map { ( defined $_->{budget_parent_id} && $_->{budget_parent_id} == $children_of ) ? $_ : () } @$budgets;
 
     # get only the columns of aqbudgets
     my @columns = Koha::Database->new()->schema->source('Aqbudget')->columns;

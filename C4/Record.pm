@@ -80,7 +80,7 @@ Returns an ISO-2709 scalar
 sub marc2marc {
 	my ($marc,$to_flavour,$from_flavour,$encoding) = @_;
 	my $error;
-    if ($to_flavour =~ m/marcstd/) {
+    if ($to_flavour && $to_flavour =~ m/marcstd/) {
         my $marc_record_obj;
         if ($marc =~ /^MARC::Record/) { # it's already a MARC::Record object
             $marc_record_obj = $marc;

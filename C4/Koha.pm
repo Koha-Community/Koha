@@ -846,7 +846,7 @@ sub NormalizeISBN {
 
     my $string        = $params->{isbn};
     my $strip_hyphens = $params->{strip_hyphens};
-    my $format        = $params->{format};
+    my $format        = $params->{format} || q{};
     my $return_invalid = $params->{return_invalid};
 
     return unless $string;

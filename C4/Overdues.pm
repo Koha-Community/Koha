@@ -247,7 +247,7 @@ sub CalcFine {
     my $fine_unit = $issuing_rule->lengthunit || 'days';
 
     my $chargeable_units = get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
-    my $units_minus_grace = $chargeable_units - $issuing_rule->firstremind;
+    my $units_minus_grace = $chargeable_units - ($issuing_rule->firstremind || 0);
     my $amount = 0;
     if ( $issuing_rule->chargeperiod && ( $units_minus_grace > 0 ) ) {
         my $units = C4::Context->preference('FinesIncludeGracePeriod') ? $chargeable_units : $units_minus_grace;
@@ -261,9 +261,9 @@ sub CalcFine {
     $amount = $issuing_rule->overduefinescap if $issuing_rule->overduefinescap && $amount > $issuing_rule->overduefinescap;
 
     # This must be moved to Koha::Item (see also similar code in C4::Accounts::chargelostitem
-    $item->{replacementprice} ||= $itemtype->defaultreplacecost
+    $item->{replacementprice} //= $itemtype->defaultreplacecost
       if $itemtype
-      && $item->{replacementprice} == 0
+      && ( ! defined $item->{replacementprice} || $item->{replacementprice} == 0 )
       && C4::Context->preference("useDefaultReplacementCost");
 
     $amount = $item->{replacementprice} if ( $issuing_rule->cap_fine_to_replacement_price && $item->{replacementprice} && $amount > $item->{replacementprice} );

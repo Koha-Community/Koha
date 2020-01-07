@@ -204,7 +204,7 @@ sub AddReserve {
     my $waitingdate;
 
     # If the reserv had the waiting status, we had the value of the resdate
-    if ( $found eq 'W' ) {
+    if ( $found && $found eq 'W' ) {
         $waitingdate = $resdate;
     }
 
@@ -228,7 +228,7 @@ sub AddReserve {
             item_level_hold => $checkitem ? 1 : 0,
         }
     )->store();
-    $hold->set_waiting() if $found eq 'W';
+    $hold->set_waiting() if $found && $found eq 'W';
 
     logaction( 'HOLDS', 'CREATE', $hold->id, Dumper($hold->unblessed) )
         if C4::Context->preference('HoldsLog');
@@ -1067,7 +1067,9 @@ sub ModReserveStatus {
     $sth_set->execute( $newstatus, $itemnumber );
 
     my $item = Koha::Items->find($itemnumber);
-    if ( ( $item->location eq 'CART' && $item->permanent_location ne 'CART'  ) && $newstatus ) {
+    if ( $item->location && $item->location eq 'CART'
+        && ( !$item->permanent_location || $item->permanent_location ne 'CART' )
+        && $newstatus ) {
       CartToShelf( $itemnumber );
     }
 }
@@ -1120,7 +1122,8 @@ sub ModReserveAffect {
 
     _FixPriority( { biblionumber => $biblionumber } );
     my $item = Koha::Items->find($itemnumber);
-    if ( ( $item->location eq 'CART' && $item->permanent_location ne 'CART'  ) ) {
+    if ( $item->location && $item->location eq 'CART'
+        && ( !$item->permanent_location || $item->permanent_location ne 'CART' ) ) {
       CartToShelf( $itemnumber );
     }
 
@@ -1472,7 +1475,7 @@ sub _FixPriority {
     if ( $rank eq "del" ) { # FIXME will crash if called without $hold
         $hold->cancel;
     }
-    elsif ( $rank eq "W" || $rank eq "0" ) {
+    elsif ( $reserve_id && ( $rank eq "W" || $rank eq "0" ) ) {
 
         # make sure priority for waiting or in-transit items is 0
         my $query = "
@@ -1500,11 +1503,12 @@ sub _FixPriority {
         push( @priority,     $line );
     }
 
+    # FIXME This whole sub must be rewritten, especially to highlight what is done when reserve_id is not given
     # To find the matching index
     my $i;
     my $key = -1;    # to allow for 0 to be a valid result
     for ( $i = 0 ; $i < @priority ; $i++ ) {
-        if ( $reserve_id == $priority[$i]->{'reserve_id'} ) {
+        if ( $reserve_id && $reserve_id == $priority[$i]->{'reserve_id'} ) {
             $key = $i;    # save the index
             last;
         }

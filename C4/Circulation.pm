@@ -748,11 +748,11 @@ sub CanBookBeIssued {
         return( { STATS => 1 }, {});
     }
 
-    if ( $patron->gonenoaddress == 1 ) {
+    if ( $patron->gonenoaddress && $patron->gonenoaddress == 1 ) {
         $issuingimpossible{GNA} = 1;
     }
 
-    if ( $patron->lost == 1 ) {
+    if ( $patron->lost && $patron->lost == 1 ) {
         $issuingimpossible{CARD_LOST} = 1;
     }
     if ( $patron->is_debarred ) {
@@ -1430,7 +1430,8 @@ sub AddIssue {
                     }
                 )->store;
             }
-            if ( $item_object->location eq 'CART' && $item_object->permanent_location ne 'CART'  ) {
+            if ( $item_object->location && $item_object->location eq 'CART'
+                && ( !$item_object->permanent_location || $item_object->permanent_location ne 'CART' ) ) {
             ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.
                 CartToShelf( $item_object->itemnumber );
             }
@@ -1458,7 +1459,7 @@ sub AddIssue {
 
             ModItem(
                 {
-                    issues        => $item_object->issues + 1,
+                    issues        => ( $item_object->issues || 0 ) + 1,
                     holdingbranch => C4::Context->userenv->{'branch'},
                     itemlost      => 0,
                     onloan        => $datedue->ymd(),
@@ -1472,7 +1473,7 @@ sub AddIssue {
 
             # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $borrower->{'borrowernumber'} );
-            if ( $charge > 0 ) {
+            if ( $charge && $charge > 0 ) {
                 AddIssuingCharge( $issue, $charge, 'RENT' );
             }
 
@@ -2168,7 +2169,7 @@ sub MarkIssueReturned {
     my $issue_id = $issue->issue_id;
 
     my $anonymouspatron;
-    if ( $privacy == 2 ) {
+    if ( $privacy && $privacy == 2 ) {
         # The default of 0 will not work due to foreign key constraints
         # The anonymisation will fail if AnonymousPatron is not a valid entry
         # We need to check if the anonymous patron exist, Koha will fail loudly if it does not
@@ -2195,7 +2196,7 @@ sub MarkIssueReturned {
         my $old_checkout = Koha::Old::Checkout->new($issue->unblessed)->store;
 
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
-        if ( $privacy == 2) {
+        if ( $privacy && $privacy == 2) {
             $old_checkout->borrowernumber($anonymouspatron)->store;
         }
 
@@ -2327,7 +2328,7 @@ sub _debar_user_on_return {
     # if borrower was already debarred but does not get an extra debarment
     my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     my ($new_debarment_str, $is_a_reminder);
-    if ( $borrower->{debarred} eq $patron->is_debarred ) {
+    if ( $borrower->{debarred} && $borrower->{debarred} eq $patron->is_debarred ) {
         $is_a_reminder = 1;
         $new_debarment_str = $borrower->{debarred};
     } else {
@@ -2927,7 +2928,7 @@ sub AddRenewal {
 
         # Update the issues record to have the new due date, and a new count
         # of how many times it has been renewed.
-        my $renews = $issue->renewals + 1;
+        my $renews = ( $issue->renewals || 0 ) + 1;
         my $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
                                 WHERE borrowernumber=?
                                 AND itemnumber=?"
@@ -2936,7 +2937,7 @@ sub AddRenewal {
         $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
 
         # Update the renewal count on the item, and tell zebra to reindex
-        $renews = $item_object->renewals + 1;
+        $renews = ( $item_object->renewals || 0 ) + 1;
         ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item_object->biblionumber, $itemnumber, { log_action => 0 } );
 
         # Charge a new rental fee, if applicable
