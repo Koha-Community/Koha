@@ -624,7 +624,7 @@ sub getRecords {
         foreach my $f (@facets_loop) {
             $f->{facets} = [ sort { uc($a->{facet_label_value}) cmp uc($b->{facet_label_value}) } @{ $f->{facets} } ];
         }
-        @facets_loop = sort {$a->{expand} cmp $b->{expand}} @facets_loop;
+        @facets_loop = sort {defined $a->{expand} && defined $b->{expand} && $a->{expand} cmp $b->{expand}} @facets_loop;
     }
 
     return ( undef, $results_hashref, \@facets_loop );
@@ -1536,7 +1536,7 @@ sub buildQuery {
                     $operands[$i] =~ s/\?/{?}/g; # need to escape question marks
                 }
                 my $operand = $operands[$i];
-                my $index   = $indexes[$i];
+                my $index   = $indexes[$i] || 'kw';
 
                 # Add index-specific attributes
 
@@ -1573,18 +1573,14 @@ sub buildQuery {
                         if ( C4::Context->preference("SearchWithISBNVariations") ) {
                             my @isbns = C4::Koha::GetVariationsOfISBN( $operand );
                             $operands[$i] = $operand =  '(nb=' . join(' OR nb=', @isbns) . ')';
-                            $indexes[$i] = $index = '';
+                            $indexes[$i] = $index = 'kw';
                         }
                     }
                 }
 
-                if(not $index){
-                    $index = 'kw';
-                }
-
                 # Set default structure attribute (word list)
                 my $struct_attr = q{};
-                unless ( $indexes_set || !$index || $index =~ /,(st-|phr|ext|wrdl)/ || $index =~ /^(nb|ns)$/ ) {
+                unless ( $indexes_set || $index =~ /,(st-|phr|ext|wrdl)/ || $index =~ /^(nb|ns)$/ ) {
                     $struct_attr = ",wrdl";
                 }
 
@@ -1750,6 +1746,13 @@ sub buildQuery {
     $query =~ s/(?<=(st-numeric)):/=/g;
     $query =~ s/(?<=(st-year)):/=/g;
     $query =~ s/(?<=(st-date-normalized)):/=/g;
+
+    # Removing warnings for later substitutions
+    $query      //= q{};
+    $query_desc //= q{};
+    $query_cgi  //= q{};
+    $limit      //= q{};
+    $limit_desc //= q{};
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
         s/  +/ /g;    # remove extra spaces
@@ -1939,9 +1942,6 @@ sub searchResults {
         my $oldbiblio = TransformMarcToKoha( $marcrecord, $fw );
         $oldbiblio->{result_number} = $i + 1;
 
-        # add imageurl to itemtype if there is one
-        $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
-
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
@@ -1950,11 +1950,15 @@ sub searchResults {
 
 		# edition information, if any
         $oldbiblio->{edition} = $oldbiblio->{editionstatement};
-        $oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{translated_description};
- # Build summary if there is one (the summary is defined in the itemtypes table)
+
+        my $itemtype = $oldbiblio->{itemtype} ? $itemtypes{$oldbiblio->{itemtype}} : undef;
+        # add imageurl to itemtype if there is one
+        $oldbiblio->{imageurl} = $itemtype ? getitemtypeimagelocation( $search_context->{'interface'}, $itemtype->{imageurl} ) : q{};
+        # Build summary if there is one (the summary is defined in the itemtypes table)
+        $oldbiblio->{description} = $itemtype ? $itemtype->{translated_description} : q{};
 
         # FIXME: this is only used in the deprecated non-XLST opac results
-        if ( !$xslfile && $is_opac && $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
+        if ( !$xslfile && $is_opac && $itemtype && $itemtype->{summary} ) {
             my $summary = $itemtypes{ $oldbiblio->{itemtype} }->{summary};
             my @fields  = $marcrecord->fields();
 
@@ -2096,7 +2100,11 @@ sub searchResults {
                 $item->{'branchname'} = $branches{$item->{$otherbranch}};
             }
 
-			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
+            my $prefix =
+                ( $item->{$hbranch} ? $item->{$hbranch} . '--' : q{} )
+              . ( $item->{location} ? $item->{location} : q{} )
+              . ( $item->{itype}    ? $item->{itype}    : q{} )
+              . ( $item->{itemcallnumber} ? $item->{itemcallnumber} : q{} );
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             if ( $item->{onloan}
                 and $logged_in_user
@@ -2171,7 +2179,7 @@ sub searchResults {
                     || $item->{damaged}
                     || $item->{notforloan}
                     || $reservestatus eq 'Waiting'
-                    || ($transfertwhen ne ''))
+                    || ($transfertwhen && $transfertwhen ne ''))
                 {
                     $withdrawn_count++        if $item->{withdrawn};
                     $itemlost_count++        if $item->{itemlost};
@@ -2247,7 +2255,7 @@ sub searchResults {
 
         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
         if (!C4::Context->preference("item-level_itypes")) {
-            if ($itemtypes{ $oldbiblio->{itemtype} }->{notforloan}) {
+            if ($itemtype && $itemtype->{notforloan}) {
                 $can_place_holds = 0;
             }
         }
