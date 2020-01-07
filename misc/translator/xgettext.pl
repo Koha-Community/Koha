@@ -366,7 +366,7 @@ usage_error('You cannot specify both --convert-from and --files-from')
 
 if (defined $output && $output ne '-') {
     print STDERR "$0: Opening output file \"$output\"\n" if $verbose_p;
-        open($OUTPUT, '>', $output) || die "$output: $!\n";
+        open($OUTPUT, '>:encoding(utf-8)', $output) || die "$output: $!\n";
 } else {
     print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
     open($OUTPUT, ">&STDOUT");
