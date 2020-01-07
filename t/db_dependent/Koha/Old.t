@@ -44,8 +44,10 @@ subtest 'Koha::Old::Patrons' => sub {
         {
             borrowernumber => $patron->borrowernumber
         }
-    )->next;
-    is_deeply( $deleted_patron->unblessed, $patron_unblessed );
+    )->next->unblessed;
+    delete $deleted_patron->{updated_on};
+    delete $patron_unblessed->{updated_on};
+    is_deeply( $deleted_patron, $patron_unblessed );
 };
 
 subtest 'Koha::Old::Biblios and Koha::Old::Items' => sub {
