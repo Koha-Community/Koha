@@ -345,7 +345,7 @@ subtest 'Return same values as DBIx::Class' => sub {
 
             subtest 'Koha::Object->delete' => sub {
 
-                plan tests => 4;
+                plan tests => 5;
 
                 my ( $r_us, $e_us, $r_them, $e_them );
 
@@ -358,6 +358,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     'Successful delete should return the object ' );
                 ok( !defined $e_us && !defined $e_them,
                     'Successful delete should not raise an exception' );
+                is( ref($r_us), 'Koha::City', 'Successful delete should return our Koha::Obect based object' );
 
                 # CASE 2 - Delete an object that is not in storage
                 try { $r_us   = $r_us->delete;   } catch { $e_us   = $_ };
@@ -463,7 +464,7 @@ subtest 'Return same values as DBIx::Class' => sub {
 
             subtest 'Koha::Object->delete' => sub {
 
-                plan tests => 6;
+                plan tests => 7;
 
                 my ( $r_us, $e_us, $r_them, $e_them );
 
@@ -480,6 +481,8 @@ subtest 'Return same values as DBIx::Class' => sub {
                     'Successful delete should return the patron object' );
                 ok( !defined $e_us && !defined $e_them,
                     'Successful delete should not raise an exception' );
+                is( ref($r_us), 'Koha::Patron',
+                    'Successful delete should return our Koha::Obect based object' );
 
                 # CASE 2 - Delete a patron that is not in storage
                 try { $r_us   = $r_us->delete;   } catch { $e_us   = $_ };

@@ -105,7 +105,7 @@ is( Koha::Acquisition::Booksellers->search()->count,
 
 #Test DelBookseller
 my $del = $supplier1->delete;
-is( $del, 1, "DelBookseller returns 1 - 1 supplier has been deleted " );
+is( ref($del), 'Koha::Acquisition::Bookseller', "DelBookseller returns the supplier object - supplier has been deleted " );
 my $b = Koha::Acquisition::Booksellers->find( $id_supplier1 );
 is( $b,
     undef, "Supplier1  has been deleted - id_supplier1 $id_supplier1 doesnt exist anymore" );

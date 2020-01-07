@@ -216,7 +216,12 @@ Returns:
 sub delete {
     my ($self) = @_;
 
-    return $self->_result()->delete;
+    my $deleted = $self->_result()->delete;
+    if ( ref $deleted ) {
+        my $object_class  = Koha::Object::_get_object_class( $self->_result->result_class );
+        $deleted = $object_class->_new_from_dbic($deleted);
+    }
+    return $deleted;
 }
 
 =head3 $object->set( $properties_hashref )
