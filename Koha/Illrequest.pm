@@ -1222,7 +1222,7 @@ sub check_out {
         $issue_args[0] = $patron->unblessed;
         my $issue = C4::Circulation::AddIssue(@issue_args);
 
-        if ($issue && %{$issue}) {
+        if ($issue) {
             # Update the request status
             $self->status('CHK')->store;
             return {
