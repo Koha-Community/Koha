@@ -41,6 +41,7 @@ on the API.
 sub to_api_mapping {
     return {
         agerestriction   => 'age_restriction',
+        biblionumber     => 'biblio_id',
         biblioitemnumber => undef, # meaningless
         collectionissn   => 'collection_issn',
         collectiontitle  => 'collection_title',

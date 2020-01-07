@@ -724,6 +724,29 @@ sub custom_cover_image_url {
     return $url;
 }
 
+=head3 to_api
+
+    my $json = $biblio->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Biblio object,
+suitable for API output. The related Koha::Biblioitem object is merged as expected
+on the API.
+
+=cut
+
+sub to_api {
+    my ($self, $args) = @_;
+
+    my $response = $self->SUPER::to_api( $args );
+    my $biblioitem = $self->biblioitem->to_api( $args );
+
+    foreach my $key ( keys %{ $biblioitem } ) {
+        $response->{$key} = $biblioitem->{$key};
+    }
+
+    return $response;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Biblio object

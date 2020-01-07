@@ -59,7 +59,7 @@ sub get {
         if ( $c->req->headers->accept =~ m/application\/json/ ) {
             return $c->render(
                 status => 200,
-                json   => $c->build_json_biblio( { biblio => $biblio } )
+                json   => $biblio->to_api
             );
         }
         else {
@@ -146,29 +146,6 @@ sub delete {
             );
         }
     };
-}
-
-=head2 Internal methods
-
-=head3 build_json_biblio
-
-Internal method that returns all the attributes from the biblio and biblioitems tables
-
-=cut
-
-sub build_json_biblio {
-    my ( $c, $args ) = @_;
-
-    my $biblio = $args->{biblio};
-
-    my $response = $biblio->to_api;
-    my $biblioitem = $biblio->biblioitem->to_api;
-
-    foreach my $key ( keys %{ $biblioitem } ) {
-        $response->{$key} = $biblioitem->{$key};
-    }
-
-    return $response;
 }
 
 1;
