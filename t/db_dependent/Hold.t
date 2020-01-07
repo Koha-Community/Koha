@@ -150,7 +150,7 @@ subtest "delete() tests" => sub {
 
     my $hold_object = Koha::Holds->find( $hold->{ reserve_id } );
     my $deleted = $hold_object->delete;
-    is( $deleted, 1, 'Koha::Hold->delete should return 1 if the hold has been correctly deleted' );
+    is( ref($deleted), 'Koha::Hold', 'Koha::Hold->delete should return the Koha::Hold object if the hold has been correctly deleted' );
     is( Koha::Holds->search({ reserve_id => $hold->{ reserve_id } })->count, 0,
         "Koha::Hold->delete should have deleted the hold" );
 
@@ -165,7 +165,7 @@ subtest "delete() tests" => sub {
 
     $hold_object = Koha::Holds->find( $hold->{ reserve_id } );
     $deleted = $hold_object->delete;
-    is( $deleted, 1, 'Koha::Hold->delete should return 1 if the hold has been correctly deleted' );
+    is( ref($deleted), 'Koha::Hold', 'Koha::Hold->delete should return a Koha::Hold object if the hold has been correctly deleted' );
     is( Koha::Holds->search({ reserve_id => $hold->{ reserve_id } })->count, 0,
         "Koha::Hold->delete should have deleted the hold" );
 
