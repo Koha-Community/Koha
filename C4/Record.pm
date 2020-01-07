@@ -427,12 +427,12 @@ sub marc2csv {
         for my $itemnumber ( @$itemnumbers) {
             my $item = Koha::Items->find( $itemnumber );
             my $biblionumber = $item->biblio->biblionumber;
-            $output .= marcrecord2csv( $biblionumber, $id, $firstpass, $csv, $fieldprocessing, [$itemnumber] );
+            $output .= marcrecord2csv( $biblionumber, $id, $firstpass, $csv, $fieldprocessing, [$itemnumber] ) // '';
             $firstpass = 0;
         }
     } else {
         foreach my $biblio (@$biblios) {
-            $output .= marcrecord2csv( $biblio, $id, $firstpass, $csv, $fieldprocessing );
+            $output .= marcrecord2csv( $biblio, $id, $firstpass, $csv, $fieldprocessing ) // '';
             $firstpass = 0;
         }
     }
