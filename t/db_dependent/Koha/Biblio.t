@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use C4::Biblio;
 use Koha::Database;
@@ -430,6 +430,23 @@ subtest 'pickup_locations' => sub {
                 _doTest($cbranch, $biblio, $patron, $results);
             }
         }
+    }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'to_api() tests' => sub {
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $biblioitem_api = $biblio->biblioitem->to_api;
+    my $biblio_api     = $biblio->to_api;
+
+    plan tests => scalar keys %{ $biblioitem_api };
+
+    foreach my $key ( keys %{ $biblioitem_api } ) {
+        is( $biblio_api->{$key}, $biblioitem_api->{$key}, "$key is added to the biblio object" );
     }
 
     $schema->storage->txn_rollback;
