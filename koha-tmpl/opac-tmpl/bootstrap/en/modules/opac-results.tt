@@ -536,50 +536,8 @@
                                                     </div> <!-- / .results_summary -->
                                                 [% END # / IF OpacStarRatings %]
 
-                                                <div class="actions-menu noprint">
-                                                        [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
-                                                            [% UNLESS ( SEARCH_RESULT.norequests ) %]
-                                                                [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
-                                                                    <span class="actions"><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" class="btn btn-link"><i class="fa fa-bookmark"></i> Place hold</a></span><!-- add back when available 0 holds in queue-->
-                                                                [% END # / IF opacuserlogin && holdable %]
-                                                            [% END # UNLESS SEARCH_RESULT.norequests %]
-                                                        [% END # IF RequestOnOpac %]
+                                                    [% INCLUDE 'title-actions-menu.inc' items=SEARCH_RESULT %]
 
-                                                        [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
-                                                            [% IF SEARCH_RESULT.artreqpossible %]
-                                                                <span class="actions"><a href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" class="btn btn-link"><i class="fa fa-file-text"></i> Request article</a></span>
-                                                            [% END %]
-                                                        [% END %]
-
-                                                        [% IF ( TagsInputEnabled ) %]
-                                                            [% IF ( loggedinusername ) %]
-                                                                <span class="actions"><a id="tag_add[% SEARCH_RESULT.biblionumber | html %]" href="#" class="tag_add btn btn-link"><i class="fa fa-tag"></i> Add tag</a></span>
-                                                                <div id="tagform[% SEARCH_RESULT.biblionumber | html %]" class="tag_results_input" style="display:none;">
-                                                                        <label for="newtag[% SEARCH_RESULT.biblionumber | html %]">New tag(s), separated by a comma:</label>
-                                                                        <input type="text" name="newtag[% SEARCH_RESULT.biblionumber | html %]" id="newtag[% SEARCH_RESULT.biblionumber | html %]" class="newtag" maxlength="100" />
-                                                                        <input name="tagbutton" class="btn btn-small tagbutton" title="[% SEARCH_RESULT.biblionumber | html %]" type="submit" value="Add" />
-                                                                        <a class="cancel_tag_add" id="cancel[% SEARCH_RESULT.biblionumber | html %]" href="#">(done)</a>
-                                                                </div>
-                                                                <span id="newtag[% SEARCH_RESULT.biblionumber | html %]_status" class="tagstatus" style="display:none;">
-                                                                    Tag status here.
-                                                                </span>
-                                                            [% ELSE %]
-                                                                <span class="actions"><span id="login4tags"><a class="btn btn-link loginModal-trigger" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-tag"></i> Log in to add tags</a></span></span>
-                                                            [% END # IF loggedinusername %]
-                                                        [% END # if TagsInputEnabled %]
-
-                                                        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                            <span class="actions"><a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]'); return false;" class="btn btn-link"><i class="fa fa-list"></i> Save to lists</a></span>
-                                                        [% END %]
-
-                                                        [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                                                            [% IF ( SEARCH_RESULT.incart ) %]
-                                                                <span class="actions"><a data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="btn btn-link cart cart[% SEARCH_RESULT.biblionumber | html %]" href="#"><i class="fa fa-shopping-cart"></i> In your cart</a> <a data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="btn btn-link remove cartRemove cartR[% SEARCH_RESULT.biblionumber | html %]" href="#">(remove)</a></span>
-                                                            [% ELSE %]
-                                                                <span class="actions"><a data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="btn btn-link addtocart cart cart[% SEARCH_RESULT.biblionumber | html %]" href="#"><i class="fa fa-shopping-cart"></i> Add to cart</a> <a style="display:none;" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="btn btn-link remove cartRemove cartR[% SEARCH_RESULT.biblionumber | html %]" href="#">(remove)</a></span>
-                                                            [% END %]
-                                                        [% END # / IF opacbookbag %]
-                                                </div>
                                                 </div>
                                                 [% INCLUDE "openlibrary-readapi.inc" bib = SEARCH_RESULT %]
 

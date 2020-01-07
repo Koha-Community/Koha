@@ -463,55 +463,7 @@
                                                         </div>
                                                     [% END %]
 
-                                                    <span class="results_summary">
-
-                                                        [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
-                                                            [% UNLESS ( itemsloo.norequests ) %]
-                                                                [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                                                    [% IF ( itemsloo.allow_onshelf_holds ) %]
-                                                                        <span class="actions"><a class="btn btn-link hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber | html %]"><i class="fa fa-fw fa-bookmark"></i> Place hold</a><!-- add back when available 0 holds in queue--></span>
-                                                                    [% ELSE %]
-                                                                        [% IF ( itemsloo.itemsissued ) %]
-                                                                            <span class="actions"><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber | html %]"><i class="fa fa-fw fa-bookmark"></i> Place hold</a><!-- add back when available 0 holds in queue--></span>
-                                                                        [% END %]
-                                                                    [% END %]
-                                                                [% END # / IF opacuserlogin %]
-                                                            [% END # / UNLESS itemsloo.norequests %]
-                                                        [% END # / RequestOnOpac %]
-
-                                                        [% IF ( TagsInputEnabled ) %]
-                                                            [% IF ( loggedinusername ) %]
-                                                                <span class="actions"><a class="btn btn-link tag_add hidden" id="tag_add[% itemsloo.biblionumber | html %]" href="#"><i class="fa fa-fw fa-tag"></i> Add tag</a></span>
-                                                                <div id="tagform[% itemsloo.biblionumber | html %]" class="tag_results_input" style="display:none;">
-                                                                    <label for="newtag[% itemsloo.biblionumber | html %]">New tag(s), separated by a comma:</label>
-                                                                    <input type="text" name="newtag[% itemsloo.biblionumber | html %]" id="newtag[% itemsloo.biblionumber | html %]" maxlength="100" />
-                                                                    <input name="tagbutton" class="tagbutton btn btn-small" title="[% itemsloo.biblionumber | html %]" type="submit" value="Add" />
-                                                                    <a class="cancel_tag_add" id="cancel[% itemsloo.biblionumber | html %]" href="#">(done)</a>
-                                                                </div>
-                                                                <div id="newtag[% itemsloo.biblionumber | html %]_status" class="tagstatus" style="display:none;">
-                                                                Tag status here.
-                                                                </div>
-                                                            [% ELSIF ( loop.first ) %]
-                                                                <span class="tagstatus" id="login4tags">Log in to add tags.</span>
-                                                            [% END # / IF loggedinusername %]
-                                                        [% END # / IF TagsInputEnabled %]
-
-                                                        [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername && ( Koha.Preference( 'virtualshelves' ) == 1 ) ) %]
-                                                            <span class="actions"><a class="btn btn-link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | uri %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber | uri %]'); return false;"><i class="fa fa-fw fa-list"></i> Save to another list</a></span>
-                                                        [% END %]
-
-                                                        [% IF can_remove_biblios %]
-                                                            <span class="actions"><a class="btn btn-link btn-disabled remove removefromlist" href="/cgi-bin/koha/opac-shelves.pl?op=remove_biblios&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;biblionumber=[% itemsloo.biblionumber | html %]"><i class="fa fa-fw fa-remove"></i> Remove from this list</a></span>
-                                                        [% END %]
-
-                                                        [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
-                                                            [% IF ( itemsloo.incart ) %]
-                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#"><i class="fa fa-fw fa-shopping-cart"></i> In your cart</a> <a data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
-                                                            [% ELSE %]
-                                                                <span class="actions"><a data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link addtocart cart[% itemsloo.biblionumber | html %] hidden" href="#"><i class="fa fa-fw fa-shopping-cart"></i> Add to cart</a> <a style="display:none;" data-biblionumber="[% itemsloo.biblionumber | html %]" class="btn btn-link cartRemove cartR[% itemsloo.biblionumber | html %] hidden" href="#">(remove)</a></span>
-                                                            [% END %]
-                                                        [% END # / IF opacbookbag %]
-                                                    </span> <!-- / .results_summary .actions -->
+                                                    [% INCLUDE 'title-actions-menu.inc' items=itemsloo %]
 
                                                     <!-- COinS / Openurl -->
                                                     <span class="Z3988" title="[% itemsloo.coins | html %]"></span>

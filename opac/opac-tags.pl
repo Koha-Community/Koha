@@ -236,6 +236,20 @@ if ($loggedinuser) {
     $should_hide = ( $should_hide =~ /\S/ ) ? 1 : 0;
     $my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
     my $my_approved_tags = get_approval_rows({ approved => 1 });
+
+    my $art_req_itypes;
+    if( C4::Context->preference('ArticleRequests') ) {
+        $art_req_itypes = Koha::IssuingRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
+    }
+
+    # get biblionumbers stored in the cart
+    my @cart_list;
+
+    if($query->cookie("bib_list")){
+        my $cart_list = $query->cookie("bib_list");
+        @cart_list = split(/\//, $cart_list);
+    }
+
     foreach my $tag (@$my_tags) {
         $tag->{visible} = 0;
         my $biblio = Koha::Biblios->find( $tag->{biblionumber} );
@@ -262,6 +276,8 @@ if ($loggedinuser) {
         $tag->{part_number} = $biblio->part_number;
         $tag->{part_name} = $biblio->part_name;
         $tag->{author} = $biblio->author;
+        # BZ17530: 'Intelligent' guess if result can be article requested
+        $tag->{artreqpossible} = ( $art_req_itypes->{ $tag->{itemtype} // q{} } || $art_req_itypes->{ '*' } ) ? 1 : q{};
 
         my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay');
         my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
@@ -279,6 +295,10 @@ if ($loggedinuser) {
         $tag->{time_created_display} = $1;
         $tag->{approved} = ( grep { $_->{term} eq $tag->{term} and $_->{approved} } @$my_approved_tags );
         $tag->{visible} = 1;
+        # while we're checking each line, see if item is in the cart
+        if ( grep {$_ eq $biblio->biblionumber} @cart_list) {
+            $tag->{incart} = 1;
+        }
     }
 }
 

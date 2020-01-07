@@ -267,12 +267,23 @@ if ( $op eq 'view' ) {
 
             my $patron = Koha::Patrons->find( $loggedinuser );
 
+            my $categorycode; # needed for may_article_request
+            if( C4::Context->preference('ArticleRequests') ) {
+                $categorycode = $patron ? $patron->categorycode : undef;
+            }
+
             # Lists display falls back to search results configuration
             my $xslfile = C4::Context->preference('OPACXSLTListsDisplay');
             my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
             my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
             my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+
+            my $art_req_itypes;
+            if( C4::Context->preference('ArticleRequests') ) {
+                $art_req_itypes = Koha::IssuingRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
+            }
+
             my @items;
             while ( my $content = $contents->next ) {
                 my $biblionumber = $content->biblionumber;
@@ -304,6 +315,8 @@ if ( $op eq 'view' ) {
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
                 $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber( $record, $marcflavour );
                 $this_item->{'normalized_isbn'} = GetNormalizedISBN( undef, $record, $marcflavour );
+                # BZ17530: 'Intelligent' guess if result can be article requested
+                $this_item->{artreqpossible} = ( $art_req_itypes->{ $this_item->{itemtype} // q{} } || $art_req_itypes->{ '*' } ) ? 1 : q{};
 
                 unless ( defined $this_item->{size} ) {
 

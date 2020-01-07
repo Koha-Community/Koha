@@ -155,6 +155,8 @@
                                                         by [% MY_TAG.author | html %]
                                                     [% END %]
                                                 [% END # /IF MY_TAG.XSLTBloc %]
+
+                                                [% INCLUDE 'title-actions-menu.inc' items=MY_TAG %]
                                             </td>
                                             <td>
                                                 <span title="[% MY_TAG.date_created | html %]">
