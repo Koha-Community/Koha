@@ -303,7 +303,7 @@ sub import_patrons {
                     );
                 }
             }
-            if ($overwrite_passwords && defined $borrower{password} && $borrower{password} ne ''){
+            if ($patron->category->category_type ne 'S' && $overwrite_passwords && defined $borrower{password} && $borrower{password} ne ''){
                 try {
                     $patron->set_password({ password => $borrower{password} });
                 }

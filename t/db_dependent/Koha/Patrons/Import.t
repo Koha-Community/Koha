@@ -435,7 +435,7 @@ subtest 'test_import_with_cardnumber_0' => sub {
 };
 
 subtest 'test_import_with_password_overwrite' => sub {
-    plan tests => 6;
+    plan tests => 8;
 
     #Remove possible existing user to avoid clashes
     my $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
@@ -443,12 +443,14 @@ subtest 'test_import_with_password_overwrite' => sub {
 
     #Setup our info
     my $branchcode = $builder->build({ source => "Branch"})->{branchcode};
-    my $categorycode = $builder->build({ source => "Category"})->{categorycode};
+    my $categorycode = $builder->build({ source => "Category", value => { category_type => 'A'  } })->{categorycode};
+    my $staff_categorycode = $builder->build({ source => "Category", value => { category_type => 'S'  } })->{categorycode};
     my $csv_headers  = 'surname,userid,branchcode,categorycode,password';
     my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest1";
     my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern1";
     my $csv_blank_password = "Worel,ErnestP,$branchcode,$categorycode,";
     my $defaults = { cardnumber => "" }; #currently all the defaults come as "" if not filled
+    my $csv_staff_password_change = "Worrell,ErnestP,$branchcode,$staff_categorycode,Vern1";
 
     #Make the test files for importing
     my $filename_1 = make_csv($temp_dir, $csv_headers, $csv_password);
@@ -461,6 +463,10 @@ subtest 'test_import_with_password_overwrite' => sub {
     my $filename_3 = make_csv($temp_dir, $csv_headers, $csv_blank_password);
     open(my $handle_3, "<", $filename_3) or die "cannot open < $filename_3: $!";
     my $params_3 = { file => $handle_3, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1};
+
+    my $filename_4 = make_csv($temp_dir, $csv_headers, $csv_staff_password_change);
+    open(my $handle_4, "<", $filename_4) or die "cannot open < $filename_4: $!";
+    my $params_4 = { file => $handle_4, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1};
 
 
     my $result = $patrons_import->import_patrons($params_1, $defaults);
@@ -483,6 +489,15 @@ subtest 'test_import_with_password_overwrite' => sub {
     $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
     is($ernest->surname,'Worel',"Patron is overwritten, surname changed");
     is($ernest->password,$orig_pass,"Patron was overwritten but password is not overwritten if blank");
+
+    $ernest->category($staff_categorycode);
+    $ernest->store;
+
+    $result = $patrons_import->import_patrons($params_4, $defaults);
+    warn Data::Dumper::Dumper( $result );
+    $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
+    is($ernest->surname,'Worrell',"Patron is overwritten, surname changed");
+    is($ernest->password,$orig_pass,"Patron is imported, password is not changed for staff");
 
 };
 
