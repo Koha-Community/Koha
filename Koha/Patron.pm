@@ -23,7 +23,7 @@ use Modern::Perl;
 use Carp;
 use List::MoreUtils qw( uniq );
 use JSON qw( to_json );
-use Text::Unaccent qw( unac_string );
+use Unicode::Normalize;
 
 use C4::Accounts;
 use C4::Context;
@@ -1293,14 +1293,14 @@ sub generate_userid {
       $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
       $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
       my $userid = lc(($firstname)? "$firstname.$surname" : $surname);
-      $userid = unac_string('utf-8',$userid);
+      $userid = NFKD( $userid );
+      $userid =~ s/\p{NonspacingMark}//g;
       $userid .= $offset unless $offset == 0;
       $self->userid( $userid );
       $offset++;
      } while (! $self->has_valid_userid );
 
      return $self;
-
 }
 
 =head2 Internal methods
