@@ -435,7 +435,7 @@ subtest 'test_import_with_cardnumber_0' => sub {
 };
 
 subtest 'test_import_with_password_overwrite' => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     #Remove possible existing user to avoid clashes
     my $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
@@ -447,6 +447,7 @@ subtest 'test_import_with_password_overwrite' => sub {
     my $csv_headers  = 'surname,userid,branchcode,categorycode,password';
     my $csv_password = "Worrell,ErnestP,$branchcode,$categorycode,Ernest1";
     my $csv_password_change = "Worrell,ErnestP,$branchcode,$categorycode,Vern1";
+    my $csv_blank_password = "Worel,ErnestP,$branchcode,$categorycode,";
     my $defaults = { cardnumber => "" }; #currently all the defaults come as "" if not filled
 
     #Make the test files for importing
@@ -456,6 +457,10 @@ subtest 'test_import_with_password_overwrite' => sub {
     my $filename_2 = make_csv($temp_dir, $csv_headers, $csv_password_change);
     open(my $handle_2, "<", $filename_2) or die "cannot open < $filename_2: $!";
     my $params_2 = { file => $handle_2, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1};
+
+    my $filename_3 = make_csv($temp_dir, $csv_headers, $csv_blank_password);
+    open(my $handle_3, "<", $filename_3) or die "cannot open < $filename_3: $!";
+    my $params_3 = { file => $handle_3, matchpoint => 'userid', overwrite_passwords => 1, overwrite_cardnumber => 1};
 
 
     my $result = $patrons_import->import_patrons($params_1, $defaults);
@@ -470,6 +475,14 @@ subtest 'test_import_with_password_overwrite' => sub {
     $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
     isnt($ernest->password,$orig_pass,"New patron is overwritten, password is overwritten");
     isnt($ernest->password,'Vern',"Password is overwritten and is encrypted from value provided");
+
+    #Save info to check not changed
+    $orig_pass = $ernest->password;
+
+    $result = $patrons_import->import_patrons($params_3, $defaults);
+    $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
+    is($ernest->surname,'Worel',"Patron is overwritten, surname changed");
+    is($ernest->password,$orig_pass,"Patron was overwritten but password is not overwritten if blank");
 
 };
 
