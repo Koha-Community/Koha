@@ -67,7 +67,7 @@ BEGIN {
         &GetBasketgroups &ReOpenBasketgroup
 
         &DelOrder &ModOrder &GetOrder &GetOrders &GetOrdersByBiblionumber
-        &GetLateOrders &GetOrderFromItemnumber
+        &GetOrderFromItemnumber
         &SearchOrders &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
         &TransferOrder
@@ -2069,134 +2069,6 @@ sub GetParcels {
     $sth->execute( @query_params );
     my $results = $sth->fetchall_arrayref({});
     return @{$results};
-}
-
-#------------------------------------------------------------#
-
-=head3 GetLateOrders
-
-  @results = &GetLateOrders;
-
-Searches for bookseller with late orders.
-
-return:
-the table of supplier with late issues. This table is full of hashref.
-
-=cut
-
-sub GetLateOrders {
-    my $delay      = shift;
-    my $supplierid = shift;
-    my $branch     = shift;
-    my $estimateddeliverydatefrom = shift;
-    my $estimateddeliverydateto = shift;
-
-    my $dbh = C4::Context->dbh;
-
-    #BEWARE, order of parenthesis and LEFT JOIN is important for speed
-    my $dbdriver = C4::Context->config("db_scheme") || "mysql";
-
-    my @query_params = ();
-    my $select = "
-    SELECT aqbasket.basketno,
-        aqorders.ordernumber      AS ordernumber,
-        DATE(aqbasket.closedate)  AS orderdate,
-        aqbasket.basketname       AS basketname,
-        aqbasket.basketgroupid    AS basketgroupid,
-        aqbasketgroups.name       AS basketgroupname,
-        aqorders.rrp              AS unitpricesupplier,
-        aqorders.ecost            AS unitpricelib,
-        aqorders.claims_count     AS claims_count,
-        aqorders.claimed_date     AS claimed_date,
-        aqorders.order_internalnote AS internalnote,
-        aqorders.order_vendornote   AS vendornote,
-        aqbudgets.budget_name     AS budget,
-        borrowers.branchcode      AS branch,
-        aqbooksellers.name        AS supplier,
-        aqbooksellers.id          AS supplierid,
-        biblio.author, biblio.title,
-        biblioitems.publishercode AS publisher,
-        biblioitems.publicationyear,
-        biblioitems.isbn          AS isbn,
-        ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) AS estimateddeliverydate,
-    ";
-    my $from = "
-    FROM
-        aqorders LEFT JOIN biblio     ON biblio.biblionumber         = aqorders.biblionumber
-        LEFT JOIN biblioitems         ON biblioitems.biblionumber    = biblio.biblionumber
-        LEFT JOIN aqbudgets           ON aqorders.budget_id          = aqbudgets.budget_id,
-        aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber
-        LEFT JOIN aqbooksellers       ON aqbasket.booksellerid       = aqbooksellers.id
-        LEFT JOIN aqbasketgroups      ON aqbasket.basketgroupid      = aqbasketgroups.id
-        WHERE aqorders.basketno = aqbasket.basketno
-        AND ( datereceived IS NULL
-            OR aqorders.quantityreceived < aqorders.quantity
-        )
-        AND aqbasket.closedate IS NOT NULL
-        AND aqorders.datecancellationprinted IS NULL
-    ";
-    if ($dbdriver eq "mysql") {
-        $select .= "
-        aqorders.quantity - COALESCE(aqorders.quantityreceived,0)                 AS quantity,
-        (aqorders.quantity - COALESCE(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
-        DATEDIFF(CAST(now() AS date),closedate) AS latesince
-        ";
-        if ( defined $delay ) {
-            $from .= " AND (closedate <= DATE_SUB(CAST(now() AS date),INTERVAL ? DAY)) " ;
-            push @query_params, $delay;
-        }
-        $from .= " AND aqorders.quantity - COALESCE(aqorders.quantityreceived,0) <> 0";
-    } else {
-        # FIXME: account for IFNULL as above
-        $select .= "
-                aqorders.quantity                AS quantity,
-                aqorders.quantity * aqorders.rrp AS subtotal,
-                (CAST(now() AS date) - closedate)            AS latesince
-        ";
-        if ( defined $delay ) {
-            $from .= " AND (closedate <= (CAST(now() AS date) -(INTERVAL ? DAY)) ";
-            push @query_params, $delay;
-        }
-        $from .= " AND aqorders.quantity <> 0";
-    }
-    if (defined $supplierid) {
-        $from .= ' AND aqbasket.booksellerid = ? ';
-        push @query_params, $supplierid;
-    }
-    if (defined $branch) {
-        $from .= ' AND borrowers.branchcode LIKE ? ';
-        push @query_params, $branch;
-    }
-
-    if ( defined $estimateddeliverydatefrom or defined $estimateddeliverydateto ) {
-        $from .= ' AND aqbooksellers.deliverytime IS NOT NULL ';
-    }
-    if ( defined $estimateddeliverydatefrom ) {
-        $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) >= ?';
-        push @query_params, $estimateddeliverydatefrom;
-    }
-    if ( defined $estimateddeliverydateto ) {
-        $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= ?';
-        push @query_params, $estimateddeliverydateto;
-    }
-    if ( defined $estimateddeliverydatefrom and not defined $estimateddeliverydateto ) {
-        $from .= ' AND ADDDATE(aqbasket.closedate, INTERVAL aqbooksellers.deliverytime DAY) <= CAST(now() AS date)';
-    }
-    if (C4::Context->preference("IndependentBranches")
-            && !C4::Context->IsSuperLibrarian() ) {
-        $from .= ' AND borrowers.branchcode LIKE ? ';
-        push @query_params, C4::Context->userenv->{branch};
-    }
-    $from .= " AND orderstatus <> 'cancelled' ";
-    my $query = "$select $from \nORDER BY latesince, basketno, borrowers.branchcode, supplier";
-    $debug and print STDERR "GetLateOrders query: $query\nGetLateOrders args: " . join(" ",@query_params);
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@query_params);
-    my @results;
-    while (my $data = $sth->fetchrow_hashref) {
-        push @results, $data;
-    }
-    return @results;
 }
 
 #------------------------------------------------------------#
