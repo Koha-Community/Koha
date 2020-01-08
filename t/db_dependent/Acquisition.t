@@ -19,9 +19,10 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 78;
+use Test::More tests => 79;
 use t::lib::Mocks;
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Acquisition::Basket;
 
 use MARC::File::XML ( BinaryEncoding => 'utf8', RecordFormat => 'MARC21' );
@@ -304,14 +305,34 @@ my $invoiceid = AddInvoice(
 
 my $invoice = GetInvoice( $invoiceid );
 
+my $reception_date = output_pref(
+    {
+            dt => dt_from_string->add( days => 1 ),
+            dateformat => 'iso',
+            dateonly => 1,
+    }
+);
 my ($datereceived, $new_ordernumber) = ModReceiveOrder(
     {
         biblionumber      => $biblionumber4,
         order             => Koha::Acquisition::Orders->find( $ordernumbers[4] )->unblessed,
         quantityreceived  => 1,
         invoice           => $invoice,
-        budget_id          => $order_content[4]->{str}->{budget_id},
+        budget_id         => $order_content[4]->{str}->{budget_id},
+        datereceived      => $reception_date,
     }
+);
+
+is(
+    output_pref(
+        {
+            dt         => dt_from_string($datereceived),
+            dateformat => 'iso',
+            dateonly   => 1
+        }
+    ),
+    $reception_date,
+    'ModReceiveOrder sets the passed date'
 );
 
 my $search_orders = SearchOrders({
