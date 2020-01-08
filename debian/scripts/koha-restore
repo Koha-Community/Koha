@@ -72,10 +72,8 @@ mysqldb="koha_$name"
 mysqluser="koha_$name"
 mysqlpwd="$( xmlstarlet sel -t -v 'yazgfs/config/pass' /etc/koha/sites/$name/koha-conf.xml )"
 zcat "$sqldump" | mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
-mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof || true
-DROP USER '$mysqluser';
-eof
-mysql --defaults-extra-file=/etc/mysql/koha-common.cnf << eof || true
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
+DROP USER IF EXISTS '$mysqluser';
 CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
 FLUSH PRIVILEGES;
