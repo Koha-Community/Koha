@@ -143,12 +143,15 @@
                                     <span class="required">Required</span>
                                 </li>
                                 [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
-                                [% IF payment_types %]
+                                [% SET excluded = ['SIP00', 'SIP01', 'SIP02'] %]
+                                [% IF payment_types > 3 %]
                                 <li>
                                     <label for="transaction_type">Transaction type: </label>
                                     <select name="transaction_type" id="transaction_type">
                                         [% FOREACH pt IN payment_types %]
+                                            [% UNLESS excluded.grep("^$pt.authorised_value\$").size %]
                                             <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
+                                            [% END %]
                                         [% END %]
                                     </select>
                                 </li>
