@@ -627,11 +627,6 @@ our $PERL_DEPS = {
         required   => 0,
         min_ver    => '0.40'
     },
-    'Text::Unaccent' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '1.08',
-    },
     'Test::WWW::Mechanize' => {
         'usage'    => 'Testing suite',
         'required' => '0',
