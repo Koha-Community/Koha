@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -351,6 +351,187 @@ subtest 'current_item_level_holds() tests' => sub {
 
     $holds = $order->current_item_level_holds;
     is( $holds->count, 1, 'Only current (not future) holds are returned');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'claim*' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+    my $order = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+        }
+    );
+
+    my $now = dt_from_string;
+    is( $order->claims->count, 0, 'No claim yet, ->claims should return an empty set');
+    is( $order->claims_count, 0, 'No claim yet, ->claims_count should return 0');
+    is( $order->claimed_date, undef, 'No claim yet, ->claimed_date should return undef');
+
+    my $claim_1 = $order->claim;
+    my $claim_2 = $order->claim;
+
+    $claim_1->claimed_on($now->clone->subtract(days => 1))->store;
+
+    is( $order->claims->count, 2, '->claims should return the correct number of claims');
+    is( $order->claims_count, 2, '->claims_count should return the correct number of claims');
+    is( dt_from_string($order->claimed_date), $now, '->claimed_date should return the date of the last claim');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'filter_by_late' => sub {
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+    my $now        = dt_from_string;
+    my $bookseller = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Booksellers',
+            value => { deliverytime => 2 }
+        }
+    );
+    my $basket_1 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                booksellerid => $bookseller->id,
+                closedate    => undef,
+            }
+        }
+    );
+    my $order_1 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno                => $basket_1->basketno,
+                datereceived            => undef,
+                datecancellationprinted => undef,
+            }
+        }
+    );
+    my $basket_2 = $builder->build_object(    # expected tomorrow
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                booksellerid => $bookseller->id,
+                closedate    => $now->clone->subtract( days => 1 ),
+            }
+        }
+    );
+    my $order_2 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno                => $basket_2->basketno,
+                datereceived            => undef,
+                datecancellationprinted => undef,
+            }
+        }
+    );
+    my $basket_3 = $builder->build_object(    # expected yesterday (1 day)
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                booksellerid => $bookseller->id,
+                closedate    => $now->clone->subtract( days => 3 ),
+            }
+        }
+    );
+    my $order_3 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno                => $basket_3->basketno,
+                datereceived            => undef,
+                datecancellationprinted => undef,
+            }
+        }
+    );
+    my $basket_4 = $builder->build_object(    # expected 3 days ago
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                booksellerid => $bookseller->id,
+                closedate    => $now->clone->subtract( days => 5 ),
+            }
+        }
+    );
+    my $order_4 = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                basketno                => $basket_4->basketno,
+                datereceived            => undef,
+                datecancellationprinted => undef,
+            }
+        }
+    );
+
+    my $orders = Koha::Acquisition::Orders->search(
+        {
+            ordernumber => {
+                -in => [
+                    $order_1->ordernumber, $order_2->ordernumber,
+                    $order_3->ordernumber, $order_4->ordernumber,
+                ]
+            }
+        }
+    );
+
+    my $late_orders = $orders->filter_by_lates;
+    is( $late_orders->count, 3 );
+
+    $late_orders = $orders->filter_by_lates( { delay => 0 } );
+    is( $late_orders->count, 3 );
+
+    $late_orders = $orders->filter_by_lates( { delay => 1 } );
+    is( $late_orders->count, 3 );
+
+    $late_orders = $orders->filter_by_lates( { delay => 3 } );
+    is( $late_orders->count, 2 );
+
+    $late_orders = $orders->filter_by_lates( { delay => 4 } );
+    is( $late_orders->count, 1 );
+
+    $late_orders = $orders->filter_by_lates( { delay => 5 } );
+    is( $late_orders->count, 1 );
+
+    $late_orders = $orders->filter_by_lates( { delay => 6 } );
+    is( $late_orders->count, 0 );
+
+    $late_orders = $orders->filter_by_lates(
+        { estimated_from => $now->clone->subtract( days => 6 ) } );
+    is( $late_orders->count,             2 );
+    is( $late_orders->next->ordernumber, $order_3->ordernumber );
+
+    $late_orders = $orders->filter_by_lates(
+        { estimated_from => $now->clone->subtract( days => 5 ) } );
+    is( $late_orders->count,             2 );
+    is( $late_orders->next->ordernumber, $order_3->ordernumber );
+
+    $late_orders = $orders->filter_by_lates(
+        { estimated_from => $now->clone->subtract( days => 4 ) } );
+    is( $late_orders->count,             2 );
+    is( $late_orders->next->ordernumber, $order_3->ordernumber );
+
+    $late_orders = $orders->filter_by_lates(
+        { estimated_from => $now->clone->subtract( days => 3 ) } );
+    is( $late_orders->count, 2 );
+
+    $late_orders = $orders->filter_by_lates(
+        { estimated_from => $now->clone->subtract( days => 1 ) } );
+    is( $late_orders->count, 1 );
+
+    $late_orders = $orders->filter_by_lates(
+        {
+            estimated_from => $now->clone->subtract( days => 4 ),
+            estimated_to   => $now->clone->subtract( days => 3 )
+        }
+    );
+    is( $late_orders->count, 1 );
 
     $schema->storage->txn_rollback;
 };
