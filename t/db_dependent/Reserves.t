@@ -1150,7 +1150,44 @@ subtest 'CheckReserves additional test' => sub {
     is( $matched_reserve->{reserve_id},
         $reserve1->reserve_id, "We got the Transit reserve" );
     is( scalar @$possible_reserves, 2, 'We do get both reserves' );
+};
 
+subtest 'AllowHoldOnPatronPossession test' => sub {
+
+    plan tests => 4;
+
+    # Create the items and patrons we need
+    my $biblio = $builder->build_sample_biblio();
+    my $itype = $builder->build_object({ class => "Koha::ItemTypes", value => { notforloan => 0 } });
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber,notforloan => 0, itype => $itype->itemtype });
+    my $patron = $builder->build_object({ class => "Koha::Patrons",
+                                          value => { branchcode => $item->homebranch }});
+
+    C4::Circulation::AddIssue($patron->unblessed,
+                              $item->barcode);
+    t::lib::Mocks::mock_preference('AllowHoldsOnPatronsPossessions', 0);
+
+    is(C4::Reserves::CanBookBeReserved($patron->borrowernumber,
+                                       $item->biblionumber)->{status},
+       'itemAlreadyOnLoan',
+       'Patron cannot place hold on a book loaned to itself');
+
+    is(C4::Reserves::CanItemBeReserved($patron->borrowernumber,
+                                       $item->itemnumber)->{status},
+       'itemAlreadyOnLoan',
+       'Patron cannot place hold on an item loaned to itself');
+
+    t::lib::Mocks::mock_preference('AllowHoldsOnPatronsPossessions', 1);
+
+    is(C4::Reserves::CanBookBeReserved($patron->borrowernumber,
+                                       $item->biblionumber)->{status},
+       'OK',
+       'Patron can place hold on a book loaned to itself');
+
+    is(C4::Reserves::CanItemBeReserved($patron->borrowernumber,
+                                       $item->itemnumber)->{status},
+       'OK',
+       'Patron can place hold on an item loaned to itself');
 };
 
 sub count_hold_print_messages {

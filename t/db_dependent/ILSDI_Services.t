@@ -300,7 +300,7 @@ subtest 'LookupPatron test' => sub {
 
 subtest 'Holds test' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -371,19 +371,28 @@ subtest 'Holds test' => sub {
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'tooManyReserves', "Too many reserves" );
 
-    # Adding a holdable item to biblio 3.
-    my $item3 = $builder->build_sample_item(
+    my $origin_branch = $builder->build(
         {
-            damaged => 0,
+            source => 'Branch',
+            value  => {
+                pickup_location => 1,
+            }
         }
     );
 
+    # Adding a holdable item.
+    my $item3 = $builder->build_sample_item(
+       {
+           barcode => '123456789',
+           library => $origin_branch->{branchcode}
+       });
+
     my $item4 = $builder->build_sample_item(
         {
-            biblionumber => $item3->biblionumber,
-            damaged      => 1,
-        }
-    );
+           biblionumber => $item3->biblionumber,
+           damaged => 1,
+           library => $origin_branch->{branchcode}
+       });
 
     Koha::CirculationRules->set_rule(
         {
@@ -397,11 +406,26 @@ subtest 'Holds test' => sub {
 
     $query = CGI->new;
     $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $item3->biblionumber);
+    $query->param( 'bib_id', $item4->biblionumber);
     $query->param( 'item_id', $item4->itemnumber);
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'damaged', "Item is damaged" );
+
+    my $module = new Test::MockModule('C4::Context');
+    $module->mock('userenv', sub { { patron => $patron } });
+    my $issue = C4::Circulation::AddIssue($patron, $item3->barcode);
+    t::lib::Mocks::mock_preference( 'AllowHoldsOnPatronsPossessions', '0' );
+
+    $query = new CGI;
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $item3->biblionumber);
+    $query->param( 'item_id', $item3->itemnumber);
+    $query->param( 'pickup_location', $origin_branch->{branchcode});
+    $reply = C4::ILSDI::Services::HoldItem( $query );
+
+    is( $reply->{code}, 'itemAlreadyOnLoan', "Patron has issued same book" );
+    is( $reply->{pickup_location}, undef, "No reserve placed");
 
     $schema->storage->txn_rollback;
 };
@@ -642,7 +666,7 @@ subtest 'GetPatronInfo paginated loans' => sub {
     });
     my $module = Test::MockModule->new('C4::Context');
     $module->mock('userenv', sub { { branch => $library->branchcode } });
-    my $date_due = DateTime->now->add(weeks => 2);
+    my $date_due = Koha::DateUtils::dt_from_string()->add(weeks => 2);
     my $issue1 = C4::Circulation::AddIssue($patron->unblessed, $item1->barcode, $date_due);
     my $date_due1 = Koha::DateUtils::dt_from_string( $issue1->date_due );
     my $issue2 = C4::Circulation::AddIssue($patron->unblessed, $item2->barcode, $date_due);
