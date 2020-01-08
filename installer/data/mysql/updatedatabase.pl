@@ -14666,10 +14666,10 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '17.06.00.009';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
-        ALTER TABLE borrowers MODIFY COLUMN login_attempts int(4) AFTER lang;
+        ALTER TABLE borrowers MODIFY COLUMN login_attempts int(4) DEFAULT 0 AFTER lang;
     });
     $dbh->do(q{
-        ALTER TABLE deletedborrowers MODIFY COLUMN login_attempts int(4) AFTER lang;
+        ALTER TABLE deletedborrowers MODIFY COLUMN login_attempts int(4) DEFAULT 0 AFTER lang;
     });
 
     SetVersion( $DBversion );
