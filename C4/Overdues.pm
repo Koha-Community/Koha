@@ -261,7 +261,7 @@ sub CalcFine {
     $amount = $issuing_rule->overduefinescap if $issuing_rule->overduefinescap && $amount > $issuing_rule->overduefinescap;
 
     # This must be moved to Koha::Item (see also similar code in C4::Accounts::chargelostitem
-    $item->{replacementprice} //= $itemtype->defaultreplacecost
+    $item->{replacementprice} ||= $itemtype->defaultreplacecost
       if $itemtype
       && ( ! defined $item->{replacementprice} || $item->{replacementprice} == 0 )
       && C4::Context->preference("useDefaultReplacementCost");
