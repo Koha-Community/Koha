@@ -20312,6 +20312,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24329 - Do not update action_log.timestamp)\n";
 }
 
+$DBversion = '19.12.00.006';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q|
+        UPDATE borrowers SET relationship = NULL
+        WHERE relationship = ""
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24263 - Replace relationship with NULL when empty string)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
