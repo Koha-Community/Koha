@@ -4,6 +4,7 @@
         <h5>Point of sale</h5>
         <ul>
             <li><a href="/cgi-bin/koha/pos/register.pl">Register details</a></li>
+            <li><a href="/cgi-bin/koha/pos/registers.pl">Branch details</a></li>
         </ul>
         [% END %]
         [% IF ( CAN_user_parameters_manage_cash_registers || CAN_user_parameters_manage_accounts) %]
