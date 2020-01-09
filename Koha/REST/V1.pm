@@ -39,10 +39,19 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
-    # Remove /api/v1/app.pl/ from the path
-    $self->hook( before_dispatch => sub {
-        shift->req->url->base->path('/');
-    });
+    $self->hook(
+        before_dispatch => sub {
+            my $c = shift;
+
+            # Remove /api/v1/app.pl/ from the path
+            $c->req->url->base->path('/');
+
+            # Handle CORS
+            $c->res->headers->header( 'Access-Control-Allow-Origin' =>
+                  C4::Context->preference('AccessControlAllowOrigin') )
+              if C4::Context->preference('AccessControlAllowOrigin');
+        }
+    );
 
     # Force charset=utf8 in Content-Type header for JSON responses
     $self->types->type( json    => 'application/json; charset=utf8' );

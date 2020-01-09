@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::Warn;
 
@@ -105,6 +105,25 @@ subtest 'under() tests' => sub {
       ->json_is('/error', 'System is under maintenance.');
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'CORS support' => sub {
+
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','');
+    $t->get_ok("/api/v1/patrons")
+      ->header_is( 'Access-control-allow-origin', undef, 'Header not returned' );
+      # FIXME: newer Test::Mojo has header_exists_not
+
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin',undef);
+    $t->get_ok("/api/v1/patrons")
+      ->header_is( 'Access-control-allow-origin', undef, 'Header not returned' );
+    # FIXME: newer Test::Mojo has header_exists_not
+
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','*');
+    $t->get_ok("/api/v1/patrons")
+      ->header_is( 'Access-control-allow-origin', '*', 'Header set' );
 };
 
 sub create_user_and_session {
