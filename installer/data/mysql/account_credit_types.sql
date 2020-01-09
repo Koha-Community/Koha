@@ -3,6 +3,7 @@ INSERT INTO account_credit_types ( code, description, can_be_added_manually, is_
 ('WRITEOFF', 'Writeoff', 0, 1),
 ('FORGIVEN', 'Forgiven', 1, 1),
 ('CREDIT', 'Credit', 1, 1),
+('DISCOUNT', 'A discount applied to a patrons fine', 0, 1),
 ('REFUND', 'A refund applied to a patrons fine', 0, 1),
 ('LOST_FOUND', 'Lost item fee refund', 0, 1),
 ('PURCHASE', 'Purchase', 0, 1);
