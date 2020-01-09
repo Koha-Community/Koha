@@ -1,5 +1,6 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo;
     [% IF club_template %]
@@ -124,7 +125,7 @@
                         [% END %]
                     </div>
                     <fieldset class="action">
-                        <a href="#" onclick="$('#new-field-template').clone().attr('id','').show().appendTo('#club-template-fields'); return false;">
+                        <a href="#" class="add_club_field">
                             <i class="fa fa-plus"></i> Add new field
                         </a>
                     </fieldset>
@@ -169,7 +170,7 @@
                         [% END %]
                     </div>
                     <fieldset class="action">
-                        <a href="#" onclick="$('#new-enrollment-field-template').clone().attr('id','').show().appendTo('#club-template-enrollment-fields'); return false;">
+                        <a href="#" class="add_enrollment_field">
                             <i class="fa fa-plus"></i> Add new field
                         </a>
                     </fieldset>
@@ -209,7 +210,7 @@
             </select>
         </li>
     </ol>
-    <fieldset class="action"><a href="#" onclick="$(this).parent().parent().remove(); return false;"><i class="fa fa-trash"></i> Delete field</a></fieldset>
+    <fieldset class="action"><a href="#" class="delete_club_field"><i class="fa fa-trash"></i> Delete field</a></fieldset>
     <hr/>
 </div>
 
@@ -236,7 +237,32 @@
             </select>
         </li>
     </ol>
-    <fieldset class="action"><a href="#" onclick="$(this).parent().parent().remove(); return false;"><i class="fa fa-trash"></i> Delete field</a></fieldset>
+    <fieldset class="action"><a href="#" class="delete_enrollment_field"><i class="fa fa-trash"></i> Delete field</a></fieldset>
 </div>
+
+
+[% MACRO jsinclude BLOCK %]
+    <script>
+        $("body").on("click", ".add_club_field", function(e){
+            e.preventDefault();
+            $("#new-field-template").clone().attr("id","").show().appendTo("#club-template-fields");
+        });
+
+        $("body").on("click", ".delete_club_field", function(e){
+            e.preventDefault();
+            $(this).parent().parent().remove();
+        });
+
+        $("body").on("click", ".delete_enrollment_field", function(e){
+            e.preventDefault();
+            $(this).parent().parent().remove();
+        });
+
+        $("body").on("click", ".add_enrollment_field", function(e){
+            e.preventDefault();
+            $('#new-enrollment-field-template').clone().attr('id','').show().appendTo('#club-template-enrollment-fields');
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
