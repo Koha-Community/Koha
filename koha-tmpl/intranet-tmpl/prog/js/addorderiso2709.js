@@ -1,6 +1,7 @@
 /* global dataTablesDefaults ERR_NO_RECORD_SELECTED ERR_INVALID_QUANTITY ERR_FUNDS_MISSING MSG_LOADING */
 
 $(document).ready(function() {
+    $("#Aform").preventDoubleFormSubmit();
     $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
         "aoColumnDefs": [
             { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
