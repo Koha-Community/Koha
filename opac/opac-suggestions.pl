@@ -126,13 +126,24 @@ if ( $op eq "add_validate" && not $biblionumber ) { # If we are creating the sug
 }
 
 my $patrons_pending_suggestions_count = 0;
-if ( $borrowernumber && C4::Context->preference("MaxOpenSuggestions") ne '' ) {
-    $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
+my $patrons_total_suggestions_count = 0;
+if ( $borrowernumber ){
+    if ( C4::Context->preference("MaxTotalSuggestions") ne '' && C4::Context->preference("NumberOfSuggestionDays") ne '' ) {
+        my $suggesteddate_from = dt_from_string()->subtract(days=>C4::Context->preference("NumberOfSuggestionDays"));
+        $patrons_total_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, suggesteddate_from => $suggesteddate_from } ) } ;
+    }
+    if ( C4::Context->preference("MaxOpenSuggestions") ne '' ) {
+        $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
+    }
 }
 
 if ( $op eq "add_confirm" ) {
     my $suggestions_loop = &SearchSuggestion($suggestion);
-    if ( C4::Context->preference("MaxOpenSuggestions") ne '' && $patrons_pending_suggestions_count >= C4::Context->preference("MaxOpenSuggestions") ) #only check limit for signed in borrowers
+    if ( C4::Context->preference("MaxTotalSuggestions") ne '' && $patrons_total_suggestions_count >= C4::Context->preference("MaxTotalSuggestions") )
+    {
+        push @messages, { type => 'error', code => 'total_suggestions' };
+    }
+    elsif ( C4::Context->preference("MaxOpenSuggestions") ne '' && $patrons_pending_suggestions_count >= C4::Context->preference("MaxOpenSuggestions") ) #only check limit for signed in borrowers
     {
         push @messages, { type => 'error', code => 'too_many' };
     }
@@ -162,6 +173,7 @@ if ( $op eq "add_confirm" ) {
 
         &NewSuggestion($suggestion);
         $patrons_pending_suggestions_count++;
+        $patrons_total_suggestions_count++;
 
         # delete empty fields, to avoid filter in "SearchSuggestion"
         foreach my $field ( qw( title author publishercode copyrightdate place collectiontitle isbn STATUS ) ) {
@@ -254,6 +266,7 @@ $template->param(
     suggested_by_anyone   => $suggested_by_anyone,
     patrons_pending_suggestions_count => $patrons_pending_suggestions_count,
     need_confirm => $need_confirm,
+    patrons_total_suggestions_count => $patrons_total_suggestions_count,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output, undef, { force_no_caching => 1 };
