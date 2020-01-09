@@ -23,6 +23,7 @@
 
 use Modern::Perl;
 
+use C4::Output qw(output_with_http_headers);
 use C4::Reports::Guided;
 use Koha::Reports;
 use JSON;
@@ -85,8 +86,4 @@ unless ($json_text) {
     }
 }
 
-print $query->header(
-    -charset    => 'UTF-8',
-    -type       => 'application/json'
-);
-print $json_text;
+output_with_http_headers( $query, undef, $json_text, 'json');
