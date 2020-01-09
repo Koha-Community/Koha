@@ -304,6 +304,10 @@ sub reduce {
         Koha::Exceptions::Account::IsNotDebit->throw(
             error => 'Account line ' . $self->id . 'is not a debit' );
     }
+    if ( $self->debit_type_code eq 'PAYOUT' ) {
+        Koha::Exceptions::Account::IsNotDebit->throw(
+            error => 'Account line ' . $self->id . 'is a payout' );
+    }
 
     # Check for mandatory parameters
     my @mandatory = ( 'interface', 'reduction_type', 'amount' );
@@ -401,7 +405,8 @@ sub reduce {
         }
     );
 
-    return $reduction->discard_changes;
+    $reduction->discard_changes;
+    return $reduction;
 }
 
 =head3 apply
@@ -583,6 +588,7 @@ sub payout {
         }
     );
 
+    $payout->discard_changes;
     return $payout;
 }
 

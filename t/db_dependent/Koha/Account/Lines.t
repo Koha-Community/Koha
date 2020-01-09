@@ -895,7 +895,7 @@ subtest "void() tests" => sub {
 
 subtest "payout() tests" => sub {
 
-    plan tests => 17;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
@@ -948,9 +948,9 @@ subtest "payout() tests" => sub {
     )->store();
 
     is( $account->balance(), -10, "Account balance is -10" );
-    is( $debit1->amountoutstanding,
+    is( $debit1->amountoutstanding + 0,
         10, 'Overdue fee has an amount outstanding of 10' );
-    is( $credit1->amountoutstanding,
+    is( $credit1->amountoutstanding + 0,
         -20, 'Credit has an amount outstanding of -20' );
 
     my $pay_params = {
@@ -1017,12 +1017,14 @@ subtest "payout() tests" => sub {
         }
     );
 
-    is( $payout->amount(),            10, "Payout amount is 10" );
-    is( $payout->amountoutstanding(), 0,  "Payout amountoutstanding is 0" );
-    is( $account->balance(),          0,  "Account balance is 0" );
-    is( $debit1->amountoutstanding,
+    is( ref($payout), 'Koha::Account::Line',
+        '->payout() returns a Koha::Account::Line' );
+    is( $payout->amount() + 0,            10, "Payout amount is 10" );
+    is( $payout->amountoutstanding() + 0, 0,  "Payout amountoutstanding is 0" );
+    is( $account->balance() + 0,          0,  "Account balance is 0" );
+    is( $debit1->amountoutstanding + 0,
         10, 'Overdue fee still has an amount outstanding of 10' );
-    is( $credit1->amountoutstanding,
+    is( $credit1->amountoutstanding + 0,
         -10, 'Credit has an new amount outstanding of -10' );
     is( $credit1->status(), 'PAID', "Credit has a new status of PAID" );
 
@@ -1031,7 +1033,7 @@ subtest "payout() tests" => sub {
 
 subtest "reduce() tests" => sub {
 
-    plan tests => 25;
+    plan tests => 27;
 
     $schema->storage->txn_begin;
 
@@ -1142,12 +1144,14 @@ subtest "reduce() tests" => sub {
     # (Refund 5 on debt of 20)
     my $reduction = $debit1->reduce($reduce_params);
 
+    is( ref($reduction), 'Koha::Account::Line',
+        '->reduce() returns a Koha::Account::Line' );
     is( $reduction->amount() * 1, -5, "Reduce amount is -5" );
     is( $reduction->amountoutstanding() * 1,
         0, "Reduce amountoutstanding is 0" );
     is( $debit1->amountoutstanding() * 1,
         15, "Debit amountoutstanding reduced by 5 to 15" );
-    is( $account->balance() * 1, -5,       "Account balance is -5" );
+    is( $account->balance() * 1, -5,        "Account balance is -5" );
     is( $reduction->status(),    'APPLIED', "Reduction status is 'APPLIED'" );
 
     my $offsets = Koha::Account::Offsets->search(
@@ -1160,8 +1164,9 @@ subtest "reduce() tests" => sub {
 
     # Zero offset created when zero outstanding
     # (Refund another 5 on paid debt of 20)
-    $credit1->apply( { debits => [ $debit1 ] } );
-    is($debit1->amountoutstanding + 0, 0, 'Debit1 amountoutstanding reduced to 0');
+    $credit1->apply( { debits => [$debit1] } );
+    is( $debit1->amountoutstanding + 0,
+        0, 'Debit1 amountoutstanding reduced to 0' );
     $reduction = $debit1->reduce($reduce_params);
     is( $reduction->amount() * 1, -5, "Reduce amount is -5" );
     is( $reduction->amountoutstanding() * 1,
@@ -1182,7 +1187,23 @@ subtest "reduce() tests" => sub {
         $debit1->reduce($reduce_params);
     }
     'Koha::Exceptions::ParameterTooHigh',
-'->reduce cannot reduce mor than the original amount (combined reductions test)';
+'->reduce cannot reduce more than the original amount (combined reductions test)';
+
+    # Throw exception if attempting to reduce a payout
+    my $payout = $reduction->payout(
+        {
+            interface   => 'intranet',
+            staff_id    => $staff->borrowernumber,
+            branch      => $branchcode,
+            payout_type => 'CASH',
+            amount      => 5
+        }
+    );
+    throws_ok {
+        $payout->reduce($reduce_params);
+    }
+    'Koha::Exceptions::Account::IsNotDebit',
+      '->reduce() cannot be used on a payout debit';
 
     $schema->storage->txn_rollback;
 };
