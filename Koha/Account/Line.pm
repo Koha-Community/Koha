@@ -291,6 +291,7 @@ debts.
 Reduction type may be one of:
 
 * REFUND
+* DISCOUNT
 
 Returns the reduction accountline (which will be a credit)
 
@@ -339,14 +340,14 @@ sub reduce {
 "Amount to reduce ($params->{amount}) is higher than original amount ($original)"
     ) unless ( $original >= $params->{amount} );
     my $reduced =
-      $self->credits( { credit_type_code => [ 'REFUND' ] } )->total;
+      $self->credits( { credit_type_code => [ 'DISCOUNT', 'REFUND' ] } )->total;
     Koha::Exceptions::ParameterTooHigh->throw( error =>
 "Combined reduction ($params->{amount} + $reduced) is higher than original amount ("
           . abs($original)
           . ")" )
       unless ( $original >= ( $params->{amount} + abs($reduced) ) );
 
-    my $status = { 'REFUND' => 'REFUNDED' };
+    my $status = { 'REFUND' => 'REFUNDED', 'DISCOUNT' => 'DISCOUNTED' };
 
     my $reduction;
     $self->_result->result_source->schema->txn_do(
