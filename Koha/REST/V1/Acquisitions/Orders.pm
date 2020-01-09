@@ -69,7 +69,7 @@ sub list {
 
 =head3 get
 
-Controller function that handles retrieving a single Koha::Aquisition::Order object
+Controller function that handles retrieving a single Koha::Acquisition::Order object
 
 =cut
 

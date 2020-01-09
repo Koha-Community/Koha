@@ -27,6 +27,7 @@ Koha::Acquisition::Invoice object class
 
 =head1 API
 
+=head2 Class methods
 
 =head3 to_api
 
