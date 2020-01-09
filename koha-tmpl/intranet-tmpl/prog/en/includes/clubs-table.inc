@@ -89,14 +89,14 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" onclick='ConfirmDeleteClub([% c.id | html %], "[% c.name | html %]", $(this) ); return false;'>
+                                        <a href="#" class="delete_club" data-id="[% c.id | html %]" data-name="[% c.name | html %]">
                                             <i class="fa fa-trash"></i> Delete
                                         </a>
                                     </li>
                                 [% END %]
                                 [% IF ( c.club_enrollments.count ) %]
                                     <li>
-                                        <a href="#" onclick="SearchToHold([% c.id | html %])">
+                                        <a href="#" class="club_hold_search" data-id="[% c.id | html %]">
                                             <i class="fa fa-search"></i> Search to hold
                                         </a>
                                     </li>

@@ -87,7 +87,7 @@
                                             <a class="btn btn-xs btn-default" style="white-space:nowrap"  href="/cgi-bin/koha/clubs/templates-add-modify.pl?id=[% t.id | html %]">
                                                 <i class="fa fa-pencil"></i> Edit
                                             </a>
-                                            <a class="btn btn-xs btn-default" href="#" onclick='ConfirmDeleteTemplate([% t.id | html %], "[% t.name | html %]", $(this) ); return false;'>
+                                            <a class="btn btn-xs btn-default delete_template" href="#" data-id="[% t.id | html %]" data-name="[% t.name | html %]">
                                                 <i class="fa fa-trash"></i> Delete
                                             </a>
                                         [% END %]
@@ -159,9 +159,29 @@
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 ]
             } ));
+
+            $(".delete_club").on("click", function(e){
+                e.preventDefault();
+                var club_id = $(this).data("id");
+                var club_name = $(this).data("name");
+                ConfirmDeleteClub( club_id, club_name );
+            });
+
+            $(".delete_template").on("click", function(e){
+                e.preventDefault();
+                var template_id = $(this).data("id");
+                var template_name = $(this).data("name");
+                ConfirmDeleteTemplate( template_id, template_name );
+            });
+
+            $(".club_hold_search").on("click", function(e){
+                e.preventDefault;
+                var club_id = $(this).data("id");
+                SearchToHold( club_id );
+            });
         });
 
-        function ConfirmDeleteTemplate( id, name, a ) {
+        function ConfirmDeleteTemplate( id, name ) {
             if ( confirm( _("Are you sure you want to delete the club template %s? This will delete all clubs using this template and cancel patron enrollments" ).format(name) ) ) {
                 $.ajax({
                     type: "POST",
@@ -179,7 +199,7 @@
             }
         }
 
-        function ConfirmDeleteClub( id, name, a ) {
+        function ConfirmDeleteClub( id, name ) {
             if ( confirm( _("Are you sure you want to delete the club %s? This will cancel all patron enrollments in this club." ).format(name) ) ) {
                 $.ajax({
                     type: "POST",
