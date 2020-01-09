@@ -1,4 +1,5 @@
 INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+('AccessControlAllowOrigin', '', NULL, 'Set the Access-Control-Allow-Origin header to the specified value', 'Free'),
 ('AccountAutoReconcile','0',NULL,'If enabled, patron balances will get reconciled automatically on each transaction.','YesNo'),
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
 ('AcqEnableFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo'),
