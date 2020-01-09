@@ -1,11 +1,27 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use Test::More tests => 6;
+use Modern::Perl;
+
+use Test::More tests => 7;
 use Test::Warn;
 use CGI qw ( -utf8 );
+
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('C4::Output');
@@ -40,4 +56,40 @@ subtest 'parametrized_url' => sub {
         q{}, 'No warning expected on undefined author';
     is( $res, 'https://somesite.com/search?q=_title_&author=',
         'Title replaced, author empty and SUFFIX removed' );
+};
+
+subtest 'output_with_http_headers() tests' => sub {
+
+    plan tests => 4;
+
+    local *STDOUT;
+    my $stdout;
+
+    my $query = CGI->new();
+    my $cookie;
+    my $output = 'foobarbaz';
+
+    open STDOUT, '>', \$stdout;
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','');
+    output_html_with_http_headers $query, $cookie, $output, undef;
+    unlike($stdout, qr/Access-control-allow-origin/, 'No header set if no value on syspref');
+    close STDOUT;
+
+    open STDOUT, '>', \$stdout;
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin',undef);
+    output_html_with_http_headers $query, $cookie, $output, undef;
+    unlike($stdout, qr/Access-control-allow-origin/, 'No header set if no value on syspref');
+    close STDOUT;
+
+    open STDOUT, '>', \$stdout;
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','*');
+    output_html_with_http_headers $query, $cookie, $output, undef;
+    like($stdout, qr/Access-control-allow-origin: \*/, 'Header set to *');
+    close STDOUT;
+
+    open STDOUT, '>', \$stdout;
+    t::lib::Mocks::mock_preference('AccessControlAllowOrigin','https://koha-community.org');
+    output_html_with_http_headers $query, $cookie, $output, undef;
+    like($stdout, qr/Access-control-allow-origin: https:\/\/koha-community\.org/, 'Header set to https://koha-community.org');
+    close STDOUT;
 };

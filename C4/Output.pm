@@ -274,6 +274,8 @@ sub output_with_http_headers {
         'X-Frame-Options' => 'SAMEORIGIN',
     };
     $options->{expires} = 'now' if $extra_options->{force_no_caching};
+    $options->{'Access-Control-Allow-Origin'} = C4::Context->preference('AccessControlAllowOrigin')
+        if C4::Context->preference('AccessControlAllowOrigin');
 
     $options->{cookie} = $cookie if $cookie;
     if ($content_type eq 'html') {  # guaranteed to be one of the content_type_map keys, else we'd have died
