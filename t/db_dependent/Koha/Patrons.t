@@ -27,6 +27,7 @@ use Time::Fake;
 use DateTime;
 use JSON;
 use Data::Dumper;
+use utf8;
 
 use C4::Circulation;
 use C4::Biblio;
@@ -1508,8 +1509,8 @@ subtest 'generate_userid' => sub {
     );
     my %data = (
         cardnumber   => "123456789",
-        firstname    => "Tomasito",
-        surname      => "None",
+        firstname    => "Tômàsító",
+        surname      => "Ñoné",
         categorycode => $patron_category->categorycode,
         branchcode   => $library->branchcode,
     );
