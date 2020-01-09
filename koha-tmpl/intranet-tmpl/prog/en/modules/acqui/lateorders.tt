@@ -63,6 +63,7 @@
             <th class="title-string">Estimated delivery date</th>
             <th>Vendor</th>
             <th class="anti-the">Information</th>
+            <th>Quantity</th>
             <th>Total cost</th>
             <th>Basket</th>
             <th>Basket group</th>
@@ -107,6 +108,7 @@
                         [% END %]
                    [% END %]
             </td>
+            <td>[% lateorder.quantity %]</td>
             <td>
                 [% SET subtotal = (lateorder.quantity - lateorder.quantityreceived) * lateorder.rrp %]
                 [% SET total = total + subtotal %]
@@ -175,7 +177,7 @@
         <tr>
             <th colspan="6">Total</th>
             <th>[% total | $Price %]</th>
-            <th colspan="9">&nbsp;</th>
+            <th colspan="10">&nbsp;</th>
         </tr>
       </tfoot>
     </table>
