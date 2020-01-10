@@ -234,12 +234,12 @@ map {
 # $patron, $different_patron, $items (same bib number), $different_item
 my $patron = $builder->build({source => 'Borrower'});
 my $patron_d = $builder->build({source => 'Borrower'});
-my $item_1 = $builder->build({source => 'Item'});
-my $item_2 = $builder->build({
-    source => 'Item',
-    value => { biblionumber => $item_1->{biblionumber} },
-});
-my $item_d = $builder->build({source => 'Item'});
+
+my $biblio = $builder->build_sample_biblio;
+$biblio->serial(0)->store;
+my $item_1 = $builder->build_sample_item({biblionumber => $biblio->biblionumber})->unblessed;
+my $item_2 = $builder->build_sample_item({biblionumber => $biblio->biblionumber})->unblessed;
+my $item_d = $builder->build_sample_item->unblessed;
 
 ## Testing Sub
 sub test_it {
