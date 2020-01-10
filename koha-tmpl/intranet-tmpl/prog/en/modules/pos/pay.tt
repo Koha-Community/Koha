@@ -48,7 +48,7 @@
                                     <td>[% invoice.description | html %]</td>
                                     <td>[% invoice.default_amount | $Price %]</td>
                                     <td>
-                                        <button class="add_button" data-invoice-code="[% invoice.code %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
+                                        <button class="add_button" data-invoice-code="[% invoice.code | html %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
                                     </td>
                                 </tr>
                             [% END %]
@@ -123,9 +123,9 @@
                                 <select name="cash_register" id="cash_register">
                                     [% FOREACH register IN registers %]
                                       [% IF register.id == registerid %]
-                                    <option value="[% register.id %]" selected="selected">[% register.name | html %]</option>
+                                    <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
                                       [% ELSE %]
-                                    <option value="[% register.id %]">[% register.name | html %]</option>
+                                    <option value="[% register.id | html %]">[% register.name | html %]</option>
                                       [% END %]
                                     [% END %]
                                 </select>
@@ -321,9 +321,9 @@
             "fnFooterCallback": function(nFoot, aData, iStart, iEnd, aiDisplay) {
                 var iTotalPrice = 0;
                 for ( var i=0 ; i<aData.length ; i++ )
-			    {
-				    iTotalPrice += aData[i][3]*1;
-			    }
+                {
+                    iTotalPrice += aData[i][3]*1;
+                }
 
                 iTotalPrice = Number.parseFloat(iTotalPrice).toFixed(2);
                 nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice;
