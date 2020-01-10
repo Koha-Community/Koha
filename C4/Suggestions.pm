@@ -353,6 +353,7 @@ sub GetSuggestionByStatus {
             LEFT JOIN categories    AS C1 ON C1.categorycode=U1.categorycode
             LEFT JOIN branches      AS B1 on B1.branchcode=U1.branchcode
         WHERE status = ?
+        ORDER BY suggestionid
     };
 
     # filter on branch
