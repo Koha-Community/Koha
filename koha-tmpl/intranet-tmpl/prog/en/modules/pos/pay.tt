@@ -24,6 +24,13 @@
             You must have at least one cash register associated with this branch before you can record payments.
         </div>
         [% ELSE %]
+
+        [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
+        <div class="dialog alert audio-alert-action">
+            Payment recieved: <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print receipt</a>
+        </div>
+        [% END %]
+
         <form name="payForm" id="payForm" method="post" action="/cgi-bin/koha/pos/pay.pl">
             <div class="row">
 
