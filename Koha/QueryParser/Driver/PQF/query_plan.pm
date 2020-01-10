@@ -50,7 +50,7 @@ sub target_syntax {
             $pqf .= $node_pqf;
         }
     }
-    $pqf = ($self->joiner eq '|' ? ' @or ' : ' @and ') x ($node_count - 1) . $pqf;
+    $pqf = ($self->joiner eq '|' ? ' @or ' : ' @and ') x ($node_count - 1) . $pqf if $node_count > 1;
     $node_count = ($node_count ? '1' : '0');
     for my $node ( @{$self->filters} ) {
         if (ref($node)) {
@@ -59,7 +59,7 @@ sub target_syntax {
             $pqf .= $node_pqf;
         }
     }
-    $pqf = ($self->joiner eq '|' ? ' @or ' : ' @and ') x ($node_count - 1) . $pqf;
+    $pqf = ($self->joiner eq '|' ? ' @or ' : ' @and ') x ($node_count - 1) . $pqf if $node_count > 1;
     foreach my $modifier ( @{$self->modifiers} ) {
         my $modifierpqf = $modifier->target_syntax($server, $self);
         $pqf = $modifierpqf . ' ' . $pqf if $modifierpqf;

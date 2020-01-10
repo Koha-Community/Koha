@@ -99,7 +99,7 @@ sub target_syntax {
             }
         }
     }
-    $pqf = (OpenILS::QueryParser::_util::default_joiner eq '|' ? ' @or ' : ' @and ') x ($atom_count - 1) . $pqf;
+    $pqf = (OpenILS::QueryParser::_util::default_joiner eq '|' ? ' @or ' : ' @and ') x ($atom_count - 1) . $pqf if $atom_count > 1;
     return ($self->negate ? '@not @attr 1=_ALLRECORDS @attr 2=103 "" ' : '') . $pqf;
 }
 
