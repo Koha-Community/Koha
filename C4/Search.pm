@@ -1477,7 +1477,7 @@ sub buildQuery {
         if ( @limits ) {
             if ( grep { $_ eq 'available' } @limits ) {
                 $q .= q| and ( (allrecords,AlwaysMatches='') and (not-onloan-count,st-numeric >= 1) and (lost,st-numeric=0) )|;
-                delete $limits['available'];
+                @limits = grep {!/^available$/} @limits;
             }
             $q .= ' and '.join(' and ', @limits) if @limits;
         }
