@@ -2071,7 +2071,7 @@ sub searchResults {
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
-            $item->{description} = $itemtypes{ $item->{itype} }{translated_description};
+            $item->{description} = $itemtypes{ $item->{itype} }{translated_description} if $item->{itype};
 
 	        # OPAC hidden items
             if ($is_opac) {
@@ -2134,7 +2134,9 @@ sub searchResults {
          # items not on loan, but still unavailable ( lost, withdrawn, damaged )
             else {
 
-                $item->{notforloan}=1 if !$item->{notforloan}  && $itemtypes{ C4::Context->preference("item-level_itypes")? $item->{itype}: $oldbiblio->{itemtype} }->{notforloan};
+                my $itemtype = C4::Context->preference("item-level_itypes")? $item->{itype}: $oldbiblio->{itemtype};
+                $item->{notforloan} = 1 if !$item->{notforloan} &&
+                    $itemtype && $itemtypes{ $itemtype }->{notforloan};
 
                 # item is on order
                 if ( $item->{notforloan} < 0 ) {
@@ -2184,9 +2186,9 @@ sub searchResults {
                     $withdrawn_count++        if $item->{withdrawn};
                     $itemlost_count++        if $item->{itemlost};
                     $itemdamaged_count++     if $item->{damaged};
-                    $item_in_transit_count++ if $transfertwhen ne '';
+                    $item_in_transit_count++ if $transfertwhen && $transfertwhen ne '';
                     $item_onhold_count++     if $reservestatus eq 'Waiting';
-                    $item->{status} = $item->{withdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
+                    $item->{status} = ($item->{withdrawn}//q{}) . "-" . ($item->{itemlost}//q{}) . "-" . ($item->{damaged}//q{}) . "-" . ($item->{notforloan}//q{});
 
                     # can place a hold on a item if
                     # not lost nor withdrawn
@@ -2210,9 +2212,9 @@ sub searchResults {
                     $other_items->{$key}->{onhold} = ($reservestatus) ? 1 : 0;
                     $other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value and $item->{notforloan};
                     $other_items->{$key}->{count}++ if $item->{$hbranch};
-                    $other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
+                    $other_items->{$key}->{location} = $shelflocations->{ $item->{location} } if $item->{location};
                     $other_items->{$key}->{description} = $item->{description};
-                    $other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
+                    $other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype}//q{} }->{imageurl} );
                 }
                 # item is available
                 else {
@@ -2222,8 +2224,8 @@ sub searchResults {
                     foreach (qw(branchname itemcallnumber description)) {
                         $available_items->{$prefix}->{$_} = $item->{$_};
                     }
-                    $available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
-                    $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
+                    $available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} } if $item->{location};
+                    $available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype}//q{} }->{imageurl} );
                 }
             }
         }    # notforloan, item level and biblioitem level
