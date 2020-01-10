@@ -934,13 +934,13 @@ subtest "CanBookBeRenewed tests" => sub {
     my $line = Koha::Account::Lines->search({ borrowernumber => $renewing_borrower->{borrowernumber} })->next();
     is( $line->debit_type_code, 'OVERDUE', 'Account line type is OVERDUE' );
     is( $line->status, 'UNRETURNED', 'Account line status is UNRETURNED' );
-    is( $line->amountoutstanding, '15.000000', 'Account line amount outstanding is 15.00' );
-    is( $line->amount, '15.000000', 'Account line amount is 15.00' );
+    is( $line->amountoutstanding+0, 15, 'Account line amount outstanding is 15.00' );
+    is( $line->amount+0, 15, 'Account line amount is 15.00' );
     is( $line->issue_id, $issue->id, 'Account line issue id matches' );
 
     my $offset = Koha::Account::Offsets->search({ debit_id => $line->id })->next();
     is( $offset->type, 'OVERDUE', 'Account offset type is Fine' );
-    is( $offset->amount, '15.000000', 'Account offset amount is 15.00' );
+    is( $offset->amount+0, 15, 'Account offset amount is 15.00' );
 
     t::lib::Mocks::mock_preference('WhenLostForgiveFine','0');
     t::lib::Mocks::mock_preference('WhenLostChargeReplacementFee','0');
@@ -961,7 +961,7 @@ subtest "CanBookBeRenewed tests" => sub {
         undef, $renewing_borrower->{borrowernumber}
     );
 
-    is( $total_due, '15.000000', 'Borrower only charged replacement fee with both WhenLostForgiveFine and WhenLostChargeReplacementFee enabled' );
+    is( $total_due+0, 15, 'Borrower only charged replacement fee with both WhenLostForgiveFine and WhenLostChargeReplacementFee enabled' );
 
     C4::Context->dbh->do("DELETE FROM accountlines");
 
@@ -2523,7 +2523,7 @@ subtest '_FixOverduesOnReturn' => sub {
 
     $accountline->_result()->discard_changes();
 
-    is( $accountline->amountoutstanding, '99.000000', 'Fine has the same amount outstanding as previously' );
+    is( $accountline->amountoutstanding+0, 99, 'Fine has the same amount outstanding as previously' );
     isnt( $accountline->status, 'UNRETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status not UNRETURNED )');
     is( $accountline->status, 'RETURNED', 'Passed status has been used to set as RETURNED )');
 
@@ -3119,7 +3119,7 @@ subtest 'Incremented fee tests' => sub {
             value => {
                 notforloan         => undef,
                 rentalcharge       => 0,
-                rentalcharge_daily => 1.000000
+                rentalcharge_daily => 1,
             }
         }
     )->store;
@@ -3131,8 +3131,8 @@ subtest 'Incremented fee tests' => sub {
         }
     );
 
-    is( $itemtype->rentalcharge_daily,
-        '1.000000', 'Daily rental charge stored and retreived correctly' );
+    is( $itemtype->rentalcharge_daily+0,
+        1, 'Daily rental charge stored and retreived correctly' );
     is( $item->effective_itemtype, $itemtype->id,
         "Itemtype set correctly for item" );
 
@@ -3145,13 +3145,13 @@ subtest 'Incremented fee tests' => sub {
     my $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     my $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '7.000000',
+    is( $accountline->amount+0, 7,
 "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '6.000000',
+    is( $accountline->amount+0, 6,
 "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar, for renewal"
     );
     $accountline->delete();
@@ -3161,13 +3161,13 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '7.000000',
+    is( $accountline->amount+0, 7,
 "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '6.000000',
+    is( $accountline->amount+0, 6,
 "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed, for renewal"
     );
     $accountline->delete();
@@ -3188,20 +3188,20 @@ subtest 'Incremented fee tests' => sub {
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '6.000000',
+    is( $accountline->amount+0, 6,
 "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $closed_day_name"
     );
     $accountline->delete();
     AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
     $accountline = Koha::Account::Lines->find( { itemnumber => $item->id } );
-    is( $accountline->amount, '5.000000',
+    is( $accountline->amount+0, 5,
 "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $closed_day_name, for renewal"
     );
     $accountline->delete();
     $issue->delete();
 
-    $itemtype->rentalcharge('2.000000')->store;
-    is( $itemtype->rentalcharge, '2.000000',
+    $itemtype->rentalcharge(2)->store;
+    is( $itemtype->rentalcharge+0, 2,
         'Rental charge updated and retreived correctly' );
     $issue =
       AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
@@ -3216,8 +3216,8 @@ subtest 'Incremented fee tests' => sub {
         "Fixed charge and accrued charge recorded distinctly, for renewal" );
     $accountlines->delete();
     $issue->delete();
-    $itemtype->rentalcharge('00.000000')->store;
-    is( $itemtype->rentalcharge, '00.000000',
+    $itemtype->rentalcharge(0)->store;
+    is( $itemtype->rentalcharge+0, 0,
         'Rental charge reset and retreived correctly' );
 
     # Hourly
@@ -3331,11 +3331,11 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
     my $dt_from = dt_from_string();
     my $dt_due = dt_from_string()->add( days => 3 );
 
-    $itemtype->rentalcharge('1.000000')->store;
+    $itemtype->rentalcharge(1)->store;
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
     is_deeply( $needsconfirmation, { RENTALCHARGE => '1.00' }, 'Item needs rentalcharge confirmation to be issued' );
     $itemtype->rentalcharge('0')->store;
-    $itemtype->rentalcharge_daily('1.000000')->store;
+    $itemtype->rentalcharge_daily(1)->store;
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
     is_deeply( $needsconfirmation, { RENTALCHARGE => '3' }, 'Item needs rentalcharge confirmation to be issued, increment' );
     $itemtype->rentalcharge_daily('0')->store;
@@ -3380,8 +3380,8 @@ subtest "Test Backdating of Returns" => sub {
     my ( undef, $message ) = AddReturn( $item->barcode, $branch, undef, $due_date );
 
     my $accountline = Koha::Account::Lines->find( { issue_id => $issue->id } );
-    is( $accountline->amountoutstanding, '0.000000', 'Fee amount outstanding was reduced to 0' );
-    is( $accountline->amount, '0.000000', 'Fee amount was reduced to 0' );
+    is( $accountline->amountoutstanding+0, 0, 'Fee amount outstanding was reduced to 0' );
+    is( $accountline->amount+0, 0, 'Fee amount was reduced to 0' );
 };
 
 $schema->storage->txn_rollback;

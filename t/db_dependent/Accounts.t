@@ -78,7 +78,7 @@ my $userenv_branchcode = $branchcode;
 my $itemtype = $builder->build( { source => 'Itemtype' } );
 my $item   = $builder->build( { source => 'Item', value => { itype => $itemtype->{itemtype} } } );
 my $patron = $builder->build( { source => 'Borrower' } );
-my $amount = '5.000000';
+my $amount = 5;
 my $description = "Test fee!";
 my $type = 'LOST';
 my $note = 'Test note!';
@@ -94,7 +94,7 @@ my ($accountline) = Koha::Account::Lines->search(
     }
 );
 is( $accountline->debit_type_code, $type, 'Debit type set correctly for manualinvoice' );
-is( $accountline->amount, $amount, 'Accountline amount set correctly for manualinvoice' );
+is( $accountline->amount+0, $amount, 'Accountline amount set correctly for manualinvoice' );
 ok( $accountline->description =~ /^$description/, 'Accountline description set correctly for manualinvoice' );
 is( $accountline->note, $note, 'Accountline note set correctly for manualinvoice' );
 is( $accountline->branchcode, $branchcode, 'Accountline branchcode set correctly for manualinvoice' );
@@ -296,9 +296,9 @@ subtest "Koha::Account::pay tests" => sub {
     my $line3 = $account->add_debit({ type => 'ACCOUNT', amount => 42, interface => 'commandline' });
     my $payment_id = $account->pay( { lines => [$line3], amount => 42 } );
     my $payment = Koha::Account::Lines->find( $payment_id );
-    is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
+    is( $payment->amount()+0, -42, "Payment paid the specified fine" );
     $line3 = Koha::Account::Lines->find( $line3->id );
-    is( $line3->amountoutstanding, '0.000000', "Specified fine is paid" );
+    is( $line3->amountoutstanding+0, 0, "Specified fine is paid" );
     is( $payment->branchcode, undef, 'branchcode passed, then undef' );
 };
 
@@ -338,13 +338,13 @@ subtest "Koha::Account::pay particular line tests" => sub {
     $_->_result->discard_changes foreach ( $line1, $line2, $line3, $line4 );
 
     # Line1 is not paid at all, as it was not passed in the lines param
-    is( $line1->amountoutstanding, "1.000000", "Line 1 was not paid" );
+    is( $line1->amountoutstanding+0, 1, "Line 1 was not paid" );
     # Line2 was paid in full, as it was the first in the lines list
-    is( $line2->amountoutstanding, "0.000000", "Line 2 was paid in full" );
+    is( $line2->amountoutstanding+0, 0, "Line 2 was paid in full" );
     # Line3 was paid partially, as the remaining balance did not cover it entirely
-    is( $line3->amountoutstanding, "1.000000", "Line 3 was paid to 1.00" );
+    is( $line3->amountoutstanding+0, 1, "Line 3 was paid to 1.00" );
     # Line4 was not paid at all, as the payment was all used up by that point
-    is( $line4->amountoutstanding, "4.000000", "Line 4 was not paid" );
+    is( $line4->amountoutstanding+0, 4, "Line 4 was not paid" );
 };
 
 subtest "Koha::Account::pay writeoff tests" => sub {
@@ -380,13 +380,13 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
     $line->_result->discard_changes();
 
-    is( $line->amountoutstanding, "0.000000", "Line was written off" );
+    is( $line->amountoutstanding+0, 0, "Line was written off" );
 
     my $writeoff = Koha::Account::Lines->find( $id );
 
     is( $writeoff->credit_type_code, 'WRITEOFF', 'Type is correct for WRITEOFF' );
     is( $writeoff->description, 'Writeoff', 'Description is correct' );
-    is( $writeoff->amount, '-42.000000', 'Amount is correct' );
+    is( $writeoff->amount+0, -42, 'Amount is correct' );
 };
 
 subtest "More Koha::Account::pay tests" => sub {
@@ -428,7 +428,7 @@ subtest "More Koha::Account::pay tests" => sub {
     $account->pay({ lines => [$line], amount => $amount, library_id => $branch, note => 'A payment note' });
 
     my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->{accountlines_id} })->next();
-    is( $offset->amount(), '-100.000000', 'Offset amount is -100.00' );
+    is( $offset->amount+0, -100, 'Offset amount is -100.00' );
     is( $offset->type(), 'Payment', 'Offset type is Payment' );
 
     my $stat = $schema->resultset('Statistic')->search({
@@ -488,7 +488,7 @@ subtest "Even more Koha::Account::pay tests" => sub {
     $account->pay({ lines => [$line], amount => $partialamount, library_id => $branch, note => 'A payment note' });
 
     my $offset = Koha::Account::Offsets->search( { debit_id => $accountline->{ accountlines_id } } )->next();
-    is( $offset->amount, '-60.000000', 'Offset amount is -60.00' );
+    is( $offset->amount+0, -60, 'Offset amount is -60.00' );
     is( $offset->type, 'Payment', 'Offset type is payment' );
 
     my $stat = $schema->resultset('Statistic')->search({

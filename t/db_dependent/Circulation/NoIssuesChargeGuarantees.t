@@ -86,12 +86,12 @@ $account->add_debit({ amount => 10.00, type => 'LOST', interface => 'test' });
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
 
 my $accountline = Koha::Account::Lines->search({ borrowernumber => $guarantee->id })->next();
-is( $accountline->amountoutstanding, "10.000000", "Found 10.00 amount outstanding" );
+is( $accountline->amountoutstanding+0, 10, "Found 10.00 amount outstanding" );
 is( $accountline->debit_type_code, "LOST", "Debit type is LOST" );
 
 my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id })->next();
 is( $offset->type, 'Lost Item', 'Got correct offset type' );
-is( $offset->amount, '10.000000', 'Got amount of $10.00' );
+is( $offset->amount+0, 10, 'Got amount of $10.00' );
 
 $schema->storage->txn_rollback;
 

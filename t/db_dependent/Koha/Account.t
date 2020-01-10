@@ -754,28 +754,28 @@ subtest 'pay() handles lost items when paying a specific lost fee' => sub {
 
     $account->pay(
         {
-            amount     => "0.500000",
+            amount     => .5,
             library_id => $library->id,
             lines      => [$accountline],
         }
     );
 
     $accountline = Koha::Account::Lines->find( $accountline->id );
-    is( $accountline->amountoutstanding, '0.500000', 'Account line was paid down by half' );
+    is( $accountline->amountoutstanding+0, .5, 'Account line was paid down by half' );
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( $checkout, 'Item still checked out to patron' );
 
     $account->pay(
         {
-            amount     => "0.500000",
+            amount     => 0.5,
             library_id => $library->id,
             lines      => [$accountline],
         }
     );
 
     $accountline = Koha::Account::Lines->find( $accountline->id );
-    is( $accountline->amountoutstanding, '0.000000', 'Account line was paid down by half' );
+    is( $accountline->amountoutstanding+0, 0, 'Account line was paid down by half' );
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( !$checkout, 'Item was removed from patron account' );
@@ -827,26 +827,26 @@ subtest 'pay() handles lost items when paying by amount ( not specifying the los
 
     $account->pay(
         {
-            amount     => "0.500000",
+            amount     => .5,
             library_id => $library->id,
         }
     );
 
     $accountline = Koha::Account::Lines->find( $accountline->id );
-    is( $accountline->amountoutstanding, '0.500000', 'Account line was paid down by half' );
+    is( $accountline->amountoutstanding+0, .5, 'Account line was paid down by half' );
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( $checkout, 'Item still checked out to patron' );
 
     $account->pay(
         {
-            amount     => "0.500000",
+            amount     => .5,,
             library_id => $library->id,
         }
     );
 
     $accountline = Koha::Account::Lines->find( $accountline->id );
-    is( $accountline->amountoutstanding, '0.000000', 'Account line was paid down by half' );
+    is( $accountline->amountoutstanding+0, 0, 'Account line was paid down by half' );
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( !$checkout, 'Item was removed from patron account' );
@@ -900,8 +900,8 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
         {
             borrowernumber    => $patron->id,
             date              => '1900-01-01',
-            amount            => "-0.500000",
-            amountoutstanding => "-0.500000",
+            amount            => -.5,
+            amountoutstanding => -.5,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
         }
@@ -910,7 +910,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
     $credit->apply({ debits => [ $debits->as_list ] });
 
     $debit = Koha::Account::Lines->find( $debit->id );
-    is( $debit->amountoutstanding, '0.500000', 'Account line was paid down by half' );
+    is( $debit->amountoutstanding+0, .5, 'Account line was paid down by half' );
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( $checkout, 'Item still checked out to patron' );
@@ -919,8 +919,8 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
         {
             borrowernumber    => $patron->id,
             date              => '1900-01-01',
-            amount            => "-0.500000",
-            amountoutstanding => "-0.500000",
+            amount            => -.5,
+            amountoutstanding => -.5,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
         }
@@ -929,7 +929,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
     $credit->apply({ debits => [ $debits->as_list ] });
 
     $debit = Koha::Account::Lines->find( $debit->id );
-    is( $debit->amountoutstanding, '0.000000', 'Account line was paid down by half' );
+    is( $debit->amountoutstanding+0, 0, 'Account line was paid down by half' );
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( !$checkout, 'Item was removed from patron account' );
