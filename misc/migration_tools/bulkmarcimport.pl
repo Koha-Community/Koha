@@ -159,8 +159,8 @@ if ((not defined $sourcesubfield) && (not defined $sourcetag)){
 
 # Disable logging for the biblios and authorities import operation. It would unnecessarily
 # slow the import
-$ENV{SYSPREF_OVERRIDE_CataloguingLog} = 0;
-$ENV{SYSPREF_OVERRIDE_AuthoritiesLog} = 0;
+$ENV{OVERRIDE_SYSPREF_CataloguingLog} = 0;
+$ENV{OVERRIDE_SYSPREF_AuthoritiesLog} = 0;
 
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
@@ -559,8 +559,8 @@ if ($fk_off) {
 }
 
 # Restore CataloguingLog and AuthoritiesLog
-delete $ENV{SYSPREF_OVERRIDE_CataloguingLog};
-delete $ENV{SYSPREF_OVERRIDE_AuthoritiesLog};
+delete $ENV{OVERRIDE_SYSPREF_CataloguingLog};
+delete $ENV{OVERRIDE_SYSPREF_AuthoritiesLog};
 
 my $timeneeded = gettimeofday - $starttime;
 print "\n$i MARC records done in $timeneeded seconds\n";
