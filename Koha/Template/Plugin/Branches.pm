@@ -90,9 +90,10 @@ sub pickup_locations {
 
     my $search_params = $params->{search_params} || {};
     my $selected      = $params->{selected};
-    my $libraries     = Koha::Libraries->pickup_locations($search_params)->unblessed;
+    my $libraries     = Koha::Libraries->pickup_locations($search_params);
 
     for my $l (@$libraries) {
+        $l = $l->unblessed;
         if ( defined $selected and $l->{branchcode} eq $selected
             or not defined $selected
             and C4::Context->userenv
