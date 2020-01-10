@@ -20350,6 +20350,16 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 23442 - Add accounts refund permission)\n";
 }
 
+$DBversion = '19.12.00.008';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( 'UPDATE systempreferences SET value = REPLACE(value, "http://worldcat.org", "https://worldcat.org") WHERE variable = "OPACSearchForTitleIn"' );
+    $dbh->do( 'UPDATE systempreferences SET value = REPLACE(value, "http://www.bookfinder.com", "https://www.bookfinder.com") WHERE variable = "OPACSearchForTitleIn"' );
+    $dbh->do( 'UPDATE systempreferences SET value = REPLACE(value, "https://openlibrary.org/search/?", "https://openlibrary.org/search?") WHERE variable = "OPACSearchForTitleIn"' );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug XXXXX - Update OpacSearchForTitleIn system preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
