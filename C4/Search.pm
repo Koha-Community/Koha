@@ -1359,12 +1359,12 @@ sub parseQuery {
         $query = '';
         for ( my $ii = 0 ; $ii <= @operands ; $ii++ ) {
             next unless $operands[$ii];
-            $query .= $operators[ $ii - 1 ] eq 'or' ? ' || ' : ' && '
+            $query .= $operators[$ii-1] && $operators[ $ii - 1 ] eq 'or' ? ' || ' : ' && '
               if ($query);
             if ( $operands[$ii] =~ /^[^"]\W*[-|_\w]*:\w.*[^"]$/ ) {
                 $query .= $operands[$ii];
             }
-            elsif ( $indexes[$ii] =~ m/su-/ ) {
+            elsif ( $indexes[$ii] && $indexes[$ii] =~ m/su-/ ) {
                 $query .= $indexes[$ii] . '(' . $operands[$ii] . ')';
             }
             else {
