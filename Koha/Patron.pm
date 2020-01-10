@@ -486,6 +486,52 @@ sub guarantee_relationships {
     );
 }
 
+=head3 relationships_debt
+
+Returns the amount owed by the patron's guarantors *and* the other guarantees of those guarantors
+
+=cut
+
+sub relationships_debt {
+    my ($self, $params) = @_;
+
+    my $include_guarantors  = $params->{include_guarantors};
+    my $only_this_guarantor = $params->{only_this_guarantor};
+    my $include_this_patron = $params->{include_this_patron};
+
+    my @guarantors;
+    if ( $only_this_guarantor ) {
+        @guarantors = $self->guarantee_relationships->count ? ( $self ) : ();
+    } elsif ( $self->guarantor_relationships->count ) {
+        # I am a guarantee, just get all my guarantors
+        @guarantors = $self->guarantor_relationships->guarantors;
+    } else {
+        # I am a guarantor, I need to get all the guarantors of all my guarantees
+        @guarantors = map { $_->guarantor_relationships->guarantors } $self->guarantee_relationships->guarantees;
+    }
+
+    my $non_issues_charges = 0;
+    my $seen = $include_this_patron ? {} : { $self->id => 1 }; # For tracking members already added to the total
+    foreach my $guarantor (@guarantors) {
+        $non_issues_charges += $guarantor->account->non_issues_charges if $include_guarantors && !$seen->{ $guarantor->id };
+
+        # We've added what the guarantor owes, not added in that guarantor's guarantees as well
+        my @guarantees = map { $_->guarantee } $guarantor->guarantee_relationships();
+        my $guarantees_non_issues_charges = 0;
+        foreach my $guarantee (@guarantees) {
+            next if $seen->{ $guarantee->id };
+            $guarantees_non_issues_charges += $guarantee->account->non_issues_charges;
+            # Mark this guarantee as seen so we don't double count a guarantee linked to multiple guarantors
+            $seen->{ $guarantee->id } = 1;
+        }
+
+        $non_issues_charges += $guarantees_non_issues_charges;
+        $seen->{ $guarantor->id } = 1;
+    }
+
+    return $non_issues_charges;
+}
+
 =head3 housebound_profile
 
 Returns the HouseboundProfile associated with this patron.

@@ -106,6 +106,10 @@
                                     <li>The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES | $Price %].</li>
                                 [% END %]
 
+                                [% IF ( DEBT_GUARANTORS ) %]
+                                    <li>The patron's guarantors and their other guarantees collectively have a debt of [% DEBT_GUARANTORS | $Price %].</li>
+                                [% END %]
+
                                 [% IF ( RENTALCHARGE && RENTALCHARGE > 0 ) %]
                                     <li>Rental charge for this item: [% RENTALCHARGE | $Price %]</li>
                                 [% END %]
@@ -316,6 +320,10 @@
 
                             <!-- RESULT OF ISSUING REQUEST -->
                             <ul>
+                                [% IF ( DEBT_GUARANTORS ) %]
+                                    <li>The patron's guarantors and their other guarantees collectively have a debt of [% DEBT_GUARANTORS | $Price %].</li>
+                                [% END %]
+
                                 [% IF ( STATS ) %]
                                     <li>Local use recorded</li>
                                 [% END %]

@@ -379,6 +379,12 @@ if (@$barcodes) {
         }
     }
 
+    if ( $error->{DEBT_GUARANTORS} ) {
+        $template_params->{DEBT_GUARANTORS} = $error->{DEBT_GUARANTORS};
+        $template_params->{IMPOSSIBLE} = 1;
+        $blocker = 1;
+    }
+
     if ( $error->{UNKNOWN_BARCODE} or not $onsite_checkout or not C4::Context->preference("OnSiteCheckoutsForce") ) {
         delete $question->{'DEBT'} if ($debt_confirmed);
         foreach my $impossible ( keys %$error ) {

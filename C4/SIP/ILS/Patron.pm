@@ -67,10 +67,14 @@ sub new {
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 
     # Get fines and add fines for guarantees (depends on preference NoIssuesChargeGuarantees)
-    my $fines_amount = $flags->{CHARGES}->{amount};
+    my $fines_amount = $flags->{CHARGES}->{amount}; #TODO Replace with $patron->account->non_issues_charges
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
-    my $guarantees_fines_amount = $flags->{CHARGES_GUARANTEES} ? $flags->{CHARGES_GUARANTEES}->{amount} : 0;
-    $fines_amount += $guarantees_fines_amount;
+    if ( C4::Context->preference('NoIssuesChargeGuarantorsWithGuarantees') ) {
+        $fines_amount += $patron->relationships_debt({ include_guarantors => 1, only_this_guaranor => 0, include_this_patron => 1 });
+    } else {
+        my $guarantees_fines_amount = $flags->{CHARGES_GUARANTEES} ? $flags->{CHARGES_GUARANTEES}->{amount} : 0; #TODO: Replace with $patron->relationships_debt
+        $fines_amount += $guarantees_fines_amount;
+    }
 
     my $fee_limit = _fee_limit();
     my $fine_blocked = $fines_amount > $fee_limit;

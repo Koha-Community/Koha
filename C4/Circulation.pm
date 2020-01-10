@@ -853,6 +853,21 @@ sub CanBookBeIssued {
         }
     }
 
+    # Check the debt of this patrons guarantors *and* the guarantees of those guarantors
+    my $no_issues_charge_guarantors = C4::Context->preference("NoIssuesChargeGuarantorsWithGuarantees");
+    $no_issues_charge_guarantors = undef unless looks_like_number( $no_issues_charge_guarantors );
+    if ( defined $no_issues_charge_guarantors ) {
+        my $guarantors_non_issues_charges += $patron->relationships_debt({ include_guarantors => 1, only_this_guaranor => 0, include_this_patron => 1 });
+
+        if ( $guarantors_non_issues_charges > $no_issues_charge_guarantors && !$inprocess && !$allowfineoverride) {
+            $issuingimpossible{DEBT_GUARANTORS} = $guarantors_non_issues_charges;
+        } elsif ( $guarantors_non_issues_charges > $no_issues_charge_guarantors && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT_GUARANTORS} = $guarantors_non_issues_charges;
+        } elsif ( $allfinesneedoverride && $guarantors_non_issues_charges > 0 && $guarantors_non_issues_charges <= $no_issues_charge_guarantors && !$inprocess ) {
+            $needsconfirmation{DEBT_GUARANTORS} = $guarantors_non_issues_charges;
+        }
+    }
+
     if ( C4::Context->preference("IssuingInProcess") ) {
         if ( $non_issues_charges > $amountlimit && !$inprocess && !$allowfineoverride) {
             $issuingimpossible{DEBT} = $non_issues_charges;
