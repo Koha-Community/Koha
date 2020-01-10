@@ -56,15 +56,15 @@ for my $currency_format ( qw( US FR ) ) {
         my $order_0_0 = {
             biblionumber     => $biblionumber_0_0,
             quantity         => 2,
-            listprice        => 82.000000,
-            unitprice        => 73.80000,
+            listprice        => 82,
+            unitprice        => 73.80,
             quantityreceived => 2,
             basketno         => $basketno_0_0,
             invoiceid        => $invoiceid_0_0,
             rrp              => 82.00,
             ecost            => 73.80,
             tax_rate         => 0.0500,
-            discount         => 10.0000,
+            discount         => 10,
             datereceived     => $today
         };
         $order_0_0 = C4::Acquisition::populate_order_with_prices(
@@ -157,15 +157,15 @@ for my $currency_format ( qw( US FR ) ) {
         my $order_1_1        = {
             biblionumber     => $biblionumber_1_1,
             quantity         => 2,
-            listprice        => 82.000000,
-            unitprice        => 73.800000,
+            listprice        => 82,
+            unitprice        => 73.80,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
             invoiceid        => $invoiceid_1_1,
             rrp              => 82.00,
             ecost            => 73.80,
             tax_rate         => 0.0500,
-            discount         => 10.0000,
+            discount         => 10,
             datereceived     => $today
         };
 
@@ -259,7 +259,7 @@ for my $currency_format ( qw( US FR ) ) {
         my $order_1_0        = {
             biblionumber     => $biblionumber_1_0,
             quantity         => 2,
-            listprice        => 82.000000,
+            listprice        => 82,
             unitprice        => 0,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
@@ -267,7 +267,7 @@ for my $currency_format ( qw( US FR ) ) {
             rrp              => 82.00,
             ecost            => 73.80,
             tax_rate         => 0.0500,
-            discount         => 10.0000,
+            discount         => 10,
             datereceived     => $today
         };
 
@@ -380,7 +380,7 @@ for my $currency_format ( qw( US FR ) ) {
         my $order_0_1        = {
             biblionumber     => $biblionumber_0_1,
             quantity         => 2,
-            listprice        => 82.000000,
+            listprice        => 82,
             unitprice        => 0,
             quantityreceived => 2,
             basketno         => $basketno_1_1,
@@ -388,7 +388,7 @@ for my $currency_format ( qw( US FR ) ) {
             rrp              => 82.00,
             ecost            => 73.80,
             tax_rate         => 0.0500,
-            discount         => 10.0000,
+            discount         => 10,
             datereceived     => $today
         };
 

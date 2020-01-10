@@ -186,8 +186,8 @@ subtest 'UpdateFine tests' => sub {
         { borrowernumber => $patron->borrowernumber } );
     is( $fines->count, 1, "Fine added when amount is greater than 0" );
     my $fine = $fines->next;
-    is( $fine->amount, '50.000000', "Fine amount correctly set to 50" );
-    is( $fine->amountoutstanding, '50.000000', "Fine amountoutstanding correctly set to 50" );
+    is( $fine->amount+0, 50, "Fine amount correctly set to 50" );
+    is( $fine->amountoutstanding+0, 50, "Fine amountoutstanding correctly set to 50" );
     is( $fine->issue_id, $checkout1->issue_id, "Fine is associated with the correct issue" );
     is( $fine->itemnumber, $checkout1->itemnumber, "Fine is associated with the correct item" );
     # Total : Outstanding : MaxFine
@@ -208,8 +208,8 @@ subtest 'UpdateFine tests' => sub {
         { borrowernumber => $patron->borrowernumber } );
     is( $fines->count, 1, "Existing fine updated" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "Fine amount correctly updated to 80" );
-    is( $fine->amountoutstanding, '80.000000', "Fine amountoutstanding correctly updated to 80" );
+    is( $fine->amount+0, 80, "Fine amount correctly updated to 80" );
+    is( $fine->amountoutstanding+0, 80, "Fine amountoutstanding correctly updated to 80" );
     # Total : Outstanding : MaxFine
     #  80   :     80      :   100
 
@@ -230,11 +230,11 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        2,    "New fine added for second checkout" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "First fine amount unchanged" );
-    is( $fine->amountoutstanding, '80.000000', "First fine amountoutstanding unchanged" );
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
+    is( $fine->amountoutstanding+0, 80, "First fine amountoutstanding unchanged" );
     my $fine2 = $fines->next;
-    is( $fine2->amount, '20.000000', "Second fine capped at '20' by MaxFine" );
-    is( $fine2->amountoutstanding, '20.000000', "Second fine amountoutstanding capped at '20' by MaxFine" );
+    is( $fine2->amount+0, 20, "Second fine capped at '20' by MaxFine" );
+    is( $fine2->amountoutstanding+0, 20, "Second fine amountoutstanding capped at '20' by MaxFine" );
     is( $fine2->issue_id, $checkout2->issue_id, "Second fine is associated with the correct issue" );
     is( $fine2->itemnumber, $checkout2->itemnumber, "Second fine is associated with the correct item" );
     is( $fine->amount + $fine2->amount, '100', "Total fines = 100" );
@@ -243,7 +243,7 @@ subtest 'UpdateFine tests' => sub {
     #  100  :     100     :   100
 
     # Partial pay fine 1
-    $fine->amountoutstanding('50.000000')->store;
+    $fine->amountoutstanding(50)->store;
     # Total : Outstanding : MaxFine
     #  100  :     50      :   100
 
@@ -264,11 +264,11 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        2,    "Still two fines after second checkout update" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "First fine amount unchanged" );
-    is( $fine->amountoutstanding, '50.000000', "First fine amountoutstanding unchanged" );
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
+    is( $fine->amountoutstanding+0, 50, "First fine amountoutstanding unchanged" );
     $fine2 = $fines->next;
-    is( $fine2->amount, '30.000000', "Second fine increased after partial payment of first" );
-    is( $fine2->amountoutstanding, '30.000000', "Second fine amountoutstanding increased after partial payment of first" );
+    is( $fine2->amount+0, 30, "Second fine increased after partial payment of first" );
+    is( $fine2->amountoutstanding+0, 30, "Second fine amountoutstanding increased after partial payment of first" );
     is( $fine->amount + $fine2->amount, '110', "Total fines = 100" );
     is( $fine->amountoutstanding + $fine2->amountoutstanding, '80', "Total outstanding = 80" );
     # Total : Outstanding : MaxFine
@@ -294,14 +294,14 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        3,    "Third fine added for overdue renewal" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "First fine amount unchanged" );
-    is( $fine->amountoutstanding, '50.000000', "First fine amountoutstanding unchanged" );
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
+    is( $fine->amountoutstanding+0, 50, "First fine amountoutstanding unchanged" );
     $fine2 = $fines->next;
-    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
-    is( $fine2->amountoutstanding, '30.000000', "Second fine amountoutstanding unchanged" );
+    is( $fine2->amount+0, 30, "Second fine amount unchanged" );
+    is( $fine2->amountoutstanding+0, 30, "Second fine amountoutstanding unchanged" );
     my $fine3 = $fines->next;
-    is( $fine3->amount, '20.000000', "Third fine amount capped due to MaxFine" );
-    is( $fine3->amountoutstanding, '20.000000', "Third fine amountoutstanding capped at '20' by MaxFine" );
+    is( $fine3->amount+0, 20, "Third fine amount capped due to MaxFine" );
+    is( $fine3->amountoutstanding+0, 20, "Third fine amountoutstanding capped at '20' by MaxFine" );
     is( $fine3->issue_id, $checkout1->issue_id, "Third fine is associated with the correct issue" );
     is( $fine3->itemnumber, $checkout1->itemnumber, "Third fine is associated with the correct item" );
     is( $fine->amount + $fine2->amount + $fine3->amount, '130', "Total fines = 130" );
@@ -333,14 +333,14 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        3,    "Still three fines after third checkout update" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "First fine amount unchanged" );
-    is( $fine->amountoutstanding, '50.000000', "First fine amountoutstanding unchanged" );
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
+    is( $fine->amountoutstanding+0, 50, "First fine amountoutstanding unchanged" );
     $fine2 = $fines->next;
-    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
-    is( $fine2->amountoutstanding, '30.000000', "Second fine amountoutstanding unchanged" );
+    is( $fine2->amount+0, 30, "Second fine amount unchanged" );
+    is( $fine2->amountoutstanding+0, 30, "Second fine amountoutstanding unchanged" );
     $fine3 = $fines->next;
-    is( $fine3->amount, '40.000000', "Third fine amount capped due to MaxFine" );
-    is( $fine3->amountoutstanding, '20.000000', "Third fine amountoutstanding increased ..." );
+    is( $fine3->amount+0, 40, "Third fine amount capped due to MaxFine" );
+    is( $fine3->amountoutstanding+0, 20, "Third fine amountoutstanding increased ..." );
     is( $fine3->issue_id, $checkout1->issue_id, "Third fine is associated with the correct issue" );
     is( $fine3->itemnumber, $checkout1->itemnumber, "Third fine is associated with the correct item" );
     is( $fine->amount + $fine2->amount + $fine3->amount, '150', "Total fines = 150" );
@@ -369,12 +369,12 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        3,    "Still only three fines after MaxFine cap removed" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
     $fine2 = $fines->next;
-    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    is( $fine2->amount+0, 30, "Second fine amount unchanged" );
     $fine3 = $fines->next;
-    is( $fine3->amount, '50.000000', "Third fine increased now MaxFine cap is disabled" );
-    is( $fine3->amountoutstanding, '30.000000', "Third fine increased now MaxFine cap is disabled" );
+    is( $fine3->amount+0, 50, "Third fine increased now MaxFine cap is disabled" );
+    is( $fine3->amountoutstanding+0, 30, "Third fine increased now MaxFine cap is disabled" );
 
     # If somehow the fine should be reduced, we changed rules or checkout date or something
     UpdateFine(
@@ -393,14 +393,12 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        3,    "Still only three fines after MaxFine cap removed and third fine altered" );
     $fine = $fines->next;
-    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
     $fine2 = $fines->next;
-    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    is( $fine2->amount+0, 30, "Second fine amount unchanged" );
     $fine3 = $fines->next;
-    is( $fine3->amount, '30.000000', "Third fine reduced" );
-    is( $fine3->amountoutstanding, '10.000000', "Third fine amount outstanding is reduced" );
-
-
+    is( $fine3->amount+0, 30, "Third fine reduced" );
+    is( $fine3->amountoutstanding+0, 10, "Third fine amount outstanding is reduced" );
 
     $schema->storage->txn_rollback;
 };

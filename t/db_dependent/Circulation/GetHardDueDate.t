@@ -113,7 +113,7 @@ my $default = {
 
 #Test GetIssuingRule
 my $sampleissuingrule1 = {
-    reservecharge      => '0.000000',
+    reservecharge      => 0,
     restrictedtype     => 0,
     accountsent        => 0,
     finedays           => 0,
@@ -124,13 +124,13 @@ my $sampleissuingrule1 = {
     issuelength        => 5,
     chargeperiod       => 0,
     chargeperiod_charge_at => 0,
-    rentaldiscount     => '2.000000',
+    rentaldiscount     => 2,
     reservesallowed    => 0,
     hardduedate        => '2013-01-01',
     branchcode         => $samplebranch1->{branchcode},
-    fine               => '0.000000',
+    fine               => 0,
     hardduedatecompare => 0,
-    overduefinescap    => '0.000000',
+    overduefinescap    => 0,
     renewalsallowed    => 0,
     firstremind        => 0,
     itemtype           => 'BOOK',
