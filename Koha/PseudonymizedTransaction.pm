@@ -79,7 +79,20 @@ sub new_from_statistic {
 
     $values->{has_cardnumber} = $patron->cardnumber ? 1 : 0;
 
-    return $class->SUPER::new($values);
+    my $self = $class->SUPER::new($values);
+
+    my $extended_attributes = $patron->extended_attributes->unblessed;
+    for my $attribute (@$extended_attributes) {
+        next unless Koha::Patron::Attribute::Types->find(
+            $attribute->{code} )->keep_for_pseudonymization;
+
+        delete $attribute->{id};
+        delete $attribute->{borrowernumber};
+
+        $self->_result->create_related('pseudonymized_borrower_attributes', $attribute);
+    }
+
+    return $self;
 }
 
 sub get_hash {

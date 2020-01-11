@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Try::Tiny;
 
 use C4::Circulation;
@@ -54,11 +54,12 @@ subtest 'Config does not exist' => sub {
         C4::Stats::UpdateStats(
             {
                 type           => 'issue',
-                branch         => 'BBB',
+                branch         => $library->branchcode,
                 itemnumber     => $item->itemnumber,
                 borrowernumber => $patron->borrowernumber,
                 itemtype       => $item->effective_itemtype,
                 location       => $item->location,
+                ccode          => $item->ccode,
             }
         );
 
@@ -110,6 +111,100 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     is( $pseudonymized->location,               $item->location );
     is( $pseudonymized->itemcallnumber,         $item->itemcallnumber );
     is( $pseudonymized->ccode,                  $item->ccode );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'PseudonymizedBorrowerAttributes tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_config( 'key', '$2a$08$9lmorEKnwQloheaCLFIfje' );
+    t::lib::Mocks::mock_preference( 'Pseudonymization', 1 );
+    t::lib::Mocks::mock_preference( 'PseudonymizationPatronFields',
+        'branchcode,categorycode,sort1' );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_info = $patron->unblessed;
+    delete $patron_info->{borrowernumber};
+    $patron->delete;
+
+    my $attribute_type1 = Koha::Patron::Attribute::Type->new(
+        {
+            code                => 'my code1',
+            description         => 'my description1',
+            repeatable          => 1,
+            keep_for_pseudonymization => 1,
+        }
+    )->store;
+    my $attribute_type2 = Koha::Patron::Attribute::Type->new(
+        {
+            code                => 'my code2',
+            description         => 'my description2',
+            keep_for_pseudonymization => 0,
+        }
+    )->store;
+    my $attribute_type3 = Koha::Patron::Attribute::Type->new(
+        {
+            code                => 'my code3',
+            description         => 'my description3',
+            keep_for_pseudonymization => 1,
+        }
+    )->store;
+
+    $patron = Koha::Patron->new($patron_info)->store->get_from_storage;
+    my $attribute_values = [
+        {
+            attribute => 'attribute for code1',
+            code      => $attribute_type1->code,
+        },
+        {
+            attribute => 'attribute for code2',
+            code      => $attribute_type2->code
+        },
+        {
+            attribute => 'attribute for code3',
+            code      => $attribute_type3->code
+        },
+    ];
+
+    $patron->extended_attributes($attribute_values);
+
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item    = $builder->build_sample_item;
+
+    C4::Stats::UpdateStats(
+        {
+            type           => 'issue',
+            branch         => $library->branchcode,
+            itemnumber     => $item->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            itemtype       => $item->effective_itemtype,
+            location       => $item->location,
+            ccode          => $item->ccode,
+        }
+    );
+
+    my $p = Koha::PseudonymizedTransactions->search({itemnumber => $item->itemnumber})->next;
+    my $attributes = Koha::Database->new->schema->resultset('PseudonymizedBorrowerAttribute')->search({transaction_id => $p->id });
+    is( $attributes->count, 2,
+        'Only the 2 attributes that have a type with keep_for_pseudonymization set should be kept'
+    );
+    my $attribute_1 = $attributes->next;
+    is_deeply(
+        { attribute => $attribute_1->attribute, code => $attribute_1->code->code },
+        $attribute_values->[0],
+        'Attribute 1 should be retrieved correctly'
+    );
+    my $attribute_2 = $attributes->next;
+    is_deeply(
+        { attribute => $attribute_2->attribute, code => $attribute_2->code->code },
+        $attribute_values->[2],
+        'Attribute 2 should be retrieved correctly'
+    );
 
     $schema->storage->txn_rollback;
 };
