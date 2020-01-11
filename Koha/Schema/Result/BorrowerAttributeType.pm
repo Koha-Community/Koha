@@ -90,6 +90,12 @@ __PACKAGE__->table("borrower_attribute_types");
   is_nullable: 0
   size: 255
 
+=head2 keep_for_pseudonymization
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -115,6 +121,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "class",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
+  "keep_for_pseudonymization",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -161,9 +169,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 pseudonymized_borrower_attributes
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-25 20:32:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gsPR8PuUUZHFUkr3MIbTpw
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PseudonymizedBorrowerAttribute>
+
+=cut
+
+__PACKAGE__->has_many(
+  "pseudonymized_borrower_attributes",
+  "Koha::Schema::Result::PseudonymizedBorrowerAttribute",
+  { "foreign.code" => "self.code" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 18:00:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MMozmna9C3PseXF0Qskznw
 
 __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },

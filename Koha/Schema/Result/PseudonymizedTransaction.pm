@@ -272,6 +272,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 pseudonymized_borrower_attributes
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PseudonymizedBorrowerAttribute>
+
+=cut
+
+__PACKAGE__->has_many(
+  "pseudonymized_borrower_attributes",
+  "Koha::Schema::Result::PseudonymizedBorrowerAttribute",
+  { "foreign.transaction_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 transaction_branchcode
 
 Type: belongs_to
@@ -293,8 +308,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 16:08:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:r3YdoQ6TKEF0THmeXHvRwA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 17:12:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bzHjcKCHYf+bixeA1dhKIQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
