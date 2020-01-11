@@ -265,9 +265,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 pseudonymized_transactions
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2019-04-12 02:43:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7rwTH9HuxcdRCBP/bj0d/A
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PseudonymizedTransaction>
+
+=cut
+
+__PACKAGE__->has_many(
+  "pseudonymized_transactions",
+  "Koha::Schema::Result::PseudonymizedTransaction",
+  { "foreign.categorycode" => "self.categorycode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 15:54:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mWu3jtWB0NXhGMjoapGfSg
 
 sub koha_object_class {
     'Koha::Patron::Category';
