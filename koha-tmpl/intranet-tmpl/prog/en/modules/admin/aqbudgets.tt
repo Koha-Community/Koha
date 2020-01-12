@@ -177,11 +177,11 @@
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetactions[% budget.budget_id | html %]_[% budget.budget_period_id | html %]">
                     <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
                     [% IF budget.budget_has_children %]
-                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has children"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li class="disabled"><a href="#" class="deletefund-disabled" data-toggle="tooltip" data-placement="left" title="This fund has sub funds."><i class="fa fa-trash"></i> Delete</a></li>
                     [% ELSE %]
                         <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
                     [% END %]
-                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add child fund</a></li>
+                    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_parent_id=[% budget.budget_id | uri %]&amp;budget_period_id=[% budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add sub fund</a></li>
                 </ul>
             </div>
         </td>
@@ -268,7 +268,7 @@
         <li class="radio">
             <label>
                 <input type="checkbox" id="set_owner_to_children" name="set_owner_to_children" value="1" />
-                Update all child funds with this owner
+                Update all sub funds with this owner
             </label>
             <span class="hint">Selecting this option will overwrite existing fund owners, if any</span>
         </li>
@@ -694,7 +694,7 @@
 
                 $(".deletefund-disabled").tooltip().on("click", function(e){
                     e.preventDefault();
-                    alert(_("This fund has children. It cannot be deleted."));
+                    alert(_("This fund has sub funds. It cannot be deleted."));
                 });
             });
         //]]>
