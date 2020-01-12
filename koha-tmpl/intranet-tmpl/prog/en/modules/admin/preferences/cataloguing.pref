@@ -230,10 +230,12 @@ Cataloging:
                 holdingbranch: 'holding library'
             - "is the logged in user's library. The second tab will contain all other items."
         -
-            - Don't show these
+            - "Don't show"
             - pref: NotesBlacklist
               class: multi
-            - note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)
+            - "note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
+            - <br />
+            - For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module.
         -
             - pref: AcquisitionDetails
               choices:
