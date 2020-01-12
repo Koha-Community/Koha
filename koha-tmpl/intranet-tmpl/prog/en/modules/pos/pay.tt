@@ -27,7 +27,7 @@
 
         [% IF payment_id && !Koha.Preference('FinePaymentAutoPopup') %]
         <div class="dialog alert audio-alert-action">
-            Payment recieved: <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print receipt</a>
+            Payment received: <a target="_blank" href="/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print receipt</a>
         </div>
         [% END %]
 
@@ -180,8 +180,8 @@
 </div>
 
 [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
-<!-- Automatic Print Reciept -->
-      <a id="printReciept" style="display: none" href="#"></a>
+<!-- Automatic Print Receipt -->
+      <a id="printReceipt" style="display: none" href="#"></a>
 [% END %]
 
 [% MACRO jsinclude BLOCK %]
@@ -395,11 +395,11 @@
         });
 
         [% IF payment_id && Koha.Preference('FinePaymentAutoPopup') %]
-            $("#printReciept").click(function() {
+            $("#printReceipt").click(function() {
                 var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=[% payment_id | uri %]&collected=[% collected | uri %]&change=[% change | uri %]', '_blank');
                 win.focus();
             });
-            $("#printReciept").click();
+            $("#printReceipt").click();
         [% END %]
     });
     </script>
