@@ -124,7 +124,7 @@ subtest 'pickup_locations() tests' => sub {
         'pickup_locations',
         sub {
             my $result = clone(\@library_array);
-            return $result;
+            return @$result;
         }
     );
 
