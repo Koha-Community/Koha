@@ -131,7 +131,7 @@
                         [% Branches.GetName(hold.branchcode) | html %] <input type="hidden" name="pickup" value="[% hold.branchcode | html %]" />
                     [% ELSE %]
                         <select name="pickup">
-                            [% PROCESS options_for_libraries libraries => Branches.pickup_locations( { search_params => { item => hold.itemnumber, patron => hold.patron }, selected => hold.branchcode }) %]
+                            [% PROCESS options_for_libraries libraries => Branches.pickup_locations( { search_params => { item => hold.itemnumber, biblio => hold.biblionumber, patron => hold.patron }, selected => hold.branchcode }) %]
                         </select>
                     [% END %]
                 [% END %]

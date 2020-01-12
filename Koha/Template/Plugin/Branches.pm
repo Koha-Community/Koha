@@ -87,13 +87,32 @@ sub InIndependentBranchesMode {
 
 sub pickup_locations {
     my ( $self, $params ) = @_;
-
     my $search_params = $params->{search_params} || {};
     my $selected      = $params->{selected};
-    my $libraries     = Koha::Libraries->pickup_locations($search_params);
+    my @libraries;
 
-    for my $l (@$libraries) {
-        $l = $l->unblessed;
+    if(defined $search_params->{item} || defined $search_params->{biblio}) {
+        my $item = $search_params->{'item'};
+        my $biblio = $search_params->{'biblio'};
+        my $patron = $search_params->{'patron'};
+
+        unless (! defined $patron || ref($patron) eq 'Koha::Patron') {
+            $patron = Koha::Patrons->find($patron);
+        }
+
+        if($item) {
+            $item = Koha::Items->find($item) unless ref($item) eq 'Koha::Item';
+            @libraries = map { $_->unblessed } $item->pickup_locations( {patron => $patron} ) if defined $item;
+        } elsif($biblio) {
+            $biblio = Koha::Biblios->find($biblio) unless ref($biblio) eq 'Koha::Biblio';
+            @libraries = map { $_->unblessed } $biblio->pickup_locations( {patron => $patron} ) if defined $biblio;
+        }
+
+    }
+
+    @libraries = Koha::Libraries->pickup_locations() unless @libraries;
+
+    for my $l (@libraries) {
         if ( defined $selected and $l->{branchcode} eq $selected
             or not defined $selected
             and C4::Context->userenv
@@ -103,7 +122,7 @@ sub pickup_locations {
         }
     }
 
-    return $libraries;
+    return \@libraries;
 }
 
 1;

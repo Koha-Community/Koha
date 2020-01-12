@@ -67,16 +67,11 @@ sub pickup_locations {
 
     my $item = $params->{'item'};
     my $biblio = $params->{'biblio'};
-    my $patron = $params->{'patron'};
-
     if ($biblio && $item) {
         Koha::Exceptions::BadParameter->throw(
             error => "Koha::Libraries->pickup_locations takes either 'biblio' or "
             ." 'item' as parameter, but not both."
         );
-    }
-    unless (! defined $patron || ref($patron) eq 'Koha::Patron') {
-        $patron = Koha::Patrons->find($patron);
     }
 
     # Select libraries that are configured as pickup locations
@@ -86,20 +81,33 @@ sub pickup_locations {
         order_by => ['branchname']
     });
 
-    return $libraries unless $item or $biblio;
-    if($item) {
+    return $libraries->unblessed unless $item or $biblio;
+    return $libraries->unblessed
+        unless C4::Context->preference('UseBranchTransferLimits');
+    my $limittype = C4::Context->preference('BranchTransferLimitsType');
+
+    if ($item) {
         unless (ref($item) eq 'Koha::Item') {
             $item = Koha::Items->find($item);
-            return $libraries unless $item;
+            return $libraries->unblessed unless $item;
         }
-        return $item->pickup_locations( {patron => $patron} );
     } else {
         unless (ref($biblio) eq 'Koha::Biblio') {
             $biblio = Koha::Biblios->find($biblio);
-            return $libraries unless $biblio;
+            return $libraries->unblessed unless $biblio;
         }
-        return $biblio->pickup_locations( {patron => $patron} );
     }
+
+    my @pickup_locations;
+    foreach my $library ($libraries->as_list) {
+        if ($item && $item->can_be_transferred({ to => $library })) {
+            push @pickup_locations, $library->unblessed;
+        } elsif ($biblio && $biblio->can_be_transferred({ to => $library })) {
+            push @pickup_locations, $library->unblessed;
+        }
+    }
+
+    return wantarray ? @pickup_locations : \@pickup_locations;
 }
 
 =head3 search_filtered
