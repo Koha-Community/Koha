@@ -69,12 +69,12 @@
 
             [% IF ( invoiceclosedate ) %]
             <li><span class="label">Status:</span>
-                Closed on [% invoiceclosedate | $KohaDates %].</li>
+                Closed on [% invoiceclosedate | $KohaDates %]</li>
 
             <li><label for="reopen">Reopen: </label> <input type="checkbox" name="reopen" id="reopen" /></li>
             [% ELSE %]
             <li><span class="label">Status:</span>
-                Open.</li>
+                Open</li>
 
             <li><label for="close">Close: </label> <input type="checkbox" name="close" id="close" />
                 </li>
@@ -334,7 +334,7 @@
         [% ELSE %]
             <div class="dialog message"><p>No orders yet</p>
             [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
-            <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price %]</p>
+            <p>Adjustments plus shipping: [% total_adj + shipmentcost | $Price %]</p>
             [% END %]
             </div>
         [% END %]
