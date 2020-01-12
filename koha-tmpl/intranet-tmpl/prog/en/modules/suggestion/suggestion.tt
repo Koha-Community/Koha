@@ -4,6 +4,7 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Price %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions  &rsaquo;
@@ -501,7 +502,7 @@
     <table id="[% suggestion.suggestiontype | html %]t" class="sorted">
         <thead>
             <tr>
-                <th class="NoSort">&nbsp;</th>
+                <th class="NoSort noExport">&nbsp;</th>
                 <th class="anti-the">Suggestion</th>
                 <th>Suggested by</th>
                 <th>Suggested on</th>
@@ -510,7 +511,7 @@
                 <th>Library</th>
                 <th>Fund</th>
                 <th>Status</th>
-                <th class="NoSort">&nbsp;</th>
+                <th class="NoSort noExport">&nbsp;</th>
             </tr>
     </thead>
         <tbody>
@@ -810,7 +811,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% IF ( op == 'show' || op_else ) %]
-        <script type="text/javascript">
+        <script>
             $(document).ready(function(){
                 $(".deletesuggestion").on("click",function(){
                     return confirm(_("Are you sure you want to delete this suggestion?"));
@@ -820,8 +821,9 @@
     [% END %]
     [% IF ( op_else ) %]
         [% INCLUDE 'datatables.inc' %]
+        [% INCLUDE 'columns_settings.inc' %]
         [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-        <script type="text/javascript">
+        <script>
             /**
             *  displayOther.
             *  This function display the select or an textaera to write a reason.
@@ -831,20 +833,22 @@
                 $("#"+show+id).show();
             }
             $(document).ready(function() {
-                $('#suggestiontabs').tabs({
-                    // Correct table sizing for tables hidden in tabs
-                    // http://www.datatables.net/examples/api/tabs_and_scrolling.html
-                    "activate": function(event, ui) {
-                        $( $.fn.dataTable.tables( true ) ).DataTable().columns.adjust();
-                    }
-                });
-                $(".sorted").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aoColumnDefs": [
-                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
-                    ],
-                    "sPaginationType": "full"
-                }));
+                $('#suggestiontabs').tabs();
+
+                columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
+                [% FOREACH suggestion IN suggestions %]
+                    [% IF ( suggestion.suggestions_loop ) %]
+                        KohaTable("[% suggestion.suggestiontype %]t", {
+                            "sorting": [[ 1, "asc" ]],
+                            "autoWidth": false,
+                            "columnDefs": [
+                                { "sortable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                            ]
+                        }, columns_settings );
+                    [% END %]
+                [% END %]
+
             [% FOREACH suggestion IN suggestions %]
                 // functions for [% suggestion.suggestiontype | html %] interactions
                 $("#CheckAll[% suggestion.suggestiontype | html %]").click(function(e){
@@ -948,7 +952,7 @@
         </script>
     [% END %]
     [% IF ( op_save )  %]
-        <script type="text/javascript">
+        <script>
             $(document).ready(function(){
                 calcNewsuggTotal();
                 $("#quantity,#price,#currency").on("change",function(){
