@@ -6,7 +6,7 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     $dbh->do(q{
-        INSERT INTO account_credit_types ( code, description, can_be_added_manually, is_system )
+        INSERT IGNORE INTO account_credit_types ( code, description, can_be_added_manually, is_system )
         VALUES ('PURCHASE', 'Purchase', 0, 1);
     });
 
