@@ -311,3 +311,68 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`) VALUES
 ('circulation', 'SR_SLIP', '', 'Stock rotation slip', 0, 'Stock rotation report', 'Stock rotation report for [% branch.name %]:\r\n\r\n[% IF branch.items.size %][% branch.items.size %] items to be processed for this branch.\r\n[% ELSE %]No items to be processed for this branch\r\n[% END %][% FOREACH item IN branch.items %][% IF item.reason != \'in-demand\' %]Title: [% item.title %]\r\nAuthor: [% item.author %]\r\nCallnumber: [% item.callnumber %]\r\nLocation: [% item.location %]\r\nBarcode: [% item.barcode %]\r\nOn loan?: [% item.onloan %]\r\nStatus: [% item.reason %]\r\nCurrent library: [% item.branch.branchname %] [% item.branch.branchcode %]\r\n\r\n[% END %][% END %]', 'email');
+INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
+('pos', 'RECEIPT', '', 'Point of sale receipt', 0, 'Receipt', '[% PROCESS "accounts.inc" %]
+<table>
+[% IF ( LibraryName ) %]
+ <tr>
+    <th colspan="2" class="centerednames">
+        <h3>[% LibraryName | html %]</h3>
+    </th>
+ </tr>
+[% END %]
+ <tr>
+    <th colspan="2" class="centerednames">
+        <h2>[% Branches.GetName( payment.branchcode ) | html %]</h2>
+    </th>
+ </tr>
+<tr>
+    <th colspan="2" class="centerednames">
+        <h3>[% payment.date | $KohaDates %]</h3>
+</tr>
+<tr>
+  <td>Transaction ID: </td>
+  <td>[% payment.accountlines_id %]</td>
+</tr>
+<tr>
+  <td>Operator ID: </td>
+  <td>[% payment.manager_id %]</td>
+</tr>
+<tr>
+  <td>Payment type: </td>
+  <td>[% payment.payment_type %]</td>
+</tr>
+ <tr></tr>
+ <tr>
+    <th colspan="2" class="centerednames">
+        <h2><u>Fee receipt</u></h2>
+    </th>
+ </tr>
+ <tr></tr>
+ <tr>
+    <th>Description of charges</th>
+    <th>Amount</th>
+  </tr>
+
+  [% FOREACH offset IN offsets %]
+    <tr>
+        <td>[% PROCESS account_type_description account=offset.debit %]</td>
+        <td>[% offset.amount * -1 | $Price %]</td>
+    </tr>
+  [% END %]
+
+<tfoot>
+  <tr class="highlight">
+    <td>Total: </td>
+    <td>[% payment.amount * -1| $Price %]</td>
+  </tr>
+  <tr>
+    <td>Tendered: </td>
+    <td>[% collected | $Price %]</td>
+  </tr>
+  <tr>
+    <td>Change: </td>
+    <td>[% change | $Price %]</td>
+    </tr>
+</tfoot>
+</table>', 'print', 'default');
