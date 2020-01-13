@@ -960,8 +960,7 @@ sub run_unimarc_search_tests {
              'location' => { 'label_value' => "Location" },
                    'se' => { 'label_value' => "Series" },
                'su-geo' => { 'label_value' => "Places" },
-                'su-to' => { 'label_value' => "Topics" },
-                'su-ut' => { 'label_value' => "Titles" }
+                'su-to' => { 'label_value' => "Topics" }
     };
     delete $expected_facets_info_unimarc->{holdingbranch}
         if Koha::Libraries->count == 1;
