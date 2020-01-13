@@ -97,6 +97,7 @@ while ( my $h = $holds_rs->next() ) {
         reserve_id     => $h->reserve_id(),
         branchcode     => $h->branch()->branchname(),
         branches       => $libraries,
+        desk_name      => $h->desk()->desk_name(),
         reservedate    => $h->reservedate(),
         expirationdate => $h->expirationdate(),
         suspend        => $h->suspend(),

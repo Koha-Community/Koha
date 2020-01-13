@@ -1136,7 +1136,7 @@ sub ModReserveStatus {
 
 =head2 ModReserveAffect
 
-  &ModReserveAffect($itemnumber,$borrowernumber,$diffBranchSend,$reserve_id);
+  &ModReserveAffect($itemnumber,$borrowernumber,$diffBranchSend,$reserve_id, $desk_id);
 
 This function affect an item and a status for a given reserve, either fetched directly
 by record_id, or by borrowernumber and itemnumber or biblionumber. If only biblionumber
@@ -1150,7 +1150,7 @@ take care of the waiting status
 =cut
 
 sub ModReserveAffect {
-    my ( $itemnumber, $borrowernumber, $transferToDo, $reserve_id ) = @_;
+    my ( $itemnumber, $borrowernumber, $transferToDo, $reserve_id, $desk_id ) = @_;
     my $dbh = C4::Context->dbh;
 
     # we want to attach $itemnumber to $borrowernumber, find the biblionumber
@@ -1183,7 +1183,7 @@ sub ModReserveAffect {
              && !$already_on_shelf) {
         $hold->set_processing();
     } else {
-        $hold->set_waiting();
+        $hold->set_waiting($desk_id);
         _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
         my $transfers = Koha::Item::Transfers->search({
             itemnumber => $itemnumber,

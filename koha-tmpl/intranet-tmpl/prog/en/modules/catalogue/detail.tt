@@ -461,7 +461,7 @@ Note that permanent location is a code, and location may be an authval.
                         [% SET hold = item.first_hold %]
                         [% IF hold %]
                             [% IF hold.waitingdate %]
-                                <span class="waitingat">Waiting at [% Branches.GetName( hold.branchcode ) | html %] since [% hold.waitingdate | $KohaDates %].</span>
+                                <span class="waitingat">Waiting at [% Branches.GetName( hold.branchcode ) | html %][% IF ( hold.desk_id ) %], [% hold.desk.desk_name | html %][% END %] since [% hold.waitingdate | $KohaDates %].</span>
                                 [% IF canreservefromotherbranches AND ( hold.waitingdate OR hold.priority == 1 ) %]
                                     <span class="heldfor">Hold for:</span>
                                     [% INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 %]

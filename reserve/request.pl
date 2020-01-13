@@ -658,6 +658,7 @@ foreach my $biblionumber (@biblionumbers) {
             $reserve{'itemnumber'}    = $res->itemnumber();
             $reserve{'wbrname'}       = $res->branch()->branchname();
             $reserve{'atdestination'} = $res->is_at_destination();
+            $reserve{'desk_name'}     = $res->desk()->desk_name();
             $reserve{'found'}     = $res->is_found();
             $reserve{'inprocessing'} = $res->is_in_processing();
             $reserve{'intransit'} = $res->is_in_transit();

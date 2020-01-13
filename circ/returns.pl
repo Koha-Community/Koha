@@ -71,6 +71,7 @@ my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
 
 my $sessionID = $query->cookie("CGISESSID");
 my $session = get_session($sessionID);
+my $desk_id = C4::Context->userenv->{"desk_id"} || '';
 
 # Print a reserve slip on this page
 if ( $query->param('print_slip') ) {
@@ -155,7 +156,7 @@ if ( $query->param('reserve_id') ) {
         my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
         # diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
         # i.e., whether to apply waiting status
-        ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id );
+        ModReserveAffect( $itemnumber, $borrowernumber, $diffBranchSend, $reserve_id, $desk_id );
     }
 #   check if we have other reserves for this document, if we have a return send the message of transfer
     my ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
@@ -422,7 +423,7 @@ if ( $messages->{'ResFound'}) {
         my $biblio = $item->biblio;
 
         my $diffBranchSend = !$branchCheck ? $reserve->{branchcode} : undef;
-        ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id} );
+        ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id}, $desk_id );
         my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
 
         $template->param(

@@ -175,7 +175,7 @@ sub set_transfer {
 =cut
 
 sub set_waiting {
-    my ( $self ) = @_;
+    my ( $self, $desk_id ) = @_;
 
     $self->priority(0);
 
@@ -183,6 +183,7 @@ sub set_waiting {
     my $values = {
         found => 'W',
         waitingdate => $today->ymd,
+        desk_id => $desk_id,
     };
 
     my $requested_expiration;
@@ -363,6 +364,19 @@ sub branch {
     $self->{_branch} ||= Koha::Libraries->find( $self->branchcode() );
 
     return $self->{_branch};
+}
+
+=head3 desk
+
+Returns the related Koha::Desk object for this Hold
+
+=cut
+
+sub desk {
+    my $self = shift;
+    my $desk_rs = $self->_result->desk;
+    return unless $desk_rs;
+    return Koha::Desk->_new_from_dbic($desk_rs);
 }
 
 =head3 borrower
