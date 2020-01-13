@@ -738,7 +738,7 @@ canned reports and writing custom SQL reports.</p>
             <input type="hidden" name="recordtype" value="biblio" />
             <input type="hidden" name="op" value="list" />
             [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
+            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
 [% cells.cell | html %][% END %][% END %][% END %]</textarea>
         </form>
 
@@ -746,7 +746,7 @@ canned reports and writing custom SQL reports.</p>
             <input type="hidden" name="recordtype" value="biblio" />
             <input type="hidden" name="op" value="list" />
             [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %][% SET batch_biblionumbers = 1 %]
+            <textarea style="display:none" name="recordnumber_list" id="recordnumber_list">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'biblionumber' || header_types.item(header_row.$place.cell) == 'biblionumber' %]
 [% cells.cell | html %][% END %][% END %][% END %]</textarea>
         </form>
 
@@ -798,7 +798,7 @@ canned reports and writing custom SQL reports.</p>
         <form method="POST" action="/cgi-bin/koha/tools/modborrowers.pl" id="batch_patron_modification">
             <input type="hidden" name="op" value="show" />
             [% # Preserve the whitespace of the following textarea in order to format the values correctly %]
-            <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' %][% SET batch_cardnumbers = 1 %]
+            <textarea style="display:none" name="cardnumberlist" id="cardnumberlist">[% FOREACH result IN results %][% FOREACH cells IN result.cells %][% place = loop.index %][% IF header_row.$place.cell == 'cardnumber' || header_types.item(header_row.$place.cell) == 'cardnumber' && cells.cell.match('^(\d+)$') %][% SET batch_cardnumbers = 1 %]
 [% cells.cell | html %][% END %][% END %][% END %]</textarea>
         </form>
 
