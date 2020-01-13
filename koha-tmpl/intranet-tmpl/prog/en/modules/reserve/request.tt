@@ -380,7 +380,7 @@
 
                 <fieldset class="rows">
                     <legend>Hold details</legend>
-                    <form action="/api/v1/holds" method="post" name="form" id="hold-request-form">
+                    <form action="placerequest.pl" method="post" name="form" id="hold-request-form">
 
                         <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                         <input type="hidden" name="type" value="str8" />
@@ -1028,7 +1028,7 @@
                 "margin-right":"0em"
             });
 
-            $("#club-request-form, #hold-request-form").on("submit", function() {
+            $("#club-request-form").on("submit", function() {
                 let $t = $(this);
                 $('.clubalert, .holdalert').addClass('hide');
                 let biblionumbers = [biblionumber];
