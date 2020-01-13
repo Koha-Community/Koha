@@ -29,6 +29,29 @@ Koha::Acquisition::Fund object class
 
 =head2 Class methods
 
+=head3 to_api
+
+    my $json = $fund->to_api;
+
+Overloaded method that returns a JSON representation of the Koha::Acquisition::Fund object,
+suitable for API output.
+
+=cut
+
+sub to_api {
+    my ( $self, $args ) = @_;
+
+    # Preserve conflicting attribute names
+    my $budget_id        = $self->budget_id;
+    my $budget_period_id = $self->budget_period_id;
+
+    my $json_fund = $self->SUPER::to_api($args);
+    $json_fund->{fund_id}   = $budget_id;
+    $json_fund->{budget_id} = $budget_period_id;
+
+    return $json_fund;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Acquisition::Fund object
