@@ -220,15 +220,8 @@ $(document).ready(function() {
                 ? row.status_alias.lib
                 : row.status_alias.authorised_value;
         } else {
-            var origData = meta.settings.oInit.originalData;
-            if (origData.length > 0) {
-                var status_name = meta.settings.oInit.originalData[0].capabilities[
-                    row.status
-                ].name;
-                return getStatusName(status_name, row);
-            } else {
-                return '';
-            }
+            var status_name = row.capabilities[row.status].name;
+            return getStatusName(status_name, row);
         }
     };
 
