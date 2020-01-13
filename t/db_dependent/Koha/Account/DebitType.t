@@ -36,18 +36,18 @@ my $number_of_debit_types = Koha::Account::DebitTypes->search->count;
 
 my $new_debit_type_1 = Koha::Account::DebitType->new(
     {
-        code                  => '3CODE',
-        description           => 'my description 3',
-        can_be_added_manually => 1,
-        default_amount        => 0.45,
+        code            => '3CODE',
+        description     => 'my description 3',
+        can_be_invoiced => 1,
+        default_amount  => 0.45,
     }
 )->store;
 
 my $new_debit_type_2 = Koha::Account::DebitType->new(
     {
-        code                  => '4CODE',
-        description           => 'my description 4',
-        can_be_added_manually => 1,
+        code            => '4CODE',
+        description     => 'my description 4',
+        can_be_invoiced => 1,
     }
 )->store;
 
