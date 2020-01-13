@@ -49,7 +49,6 @@ my @reservedates = $query->multi_param('reservedate');
 my @expirationdates = $query->multi_param('expirationdate');
 my @branch = $query->multi_param('pickup');
 my @itemnumber = $query->multi_param('itemnumber');
-my $multi_hold = $query->param('multi_hold');
 my $biblionumbers = $query->param('biblionumbers');
 my $count=@rank;
 
@@ -94,7 +93,7 @@ if ( $from eq 'borrower'){
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
 } else {
      my $url = "/cgi-bin/koha/reserve/request.pl?";
-     if ($multi_hold) {
+     if (@biblionumber > 1) {
          $url .= "multi_hold=1&biblionumbers=$biblionumbers";
      } else {
          $url .= "biblionumber=$biblionumber[0]";

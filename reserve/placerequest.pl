@@ -56,8 +56,9 @@ my $itemtype       = $input->param('itemtype') || undef;
 my $borrower = Koha::Patrons->find( $borrowernumber );
 $borrower = $borrower->unblessed if $borrower;
 
-my $multi_hold = $input->param('multi_hold');
-my $biblionumbers = $multi_hold ? $input->param('biblionumbers') : ($biblionumber . '/');
+my $biblionumbers = $input->param('biblionumbers');
+$biblionumbers ||= $biblionumber . '/';
+
 my $bad_bibs = $input->param('bad_bibs');
 my $holds_to_place_count = $input->param('holds_to_place_count') || 1;
 
@@ -118,7 +119,7 @@ if ( $type eq 'str8' && $borrower ) {
 
             }
 
-        } elsif ($multi_hold) {
+        } elsif (@biblionumbers > 1) {
             my $bibinfo = $bibinfos{$biblionumber};
             if ( $can_override || CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
                 AddReserve(
@@ -161,15 +162,10 @@ if ( $type eq 'str8' && $borrower ) {
         }
     }
 
-    if ($multi_hold) {
-        if ($bad_bibs) {
-            $biblionumbers .= $bad_bibs;
-        }
-        print $input->redirect("request.pl?biblionumbers=$biblionumbers&multi_hold=1");
+    if ($bad_bibs) {
+        $biblionumbers .= $bad_bibs;
     }
-    else {
-        print $input->redirect("request.pl?biblionumber=$biblionumber");
-    }
+    print $input->redirect("request.pl?biblionumber=$biblionumber");
 }
 elsif ( $borrowernumber eq '' ) {
     print $input->header();

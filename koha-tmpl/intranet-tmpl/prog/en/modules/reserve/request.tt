@@ -101,16 +101,11 @@
                                 <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
                                 <input type="submit" value="Search" />
                                 [% IF multi_hold %]
-                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
                                     <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
                                 [% ELSE %]
                                     <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                                 [% END %]
 
-                                [% IF ( multi_hold ) %]
-                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                [% END %]
                             </form> <!-- /#holds_patronsearch -->
                             [% IF borrowers %]
                                 [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
@@ -122,16 +117,11 @@
                                 <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
                                 <input type="submit" value="Search" />
                                 [% IF multi_hold %]
-                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
                                     <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
                                 [% ELSE %]
                                     <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                                 [% END %]
 
-                                [% IF ( multi_hold ) %]
-                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                [% END %]
                             </form> <!-- /#holds_patronsearch -->
                             [% IF clubs %]
                                 [% INCLUDE 'clubs-table.inc' destination = "holds" %]
@@ -147,7 +137,6 @@
                     <form action="/api/v1/clubs/[% club.id | html %]/holds" method="post" name="form" id="club-request-form">
 
                         [% IF ( multi_hold ) %]
-                            <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
                             <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
                             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
@@ -384,7 +373,6 @@
                         <input type="hidden" name="type" value="str8" />
 
                         [% IF ( multi_hold ) %]
-                            <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
                             <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="[% biblionumbers | html %]"/>
                             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
                             <input type="hidden" name="request" value="any"/>
