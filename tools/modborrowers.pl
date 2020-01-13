@@ -265,6 +265,12 @@ if ( $op eq 'show' ) {
         }
         ,
         {
+            name => "email",
+            type => "text",
+            mandatory => ( grep /email/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
             name => "debarred",
             type => "date",
             mandatory => ( grep /debarred/, @mandatoryFields ) ? 1 : 0,
@@ -288,7 +294,7 @@ if ( $op eq 'do' ) {
 
     my @disabled = $input->multi_param('disable_input');
     my $infos;
-    for my $field ( qw/surname firstname branchcode categorycode city state zipcode country sort1 sort2 dateenrolled dateexpiry borrowernotes opacnote debarred debarredcomment/ ) {
+        for my $field ( qw/surname firstname branchcode categorycode city state zipcode country sort1 sort2 dateenrolled dateexpiry borrowernotes opacnote email/ ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
         $infos->{$field} = "" if grep { /^$field$/ } @disabled;

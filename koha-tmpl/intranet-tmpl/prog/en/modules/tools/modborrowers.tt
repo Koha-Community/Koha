@@ -149,6 +149,7 @@
                                                 <th class="title-string">Expiry date</th>
                                                 <th>Circulation note</th>
                                                 <th>OPAC note</th>
+                                                <th>Email address</th>
                                                 <th>Restriction expiration</th>
                                                 <th>Restriction comment</th>
                                                 [% FOREACH attrh IN attributes_header %]
@@ -175,6 +176,7 @@
                                                     <td><span title="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
                                                     <td>[% borrower.borrowernotes | html %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
+                                                    <td>[% borrower.email | html %]</td>
                                                     <td><span title="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</span></td>
                                                     <td>[% borrower.debarredcomment | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
@@ -233,6 +235,8 @@
                                                 Circulation note:
                                                 [% CASE 'opacnote' %]
                                                 OPAC note:
+                                                [% CASE 'email' %]
+                                                Email address:
                                                 [% CASE 'debarred' %]
                                                 Restriction expiration:
                                                 [% CASE 'debarredcomment' %]
