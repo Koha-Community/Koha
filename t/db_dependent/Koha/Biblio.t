@@ -440,14 +440,19 @@ subtest 'to_api() tests' => sub {
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
     my $biblioitem_api = $biblio->biblioitem->to_api;
     my $biblio_api     = $biblio->to_api;
 
-    plan tests => scalar keys %{ $biblioitem_api };
+    plan tests => (scalar keys %{ $biblioitem_api }) + 1;
 
     foreach my $key ( keys %{ $biblioitem_api } ) {
         is( $biblio_api->{$key}, $biblioitem_api->{$key}, "$key is added to the biblio object" );
     }
+
+    $biblio_api = $biblio->to_api({ embed => { items => {} } });
+    is_deeply( $biblio_api->{items}, [ $item->to_api ], 'Item correctly embedded' );
 
     $schema->storage->txn_rollback;
 };

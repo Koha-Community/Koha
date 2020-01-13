@@ -737,8 +737,16 @@ on the API.
 sub to_api {
     my ($self, $args) = @_;
 
+    my @embeds = keys %{ $args->{embed} };
+    my $remaining_embeds = {};
+
+    foreach my $embed (@embeds) {
+        $remaining_embeds = delete $args->{embed}->{$embed}
+            unless $self->can($embed);
+    }
+
     my $response = $self->SUPER::to_api( $args );
-    my $biblioitem = $self->biblioitem->to_api( $args );
+    my $biblioitem = $self->biblioitem->to_api({ embed => $remaining_embeds });
 
     return { %$response, %$biblioitem };
 }
