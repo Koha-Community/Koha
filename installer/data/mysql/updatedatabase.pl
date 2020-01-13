@@ -20357,7 +20357,7 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do( 'UPDATE systempreferences SET value = REPLACE(value, "https://openlibrary.org/search/?", "https://openlibrary.org/search?") WHERE variable = "OPACSearchForTitleIn"' );
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - Update OpacSearchForTitleIn system preference)\n";
+    print "Upgrade to $DBversion done (Bug 24206 - Update OpacSearchForTitleIn system preference)\n";
 }
 
 # SEE bug 13068
