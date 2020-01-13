@@ -740,11 +740,7 @@ sub to_api {
     my $response = $self->SUPER::to_api( $args );
     my $biblioitem = $self->biblioitem->to_api( $args );
 
-    foreach my $key ( keys %{ $biblioitem } ) {
-        $response->{$key} = $biblioitem->{$key};
-    }
-
-    return $response;
+    return { %$response, %$biblioitem };
 }
 
 =head3 to_api_mapping
