@@ -21,7 +21,8 @@
 use Modern::Perl;
 
 use DateTime;
-use Test::More tests => 7;
+use Test::More tests => 8;
+use Test::Warn;
 
 use t::lib::Mocks;
 
@@ -62,6 +63,16 @@ subtest 'Patron tests - 15 years old (Time Zone shifts)' => sub {
             $offset++;
         }
     }
+};
+
+subtest 'No age restriction' => sub {
+    plan tests => 1;
+
+    warning_is {
+        C4::Circulation::GetAgeRestriction();
+    }
+    undef, "No warning if GetAgeRestriction is called without restriction";
+
 };
 
 # The Patron tests

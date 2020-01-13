@@ -3977,6 +3977,7 @@ sub GetAgeRestriction {
     my ($record_restrictions, $borrower) = @_;
     my $markers = C4::Context->preference('AgeRestrictionMarker');
 
+    return unless $record_restrictions;
     # Split $record_restrictions to something like FSK 16 or PEGI 6
     my @values = split ' ', uc($record_restrictions);
     return unless @values;
