@@ -144,12 +144,12 @@
                                         </td>
                                         <td class="actions">
                                         [% IF not basket.closedate and supplier.active %]
+                                            [% IF basket.uncertainprices OR ( basket.total_items && !basket.is_standing ) %]
                                             <div class="dropup">
                                                 <div class="btn-group">
                                                 [%# There should be no space between these two buttons, it would render badly %]
-                                                    <a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"><i class="fa fa-eye"></i> View</a><a class="btn btn-default btn-xs dropdown-toggle" id="basketactions[% basket.basknetno | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                                                    <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a><a class="btn btn-default btn-xs dropdown-toggle" id="basketactions[% basket.basknetno | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="basketactions[% basketn.basketno | html %]">
-                                                        <li><a id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></li>
                                                         [% IF basket.uncertainprices %]
                                                         <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | uri %]&owner=1"><i class="fa fa-usd"></i> Uncertain prices</a></li>
                                                         [% ELSIF basket.total_items && !basket.is_standing %]
@@ -169,8 +169,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                        [% ELSE %]
-                                            <a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"><i class="fa fa-eye"></i> View</a>
+                                            [% ELSE %]
+                                                <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
+                                            [% END %]
                                         [% END %]
                                         </td>
                                     </tr>
