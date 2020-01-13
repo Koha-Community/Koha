@@ -284,42 +284,65 @@
     }
 
     /**
-     * check if mandatory subfields are written
+     * check if mandatory/important subfields are written
+     * @param mandatory true to check for mandatories, false for importants
      */
-    function AreMandatoriesNotOk(){
-        var mandatories = new Array();
-        var mandatoriesfields = new Array();
+    function AreFieldsNotOk (mandatory = true) {
+        var fields = new Array();
+        var subfields = new Array();
         var tab = new Array();
         var label = new Array();
         var flag=0;
         var tabflag= new Array();
-        [% FOREACH BIG_LOO IN BIG_LOOP %]
-            [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                [% IF ( innerloo.mandatory ) %]
-                    mandatoriesfields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
-                [% END %]
-                [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                    [% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
-                        tab.push("[% BIG_LOO.number | html %]");
-                        label.push("[% subfield_loo.marc_lib | $raw %]");
+        var StrAlert = "";
+        var notFilledClass = "subfield_not_filled";
+
+        if (mandatory) {
+            [% FOREACH BIG_LOO IN BIG_LOOP %]
+                [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                    [% IF ( innerloo.mandatory ) %]
+                        fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+                    [% END %]
+                    [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+                        [% IF ( subfield_loo.mandatory ) %]subfields.push("[% subfield_loo.id | html %]");
+                            tab.push("[% BIG_LOO.number | html %]");
+                            label.push("[% subfield_loo.marc_lib | $raw %]");
+                        [% END %]
                     [% END %]
                 [% END %]
             [% END %]
-        [% END %]
-        var StrAlert = _("Can't save this record because the following field aren't filled:");
-        StrAlert += "\n\n";
-        for(var i=0,len=mandatories.length; i<len ; i++){
-            var tag=mandatories[i].substr(4,3);
-            var subfield=mandatories[i].substr(17,1);
-            var tagnumber=mandatories[i].substr(19,mandatories[i].lastIndexOf("_")-19);
-            if (tabflag[tag+subfield+tagnumber] ==  null) {
-            tabflag[tag+subfield+tagnumber]=new Array();
-                tabflag[tag+subfield+tagnumber][0]=0;
+            StrAlert = _("Can't save this record because the following field aren't filled:");
+        } else {
+            [% FOREACH BIG_LOO IN BIG_LOOP %]
+                [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                    [% IF ( innerloo.important ) %]
+                    fields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
+                    [% END %]
+                    [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+                        [% IF ( subfield_loo.important ) %]subfields.push("[% subfield_loo.id | html %]");
+                            tab.push("[% BIG_LOO.number | html %]");
+                            label.push("[% subfield_loo.marc_lib | $raw %]");
+                        [% END %]
+                    [% END %]
+                [% END %]
+            [% END %]
+            StrAlert = _("A few important fields are not filled:");
+            notFilledClass = "important_subfield_not_filled";
         }
-            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(mandatories[i]) != null && ! document.getElementById(mandatories[i]).value || document.getElementById(mandatories[i]) == null)){
+
+        StrAlert += "\n\n";
+        for(var i=0,len=subfields.length; i<len ; i++){
+            var tag=subfields[i].substr(4,3);
+            var subfield=subfields[i].substr(17,1);
+            var tagnumber=subfields[i].substr(19,subfields[i].lastIndexOf("_")-19);
+            if (tabflag[tag+subfield+tagnumber] ==  null) {
+                tabflag[tag+subfield+tagnumber]=new Array();
+                tabflag[tag+subfield+tagnumber][0]=0;
+            }
+            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(subfields[i]) != null && ! document.getElementById(subfields[i]).value || document.getElementById(subfields[i]) == null)){
                 tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
-                document.getElementById(mandatories[i]).setAttribute('class','input_marceditor noEnterSubmit subfield_not_filled');
-                $('#' + mandatories[i]).focus();
+                document.getElementById(subfields[i]).setAttribute('class','input_marceditor noEnterSubmit ' + notFilledClass);
+                $('#' + subfields[i]).focus();
                 tabflag[tag+subfield+tagnumber][1]=label[i];
                 tabflag[tag+subfield+tagnumber][2]=tab[i];
             } else {
@@ -336,10 +359,10 @@
             }
         }
 
-        /* Check for mandatories field(not subfields) */
-        for(var i=0,len=mandatoriesfields.length; i<len; i++){
+        /* Check for mandatories/importants field(not subfields) */
+        for(var i=0,len=fields.length; i<len; i++){
             isempty  = true;
-            arr      = mandatoriesfields[i];
+            arr      = fields[i];
             divid    = "tag_" + arr[0] + "_" + arr[1];
             varegexp = new RegExp("^tag_" + arr[0] + "_code_");
 
@@ -380,7 +403,13 @@
 
             if(isempty){
                 flag = 1;
-                    StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
+                StrAlert += "\t* ";
+                if (mandatory) {
+                    StrAlert += _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]);
+                } else {
+                    StrAlert += _("Field %s is important, at least one of its subfields must be filled.").format(arr[0]);
+                }
+                StrAlert += "\n";
             }
 
         }
@@ -397,10 +426,11 @@
      *
      */
     function Check(){
-        var StrAlert = AreMandatoriesNotOk();
+        var StrAlert = AreFieldsNotOk();
         if( ! StrAlert ){
-            var StrWarning = AreImportantsNotOk();
+            var StrWarning = AreFieldsNotOk(false);
             if (StrWarning){
+                StrWarning += "\n" + _("Are you sure you want to save?");
                 var r=confirm(StrWarning);
                 if (! r){
                     return false;
@@ -411,115 +441,6 @@
         } else {
             alert(StrAlert);
             return false;
-        }
-    }
-
-    /**
-     * check if important subfields are written
-     */
-    function AreImportantsNotOk(){
-        var importants = new Array();
-        var importantsfields = new Array();
-        var tab = new Array();
-        var label = new Array();
-        var flag=0;
-        var tabflag= new Array();
-        [% FOREACH BIG_LOO IN BIG_LOOP %]
-            [% FOREACH innerloo IN BIG_LOO.innerloop %]
-                [% IF ( innerloo.important ) %]
-                importantsfields.push(new Array("[% innerloo.tag | html %]","[% innerloo.index | html %][% innerloo.random | html %]","[% innerloo.index | html %]"));
-                [% END %]
-                [% FOREACH subfield_loo IN innerloo.subfield_loop %]
-                    [% IF ( subfield_loo.important ) %]importants.push("[% subfield_loo.id | html %]");
-                        tab.push("[% BIG_LOO.number | html %]");
-                        label.push("[% subfield_loo.marc_lib | $raw %]");
-                    [% END %]
-                [% END %]
-            [% END %]
-        [% END %]
-        var StrWarning = _("A few important fields are not filled:");
-        StrWarning += "\n\n";
-        for(var i=0,len=importants.length; i<len ; i++){
-            var tag=importants[i].substr(4,3);
-            var subfield=importants[i].substr(17,1);
-            var tagnumber=importants[i].substr(19,importants[i].lastIndexOf("_")-19);
-            if (tabflag[tag+subfield+tagnumber] ==  null) {
-                tabflag[tag+subfield+tagnumber]=new Array();
-                tabflag[tag+subfield+tagnumber][0]=0;
-            }
-            if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(importants[i]) != null && ! document.getElementById(importants[i]).value || document.getElementById(importants[i]) == null)){
-                tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
-                document.getElementById(importants[i]).setAttribute('class','input_marceditor noEnterSubmit important_subfield_not_filled');
-                $('#' + importants[i]).focus();
-                tabflag[tag+subfield+tagnumber][1]=label[i];
-                tabflag[tag+subfield+tagnumber][2]=tab[i];
-            } else {
-                tabflag[tag+subfield+tagnumber][0] = 1;
-            }
-        }
-        for (var tagsubfieldid in tabflag){
-            if (tabflag[tagsubfieldid][0]==0){
-                var tag=tagsubfieldid.substr(0,3);
-                var subfield=tagsubfieldid.substr(3,1);
-                StrWarning += "\t* "+_("tag %s subfield %s %s in tab %s").format(tag, subfield, tabflag[tagsubfieldid][1], tabflag[tagsubfieldid][2]) + "\n";
-                //StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
-                flag=1;
-            }
-        }
-
-        /* Check for importants field(not subfields) */
-        for(var i=0,len=importantsfields.length; i<len; i++){
-            isempty  = true;
-            arr      = importantsfields[i];
-            divid    = "tag_" + arr[0] + "_" + arr[1];
-            varegexp = new RegExp("^tag_" + arr[0] + "_code_");
-
-            if(parseInt(arr[0]) >= 10){
-                elem = document.getElementById(divid);
-                eleminputs = elem.getElementsByTagName('input');
-                for(var j=0,len2=eleminputs.length; j<len2; j++){
-
-                    if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-                        inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
-
-                        for( var k=0; k<len2; k++){
-                            if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
-                                isempty = false
-                            }
-                        }
-
-                        elemselect = elem.getElementsByTagName('select');
-                        for( var k=0; k<elemselect.length; k++){
-                            if(elemselect[k].id.match(inputregexp) && elemselect[k].value){
-                                isempty = false
-                            }
-                        }
-                    }
-                }
-
-                elemtextareas = elem.getElementsByTagName('textarea');
-                for(var j=0,len2=elemtextareas.length; j<len2; j++){
-                    // this bit assumes that the only textareas in this context would be for subfields
-                    if (elemtextareas[j].value) {
-                        isempty = false;
-                    }
-                }
-            } else {
-                isempty = false;
-            }
-
-            if(isempty){
-                flag = 1;
-                StrWarning += "\t* " + _("Field %s is important, at least one of its subfields must be filled.").format(arr[0]) + "\n";
-            }
-        }
-
-        StrWarning += "\n" + _("Are you sure you want to save?");
-
-        if(flag){
-            return StrWarning;
-        } else {
-            return flag;
         }
     }
 
