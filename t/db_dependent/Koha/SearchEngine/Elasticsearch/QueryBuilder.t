@@ -457,8 +457,8 @@ subtest 'build_query tests' => sub {
     ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 1 } );
     is(
         $query->{query}{query_string}{query},
-        '(title:"donald duck") AND suppress:0',
-        "query of specific field is added AND suppress:0"
+        '(title:"donald duck") AND suppress:false',
+        "query of specific field is added AND suppress:false"
     );
 
     ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 0 } );
