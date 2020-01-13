@@ -3276,6 +3276,7 @@ CREATE TABLE `biblioimages` ( -- local cover images
  `mimetype` varchar(15) NOT NULL, -- image type
  `imagefile` mediumblob NOT NULL, -- image file contents
  `thumbnail` mediumblob NOT NULL, -- thumbnail file contents
+ `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- image creation/update time
  PRIMARY KEY (`imagenumber`),
  CONSTRAINT `bibliocoverimage_fk1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
