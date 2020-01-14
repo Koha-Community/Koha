@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Cash registers
@@ -97,7 +98,7 @@
 
                             <li>
                                 <label for="starting_float">Initial float: </label>
-                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" value="[% cash_register.starting_float | html %]" />
+                                <input type="text" pattern='^\d+(?:\.\d{0,2})$' name="starting_float" id="starting_float" value="[% cash_register.starting_float | $Price on_editing => 1  %]" />
                             </li>
                         </ol>
                    </fieldset>
@@ -145,7 +146,7 @@
                        <td>[% cash_register.description | html %]</td>
                        <td>[% cash_register.library.branchname | html %]</td>
                        <td>[% IF cash_register.branch_default %]Yes[% ELSE %]No[% END %]</td>
-                       <td>[% cash_register.starting_float | html %]</td>
+                       <td>[% cash_register.starting_float | $Price %]</td>
                        [% IF cash_register.archived == '0' %]
                        <td class="actions">
                            <a class="btn btn-default btn-xs" href="cash_registers.pl?op=add_form&amp;id=[% cash_register.id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
