@@ -26,6 +26,7 @@ use Koha::Exceptions::Config;
 use Koha::Exceptions::Elasticsearch;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
+use C4::Heading;
 
 use Carp;
 use Clone qw(clone);
@@ -470,7 +471,6 @@ sub marc_records_to_documents {
                 }
 
                 my $data_field_rules = $data_fields_rules->{$tag};
-
                 if ($data_field_rules) {
                     my $subfields_mappings = $data_field_rules->{subfields};
                     my $wildcard_mappings = $subfields_mappings->{'*'};
@@ -482,6 +482,13 @@ sub marc_records_to_documents {
                         }
                         if (@{$mappings}) {
                             $self->_process_mappings($mappings, $data, $record_document, $altscript);
+                        }
+                        if ( defined @{$mappings}[0] && grep /match-heading/, @{@{$mappings}[0]} ){
+                            # Used by the authority linker the match-heading field requires a specific syntax
+                            # that is specified in C4/Heading
+                            my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
+                            next unless $heading;
+                            push @{$record_document->{'match-heading'}}, $heading->search_form;
                         }
                     }
 
@@ -498,6 +505,13 @@ sub marc_records_to_documents {
                             );
                             if ($data) {
                                 $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document, $altscript);
+                            }
+                            if ( grep { $_->[0] eq 'match-heading' } @{$subfields_join_mappings->{$subfields_group}} ){
+                                # Used by the authority linker the match-heading field requires a specific syntax
+                                # that is specified in C4/Heading
+                                my $heading = C4::Heading->new_from_field( $field, undef, 1 ); #new auth heading
+                                next unless $heading;
+                                push @{$record_document->{'match-heading'}}, $heading->search_form;
                             }
                         }
                     }

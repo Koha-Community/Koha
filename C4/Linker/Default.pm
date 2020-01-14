@@ -68,7 +68,7 @@ sub get_link {
                         map { $_->[0] => $_->[1] } @subfields
                     );
                 ( $authid, $fuzzy ) =
-                  $self->get_link( C4::Heading->new_from_bib_field($field),
+                  $self->get_link( C4::Heading->new_from_field($field),
                     $behavior );
             }
         }
