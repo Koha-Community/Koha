@@ -543,7 +543,7 @@ sub LinkBibHeadingsToAuthorities {
                         $authfield->add_subfields( $_->[0] => $_->[1] )
                           if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a"
                             && C4::Heading::valid_bib_heading_subfield(
-                                $authority_type->auth_tag_to_report, $_->[0] )
+                                $field->tag, $_->[0] )
                             );
                     } $field->subfields();
                     $marcrecordauth->insert_fields_ordered($authfield);
