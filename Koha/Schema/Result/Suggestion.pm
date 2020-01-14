@@ -443,6 +443,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UsG/gxLa0HMMbcpbscV29Q
 
+sub koha_objects_class {
+    'Koha::Suggestions';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Suggestion';
+}
+
 1;
