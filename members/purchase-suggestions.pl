@@ -34,7 +34,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 'suggestions_manage' },
+        flagsrequired   => { suggestions => 'suggestions_manage' },
         debug           => 1,
     }
 );
