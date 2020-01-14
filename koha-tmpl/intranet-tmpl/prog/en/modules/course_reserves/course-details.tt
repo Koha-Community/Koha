@@ -86,6 +86,7 @@
                         <th>Public note</th>
                         <th>Link</th>
                         <th class="NoSort">Other course reserves</th>
+                        <th>Circulation</th>
                         [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                             <th class="NoSort">Actions</th>
                         [% END %]
@@ -216,6 +217,16 @@
                                 [% END %]
                             </td>
 
+                            <td class="status">
+                                <span>
+                                [% IF cr.item.onloan %]
+                                    Checked Out
+                                [% ELSE %]
+                                    Available
+                                [% END %]
+                                </span>
+                            </td>
+
                             [% IF CAN_user_coursereserves_add_reserves || CAN_user_coursereserves_delete_reserves %]
                                 <td class="actions">
                                     [% IF CAN_user_coursereserves_add_reserves %]
@@ -223,11 +234,7 @@
                                     [% END %]
 
                                     [% IF CAN_user_coursereserves_delete_reserves %]
-                                        [% IF cr.item.onloan %]
-                                            <a class="btn btn-default btn-xs disabled checkedout delete_item" href="#" data-toggle="tooltip" data-placement="left" title="This item is checked out">
-                                        [% ELSE %]
-                                            <a class="btn btn-default btn-xs delete_item" href="course-details.pl?course_id=[% course.course_id | html %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id | html %]">
-                                        [% END %]
+                                        <a class="btn btn-default btn-xs delete_item" href="course-details.pl?course_id=[% course.course_id | html %]&amp;action=del_reserve&amp;cr_id=[% cr.cr_id | html %]">
                                         <i class="fa fa-trash"></i> Remove</a>
                                     [% END %]
                                 </td>
