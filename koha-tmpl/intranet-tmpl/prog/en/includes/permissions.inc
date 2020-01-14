@@ -28,7 +28,10 @@
         <span class="main_permission updatecharges_permission">Manage patrons fines and fees</span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'acquisition' -%]
-        <span class="main_permission acquisition_permission">Acquisition and/or suggestion management</span>
+        <span class="main_permission acquisition_permission">Acquisition management</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'suggestions' -%]
+        <span class="main_permission suggestions_permission">Suggestions management</span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'tools' -%]
         <span class="main_permission tools_permission">Use all tools (expand for granular tools permissions)</span>
