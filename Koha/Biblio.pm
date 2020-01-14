@@ -40,6 +40,7 @@ use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::Suggestions;
 use Koha::Subscriptions;
 
 =head1 NAME
@@ -437,6 +438,21 @@ sub biblioitem {
     $self->{_biblioitem} ||= Koha::Biblioitems->find( { biblionumber => $self->biblionumber() } );
 
     return $self->{_biblioitem};
+}
+
+=head3 suggestions
+
+my $suggestions = $self->suggestions
+
+Returns the related Koha::Suggestions object for this Biblio object
+
+=cut
+
+sub suggestions {
+    my ($self) = @_;
+
+    my $suggestions_rs = $self->_result->suggestions;
+    return Koha::Suggestions->_new_from_dbic( $suggestions_rs );
 }
 
 =head3 subscriptions
