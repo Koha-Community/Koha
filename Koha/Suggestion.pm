@@ -23,6 +23,7 @@ use Carp;
 
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::Patrons;
 
 use base qw(Koha::Object);
 
@@ -32,7 +33,7 @@ Koha::Suggestion - Koha Suggestion object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -53,7 +54,26 @@ sub store {
     return $self->SUPER::store();
 }
 
-=head3 type
+=head3 suggester
+
+    my $patron = $suggestion->suggester
+
+Returns the I<Koha::Patron> for the suggestion generator. I<undef> is
+returned if no suggester is linked.
+
+=cut
+
+sub suggester {
+    my ($self) = @_;
+
+    my $suggester_rs = $self->_result->suggester;
+    return unless $suggester_rs;
+    return Koha::Patron->_new_from_dbic($suggester_rs);
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 
