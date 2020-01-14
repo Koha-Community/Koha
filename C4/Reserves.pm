@@ -392,7 +392,6 @@ sub CanItemBeReserved {
         {
             borrowernumber => $borrowernumber,
             biblionumber   => $item->biblionumber,
-            found          => undef, # Found holds don't count against a patron's holds limit
         }
     );
     if ( $holds->count() >= $holds_per_record ) {
