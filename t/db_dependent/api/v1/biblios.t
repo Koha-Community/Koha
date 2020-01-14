@@ -37,14 +37,14 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'delete() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
-            value => { flags => 0 } # no permissions
+            value => { flags => 9 }
         }
     );
     my $password = 'thePassword123';
@@ -53,22 +53,6 @@ subtest 'delete() tests' => sub {
 
     my $item      = $builder->build_sample_item();
     my $biblio_id = $item->biblionumber;
-
-    $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
-      ->status_is(403, 'Not enough permissions makes it return the right code');
-
-    # Add permissions
-    $builder->build(
-        {
-            source => 'UserPermission',
-            value  => {
-                borrowernumber => $patron->borrowernumber,
-                module_bit     => 9,
-                code           => 'edit_catalogue'
-            }
-        }
-    );
-
 
     # Bibs with items cannot be deleted
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
