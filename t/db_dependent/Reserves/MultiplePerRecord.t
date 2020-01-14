@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 38;
+use Test::More tests => 39;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -289,5 +289,8 @@ ok( $hold_id, 'Second hold was placed' );
 $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
 is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
-$schema->storage->txn_rollback;
+Koha::Holds->find($hold_id)->found("W")->store;
+$can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
+is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
+$schema->storage->txn_rollback;
