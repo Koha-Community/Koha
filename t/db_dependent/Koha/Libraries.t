@@ -192,7 +192,7 @@ subtest 'pickup_locations' => sub {
             my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             my $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -201,7 +201,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item1, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -221,7 +221,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1  });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -230,7 +230,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item2, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -240,7 +240,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -249,7 +249,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item1, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -278,7 +278,7 @@ subtest 'pickup_locations' => sub {
             my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             my $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -287,7 +287,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item1, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -302,7 +302,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -319,7 +319,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -328,7 +328,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item1, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -355,7 +355,7 @@ subtest 'pickup_locations' => sub {
             my $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             my $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -364,7 +364,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item1, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -384,7 +384,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -393,7 +393,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item3, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -403,7 +403,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ biblio => $biblio->biblionumber, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
@@ -412,7 +412,7 @@ subtest 'pickup_locations' => sub {
             $pickup = Koha::Libraries->pickup_locations({ item => $item1, patron => $patron1 });
             $found = 0;
             foreach my $lib (@{$pickup}) {
-                if ($lib->branchcode eq $limit->toBranch) {
+                if ($lib->{branchcode} eq $limit->toBranch) {
                     $found = 1;
                 }
             }
