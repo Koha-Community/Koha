@@ -2166,6 +2166,9 @@ sub MarkIssueReturned {
 
     # Retrieve the issue
     my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
+
+    return unless $issue->borrowernumber == $borrowernumber; # If the item is checked out to another patron we do not return it
+
     my $issue_id = $issue->issue_id;
 
     my $anonymouspatron;
