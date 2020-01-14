@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use C4::Biblio;
 use Koha::Database;
@@ -453,6 +453,40 @@ subtest 'to_api() tests' => sub {
 
     $biblio_api = $biblio->to_api({ embed => { items => {} } });
     is_deeply( $biblio_api->{items}, [ $item->to_api ], 'Item correctly embedded' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'suggestions() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio     = $builder->build_sample_biblio();
+
+    is( ref($biblio->suggestions), 'Koha::Suggestions', 'Return type is correct' );
+
+    is_deeply(
+        $biblio->suggestions->unblessed,
+        [],
+        '->suggestions returns an empty Koha::Suggestions resultset'
+    );
+
+    my $suggestion = $builder->build_object(
+        {
+            class => 'Koha::Suggestions',
+            value => { biblionumber => $biblio->biblionumber }
+        }
+    );
+
+    my $suggestions = $biblio->suggestions->unblessed;
+
+    is_deeply(
+        $biblio->suggestions->unblessed,
+        [ $suggestion->unblessed ],
+        '->suggestions returns the related Koha::Suggestion objects'
+    );
 
     $schema->storage->txn_rollback;
 };
