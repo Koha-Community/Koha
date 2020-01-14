@@ -9,7 +9,8 @@
     [%- CASE 'reserveforothers' -%]<span>Place and modify holds for patrons</span>
     [%- CASE 'editcatalogue' -%]<span>Edit catalog (Modify bibliographic/holdings data)</span>
     [%- CASE 'updatecharges' -%]<span>Manage patrons fines and fees</span>
-    [%- CASE 'acquisition' -%]<span>Acquisition and/or suggestion management</span>
+    [%- CASE 'acquisition' -%]<span>Acquisition management</span>
+    [%- CASE 'suggestions' -%]<span>Suggestions management</span>
     [%- CASE 'tools' -%]<span>Use all tools (expand for granular tools permissions)</span>
     [%- CASE 'editauthorities' -%]<span>Edit authorities</span>
     [%- CASE 'serials' -%]<span>Manage serial subscriptions</span>
