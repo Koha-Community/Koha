@@ -50,9 +50,9 @@ subtest 'Test caching in get_link and update_cache' => sub {
     my $subject_field2 = MARC::Field->new($tags[0],0,2,$tags[1]=>'Science fiction');
     my $genre_field = MARC::Field->new($tags[2],0,2,$tags[3]=>'Science fiction');
     # Can we build a heading from it?
-    my $subject_heading = C4::Heading->new_from_bib_field( $subject_field, q{} );
-    my $subject_heading2 = C4::Heading->new_from_bib_field( $subject_field, q{} );
-    my $genre_heading = C4::Heading->new_from_bib_field( $genre_field, q{} );
+    my $subject_heading = C4::Heading->new_from_field( $subject_field, q{} );
+    my $subject_heading2 = C4::Heading->new_from_field( $subject_field, q{} );
+    my $genre_heading = C4::Heading->new_from_field( $genre_field, q{} );
 
 
     # Now test to see if C4::Linker can find it.

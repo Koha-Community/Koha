@@ -87,20 +87,20 @@ sub new {
     return bless {}, $class;
 }
 
-=head2 valid_bib_heading_tag
+=head2 valid_heading_tag
 
 =cut
 
-sub valid_bib_heading_tag {
+sub valid_heading_tag {
     my ( $self, $tag ) = @_;
     return $bib_heading_fields->{$tag};
 }
 
-=head2 valid_bib_heading_subfield
+=head2 valid_heading_subfield
 
 =cut
 
-sub valid_bib_heading_subfield {
+sub valid_heading_subfield {
     my $self          = shift;
     my $tag           = shift;
     my $subfield      = shift;

@@ -27,20 +27,23 @@ BEGIN {
 }
 
 subtest "MARC21 tests" => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
-    ok(C4::Heading::valid_bib_heading_subfield('100', 'a'), '100a valid');
-    ok(!C4::Heading::valid_bib_heading_subfield('100', 'e'), '100e not valid');
+    ok(C4::Heading::valid_heading_subfield('100', 'a'), '100a valid for bib');
+    ok(!C4::Heading::valid_heading_subfield('100', 'e'), '100e not valid for bib');
 
-    ok(C4::Heading::valid_bib_heading_subfield('110', 'a'), '110a valid');
-    ok(!C4::Heading::valid_bib_heading_subfield('110', 'e'), '110e not valid');
+    ok(C4::Heading::valid_heading_subfield('100', 'a', 1), '100a valid for authority');
+    ok(!C4::Heading::valid_heading_subfield('100', 'e', 1), '100e not valid for authority');
 
-    ok(C4::Heading::valid_bib_heading_subfield('600', 'a'), '600a valid');
-    ok(!C4::Heading::valid_bib_heading_subfield('600', 'e'), '600e not valid');
+    ok(C4::Heading::valid_heading_subfield('110', 'a'), '110a valid for bib');
+    ok(!C4::Heading::valid_heading_subfield('110', 'e'), '110e not valid for bib');
 
-    ok(!C4::Heading::valid_bib_heading_subfield('012', 'a'), '012a invalid field');
+    ok(C4::Heading::valid_heading_subfield('600', 'a'), '600a valid for bib');
+    ok(!C4::Heading::valid_heading_subfield('600', 'e'), '600e not valid for bib');
+
+    ok(!C4::Heading::valid_heading_subfield('012', 'a'), '012a invalid field for bib');
 };
 
 subtest "UNIMARC tests" => sub {
@@ -48,14 +51,14 @@ subtest "UNIMARC tests" => sub {
 
     t::lib::Mocks::mock_preference('marcflavour', 'UNIMARC');
 
-    ok(C4::Heading::valid_bib_heading_subfield('100', 'a'), '100a valid');
-    ok(!C4::Heading::valid_bib_heading_subfield('100', 'i'), '100i not valid');
+    ok(C4::Heading::valid_heading_subfield('100', 'a'), '100a valid for bib');
+    ok(!C4::Heading::valid_heading_subfield('100', 'i'), '100i not valid fir bib');
 
-    ok(C4::Heading::valid_bib_heading_subfield('110', 'a'), '110a valid');
-    ok(!C4::Heading::valid_bib_heading_subfield('110', 'i'), '110i not valid');
+    ok(C4::Heading::valid_heading_subfield('110', 'a'), '110a valid for bib');
+    ok(!C4::Heading::valid_heading_subfield('110', 'i'), '110i not valid for bib');
 
-    ok(C4::Heading::valid_bib_heading_subfield('600', 'a'), '600a valid');
-    ok(!C4::Heading::valid_bib_heading_subfield('600', 'i'), '600i not valid');
+    ok(C4::Heading::valid_heading_subfield('600', 'a'), '600a valid for bib');
+    ok(!C4::Heading::valid_heading_subfield('600', 'i'), '600i not valid for bib');
 
-    ok(!C4::Heading::valid_bib_heading_subfield('012', 'a'), '012a invalid field');
+    ok(!C4::Heading::valid_heading_subfield('012', 'a'), '012a invalid field for bib');
 }

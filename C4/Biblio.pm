@@ -501,7 +501,7 @@ sub LinkBibHeadingsToAuthorities {
     $allowrelink = 1 unless defined $allowrelink;
     my $num_headings_changed = 0;
     foreach my $field ( $bib->fields() ) {
-        my $heading = C4::Heading->new_from_bib_field( $field, $frameworkcode );
+        my $heading = C4::Heading->new_from_field( $field, $frameworkcode );
         next unless defined $heading;
 
         # check existing $9
@@ -545,7 +545,7 @@ sub LinkBibHeadingsToAuthorities {
                     my @auth_subfields;
                     foreach my $subfield ( $field->subfields() ){
                         if ( $subfield->[0] =~ /[A-z]/
-                            && C4::Heading::valid_bib_heading_subfield(
+                            && C4::Heading::valid_heading_subfield(
                                 $field->tag, $subfield->[0] )
                            ){
                             push @auth_subfields, $subfield->[0] => $subfield->[1];

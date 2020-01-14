@@ -110,7 +110,7 @@ sub run_tests {
     my $heading;
     ok(
         defined(
-            $heading = C4::Heading->new_from_bib_field( $new_bibfield, q{} )
+            $heading = C4::Heading->new_from_field( $new_bibfield, q{} )
         ),
         'Creating heading from bib field'
     );

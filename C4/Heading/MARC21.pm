@@ -119,6 +119,49 @@ my $bib_heading_fields = {
       { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst', series => 1 },
 };
 
+my $auth_heading_fields = {
+    '100' => {
+        auth_type  => 'PERSO_NAME',
+        subfields  => 'abcdfghjklmnopqrstvxyz',
+        main_entry => 1
+    },
+    '110' => {
+        auth_type  => 'CORPO_NAME',
+        subfields  => 'abcdfghklmnoprstvxyz',
+        main_entry => 1
+    },
+    '111' => {
+        auth_type  => 'MEETI_NAME',
+        subfields  => 'acdfghjklnpqstvxyz',
+        main_entry => 1
+    },
+    '130' => {
+        auth_type  => 'UNIF_TITLE',
+        subfields  => 'adfghklmnoprstvxyz',
+        main_entry => 1
+    },
+    '148' => {
+        auth_type => 'CHRON_TERM',
+        subfields => 'avxyz',
+        main_entry => 1
+    },
+    '150' => {
+        auth_type => 'TOPIC_TERM',
+        subfields => 'abgvxyz',
+        main_entry => 1
+    },
+    '151' => {
+        auth_type => 'GEOG_NAME',
+        subfields => 'agvxyz',
+        main_entry => 1
+    },
+    '155' => {
+        auth_type => 'GENRE/FORM',
+        subfields => 'agvxyz',
+        main_entry => 1
+    }
+};
+
 =head2 subdivisions
 
 =cut
@@ -143,16 +186,18 @@ sub new {
     return bless {}, $class;
 }
 
-=head2 valid_bib_heading_tag
+=head2 valid_heading_tag
 
 =cut
 
-sub valid_bib_heading_tag {
+sub valid_heading_tag {
     my $self          = shift;
     my $tag           = shift;
     my $frameworkcode = shift;
+    my $auth          = shift;
+    my $heading_fields = $auth ? { %$auth_heading_fields } : { %$bib_heading_fields };
 
-    if ( exists $bib_heading_fields->{$tag} ) {
+    if ( exists $heading_fields->{$tag} ) {
         return 1;
     }
     else {
@@ -161,32 +206,40 @@ sub valid_bib_heading_tag {
 
 }
 
-=head2 valid_bib_heading_subfield
+=head2 valid_heading_subfield
 
 =cut
 
-sub valid_bib_heading_subfield {
+sub valid_heading_subfield {
     my $self          = shift;
     my $tag           = shift;
     my $subfield      = shift;
+    my $auth          = shift;
 
-    if ( exists $bib_heading_fields->{$tag} ) {
-        return 1 if ($bib_heading_fields->{$tag}->{subfields} =~ /$subfield/);
+    my $heading_fields = $auth ? { %$auth_heading_fields } : { %$bib_heading_fields };
+
+    if ( exists $heading_fields->{$tag} ) {
+        return 1 if ($heading_fields->{$tag}->{subfields} =~ /$subfield/);
     }
     return 0;
 }
 
 =head2 parse_heading
 
+Given a field and an indicator to specify if it is an authority field or biblio field we return
+the correct type, thesauarus, search form, and display form of the heading.
+
 =cut
 
 sub parse_heading {
     my $self  = shift;
     my $field = shift;
+    my $auth  = shift;
 
     my $tag        = $field->tag;
-    my $field_info = $bib_heading_fields->{$tag};
+    my $heading_fields = $auth ? { %$auth_heading_fields } : { %$bib_heading_fields };
 
+    my $field_info = $heading_fields->{$tag};
     my $auth_type = $field_info->{'auth_type'};
     my $thesaurus =
       $tag =~ m/6../
