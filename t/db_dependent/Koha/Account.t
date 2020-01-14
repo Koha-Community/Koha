@@ -712,7 +712,7 @@ subtest 'pay() tests' => sub {
 
 subtest 'pay() handles lost items when paying a specific lost fee' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -779,6 +779,49 @@ subtest 'pay() handles lost items when paying a specific lost fee' => sub {
 
     $checkout = Koha::Checkouts->find( $checkout->id );
     ok( !$checkout, 'Item was removed from patron account' );
+
+    subtest 'item was not checked out to the same patron' => sub {
+        plan tests => 1;
+
+        my $patron_2 = $builder->build_object(
+            {
+                class => 'Koha::Patrons',
+                value => { branchcode => $library->branchcode }
+            }
+        );
+        $item->itemlost('1')->store();
+        C4::Accounts::chargelostitem( $patron->borrowernumber, $item->itemnumber, 5, "lost" );
+        my $accountline = Koha::Account::Lines->search(
+            {
+                borrowernumber  => $patron->borrowernumber,
+                itemnumber      => $item->itemnumber,
+                debit_type_code => 'LOST'
+            }
+        )->next;
+        my $checkout = Koha::Checkout->new(
+            {
+                borrowernumber => $patron_2->borrowernumber,
+                itemnumber     => $item->itemnumber,
+                date_due       => \'NOW()',
+                branchcode     => $patron_2->branchcode,
+                issuedate      => \'NOW()',
+            }
+        )->store();
+
+        $patron->account->pay(
+            {
+                amount     => 5,
+                library_id => $library->branchcode,
+                lines      => [$accountline],
+            }
+        );
+
+        ok(
+            Koha::Checkouts->find( $checkout->issue_id ),
+            'If the item is checked out to another patron, a lost item should not be returned if lost fee is paid'
+        );
+
+    };
 
     $schema->storage->txn_rollback;
 };
