@@ -122,6 +122,7 @@ BEGIN {
         &AutoUnsuspendReserves
 
         &IsAvailableForItemLevelRequest
+        ItemsAnyAvailableForHold
 
         &AlterPriority
         &ToggleLowestPriority
@@ -1259,34 +1260,51 @@ sub IsAvailableForItemLevelRequest {
     if ( $on_shelf_holds == 1 ) {
         return 1;
     } elsif ( $on_shelf_holds == 2 ) {
-        my @items =
-          Koha::Items->search( { biblionumber => $item->biblionumber } );
-
-        my $any_available = 0;
-
-        foreach my $i (@items) {
-            my $reserves_control_branch = GetReservesControlBranch( $i->unblessed(), $patron->unblessed );
-            my $branchitemrule = C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
-            my $item_library = Koha::Libraries->find( {branchcode => $i->homebranch} );
-
-
-            $any_available = 1
-              unless $i->itemlost
-              || $i->notforloan > 0
-              || $i->withdrawn
-              || $i->onloan
-              || IsItemOnHoldAndFound( $i->id )
-              || ( $i->damaged
-                && !C4::Context->preference('AllowHoldsOnDamagedItems') )
-              || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
-              || $branchitemrule->{holdallowed} == 1 && $patron->branchcode ne $i->homebranch
-              || $branchitemrule->{holdallowed} == 3 && !$item_library->validate_hold_sibling( {branchcode => $patron->branchcode} );
-        }
-
+        my $any_available = ItemsAnyAvailableForHold( { biblionumber => $item->biblionumber, patron => $patron });
         return $any_available ? 0 : 1;
     } else { # on_shelf_holds == 0 "If any unavailable" (the description is rather cryptic and could still be improved)
         return $item->onloan || IsItemOnHoldAndFound( $item->itemnumber );
     }
+}
+
+=head2 ItemsAnyAvailableForHold
+
+  ItemsAnyAvailableForHold( { biblionumber => $biblionumber, patron => $patron });
+
+This function checks all items for specified biblionumber (num) / patron (object)
+and returns true (1) or false (0) depending if any of rules allows at least of
+one item to be available for hold including lots of parameters/logic
+
+=cut
+
+sub ItemsAnyAvailableForHold {
+    my $param = shift;
+
+    my @items = Koha::Items->search( { biblionumber => $param->{biblionumber} } );
+
+    my $any_available = 0;
+
+    foreach my $i (@items) {
+        my $reserves_control_branch =
+            GetReservesControlBranch( $i->unblessed(), $param->{patron}->unblessed );
+        my $branchitemrule =
+            C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
+        my $item_library = Koha::Libraries->find( { branchcode => $i->homebranch } );
+
+        $any_available = 1
+            unless $i->itemlost
+            || $i->notforloan > 0
+            || $i->withdrawn
+            || $i->onloan
+            || IsItemOnHoldAndFound( $i->id )
+            || ( $i->damaged
+            && ! C4::Context->preference('AllowHoldsOnDamagedItems') )
+            || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
+            || $branchitemrule->{holdallowed} == 1 && $param->{patron}->branchcode ne $i->homebranch
+            || $branchitemrule->{holdallowed} == 3 && ! $item_library->validate_hold_sibling( { branchcode => $param->{patron}->branchcode } );
+    }
+
+    return $any_available;
 }
 
 =head2 AlterPriority
