@@ -387,15 +387,13 @@ subtest 'new_from_api() tests' => sub {
 
 subtest 'attributes_from_api() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 12;
 
     my $patron = Koha::Patron->new();
 
-    use Data::Printer colored => 1;
-
     my $attrs = $patron->attributes_from_api(
         {
-            updated_on  => '2019-12-27T14:53:00'
+            updated_on => '2019-12-27T14:53:00',
         }
     );
 
@@ -451,6 +449,19 @@ subtest 'attributes_from_api() tests' => sub {
         'date_of_birth',
         'Exception parameter is the API field name, not the DB one'
     );
+
+    # Booleans
+    $attrs = $patron->attributes_from_api(
+        {
+            incorrect_address => Mojo::JSON->true,
+            patron_card_lost  => Mojo::JSON->false,
+        }
+    );
+
+    ok( exists $attrs->{gonenoaddress}, 'Attribute gets translated' );
+    is( $attrs->{gonenoaddress}, 1, 'Boolean correctly translated to integer (true => 1)' );
+    ok( exists $attrs->{lost}, 'Attribute gets translated' );
+    is( $attrs->{lost}, 0, 'Boolean correctly translated to integer (false => 0)' );
 };
 
 subtest "Test update method" => sub {

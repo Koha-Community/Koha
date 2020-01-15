@@ -487,7 +487,12 @@ sub attributes_from_api {
           ? $from_api_mapping->{$key}
           : $key;
 
-        if ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
+        if ( $columns_info->{$koha_field_name}->{is_boolean} ) {
+            # TODO: Remove when D8 is formally deprecated
+            # Handle booleans gracefully
+            $value = ( $value ) ? 1 : 0;
+        }
+        elsif ( _date_or_datetime_column_type( $columns_info->{$koha_field_name}->{data_type} ) ) {
             try {
                 $value = dt_from_string($value, 'rfc3339');
             }
