@@ -54,7 +54,6 @@ BEGIN {
         TransformKohaToMarc
         PrepHostMarcField
         CountItemsIssued
-        CountBiblioInOrders
         ModBiblio
         ModZebra
         UpdateTotalIssues
@@ -3178,26 +3177,6 @@ sub ModBiblioMarc {
     ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
 
     return $biblionumber;
-}
-
-=head2 CountBiblioInOrders
-
-    $count = &CountBiblioInOrders( $biblionumber);
-
-This function return count of biblios in orders with $biblionumber 
-
-=cut
-
-sub CountBiblioInOrders {
- my ($biblionumber) = @_;
-    my $dbh            = C4::Context->dbh;
-    my $query          = "SELECT count(*)
-          FROM  aqorders 
-          WHERE biblionumber=? AND datecancellationprinted IS NULL";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my $count = $sth->fetchrow;
-    return ($count);
 }
 
 =head2 prepare_host_field
