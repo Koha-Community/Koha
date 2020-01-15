@@ -274,7 +274,7 @@ if ($op eq "show"){
             @notfounditemnumbers = grep { !exists $itemdata{$_} } @contentlist;
         }
     } else {
-        if (defined $biblionumber){
+        if (defined $biblionumber && !@itemnumbers){
             my @all_items = GetItemsInfo( $biblionumber );
             foreach my $itm (@all_items) {
                 push @itemnumbers, $itm->{itemnumber};
