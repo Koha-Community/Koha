@@ -22,6 +22,7 @@ use Mojolicious::Lite;
 use Try::Tiny;
 
 use Koha::Cities;
+use Koha::Holds;
 
 app->log->level('error');
 
@@ -102,6 +103,20 @@ get '/dbic_merge_sorting_result_set' => sub {
         {
             attributes => $attributes,
             params     => { _match => 'exact', _order_by => [ 'name', '-postal_code', '+country', ' state' ] },
+            result_set => $result_set
+        }
+    );
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_sorting_date' => sub {
+    my $c = shift;
+    my $attributes = { a => 'a', b => 'b' };
+    my $result_set = Koha::Holds->new;
+    $attributes = $c->dbic_merge_sorting(
+        {
+            attributes => $attributes,
+            params     => { _match => 'exact', _order_by => [ '-hold_date' ] },
             result_set => $result_set
         }
     );
@@ -214,7 +229,7 @@ subtest 'extract_reserved_params() tests' => sub {
 
 subtest 'dbic_merge_sorting() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 20;
 
     my $t = Test::Mojo->new;
 
@@ -237,6 +252,14 @@ subtest 'dbic_merge_sorting() tests' => sub {
             { -desc => 'city_zipcode' },
             { -asc  => 'city_country' },
             { -asc  => 'city_state' }
+        ]
+      );
+
+    $t->get_ok('/dbic_merge_sorting_date')->status_is(200)
+      ->json_is( '/a' => 'a', 'Existing values are kept (a)' )
+      ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
+        '/order_by' => [
+            { -desc => 'reservedate' }
         ]
       );
 
