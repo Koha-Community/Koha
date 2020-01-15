@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Exception;
 use Test::Warn;
 
@@ -756,6 +756,23 @@ subtest "attributes_from_api() tests" => sub {
     is_deeply(
         $cities_rs->attributes_from_api($api_attributes),
         $city->attributes_from_api($api_attributes)
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest "from_api_mapping() tests" => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $cities_rs = Koha::Cities->new;
+    my $city      = Koha::City->new;
+
+    is_deeply(
+        $cities_rs->from_api_mapping,
+        $city->from_api_mapping
     );
 
     $schema->storage->txn_rollback;

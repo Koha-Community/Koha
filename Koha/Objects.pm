@@ -335,6 +335,21 @@ sub attributes_from_api {
     return $self->{_singular_object}->attributes_from_api( $attributes );
 }
 
+=head3 from_api_mapping
+
+    my $mapped_attributes_hash = $objects->from_api_mapping;
+
+Attributes map from the API to DBIC
+
+=cut
+
+sub from_api_mapping {
+    my ( $self ) = @_;
+
+    $self->{_singular_object} ||= $self->object_class->new();
+    return $self->{_singular_object}->from_api_mapping;
+}
+
 =head3 Koha::Objects->_wrap
 
 wraps the DBIC object in a corresponding Koha object
