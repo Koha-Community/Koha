@@ -32,6 +32,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
+use Koha::Acquisition::Orders;
 use Koha::ArticleRequest::Status;
 use Koha::ArticleRequests;
 use Koha::Biblio::Metadatas;
@@ -80,6 +81,37 @@ sub metadata {
 
     my $metadata = $self->_result->metadata;
     return Koha::Biblio::Metadata->_new_from_dbic($metadata);
+}
+
+=head3 orders
+
+my $orders = $biblio->orders();
+
+Returns a Koha::Acquisition::Orders object
+
+=cut
+
+sub orders {
+    my ( $self ) = @_;
+
+    my $orders = $self->_result->orders;
+    return Koha::Acquisition::Orders->_new_from_dbic($orders);
+}
+
+=head3 active_orders_count
+
+my $orders_count = $biblio->active_orders_count();
+
+Returns the number of active acquisition orders related to this biblio.
+An order is considered active when it is not cancelled (i.e. when datecancellation
+is not undef).
+
+=cut
+
+sub active_orders_count {
+    my ( $self ) = @_;
+
+    return $self->orders->search({ datecancellationprinted => undef })->count;
 }
 
 =head3 can_article_request
