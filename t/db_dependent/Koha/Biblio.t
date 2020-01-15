@@ -17,10 +17,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use C4::Biblio;
 use Koha::Database;
+use Koha::Acquisition::Orders;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -487,6 +488,52 @@ subtest 'suggestions() tests' => sub {
         [ $suggestion->unblessed ],
         '->suggestions returns the related Koha::Suggestion objects'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'orders() and active_orders_count() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my $orders = $biblio->orders;
+    my $active_orders_count = $biblio->active_orders_count;
+
+    is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
+    is( $orders->count, $active_orders_count, '->orders_count returns the count for the resultset' );
+
+    # Add a couple orders
+    foreach (1..2) {
+        $builder->build_object(
+            {
+                class => 'Koha::Acquisition::Orders',
+                value => {
+                    biblionumber => $biblio->biblionumber,
+                    datecancellationprinted => '2019-12-31'
+                }
+            }
+        );
+    }
+
+    $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                biblionumber => $biblio->biblionumber,
+                datecancellationprinted => undef
+            }
+        }
+    );
+
+    $orders = $biblio->orders;
+    $active_orders_count = $biblio->active_orders_count;
+
+    is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
+    is( $orders->count, $active_orders_count + 2, '->active_orders_count returns the rigt count' );
 
     $schema->storage->txn_rollback;
 };
