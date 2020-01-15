@@ -220,7 +220,8 @@ sub _build_order_atom {
     my $param = $string;
     $param =~ s/^(\+|\-|\s)//;
     if ( $result_set ) {
-        $param = (keys %{$result_set->attributes_from_api({ $param => 1 })})[0];
+        my $model_param = $result_set->from_api_mapping->{$param};
+        $param = $model_param if defined $model_param;
     }
 
     if ( $string =~ m/^\+/ or
