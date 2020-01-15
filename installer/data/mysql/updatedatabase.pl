@@ -20485,6 +20485,36 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
     print "Upgrade to $DBversion done (Bug 23354 - Add point of sale permissions)\n";
 }
 
+$DBversion = '19.12.00.010';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'oai_sets_mappings', 'rule_order' ) ) {
+        $dbh->do( "ALTER TABLE oai_sets_mappings ADD COLUMN rule_order INT AFTER set_id, ADD COLUMN rule_operator VARCHAR(3) AFTER rule_order" );
+        $dbh->do( "UPDATE oai_sets_mappings SET rule_operator='or'" );
+        my $sets = $dbh->selectall_arrayref("SELECT * from oai_sets_mappings ORDER BY set_id", { Slice => {} });
+        my $i = 0;
+        my $previous_set_id;
+        for my $set ( @{$sets}) {
+            my $set_id = $set->{set_id};
+    
+            if ($previous_set_id && $previous_set_id != $set_id) {
+                $i = 0;
+            }
+    
+            if ($i == 0) {
+                $dbh->do("UPDATE oai_sets_mappings SET rule_operator=NULL WHERE set_id=? LIMIT 1", {}, $set_id);
+            }
+    
+            $dbh->do("UPDATE oai_sets_mappings SET rule_order=? WHERE set_id=? AND rule_order IS NULL LIMIT 1", {}, $i, $set_id);
+    
+            $i++;
+            $previous_set_id = $set_id;
+        }
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21520 - Add rule_order and rule_operator fields to oai_sets_mappings table)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
