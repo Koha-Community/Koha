@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 
 my $schema  = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -247,6 +248,65 @@ subtest 'duplicate_to | add_item' => sub {
         my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
         is($duplicated_order->invoiceid, undef, "invoiceid should be set to null for a new duplicated order");
     };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'current_holds() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_2 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+    my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
+
+    C4::Reserves::AddReserve(
+        $patron->branchcode,   $patron->borrowernumber,
+        $biblio->biblionumber, undef,
+        undef, dt_from_string->add( days => -2 ),
+        undef, undef,
+        undef, $item_1->itemnumber
+    );
+    C4::Reserves::AddReserve(
+        $patron->branchcode,   $patron->borrowernumber,
+        $biblio->biblionumber, undef,
+        undef, dt_from_string->add( days => -2 ),
+        undef, undef,
+        undef, $item_2->itemnumber
+    );
+    # Add a hold in the future
+    C4::Reserves::AddReserve(
+        $patron->branchcode,   $patron->borrowernumber,
+        $biblio->biblionumber, undef,
+        undef, dt_from_string->add( days => 2 ),
+        undef, undef,
+        undef, $item_3->itemnumber
+    );
+
+    # Add an order with no biblionumber
+    my $order = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                biblionumber => undef
+            }
+        }
+    );
+
+    is( $order->current_holds, undef, 'Returns undef if no linked biblio');
+
+    $order->set({ biblionumber => $biblio->biblionumber })->store->discard_changes;
+
+    is( $order->current_holds, undef, 'Returns undef if no linked items');
+
+    $order->add_item( $item_2->itemnumber );
+    $order->add_item( $item_3->itemnumber );
+
+    is( $order->current_holds->count, 1, 'Only current (not future) holds are returned');
 
     $schema->storage->txn_rollback;
 };
