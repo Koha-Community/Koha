@@ -252,7 +252,7 @@ sub decode {
 =head2 transferbook
 
   ($dotransfer, $messages, $iteminformation) = &transferbook($newbranch, 
-                                            $barcode, $ignore_reserves);
+                                            $barcode, $ignore_reserves, $trigger);
 
 Transfers an item to a new branch. If the item is currently on loan, it is automatically returned before the actual transfer.
 
@@ -262,6 +262,8 @@ C<$barcode> is the barcode of the item to be transferred.
 
 If C<$ignore_reserves> is true, C<&transferbook> ignores reserves.
 Otherwise, if an item is reserved, the transfer fails.
+
+C<$trigger> is the enum value for what triggered the transfer.
 
 Returns three values:
 
@@ -304,7 +306,7 @@ The item was eligible to be transferred. Barring problems communicating with the
 =cut
 
 sub transferbook {
-    my ( $tbr, $barcode, $ignoreRs ) = @_;
+    my ( $tbr, $barcode, $ignoreRs, $trigger ) = @_;
     my $messages;
     my $dotransfer      = 1;
     my $item = Koha::Items->find( { barcode => $barcode } );
@@ -360,7 +362,7 @@ sub transferbook {
 
     #actually do the transfer....
     if ($dotransfer) {
-        ModItemTransfer( $itemnumber, $fbr, $tbr );
+        ModItemTransfer( $itemnumber, $fbr, $tbr, $trigger );
 
         # don't need to update MARC anymore, we do it in batch now
         $messages->{'WasTransfered'} = 1;
