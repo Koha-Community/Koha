@@ -411,6 +411,20 @@ sub items {
     return Koha::Items->_new_from_dbic( $items_rs );
 }
 
+=head3 items_count
+
+my $items_count = $biblio->items();
+
+Returns the count of the the related Koha::Items object for this biblio
+
+=cut
+
+sub items_count {
+    my ($self) = @_;
+
+    return $self->_result->items->count;
+}
+
 =head3 itemtype
 
 my $itemtype = $biblio->itemtype();
