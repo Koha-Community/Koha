@@ -184,10 +184,11 @@
                         [% IF ! onlyinfo %]
                             <td class="modify">
                                 [% IF ( HOLD.is_cancelable_from_opac ) %]
-                                    <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                                    <form id="delete_hold_[% HOLD.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                     <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                     <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                    <button type="submit" name="submit" class="btn btn-mini btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="fa fa-remove"></i> Cancel</button></form>
+                                    <button data-title="[% INCLUDE 'biblio-title-head.inc' biblio=HOLD.biblio %]" data-reserve_id="[% HOLD.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove"></i> Cancel</button>
+                                </form>
                                 [% END %]
                             </td>
                         [% END # / IF onlyinfo %]
