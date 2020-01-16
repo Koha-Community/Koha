@@ -92,19 +92,23 @@ subtest 'hidden_in_opac() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'items() tests' => sub {
+subtest 'items() and items_count() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
+
+    is( $biblio->items_count, 0, 'No items, count is 0' );
+
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
     my $items = $biblio->items;
     is( ref($items), 'Koha::Items', 'Returns a Koha::Items resultset' );
     is( $items->count, 2, 'Two items in resultset' );
+    is( $biblio->items_count, $items->count, 'items_count returns the expected value' );
 
     my @items = $biblio->items->as_list;
     is( scalar @items, 2, 'Same result, but in list context' );
