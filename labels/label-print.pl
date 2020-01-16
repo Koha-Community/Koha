@@ -60,7 +60,7 @@ my $layouts = undef;
 my $templates = undef;
 my $output_formats = undef;
 my @batches = ();
-my $multi_batch_count = scalar(@batch_ids);
+my $multi_batch_count = scalar(@batch_ids) || ($from && $to) ? 1 : 0;
 my $label_count = scalar(@label_ids);
 my $item_count = scalar(@item_numbers);
 
