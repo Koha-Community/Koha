@@ -1219,8 +1219,8 @@ CREATE TABLE `oai_sets_descriptions` (
 DROP TABLE IF EXISTS `oai_sets_mappings`;
 CREATE TABLE `oai_sets_mappings` (
   `set_id` int(11) NOT NULL,
-  `rule_order` int NOT NULL,
-  `rule_operator` varchar(3) NOT NULL default 'or',
+  `rule_order` int NULL,
+  `rule_operator` varchar(3) NULL,
   `marcfield` char(3) NOT NULL,
   `marcsubfield` char(1) NOT NULL,
   `operator` varchar(8) NOT NULL default 'equal',
