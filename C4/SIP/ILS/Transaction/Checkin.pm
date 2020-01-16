@@ -121,7 +121,8 @@ sub do_checkin {
                 $messages->{ResFound}->{borrowernumber}, 1, $messages->{ResFound}->{reserve_id});
             ModItemTransfer( $messages->{ResFound}->{itemnumber},
                 $branch,
-                $messages->{ResFound}->{branchcode}
+                $messages->{ResFound}->{branchcode},
+                $messages->{TransferTrigger},
             );
 
         }

@@ -538,15 +538,14 @@ sub ModItem {
 
 =head2 ModItemTransfer
 
-  ModItemTransfer($itenumber, $frombranch, $tobranch);
+  ModItemTransfer($itemnumber, $frombranch, $tobranch, $trigger);
 
-Marks an item as being transferred from one branch
-to another.
+Marks an item as being transferred from one branch to another and records the trigger.
 
 =cut
 
 sub ModItemTransfer {
-    my ( $itemnumber, $frombranch, $tobranch ) = @_;
+    my ( $itemnumber, $frombranch, $tobranch, $trigger ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $item = Koha::Items->find( $itemnumber );
@@ -558,9 +557,9 @@ sub ModItemTransfer {
 
     #new entry in branchtransfers....
     my $sth = $dbh->prepare(
-        "INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch)
-        VALUES (?, ?, NOW(), ?)");
-    $sth->execute($itemnumber, $frombranch, $tobranch);
+        "INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch, reason)
+        VALUES (?, ?, NOW(), ?, ?)");
+    $sth->execute($itemnumber, $frombranch, $tobranch, $trigger);
 
     ModItem({ holdingbranch => $frombranch }, undef, $itemnumber, { log_action => 0 });
     ModDateLastSeen($itemnumber);

@@ -1898,6 +1898,7 @@ sub AddReturn {
         # get the proper branch to which to return the item
     my $returnbranch = $hbr ne 'noreturn' ? $item->$hbr : $branch;
         # if $hbr was "noreturn" or any other non-item table value, then it should 'float' (i.e. stay at this branch)
+    my $transfer_trigger = $hbr eq 'homebranch' ? 'ReturnToHome' : $hbr eq 'holdingbranch' ? 'ReturnToHolding' : undef;
 
     my $borrowernumber = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed : {};
@@ -2146,12 +2147,13 @@ sub AddReturn {
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $returnbranch, $item->$BranchTransferLimitsType )
            )) {
-            $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s)", $item->itemnumber,$branch, $returnbranch;
+            $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s, %s)", $item->itemnumber,$branch, $returnbranch, $transfer_trigger;
             $debug and warn "item: " . Dumper($item_unblessed);
-            ModItemTransfer($item->itemnumber, $branch, $returnbranch);
+            ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger);
             $messages->{'WasTransfered'} = 1;
         } else {
             $messages->{'NeedsTransfer'} = $returnbranch;
+            $messages->{'TransferTrigger'} = $transfer_trigger;
         }
     }
 
