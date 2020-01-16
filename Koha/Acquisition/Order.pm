@@ -169,6 +169,37 @@ sub subscription {
     return Koha::Subscription->_new_from_dbic( $subscription_rs );
 }
 
+=head3 current_holds
+
+    my $holds = $order->current_holds;
+
+Returns the current holds associated to the order. It returns a I<Koha::Holds>
+resultset in scalar context or a list of I<Koha::Hold> objects in list context.
+
+It returns B<undef> if no I<biblio> or no I<items> are linked to the order.
+
+=cut
+
+sub current_holds {
+    my ($self) = @_;
+
+    my $items_rs     = $self->_result->aqorders_items;
+    my @item_numbers = $items_rs->get_column('itemnumber')->all;
+
+    return unless @item_numbers;
+
+    my $biblio = $self->biblio;
+    return unless $biblio;
+
+    return $biblio->current_holds->search(
+        {
+            itemnumber => {
+                -in => \@item_numbers
+            }
+        }
+    );
+}
+
 =head3 items
 
     my $items = $order->items
@@ -196,7 +227,8 @@ Returns the bibliographic record associated to the order
 
 sub biblio {
     my ( $self ) = @_;
-    my $biblio_rs= $self->_result->biblionumber;
+    my $biblio_rs= $self->_result->biblio;
+    return unless $biblio_rs;
     return Koha::Biblio->_new_from_dbic( $biblio_rs );
 }
 

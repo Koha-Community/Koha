@@ -664,12 +664,26 @@ __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-08-31 11:51:37
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GQEXetlivZm7buQohl8m4A
 
+__PACKAGE__->belongs_to(
+  "biblio",
+  "Koha::Schema::Result::Biblio",
+  { 'foreign.biblionumber' => "self.biblionumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 sub koha_objects_class {
     'Koha::Acquisition::Orders';
 }
+
 sub koha_object_class {
     'Koha::Acquisition::Order';
 }
+
 __PACKAGE__->add_columns(
     '+uncertainprice' => { is_boolean => 1 }
 );
