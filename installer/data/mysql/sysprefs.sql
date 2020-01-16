@@ -171,8 +171,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('EmailPurchaseSuggestions','0','0|EmailAddressForSuggestions|BranchEmailAddress|KohaAdminEmailAddress','Choose email address that new purchase suggestions will be sent to: ','Choice'),
 ('EnableAdvancedCatalogingEditor','0','','Enable the Rancor advanced cataloging editor','YesNo'),
 ('EnableBorrowerFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to a borrower record.','YesNo'),
-('EnablePointOfSale','0',NULL,'Enable the point of sale feature to allow anonymous transactions with the accounting system. (Requires UseCashRegisters)','YesNo')
 ('EnableOpacSearchHistory','1','YesNo','Enable or disable opac search history',''),
+('EnablePointOfSale','0',NULL,'Enable the point of sale feature to allow anonymous transactions with the accounting system. (Requires UseCashRegisters)','YesNo'),
 ('EnableSearchHistory','0','','Enable or disable search history','YesNo'),
 ('EnhancedMessagingPreferences','1','','If ON, allows patrons to select to receive additional messages about items due or nearly due.','YesNo'),
 ('EnhancedMessagingPreferencesOPAC', '1', NULL, 'If ON, show patrons messaging setting on the OPAC.', 'YesNo'),
