@@ -175,7 +175,7 @@ subtest "Tests for needs_advancing." => sub {
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => DateTime->now,
         'datearrived' => undef,
-        'comments'    => "StockrotationAdvance",
+        'reason'      => "StockrotationAdvance",
     })->store;
 
     # Test item will not be advanced if in transit.
@@ -307,7 +307,7 @@ subtest "Tests for investigate (singular)." => sub {
         'tobranch'    => $dbitem->itemnumber->homebranch,
         'datesent'    => DateTime->now,
         'datearrived' => DateTime->now,
-        'comments'    => "StockrotationAdvance",
+        'reason'      => "StockrotationAdvance",
     })->store;
     is($dbitem->investigate->{reason}, 'repatriation', "older item repatriates.");
 
@@ -323,7 +323,7 @@ subtest "Tests for investigate (singular)." => sub {
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => DateTime->now,
         'datearrived' => DateTime->now,
-        'comments'    => "StockrotationAdvance",
+        'reason'      => "StockrotationAdvance",
     })->store;
     $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
@@ -342,7 +342,7 @@ subtest "Tests for investigate (singular)." => sub {
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => DateTime->now - $sent_duration,
         'datearrived' => DateTime->now - $arrived_duration,
-        'comments'    => "StockrotationAdvance",
+        'reason'      => "StockrotationAdvance",
     })->store;
     $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
@@ -362,7 +362,7 @@ subtest "Tests for investigate (singular)." => sub {
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => DateTime->now - $sent_duration,
         'datearrived' => DateTime->now - $arrived_duration,
-        'comments'    => "StockrotationAdvance",
+        'reason'      => "StockrotationAdvance",
     })->store;
     $dbitem->itemnumber->homebranch($dbitem->stage->branchcode_id)->store;
     $dbitem->itemnumber->holdingbranch($dbitem->stage->branchcode_id)->store;
@@ -382,7 +382,7 @@ subtest "Tests for investigate (singular)." => sub {
         'tobranch'    => $dbitem->stage->branchcode_id,
         'datesent'    => DateTime->now - $sent_duration,
         'datearrived' => DateTime->now - $arrived_duration,
-        'comments'    => "StockrotationAdvance",
+        'reason'      => "StockrotationAdvance",
     })->store;
     is($dbitem->investigate->{reason}, 'repatriation',
        "Item advances, but not at stage branch.");

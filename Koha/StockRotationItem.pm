@@ -119,7 +119,7 @@ sub needs_advancing {
     return 0 if $self->itemnumber->get_transfer; # intransfer: don't advance.
     return 1 if $self->fresh;                    # Just on rota: advance.
     my $completed = $self->itemnumber->_result->branchtransfers->search(
-        { 'comments'    => "StockrotationAdvance" },
+        { 'reason' => "StockrotationAdvance" },
         { order_by => { -desc => 'datearrived' } }
     );
     # Do maths on whether we need to be moved on.
@@ -156,7 +156,8 @@ sub repatriate {
         'frombranch' => $self->itemnumber->holdingbranch,
         'tobranch'   => $self->stage->branchcode_id,
         'datesent'   => DateTime->now,
-        'comments'   => $msg || "StockrotationRepatriation",
+        'comments'   => $msg,
+        'reason'     => "StockrotationRepatriation"
     })->store;
     $self->itemnumber->homebranch($self->stage->branchcode_id)->store;
     return $transfer_stored;
@@ -185,7 +186,7 @@ sub advance {
         'itemnumber' => $self->itemnumber_id,
         'frombranch' => $item->holdingbranch,
         'datesent'   => DateTime->now,
-        'comments'   => "StockrotationAdvance"
+        'reason'     => "StockrotationAdvance"
     });
 
     if ( $self->indemand && !$self->fresh ) {
