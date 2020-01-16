@@ -2985,7 +2985,7 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
-    plan tests => 10;
+    plan tests => 11;
 
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
@@ -3062,11 +3062,21 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     is( $line->description, '', 'AddRenewal does not set a hardcoded description for the accountline' );
 
     t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
+
+    $context = Test::MockModule->new('C4::Context');
+    $context->mock( userenv => { branch => undef, interface => 'CRON'} ); #Test statistical logging of renewal via cron (atuo_renew)
+
     $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     $old_log_size = Koha::ActionLogs->count( \%params_renewal );
+    my $sth = $dbh->prepare("SELECT COUNT(*) FROM statistics WHERE itemnumber = ? AND branch = ?");
+    $sth->execute($item->id, $library->id);
+    my ($old_stats_size) = $sth->fetchrow_array;
     AddRenewal( $patron->id, $item->id, $library->id );
     $new_log_size = Koha::ActionLogs->count( \%params_renewal );
+    $sth->execute($item->id, $library->id);
+    my ($new_stats_size) = $sth->fetchrow_array;
     is( $new_log_size, $old_log_size + 1, 'renew log successfully added' );
+    is( $new_stats_size, $old_stats_size + 1, 'renew statistic successfully added with passed branch' );
 
 };
 
