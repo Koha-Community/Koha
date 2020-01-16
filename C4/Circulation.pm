@@ -2112,7 +2112,7 @@ sub AddReturn {
 
     # Transfer to returnbranch if Automatic transfer set or append message NeedsTransfer
     if (!$is_in_rotating_collection && ($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $returnbranch) and not $messages->{'WrongTransfer'}){
-        my $BranchTransferLimitsType = C4::Context->preference("BranchTransferLimitsType");
+        my $BranchTransferLimitsType = C4::Context->preference("BranchTransferLimitsType") eq 'itemtype' ? 'effective_itemtype' : 'ccode';
         if  (C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $returnbranch, $item->$BranchTransferLimitsType )
