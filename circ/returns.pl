@@ -367,7 +367,9 @@ my $reserved = 0;
 if ( $messages->{'WasTransfered'} ) {
     $template->param(
         found          => 1,
-        transfer       => 1,
+        transfer       => $messages->{'WasTransfered'},
+        trigger        => $messages->{'TransferTrigger'},
+        itemnumber     => $itemnumber,
     );
 }
 

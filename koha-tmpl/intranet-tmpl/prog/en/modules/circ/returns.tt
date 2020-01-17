@@ -106,6 +106,25 @@
                                 </div> <!-- /.hold-auto-filled -->
                             [% END # /IF hold_auto_filled %]
 
+                            [% IF ( trigger ) %]
+                                 <div id="transfer-trigger" class="dialog message">
+                                     <h3>Reason for transfer</h3>
+                                     <p>
+                                         [%- SWITCH trigger -%]
+                                             [%- CASE 'Manual' -%]Manual
+                                             [%- CASE 'StockrotationAdvance' -%]Stock rotation advance
+                                             [%- CASE 'StockrotationRepatriation' -%]Stock rotation repatriation
+                                             [%- CASE 'ReturnToHome' -%]Return to home library
+                                             [%- CASE 'ReturnToHolding' -%]Return to holding library
+                                             [%- CASE 'RotatingCollection' -%]Rotating collection
+                                             [%- CASE 'Reserve' -%]Reserve
+                                             [%- CASE 'LostReserve' -%]Lost reserve
+                                             [%- CASE 'CancelReserve' -%]Cancelled reserve
+                                         [%- END -%]
+                                     </p>
+                                 </div>
+                            [% END %]
+
                             [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
                                 <div class="dialog alert">
                                     <strong>Error:</strong>
@@ -538,7 +557,7 @@
 
                                                 <div class="modal-header">
                                                     <h3>
-                                                        Please return this item to [% Branches.GetName( returnbranch ) | html %]
+                                                        Please return this item to [% IF transfer %][% Branches.GetName( transfer ) | html %][% ELSE %][% Branches.GetName( returnbranch ) | html %][% END %]
                                                     </h3>
                                                 </div>
                                                 <div class="modal-body">
@@ -565,7 +584,7 @@
                                                         <button type="button" data-dismiss="modal" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
                                                     [% ELSE %]
                                                         <button type="button" data-dismiss="modal" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
-                                                        <button type="button" data-dismiss="modal" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% returnbranch | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
+                                                        <button type="button" data-dismiss="modal" name="dotransfer" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | uri %]&amp;branchcode=[% transfer | uri %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
                                                     [% END %]
                                                     <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
                                                     <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
