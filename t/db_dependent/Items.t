@@ -368,7 +368,7 @@ subtest q{Test Koha::Database->schema()->resultset('Item')->itemtype()} => sub {
 };
 
 subtest 'SearchItems test' => sub {
-    plan tests => 14;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
     my $dbh = C4::Context->dbh;
@@ -402,6 +402,7 @@ subtest 'SearchItems test' => sub {
         homebranch => $library2->{branchcode},
         holdingbranch => $library2->{branchcode},
         itype => $itemtype->{itemtype},
+        issues => 3,
     }, $biblio->biblionumber);
 
     my ($items, $total_results);
@@ -542,6 +543,25 @@ subtest 'SearchItems test' => sub {
 
     my $cpl_items_after = SearchItemsByField( 'homebranch', $library1->{branchcode});
     is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItemsByField should return something' );
+
+    # Issues count may be NULL
+    $filter = {
+        conjunction => 'AND',
+        filters => [
+            {
+                field => 'issues',
+                query => 0,
+                operator => '=',
+            },
+            {
+                field => 'homebranch',
+                query => $library1->{branchcode},
+                operator => '=',
+            },
+        ],
+    };
+    ($items, $total_results) = SearchItems($filter);
+    is($total_results, 1, "Search items.issues is NULL with filter issues = 0");
 
     $schema->storage->txn_rollback;
 };
