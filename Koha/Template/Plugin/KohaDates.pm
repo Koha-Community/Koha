@@ -23,6 +23,7 @@ use Template::Plugin::Filter;
 use base qw( Template::Plugin::Filter );
 
 use Koha::DateUtils;
+use C4::Context;
 our $DYNAMIC = 1;
 
 sub filter {
@@ -40,6 +41,10 @@ sub filter {
 sub output_preference {
     my ( $self, @params ) = @_;
     return output_pref( @params );
+}
+
+sub tz {
+    return C4::Context->tz->name;
 }
 
 1;
