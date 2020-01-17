@@ -55,6 +55,7 @@ sub new {
     my ($class) = @_;
     my $self = {};
 
+    $self->{_options} = {};
     my $conf = C4::Context->config('koha_xslt_security');
     if( $conf && ref($conf) eq 'HASH' ) {
         $self->{_options} = $conf;
@@ -142,11 +143,11 @@ sub set_callbacks {
 sub set_parser_options {
     my ($self, $parser) = @_;
     my $conf = $self->{_options};
-    return if !$conf;
 
     if( $conf->{expand_entities} ) {
         _set_option($parser, 'expand_entities', 1);
     } else {
+        # If not explicitly set, we should disable expanding for security
         _set_option($parser, 'expand_entities', 0);
     }
 }
