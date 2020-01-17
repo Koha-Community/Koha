@@ -13,7 +13,10 @@
             "description": "Identifier for the linked bibliographic record"
         },
         "created_by": {
-            "type": "integer",
+            "type": [
+                "integer",
+                "null"
+            ],
             "description": "Interal patron identifier of the order line creator"
         },
         "entry_date": {
@@ -301,6 +304,10 @@
                 "object",
                 "null"
             ]
+        },
+        "current_item_level_holds_count": {
+            "type": "integer",
+            "description": "Current holds count for associated items"
         },
         "fund": {
             "type": [

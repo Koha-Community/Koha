@@ -40,6 +40,13 @@
                     "type": "string"
                 },
                 {
+                    "name": "only_active",
+                    "in": "query",
+                    "description": "If only active orders should be listed",
+                    "required": false,
+                    "type": "boolean"
+                },
+                {
                     "$ref": "../parameters.json#/match"
                 },
                 {
@@ -50,6 +57,15 @@
                 },
                 {
                     "$ref": "../parameters.json#/per_page"
+                },
+                {
+                    "$ref": "../parameters.json#/q_param"
+                },
+                {
+                    "$ref": "../parameters.json#/q_body"
+                },
+                {
+                    "$ref": "../parameters.json#/q_header"
                 }
             ],
             "responses": {
@@ -100,11 +116,18 @@
             },
             "x-koha-embed": [
                 "basket",
+                "basket.basket_group",
+                "basket.creator",
+                "biblio",
+                "biblio.active_orders+count",
+                "biblio.holds+count",
+                "biblio.items+count",
+                "biblio.suggestions.suggester",
                 "fund",
+                "current_item_level_holds+count",
                 "invoice",
-                "subscription",
                 "items",
-                "biblio"
+                "subscription"
             ]
         },
         "post": {
@@ -240,11 +263,18 @@
             },
             "x-koha-embed": [
                 "basket",
+                "basket.basket_group",
+                "basket.creator",
+                "biblio",
+                "biblio.active_orders+count",
+                "biblio.holds+count",
+                "biblio.items+count",
+                "biblio.suggestions.suggester",
                 "fund",
+                "current_item_level_holds+count",
                 "invoice",
-                "subscription",
                 "items",
-                "biblio"
+                "subscription"
             ]
         },
         "put": {

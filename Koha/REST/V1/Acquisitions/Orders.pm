@@ -22,6 +22,8 @@ use Mojo::Base 'Mojolicious::Controller';
 use Koha::Acquisition::Orders;
 use Koha::DateUtils;
 
+use Clone 'clone';
+use JSON qw(decode_json);
 use Scalar::Util qw( blessed );
 use Try::Tiny;
 
@@ -44,11 +46,120 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     return try {
-        my $orders = $c->objects->search( Koha::Acquisition::Orders->new );
+
+        my $only_active = delete $c->validation->output->{only_active};
+        my $order_id    = delete $c->validation->output->{order_id};
+
+        my $orders_rs;
+
+        if ( $only_active ) {
+            $orders_rs = Koha::Acquisition::Orders->filter_by_active;
+        }
+        else {
+            $orders_rs = Koha::Acquisition::Orders->new;
+        }
+
+        $orders_rs = $orders_rs->filter_by_id_including_transfers({ ordernumber => $order_id })
+            if $order_id;
+
+        my $args = $c->validation->output;
+        my $attributes = {};
+
+        # Extract reserved params
+        my ( $filtered_params, $reserved_params, $path_params ) = $c->extract_reserved_params($args);
+        # Look for embeds
+        my $embed = $c->stash('koha.embed');
+        my $fixed_embed = clone($embed);
+        if ( exists $fixed_embed->{biblio} ) {
+            # Add biblioitems to prefetch
+            # FIXME remove if we merge biblio + biblioitems
+            $fixed_embed->{biblio}->{children}->{biblioitem} = {};
+            $c->stash('koha.embed', $fixed_embed);
+        }
+
+        # If no pagination parameters are passed, default
+        $reserved_params->{_per_page} //= C4::Context->preference('RESTdefaultPageSize');
+        $reserved_params->{_page}     //= 1;
+
+        unless ( $reserved_params->{_per_page} == -1 ) {
+            # Merge pagination into query attributes
+            $c->dbic_merge_pagination(
+                {
+                    filter => $attributes,
+                    params => $reserved_params
+                }
+            );
+        }
+
+        # Generate prefetches for embedded stuff
+        $c->dbic_merge_prefetch(
+            {
+                attributes => $attributes,
+                result_set => $orders_rs
+            }
+        );
+
+        # Call the to_model function by reference, if defined
+        if ( defined $filtered_params ) {
+
+            # Apply the mapping function to the passed params
+            $filtered_params = $orders_rs->attributes_from_api($filtered_params);
+            $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+        }
+
+        if ( defined $path_params ) {
+
+            # Apply the mapping function to the passed params
+            $filtered_params //= {};
+            $path_params = $orders_rs->attributes_from_api($path_params);
+            foreach my $param (keys %{$path_params}) {
+                $filtered_params->{$param} = $path_params->{$param};
+            }
+        }
+
+        if ( defined $reserved_params->{q} || defined $reserved_params->{query} || defined $reserved_params->{'x-koha-query'}) {
+            $filtered_params //={};
+            my @query_params_array;
+            my $query_params;
+            if ( exists $reserved_params->{query} and defined $reserved_params->{query} ) {
+                push @query_params_array, fix_query({ query => $reserved_params->{query} });
+            }
+            if ( exists $reserved_params->{q} and defined $reserved_params->{q}) {
+                push @query_params_array, fix_query({ query => decode_json($reserved_params->{q}) });
+            }
+            if ( exists $reserved_params->{'x-koha-query'} and defined $reserved_params->{'x-koha-query'} ) {
+                push @query_params_array, fix_query({ query => decode_json($reserved_params->{'x-koha-query'}) });;
+            }
+
+            if(scalar(@query_params_array) > 1) {
+                $query_params = {'-and' => \@query_params_array};
+            }
+            else {
+                $query_params = $query_params_array[0];
+            }
+
+            $filtered_params = $c->merge_q_params( $filtered_params, $query_params, $orders_rs );
+        }
+
+        # Perform search
+        my $orders = $orders_rs->search( $filtered_params, $attributes );
+
+        if ($orders->is_paged) {
+            $c->add_pagination_headers({
+                total => $orders->pager->total_entries,
+                params => $args,
+            });
+        }
+        else {
+            $c->add_pagination_headers({
+                total => $orders->count,
+                params => $args,
+            });
+        }
 
         return $c->render(
             status  => 200,
-            openapi => $orders
+            openapi => $orders->to_api({ embed => $embed })
         );
     }
     catch {
@@ -183,6 +294,54 @@ sub delete {
     catch {
         $c->unhandled_exception($_);
     };
+}
+
+=head2 Internal methods
+
+=head3 fix_query
+
+    my $query = fix_query($query);
+
+This method takes care of recursively fixing queries that should be done
+against biblioitems (instead if biblio as exposed on the API)
+
+=cut
+
+sub fix_query {
+    my ($args) = @_;
+
+    my $query = $args->{query};
+    my $biblioitem_fields = {
+        'biblio.isbn' => 'biblio.biblioitem.isbn',
+        'biblio.ean'  => 'biblio.biblioitem.ean'
+    };
+
+    if ( ref($query) eq 'HASH' ) {
+        foreach my $key (keys %{$query}) {
+            if ( exists $biblioitem_fields->{$key}) {
+                my $subq = delete $query->{$key};
+                $query->{$biblioitem_fields->{$key}} = (ref($subq) eq 'HASH')
+                        ? fix_query({ query => $subq })
+                        : $subq;
+            }
+            else {
+                $query->{$key} = fix_query({ query => $query->{$key} });
+            }
+        }
+    }
+    elsif ( ref($query) eq 'ARRAY' ) {
+        my @accum;
+        foreach my $item (@{$query}) {
+            push @accum, fix_query({ query => $item });
+        }
+        $query = \@accum;
+    }
+    else { # scalar
+        $query = $biblioitem_fields->{$query}
+            if exists $biblioitem_fields->{$query};
+    }
+
+    return $query;
 }
 
 1;
