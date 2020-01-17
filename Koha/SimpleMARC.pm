@@ -208,12 +208,12 @@ sub add_field {
     if ( $fieldName > 10 ) {
         foreach my $value ( @values ) {
             my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $value );
-            $record->append_fields( $field );
+            $record->insert_fields_ordered( $field );
         }
     } else {
         foreach my $value ( @values ) {
             my $field = MARC::Field->new( $fieldName, $value );
-            $record->append_fields( $field );
+            $record->insert_fields_ordered( $field );
         }
     }
 }
@@ -236,7 +236,7 @@ sub _update_field {
         if ( $fieldName < 10 ) {
             foreach my $value ( @values ) {
                 my $field = MARC::Field->new( $fieldName, $value );
-                $record->append_fields( $field );
+                $record->insert_fields_ordered( $field );
             }
         } else {
             warn "Invalid operation, trying to add a new field without subfield";
@@ -279,7 +279,7 @@ sub _update_subfield {
         ## Field does not exist, create it.
         foreach my $value ( @values ) {
             my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $values[$i++] );
-            $record->append_fields( $field );
+            $record->insert_fields_ordered( $field );
         }
     }
 }
@@ -575,7 +575,6 @@ sub _copy_move_field {
         @from_fields = map { $_ <= @from_fields ? $from_fields[ $_ - 1 ] : () } @$field_numbers;
     }
 
-    my @new_fields;
     for my $from_field ( @from_fields ) {
         my $new_field = $from_field->clone;
         $new_field->{_tag} = $toFieldName; # Should be replaced by set_tag, introduced by MARC::Field 2.0.4
@@ -595,9 +594,8 @@ sub _copy_move_field {
                 $record->delete_field( $to_fields[0] );
             }
         }
-        push @new_fields, $new_field;
+        $record->insert_grouped_field( $new_field );
     }
-    $record->append_fields( @new_fields );
 }
 
 sub _copy_move_subfield {
