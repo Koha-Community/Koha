@@ -925,6 +925,7 @@ DROP TABLE IF EXISTS `branchtransfers`;
 CREATE TABLE `branchtransfers` ( -- information for items that are in transit between branches
   `branchtransfer_id` int(12) NOT NULL auto_increment, -- primary key
   `itemnumber` int(11) NOT NULL default 0, -- the itemnumber that it is in transit (items.itemnumber)
+  `daterequested` timestamp NOT NULL default CURRENT_TIMESTAMP, -- the date the transfer was requested
   `datesent` datetime default NULL, -- the date the transfer was initialized
   `frombranch` varchar(10) NOT NULL default '', -- the branch the transfer is coming from
   `datearrived` datetime default NULL, -- the date the transfer arrived at its destination

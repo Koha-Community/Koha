@@ -36,6 +36,13 @@ __PACKAGE__->table("branchtransfers");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 daterequested
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
 =head2 datesent
 
   data_type: 'datetime'
@@ -86,6 +93,13 @@ __PACKAGE__->add_columns(
     default_value  => 0,
     is_foreign_key => 1,
     is_nullable    => 0,
+  },
+  "daterequested",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
   },
   "datesent",
   {
@@ -197,8 +211,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-20 11:24:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:50FpCj6vWH5O8MThCy/1hA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-20 12:30:59
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:G5GZTxF8X/mcIKXmuGVWIQ
 
 sub koha_object_class {
     'Koha::Item::Transfer';
