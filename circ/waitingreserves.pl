@@ -144,7 +144,7 @@ sub cancel {
 
 # 	if the document is not in his homebranch location and there is not reservation after, we transfer it
     if ($transfer && !$nextreservinfo) {
-        ModItemTransfer( $item, $fbr, $tbr );
+        ModItemTransfer( $item, $fbr, $tbr, 'CancelReserve' );
     }
     # if we have a result
     if ($nextreservinfo) {

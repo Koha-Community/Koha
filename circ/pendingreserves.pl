@@ -102,7 +102,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
         }
         $hold->cancel;
         if ( $item->homebranch ne $item->holdingbranch ) {
-            C4::Items::ModItemTransfer( $item->itemnumber, $item->holdingbranch, $item->homebranch );
+            C4::Items::ModItemTransfer( $item->itemnumber, $item->holdingbranch, $item->homebranch, 'LostReserve' );
         }
 
         if ( my $yaml = C4::Context->preference('UpdateItemWhenLostFromHoldList') ) {
