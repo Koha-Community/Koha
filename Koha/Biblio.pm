@@ -517,6 +517,20 @@ sub subscriptions {
     return $self->{_subscriptions};
 }
 
+=head3 subscriptions_count
+
+my $subscriptions_count = $self->subscriptions_count
+
+Returns the count of the the related Koha::Subscriptions object for this biblio
+
+=cut
+
+sub subscriptions_count {
+    my ($self) = @_;
+
+    return $self->subscriptions->count;
+}
+
 =head3 has_items_waiting_or_intransit
 
 my $itemsWaitingOrInTransit = $biblio->has_items_waiting_or_intransit
