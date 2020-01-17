@@ -2141,6 +2141,9 @@ sub _SearchItems_build_where_fragment {
                     }
                     $column = "ExtractValue($sqlfield, '$xpath')";
                 }
+            } elsif ($field eq 'issues') {
+                # Consider NULL as 0 for issues count
+                $column = 'COALESCE(issues,0)';
             } else {
                 $column = $field;
             }
