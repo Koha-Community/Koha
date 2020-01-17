@@ -107,6 +107,7 @@ sub new {
         items           => [],
         hold_items      => $flags->{WAITING}->{itemlist},
         overdue_items   => $flags->{ODUES}->{itemlist},
+        too_many_overdue => $circ_blocked,
         fine_items      => [],
         recall_items    => [],
         unavail_holds   => [],
@@ -120,6 +121,9 @@ sub new {
 
     if ( $patron->is_debarred and $patron->debarredcomment ) {
         $ilspatron{screen_msg} .= " -- " . $patron->debarredcomment;
+    }
+    if ( $circ_blocked ) {
+        $ilspatron{screen_msg} .= " -- " . "Patron has overdues";
     }
     for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
         ($flags->{$_}) or next;
