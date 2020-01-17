@@ -315,14 +315,22 @@
                     $('#item-search-block').show();
                 });
 
+            function getCheckedItemnumbers () {
+                var itemnumbers;
+                try {
+                    itemnumbers = JSON.parse(sessionStorage.getItem('itemsearch_itemnumbers') || '[]');
+                } catch (e) {
+                    itemnumbers = [];
+                }
+
+                return new Set(itemnumbers);
+            }
+
             function exportItems(format) {
-              var itemnumbers = [];
-              $('#results').find('input[name="itemnumber"]:checked').each(function() {
-                itemnumbers.push($(this).val());
-              });
-              if (itemnumbers.length) {
+              var itemnumbers = getCheckedItemnumbers();
+              if (itemnumbers.size > 0) {
                 var href = '/cgi-bin/koha/catalogue/item-export.pl?format=' + format;
-                href += '&itemnumber=' + itemnumbers.join('&itemnumber=');
+                href += '&itemnumber=' + Array.from(itemnumbers).join('&itemnumber=');
                 location = href;
               } else {
                 $('#format-' + format).prop('checked', true);
@@ -374,6 +382,7 @@
               .append(_("Clear selection"))
               .on('click', function(e) {
                   e.preventDefault();
+                  sessionStorage.setItem('itemsearch_itemnumbers', '[]');
                   $('#results input[type="checkbox"]').prop('checked', false).change();
               });
             var exportLinks = $('<p>')
@@ -491,11 +500,30 @@
                     null
                 ]
             });
+            $('#results').on('draw.dt', function (e, settings) {
+                var itemnumbers = getCheckedItemnumbers();
+                $(this).find('input[type="checkbox"][name="itemnumber"]').each(function () {
+                    var itemnumber = this.value;
+                    if (itemnumbers.has(itemnumber)) {
+                        this.checked = true;
+                    }
+                });
+            });
+
+            sessionStorage.setItem('itemsearch_itemnumbers', '[]');
 
             $('#results').on('change', 'input[type="checkbox"]', function() {
-              var countSelected = $(this).parents('table').find('input:checked').length;
+              var itemnumber = this.value;
+              var itemnumbers = getCheckedItemnumbers();
+              if (this.checked) {
+                  itemnumbers.add(itemnumber);
+              } else {
+                  itemnumbers.delete(itemnumber);
+              }
+              sessionStorage.setItem('itemsearch_itemnumbers', JSON.stringify(Array.from(itemnumbers)));
+
               var caret = ' <span class="caret">';
-              if (countSelected > 0) {
+              if (itemnumbers.size > 0) {
                 $('#export-button').html(_("Export selected results to") + caret);
               } else {
                 $('#export-button').html(_("Export all results to") + caret);
