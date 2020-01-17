@@ -60,8 +60,8 @@ $xslt=<<"EOT";
 </xsl:stylesheet>
 EOT
 $xslt_file = mytempfile($xslt);
-warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
-    qr/read_file called in XML::LibXSLT/,
+warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+    [ qr/read_file called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for read_file';
 
 # Trigger write_file
@@ -74,8 +74,8 @@ $xslt=<<"EOT";
 </xsl:stylesheet>
 EOT
 $xslt_file = mytempfile($xslt);
-warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
-    qr/write_file called in XML::LibXSLT/,
+warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+    [ qr/write_file called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for write_file';
 
 # Trigger read_net
@@ -88,8 +88,8 @@ $xslt=<<"EOT";
 </xsl:stylesheet>
 EOT
 $xslt_file = mytempfile($xslt);
-warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
-    qr/read_net called in XML::LibXSLT/,
+warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+    [ qr/read_net called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for read_net';
 
 # Trigger write_net
@@ -104,8 +104,8 @@ $xslt=<<"EOT";
 </xsl:stylesheet>
 EOT
 $xslt_file = mytempfile($xslt);
-warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
-    qr/write_net called in XML::LibXSLT/,
+warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+    [ qr/write_net called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for write_net';
 
 # Check remote import (include should be similar)
