@@ -130,6 +130,8 @@ CodeMirror.defineMode( 'marc', function( config, modeConfig ) {
                     // matching.
                     if ( stream.match( /[ \t]+$/ ) ) {
                         return 'end-space';
+                    } else if ( stream.match( /\s{2,}/ ) ) {
+                        return 'double-space';
                     } else if ( stream.match( /[^ \t‡]+/ ) || stream.match( /[ \t]+/ ) ) {
                         return;
                     }
@@ -156,6 +158,8 @@ CodeMirror.defineMode( 'marc', function( config, modeConfig ) {
                 // Match space at end of line
                 if ( stream.match( /[ \t]+$/ ) ) {
                     return 'end-space';
+                } else if ( stream.match( /\s{2,}/ ) ) {
+                    return 'double-space';
                 } else {
                     stream.match( /[ \t]+/ );
                 }
