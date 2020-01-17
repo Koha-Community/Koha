@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 5;
 use Test::Exception;
 use MARC::Field;
 
@@ -79,22 +79,6 @@ subtest 'holds + current_holds' => sub {
     is( $holds->count, 0, '->current_holds should not return future holds' );
     $holds->delete;
 
-};
-
-subtest 'subscriptions' => sub {
-    plan tests => 2;
-    $builder->build(
-        { source => 'Subscription', value => { biblionumber => $biblio->id } }
-    );
-    $builder->build(
-        { source => 'Subscription', value => { biblionumber => $biblio->id } }
-    );
-    my $biblio        = Koha::Biblios->find( $biblio->id );
-    my $subscriptions = $biblio->subscriptions;
-    is( ref($subscriptions), 'Koha::Subscriptions',
-        'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
-    );
-    is( $subscriptions->count, 2, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
 };
 
 subtest 'waiting_or_in_transit' => sub {

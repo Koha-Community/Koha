@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 use C4::Biblio;
 use Koha::Database;
@@ -538,6 +538,41 @@ subtest 'orders() and active_orders_count() tests' => sub {
 
     is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
     is( $orders->count, $active_orders_count + 2, '->active_orders_count returns the rigt count' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'subscriptions() and subscriptions_count() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $subscriptions = $biblio->subscriptions;
+    is( ref($subscriptions), 'Koha::Subscriptions',
+        'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
+    );
+    is( $subscriptions->count, 0, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
+    is( $biblio->subscriptions_count, 0, 'subscriptions_count returns the correct number' );
+
+    # Add two subscriptions
+    foreach (1..2) {
+        $builder->build_object(
+            {
+                class => 'Koha::Subscriptions',
+                value => { biblionumber => $biblio->biblionumber }
+            }
+        );
+    }
+
+    $subscriptions = $biblio->subscriptions;
+    is( ref($subscriptions), 'Koha::Subscriptions',
+        'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
+    );
+    is( $subscriptions->count, 2, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
+    is( $biblio->subscriptions_count, 2, 'subscriptions_count returns the correct number' );
 
     $schema->storage->txn_rollback;
 };
