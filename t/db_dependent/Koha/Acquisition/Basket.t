@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Acquisition;
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 
 use_ok('Koha::Acquisition::Basket');
 use_ok('Koha::Acquisition::Baskets');
@@ -104,6 +105,39 @@ subtest 'basket_group' => sub {
     $basket = Koha::Acquisition::Baskets->find( $b->basketno );
     is( ref( $basket->basket_group ), 'Koha::Acquisition::BasketGroup',
         '->basket_group should return a Koha::Acquisition::BasketGroup object if linked to a basket group');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'to_api() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $vendor = $builder->build_object({ class => 'Koha::Acquisition::Booksellers' });
+    my $basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => {
+                closedate => undef
+            }
+        }
+    );
+
+    my $closed = $basket->to_api->{closed};
+    ok( defined $closed, 'closed is defined' );
+    ok( !$closed, 'closedate is undef, closed evaluates to false' );
+
+    $basket->closedate( dt_from_string )->store->discard_changes;
+    $closed = $basket->to_api->{closed};
+    ok( defined $closed, 'closed is defined' );
+    ok( $closed, 'closedate is defined, closed evaluates to true' );
+
+    $basket->booksellerid( $vendor->id )->store->discard_changes;
+    my $basket_json = $basket->to_api({ embed => { bookseller => {} } });
+    ok( exists $basket_json->{bookseller} );
+    is_deeply( $basket_json->{bookseller}, $vendor->to_api );
 
     $schema->storage->txn_rollback;
 };
