@@ -81,9 +81,9 @@ suitable for API output.
 =cut
 
 sub to_api {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
 
-    my $json = $self->SUPER::to_api;
+    my $json = $self->SUPER::to_api( $params );
 
     $json->{closed} = ( $self->closedate )
                                     ? Mojo::JSON->true
