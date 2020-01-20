@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-12-17 11:14-0300\n"
+"POT-Creation-Date: 2020-01-15 22:07-0300\n"
 "PO-Revision-Date: 2019-06-02 08:05+0000\n"
 "Last-Translator: jerryeast <haod.wu@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -1117,7 +1117,7 @@ msgstr "%s %s %s 没有名称，采购单: %s %s "
 #. %2$s:  PROCESS items_table tab="otherholdings" items=otheritemloop 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:619
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:622
 #, c-format
 msgid "%s %s %s No other items. %s "
 msgstr "%s %s %s 无其它馆藏。%s "
@@ -1129,27 +1129,30 @@ msgstr "%s %s %s 无其它馆藏。%s "
 #. %5$s:  item.notforloanvalue | html 
 #. %6$s:  END 
 #. %7$s:  END 
-#. %8$s:  IF ( item.reservedate ) 
-#. %9$s:  IF ( item.waitingdate ) 
-#. %10$s:  Branches.GetName( item.ExpectedAtLibrary ) | html 
-#. %11$s:  item.waitingdate | $KohaDates 
-#. %12$s:  ELSE 
-#. %13$s:  item.reservedate | $KohaDates 
-#. %14$s:  Branches.GetName( item.ExpectedAtLibrary ) | html 
-#. %15$s:  END 
-#. %16$s:  IF ( canreservefromotherbranches ) 
-#. %17$s:  INCLUDE 'patron-title.inc' patron=item.ReservedFor hide_patron_infos_if_needed=1 
+#. %8$s:  SET hold = item.first_hold 
+#. %9$s:  IF hold 
+#. %10$s:  IF hold.waitingdate 
+#. %11$s:  Branches.GetName( hold.branchcode ) | html 
+#. %12$s:  hold.waitingdate | $KohaDates 
+#. %13$s:  ELSIF hold.priority == 1 
+#. %14$s:  hold.reservedate | $KohaDates 
+#. %15$s:  Branches.GetName( hold.branchcode ) | html 
+#. %16$s:  ELSE 
+#. %17$s:  hold.priority | html 
 #. %18$s:  END 
-#. %19$s:  END 
-#. %20$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) 
+#. %19$s:  IF canreservefromotherbranches AND ( hold.waitingdate OR hold.priority == 1 ) 
+#. %20$s:  INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 
 #. %21$s:  END 
-#. %22$s:  IF ( item.restricted ) 
+#. %22$s:  END 
+#. %23$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold ) 
+#. %24$s:  END 
+#. %25$s:  IF ( item.restricted ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:476
 #, fuzzy, c-format
 msgid ""
-"%s %s %s Not for loan %s (%s) %s %s %s %s Waiting at %s since %s. %s Item-"
-"level hold (placed %s) for delivery at %s. %s %s Hold for: %s %s %s %s "
-"Available %s %s "
+"%s %s %s Not for loan %s (%s) %s %s %s %s %s Waiting at %s since %s. %s Item-"
+"level hold (placed %s) for delivery at %s. %s There is an item level hold on "
+"this item (priority = %s). %s %s Hold for: %s %s %s %s Available %s %s "
 msgstr "%s %s %s 不外借 %s (%s) %s %s %s %s 处理中 %s 馆藏层次预约 %s %s 被 "
 
 #. %1$s:  END 
@@ -1542,7 +1545,7 @@ msgstr "%s %s (%s) %s 没有映射规则 %s%s "
 #. %10$s:  IF ( CAN_user_acquisition_group_manage ) 
 #. %11$s:  IF ( basketgroup.id ) 
 #. %12$s:  basketgroup.name | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:318
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:319
 #, fuzzy, c-format
 msgid "%s %s (closed) %s %s %s %s %s No group %s %s %s %s %s "
 msgstr "%s %s (关闭) %s %s %s %s %s 无群组 %s %s "
@@ -2336,7 +2339,7 @@ msgstr "%s %s 此纪录无映射的馆藏。%s "
 #. %6$s:  CASE 
 #. %7$s:  m.code | html 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:193
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:194
 #, c-format
 msgid ""
 "%s %s This vendor has no contact selected for sending orders to or is "
@@ -2811,7 +2814,7 @@ msgstr "%s %s馆藏%s馆藏%s 逾期视为 %s%s "
 #. %5$s:  CASE 'complete' 
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:765
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:768
 #, c-format
 msgid "%s %sNew %sOrdered %sPartial %sComplete %sCancelled %s "
 msgstr "%s %s新增 %s采购 %s部份 %s全部 %s取消 %s "
@@ -2922,7 +2925,7 @@ msgstr ""
 #. %3$s:  CASE 'cataloguing' 
 #. %4$s:  CASE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:298
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:299
 #, c-format
 msgid "%s %sReceiving items %sCataloguing items %sPlacing orders %s "
 msgstr ""
@@ -2996,7 +2999,7 @@ msgstr ""
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:892
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:893
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %s此报表包含 SQL 关键字 "
@@ -3298,8 +3301,8 @@ msgstr "%s (调整 %s, %s含税%s不含税%s) %s "
 
 #. For the first occurrence,
 #. %1$s:  basketgroup.name | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:318
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:319
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:355
 #, c-format
 msgid "%s (closed)"
 msgstr "%s (关闭)"
@@ -3392,7 +3395,7 @@ msgstr "%s (空白可能没问题)"
 #. %1$s:  IF ( books_loo.order_received ) 
 #. %2$s:  END 
 #. %3$s:  IF books_loo.title 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:476
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #, c-format
 msgid "%s (rcvd)%s %s "
 msgstr "%s (rcvd)%s %s "
@@ -3405,7 +3408,7 @@ msgstr "%s (rcvd)%s %s "
 #. %6$s:  order.author | html 
 #. %7$s:  END 
 #. %8$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:604
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:605
 #, c-format
 msgid "%s (rcvd)%s %s %s%s by %s%s %s "
 msgstr "%s (rcvd)%s %s %s%s by %s%s %s "
@@ -4288,7 +4291,7 @@ msgid "%s No file found. %s %s "
 msgstr "%s 未找到结果 %s "
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:332
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:333
 #, fuzzy, c-format
 msgid "%s No group "
 msgstr "无群组"
@@ -4334,7 +4337,7 @@ msgid ""
 msgstr "%s 无馆藏匹配找到的条码 %s 馆藏不在此书库 %s %s %s "
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:252
 #, fuzzy, c-format
 msgid "%s No library "
 msgstr "%s 来自任何图书馆 "
@@ -4979,7 +4982,7 @@ msgstr "%s 未设置任何字段。%s %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:788
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:791
 #, c-format
 msgid "%s There is no order for this biblio. %s "
 msgstr "%s 此寻找结果未排序。%s "
@@ -5249,7 +5252,7 @@ msgid "%s already in your cart"
 msgstr "%s 已在您的采购单"
 
 #. %1$s:  item.countanalytics | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:537
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:540
 #, c-format
 msgid "%s analytics"
 msgstr "%s 分析"
@@ -5282,7 +5285,7 @@ msgstr "%s 由 %s%s "
 #. %2$s:  books_loo.author | html 
 #. %3$s:  END 
 #. %4$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:479
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:480
 #, c-format
 msgid "%s by %s%s %s "
 msgstr "%s 著者 %s%s %s "
@@ -5450,7 +5453,7 @@ msgstr "[% count %] 馆藏附加在此记录。必须先删除馆藏才能删除
 #. For the first occurrence,
 #. %1$s:  loop_order.holds | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:205
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:563
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:564
 #, c-format
 msgid "%s hold(s) left"
 msgstr "还有 %s 笔预约"
@@ -5562,7 +5565,7 @@ msgid ""
 msgstr "%s 与此记录相关的馆藏。必须先删除馆藏才能删除记录。"
 
 #. %1$s:  cannotdelbiblio.itemcount | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:177
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:178
 #, c-format
 msgid "%s item(s) attached."
 msgstr "%s 笔馆藏加入。"
@@ -5585,7 +5588,7 @@ msgstr "%s 笔馆藏删除。"
 #. For the first occurrence,
 #. %1$s:  loop_order.items | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:196
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:555
 #, c-format
 msgid "%s item(s) left"
 msgstr "还有 %s 笔馆藏"
@@ -5724,7 +5727,7 @@ msgid ""
 msgstr "%s 使用此记录的订单。需要订单管理权限才能删除此记录。"
 
 #. %1$s:  cannotdelbiblio.countbiblio | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:179
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:180
 #, c-format
 msgid "%s order(s) attached."
 msgstr "加入 %s 笔订单。"
@@ -5732,7 +5735,7 @@ msgstr "加入 %s 笔订单。"
 #. For the first occurrence,
 #. %1$s:  loop_order.biblios | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:199
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:557
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:558
 #, c-format
 msgid "%s order(s) left"
 msgstr "还有 %s 订单"
@@ -5903,7 +5906,7 @@ msgid "%s sort"
 msgstr ""
 
 #. %1$s:  cannotdelbiblio.subscriptions | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:178
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:179
 #, c-format
 msgid "%s subscription(s) attached."
 msgstr "加入 %s 笔订阅。"
@@ -5911,7 +5914,7 @@ msgstr "加入 %s 笔订阅。"
 #. For the first occurrence,
 #. %1$s:  loop_order.subscriptions | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:202
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:560
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:561
 #, c-format
 msgid "%s subscription(s) left"
 msgstr "还有 %s 笔订阅"
@@ -6065,7 +6068,7 @@ msgstr "%s%s &rsaquo; 新增虚拟书架%s%s &rsaquo; 编辑虚拟书架 "
 #. %2$s:  IF unlimited_total > limit 
 #. %3$s:  limit | html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:702
 #, fuzzy, c-format
 msgid "%s%s (%s shown)%s."
 msgstr "%s%s%s(无)%s"
@@ -6849,7 +6852,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( latestserial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:683
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:686
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:224
 #, c-format
 msgid ""
@@ -7110,7 +7113,7 @@ msgstr "%s修改%s新增%s 基金 %s %s 供预算 '%s' %s "
 #. %2$s:  END 
 #. %3$s:  basketname | html 
 #. %4$s:  basketno | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:208
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:209
 #, c-format
 msgid "%sNew %sBasket %s (%s) for "
 msgstr "%s新增 %s采购单 %s (%s) 给 "
@@ -7257,7 +7260,7 @@ msgstr "%s是的%s&nbsp;%s"
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:174
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:66
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:294
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:295
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:311
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:313
@@ -9567,8 +9570,8 @@ msgstr "(内含，缺省 %s 天之前到 %s%s 在 %s今天%s，必要时可设�
 msgid "(Indonesian)"
 msgstr "(印尼)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1424
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1446
 #, c-format
 msgid "(None)"
 msgstr "(无)"
@@ -9616,7 +9619,7 @@ msgid "(Tax inc.)"
 msgstr "(含税)"
 
 #. %1$s:  subscriptionsnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:658
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:661
 #, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "(与此题名有关的 %s 笔订阅)。"
@@ -9797,7 +9800,7 @@ msgstr "(必须是大于 0 的数字)"
 msgid "(never)"
 msgstr "(不曾)"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:263
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:264
 #, c-format
 msgid "(no library)"
 msgstr "(无图书馆)"
@@ -9867,8 +9870,8 @@ msgstr ") 是未借出给读者。"
 msgid ") now due on %s "
 msgstr ") 现在的到期日 %s "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:512
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:630
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:513
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:631
 #, c-format
 msgid ") on "
 msgstr ") 在 "
@@ -9900,7 +9903,7 @@ msgstr "坦米尔，法国"
 msgid "). %s %s Item is marked waiting at %s for %s ("
 msgstr ")。%s %s 馆藏处理中 %s 给 %s ("
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:573
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:574
 #, c-format
 msgid "** Vendor's listings already include tax."
 msgstr "** 供应商清单已经含税。"
@@ -10257,7 +10260,7 @@ msgstr "：馆藏已被借出。"
 #. %3$s:  HTML5MediaSet.srcblock | html 
 #. %4$s:  HTML5MediaSet.typeblock | html 
 #. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:838
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:841
 #, fuzzy, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
@@ -10836,6 +10839,12 @@ msgstr "动作："
 msgid "Activate"
 msgstr "使用中"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/datatables.inc:11
+#, fuzzy
+msgid "Activate filters"
+msgstr "使用中"
+
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:61
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:56
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:81
@@ -11174,7 +11183,7 @@ msgstr "新增群组"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:325
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:499
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:500
 #, c-format
 msgid "Add internal note"
 msgstr "新增内部说明"
@@ -11312,7 +11321,7 @@ msgstr "新增定义"
 msgid "Add new field "
 msgstr "新增字段"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:358
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:359
 #, c-format
 msgid "Add new group"
 msgstr "新增群组"
@@ -11517,7 +11526,7 @@ msgstr "新增到购物车"
 msgid "Add to:"
 msgstr "新增至："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:234
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:235
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:92
 #, c-format
 msgid "Add user"
@@ -11535,7 +11544,7 @@ msgstr "新增供应商"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:166
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:330
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:504
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:505
 #, c-format
 msgid "Add vendor note"
 msgstr "新增供应商说明"
@@ -12112,7 +12121,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:51
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:160
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:169
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:684
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 #, c-format
 msgid "All"
 msgstr "所有"
@@ -12640,7 +12650,7 @@ msgid "An error has occurred. Invoice cannot be created."
 msgstr "发生错误。不能新增发票。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "An error occurred on deleting this image"
 msgstr "当删除这个封面时发生程序错误"
 
@@ -12965,7 +12975,7 @@ msgstr "适用其它映射规则"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:202
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:936
 msgid "Apply filter"
 msgstr "使用筛选器"
 
@@ -13085,13 +13095,13 @@ msgid ""
 msgstr "确定删除此读者吗？删除后不能恢复。"
 
 #. %1$s:  basketname | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:682
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:683
 #, c-format
 msgid "Are you sure you want to close basket %s?"
 msgstr "确定关闭采购单%s吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:851
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:852
 #, fuzzy
 msgid ""
 "Are you sure you want to close this basket and generate an EDIFACT order?"
@@ -13209,7 +13219,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "确定删除指定的最新消息吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "确定删除指定的报表吗？"
 
@@ -13271,7 +13281,7 @@ msgid "Are you sure you want to delete this course? There is %s attached item."
 msgstr "确定删除此 %s 附加的馆藏吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "Are you sure you want to delete this cover image?"
 msgstr "确定删除此封面吗？"
 
@@ -13394,7 +13404,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr "确定要删除此记录吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 #, fuzzy
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "确定删除此读者吗？删除后不能恢复。"
@@ -13406,7 +13416,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "确定删除此读者吗？删除后不能恢复。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Are you sure you want to delete this saved report?"
 msgstr "您确定要删除此存储的报表吗？"
 
@@ -13481,7 +13491,7 @@ msgid "Are you sure you want to erase your changes?"
 msgstr "确定取消此改变吗？"
 
 #. %1$s:  basketname | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:706
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:707
 #, fuzzy, c-format
 msgid "Are you sure you want to generate an EDIFACT order and close basket %s?"
 msgstr "确定关闭采购单%s吗？"
@@ -13557,7 +13567,7 @@ msgid "Are you sure you want to renew this patron's registration?"
 msgstr "您确定删除此译文吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:878
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:879
 msgid "Are you sure you want to reopen this basket?"
 msgstr "确定再打开此采购单吗？"
 
@@ -13718,7 +13728,7 @@ msgid "At least two records must be selected for merging."
 msgstr "合并时必须选定两笔纪录。"
 
 #. %1$s:  Branches.GetName(subscription.branchcode) || subscription.branchcode | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:661
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:664
 #, c-format
 msgid "At library: %s"
 msgstr "在图书馆：%s"
@@ -13749,8 +13759,8 @@ msgstr "附加其它馆藏"
 msgid "Attach item"
 msgstr "附加馆藏"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:685
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:709
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:686
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:710
 #, c-format
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "此采购单以同样的名称附加在新的采购单群组"
@@ -13945,7 +13955,7 @@ msgstr "著者：%s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:271
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:102
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:148
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:73
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:252
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:649
@@ -14607,7 +14617,7 @@ msgid "Basic parameters"
 msgstr "基本参数"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:17
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:362
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:264
@@ -14673,7 +14683,7 @@ msgstr "购物车新增者："
 msgid "Basket creator"
 msgstr "购物车新增者"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:167
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:168
 #, c-format
 msgid "Basket deleted"
 msgstr "删除采购单"
@@ -14683,7 +14693,7 @@ msgstr "删除采购单"
 msgid "Basket details"
 msgstr "采购单详情"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:717
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:720
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:145
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:117
@@ -14702,12 +14712,12 @@ msgstr "采购单群组"
 msgid "Basket group %s (%s) for "
 msgstr "采购单群组 %s (%s) 供 "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:375
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:376
 #, c-format
 msgid "Basket group billing place:"
 msgstr "采购单群组帐单地址："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:370
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:371
 #, c-format
 msgid "Basket group delivery placename:"
 msgstr "采购单群组送达地名："
@@ -14724,7 +14734,7 @@ msgid "Basket group search"
 msgstr "寻找采购单群组"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:20
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:311
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:312
 #, c-format
 msgid "Basket group:"
 msgstr "采购单群组："
@@ -14913,7 +14923,7 @@ msgid "Batch item modification results"
 msgstr "批次馆藏修改结果"
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:19
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:743
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, fuzzy, c-format
 msgid "Batch modify"
 msgstr "批次馆藏修改"
@@ -15271,7 +15281,7 @@ msgstr "帐单地址"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:211
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:217
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:221
 #, c-format
 msgid "Billing place:"
 msgstr "帐单日期："
@@ -15845,8 +15855,8 @@ msgid "Cache expiry (seconds)"
 msgstr "高速缓冲到期时间(秒)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:787
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:788
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:863
 #, c-format
 msgid "Cache expiry:"
 msgstr "高速缓冲到期时间："
@@ -16007,7 +16017,7 @@ msgid "Callnumber classification scheme"
 msgstr "新增分类法来源"
 
 #. %1$s:  subscription.callnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:664
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:667
 #, c-format
 msgid "Callnumber: %s "
 msgstr "索书号：%s "
@@ -16037,6 +16047,11 @@ msgstr ""
 msgid "Can not close baskets that have items with uncertain prices in them."
 msgstr ""
 
+#. DIV
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:152
+msgid "Can not reopen baskets that are part of a basket group."
+msgstr ""
+
 #. %1$s:  IF ( error.cardnumber ) 
 #. %2$s:  error.cardnumber | html 
 #. %3$s:  END 
@@ -16047,20 +16062,20 @@ msgid "Can not update patron. %s Cardnumber: %s %s (Borrowernumber: %s) "
 msgstr "不能更新读者。%s 读者证号：%s %s (读者号：%s) "
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:186
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:545
 #, fuzzy, c-format
 msgid "Can't cancel order"
 msgstr "不能删除订单"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:193
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:551
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:552
 #, fuzzy, c-format
 msgid "Can't cancel order and delete catalog record"
 msgstr "不能删除订单与书目纪录"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:186
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:545
 #, fuzzy
 msgid ""
 "Can't cancel order, (%s) holds are linked with this order. Cancel holds first"
@@ -16075,12 +16090,12 @@ msgstr "不能取消收条 "
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:205
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:563
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:564
 msgid "Can't delete catalog record or order, cancel holds first"
 msgstr "不能删除目录纪录或订单，先取消预约"
 
 #. B
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:555
 #, fuzzy
 msgid "Can't delete catalog record, because of %s existing hold(s)"
 msgstr "不能删除目录纪录，因为 [% books_loo.items %] 已被预约"
@@ -16093,19 +16108,19 @@ msgstr "不能删除目录纪录，因为 [% loop_order.items %] 已有馆藏"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:199
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:557
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:558
 msgid "Can't delete catalog record, delete other orders linked to it first"
 msgstr "不能删除目录纪录，先删除连结的其它订单"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:202
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:560
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:561
 msgid "Can't delete catalog record, delete subscriptions first"
 msgstr "不能删除目录纪录，先删除订阅"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:193
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:551
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:552
 msgid "Can't delete catalog record, see constraints below"
 msgstr "不能删除目录纪录，见以下的限制"
 
@@ -16207,10 +16222,10 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:108
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:126
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:272
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:360
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:667
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:753
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:273
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:361
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:668
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:754
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:159
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:495
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:498
@@ -16277,8 +16292,8 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:257
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:259
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:355
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:806
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:882
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:807
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:883
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -16403,8 +16418,8 @@ msgid "Cancel notification"
 msgstr "取消通知"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:188
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:546
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:413
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:547
 #, fuzzy, c-format
 msgid "Cancel order"
 msgstr "取消订单"
@@ -16414,7 +16429,7 @@ msgstr "取消订单"
 msgid "Cancel order and catalog record"
 msgstr "不能删除订单与书目纪录"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:549
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:550
 #, fuzzy, c-format
 msgid "Cancel order and delete catalog record"
 msgstr "不能删除订单与书目纪录"
@@ -16458,7 +16473,7 @@ msgstr "取消日期"
 
 #. %1$s:  AuthorisedValues.GetByCode( 'ORDER_CANCELLATION_REASON', order.cancellationreason ) | html 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:620
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:621
 #, c-format
 msgid "Cancellation reason: %s %s "
 msgstr "取消的原因：%s %s "
@@ -16483,7 +16498,7 @@ msgstr "已取消"
 msgid "Cancelled "
 msgstr "取消 "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:578
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:579
 #, c-format
 msgid "Cancelled orders"
 msgstr "取消订单"
@@ -17111,7 +17126,7 @@ msgstr "改变"
 msgid "Change amounts by"
 msgstr "罚款金额："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:332
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:333
 #, c-format
 msgid "Change basket group"
 msgstr "改变采购单群组"
@@ -17133,7 +17148,7 @@ msgstr "更改框架："
 msgid "Change internal note"
 msgstr "改变内部说明"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:252
 #, fuzzy, c-format
 msgid "Change library"
 msgstr "任何图书馆"
@@ -18405,7 +18420,7 @@ msgstr "清除批次输入#%s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:936
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, c-format
 msgid "Clear"
 msgstr "清除"
@@ -18477,6 +18492,9 @@ msgstr "清除字段"
 msgid "Clear fields"
 msgstr "清除字段"
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/datatables.inc:11
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:77
 #, fuzzy, c-format
 msgid "Clear filter"
@@ -18531,7 +18549,7 @@ msgstr "勾选存储，完成作业。"
 msgid "Click here to define a printer profile."
 msgstr "勾选选这里设置打印机配置文件。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:186
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:187
 #, c-format
 msgid "Click here to go back to booksellers page"
 msgstr "勾选这里回到书商网页"
@@ -18542,7 +18560,7 @@ msgstr "勾选这里回到书商网页"
 msgid "Click here to see the merged record."
 msgstr "勾选这里，查看合并的纪录。"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:815
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:818
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "勾选图片，在图片查看视器里查看图片"
@@ -18742,7 +18760,7 @@ msgstr "复制借出规则失败！"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:132
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:32
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:890
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:634
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:142
@@ -18835,7 +18853,7 @@ msgstr "关闭于 %s"
 msgid "Closed on %s."
 msgstr "关闭于 %s。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:289
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:50
 #, c-format
 msgid "Closed on:"
@@ -18907,8 +18925,8 @@ msgstr "注册费："
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:328
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1386
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1413
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
 #, c-format
 msgid "Code"
 msgstr "代码"
@@ -19603,7 +19621,7 @@ msgstr "不能删除合约。或许采购单连结至此合约。"
 msgid "Contract id "
 msgstr "合约代码 "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:217
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:218
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:44
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:114
 #, c-format
@@ -20116,7 +20134,7 @@ msgstr "新增订阅"
 msgid "Create a new template"
 msgstr "新增模板"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:542
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:545
 #, c-format
 msgid "Create analytics"
 msgstr "新增分析"
@@ -20193,7 +20211,7 @@ msgid "Create item when receiving: "
 msgstr "选定馆藏："
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:115
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:298
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:299
 #, fuzzy, c-format
 msgid "Create items when:"
 msgstr "选定馆藏："
@@ -20268,7 +20286,7 @@ msgstr "新增纪录"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:121
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:773
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:774
 #, c-format
 msgid "Create report from SQL"
 msgstr "从SQL新增报表"
@@ -20301,7 +20319,7 @@ msgstr "新增者："
 msgid "Created by"
 msgstr "新增者"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:221
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:222
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:160
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:348
 #, c-format
@@ -20309,7 +20327,7 @@ msgid "Created by:"
 msgstr "新增者："
 
 #: intranet-tmpl/prog/en/columns.def:121
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:720
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:364
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:65
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:185
@@ -20859,7 +20877,7 @@ msgstr "新增日期"
 msgid "Date and time: "
 msgstr "到期日："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:673
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:676
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, c-format
 msgid "Date arrived"
@@ -20980,7 +20998,7 @@ msgstr "订单日期 "
 msgid "Date ordered "
 msgstr "订单日期 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:674
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:677
 #, c-format
 msgid "Date published"
 msgstr "出版日期"
@@ -21041,7 +21059,7 @@ msgstr "日期/时间"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:274
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:117
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:145
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:927
 #, c-format
 msgid "Date:"
 msgstr "日期："
@@ -21165,8 +21183,8 @@ msgstr "天："
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:267
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:353
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:792
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:793
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:868
 #, c-format
 msgid "Days"
 msgstr "日"
@@ -21180,6 +21198,12 @@ msgstr "提前天数"
 #, c-format
 msgid "DeAndre Carroll"
 msgstr "DeAndre Carroll"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/datatables.inc:11
+#, fuzzy
+msgid "Deactivate filters"
+msgstr "寻找筛选器"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:2
@@ -21801,7 +21825,7 @@ msgstr "删除基金%s 吗？"
 msgid "Delete group"
 msgstr "删除宏"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:823
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:826
 #, c-format
 msgid "Delete image"
 msgstr "删除照片"
@@ -21995,8 +22019,8 @@ msgstr "删除此存储的报表"
 msgid "Delete this subfield"
 msgstr "删除此分栏"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:230
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:889
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:890
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #, c-format
@@ -22015,8 +22039,8 @@ msgid "Delete?"
 msgstr "删除吗？"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:272
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:481
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:609
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:482
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:610
 #, c-format
 msgid "Deleted bibliographic record, can't find title"
 msgstr "删除找不到题名的书目纪录"
@@ -22108,7 +22132,7 @@ msgstr "送达地址"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:223
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:231
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:236
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:219
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:220
 #, c-format
 msgid "Delivery place:"
 msgstr "送达地址："
@@ -22614,7 +22638,7 @@ msgstr ""
 msgid "Display supplier metadata "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
 #, c-format
 msgid "Display them"
 msgstr "显示他们"
@@ -22809,7 +22833,7 @@ msgid "Download "
 msgstr "下载 "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:867
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:870
 msgid "Download Record"
 msgstr "下载纪录"
 
@@ -22915,7 +22939,7 @@ msgid "Draw guide boxes: "
 msgstr "绘制书标边界："
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:863
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:866
 #, fuzzy, c-format
 msgid "Dublin Core"
 msgstr "都伯林核心(XML)"
@@ -23042,7 +23066,7 @@ msgstr "复制此存储报表"
 msgid "Duplicate values detected. Please correct the errors and resubmit."
 msgstr "检测到复制值。请更正错误并重送。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:385
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:18
 #, c-format
 msgid "Duplicate warning"
@@ -23204,7 +23228,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:79
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:566
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:569
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:215
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
@@ -23324,7 +23348,7 @@ msgstr "修改 OAI 数据集 '%s'"
 msgid "Edit SQL"
 msgstr "编辑 SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
 #, c-format
 msgid "Edit SQL report"
 msgstr "编辑SQL报表"
@@ -23438,7 +23462,7 @@ msgid "Edit in host"
 msgstr "编辑主纪录"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:498
 #, fuzzy, c-format
 msgid "Edit internal note"
 msgstr "新增内部说明"
@@ -23614,7 +23638,7 @@ msgid "Edit vendor"
 msgstr "编辑代理商"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:503
 #, fuzzy, c-format
 msgid "Edit vendor note"
 msgstr "新增供应商说明"
@@ -23672,7 +23696,7 @@ msgid "Edition: %s"
 msgstr "版本：%s"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:320
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:796
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:799
 #, c-format
 msgid "Editions"
 msgstr "版本"
@@ -24392,7 +24416,7 @@ msgstr "估计送达日期"
 msgid "Estimated delivery date from: "
 msgstr "估计送达日期："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:292
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:293
 #, c-format
 msgid "Estimated delivery date:"
 msgstr "估计送达日期："
@@ -25412,7 +25436,7 @@ msgstr "影片目录"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:925
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -26164,8 +26188,8 @@ msgstr "Frédérick Capovilla"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:237
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:594
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:595
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:49
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:38
@@ -26308,15 +26332,15 @@ msgid "GPL License"
 msgstr "GNU 通用公共许可证"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:593
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:594
 #, c-format
 msgid "GST"
 msgstr "营业税"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:405
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:592
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:593
 #, c-format
 msgid "GST %%"
 msgstr "营业税 %%"
@@ -26617,12 +26641,12 @@ msgid ""
 msgstr "群组属性类型含禁用题名(根据容许值类型 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1386
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
 msgid "Group code"
 msgstr "群组代码"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1387
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 msgid "Group name"
 msgstr "群组名称"
 
@@ -26863,7 +26887,7 @@ msgstr "隐藏所有栏"
 msgid "Hide already received orders"
 msgstr "已经收到"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:705
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:706
 #, fuzzy, c-format
 msgid "Hide chart"
 msgstr "借出状态："
@@ -27161,7 +27185,7 @@ msgstr "借出图书馆："
 msgid "Holdings (%s)"
 msgstr "预约 (%s)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:603
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
 #, c-format
 msgid "Holdings:"
 msgstr "预约："
@@ -27736,8 +27760,8 @@ msgstr "小时"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:268
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:352
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:792
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
 #, c-format
 msgid "Hours"
 msgstr "时间"
@@ -28901,7 +28925,7 @@ msgstr "服务器内部错误，请再上传页面"
 msgid "Internal note"
 msgstr "内部说明"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:214
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:215
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:40
 #, c-format
 msgid "Internal note:"
@@ -28912,7 +28936,7 @@ msgstr "内部说明："
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:323
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:83
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:302
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:498
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:475
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
 #, c-format
@@ -29056,7 +29080,7 @@ msgstr "登录"
 msgid "Inventory number"
 msgstr "登录簿发票号码"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:719
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:361
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:63
@@ -29065,7 +29089,7 @@ msgid "Invoice"
 msgstr "发票 "
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:739
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:412
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:79
 #, fuzzy
@@ -29229,7 +29253,7 @@ msgstr "期"
 msgid "Issue "
 msgstr "期 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:672
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
 #, c-format
 msgid "Issue #"
 msgstr "期 #"
@@ -30397,7 +30421,7 @@ msgid "Keyword to MARC mapping"
 msgstr "键词映射至 MARC"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:151
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
 #, c-format
 msgid "Keyword:"
 msgstr "键词："
@@ -34088,14 +34112,14 @@ msgstr "Liz Rea"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:248
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:128
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:216
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:190
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:459
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:116
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Loading"
 msgstr "装入中"
 
@@ -34104,7 +34128,7 @@ msgstr "装入中"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:28
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:104
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:115
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:203
@@ -34520,7 +34544,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:866
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:869
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -34532,7 +34556,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:865
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:868
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -34631,7 +34655,7 @@ msgstr "机构"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:126
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:112
@@ -34713,7 +34737,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:133
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:864
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:867
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -34752,7 +34776,7 @@ msgid "MJ Ray (2.0 Release Maintainer)"
 msgstr "MJ Ray (2.0 释出维护者)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:862
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:865
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -35299,7 +35323,7 @@ msgstr "管理器"
 msgid "Managed by - on"
 msgstr "管理器 - 打开"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:224
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:225
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:46
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:170
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:354
@@ -35330,7 +35354,7 @@ msgstr "管理日期："
 msgid "Manager name"
 msgstr "管理 "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:248
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:249
 #, fuzzy, c-format
 msgid "Managing library:"
 msgstr "在图书馆 "
@@ -35966,8 +35990,8 @@ msgid "Minute"
 msgstr "分"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:790
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, c-format
 msgid "Minutes"
 msgstr "分"
@@ -36044,7 +36068,7 @@ msgid "Missing issues:"
 msgstr "遗失期数"
 
 #. %1$s:  subscription.missinglist | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:666
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:669
 #, c-format
 msgid "Missing issues: %s "
 msgstr "遗失期数：%s "
@@ -36109,8 +36133,8 @@ msgstr "修改读者属性类型 &quot;%s&quot;"
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr "修改纪录映射规则 &quot;%s&quot;"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:411
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:536
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:537
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:137
 #, c-format
 msgid "Modify"
@@ -36671,8 +36695,8 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:145
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:66
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1387
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1414
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 #, c-format
 msgid "Name"
 msgstr "名称"
@@ -37516,10 +37540,10 @@ msgstr "不 "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:782
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:784
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:783
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:785
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
 #, c-format
 msgid "No (default)"
 msgstr "不(缺省值)"
@@ -37697,7 +37721,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "No columns selected!"
 msgstr "未选择栏！"
 
@@ -37768,7 +37792,7 @@ msgstr "还没有选择订单"
 msgid "No funds to display for this search criteria"
 msgstr "此寻找类型内无基金"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:346
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:347
 #, c-format
 msgid "No group"
 msgstr "无群组"
@@ -37826,7 +37850,7 @@ msgid "No images are currently available. "
 msgstr "当前无可用的照片。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "还未上传此书目纪录的封面。"
 
@@ -37974,7 +37998,7 @@ msgid "No matching records found"
 msgstr "未找到匹配的纪录"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "No matching reports found"
 msgstr "无找到匹配的报表"
 
@@ -38082,7 +38106,7 @@ msgstr "无审核的现场借出。"
 msgid "No phone stored."
 msgstr "未存储电话。"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:609
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:143
 #, c-format
 msgid "No physical items for this record"
@@ -38325,8 +38349,8 @@ msgstr "不，不要删除"
 msgid "No, don't check out (N)"
 msgstr "不，不要借出(N)"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:698
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:723
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:699
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:724
 #, c-format
 msgid "No, don't close (N)"
 msgstr "不，不要关闭(N)"
@@ -38346,8 +38370,8 @@ msgstr "不，不要续借(N)"
 msgid "No, save as new record"
 msgstr "不：存储为新纪录"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:395
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:582
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:396
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:583
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:86
 #, c-format
 msgid "No."
@@ -38653,7 +38677,7 @@ msgstr "不可续借"
 msgid "Not seen"
 msgstr "最后看到"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:676
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:679
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:48
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:50
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:40
@@ -38859,10 +38883,10 @@ msgstr "说明/评论"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:197
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:700
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:795
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:830
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:870
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:796
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:831
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:871
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:122
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:276
 #, c-format
@@ -38963,8 +38987,8 @@ msgstr "十一月"
 msgid "NoveList Select"
 msgstr "删除采购单"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:580
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:612
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:583
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:615
 #, c-format
 msgid "Novelist Select: "
 msgstr ""
@@ -39777,7 +39801,7 @@ msgid "Open fresh record"
 msgstr "打开新记录"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:204
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:19
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:20
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:21
@@ -39811,7 +39835,7 @@ msgstr "OpenJS 键盘热键库"
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS 键盘热键库"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:286
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:287
 #, c-format
 msgid "Opened on:"
 msgstr "打开位置："
@@ -39879,8 +39903,8 @@ msgstr "或使用读者清单"
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:31
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:396
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:583
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:397
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:584
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:81
 #, c-format
 msgid "Order"
@@ -39956,12 +39980,12 @@ msgstr "订单顺序寻找"
 msgid "Order line:"
 msgstr "订单列："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:743
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:744
 #, fuzzy, c-format
 msgid "Order note"
 msgstr "订单成本"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:719
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:64
 #, c-format
@@ -40028,14 +40052,14 @@ msgstr "订单信息"
 msgid "Ordernumber"
 msgstr "Ordernumber"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:391
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:392
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:258
 #, c-format
 msgid "Orders"
 msgstr "订单"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:105
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:294
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:295
 #, fuzzy, c-format
 msgid "Orders are standing:"
 msgstr "%s 启用 "
@@ -42035,7 +42059,7 @@ msgstr "请勾选不出版的期数(不规则)"
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:897
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:898
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -42424,7 +42448,7 @@ msgid "Please return this item to %s "
 msgstr "请送回至 %s"
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:896
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:897
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -42572,7 +42596,7 @@ msgid "Please select or enter a sound."
 msgstr "请从 %s 至 %s 之间选择一个。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "Please select the image file to upload. %sUpload%s"
 msgstr "请选择上传的照片档。%s上传%s"
 
@@ -43048,7 +43072,7 @@ msgstr "将卡片号码当成条码："
 msgid "Print card number as text under barcode: "
 msgstr "将卡片号码以文字印在条码之下："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:529
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:532
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:217
 #, c-format
 msgid "Print label"
@@ -43665,8 +43689,8 @@ msgid "Purchase suggestions"
 msgstr "新书推荐"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:402
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:589
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:403
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:590
 #, c-format
 msgid "Qty."
 msgstr "数量"
@@ -43697,7 +43721,7 @@ msgstr "质量保证团队："
 msgid "Quality assurance team:"
 msgstr "质量保证团队："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:370
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:236
@@ -43828,14 +43852,14 @@ msgstr "RIS"
 msgid "RRP"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:397
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:584
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:398
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:585
 #, c-format
 msgid "RRP tax exc."
 msgstr "RRP 不含税"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:399
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:586
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:400
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:587
 #, c-format
 msgid "RRP tax inc."
 msgstr "RRP 含税"
@@ -43951,7 +43975,7 @@ msgstr "收到"
 msgid "Receive a new shipment"
 msgstr "收到新的运货单"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:365
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:66
 #, c-format
@@ -44713,6 +44737,7 @@ msgid "Reopen it"
 msgstr "再打开它"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:153
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:156
 #, c-format
 msgid "Reopen this basket"
 msgstr "再打开此采购篮"
@@ -44790,8 +44815,8 @@ msgstr "重置成本："
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:253
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:235
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:588
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:589
 #, c-format
 msgid "Replacement price"
 msgstr "重置价格"
@@ -44828,7 +44853,7 @@ msgstr "报表"
 msgid "Report %s&rsaquo; "
 msgstr "报表 %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:702
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:703
 #, fuzzy, c-format
 msgid "Report SQL:"
 msgstr "报表："
@@ -44846,17 +44871,17 @@ msgid ""
 "%s)"
 msgstr "移动预算内未签收的订单报表 %s (%s - %s) to %s (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1368
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1419
 #, c-format
 msgid "Report group:"
 msgstr "报表群组："
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:782
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:784
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:783
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:785
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
 #, c-format
 msgid "Report is public:"
 msgstr "公开报表："
@@ -44866,13 +44891,13 @@ msgstr "公开报表："
 msgid "Report name"
 msgstr "报表名称"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:776
 #, c-format
 msgid "Report name:"
 msgstr "报表名称："
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:606
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:854
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
 #, c-format
 msgid "Report name: "
 msgstr "报表名称："
@@ -44885,7 +44910,7 @@ msgstr "报表名称："
 msgid "Report plugins"
 msgstr "报表外挂程序"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1390
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1441
 #, c-format
 msgid "Report subgroup:"
 msgstr "报表次群组："
@@ -45277,10 +45302,10 @@ msgstr "Require.js JS 模块系统"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:215
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:225
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:606
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:777
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:801
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:854
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:877
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:778
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:802
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:878
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:284
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -45534,7 +45559,7 @@ msgstr "缺省框架"
 msgid "Return to patron detail"
 msgstr "回到读者详情"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:902
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:903
 #, c-format
 msgid "Return to previous page"
 msgstr "回到前一页"
@@ -45836,7 +45861,7 @@ msgstr "传阅："
 msgid "Row"
 msgstr "列"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
 #, c-format
 msgid "Rows per page: "
 msgstr "每页列数："
@@ -45893,7 +45918,7 @@ msgid "Run reports"
 msgstr "执行报表"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:693
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:694
 msgid "Run the report"
 msgstr "执行报表"
 
@@ -45993,8 +46018,8 @@ msgstr "简信号码："
 msgid "SMS provider:"
 msgstr "CSV 配置文件："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:799
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:875
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:800
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:876
 #, c-format
 msgid "SQL:"
 msgstr "SQL："
@@ -46119,7 +46144,7 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:132
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:311
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:290
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:752
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:753
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:493
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
@@ -46175,7 +46200,7 @@ msgstr "存储"
 msgid "Save "
 msgstr "存储 "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:860
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:863
 #, c-format
 msgid "Save Record"
 msgstr "存储纪录"
@@ -46235,7 +46260,7 @@ msgstr "存储为新的模式"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:146
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:360
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:192
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:237
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:212
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
@@ -46272,7 +46297,7 @@ msgstr "存储纪录"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:611
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:806
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:807
 msgid "Save report"
 msgstr "存储报表"
 
@@ -46309,7 +46334,7 @@ msgstr "存储"
 msgid "Saved preference %s"
 msgstr "存储引用 %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:812
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
 #, c-format
 msgid "Saved report results"
 msgstr "存储报表结果"
@@ -46319,7 +46344,7 @@ msgstr "存储报表结果"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:61
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:62
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:139
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
 #, c-format
 msgid "Saved reports"
 msgstr "存储报表"
@@ -47013,8 +47038,8 @@ msgid "Secondary phone: "
 msgstr "次要电话："
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:350
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:789
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:790
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #, c-format
 msgid "Seconds (default)"
 msgstr "次要(缺省)"
@@ -47071,8 +47096,8 @@ msgstr "看见"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:71
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1393
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1422
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1444
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:117
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -47298,7 +47323,7 @@ msgstr "选定上传的图档或ZIP档。此工具将接受GIF、JPEG、PNG与XP
 msgid "Select day: "
 msgstr "选定日期："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:861
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:864
 #, c-format
 msgid "Select download format: "
 msgstr "选定下载格式："
@@ -47558,7 +47583,7 @@ msgid "Send to"
 msgstr "送出"
 
 #. BUTTON
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:743
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, fuzzy
 msgid "Send visible items to batch modification"
 msgstr "回到批次馆藏修改"
@@ -47839,7 +47864,7 @@ msgstr "所有基金设置为零"
 msgid "Set back to"
 msgstr "设置回"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:335
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:336
 #, fuzzy, c-format
 msgid "Set basket group"
 msgstr "新增采购单群组"
@@ -47876,7 +47901,7 @@ msgstr "设置盘点日："
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:47
 #: intranet-tmpl/prog/en/includes/header.inc:111
 #: intranet-tmpl/prog/en/includes/header.inc:116
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:255
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:17
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:52
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:33
@@ -48205,7 +48230,7 @@ msgstr "显示高级寻找 (Ctrl-Alt-S)"
 msgid "Show all"
 msgstr "显示所有"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:188
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:189
 #, fuzzy, c-format
 msgid "Show all active baskets"
 msgstr "显示所有购书篮"
@@ -48235,7 +48260,7 @@ msgstr "显示所有馆藏"
 
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:593
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:435
 #, c-format
 msgid "Show all items (%s hidden)"
@@ -48267,7 +48292,7 @@ msgid "Show any items currently checked out:"
 msgstr "显示当前借出的馆藏："
 
 #. %1$s:  booksellername | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:188
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:189
 #, fuzzy, c-format
 msgid "Show baskets for vendor %s"
 msgstr "采购单 %s"
@@ -48287,7 +48312,7 @@ msgstr "显示书目"
 msgid "Show category: "
 msgstr "显示类型："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:706
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:707
 #, fuzzy, c-format
 msgid "Show chart"
 msgstr "借出状态："
@@ -48538,7 +48563,7 @@ msgstr ""
 "部份读者要求对还入馆藏的隐私但 AnonymousPatron 首选设置错误。设置为有效的借阅"
 "者号就能顺利启用此功能。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
 #, c-format
 msgid ""
 "Some records have not been automatically added because they match an "
@@ -49213,8 +49238,8 @@ msgstr "统计向导"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:362
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:678
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:120
@@ -49573,12 +49598,12 @@ msgid "Subgroup"
 msgstr "次群组"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1413
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
 msgid "Subgroup code"
 msgstr "次群组代码"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1414
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 msgid "Subgroup name"
 msgstr "次群组名称"
 
@@ -49773,7 +49798,7 @@ msgstr "送出"
 msgid "Submit your suggestion"
 msgstr "送出您的推荐"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:149
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:151
 #, fuzzy, c-format
@@ -49812,7 +49837,7 @@ msgstr "订阅开始日期"
 msgid "Subscription begin"
 msgstr "订阅开始"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, fuzzy, c-format
 msgid "Subscription callnumber"
 msgstr "订阅号"
@@ -49823,7 +49848,7 @@ msgstr "订阅号"
 msgid "Subscription closed %s "
 msgstr "订阅终止 %s "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:705
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:338
 #, c-format
@@ -50032,7 +50057,7 @@ msgstr "推荐者："
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:153
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:317
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:491
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:492
 #, c-format
 msgid "Suggested by: %s%s, %s %s ("
 msgstr "推荐者：%s%s, %s %s ("
@@ -50192,7 +50217,7 @@ msgstr "补篇期刊 "
 msgid "Supplier metadata"
 msgstr "存储报表"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:409
 #, fuzzy, c-format
 msgid "Supplier report"
 msgstr "存储报表"
@@ -50922,7 +50947,7 @@ msgid "The "
 msgstr "这个 "
 
 #. %1$s:  subscription.staffdisplaycount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:669
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:672
 #, c-format
 msgid "The %s latest issues related to this subscription:"
 msgstr "与此订阅有关的%s 最新期："
@@ -51284,7 +51309,7 @@ msgstr "找到以下的条码："
 msgid "The following error occurred while importing the database structure:"
 msgstr "输入数据库结构时，发生以下错误："
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:892
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:893
 #, c-format
 msgid "The following error was encountered:"
 msgstr "碰到以下的错误："
@@ -51351,7 +51376,7 @@ msgid ""
 "shouldn't. "
 msgstr "以下的匹配存在供 items.permanent_location 使用，其实不该存在。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:172
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:173
 #, c-format
 msgid "The following records could not be deleted:"
 msgstr "不能删除以下的记录："
@@ -52383,7 +52408,7 @@ msgid ""
 "existing invoice?"
 msgstr "此发票编号已被使用。您要在既有的发票上签收吗？"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:657
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:660
 #, c-format
 msgid "This is a serial subscription"
 msgstr "这是订阅期刊"
@@ -52718,7 +52743,7 @@ msgstr "此订阅视另个供应商而定"
 msgid "This subscription does not exist."
 msgstr "此读者不存在。"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:663
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:666
 #, c-format
 msgid "This subscription is closed."
 msgstr "此订阅已关闭。"
@@ -53556,7 +53581,7 @@ msgstr "总计 "
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:310
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:444
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:445
 #, c-format
 msgid "Total (%s)"
 msgstr "总计(%s)"
@@ -53574,7 +53599,7 @@ msgid "Total (GST %s%%)"
 msgstr "总计(含税 %s%%)"
 
 #. %1$s:  foot_loo.tax_rate * 100 | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:421
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:422
 #, c-format
 msgid "Total (GST %s)"
 msgstr "总计(含税 %s)"
@@ -53687,7 +53712,7 @@ msgstr "此群组总馆藏"
 msgid "Total must be a number"
 msgstr "总额必须是数字"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:702
 #, fuzzy, c-format
 msgid "Total number of results:"
 msgstr "登记税籍号："
@@ -53721,8 +53746,8 @@ msgstr "未税总额"
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:403
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:590
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:591
 #, c-format
 msgid "Total tax exc. (%s)"
 msgstr "未税总计(%s)"
@@ -53735,8 +53760,8 @@ msgstr "含税总额"
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:591
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:405
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:592
 #, c-format
 msgid "Total tax inc. (%s)"
 msgstr "含税总计(%s)"
@@ -53806,7 +53831,7 @@ msgstr "翻译"
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:48
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:182
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:539
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:540
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:93
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:145
 #, c-format
@@ -53857,7 +53882,7 @@ msgstr "转转到："
 msgid "Transferred"
 msgstr "转移"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:510
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:511
 #, c-format
 msgid "Transferred from basket: "
 msgstr "转移自采购篮："
@@ -53867,7 +53892,7 @@ msgstr "转移自采购篮："
 msgid "Transferred items"
 msgstr "转移的馆藏"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:628
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:629
 #, c-format
 msgid "Transferred to basket: "
 msgstr "转转到采购篮："
@@ -54431,7 +54456,7 @@ msgstr ""
 msgid "Unknown error type %s."
 msgstr "不明的错误。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:180
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:181
 #, c-format
 msgid "Unknown error."
 msgstr "不明的错误。"
@@ -54524,7 +54549,7 @@ msgstr "更新"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:79
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:882
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:883
 #, c-format
 msgid "Update SQL"
 msgstr "更新SQL"
@@ -54943,7 +54968,7 @@ msgstr ""
 msgid "Use for staff search groups "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:895
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:896
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -55229,7 +55254,7 @@ msgid "Vassilis Kanellopoulos"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:23
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:715
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:89
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:23
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:35
@@ -55260,7 +55285,7 @@ msgid "Vendor EDI accounts"
 msgstr "找不到供应商"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:734
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:737
 msgid "Vendor detail page"
 msgstr "供应商详情页面"
 
@@ -55289,7 +55314,7 @@ msgstr "供应商是："
 msgid "Vendor name: "
 msgstr "供应商名称："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:163
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:164
 #, c-format
 msgid "Vendor not found"
 msgstr "找不到供应商"
@@ -55300,7 +55325,7 @@ msgstr "找不到供应商"
 msgid "Vendor note"
 msgstr "供应商说明："
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:215
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:41
 #, c-format
 msgid "Vendor note:"
@@ -55311,7 +55336,7 @@ msgstr "供应商说明："
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:328
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:304
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:503
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:479
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
 #, c-format
@@ -55843,7 +55868,7 @@ msgid ""
 msgstr "报警，键入太多馆藏。不能新增馆藏。"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:120
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:172
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:37
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:28
 #, c-format
@@ -56446,10 +56471,10 @@ msgstr "每年重复的假日：%s"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:326
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:782
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:784
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:783
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:785
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
 #, c-format
 msgid "Yes"
 msgstr "是的"
@@ -56493,8 +56518,8 @@ msgstr "是，取消"
 msgid "Yes, check out (Y)"
 msgstr "是的，借出(Y)"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:694
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:719
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:695
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:720
 #, c-format
 msgid "Yes, close (Y)"
 msgstr "是的，关闭(Y)"
@@ -57123,7 +57148,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "您必须选择一或多个读者供删除"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "You must select one or more reports to delete"
 msgstr "您必须选择一或两个报表供删除"
 
@@ -57317,7 +57342,7 @@ msgid "Your patron lists"
 msgstr "您的读者清单"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:842
 #, fuzzy, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "已存储您的报表"
@@ -57820,7 +57845,7 @@ msgid "basket"
 msgstr "采购单"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:318
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:319
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:117
 msgid "basketgroup"
 msgstr "采购单群组"
@@ -57940,7 +57965,7 @@ msgstr "著者 %s"
 #. %24$s:  IF ( XISBN.size ) 
 #. %25$s:  END 
 #. %26$s:  XISBN.size | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:800
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:803
 #, c-format
 msgid ""
 "by %s &copy;%s %s %s %s(%s)%s %s, %s%s %s%s%s %s%s%s %s %s %s%s %s%s%s %s, %s"
@@ -57950,7 +57975,7 @@ msgstr ""
 "%s "
 
 #. %1$s:  cannotdelbiblio.author | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:175
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:176
 #, c-format
 msgid "by %s: "
 msgstr "著者 %s："
@@ -58327,8 +58352,8 @@ msgstr "未符合任何既有记录。"
 msgid "déselectionner tout"
 msgstr "取消所有选择"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:398
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:585
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:399
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:586
 #, c-format
 msgid "ecost tax exc."
 msgstr "不含税"
@@ -58339,8 +58364,8 @@ msgstr "不含税"
 msgid "ecost tax exc. / ecost tax inc."
 msgstr "含税的价格。"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:400
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:587
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:588
 #, c-format
 msgid "ecost tax inc."
 msgstr "含税"
@@ -58794,12 +58819,12 @@ msgstr "馆藏所属图书馆："
 msgid "item's home library "
 msgstr "馆藏所属图书馆："
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:596
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:599
 #, c-format
 msgid "itemdata_copynumber"
 msgstr "itemdata_copynumber"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:595
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:598
 #, c-format
 msgid "itemdata_enumchron"
 msgstr "itemdata_enumchron"
@@ -59259,12 +59284,12 @@ msgstr "或 MARC 分栏。"
 msgid "or any available"
 msgstr "或任何可取得"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1463
 #, c-format
 msgid "or create"
 msgstr "或新增"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1385
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1436
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "或新增"
@@ -59420,8 +59445,8 @@ msgid "rejected"
 msgstr "拒绝"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:823
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:824
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:826
 msgid "remove this image"
 msgstr "删除此图像"
 
@@ -59539,7 +59564,7 @@ msgstr "选择器"
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "以空格区隔。(如：100a 200 606) "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:597
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:600
 #, c-format
 msgid "serial"
 msgstr "期刊"
@@ -59711,7 +59736,7 @@ msgstr "推荐"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:155
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:319
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:51
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:493
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:494
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:244
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:425
 #, c-format
@@ -60122,7 +60147,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:125
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:24
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:883
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:620
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111

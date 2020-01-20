@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-12-17 10:53-0300\n"
-"PO-Revision-Date: 2019-11-19 02:32+0000\n"
+"POT-Creation-Date: 2020-01-15 21:46-0300\n"
+"PO-Revision-Date: 2020-01-17 14:12+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1574130724.467739\n"
+"X-POOTLE-MTIME: 1579270376.256631\n"
 "X-Pootle-Path: /hi/18.05/hi-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1135,7 +1135,7 @@ msgstr "%s %s %s नाम नही, बास्केटसंख्या: %
 #. %2$s:  PROCESS items_table tab="otherholdings" items=otheritemloop 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:619
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:622
 #, c-format
 msgid "%s %s %s No other items. %s "
 msgstr "%s %s %s अन्य कोई आइटम नही. %s "
@@ -1147,30 +1147,34 @@ msgstr "%s %s %s अन्य कोई आइटम नही. %s "
 #. %5$s:  item.notforloanvalue | html 
 #. %6$s:  END 
 #. %7$s:  END 
-#. %8$s:  IF ( item.reservedate ) 
-#. %9$s:  IF ( item.waitingdate ) 
-#. %10$s:  Branches.GetName( item.ExpectedAtLibrary ) | html 
-#. %11$s:  item.waitingdate | $KohaDates 
-#. %12$s:  ELSE 
-#. %13$s:  item.reservedate | $KohaDates 
-#. %14$s:  Branches.GetName( item.ExpectedAtLibrary ) | html 
-#. %15$s:  END 
-#. %16$s:  IF ( canreservefromotherbranches ) 
-#. %17$s:  INCLUDE 'patron-title.inc' patron=item.ReservedFor hide_patron_infos_if_needed=1 
+#. %8$s:  SET hold = item.first_hold 
+#. %9$s:  IF hold 
+#. %10$s:  IF hold.waitingdate 
+#. %11$s:  Branches.GetName( hold.branchcode ) | html 
+#. %12$s:  hold.waitingdate | $KohaDates 
+#. %13$s:  ELSIF hold.priority == 1 
+#. %14$s:  hold.reservedate | $KohaDates 
+#. %15$s:  Branches.GetName( hold.branchcode ) | html 
+#. %16$s:  ELSE 
+#. %17$s:  hold.priority | html 
 #. %18$s:  END 
-#. %19$s:  END 
-#. %20$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || item.reservedate ) 
+#. %19$s:  IF canreservefromotherbranches AND ( hold.waitingdate OR hold.priority == 1 ) 
+#. %20$s:  INCLUDE 'patron-title.inc' patron=hold.borrower hide_patron_infos_if_needed=1 
 #. %21$s:  END 
-#. %22$s:  IF ( item.restricted ) 
+#. %22$s:  END 
+#. %23$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold ) 
+#. %24$s:  END 
+#. %25$s:  IF ( item.restricted ) 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:476
 #, c-format
 msgid ""
-"%s %s %s Not for loan %s (%s) %s %s %s %s Waiting at %s since %s. %s Item-"
-"level hold (placed %s) for delivery at %s. %s %s Hold for: %s %s %s %s "
-"Available %s %s "
+"%s %s %s Not for loan %s (%s) %s %s %s %s %s Waiting at %s since %s. %s Item-"
+"level hold (placed %s) for delivery at %s. %s There is an item level hold on "
+"this item (priority = %s). %s %s Hold for: %s %s %s %s Available %s %s "
 msgstr ""
-"%s %s %s ऋण के लिए नहीं %s (%s) %s %s %s %s पर प्रतीक्षा कर रहा है %s since %s. "
-"%s आइटम-स्तरीय होल्ड (रखा गया %s) डिलीवरी के लिए %s. %s %s होल्ड पर: %s %s %s %s "
+"%s %s %s ऋण के लिए नहीं %s (%s) %s %s %s %s %s पर प्रतीक्षा कर रहा है %s जबसे"
+" %s. %s आइटम-स्तरीय होल्ड (रखा गया %s) डिलीवरी के लिए %s. %s इस मद "
+"(प्राथमिकता) पर एक आइटम स्तर होल्ड है = %s). %s %s होल्ड पर: %s %s %s %s "
 "उपलब्ध %s %s "
 
 #. %1$s:  END 
@@ -1582,7 +1586,7 @@ msgstr "%s %s (%s) %s प्रभाव में मिलान नियम 
 #. %10$s:  IF ( CAN_user_acquisition_group_manage ) 
 #. %11$s:  IF ( basketgroup.id ) 
 #. %12$s:  basketgroup.name | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:318
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:319
 #, c-format
 msgid "%s %s (closed) %s %s %s %s %s No group %s %s %s %s %s "
 msgstr "%s %s (बन्द) %s %s %s %s %s समूह नही %s %s %s %s %s "
@@ -2437,7 +2441,7 @@ msgstr "%s %s इस रिकार्ड में कोई आइटम न�
 #. %6$s:  CASE 
 #. %7$s:  m.code | html 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:193
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:194
 #, c-format
 msgid ""
 "%s %s This vendor has no contact selected for sending orders to or is "
@@ -2919,7 +2923,7 @@ msgstr "%s %s आइटम %s मद %s के रूप में अतिद�
 #. %5$s:  CASE 'complete' 
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:765
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:768
 #, c-format
 msgid "%s %sNew %sOrdered %sPartial %sComplete %sCancelled %s "
 msgstr "%s %s न्यू %s का आदेश दिया %s आंशिक %s पूरा %s रद्द %s "
@@ -3032,7 +3036,7 @@ msgstr ""
 #. %3$s:  CASE 'cataloguing' 
 #. %4$s:  CASE 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:298
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:299
 #, c-format
 msgid "%s %sReceiving items %sCataloguing items %sPlacing orders %s "
 msgstr "%s %sवस्तुओं को प्राप्त करना %s आइटम्स सूचीबद्ध करना %s ऑर्डर देना %s "
@@ -3110,7 +3114,7 @@ msgstr ""
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:892
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:893
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %sइस रिपोर्ट में एसक्यूएल कीवर्ड है "
@@ -3424,8 +3428,8 @@ msgstr "%s (के लिए समायोजित %s , %s कर सम्�
 
 #. For the first occurrence,
 #. %1$s:  basketgroup.name | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:318
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:354
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:319
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:355
 #, c-format
 msgid "%s (closed)"
 msgstr "%s (बन्द) "
@@ -3521,7 +3525,7 @@ msgstr "%s (शायद रिक्त अगर ठीक है)"
 #. %1$s:  IF ( books_loo.order_received ) 
 #. %2$s:  END 
 #. %3$s:  IF books_loo.title 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:476
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:477
 #, c-format
 msgid "%s (rcvd)%s %s "
 msgstr "%s (rcvd)%s %s "
@@ -3534,7 +3538,7 @@ msgstr "%s (rcvd)%s %s "
 #. %6$s:  order.author | html 
 #. %7$s:  END 
 #. %8$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:604
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:605
 #, c-format
 msgid "%s (rcvd)%s %s %s%s by %s%s %s "
 msgstr "%s (rcvd)%s %s %s%s by %s%s %s "
@@ -4428,7 +4432,7 @@ msgid "%s No file found. %s %s "
 msgstr "%s कोई फ़ाइल नहीं मिली. %s %s "
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:332
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:333
 #, c-format
 msgid "%s No group "
 msgstr "%s समूह नही"
@@ -4474,7 +4478,7 @@ msgid ""
 msgstr "%s मिलान बारकोड के साथ कोई आइटम पाया %s मद इस संग्रह में नहीं है %s %s %s "
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:252
 #, c-format
 msgid "%s No library "
 msgstr "%s कोई पुस्तकालय नहीं"
@@ -5137,7 +5141,7 @@ msgstr "%s वहाँ कोई क्षेत्र परिभाषित
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:788
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:791
 #, c-format
 msgid "%s There is no order for this biblio. %s "
 msgstr "%s इस Biblio के लिए कोई आदेश नहीं है. %s "
@@ -5427,7 +5431,7 @@ msgid "%s already in your cart"
 msgstr "%s पहले से ही आपकी कार्ट में"
 
 #. %1$s:  item.countanalytics | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:537
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:540
 #, c-format
 msgid "%s analytics"
 msgstr "%s विश्लेषण"
@@ -5460,7 +5464,7 @@ msgstr "%s द्वारा %s%s "
 #. %2$s:  books_loo.author | html 
 #. %3$s:  END 
 #. %4$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:479
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:480
 #, c-format
 msgid "%s by %s%s %s "
 msgstr "%s द्वारा %s%s %s "
@@ -5633,7 +5637,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  loop_order.holds | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:205
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:563
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:564
 #, c-format
 msgid "%s hold(s) left"
 msgstr "%s होल्ड(ओ) छोड़ना"
@@ -5748,7 +5752,7 @@ msgstr ""
 "होगा।"
 
 #. %1$s:  cannotdelbiblio.itemcount | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:177
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:178
 #, c-format
 msgid "%s item(s) attached."
 msgstr "%s मद(s) संलग्न"
@@ -5771,7 +5775,7 @@ msgstr "%s मद(s) मिटाई गई."
 #. For the first occurrence,
 #. %1$s:  loop_order.items | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:196
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:555
 #, c-format
 msgid "%s item(s) left"
 msgstr "%s मद (s) शेष"
@@ -5912,7 +5916,7 @@ msgstr ""
 "नष्ट करने की जरूरत है।"
 
 #. %1$s:  cannotdelbiblio.countbiblio | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:179
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:180
 #, c-format
 msgid "%s order(s) attached."
 msgstr "%s आदेश(ओ) संलग्न।"
@@ -5920,7 +5924,7 @@ msgstr "%s आदेश(ओ) संलग्न।"
 #. For the first occurrence,
 #. %1$s:  loop_order.biblios | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:199
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:557
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:558
 #, c-format
 msgid "%s order(s) left"
 msgstr "%s आदेश(ओ) शेष"
@@ -6093,7 +6097,7 @@ msgid "%s sort"
 msgstr "%s शार्ट"
 
 #. %1$s:  cannotdelbiblio.subscriptions | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:178
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:179
 #, c-format
 msgid "%s subscription(s) attached."
 msgstr "%s सदस्यता(ओ) संलग्न"
@@ -6101,7 +6105,7 @@ msgstr "%s सदस्यता(ओ) संलग्न"
 #. For the first occurrence,
 #. %1$s:  loop_order.subscriptions | html 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:202
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:560
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:561
 #, c-format
 msgid "%s subscription(s) left"
 msgstr "%s सदस्यता(ओ) शेष"
@@ -6254,7 +6258,7 @@ msgstr "%s%s &rsaquo; नई सूची बनाए%s%s &rsaquo; सूची
 #. %2$s:  IF unlimited_total > limit 
 #. %3$s:  limit | html 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:702
 #, c-format
 msgid "%s%s (%s shown)%s."
 msgstr "%s%s (%s दिखाया)%s."
@@ -7047,7 +7051,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( latestserial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:683
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:686
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:224
 #, c-format
 msgid ""
@@ -7316,7 +7320,7 @@ msgstr "%s संशोधित %s जोड़े %s फंड %s %s के �
 #. %2$s:  END 
 #. %3$s:  basketname | html 
 #. %4$s:  basketno | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:208
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:209
 #, c-format
 msgid "%sNew %sBasket %s (%s) for "
 msgstr "%sनया %sबास्केट %s (%s)के लिए "
@@ -7466,7 +7470,7 @@ msgstr "%sहाँ%s &nbsp;%s"
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:174
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:66
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:294
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:295
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:309
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:311
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:313
@@ -9786,8 +9790,8 @@ msgstr ""
 msgid "(Indonesian)"
 msgstr "(इन्डोनेशियाई) "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1395
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1424
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1446
 #, c-format
 msgid "(None)"
 msgstr "(कुछ नहीं)"
@@ -9835,7 +9839,7 @@ msgid "(Tax inc.)"
 msgstr "(टैक्स inc.)"
 
 #. %1$s:  subscriptionsnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:658
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:661
 #, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "(यह है %s इस शीर्षक के साथ जुड़े हैं.)."
@@ -10017,7 +10021,7 @@ msgstr "(0 से बड़ी संख्या में होना चा�
 msgid "(never)"
 msgstr "(कभी नहीं)"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:263
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:264
 #, c-format
 msgid "(no library)"
 msgstr "(पुस्तकाललय नही)"
@@ -10087,8 +10091,8 @@ msgstr ") एक संरक्षक के लिए चैक आउट न�
 msgid ") now due on %s "
 msgstr ") अब देय है पर %s "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:512
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:630
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:513
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:631
 #, c-format
 msgid ") on "
 msgstr ") पर"
@@ -10120,7 +10124,7 @@ msgstr "), फ्रांस"
 msgid "). %s %s Item is marked waiting at %s for %s ("
 msgstr "). %s %s आइटम पर का इंतज़ार कर चिह्नित है. %s के लिए %s ("
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:573
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:574
 #, c-format
 msgid "** Vendor's listings already include tax."
 msgstr "** विक्रेता की लिस्टिंग पहले ही टैक्स शामिल हैं."
@@ -10481,7 +10485,7 @@ msgstr ": मद बाहर की जाँच की है."
 #. %3$s:  HTML5MediaSet.srcblock | html 
 #. %4$s:  HTML5MediaSet.typeblock | html 
 #. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:838
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:841
 #, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
@@ -11061,6 +11065,11 @@ msgstr "क्रियाएं:"
 msgid "Activate"
 msgstr "सक्रिय करें"
 
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/datatables.inc:11
+msgid "Activate filters"
+msgstr "फ़िल्टर्स सक्रिय करें"
+
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:61
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:56
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:81
@@ -11396,7 +11405,7 @@ msgstr "समूह जोड़ें"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:161
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:325
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:499
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:500
 #, c-format
 msgid "Add internal note"
 msgstr "आंतरिक नोट जोड़ें"
@@ -11534,7 +11543,7 @@ msgstr "नई परिभाषा जोड़ें"
 msgid "Add new field "
 msgstr "नया फ़ील्ड जोड़ें"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:358
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:359
 #, c-format
 msgid "Add new group"
 msgstr "नया समूह जोड़ें"
@@ -11741,7 +11750,7 @@ msgstr "रोटा में जोड़ें:"
 msgid "Add to:"
 msgstr "को जोड़ें:"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:234
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:235
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:92
 #, c-format
 msgid "Add user"
@@ -11759,7 +11768,7 @@ msgstr "विक्रेता जोड़ें"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:166
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:330
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:504
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:505
 #, c-format
 msgid "Add vendor note"
 msgstr "विक्रेता टिप्पणी जोड़ें"
@@ -12334,7 +12343,8 @@ msgstr "अंलिगसस पब्लिक लाइब्रेरी, �
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:51
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:160
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:169
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:684
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 #, c-format
 msgid "All"
 msgstr "सब"
@@ -12864,7 +12874,7 @@ msgid "An error has occurred. Invoice cannot be created."
 msgstr "एक गलती हुई है। चालान नहीं बनाया जा सकता।"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "An error occurred on deleting this image"
 msgstr "इस छवि को हटाने पर कोई त्रुटि उत्पन्न"
 
@@ -13187,7 +13197,7 @@ msgstr "अलग मिलान नियम लागू "
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:202
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:935
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:936
 msgid "Apply filter"
 msgstr "फ़िल्टर लागू करें"
 
@@ -13309,13 +13319,13 @@ msgstr ""
 "मौजूदा नियमों को ओवरराइड करेगा। "
 
 #. %1$s:  basketname | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:682
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:683
 #, c-format
 msgid "Are you sure you want to close basket %s?"
 msgstr "क्या आप वाकई इस बास्केट को बन्द करना चाहते हैं %s?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:851
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:852
 msgid ""
 "Are you sure you want to close this basket and generate an EDIFACT order?"
 msgstr "तुम्हें यकीन है कि आप इस टोकरी को बंद करने और एक EDIFACT आदेश पैदा करना चाहते ?"
@@ -13430,7 +13440,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr "क्या आप वाकई चयनित समाचारों को मिटाना चाहते हैं? "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Are you sure you want to delete the selected reports?"
 msgstr "क्या आप वाकई चयनित रिपोर्ट को मिटाना चाहते हैं? "
 
@@ -13487,7 +13497,7 @@ msgid "Are you sure you want to delete this course? There is %s attached item."
 msgstr "क्या आप वाकई इस कोर्स को हटाना चाहते हैं? %s संलग्न वस्तु है"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "Are you sure you want to delete this cover image?"
 msgstr "क्या आप वाकई इस कवर छवि को मिटाना चाहते हैं?"
 
@@ -13601,7 +13611,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr "क्या आप इस अभिलेख को हटाना चाहते हैं?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "क्या आप इस रिपोर्ट को हटाना चाहते हैं? यह पूर्ववत नहीं कर सकते हैं."
 
@@ -13611,7 +13621,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "आप इस नियम को हटाना चाहते हैं आप सुनिश्चित हैं यह पूर्ववत नहीं कर सकते हैं."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Are you sure you want to delete this saved report?"
 msgstr "आप इस सहेजी रिपोर्ट को हटाना चाहते हैं आप सुनिश्चित हैं"
 
@@ -13685,7 +13695,7 @@ msgid "Are you sure you want to erase your changes?"
 msgstr "आप अपने परिवर्तनों को मिटाना चाहते हैं आप सुनिश्चित हैं?"
 
 #. %1$s:  basketname | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:706
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:707
 #, c-format
 msgid "Are you sure you want to generate an EDIFACT order and close basket %s?"
 msgstr "क्या आप वाकई एक EDIFACT आदेश और करीब टोकरी पैदा करना चाहते हैं %s?"
@@ -13756,7 +13766,7 @@ msgid "Are you sure you want to renew this patron's registration?"
 msgstr "क्या आप इस संरक्षक पजीकरण नवीनीकृत करना चाहते हैं ?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:878
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:879
 msgid "Are you sure you want to reopen this basket?"
 msgstr "आप इस टोकरी को फिर से खोलने के लिए चाहते हैं आप सुनिश्चित हैं?"
 
@@ -13916,7 +13926,7 @@ msgid "At least two records must be selected for merging."
 msgstr "कम से कम दो रिकॉर्ड विलय के लिए चयनित किया जाना चाहिए।"
 
 #. %1$s:  Branches.GetName(subscription.branchcode) || subscription.branchcode | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:661
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:664
 #, c-format
 msgid "At library: %s"
 msgstr "पुस्तकालय में: %s"
@@ -13947,8 +13957,8 @@ msgstr "अन्य आइटम संलग्न"
 msgid "Attach item"
 msgstr "आइटम संलग्न"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:685
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:709
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:686
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:710
 #, c-format
 msgid "Attach this basket to a new basket group with the same name"
 msgstr "एक ही नाम के साथ एक नया टोकरी समूह को यह टोकरी संलग्न"
@@ -14144,7 +14154,7 @@ msgstr "लेखक(ओ): %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:271
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:102
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:148
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:73
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:252
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:649
@@ -14812,7 +14822,7 @@ msgid "Basic parameters"
 msgstr "बुनियादी मानकों"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:17
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:362
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:143
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:264
@@ -14878,7 +14888,7 @@ msgstr "टोकरी द्वारा बनाया गया :"
 msgid "Basket creator"
 msgstr "टोकरी बनाने वाला"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:167
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:168
 #, c-format
 msgid "Basket deleted"
 msgstr "टोकरी मिटाया"
@@ -14888,7 +14898,7 @@ msgstr "टोकरी मिटाया"
 msgid "Basket details"
 msgstr "टोकरी विवरण"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:717
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:720
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:145
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:266
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:117
@@ -14907,12 +14917,12 @@ msgstr "टोकरी समूह"
 msgid "Basket group %s (%s) for "
 msgstr "टोकरी समूह %s (%s)  के लिए "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:375
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:376
 #, c-format
 msgid "Basket group billing place:"
 msgstr "टोकरी समूह बिलिंग जगह:"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:370
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:371
 #, c-format
 msgid "Basket group delivery placename:"
 msgstr "टोकरी समूह डिलिवरी जगह का नाम:"
@@ -14929,7 +14939,7 @@ msgid "Basket group search"
 msgstr "टोकरी समूह खोज"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:20
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:311
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:312
 #, c-format
 msgid "Basket group:"
 msgstr "टोकरी समूहः"
@@ -15118,7 +15128,7 @@ msgid "Batch item modification results"
 msgstr "बैच आइटम सँशोधन परिणाम"
 
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:19
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:743
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 #, c-format
 msgid "Batch modify"
 msgstr "बैच को संशोधित"
@@ -15480,7 +15490,7 @@ msgstr "बिलिंग स्थान:"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:211
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:217
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:220
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:221
 #, c-format
 msgid "Billing place:"
 msgstr "बिलिंग स्थान: "
@@ -16056,8 +16066,8 @@ msgid "Cache expiry (seconds)"
 msgstr "कैश समाप्ति (सेकंड)"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:348
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:787
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:862
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:788
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:863
 #, c-format
 msgid "Cache expiry:"
 msgstr "केचे समाप्ति:"
@@ -16218,7 +16228,7 @@ msgid "Callnumber classification scheme"
 msgstr "कॉलनंबर वर्गीकरण योजना"
 
 #. %1$s:  subscription.callnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:664
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:667
 #, c-format
 msgid "Callnumber: %s "
 msgstr "कॉलनंबर: %s "
@@ -16248,6 +16258,11 @@ msgstr "अब कोई ऑटो नवीकरण किया जा सक
 msgid "Can not close baskets that have items with uncertain prices in them."
 msgstr "उन बास्केटों को बंद नहीं कर सकते हैं जिनके पास अनिश्चित कीमतों वाले आइटम हैं।"
 
+#. DIV
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:152
+msgid "Can not reopen baskets that are part of a basket group."
+msgstr "बास्केट को फिर से खोल नहीं सकते हैं जो एक बास्केट समूह का हिस्सा हैं।"
+
 #. %1$s:  IF ( error.cardnumber ) 
 #. %2$s:  error.cardnumber | html 
 #. %3$s:  END 
@@ -16258,20 +16273,20 @@ msgid "Can not update patron. %s Cardnumber: %s %s (Borrowernumber: %s) "
 msgstr "अद्यतन नहीं कर सकता संरक्षक के %s कार्ड संख्या:%s %s (उधारकर्ता संख्याः %s)"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:186
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:545
 #, c-format
 msgid "Can't cancel order"
 msgstr "आदेश को रद्द नही कर सकते"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:193
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:551
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:552
 #, c-format
 msgid "Can't cancel order and delete catalog record"
 msgstr "आदेश को रद्द नहीं कर सकते हैं और सूची रिकॉर्ड नष्ट"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:186
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:544
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:545
 msgid ""
 "Can't cancel order, (%s) holds are linked with this order. Cancel holds first"
 msgstr "आदेश रद्द नहीं कर सकते, (%s) होल्ड इस आदेश के साथ जुड़े हुए हैं पहले होल्ड रद्द करें"
@@ -16283,12 +16298,12 @@ msgstr "रसीद रद्द नहीं कर सकते "
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:205
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:563
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:564
 msgid "Can't delete catalog record or order, cancel holds first"
 msgstr "सूची रिकॉर्ड या आदेश हटा नहीं सकते, रद्द पहली रखती है"
 
 #. B
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:554
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:555
 msgid "Can't delete catalog record, because of %s existing hold(s)"
 msgstr "के कारण कैटलॉग रिकॉर्ड को हटा नहीं सकते %s मौजूदा होल्ड(ओं) "
 
@@ -16299,19 +16314,19 @@ msgstr "के कारण कैटलॉग रिकॉर्ड को ह�
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:199
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:557
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:558
 msgid "Can't delete catalog record, delete other orders linked to it first"
 msgstr "सूची रिकॉर्ड को नष्ट नहीं कर सकते हैं, अन्य पहली बार इसे से जुड़े आदेश हटा"
 
 #. B
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:202
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:560
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:561
 msgid "Can't delete catalog record, delete subscriptions first"
 msgstr "सूची रिकॉर्ड नष्ट नहीं कर सकते, पहले सदस्यता नष्ट"
 
 #. SPAN
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:193
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:551
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:552
 msgid "Can't delete catalog record, see constraints below"
 msgstr "सूची रिकॉर्ड को नष्ट नहीं कर सकते हैं, नीचे की कमी देखना"
 
@@ -16413,10 +16428,10 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:108
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:126
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:272
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:360
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:667
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:753
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:273
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:361
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:668
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:754
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:159
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:495
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:498
@@ -16483,8 +16498,8 @@ msgstr "इस रिकॉर्ड के सेव नहीं कर सक
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:257
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:259
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:355
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:806
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:882
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:807
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:883
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -16605,8 +16620,8 @@ msgid "Cancel notification"
 msgstr "अधिसूचना रद्द करें"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:188
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:546
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:413
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:547
 #, c-format
 msgid "Cancel order"
 msgstr "रद्द करें आदेश"
@@ -16616,7 +16631,7 @@ msgstr "रद्द करें आदेश"
 msgid "Cancel order and catalog record"
 msgstr "रद्द करें आदेश और सूची रिकॉर्ड"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:549
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:550
 #, c-format
 msgid "Cancel order and delete catalog record"
 msgstr "आदेश रद्द करें और सूची रिकॉर्ड नष्ट"
@@ -16660,7 +16675,7 @@ msgstr "रद्द करने की तारीख"
 
 #. %1$s:  AuthorisedValues.GetByCode( 'ORDER_CANCELLATION_REASON', order.cancellationreason ) | html 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:620
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:621
 #, c-format
 msgid "Cancellation reason: %s %s "
 msgstr "रद्द करने का कारण: %s %s "
@@ -16684,7 +16699,7 @@ msgstr "रद्द किया"
 msgid "Cancelled "
 msgstr "रद्द किया"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:578
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:579
 #, c-format
 msgid "Cancelled orders"
 msgstr "रद्द किया आदेश"
@@ -17312,7 +17327,7 @@ msgstr "बदलना"
 msgid "Change amounts by"
 msgstr "द्वारा राशी में बदलें"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:332
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:333
 #, c-format
 msgid "Change basket group"
 msgstr "टोकरी समूह बदलें"
@@ -17334,7 +17349,7 @@ msgstr "फ्रेमवर्क बदलें"
 msgid "Change internal note"
 msgstr "आंतरिक नोट बदलें"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:252
 #, c-format
 msgid "Change library"
 msgstr "लाइब्रेरी बदले"
@@ -18618,7 +18633,7 @@ msgstr "साफ आयात बैच # %s"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:259
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:337
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:936
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, c-format
 msgid "Clear"
 msgstr "स्पष्ट"
@@ -18690,6 +18705,9 @@ msgstr "साफ़ फील्ड"
 msgid "Clear fields"
 msgstr "साफ़ फील्ड"
 
+#. For the first occurrence,
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/datatables.inc:11
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:77
 #, c-format
 msgid "Clear filter"
@@ -18744,7 +18762,7 @@ msgstr "खत्म करने के लिए सहेजें क्ल�
 msgid "Click here to define a printer profile."
 msgstr "एक प्रिंटर प्रोफाइल को परिभाषित करने के लिए यहां क्लिक करें।"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:186
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:187
 #, c-format
 msgid "Click here to go back to booksellers page"
 msgstr "पुस्तक विक्रेताओं पृष्ठ पर वापस जाने के लिए यहां क्लिक करें"
@@ -18755,7 +18773,7 @@ msgstr "पुस्तक विक्रेताओं पृष्ठ पर
 msgid "Click here to see the merged record."
 msgstr "विलय कर रिकॉर्ड देखने के लिए यहां क्लिक करें।"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:815
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:818
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "छवि दर्शकों में इसे देखने के लिए एक छवि पर क्लिक करें"
@@ -18963,7 +18981,7 @@ msgstr "परिसंचरण और ठीक नियमों की क�
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:149
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:132
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:32
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:890
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:634
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:206
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:142
@@ -19055,7 +19073,7 @@ msgstr "पर बंद: %s"
 msgid "Closed on %s."
 msgstr "पर बंद: %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:289
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:290
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:50
 #, c-format
 msgid "Closed on:"
@@ -19127,8 +19145,8 @@ msgstr "क्लबों में नामांकित नहीं ह�
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:328
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1386
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1413
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
 #, c-format
 msgid "Code"
 msgstr "संहिता"
@@ -19825,7 +19843,7 @@ msgstr "अनुबंध को नहीं हटाया गया है�
 msgid "Contract id "
 msgstr "संपर्क id"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:217
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:218
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:44
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:114
 #, c-format
@@ -20345,7 +20363,7 @@ msgstr "नई सदस्यता बनाएँ "
 msgid "Create a new template"
 msgstr "एक नई टेमप्लेट बनाएँ"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:542
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:545
 #, c-format
 msgid "Create analytics"
 msgstr "एनालिटिक्स बनाएं"
@@ -20424,7 +20442,7 @@ msgid "Create item when receiving: "
 msgstr "प्राप्त करते समय आइटम बनाएं:  "
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:115
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:298
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:299
 #, c-format
 msgid "Create items when:"
 msgstr "आइटम बनाएं जब:"
@@ -20499,7 +20517,7 @@ msgstr "रिकार्ड बनाएँ"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:121
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:773
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:774
 #, c-format
 msgid "Create report from SQL"
 msgstr "SQL से रिपोर्ट बनाएँ"
@@ -20532,7 +20550,7 @@ msgstr "बनाया था"
 msgid "Created by"
 msgstr "द्वारा बनाया गया"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:221
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:222
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:160
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:348
 #, c-format
@@ -20540,7 +20558,7 @@ msgid "Created by:"
 msgstr "द्वारा बनाया गया :"
 
 #: intranet-tmpl/prog/en/columns.def:121
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:720
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:364
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:65
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:185
@@ -21090,7 +21108,7 @@ msgstr "तिथि जोड़ी गई"
 msgid "Date and time: "
 msgstr "दिनांक और समय:   "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:673
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:676
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, c-format
 msgid "Date arrived"
@@ -21211,7 +21229,7 @@ msgstr "आदेश देने की तिथि"
 msgid "Date ordered "
 msgstr "तिथि को आदेश "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:674
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:677
 #, c-format
 msgid "Date published"
 msgstr "दिनांक प्रकाशित"
@@ -21272,7 +21290,7 @@ msgstr "परिवर्तन की तिथि/समय"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:274
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:117
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:145
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:927
 #, c-format
 msgid "Date:"
 msgstr "दिनांक:"
@@ -21395,8 +21413,8 @@ msgstr "दिन:"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:267
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:353
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:792
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:793
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:868
 #, c-format
 msgid "Days"
 msgstr "दिन"
@@ -21410,6 +21428,11 @@ msgstr "पहले ही दिन"
 #, c-format
 msgid "DeAndre Carroll"
 msgstr "DeAndre कैरोल"
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/datatables.inc:11
+msgid "Deactivate filters"
+msgstr "फिल्टर्स निष्क्रिय करें"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:2
@@ -22043,7 +22066,7 @@ msgstr "कोष को हटा दें%s?"
 msgid "Delete group"
 msgstr "समूह मिटाएँ "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:823
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:826
 #, c-format
 msgid "Delete image"
 msgstr "छवि हटाए"
@@ -22237,8 +22260,8 @@ msgstr "हटाएँ इस रिपोर्ट को बचाया"
 msgid "Delete this subfield"
 msgstr "हटाएँ इस उपक्षेत्र"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:230
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:889
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:231
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:890
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:542
 #, c-format
@@ -22257,8 +22280,8 @@ msgid "Delete?"
 msgstr "हटाएँ?"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:272
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:481
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:609
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:482
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:610
 #, c-format
 msgid "Deleted bibliographic record, can't find title"
 msgstr "हटाए गए ग्रंथ सूची रिकॉर्ड, शीर्षक नहीं मिल सकता"
@@ -22350,7 +22373,7 @@ msgstr "वितरण स्थान"
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:223
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:231
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:236
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:219
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:220
 #, c-format
 msgid "Delivery place:"
 msgstr "वितरण स्थान:"
@@ -22853,7 +22876,7 @@ msgstr "प्रदायक मेटाडेटा प्रदर्शि�
 msgid "Display supplier metadata "
 msgstr "प्रदायक मेटाडेटा प्रदर्शित करें"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
 #, c-format
 msgid "Display them"
 msgstr "उन्हें प्रदर्शित"
@@ -23049,7 +23072,7 @@ msgid "Download "
 msgstr "डाउनलोड "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:867
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:870
 msgid "Download Record"
 msgstr "डाउनलोड रिकार्ड"
 
@@ -23155,7 +23178,7 @@ msgid "Draw guide boxes: "
 msgstr "ड्रा गाइड बॉक्सः"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:863
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:866
 #, c-format
 msgid "Dublin Core"
 msgstr "डबलिन कोर "
@@ -23282,7 +23305,7 @@ msgstr "इस सहेजी गई रिपोर्ट डुप्लि�
 msgid "Duplicate values detected. Please correct the errors and resubmit."
 msgstr "पता चला मूल्यों डुप्लिकेट। कृपया त्रुटियों को ठीक करें और पुनः सबमिट करें।"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:385
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:18
 #, c-format
 msgid "Duplicate warning"
@@ -23445,7 +23468,7 @@ msgstr "एड ग्रीष्मकाल (कुछ कोड और MARC �
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:79
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:566
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:569
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:215
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
@@ -23565,7 +23588,7 @@ msgstr "संपादित OAI सेट '%s'"
 msgid "Edit SQL"
 msgstr "संपादित SQL"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:852
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:853
 #, c-format
 msgid "Edit SQL report"
 msgstr "संपादित SQLरिपोर्ट"
@@ -23679,7 +23702,7 @@ msgid "Edit in host"
 msgstr "होस्ट में संपादित करें"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:498
 #, c-format
 msgid "Edit internal note"
 msgstr "आंतरिक नोट संपादित करें"
@@ -23853,7 +23876,7 @@ msgid "Edit vendor"
 msgstr "संपादित करें विक्रेता"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:503
 #, c-format
 msgid "Edit vendor note"
 msgstr "विक्रेता नोट संपादित करें"
@@ -23910,7 +23933,7 @@ msgid "Edition: %s"
 msgstr "संस्करण : %s"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:320
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:796
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:799
 #, c-format
 msgid "Editions"
 msgstr "संस्करण"
@@ -24635,7 +24658,7 @@ msgstr "अनुमानित प्रसव तिथि"
 msgid "Estimated delivery date from: "
 msgstr "डिलीवरी की तारीख से अनुमानित: "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:292
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:293
 #, c-format
 msgid "Estimated delivery date:"
 msgstr "अनुमानित प्रसव तिथि:"
@@ -25652,7 +25675,7 @@ msgstr "फिल्मोग्राफीज"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:925
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:73
 #, c-format
@@ -26412,8 +26435,8 @@ msgstr "फ्रेडरिक Capovilla"
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:259
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:237
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:594
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:595
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:68
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:49
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:38
@@ -26556,15 +26579,15 @@ msgid "GPL License"
 msgstr "GPL लाइसेंस"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:258
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:593
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:407
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:594
 #, c-format
 msgid "GST"
 msgstr "GST"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:257
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:405
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:592
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:406
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:593
 #, c-format
 msgid "GST %%"
 msgstr "GST %%"
@@ -26867,12 +26890,12 @@ msgstr ""
 "प्रकार"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1386
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
 msgid "Group code"
 msgstr "समूह कोड"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1387
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 msgid "Group name"
 msgstr "समूह नाम"
 
@@ -27113,7 +27136,7 @@ msgstr "सभी स्तंभों को छुपाएं"
 msgid "Hide already received orders"
 msgstr "पहले से ही प्राप्त आदेश छिपाएं"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:705
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:706
 #, c-format
 msgid "Hide chart"
 msgstr "चार्ट छिपाएं"
@@ -27413,7 +27436,7 @@ msgstr "होल्डिंग पुस्तकालयः"
 msgid "Holdings (%s)"
 msgstr "होल्डिंग्स (%s)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:603
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
 #, c-format
 msgid "Holdings:"
 msgstr "होल्डिंग्सः"
@@ -27986,8 +28009,8 @@ msgstr "घंटा"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:268
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:352
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:792
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:867
 #, c-format
 msgid "Hours"
 msgstr "घंटे"
@@ -29197,7 +29220,7 @@ msgstr "आंतरिक सर्वर त्रुटि, पृष्ठ �
 msgid "Internal note"
 msgstr "आंतरिक नोट"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:214
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:215
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:40
 #, c-format
 msgid "Internal note:"
@@ -29208,7 +29231,7 @@ msgstr "आंतरिक नोट:"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:323
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:83
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:302
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:497
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:498
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:475
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:458
 #, c-format
@@ -29351,7 +29374,7 @@ msgstr "इन्वेंटरी"
 msgid "Inventory number"
 msgstr "इन्वेंटरी संख्या"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:719
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:361
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:63
@@ -29360,7 +29383,7 @@ msgid "Invoice"
 msgstr "इनवाइस"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:739
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:412
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:79
 msgid "Invoice detail page"
@@ -29523,7 +29546,7 @@ msgstr "मुद्दा"
 msgid "Issue "
 msgstr "इश्यू"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:672
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
 #, c-format
 msgid "Issue #"
 msgstr "अंक #"
@@ -30696,7 +30719,7 @@ msgid "Keyword to MARC mapping"
 msgstr "मार्क मानचित्रण के लिए खोजशब्द"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:151
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
 #, c-format
 msgid "Keyword:"
 msgstr "खोजशब्दः"
@@ -34453,14 +34476,14 @@ msgstr "लिज़ वजह"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:248
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:482
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:128
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:216
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:190
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:459
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:116
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "Loading"
 msgstr "लोडिंग"
 
@@ -34469,7 +34492,7 @@ msgstr "लोडिंग"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:28
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:104
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:887
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:115
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:203
@@ -34886,7 +34909,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:866
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:869
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "मार्क (यूनिकोड/यूटीएफ-8)"
@@ -34898,7 +34921,7 @@ msgstr "मार्क (यूनिकोड/यूटीएफ-8, मान�
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:865
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:868
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "मार्क (गैर-यूनिकोड/मार्क-8) "
@@ -34997,7 +35020,7 @@ msgstr "मार्क संगठन कोड"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:417
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:126
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:881
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:884
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:97
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:112
@@ -35082,7 +35105,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:133
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:864
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:867
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -35121,7 +35144,7 @@ msgid "MJ Ray (2.0 Release Maintainer)"
 msgstr "एमजे रे (2.0 रिलीज मेंटेनर)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:862
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:865
 #, c-format
 msgid "MODS (XML)"
 msgstr "मोडस (एक्सएमएल)"
@@ -35682,7 +35705,7 @@ msgstr "द्वारा प्रबंधित"
 msgid "Managed by - on"
 msgstr "द्वारा प्रबंधित - पर"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:224
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:225
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:46
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:170
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:354
@@ -35713,7 +35736,7 @@ msgstr "प्रबंध दिनांक सेः"
 msgid "Manager name"
 msgstr "प्रबंधक नाम"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:248
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:249
 #, c-format
 msgid "Managing library:"
 msgstr "पुस्तकालय का प्रबंधन:"
@@ -36344,8 +36367,8 @@ msgid "Minute"
 msgstr "मिनट"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:351
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:790
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:791
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, c-format
 msgid "Minutes"
 msgstr "मिनट्स"
@@ -36422,7 +36445,7 @@ msgid "Missing issues:"
 msgstr "गुम इश्योंः"
 
 #. %1$s:  subscription.missinglist | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:666
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:669
 #, c-format
 msgid "Missing issues: %s "
 msgstr "गुम इश्योंः  %s "
@@ -36487,8 +36510,8 @@ msgstr "संशोधित संरक्षक प्रकार &quot;%s&
 msgid "Modified record matching rule &quot;%s&quot;"
 msgstr "संशोधित रिकार्ड मिलान शासन &quot;%s&quot;"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:411
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:536
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:412
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:537
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:137
 #, c-format
 msgid "Modify"
@@ -37050,8 +37073,8 @@ msgstr "नहुएल अंजलिनेत्ति"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:145
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:66
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1387
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1414
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 #, c-format
 msgid "Name"
 msgstr "नाम"
@@ -37894,10 +37917,10 @@ msgstr "नहीं "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:782
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:784
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:783
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:785
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
 #, c-format
 msgid "No (default)"
 msgstr "नही (डिफॉल्ट)"
@@ -38086,7 +38109,7 @@ msgstr ""
 "परिभाषित किया जाना चाहिए।"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "No columns selected!"
 msgstr "कॉलम नहीं चुना!"
 
@@ -38156,7 +38179,7 @@ msgstr "कोई फंड नहीं चुना गया।"
 msgid "No funds to display for this search criteria"
 msgstr "कोई कोष नही है यह खोज मापदंड प्रदर्शित करने के लिए"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:346
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:347
 #, c-format
 msgid "No group"
 msgstr "समूह नही"
@@ -38212,7 +38235,7 @@ msgid "No images are currently available. "
 msgstr "केवल छवि वर्तमान में उपलब्ध नही"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "कोई छवि नही इस ग्रंथ सूची रिकार्ड के लिए अभी तक अपलोड कर दिया गया है।"
 
@@ -38362,7 +38385,7 @@ msgid "No matching records found"
 msgstr "कोई मेल रिकार्ड नहीं मिला "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "No matching reports found"
 msgstr "कोई मेल रिपोर्ट नहीं मिला"
 
@@ -38472,7 +38495,7 @@ msgstr "कोई लंबित नही ऑन-साइट चेकआउ�
 msgid "No phone stored."
 msgstr "टेलीफोन नहीं जमा."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:606
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:609
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:143
 #, c-format
 msgid "No physical items for this record"
@@ -38720,8 +38743,8 @@ msgstr "नहीं, रद्द नहीं है (N)"
 msgid "No, don't check out (N)"
 msgstr "नहीं, चैक आउट नहीं है (एन)"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:698
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:723
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:699
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:724
 #, c-format
 msgid "No, don't close (N)"
 msgstr "नहीं, बंद नहीं करते (एन)"
@@ -38741,8 +38764,8 @@ msgstr "नहीं, नवीनीकृत नहीं है (एन)"
 msgid "No, save as new record"
 msgstr "नहीं: नया रिकार्ड के रूप में सहेजें"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:395
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:582
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:396
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:583
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:86
 #, c-format
 msgid "No."
@@ -39047,7 +39070,7 @@ msgstr "नवीनीकरणयोग्य नही"
 msgid "Not seen"
 msgstr "नही देखा"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:676
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:679
 #: intranet-tmpl/prog/en/modules/members/printinvoice.tt:48
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:50
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:40
@@ -39267,10 +39290,10 @@ msgstr "नोट्स/टिप्पणियाँ"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:197
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:767
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:608
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:700
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:795
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:830
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:870
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:796
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:831
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:871
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:122
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:276
 #, c-format
@@ -39371,8 +39394,8 @@ msgstr "नवं"
 msgid "NoveList Select"
 msgstr "उपन्यासकार का चयन"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:580
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:612
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:583
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:615
 #, c-format
 msgid "Novelist Select: "
 msgstr "उपन्यासकार चुनें:"
@@ -40190,7 +40213,7 @@ msgid "Open fresh record"
 msgstr "खुला फ्रेश रिकार्ड"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:204
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:19
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:20
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty_duplicate.tt:21
@@ -40224,7 +40247,7 @@ msgstr "OpenJS कीबोर्ड शॉर्टकट लाइब्रे
 msgid "OpenJS keyboard shortcuts library"
 msgstr "OpenJS कीबोर्ड शॉर्टकट पुस्तकालय"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:286
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:287
 #, c-format
 msgid "Opened on:"
 msgstr "इसमें खोलें:"
@@ -40292,8 +40315,8 @@ msgstr "या फिर एक संरक्षक सूची का उप
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:31
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:170
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:334
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:396
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:583
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:397
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:584
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:81
 #, c-format
 msgid "Order"
@@ -40369,12 +40392,12 @@ msgstr "आदेश पंक्ति खोज"
 msgid "Order line:"
 msgstr "आदेश पंक्तिः"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:743
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:744
 #, c-format
 msgid "Order note"
 msgstr "आदेश नोट"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:719
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:64
 #, c-format
@@ -40441,14 +40464,14 @@ msgstr "जानकारी आदेश"
 msgid "Ordernumber"
 msgstr "आदेशसंख्या"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:391
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:392
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:258
 #, c-format
 msgid "Orders"
 msgstr "आदेशों"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:105
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:294
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:295
 #, c-format
 msgid "Orders are standing:"
 msgstr "आदेश खड़ा कर रहे हैं:"
@@ -42447,7 +42470,7 @@ msgstr "मुद्दों है कि प्रकाशित नही�
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:897
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:898
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -42839,7 +42862,7 @@ msgid "Please return this item to %s "
 msgstr "कृपया इस आइटम को वापस करें %s "
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:896
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:897
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -42983,7 +43006,7 @@ msgid "Please select or enter a sound."
 msgstr "कृपया चयन करें या एक ध्वनि दर्ज करें।"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:905
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:908
 msgid "Please select the image file to upload. %sUpload%s"
 msgstr "कृपया अपलोड करने के लिए छवि फ़ाइल का चयन. %sअपलोड%s"
 
@@ -43461,7 +43484,7 @@ msgstr "बारकोड के रूप में प्रिंट का�
 msgid "Print card number as text under barcode: "
 msgstr "बारकोड के तहत पाठ के रूप में प्रिंट कार्ड नंबर:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:529
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:532
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:217
 #, c-format
 msgid "Print label"
@@ -44078,8 +44101,8 @@ msgid "Purchase suggestions"
 msgstr "खरीद सुझाव"
 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:254
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:402
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:589
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:403
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:590
 #, c-format
 msgid "Qty."
 msgstr "मात्रा."
@@ -44110,7 +44133,7 @@ msgstr "गुणवत्ता आश्वासन प्रबंधक:"
 msgid "Quality assurance team:"
 msgstr "गुणवत्ता आश्वासन टीम:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:370
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:236
@@ -44239,14 +44262,14 @@ msgstr "RIS"
 msgid "RRP"
 msgstr "RRP"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:397
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:584
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:398
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:585
 #, c-format
 msgid "RRP tax exc."
 msgstr "RRP टैक्स अतिरिक्त"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:399
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:586
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:400
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:587
 #, c-format
 msgid "RRP tax inc."
 msgstr "RRP कर इंक।"
@@ -44361,7 +44384,7 @@ msgstr "प्राप्त"
 msgid "Receive a new shipment"
 msgstr "एक नए शिपमेंट प्राप्त करें"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:365
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:66
 #, c-format
@@ -45122,6 +45145,7 @@ msgid "Reopen it"
 msgstr "इसे फिर से खोलना"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:153
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:156
 #, c-format
 msgid "Reopen this basket"
 msgstr "इस टोकरी फिर से खोलना"
@@ -45199,8 +45223,8 @@ msgstr "प्रतिस्थापन लागत: "
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:253
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:235
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:588
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:402
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:589
 #, c-format
 msgid "Replacement price"
 msgstr "प्रतिस्थापन मूल्य"
@@ -45237,7 +45261,7 @@ msgstr "रिपोर्ट:"
 msgid "Report %s&rsaquo; "
 msgstr "रिपोर्ट %s&rsaquo; "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:702
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:703
 #, c-format
 msgid "Report SQL:"
 msgstr "रिपोर्ट एसक्यूएल:"
@@ -45256,17 +45280,17 @@ msgid ""
 msgstr ""
 "रिपोर्ट के बजट से unreceived आदेश के जाने के बाद %s ( %s - %s के लिए) %s ( %s - %s )"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1368
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1419
 #, c-format
 msgid "Report group:"
 msgstr "रिपोर्ट समूहः"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:782
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:784
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:783
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:785
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
 #, c-format
 msgid "Report is public:"
 msgstr "रिपोर्ट सार्वजनिक है:"
@@ -45276,13 +45300,13 @@ msgstr "रिपोर्ट सार्वजनिक है:"
 msgid "Report name"
 msgstr "रिपोर्ट नाम"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:775
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:776
 #, c-format
 msgid "Report name:"
 msgstr "रिपोर्ट नाम:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:606
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:854
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
 #, c-format
 msgid "Report name: "
 msgstr "रिपोर्ट नाम: "
@@ -45295,7 +45319,7 @@ msgstr "रिपोर्ट नाम: "
 msgid "Report plugins"
 msgstr "रिपोर्ट प्लगइन"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1390
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1441
 #, c-format
 msgid "Report subgroup:"
 msgstr "रिपोर्ट उपसमूहः "
@@ -45685,10 +45709,10 @@ msgstr "Require.js जेएस मॉड्यूल प्रणाली"
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:215
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:225
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:606
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:777
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:801
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:854
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:877
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:778
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:802
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:855
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:878
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:284
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -45941,7 +45965,7 @@ msgstr "फ्रेवर्क के लिए लौटे"
 msgid "Return to patron detail"
 msgstr "संरक्षक विवरण के लिए लौटें"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:902
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:903
 #, c-format
 msgid "Return to previous page"
 msgstr "पिछले पृष्ठ पर लौटे"
@@ -46240,7 +46264,7 @@ msgstr "अनुमार्गण"
 msgid "Row"
 msgstr "पंक्ति"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:722
 #, c-format
 msgid "Rows per page: "
 msgstr "प्रति पृष्ठ पक्तियाँ: "
@@ -46297,7 +46321,7 @@ msgid "Run reports"
 msgstr "रिपोर्ट चलाएँ"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:693
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:694
 msgid "Run the report"
 msgstr "इस रिपोर्ट को चलाएँ"
 
@@ -46397,8 +46421,8 @@ msgstr "एसएमएस नंबर:"
 msgid "SMS provider:"
 msgstr "एसएमएस प्रदाता: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:799
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:875
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:800
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:876
 #, c-format
 msgid "SQL:"
 msgstr "SQL:"
@@ -46523,7 +46547,7 @@ msgstr "शनिवार को"
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:132
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:311
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:290
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:752
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:753
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:493
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:119
@@ -46579,7 +46603,7 @@ msgstr "बचाना"
 msgid "Save "
 msgstr "सहेजें"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:860
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:863
 #, c-format
 msgid "Save Record"
 msgstr "सहेजें रिकार्ड"
@@ -46638,7 +46662,7 @@ msgstr "नए पैटर्न के रूप में सहेजें"
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:146
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:360
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:192
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:237
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:238
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:212
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:43
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:98
@@ -46675,7 +46699,7 @@ msgstr "सहेजें रिकार्ड"
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:611
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:806
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:807
 msgid "Save report"
 msgstr "रिपोर्ट सहेजें"
 
@@ -46712,7 +46736,7 @@ msgstr "सहेज लिया"
 msgid "Saved preference %s"
 msgstr "प्राथमिकताएँ सहेजें %s"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:812
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:813
 #, c-format
 msgid "Saved report results"
 msgstr "सहेजे रिपोर्ट परिणाम"
@@ -46722,7 +46746,7 @@ msgstr "सहेजे रिपोर्ट परिणाम"
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:61
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:62
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:139
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
 #, c-format
 msgid "Saved reports"
 msgstr "रिपोर्ट सहेजें"
@@ -47413,8 +47437,8 @@ msgid "Secondary phone: "
 msgstr "माध्यमिक फोनः"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:350
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:789
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:864
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:790
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:865
 #, c-format
 msgid "Seconds (default)"
 msgstr "सेकंड (डिफ़ॉल्ट)"
@@ -47471,8 +47495,8 @@ msgstr "देखा"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:71
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1393
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1422
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1444
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:117
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -47704,7 +47728,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "चुनें दिन: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:861
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:864
 #, c-format
 msgid "Select download format: "
 msgstr "चुनें डाउनलोड प्रारूप: "
@@ -47967,7 +47991,7 @@ msgid "Send to"
 msgstr "को भेजें"
 
 #. BUTTON
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:743
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:744
 msgid "Send visible items to batch modification"
 msgstr "दृश्यमान वस्तुओं को बैच संशोधन के लिए भेजें"
 
@@ -48247,7 +48271,7 @@ msgstr "शून्य करने के लिए सब धन सेट"
 msgid "Set back to"
 msgstr "सेट वापस करने के लिए"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:335
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:336
 #, c-format
 msgid "Set basket group"
 msgstr "बास्केट समूह सेंट करें"
@@ -48282,7 +48306,7 @@ msgstr "सेट करे इन्वेंट्री की तारी�
 #: intranet-tmpl/prog/en/includes/patroncards-errors.inc:47
 #: intranet-tmpl/prog/en/includes/header.inc:111
 #: intranet-tmpl/prog/en/includes/header.inc:116
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:254
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:255
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:17
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:52
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:33
@@ -48611,7 +48635,7 @@ msgstr "उन्नत खोज दिखाए (Ctrl-Alt-S)"
 msgid "Show all"
 msgstr "सभी दिखाए"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:188
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:189
 #, c-format
 msgid "Show all active baskets"
 msgstr "सभी सक्रिय बास्केट दिखाएँ"
@@ -48641,7 +48665,7 @@ msgstr "सभी आइटम दिखाएँ "
 
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:590
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:593
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:435
 #, c-format
 msgid "Show all items (%s hidden)"
@@ -48673,7 +48697,7 @@ msgid "Show any items currently checked out:"
 msgstr "वर्तमान में चेक आउट किया गया किसी भी आइटम दिखाएँ:"
 
 #. %1$s:  booksellername | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:188
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:189
 #, c-format
 msgid "Show baskets for vendor %s"
 msgstr "बास्केट दिखाएँ वेंडर के लिए %s"
@@ -48693,7 +48717,7 @@ msgstr "दिखाएँ संक्षिप्त रूप"
 msgid "Show category: "
 msgstr "दिखाएँ श्रेणी: "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:706
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:707
 #, c-format
 msgid "Show chart"
 msgstr "चार्ट दिखाएँ"
@@ -48947,7 +48971,7 @@ msgstr ""
 "सही ढंग से स्थापित नहीं है। यह एक वैध ऋण लेने नंबर करने के लिए सेट करें यदि आप चाहते हैं इस "
 "सुविधा को सही ढंग से काम करता है।"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:386
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:387
 #, c-format
 msgid ""
 "Some records have not been automatically added because they match an "
@@ -49624,8 +49648,8 @@ msgstr "सांख्यिकी जादूगरों"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:222
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:362
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:675
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:678
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:14
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:695
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:120
@@ -49985,12 +50009,12 @@ msgid "Subgroup"
 msgstr "उपसमूह"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1413
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
 msgid "Subgroup code"
 msgstr "उपसमूह कोड"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1414
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 msgid "Subgroup name"
 msgstr "उपसमूह नाम"
 
@@ -50185,7 +50209,7 @@ msgstr "जमा करें"
 msgid "Submit your suggestion"
 msgstr "अपने सुझाव प्रस्तुत करें"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:149
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:151
 #, c-format
@@ -50224,7 +50248,7 @@ msgstr "सदस्यता बैच संपादित करें"
 msgid "Subscription begin"
 msgstr "सदस्यता शुरू"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "Subscription callnumber"
 msgstr "सदस्यता कॉलनंबर"
@@ -50235,7 +50259,7 @@ msgstr "सदस्यता कॉलनंबर"
 msgid "Subscription closed %s "
 msgstr "सदस्यता बन्द %s "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:702
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:705
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:47
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:338
 #, c-format
@@ -50443,7 +50467,7 @@ msgstr "द्वारा सुझायाः "
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:153
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:317
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:491
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:492
 #, c-format
 msgid "Suggested by: %s%s, %s %s ("
 msgstr "द्वारा सुझाया: %s%s, %s %s ("
@@ -50603,7 +50627,7 @@ msgstr "पूरक इशयू"
 msgid "Supplier metadata"
 msgstr "आपूर्तिकर्ता मेटाडाटा"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:408
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:409
 #, c-format
 msgid "Supplier report"
 msgstr "प्रदायक रिपोर्ट"
@@ -51335,7 +51359,7 @@ msgid "The "
 msgstr "इस "
 
 #. %1$s:  subscription.staffdisplaycount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:669
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:672
 #, c-format
 msgid "The %s latest issues related to this subscription:"
 msgstr "इस %s तीन नवीनतम मुद्दों इस सदस्यता से संबंधित:"
@@ -51716,7 +51740,7 @@ msgstr "निम्नलिखित बारकोड पाया गया
 msgid "The following error occurred while importing the database structure:"
 msgstr "जबकि डेटाबेस संरचना आयात निम्नलिखित त्रुटि:"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:892
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:893
 #, c-format
 msgid "The following error was encountered:"
 msgstr "निम्न त्रुटि आई थी:"
@@ -51784,7 +51808,7 @@ msgid ""
 msgstr ""
 "निम्नलिखित मैपिंग items.permanent_location के लिए मौजूद हैं, और वे नहीं करना चाहिए। "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:172
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:173
 #, c-format
 msgid "The following records could not be deleted:"
 msgstr "निम्नलिखित रिकॉर्ड नष्ट नहीं किया जा सकता है:"
@@ -52861,7 +52885,7 @@ msgstr ""
 "इस चालान संख्या पहले से ही इस्तेमाल किया गया है। यदि आप एक मौजूदा चालान पर प्राप्त "
 "करना चाहेंगे?"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:657
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:660
 #, c-format
 msgid "This is a serial subscription"
 msgstr "यह एक धारावाहिक सदस्यता है"
@@ -53205,7 +53229,7 @@ msgstr "इस सदस्यता एक और आपूर्तिकर�
 msgid "This subscription does not exist."
 msgstr "यह सदस्यता मौजूद नहीं है।"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:663
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:666
 #, c-format
 msgid "This subscription is closed."
 msgstr "यह सदस्यता बंद कर दिया है।"
@@ -54065,7 +54089,7 @@ msgstr "कुल"
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:310
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:444
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:445
 #, c-format
 msgid "Total (%s)"
 msgstr "कुल (%s)"
@@ -54083,7 +54107,7 @@ msgid "Total (GST %s%%)"
 msgstr "योग (GST %s%%)"
 
 #. %1$s:  foot_loo.tax_rate * 100 | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:421
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:422
 #, c-format
 msgid "Total (GST %s)"
 msgstr "योग (GST %s)"
@@ -54196,7 +54220,7 @@ msgstr "समूह में कुल आइटम"
 msgid "Total must be a number"
 msgstr "कुल एक संख्या अवश्य होनी चाहिए"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:701
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:702
 #, c-format
 msgid "Total number of results:"
 msgstr "परिणामों की कुल संख्या:"
@@ -54230,8 +54254,8 @@ msgstr "कुल टैक्स अतिरिक्त"
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:255
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:403
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:590
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:591
 #, c-format
 msgid "Total tax exc. (%s)"
 msgstr "कुल टैक्स अतिरिक्त. (%s)"
@@ -54244,8 +54268,8 @@ msgstr "कुल टैक्स शामिल."
 #. For the first occurrence,
 #. %1$s:  currency.symbol | html 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:256
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:404
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:591
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:405
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:592
 #, c-format
 msgid "Total tax inc. (%s)"
 msgstr "कुल टैक्स शामिल. (%s)"
@@ -54315,7 +54339,7 @@ msgstr "लेन-देन"
 #: intranet-tmpl/prog/en/modules/rotating_collections/rotatingCollections.tt:48
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:88
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:182
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:539
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:540
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:93
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:145
 #, c-format
@@ -54366,7 +54390,7 @@ msgstr "स्थानांतरण करने के लिए:"
 msgid "Transferred"
 msgstr "स्थानांतरित कर दिया"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:510
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:511
 #, c-format
 msgid "Transferred from basket: "
 msgstr "टोकरी से स्थानांतरितः"
@@ -54376,7 +54400,7 @@ msgstr "टोकरी से स्थानांतरितः"
 msgid "Transferred items"
 msgstr "स्थानांतरित आइटम"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:628
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:629
 #, c-format
 msgid "Transferred to basket: "
 msgstr "टोकरी को स्थानांतरितः "
@@ -54932,7 +54956,7 @@ msgstr "आपका अनुरोध संसाधित करने म�
 msgid "Unknown error type %s."
 msgstr "अज्ञात त्रुटि प्रकार %s."
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:180
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:181
 #, c-format
 msgid "Unknown error."
 msgstr "अज्ञात त्रुटि."
@@ -55025,7 +55049,7 @@ msgstr "अद्यतन"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:79
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:252
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:882
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:883
 #, c-format
 msgid "Update SQL"
 msgstr "अद्यतन SQL"
@@ -55443,7 +55467,7 @@ msgstr "स्टाफ खोज समूहों के लिए उपय�
 msgid "Use for staff search groups "
 msgstr "स्टाफ खोज समूहों के लिए उपयोग करें"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:895
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:896
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -55730,7 +55754,7 @@ msgid "Vassilis Kanellopoulos"
 msgstr "डिमिटिस केमेननोपोलोस"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:23
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:715
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:89
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:23
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:35
@@ -55761,7 +55785,7 @@ msgid "Vendor EDI accounts"
 msgstr "विक्रेता ईडीआई खातों"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:734
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:737
 msgid "Vendor detail page"
 msgstr "विक्रेता विवरण पृष्ठ"
 
@@ -55790,7 +55814,7 @@ msgstr "विक्रेता है: "
 msgid "Vendor name: "
 msgstr "विक्रेता का नाम: "
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:163
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:164
 #, c-format
 msgid "Vendor not found"
 msgstr "विक्रेता नहीं मिला:"
@@ -55801,7 +55825,7 @@ msgstr "विक्रेता नहीं मिला:"
 msgid "Vendor note"
 msgstr "विक्रेता टिप्पणी"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:215
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:41
 #, c-format
 msgid "Vendor note:"
@@ -55812,7 +55836,7 @@ msgstr "विक्रेता टिप्पणीः"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:328
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:304
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:502
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:503
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:479
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:462
 #, c-format
@@ -56347,7 +56371,7 @@ msgstr ""
 "चेतावनी, आप और अधिक आइटम उम्मीद की तुलना में प्रवेश किया है। आइटम नहीं बनाया जाएगा।"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:120
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:171
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:172
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:37
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:28
 #, c-format
@@ -56959,10 +56983,10 @@ msgstr "वार्षिक छुट्टियाँः %s"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:326
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:343
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:345
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:782
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:784
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:857
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:859
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:783
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:785
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:858
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
 #, c-format
 msgid "Yes"
 msgstr "हाँ"
@@ -57006,8 +57030,8 @@ msgstr "हां, रद्द (Y)"
 msgid "Yes, check out (Y)"
 msgstr "हाँ, चेक आउट (Y)"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:694
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:719
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:695
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:720
 #, c-format
 msgid "Yes, close (Y)"
 msgstr "हाँ, बन्द (Y)"
@@ -57671,7 +57695,7 @@ msgid "You must select one or more patrons to remove"
 msgstr "आप को हटाने करने के लिए एक या एक से अधिक संरक्षक का चयन करना होगा"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:960
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
 msgid "You must select one or more reports to delete"
 msgstr "आप नष्ट करने के लिए एक या एक से अधिक रिपोर्टों का चयन करना होगा"
 
@@ -57874,7 +57898,7 @@ msgid "Your patron lists"
 msgstr "आपकी संरक्षक सूचियाँ"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:841
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:842
 #, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "आपकी रिपोर्ट \"%s\" सहेज लिया गया है"
@@ -58427,7 +58451,7 @@ msgid "basket"
 msgstr "टोकरी"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:318
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:319
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:117
 msgid "basketgroup"
 msgstr "टोकरीसमूह"
@@ -58547,7 +58571,7 @@ msgstr "%s द्वारा"
 #. %24$s:  IF ( XISBN.size ) 
 #. %25$s:  END 
 #. %26$s:  XISBN.size | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:800
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:803
 #, c-format
 msgid ""
 "by %s &copy;%s %s %s %s(%s)%s %s, %s%s %s%s%s %s%s%s %s %s %s%s %s%s%s %s, %s"
@@ -58557,7 +58581,7 @@ msgstr ""
 "%s %s %s %s %s %s %s , %s %s "
 
 #. %1$s:  cannotdelbiblio.author | html 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:175
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:176
 #, c-format
 msgid "by %s: "
 msgstr "द्वारा  %s: "
@@ -58937,8 +58961,8 @@ msgstr "एक मौजूदा रिकार्ड से मेल नह�
 msgid "déselectionner tout"
 msgstr "सभी अचयनित करें"
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:398
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:585
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:399
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:586
 #, c-format
 msgid "ecost tax exc."
 msgstr "ईकोस्ट कर अतिरिक्त."
@@ -58948,8 +58972,8 @@ msgstr "ईकोस्ट कर अतिरिक्त."
 msgid "ecost tax exc. / ecost tax inc."
 msgstr "ecost tax exc. / ecost tax inc."
 
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:400
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:587
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:401
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:588
 #, c-format
 msgid "ecost tax inc."
 msgstr "ईकोस्ट कर शामिल. "
@@ -59411,12 +59435,12 @@ msgstr "आइटम की होम लाइब्रेरी"
 msgid "item's home library "
 msgstr "आइटम की होम लाइब्रेरी"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:596
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:599
 #, c-format
 msgid "itemdata_copynumber"
 msgstr "itemdata_copynumber"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:595
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:598
 #, c-format
 msgid "itemdata_enumchron"
 msgstr "itemdata_enumchron"
@@ -59880,12 +59904,12 @@ msgstr "या MARC उपक्षेत्र"
 msgid "or any available"
 msgstr "या कोई उपलब्ध"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1412
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1463
 #, c-format
 msgid "or create"
 msgstr "या बनाएँ"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1385
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1436
 #, c-format
 msgid "or create:"
 msgstr "या बनाएँः"
@@ -60040,8 +60064,8 @@ msgid "rejected"
 msgstr "अस्वीकार कर दिया"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:821
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:823
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:824
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:826
 msgid "remove this image"
 msgstr "इस छवि को हटाए"
 
@@ -60159,7 +60183,7 @@ msgstr "चयनकर्ता"
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "एक खाली से अलग. (e.g., 100a 200 606) "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:597
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:600
 #, c-format
 msgid "serial"
 msgstr "धारावाहिक"
@@ -60325,7 +60349,7 @@ msgstr "सुझाव"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:155
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:319
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:51
-#: intranet-tmpl/prog/en/modules/acqui/basket.tt:493
+#: intranet-tmpl/prog/en/modules/acqui/basket.tt:494
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:244
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:425
 #, c-format
@@ -60739,7 +60763,7 @@ msgstr "| "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:125
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:24
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:880
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:883
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:620
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:176
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
