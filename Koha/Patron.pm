@@ -1558,9 +1558,9 @@ suitable for API output.
 =cut
 
 sub to_api {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
 
-    my $json_patron = $self->SUPER::to_api;
+    my $json_patron = $self->SUPER::to_api( $params );
 
     $json_patron->{restricted} = ( $self->is_debarred )
                                     ? Mojo::JSON->true
