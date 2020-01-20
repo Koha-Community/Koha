@@ -19,10 +19,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 use Koha::Database;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Patrons;
 use Koha::Patron::Relationships;
 
@@ -153,4 +154,41 @@ subtest 'add_enrolment_fee_if_needed() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'to_api() tests' => sub {
+
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron_class = Test::MockModule->new('Koha::Patron');
+    $patron_class->mock(
+        'algo',
+        sub { return 'algo' }
+    );
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                debarred => undef
+            }
+        }
+    );
+
+    my $restricted = $patron->to_api->{restricted};
+    ok( defined $restricted, 'restricted is defined' );
+    ok( !$restricted, 'debarred is undef, restricted evaluates to false' );
+
+    $patron->debarred( dt_from_string->add( days => 1 ) )->store->discard_changes;
+    $restricted = $patron->to_api->{restricted};
+    ok( defined $restricted, 'restricted is defined' );
+    ok( $restricted, 'debarred is defined, restricted evaluates to true' );
+
+    my $patron_json = $patron->to_api({ embed => { algo => {} } });
+    ok( exists $patron_json->{algo} );
+    is( $patron_json->{algo}, 'algo' );
+
+    $schema->storage->txn_rollback;
 };
