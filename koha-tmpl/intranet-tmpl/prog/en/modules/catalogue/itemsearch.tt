@@ -87,16 +87,16 @@
     [% IF params.exists('op') %]
         <select name="op" class="form-field-not">
            <option value="like">is</option>
-            [% IF params.op == '!=' %]
-               <option value="!=" selected="selected">is not</option>
+            [% IF params.op == 'not like' %]
+               <option value="not like" selected="selected">is not</option>
             [% ELSE %]
-               <option value="!=">is not</option>
+               <option value="not like">is not</option>
             [% END %]
         </select>
     [% ELSE %]
         <select name="op" class="form-field-not">
            <option value="like">is</option>
-           <option value="!=">is not</option>
+           <option value="not like">is not</option>
         </select>
     [% END %]
     <input type="text" name="q" class="form-field-value" value="" />

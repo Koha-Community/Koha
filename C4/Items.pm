@@ -1333,6 +1333,7 @@ sub _SearchItems_build_where_fragment {
         push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
         push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
         my @operators = qw(= != > < >= <= like);
+        push @operators, 'not like';
         my $field = $filter->{field} // q{};
         if ( (0 < grep { $_ eq $field } @columns) or (substr($field, 0, 5) eq 'marc:') ) {
             my $op = $filter->{operator};
@@ -1424,7 +1425,7 @@ A filter has the following keys:
 
 =item * query: the value to search in this column
 
-=item * operator: comparison operator. Can be one of = != > < >= <= like
+=item * operator: comparison operator. Can be one of = != > < >= <= like 'not like'
 
 =back
 
