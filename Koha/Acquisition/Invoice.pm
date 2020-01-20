@@ -64,9 +64,9 @@ sub to_api_mapping {
         booksellerid          => 'vendor_id',
         shipmentdate          => 'shipping_date',
         billingdate           => 'invoice_date',
-        closedate             => 'close_date',
+        closedate             => 'closed_date',
         shipmentcost          => 'shipping_cost',
-        shipmentcost_budgetid => 'shipping_cost_budget_id',
+        shipmentcost_budgetid => 'shipping_fund_id',
         message_id            => undef
     };
 }
