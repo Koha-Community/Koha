@@ -23,7 +23,7 @@ use Koha::Database;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 my $schema  = Koha::Database->new->schema;
@@ -109,6 +109,63 @@ subtest 'transit tests' => sub {
 
     # Last seen
     ok ( $item->datelastseen, 'Transit set item datelastseen date');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'receive tests' => sub {
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $item     = $builder->build_sample_item(
+        {
+            homebranch    => $library1->branchcode,
+            holdingbranch => $library2->branchcode,
+            datelastseen  => undef
+        }
+    );
+
+    my $transfer = $builder->build_object(
+        {
+            class => 'Koha::Item::Transfers',
+            value => {
+                itemnumber   => $item->itemnumber,
+                frombranch   => $library2->branchcode,
+                tobranch     => $library1->branchcode,
+                datearrived => undef,
+                reason       => 'Manual'
+            }
+        }
+    );
+    is( ref($transfer), 'Koha::Item::Transfer', 'Mock transfer added' );
+
+    # Item checked out should result in failure
+    my $checkout = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber => $item->itemnumber
+            }
+        }
+    );
+    is( ref($checkout), 'Koha::Checkout', 'Mock checkout added' );
+
+    throws_ok { $transfer->receive() }
+    'Koha::Exceptions::Item::Transfer::Out',
+      'Exception thrown if item is checked out';
+
+    $checkout->delete;
+
+    # Transit state set
+    $transfer->discard_changes;
+    $transfer->receive();
+    ok( $transfer->datearrived, 'Receipt set the datearrived for the transfer' );
+
+    # Last seen
+    ok( $item->datelastseen, 'Receipt set item datelastseen date' );
 
     $schema->storage->txn_rollback;
 };
