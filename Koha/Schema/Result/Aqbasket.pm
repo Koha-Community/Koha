@@ -328,6 +328,18 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+__PACKAGE__->belongs_to(
+  "basket_group",
+  "Koha::Schema::Result::Aqbasketgroup",
+  { 'foreign.id' => "self.basketgroupid" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "RESTRICT",
+    on_update     => "CASCADE",
+  },
+);
+
 sub koha_object_class {
     'Koha::Acquisition::Basket';
 }

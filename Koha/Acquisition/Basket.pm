@@ -54,7 +54,8 @@ Returns the basket group associated to this basket
 
 sub basket_group {
     my ($self) = @_;
-    my $basket_group_rs = $self->_result->basketgroupid;
+
+    my $basket_group_rs = $self->_result->basket_group;
     return unless $basket_group_rs;
     return Koha::Acquisition::BasketGroup->_new_from_dbic( $basket_group_rs );
 }
