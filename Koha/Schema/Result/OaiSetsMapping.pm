@@ -32,13 +32,12 @@ __PACKAGE__->table("oai_sets_mappings");
 =head2 rule_order
 
   data_type: 'integer'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 rule_operator
 
   data_type: 'varchar'
-  default_value: 'or'
-  is_nullable: 0
+  is_nullable: 1
   size: 3
 
 =head2 marcfield
@@ -72,9 +71,9 @@ __PACKAGE__->add_columns(
   "set_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "rule_order",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", is_nullable => 1 },
   "rule_operator",
-  { data_type => "varchar", default_value => "or", is_nullable => 0, size => 3 },
+  { data_type => "varchar", is_nullable => 1, size => 3 },
   "marcfield",
   { data_type => "char", is_nullable => 0, size => 3 },
   "marcsubfield",
@@ -108,8 +107,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-15 16:27:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:70uqCB/wqEodblvsbKKVvA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-17 14:57:11
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WiJev30SDAqddxO6moz/7A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
