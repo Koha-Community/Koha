@@ -20515,7 +20515,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21520 - Add rule_order and rule_operator fields to oai_sets_mappings table)\n";
 }
 
-$DBversion = '19.12.00.010';
+$DBversion = '19.12.00.011';
 if( CheckVersion( $DBversion ) ) {
     if( !foreign_key_exists( 'repeatable_holidays', 'repeatable_holidays_ibfk_1' ) ) {
         $dbh->do(q|
