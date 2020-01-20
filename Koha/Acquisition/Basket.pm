@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Koha::Database;
 use Koha::Acquisition::BasketGroups;
+use Koha::Patrons;
 
 use base qw( Koha::Object Koha::Object::Mixin::AdditionalFields );
 
@@ -30,7 +31,7 @@ Koha::Acquisition::Basket - Koha Basket Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -44,6 +45,20 @@ sub bookseller {
     my ($self) = @_;
     my $bookseller_rs = $self->_result->booksellerid;
     return Koha::Acquisition::Bookseller->_new_from_dbic( $bookseller_rs );
+}
+
+=head3 creator
+
+    my $creator = $basket->creator;
+
+Returns the I<Koha::Patron> for the basket creator.
+
+=cut
+
+sub creator {
+    my ($self) = @_;
+    return Koha::Patrons->find( $self->authorisedby )
+        if $self->authorisedby;
 }
 
 =head3 basket_group
