@@ -1,6 +1,6 @@
 package Koha::XSLT_Handler;
 
-# Copyright 2014 Rijksmuseum
+# Copyright 2014, 2019 Rijksmuseum, Prosentient Systems
 #
 # This file is part of Koha.
 #
@@ -43,7 +43,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
 
 =head2 new
 
-    Create handler object (via Class::Accessor)
+    Create handler object
 
 =head2 transform
 
@@ -118,6 +118,7 @@ Koha::XSLT_Handler - Facilitate use of XSLT transformations
 use Modern::Perl;
 use XML::LibXML;
 use XML::LibXSLT;
+use Koha::XSLT::Security;
 
 use base qw(Class::Accessor);
 
@@ -131,6 +132,20 @@ use constant XSLTH_ERR_4    => 'XSLTH_ERR_PARSING_CODE';
 use constant XSLTH_ERR_5    => 'XSLTH_ERR_PARSING_DATA';
 use constant XSLTH_ERR_6    => 'XSLTH_ERR_TRANSFORMING';
 use constant XSLTH_ERR_7    => 'XSLTH_NO_STRING_PASSED';
+
+=head2 new
+
+    my $xslt_engine = Koha::XSLT_Handler->new;
+
+=cut
+
+sub new {
+    my ($class, $params) = @_;
+    my $self = $class->SUPER::new($params);
+    $self->{_security} = Koha::XSLT::Security->new;
+    $self->{_security}->register_callbacks;
+    return $self;
+}
 
 =head2 transform
 
@@ -195,6 +210,7 @@ sub transform {
 
     #parse input and transform
     my $parser = XML::LibXML->new();
+    $self->{_security}->set_parser_options($parser);
     my $source = eval { $parser->parse_string($xml) };
     if ($@) {
         $self->_set_error( XSLTH_ERR_5, $@ );
@@ -310,6 +326,7 @@ sub _load {
 
     #load sheet
     my $parser = XML::LibXML->new;
+    $self->{_security}->set_parser_options($parser);
     my $style_doc = eval {
         $parser->load_xml( $self->_load_xml_args($filename, $code) )
     };
@@ -320,6 +337,8 @@ sub _load {
 
     #parse sheet
     my $xslt = XML::LibXSLT->new;
+    $self->{_security}->set_callbacks($xslt);
+
     $rv = $code? $digest.$codelen: $filename;
     $self->{xslt_hash}->{$rv} = eval { $xslt->parse_stylesheet($style_doc) };
     if ($@) {
@@ -348,6 +367,7 @@ sub _set_error {
 =head1 AUTHOR
 
     Marcel de Rooy, Rijksmuseum Netherlands
+    David Cook, Prosentient Systems
 
 =cut
 
