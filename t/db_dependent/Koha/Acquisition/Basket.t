@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -105,6 +105,36 @@ subtest 'basket_group' => sub {
     $basket = Koha::Acquisition::Baskets->find( $b->basketno );
     is( ref( $basket->basket_group ), 'Koha::Acquisition::BasketGroup',
         '->basket_group should return a Koha::Acquisition::BasketGroup object if linked to a basket group');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'creator() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $basket = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => { authorisedby => undef }
+        }
+    );
+
+    is( $basket->creator, undef, 'Undef is handled as expected' );
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $basket->authorisedby( $patron->borrowernumber )->store->discard_changes;
+
+    my $creator = $basket->creator;
+    is( ref($creator), 'Koha::Patron', 'Return type is correct' );
+    is( $creator->borrowernumber, $patron->borrowernumber, 'Returned object is the right one' );
+
+    # Delete the patron
+    $patron->delete;
+
+    is( $basket->creator, undef, 'Undef is handled as expected' );
 
     $schema->storage->txn_rollback;
 };
