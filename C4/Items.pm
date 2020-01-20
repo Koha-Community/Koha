@@ -2539,17 +2539,17 @@ sub PrepareItemrecordDisplay {
                         my $tab= $plugin->noclick? '-1': '';
                         my $class= $plugin->noclick? ' disabled': '';
                         my $title= $plugin->noclick? 'No popup': 'Tag editor';
-                        $subfield_data{marc_value} = qq[<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" /><a href="#" id="buttonDot_$subfield_data{id}" tabindex="$tab" class="buttonDot $class" title="$title">...</a>\n].$plugin->javascript;
+                        $subfield_data{marc_value} = qq[<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" /><a href="#" id="buttonDot_$subfield_data{id}" class="buttonDot $class" title="$title">...</a>\n].$plugin->javascript;
                     } else {
                         warn $plugin->errstr;
                         $subfield_data{marc_value} = qq(<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />); # supply default input form
                     }
                 }
                 elsif ( $tag eq '' ) {       # it's an hidden field
-                    $subfield_data{marc_value} = qq(<input type="hidden" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
+                    $subfield_data{marc_value} = qq(<input type="hidden" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
                 }
                 elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
-                    $subfield_data{marc_value} = qq(<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
+                    $subfield_data{marc_value} = qq(<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
                 }
                 elsif ( length($defaultvalue) > 100
                             or (C4::Context->preference("marcflavour") eq "UNIMARC" and
@@ -2558,9 +2558,9 @@ sub PrepareItemrecordDisplay {
                                   500 <= $tag && $tag < 600                     )
                           ) {
                     # oversize field (textarea)
-                    $subfield_data{marc_value} = qq(<textarea tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength">$defaultvalue</textarea>\n");
+                    $subfield_data{marc_value} = qq(<textarea id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength">$defaultvalue</textarea>\n");
                 } else {
-                    $subfield_data{marc_value} = qq(<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
+                    $subfield_data{marc_value} = qq(<input type="text" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="50" maxlength="$maxlength" value="$defaultvalue" />);
                 }
                 push( @loop_data, \%subfield_data );
             }
