@@ -446,7 +446,7 @@ sub filter_by_attribute_type {
 
 my $patrons = Koha::Patrons->filter_by_attribute_value($attribute_value);
 
-Return a Koha::Patrons set with patrong having the attribute value passed in paramter.
+Return a Koha::Patrons set with patrong having the attribute value passed in parameter.
 
 =cut
 

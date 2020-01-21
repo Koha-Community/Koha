@@ -67,7 +67,7 @@ sub type {
     return scalar Koha::Patron::Attribute::Types->find( $self->code );
 }
 
-=head3
+=head3 authorised_value
 
 my $authorised_value = $attribute->authorised_value;
 
@@ -92,7 +92,7 @@ sub authorised_value {
     return $av->next;
 }
 
-=head3
+=head3 description
 
 my $description = $patron_attribute->description;
 

@@ -87,7 +87,7 @@ sub filter_by_branch_limitations {
     return $self->search( $or, $join );
 }
 
-=head3
+=head3 merge_with
 
 $new_attributes is an arrayref of hashrefs
 
