@@ -36,7 +36,7 @@ use Koha::Patrons;
 use Koha::DateUtils qw( dt_from_string );
 
 my $input           = new CGI;
-my $op              = $input->param('op');
+my $op              = $input->param('op') || 'else';
 my $biblionumber    = $input->param('biblionumber');
 my $suggestion      = $input->Vars;
 my $negcaptcha      = $input->param('negcap');
@@ -84,7 +84,6 @@ else {
 # DBIx::Class::Row::store_column(): No such column 'negcap' on Koha::Schema::Result::Suggestion at  Koha/C4/Suggestions.pm
 delete $suggestion->{negcap};
 delete $suggestion->{$_} foreach qw<op suggested_by_anyone confirm>;
-$op = 'else' unless $op;
 
 if ( $op eq 'else' ) {
     if ( C4::Context->preference("OPACViewOthersSuggestions") ) {
