@@ -725,7 +725,7 @@
 
                             [% IF ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY ) %]
                                 <h4>Enhanced descriptions from Syndetics:</h4>
-                                <p>[% SYNDETICS_SUMMARY | html %]</p>
+                                <p>[% SYNDETICS_SUMMARY | $raw %]</p>
                             [% END %]
 
                             [% IF ( MARCNOTES ) %]
@@ -757,7 +757,7 @@
                                     <h3>Table of contents provided by Syndetics</h3>
                                         <ul>
                                             [% FOREACH SYNDETICS_TO IN SYNDETICS_TOC %]
-                                                <li><strong>[% SYNDETICS_TO.l | html %] [% SYNDETICS_TO.t | html %]</strong>[% IF ( SYNDETICS_TO.p ) %] ([% SYNDETICS_TO.p | html %])[% END %]</li>
+                                                <li><strong>[% SYNDETICS_TO.l | html %] [% SYNDETICS_TO.t | html %]</strong>[% IF ( SYNDETICS_TO.p ) %] ([% SYNDETICS_TO.p | $raw %])[% END %]</li>
                                             [% END %]
                                         </ul>
                                 </div>
@@ -768,7 +768,7 @@
                             <div id="excerpt">
                                 <div class="content_set">
                                     <h3>Excerpt provided by Syndetics</h3>
-                                    [% SYNDETICS_EXCERPT | html %]
+                                    [% SYNDETICS_EXCERPT | $raw %]
                                 </div>
                             </div>
                         [% END # / IF SyndeticsExcerpt && SYNDETICS_EXCERPT %]
@@ -783,7 +783,7 @@
                                                 [% FOREACH review IN SYNDETICS_REVIEW.reviews %]
 
                                                     [% IF ( review.content ) %]
-                                                        [% review.content | html %]
+                                                        [% review.content | $raw %]
                                                     [% END %]
 
                                                 [% END %]
@@ -799,7 +799,7 @@
                                     <h3>Author notes provided by Syndetics</h3>
                                     [% FOREACH SYNDETICS_ANOTE IN SYNDETICS_ANOTES %]
                                         [% IF ( SYNDETICS_ANOTE.content ) %]
-                                            [% SYNDETICS_ANOTE.content | html %]
+                                            [% SYNDETICS_ANOTE.content | $raw %]
                                         [% END %]
                                     [% END %]
                                 </div>
