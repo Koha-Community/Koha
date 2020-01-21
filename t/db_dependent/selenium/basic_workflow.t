@@ -237,12 +237,14 @@ SKIP: {
     #Place holds
     $driver->get($base_url."/reserve/request.pl?borrowernumber=$borrowernumber&biblionumber=".$biblionumbers[0]);
     $driver->find_element('//form[@id="hold-request-form"]//button[@type="submit"]')->click; # Biblio level
+    $driver->pause(1000); # This seems wrong, since bug 19618 the hold is created async with an AJAX call. Not sure what is happening here but the next statements are exectuted before the hold is created and the count is wrong (still 0)
     my $patron = Koha::Patrons->find($borrowernumber);
     is( $patron->holds->count, 1, );
 
     $driver->get($base_url."/reserve/request.pl?borrowernumber=$borrowernumber&biblionumber=".$biblionumbers[1]);
     $driver->find_element('//form[@id="hold-request-form"]//input[@type="radio"]')->click; # Item level, there is only 1 item per bib so we are safe
     $driver->find_element('//form[@id="hold-request-form"]//button[@type="submit"]')->click;
+    $driver->pause(1000);
     is( $patron->holds->count, 2, );
 
     time_diff("holds");
