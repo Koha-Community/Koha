@@ -1289,33 +1289,6 @@ sub IsAvailableForItemLevelRequest {
     }
 }
 
-sub _get_itype {
-    my $item = shift;
-
-    my $itype;
-    if (C4::Context->preference('item-level_itypes')) {
-        # We can't trust GetItem to honour the syspref, so safest to do it ourselves
-        # When GetItem is fixed, we can remove this
-        $itype = $item->{itype};
-    }
-    else {
-        # XXX This is a bit dodgy. It relies on biblio itemtype column having different name.
-        # So if we already have a biblioitems join when calling this function,
-        # we don't need to access the database again
-        $itype = $item->{itemtype};
-    }
-    unless ($itype) {
-        my $dbh = C4::Context->dbh;
-        my $query = "SELECT itemtype FROM biblioitems WHERE biblioitemnumber = ? ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute($item->{biblioitemnumber});
-        if (my $data = $sth->fetchrow_hashref()){
-            $itype = $data->{itemtype};
-        }
-    }
-    return $itype;
-}
-
 =head2 AlterPriority
 
   AlterPriority( $where, $reserve_id, $prev_priority, $next_priority, $first_priority, $last_priority );

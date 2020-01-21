@@ -621,13 +621,12 @@ my $limit = Koha::Item::Transfer::Limit->new(
 is( C4::Reserves::IsAvailableForItemLevelRequest($item, $patron, $pickup_branch), 0, "Item level request not available due to transfer limit" );
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '0' );
 
-my $itype = C4::Reserves::_get_itype($item);
 my $categorycode = $borrower->{categorycode};
 my $holdingbranch = $item->{holdingbranch};
 Koha::CirculationRules->set_rules(
     {
         categorycode => $categorycode,
-        itemtype     => $itype,
+        itemtype     => $item->effective_itemtype,
         branchcode   => $holdingbranch,
         rules => {
             onshelfholds => 1,
