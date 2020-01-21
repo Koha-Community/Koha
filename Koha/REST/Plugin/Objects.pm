@@ -71,6 +71,14 @@ sub register {
                 }
             );
 
+            # Generate prefetches for embedded stuff
+            $c->dbic_merge_prefetch(
+                {
+                    attributes => $attributes,
+                    result_set => $result_set
+                }
+            );
+
             # Call the to_model function by reference, if defined
             if ( defined $filtered_params ) {
 

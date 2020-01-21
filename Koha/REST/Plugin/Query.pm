@@ -105,6 +105,35 @@ Generates the DBIC order_by attributes based on I<$params>, and merges into I<$a
         }
     );
 
+=head3 dbic_merge_prefetch
+
+    $attributes = $c->dbic_merge_prefetch({ attributes => $attributes, result_set => $result_set });
+
+Generates the DBIC prefetch attribute based on embedded relations, and merges into I<$attributes>.
+
+=cut
+
+    $app->helper(
+        'dbic_merge_prefetch' => sub {
+            my ( $c, $args ) = @_;
+            my $attributes = $args->{attributes};
+            my $result_set = $args->{result_set};
+            my $embed = $c->stash('koha.embed');
+
+            return unless defined $embed;
+
+            my @prefetches;
+            foreach my $key (keys %{$embed}) {
+                my $parsed = _parse_prefetch($key, $embed, $result_set);
+                push @prefetches, $parsed if defined $parsed;
+            }
+
+            if(scalar(@prefetches)) {
+                $attributes->{prefetch} = \@prefetches;
+            }
+        }
+    );
+
 =head3 _build_query_params_from_api
 
     my $params = _build_query_params_from_api( $filtered_params, $reserved_params );
@@ -296,6 +325,25 @@ sub _merge_embed {
         # Embed
         $embed->{$root} = $structure->{$root};
     }
+}
+
+sub _parse_prefetch {
+    my ( $key, $embed, $result_set) = @_;
+
+    return unless exists $result_set->prefetch_whitelist->{$key};
+
+    my $ko_class = $result_set->prefetch_whitelist->{$key};
+    return $key unless defined $embed->{$key}->{children} && defined $ko_class;
+
+    my $prefetch = {};
+    foreach my $child (keys %{$embed->{$key}->{children}}) {
+        my $parsed = _parse_prefetch($child, $embed->{$key}->{children}, $ko_class->new);
+        $prefetch->{$key} = $parsed if defined $parsed;
+    }
+
+    return unless scalar(keys %{$prefetch});
+
+    return $prefetch;
 }
 
 1;

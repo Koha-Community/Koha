@@ -113,6 +113,27 @@ get '/dbic_merge_sorting_date' => sub {
     $c->render( json => $attributes, status => 200 );
 };
 
+get '/dbic_merge_prefetch' => sub {
+    my $c = shift;
+    my $attributes = {};
+    my $result_set = Koha::Holds->new;
+    $c->stash('koha.embed', {
+            "item" => {},
+            "biblio" => {
+                children => {
+                    "orders" => {}
+                }
+            }
+        });
+
+    $c->dbic_merge_prefetch({
+        attributes => $attributes,
+        result_set => $result_set
+    });
+
+    $c->render( json => $attributes, status => 200 );
+};
+
 get '/build_query' => sub {
     my $c = shift;
     my ( $filtered_params, $reserved_params ) =
@@ -188,7 +209,7 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -264,6 +285,16 @@ subtest 'dbic_merge_sorting() tests' => sub {
       ->json_is( '/b' => 'b', 'Existing values are kept (b)' )->json_is(
         '/order_by' => { '-desc' => 'uno' }
       );
+};
+
+subtest '/dbic_merge_prefetch' => sub {
+    plan tests => 4;
+
+    my $t = Test::Mojo->new;
+
+    $t->get_ok('/dbic_merge_prefetch')->status_is(200)
+      ->json_like( '/prefetch/0' => qr/item|biblio/ )
+      ->json_like( '/prefetch/1' => qr/item|biblio/ );
 };
 
 subtest '_build_query_params_from_api' => sub {

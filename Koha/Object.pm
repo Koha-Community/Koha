@@ -373,6 +373,35 @@ sub _numeric_column_type {
     return ( grep { $column_type eq $_ } @numeric_types) ? 1 : 0;
 }
 
+=head3 prefetch_whitelist
+
+    my $whitelist = $object->prefetch_whitelist()
+
+Returns a hash of prefetchable subs and the type they return.
+
+=cut
+
+sub prefetch_whitelist {
+    my ( $self ) = @_;
+
+    my $whitelist = {};
+    my $relations = $self->_result->result_source->_relationships;
+
+    foreach my $key (keys %{$relations}) {
+        if($self->can($key)) {
+            my $result_class = $relations->{$key}->{class};
+            my $obj = $result_class->new;
+            try {
+                $whitelist->{$key} = $obj->koha_object_class;
+            } catch {
+                $whitelist->{$key} = undef;
+            }
+        }
+    }
+
+    return $whitelist;
+}
+
 =head3 to_api
 
     my $object_for_api = $object->to_api(

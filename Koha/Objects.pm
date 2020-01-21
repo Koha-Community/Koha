@@ -351,6 +351,22 @@ sub from_api_mapping {
     return $self->{_singular_object}->from_api_mapping;
 }
 
+=head3 prefetch_whitelist
+
+    my $whitelist = $object->prefetch_whitelist()
+
+Returns a hash of prefetchable subs and the type it returns
+
+=cut
+
+sub prefetch_whitelist {
+    my ( $self ) = @_;
+
+    $self->{_singular_object} ||= $self->object_class->new();
+
+    $self->{_singular_object}->prefetch_whitelist;
+}
+
 =head3 Koha::Objects->_wrap
 
 wraps the DBIC object in a corresponding Koha object
