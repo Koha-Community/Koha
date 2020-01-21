@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use Test::Warn;
 
@@ -362,6 +362,36 @@ subtest 'Checkin of an item claimed as returned should generate a message' => su
 
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     ok( $messages->{ReturnClaims}, "ReturnClaims is in messages for return of a claimed as returned itm" );
+};
+
+subtest 'BranchTransferLimitsType' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('AutomaticItemReturn', 0);
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
+
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item = $builder->build_object(
+        {
+            class  => 'Koha::Items',
+            value  => {
+                biblionumber => $biblio->biblionumber,
+                notforloan => 0,
+                itemlost   => 0,
+                withdrawn  => 0,
+        }
+    }
+    );
+    my $patron = $builder->build_object({class => 'Koha::Patrons'});
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
+    is( $doreturn, 1, 'AddReturn should have checkin the item if BranchTransferLimitsType=ccode');
+
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
+    is( $doreturn, 1, 'AddReturn should have checkin the item if BranchTransferLimitsType=itemtype');
 };
 
 $schema->storage->txn_rollback;
