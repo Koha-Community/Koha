@@ -19,12 +19,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Exception;
 use Test::Warn;
 
 use Koha::Authority::Types;
 use Koha::Cities;
+use Koha::Biblios;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -773,6 +774,29 @@ subtest "from_api_mapping() tests" => sub {
     is_deeply(
         $cities_rs->from_api_mapping,
         $city->from_api_mapping
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'prefetch_whitelist() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblios = Koha::Biblios->new;
+
+    my $prefetch_whitelist = $biblios->prefetch_whitelist;
+
+    ok(
+        exists $prefetch_whitelist->{orders},
+        'Relationship matching method name is listed'
+    );
+    is(
+        $prefetch_whitelist->{orders},
+        'Koha::Acquisition::Order',
+        'Guessed the object class correctly'
     );
 
     $schema->storage->txn_rollback;

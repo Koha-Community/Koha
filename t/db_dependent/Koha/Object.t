@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -792,6 +792,29 @@ subtest 'get_from_storage' => sub {
     is( ref($biblio), 'Koha::Biblio', 'current $biblio should not be deleted' );
     is( $biblio->get_from_storage, undef,
         'get_from_storage should return undef if the object has been deleted' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'prefetch_whitelist() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = Koha::Biblio->new;
+
+    my $prefetch_whitelist = $biblio->prefetch_whitelist;
+
+    ok(
+        exists $prefetch_whitelist->{orders},
+        'Relationship matching method name is listed'
+    );
+    is(
+        $prefetch_whitelist->{orders},
+        'Koha::Acquisition::Order',
+        'Guessed the object class correctly'
+    );
 
     $schema->storage->txn_rollback;
 };
