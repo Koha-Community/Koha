@@ -82,7 +82,7 @@ sub guarantor {
 
     return unless $self->guarantor_id;
 
-    return scalar Koha::Patrons->find( $self->guarantor_id );
+    return Koha::Patrons->find( $self->guarantor_id );
 }
 
 =head3 guarantee
@@ -94,7 +94,7 @@ Returns the Koha::Patron object for the guarantee
 sub guarantee {
     my ( $self ) = @_;
 
-    return scalar Koha::Patrons->find( $self->guarantee_id );
+    return Koha::Patrons->find( $self->guarantee_id );
 }
 
 =head3 type

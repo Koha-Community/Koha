@@ -332,7 +332,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
 }
 
 my $captcha = random_string("CCCCC");
-my $patron_param = scalar Koha::Patrons->find( $borrowernumber );
+my $patron_param = Koha::Patrons->find( $borrowernumber );
 $template->param(
     has_guarantor_flag => $patron_param->guarantor_relationships->guarantors->_resultset->count
 ) if $patron_param;

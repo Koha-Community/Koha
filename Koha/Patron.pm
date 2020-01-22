@@ -415,7 +415,7 @@ sub category {
 sub image {
     my ( $self ) = @_;
 
-    return scalar Koha::Patron::Images->find( $self->borrowernumber );
+    return Koha::Patron::Images->find( $self->borrowernumber );
 }
 
 =head3 library
