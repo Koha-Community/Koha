@@ -38,6 +38,7 @@
     [%~ public      = public | html ~%]
     [%~ IF can_manage_shelf ~%]
         [%~ action_block =                '<form action="shelves.pl" method="get">' ~%]
+        [%~ action_block = BLOCK ~%][%~ action_block | $raw ~%][%~ INCLUDE 'csrf-token.inc' | trim ~%][%~ END ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="edit_form" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="public" value="' _ public _ '" />' ~%]
@@ -47,6 +48,7 @@
     [%~ END ~%]
     [%~ IF can_manage_shelf OR can_delete_shelf ~%]
         [%~ action_block = action_block _ ' <form action="shelves.pl" method="post">' ~%]
+        [%~ action_block = BLOCK ~%][%~ action_block | $raw ~%][%~ INCLUDE 'csrf-token.inc' | trim ~%][%~ END ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelves" value="1" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="delete" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
@@ -59,4 +61,5 @@
     [%~ SET action_block = 'None' ~%]
 [%~ END ~%]
 [%~ To.json(action_block) | $raw ~%]
+
 [%~ END ~%]

@@ -30,7 +30,7 @@ use C4::Koha qw(
 );
 use C4::Items qw( GetItemsLocationInfo );
 use C4::Members;
-use C4::Output qw( pagination_bar output_html_with_http_headers );
+use C4::Output qw( pagination_bar output_html_with_http_headers output_and_exit_if_error );
 use C4::XSLT qw( XSLTParse4Display );
 
 use Koha::Biblios;
@@ -62,6 +62,7 @@ if ( $op eq 'add_form' ) {
     # Only pass default
     $shelf = { allow_change_from_owner => 1 };
 } elsif ( $op eq 'edit_form' ) {
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
@@ -77,6 +78,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
 } elsif ( $op eq 'add' ) {
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     my $allow_changes_from = $query->param('allow_changes_from');
     eval {
         $shelf = Koha::Virtualshelf->new(
@@ -101,6 +103,7 @@ if ( $op eq 'add_form' ) {
         $op = 'view';
     }
 } elsif ( $op eq 'edit' ) {
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
 
@@ -130,6 +133,7 @@ if ( $op eq 'add_form' ) {
         push @messages, { type => 'alert', code => 'does_not_exist' };
     }
 } elsif ( $op eq 'delete' ) {
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf       = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
@@ -148,6 +152,7 @@ if ( $op eq 'add_form' ) {
     }
     $op = 'list';
 } elsif ( $op eq 'add_biblio' ) {
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
@@ -204,6 +209,7 @@ if ( $op eq 'add_form' ) {
     }
     $op = $referer;
 } elsif ( $op eq 'remove_biblios' ) {
+    output_and_exit_if_error($query, $cookie, $template, { check => 'csrf_token' });
     $shelfnumber = $query->param('shelfnumber');
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     my @biblionumbers = $query->multi_param('biblionumber');
