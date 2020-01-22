@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2019-11-14 17:37+0000\n"
+"PO-Revision-Date: 2020-01-06 20:14+0000\n"
 "Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
 "Language: fr_CA\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1573753039.864884\n"
+"X-POOTLE-MTIME: 1578341653.095169\n"
 "X-Pootle-Path: /fr_CA/18.05/fr-CA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2629,18 +2629,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr "un utilisateur qui fait une réservation sur une notice où l'utilisateur a déjà un ou plusieurs exemplaires attachés à cette notice, prêtés."
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr "Permettre"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr "Empêcher"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr " le prêt d'un document réservé par quelqu'un d'autre. Si activé, les avertissement de Réservation en attente et de Document réservé ne seront pas émis. Ceci permet le prêt en libre service pour ces documents. Si vous utilisez la file de réservation, les documents avec des réservations en attente seront marqués comme \"non disponibles\" si l'option \"Ne pas autoriser\" est choisie."
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr "Autoriser"
 
@@ -2651,6 +2639,26 @@ msgstr "Ne pas autoriser"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
 msgstr "le retour des exemplaires réservés dans le module SCO. Si vous l'autorisez, les alertes RESERVE_WAITINg et RESERVED ne seront pas générées. Cela autorise l'auto-retour pour ces exemplaires."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3129,7 +3137,7 @@ msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
 msgstr ""
 
 # Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than"
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
 msgstr ""
 
 # Circulation > Return Claims
@@ -3245,16 +3253,16 @@ msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on mul
 msgstr " la possibilité de placer des réservations sur plusieurs notices bibliographiques à partir des résultats de la recherche."
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
-msgstr "Permettre"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
+msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr "que les jours fermés du calendrier soient pris en compte dans le délai maximum pour récupérer un document réservé."
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
+msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
-msgstr "Ne pas permettre"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -3639,7 +3647,7 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking out if the patron has guarantees owing in total more than"
-msgstr "Empêcher les utilisateurs d'emprunter des livres s'ils ont plus de"
+msgstr "Empêcher les utilisateurs d'emprunter si leurs personnes à charge doivent collectivement plus de"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# [% local_currency %] in fines."
@@ -3783,7 +3791,7 @@ msgstr "le calendrier dans le calcul des cycles de réclamation des prêts en re
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Ask for confirmation"
-msgstr "Demander confirmation"
+msgstr "Demander une confirmation"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# Block"
@@ -3795,7 +3803,7 @@ msgstr "Ne pas bloquer"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockCirc# when checking out to a borrower that has overdues outstanding"
-msgstr "quand un prêt est fait à un utilisateurs qui détient des documents en retards."
+msgstr "au moment du prêt à un utilisateur qui détient des documents en retard."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OverduesBlockRenewing# When a patron's checked out item is overdue,"
@@ -4210,15 +4218,15 @@ msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
 msgstr "les réservations à être suspendues de l'OPAC."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
+msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# directly."
+msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
+msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -4518,16 +4526,16 @@ msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the 
 msgstr "un courriel à l'administrateur de Koha lorsqu'une réservation est faite par un utilisateur."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
-msgstr "Calculer les amendes sur la base du nombre de jours de retard"
+msgid "circulation.pref#finesCalendar# Ignore the calendar"
+msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# directly."
-msgstr "en incluant les jours de fermeture"
+msgid "circulation.pref#finesCalendar# Use the calendar"
+msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# not including days the library is closed."
-msgstr "en excluant les jours de fermeture"
+msgid "circulation.pref#finesCalendar# when calculating the period for fines."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
@@ -4658,24 +4666,24 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
 msgstr "du plus récent au plus ancien"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# Calculate the due date using"
-msgstr "Calculer la date de retour en utilisant"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# circulation rules only."
-msgstr "uniquement les règles de circulation"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
-msgstr "le calendrier pour repousser le retour au prochain jour d'ouverture"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgid "circulation.pref#useDaysMode# Ignore the calendar"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
-msgstr "le calendrier pour sauter tous les jours où la bibliothèque est fermée"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#useDaysMode# when calculating the date due."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Don't use"
@@ -4778,10 +4786,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr "<strong>Note :</strong> Vous ne pouvez choisir qu'une source pour les images de couverture, autrement Koha pourra afficher plusieurs couvertures de la même ressource."
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr " for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> service de couverture."
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr " Ne pas montrer"
 
@@ -4792,6 +4796,14 @@ msgstr " Montrer"
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 msgstr " images de couverture dans les résultats à l'OPAC et liste détaillée d'un détaillant suédois <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr ""
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
+msgstr ""
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7993,8 +8005,8 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr "Activer"
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
-msgstr "Envoyer les notifications par SMS si aucun courriel d'usager n'est défini"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"

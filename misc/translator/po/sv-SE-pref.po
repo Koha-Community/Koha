@@ -2629,18 +2629,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr "en låntagare att reservera en post för vilken låntagaren redan har ett eller flera exemplar som tillhör posten på lån. "
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr "Tillåt "
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr "Tillåt inte "
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr ""
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr "Tillåt "
 
@@ -2651,6 +2639,26 @@ msgstr "Tillåt inte "
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
 msgstr "utlån av exemplar reserverade till någon annan i SCO-modulen. Om aktiverat/tillåtet så skapas inte RESERVE_WAITING och RESERVED varningsmeddelande. Detta tillåter utlån av dessa exemplar."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3129,7 +3137,7 @@ msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
 msgstr ""
 
 # Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than"
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
 msgstr ""
 
 # Circulation > Return Claims
@@ -3245,16 +3253,16 @@ msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on mul
 msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
-msgstr "Tillåt"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
+msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr "Stängda dagar att ta hänsyn till i max antal dagar att hämta reservation."
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
+msgstr ""
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
-msgstr "Tillåt inte"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4210,15 +4218,15 @@ msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
 msgstr "reservationer kan pausas från OPAC."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
+msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# directly."
+msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
 msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
+msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -4518,16 +4526,16 @@ msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the 
 msgstr "skicka ett e-postmeddelande till Koha-administratören varje gång en reservation läggs."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
-msgstr "Beräkna böter baserat på antalet förseningsdagar "
+msgid "circulation.pref#finesCalendar# Ignore the calendar"
+msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# directly."
-msgstr "direkt. "
+msgid "circulation.pref#finesCalendar# Use the calendar"
+msgstr ""
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# not including days the library is closed."
-msgstr "exklusive dagar då biblioteket är stängt. "
+msgid "circulation.pref#finesCalendar# when calculating the period for fines."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
@@ -4658,24 +4666,24 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
 msgstr "senaste till tidigast "
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# Calculate the due date using"
-msgstr "Beräkna återlämningsdatum med "
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# circulation rules only."
-msgstr "endast för låneregler. "
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
-msgstr "kalendern för att flytta återlämningsdatumet till nästa öppna dag "
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgid "circulation.pref#useDaysMode# Ignore the calendar"
 msgstr ""
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
-msgstr "kalendern för att hoppa över alla dagar biblioteket är stängt. "
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#useDaysMode# when calculating the date due."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Don't use"
@@ -4778,10 +4786,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr "enhanced_content.pref## <strong>OBS!</strong> du kan bara välja en källa för omslagsbilder nedan, annars kommer Koha att visa bilder från alla valda källor."
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr ""
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr "Visa inte"
 
@@ -4791,6 +4795,14 @@ msgstr "Visa"
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
+msgstr ""
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr ""
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
 msgstr ""
 
 # Enhanced Content > Local or remote cover images
@@ -7993,7 +8005,7 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr ""
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
 msgstr ""
 
 # Patrons > General

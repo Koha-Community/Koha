@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2019-12-11 18:11+0000\n"
+"PO-Revision-Date: 2020-01-21 16:36+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1576087866.048401\n"
+"X-POOTLE-MTIME: 1579624560.028825\n"
 "X-Pootle-Path: /hy/18.05/hy-Armn-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2630,18 +2630,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr "circulation.pref#AllowHoldsOnPatronsPossessions# օգտատերը ով պետք է դնի պահւմ գրառման վրա որին ընթերցողը կցել է մեկ կամ ավելի նյութեր որը  սպասարկվել է։"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr "circulation.pref#AllowItemsOnHoldCheckout# Թույլատրել"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr "circulation.pref#AllowItemsOnHoldCheckout# Չթույլատրել"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr "circulation.pref#AllowItemsOnHoldCheckout# ուրիշի համար պահված նյութերի տացք։ Եթե թույլատրված է, մի գեներացրու RESERVE_WAITING և RESERVED նախազգուշացում: Սա թույլ է տալիս այդ նյութերի համար ինքնատացք։ Եթե օգտագործելով սպասող պահումներով պահման հերթերի նյութերը կնշվեն որպես «անհասանելի», եթե այն կարգաբերված է «Մի թույլատրեք»:"
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr "circulation.pref#AllowItemsOnHoldCheckoutSCO# Թույլատրի"
 
@@ -2652,6 +2640,34 @@ msgstr "circulation.pref#AllowItemsOnHoldCheckoutSCO# Մի թույլատրի"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
 msgstr "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# Թույլատրել"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# ՄԻ թույլատրեք"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# Եթե թույլատրված է, մի "
+"գեներացրու RESERVE_WAITING և RESERVED զգուշացումը։"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# Սա թույլ է տալիս ինքնատացքեր "
+"այդ նյութերի համար։ Եթե օգտագործելով պահման հերթի նյութերը սպասվող "
+"պահումներով, նշվում են որպես «անհասանելի», եթե դա սահմանված է «Չի "
+"թույլատրվում»:"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# նյութի տացքերը պահված են մեկ "
+"ուրիշին, SIP տացքի հաղորդագրությունների միջոցով։"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3130,8 +3146,11 @@ msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
 msgstr "circulation.pref#ClaimReturnedLostValue# վերադարձի պահանջները ներկայացնելու համար"
 
 # Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than"
-msgstr "circulation.pref#ClaimReturnedWarningThreshold# Զգուշացեք գրադարանավարներին, որ այցելուն չափից ավելի վերադարձի պահանջներ ունի, եթե այցելուն պահանջել է ավելին վերադարձնել"
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
+msgstr ""
+"circulation.pref#ClaimReturnedWarningThreshold# Զգուշացեք գրադարանավարներին, "
+"որ այցելուն չափից ավելի վերադարձի պահանջներ ունի, եթե այցելուն պահանջել է "
+"ավելին վերադարձնել"
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
@@ -3246,16 +3265,19 @@ msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on mul
 msgstr "circulation.pref#DisplayMultiPlaceHold# հնարավորություն, փնտրման արդյունքներից դնելու բազմակի մատենագիտական գրառումների վրա պահումներ"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Թույլատրի"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
+msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Անտեսեք օրացույցը"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Չաշխատելու օրերը պետք է նկատի առնվեն ռեզերվների ստանալու մեծագույն ուշացման մեջ։"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
+msgstr ""
+"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Օգտագործեք օրացույցը"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Մի թույլատրի"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
+msgstr ""
+"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# երբ հաշվարկվում է "
+"ստացման մաքս ուշացման ժամանակահատվածը:"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4211,16 +4233,18 @@ msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
 msgstr "circulation.pref#SuspendHoldsOpac# պահում, որ պետք է կասեցվի ՀՕԱՔ-ից։"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
-msgstr "circulation.pref#SuspensionsCalendar# Հաշվարկել կասեցման ժամկետը` ելնելով ժամկետանց օրերի քանակից"
+msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
+msgstr "circulation.pref#SuspensionsCalendar# Անտեսեք օրացույցը"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# directly."
-msgstr "circulation.pref#SuspensionsCalendar# directly."
+msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
+msgstr "circulation.pref#SuspensionsCalendar# Օգտագործեք օրացույցը"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
-msgstr "circulation.pref#SuspensionsCalendar# չեն ներառված օրերը, երբ գրադարանը փակ է:"
+msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
+msgstr ""
+"circulation.pref#SuspensionsCalendar# երբ հաշվարկվում է կասեցման ժամկետի "
+"ավարտի ժամանակահատվածը:"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
@@ -4519,16 +4543,16 @@ msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the 
 msgstr "circulation.pref#emailLibrarianWhenHoldIsPlaced# մշատապես ուղարկում է էլ փոստ Կոհայի ադմինիստրացիային երբ պահման հարցում է արվում"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
-msgstr "circulation.pref#finesCalendar# Հիմնված ժամկետանց օրերի վրա հաշվում է տուգանքները"
+msgid "circulation.pref#finesCalendar# Ignore the calendar"
+msgstr "circulation.pref#finesCalendar# Անտեսեք օրացույցը"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# directly."
-msgstr "circulation.pref#finesCalendar# ուղիղ։"
+msgid "circulation.pref#finesCalendar# Use the calendar"
+msgstr "circulation.pref#finesCalendar# Օգտագործեք օրացույցը"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# not including days the library is closed."
-msgstr "circulation.pref#finesCalendar# չի ներառում գրադարանի փակ օրերը։"
+msgid "circulation.pref#finesCalendar# when calculating the period for fines."
+msgstr "circulation.pref#finesCalendar# տուգանքների ժամկետը հաշվարկելիս:"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
@@ -4659,24 +4683,31 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
 msgstr "circulation.pref#todaysIssuesDefaultSortOrder# ուշից դեպի վաղ"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# Calculate the due date using"
-msgstr "circulation.pref#useDaysMode# Հաշվում է վերադարձի ամսաթիվը օգտագործելով"
+msgid "circulation.pref#useDaysMode# Ignore the calendar"
+msgstr "circulation.pref#useDaysMode# Անտեսեք օրացույցը"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# circulation rules only."
-msgstr "circulation.pref#useDaysMode# միայն տացքի օրենքներ։"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
+msgstr ""
+"circulation.pref#useDaysMode# Օգտագործեք օրացույցը, վերադարձի ժամկետը հաջորդ "
+"բաց օր մղելու համար"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
-msgstr "circulation.pref#useDaysMode# օրացույց որը պետք հրի վերադարձի ամսաթիվը հաջորդ բաց օր"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgstr ""
+"circulation.pref#useDaysMode# Օգտագործեք օրացույցը, վերադարձի ամսաթիվը "
+"շաբաթական տրման ժամանակահատվածների համար հաջորդ բաց համընկնող աշխատանքային "
+"օր մղելու համար, կամ հաջորդ բաց հաջորդ օրը։"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
-msgstr "circulation.pref#useDaysMode# շաբաթական տրման ժամանակահատվածների համար օրացույցը հարմարեցնում է վերադարձի ամսաթիվը հաջորդ շաբաթվա մատչելի աշխատանքային օր, կամ հաջորդ բաց օրը"
+msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
+msgstr ""
+"circulation.pref#useDaysMode# Օգտագործեք օրացույցը, բաց թողնելու համար այն "
+"օրերը, երբ գրադարանը փակ է։"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
-msgstr "circulation.pref#useDaysMode# օրացույց որը պետք է բաց թողնի բոլոր այն օրերը երբ գրադարանը փակ է։"
+msgid "circulation.pref#useDaysMode# when calculating the date due."
+msgstr "circulation.pref#useDaysMode# երբ հաշվարկվում է վերադարձի ամսաթիվը։"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Don't use"
@@ -4779,10 +4810,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr "enhanced_content.pref## <strong>Նկատի առ:</strong> դու կարող ես ընտրել միայն մեկ կազմի պատկեր, հակառակ դեպքում Կոհան ցույց կտա պատկերները ընտրված բոլոր աղբյուրներից։"
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr "enhanced_content.pref## <a href=\"https://www.adlibris.com/se\">Adlibris</a> կազմի ծառայությանը։"
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr "enhanced_content.pref#AdlibrisCoversEnabled# Ցույց մի տուռ"
 
@@ -4793,6 +4820,16 @@ msgstr "enhanced_content.pref#AdlibrisCoversEnabled# Ցույց տուր"
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 msgstr "enhanced_content.pref#AdlibrisCoversEnabled# կազմերի պատկերներ ՀՕԱՔ արդյունքներից և մանրամասն ցուցակներ շվեդական մանրածախ վաճառողից <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr "enhanced_content.pref#AdlibrisCoversURL# Օգտագործիր հիմնային URL -ը։ "
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
+msgstr ""
+"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\""
+"https://www.adlibris.com/se\">Adlibris</a> կազմի ծառայություն։"
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7994,8 +8031,10 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr "patrons.pref#FallbackToSMSIfNoEmail# Թույլատրիր"
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
-msgstr "patrons.pref#FallbackToSMSIfNoEmail# Ուղարկեք հաղորդագրություններ SMS-ով, եթե չկա սահմանված հաճախորդի էլ․ փոստը"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
+msgstr ""
+"patrons.pref#FallbackToSMSIfNoEmail# Ուղարկեք գնման առաջարկի "
+"հաղորդագրությունները SMS-ով, եթե չկա սահմանված հաճախորդի էլ․ փոստ։"
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -9568,4 +9607,3 @@ msgstr "web_services.pref#SvcMaxReportRows# Միայն վերադարձ"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "web_services.pref#SvcMaxReportRows# հաշվետվության տողերը պահանջվում են հաշվետվության վեբ ծառյության միջոցով։"
-

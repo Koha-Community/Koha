@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2019-12-17 11:52+0000\n"
+"PO-Revision-Date: 2020-01-17 14:28+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1576583570.667119\n"
+"X-POOTLE-MTIME: 1579271289.805401\n"
 "X-Pootle-Path: /hi/18.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2629,18 +2629,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr "circulation.pref # AllowHoldsOnPatronsPossessions # एक संरक्षक जहां संरक्षक पहले से ही जुड़ी हुई है कि रिकॉर्ड से बाहर की जाँच के लिए एक या अधिक आइटम नहीं है एक रिकॉर्ड पर एक पकड़ जगह है।"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr "circulation.pref # AllowItemsOnHoldCheckout # अनुमति दें"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr "circulation.pref # AllowItemsOnHoldCheckout # अनुमति न दें"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr "circulation.pref#AllowItemsOnHoldCheckout# किसी और के लिए आरक्षित वस्तुओं के चेकआउट। यदि अनुमत हो तो RESERVE_WAITING और RESERVED चेतावनी उत्पन्न न करें। यह उन वस्तुओं के लिए स्व-चेकआउट की अनुमति देता है। यदि लंबित होल्ड के साथ होल्ड क्यू आइटम का उपयोग करना \"अनुपलब्ध\" के रूप में चिह्नित किया जाएगा यदि यह \"अनुमति न दें\" के लिए सेट हो."
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr "circulation.pref#AllowItemsOnHoldCheckoutSCO# अनुमति दें"
 
@@ -2651,6 +2639,34 @@ msgstr "circulation.pref#AllowItemsOnHoldCheckoutSCO# अनुमति नह�
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
 msgstr "circulation.pref#AllowItemsOnHoldCheckoutSCO# आइटमों की चैकआउट SCO मॉड्यूल में किसी और के लिए सुरक्षित रख लिया। अगर RESERVE_WAITING और आरक्षित चेतावनी उत्पन्न नहीं है की अनुमति दी। यह उन वस्तुओं के लिए स्वयं चैकआउटस अनुमति देता है।"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# अनुमति दें"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# अनुमति नही दें"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# यदि अनुमत हो तो "
+"RESERVE_WAITING और RESERVED चेतावनी उत्पन्न न करें।"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# यह उन वस्तुओं के लिए स्व-चे"
+"कआउट की अनुमति देता है। यदि लंबित होल्ड के साथ होल्ड क्यू आइटम का उपयोग करना "
+"\"अनुपलब्ध\" के रूप में चिह्नित किया जाएगा यदि यह \"अनुमति न दें\" के लिए से"
+"ट हो."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
+msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# SIP चेकआउट संदेशों के माध्यम से"
+" किसी और के लिए आरक्षित वस्तुओं के चेकआउट."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3129,8 +3145,11 @@ msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
 msgstr "circulation.pref#ClaimReturnedLostValue# रिटर्न दावों का प्रतिनिधित्व करने के लिए"
 
 # Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than"
-msgstr "circulation.pref#ClaimReturnedWarningThreshold# यदि एक संरक्षक ने अधिक से अधिक वापसी का दावा किया है तो चेतावनी दी है कि एक प्रोटॉन के पास अत्यधिक वापसी का दावा है"
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
+msgstr ""
+"circulation.pref#ClaimReturnedWarningThreshold# लाइब्रेरियन को चेतावनी यदि "
+"संरक्षक ने अधिक से अधिक वापसी का दावा किया है, तो एक संरक्षक के पास अत्यधिक "
+"वापसी के दावे हैं"
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
@@ -3245,16 +3264,20 @@ msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on mul
 msgstr "circulation.pref#DisplayMultiPlaceHold# खोज परिणामों से कई ग्रंथ सूची रिकॉर्ड रखने की क्षमता है"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# अनुमति दें"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
+msgstr ""
+"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# कैलेंडर पर ध्यान न दें"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# खाते में अधिकतम पिकअप देरी को ध्यान में रखते हुए बंद किए गए दिन."
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
+msgstr ""
+"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# कैलेंडर का उपयोग करें"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
-msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# अनुमति नही दें"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
+msgstr ""
+"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# जब आरक्षित अधिकतम पिकअप "
+"विलंब के लिए अवधि की गणना करते हैं."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4210,16 +4233,18 @@ msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
 msgstr "circulation.pref # SuspendHoldsOpac # ओपेक से निलंबित किए जाने की भी रहती है।"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
-msgstr "circulation.pref#SuspensionsCalendar# अतिदेय के आधार पर निलंबन समाप्ति की गणना करें"
+msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
+msgstr "circulation.pref#SuspensionsCalendar# कैलेंडर पर ध्यान न दें"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# directly."
-msgstr "circulation.pref#SuspensionsCalendar# प्रत्यक्ष रूप से."
+msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
+msgstr "circulation.pref#SuspensionsCalendar# कैलेंडर का उपयोग करें"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
-msgstr "circulation.pref#SuspensionsCalendar# पुस्तकालय बंद होने के दिनों में शामिल नहीं है."
+msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
+msgstr ""
+"circulation.pref#SuspensionsCalendar# निलंबन समाप्ति के लिए अवधि की गणना करते"
+" समय."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
@@ -4518,16 +4543,16 @@ msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the 
 msgstr "circulation.pref # Koha व्यवस्थापक ईमेल पते पर एक ईमेल भेज emailLibrarianWhenHoldIsPlaced # जब भी एक पकड़ अनुरोध रखा गया है।"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
-msgstr "circulation.pref # finesCalendar # गणना अतिदेय दिनों के आधार पर जुर्माना"
+msgid "circulation.pref#finesCalendar# Ignore the calendar"
+msgstr "circulation.pref#finesCalendar# कैलेंडर पर ध्यान न दें"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# directly."
-msgstr "circulation.pref # finesCalendar सीधे #।"
+msgid "circulation.pref#finesCalendar# Use the calendar"
+msgstr "circulation.pref#finesCalendar# कैलेंडर का उपयोग करें"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# not including days the library is closed."
-msgstr "दिन पुस्तकालय बंद कर दिया है सहित नहीं circulation.pref # finesCalendar #।"
+msgid "circulation.pref#finesCalendar# when calculating the period for fines."
+msgstr "circulation.pref#finesCalendar# जुर्माना की अवधि की गणना करते समय."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
@@ -4658,24 +4683,31 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
 msgstr "circulation.pref # todaysIssuesDefaultSortOrder # नवीनतम जल्द से जल्द करने के लिए"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# Calculate the due date using"
-msgstr "circulation.pref # useDaysMode # का उपयोग नियत तारीख की गणना"
+msgid "circulation.pref#useDaysMode# Ignore the calendar"
+msgstr "circulation.pref#useDaysMode# कैलेंडर पर ध्यान न दें"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# circulation rules only."
-msgstr "circulation.pref # useDaysMode # परिसंचरण नियम ही।"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
+msgstr ""
+"circulation.pref#useDaysMode# अगले खुले दिन के लिए नियत तारीख को धकेलने के लि"
+"ए कैलेंडर का उपयोग करें"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
-msgstr "circulation.pref # useDaysMode # कैलेंडर अगले दिन खुला होने के कारण तिथि करने के लिए धक्का"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgstr ""
+"circulation.pref#useDaysMode# साप्ताहिक ऋण अवधि के लिए अगले खुले मिलान वाले "
+"दिन, या अगले खुले दिन अन्यथा के लिए नियत तारीख को धकेलने के लिए कैलेंडर का "
+"उपयोग करें"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
-msgstr "circulation.pref#useDaysMode# साप्ताहिक ऋण अवधि के लिए अगले खुले मिलान कार्यदिवस, या अगले खुले दिन अन्यथा के लिए नियत तारीख को धकेलने का कैलेंडर"
+msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
+msgstr ""
+"circulation.pref#useDaysMode# लाइब्रेरी बंद होने के दिनों को छोड़ने के लिए "
+"कैलेंडर का उपयोग करें"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
-msgstr "circulation.pref # useDaysMode # कैलेंडर सभी दिन पुस्तकालय बंद कर दिया है छोड़ करने के लिए।"
+msgid "circulation.pref#useDaysMode# when calculating the date due."
+msgstr "circulation.pref#useDaysMode# देय तिथि की गणना करते समय."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Don't use"
@@ -4778,10 +4810,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr "enhanced_content.pref## <strong> नोट: </strong> आप केवल नीचे से कवर छवियों का एक स्रोत चुन सकते हैं, अन्यथा Koha चयनित सभी स्रोतों से छवियों को दिखा देंगे।"
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr "enhanced_content.pref## के लिए<a href=\"https://www.adlibris.com/se\">Adlibris</a> कवर सेवा."
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr "enhanced_content.pref#AdlibrisCoversEnabled# दिखाओ मत"
 
@@ -4792,6 +4820,16 @@ msgstr "enhanced_content.pref#AdlibrisCoversEnabled# दिखाओ"
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 msgstr "enhanced_content.pref#AdlibrisCoversEnabled# ओपेक परिणाम और स्वीडिश रिटेलर से विस्तार सूची में छवियों पर <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr "enhanced_content.pref#AdlibrisCoversURL# आधार URL का उपयोग करें:"
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
+msgstr ""
+"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\""
+"https://www.adlibris.com/se\">Adlibris</a> कवर सेवा."
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7993,8 +8031,10 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr "patrons.pref#FallbackToSMSIfNoEmail# सक्षम"
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
-msgstr "patrons.pref#FallbackToSMSIfNoEmail# यदि कोई संरक्षक ईमेल परिभाषित नहीं है, तो एसएमएस द्वारा संदेश भेजें"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
+msgstr ""
+"patrons.pref#FallbackToSMSIfNoEmail# यदि कोई संरक्षक ईमेल परिभाषित नहीं है, "
+"तो एसएमएस द्वारा खरीद सुझाव संदेश भेजें."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -9567,4 +9607,3 @@ msgstr "web_services.pref # SvcMaxReportRows # केवल वापसी"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "web_services.pref # SvcMaxReportRows # एक रिपोर्ट रिपोर्टों वेब सेवा के माध्यम से अनुरोध किया की पंक्तियों।"
-

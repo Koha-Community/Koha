@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2019-12-21 08:38+0000\n"
+"PO-Revision-Date: 2020-01-16 10:48+0000\n"
 "Last-Translator: Anthony MAO <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1576917522.639464\n"
+"X-POOTLE-MTIME: 1579171705.559781\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2629,18 +2629,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr "預約的讀者已經借出一筆或多筆該書目記錄的館藏。"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr "允許"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr "不允許"
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr "借出被它人預約保留的館藏。若允許則不出現 RESERVE_WAITING 與 RESERVED 警示。可以自助借出該等館藏。若設定為 \"不允許\"，則標記為 \"不可得\"。"
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr "允許"
 
@@ -2651,6 +2639,26 @@ msgstr "不允許"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
 msgstr "在 SCO 模組中供出已被其他人預約的館藏。若允許，則不會產生 RESERVE_WAITING 和 RESERVED 警示。允許自助借出該等館藏。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr "允許"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr "不允許"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr "若允許，則不產生 RESERVE_WAITING 與 RESERVED 警示。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr "此設定允許自助借出該等館藏。若把它設為 \"不允許\"，使用預約佇列館藏時，將標示為 \"不可得\"。"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
+msgstr "經由 SIP 借出訊息將保留的館藏借出。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3129,8 +3137,8 @@ msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
 msgstr "代表宣稱已還入"
 
 # Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return cliams if the patron has claimed the return of more than"
-msgstr "讀者宣稱已還入的數量超過指定範圍時，對館員提出警示"
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
+msgstr "警示館員，該讀者宣稱已還入的館藏超過"
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
@@ -3245,16 +3253,16 @@ msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on mul
 msgstr "從搜尋結果預約多筆書目紀錄的功能"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
-msgstr "允許"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
+msgstr "略過行事曆"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Closed days to be taken into account in reserves max pickup delay."
-msgstr "閉館日不許入預約到館的提取期限。"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
+msgstr "使用行事曆"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Don't allow"
-msgstr "不允許"
+msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
+msgstr "計算保留到館提取的日數。"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4210,16 +4218,16 @@ msgid "circulation.pref#SuspendHoldsOpac# holds to be suspended from the OPAC."
 msgstr "暫停從 OPAC 預約的功能。"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
-msgstr "根據逾期天數計算停權"
+msgid "circulation.pref#SuspensionsCalendar# Ignore the calendar"
+msgstr "略過行事曆"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# directly."
-msgstr "直接。"
+msgid "circulation.pref#SuspensionsCalendar# Use the calendar"
+msgstr "使用行事曆"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
-msgstr "不納入閉館日。"
+msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
+msgstr "計算暫停到期日。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
@@ -4518,16 +4526,16 @@ msgid "circulation.pref#emailLibrarianWhenHoldIsPlaced# sending an email to the 
 msgstr "送出電子郵件，告知 Koha 管理者，有人預約館藏。"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# Calculate fines based on days overdue"
-msgstr "依照逾期日數，計算罰款"
+msgid "circulation.pref#finesCalendar# Ignore the calendar"
+msgstr "略過行事曆"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# directly."
-msgstr "直接地。"
+msgid "circulation.pref#finesCalendar# Use the calendar"
+msgstr "使用行事曆"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesCalendar# not including days the library is closed."
-msgstr "不包括閉館日。"
+msgid "circulation.pref#finesCalendar# when calculating the period for fines."
+msgstr "計算罰款的日數。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
@@ -4658,24 +4666,24 @@ msgid "circulation.pref#todaysIssuesDefaultSortOrder# latest to earliest"
 msgstr "由近至遠"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# Calculate the due date using"
-msgstr "計算到期日的方法"
+msgid "circulation.pref#useDaysMode# Ignore the calendar"
+msgstr "略過行事曆"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# circulation rules only."
-msgstr "祗限流通規則。"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
+msgstr "依行事曆計算下個開館日為到期日"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open day"
-msgstr "遇閉館日，順延至下個開館日"
+msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
+msgstr "依行事曆計算以週為基礎的到期日，為下個工作日或下個開館日"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
-msgstr "以週為借期單位時，依行事曆設定，將到期日定為下個開館工作日"
+msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
+msgstr "依行事曆略過閉館日"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#useDaysMode# the calendar to skip all days the library is closed."
-msgstr "不含閉館日。"
+msgid "circulation.pref#useDaysMode# when calculating the date due."
+msgstr "計算到期日。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#useDefaultReplacementCost# Don't use"
@@ -4778,10 +4786,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr "<strong>附註：</strong> 您祗能從以下清單選擇封面的來源，否則 Koha 將顯示所有選定來源的封面。"
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr "供 <a href=\"https://www.adlibris.com/se\">Adlibris</a> 封面服務。"
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr "不顯示"
 
@@ -4792,6 +4796,14 @@ msgstr "顯示"
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 msgstr "OPAC 搜尋結果與詳情頁面的封面來自瑞典廠商 <a href=\"https://www.adlibris.com/se\">Adlibris</a>。"
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr "使用 URL："
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
+msgstr "採用 <a href=\"https://www.adlibris.com/se\">Adlibris</a> 封面服務。"
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -6634,23 +6646,23 @@ msgstr "圖書館或分館"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Note"
-msgstr ""
+msgstr "說明"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Patron reason"
-msgstr ""
+msgstr "讀者的理由"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Publication place"
-msgstr ""
+msgstr "出版地"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Publisher name"
-msgstr ""
+msgstr "出版者"
 
 # OPAC > Policy
 msgid "opac.pref#OPACSuggestionMandatoryFields# Title"
-msgstr ""
+msgstr "題名"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACURLOpenInNewWindow# When patrons click on a link to another website from your OPAC (like Amazon or OCLC),"
@@ -6758,19 +6770,19 @@ msgstr "以預設的樣式表(空白即停用)取代既有的設定。輸入檔�
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Item types"
-msgstr ""
+msgstr "館藏類型"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Language"
-msgstr ""
+msgstr "語文"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Location and availability"
-msgstr ""
+msgstr "位置及可得性"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Publication date"
-msgstr ""
+msgstr "出版年"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Show search options for the expanded view"
@@ -6778,27 +6790,27 @@ msgstr "顯示詳細搜尋選項"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Sorting"
-msgstr ""
+msgstr "排序"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchMoreOptions# Subtypes"
-msgstr ""
+msgstr "次類型"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Item types"
-msgstr ""
+msgstr "館藏類型"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Language"
-msgstr ""
+msgstr "語言"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Location and availability"
-msgstr ""
+msgstr "位置與可得性"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Publication date"
-msgstr ""
+msgstr "出版年"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Show search options"
@@ -6806,11 +6818,11 @@ msgstr "顯示搜尋選項"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Sorting"
-msgstr ""
+msgstr "排序"
 
 # OPAC > Advanced Search Options
 msgid "opac.pref#OpacAdvSearchOptions# Subtypes"
-msgstr ""
+msgstr "次類型"
 
 # OPAC > Policy
 msgid "opac.pref#OpacAllowPublicListCreation# Allow"
@@ -6898,31 +6910,31 @@ msgstr "以下列 HTML 取代 OPAC 上方的搜尋盒："
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# BibTeX"
-msgstr ""
+msgstr "BibTeX"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Dublin Core"
-msgstr ""
+msgstr "Dublin Core"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# ISBD"
-msgstr ""
+msgstr "ISBD"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# MARC-8 encoded MARC"
-msgstr ""
+msgstr "MARC-8 encoded MARC"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# MARCXML"
-msgstr ""
+msgstr "MARCXML"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# MODS"
-msgstr ""
+msgstr "MODS"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# RIS"
-msgstr ""
+msgstr "RIS"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Select export options that should be available from OPAC detail page:"
@@ -6930,11 +6942,11 @@ msgstr "匯出的選項應位於 OPAC 詳情頁面："
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC"
-msgstr ""
+msgstr "Unicode/UTF-8 encoded MARC"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacExportOptions# Unicode/UTF-8 encoded MARC without local use -9xx, x9x, xx9- fields and subfields"
-msgstr ""
+msgstr "Unicode/UTF-8 編碼的 MARC 不含在地使用的 -9xx, x9x, xx9- 欄位及分欄"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacFavicon# Use the image at"
@@ -7606,15 +7618,15 @@ msgstr "在 OPAC 評論旁的評論者圖像。可以從 www.libravatar.org 以�
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Email"
-msgstr ""
+msgstr "電子郵件"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Facebook"
-msgstr ""
+msgstr "臉書"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# LinkedIn"
-msgstr ""
+msgstr "領英"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Show"
@@ -7622,7 +7634,7 @@ msgstr "顯示"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# Twitter"
-msgstr ""
+msgstr "推特"
 
 # OPAC > Features
 msgid "opac.pref#SocialNetworks# social network links in opac detail pages"
@@ -7993,8 +8005,8 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr "啟用"
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
-msgstr "若沒有讀者的電子郵件則送出簡訊"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
+msgstr "無電子郵件的讀者，以 SMS 送出採訪建議。"
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -9374,7 +9386,7 @@ msgstr "自動與 Mana KB 共享的欄位"
 
 # Web services > Mana KB
 msgid "web_services.pref#AutoShareWithMana# Subscriptions"
-msgstr ""
+msgstr "訂閱"
 
 # Web services > ILS-DI
 msgid "web_services.pref#ILS-DI# Disable"
