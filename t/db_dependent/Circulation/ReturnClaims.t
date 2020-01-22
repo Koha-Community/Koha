@@ -46,16 +46,15 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new();
-Koha::IssuingRules->search->delete;
-my $rule = Koha::IssuingRule->new(
+Koha::CirculationRules->set_rule(
     {
-        categorycode => '*',
-        itemtype     => '*',
-        branchcode   => '*',
-        issuelength  => 1,
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => undef,
+        rule_name    => 'issuelength',
+        rule_value   => 1
     }
 );
-$rule->store();
 
 $branch = $builder->build( { source => 'Branch' } )->{branchcode};
 

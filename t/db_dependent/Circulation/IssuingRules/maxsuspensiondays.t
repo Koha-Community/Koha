@@ -109,14 +109,12 @@ is(
 DelDebarment( $debarments->[0]->{borrower_debarment_id} );
 
 subtest "suspension_chargeperiod" => sub {
-    Koha::IssuingRules->search->delete;
-    $builder->build(
+    Koha::CirculationRules->set_rules(
         {
-            source => 'Issuingrule',
-            value  => {
-                categorycode => '*',
-                itemtype     => '*',
-                branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
                 firstremind  => 0,
                 finedays     => 7,
                 lengthunit   => 'days',
@@ -137,14 +135,12 @@ subtest "suspension_chargeperiod" => sub {
 };
 
 subtest "maxsuspensiondays" => sub {
-    Koha::IssuingRules->search->delete;
-    $builder->build(
+    Koha::CirculationRules->set_rules(
         {
-            source => 'Issuingrule',
-            value  => {
-                categorycode => '*',
-                itemtype     => '*',
-                branchcode   => '*',
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
                 firstremind  => 0,
                 finedays     => 15,
                 lengthunit   => 'days',

@@ -364,15 +364,17 @@ subtest 'accumulate_rentalcharge tests' => sub {
     );
 
     # Hourly tests
-    my $issuingrule = Koha::IssuingRules->get_effective_issuing_rule(
-        {
+    Koha::CirculationRules->set_rules({
             categorycode => $patron->categorycode,
             itemtype     => $itemtype->id,
-            branchcode   => $library->id
+            branchcode   => $library->id,
+            rules => {
+                lengthunit => 'hours',
+            }
         }
+
     );
-    $issuingrule->lengthunit('hours');
-    $issuingrule->store();
+
     $itemtype->rentalcharge_hourly("0.25");
     $itemtype->store();
 

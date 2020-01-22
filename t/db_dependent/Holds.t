@@ -458,7 +458,6 @@ subtest 'Test max_holds per library/patron category' => sub {
     plan tests => 6;
 
     $dbh->do('DELETE FROM reserves');
-    $dbh->do('DELETE FROM circulation_rules');
 
     $biblio = $builder->build_sample_biblio;
     ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
@@ -586,8 +585,6 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
 
     Koha::Holds->search->delete;
     $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM issuingrules');
-    $dbh->do('DELETE FROM circulation_rules');
     Koha::Items->search->delete;
     Koha::Biblios->search->delete;
 
@@ -753,14 +750,15 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
     # Cleanup database
     Koha::Holds->search->delete;
     $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM issuingrules');
-    $dbh->do(
-        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)},
-        {},
-        '*', '*', '*', 25
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'reservesallowed',
+            rule_value   => 25,
+        }
     );
-    $dbh->do('DELETE FROM circulation_rules');
 
     Koha::Items->search->delete;
     Koha::Biblios->search->delete;
@@ -818,7 +816,6 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
         {
             branchcode => undef,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'any',
@@ -841,15 +838,11 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
         'Patron cannot place hold because patron\'s home library is not part of hold group'
     );
 
-    # Cleanup default_cirt_rules
-    $dbh->do('DELETE FROM circulation_rules');
-
     # Insert default circ rule to "any" for library 2
     Koha::CirculationRules->set_rules(
         {
             branchcode => $library2->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
@@ -870,7 +863,6 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
         {
             branchcode => $library2->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'any',
@@ -886,15 +878,11 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
         'Patron cannot place hold if holdallowed is set to "hold group" for library 2'
     );
 
-    # Cleanup default_branch_cirt_rules
-    $dbh->do('DELETE FROM circulation_rules');
-
     # Insert default item rule to "any" for itemtype 2
     Koha::CirculationRules->set_rules(
         {
-            branchcode => undef,
+            branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
@@ -913,9 +901,8 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
     # Update default item rule to "hold group" for itemtype 2
     Koha::CirculationRules->set_rules(
         {
-            branchcode => undef,
+            branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'any',
@@ -931,15 +918,11 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
         'Patron cannot place hold if holdallowed is set to "hold group" for itemtype 2'
     );
 
-    # Cleanup default_branch_item_rules
-    $dbh->do('DELETE FROM circulation_rules');
-
     # Insert branch item rule to "any" for itemtype 2 and library 2
     Koha::CirculationRules->set_rules(
         {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
@@ -960,7 +943,6 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
         {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'any',
@@ -988,14 +970,15 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
     # Cleanup database
     Koha::Holds->search->delete;
     $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM issuingrules');
-    $dbh->do(
-        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)},
-        {},
-        '*', '*', '*', 25
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rule_name    => 'reservesallowed',
+            rule_value   => 25,
+        }
     );
-    $dbh->do('DELETE FROM circulation_rules');
 
     Koha::Items->search->delete;
     Koha::Biblios->search->delete;
@@ -1053,7 +1036,6 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
         {
             branchcode => undef,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'holdgroup',
@@ -1076,15 +1058,11 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
         'Patron cannot place hold because pickup location is not part of hold group'
     );
 
-    # Cleanup default_cirt_rules
-    $dbh->do('DELETE FROM circulation_rules');
-
     # Insert default circ rule to "any" for library 2
     Koha::CirculationRules->set_rules(
         {
             branchcode => $library2->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
@@ -1105,7 +1083,6 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
         {
             branchcode => $library2->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'holdgroup',
@@ -1121,15 +1098,11 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
         'Patron cannot place hold if hold_fulfillment_policy is set to "hold group" for library 2'
     );
 
-    # Cleanup default_branch_cirt_rules
-    $dbh->do('DELETE FROM circulation_rules');
-
     # Insert default item rule to "any" for itemtype 2
     Koha::CirculationRules->set_rules(
         {
-            branchcode => undef,
+            branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
@@ -1148,9 +1121,8 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
     # Update default item rule to "hold group" for itemtype 2
     Koha::CirculationRules->set_rules(
         {
-            branchcode => undef,
+            branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'holdgroup',
@@ -1166,15 +1138,11 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
         'Patron cannot place hold if hold_fulfillment_policy is set to "hold group" for itemtype 2'
     );
 
-    # Cleanup default_branch_item_rules
-    $dbh->do('DELETE FROM circulation_rules');
-
     # Insert branch item rule to "any" for itemtype 2 and library 2
     Koha::CirculationRules->set_rules(
         {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
@@ -1195,7 +1163,6 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
         {
             branchcode => $library2->branchcode,
             itemtype   => $itemtype2->itemtype,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'holdgroup',

@@ -157,22 +157,27 @@ $calendar->delete_holiday(
 
 # Now we test it does the right thing if the loan and renewal periods
 # are a multiple of 7 days
-my $dayweek_categorycode = 'C';
+my $dayweek_categorycode = 'K';
 my $dayweek_itemtype = 'MX';
 my $dayweek_branchcode = 'FPL';
 my $dayweek_issuelength = 14;
 my $dayweek_renewalperiod = 7;
 my $dayweek_lengthunit = 'days';
 
-Koha::Database->schema->resultset('Issuingrule')->create({
-  categorycode  => $dayweek_categorycode,
-  itemtype      => $dayweek_itemtype,
-  branchcode    => $dayweek_branchcode,
-  issuelength   => $dayweek_issuelength,
-  renewalperiod => $dayweek_renewalperiod,
-  lengthunit    => $dayweek_lengthunit,
-});
-my $dayweek_borrower = {categorycode => 'C', dateexpiry => $dateexpiry};
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => $dayweek_categorycode,
+        itemtype     => $dayweek_itemtype,
+        branchcode   => $dayweek_branchcode,
+        rules        => {
+            issuelength   => $dayweek_issuelength,
+            renewalperiod => $dayweek_renewalperiod,
+            lengthunit    => $dayweek_lengthunit,
+        }
+    }
+);
+
+my $dayweek_borrower = {categorycode => 'K', dateexpiry => $dateexpiry};
 
 # For issues...
 $start_date = DateTime->new({year => 2013, month => 2, day => 9});

@@ -3358,7 +3358,7 @@ subtest 'ProcessOfflinePayment() tests' => sub {
 };
 
 subtest 'Incremented fee tests' => sub {
-    plan tests => 20;
+    plan tests => 19;
 
     my $dt = dt_from_string();
     Time::Fake->offset( $dt->epoch );
@@ -3486,16 +3486,15 @@ subtest 'Incremented fee tests' => sub {
         'Rental charge reset and retreived correctly' );
 
     # Hourly
-    my $issuingrule = Koha::IssuingRules->get_effective_issuing_rule(
+    Koha::CirculationRules->set_rule(
         {
             categorycode => $patron->categorycode,
             itemtype     => $itemtype->id,
-            branchcode   => $library->id
+            branchcode   => $library->id,
+            rule_name    => 'lengthunit',
+            rule_value   => 'hours',
         }
     );
-    $issuingrule->lengthunit('hours')->store();
-    is( $issuingrule->lengthunit, 'hours',
-        'Issuingrule updated and retrieved correctly' );
 
     $itemtype->rentalcharge_hourly('0.25')->store();
     is( $itemtype->rentalcharge_hourly,
@@ -3545,7 +3544,6 @@ subtest 'Incremented fee tests' => sub {
         "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed, for renewal (312h - 168h - 0h * 0.25u)" );
     $accountline->delete();
     $issue->delete();
-    $issuingrule->lengthunit('days')->store();
     Time::Fake->reset;
 };
 

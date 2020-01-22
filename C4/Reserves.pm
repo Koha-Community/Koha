@@ -379,8 +379,8 @@ sub CanItemBeReserved {
     # we retrieve rights
     if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->effective_itemtype, $branchcode ) ) {
         $ruleitemtype     = $rights->{itemtype};
-        $allowedreserves  = $rights->{reservesallowed};
-        $holds_per_record = $rights->{holds_per_record};
+        $allowedreserves  = $rights->{reservesallowed} // $allowedreserves;
+        $holds_per_record = $rights->{holds_per_record} // $holds_per_record;
         $holds_per_day    = $rights->{holds_per_day};
     }
     else {
@@ -2216,13 +2216,14 @@ sub GetHoldRule {
             }
         }
     );
-    return unless $reservesallowed;;
 
     my $rules;
-    $rules->{reservesallowed} = $reservesallowed->rule_value;
-    $rules->{itemtype}        = $reservesallowed->itemtype;
-    $rules->{categorycode}    = $reservesallowed->categorycode;
-    $rules->{branchcode}      = $reservesallowed->branchcode;
+    if ( $reservesallowed ) {
+        $rules->{reservesallowed} = $reservesallowed->rule_value;
+        $rules->{itemtype}        = $reservesallowed->itemtype;
+        $rules->{categorycode}    = $reservesallowed->categorycode;
+        $rules->{branchcode}      = $reservesallowed->branchcode;
+    }
 
     my $holds_per_x_rules = Koha::CirculationRules->get_effective_rules(
         {

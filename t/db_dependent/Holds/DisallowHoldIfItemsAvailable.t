@@ -239,7 +239,6 @@ sub set_holdallowed_rule {
     Koha::CirculationRules->set_rules(
         {
             branchcode   => $branchcode || undef,
-            categorycode => undef,
             itemtype     => undef,
             rules        => {
                 holdallowed              => $holdallowed,
