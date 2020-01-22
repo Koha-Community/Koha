@@ -470,7 +470,7 @@
     <ul class="ui-tabs-nav">
         [% FOREACH suggestion IN suggestions %]
                 <li>
-            <a href="#tab_[% loop.count %]">
+            <a href="#tab_[% loop.count | uri %]">
             [% IF ( suggestion.suggestiontypelabel ) %]
                 [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending
                 [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]Accepted
@@ -494,12 +494,12 @@
 [% END %]
 
 [% FOREACH suggestion IN suggestions %]
-<div id="tab_[% loop.count %]">
-<form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#tab_[% loop.count %]">
+<div id="tab_[% loop.count | html %]">
+<form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#tab_[% loop.count | html %]">
 
 [% IF ( suggestion.suggestions_loop ) %]
 <p><a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a></p>
-    <table id="table_[% loop.count %]" class="sorted">
+    <table id="table_[% loop.count | html %]" class="sorted">
         <thead>
             <tr>
                 <th class="NoSort noExport">&nbsp;</th>
@@ -645,7 +645,7 @@
 
             <div class="col-sm-4">
                 <fieldset>
-                    <label for="delete_[% loop.count %]">Delete selected</label>
+                    <label for="delete_[% loop.count | html %]">Delete selected</label>
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="delete"/>Delete</button></fieldset>
                 </fieldset>
@@ -837,7 +837,7 @@
         [% INCLUDE 'columns_settings.inc' %]
         [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
                 $('#suggestiontabs').tabs();
 
