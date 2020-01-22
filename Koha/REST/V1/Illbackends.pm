@@ -41,7 +41,7 @@ sub list {
     my $backends = $config->available_backends;
 
     my @data;
-    foreach $b ( @$backends ) {
+    foreach my $b ( @$backends ) {
         my $backend = Koha::Illrequest->new->load_backend( $b );
         push @data, {
             ill_backend_id => $b,
