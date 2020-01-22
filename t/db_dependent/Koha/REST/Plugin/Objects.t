@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 use Koha::Cities;
+use Koha::Holds;
 
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
@@ -58,6 +59,16 @@ get '/cities_sorted' => sub {
     $c->render( status => 200, json => $cities );
 };
 
+get '/patrons/:patron_id/holds' => sub {
+    my $c = shift;
+    my $params = $c->req->params->to_hash;
+    $params->{patron_id} = $c->stash("patron_id");
+    $c->validation->output($params);
+    my $holds_set = Koha::Holds->new;
+    my $holds     = $c->objects->search( $holds_set );
+    $c->render( status => 200, json => {count => scalar(@$holds)} );
+};
+
 sub to_model {
     my $params = shift;
 
@@ -79,15 +90,13 @@ sub to_api {
 }
 
 # The tests
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
 use Koha::Database;
 
-my $schema = Koha::Database->new()->schema();
-
-
+my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
@@ -273,4 +282,22 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
       ->json_is('/1/nombre' => 'A');
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest 'objects.search helper, with path parameters and _match' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::Holds->search()->delete;
+
+    $builder->build_object({class=>"Koha::Holds", value => {borrowernumber => 10 }});
+
+    $t->get_ok('/patrons/1/holds?_match=exact')
+      ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=exact');
+
+    $t->get_ok('/patrons/1/holds?_match=contains')
+      ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=contains');
+
+    $schema->storage->txn_rollback;
+};
