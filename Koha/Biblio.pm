@@ -100,18 +100,18 @@ sub orders {
 
 =head3 active_orders_count
 
-my $orders_count = $biblio->active_orders_count();
+my $active_orders = $biblio->active_orders();
 
-Returns the number of active acquisition orders related to this biblio.
+Returns the active acquisition orders related to this biblio.
 An order is considered active when it is not cancelled (i.e. when datecancellation
 is not undef).
 
 =cut
 
-sub active_orders_count {
+sub active_orders {
     my ( $self ) = @_;
 
-    return $self->orders->search({ datecancellationprinted => undef })->count;
+    return $self->orders->search({ datecancellationprinted => undef });
 }
 
 =head3 can_article_request
@@ -411,20 +411,6 @@ sub items {
     return Koha::Items->_new_from_dbic( $items_rs );
 }
 
-=head3 items_count
-
-my $items_count = $biblio->items();
-
-Returns the count of the the related Koha::Items object for this biblio
-
-=cut
-
-sub items_count {
-    my ($self) = @_;
-
-    return $self->_result->items->count;
-}
-
 =head3 itemtype
 
 my $itemtype = $biblio->itemtype();
@@ -515,22 +501,6 @@ sub subscriptions {
     $self->{_subscriptions} ||= Koha::Subscriptions->search( { biblionumber => $self->biblionumber } );
 
     return $self->{_subscriptions};
-}
-
-=head3 subscriptions_count
-
-my $subscriptions_count = $self->subscriptions_count
-
-Returns the count of the the related Koha::Subscriptions object for this biblio
-
-IMPORTANT: this method is temporary and should not be used.
-
-=cut
-
-sub subscriptions_count {
-    my ($self) = @_;
-
-    return $self->subscriptions->count;
 }
 
 =head3 has_items_waiting_or_intransit

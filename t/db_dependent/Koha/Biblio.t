@@ -92,15 +92,15 @@ subtest 'hidden_in_opac() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'items() and items_count() tests' => sub {
+subtest 'items() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
 
-    is( $biblio->items_count, 0, 'No items, count is 0' );
+    is( $biblio->items->count, 0, 'No items, count is 0' );
 
     my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
@@ -108,7 +108,6 @@ subtest 'items() and items_count() tests' => sub {
     my $items = $biblio->items;
     is( ref($items), 'Koha::Items', 'Returns a Koha::Items resultset' );
     is( $items->count, 2, 'Two items in resultset' );
-    is( $biblio->items_count, $items->count, 'items_count returns the expected value' );
 
     my @items = $biblio->items->as_list;
     is( scalar @items, 2, 'Same result, but in list context' );
@@ -496,19 +495,19 @@ subtest 'suggestions() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'orders() and active_orders_count() tests' => sub {
+subtest 'orders() and active_orders() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
     my $biblio = $builder->build_sample_biblio();
 
-    my $orders = $biblio->orders;
-    my $active_orders_count = $biblio->active_orders_count;
+    my $orders        = $biblio->orders;
+    my $active_orders = $biblio->active_orders;
 
     is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( $orders->count, $active_orders_count, '->orders_count returns the count for the resultset' );
+    is( $biblio->orders->count, $biblio->active_orders->count, '->orders_count returns the count for the resultset' );
 
     # Add a couple orders
     foreach (1..2) {
@@ -534,17 +533,18 @@ subtest 'orders() and active_orders_count() tests' => sub {
     );
 
     $orders = $biblio->orders;
-    $active_orders_count = $biblio->active_orders_count;
+    $active_orders = $biblio->active_orders;
 
     is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( $orders->count, $active_orders_count + 2, '->active_orders_count returns the rigt count' );
+    is( ref($active_orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
+    is( $orders->count, $active_orders->count + 2, '->active_orders_count returns the rigt count' );
 
     $schema->storage->txn_rollback;
 };
 
-subtest 'subscriptions() and subscriptions_count() tests' => sub {
+subtest 'subscriptions() tests' => sub {
 
-    plan tests => 6;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -555,7 +555,6 @@ subtest 'subscriptions() and subscriptions_count() tests' => sub {
         'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
     );
     is( $subscriptions->count, 0, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
-    is( $biblio->subscriptions_count, 0, 'subscriptions_count returns the correct number' );
 
     # Add two subscriptions
     foreach (1..2) {
@@ -572,7 +571,6 @@ subtest 'subscriptions() and subscriptions_count() tests' => sub {
         'Koha::Biblio->subscriptions should return a Koha::Subscriptions object'
     );
     is( $subscriptions->count, 2, 'Koha::Biblio->subscriptions should return the correct number of subscriptions');
-    is( $biblio->subscriptions_count, 2, 'subscriptions_count returns the correct number' );
 
     $schema->storage->txn_rollback;
 };

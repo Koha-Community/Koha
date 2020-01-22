@@ -241,7 +241,7 @@ unless( defined $invoice->{closedate} ) {
 
         my $biblionumber = $line{'biblionumber'};
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my $countbiblio = $biblio->active_orders_count;
+        my $countbiblio = $biblio->active_orders->count;
         my $ordernumber = $line{'ordernumber'};
         my $order_object = Koha::Acquisition::Orders->find($ordernumber);
         my $cnt_subscriptions = $biblio ? $biblio->subscriptions->count: 0;
