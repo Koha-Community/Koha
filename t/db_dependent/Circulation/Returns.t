@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
 use Test::Warn;
 
@@ -397,6 +397,46 @@ subtest 'BranchTransferLimitsType' => sub {
     $checkout = AddIssue( $patron->unblessed, $item->barcode );
     ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);
     is( $doreturn, 1, 'AddReturn should have checkin the item if BranchTransferLimitsType=itemtype');
+};
+
+subtest 'Backdated returns should reduce fine if needed' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference( "CalculateFinesOnReturn", 0 );
+
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $item = $builder->build_object(
+        {
+            class  => 'Koha::Items',
+            value  => {
+                biblionumber => $biblio->biblionumber,
+                notforloan => 0,
+                itemlost   => 0,
+                withdrawn  => 0,
+        }
+    }
+    );
+    my $patron = $builder->build_object({class => 'Koha::Patrons'});
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
+    my $fine = Koha::Account::Line->new({
+        issue_id => $checkout->id,
+        borrowernumber => $patron->id,
+        itemnumber => $item->id,
+        date => dt_from_string(),
+        amount => 100,
+        amountoutstanding => 100,
+        debit_type_code => 'OVERDUE',
+        status => 'UNRETURNED',
+        timestamp => dt_from_string(),
+        manager_id => undef,
+        interface => 'cli',
+        branchcode => $patron->branchcode,
+    })->store();
+
+    my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode, undef, undef, dt_from_string('1999-01-01') );
+
+    $fine->discard_changes;
+    is( $fine->amountoutstanding, '0.000000', "Fine was reduced correctly with a backdated return" );
 };
 
 $schema->storage->txn_rollback;
