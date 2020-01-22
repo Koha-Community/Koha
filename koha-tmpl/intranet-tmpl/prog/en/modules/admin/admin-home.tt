@@ -107,14 +107,14 @@
                 </dl>
             [% END %]
 
-            [% IF ( CAN_user_parameters_manage_accounts || ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_manage_cash_registers ) ) %]
+            [% IF ( CAN_user_parameters_manage_accounts || ( Koha.Preference('UseCashRegisters') && CAN_user_parameters_manage_cash_registers ) ) %]
                 <h3>Accounting</h3>
                 <dl>
                 [% IF ( CAN_user_parameters_manage_accounts ) %]
                     <dt><a href="/cgi-bin/koha/admin/debit_types.pl">Debit types</a></dt>
                     <dd>Define debit types.</dd>
                 [% END %]
-                [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_manage_cash_registers ) %]
+                [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_parameters_manage_cash_registers ) %]
                     <dt><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></dt>
                     <dd>Define cash registers</dd>
                 [% END %]
