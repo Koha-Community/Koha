@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Koha::Acquisition::Orders;
 use Koha::Cities;
+use Koha::Holds;
 
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
@@ -44,8 +45,18 @@ get '/orders' => sub {
     $c->render( status => 200, json => $orders );
 };
 
+get '/patrons/:patron_id/holds' => sub {
+    my $c = shift;
+    my $params = $c->req->params->to_hash;
+    $params->{patron_id} = $c->stash("patron_id");
+    $c->validation->output($params);
+    my $holds_set = Koha::Holds->new;
+    my $holds     = $c->objects->search( $holds_set );
+    $c->render( status => 200, json => {count => scalar(@$holds)} );
+};
+
 # The tests
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -173,6 +184,24 @@ subtest 'objects.search helper, embed' => sub {
 
     $t->get_ok('/orders?order_id=' . $order->ordernumber)
       ->json_is('/0',$order->to_api({ embed => ( { fund => {} } ) }));
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'objects.search helper, with path parameters and _match' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    Koha::Holds->search()->delete;
+
+    $builder->build_object({class=>"Koha::Holds", value => {borrowernumber => 10 }});
+
+    $t->get_ok('/patrons/1/holds?_match=exact')
+      ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=exact');
+
+    $t->get_ok('/patrons/1/holds?_match=contains')
+      ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=contains');
 
     $schema->storage->txn_rollback;
 };
