@@ -21,7 +21,7 @@ use Modern::Perl;
 require Exporter;
 use CGI qw ( -utf8 );
 use C4::Auth qw( get_template_and_user );
-use C4::Output qw( output_html_with_http_headers );
+use C4::Output qw( output_html_with_http_headers output_and_exit_if_error );
 use C4::Suggestions;
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Budgets qw( GetBudget GetBudgets GetBudgetHierarchy CanUserUseBudget );
@@ -133,6 +133,7 @@ my $branchfilter = $input->param('branchcode') || C4::Context->userenv->{'branch
 ##
 
 if ( $op =~ /save/i ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my @messages;
     my $biblio = MarcRecordFromNewSuggestion({
             title => $suggestion_only->{title},
@@ -250,7 +251,8 @@ elsif ($op=~/add/) {
     $op ='save';
 }
 elsif ($op=~/edit/) {
-    #Edit suggestion  
+    #Edit suggestion
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     $suggestion_ref=&GetSuggestion($$suggestion_ref{'suggestionid'});
     $suggestion_ref->{reasonsloop} = $reasonsloop;
     my $other_reason = 1;
@@ -265,7 +267,7 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "update_status" ) {
-
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $suggestion;
     # set accepted/rejected/managed informations if applicable
     # ie= if the librarian has chosen some action on the suggestions
@@ -302,6 +304,7 @@ elsif ($op eq "update_status" ) {
     }
     redirect_with_params($input);
 }elsif ($op eq "delete" ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     foreach my $delete_field (@editsuggestions) {
         &DelSuggestion( $borrowernumber, $delete_field,'intranet' );
     }
