@@ -70,6 +70,7 @@
 [% IF ( accounts ) %]
     <form action="/cgi-bin/koha/members/pay.pl" method="post" id="pay-fines-form">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+    [% INCLUDE 'csrf-token.inc' %]
 <p><span class="checkall"><a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a></span> | <span class="clearall"><a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a></span></p>
 <table id="finest">
 <thead>

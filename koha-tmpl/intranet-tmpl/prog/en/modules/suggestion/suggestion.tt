@@ -90,6 +90,8 @@
         [% END #/ WRAPPER breadcrumbs %]
     [% END #/ WRAPPER sub-header.inc %]
 
+    [% INCLUDE 'blocking_errors.inc' %]
+
     [% IF ( op == 'show' ) %]
         <div class="main container-fluid">
             <div class="row">
@@ -337,6 +339,7 @@
             [% END %]
 
             <form id="add_edit" action="suggestion.pl" method="post" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="redirect" id="redirect" value="[% redirect | html %]" />
                 <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber | html %]" />
                 [% IF ( suggestionid ) %]
@@ -709,6 +712,7 @@
                     [% FOREACH suggestion IN suggestions %]
                         [% WRAPPER tab_panel tabname= suggestion.suggestiontype %]
                             <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
+                            [% INCLUDE 'csrf-token.inc' %]
 
                                 [% IF suggestion.suggestions.size %]
                                     <p>
@@ -995,6 +999,7 @@
                 <div class="col-sm-2 col-sm-pull-10">
                     <aside>
                         <form name="suggestionfilter" action="suggestion.pl" method="get">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                             <fieldset class="brief">
                                 <h4>Organize by:</h4>

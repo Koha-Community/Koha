@@ -55,7 +55,7 @@
 
 [% INCLUDE 'members-toolbar.inc' %]
 <h1>Account for [% INCLUDE 'patron-title.inc' %]</h1>
-<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
+<form action="/cgi-bin/koha/members/boraccount.pl" method="get">[% INCLUDE 'csrf-token.inc' %]<input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" /></form>
 
 <!-- The manual invoice and credit buttons -->
 <div class="toptabs">
@@ -147,14 +147,14 @@
         [% END %]
         <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs details-action"><i class="fa fa-list"></i> Details</a>
         [% IF account.is_debit && account.amountoutstanding > 0 %]
-            <a class="btn btn-default btn-xs pay-action" href="/cgi-bin/koha/members/paycollect.pl?borrowernumber=[% account.borrowernumber | html %]&pay_individual=1&debit_type_code=[% account.debit_type_code | html %]&amount=[% account.amount | html %]&amountoutstanding=[% account.amountoutstanding | html %]&description=[% account.description | html %]&itemnumber=[% account.itemnumber | html %]&accountlines_id=[% account.accountlines_id | html %]"><i class="fa fa-money"></i> Pay</a>
+            <a class="btn btn-default btn-xs pay-action" href="/cgi-bin/koha/members/paycollect.pl?borrowernumber=[% account.borrowernumber | html %]&pay_individual=1&debit_type_code=[% account.debit_type_code | html %]&amount=[% account.amount | html %]&amountoutstanding=[% account.amountoutstanding | html %]&description=[% account.description | html %]&itemnumber=[% account.itemnumber | html %]&accountlines_id=[% account.accountlines_id | html %]&amp;csrf_token=[% csrf_token | html %]"><i class="fa fa-money"></i> Pay</a>
         [% END %]
         [% IF account.is_credit && account.status != 'VOID' %]
-          <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]" class="btn btn-default btn-xs void-action"><i class="fa fa-ban"></i> Void payment</a>
+          <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]&amp;csrf_token=[% csrf_token | uri %]" class="btn btn-default btn-xs void-action"><i class="fa fa-ban"></i> Void payment</a>
         [% END %]
         [% IF account.is_debit && account.amount == account.amountoutstanding && account.status != 'CANCELLED' && !(account.debit_type_code == 'PAYOUT') %]
           <form method="post" action="/cgi-bin/koha/members/cancel-charge.pl">
-            <input type="hidden" name="csrf_token" value="[% csrf_token | html %]">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]">
             <input type="hidden" name="accountlines_id" value="[% account.accountlines_id | html %]">
             <button type="submit" class="btn btn-default btn-xs cancel-action">
@@ -210,6 +210,7 @@
     <!-- Issue payout modal -->
     <div class="modal" id="issuePayoutModal" tabindex="-1" role="dialog" aria-labelledby="issuePayoutLabel">
         <form  id="payout_form" action="/cgi-bin/koha/members/boraccount.pl" method="get" enctype="multipart/form-data" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="payoutline">
             <input type="hidden" name="action" value="payout">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
@@ -264,6 +265,7 @@
     <!-- Issue refund modal -->
     <div class="modal" id="issueRefundModal" tabindex="-1" role="dialog" aria-labelledby="issueRefundLabel">
         <form  id="refund_form" action="/cgi-bin/koha/members/boraccount.pl" method="get" enctype="multipart/form-data" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="refundline">
             <input type="hidden" name="action" value="refund">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
@@ -321,6 +323,7 @@
     <!-- Apply discount modal -->
     <div class="modal" id="applyDiscountModal" tabindex="-1" role="dialog" aria-labelledby="applyDiscountLabel">
         <form  id="discount_form" action="/cgi-bin/koha/members/boraccount.pl" method="get" enctype="multipart/form-data" class="validated">
+            [% INCLUDE 'csrf-token.inc' %]
             <input type="hidden" name="accountlines_id" value="" id="discountline">
             <input type="hidden" name="action" value="discount">
             <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
