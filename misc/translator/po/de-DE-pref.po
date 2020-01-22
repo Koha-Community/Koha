@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2019-12-16 08:32+0000\n"
+"PO-Revision-Date: 2020-01-16 06:49+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1576485156.651015\n"
+"X-POOTLE-MTIME: 1579157388.891661\n"
 "X-Pootle-Path: /de/18.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2421,6 +2421,10 @@ msgstr "Benutzeroberfläche"
 msgid "circulation.pref Interlibrary Loans"
 msgstr "Fernleihe"
 
+# Circulation > Return Claims
+msgid "circulation.pref Return Claims"
+msgstr "Rückgabebehauptungen"
+
 # Circulation > Self Checkout
 msgid "circulation.pref Self Checkout"
 msgstr "Selbstbedienungsfunktionen"
@@ -2976,6 +2980,44 @@ msgstr "Deaktiviere"
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# the navigation sidebar on all Circulation pages."
 msgstr "die seitliche Navigationsleiste auf allen Ausleihe-Seiten."
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# ."
+msgstr "."
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims returned\","
+msgstr "Wenn eine Ausleihe als \"Angeblich zurückgegeben\" markiert wird,"
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# ask if a lost fee should be charged"
+msgstr "dann frage, ob eine Verlustgebühr gebucht werden soll"
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# charge a lost fee"
+msgstr "buche eine Verlustgebühr"
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
+msgstr "dann buche keine Verlustgebühr"
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+msgstr "Verwende den Normierten Wert LOST"
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
+msgstr "um Rückgabebehauptungen einzutragen"
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
+msgstr ""
+"Warne das Bibliothekspersonal, wenn ein Benutzer viele Rückgabebehauptungen "
+"hat, wenn mehr als "
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
+msgstr "Behauptungen vorliegen."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
@@ -4551,10 +4593,6 @@ msgid "enhanced_content.pref## <strong>NOTE:</strong> you can only choose one so
 msgstr " <strong>HINWEIS:</strong> Sie sollten nur eine der untenstehenden Quellen für Cover auswählen, da Koha sonst die Cover aus allen gewählten Quellen gemeinsam anzeigen wird."
 
 # Enhanced Content > Adlibris
-msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr "für den <a href=\"https://www.adlibris.com/se\">Adlibris</a>-Coverservice."
-
-# Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
 msgstr "Zeige keine"
 
@@ -4565,6 +4603,15 @@ msgstr "Zeige"
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 msgstr "Coverbilder vom schwedischen Händler <a href=\"https://www.adlibris.com/se\">Adlibris</a> in der Trefferliste und Detailansicht im OPAC."
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
+msgstr "Verwende die Basis-URL: "
+
+# Enhanced Content > Adlibris
+msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
+msgstr ""
+"für den <a href=\"https://www.adlibris.com/se\">Adlibris</a>-Coverservice"
 
 # Enhanced Content > Local Cover Images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7488,8 +7535,10 @@ msgid "patrons.pref#FallbackToSMSIfNoEmail# Enable"
 msgstr "Aktivieren"
 
 # Patrons > General
-msgid "patrons.pref#FallbackToSMSIfNoEmail# Send messages by SMS if no patron email is defined"
-msgstr "Benachrichtigungen via SMS schicken, wenn keine E-Mail-Adresse im Benutzerdatensatz hinterlegt ist"
+msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
+msgstr ""
+"Schicke Benachrichtigungen zu Anschaffungsvorschlägen als SMS, wenn keine E"
+"-Mail-Adresse definiert wurde."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -9030,4 +9079,3 @@ msgstr "Zeige maximal"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
-
