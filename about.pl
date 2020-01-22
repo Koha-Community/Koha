@@ -456,12 +456,9 @@ $template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 # Circ rule warnings
 {
     my $dbh   = C4::Context->dbh;
-    my $units = $dbh->selectall_arrayref(
-        q|SELECT branchcode, categorycode, itemtype, lengthunit FROM issuingrules WHERE lengthunit NOT IN ( 'days', 'hours' ); |,
-        { Slice => {} }
-    );
+    my $units = Koha::CirculationRules->search({ rule_name => 'lengthunit', rule_value => { -not_in => ['days', 'hours'] } });
 
-    if (@$units) {
+    if ( $units->count ) {
         $template->param(
             warnIssuingRules => 1,
             ir_units         => $units,
