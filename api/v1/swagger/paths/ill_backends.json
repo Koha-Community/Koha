@@ -52,5 +52,67 @@
                 }
             }
         }
+    },
+    "/ill_backends/{ill_backend_id}": {
+        "get": {
+            "x-mojo-to": "Illbackends#get",
+            "operationId": "getIllbackends",
+            "tags": ["illbackends"],
+            "parameters": [
+                {
+                    "name": "ill_backend_id",
+                    "in": "path",
+                    "description": "ILL backend id/name",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "An ILL backends",
+                    "schema": {
+                        "$ref": "../definitions.json#/ill_backend"
+                    }
+                },
+                "401": {
+                  "description": "Authentication required",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "403": {
+                  "description": "Access forbidden",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "404": {
+                  "description": "ILL backends not found",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "500": {
+                  "description": "Internal server error",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                },
+                "503": {
+                  "description": "Under maintenance",
+                  "schema": {
+                    "$ref": "../definitions.json#/error"
+                  }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "ill": "1"
+                }
+            }
+        }
     }
 }

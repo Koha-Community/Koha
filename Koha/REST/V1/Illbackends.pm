@@ -51,4 +51,32 @@ sub list {
     return $c->render( status => 200, openapi => \@data );
 }
 
+=head3 get
+
+Get one backend
+
+=cut
+
+sub get {
+    my $c = shift->openapi->valid_input;
+
+    my $backend_id = $c->validation->param('ill_backend_id');
+
+    return try {
+        my $backend = Koha::Illrequest->new->load_backend( $backend_id );
+        return $c->render(
+            status => 200,
+            openapi => {
+                ill_backend_id => $backend_id,
+                capabilities => $backend->capabilities
+            }
+        );
+    } catch {
+        return $c->render(
+            status => 404,
+            openapi => { error => "ILL backend does not exist" }
+        );
+    };
+}
+
 1;
