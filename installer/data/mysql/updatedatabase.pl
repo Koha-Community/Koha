@@ -20396,7 +20396,7 @@ if( CheckVersion( $DBversion ) ) {
     unless ( column_exists('account_debit_types', 'can_be_sold') ) {
         $dbh->do(
             qq{
-                ALTER IGNORE TABLE account_debit_types
+                ALTER TABLE account_debit_types
                 ADD
                   can_be_sold tinyint(1) DEFAULT 0
                 AFTER
