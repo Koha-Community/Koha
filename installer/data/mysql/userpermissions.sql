@@ -17,6 +17,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_patron_attributes', 'Manage extended patron attributes'),
    ( 3, 'manage_transfers', 'Manage library transfer limits and transport cost matrix'),
    ( 3, 'manage_item_circ_alerts', 'Manage item circulation alerts'),
+   ( 3, 'manage_cash_registers', 'Add and remove cash registers'),
    ( 3, 'manage_cities', 'Manage cities and towns'),
    ( 3, 'manage_marc_frameworks', 'Manage MARC bibliographic and authority frameworks'),
    ( 3, 'manage_classifications', 'Manage classification sources'),
@@ -120,6 +121,5 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (23, 'self_checkout_module', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    (24, 'manage_rotas', 'Create, edit and delete rotas'),
    (24, 'manage_rota_items', 'Add and remove items from rotas'),
-   (25, 'manage_cash_registers', 'Add and remove cash registers'),
    (25, 'takepayment', 'Access the point of sale page and take payments')
 ;
