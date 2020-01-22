@@ -80,7 +80,7 @@
                     <div class="col-xs-6">
                         <ul class="biglinks-list">
 
-                            [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_cash_management_takepayment ) %]
+                            [% IF ( Koha.Preference('EnablePointOfSale') && Koha.Preference('UseCashRegisters') && CAN_user_cash_management_takepayment ) %]
                             <li>
                                 <a class="icon_general icon_pos" href="/cgi-bin/koha/pos/pay.pl"><i class="fa fa-shopping-cart"></i>Point of sale</a>
                             </li>

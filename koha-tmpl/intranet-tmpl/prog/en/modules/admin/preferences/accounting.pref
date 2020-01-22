@@ -1,13 +1,6 @@
 Accounting:
     Policy:
         -
-            - pref: UseCashRegisters
-              default: no
-              choices:
-                yes: "Use"
-                no: "Don't use"
-            - " cash registers with the accounting system to track payments."
-        -
             - pref: AccountAutoReconcile
               choices:
                   yes: "Do"
@@ -19,3 +12,18 @@ Accounting:
                   yes: "Do"
                   no: "Don't"
             - automatically display a print dialog for a payment receipt when making a payment.
+    Features:
+        -
+            - pref: UseCashRegisters
+              default: no
+              choices:
+                yes: "Use"
+                no: "Don't use"
+            - " cash registers with the accounting system to track payments."
+        -
+            - pref: EnablePointOfSale
+              default: no
+              choices:
+                yes: "Enable"
+                no: "Disable"
+            - " the point of sale feature to allow anonymous transactions with the accounting system. (Requires UseCashRegisters)"
