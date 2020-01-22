@@ -37,7 +37,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $cgi,
         type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { admin => 'edit_cash_registers' },
+        flagsrequired   => { parameters => 'manage_cash_registers' },
     }
 );
 
