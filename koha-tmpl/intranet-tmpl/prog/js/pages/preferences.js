@@ -117,7 +117,8 @@ $( document ).ready( function () {
             var editor = CodeMirror.fromTextArea( document.getElementById( "pref_" + target ), {
                 lineNumbers: true,
                 mode: syntax,
-                lineWrapping: true
+                lineWrapping: true,
+                viewportMargin: Infinity,
             });
             editor.on("change", function(){
                 mark_modified.call( $("#pref_" + target )[0]);
