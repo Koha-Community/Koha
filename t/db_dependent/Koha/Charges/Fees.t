@@ -320,6 +320,16 @@ subtest 'accumulate_rentalcharge tests' => sub {
     );
 
     # Daily tests
+    Koha::CirculationRules->set_rules({
+            categorycode => $patron->categorycode,
+            itemtype     => $itemtype->id,
+            branchcode   => $library->id,
+            rules => {
+                lengthunit => 'days',
+            }
+        }
+    );
+
     $itemtype->rentalcharge_daily(1.00);
     $itemtype->store();
     is( $itemtype->rentalcharge_daily,
