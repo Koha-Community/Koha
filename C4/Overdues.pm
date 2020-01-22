@@ -250,7 +250,6 @@ sub CalcFine {
                 'fine',
                 'overduefinescap',
                 'cap_fine_to_replacement_price',
-                'chargename',
             ]
         }
     );
