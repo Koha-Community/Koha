@@ -26,6 +26,7 @@ my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
+        flagsrequired   => { cash_management => 'takepayment' },
     }
 );
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
