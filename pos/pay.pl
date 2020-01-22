@@ -16,14 +16,14 @@ use Koha::Charges::Sales;
 use Koha::Database;
 use Koha::Libraries;
 
-my $q         = CGI->new();
-my $sessionID = $q->cookie('CGISESSID');
+my $input     = CGI->new();
+my $sessionID = $input->cookie('CGISESSID');
 my $session   = get_session($sessionID);
 
 my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
     {
         template_name   => 'pos/pay.tt',
-        query           => $q,
+        query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
     }
@@ -31,7 +31,7 @@ my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 
 my $library_id = C4::Context->userenv->{'branch'};
-my $registerid = $q->param('registerid');
+my $registerid = $input->param('registerid');
 my $registers  = Koha::Cash::Registers->search(
     { branch   => $library_id, archived => 0 },
     { order_by => { '-asc' => 'name' } }
@@ -60,10 +60,10 @@ my $invoice_types =
     {}, $library_id );
 $template->param( invoice_types => $invoice_types );
 
-my $total_paid = $q->param('paid');
+my $total_paid = $input->param('paid');
 if ( $total_paid and $total_paid ne '0.00' ) {
     my $cash_register = Koha::Cash::Registers->find( { id => $registerid } );
-    my $payment_type  = $q->param('payment_type');
+    my $payment_type  = $input->param('payment_type');
     my $sale          = Koha::Charges::Sales->new(
         {
             cash_register => $cash_register,
@@ -71,7 +71,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
         }
     );
 
-    my @sales = $q->multi_param('sales');
+    my @sales = $input->multi_param('sales');
     for my $item (@sales) {
         $item = from_json $item;
         $sale->add_item($item);
@@ -81,11 +81,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
 
     $template->param(
         payment_id => $payment->accountlines_id,
-        collected  => scalar $q->param('collected'),
-        change     => scalar $q->param('change')
+        collected  => scalar $input->param('collected'),
+        change     => scalar $input->param('change')
     );
 }
 
-output_html_with_http_headers( $q, $cookie, $template->output );
+output_html_with_http_headers( $input, $cookie, $template->output );
 
 1;
