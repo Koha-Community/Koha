@@ -1,9 +1,9 @@
 <div id="navmenu">
     <div id="navmenulist">
-        [% IF ( CAN_user_cash_management_manage_cash_registers || CAN_user_parameters_manage_auth_values) %]
+        [% IF ( CAN_user_parameters_manage_cash_registers || CAN_user_parameters_manage_accounts) %]
         <h5>Administration</h5>
         <ul>
-            [% IF ( CAN_user_cash_management_manage_cash_registers ) %]
+            [% IF ( CAN_user_parameters_manage_cash_registers ) %]
                 <li><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></li>
             [% END %]
 
