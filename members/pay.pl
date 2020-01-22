@@ -77,22 +77,28 @@ $user ||= q{};
 our $branch = C4::Context->userenv->{'branch'};
 
 if ( $input->param('paycollect') ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     print $input->redirect(
         "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber&change_given=$change_given");
 }
 elsif ( $input->param('payselected') ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     payselected({ params => \@names });
 }
 elsif ( $input->param('writeoff_selected') ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     payselected({ params => \@names, type => 'WRITEOFF' });
 }
 elsif ( $input->param('woall') ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     writeoff_all(@names);
 }
 elsif ( $input->param('apply_credits') ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     apply_credits({ patron => $patron, cgi => $input });
 }
 elsif ( $input->param('confirm_writeoff') ) {
+    output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
     my $item_id         = $input->param('itemnumber');
     my $accountlines_id = $input->param('accountlines_id');
     my $amount          = $input->param('amountwrittenoff');
@@ -129,9 +135,11 @@ elsif ( $input->param('confirm_writeoff') ) {
 
 for (@names) {
     if (/^pay_indiv_(\d+)$/) {
+        output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
         my $line_no = $1;
         redirect_to_paycollect( 'pay_individual', $line_no );
     } elsif (/^wo_indiv_(\d+)$/) {
+        output_and_exit_if_error($input, $cookie, $template, { check => 'csrf_token' });
         my $line_no = $1;
         redirect_to_paycollect( 'writeoff_individual', $line_no );
     }

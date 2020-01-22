@@ -104,6 +104,8 @@
         </ol>
     </nav> <!-- /.breadcrumbs -->
 
+    [% INCLUDE 'blocking_errors.inc' %]
+
     [% IF ( op == 'show' ) %]
         <div class="main container-fluid">
             <div class="row">
@@ -345,6 +347,7 @@
             [% END %]
 
             <form id="add_edit" action="suggestion.pl" method="post" class="validated">
+                [% INCLUDE 'csrf-token.inc' %]
                 <input type="hidden" name="redirect" id="redirect" value="[% redirect | html %]" />
                 <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber | html %]" />
                 [% IF ( suggestionid ) %]
@@ -707,17 +710,16 @@
                                     <span>No name</span>
                                 [% END %]
                             [% END %]
-                            ([% suggestion.suggestions_loop.size | html %])
-                            </a>
-                            </li>
+                            ([% suggestion.suggestions_loop.size | html %])</a></li>
                         [% END # /FOREACH suggestion %]
                     </ul> <!-- /.ui-tabs-nav -->
                     <div class="tab-content">
             [% END # /UNLESS notabs %]
 
-                [% FOREACH suggestion IN suggestions %]
-                    <div id="[% suggestion.suggestiontype | html %]" role="tabpanel" class="tab-pane">
-                        <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
+            [% FOREACH suggestion IN suggestions %]
+                <div id="[% suggestion.suggestiontype | html %]">
+                    <form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
+                        [% INCLUDE 'csrf-token.inc' %]
 
                             [% IF ( suggestion.suggestions_loop ) %]
                                 <p>
@@ -991,6 +993,7 @@
                 <div class="col-sm-2 col-sm-pull-10">
                     <aside>
                         <form name="suggestionfilter" action="suggestion.pl" method="get">
+                            [% INCLUDE 'csrf-token.inc' %]
                             <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                             <fieldset class="brief">
                                 <ol style="display:block;">
