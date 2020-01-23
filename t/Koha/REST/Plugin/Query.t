@@ -32,13 +32,7 @@ get '/empty' => sub {
 
 get '/query' => sub {
     my $c     = shift;
-    my $input = {
-        _page     => 2,
-        _per_page => 3,
-        firstname => 'Manuel',
-        surname   => 'Cohen Arazi'
-    };
-    my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($input);
+    my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($c->req->params->to_hash);
     $c->render(
         json => {
             filtered_params => $filtered_params,
@@ -48,21 +42,17 @@ get '/query' => sub {
     );
 };
 
-get '/query_full' => sub {
+get '/query_full/:id/:subid' => sub {
     my $c     = shift;
-    my $input = {
-        _match    => 'exact',
-        _order_by => 'blah',
-        _page     => 2,
-        _per_page => 3,
-        firstname => 'Manuel',
-        surname   => 'Cohen Arazi'
-    };
-    my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($input);
+    my $params = $c->req->params->to_hash;
+    $params->{id} = $c->stash->{id};
+    $params->{subid} = $c->stash->{subid};
+    my ( $filtered_params, $reserved_params, $path_params ) = $c->extract_reserved_params($params);
     $c->render(
         json => {
             filtered_params => $filtered_params,
-            reserved_params => $reserved_params
+            reserved_params => $reserved_params,
+            path_params => $path_params
         },
         status => 200
     );
@@ -136,16 +126,16 @@ use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 9;
 
     my $t = Test::Mojo->new;
 
-    $t->get_ok('/query')->status_is(200)
+    $t->get_ok('/query?_page=2&_per_page=3&firstname=Manuel&surname=Cohen%20Arazi')->status_is(200)
       ->json_is( '/filtered_params' =>
           { firstname => 'Manuel', surname => 'Cohen Arazi' } )
       ->json_is( '/reserved_params' => { _page => 2, _per_page => 3 } );
 
-    $t->get_ok('/query_full')->status_is(200)
+    $t->get_ok('/query_full/with/path?_match=exact&_order_by=blah&_page=2&_per_page=3&firstname=Manuel&surname=Cohen%20Arazi')->status_is(200)
       ->json_is(
         '/filtered_params' => {
             firstname => 'Manuel',
@@ -157,6 +147,11 @@ subtest 'extract_reserved_params() tests' => sub {
             _per_page => 3,
             _match    => 'exact',
             _order_by => 'blah'
+        } )
+      ->json_is(
+        '/path_params' => {
+            id => 'with',
+            subid => 'path'
         } );
 
 };
