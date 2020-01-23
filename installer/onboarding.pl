@@ -251,17 +251,65 @@ if ( $step == 5 ) {
             categorycode    => $categorycode,
             itemtype        => $itemtype,
             rules => {
-                renewalsallowed => $renewalsallowed,
-                renewalperiod   => $renewalperiod,
-                issuelength     => $issuelength,
-                lengthunit      => $lengthunit,
-                onshelfholds    => $onshelfholds,
+                renewalsallowed                  => $renewalsallowed,
+                renewalperiod                    => $renewalperiod,
+                issuelength                      => $issuelength,
+                lengthunit                       => $lengthunit,
+                onshelfholds                     => $onshelfholds,
+                article_requests                 => "no",
+                auto_renew                       => 0,
+                cap_fine_to_replacement_price    => 0,
+                chargeperiod                     => 0,
+                chargeperiod_charge_at           => 0,
+                fine                             => 0,
+                finedays                         => 0,
+                firstremind                      => 0,
+                hardduedate                      => "",
+                hardduedatecompare               => -1,
+                holds_per_day                    => undef,
+                holds_per_record                 => 1,
+                maxissueqty                      => "",
+                maxonsiteissueqty                => "",
+                maxsuspensiondays                => "",
+                no_auto_renewal_after            => "",
+                no_auto_renewal_after_hard_limit => "",
+                norenewalbefore                  => "",
+                opacitemholds                    => "N",
+                overduefinescap                  => "",
+                rentaldiscount                   => 0,
+                reservesallowed                  => 0,
+                suspension_chargeperiod          => undef,
+              }
+        };
+
+        my $params_2 = {
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            rules        => {
+                patron_maxissueqty       => "",
+                patron_maxonsiteissueqty => "",
+                max_holds                => "",
             }
         };
 
-        eval { Koha::CirculationRules->set_rules( $params ) };
+        my $params_3 = {
+            branchcode => $branchcode,
+            itemtype   => $itemtype,
+            rules      => {
+                holdallowed             => "",
+                hold_fulfillment_policy => "",
+                returnbranch            => "",
+            }
+        };
+
+        eval {
+            Koha::CirculationRules->set_rules($params);
+            Koha::CirculationRules->set_rules($params_2);
+            Koha::CirculationRules->set_rules($params_3);
+        };
 
         if ($@) {
+            warn $@;
             push @messages, { code => 'error_on_insert_circ_rule' };
         } else {
 
