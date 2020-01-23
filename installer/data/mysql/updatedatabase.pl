@@ -20563,6 +20563,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24481 - Move permission to correct module_bit)\n";
 }
 
+$DBversion = '19.12.00.013';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(qq{
+        INSERT IGNORE INTO 
+          systempreferences (variable,value,options,explanation,type)
+        VALUES
+          ('EnablePointOfSale','0',NULL,'Enable the point of sale feature to allow anonymous transactions with the accounting system. (Requires UseCashRegisters)','YesNo')
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24478 - Add `EnablePointOfSale` system preference to allow disabling the point of sale feature)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
