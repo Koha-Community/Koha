@@ -844,7 +844,7 @@
                 columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'suggestions', 'suggestions', 'json' ) | $raw %]
                 [% FOREACH suggestion IN suggestions %]
                     [% IF ( suggestion.suggestions_loop ) %]
-                        KohaTable("[% suggestion.suggestiontype | html %]t", {
+                        KohaTable("table_[% loop.count| html %]", {
                             "sorting": [[ 1, "asc" ]],
                             "autoWidth": false,
                             "columnDefs": [
