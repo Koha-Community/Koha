@@ -1,0 +1,180 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% USE Price %]
+[% SET footerjs = 1 %]
+[% PROCESS 'accounts.inc' %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cashup</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("lib/jquery/plugins/rowGroup/stylesheets/rowGroup.dataTables.min.css") | $raw %]
+</head>
+
+<body id="register" class="pos">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/pos/pay.pl">Point of sale</a> &rsaquo; Register details</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+
+            [% IF ( error_registers ) %]
+            <div id="error_message" class="dialog alert">
+                You must have at least one cash register associated with this branch before you can record payments.
+            </div>
+            [% ELSE %]
+
+            <div id="toolbar" class="btn-toolbar">
+                <a id="cashup" href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-default"><i class="fa fa-money"></i> Record cashup</a>
+            </div>
+
+            <h1>Register transaction details for [% register.name | html %]</h1>
+
+            <h2>Summary</h2>
+            <ul>
+                [% IF register.last_cashup %]
+                <li>Last cashup: [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %]</li>
+                [% END %]
+                <li>Float: [% register.starting_float | $Price %]</li>
+                <li>Total income (cash): [% accountlines.credits_total * -1 | $Price %] ([% accountlines.credits_total(payment_type => 'CASH') * -1 | $Price %])</li>
+                <li>Total outgoing (cash): [% accountlines.debits_total * -1 | $Price %] ([% accountlines.debits_total( payment_type => 'CASH') * -1 | $Price %])</li>
+                <li>Total bankable: [% accountlines.total( payment_type => 'CASH') * -1 | $Price %]</li>
+            </ul>
+
+            [% IF register.last_cashup %]
+            <h2>Transactions since [% register.last_cashup.timestamp | $KohaDates with_hours => 1 %]</h2>
+            [% ELSE %]
+            <h2>Transactions to date</h2>
+            [% END %]
+            <table id="sales" class="table_sales">
+                <thead>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        DATA
+                    </th>
+                    <th>
+                        Transaction
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </thead>
+                <tbody>
+                    [% FOREACH accountline IN accountlines %]
+                        [% IF accountline.is_credit %]
+                            [% FOREACH credit IN accountline.credit_offsets %]
+                            [% IF credit.debit %]
+                            <tr>
+                                <td>
+                                    [% accountline.accountlines_id %]
+                                </td>
+                                <td>
+                                    { "type": "credit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }
+                                </td>
+                                <td></td>
+                                <td>
+                                    [%- PROCESS account_type_description account=credit.debit -%]
+                                    [%- IF credit.debit.description -%] ([% credit.debit.description | html %])[%- END -%]
+                                    [%- IF ( credit.debit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% credit.debit.item.biblionumber | uri %]&amp;itemnumber=[% credit.debit.itemnumber | uri %]">[% credit.debit.item.biblio.title | html %]</a>)[%- END -%]
+                                </td>
+                                <td>
+                                    [% credit.debit.amount | $Price %]
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            [% END %]
+                            [% END %]
+                        [% ELSE %]
+                            [% FOREACH debit IN accountline.debit_offsets %]
+                            [% IF debit.credit %]
+                            <tr>
+                                <td>
+                                    [% accountline.accountlines_id %]
+                                </td>
+                                <td>
+                                    { "type": "debit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }
+                                </td>
+                                <td></td>
+                                <td>
+                                    [%- PROCESS account_type_description account=debit.credit -%]
+                                </td>
+                                <td>
+                                    [%- IF debit.credit.description %][% debit.credit.description | html %][%- END -%]
+                                    [%- IF ( debit.credit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% debit.credit.item.biblionumber | uri %]&amp;itemnumber=[% debit.credit.itemnumber | uri %]">[% debit.credit.item.biblio.title | html %]</a>)[%- END -%]
+                                </td>
+                                <td>
+                                    [% debit.credit.amount | $Price %]
+                                </td>
+                                <td></td>
+                            </tr>
+                            [% END %]
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">Total income: </td>
+                        <td>[% accountlines.total * -1 | $Price %]</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            [% END %]
+        </div>
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'pos-menu.inc' %]
+            </aside>
+        </div>
+    </div><!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("lib/jquery/plugins/rowGroup/dataTables.rowGroup.min.js") | $raw %]
+    <script>
+        var sales_table = $("#sales").dataTable($.extend(true, {}, dataTablesDefaults, {
+            orderFixed: [ 0, 'asc'],
+            columnDefs: [ {
+                targets: [ 0, 1 ],
+                visible: false
+            }],
+            rowGroup: {
+                dataSrc: 0,
+                startRender: function ( rows, group ) {
+                    var details = JSON.parse(rows.data().pluck(1).pop());
+                    return $('<tr class="'+details.type+'"/>')
+                        .append( '<td>'+group+'</td>' )
+                        .append( '<td colspan="2">'+details.description+'</td>' )
+                        .append( '<td>'+details.amount+'</td>' )
+                        .append( '<td><button class="printReceipt btn btn-default btn-xs" data-accountline="'+group+'"><i class="fa fa-print"></i> Print receipt</button></td>');
+                },
+                endRender: null,
+            }
+        }));
+
+        $(".printReceipt").click(function() {
+            var accountlines_id = $(this).data('accountline');
+            var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=' + accountlines_id, '_blank');
+            win.focus();
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
