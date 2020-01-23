@@ -23,8 +23,10 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 
+use Koha::Account::Lines;
 use Koha::Cash::Registers;
 use Koha::Database;
+use Koha::DateUtils;
 
 my $input = CGI->new();
 
@@ -69,6 +71,33 @@ else {
         register     => $cash_register,
         accountlines => $accountlines
     );
+
+    my $transactions_range_from = $input->param('trange_f');
+    my $last_cashup             = $cash_register->last_cashup;
+    my $transactions_range_to =
+        $input->param('trange_t') ? $input->param('trange_t')
+      : $last_cashup              ? $last_cashup->timestamp
+      :                             '';
+    $template->param( trange_t => $transactions_range_to );
+    if ($transactions_range_from) {
+        $template->param( trange_f => $transactions_range_from );
+
+        my $dtf               = $schema->storage->datetime_parser;
+        my $start             = dt_from_string($transactions_range_from);
+        my $end               = dt_from_string($transactions_range_to);
+        my $past_accountlines = Koha::Account::Lines->search(
+            {
+                register_id => $registerid,
+                timestamp   => {
+                    -between => [
+                        $dtf->format_datetime($start),
+                        $dtf->format_datetime($end)
+                    ]
+                }
+            }
+        );
+        $template->param( past_accountlines => $past_accountlines );
+    }
 
     my $op = $input->param('op') // '';
     if ( $op eq 'cashup' ) {

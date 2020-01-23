@@ -117,6 +117,110 @@
                 </tfoot>
             </table>
             [% END %]
+
+            [% IF register.cashups %]
+            <h2>Older transactions</h2>
+            <form method="GET" action="/cgi-bin/koha/pos/register.pl">
+			<fieldset class="rows">
+                            Please select a date range to display transactions for:
+                            <ol>
+                                <li>
+                                    <label for="trange_f">From: </label>
+                                    <input type="text" size="10" id="from" name="trange_f" value="[% trange_f | html %]"/>
+                                    <label class="inline" for="trange_t">To: </label>
+                                    [% IF trange_t %]
+                                    <input size="10" id="to" name="trange_t" value="[% trange_t | html %]" type="text"/>
+                                    [% ELSE %]
+                                    <input size="10" id="to" name="trange_t" value="[% register.last_cashup.timestamp | $KohaDates with_hours => 0, dateformat => 'metric' %]" type="text"/>
+                                    [% END %]
+                                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                                </li>
+                            </ol>
+			</fieldset>
+
+            <div class="action">
+	            <input type="hidden" name="registerid" value="[% register.id | html %]">
+	            <input type="submit" value="Display" />
+            </div>
+            </form>
+
+            [% IF trange_f %]
+            <table id="past_sales" class="past_sales_table">
+                <thead>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        DATA
+                    </th>
+                    <th>
+                        Transaction
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </thead>
+                <tbody>
+                    [% FOREACH accountline IN past_accountlines %]
+                        [% IF accountline.is_credit %]
+                            [% FOREACH credit IN accountline.credit_offsets %]
+                            [% IF credit.debit %]
+                            <tr>
+                                <td>[% accountline.accountlines_id %]</td>
+                                <td>{ "type": "credit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
+                                <td></td>
+                                <td>[%- PROCESS account_type_description account=credit.debit -%]
+                                    [%- IF credit.debit.description -%] ([% credit.debit.description | html %])[%- END -%]
+                                    [%- IF ( credit.debit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% credit.debit.item.biblionumber | uri %]&amp;itemnumber=[% credit.debit.itemnumber | uri %]">[% credit.debit.item.biblio.title | html %]</a>)[%- END -%]
+                                </td>
+                                <td>[% credit.debit.amount | $Price %]</td>
+                                <td></td>
+                                <td>
+                                    [% IF CAN_user_cash_management_refund_cash_registers && !(credit.debit.status == 'REFUNDED' ) %]
+                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-quantity="[% credit.debit.note | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                    [% END %]
+                                </td>
+                            </tr>
+                            [% END %]
+                            [% END %]
+                        [% ELSE %]
+                            [% FOREACH debit IN accountline.debit_offsets %]
+                            [% IF debit.credit %]
+                            <tr>
+                                <td>[% accountline.accountlines_id %]</td>
+                                <td>{ "type": "debit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
+                                <td></td>
+                                <td>[%- PROCESS account_type_description account=debit.credit -%]</td>
+                                <td>[%- IF debit.credit.description %][% debit.credit.description | html %][% END %]
+        &nbsp;[% IF ( debit.credit.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% debit.credit.item.biblionumber | uri %]&amp;itemnumber=[% debit.credit.itemnumber | uri %]">[% debit.credit.item.biblio.title | html %]</a>[% END %]</td>
+                                <td>[% debit.credit.amount | $Price %]</td>
+                                <td></td>
+                            </tr>
+                            [% END %]
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">Total income: </td>
+                        <td>[% past_accountlines.total * -1 | $Price %]</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            [% END %]
+
+            [% END %]
         </div>
 
         <div class="col-sm-2 col-sm-pull-10">
@@ -199,6 +303,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/rowGroup/dataTables.rowGroup.min.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
     <script>
         var sales_table = $("#sales").dataTable($.extend(true, {}, dataTablesDefaults, {
             orderFixed: [ 0, 'asc'],
@@ -220,6 +325,26 @@
             }
         }));
 
+        var past_sales_table = $("#past_sales").dataTable($.extend(true, {}, dataTablesDefaults, {
+            orderFixed: [ 0, 'asc'],
+            columnDefs: [ {
+                targets: [ 0, 1 ],
+                visible: false
+            }],
+            rowGroup: {
+                dataSrc: 0,
+                startRender: function ( rows, group ) {
+                    var details = JSON.parse(rows.data().pluck(1).pop());
+                    return $('<tr class="'+details.type+'"/>')
+                        .append( '<td>'+group+'</td>' )
+                        .append( '<td colspan="2">'+details.description+'</td>' )
+                        .append( '<td>'+details.amount+'</td>' )
+                        .append( '<td><button class="printReceipt btn btn-default btn-xs" data-accountline="'+group+'"><i class="fa fa-print"></i> Print receipt</button></td>');
+                },
+                endRender: null,
+            }
+        }));
+
         $("#issueRefundModal").on("shown.bs.modal", function(e){
            var button = $(e.relatedTarget);
            var item = button.data('item');
@@ -236,6 +361,23 @@
             var accountlines_id = $(this).data('accountline');
             var win = window.open('/cgi-bin/koha/pos/printreceipt.pl?action=print&accountlines_id=' + accountlines_id, '_blank');
             win.focus();
+        });
+
+        $(document).ready(function() {
+            // http://jqueryui.com/demos/datepicker/#date-range
+            var dates = $( "#from, #to" ).datepicker({
+                changeMonth: true,
+                numberOfMonths: 1,
+                onSelect: function( selectedDate ) {
+                    var option = this.id == "from" ? "minDate" : "maxDate",
+                        instance = $( this ).data( "datepicker" );
+                        date = $.datepicker.parseDate(
+                            instance.settings.dateFormat ||
+                            $.datepicker._defaults.dateFormat,
+                            selectedDate, instance.settings );
+                    dates.not( this ).datepicker( "option", option, date );
+                }
+            });
         });
     </script>
 [% END %]
