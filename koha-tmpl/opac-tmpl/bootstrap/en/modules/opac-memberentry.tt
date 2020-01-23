@@ -258,6 +258,33 @@
                                         [% END %]
                                     </li>
                                 [% END %]
+                                [% UNLESS hidden.defined('autorenewal') %]
+                                    <li class="lradio">
+                                        <label for="yes-autorenewal">
+                                            Allow auto-renewal:
+                                        </label>
+                                            [% IF ( borrower.autorenewal ) %]
+                                                <label class="radio inline" for="yes-autorenewal">
+                                                    Yes
+                                                    <input type="radio" id="yes-autorenewal" name="borrower_autorenewal" value="1" checked="checked" />
+                                                </label>
+
+                                                <label class="radio inline" for="no-autorenewal">
+                                                    No
+                                                    <input type="radio" id="no-autorenewal" name="borrower_autorenewal" value="0" />
+                                                </label>
+                                            [% ELSE %]
+                                                <label class="radio inline" for="yes-autorenewal">
+                                                    Yes
+                                                    <input type="radio" id="yes-autorenewal" name="borrower_autorenewal" value="1" />
+                                                </label>
+                                                <label class="radio inline" for="no-autorenewal">
+                                                    No
+                                                    <input type="radio" id="no-autorenewal" name="borrower_autorenewal" value="0" checked="checked" />
+                                                </label>
+                                            [% END %]
+                                    </li>
+                                [% END %]
                             </ol>
                         </fieldset>
                 [% END # / defined 'branchcode' %]

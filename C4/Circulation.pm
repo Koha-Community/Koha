@@ -2817,7 +2817,7 @@ sub CanBookBeRenewed {
 
         # Fallback for automatic renewals:
         # If norenewalbefore is undef, don't renew before due date.
-        if ( $issue->auto_renew && !$auto_renew ) {
+        if ( $issue->auto_renew && !$auto_renew && $patron->autorenew_checkouts ) {
             my $now = dt_from_string;
             if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
                 $auto_renew = 1;

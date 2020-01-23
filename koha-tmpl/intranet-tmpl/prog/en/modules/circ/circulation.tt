@@ -568,15 +568,23 @@
                                                         <div id="set-automatic-renewal" class="circ-setting">
                                                             [% IF NEEDSCONFIRMATION %]
                                                                 [% IF auto_renew %]
-                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" checked="checked" />
+                                                                    [% IF patron.autorenewal %]
+                                                                        <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled"
+                                                                        title="Patron has opted out of auto-renewal"/>
+                                                                    [% ELSE %]
+                                                                        <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" checked="checked" />
+                                                                    [% END %]
                                                                 [% ELSE %]
                                                                     <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled" />
                                                                 [% END %]
                                                             [% ELSE %]
-                                                                [% IF auto_renew %]
+                                                                [% IF ( auto_renew && patron.autorenewal ) %]
                                                                     <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" checked="checked" />
-                                                                [% ELSE %]
+                                                                [% ELSIF patron.autorenewal %]
                                                                     <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" class="circ_setting" />
+                                                                [% ELSE %]
+                                                                    <input type="checkbox" name="auto_renew" id="auto_renew" value="auto_renew" disabled="disabled"
+                                                                    title="Patron has opted out of auto-renewal"/>
                                                                 [% END %]
                                                             [% END %]
 

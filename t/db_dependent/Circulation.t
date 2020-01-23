@@ -274,7 +274,7 @@ Koha::CirculationRules->set_rules(
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 77;
+    plan tests => 83;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio

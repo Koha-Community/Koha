@@ -80,7 +80,7 @@ GetOptions(
 pod2usage(0) if $help;
 cronlogaction();
 
-my $auto_renews = Koha::Checkouts->search({ auto_renew => 1 });
+my $auto_renews = Koha::Checkouts->search({ auto_renew => 1, 'borrower.autorenewal' => 1 },{ join => 'borrower'});
 
 my %report;
 $verbose = 1 unless $verbose or $confirm;

@@ -874,6 +874,33 @@ legend:hover {
                                             </li>
                                         [% END # /UNLESS nosort2 %]
 
+                                        [% UNLESS noautorenewal %]
+                                            <li class="radio">
+                                                <label for="yes-autorenewal">
+                                                    Allow auto-renewal of items:
+                                                </label>
+                                                    [% IF ( autorenewal ) %]
+                                                        <label for="yes-autorenewal">
+                                                            Yes
+                                                            <input type="radio" id="yes-autorenewal" name="autorenewal" value="1" checked="checked" />
+                                                        </label>
+                                                        <label for="no-autorenewal">
+                                                            No
+                                                            <input type="radio" id="no-autorenewal" name="autorenewal" value="0" />
+                                                        </label>
+                                                    [% ELSE %]
+                                                        <label for="yes-autorenewal">
+                                                            Yes
+                                                            <input type="radio" id="yes-autorenewal" name="autorenewal" value="1" />
+                                                        </label>
+                                                        <label for="no-autorenewal">
+                                                            No
+                                                            <input type="radio" id="no-autorenewal" name="autorenewal" value="0" checked="checked" />
+                                                        </label>
+                                                    [% END %]
+                                            </li>
+                                        [% END %]
+
                                         [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                                             <li>
                                                 <label for="checkprevcheckout">Check for previous checkouts: </label>
