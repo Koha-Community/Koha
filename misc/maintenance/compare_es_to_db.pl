@@ -30,7 +30,7 @@ B<compare_es_to_db.pl>
 =cut
 
 use Modern::Perl;
-use Array::Utils qw( array_diff );
+use Array::Utils qw( array_minus );
 
 use C4::Context;
 
@@ -76,29 +76,18 @@ foreach my $index ( ('biblios','authorities') ){
         push @es_ids, $doc->{_id};
         $i++;
     }
-    print "\nComparing arrays, this may take a while\n";
-
-    # And compare the arrays
-    # array_diff returns only a list of values which are not common to both arrays
-    my @diff = array_diff(@db_records, @es_ids );
-
-    print "All records match\n" unless @diff;
 
     # Fetch values for providing record links
     my $es_params = $searcher->get_elasticsearch_params;
     my $es_base   = "$es_params->{nodes}[0]/$es_params->{index_name}";
     my $opac_base = C4::Context->preference('OPACBaseURL');
 
+    print "\nComparing arrays, this may take a while\n";
 
-    my @koha_problems;
-    my @es_problems;
-    foreach my $problem ( sort { $a <=> $b } @diff){
-        if ( (grep /^$problem$/, @db_records) ){
-            push @koha_problems, $problem;
-        } else {
-            push @es_problems, $problem;
-        }
-    }
+    my @koha_problems = sort { $a <=> $b } array_minus(@db_records, @es_ids);
+    my @es_problems = sort { $a <=> $b } array_minus(@es_ids, @db_records);
+
+    print "All records match\n" unless ( @koha_problems || @es_problems );
 
     if ( @koha_problems ){
         print "=================\n";
@@ -113,6 +102,7 @@ foreach my $index ( ('biblios','authorities') ){
             }
         }
     }
+
     if ( @es_problems ){
         print "=================\n";
         print "Records that exist in ES but not in Koha\n";
