@@ -38,6 +38,7 @@ my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
     }
 );
 my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
+my $schema = Koha::Database->new->schema;
 
 my $library_id = C4::Context->userenv->{'branch'};
 my $registerid = $input->param('registerid');
@@ -75,6 +76,39 @@ else {
             {
                 manager_id => $logged_in_user->id,
                 amount     => $cash_register->outstanding_accountlines->total
+            }
+        );
+    }
+    elsif ( $op eq 'refund' ) {
+        my $amount           = $input->param('amount');
+        my $quantity         = $input->param('quantity');
+        my $accountline_id   = $input->param('accountline');
+        my $transaction_type = $input->param('transaction_type');
+
+        my $accountline = Koha::Account::Lines->find($accountline_id);
+        $schema->txn_do(
+            sub {
+
+                my $refund = $accountline->reduce(
+                    {
+                        reduction_type => 'Refund',
+                        branch         => $library_id,
+                        staff_id       => $logged_in_user->id,
+                        interface      => 'intranet',
+                        amount         => $amount
+                    }
+                );
+                my $payout = $refund->payout(
+                    {
+                        payout_type   => $transaction_type,
+                        branch        => $library_id,
+                        staff_id      => $logged_in_user->id,
+                        cash_register => $cash_register->id,
+                        interface     => 'intranet',
+                        amount        => $amount
+                    }
+                );
+
             }
         );
     }
