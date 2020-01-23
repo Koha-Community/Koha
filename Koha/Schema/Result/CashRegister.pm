@@ -144,9 +144,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 cash_register_actions
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-23 13:14:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TfGf0U/vWS7IviRlvDdE1w
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CashRegisterAction>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cash_register_actions",
+  "Koha::Schema::Result::CashRegisterAction",
+  { "foreign.register_id" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-23 13:21:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zP8my0Zp5bSARTBfws4n1A
 
 __PACKAGE__->add_columns(
     '+archived'       => { is_boolean => 1 },

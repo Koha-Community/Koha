@@ -929,6 +929,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 cash_register_actions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CashRegisterAction>
+
+=cut
+
+__PACKAGE__->has_many(
+  "cash_register_actions",
+  "Koha::Schema::Result::CashRegisterAction",
+  { "foreign.manager_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 categorycode
 
 Type: belongs_to
@@ -1634,9 +1649,14 @@ Composing rels: L</aqorder_users> -> ordernumber
 
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-23 13:21:02
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f25Xar862YgzWuWq5/LIRA
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-10 14:31:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GjJLIOViIFRm185Yjl9vYA
+__PACKAGE__->belongs_to(
+    "guarantor",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "guarantorid" },
+);
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
