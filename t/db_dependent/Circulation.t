@@ -355,7 +355,8 @@ subtest "CanBookBeRenewed tests" => sub {
     my $restricted_borrowernumber = Koha::Patron->new(\%restricted_borrower_data)->store->borrowernumber;
     my $expired_borrowernumber = Koha::Patron->new(\%expired_borrower_data)->store->borrowernumber;
 
-    my $renewing_borrower = Koha::Patrons->find( $renewing_borrowernumber )->unblessed;
+    my $renewing_borrower_obj = Koha::Patrons->find( $renewing_borrowernumber );
+    my $renewing_borrower = $renewing_borrower_obj->unblessed;
     my $restricted_borrower = Koha::Patrons->find( $restricted_borrowernumber )->unblessed;
     my $expired_borrower = Koha::Patrons->find( $expired_borrowernumber )->unblessed;
 
@@ -656,6 +657,12 @@ subtest "CanBookBeRenewed tests" => sub {
 
 
 
+    $renewing_borrower_obj->autorenewal(0)->store;
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
+    is( $renewokay, 1, 'No renewal before is undef, but patron opted out of auto_renewal' );
+    $renewing_borrower_obj->autorenewal(1)->store;
+
+
     # Bug 7413
     # Test premature manual renewal
     Koha::CirculationRules->set_rule(
@@ -699,6 +706,12 @@ subtest "CanBookBeRenewed tests" => sub {
         'Bug 14101: Cannot renew, renewal is automatic and premature (returned code is auto_too_soon)'
     );
 
+    $renewing_borrower_obj->autorenewal(0)->store;
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
+    is( $renewokay, 0, 'No renewal before is 7, patron opted out of auto_renewal still cannot renew early' );
+    is( $error, 'too_soon', 'Error is too_soon, no auto' );
+    $renewing_borrower_obj->autorenewal(1)->store;
+
     # Change policy so that loans can only be renewed exactly on due date (0 days prior to due date)
     # and test automatic renewal again
     $dbh->do(q{UPDATE circulation_rules SET rule_value = '0' WHERE rule_name = 'norenewalbefore'});
@@ -709,6 +722,12 @@ subtest "CanBookBeRenewed tests" => sub {
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = 0 (returned code is auto_too_soon)'
     );
 
+    $renewing_borrower_obj->autorenewal(0)->store;
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
+    is( $renewokay, 0, 'No renewal before is 0, patron opted out of auto_renewal still cannot renew early' );
+    is( $error, 'too_soon', 'Error is too_soon, no auto' );
+    $renewing_borrower_obj->autorenewal(1)->store;
+
     # Change policy so that loans can be renewed 99 days prior to the due date
     # and test automatic renewal again
     $dbh->do(q{UPDATE circulation_rules SET rule_value = '99' WHERE rule_name = 'norenewalbefore'});
@@ -718,6 +737,11 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $error, 'auto_renew',
         'Bug 14101: Cannot renew, renewal is automatic (returned code is auto_renew)'
     );
+
+    $renewing_borrower_obj->autorenewal(0)->store;
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
+    is( $renewokay, 1, 'No renewal before is 99, patron opted out of auto_renewal so can renew' );
+    $renewing_borrower_obj->autorenewal(1)->store;
 
     subtest "too_late_renewal / no_auto_renewal_after" => sub {
         plan tests => 14;
