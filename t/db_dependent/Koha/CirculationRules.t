@@ -33,12 +33,13 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'set_rule + get_effective_rule' => sub {
-    plan tests => 13;
+    plan tests => 14;
 
     my $categorycode = $builder->build_object( { class => 'Koha::Patron::Categories' } )->categorycode;
     my $itemtype     = $builder->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
     my $branchcode   = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
-    my $rule_name    = 'my_rule';
+    my $branchcode_2 = $builder->build_object( { class => 'Koha::Libraries' } )->branchcode;
+    my $rule_name    = 'maxissueqty';
     my $default_rule_value = 1;
 
     my $rule;
@@ -108,6 +109,17 @@ subtest 'set_rule + get_effective_rule' => sub {
     );
     is( $rule->rule_value, 2,
         'More specific rule is returned when itemtype is given' );
+
+    $rule = Koha::CirculationRules->get_effective_rule(
+        {
+            branchcode   => $branchcode_2,
+            categorycode => '*',
+            itemtype     => '*',
+            rule_name    => $rule_name,
+        }
+    );
+    is( $rule->rule_value, 1,
+        'Default rule is returned if there is no rule for this branchcode' );
 
     Koha::CirculationRules->set_rule(
         {
