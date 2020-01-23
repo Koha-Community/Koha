@@ -20547,6 +20547,22 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24289 - Adding foreign keys on *_holidays.branchcode tables)\n";
 }
 
+$DBversion = '19.12.00.012';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do(qq{
+        UPDATE
+          `permissions`
+        SET
+          `module_bit` = 3
+        WHERE
+          `code` = 'manage_cash_registers'
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24481 - Move permission to correct module_bit)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
