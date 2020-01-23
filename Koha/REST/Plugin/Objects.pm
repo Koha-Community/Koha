@@ -50,7 +50,7 @@ sub register {
             my $attributes = {};
 
             # Extract reserved params
-            my ( $filtered_params, $reserved_params ) = $c->extract_reserved_params($args);
+            my ( $filtered_params, $reserved_params, $path_params ) = $c->extract_reserved_params($args);
             # Look for embeds
             my $embed = $c->stash('koha.embed');
 
@@ -77,6 +77,16 @@ sub register {
                 # Apply the mapping function to the passed params
                 $filtered_params = $result_set->attributes_from_api($filtered_params);
                 $filtered_params = $c->build_query_params( $filtered_params, $reserved_params );
+            }
+
+            if ( defined $path_params ) {
+
+                # Apply the mapping function to the passed params
+                $filtered_params //= {};
+                $path_params = $result_set->attributes_from_api($path_params);
+                foreach my $param (keys %{$path_params}) {
+                    $filtered_params->{$param} = $path_params->{$param};
+                }
             }
 
             # Perform search

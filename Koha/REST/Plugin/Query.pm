@@ -54,19 +54,24 @@ Generates the DBIC query from the query parameters.
 
             my $reserved_params;
             my $filtered_params;
+            my $path_params;
 
             my $reserved_words = _reserved_words();
+            my @query_param_names = keys %{$c->req->params->to_hash};
 
             foreach my $param ( keys %{$params} ) {
                 if ( grep { $param eq $_ } @{$reserved_words} ) {
                     $reserved_params->{$param} = $params->{$param};
                 }
-                else {
+                elsif ( grep { $param eq $_ } @query_param_names ) {
                     $filtered_params->{$param} = $params->{$param};
+                }
+                else {
+                    $path_params->{$param} = $params->{$param};
                 }
             }
 
-            return ( $filtered_params, $reserved_params );
+            return ( $filtered_params, $reserved_params, $path_params );
         }
     );
 
