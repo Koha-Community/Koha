@@ -65,9 +65,15 @@ get '/patrons/:patron_id/holds' => sub {
     $params->{patron_id} = $c->stash("patron_id");
     $c->validation->output($params);
     my $holds_set = Koha::Holds->new;
-    my $holds     = $c->objects->search( $holds_set );
+    my $holds     = $c->objects->search( $holds_set, \&to_model_holds );
     $c->render( status => 200, json => {count => scalar(@$holds)} );
 };
+
+sub to_model_holds {
+    my ($params) = @_;
+    $params->{borrowernumber} = delete $params->{patron_id};
+    return $params;
+}
 
 sub to_model {
     my $params = shift;
@@ -99,11 +105,11 @@ use Koha::Database;
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
+my $t = Test::Mojo->new;
+
 subtest 'objects.search helper' => sub {
 
     plan tests => 90;
-
-    my $t = Test::Mojo->new;
 
     $schema->storage->txn_begin;
 
@@ -285,19 +291,34 @@ subtest 'objects.search helper, sorting on mapped column' => sub {
 };
 
 subtest 'objects.search helper, with path parameters and _match' => sub {
-    plan tests => 4;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
     Koha::Holds->search()->delete;
 
-    $builder->build_object({class=>"Koha::Holds", value => {borrowernumber => 10 }});
+    my $patron = Koha::Patrons->find(10);
+    $patron->delete if $patron;
+    $patron = $builder->build_object( { class => "Koha::Patrons" } );
+    $patron->borrowernumber(10)->store;
+    $builder->build_object(
+        {
+            class => "Koha::Holds",
+            value => { borrowernumber => $patron->borrowernumber }
+        }
+    );
 
     $t->get_ok('/patrons/1/holds?_match=exact')
       ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=exact');
 
     $t->get_ok('/patrons/1/holds?_match=contains')
       ->json_is('/count' => 0, 'there should be no holds for borrower 1 with _match=contains');
+
+    $t->get_ok('/patrons/10/holds?_match=exact')
+      ->json_is('/count' => 1, 'there should be 1 hold for borrower 10 with _match=exact');
+
+    $t->get_ok('/patrons/10/holds?_match=contains')
+      ->json_is('/count' => 1, 'there should be 1 hold for borrower 10 with _match=contains');
 
     $schema->storage->txn_rollback;
 };
