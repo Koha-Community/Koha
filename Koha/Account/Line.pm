@@ -382,7 +382,7 @@ sub reduce {
                 $reduction->apply(
                     {
                         debits      => [$self],
-                        offset_type => $params->{reduction_type}
+                        offset_type => uc( $params->{reduction_type} )
                     }
                 );
                 $reduction->status('APPLIED')->store();
@@ -394,7 +394,7 @@ sub reduce {
                     {
                         credit_id => $reduction->accountlines_id,
                         debit_id  => $self->accountlines_id,
-                        type      => $params->{reduction_type},
+                        type      => uc( $params->{reduction_type} ),
                         amount    => 0
                     }
                 )->store();
