@@ -425,7 +425,7 @@ sub article_requestable_rules {
 
     return if !C4::Context->preference('ArticleRequests');
     return $class->search({
-        $category ? ( categorycode => [ $category, '*' ] ) : (),
+        $category ? ( categorycode => [ $category, undef ] ) : (),
         rule_name => 'article_requests',
         rule_value => { '!=' => 'no' },
     });
