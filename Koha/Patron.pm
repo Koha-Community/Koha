@@ -1671,6 +1671,7 @@ sub to_api_mapping {
         smsalertnumber      => 'sms_number',
         sort1               => 'statistics_1',
         sort2               => 'statistics_2',
+        autorenewal         => 'autorenewal',
         streetnumber        => 'street_number',
         streettype          => 'street_type',
         zipcode             => 'postal_code',
