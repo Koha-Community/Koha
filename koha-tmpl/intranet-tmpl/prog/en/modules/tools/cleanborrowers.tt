@@ -59,7 +59,13 @@
 <!-- step 1 START -->
 
 <div class="help">
-    <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used.</p>
+    <p>This tool allows you to delete patrons and anonymize checkout history. For deleting patrons, any combination of limits can be used. Patrons will not be deleted if they meet one or more of the following conditions:</p>
+<ul>
+<li>They have items currently checked out.</li>
+<li>They have a non-zero account balance.</li>
+<li>They are the guarantor to another patron.</li>
+<li>They are in a patron category of type staff.</li>
+</ul>
 </div>
 <div id="step1">
     <form name="f1" id="delete_patrons_form" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
