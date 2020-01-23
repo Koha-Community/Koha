@@ -27,9 +27,11 @@
             </div>
             [% ELSE %]
 
+            [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa fa-money"></i> Record cashup</button>
             </div>
+            [% END %]
 
             <h1>Register transaction details for [% register.name | html %]</h1>
 

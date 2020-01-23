@@ -704,5 +704,10 @@
             Perform cash register cashup action
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'anonymous_refund' -%]
+        <span class="sub_permission anonymous_refund_subpermission">
+            Perform anonymous refund actions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
 [%- END -%]
