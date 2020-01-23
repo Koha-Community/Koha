@@ -152,143 +152,218 @@ unless ( $enddate ) {
     $enddate = $today + DateTime::Duration->new( days => C4::Context->preference('ConfirmFutureHolds') || 0 );
 }
 
-my @reservedata;
-my $dbh = C4::Context->dbh;
-my $sqldatewhere = "";
+# building query parameters
+my %where = (
+    'reserve.found' => undef,
+    'reserve.suspend' => 0,
+    'itembib.itemlost' => 0,
+    'itembib.withdrawn' => 0,
+    'itembib.notforloan' => 0,
+    'itembib.itemnumber' => { -not_in => \'SELECT itemnumber FROM branchtransfers WHERE datearrived IS NULL' }
+);
+
+# date boundaries
 my $startdate_iso = output_pref({ dt => $startdate, dateformat => 'iso', dateonly => 1 });
 my $enddate_iso   = output_pref({ dt => $enddate, dateformat => 'iso', dateonly => 1 });
-
-$debug and warn $startdate_iso. "\n" . $enddate_iso;
-
-my @query_params = ();
-
-if ($startdate_iso) {
-    $sqldatewhere .= " AND reservedate >= ?";
-    push @query_params, $startdate_iso;
+if ( $startdate_iso && $enddate_iso ){
+    $where{'reserve.reservedate'} = [ -and => { '>=', $startdate_iso }, { '<=', $enddate_iso } ];
+} elsif ( $startdate_iso ){
+    $where{'reserve.reservedate'} = { '>=', $startdate_iso };
+} elsif ( $enddate_iso ){
+    $where{'reserve.reservedate'} = { '<=', $enddate_iso };
 }
-if ($enddate_iso) {
-    $sqldatewhere .= " AND reservedate <= ?";
-    push @query_params, $enddate_iso;
-}
-
-my $item_type = C4::Context->preference('item-level_itypes') ? "items.itype" : "biblioitems.itemtype";
 
 # Bug 21320
-if ( ! C4::Context->preference('AllowHoldsOnDamagedItems') ) {
-    $sqldatewhere .= " AND damaged = 0";
+if ( !C4::Context->preference('AllowHoldsOnDamagedItems') ){
+    $where{'itembib.damaged'} = 0;
 }
 
-my $strsth =
-    "SELECT min(reservedate) as l_reservedate,
-            reserves.reserve_id,
-            reserves.borrowernumber as borrowernumber,
-
-            GROUP_CONCAT(DISTINCT items.holdingbranch 
-                    ORDER BY items.itemnumber SEPARATOR '|') l_holdingbranch,
-            reserves.biblionumber,
-            reserves.branchcode as l_branch,
-            reserves.itemnumber,
-            items.holdingbranch,
-            items.homebranch,
-            GROUP_CONCAT(DISTINCT $item_type
-                    ORDER BY items.itemnumber SEPARATOR '|') l_item_type,
-            GROUP_CONCAT(DISTINCT items.location 
-                    ORDER BY items.itemnumber SEPARATOR '|') l_location,
-            GROUP_CONCAT(DISTINCT items.itemcallnumber 
-                    ORDER BY items.itemnumber SEPARATOR '|') l_itemcallnumber,
-            GROUP_CONCAT(DISTINCT items.enumchron
-                    ORDER BY items.itemnumber SEPARATOR '|') l_enumchron,
-            GROUP_CONCAT(DISTINCT items.copynumber
-                    ORDER BY items.itemnumber SEPARATOR '|') l_copynumber,
-            GROUP_CONCAT(DISTINCT items.barcode
-                    ORDER BY items.itemnumber SEPARATOR '|') l_barcode,
-            biblio.title,
-            biblio.copyrightdate,
-            biblioitems.publicationyear,
-            biblio.subtitle,
-            biblio.medium,
-            biblio.part_number,
-            biblio.part_name,
-            biblio.author,
-            biblioitems.editionstatement,
-            count(DISTINCT items.itemnumber) as icount,
-            count(DISTINCT reserves.borrowernumber) as rcount,
-            borrowers.firstname,
-            borrowers.surname
-    FROM  reserves
-        LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
-        LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
-        LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber
-        LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
-        LEFT JOIN issues ON items.itemnumber=issues.itemnumber
-        LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
-        LEFT JOIN circulation_rules ON ( items.itype=circulation_rules.itemtype AND rule_name = 'holdallowed' AND circulation_rules.branchcode IS NULL AND circulation_rules.categorycode IS NULL )
-    WHERE
-    reserves.found IS NULL
-    $sqldatewhere
-    AND (reserves.itemnumber IS NULL OR reserves.itemnumber = items.itemnumber)
-    AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
-    AND items.itemnumber NOT IN (SELECT itemnumber FROM reserves WHERE found IS NOT NULL AND itemnumber IS NOT NULL)
-    AND issues.itemnumber IS NULL
-    AND reserves.priority <> 0 
-    AND reserves.suspend = 0
-    AND notforloan = 0 AND itemlost = 0 AND withdrawn = 0
-    AND ( circulation_rules.rule_value IS NULL OR circulation_rules.rule_value != 0 )
-    ";
-    # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
-    #    multiple patrons have a hold on an item
-#FIXME "found IS NOT NULL AND itemnumber IS NOT NULL" is just a workaround: see BZ 25726
-
-if (C4::Context->preference('IndependentBranches')){
-    $strsth .= " AND items.holdingbranch=? ";
-    push @query_params, C4::Context->userenv->{'branch'};
+if ( C4::Context->preference('IndependentBranches') ){
+    $where{'itembib.holdingbranch'} = C4::Context->userenv->{'branch'};
 }
-$strsth .= " GROUP BY reserves.biblionumber ORDER BY biblio.title ";
 
-my $sth = $dbh->prepare($strsth);
-$sth->execute(@query_params);
+# get all distinct unfulfilled reserves
+my @distinct_holds = Koha::Holds->search(
+    { %where },
+    { join => 'itembib', group_by => 'reserve.biblionumber', alias => 'reserve' }
+);
 
-while ( my $data = $sth->fetchrow_hashref ) {
-    push(
-        @reservedata, {
-            reservedate      => $data->{l_reservedate},
-            firstname        => $data->{firstname} || '',
-            surname          => $data->{surname},
-            title            => $data->{title},
-            editionstatement => $data->{editionstatement},
-            subtitle         => $data->{subtitle},
-            medium           => $data->{medium},
-            part_number      => $data->{part_number},
-            part_name        => $data->{part_name},
-            author           => $data->{author},
-            borrowernumber   => $data->{borrowernumber},
-            biblionumber     => $data->{biblionumber},
-            holdingbranches  => [split('\|', $data->{l_holdingbranch})],
-            branch           => $data->{l_branch},
-            itemcallnumber   => [split('\|', $data->{l_itemcallnumber})],
-            enumchron        => [split('\|', $data->{l_enumchron})],
-            copyno           => [split('\|', $data->{l_copynumber})],
-            barcode          => [split('\|', $data->{l_barcode})],
-            count            => $data->{icount},
-            rcount           => $data->{rcount},
-            pullcount        => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
-            itemTypes        => [split('\|', $data->{l_item_type})],
-            locations        => [split('\|', $data->{l_location})],
-            reserve_id       => $data->{reserve_id},
-            holdingbranch    => $data->{holdingbranch},
-            homebranch       => $data->{homebranch},
-            itemnumber       => $data->{itemnumber},
-            publicationyear  => C4::Context->preference('marcflavour') eq "MARC21" ? $data->{copyrightdate} : $data->{publicationyear},
+# make final reserves hash and fill with info
+my $reserves;
+foreach my $dh ( @distinct_holds ){
+
+    my $bibnum = $dh->biblionumber;
+
+    my @items = Koha::Items->search({ biblionumber => $bibnum });
+    foreach my $i ( @items ){
+        if ( $i->checkout ){
+            next;
+        }
+    }
+
+    my @branchtransfers = map { $_->itemnumber } Koha::Item::Transfers->search({ datearrived => undef }, { columns => [ 'itemnumber' ], collapse => 1 });
+    my @issues = map { $_->itemnumber } Koha::Checkouts->search({}, { columns => [ 'itemnumber' ], collapse => 1 });
+
+    # get available item types for each biblio
+    my $res_itemtypes;
+    if ( C4::Context->preference('item-level_itypes') ){
+        $res_itemtypes = Koha::Items->search(
+            { biblionumber => $bibnum,
+              itype => { '!=', undef },
+              itemlost => 0,
+              withdrawn => 0,
+              notforloan => 0,
+              itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+            },
+            { columns => 'itype',
+              distinct => 1,
+            }
+        );
+    } else {
+        my $res_itemtypes = Koha::Biblioitems->search(
+            { biblionumber => $bibnum, itemtype => { '!=', undef }  },
+            { columns => 'itemtype',
+              distinct => 1,
+            }
+        );
+    }
+    $reserves->{$bibnum}->{itemtypes} = $res_itemtypes;
+
+    # get available locations for each biblio
+    my $res_locations = Koha::Items->search(
+        { biblionumber => $bibnum,
+          location => { '!=', undef },
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { columns => 'location',
+          distinct => 1,
         }
     );
+    $reserves->{$bibnum}->{locations} = $res_locations;
+
+    # get available callnumbers for each biblio
+    my $res_callnumbers = Koha::Items->search(
+        { biblionumber => $bibnum,
+          itemcallnumber => { '!=', undef },
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { columns => 'itemcallnumber',
+          distinct => 1,
+        }
+    );
+    $reserves->{$bibnum}->{callnumbers} = $res_callnumbers;
+
+    # get available enumchrons for each biblio
+    my $res_enumchrons = Koha::Items->search(
+        { biblionumber => $bibnum,
+          enumchron => { '!=', undef },
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { columns => 'enumchron',
+          distinct => 1,
+        }
+    );
+    $reserves->{$bibnum}->{enumchrons} = $res_enumchrons;
+
+    # get available copynumbers for each biblio
+    my $res_copynumbers = Koha::Items->search(
+        { biblionumber => $bibnum,
+          copynumber => { '!=', undef },
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { columns => 'copynumber',
+          distinct => 1,
+        }
+    );
+    $reserves->{$bibnum}->{copynumbers} = $res_copynumbers;
+
+    # get available barcodes for each biblio
+    my $res_barcodes = Koha::Items->search(
+        { biblionumber => $bibnum,
+          barcode => { '!=', undef },
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { columns => 'barcode',
+          distinct => 1,
+        }
+    );
+    $reserves->{$bibnum}->{barcodes} = $res_barcodes;
+
+    # get available holding branches for each biblio
+    my $res_holdingbranches = Koha::Items->search(
+        { biblionumber => $bibnum,
+          holdingbranch => { '!=', undef },
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { columns => 'holdingbranch',
+          distinct => 1,
+        }
+    );
+    $reserves->{$bibnum}->{holdingbranches} = $res_holdingbranches;
+
+    # items available
+    my $items_count = Koha::Items->search(
+        { biblionumber => $bibnum,
+          itemlost => 0,
+          withdrawn => 0,
+          notforloan => 0,
+          itemnumber => { -not_in => [ @branchtransfers, @issues ] },
+        },
+        { select => [ { distinct => 'itemnumber' } ] }
+    )->count;
+    $reserves->{$bibnum}->{items_count} = $items_count;
+
+    # patrons with holds
+    my $patrons_count = Koha::Holds->search(
+        { biblionumber => $bibnum },
+        { select => [ { distinct => 'borrowernumber' } ] }
+    )->count;
+    $reserves->{$bibnum}->{patrons_count} = $patrons_count;
+
+    my $pull_count = $items_count <= $patrons_count ? $items_count : $patrons_count;
+    if ( $pull_count == 0 ) {
+        delete($reserves->{$bibnum});
+        next;
+    }
+    $reserves->{$bibnum}->{pull_count} = $pull_count;
+
+    # get other relevant information
+    my $res_info = Koha::Holds->search(
+        { 'reserve.biblionumber' => $bibnum, %where },
+        { prefetch => [ 'borrowernumber', 'itembib', 'biblio' ],
+          order_by => 'reserve.reservedate',
+          alias => 'reserve'
+        }
+    )->next; # get first item in results
+    $reserves->{$bibnum}->{borrower} = $res_info->borrower;
+    $reserves->{$bibnum}->{item} = $res_info->item;
+    $reserves->{$bibnum}->{biblio} = $res_info->biblio;
+    $reserves->{$bibnum}->{reserve} = $res_info;
 }
-$sth->finish;
 
 $template->param(
     todaysdate          => $today,
     from                => $startdate,
     to                  => $enddate,
-    reserveloop         => \@reservedata,
+    reserves            => $reserves,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     HoldsToPullStartDate => C4::Context->preference('HoldsToPullStartDate') || PULL_INTERVAL,
     HoldsToPullEndDate  => C4::Context->preference('ConfirmFutureHolds') || 0,

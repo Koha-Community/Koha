@@ -469,4 +469,16 @@ sub koha_objects_class {
     'Koha::Holds';
 }
 
+__PACKAGE__->belongs_to(
+  "itembib",
+  "Koha::Schema::Result::Item",
+  { biblionumber => "biblionumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 1;
