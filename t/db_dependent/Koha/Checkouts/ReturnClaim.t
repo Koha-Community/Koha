@@ -94,9 +94,9 @@ subtest "store() tests" => sub {
             'An exception is thrown on duplicate issue_id';
         close STDERR;
 
-        is(
+        like(
             $@->duplicate_id,
-            'issue_id',
+            qr/(return_claims\.)?issue_id/,
             'Exception field is correct'
         );
     }
