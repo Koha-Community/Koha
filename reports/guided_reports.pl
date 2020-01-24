@@ -1091,6 +1091,7 @@ sub get_prepped_report {
     for(my $i=0;$i<$#split/2;$i++){ #The placeholders are always the odd elements of the array
         my ($type,$name) = split /\|/,$split[$i*2+1]; # We split them on '|'
         $headers->{$name} = $type; # Store as a lookup for the template
+        $headers->{$name} =~ s/^\w*\.//; # strip the table name just as in $sth->{NAME} array
         $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g; #Quote any special characters so we can replace the placeholders
         $name = C4::Context->dbh->quote($name);
         $sql =~ s/\[\[$split[$i*2+1]\]\]/$type AS $name/; # Remove placeholders from SQL
