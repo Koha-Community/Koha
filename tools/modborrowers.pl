@@ -203,6 +203,24 @@ if ( $op eq 'show' ) {
         }
         ,
         {
+            name => "streetnumber",
+            type => "text",
+            mandatory => ( grep /streetnumber/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "address",
+            type => "text",
+            mandatory => ( grep /address/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "address2",
+            type => "text",
+            mandatory => ( grep /address2/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
             name => "city",
             type => "text",
             mandatory => ( grep /city/, @mandatoryFields ) ? 1 : 0,
@@ -224,6 +242,24 @@ if ( $op eq 'show' ) {
             name => "country",
             type => "text",
             mandatory => ( grep /country/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "email",
+            type => "text",
+            mandatory => ( grep /email/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "phone",
+            type => "text",
+            mandatory => ( grep /phone/, @mandatoryFields ) ? 1 : 0,
+        }
+        ,
+        {
+            name => "mobile",
+            type => "text",
+            mandatory => ( grep /mobile/, @mandatoryFields ) ? 1 : 0,
         }
         ,
         {
@@ -265,12 +301,6 @@ if ( $op eq 'show' ) {
         }
         ,
         {
-            name => "email",
-            type => "text",
-            mandatory => ( grep /email/, @mandatoryFields ) ? 1 : 0,
-        }
-        ,
-        {
             name => "debarred",
             type => "date",
             mandatory => ( grep /debarred/, @mandatoryFields ) ? 1 : 0,
@@ -294,7 +324,7 @@ if ( $op eq 'do' ) {
 
     my @disabled = $input->multi_param('disable_input');
     my $infos;
-        for my $field ( qw/surname firstname branchcode categorycode city state zipcode country sort1 sort2 dateenrolled dateexpiry borrowernotes opacnote email/ ) {
+        for my $field ( qw/surname firstname branchcode categorycode streetnumber address address2 city state zipcode country email phone mobile sort1 sort2 dateenrolled dateexpiry borrowernotes opacnote/ ) {
         my $value = $input->param($field);
         $infos->{$field} = $value if $value;
         $infos->{$field} = "" if grep { /^$field$/ } @disabled;

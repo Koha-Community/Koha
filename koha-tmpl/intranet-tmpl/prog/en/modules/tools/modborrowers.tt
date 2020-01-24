@@ -141,15 +141,20 @@
                                                 <th>First name</th>
                                                 <th>Library</th>
                                                 <th>Patron category</th>
+                                                <th>Street number</th>
+                                                <th>Address</th>
+                                                <th>Address 2</th>
                                                 <th>City</th>
                                                 <th>State</th>
                                                 <th>ZIP/Postal code</th>
                                                 <th>Country</th>
+                                                <th>Primary email</th>
+                                                <th>Phone</th>
+                                                <th>Mobile</th>
                                                 <th class="title-string">Registration date</th>
                                                 <th class="title-string">Expiry date</th>
                                                 <th>Circulation note</th>
                                                 <th>OPAC note</th>
-                                                <th>Primary email</th>
                                                 <th>Restriction expiration</th>
                                                 <th>Restriction comment</th>
                                                 [% FOREACH attrh IN attributes_header %]
@@ -168,15 +173,20 @@
                                                     <td>[% borrower.firstname | html %]</td>
                                                     <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
                                                     <td>[% Categories.GetName(borrower.categorycode) | html %]</td>
+                                                    <td>[% borrower.streetnumber | html %]</td>
+                                                    <td>[% borrower.address | html %]</td>
+                                                    <td>[% borrower.address2 | html %]</td>
                                                     <td>[% borrower.city | html %]</td>
                                                     <td>[% borrower.state | html %]</td>
                                                     <td>[% borrower.zipcode | html %]</td>
                                                     <td>[% borrower.country | html %]</td>
+                                                    <td>[% borrower.email | html %]</td>
+                                                    <td>[% borrower.phone | html %]</td>
+                                                    <td>[% borrower.mobile | html %]</td>
                                                     <td><span title="[% borrower.dateenrolled | html %]">[% borrower.dateenrolled | $KohaDates %]</span></td>
                                                     <td><span title="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
                                                     <td>[% borrower.borrowernotes | html %]</td>
                                                     <td>[% borrower.opacnote | html %]</td>
-                                                    <td>[% borrower.email | html %]</td>
                                                     <td><span title="[% borrower.debarred | html %]">[% borrower.debarred | $KohaDates %]</span></td>
                                                     <td>[% borrower.debarredcomment | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
@@ -215,6 +225,12 @@
                                                 Library:
                                                 [% CASE 'categorycode' %]
                                                 Patron category:
+                                                [% CASE 'streetnumber' %]
+                                                Street number:
+                                                [% CASE 'address' %]
+                                                Address:
+                                                [% CASE 'address2' %]
+                                                Address 2:
                                                 [% CASE 'city' %]
                                                 City:
                                                 [% CASE 'state' %]
@@ -223,6 +239,12 @@
                                                 ZIP/Postal code:
                                                 [% CASE 'country' %]
                                                 Country:
+                                                [% CASE 'email' %]
+                                                Primary email:
+                                                [% CASE 'phone' %]
+                                                Phone:
+                                                [% CASE 'mobile' %]
+                                                Mobile:
                                                 [% CASE 'sort1' %]
                                                 Sort 1:
                                                 [% CASE 'sort2' %]
@@ -235,8 +257,6 @@
                                                 Circulation note:
                                                 [% CASE 'opacnote' %]
                                                 OPAC note:
-                                                [% CASE 'email' %]
-                                                Primary email:
                                                 [% CASE 'debarred' %]
                                                 Restriction expiration:
                                                 [% CASE 'debarredcomment' %]
