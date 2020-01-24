@@ -24,6 +24,7 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Barcodes::ValueBuilder;
+use C4::Biblio qw/GetMarcFromKohaField/;
 use Koha::DateUtils;
 
 my $DEBUG = 0;
