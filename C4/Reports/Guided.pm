@@ -984,7 +984,7 @@ sub EmailReport {
     my $params     = shift;
     my $report_id  = $params->{report_id};
     my $from       = $params->{from};
-    my $email      = $params->{email};
+    my $email_col  = $params->{email} || 'email';
     my $module     = $params->{module};
     my $code       = $params->{code};
     my $branch     = $params->{branch} || "";
@@ -1017,12 +1017,12 @@ sub EmailReport {
         my $email;
         my $err_count = scalar @errors;
         push ( @errors, { NO_BOR_COL => $counter } ) unless defined $row->{borrowernumber};
-        push ( @errors, { NO_EMAIL_COL => $counter } ) unless ( (defined $email && defined $row->{$email}) || defined $row->{email} );
+        push ( @errors, { NO_EMAIL_COL => $counter } ) unless ( defined $row->{$email_col} );
         push ( @errors, { NO_FROM_COL => $counter } ) unless defined ( $from || $row->{from} );
         push ( @errors, { NO_BOR => $row->{borrowernumber} } ) unless Koha::Patrons->find({borrowernumber=>$row->{borrowernumber}});
 
         my $from_address = $from || $row->{from};
-        my $to_address = $email ? $row->{$email} : $row->{email};
+        my $to_address = $row->{$email_col};
         push ( @errors, { NOT_PARSE => $counter } ) unless my $content = _process_row_TT( $row, $template );
         $counter++;
         next if scalar @errors > $err_count; #If any problems, try next

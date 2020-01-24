@@ -361,12 +361,12 @@ count(h.reservedate) AS 'holds'
 
 subtest 'Email report test' => sub {
 
-    plan tests => 9;
+    plan tests => 12;
 
-    my $id1 = $builder->build({ source => 'Borrower',value => { surname => 'mailer', email => 'a@b.com' } })->{ borrowernumber };
-    my $id2 = $builder->build({ source => 'Borrower',value => { surname => 'nomailer', email => undef } })->{ borrowernumber };
-    my $id3 = $builder->build({ source => 'Borrower',value => { surname => 'norman', email => 'a@b.com' } })->{ borrowernumber };
-    my $report1 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT surname,borrowernumber,email FROM borrowers WHERE borrowernumber IN ($id1,$id2,$id3)" } })->{ id };
+    my $id1 = $builder->build({ source => 'Borrower',value => { surname => 'mailer', email => 'a@b.com', emailpro => 'b@c.com' } })->{ borrowernumber };
+    my $id2 = $builder->build({ source => 'Borrower',value => { surname => 'nomailer', email => undef, emailpro => 'd@e.com' } })->{ borrowernumber };
+    my $id3 = $builder->build({ source => 'Borrower',value => { surname => 'norman', email => 'a@b.com', emailpro => undef } })->{ borrowernumber };
+    my $report1 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT surname,borrowernumber,email,emailpro FROM borrowers WHERE borrowernumber IN ($id1,$id2,$id3)" } })->{ id };
     my $report2 = $builder->build({ source => 'SavedSql', value => { savedsql => "SELECT potato FROM mashed" } })->{ id };
 
     my $letter1 = $builder->build({
@@ -410,6 +410,11 @@ subtest 'Email report test' => sub {
     ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh' });
     is( $emails->[0]{letter}->{content}, "mailer", "Message has expected content");
     is( $emails->[1]{letter}->{content}, "norman", "Message has expected content");
+
+    ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module} , code => $letter1->{code}, from => 'the@future.ooh', email => 'emailpro' });
+    is_deeply( $errors, [{'NO_EMAIL_COL'=>3}],"We report missing email in emailpro column");
+    is( $emails->[0]->{to_address}, 'b@c.com', "Message uses correct email");
+    is( $emails->[1]->{to_address}, 'd@e.com', "Message uses correct email");
 
 };
 
