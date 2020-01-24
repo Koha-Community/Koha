@@ -213,7 +213,7 @@ sub get_effective_rule {
     return $rule;
 }
 
-=head3 get_effective_rule
+=head3 get_effective_rules
 
 =cut
 
