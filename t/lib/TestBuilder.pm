@@ -86,6 +86,8 @@ sub build_object {
     my $object;
     if ( $class eq 'Koha::Old::Patrons' ) {
         $object = $class->search({ borrowernumber => $hashref->{borrowernumber} })->next;
+    } elsif ( $class eq 'Koha::Statistics' ) {
+        $object = $class->search({ datetime => $hashref->{datetime} })->next;
     } else {
         my @ids;
         my @pks = $self->schema->source( $class->_type )->primary_columns;
