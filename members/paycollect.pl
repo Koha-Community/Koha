@@ -67,7 +67,8 @@ my $user           = $input->remote_user;
 my $library_id = C4::Context->userenv->{'branch'};
 my $total_due  = $account->outstanding_debits->total_outstanding;
 
-my $total_paid = $input->param('paid');
+my $total_paid      = $input->param('paid');
+my $total_collected = $input->param('collected');
 
 my $selected_lines = $input->param('selected'); # comes from pay.pl
 my $pay_individual   = $input->param('pay_individual');
@@ -163,6 +164,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
         $template->param(
             error_over => 1,
             total_due => $total_due
+        );
+    } elsif ( $total_collected < $total_paid && !( $writeoff_individual || $type eq 'writeoff') ) {
+        $template->param(
+            error_under => 1,
+            total_paid => $total_paid
         );
     } else {
         output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )

@@ -65,6 +65,11 @@
     You must pay a value less than or equal to [% total_due | format('%.2f') %].
     </div>
 [% END %]
+[% IF ( error_under ) %]
+    <div id="error_message" class="dialog alert">
+    You must collect a value greater than or equal to [% total_paid | format('%.2f') %].
+    </div>
+[% END %]
 
 [% IF ( pay_individual ) %]
     [% IF ( error_registers ) %]
