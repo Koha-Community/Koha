@@ -207,8 +207,8 @@ subtest 'add() tests' => sub {
             $t->post_ok("//$userid:$password@/api/v1/patrons" => json => $newpatron)
               ->status_is(409)
               ->json_has( '/error', 'Fails when trying to POST duplicate cardnumber' )
-              ->json_has( '/conflict', 'cardnumber' ); }
-            qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'cardnumber'/;
+              ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ ); }
+            qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
 
         $schema->storage->txn_rollback;
     };
@@ -311,8 +311,8 @@ subtest 'update() tests' => sub {
             $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
               ->status_is(409)
               ->json_has( '/error' => "Fails when trying to update to an existing cardnumber or userid")
-              ->json_is(  '/conflict', 'cardnumber' ); }
-            qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key 'cardnumber'/;
+              ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ ); }
+            qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
 
         $newpatron->{ cardnumber } = $patron_1->id . $patron_2->id;
         $newpatron->{ userid }     = "user" . $patron_1->id.$patron_2->id;

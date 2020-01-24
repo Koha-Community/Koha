@@ -211,8 +211,8 @@ subtest 'add() tests' => sub {
         $t->post_ok( "//$auth_userid:$password@/api/v1/acquisitions/orders" => json => $order )
           ->status_is(409)
           ->json_has( '/error' => "Fails when trying to add an existing order_id")
-          ->json_is(  '/conflict', 'PRIMARY' ); } # WTF
-        qr/^DBD::mysql::st execute failed: Duplicate entry '(.*)' for key 'PRIMARY'/;
+          ->json_like( '/conflict' => qr/(aqorders\.)?PRIMARY/ ); }
+        qr/^DBD::mysql::st execute failed: Duplicate entry '(.*)' for key '(aqorders\.)?PRIMARY'/;
 
     $schema->storage->txn_rollback;
 };
