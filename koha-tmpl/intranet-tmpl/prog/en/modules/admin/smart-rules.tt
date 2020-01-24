@@ -174,7 +174,7 @@
                                     </td>
                                     <td class="actions">
                                       <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' | html %]&amp;categorycode=[% rule.categorycode || '*' | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
+                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% i || '*' | html %]&amp;categorycode=[% c || '*' | html %]&amp;branch=[% current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
                                     <td>
                                         [% IF note.defined && note != '' %]
@@ -289,7 +289,7 @@
                                     <td>[% rentaldiscount | html %]</td>
                                     <td class="actions">
                                       <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype || '*' | uri %]&amp;categorycode=[% rule.categorycode || '*' | uri %]&amp;branch=[% rule.current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                                      <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% i || '*' | uri %]&amp;categorycode=[% c || '*' | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
                                     </td>
                             </tr>
                         [% END %]
