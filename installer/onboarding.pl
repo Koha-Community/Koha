@@ -30,6 +30,7 @@ use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::ItemTypes;
+use Koha::CirculationRules;
 
 #Setting variables
 my $input = new CGI;
