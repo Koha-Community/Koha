@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
@@ -585,6 +585,43 @@ subtest 'ModBiblio called from linker test' => sub {
     $called = 0;
     C4::Biblio::ModBiblio($record,$biblionumber,'',1);
     is($called,0,"We didn't call to link bibs because from linker");
+};
+
+subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
+    plan tests => 3;
+
+    # Set up mocks to ensure authorities are generated
+    my $biblio_mod = Test::MockModule->new( 'C4::Linker::Default' );
+    $biblio_mod->mock( 'get_link', sub {
+        return (undef,undef);
+    });
+    # UNIMARC valid headings are built from the marc_subfield_structure for bibs and
+    # include all subfields as valid, testing with MARC21 should be sufficient for now
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('AutoCreateAuthorities', '1');
+
+    my $linker = C4::Linker::Default->new();
+    my $record = MARC::Record->new();
+
+    # Generate a record including all valid subfields and an invalid one 'e'
+    my $field = MARC::Field->new('650','','','a' => 'Beach city', 'b' => 'Weirdness', 'v' => 'Fiction', 'x' => 'Books', 'y' => '21st Century', 'z' => 'Fish Stew Pizza', 'e' => 'Depicted');
+
+    $record->append_fields($field);
+    my ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef);
+
+    is( $num_headings_changed, 1, 'We changed the one we passed' );
+    is_deeply( $results->{added},
+        {"Beach city Weirdness--Fiction--Books--21st Century--Fish Stew Pizza" => 1 },
+        "We added an authority record for the heading"
+    );
+
+    # Now we check the authority record itself
+    my $authority = GetAuthority( $record->subfield('650','9') );
+    is( $authority->field('150')->as_string(),
+        "Beach city Weirdness Fiction Books 21st Century Fish Stew Pizza",
+        "The generated record contains the correct subfields"
+    );
+
 };
 
 # Cleanup
