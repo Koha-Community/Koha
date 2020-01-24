@@ -555,7 +555,7 @@ elsif ( $op eq 'mod-refund-lost-item-fee-rule' ) {
     } else {
         Koha::CirculationRules->set_rules(
             {
-                branchcode   => undef,
+                branchcode   => $branch,
                 rules        => {
                     refund => $refund
                 }
