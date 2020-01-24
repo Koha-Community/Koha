@@ -1083,6 +1083,9 @@ sub get_prepped_report {
     my ($sql, $param_names, $sql_params ) = @_;
 
     # First we split out the placeholders
+    # This part of the code supports using [[ table.field | alias ]] in the
+    # query and replaces it by table.field AS alias. Not sure why we would
+    # need it if we can type the latter (which is simpler)?
     my @split = split /\[\[|\]\]/,$sql;
     my $headers;
     for(my $i=0;$i<$#split/2;$i++){ #The placeholders are always the odd elements of the array
