@@ -508,6 +508,9 @@ sub expected_record_1 {
     $record->leader('03174nam a2200445 a 4500');
     my @fields = (
         MARC::Field->new(
+           '007', 'vxcdq',
+        ),
+        MARC::Field->new(
             100, '1', ' ',
             a => 'Knuth, Donald Ervin',
             d => '1938',
@@ -518,8 +521,17 @@ sub expected_record_1 {
             c => 'Donald E. Knuth.',
         ),
         MARC::Field->new(
+            246, '', ' ',
+            a => 'The art of computer programming',
+        ),
+        MARC::Field->new(
             650, ' ', '0',
             9 => '462',
+        ),
+        MARC::Field->new(
+            651, ' ', '0',
+            a => 'Computer algorithms.',
+            9 => '499',
         ),
         MARC::Field->new(
             952, ' ', ' ',
@@ -529,24 +541,12 @@ sub expected_record_1 {
             e => '2001-06-25',
         ),
         MARC::Field->new(
-            246, '', ' ',
-            a => 'The art of computer programming',
-        ),
-        MARC::Field->new(
-            651, ' ', '0',
-            a => 'Computer algorithms.',
-            9 => '499',
-        ),
-        MARC::Field->new(
-            999, ' ', ' ',
-            a => 'existent - updated.',
-        ),
-        MARC::Field->new(
             999, ' ', ' ',
             a => 'additional existent.',
         ),
         MARC::Field->new(
-           '007', 'vxcdq',
+            999, ' ', ' ',
+            a => 'existent - updated.',
         ),
     );
     $record->append_fields(@fields);
@@ -578,17 +578,17 @@ sub expected_record_2 {
             9 => '499',
         ),
         MARC::Field->new(
+            651, ' ', '0',
+            a => 'Computer programming.',
+            9 => '462',
+        ),
+        MARC::Field->new(
             952, ' ', ' ',
             p => '3010023917',
             y => 'BK',
             c => 'GEN',
             d => '2001-06-25',
-        ),
-        MARC::Field->new(
-            651, ' ', '0',
-            a => 'Computer programming.',
-            9 => '462',
-        ),
+        )
     );
     $record->append_fields(@fields);
     return $record;
@@ -721,6 +721,14 @@ sub expected_record_0 {
             c => 'Donald E. Knuth.',
         ),
         MARC::Field->new(
+            600, ' ', ' ',
+            0 => 'TestUpdated',
+        ),
+        MARC::Field->new(
+            600, ' ', ' ',
+            0 => 'TestUpdated',
+        ),
+        MARC::Field->new(
             650, ' ', '0',
             0 => '42',
             a => 'Computer programming.',
@@ -732,18 +740,6 @@ sub expected_record_0 {
             a => 'Appolo',
         ),
         MARC::Field->new(
-            600, ' ', ' ',
-            0 => 'TestUpdated',
-        ),
-        MARC::Field->new(
-            600, ' ', ' ',
-            0 => 'TestUpdated',
-        ),
-        MARC::Field->new(
-            700, ' ', ' ',
-            0 => '12345',
-        ),
-        MARC::Field->new(
             690, ' ', ' ',
             0 => 'Zeroth',
             a => 'Appolo',
@@ -752,6 +748,10 @@ sub expected_record_0 {
             690, ' ', '0',
             0 => 'Zeroth',
             a => 'Appolo',
+        ),
+        MARC::Field->new(
+            700, ' ', ' ',
+            0 => '12345',
         ),
     );
     $record->append_fields(@fields);
