@@ -20,6 +20,7 @@ use Modern::Perl;
 use Koha::Acquisition::Orders;
 use Koha::Cities;
 use Koha::Holds;
+use Koha::Biblios;
 
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
@@ -55,8 +56,28 @@ get '/patrons/:patron_id/holds' => sub {
     $c->render( status => 200, json => {count => scalar(@$holds)} );
 };
 
+get '/biblios' => sub {
+    my $c = shift;
+    my $output = $c->req->params->to_hash;
+    $output->{query} = $c->req->json if defined $c->req->json;
+    my $headers = $c->req->headers->to_hash;
+    $output->{'x-koha-query'} = $headers->{'x-koha-query'} if defined $headers->{'x-koha-query'};
+    $c->validation->output($output);
+    my $biblios_set = Koha::Biblios->new;
+    $c->stash("koha.embed", {
+        "suggestions" => {
+            children => {
+                "suggester" => {}
+            }
+        }
+    });
+    my $biblios = $c->objects->search($biblios_set);
+
+    $c->render( status => 200, json => {count => scalar(@$biblios)} );
+};
+
 # The tests
-use Test::More tests => 4;
+use Test::More tests => 8;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -228,6 +249,101 @@ subtest 'objects.search helper, with path parameters and _match' => sub {
 
     $t->get_ok('/patrons/10/holds?_match=contains')
       ->json_is('/count' => 1, 'there should be 1 hold for borrower 10 with _match=contains');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'object.search helper with query parameter' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron1 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron2 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
+    my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
+    my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
+
+    $t->get_ok('/biblios' => json => {"suggestions.suggester.patron_id" => $patron1->borrowernumber })
+      ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
+
+    $t->get_ok('/biblios' => json => {"suggestions.suggester.patron_id" => $patron2->borrowernumber })
+      ->json_is('/count' => 2, 'there should be 2 biblios with suggestions of patron 2');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'object.search helper with q parameter' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron1 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron2 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
+    my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
+    my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
+
+    $t->get_ok('/biblios?q={"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}')
+      ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
+
+    $t->get_ok('/biblios?q={"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}')
+      ->json_is('/count' => 2, 'there should be 2 biblios with suggestions of patron 2');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'object.search helper with x-koha-query header' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $patron1 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron2 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
+    my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
+    my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
+
+    $t->get_ok('/biblios' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}'})
+      ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
+
+    $t->get_ok('/biblios' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}'})
+      ->json_is('/count' => 2, 'there should be 2 biblios with suggestions of patron 2');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'object.search helper with all query methods' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $patron1 = $builder->build_object( { class => "Koha::Patrons" , value => {cardnumber => 'cardpatron1', firstname=>'patron1'} } );
+    my $patron2 = $builder->build_object( { class => "Koha::Patrons" , value => {cardnumber => 'cardpatron2', firstname=>'patron2'} } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $biblio3 = $builder->build_sample_biblio;
+    my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
+    my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
+    my $suggestion3 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio3->biblionumber} } );
+
+    $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron1->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron1->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron1->cardnumber})
+      ->json_is('/count' => 1, 'there should be 1 biblio with suggestions of patron 1');
+
+    $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron2->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron2->cardnumber})
+      ->json_is('/count' => 2, 'there should be 2 biblios with suggestions of patron 2');
+
+    $t->get_ok('/biblios?q={"suggestions.suggester.firstname": "'.$patron1->firstname.'"}' => {'x-koha-query' => '{"suggestions.suggester.patron_id": "'.$patron2->borrowernumber.'"}'} => json => {"suggestions.suggester.cardnumber" => $patron2->cardnumber})
+      ->json_is('/count' => 0, 'there shouldn\'t be biblios where suggester has patron1 fistname and patron2 id');
 
     $schema->storage->txn_rollback;
 };

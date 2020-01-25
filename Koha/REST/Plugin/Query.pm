@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Plugin';
 use List::MoreUtils qw(any);
 use Scalar::Util qw(reftype);
+use JSON qw(decode_json);
 
 use Koha::Exceptions;
 
@@ -179,6 +180,28 @@ is raised.
         }
     );
 
+=head3 merge_q_params
+
+    $c->merge_q_params( $filtered_params, $q_params, $result_set );
+
+Merges parameters from $q_params into $filtered_params.
+
+=cut
+
+    $app->helper(
+        'merge_q_params' => sub {
+
+            my ( $c, $filtered_params, $q_params, $result_set ) = @_;
+
+            $q_params = decode_json($q_params) unless reftype $q_params;
+
+            my $params = _parse_dbic_query($q_params, $result_set);
+
+            return $params unless scalar(keys %{$filtered_params});
+            return {'-and' => [$params, $filtered_params ]};
+        }
+    );
+
 =head3 stash_embed
 
     $c->stash_embed( $c->match->endpoint->pattern->defaults->{'openapi.op_spec'} );
@@ -229,7 +252,7 @@ is raised.
 
 sub _reserved_words {
 
-    my @reserved_words = qw( _match _order_by _page _per_page );
+    my @reserved_words = qw( _match _order_by _page _per_page q query x-koha-query);
     return \@reserved_words;
 }
 
@@ -344,6 +367,55 @@ sub _parse_prefetch {
     return unless scalar(keys %{$prefetch});
 
     return $prefetch;
+}
+
+sub _from_api_param {
+    my ($key, $result_set) = @_;
+
+    if($key =~ /\./) {
+
+        my ($curr, $next) = split /\s*\.\s*/, $key, 2;
+
+        return $curr.'.'._from_api_param($next, $result_set) if $curr eq 'me';
+
+        my $ko_class = $result_set->prefetch_whitelist->{$curr};
+
+        Koha::Exceptions::BadParameter->throw("Cannot find Koha::Object class for $curr")
+            unless defined $ko_class;
+
+        $result_set = $ko_class->new;
+
+        if ($next =~ /\./) {
+            return _from_api_param($next, $result_set);
+        } else {
+            return $curr.'.'.($result_set->from_api_mapping && defined $result_set->from_api_mapping->{$next} ? $result_set->from_api_mapping->{$next}:$next);
+        }
+    } else {
+        return defined $result_set->from_api_mapping->{$key} ? $result_set->from_api_mapping->{$key} : $key;
+    }
+}
+
+sub _parse_dbic_query {
+    my ($q_params, $result_set) = @_;
+
+    if(reftype($q_params) && reftype($q_params) eq 'HASH') {
+        my $parsed_hash;
+        foreach my $key (keys %{$q_params}) {
+            if($key =~ /-?(not_?)?bool/i ) {
+                $parsed_hash->{$key} = _from_api_param($q_params->{$key}, $result_set);
+                next;
+            }
+            my $k = _from_api_param($key, $result_set);
+            $parsed_hash->{$k} = _parse_dbic_query($q_params->{$key}, $result_set);
+        }
+        return $parsed_hash;
+    } elsif (reftype($q_params) && reftype($q_params) eq 'ARRAY') {
+        my @mapped = map{ _parse_dbic_query($_, $result_set) } @$q_params;
+        return \@mapped;
+    } else {
+        return $q_params;
+    }
+
 }
 
 1;

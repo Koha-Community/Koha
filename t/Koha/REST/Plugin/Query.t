@@ -23,6 +23,7 @@ use Try::Tiny;
 
 use Koha::Cities;
 use Koha::Holds;
+use Koha::Biblios;
 
 app->log->level('error');
 
@@ -134,6 +135,15 @@ get '/dbic_merge_prefetch' => sub {
     $c->render( json => $attributes, status => 200 );
 };
 
+get '/merge_q_params' => sub {
+  my $c = shift;
+  my $filtered_params = {'biblio_id' => 1};
+  my $result_set = Koha::Biblios->new;
+  $filtered_params = $c->merge_q_params($filtered_params, $c->req->json->{q}, $result_set);
+
+  $c->render( json => $filtered_params, status => 200 );
+};
+
 get '/build_query' => sub {
     my $c = shift;
     my ( $filtered_params, $reserved_params ) =
@@ -209,7 +219,7 @@ sub to_model {
 
 # The tests
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Mojo;
 
 subtest 'extract_reserved_params() tests' => sub {
@@ -295,6 +305,55 @@ subtest '/dbic_merge_prefetch' => sub {
     $t->get_ok('/dbic_merge_prefetch')->status_is(200)
       ->json_like( '/prefetch/0' => qr/item|biblio/ )
       ->json_like( '/prefetch/1' => qr/item|biblio/ );
+};
+
+subtest '/merge_q_params' => sub {
+  plan tests => 3;
+  my $t = Test::Mojo->new;
+
+  $t->get_ok('/merge_q_params' => json => {
+    q => {
+      "-not_bool" => "suggestions.suggester.patron_card_lost",
+      "-or" => [
+        {
+          "creation_date" => {
+            "!=" => ["fff", "zzz", "xxx"]
+          }
+        },
+        { "suggestions.suggester.housebound_profile.frequency" => "123" },
+        {
+          "suggestions.suggester.library_id" => {"like" => "%CPL%"}
+        }
+      ]
+    }
+  })->status_is(200)
+    ->json_is( '/-and' => [
+        {
+          "-not_bool" => "suggester.lost",
+          "-or" => [
+            {
+              "datecreated" => {
+                "!=" => [
+                  "fff",
+                  "zzz",
+                  "xxx"
+                ]
+              }
+            },
+            {
+              "housebound_profile.frequency" => 123
+            },
+            {
+              "suggester.branchcode" => {
+                "like" => "\%CPL\%"
+              }
+            }
+          ]
+        },
+        {
+          "biblio_id" => 1
+        }
+      ]);
 };
 
 subtest '_build_query_params_from_api' => sub {

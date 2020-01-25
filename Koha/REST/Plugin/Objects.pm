@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Plugin';
 
+use JSON qw(decode_json);
+
 =head1 NAME
 
 Koha::REST::Plugin::Objects
@@ -97,6 +99,22 @@ sub register {
                 }
             }
 
+            if( defined $reserved_params->{q} || defined $reserved_params->{query} || defined $reserved_params->{'x-koha-query'}) {
+                $filtered_params //={};
+                my @query_params_array;
+                my $query_params;
+                push @query_params_array, $reserved_params->{query} if defined $reserved_params->{query};
+                push @query_params_array, decode_json($reserved_params->{q}) if defined $reserved_params->{q};
+                push @query_params_array, decode_json($reserved_params->{'x-koha-query'}) if defined $reserved_params->{'x-koha-query'};
+
+                if(scalar(@query_params_array) > 1) {
+                    $query_params = {'-and' => \@query_params_array};
+                } else {
+                    $query_params = $query_params_array[0];
+                }
+
+                $filtered_params = $c->merge_q_params( $filtered_params, $query_params, $result_set );
+            }
             # Perform search
             my $objects = $result_set->search( $filtered_params, $attributes );
 
