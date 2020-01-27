@@ -4,11 +4,11 @@
         <h5>Administration</h5>
         <ul>
             [% IF ( CAN_user_parameters_manage_cash_registers ) %]
-                <li><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></li>
+                <li><a href="/cgi-bin/koha/admin/cash_registers.pl">Configure cash registers</a></li>
             [% END %]
 
             [% IF ( CAN_user_parameters_manage_accounts ) %]
-                <li><a href="/cgi-bin/koha/admin/debit_types.pl">Purchase items</a></li>
+                <li><a href="/cgi-bin/koha/admin/debit_types.pl">Configure items for purchase</a></li>
             [% END %]
         </ul>
         [% END %]
