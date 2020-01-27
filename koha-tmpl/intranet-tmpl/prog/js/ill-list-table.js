@@ -323,20 +323,22 @@ $(document).ready(function() {
     });
 
     // Filter partner list
+    // Record the list of all options
+    var ill_partner_options = $('#partners > option');
     $('#partner_filter').keyup(function() {
         var needle = $('#partner_filter').val();
-        $('#partners > option').each(function() {
-            var regex = new RegExp(needle, 'i');
+        var regex = new RegExp(needle, 'i');
+        var filtered = [];
+        ill_partner_options.each(function() {
             if (
                 needle.length == 0 ||
                 $(this).is(':selected') ||
                 $(this).text().match(regex)
             ) {
-                $(this).show();
-            } else {
-                $(this).hide();
+                filtered.push($(this));
             }
         });
+        $('#partners').empty().append(filtered);
     });
 
     // Display the modal containing request supplier metadata
