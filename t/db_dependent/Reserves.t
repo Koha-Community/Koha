@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 62;
+use Test::More tests => 63;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1033,6 +1033,49 @@ subtest 'MoveReserve additional test' => sub {
     is($patron_2->holds->count, 0, "The 2nd patrons no longer has a hold");
     is($patron_2->old_holds->next()->reserve_id, $reserve_2, "The 2nd patrons hold was filled and moved to old holds");
 
+};
+
+subtest 'RevertWaitingStatus' => sub {
+
+    plan tests => 2;
+
+    # Create the items and patrons we need
+    my $biblio  = $builder->build_sample_biblio();
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itype   = $builder->build_object(
+        { class => "Koha::ItemTypes", value => { notforloan => 0 } } );
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            itype        => $itype->itemtype,
+            library      => $library->branchcode
+        }
+    );
+    my $patron_1 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron_2 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron_3 = $builder->build_object( { class => "Koha::Patrons" } );
+    my $patron_4 = $builder->build_object( { class => "Koha::Patrons" } );
+
+    # Place a hold on the title for both patrons
+    my $priority = 1;
+    my $hold_1 = place_item_hold( $patron_1, $item_1, $library, $priority );
+    my $hold_2 = place_item_hold( $patron_2, $item_1, $library, $priority );
+    my $hold_3 = place_item_hold( $patron_3, $item_1, $library, $priority );
+    my $hold_4 = place_item_hold( $patron_4, $item_1, $library, $priority );
+
+    $hold_1->set_waiting;
+    AddIssue( $patron_3->unblessed, $item_1->barcode, undef, 'revert' );
+
+    my $holds = $biblio->holds;
+    is( $holds->count, 3, 'One hold has been deleted' );
+    is_deeply(
+        [
+            $holds->next->priority, $holds->next->priority,
+            $holds->next->priority
+        ],
+        [ 1, 2, 3 ],
+        'priorities have been reordered'
+    );
 };
 
 sub count_hold_print_messages {
