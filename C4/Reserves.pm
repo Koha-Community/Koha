@@ -2006,10 +2006,8 @@ sub RevertWaitingStatus {
 
     ## Increment the priority of all other non-waiting
     ## reserves for this bib record
-    my $holds = Koha::Holds->search({ biblionumber => $hold->biblionumber, priority => { '>' => 0 } });
-    while ( my $h = $holds->next ) {
-        $h->priority( $h->priority + 1 )->store;
-    }
+    my $holds = Koha::Holds->search({ biblionumber => $hold->biblionumber, priority => { '>' => 0 } })
+                           ->update({ priority => \'priority + 1' });
 
     ## Fix up the currently waiting reserve
     $hold->set(
