@@ -144,7 +144,7 @@ sub set_parser_options {
     my ($self, $parser) = @_;
     my $conf = $self->{_options};
 
-    if( $conf->{expand_entities} ) {
+    if( $conf->{expand_entities_unsafe} ) { # NOT recommended
         _set_option($parser, 'expand_entities', 1);
     } else {
         # If not explicitly set, we should disable expanding for security

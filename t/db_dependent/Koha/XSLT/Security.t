@@ -25,7 +25,7 @@ use Test::Warn;
 use Koha::XSLT::Base;
 use t::lib::Mocks;
 
-t::lib::Mocks::mock_config( 'koha_xslt_security', { expand_entities => 1 } );
+t::lib::Mocks::mock_config( 'koha_xslt_security', { expand_entities_unsafe => 1 } );
 my $engine=Koha::XSLT::Base->new;
 
 my $secret_file = mytempfile('Big secret');
@@ -44,7 +44,7 @@ my $xslt_file = mytempfile($xslt);
 my $output= $engine->transform( "<ignored/>", $xslt_file );
 like($output, qr/Big secret/, 'external entity got through');
 
-t::lib::Mocks::mock_config( 'koha_xslt_security', { expand_entities => 0 } );
+t::lib::Mocks::mock_config( 'koha_xslt_security', { expand_entities_unsafe => 0 } );
 $engine=Koha::XSLT::Base->new;
 $output= $engine->transform( "<ignored/>", $xslt_file );
 unlike($output, qr/Big secret/, 'external entity did not get through');
