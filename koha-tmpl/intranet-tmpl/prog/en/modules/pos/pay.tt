@@ -323,7 +323,7 @@
             },
             "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
                 var iTotal = aData[1] * aData[2];
-                this.fnUpdate( iTotal.format_price(), nRow, 3, false, false );
+                this.fnUpdate( iTotal, nRow, 3, false, false );
             },
             "fnFooterCallback": function(nFoot, aData, iStart, iEnd, aiDisplay) {
                 var iTotalPrice = 0;
@@ -331,9 +331,7 @@
                 {
                     iTotalPrice += aData[i][3]*1;
                 }
-
-                iTotalPrice = Number.parseFloat(iTotalPrice).toFixed(2);
-                nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice;
+                nFoot.getElementsByTagName('td')[1].innerHTML = iTotalPrice.format_price();
                 $('#paid').val(iTotalPrice);
                 $('#paid').trigger('change');
             }
