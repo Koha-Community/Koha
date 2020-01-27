@@ -223,7 +223,7 @@ Koha::CirculationRules->set_rules(
         branchcode   => undef,
         rules        => {
             maxissueqty     => 99,
-            onshelfholds    => 2,
+            onshelfholds    => 0,
         }
     }
 );

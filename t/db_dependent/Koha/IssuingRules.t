@@ -49,6 +49,7 @@ subtest 'get_effective_issuing_rule' => sub {
         Koha::CirculationRules->delete;
 
         is(Koha::CirculationRules->search->count, 0, 'There are no issuing rules.');
+        # undef, undef, undef => 1
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => undef,
             categorycode => undef,
@@ -58,27 +59,34 @@ subtest 'get_effective_issuing_rule' => sub {
         });
         is($rule, undef, 'When I attempt to get effective issuing rule by'
            .' providing undefined values, then undef is returned.');
-        ok(Koha::CirculationRule->new({
-            branchcode => undef,
-            categorycode => undef,
-            itemtype => undef,
-            rule_name => 'fine',
-            rule_value => 2,
-        })->store, 'Given I added an issuing rule branchcode => undef,'
+
+       # undef, undef, undef => 2
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => undef,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'fine',
+                    rule_value   => 2,
+                }
+              )->store,
+            'Given I added an issuing rule branchcode => undef,'
            .' categorycode => undef, itemtype => undef,');
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => undef,
             categorycode => undef,
             itemtype     => undef,
             rule_name    => 'fine',
-            rule_value => 3,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => undef,
+                branchcode   => undef,
                 categorycode => undef,
-                itemtype => undef
+                itemtype     => undef,
+                rule_name    => 'fine',
+                rule_value   => 2,
             },
             'When I attempt to get effective'
            .' issuing rule by providing undefined values, then the above one is'
@@ -97,11 +105,11 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 4,
         });
         is($rule, undef, 'When I attempt to get effective issuing rule, then undef'
                         .' is returned.');
 
+        # undef, undef, undef => 5
         ok(Koha::CirculationRule->new({
             branchcode => undef,
             categorycode => undef,
@@ -114,189 +122,267 @@ subtest 'get_effective_issuing_rule' => sub {
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 6,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => undef,
+                branchcode   => undef,
                 categorycode => undef,
-                itemtype => undef
+                itemtype     => undef,
+                rule_name    => 'fine',
+                rule_value   => 5,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => undef,
-            categorycode => undef,
-            itemtype => $itemtype,
-            rule_name => 'fine',
-            rule_value   => 7,
-        })->store, "Given I added an issuing rule branchcode => undef, categorycode => undef, itemtype => $itemtype,");
+        # undef, undef, undef     => 5
+        # undef, undef, $itemtype => 7
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => undef,
+                    categorycode => undef,
+                    itemtype     => $itemtype,
+                    rule_name    => 'fine',
+                    rule_value   => 7,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => undef, categorycode => undef, itemtype => $itemtype,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 8,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => undef,
+                branchcode   => undef,
                 categorycode => undef,
-                itemtype => $itemtype
+                itemtype     => $itemtype,
+                rule_name    => 'fine',
+                rule_value   => 7,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => undef,
-            categorycode => $categorycode,
-            itemtype => undef,
-            rule_name => 'fine',
-            rule_value   => 9,
-        })->store, "Given I added an issuing rule branchcode => undef, categorycode => $categorycode, itemtype => undef,");
+        # undef, undef,         undef     => 5
+        # undef, undef,         $itemtype => 7
+        # undef, $categorycode, undef     => 9
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => undef,
+                    categorycode => $categorycode,
+                    itemtype     => undef,
+                    rule_name    => 'fine',
+                    rule_value   => 9,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => undef, categorycode => $categorycode, itemtype => undef,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 10,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => undef,
+                branchcode   => undef,
                 categorycode => $categorycode,
-                itemtype => undef
+                itemtype     => undef,
+                rule_name    => 'fine',
+                rule_value   => 9,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => undef,
-            categorycode => $categorycode,
-            itemtype => $itemtype,
-            rule_name => 'fine',
-            rule_value   => 11,
-        })->store, "Given I added an issuing rule branchcode => undef, categorycode => $categorycode, itemtype => $itemtype,");
+        # undef, undef,         undef     => 5
+        # undef, undef,         $itemtype => 7
+        # undef, $categorycode, undef     => 9
+        # undef, $categorycode, $itemtype => 11
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => undef,
+                    categorycode => $categorycode,
+                    itemtype     => $itemtype,
+                    rule_name    => 'fine',
+                    rule_value   => 11,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => undef, categorycode => $categorycode, itemtype => $itemtype,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 12,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => undef,
+                branchcode   => undef,
                 categorycode => $categorycode,
-                itemtype => $itemtype
+                itemtype     => $itemtype,
+                rule_name    => 'fine',
+                rule_value   => 11,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => $branchcode,
-            categorycode => undef,
-            itemtype => undef,
-            rule_name => 'fine',
-            rule_value   => 13,
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => undef, itemtype => undef,");
+        # undef,       undef,         undef     => 5
+        # undef,       undef,         $itemtype => 7
+        # undef,       $categorycode, undef     => 9
+        # undef,       $categorycode, $itemtype => 11
+        # $branchcode, undef,         undef     => 13
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => $branchcode,
+                    categorycode => undef,
+                    itemtype     => undef,
+                    rule_name    => 'fine',
+                    rule_value   => 13,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => $branchcode, categorycode => undef, itemtype => undef,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 14,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => $branchcode,
+                branchcode   => $branchcode,
                 categorycode => undef,
-                itemtype => undef
+                itemtype     => undef,
+                rule_name    => 'fine',
+                rule_value   => 13,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => $branchcode,
-            categorycode => undef,
-            itemtype => $itemtype,
-            rule_name => 'fine',
-            rule_value   => 15,
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => undef, itemtype => $itemtype,");
+        # undef,       undef,         undef     => 5
+        # undef,       undef,         $itemtype => 7
+        # undef,       $categorycode, undef     => 9
+        # undef,       $categorycode, $itemtype => 11
+        # $branchcode, undef,         undef     => 13
+        # $branchcode, undef,         $itemtype => 15
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => $branchcode,
+                    categorycode => undef,
+                    itemtype     => $itemtype,
+                    rule_name    => 'fine',
+                    rule_value   => 15,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => $branchcode, categorycode => undef, itemtype => $itemtype,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 16,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => $branchcode,
+                branchcode   => $branchcode,
                 categorycode => undef,
-                itemtype => $itemtype
+                itemtype     => $itemtype,
+                rule_name    => 'fine',
+                rule_value   => 15,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => $branchcode,
-            categorycode => $categorycode,
-            itemtype => undef,
-            rule_name => 'fine',
-            rule_value   => 17,
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => undef,");
+        # undef,       undef,         undef     => 5
+        # undef,       undef,         $itemtype => 7
+        # undef,       $categorycode, undef     => 9
+        # undef,       $categorycode, $itemtype => 11
+        # $branchcode, undef,         undef     => 13
+        # $branchcode, undef,         $itemtype => 15
+        # $branchcode, $categorycode, undef     => 17
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => $branchcode,
+                    categorycode => $categorycode,
+                    itemtype     => undef,
+                    rule_name    => 'fine',
+                    rule_value   => 17,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => undef,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 18,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => $branchcode,
+                branchcode   => $branchcode,
                 categorycode => $categorycode,
-                itemtype => undef
+                itemtype     => undef,
+                rule_name    => 'fine',
+                rule_value   => 17,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
         );
 
-        ok(Koha::CirculationRule->new({
-            branchcode => $branchcode,
-            categorycode => $categorycode,
-            itemtype => $itemtype,
-            rule_name => 'fine',
-            rule_value   => 19,
-        })->store, "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => $itemtype,");
+        # undef,       undef,         undef     => 5
+        # undef,       undef,         $itemtype => 7
+        # undef,       $categorycode, undef     => 9
+        # undef,       $categorycode, $itemtype => 11
+        # $branchcode, undef,         undef     => 13
+        # $branchcode, undef,         $itemtype => 15
+        # $branchcode, $categorycode, undef     => 17
+        # $branchcode, $categorycode, $itemtype => 19
+        ok(
+            Koha::CirculationRule->new(
+                {
+                    branchcode   => $branchcode,
+                    categorycode => $categorycode,
+                    itemtype     => $itemtype,
+                    rule_name    => 'fine',
+                    rule_value   => 19,
+                }
+              )->store,
+            "Given I added an issuing rule branchcode => $branchcode, categorycode => $categorycode, itemtype => $itemtype,"
+        );
         $rule = Koha::CirculationRules->get_effective_rule({
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => 'fine',
-            rule_value   => 20,
         });
         _is_row_match(
             $rule,
             {
-                branchcode => $branchcode,
+                branchcode   => $branchcode,
                 categorycode => $categorycode,
-                itemtype => $itemtype
+                itemtype     => $itemtype,
+                rule_name    => 'fine',
+                rule_value   => 19,
             },
             'When I attempt to get effective issuing rule,'
            .' then the above one is returned.'
