@@ -148,7 +148,9 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        $self->timestamp(undef) if $self->timestamp; # Maybe move this to Koha::Object->store?
+        if ( $self->timestamp ) {
+            $self->timestamp(dt_from_string); # Maybe move this to Koha::Object->store?
+        }
 
         C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
 
