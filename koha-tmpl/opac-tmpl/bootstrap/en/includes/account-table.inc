@@ -29,7 +29,6 @@
                     <td><span title="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
                     <td>
                         [% PROCESS account_type_description account=ACCOUNT_LINE %]
-                        [%- PROCESS account_status_description account=ACCOUNT_LINE -%]
                     </td>
                     <td>
                         [%- IF ACCOUNT_LINE.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) | html %][% END %]
@@ -59,7 +58,6 @@
                     <td><span title="[% outstanding_credit.date | html %]">[% outstanding_credit.date | $KohaDates %]</span></td>
                     <td>
                         [% PROCESS account_type_description account=outstanding_credit %]
-                        [%- PROCESS account_status_description account=outstanding_credit -%]
                     </td>
                     <td>
                         [%- IF outstanding_credit.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', outstanding_credit.payment_type, 1) | html %][% END %]
@@ -198,11 +196,6 @@
            [%- CASE                    -%][% account.debit_type.description | html %]
        [%- END -%]
     [%- END -%]
-    [%- PROCESS account_status_description account=account -%]
-    </span>
-[%- END -%]
-
-[%- BLOCK account_status_description -%]
     [%- SWITCH account.status -%]
         [%- CASE 'UNRETURNED' -%]<span> (Accruing)</span>
         [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
@@ -212,4 +205,5 @@
         [%- CASE 'LOST'       -%]<span> (Lost)</span>
         [%- CASE              -%]
     [%- END -%]
+    </span>
 [%- END -%]
