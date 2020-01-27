@@ -2102,7 +2102,7 @@ sub _SearchItems_build_where_fragment {
         push @columns, Koha::Database->new()->schema()->resultset('Biblio')->result_source->columns;
         push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
         my @operators = qw(= != > < >= <= like);
-        my $field = $filter->{field};
+        my $field = $filter->{field} // q{};
         if ( (0 < grep /^$field$/, @columns) or (substr($field, 0, 5) eq 'marc:') ) {
             my $op = $filter->{operator};
             my $query = $filter->{query};
