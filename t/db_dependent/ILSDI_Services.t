@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -28,6 +28,7 @@ use XML::LibXML;
 
 use C4::Items qw( ModItemTransfer );
 use C4::Circulation qw( AddIssue );
+use C4::Reserves qw (AddReserve ModReserve ModReserveAffect ModReserveStatus);
 
 use Koha::AuthUtils;
 use Koha::DateUtils qw( dt_from_string );
@@ -734,6 +735,65 @@ subtest 'RenewHold' => sub {
     $patron->delete;
     $reply = C4::ILSDI::Services::RenewLoan($cgi);
     is( $reply->{code}, 'PatronNotFound', 'If the patron does not exist, PatronNotFound should be returned');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'CancelHold' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $cgi = CGI->new;
+
+    my $library = $builder->build_object({
+        class => 'Koha::Libraries',
+    });
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons',
+                                           value => {
+                                               branchcode => $library->branchcode,
+                                           },
+                                         } );
+
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons',
+                                           value => {
+                                               branchcode => $library->branchcode,
+                                           },
+                                         } );
+
+    my $item = $builder->build_sample_item({ library => $library->branchcode });
+
+    my $reserve = C4::Reserves::AddReserve({branchcode => $library->branchcode,
+                                            borrowernumber => $patron->borrowernumber,
+                                            biblionumber => $item->biblionumber });
+
+    # Affecting the reserve sets it to a waiting state
+    C4::Reserves::ModReserveAffect( $item->itemnumber,
+                                    $patron->borrowernumber,
+                                    undef,
+                                    $reserve,
+                                   );
+
+    $cgi->param( patron_id => $patron2->borrowernumber );
+    $cgi->param( item_id   => $reserve );
+
+
+    my $reply = C4::ILSDI::Services::CancelHold($cgi);
+    is( $reply->{code}, 'BorrowerCannotCancelHold', 'If the patron is wrong, BorrowerCannotCancelHold should be returned');
+
+    $cgi->param( patron_id => $patron->borrowernumber );
+    $reply = C4::ILSDI::Services::CancelHold($cgi);
+    is( $reply->{code}, 'BorrowerCannotCancelHold', 'If reserve in a Waiting state, patron cannot cancel');
+
+    C4::Reserves::ModReserveStatus( $item->itemnumber, 'T' );
+    $reply = C4::ILSDI::Services::CancelHold($cgi);
+    is( $reply->{code}, 'BorrowerCannotCancelHold', 'If reserve in a Transfer state, patron cannot cancel');
+
+    C4::Reserves::ModReserve( {rank => 1, reserve_id => $reserve, branchcode => $library->branchcode} );
+    $cgi->param( item_id => $reserve );
+    $reply = C4::ILSDI::Services::CancelHold($cgi);
+    is( $reply->{code}, 'Canceled', 'If the patron is fine and reserve not waiting, Canceled should be returned and reserve canceled');
 
     $schema->storage->txn_rollback;
 };
