@@ -290,9 +290,11 @@
                                         <label for="partners" class="required">Select partner libraries:</label>
                                         <select size="5" multiple="true" id="partners" name="partners" required="required">
                                             [% FOREACH partner IN whole.value.partners %]
-                                                <option value=[% partner.email | html %]>
-                                                    [% partner.branchcode _ " - " _ partner.surname %]
-                                                </option>
+                                                [% IF partner.email && partner.email.length > 0 %]
+                                                    <option value="[% partner.email | html %]">
+                                                        [% partner.branchcode _ " - " _ partner.surname %]
+                                                    </option>
+                                                [% END %]
                                             [% END %]
                                         </select>
 
