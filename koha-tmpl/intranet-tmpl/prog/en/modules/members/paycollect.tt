@@ -128,17 +128,18 @@
         <label>Change to give: </label>
         <span id="change">0.00</span>
     </li>
-    [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
-    [% SET excluded = ['SIP00', 'SIP01', 'SIP02'] %]
-    [% IF payment_types.size > 3 %]
+    [% SET payment_types = [] %]
+    [% FOR pt IN AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
+        [% NEXT IF pt.authorised_value.grep("^SIP[[:digit:]]{2}$").size() %]
+        [% payment_types.push(pt) %]
+    [% END %]
+    [% IF payment_types.size > 0 %]
         <li>
             <label for="payment_type">Payment type: </label>
             <select name="payment_type" id="payment_type">
                 <option value=""></option>
                 [% FOREACH pt IN payment_types %]
-                    [% UNLESS excluded.grep("^$pt.authorised_value\$").size %]
                     <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
-                    [% END %]
                 [% END %]
             </select>
         </li>
@@ -260,17 +261,18 @@
             <label>Change to give: </label>
             <span id="change">0.00</span>
         </li>
-    [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
-    [% SET excluded = ['SIP00', 'SIP01', 'SIP02'] %]
-    [% IF payment_types.size > 3 %]
+    [% SET payment_types = [] %]
+    [% FOR pt IN AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
+        [% NEXT IF pt.authorised_value.grep("^SIP[[:digit:]]{2}$").size() %]
+        [% payment_types.push(pt) %]
+    [% END %]
+    [% IF payment_types.size > 0 %]
         <li>
             <label for="payment_type">Payment type: </label>
             <select name="payment_type" id="payment_type">
                 <option value=""></option>
                 [% FOREACH pt IN payment_types %]
-                    [% UNLESS excluded.grep("^$pt.authorised_value\$").size %]
                     <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
-                    [% END %]
                 [% END %]
             </select>
         </li>
