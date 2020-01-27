@@ -19,12 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use C4::Biblio;
+use C4::Circulation;
 
 use Koha::Items;
 use Koha::Database;
+use Koha::Old::Items;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -326,6 +328,112 @@ subtest 'pickup_locations' => sub {
             }
         }
     }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'deletion' => sub {
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+
+    is( ref( $item->move_to_deleted ), 'Koha::Schema::Result::Deleteditem', 'Koha::Item->move_to_deleted should return the Deleted item' )
+      ;    # FIXME This should be Koha::Deleted::Item
+    is( Koha::Old::Items->search({itemnumber => $item->itemnumber})->count, 1, '->move_to_deleted must have moved the item to deleteditem' );
+    $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+        }
+    );
+    $item->delete;
+    is( Koha::Old::Items->search({itemnumber => $item->itemnumber})->count, 0, '->move_to_deleted must not have moved the item to deleteditem' );
+
+
+    my $library   = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_2 = $builder->build_object({ class => 'Koha::Libraries' });
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+
+    my $patron = $builder->build_object({class => 'Koha::Patrons'});
+    $item = $builder->build_sample_item({ library => $library->branchcode });
+
+    # book_on_loan
+    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+    is(
+        $item->safe_to_delete,
+        'book_on_loan',
+        'Koha::Item->safe_to_delete reports item on loan',
+    );
+
+    is(
+        $item->safe_delete,
+        'book_on_loan',
+        'item that is on loan cannot be deleted',
+    );
+
+    AddReturn( $item->barcode, $library->branchcode );
+
+    # book_reserved is tested in t/db_dependent/Reserves.t
+
+    # not_same_branch
+    t::lib::Mocks::mock_preference('IndependentBranches', 1);
+    my $item_2 = $builder->build_sample_item({ library => $library_2->branchcode });
+
+    is(
+        $item_2->safe_to_delete,
+        'not_same_branch',
+        'Koha::Item->safe_to_delete reports IndependentBranches restriction',
+    );
+
+    is(
+        $item_2->safe_delete,
+        'not_same_branch',
+        'IndependentBranches prevents deletion at another branch',
+    );
+
+    # linked_analytics
+
+    { # codeblock to limit scope of $module->mock
+
+        my $module = Test::MockModule->new('C4::Items');
+        $module->mock( GetAnalyticsCount => sub { return 1 } );
+
+        $item->discard_changes;
+        is(
+            $item->safe_to_delete,
+            'linked_analytics',
+            'Koha::Item->safe_to_delete reports linked analytics',
+        );
+
+        is(
+            $item->safe_delete,
+            'linked_analytics',
+            'Linked analytics prevents deletion of item',
+        );
+
+    }
+
+    is(
+        $item->safe_to_delete,
+        1,
+        'Koha::Item->safe_to_delete shows item safe to delete'
+    );
+
+    $item->safe_delete,
+
+    my $test_item = Koha::Items->find( $item->itemnumber );
+
+    is( $test_item, undef,
+        "Koha::Item->safe_delete should delete item if safe_to_delete returns true"
+    );
 
     $schema->storage->txn_rollback;
 };
