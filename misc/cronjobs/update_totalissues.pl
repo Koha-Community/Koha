@@ -138,21 +138,15 @@ sub process_stats {
             $dt->subtract( $units{$unit} => $1 ) );
     }
     my $limit = '';
-    $limit = " AND statistics.datetime >= ?" if ( $interval || $since );
+    $limit = " WHERE statistics.datetime >= ?" if ( $interval || $since );
 
     my $query =
-"SELECT biblio.biblionumber, COUNT(statistics.itemnumber) FROM biblio LEFT JOIN items ON (biblio.biblionumber=items.biblionumber) LEFT JOIN statistics ON (items.itemnumber=statistics.itemnumber) WHERE statistics.type = 'issue' $limit GROUP BY biblio.biblionumber;";
+"SELECT biblio.biblionumber, COUNT(statistics.itemnumber) FROM biblio\
+ LEFT JOIN items ON (biblio.biblionumber=items.biblionumber)\
+ LEFT JOIN statistics ON (items.itemnumber=statistics.itemnumber AND statistics.type = 'issue')
+ $limit\
+ GROUP BY biblio.biblionumber";
     process_query( $query, $limit );
-
-    unless ($incremental) {
-        $query =
-"SELECT biblio.biblionumber, 0 FROM biblio LEFT JOIN items ON (biblio.biblionumber=items.biblionumber) LEFT JOIN statistics ON (items.itemnumber=statistics.itemnumber) WHERE statistics.itemnumber IS NULL GROUP BY biblio.biblionumber;";
-        process_query( $query, '' );
-
-        $query =
-"SELECT biblio.biblionumber, 0 FROM biblio LEFT JOIN items ON (biblio.biblionumber=items.biblionumber) WHERE items.itemnumber IS NULL GROUP BY biblio.biblionumber;";
-        process_query( $query, '' );
-    }
 
     $dbh->commit();
 }
