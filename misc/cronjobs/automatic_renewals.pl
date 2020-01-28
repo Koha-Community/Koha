@@ -44,6 +44,14 @@ Send AUTO_RENEWALS notices to patrons if the auto renewal has been done.
 
 Note that this option does not support digest yet.
 
+=item B<--verbose>
+
+Print report to standard out.
+
+=item B<--commit>
+
+Without this parameter no changes will be made
+
 =back
 
 =cut
@@ -61,10 +69,12 @@ use Koha::Checkouts;
 use Koha::Libraries;
 use Koha::Patrons;
 
-my ( $help, $send_notices );
+my ( $help, $send_notices, $verbose, $commit );
 GetOptions(
     'h|help' => \$help,
     'send-notices' => \$send_notices,
+    'v|verbose'    => \$verbose,
+    'c|commit'     => \$commit,
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
@@ -73,13 +83,18 @@ cronlogaction();
 my $auto_renews = Koha::Checkouts->search({ auto_renew => 1 });
 
 my %report;
+print "Test run only\n" unless $commit;
 while ( my $auto_renew = $auto_renews->next ) {
 
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
     my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber );
     if ( $error eq 'auto_renew' ) {
-        my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
-        $auto_renew->auto_renew_error(undef)->store;
+        if ($commit){
+            my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
+            $auto_renew->auto_renew_error(undef)->store;
+        }
+        $verbose && print "Issue id: " . $auto_renew->issue_id . " for borrower: " . $auto_renew->borrowernumber . " and item: " . $auto_renew->itemnumber;
+        $verbose && $commit ? print " will be renewed.\n" : print " would be renewed.\n";
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew;
     } elsif ( $error eq 'too_many'
         or $error eq 'on_reserve'
@@ -90,8 +105,13 @@ while ( my $auto_renew = $auto_renews->next ) {
         or $error eq 'auto_too_much_oweing'
         or $error eq 'auto_too_soon'
         or $error eq 'item_denied_renewal' ) {
+        if ( $verbose ) {
+            print "Issue id: " . $auto_renew->issue_id . " for borrower: " . $auto_renew->borrowernumber . " and item: " . $auto_renew->itemnumber;
+            $commit ? print " will not be renewed " : print " would not be renewed ";
+            print "($error)\n";
+        }
         if ( not $auto_renew->auto_renew_error or $error ne $auto_renew->auto_renew_error ) {
-            $auto_renew->auto_renew_error($error)->store;
+            $auto_renew->auto_renew_error($error)->store if $commit;
             push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew
               if $error ne 'auto_too_soon';    # Do not notify if it's too soon
         }
@@ -124,7 +144,7 @@ if ( $send_notices ) {
                     message_transport_type => 'email',
                     from_address           => $admin_email_address,
                 }
-            );
+            ) if $commit;
         }
     }
 }
