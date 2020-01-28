@@ -20594,6 +20594,52 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24287 - Add 'reason' field to transfers table)\n";
 }
 
+$DBversion = '19.12.00.015';
+if( CheckVersion( $DBversion ) ) {
+
+    # Add stockrotation states to reason enum
+    $dbh->do(
+        qq{
+            ALTER TABLE
+                `branchtransfers`
+            MODIFY COLUMN
+                `reason` enum(
+                    'Manual',
+                    'StockrotationAdvance',
+                    'StockrotationRepatriation'
+                )
+            AFTER `comments`
+          }
+    );
+
+    # Move stockrotation states to reason field
+    $dbh->do(
+        qq{
+            UPDATE
+              `branchtransfers`
+            SET
+              `reason` = 'StockrotationAdvance',
+              `comments` = NULL
+            WHERE
+              `comments` = 'StockrotationAdvance'
+          }
+    );
+    $dbh->do(
+        qq{
+            UPDATE
+              `branchtransfers`
+            SET
+              `reason` = 'StockrotationRepatriation',
+              `comments` = NULL
+            WHERE
+              `comments` = 'StockrotationRepatriation'
+          }
+    );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24296 - Update stockrotation to use 'reason' field in transfers table)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
