@@ -159,8 +159,8 @@
 
                                 [% IF Koha.Preference('UseCashRegisters') %]
                                 <li>
-                                    <label for="cash_register">Cash register: </label>
-                                    <select name="cash_register" id="cash_register">
+                                    <label for="registerid">Cash register: </label>
+                                    <select name="registerid" id="payout_registerid">
                                         [% FOREACH register IN registers %]
                                           [% IF register.id == registerid %]
                                         <option value="[% register.id | html %]" selected="selected">[% register.name | html %]</option>
@@ -176,7 +176,6 @@
                         </fieldset> <!-- /.rows -->
                     </div> <!-- /.modal-body -->
                     <div class="modal-footer">
-                        <input type="hidden" name="registerid" value="[% register.id | html %]">
                         <input type="hidden" name="op" value="payout">
                         <button type="submit" class="btn btn-default">Confirm</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
