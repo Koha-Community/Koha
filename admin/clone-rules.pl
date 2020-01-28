@@ -32,9 +32,9 @@ use C4::Output;
 use C4::Auth;
 use C4::Koha;
 use C4::Debug;
+use Koha::CirculationRules;
 
 my $input = new CGI;
-my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/clone-rules.tt",
@@ -51,50 +51,19 @@ my $tobranch   = $input->param("tobranch");
 $template->param(frombranch     => $frombranch)                if ($frombranch);
 $template->param(tobranch       => $tobranch)                  if ($tobranch);
 
-if ($frombranch && $tobranch) {
+if ($frombranch && $tobranch && $frombranch ne $tobranch) {
+    $frombranch = ( $frombranch ne '*' ? $frombranch : undef );
+    $tobranch = ( $tobranch ne '*' ? $tobranch : undef );
 
-    my $error;	
+    Koha::CirculationRules->search({branchcode => $tobranch})->delete;
 
-    # First, we create a temporary table with the rules we want to clone
-    my $query = "CREATE TEMPORARY TABLE tmpissuingrules ENGINE=memory SELECT * FROM issuingrules WHERE branchcode=?";
-    my $sth = $dbh->prepare($query);
-    my $res = $sth->execute($frombranch);
-    $error = 1 unless ($res);
-
-    if (!$error) {
-	# We modify these rules according to the new branchcode
-	$query = "UPDATE tmpissuingrules SET branchcode=? WHERE branchcode=?";
-	$sth = $dbh->prepare($query);
-	$res = $sth->execute($tobranch, $frombranch);
-	$error = 1 unless ($res);
-    }
-
-    if (!$error) {
-	# We delete the rules for the existing branchode
-	$query = "DELETE FROM issuingrules WHERE branchcode=?";
-	$sth = $dbh->prepare($query);
-	$res = $sth->execute($tobranch);
-	$error = 1 unless ($res);
-    }
-
-
-    if (!$error) {
-	# We insert the new rules from our temporary table
-	$query = "INSERT INTO issuingrules SELECT * FROM tmpissuingrules WHERE branchcode=?";
-	$sth = $dbh->prepare($query);
-	$res = $sth->execute($tobranch);
-	$error = 1 unless ($res);
-    }
-
-    # Finally, we delete our temporary table
-    $query = "DROP TABLE tmpissuingrules";
-    $sth = $dbh->prepare($query);
-    $res = $sth->execute();
-
-    $template->param(result => "1");
-    $template->param(error  => $error);
+    my $rules = Koha::CirculationRules->search({ branchcode => $frombranch });
+    $rules->clone($tobranch);
+} else {
+    $template->param(error => 1);
 }
 
+$template->param(result => 1);
 
 
 output_html_with_http_headers $input, $cookie, $template->output;

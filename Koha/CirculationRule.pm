@@ -71,6 +71,21 @@ sub item_type {
     return $self->{item_type};
 }
 
+=head3 clone
+
+Clone a circulation rule to another branch
+
+=cut
+
+sub clone {
+    my ($self, $to_branch) = @_;
+
+    my $cloned_rule = $self->unblessed;
+    $cloned_rule->{branchcode} = $to_branch;
+    delete $cloned_rule->{id};
+    return Koha::CirculationRule->new( $cloned_rule )->store;
+}
+
 =head3 _type
 
 =cut

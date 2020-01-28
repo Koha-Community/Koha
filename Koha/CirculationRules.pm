@@ -358,6 +358,20 @@ sub delete {
     }
 }
 
+=head3 clone
+
+Clone a set of circulation rules to another branch
+
+=cut
+
+sub clone {
+    my ( $self, $to_branch ) = @_;
+
+    while ( my $rule = $self->next ){
+        $rule->clone($to_branch);
+    }
+}
+
 =head3 get_opacitemholds_policy
 
 my $can_place_a_hold_at_item_level = Koha::CirculationRules->get_opacitemholds_policy( { patron => $patron, item => $item } );

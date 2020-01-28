@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Deep qw( cmp_methods );
 use Test::Exception;
 
@@ -563,6 +563,115 @@ subtest 'set_rule' => sub {
                 rule_value => '',
             } );
         }, qr/categorycode/, 'setting holdallowed with categorycode fails' );
+    };
+};
+
+subtest 'clone' => sub {
+    plan tests => 2;
+
+    my $branchcode   = $builder->build({ source => 'Branch' })->{'branchcode'};
+    my $categorycode = $builder->build({ source => 'Category' })->{'categorycode'};
+    my $itemtype     = $builder->build({ source => 'Itemtype' })->{'itemtype'};
+
+    subtest 'Clone multiple rules' => sub {
+        plan tests => 4;
+
+        Koha::CirculationRules->delete;
+
+        Koha::CirculationRule->new({
+            branchcode   => undef,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => 'fine',
+            rule_value   => 5,
+        })->store;
+
+        Koha::CirculationRule->new({
+            branchcode   => undef,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => 'lengthunit',
+            rule_value   => 'days',
+        })->store;
+
+        Koha::CirculationRules->search({ branchcode => undef })->clone($branchcode);
+
+        my $rule_fine = Koha::CirculationRules->get_effective_rule({
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => 'fine',
+        });
+        my $rule_lengthunit = Koha::CirculationRules->get_effective_rule({
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => 'lengthunit',
+        });
+
+        _is_row_match(
+            $rule_fine,
+            {
+                branchcode   => $branchcode,
+                categorycode => $categorycode,
+                itemtype     => $itemtype,
+                rule_name    => 'fine',
+                rule_value   => 5,
+            },
+            'When I attempt to get cloned fine rule,'
+           .' then the above one is returned.'
+        );
+        _is_row_match(
+            $rule_lengthunit,
+            {
+                branchcode   => $branchcode,
+                categorycode => $categorycode,
+                itemtype     => $itemtype,
+                rule_name    => 'lengthunit',
+                rule_value   => 'days',
+            },
+            'When I attempt to get cloned lengthunit rule,'
+           .' then the above one is returned.'
+        );
+
+    };
+
+    subtest 'Clone one rule' => sub {
+        plan tests => 2;
+
+        Koha::CirculationRules->delete;
+
+        Koha::CirculationRule->new({
+            branchcode   => undef,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => 'fine',
+            rule_value   => 5,
+        })->store;
+
+        my $rule = Koha::CirculationRules->search({ branchcode => undef })->next;
+        $rule->clone($branchcode);
+
+        my $cloned_rule = Koha::CirculationRules->get_effective_rule({
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            rule_name    => 'fine',
+        });
+
+        _is_row_match(
+            $cloned_rule,
+            {
+                branchcode   => $branchcode,
+                categorycode => $categorycode,
+                itemtype     => $itemtype,
+                rule_name    => 'fine',
+                rule_value   => '5',
+            },
+            'When I attempt to get cloned fine rule,'
+           .' then the above one is returned.'
+        );
+
     };
 };
 

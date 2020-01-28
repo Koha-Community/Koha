@@ -574,13 +574,18 @@ my $patron_categories = Koha::Patron::Categories->search({}, { order_by => ['des
 
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
+my $humanbranch = ( $branch ne '*' ? $branch : undef );
+
+my $definedbranch = Koha::CirculationRules->search({ branchcode => $humanbranch })->count ? 1 : 0;
+
 $template->param(show_branch_cat_rule_form => 1);
 
 $template->param(
     patron_categories => $patron_categories,
     itemtypeloop      => $itemtypes,
-    humanbranch       => ( $branch ne '*' ? $branch : undef ),
+    humanbranch       => $humanbranch,
     current_branch    => $branch,
+    definedbranch     => $definedbranch,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
