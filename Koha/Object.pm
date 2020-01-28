@@ -151,6 +151,12 @@ sub store {
                     $self->_result()->set_column($col => $columns_info->{$col}->{default_value});
                 }
             }
+            elsif ( not defined $self->$col
+                  && $columns_info->{$col}->{datetime_undef_if_invalid} )
+              {
+                  # timestamp
+                  $self->$col( $columns_info->{$col}->{default_value} );
+              }
         }
     }
 
