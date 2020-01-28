@@ -215,7 +215,7 @@ subtest 'TO_JSON tests' => sub {
 
 subtest "to_api() tests" => sub {
 
-    plan tests => 26;
+    plan tests => 28;
 
     $schema->storage->txn_begin;
 
@@ -329,6 +329,41 @@ subtest "to_api() tests" => sub {
         "Asked to embed items but its return value doesn't implement to_api",
         "Exception message correct"
     );
+
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                biblionumber   => $biblio->biblionumber,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+    $builder->build_object(
+        {
+            class => 'Koha::Holds',
+            value => {
+                biblionumber   => $biblio->biblionumber,
+                borrowernumber => $patron->borrowernumber
+            }
+        }
+    );
+
+    my $patron_api = $patron->to_api(
+        {
+            embed => { holds_count => { is_count => 1 } }
+        }
+    );
+    is( $patron_api->{holds_count}, $patron->holds->count, 'Count embeds are supported and work as expected' );
+
+    throws_ok
+        {
+            $patron->to_api({ embed => { holds_count => {} } });
+        }
+        'Koha::Exceptions::Object::MethodNotCoveredByTests',
+        'Unknown method exception thrown if is_count not specified';
 
     $schema->storage->txn_rollback;
 };
