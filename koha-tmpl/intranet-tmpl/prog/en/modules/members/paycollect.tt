@@ -121,7 +121,7 @@
         <input name="paid" id="paid" type="text" step="0.01" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
-        <label for="collected">Collected from patron: </label>
+        <label for="collected">Amount tendered: </label>
         <input name="collected" id="collected" type="text" step="0.01" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
@@ -241,7 +241,7 @@
     </li>
     [% IF type != 'WRITEOFF' %]
         <li>
-            <label for="collected">Collected from patron: </label>
+            <label for="collected">Amount tendered: </label>
             <input name="collected" id="collected" type="text" step="0.01" value="[% total | $Price on_editing => 1 %]"/>
         </li>
         <li>
