@@ -428,21 +428,29 @@ sub to_api {
 
     if ($embeds) {
         foreach my $embed ( keys %{$embeds} ) {
-            my $curr = $embed;
-            my $next = $embeds->{$curr}->{children};
+            if ( $embed =~ m/^(?<relation>.*)_count$/
+                and $embeds->{$embed}->{is_count} ) {
 
-            my $children = $self->$curr;
-
-            if ( defined $children and ref($children) eq 'ARRAY' ) {
-                my @list = map {
-                    $self->_handle_to_api_child(
-                        { child => $_, next => $next, curr => $curr } )
-                } @{$children};
-                $json_object->{$curr} = \@list;
+                my $relation = $+{relation};
+                $json_object->{$embed} = $self->$relation->count;
             }
             else {
-                $json_object->{$curr} = $self->_handle_to_api_child(
-                    { child => $children, next => $next, curr => $curr } );
+                my $curr = $embed;
+                my $next = $embeds->{$curr}->{children};
+
+                my $children = $self->$curr;
+
+                if ( defined $children and ref($children) eq 'ARRAY' ) {
+                    my @list = map {
+                        $self->_handle_to_api_child(
+                            { child => $_, next => $next, curr => $curr } )
+                    } @{$children};
+                    $json_object->{$curr} = \@list;
+                }
+                else {
+                    $json_object->{$curr} = $self->_handle_to_api_child(
+                        { child => $children, next => $next, curr => $curr } );
+                }
             }
         }
     }
