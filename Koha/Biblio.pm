@@ -523,6 +523,8 @@ my $subscriptions_count = $self->subscriptions_count
 
 Returns the count of the the related Koha::Subscriptions object for this biblio
 
+IMPORTANT: this method is temporary and should not be used.
+
 =cut
 
 sub subscriptions_count {
