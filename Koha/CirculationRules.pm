@@ -481,7 +481,7 @@ sub guess_article_requestable_itemtypes {
     });
     return $res if !$rules;
     foreach my $rule ( $rules->as_list ) {
-        $res->{ $rule->itemtype } = 1;
+        $res->{ $rule->itemtype // '*' } = 1;
     }
     $last_article_requestable_guesses->{$key} = $res;
     $cache->set_in_cache(GUESSED_ITEMTYPES_KEY, $last_article_requestable_guesses);

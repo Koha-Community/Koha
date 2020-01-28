@@ -21,28 +21,29 @@ subtest 'guess_article_requestable_itemtypes' => sub {
     t::lib::Mocks::mock_preference('ArticleRequestsLinkControl', 'calc');
     $cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
     Koha::CirculationRules->delete;
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
     my $itype1 = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $itype2 = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $catg1 = $builder->build_object({ class => 'Koha::Patron::Categories' });
     my $catg2 = $builder->build_object({ class => 'Koha::Patron::Categories' });
-    my $rule1 = $builder->build_object({
-        class => 'Koha::CirculationRules',
-        value => {
-            branchcode => 'MPL', # no worries: no FK
-            categorycode => '*',
-            itemtype => $itype1->itemtype,
-            article_requests => 'bib_only',
+    my $rule1 = Koha::CirculationRules->set_rule(
+        {
+            branchcode   => $library->branchcode,
+            categorycode => undef,
+            itemtype     => $itype1->itemtype,
+            rule_name    => 'article_requests',
+            rule_value   => 'bib_only',
         },
-    });
-    my $rule2 = $builder->build_object({
-        class => 'Koha::CirculationRules',
-        value => {
-            branchcode => '*',
+    );
+    my $rule2 = Koha::CirculationRules->set_rule(
+        {
+            branchcode   => undef,
             categorycode => $catg1->categorycode,
-            itemtype => $itype2->itemtype,
-            article_requests => 'yes',
+            itemtype     => $itype2->itemtype,
+            rule_name    => 'article_requests',
+            rule_value   => 'yes',
         },
-    });
+    );
 
     my $res = Koha::CirculationRules->guess_article_requestable_itemtypes;
     is( $res->{'*'}, undef, 'Item type * seems not permitted' );
@@ -54,7 +55,7 @@ subtest 'guess_article_requestable_itemtypes' => sub {
     is( $res->{$itype2->itemtype}, undef, 'Item type 2 seems not permitted' );
 
     # Change the rules
-    $rule2->itemtype('*')->store;
+    $rule2->itemtype(undef)->store;
     $cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
     $res = Koha::CirculationRules->guess_article_requestable_itemtypes;
     is( $res->{'*'}, 1, 'Item type * seems permitted' );
