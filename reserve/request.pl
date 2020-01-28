@@ -354,6 +354,7 @@ foreach my $biblionumber (@biblionumbers) {
         my $num_available = 0;
         my $num_override  = 0;
         my $hiddencount   = 0;
+        my $num_alreadyheld = 0;
 
         $biblioitem->{force_hold_level} = $force_hold_level;
 
@@ -500,7 +501,7 @@ foreach my $biblionumber (@biblionumbers) {
                     if ( $can_item_be_reserved ne 'itemAlreadyOnHold' ) {
                         $item->{override} = 1;
                         $num_override++;
-                    }
+                    } else { $num_alreadyheld++ }
 
                     push( @available_itemtypes, $item->{itype} );
                 }
@@ -520,7 +521,10 @@ foreach my $biblionumber (@biblionumbers) {
             push @{ $biblioitem->{itemloop} }, $item;
         }
 
-        if ( $num_override == scalar( @{ $biblioitem->{itemloop} } ) ) { # That is, if all items require an override
+        # While we can't override an alreay held item, we should be able to override the others
+        # Unless all items are already held
+        if ( $num_override > 0 && ($num_override + $num_alreadyheld) == scalar( @{ $biblioitem->{itemloop} } ) ) {
+        # That is, if all items require an override
             $template->param( override_required => 1 );
         } elsif ( $num_available == 0 ) {
             $template->param( none_available => 1 );
