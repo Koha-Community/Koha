@@ -260,7 +260,7 @@ $(document).ready(function() {
                     "bVisible": false,
                 },
                 {
-                    "iDataSort": 2, // Sort on hidden unformatted date due column
+                    "aDataSort": [1,2], // Sort on hidden unformatted date due column
                     "mDataProp": function( oObj ) {
                         var due = oObj.date_due_formatted;
 
@@ -344,68 +344,79 @@ $(document).ready(function() {
 
                         return title;
                     },
-                    "sType": "anti-the"
+                    "sType": "anti-the",
+                    "aDataSort": [1, 3]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return oObj.recordtype_description.escapeHtml();
-                    }
+                    },
+                    "aDataSort": [1, 4]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return oObj.itemtype_description.escapeHtml();
-                    }
+                    },
+                    "aDataSort": [1, 5]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
-                    }
+                    },
+                    "aDataSort": [1,6]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return ( oObj.location ? oObj.location.escapeHtml() : '' );
-                    }
+                    },
+                    "aDataSort": [1,7]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return oObj.homebranch.escapeHtml();
-                    }
+                    },
+                    "aDataSort": [1,8]
                 },
                 {
                     "mDataProp": "issuedate",
                     "bVisible": false,
                 },
                 {
-                    "iDataSort": 9, // Sort on hidden unformatted issuedate column
+                    "aDataSort": [1,9], // Sort on hidden unformatted issuedate column
                     "mDataProp": "issuedate_formatted",
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return oObj.branchname.escapeHtml();
-                    }
+                    },
+                    "aDataSort": [1,11]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
-                    }
+                    },
+                    "aDataSort": [1,12]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.charge ) oObj.charge = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.charge).toFixed(2) + '<span>';
-                    }
+                    },
+                    "aDataSort": [1,13]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.fine ) oObj.fine = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.fine).toFixed(2)  + '<span>';
-                    }
+                    },
+                    "aDataSort": [1,14]
                 },
                 {
                     "mDataProp": function ( oObj ) {
                         if ( ! oObj.price ) oObj.price = 0;
                         return '<span style="text-align: right; display: block;">' + parseFloat(oObj.price).toFixed(2) + '<span>';
-                    }
+                    },
+                    "aDataSort": [1,15]
                 },
                 {
                     "bSortable": false,
@@ -607,10 +618,6 @@ $(document).ready(function() {
                 }
             },
             "fnInitComplete": function(oSettings, json) {
-                // Disable rowGrouping plugin after first use
-                // so any sorting on the table doesn't use it
-                //var oSettings = issuesTable.fnSettings();
-
                 // Build a summary of checkouts grouped by itemtype
                 var checkoutsByItype = json.aaData.reduce(function (obj, row) {
                     obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
