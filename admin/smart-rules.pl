@@ -277,7 +277,7 @@ elsif ($op eq 'add') {
     my $holds_per_record = $input->param('holds_per_record');
     my $holds_per_day    = $input->param('holds_per_day');
     $holds_per_day =~ s/\s//g;
-    $holds_per_day = undef if $holds_per_day !~ /^\d+/;
+    $holds_per_day = '' if $holds_per_day !~ /^\d+/;
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     $maxissueqty =~ s/\s//g;
     $maxissueqty = '' if $maxissueqty !~ /^\d+/;

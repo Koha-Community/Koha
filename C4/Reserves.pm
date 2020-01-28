@@ -393,7 +393,8 @@ sub CanItemBeReserved {
             biblionumber   => $item->biblionumber,
         }
     );
-    if ( $holds->count() >= $holds_per_record ) {
+    if (   defined $holds_per_record && $holds_per_record ne ''
+        && $holds->count() >= $holds_per_record ) {
         return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
     }
 
@@ -402,10 +403,9 @@ sub CanItemBeReserved {
         reservedate    => dt_from_string->date
     });
 
-    if ( defined $holds_per_day &&
-          (   ( $holds_per_day > 0 && $today_holds->count() >= $holds_per_day )
-           or ( $holds_per_day == 0 ) )
-        )  {
+    if (   defined $holds_per_day && $holds_per_day ne ''
+        && $today_holds->count() >= $holds_per_day )
+    {
         return { status => 'tooManyReservesToday', limit => $holds_per_day };
     }
 
@@ -436,7 +436,8 @@ sub CanItemBeReserved {
     }
 
     # we check if it's ok or not
-    if ( $reservecount >= $allowedreserves ) {
+    if (   defined  $allowedreserves && $allowedreserves ne ''
+        && $reservecount >= $allowedreserves ) {
         return { status => 'tooManyReserves', limit => $allowedreserves };
     }
 
