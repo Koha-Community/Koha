@@ -20576,6 +20576,24 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24478 - Add `EnablePointOfSale` system preference to allow disabling the point of sale feature)\n";
 }
 
+$DBversion = '19.12.00.014';
+if( CheckVersion( $DBversion ) ) {
+    unless ( column_exists('branchtransfers', 'reason') ) {
+        $dbh->do(
+            qq{
+                ALTER TABLE branchtransfers
+                ADD
+                  `reason` enum('Manual')
+                AFTER
+                  comments
+              }
+        );
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24287 - Add 'reason' field to transfers table)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
