@@ -787,7 +787,7 @@ sub CheckReserves {
 
         my $priority = 10000000;
         foreach my $res (@reserves) {
-            if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
+            if ( $res->{'itemnumber'} && $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
                 if ($res->{'found'} eq 'W') {
                     return ( "Waiting", $res, \@reserves ); # Found it, it is waiting
                 } else {
