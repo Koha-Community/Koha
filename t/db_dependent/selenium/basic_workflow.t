@@ -72,7 +72,7 @@ our $sample_data = {
     issuingrule => {
         categorycode  => 'test_cat',
         itemtype      => 'IT4test',
-        branchcode    => '*',
+        branchcode    => undef,
         maxissueqty   => '5',
         issuelength   => '5',
         lengthunit    => 'days',
@@ -80,6 +80,8 @@ our $sample_data = {
       },
 };
 our ( $borrowernumber, $start, $prev_time, $cleanup_needed );
+
+$dbh->do(q|INSERT INTO itemtypes(itemtype) VALUES (?)|, undef, $sample_data->{itemtype}{itemtype});
 
 SKIP: {
     eval { require Selenium::Remote::Driver; };
@@ -146,17 +148,18 @@ SKIP: {
     time_diff("add biblio");
 
     my $itemtype = $sample_data->{itemtype};
-    $dbh->do(q|INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan) VALUES (?, ?, ?, ?)|, undef, $itemtype->{itemtype}, $itemtype->{description}, $itemtype->{rentalcharge}, $itemtype->{notforloan});
 
     my $issuing_rules = $sample_data->{issuingrule};
-    $dbh->do(q|INSERT INTO issuingrules (categorycode, itemtype, branchcode, issuelength, lengthunit, renewalperiod) VALUES (?, ?, ?, ?, ?, ?)|, undef, $issuing_rules->{categorycode}, $issuing_rules->{itemtype}, $issuing_rules->{branchcode}, $issuing_rules->{issuelength}, $issuing_rules->{lengthunit}, $issuing_rules->{renewalperiod});
     Koha::CirculationRules->set_rules(
         {
             categorycode => $issuing_rules->{categorycode},
             itemtype     => $issuing_rules->{itemtype},
             branchcode   => $issuing_rules->{branchcode},
             rules        => {
-                maxissueqty => $issuing_rules->{maxissueqty}
+                maxissueqty => $issuing_rules->{maxissueqty},
+                issuelength => $issuing_rules->{issuelength},
+                lengthunit => $issuing_rules->{lengthunit},
+                renewalperiod => $issuing_rules->{renewalperiod},
             }
         }
     );
@@ -245,7 +248,7 @@ sub cleanup {
         $dbh->do(qq|DELETE FROM biblio WHERE title = "test biblio $i"|);
     };
     $dbh->do(q|DELETE FROM itemtypes WHERE itemtype=?|, undef, $sample_data->{itemtype}{itemtype});
-    $dbh->do(q|DELETE FROM issuingrules WHERE categorycode=? AND itemtype=? AND branchcode=?|, undef, $sample_data->{issuingrule}{categorycode}, $sample_data->{issuingrule}{itemtype}, $sample_data->{issuingrule}{branchcode});
+    $dbh->do(q|DELETE FROM circulation_rules WHERE categorycode=? AND itemtype=? AND branchcode=?|, undef, $sample_data->{issuingrule}{categorycode}, $sample_data->{issuingrule}{itemtype}, $sample_data->{issuingrule}{branchcode});
 }
 
 sub time_diff {

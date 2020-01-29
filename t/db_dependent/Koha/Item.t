@@ -157,14 +157,17 @@ subtest 'pickup_locations' => sub {
     Koha::Items->search->delete;
     Koha::Libraries->search->delete;
     $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM issuingrules');
-    $dbh->do(
-        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)},
-        {},
-        '*', '*', '*', 25
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 25,
+            }
+        }
     );
-    $dbh->do('DELETE FROM circulation_rules');
 
     my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
     my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
@@ -273,7 +276,6 @@ subtest 'pickup_locations' => sub {
             {
                 branchcode => undef,
                 itemtype   => undef,
-                categorycode => undef,
                 rules => {
                     holdallowed => $ha,
                     hold_fulfillment_policy => $hfp,

@@ -950,7 +950,6 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
     $dbh->do("DELETE FROM tmp_holdsqueue");
     $dbh->do("DELETE FROM hold_fill_targets");
     $dbh->do("DELETE FROM reserves");
-    $dbh->do("DELETE FROM issuingrules");
     $dbh->do("DELETE FROM circulation_rules");
     Koha::Biblios->delete();
 

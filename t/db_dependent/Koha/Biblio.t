@@ -187,15 +187,18 @@ subtest 'pickup_locations' => sub {
     Koha::Patrons->search->delete;
     Koha::Items->search->delete;
     Koha::Libraries->search->delete;
+    Koha::CirculationRules->search->delete;
     $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM issuingrules');
-    $dbh->do(
-        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
-        VALUES (?, ?, ?, ?)},
-        {},
-        '*', '*', '*', 25
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            itemtype     => undef,
+            branchcode   => undef,
+            rules        => {
+                reservesallowed => 25,
+            }
+        }
     );
-    $dbh->do('DELETE FROM circulation_rules');
 
     my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
     my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
@@ -214,7 +217,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library1->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 1,
                 hold_fulfillment_policy => 'any',
@@ -227,7 +229,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library2->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'holdgroup',
@@ -240,7 +241,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library3->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'patrongroup',
@@ -253,7 +253,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library4->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'holdingbranch',
@@ -266,7 +265,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library5->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'homebranch',
@@ -279,7 +277,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library6->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 1,
                 hold_fulfillment_policy => 'holdgroup',
@@ -292,7 +289,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library7->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 3,
                 hold_fulfillment_policy => 'holdingbranch',
@@ -306,7 +302,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => $library8->branchcode,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'patrongroup',
