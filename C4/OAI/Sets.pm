@@ -541,14 +541,25 @@ sub _evalRule {
     my $subfield = $mapping->{'marcsubfield'};
     my $operator = $mapping->{'operator'};
     my $value = $mapping->{'marcvalue'};
-    my @subfield_values = $record->subfield($field, $subfield);
+
+    my @all_subfield_values;
+    # Get all the fields with the given tag
+    my @fields = $record->field($field);
+    # Iterate over all the fields
+    foreach my $field ( @fields ) {
+        # Get the values from all the subfields with the given subfield code
+        if ( my @subfield_values = $field->subfield($subfield) ) {
+            push @all_subfield_values, @subfield_values;
+        }
+    }
+
     if ($operator eq 'notequal') {
-        if(0 == grep /^$value$/, @subfield_values) {
+        if(0 == grep /^$value$/, @all_subfield_values) {
             return 1;
         }
     }
     else {
-        if(0 < grep /^$value$/, @subfield_values) {
+        if(0 < grep /^$value$/, @all_subfield_values) {
             return 1;
         }
     }
