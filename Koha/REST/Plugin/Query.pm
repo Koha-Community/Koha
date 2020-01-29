@@ -263,7 +263,13 @@ sub _parse_embed {
         $result->{$curr} = { children => _parse_embed( $next ) };
     }
     else {
-        $result->{$curr} = {};
+        if ( $curr =~ m/^(?<relation>.*)\+count/ ) {
+            my $key = $+{relation} . "_count";
+            $result->{$key} = { is_count => 1 };
+        }
+        else {
+            $result->{$curr} = {};
+        }
     }
 
     return $result;

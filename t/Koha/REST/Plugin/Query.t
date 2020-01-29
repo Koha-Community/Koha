@@ -140,7 +140,8 @@ get '/stash_embed' => sub {
                     'x-koha-embed' => [
                         'checkouts',
                         'checkouts.item',
-                        'library'
+                        'library',
+                        'holds+count'
                     ]
                 }
             }
@@ -304,7 +305,7 @@ subtest '_build_query_params_from_api' => sub {
 
 subtest 'stash_embed() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 15;
 
     my $t = Test::Mojo->new;
 
@@ -315,6 +316,10 @@ subtest 'stash_embed() tests' => sub {
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,library' } )
       ->status_is(200)
       ->json_is( { checkouts => { children => { item => {} } }, library => {} } );
+
+    $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'holds+count' } )
+      ->status_is(200)
+      ->json_is( { holds_count => { is_count => 1 } } );
 
     $t->get_ok( '/stash_embed' => { 'x-koha-embed' => 'checkouts,checkouts.item,patron' } )
       ->status_is(400)
