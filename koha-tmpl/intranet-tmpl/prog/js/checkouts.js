@@ -607,10 +607,6 @@ $(document).ready(function() {
                 }
             },
             "fnInitComplete": function(oSettings, json) {
-                // Disable rowGrouping plugin after first use
-                // so any sorting on the table doesn't use it
-                //var oSettings = issuesTable.fnSettings();
-
                 // Build a summary of checkouts grouped by itemtype
                 var checkoutsByItype = json.aaData.reduce(function (obj, row) {
                     obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
