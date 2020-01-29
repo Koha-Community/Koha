@@ -50,6 +50,8 @@ subtest 'Bad plugins tests' => sub {
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
     t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 
+    # remove any existing plugins that might interfere
+    Koha::Plugins::Methods->search->delete;
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;
 
@@ -66,8 +68,10 @@ subtest 'Bad plugins tests' => sub {
         'Bad plugins raise warning';
 
     my $routes = get_defined_routes($t);
-    ok( !exists $routes->{'/contrib/badass/patrons/(:patron_id)/bother_wrong'}, 'Route doesn\'t exist' );
-    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'}, 'Route exists' );
+    # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
+    # TODO: remove () if minimum version is bumped to at least 1.28.
+    ok( !exists $routes->{'/contrib/badass/patrons/(:patron_id)/bother_wrong'} && !exists $routes->{'/contrib/badass/patrons/<:patron_id>/bother_wrong'}, 'Route doesn\'t exist' );
+    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id>)/bother'} || exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'}, 'Route exists' );
 
     $schema->storage->txn_rollback;
 };
@@ -98,7 +102,9 @@ subtest 'Disabled plugins tests' => sub {
     my $t = Test::Mojo->new('Koha::REST::V1');
 
     my $routes = get_defined_routes($t);
-    ok( !exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'},
+    # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
+    # TODO: remove () if minimum version is bumped to at least 1.28.
+    ok( !exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'} && !exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'},
         'Plugin disabled, route not defined' );
 
     $good_plugin->enable;
@@ -106,7 +112,9 @@ subtest 'Disabled plugins tests' => sub {
     $t      = Test::Mojo->new('Koha::REST::V1');
     $routes = get_defined_routes($t);
 
-    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'},
+    # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
+    # TODO: remove () if minimum version is bumped to at least 1.28.
+    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'} || exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'},
         'Plugin enabled, route defined' );
 
     $schema->storage->txn_rollback;
