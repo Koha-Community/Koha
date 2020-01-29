@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 144;
+use Test::More tests => 147;
 use Test::MockModule;
 use Test::Warn;
 use MARC::Record;
@@ -586,5 +586,76 @@ UpdateOAISetsBiblio($biblionumberNotVH, $record);
 
 my @setsNotEq = CalcOAISetsBiblio($record);
 is_deeply(@setsNotEq, $setNotVH_id, 'The $record only belongs to $setNotVH');
+
+# ---------- Testing CalcOAISetsBiblio with repeated field ----------
+
+# Delete all existing sets to avoid false positives
+my $all_sets = GetOAISets;
+foreach my $set ( @$all_sets ) {
+    DelOAISet( $set->{'id'} );
+}
+
+# Create a MARC record with a repeated field 374
+my $record_rep = MARC::Record->new;
+$record_rep->add_fields(
+    [ '001', '1234' ],
+    [ '100', ' ', ' ', a => 'N., N.' ],
+    [ '374', ' ', ' ', a => 'A' ],
+    [ '374', ' ', ' ', a => 'B', a => 'C' ]
+);
+
+# Create a set
+my $setRep = {
+    'spec' => 'Set where 374a equals a given letter',
+    'name' => 'Rep'
+};
+my $setRep_id = AddOAISet($setRep);
+# Create a mapping : 374$a should be "A"
+my $mappingRepA = [
+    {
+        marcfield => '374',
+        marcsubfield => 'a',
+        operator => 'equal',
+        marcvalue => 'A',
+    },
+];
+# Add the mapping to the set
+ModOAISetMappings($setRep_id, $mappingRepA);
+
+# Get a list of set ids the record belongs to
+my @setsRepA = CalcOAISetsBiblio($record_rep);
+is_deeply(\@setsRepA, [$setRep_id], 'The $record belongs to $setRep_id (matching on first field, first subfield)');
+
+# Create another mapping : 374$a should now be "B"
+my $mappingRepB = [
+    {
+        marcfield => '374',
+        marcsubfield => 'a',
+        operator => 'equal',
+        marcvalue => 'B',
+    },
+];
+# Replace the first mapping with the second one
+ModOAISetMappings($setRep_id, $mappingRepB);
+
+# Get a list of set ids the record belongs to
+my @setsRepB = CalcOAISetsBiblio($record_rep);
+is_deeply(\@setsRepB, [$setRep_id], 'The $record belongs to $setRep_id (matching on second field, first subfield)');
+
+# Create another mapping : 374$a should now be "C"
+my $mappingRepC = [
+    {
+        marcfield => '374',
+        marcsubfield => 'a',
+        operator => 'equal',
+        marcvalue => 'C',
+    },
+];
+# Replace the first mapping with the second one
+ModOAISetMappings($setRep_id, $mappingRepC);
+
+# Get a list of set ids the record belongs to
+my @setsRepC = CalcOAISetsBiblio($record_rep);
+is_deeply(\@setsRepC, [$setRep_id], 'The $record belongs to $setRep_id (matching on second field, second subfield)');
 
 $schema->storage->txn_rollback;
