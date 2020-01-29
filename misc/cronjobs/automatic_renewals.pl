@@ -93,8 +93,10 @@ while ( my $auto_renew = $auto_renews->next ) {
             my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
             $auto_renew->auto_renew_error(undef)->store;
         }
-        $verbose && print "Issue id: " . $auto_renew->issue_id . " for borrower: " . $auto_renew->borrowernumber . " and item: " . $auto_renew->itemnumber;
-        $verbose && $commit ? print " will be renewed.\n" : print " would be renewed.\n";
+        if ( $verbose ){
+            print "Issue id: " . $auto_renew->issue_id . " for borrower: " . $auto_renew->borrowernumber . " and item: " . $auto_renew->itemnumber;
+            $commit ? print " will be renewed.\n" : print " would be renewed.\n";
+        }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew;
     } elsif ( $error eq 'too_many'
         or $error eq 'on_reserve'
