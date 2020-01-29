@@ -213,13 +213,14 @@ sub allows_renewal {
             categorycode => $checkout->patron->categorycode,
             itemtype     => $checkout->item->effective_itemtype,
             branchcode   => $checkout->branchcode,
+            rule_name    => 'renewalsallowed',
         }
     );
     return $c->render(
         status => 200,
         openapi => {
             allows_renewal => $renewable,
-            max_renewals => $rule->renewalsallowed,
+            max_renewals => $rule->rule_value,
             current_renewals => $checkout->renewals,
             error => $error
         }

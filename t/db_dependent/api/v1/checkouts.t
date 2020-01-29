@@ -71,11 +71,18 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$notexisting_patron
   ->status_is(200)
   ->json_is([]);
 
-$dbh->do('DELETE FROM issuingrules');
-$dbh->do(q{
-    INSERT INTO issuingrules (categorycode, branchcode, itemtype, renewalperiod, renewalsallowed, issuelength)
-    VALUES (?, ?, ?, ?, ?, ?)
-}, {}, '*', '*', '*', 7, 1, 5);
+Koha::CirculationRules->set_rules(
+    {
+        categorycode => undef,
+        itemtype     => undef,
+        branchcode   => undef,
+        rules        => {
+            renewalperiod => 7,
+            renewalsallowed => 1,
+            issuelength => 5,
+        }
+    }
+);
 
 my $item1 = $builder->build_sample_item;
 my $item2 = $builder->build_sample_item;
@@ -172,7 +179,6 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
 $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id)
   ->status_is(200)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due2 }) );
-
 
 my $expected_datedue = $date_due
     ->set_time_zone('local')
