@@ -69,14 +69,15 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'objects.search helper' => sub {
 
-    plan tests => 34;
+    plan tests => 38;
 
     $schema->storage->txn_begin;
 
-    # Remove existing cities to have more control on the search restuls
+    # Remove existing cities to have more control on the search results
     Koha::Cities->delete;
 
-    # Create two sample patrons that match the query
+    # Create three sample cities that match the query. This makes sure we
+    # always have a "next" link regardless of Mojolicious::Plugin::OpenAPI version.
     $builder->build_object({
         class => 'Koha::Cities',
         value => {
@@ -89,10 +90,16 @@ subtest 'objects.search helper' => sub {
             city_name => 'Manuela'
         }
     });
+    $builder->build_object({
+        class => 'Koha::Cities',
+        value => {
+            city_name => 'Manuelab'
+        }
+    });
 
     $t->get_ok('/cities?name=manuel&_per_page=1&_page=1')
         ->status_is(200)
-        ->header_like( 'Link' => qr/<http:\/\/.*\?.*&_page=2.*>; rel="next",/ )
+        ->header_like( 'Link' => qr/<http:\/\/.*[\?&]_page=2.*>; rel="next",/ )
         ->json_has('/0')
         ->json_hasnt('/1')
         ->json_is('/0/name' => 'Manuel');
@@ -105,16 +112,18 @@ subtest 'objects.search helper' => sub {
     });
 
     # _match=starts_with
-    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=starts_with')
+    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=starts_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
-        ->json_hasnt('/2')
+        ->json_has('/2')
+        ->json_hasnt('/3')
         ->json_is('/0/name' => 'Manuel')
-        ->json_is('/1/name' => 'Manuela');
+        ->json_is('/1/name' => 'Manuela')
+        ->json_is('/2/name' => 'Manuelab');
 
     # _match=ends_with
-    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=ends_with')
+    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=ends_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
@@ -123,22 +132,24 @@ subtest 'objects.search helper' => sub {
         ->json_is('/1/name' => 'Emanuel');
 
     # _match=exact
-    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=exact')
+    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=exact')
         ->status_is(200)
         ->json_has('/0')
         ->json_hasnt('/1')
         ->json_is('/0/name' => 'Manuel');
 
     # _match=contains
-    $t->get_ok('/cities?name=manuel&_per_page=3&_page=1&_match=contains')
+    $t->get_ok('/cities?name=manuel&_per_page=4&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_has('/2')
-        ->json_hasnt('/3')
+        ->json_has('/3')
+        ->json_hasnt('/4')
         ->json_is('/0/name' => 'Manuel')
         ->json_is('/1/name' => 'Manuela')
-        ->json_is('/2/name' => 'Emanuel');
+        ->json_is('/2/name' => 'Manuelab')
+        ->json_is('/3/name' => 'Emanuel');
 
     $schema->storage->txn_rollback;
 };

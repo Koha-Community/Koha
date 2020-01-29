@@ -55,14 +55,14 @@ This subroutine is called before every request to API.
 =cut
 
 sub under {
-    my $c = shift->openapi->valid_input or return;;
+    my ( $c ) = @_;
 
     my $status = 0;
 
     try {
 
         # /api/v1/{namespace}
-        my $namespace = $c->req->url->to_abs->path->[2];
+        my $namespace = $c->req->url->to_abs->path->[2] // '';
 
         if ( $namespace eq 'public'
             and !C4::Context->preference('RESTPublicAPI') )
@@ -136,7 +136,10 @@ sub authenticate_api_request {
 
     my $user;
 
-    my $spec = $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
+    # The following supports retrieval of spec with Mojolicious::Plugin::OpenAPI@1.17 and later (first one)
+    # and older versions (second one).
+    # TODO: remove the latter 'openapi.op_spec' if minimum version is bumped to at least 1.17.
+    my $spec = $c->openapi->spec || $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
 
     $c->stash_embed({ spec => $spec });
 
@@ -205,7 +208,6 @@ sub authenticate_api_request {
         if ($status eq "ok") {
             my $session = get_session($sessionID);
             $user = Koha::Patrons->find($session->param('number'));
-            # $c->stash('koha.user' => $user);
         }
         elsif ($status eq "maintenance") {
             Koha::Exceptions::UnderMaintenance->throw(
