@@ -23,6 +23,7 @@ use constant DEFAULT_ZEBRAQ_PURGEDAYS             => 30;
 use constant DEFAULT_MAIL_PURGEDAYS               => 30;
 use constant DEFAULT_IMPORT_PURGEDAYS             => 60;
 use constant DEFAULT_LOGS_PURGEDAYS               => 180;
+use constant DEFAULT_MESSAGES_PURGEDAYS           => 365;
 use constant DEFAULT_SEARCHHISTORY_PURGEDAYS      => 30;
 use constant DEFAULT_SHARE_INVITATION_EXPIRY_DAYS => 14;
 use constant DEFAULT_DEBARMENTS_PURGEDAYS         => 30;
@@ -50,6 +51,7 @@ use Koha::Old::Holds;
 use Koha::Old::Patrons;
 use Koha::Item::Transfers;
 use Koha::PseudonymizedTransactions;
+use Koha::Patron::Messages;
 
 sub usage {
     print STDERR <<USAGE;
@@ -68,6 +70,8 @@ Usage: $0 [-h|--help] [--confirm] [--sessions] [--sessdays DAYS] [-v|--verbose] 
    -m --mail DAYS     purge items from the mail queue that are older than DAYS days.
                       Defaults to 30 days if no days specified.
    --merged           purged completed entries from need_merge_authorities.
+   --messages DAYS    purge entries from messages table older than DAYS days.
+                      Defaults to 365 days if no days specified.
    --import DAYS      purge records from import tables older than DAYS days.
                       Defaults to 60 days if no days specified.
    --z3950            purge records from import tables that are the result
@@ -137,6 +141,7 @@ my $pOldIssues;
 my $pOldReserves;
 my $pTransfers;
 my ( $pPseudoTransactions, $pPseudoTransactionsFrom, $pPseudoTransactionsTo );
+my $pMessages;
 
 GetOptions(
     'h|help'            => \$help,
@@ -150,6 +155,7 @@ GetOptions(
     'import:i'          => \$pImport,
     'z3950'             => \$pZ3950,
     'logs:i'            => \$pLogs,
+    'messages:i'        => \$pMessages,
     'fees:i'            => \$fees_days,
     'searchhistory:i'   => \$pSearchhistory,
     'list-invites:i'    => \$pListShareInvites,
@@ -182,6 +188,7 @@ $mail              = DEFAULT_MAIL_PURGEDAYS               if defined($mail)     
 $pSearchhistory    = DEFAULT_SEARCHHISTORY_PURGEDAYS      if defined($pSearchhistory)    && $pSearchhistory == 0;
 $pListShareInvites = DEFAULT_SHARE_INVITATION_EXPIRY_DAYS if defined($pListShareInvites) && $pListShareInvites == 0;
 $pDebarments       = DEFAULT_DEBARMENTS_PURGEDAYS         if defined($pDebarments)       && $pDebarments == 0;
+$pMessages         = DEFAULT_MESSAGES_PURGEDAYS           if defined($pMessages)         && $pMessages == 0;
 
 if ($help) {
     usage(0);
@@ -214,6 +221,7 @@ unless ( $sessions
     || defined $pPseudoTransactions
     || $pPseudoTransactionsFrom
     || $pPseudoTransactionsTo
+    || $pMessages
 ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
@@ -332,6 +340,19 @@ if ($pLogs) {
         $sth->execute($pLogs) or die $dbh->errstr;
     }
     print "Done with purging action_logs.\n" if $verbose;
+}
+
+if ($pMessages) {
+    print "Purging messages older than $pMessages days.\n" if $verbose;
+    my $messages = Koha::Patron::Messages->filter_by_last_update(
+        { timestamp_column_name => 'message_date', days => $pMessages } );
+    my $count = $messages->count;
+    $messages->delete if $confirm;
+    if ( $verbose ) {
+        say $confirm
+          ? sprintf( "Done with purging %d messages", $count )
+          : sprintf( "%d messages would have been removed", $count );
+    }
 }
 
 if ($fees_days) {
