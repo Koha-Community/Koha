@@ -71,6 +71,12 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$notexisting_patron
   ->status_is(200)
   ->json_is([]);
 
+$dbh->do('DELETE FROM issuingrules');
+$dbh->do(q{
+    INSERT INTO issuingrules (categorycode, branchcode, itemtype, renewalperiod, renewalsallowed, issuelength)
+    VALUES (?, ?, ?, ?, ?, ?)
+}, {}, '*', '*', '*', 7, 1, 5);
+
 my $item1 = $builder->build_sample_item;
 my $item2 = $builder->build_sample_item;
 my $item3 = $builder->build_sample_item;
@@ -148,15 +154,9 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due2 }) );
 
 
-$dbh->do('DELETE FROM issuingrules');
-$dbh->do(q{
-    INSERT INTO issuingrules (categorycode, branchcode, itemtype, renewalperiod, renewalsallowed)
-    VALUES (?, ?, ?, ?, ?)
-}, {}, '*', '*', '*', 7, 1);
-
-my $expected_datedue = DateTime->now
+my $expected_datedue = $date_due
     ->set_time_zone('local')
-    ->add(days => 14)
+    ->add(days => 7)
     ->set(hour => 23, minute => 59, second => 0);
 $t->post_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
   ->status_is(201)
