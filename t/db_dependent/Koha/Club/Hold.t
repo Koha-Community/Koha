@@ -42,10 +42,9 @@ subtest 'add' => sub {
 
     my $club = $builder->build_object({ class => 'Koha::Clubs' });
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $item1 = $builder->build_sample_item({ branchcode => $library->branchcode });
-    my $item2 = $builder->build_sample_item({ branchcode => $library->branchcode });
+    my $item1 = $builder->build_sample_item({ library => $library->branchcode });
+    my $item2 = $builder->build_sample_item({ library => $library->branchcode });
 
-    use Data::Printer colored => 1;
     try {
         Koha::Club::Hold::add({ club_id => $club->id, biblio_id => $item1->biblionumber, pickup_library_id => $library->branchcode });
     } catch {
