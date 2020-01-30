@@ -1868,7 +1868,7 @@ sub checkpw {
     if( $patron && $passwd_ok && C4::Context->preference('AuthSuccessLog') ) {
         logaction( 'AUTH', 'SUCCESS', $patron->id, "Valid password for $userid", $type );
     } elsif( !$passwd_ok && C4::Context->preference('AuthFailureLog') ) {
-        logaction( 'AUTH', 'FAILURE', 0, "Wrong password for $userid", $type );
+        logaction( 'AUTH', 'FAILURE', $patron ? $patron->id : 0, "Wrong password for $userid", $type );
     }
 
     return @return;
