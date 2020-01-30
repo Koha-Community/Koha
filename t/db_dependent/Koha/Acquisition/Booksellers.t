@@ -43,7 +43,7 @@ subtest '->baskets() tests' => sub {
 
     my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
 
-    is( $vendor->baskets, 0, 'Vendor has no baskets' );
+    is( $vendor->baskets->count, 0, 'Vendor has no baskets' );
 
     # Add two baskets
     my $basket_1_id = C4::Acquisition::NewBasket( $vendor->id, $patron->borrowernumber, 'basketname1' );
@@ -51,7 +51,7 @@ subtest '->baskets() tests' => sub {
 
     # Re-fetch vendor
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );
-    is( $vendor->baskets, 2, 'Vendor has two baskets' );
+    is( $vendor->baskets->count, 2, 'Vendor has two baskets' );
 
     $schema->storage->txn_rollback();
 };
@@ -139,7 +139,7 @@ subtest '->subscriptions() tests' => sub {
 
 subtest '->contacts() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 3;
 
     $schema->storage->txn_begin();
 
@@ -161,10 +161,9 @@ subtest '->contacts() tests' => sub {
 
     # Re-fetch vendor
     $vendor = Koha::Acquisition::Booksellers->find( $vendor->id );
-    is( $vendor->contacts->count, 2, 'Vendor has two contacts' );
-    foreach my $contact ( $vendor->contacts ) {
-        is( ref($contact), 'Koha::Acquisition::Bookseller::Contact', 'Type is correct' );
-    }
+    my $contacts = $vendor->contacts;
+    is( $contacts->count, 2, 'Vendor has two contacts' );
+    is( ref($contacts), 'Koha::Acquisition::Bookseller::Contacts', 'Type is correct' );
 
     $schema->storage->txn_rollback();
 };

@@ -41,7 +41,8 @@ Returns the list of baskets for the vendor
 
 sub baskets {
     my ( $self ) = @_;
-    return $self->{_result}->aqbaskets;
+    my $baskets_rs = $self->_result->aqbaskets;
+    return Koha::Acquisition::Baskets->_new_from_dbic( $baskets_rs );
 }
 
 =head3 contacts
@@ -55,7 +56,8 @@ Returns the list of contacts for the vendor
 
 sub contacts {
     my ($self) = @_;
-    return Koha::Acquisition::Bookseller::Contacts->search( { booksellerid => $self->id } );
+    my $contacts_rs = $self->_result->aqcontacts;
+    return Koha::Acquisition::Bookseller::Contacts->_new_from_dbic( $contacts_rs );
 }
 
 =head3 subscriptions
@@ -70,6 +72,7 @@ Returns the list of subscriptions for the vendor
 sub subscriptions {
     my ($self) = @_;
 
+    # FIXME FK missing at DB level
     return Koha::Subscriptions->search( { aqbooksellerid => $self->id } );
 }
 
