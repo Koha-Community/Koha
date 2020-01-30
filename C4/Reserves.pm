@@ -1049,6 +1049,9 @@ sub ModReserveFill {
         }
     );
 
+    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+        if C4::Context->preference('HoldsLog');
+
     # FIXME Must call Koha::Hold->cancel ? => No, should call ->filled and add the correct log
     Koha::Old::Hold->new( $hold->unblessed() )->store();
 
@@ -1148,6 +1151,9 @@ sub ModReserveAffect {
         && ( !$item->permanent_location || $item->permanent_location ne 'CART' ) ) {
       CartToShelf( $itemnumber );
     }
+
+    logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
+        if C4::Context->preference('HoldsLog');
 
     return;
 }
