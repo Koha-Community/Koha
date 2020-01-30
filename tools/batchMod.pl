@@ -191,7 +191,7 @@ if ($op eq "action") {
         my $itemdata = $item->unblessed;
         if ( $del ){
             my $return = $item->safe_delete;
-			if ($return == 1) {
+            if (ref($return)) {
 			    $deleted_items++;
 			} else {
 			    $not_deleted_items++;
