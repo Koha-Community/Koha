@@ -69,7 +69,30 @@
     "required": false,
     "description": "Page size, for paginated object listing",
     "type": "integer"
-   },
+  },
+  "q_body": {
+    "name": "query",
+    "in": "body",
+    "required": false,
+    "description": "Query filter sent through request's body",
+    "schema": {
+      "type": ["object", "array"]
+    }
+  },
+  "q_param": {
+    "name": "q",
+    "in": "query",
+    "required": false,
+    "description": "Query filter sent as a request parameter",
+    "type": "string"
+  },
+  "q_header": {
+    "name": "x-koha-query",
+    "in": "header",
+    "required": false,
+    "description": "Query filter sent as a request header",
+    "type": "string"
+  },
   "fundidPathParam": {
     "$ref": "parameters/fund.json#/fundidPathParam"
   }
