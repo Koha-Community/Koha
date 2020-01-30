@@ -140,6 +140,20 @@ __PACKAGE__->set_primary_key("id");
 
 =head1 UNIQUE CONSTRAINTS
 
+=head2 C<library_groups_uniq_2>
+
+=over 4
+
+=item * L</parent_id>
+
+=item * L</branchcode>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("library_groups_uniq_2", ["parent_id", "branchcode"]);
+
 =head2 C<title>
 
 =over 4
@@ -210,8 +224,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-03 22:28:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:mJMYVtlB3JfqMEmNa0SWdg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-30 15:43:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qg0Ckj0ZBRjSaQgEcvxSZA
 
 sub koha_object_class {
     'Koha::Library::Group';
