@@ -150,11 +150,17 @@ sub marc_framework_sql_list {
         my %cell;
         my @frameworklist;
         map {
-            my $name = substr( $_, 0, -4 ); # FIXME: restricted to 3 letter extension
-            open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
-            my $line = <$fh>;
-            $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
-            my @lines = split /\n/, $line;
+            my ( $name, $ext ) = split /\./, $_;
+            my @lines;
+            if ( $ext =~ /yml/ ) {
+                my $yaml = LoadFile("$dir/$requirelevel/$name\.$ext");
+                @lines = map { Encode::decode('UTF-8', $_) } @{ $yaml->{'description'} };
+            } else {
+                open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
+                my $line = <$fh>;
+                $line = Encode::encode('UTF-8', $line) unless ( Encode::is_utf8($line) );
+                @lines = split /\n/, $line;
+            }
             my $mandatory = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i);
             push @frameworklist,
               {
@@ -231,7 +237,7 @@ sub sample_data_sql_list {
             my @lines;
             if ( $ext =~ /yml/ ) {
                 my $yaml = LoadFile("$dir/$requirelevel/$name\.$ext");
-                @lines = @{ $yaml->{'description'} };
+                @lines = map { Encode::decode('UTF-8', $_) } @{ $yaml->{'description'} };
             } else {
                 open my $fh, "<:encoding(UTF-8)", "$dir/$requirelevel/$name.txt";
                 my $line = <$fh>;
@@ -484,10 +490,19 @@ sub load_sql {
                     my $placeholders = join ",", map { "?" } @columns;               # '?,..,?' string
                     my $query        = "INSERT INTO $table_name ( $fields ) VALUES ( $placeholders )";
                     my $sth          = $dbh->prepare($query);
+                    my @multiline    = @{ $table->{$table_name}->{'multiline'} };    # to check multiline values;
                     foreach my $row ( @rows ) {
-                        my @values = map { $row->{$_} } @columns;
+                        my @values = map {
+                                        my $col = $_;
+                                        ( @multiline and grep { $_ eq $col } @multiline )
+                                        ? join "\r\n", @{$row->{$col}}                # join multiline values
+                                        : $row->{$col};
+                                     } @columns;
                         $sth->execute( @values );
                     }
+                }
+                for my $statement ( @{ $yaml->{'sql_statements'} } ) {               # extra SQL statements
+                    $dbh->do($statement);
                 }
             };
         }
