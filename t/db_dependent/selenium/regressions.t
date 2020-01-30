@@ -181,9 +181,9 @@ subtest 'Display circulation table correctly' => sub {
     my $tfoot_length = 0;
     $tfoot_length += $_->get_attribute('colspan') || 0 for @tfoot_td;
 
-    my @tbody_td = $driver->find_elements('//table[@id="issues-table"]/tbody/tr/td');
+    my @tbody_td = $driver->find_elements('//table[@id="issues-table"]/tbody/tr[2]/td');
     my $tbody_length = 0;
-    $tbody_length += $_->get_attribute('colspan') || 0 for @tbody_td;
+    $tbody_length += 1 for @tbody_td;
 
     is( $thead_length == $tfoot_length && $tfoot_length == $tbody_length,
         1, "Checkouts table must be correctly aligned" )
