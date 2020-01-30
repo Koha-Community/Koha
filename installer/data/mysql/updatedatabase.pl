@@ -19919,7 +19919,7 @@ if ( CheckVersion($DBversion) ) {
     # Populating debit_type_code
     $dbh->do(
         qq{
-        UPDATE accountlines SET debit_type_code = accounttype, accounttype = NULL WHERE accounttype IN (SELECT code from account_debit_types)
+        UPDATE accountlines SET debit_type_code = accounttype, accounttype = NULL WHERE accounttype IN (SELECT code from account_debit_types) AND amount >= 0
         }
     );
 
