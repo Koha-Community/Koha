@@ -32,6 +32,7 @@ use C4::Stats qw( UpdateStats );
 use Koha::Patrons;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::Account::DebitTypes;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 use Koha::Exceptions::Account;
