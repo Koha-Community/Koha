@@ -1,23 +1,23 @@
 [%- BLOCK patron_fields -%]
      [%- SWITCH name -%]
      [%- CASE 'standard' -%]<span>Standard</span>
-     [%- CASE 'borrowernumber' -%]<span>Borrower number</span>
+     [%- CASE 'borrowernumber' -%]<span>Borrowernumber</span>
      [%- CASE 'cardnumber' -%]<span>Card number</span>
      [%- CASE 'surname' -%]<span>Surname</span>
      [%- CASE 'firstname' -%]<span>First name</span>
-     [%- CASE 'title' -%]<span>Title</span>
-     [%- CASE 'othernames' -%]<span>Other names</span>
+     [%- CASE 'title' -%]<span>Salutation</span>
+     [%- CASE 'othernames' -%]<span>Other name</span>
      [%- CASE 'initials' -%]<span>Initials</span>
      [%- CASE 'streetnumber' -%]<span>Street number</span>
      [%- CASE 'streettype' -%]<span>Street type</span>
      [%- CASE 'address' -%]<span>Address</span>
-     [%- CASE 'address2' -%]<span>Address line 2</span>
+     [%- CASE 'address2' -%]<span>Address 2</span>
      [%- CASE 'city' -%]<span>City</span>
      [%- CASE 'state' -%]<span>State</span>
-     [%- CASE 'zipcode' -%]<span>Zip code</span>
+     [%- CASE 'zipcode' -%]<span>ZIP/Postal code</span>
      [%- CASE 'country' -%]<span>Country</span>
-     [%- CASE 'email' -%]<span>Email</span>
-     [%- CASE 'phone' -%]<span>Phone</span>
+     [%- CASE 'email' -%]<span>Primary email</span>
+     [%- CASE 'phone' -%]<span>Primary phone</span>
      [%- CASE 'mobile' -%]<span>Mobile phone</span>
      [%- CASE 'fax' -%]<span>Fax</span>
      [%- CASE 'emailpro' -%]<span>Secondary email</span>
@@ -33,10 +33,10 @@
      [%- CASE 'B_email' -%]<span>Alternate email</span>
      [%- CASE 'B_phone' -%]<span>Alternate phone</span>
      [%- CASE 'dateofbirth' -%]<span>Date of birth</span>
-     [%- CASE 'branchcode' -%]<span>Branch code</span>
-     [%- CASE 'categorycode' -%]<span>Category code</span>
+     [%- CASE 'branchcode' -%]<span>Library (code)</span>
+     [%- CASE 'categorycode' -%]<span>Category (code)</span>
      [%- CASE 'dateenrolled' -%]<span>Registration date</span>
-     [%- CASE 'dateexpiry' -%]<span>Expiration date</span>
+     [%- CASE 'dateexpiry' -%]<span>Expiry date</span>
      [%- CASE 'gonenoaddress' -%]<span>Gone no address</span>
      [%- CASE 'lost' -%]<span>Lost card</span>
      [%- CASE 'debarred' -%]<span>Restricted</span>
@@ -45,22 +45,22 @@
      [%- CASE 'contactfirstname' -%]<span>Guarantor firstname</span>
      [%- CASE 'contacttitle' -%]<span>Guarantor title</span>
      [%- CASE 'guarantorid' -%]<span>Guarantor ID</span>
-     [%- CASE 'borrowernotes' -%]<span>Circulation Note</span>
+     [%- CASE 'borrowernotes' -%]<span>Circulation note</span>
      [%- CASE 'relationship' -%]<span>Guarantor relationship</span>
-     [%- CASE 'sex' -%]<span>Sex</span>
+     [%- CASE 'sex' -%]<span>Gender</span>
      [%- CASE 'flags' -%]<span>Permissions (code)</span>
-     [%- CASE 'userid' -%]<span>User name</span>
+     [%- CASE 'userid' -%]<span>Username</span>
      [%- CASE 'opacnote' -%]<span>OPAC note</span>
      [%- CASE 'contactnote' -%]<span>Contact note</span>
-     [%- CASE 'sort1' -%]<span>Sort field 1</span>
-     [%- CASE 'sort2' -%]<span>Sort field 2</span>
+     [%- CASE 'sort1' -%]<span>Sort 1</span>
+     [%- CASE 'sort2' -%]<span>Sort 2</span>
      [%- CASE 'altcontactfirstname' -%]<span>Alternate contact first name</span>
      [%- CASE 'altcontactsurname' -%]<span>Alternate contact surname</span>
      [%- CASE 'altcontactaddress1' -%]<span>Alternate contact address</span>
-     [%- CASE 'altcontactaddress2' -%]<span>Alternate contact address line 2</span>
+     [%- CASE 'altcontactaddress2' -%]<span>Alternate contact address 2</span>
      [%- CASE 'altcontactaddress3' -%]<span>Alternate contact city</span>
      [%- CASE 'altcontactstate' -%]<span>Alternate contact state</span>
-     [%- CASE 'altcontactzipcode' -%]<span>Alternate contact zip code</span>
+     [%- CASE 'altcontactzipcode' -%]<span>Alternate contact ZIP/postal code</span>
      [%- CASE 'altcontactcountry' -%]<span>Alternate contact country</span>
      [%- CASE 'altcontactphone' -%]<span>Alternate contact phone</span>
      [%- CASE 'smsalertnumber' -%]<span>SMS alert number</span>
