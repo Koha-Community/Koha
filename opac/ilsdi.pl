@@ -27,6 +27,7 @@ use C4::Context;
 use List::MoreUtils qw(any);
 use XML::Simple;
 use CGI qw ( -utf8 );
+use Net::Netmask;
 
 =head1 DLF ILS-DI for Koha
 
@@ -164,11 +165,19 @@ unless ( C4::Context->preference('ILS-DI') ) {
 
 # If the remote address is not allowed, redirect to 403
 my @AuthorizedIPs = split(/,/, C4::Context->preference('ILS-DI:AuthorizedIPs'));
-if ( @AuthorizedIPs # If no filter set, allow access to everybody
-    and not any { $ENV{'REMOTE_ADDR'} eq $_ } @AuthorizedIPs # IP Check
-    ) {
-    $out->{'code'} = "NotAllowed";
-    $out->{'message'} = "Unauthorized IP address: ".$ENV{'REMOTE_ADDR'}.".";
+if ( @AuthorizedIPs ){ # If no filter set, allow access to everybody
+    my $authorized = 0;
+    foreach my $ip (@AuthorizedIPs){
+        my $netmask = Net::Netmask->new2($ip);
+        if ( $netmask && $netmask->match($ENV{'REMOTE_ADDR'}) ){
+            $authorized = 1;
+            last;
+        }
+    }
+    unless ($authorized){
+        $out->{'code'} = "NotAllowed";
+        $out->{'message'} = "Unauthorized IP address: ".$ENV{'REMOTE_ADDR'}.".";
+    }
 }
 
 my $service = $cgi->param('service') || "ilsdi";
