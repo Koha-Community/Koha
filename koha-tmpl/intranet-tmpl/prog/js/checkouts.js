@@ -600,9 +600,9 @@ $(document).ready(function() {
                 "dataSrc": "issued_today",
                 "startRender": function ( rows, group ) {
                     if ( group ) {
-                        return $('<tr/>').append("<td colspan='100%'><strong>" + TODAYS_CHECKOUTS + "</strong></td>");
+                        return TODAYS_CHECKOUTS;
                     } else {
-                        return $('<tr/>').append("<td colspan='100%'><strong>" + PREVIOUS_CHECKOUTS + "</strong></td>");
+                        return PREVIOUS_CHECKOUTS;
                     }
                 }
             },
