@@ -113,43 +113,48 @@ sub add_item {
 
 =head3 basket
 
-    my $basket = Koha::Acquisition::Orders->find( $id )->basket;
+    my $basket = $order->basket;
 
-Returns the basket associated to the order.
+Returns the I<Koha::Acquisition::Basket> object for the basket associated
+to the order.
 
 =cut
 
 sub basket {
     my ( $self )  = @_;
-    my $basket_rs = $self->_result->basketno;
+    my $basket_rs = $self->_result->basket;
     return Koha::Acquisition::Basket->_new_from_dbic( $basket_rs );
 }
 
 =head3 fund
 
-    my $fund = $order->fund
+    my $fund = $order->fund;
 
-Returns the fund (aqbudgets) associated to the order.
+Returns the I<Koha::Acquisition::Fund> object for the fund (aqbudgets)
+associated to the order.
 
 =cut
 
 sub fund {
     my ( $self )  = @_;
-    my $fund_rs = $self->_result->budget;
+    my $fund_rs = $self->_result->fund;
     return Koha::Acquisition::Fund->_new_from_dbic( $fund_rs );
 }
 
 =head3 invoice
 
-    my $invoice = $order->invoice
+    my $invoice = $order->invoice;
 
-Returns the invoice associated to the order.
+Returns the I<Koha::Acquisition::Invoice> object for the invoice associated
+to the order.
+
+It returns B<undef> if no linked invoice is found.
 
 =cut
 
 sub invoice {
     my ( $self )  = @_;
-    my $invoice_rs = $self->_result->invoiceid;
+    my $invoice_rs = $self->_result->invoice;
     return unless $invoice_rs;
     return Koha::Acquisition::Invoice->_new_from_dbic( $invoice_rs );
 }
@@ -158,13 +163,16 @@ sub invoice {
 
     my $subscription = $order->subscription
 
-Returns the subscription associated to the order.
+Returns the I<Koha::Subscription> object for the subscription associated
+to the order.
+
+It returns B<undef> if no linked subscription is found.
 
 =cut
 
 sub subscription {
     my ( $self )  = @_;
-    my $subscription_rs = $self->_result->subscriptionid;
+    my $subscription_rs = $self->_result->subscription;
     return unless $subscription_rs;
     return Koha::Subscription->_new_from_dbic( $subscription_rs );
 }

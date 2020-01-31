@@ -665,6 +665,18 @@ __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GQEXetlivZm7buQohl8m4A
 
 __PACKAGE__->belongs_to(
+  "basket",
+  "Koha::Schema::Result::Aqbasket",
+  { "foreign.basketno" => "self.basketno" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
   "biblio",
   "Koha::Schema::Result::Biblio",
   { 'foreign.biblionumber' => "self.biblionumber" },
@@ -672,6 +684,37 @@ __PACKAGE__->belongs_to(
     is_deferrable => 1,
     join_type     => "LEFT",
     on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
+  "fund",
+  "Koha::Schema::Result::Aqbudget",
+  { "foreign.budget_id" => "self.budget_id" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+  "invoice",
+  "Koha::Schema::Result::Aqinvoice",
+  { "foreign.invoiceid" => "self.invoiceid" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+__PACKAGE__->belongs_to(
+  "subscription",
+  "Koha::Schema::Result::Subscription",
+  { "foreign.subscriptionid" => "self.subscriptionid" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
     on_update     => "CASCADE",
   },
 );
