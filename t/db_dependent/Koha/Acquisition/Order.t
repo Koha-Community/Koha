@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -53,6 +53,32 @@ subtest 'basket() tests' => sub {
         'Type is correct for ->basket' );
     is_deeply( $retrieved_basket->unblessed,
         $basket->unblessed, "Correct basket found and updated" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'biblio() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $order = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => { biblionumber => undef }
+        }
+    );
+
+    is( $order->biblio, undef, 'If no linked biblio, undef is returned' );
+
+    # Add and link a biblio to the order
+    my $biblio = $builder->build_sample_biblio();
+    $order->set({ biblionumber => $biblio->biblionumber })->store->discard_changes;
+
+    my $THE_biblio = $order->biblio;
+    is( ref($THE_biblio), 'Koha::Biblio', 'Returns a Koha::Biblio object' );
+    is( $THE_biblio->biblionumber, $biblio->biblionumber, 'It is not cheating about the object' );
 
     $schema->storage->txn_rollback;
 };
