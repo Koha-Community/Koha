@@ -183,9 +183,8 @@ sub get_effective_rule {
     my $itemtype     = $params->{itemtype};
     my $branchcode   = $params->{branchcode};
 
-    my @c = caller;
     Koha::Exceptions::MissingParameter->throw(
-        "Required parameter 'rule_name' missing" . "@c")
+        "Required parameter 'rule_name' missing")
       unless $rule_name;
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
