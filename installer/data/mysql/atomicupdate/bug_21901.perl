@@ -2,11 +2,41 @@ $DBversion = 'XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q|
+        UPDATE
+          serial
+        SET
+          planneddate = NULL
+        WHERE
+          planneddate = '0000-00-00'
+    |);
+
+    $dbh->do(q|
+        UPDATE
+          serial
+        SET
+          publisheddate = NULL
+        WHERE
+          publisheddate = '0000-00-00'
+    |);
+
+    $dbh->do(q|
+        UPDATE
+          serial
+        SET
+          claimdate = NULL
+        WHERE
+          claimdate = '0000-00-00'
+    |);
+
+    $dbh->do(q|
         ALTER TABLE serial
         MODIFY COLUMN biblionumber INT(11) NOT NULL
     |);
 
     unless ( foreign_key_exists( 'serial', 'serial_ibfk_1' ) ) {
+        $dbh->do(q|
+            DELETE FROM serial WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+        |);
         $dbh->do(q|
             ALTER TABLE serial
             ADD CONSTRAINT serial_ibfk_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
@@ -19,6 +49,9 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     unless ( foreign_key_exists( 'serial', 'serial_ibfk_2' ) ) {
+        $dbh->do(q|
+            DELETE FROM serial WHERE subscriptionid NOT IN (SELECT subscriptionid FROM subscription)
+        |);
         $dbh->do(q|
             ALTER TABLE serial
             ADD CONSTRAINT serial_ibfk_2 FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE
@@ -33,12 +66,18 @@ if( CheckVersion( $DBversion ) ) {
 
     unless ( foreign_key_exists( 'subscriptionhistory', 'subscription_history_ibfk_1' ) ) {
         $dbh->do(q|
+            DELETE FROM subscriptionhistory WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+        |);
+        $dbh->do(q|
             ALTER TABLE subscriptionhistory
             ADD CONSTRAINT subscription_history_ibfk_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
         |);
     }
 
     unless ( foreign_key_exists( 'subscriptionhistory', 'subscription_history_ibfk_2' ) ) {
+        $dbh->do(q|
+            DELETE FROM subscriptionhistory WHERE subscriptionid NOT IN (SELECT subscriptionid FROM subscription)
+        |);
         $dbh->do(q|
             ALTER TABLE subscriptionhistory
             ADD CONSTRAINT subscription_history_ibfk_2 FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE
@@ -51,6 +90,9 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     unless ( foreign_key_exists( 'subscription', 'subscription_ibfk_3' ) ) {
+        $dbh->do(q|
+            DELETE FROM subscription WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+        |);
         $dbh->do(q|
             ALTER TABLE subscription
             ADD CONSTRAINT subscription_ibfk_3 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
