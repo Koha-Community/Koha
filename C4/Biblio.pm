@@ -543,16 +543,22 @@ sub LinkBibHeadingsToAuthorities {
                     }
                     $field->delete_subfield( code => '9' )
                       if defined $current_link;
-                    my $authfield =
-                      MARC::Field->new( $authority_type->auth_tag_to_report,
-                        '', '', "a" => "" . $field->subfield('a') );
-                    map {
-                        $authfield->add_subfields( $_->[0] => $_->[1] )
-                          if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a"
+                    my @auth_subfields;
+                    foreach my $subfield ( $field->subfields() ){
+                        if ( $subfield->[0] =~ /[A-z]/
                             && C4::Heading::valid_bib_heading_subfield(
-                                $field->tag, $_->[0] )
-                            );
-                    } $field->subfields();
+                                $field->tag, $subfield->[0] )
+                           ){
+                            push @auth_subfields, $subfield->[0] => $subfield->[1];
+                        }
+                    }
+                    # Bib headings contain some ending punctuation that should NOT
+                    # be included in the authority record. Strip those before creation
+                    next unless @auth_subfields; # Don't try to create a record if we have no fields;
+                    my $last_sub = pop @auth_subfields;
+                    $last_sub =~ s/[\s]*[,.:=;!%\/][\s]*$//;
+                    push @auth_subfields, $last_sub;
+                    my $authfield = MARC::Field->new( $authority_type->auth_tag_to_report, '', '', @auth_subfields );
                     $marcrecordauth->insert_fields_ordered($authfield);
 
 # bug 2317: ensure new authority knows it's using UTF-8; currently
