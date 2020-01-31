@@ -59,7 +59,7 @@ subtest 'basket() tests' => sub {
 
 subtest 'biblio() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -79,6 +79,11 @@ subtest 'biblio() tests' => sub {
     my $THE_biblio = $order->biblio;
     is( ref($THE_biblio), 'Koha::Biblio', 'Returns a Koha::Biblio object' );
     is( $THE_biblio->biblionumber, $biblio->biblionumber, 'It is not cheating about the object' );
+
+    $order->biblio->delete;
+    $order = Koha::Acquisition::Orders->find($order->ordernumber);
+    ok( $order, 'The order is not deleted if the biblio is deleted' );
+    is( $order->biblio, undef, 'order.biblio is correctly set to NULL when the biblio is deleted' );
 
     $schema->storage->txn_rollback;
 };
