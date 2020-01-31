@@ -75,6 +75,7 @@ while ( my ( $biblionumber, $frameworkcode ) = $sth->fetchrow_array ) {
         next if $marc_record->subfield($tag, $subfield);
     }
     if ( $date_field ) {
+        @fields_to_add = ();
         my ( $tag,  $subfield ) = split '\$', $date_field;
         my $date = $marc_record->subfield($tag, $subfield);
         next unless $date;
