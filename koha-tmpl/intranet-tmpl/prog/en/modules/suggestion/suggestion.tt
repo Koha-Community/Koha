@@ -693,10 +693,10 @@
 
             <div class="col-sm-2">
                 <fieldset>
-                    <label for="set_manager_[% loop.count %]">Update manager</label><br/>
-                    <a id="set_manager_[% loop.count %]" data-tab="[% loop.count %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
-                    <span id="managedby_name[% loop.count %]"></span>
-                    <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count %]" value="[% logged_in_user.borrowernumber | html %]" />
+                    <label for="set_manager_[% loop.count | html %]">Update manager</label><br/>
+                    <a id="set_manager_[% loop.count | html %]" data-tab="[% loop.count | html %]" class="set_manager" href="#"><i class="fa fa-search"></i> Select manager</a>
+                    <span id="managedby_name[% loop.count | html %]"></span>
+                    <input type="hidden" name="suggestion_managedby" id="managedby[% loop.count | html %]" value="[% logged_in_user.borrowernumber | html %]" />
                     <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
                     <fieldset class="action"><button type="submit" class="btn btn-default btn-xs" value="update_manager"/>Submit</button></fieldset>
                 </fieldset>
@@ -885,7 +885,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
 
-    <script type="text/javascript">
+    <script>
         var tab = '';
         function editManagerPopup(selected_tab) {
             tab = selected_tab;
