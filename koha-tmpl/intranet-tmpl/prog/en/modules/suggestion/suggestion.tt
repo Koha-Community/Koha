@@ -586,7 +586,7 @@
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.lastmodificationby | uri %]">[% suggestions_loo.surnamelastmodificationby | html %][% IF ( suggestions_loo.firstnamelastmodificationby ) %], [% suggestions_loo.firstnamelastmodificationby | html %][% END %]</a>
                 </td>
                 <td data-order="[% suggestions_loo.lastmodificationdate | html %]">
-                    [% IF ( suggestions_loo.lastmodificationdate ) %] - [% suggestions_loo.lastmodificationdate | $KohaDates %][% END %]
+                    [% IF ( suggestions_loo.lastmodificationdate ) %][% suggestions_loo.lastmodificationdate | $KohaDates %][% END %]
                 </td>
                 <td>
                     [% Branches.GetName( suggestions_loo.branchcode ) | html %]

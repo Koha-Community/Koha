@@ -11,7 +11,7 @@ if( CheckVersion( $DBversion ) ) {
     }
     if( !column_exists( 'suggestions', 'lastmodificationdate' ) ) {
         $dbh->do(q|
-            ALTER TABLE suggestions ADD COLUMN lastmodificationdate DATE DEFAULT NULL
+            ALTER TABLE suggestions ADD COLUMN lastmodificationdate DATE DEFAULT NULL AFTER lastmodificationby
         |);
     }
 
