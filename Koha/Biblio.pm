@@ -98,7 +98,7 @@ sub orders {
     return Koha::Acquisition::Orders->_new_from_dbic($orders);
 }
 
-=head3 active_orders_count
+=head3 active_orders
 
 my $active_orders = $biblio->active_orders();
 
