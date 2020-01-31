@@ -507,7 +507,7 @@ subtest 'orders() and active_orders() tests' => sub {
     my $active_orders = $biblio->active_orders;
 
     is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( $biblio->orders->count, $biblio->active_orders->count, '->orders_count returns the count for the resultset' );
+    is( $biblio->orders->count, $biblio->active_orders->count, '->orders->count returns the count for the resultset' );
 
     # Add a couple orders
     foreach (1..2) {
@@ -537,7 +537,7 @@ subtest 'orders() and active_orders() tests' => sub {
 
     is( ref($orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
     is( ref($active_orders), 'Koha::Acquisition::Orders', 'Result type is correct' );
-    is( $orders->count, $active_orders->count + 2, '->active_orders_count returns the rigt count' );
+    is( $orders->count, $active_orders->count + 2, '->active_orders->count returns the rigt count' );
 
     $schema->storage->txn_rollback;
 };
