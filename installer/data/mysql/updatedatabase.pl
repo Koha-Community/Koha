@@ -20667,7 +20667,7 @@ if( CheckVersion( $DBversion ) ) {
             DELETE FROM library_groups
             WHERE id NOT IN (
                 SELECT MIN(id)
-                FROM library_groups
+                FROM ( SELECT * FROM library_groups ) AS lg
                 WHERE parent_id IS NOT NULL
                 GROUP BY parent_id, branchcode
             )
