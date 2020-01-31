@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 use C4::Context;
 
 BEGIN {
@@ -19,4 +19,10 @@ SKIP: {
     my $heading = C4::Heading->new_from_bib_field($field);
     is($heading->display_form(), 'Uncles--Fiction', 'Display form generation');
     is($heading->search_form(), 'Uncles generalsubdiv Fiction', 'Search form generation');
+
+    $field = MARC::Field->new( '830', ' ', '4', a => 'The dark is rising ;', v => '3' );
+    $heading = C4::Heading->new_from_bib_field($field);
+    is($heading->display_form(), 'The dark is rising ;', 'Display form generation');
+    is($heading->search_form(), 'The dark is rising', 'Search form generation');
+
 }

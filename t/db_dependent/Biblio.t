@@ -645,7 +645,7 @@ subtest 'ModBiblio called from linker test' => sub {
 };
 
 subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
-    plan tests => 3;
+    plan tests => 6;
 
     # Set up mocks to ensure authorities are generated
     my $biblio_mod = Test::MockModule->new( 'C4::Linker::Default' );
@@ -678,6 +678,28 @@ subtest "LinkBibHeadingsToAuthorities record generation tests" => sub {
         "Beach city Weirdness Fiction Books 21st Century Fish Stew Pizza",
         "The generated record contains the correct subfields"
     );
+
+    # Example series link with volume and punctuation
+    $record = MARC::Record->new();
+    $field = MARC::Field->new('800','','','a' => 'Tolkien, J. R. R.', 'q' => '(John Ronald Reuel),', 'd' => '1892-1973.', 't' => 'Lord of the rings ;', 'v' => '1');
+    $record->append_fields($field);
+
+    ( $num_headings_changed, $results ) = LinkBibHeadingsToAuthorities($linker, $record, "",undef);
+
+    is( $num_headings_changed, 1, 'We changed the one we passed' );
+    is_deeply( $results->{added},
+        {"Tolkien, J. R. R. (John Ronald Reuel), 1892-1973. Lord of the rings ;" => 1 },
+        "We added an authority record for the heading"
+    );
+
+    # Now we check the authority record itself
+    $authority = GetAuthority( $record->subfield('800','9') );
+    is( $authority->field('100')->as_string(),
+        "Tolkien, J. R. R. (John Ronald Reuel), 1892-1973. Lord of the rings",
+        "The generated record contains the correct subfields"
+    );
+
+
 
 };
 
