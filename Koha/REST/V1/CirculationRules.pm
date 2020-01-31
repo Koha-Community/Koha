@@ -23,6 +23,16 @@ use Koha::CirculationRules;
 
 use Try::Tiny;
 
+=head1 API
+
+=head2 Methods
+
+=head3 get_kinds
+
+List all available circulation rules that can be used.
+
+=cut
+
 sub get_kinds {
     my $c = shift->openapi->valid_input or return;
 
