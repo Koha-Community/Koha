@@ -46,10 +46,10 @@
                                     [% IF some_public_shelves > 10 %]
                                         <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>
                                     [% END %]
-                                [% ELSE %]
-                                    <li role="presentation"><a href="#" tabindex="-1" class="menu-inactive" role="menuitem">No public lists</a></li>
                                 [% END %]
-                                <li class="divider" role="presentation"></li>
+                                [% IF some_public_shelves.count > 0 %]
+                                    <li class="divider" role="presentation"></li>
+                                [% END %]
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                                     <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem"><strong>Your lists</strong></a></li>
                                     [% IF loggedinusername %]
