@@ -174,7 +174,6 @@ if ( $op =~ /save/i ) {
                 my $patron = Koha::Patrons->find( $suggestion_only->{managedby} );
                 my $email_address = $patron->notice_email_address;
                 if ($patron->notice_email_address) {
-                    my $budget = C4::Budgets::GetBudget( $suggestion_only->{budgetid} );
                     my $library = $patron->library;
                     my $admin_email_address = $library->branchemail
                       || C4::Context->preference('KohaAdminEmailAddress');
