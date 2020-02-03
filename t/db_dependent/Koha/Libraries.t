@@ -95,7 +95,6 @@ subtest 'pickup_locations' => sub {
         {
             branchcode => undef,
             itemtype   => undef,
-            categorycode => undef,
             rules => {
                 holdallowed => 2,
                 hold_fulfillment_policy => 'any',
