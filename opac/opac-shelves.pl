@@ -281,7 +281,7 @@ if ( $op eq 'view' ) {
 
             my $art_req_itypes;
             if( C4::Context->preference('ArticleRequests') ) {
-                $art_req_itypes = Koha::IssuingRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
+                $art_req_itypes = Koha::CirculationRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
             }
 
             my @items;
