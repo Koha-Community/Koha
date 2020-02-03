@@ -72,6 +72,7 @@ sub do_checkin {
     my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, dt_from_string($return_date));
 
     if ( $checked_in_ok ) {
+        delete $messages->{ItemLocationUpdated};
         delete $messages->{NotIssued};
         delete $messages->{LocalUse};
         $return = 1 unless keys %$messages;
