@@ -146,6 +146,81 @@ subtest 'ModItem tests' => sub {
 
 };
 
+subtest 'ModItemTransfer tests' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item    = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value  => {
+                itemlost     => 0,
+                damaged      => 0,
+                withdrawn    => 0,
+                itemlost_on  => undef,
+                damaged_on   => undef,
+                withdrawn_on => undef,
+            }
+        }
+    )->store;
+
+    my $library1 = $builder->build(
+        {
+            source => 'Branch',
+        }
+    );
+    my $library2 = $builder->build(
+        {
+            source => 'Branch',
+        }
+    );
+
+    ModItemTransfer( $item->itemnumber, $library1->{branchcode},
+        $library2->{branchcode} );
+
+    my $transfers = Koha::Item::Transfers->search(
+        {
+            itemnumber => $item->itemnumber
+        }
+    );
+
+    is( $transfers->count, 1, "One transfer created with ModItemTransfer" );
+    $item->discard_changes;
+    is($item->holdingbranch, $library1->{branchcode}, "Items holding branch was updated to frombranch");
+
+    ModItemTransfer( $item->itemnumber, $library2->{branchcode},
+        $library1->{branchcode} );
+    $transfers = Koha::Item::Transfers->search(
+        { itemnumber => $item->itemnumber, },
+        { order_by   => { '-asc' => 'branchtransfer_id' } }
+    );
+
+    is($transfers->count, 2, "Second transfer recorded on second call of ModItemTransfer");
+    my $transfer1 = $transfers->next;
+    my $transfer2 = $transfers->next;
+    isnt($transfer1->datearrived, undef, "First transfer marked as completed by ModItemTransfer");
+    like($transfer1->comments,qr/^Canceled/, "First transfer contains 'Canceled' comment");
+    is($transfer2->datearrived, undef, "Second transfer is now the active transfer");
+    $item->discard_changes;
+    is($item->holdingbranch, $library2->{branchcode}, "Items holding branch was updated to frombranch");
+
+    # Check 'reason' is populated when passed
+    ModItemTransfer( $item->itemnumber, $library2->{branchcode},
+        $library1->{branchcode}, "Manual" );
+
+    $transfers = Koha::Item::Transfers->search(
+        { itemnumber => $item->itemnumber, },
+        { order_by   => { '-desc' => 'branchtransfer_id' } }
+    );
+
+    my $transfer3 = $transfers->next;
+    is($transfer3->reason, 'Manual', "Reason set via ModItemTransfer");
+
+    $schema->storage->txn_rollback;
+};
+
 subtest 'GetHiddenItemnumbers tests' => sub {
 
     plan tests => 11;
