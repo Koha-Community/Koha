@@ -283,7 +283,7 @@ subtest 'duplicate_to | add_item' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'current_holds() tests' => sub {
+subtest 'current_item_level_holds() tests' => sub {
 
     plan tests => 3;
 
@@ -328,16 +328,16 @@ subtest 'current_holds() tests' => sub {
         }
     );
 
-    is( $order->current_holds, undef, 'Returns undef if no linked biblio');
+    is( $order->current_item_level_holds, undef, 'Returns undef if no linked biblio');
 
     $order->set({ biblionumber => $biblio->biblionumber })->store->discard_changes;
 
-    is( $order->current_holds, undef, 'Returns undef if no linked items');
+    is( $order->current_item_level_holds, undef, 'Returns undef if no linked items');
 
     $order->add_item( $item_2->itemnumber );
     $order->add_item( $item_3->itemnumber );
 
-    is( $order->current_holds->count, 1, 'Only current (not future) holds are returned');
+    is( $order->current_item_level_holds->count, 1, 'Only current (not future) holds are returned');
 
     $schema->storage->txn_rollback;
 };

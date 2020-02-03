@@ -177,18 +177,18 @@ sub subscription {
     return Koha::Subscription->_new_from_dbic( $subscription_rs );
 }
 
-=head3 current_holds
+=head3 current_item_level_holds
 
-    my $holds = $order->current_holds;
+    my $holds = $order->current_item_level_holds;
 
-Returns the current holds associated to the order. It returns a I<Koha::Holds>
+Returns the current item-level holds associated to the order. It returns a I<Koha::Holds>
 resultset in scalar context or a list of I<Koha::Hold> objects in list context.
 
 It returns B<undef> if no I<biblio> or no I<items> are linked to the order.
 
 =cut
 
-sub current_holds {
+sub current_item_level_holds {
     my ($self) = @_;
 
     my $items_rs     = $self->_result->aqorders_items;
