@@ -192,6 +192,10 @@ __PACKAGE__->add_columns(
     '+keep_for_pseudonymization' => { is_boolean => 1 },
 );
 
+__PACKAGE__->add_columns(
+    '+mandatory' => { is_boolean => 1 },
+);
+
 sub koha_object_class {
     'Koha::Patron::Attribute::Type';
 }
