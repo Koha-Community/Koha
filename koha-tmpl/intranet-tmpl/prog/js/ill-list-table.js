@@ -363,8 +363,16 @@ $(document).ready(function() {
     // Get our data from the API and process it prior to passing
     // it to datatables
     var filterParam = prefilters ? '&' + prefilters : '';
-    // Only fire the request if we're on the ILL list page
-    if (window.location.search.length == 0) {
+    // Only fire the request if we're on an appropriate page
+    if (
+        (
+            // ILL list requests page
+            window.location.href.match(/ill\/ill-requests\.pl/) &&
+            window.location.search.length == 0
+        ) ||
+        // Patron profile page
+        window.location.href.match(/members\/ill-requests\.pl/)
+    ) {
         var ajax = $.ajax(
             '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments,requested_partners'
             + filterParam
