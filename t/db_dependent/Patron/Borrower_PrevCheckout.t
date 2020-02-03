@@ -237,9 +237,15 @@ my $patron_d = $builder->build({source => 'Borrower'});
 
 my $biblio = $builder->build_sample_biblio;
 $biblio->serial(0)->store;
-my $item_1 = $builder->build_sample_item({biblionumber => $biblio->biblionumber})->unblessed;
-my $item_2 = $builder->build_sample_item({biblionumber => $biblio->biblionumber})->unblessed;
-my $item_d = $builder->build_sample_item->unblessed;
+my $item_1 = $builder->build({
+    source => 'Item',
+    value => { biblionumber => $biblio->biblionumber }
+});
+my $item_2 = $builder->build({
+    source => 'Item',
+    value => { biblionumber => $biblio->biblionumber },
+});
+my $item_d = $builder->build({source => 'Item'});
 
 ## Testing Sub
 sub test_it {
