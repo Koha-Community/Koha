@@ -315,7 +315,6 @@ subtest 'test AllowHoldPolicyOverride' => sub {
 
     Koha::CirculationRules->set_rules(
         {
-            categorycode => undef,
             itemtype     => undef,
             branchcode   => undef,
             rules        => {
