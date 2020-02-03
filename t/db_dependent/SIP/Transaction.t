@@ -16,6 +16,7 @@ use C4::SIP::ILS::Transaction::FeePayment;
 use C4::SIP::ILS::Transaction::Hold;
 
 use C4::Reserves;
+use Koha::CirculationRules;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -65,16 +66,20 @@ subtest fill_holds_at_checkout => sub {
         }
     });
 
-    Koha::IssuingRule->new({
-        categorycode     => $borrower->{categorycode},
-        itemtype         => $itype->{itemtype},
-        branchcode       => $branch->{branchcode},
-        onshelfholds     => 1,
-        reservesallowed  => 3,
-        holds_per_record => 3,
-        issuelength      => 5,
-        lengthunit       => 'days',
-    })->store;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $borrower->{categorycode},
+            branchcode   => $branch->{branchcode},
+            itemtype     => $itype->{itemtype},
+            rules        => {
+                onshelfholds     => 1,
+                reservesallowed  => 3,
+                holds_per_record => 3,
+                issuelength      => 5,
+                lengthunit       => 'days',
+            }
+        }
+    );
 
     my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
     my $reserve2 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
@@ -154,16 +159,20 @@ subtest cancel_hold => sub {
         library       => $library->branchcode,
     });
 
-    Koha::IssuingRule->new({
-        categorycode     => $patron->categorycode,
-        itemtype         => $item->effective_itemtype,
-        branchcode       => $library->branchcode,
-        onshelfholds     => 1,
-        reservesallowed  => 3,
-        holds_per_record => 3,
-        issuelength      => 5,
-        lengthunit       => 'days',
-    })->store;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron->categorycode,
+            branchcode   => $library->branchcode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                onshelfholds     => 1,
+                reservesallowed  => 3,
+                holds_per_record => 3,
+                issuelength      => 5,
+                lengthunit       => 'days',
+            }
+        }
+    );
 
     my $reserve1 =
       AddReserve( $library->branchcode, $patron->borrowernumber,
