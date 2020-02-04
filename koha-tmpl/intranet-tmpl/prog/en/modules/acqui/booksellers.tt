@@ -156,22 +156,24 @@
                                                         <li><a href="/cgi-bin/koha/acqui/basket.pl?op=close&basketno=[% basket.basketno | uri %]&booksellerid=[% basket.booksellerid | uri %]"><i class="fa fa-times-circle"></i> Close this basket</a></li>
                                                         [% END %]
                                                     </ul>
-                                                    <!-- Modal -->
-                                                    <div id="addtoBasket[% basket.basketno | html %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    [% INCLUDE 'acquisitions-add-to-basket.inc' booksellerid=supplier.booksellerid basketno=basket.basketno %]
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                </div>
+                                            </div>
                                             [% ELSE %]
                                                 <a class="btn btn-default btn-xs" id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a>
                                             [% END %]
+                                            <!-- Modal -->
+                                            <div id="addtoBasket[% basket.basketno | html %]" class="modal" tabindex="-1" role="dialog" aria-labelledby="addtoBasketLabel[% basket.basketno | html %]" aria-hidden="true" data-basketno="[% basket.basketname | html %]">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body">
+                                                            [% INCLUDE 'acquisitions-add-to-basket.inc' booksellerid=supplier.booksellerid basketno=basket.basketno %]
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         [% END %]
                                         </td>
                                     </tr>
