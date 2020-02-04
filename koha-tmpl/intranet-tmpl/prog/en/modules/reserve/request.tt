@@ -676,6 +676,10 @@
                                                             <span class="dmg">[% AuthorisedValues.GetByCode( 'DAMAGED', itemloo.damaged ) | html %]</span>
                                                         [% END %]
 
+                                                        [% IF ( itemloo.withdrawn ) %]
+                                                           <span class="wdn">[% AuthorisedValues.GetByCode( 'WITHDRAWN', itemloo.withdrawn ) | html %]</span>
+                                                        [% END %]
+
                                                         [% IF ( itemloo.notforloan ) %]
                                                            <span class="nfl">Not for loan ([% AuthorisedValues.GetByCode( 'NOT_LOAN', itemloo.notforloan ) | html %])</span>
                                                         [% END %]
