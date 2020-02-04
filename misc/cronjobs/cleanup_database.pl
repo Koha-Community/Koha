@@ -430,7 +430,7 @@ if ($pDeletedPatrons) {
 }
 
 if ($pOldIssues) {
-    print "Purging old issues older than $pOldIssues days.\n" if $verbose;
+    print "Purging old checkouts older than $pOldIssues days.\n" if $verbose;
     $sth = $dbh->prepare(
         q{
             DELETE FROM old_issues
