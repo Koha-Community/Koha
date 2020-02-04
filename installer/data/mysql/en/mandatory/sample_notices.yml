@@ -1,0 +1,1148 @@
+---
+#
+#  Copyright 2019 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+# *************************************************************
+#                       SAMPLE NOTICES
+# *************************************************************
+
+description:
+  - "Sample notices"
+
+tables:
+  - letter:
+      translatable: [ name, title, content ]
+      multiline: [ content ]
+      rows:
+        - module: acquisition
+          code: ACQ_NOTIF_ON_RECEIV
+          branchcode: ""
+          name: "Notification on receiving"
+          is_html: 0
+          title: "Order received"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - " The order <<aqorders.ordernumber>> (<<biblio.title>>) has been received."
+            - ""
+            - "Your library."
+
+        - module: circulation
+          code: ACCOUNT_CREDIT
+          branchcode: ""
+          name: "Account payment"
+          is_html: 0
+          title: "Account payment"
+          message_transport_type: print
+          lang: default
+          content:
+            - "<table>"
+            - "[% IF ( LibraryName ) %]"
+            - " <tr>"
+            - "    <th colspan=\"4\" class=\"centerednames\">"
+            - "        <h3>[% LibraryName | html %]</h3>"
+            - "    </th>"
+            - " </tr>"
+            - "[% END %]"
+            - " <tr>"
+            - "    <th colspan=\"4\" class=\"centerednames\">"
+            - "        <h2><u>Fee receipt</u></h2>"
+            - "    </th>"
+            - " </tr>"
+            - " <tr>"
+            - "    <th colspan=\"4\" class=\"centerednames\">"
+            - "        <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>"
+            - "    </th>"
+            - " </tr>"
+            - " <tr>"
+            - "    <th colspan=\"4\">"
+            - "        Received with thanks from  [% patron.firstname | html %] [% patron.surname | html %] <br />"
+            - "        Card number: [% patron.cardnumber | html %]<br />"
+            - "    </th>"
+            - " </tr>"
+            - "  <tr>"
+            - "    <th>Date</th>"
+            - "    <th>Description of charges</th>"
+            - "    <th>Note</th>"
+            - "    <th>Amount</th>"
+            - " </tr>"
+            - ""
+            - "  [% FOREACH account IN accounts %]"
+            - "    <tr class=\"highlight\">"
+            - "      <td>[% account.date | $KohaDates %]</td>"
+            - "      <td>"
+            - "        [% PROCESS account_type_description account=account %]"
+            - "        [%- IF account.description %], [% account.description | html %][% END %]"
+            - "      </td>"
+            - "      <td>[% account.note | html %]</td>"
+            - "      [% IF ( account.amountcredit ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% account.amount | $Price %]</td>"
+            - "    </tr>"
+            - ""
+            - "  [% END %]"
+            - "<tfoot>"
+            - "  <tr>"
+            - "    <td colspan=\"3\">Total outstanding dues as on date: </td>"
+            - "    [% IF ( totalcredit ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% total | $Price %]</td>"
+            - "  </tr>"
+            - "</tfoot>"
+            - "</table>"
+
+        - module: circulation
+          code: ACCOUNT_DEBIT
+          branchcode: ""
+          name: "Account fee"
+          is_html: 0
+          title: "Account fee"
+          message_transport_type: print
+          lang: default
+          content:
+            - "<table>"
+            - "  [% IF ( LibraryName ) %]"
+            - "    <tr>"
+            - "      <th colspan=\"5\" class=\"centerednames\">"
+            - "        <h3>[% LibraryName | html %]</h3>"
+            - "      </th>"
+            - "    </tr>"
+            - "  [% END %]"
+            - ""
+            - "  <tr>"
+            - "    <th colspan=\"5\" class=\"centerednames\">"
+            - "      <h2><u>INVOICE</u></h2>"
+            - "    </th>"
+            - "  </tr>"
+            - "  <tr>"
+            - "    <th colspan=\"5\" class=\"centerednames\">"
+            - "      <h2>[% Branches.GetName( patron.branchcode ) | html %]</h2>"
+            - "    </th>"
+            - "  </tr>"
+            - "  <tr>"
+            - "    <th colspan=\"5\" >"
+            - "      Bill to: [% patron.firstname | html %] [% patron.surname | html %] <br />"
+            - "      Card number: [% patron.cardnumber | html %]<br />"
+            - "    </th>"
+            - "  </tr>"
+            - "  <tr>"
+            - "    <th>Date</th>"
+            - "    <th>Description of charges</th>"
+            - "    <th>Note</th>"
+            - "    <th style=\"text-align:right;\">Amount</th>"
+            - "    <th style=\"text-align:right;\">Amount outstanding</th>"
+            - "  </tr>"
+            - ""
+            - "  [% FOREACH account IN accounts %]"
+            - "    <tr class=\"highlight\">"
+            - "      <td>[% account.date | $KohaDates%]</td>"
+            - "      <td>"
+            - "        [% PROCESS account_type_description account=account %]"
+            - "        [%- IF account.description %], [% account.description | html %][% END %]"
+            - "      </td>"
+            - "      <td>[% account.note | html %]</td>"
+            - "      [% IF ( account.amountcredit ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% account.amount | $Price %]</td>"
+            - "      [% IF ( account.amountoutstandingcredit ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% account.amountoutstanding | $Price %]</td>"
+            - "    </tr>"
+            - "  [% END %]"
+            - ""
+            - "  <tfoot>"
+            - "    <tr>"
+            - "      <td colspan=\"4\">Total outstanding dues as on date: </td>"
+            - "      [% IF ( totalcredit ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% total | $Price %]</td>"
+            - "    </tr>"
+            - "  </tfoot>"
+            - "</table>"
+
+        - module: circulation
+          code: ACCOUNT_PAYMENT
+          branchcode: ""
+          name: "Account payment"
+          is_html: 0
+          title: "Account payment"
+          message_transport_type: email
+          lang: default
+          content:
+            - "[%- USE Price -%]"
+            - "A payment of [% credit.amount * -1 | $Price %] has been applied to your account."
+            - ""
+            - "This payment affected the following fees:"
+            - "[%- FOREACH o IN offsets %]"
+            - "Description: [% o.debit.description %]"
+            - "Amount paid: [% o.amount * -1 | $Price %]"
+            - "Amount remaining: [% o.debit.amountoutstanding | $Price %]"
+            - "[% END %]"
+
+        - module: circulation
+          code: ACCOUNT_WRITEOFF
+          branchcode: ""
+          name: "Account writeoff"
+          is_html: 0
+          title: "Account writeoff"
+          message_transport_type: email
+          lang: default
+          content:
+            - "[%- USE Price -%]"
+            - "An account writeoff of [% credit.amount * -1 | $Price %] has been applied to your account."
+            - ""
+            - "This writeoff affected the following fees:"
+            - "[%- FOREACH o IN offsets %]"
+            - "Description: [% o.debit.description %]"
+            - "Amount paid: [% o.amount * -1 | $Price %]"
+            - "Amount remaining: [% o.debit.amountoutstanding | $Price %]"
+            - "[% END %]"
+
+        - module: circulation
+          code: AR_CANCELED
+          branchcode: ""
+          name: "Article request - canceled"
+          is_html: 0
+          title: "Article request canceled"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),"
+            - ""
+            - "Your request for an article from <<biblio.title>> (<<items.barcode>>) has been canceled for the following reason:"
+            - ""
+            - "<<article_requests.notes>>"
+            - ""
+            - "Article requested:"
+            - "Title: <<article_requests.title>>"
+            - "Author: <<article_requests.author>>"
+            - "Volume: <<article_requests.volume>>"
+            - "Issue: <<article_requests.issue>>"
+            - "Date: <<article_requests.date>>"
+            - "Pages: <<article_requests.pages>>"
+            - "Chapters: <<article_requests.chapters>>"
+            - "Notes: <<article_requests.patron_notes>>"
+            - ""
+            - "Your library"
+
+        - module: circulation
+          code: AR_COMPLETED
+          branchcode: ""
+          name: "Article request - completed"
+          is_html: 0
+          title: "Article request completed"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),"
+            - ""
+            - "We have completed your request for an article from <<biblio.title>> (<<items.barcode>>)."
+            - ""
+            - "Article requested:"
+            - "Title: <<article_requests.title>>"
+            - "Author: <<article_requests.author>>"
+            - "Volume: <<article_requests.volume>>"
+            - "Issue: <<article_requests.issue>>"
+            - "Date: <<article_requests.date>>"
+            - "Pages: <<article_requests.pages>>"
+            - "Chapters: <<article_requests.chapters>>"
+            - "Notes: <<article_requests.patron_notes>>"
+            - ""
+            - "You may pick your article up at <<branches.branchname>>."
+            - ""
+            - "Thank you!"
+
+        - module: circulation
+          code: AR_PENDING
+          branchcode: ""
+          name: "Article request - open"
+          is_html: 0
+          title: "Article request received"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)"
+            - ""
+            - "We have received your request for an article from <<biblio.title>> (<<items.barcode>>)."
+            - ""
+            - "Article requested:"
+            - "Title: <<article_requests.title>>"
+            - "Author: <<article_requests.author>>"
+            - "Volume: <<article_requests.volume>>"
+            - "Issue: <<article_requests.issue>>"
+            - "Date: <<article_requests.date>>"
+            - "Pages: <<article_requests.pages>>"
+            - "Chapters: <<article_requests.chapters>>"
+            - "Notes: <<article_requests.patron_notes>>"
+            - ""
+            - ""
+            - "Thank you!"
+
+        - module: circulation
+          code: AR_PROCESSING
+          branchcode: ""
+          name: "Article request - processing"
+          is_html: 0
+          title: "Article request processing"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),"
+            - ""
+            - "We are now processing your request for an article from <<biblio.title>> (<<items.barcode>>)."
+            - ""
+            - "Article requested:"
+            - "Title: <<article_requests.title>>"
+            - "Author: <<article_requests.author>>"
+            - "Volume: <<article_requests.volume>>"
+            - "Issue: <<article_requests.issue>>"
+            - "Date: <<article_requests.date>>"
+            - "Pages: <<article_requests.pages>>"
+            - "Chapters: <<article_requests.chapters>>"
+            - "Notes: <<article_requests.patron_notes>>"
+            - ""
+            - "Thank you!"
+
+        - module: circulation
+          code: AR_SLIP
+          branchcode: ""
+          name: "Article request - print slip"
+          is_html: 0
+          title: "Article request"
+          message_transport_type: print
+          lang: default
+          content:
+            - "Article request:"
+            - ""
+            - "<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),"
+            - ""
+            - "Title: <<biblio.title>>"
+            - "Barcode: <<items.barcode>>"
+            - ""
+            - "Article requested:"
+            - "Title: <<article_requests.title>>"
+            - "Author: <<article_requests.author>>"
+            - "Volume: <<article_requests.volume>>"
+            - "Issue: <<article_requests.issue>>"
+            - "Date: <<article_requests.date>>"
+            - "Pages: <<article_requests.pages>>"
+            - "Chapters: <<article_requests.chapters>>"
+            - "Notes: <<article_requests.patron_notes>>"
+            - ""
+
+        - module: circulation
+          code: CHECKIN
+          branchcode: ""
+          name: "Item Check-in (Digest)"
+          is_html: 0
+          title: "Check-ins"
+          message_transport_type: email
+          lang: default
+          content:
+            - "The following items have been checked in:"
+            - "----"
+            - "[% biblio.title %]"
+            - "----"
+            - "Thank you."
+
+        - module: circulation
+          code: CHECKOUT
+          branchcode: ""
+          name: "Item Check-out (Digest)"
+          is_html: 0
+          title: "Checkouts"
+          message_transport_type: email
+          lang: default
+          content:
+            - "The following items have been checked out:"
+            - "----"
+            - "[% biblio.title %]"
+            - "----"
+            - "Thank you for visiting [% branch.branchname %]."
+
+        - module: circulation
+          code: CHECKOUT_NOTE
+          branchcode: ""
+          name: "Checkout note on item set by patron"
+          is_html: 0
+          title: "Checkout note"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>)."
+
+        - module: circulation
+          code: DUE
+          branchcode: ""
+          name: "Item Due Reminder"
+          is_html: 0
+          title: "Item Due Reminder"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following item is now due:"
+            - ""
+            - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
+
+        - module: circulation
+          code: DUEDGST
+          branchcode: ""
+          name: "Item Due Reminder (Digest)"
+          is_html: 0
+          title: "Item Due Reminder"
+          message_transport_type: email
+          lang: default
+          content:
+            - "You have <<count>> items due"
+
+        - module: circulation
+          code: HOLD_SLIP
+          branchcode: ""
+          name: "Hold Slip"
+          is_html: 1
+          title: "Hold Slip"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<h5>Date: <<today>></h5>"
+            - ""
+            - "<h3> Transfer to/Hold in <<branches.branchname>></h3>"
+            - ""
+            - "<h3><<borrowers.surname>>, <<borrowers.firstname>></h3>"
+            - ""
+            - "<ul>"
+            - "    <li><<borrowers.cardnumber>></li>"
+            - "    <li><<borrowers.phone>></li>"
+            - "    <li> <<borrowers.address>><br />"
+            - "         <<borrowers.address2>><br />"
+            - "         <<borrowers.city >>  <<borrowers.zipcode>>"
+            - "    </li>"
+            - "    <li><<borrowers.email>></li>"
+            - "</ul>"
+            - "<br />"
+            - "<h3>ITEM ON HOLD</h3>"
+            - "<h4><<biblio.title>></h4>"
+            - "<h5><<biblio.author>></h5>"
+            - "<ul>"
+            - "   <li><<items.barcode>></li>"
+            - "   <li><<items.itemcallnumber>></li>"
+            - "   <li><<reserves.waitingdate>></li>"
+            - "</ul>"
+            - "<p>Notes:"
+            - "<pre><<reserves.reservenotes>></pre>"
+            - "</p>"
+            - ""
+
+        - module: circulation
+          code: ISSUEQSLIP
+          branchcode: ""
+          name: "Issue Quick Slip"
+          is_html: 1
+          title: "Issue Quick Slip"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<h3><<branches.branchname>></h3>"
+            - "Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />"
+            - "(<<borrowers.cardnumber>>) <br />"
+            - ""
+            - "<<today>><br />"
+            - ""
+            - "<h4>Checked Out Today</h4>"
+            - "<checkedout>"
+            - "<p>"
+            - "<<biblio.title>> <br />"
+            - "Barcode: <<items.barcode>><br />"
+            - "Date due: <<issues.date_due>><br />"
+            - "</p>"
+            - "</checkedout>"
+
+        - module: circulation
+          code: ISSUESLIP
+          branchcode: ""
+          name: "Issue Slip"
+          is_html: 1
+          title: "Issue Slip"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<h3><<branches.branchname>></h3>"
+            - "Checked out to <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />"
+            - "(<<borrowers.cardnumber>>) <br />"
+            - ""
+            - "<<today>><br />"
+            - ""
+            - "<h4>Checked Out</h4>"
+            - "<checkedout>"
+            - "<p>"
+            - "<<biblio.title>> <br />"
+            - "Barcode: <<items.barcode>><br />"
+            - "Date due: <<issues.date_due>><br />"
+            - "</p>"
+            - "</checkedout>"
+            - ""
+            - "<h4>Overdues</h4>"
+            - "<overdue>"
+            - "<p>"
+            - "<<biblio.title>> <br />"
+            - "Barcode: <<items.barcode>><br />"
+            - "Date due: <<issues.date_due>><br />"
+            - "</p>"
+            - "</overdue>"
+            - ""
+            - "<hr>"
+            - ""
+            - "<h4 style=\"text-align: center; font-style:italic;\">News</h4>"
+            - "<news>"
+            - "<div class=\"newsitem\">"
+            - "<h5 style=\"margin-bottom: 1px; margin-top: 1px\"><b><<opac_news.title>></b></h5>"
+            - "<p style=\"margin-bottom: 1px; margin-top: 1px\"><<opac_news.content>></p>"
+            - "<p class=\"newsfooter\" style=\"font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px\">Posted on <<opac_news.timestamp>></p>"
+            - "<hr />"
+            - "</div>"
+            - "</news>"
+
+        - module: circulation
+          code: ODUE
+          branchcode: ""
+          name: "Overdue Notice"
+          is_html: 0
+          title: "Item Overdue"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "According to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible."
+            - ""
+            - "<<branches.branchname>>"
+            - "<<branches.branchaddress1>>"
+            - "<<branches.branchaddress2>> <<branches.branchaddress3>>"
+            - "Phone: <<branches.branchphone>>"
+            - "Fax: <<branches.branchfax>>"
+            - "Email: <<branches.branchemail>>"
+            - ""
+            - "If you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned."
+            - ""
+            - "The following item(s) is/are currently overdue:"
+            - ""
+            - "<item>\"<<biblio.title>>\" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>"
+            - ""
+            - "Thank-you for your prompt attention to this matter."
+            - ""
+            - "<<branches.branchname>> Staff"
+            - ""
+
+        - module: circulation
+          code: OVERDUES_SLIP
+          branchcode: ""
+          name: "Overdues Slip"
+          is_html: 0
+          title: "OVERDUES_SLIP"
+          message_transport_type: print
+          lang: default
+          content:
+            - "The following item(s) is/are currently overdue:"
+            - ""
+            - "<item>\"<<biblio.title>>\" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <<items.fine>></item>"
+            - ""
+
+        - module: circulation
+          code: PREDUE
+          branchcode: ""
+          name: "Advance Notice of Item Due"
+          is_html: 0
+          title: "Advance Notice of Item Due"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following item will be due soon:"
+            - ""
+            - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
+
+        - module: circulation
+          code: PREDUEDGST
+          branchcode: ""
+          name: "Advance Notice of Item Due (Digest)"
+          is_html: 0
+          title: "Advance Notice of Item Due"
+          message_transport_type: email
+          lang: default
+          content:
+            - "You have <<count>> items due soon"
+
+        - module: circulation
+          code: RENEWAL
+          branchcode: ""
+          name: "Item Renewals"
+          is_html: 0
+          title: "Item Renewals"
+          message_transport_type: email
+          lang: default
+          content:
+            - "The following items have been renewed:"
+            - "----"
+            - "<<biblio.title>>"
+            - "----"
+            - "Thank you for visiting <<branches.branchname>>."
+
+        - module: circulation
+          code: SR_SLIP
+          branchcode: ""
+          name: "Stock rotation slip"
+          is_html: 0
+          title: "Stock rotation report"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Stock rotation report for [% branch.name %]:"
+            - ""
+            - "[% IF branch.items.size %][% branch.items.size %] items to be processed for this branch."
+            - "[% ELSE %]No items to be processed for this branch"
+            - "[% END %][% FOREACH item IN branch.items %][% IF item.reason != 'in-demand' %]Title: [% item.title %]"
+            - "Author: [% item.author %]"
+            - "Callnumber: [% item.callnumber %]"
+            - "Location: [% item.location %]"
+            - "Barcode: [% item.barcode %]"
+            - "On loan?: [% item.onloan %]"
+            - "Status: [% item.reason %]"
+            - "Current library: [% item.branch.branchname %] [% item.branch.branchcode %]"
+            - ""
+            - "[% END %][% END %]"
+
+        - module: circulation
+          code: TRANSFERSLIP
+          branchcode: ""
+          name: "Transfer Slip"
+          is_html: 1
+          title: "Transfer Slip"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<h5>Date: <<today>></h5>"
+            - ""
+            - "<h3>Transfer to <<branches.branchname>></h3>"
+            - ""
+            - "<h3>ITEM</h3>"
+            - "<h4><<biblio.title>></h4>"
+            - "<h5><<biblio.author>></h5>"
+            - "<ul>"
+            - "   <li><<items.barcode>></li>"
+            - "   <li><<items.itemcallnumber>></li>"
+            - "</ul>"
+
+        - module: claimacquisition
+          code: ACQCLAIM
+          branchcode: ""
+          name: "Acquisition Claim"
+          is_html: 0
+          title: "Item Not Received"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<<aqbooksellers.name>>"
+            - "<<aqbooksellers.address1>>"
+            - "<<aqbooksellers.address2>>"
+            - "<<aqbooksellers.address3>>"
+            - "<<aqbooksellers.address4>>"
+            - "<<aqbooksellers.phone>>"
+            - ""
+            - "<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (<<aqorders.quantity>> ordered) ($<<aqorders.listprice>> each) has not been received.</order>"
+
+        - module: members
+          code: ACCTDETAILS
+          branchcode: ""
+          name: "Account Details Template - DEFAULT"
+          is_html: 0
+          title: "Your new Koha account details."
+          message_transport_type: email
+          lang: default
+          content:
+            - "Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>."
+            - ""
+            - "Your new Koha account details are:"
+            - ""
+            - "User:  <<borrowers.userid>>"
+            - "Password: <<borrowers.password>>"
+            - ""
+            - "If you have any problems or questions regarding your account, please contact your Koha Administrator."
+            - ""
+            - "Thank you,"
+            - "Koha Administrator"
+            - "kohaadmin@yoursite.org"
+
+        - module: members
+          code: DISCHARGE
+          branchcode: ""
+          name: "Discharge confirmation"
+          is_html: 1
+          title: "Discharge for <<borrowers.firstname>> <<borrowers.surname>>"
+          message_transport_type: email
+          lang: default
+          content:
+            - ""
+            - "<<today>>"
+            - "<h1>Discharge confirmation</h1>"
+            - "<p><<branches.branchname>> certifies that the following borrower:<br>"
+            - "<<borrowers.firstname>> <<borrowers.surname>> (cardnumber: <<borrowers.cardnumber>>)<br>"
+            - "has returned all items.</p>"
+
+        - module: members
+          code: MEMBERSHIP_EXPIRY
+          branchcode: ""
+          name: "Account expiration"
+          is_html: 0
+          title: "Account expiration"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "Your library card will expire soon, on:"
+            - ""
+            - "<<borrowers.dateexpiry>>"
+            - ""
+            - "Thank you,"
+            - ""
+            - "Librarian"
+            - ""
+            - "<<branches.branchname>>"
+
+        - module: members
+          code: OPAC_REG_VERIFY
+          branchcode: ""
+          name: "Opac Self-Registration Verification Email"
+          is_html: 1
+          title: "Verify Your Account"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Hello!"
+            - ""
+            - "Your library account has been created. Please verify your email address by clicking this link to complete the signup process:"
+            - ""
+            - "<<OPACBaseURL>>/cgi-bin/koha/opac-registration-verify.pl?token=<<borrower_modifications.verification_token>>"
+            - ""
+            - "If you did not initiate this request, you may safely ignore this one-time message. The request will expire shortly."
+
+        - module: members
+          code: PASSWORD_RESET
+          branchcode: ""
+          name: "Online password reset"
+          is_html: 1
+          title: "Koha password recovery"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<html>"
+            - "<p>This email has been sent in response to your password recovery request for the account <strong><<user>></strong>."
+            - "</p>"
+            - "<p>"
+            - "You can now create your new password using the following link:"
+            - "<br/><a href=\"<<passwordreseturl>>\"><<passwordreseturl>></a>"
+            - "</p>"
+            - "<p>This link will be valid for 2 days from this email's reception, then you must reapply if you do not change your password.</p>"
+            - "<p>Thank you.</p>"
+            - "</html>"
+            - ""
+
+        - module: members
+          code: SHARE_ACCEPT
+          branchcode: ""
+          name: "Notification about an accepted share"
+          is_html: 0
+          title: "Share on list <<listname>> accepted"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear patron,"
+            - ""
+            - "We want to inform you that <<borrowers.firstname>> <<borrowers.surname>> accepted your invitation to share your list <<listname>> in our library catalog."
+            - ""
+            - "Thank you."
+            - ""
+            - "Your library."
+
+        - module: members
+          code: SHARE_INVITE
+          branchcode: ""
+          name: "Invitation for sharing a list"
+          is_html: 0
+          title: "Share list <<listname>>"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear patron,"
+            - ""
+            - "One of our patrons, <<borrowers.firstname>> <<borrowers.surname>>, invites you to share a list <<listname>> in our library catalog."
+            - ""
+            - "To access this shared list, please click on the following URL or copy-and-paste it into your browser address bar."
+            - ""
+            - "<<shareurl>>"
+            - ""
+            - "In case you are not a patron in our library or do not want to accept this invitation, please ignore this mail. Note also that this invitation expires within two weeks."
+            - ""
+            - "Thank you."
+            - ""
+            - "Your library."
+
+        - module: orderacquisition
+          code: ACQORDER
+          branchcode: ""
+          name: "Acquisition order"
+          is_html: 0
+          title: "Order"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<<aqbooksellers.name>>"
+            - "<<aqbooksellers.address1>>"
+            - "<<aqbooksellers.address2>>"
+            - "<<aqbooksellers.address3>>"
+            - "<<aqbooksellers.address4>>"
+            - "<<aqbooksellers.phone>>"
+            - ""
+            - "Please order for the library:"
+            - ""
+            - "<order>Ordernumber <<aqorders.ordernumber>> (<<biblio.title>>) (quantity: <<aqorders.quantity>>) ($<<aqorders.listprice>> each).</order>"
+            - ""
+            - "Thank you,"
+            - ""
+            - "<<branches.branchname>>"
+
+        - module: pos
+          code: RECEIPT
+          branchcode: ""
+          name: "Point of sale receipt"
+          is_html: 0
+          title: "Receipt"
+          message_transport_type: print
+          lang: default
+          content:
+            - "[% PROCESS \"accounts.inc\" %]"
+            - "<table>"
+            - "[% IF ( LibraryName ) %]"
+            - " <tr>"
+            - "    <th colspan=\"2\" class=\"centerednames\">"
+            - "        <h3>[% LibraryName | html %]</h3>"
+            - "    </th>"
+            - " </tr>"
+            - "[% END %]"
+            - " <tr>"
+            - "    <th colspan=\"2\" class=\"centerednames\">"
+            - "        <h2>[% Branches.GetName( payment.branchcode ) | html %]</h2>"
+            - "    </th>"
+            - " </tr>"
+            - "<tr>"
+            - "    <th colspan=\"2\" class=\"centerednames\">"
+            - "        <h3>[% payment.date | $KohaDates %]</h3>"
+            - "</tr>"
+            - "<tr>"
+            - "  <td>Transaction ID: </td>"
+            - "  <td>[% payment.accountlines_id %]</td>"
+            - "</tr>"
+            - "<tr>"
+            - "  <td>Operator ID: </td>"
+            - "  <td>[% payment.manager_id %]</td>"
+            - "</tr>"
+            - "<tr>"
+            - "  <td>Payment type: </td>"
+            - "  <td>[% payment.payment_type %]</td>"
+            - "</tr>"
+            - " <tr></tr>"
+            - " <tr>"
+            - "    <th colspan=\"2\" class=\"centerednames\">"
+            - "        <h2><u>Fee receipt</u></h2>"
+            - "    </th>"
+            - " </tr>"
+            - " <tr></tr>"
+            - " <tr>"
+            - "    <th>Description of charges</th>"
+            - "    <th>Amount</th>"
+            - "  </tr>"
+            - ""
+            - "  [% FOREACH offset IN offsets %]"
+            - "    <tr>"
+            - "        <td>[% PROCESS account_type_description account=offset.debit %]</td>"
+            - "        <td>[% offset.amount * -1 | $Price %]</td>"
+            - "    </tr>"
+            - "  [% END %]"
+            - ""
+            - "<tfoot>"
+            - "  <tr class=\"highlight\">"
+            - "    <td>Total: </td>"
+            - "    <td>[% payment.amount * -1| $Price %]</td>"
+            - "  </tr>"
+            - "  <tr>"
+            - "    <td>Tendered: </td>"
+            - "    <td>[% collected | $Price %]</td>"
+            - "  </tr>"
+            - "  <tr>"
+            - "    <td>Change: </td>"
+            - "    <td>[% change | $Price %]</td>"
+            - "    </tr>"
+            - "</tfoot>"
+            - "</table>"
+
+        - module: reserves
+          code: CANCEL_HOLD_ON_LOST
+          branchcode: ""
+          name: "Hold has been cancelled"
+          is_html: 0
+          title: "Hold has been cancelled"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrower.surname %],"
+            - ""
+            - "We regret to inform you, that the following item can not be provided due to it being missing. Your hold was cancelled."
+            - ""
+            - "Title: [% biblio.title %]"
+            - "Author: [% biblio.author %]"
+            - "Copy: [% item.copynumber %]"
+            - "Location: [% branch.branchname %]"
+
+        - module: reserves
+          code: HOLD
+          branchcode: ""
+          name: "Hold Available for Pickup"
+          is_html: 0
+          title: "Hold Available for Pickup at <<branches.branchname>>"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have a hold available for pickup as of <<reserves.waitingdate>>:"
+            - ""
+            - "Title: <<biblio.title>>"
+            - "Author: <<biblio.author>>"
+            - "Copy: <<items.copynumber>>"
+            - "Location: <<branches.branchname>>"
+            - "<<branches.branchaddress1>>"
+            - "<<branches.branchaddress2>>"
+            - "<<branches.branchaddress3>>"
+            - "<<branches.branchcity>> <<branches.branchzip>>"
+
+        - module: reserves
+          code: HOLD
+          branchcode: ""
+          name: "Hold Available for Pickup"
+          is_html: 0
+          title: "Hold Available for Pickup (print notice)"
+          message_transport_type: print
+          lang: default
+          content:
+            - "<<branches.branchname>>"
+            - "<<branches.branchaddress1>>"
+            - "<<branches.branchaddress2>>"
+            - ""
+            - ""
+            - "Change Service Requested"
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - "<<borrowers.firstname>> <<borrowers.surname>>"
+            - "<<borrowers.address>>"
+            - "<<borrowers.city>> <<borrowers.zipcode>>"
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - ""
+            - "<<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>"
+            - ""
+            - "You have a hold available for pickup as of <<reserves.waitingdate>>:"
+            - ""
+            - "Title: <<biblio.title>>"
+            - "Author: <<biblio.author>>"
+            - "Copy: <<items.copynumber>>"
+            - ""
+
+        - module: reserves
+          code: HOLDPLACED
+          branchcode: ""
+          name: "Hold Placed on Item"
+          is_html: 0
+          title: "Hold Placed on Item"
+          message_transport_type: email
+          lang: default
+          content:
+            - "A hold has been placed on the following item : <<biblio.title>> (<<biblio.biblionumber>>) by the user <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)."
+
+        - module: serial
+          code: SERIAL_ALERT
+          branchcode: ""
+          name: "New serial issue"
+          is_html: 0
+          title: "New serial issue is now available"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "The following issue is now available:"
+            - ""
+            - "<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)"
+            - ""
+            - "Please pick it up at your convenience."
+
+        - module: suggestions
+          code: ACCEPTED
+          branchcode: ""
+          name: "Suggestion accepted"
+          is_html: 0
+          title: "Purchase suggestion accepted"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - ""
+            - "The library has reviewed your suggestion today. The item will be ordered as soon as possible. You will be notified by mail when the order is completed, and again when the item arrives at the library."
+            - ""
+            - "If you have any questions, please email us at <<branches.branchemail>>."
+            - ""
+            - "Thank you,"
+            - ""
+            - "<<branches.branchname>>"
+
+        - module: suggestions
+          code: AVAILABLE
+          branchcode: ""
+          name: "Suggestion available"
+          is_html: 0
+          title: "Suggested purchase available"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - ""
+            - "We are pleased to inform you that the item you requested is now part of the collection."
+            - ""
+            - "If you have any questions, please email us at <<branches.branchemail>>."
+            - ""
+            - "Thank you,"
+            - ""
+            - "<<branches.branchname>>"
+
+        - module: suggestions
+          code: NEW_SUGGESTION
+          branchcode: ""
+          name: "New suggestion"
+          is_html: 1
+          title: "New suggestion"
+          message_transport_type: email
+          lang: default
+          content:
+            - "<h3>Suggestion pendin    g approval</h3>"
+            - "    <p><h4>Suggested by</h4>"
+            - "    <ul>"
+            - "    <li><<borrowers.firstname>> <<borrowers.surname>></li>"
+            - "    <li><<borrowers.cardnumber>></li>"
+            - "    <li><<borrowers.phone>></li>"
+            - "    <li><<borrowers.email>></li>"
+            - "    </ul>"
+            - "    </p>"
+            - "    <p><h4>Title suggested</h4>"
+            - "    <ul>"
+            - "    <li><b>Library:</b> <<branches.branchname>></li>"
+            - "    <li><b>Title:</b> <<suggestions.title>></li>"
+            - "    <li><b>Author:</b> <<suggestions.author>></li>"
+            - "    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>"
+            - "    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>"
+            - "    <li><b>Publisher:</b> <<suggestions.publishercode>></li>"
+            - "    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>"
+            - "    <li><b>Publication place:</b> <<suggestions.place>></li>"
+            - "    <li><b>Quantity:</b> <<suggestions.quantity>></li>"
+            - "    <li><b>Item type:</b>  <<suggestions.itemtype>></li>"
+            - "    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>"
+            - "    <li><b>Notes:</b> <<suggestions.note>></li>"
+            - "    </ul>"
+            - "    </p>"
+
+        - module: suggestions
+          code: ORDERED
+          branchcode: ""
+          name: "Suggestion ordered"
+          is_html: 0
+          title: "Suggested item ordered"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - ""
+            - "We are pleased to inform you that the item you requested has now been ordered. It should arrive soon, at which time it will be processed for addition into the collection."
+            - ""
+            - "You will be notified again when the book is available."
+            - ""
+            - "If you have any questions, please email us at <<branches.branchemail>>"
+            - ""
+            - "Thank you,"
+            - ""
+            - "<<branches.branchname>>"
+
+        - module: suggestions
+          code: REJECTED
+          branchcode: ""
+          name: "Suggestion rejected"
+          is_html: 0
+          title: "Purchase suggestion declined"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "You have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>."
+            - ""
+            - "The library has reviewed your request today, and has decided not to accept the suggestion at this time."
+            - ""
+            - "The reason given is: <<suggestions.reason>>"
+            - ""
+            - "If you have any questions, please email us at <<branches.branchemail>>."
+            - ""
+            - "Thank you,"
+            - ""
+            - "<<branches.branchname>>"
+
+        - module: suggestions
+          code: TO_PROCESS
+          branchcode: ""
+          name: "Notify fund owner"
+          is_html: 0
+          title: "A suggestion is ready to be processed"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear <<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "A new suggestion is ready to be processed: <<suggestions.title>> by <<suggestions.author>>."
+            - ""
+            - "Thank you,"
+            - ""
+            - "<<branches.branchname>>"
