@@ -1,0 +1,119 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Sample numbering patterns for subscriptions"
+
+tables:
+  - subscription_numberpatterns:
+      translatable: [ label, description, numberingmethod, label1, label2, label3 ]
+      multiline: []
+      rows:
+        - label: "Number"
+          displayorder: 1
+          description: "Simple Numbering method"
+          numberingmethod: "No. {X}"
+          label1: "Number"
+          add1: 1
+          every1: 1
+          whenmorethan1: 99999
+          setto1: 1
+          numbering1: ~
+          label2: ""
+          add2: ~
+          every2: ~
+          whenmorethan2: ~
+          setto2: ~
+          numbering2: ~
+          label3: ""
+          add3: ~
+          every3: ~
+          whenmorethan3: ~
+          setto3: ~
+          numbering3: ~
+
+        - label: "Volume, Number, Issue"
+          displayorder: 2
+          description: "Volume Number Issue 1"
+          numberingmethod: "Vol. {X}, Number {Y}, Issue {Z}"
+          label1: "Volume"
+          add1: 1
+          every1: 48
+          whenmorethan1: 99999
+          setto1: 1
+          numbering1: ~
+          label2: "Number"
+          add2: 1
+          every2: 4
+          whenmorethan2: 12
+          setto2: 1
+          numbering2: ~
+          label3: "Issue"
+          add3: 1
+          every3: 1
+          whenmorethan3: 4
+          setto3: 1
+          numbering3: ~
+
+        - label: "Volume, Number"
+          displayorder: 3
+          description: "Volume Number 1"
+          numberingmethod: "Vol. {X}, No. {Y}"
+          label1: "Volume"
+          add1: 1
+          every1: 12
+          whenmorethan1: 99999
+          setto1: 1
+          numbering1: ~
+          label2: "Number"
+          add2: 1
+          every2: 1
+          whenmorethan2: 12
+          setto2: 1
+          numbering2: ~
+          label3: ""
+          add3: ~
+          every3: ~
+          whenmorethan3: ~
+          setto3: ~
+          numbering3: ~
+
+        - label: "Seasonal"
+          displayorder: 4
+          description: "Season Year"
+          numberingmethod: "{X} {Y}"
+          label1: "Season"
+          add1: 1
+          every1: 1
+          whenmorethan1: 3
+          setto1: 0
+          numbering1: season
+          label2: "Year"
+          add2: 1
+          every2: 4
+          whenmorethan2: 99999
+          setto2: 1
+          numbering2: ~
+          label3: ""
+          add3: ~
+          every3: ~
+          whenmorethan3: ~
+          setto3: ~
+          numbering3: ~
