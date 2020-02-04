@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 46;
+use Test::More tests => 47;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
 
@@ -3768,6 +3768,48 @@ subtest "Test Backdating of Returns" => sub {
     my $accountline = Koha::Account::Lines->find( { issue_id => $issue->id } );
     is( $accountline->amountoutstanding+0, 0, 'Fee amount outstanding was reduced to 0' );
     is( $accountline->amount+0, 0, 'Fee amount was reduced to 0' );
+};
+
+subtest 'Do not return on renewal (LOST charge)' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference('MarkLostItemsAsReturned', 'onpayment');
+    my $library = $builder->build_object( { class => "Koha::Libraries" } );
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    t::lib::Mocks::mock_userenv({ patron => $manager,branchcode => $manager->branchcode });
+
+    my $biblio = $builder->build_sample_biblio;
+
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber     => $biblio->biblionumber,
+            library          => $library->branchcode,
+            replacementprice => 99.00,
+            itype            => $itemtype,
+        }
+    );
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    AddIssue( $patron->unblessed, $item->barcode );
+
+    my $accountline = Koha::Account::Line->new(
+        {
+            borrowernumber    => $patron->borrowernumber,
+            debit_type_code   => 'LOST',
+            status            => undef,
+            itemnumber        => $item->itemnumber,
+            amount            => 12,
+            amountoutstanding => 12,
+            interface         => 'something',
+        }
+    )->store();
+
+    # AddRenewal doesn't call _FixAccountForLostAndFound
+    AddIssue( $patron->unblessed, $item->barcode );
+
+    is( $patron->checkouts->count, 1,
+        'Renewal should not return the item even if a LOST payment has been made earlier'
+    );
 };
 
 $schema->storage->txn_rollback;
