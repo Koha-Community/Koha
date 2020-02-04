@@ -102,7 +102,7 @@ sub GetItemTypesCategorized {
         SELECT itemtype, description, imageurl, hideinopac, 0 as 'iscat' FROM itemtypes WHERE ISNULL(searchcategory) or length(searchcategory) = 0
         UNION
         SELECT DISTINCT searchcategory AS `itemtype`,
-                        authorised_values.lib_opac AS description,
+                        COALESCE(authorised_values.lib_opac,authorised_values.lib) AS description,
                         authorised_values.imageurl AS imageurl,
                         hideinopac, 1 as 'iscat'
         FROM itemtypes
@@ -110,7 +110,7 @@ sub GetItemTypesCategorized {
         WHERE searchcategory > '' and hideinopac=1
         UNION
         SELECT DISTINCT searchcategory AS `itemtype`,
-                        authorised_values.lib_opac AS description,
+                        COALESCE(authorised_values.lib_opac,authorised_values.lib) AS description,
                         authorised_values.imageurl AS imageurl,
                         hideinopac, 1 as 'iscat'
         FROM itemtypes
