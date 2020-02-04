@@ -71,7 +71,7 @@ subtest 'Bad plugins tests' => sub {
     # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
     # TODO: remove () if minimum version is bumped to at least 1.28.
     ok( !exists $routes->{'/contrib/badass/patrons/(:patron_id)/bother_wrong'} && !exists $routes->{'/contrib/badass/patrons/<:patron_id>/bother_wrong'}, 'Route doesn\'t exist' );
-    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id>)/bother'} || exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'}, 'Route exists' );
+    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'} || exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'}, 'Route exists' );
 
     $schema->storage->txn_rollback;
 };
