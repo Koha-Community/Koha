@@ -1,0 +1,98 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Default classification sources and filing rules for Koha."
+
+tables:
+  # class sorting (filing) rules
+  - class_sort_rules:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - class_sort_rule: "dewey"
+          description: "Default filing rules for DDC"
+          sort_routine: "Dewey"
+
+        - class_sort_rule: "lcc"
+          description: "Default filing rules for LCC"
+          sort_routine: "LCC"
+
+        - class_sort_rule: "generic"
+          description: "Generic call number filing rules"
+          sort_routine: "Generic"
+
+  # splitting rules
+  - class_split_rules:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - class_split_rule: "dewey"
+          description: "Default splitting rules for DDC"
+          split_routine: "Dewey"
+
+        - class_split_rule: "lcc"
+          description: "Default splitting rules for LCC"
+          split_routine: "LCC"
+
+        - class_split_rule: "generic"
+          description: "Generic call number splitting rules"
+          split_routine: "Generic"
+
+  # classification schemes or sources
+  - class_sources:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - cn_source: "ddc"
+          description: "Dewey Decimal Classification"
+          used: 1
+          class_sort_rule: "dewey"
+          class_split_rule: "dewey"
+
+        - cn_source: "lcc"
+          description: "Library of Congress Classification"
+          used: 1
+          class_sort_rule: "lcc"
+          class_split_rule: "lcc"
+
+        - cn_source: "udc"
+          description: "Universal Decimal Classification"
+          used: 0
+          class_sort_rule: "generic"
+          class_split_rule: "generic"
+
+        - cn_source: "sudocs"
+          description: "SuDoc Classification (U.S. GPO)"
+          used: 0
+          class_sort_rule: "generic"
+          class_split_rule: "generic"
+
+        - cn_source: "anscr"
+          description: "ANSCR (Sound Recordings)"
+          used: 0
+          class_sort_rule: "generic"
+          class_split_rule: "generic"
+
+        - cn_source: "z"
+          description: "Other/Generic Classification Scheme"
+          used: 0
+          class_sort_rule: "generic"
+          class_split_rule: "generic"
