@@ -1,0 +1,60 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Default Koha system authorised values"
+
+tables:
+  - authorised_values:
+      translatable: [ lib, lib_opac ]
+      multiline: []
+      rows:
+        - category: "YES_NO"
+          authorised_value: "0"
+          lib: "No"
+          lib_opac: "No"
+
+        - category: "YES_NO"
+          authorised_value: "1"
+          lib: "Yes"
+          lib_opac: "Yes"
+
+        - category: "PAYMENT_TYPE"
+          authorised_value: "SIP00"
+          lib: "Cash via SIP2"
+          lib_opac: "Cash"
+
+        - category: "PAYMENT_TYPE"
+          authorised_value: "SIP01"
+          lib: "Visa via SIP2"
+          lib_opac: "Visa"
+
+        - category: "PAYMENT_TYPE"
+          authorised_value: "SIP02"
+          lib: "Creditcard via SIP2"
+          lib_opac: "Creditcard"
+
+  - authorised_values:
+      translatable: [ lib ]
+      multiline: []
+      rows:
+        - category: "HSBND_FREQ"
+          authorised_value: "EW"
+          lib: "Every week"
