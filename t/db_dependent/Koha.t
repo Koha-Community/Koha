@@ -240,13 +240,15 @@ subtest 'ISBN tests' => sub {
 };
 
 subtest 'GetItemTypesCategorized test' => sub{
-    plan tests => 7;
+    plan tests => 9;
 
     my $avc = Koha::AuthorisedValueCategories->find('ITEMTYPECAT');
     Koha::AuthorisedValueCategory->new({ category_name => 'ITEMTYPECAT' })->store unless $avc;
     my $insertGroup = Koha::AuthorisedValue->new(
         {   category         => 'ITEMTYPECAT',
-            authorised_value => 'Quertyware',
+            authorised_value => 'Qwertyware',
+            lib              => 'Keyboard software',
+            lib_opac         => 'Computer stuff',
         }
     )->store;
 
@@ -270,7 +272,8 @@ subtest 'GetItemTypesCategorized test' => sub{
     # add more data since GetItemTypesCategorized's search is more subtle
     $insertGroup = Koha::AuthorisedValue->new(
         {   category         => 'ITEMTYPECAT',
-            authorised_value => 'Varyheavybook',
+            authorised_value => 'Veryheavybook',
+            lib              => 'Weighty literature',
         }
     )->store;
 
@@ -280,6 +283,9 @@ subtest 'GetItemTypesCategorized test' => sub{
     ok(exists $hrCat->{Qwertyware}, 'GetItemTypesCategorized: fully visible category exists');
     ok($hrCat->{Veryheavybook} &&
        $hrCat->{Veryheavybook}->{hideinopac}==1, 'GetItemTypesCategorized: non-visible category hidden' );
+
+    is( $hrCat->{Veryheavybook}->{description}, 'Weighty literature', 'A category with only lib description passes through');
+    is( $hrCat->{Qwertyware}->{description}, 'Computer stuff', 'A category with lib_opac description uses that');
 
     $insertSth->execute('BKghjklo5', 'An hidden book', 'Qwertyware', 1);
     $hrCat = GetItemTypesCategorized();
