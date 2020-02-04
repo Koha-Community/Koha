@@ -1,0 +1,105 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Sample frequencies for subscriptions"
+
+tables:
+  - subscription_frequencies:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        - description: "2/day"
+          unit: "day"
+          unitsperissue: 1
+          issuesperunit: 2
+          displayorder: 1
+
+        - description: "1/day"
+          unit: "day"
+          unitsperissue: 1
+          issuesperunit: 1
+          displayorder: 2
+
+        - description: "3/week"
+          unit: "week"
+          unitsperissue: 1
+          issuesperunit: 3
+          displayorder: 3
+
+        - description: "1/week"
+          unit: "week"
+          unitsperissue: 1
+          issuesperunit: 1
+          displayorder: 4
+
+        - description: "1/2 weeks"
+          unit: "week"
+          unitsperissue: 2
+          issuesperunit: 1
+          displayorder: 5
+
+        - description: "1/3 weeks"
+          unit: "week"
+          unitsperissue: 3
+          issuesperunit: 1
+          displayorder: 6
+
+        - description: "1/month"
+          unit: "month"
+          unitsperissue: 1
+          issuesperunit: 1
+          displayorder: 7
+
+        - description: "1/2 months"
+          unit: "month"
+          unitsperissue: 2
+          issuesperunit: 1
+          displayorder: 8
+
+        - description: "1/3 months"
+          unit: "month"
+          unitsperissue: 3
+          issuesperunit: 1
+          displayorder: 9
+
+        - description: "2/year"
+          unit: "month"
+          unitsperissue: 6
+          issuesperunit: 1
+          displayorder: 10
+
+        - description: "1/year"
+          unit: "year"
+          unitsperissue: 1
+          issuesperunit: 1
+          displayorder: 11
+
+        - description: "1/2 year"
+          unit: "year"
+          unitsperissue: 2
+          issuesperunit: 1
+          displayorder: 12
+
+        - description: "Irregular"
+          unit: ~
+          unitsperissue: 1
+          issuesperunit: 1
+          displayorder: 13
