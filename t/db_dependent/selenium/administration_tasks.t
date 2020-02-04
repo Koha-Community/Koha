@@ -82,7 +82,7 @@ SKIP: {
         $elt = $driver->find_element('//tr[@id="edit_row"]/td[@class="actions"]/button[@type="submit"]');
         $elt->click();
         $elt = $driver->find_elements('//table[@id="default-circulation-rules"]/tbody/tr/td[contains(text(),"'.$itype->description.'")]/following-sibling::td/span[text() = "Unlimited"]');
-        is( @$elt,2,"We have unlimited checkouts");
+        is( @$elt, 4, "We have unlimited checkouts and holds" );
         #Clean up
         Koha::CirculationRules->search( { itemtype => $itype->itemtype } )->delete;
         $itype->delete;
