@@ -20683,6 +20683,55 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21674 - Add unique key (parent_id, branchcode) to library_group)\n";
 }
 
+$DBversion = '19.12.00.018';
+if( CheckVersion( $DBversion ) ) {
+    my @columns = qw(
+        restrictedtype
+        rentaldiscount
+        fine
+        finedays
+        maxsuspensiondays
+        suspension_chargeperiod
+        firstremind
+        chargeperiod
+        chargeperiod_charge_at
+        accountsent
+        issuelength
+        lengthunit
+        hardduedate
+        hardduedatecompare
+        renewalsallowed
+        renewalperiod
+        norenewalbefore
+        auto_renew
+        no_auto_renewal_after
+        no_auto_renewal_after_hard_limit
+        reservesallowed
+        holds_per_record
+        holds_per_day
+        onshelfholds
+        opacitemholds
+        overduefinescap
+        cap_fine_to_replacement_price
+        article_requests
+        note
+    );
+
+    if ( column_exists( 'issuingrules', 'categorycode' ) ) {
+        foreach my $column ( @columns ) {
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT IF(categorycode='*', NULL, categorycode), IF(branchcode='*', NULL, branchcode), IF(itemtype='*', NULL, itemtype), \'$column\', COALESCE( $column, '' )
+                FROM issuingrules
+            ");
+        }
+        $dbh->do("DROP TABLE issuingrules");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18936: Convert issuingrules fields to circulation_rules)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
