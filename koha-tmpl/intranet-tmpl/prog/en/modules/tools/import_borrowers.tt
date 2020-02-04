@@ -117,7 +117,7 @@
                     [% END %]
                     [% IF e.passwd_too_short %]
                         <li class="line_error">
-                            Password is too short for patron with borrowernumber [% e.borrowernumber | html %]. Minimum length is [% e.min_length %], length is [% e.length %]
+                            Password is too short for patron with borrowernumber [% e.borrowernumber | html %]. Minimum length is [% e.min_length | html %], length is [% e.length | html %]
                         </li>
                     [% END %]
                     [% IF e.passwd_whitespace %]

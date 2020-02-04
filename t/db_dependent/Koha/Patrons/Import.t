@@ -494,7 +494,6 @@ subtest 'test_import_with_password_overwrite' => sub {
     $ernest->store;
 
     $result = $patrons_import->import_patrons($params_4, $defaults);
-    warn Data::Dumper::Dumper( $result );
     $ernest = Koha::Patrons->find({ userid => 'ErnestP' });
     is($ernest->surname,'Worrell',"Patron is overwritten, surname changed");
     is($ernest->password,$orig_pass,"Patron is imported, password is not changed for staff");
