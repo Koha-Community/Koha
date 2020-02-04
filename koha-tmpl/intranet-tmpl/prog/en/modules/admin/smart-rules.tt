@@ -248,7 +248,13 @@
                                     </td>
                                     <td>[% no_auto_renewal_after | html %]</td>
                                     <td>[% no_auto_renewal_after_hard_limit | $KohaDates %]</td>
-                                    <td>[% reservesallowed | html %]</td>
+                                    <td>
+                                        [% IF reservesallowed.defined && reservesallowed != '' %]
+                                            [% reservesallowed | html %]
+                                        [% ELSE %]
+                                            <span>Unlimited</span>
+                                        [% END %]
+                                    </td>
                                     <td>
                                         [% IF holds_per_day.defined && holds_per_day != '' %]
                                             [% holds_per_day | html %]
