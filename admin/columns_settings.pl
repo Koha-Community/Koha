@@ -53,7 +53,8 @@ if ( $action eq 'save' ) {
         next unless $table_id =~ m|^([^#]*)#(.*)$|;
         my $default_display_length = $input->param( $table_id . '_default_display_length' );
         my $default_sort_order     = $input->param( $table_id . '_default_sort_order' );
-        if ( $default_display_length && $default_sort_order ) {
+        if (   defined $default_display_length && $default_display_length ne ""
+            && defined $default_sort_order     && $default_sort_order     ne "" ) {
             C4::Utils::DataTables::TablesSettings::update_table_settings(
                 {
                     module                 => $module,
