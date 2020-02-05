@@ -1,0 +1,259 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Sample label and patron card data"
+
+tables:
+  - creator_layouts:
+      translatable: [ layout_name, layout_xml ]
+      multiline: [ layout_xml ]
+      rows:
+        - layout_id: 17
+          barcode_type: CODE39
+          start_label: 1
+          printing_type: BIBBAR
+          layout_name: "Label Test"
+          guidebox: 0
+          font: TR
+          font_size: 3
+          units: POINT
+          callnum_split: 0
+          text_justify: L
+          format_string: "title, author, isbn, issn, itemtype, barcode, itemcallnumber"
+          layout_xml:
+            - "<opt></opt>"
+          creator: "Labels"
+
+        - layout_id: 18
+          barcode_type: CODE39
+          start_label: 1
+          printing_type: BAR
+          layout_name: "DEFAULT"
+          guidebox: 0
+          font: TR
+          font_size: 3
+          units: POINT
+          callnum_split: 0
+          text_justify: L
+          format_string: "title, author, isbn, issn, itemtype, barcode, itemcallnumber"
+          layout_xml:
+            - "<opt></opt>"
+          creator: "Labels"
+
+        - layout_id: 19
+          barcode_type: CODE39
+          start_label: 1
+          printing_type: BAR
+          layout_name: "DEFAULT"
+          guidebox: 0
+          font: TR
+          font_size: 3
+          units: POINT
+          callnum_split: 0
+          text_justify: L
+          format_string: "title, author, isbn, issn, itemtype, barcode, itemcallnumber"
+          layout_xml:
+            - "<opt></opt>"
+          creator: "Labels"
+
+        - layout_id: 20
+          barcode_type: CODE39
+          start_label: 1
+          printing_type: BAR
+          layout_name: "Test Layout"
+          guidebox: 0
+          font: TR
+          font_size: 10
+          units: POINT
+          callnum_split: 0
+          text_justify: L
+          format_string: "barcode"
+          layout_xml:
+            - "<opt page_side=\"F\" units=\"POINT\">"
+            - "  <images name=\"image_1\" Dx=\"72\" Ox=\"0\" Oy=\"0\" Sx=\"0\" Sy=\"0\" Tx=\"4.5\" Ty=\"63\">"
+            - "    <data_source image_name=\"none\" image_source=\"patronimages\" />"
+            - "  </images>"
+            - "  <text>&lt;firstname&gt; &lt;surname&gt;</text>"
+            - "  <text enable=\"1\" font=\"TR\" font_size=\"10\" llx=\"100\" lly=\"100\" text_alignment=\"L\" />"
+            - "  <text>Branch: &lt;branchcode&gt;</text>"
+            - "  <text enable=\"1\" font=\"TR\" font_size=\"10\" llx=\"100\" lly=\"75\" text_alignment=\"L\" />"
+            - "  <text>Expires: August 31, 2010</text>"
+            - "  <text font=\"TR\" font_size=\"6\" llx=\"115\" lly=\"65\" text_alignment=\"L\" />"
+            - "</opt>"
+          creator: "Patroncards"
+
+  - creator_templates:
+      translatable: [ template_desc ]
+      multiline: [ ]
+      rows:
+        - template_id: 1
+          profile_id: 1
+          template_code: "Avery 5160 | 1 x 2-5/8"
+          template_desc: "3 columns, 10 rows of labels"
+          page_width: 8.5
+          page_height: 11
+          label_width: 2.63
+          label_height: 1
+          top_text_margin: 0.139
+          left_text_margin: 0
+          top_margin: 0.35
+          left_margin: 0.23
+          cols: 3
+          rows: 10
+          col_gap: 0.13
+          row_gap: 0
+          units: "INCH"
+          creator: "Labels"
+
+        - template_id: 7
+          profile_id: 13
+          template_code: "Demco WS14942260"
+          template_desc: "1\" X 1.5\" Spine Label | Setup for up to four lines of text"
+          page_width: 8.5
+          page_height: 11
+          label_width: 1.5
+          label_height: 1
+          top_text_margin: 0.236
+          left_text_margin: 0
+          top_margin: 0.5
+          left_margin: 0.25
+          cols: 5
+          rows: 10
+          col_gap: 0.0625
+          row_gap: 0
+          units: "INCH"
+          creator: "Labels"
+
+        - template_id: 12
+          profile_id: 14
+          template_code: "Demco WS14942260"
+          template_desc: "1\" X 1.5\" Spine Label | Setup for five lines of text"
+          page_width: 8.5
+          page_height: 11
+          label_width: 1.5
+          label_height: 1
+          top_text_margin: 0.139
+          left_text_margin: 0
+          top_margin: 0.53
+          left_margin: 0.3
+          cols: 5
+          rows: 10
+          col_gap: 0.0625
+          row_gap: 0
+          units: "INCH"
+          creator: "Labels"
+
+        - template_id: 22
+          profile_id: 0
+          template_code: "DEFAULT TEMPLATE 01"
+          template_desc: "Default description"
+          page_width: 0
+          page_height: 5
+          label_width: 0
+          label_height: 0
+          top_text_margin: 0
+          left_text_margin: 0
+          top_margin: 0
+          left_margin: 0
+          cols: 0
+          rows: 0
+          col_gap: 0
+          row_gap: 0
+          units: "POINT"
+          creator: "Labels"
+
+        - template_id: 23
+          profile_id: 16
+          template_code: "HB-PC0001"
+          template_desc: "A template for home brewed patron card forms"
+          page_width: 8.5
+          page_height: 11
+          label_width: 3.1875
+          label_height: 1.9375
+          top_text_margin: 0
+          left_text_margin: 0
+          top_margin: 0.6875
+          left_margin: 0.875
+          cols: 2
+          rows: 4
+          col_gap: 0.4375
+          row_gap: 0.1875
+          units: "INCH"
+          creator: "Patroncards"
+
+  - printers_profile:
+      translatable: [ printer_name ]
+      multiline: [ ]
+      rows:
+        - profile_id: 1
+          printer_name: "Library Laser"
+          template_id: 1
+          paper_bin: "Bypass"
+          offset_horz: -2
+          offset_vert: 9
+          creep_horz: 3
+          creep_vert: 0
+          units: "POINT"
+          creator: "Labels"
+
+        - profile_id: 13
+          printer_name: "Library Laser"
+          template_id: 7
+          paper_bin: "Tray 1"
+          offset_horz: 0
+          offset_vert: 0
+          creep_horz: 0
+          creep_vert: 0
+          units: "POINT"
+          creator: "Labels"
+
+        - profile_id: 14
+          printer_name: "Library Laser"
+          template_id: 12
+          paper_bin: "Tray 2"
+          offset_horz: 0
+          offset_vert: 0
+          creep_horz: 0
+          creep_vert: 0
+          units: "POINT"
+          creator: "Labels"
+
+        - profile_id: 16
+          printer_name: "Test Printer 01"
+          template_id: 23
+          paper_bin: "Test Bin"
+          offset_horz: 0
+          offset_vert: 0
+          creep_horz: 0
+          creep_vert: 0
+          units: "POINT"
+          creator: "Patroncards"
+
+        - profile_id: 22
+          printer_name: "Library Laser"
+          template_id: 0
+          paper_bin: "Tray 3"
+          offset_horz: 0
+          offset_vert: 0
+          creep_horz: 0
+          creep_vert: 0
+          units: "POINT"
+          creator: "Labels"
