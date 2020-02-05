@@ -18897,6 +18897,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23233 - Rename AllowItemsOnHoldCheckout syspref)\n";
 }
 
+$DBversion = '19.05.07.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE action_logs MODIFY COLUMN `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24329 - Do not update action_log.timestamp)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
