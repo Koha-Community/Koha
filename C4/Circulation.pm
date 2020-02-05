@@ -1455,7 +1455,7 @@ sub AddIssue {
                     )
                   )
                 {
-                    _FixAccountForLostAndReturned( $item_object->itemnumber, undef,
+                    _FixAccountForLostAndFound( $item_object->itemnumber, undef,
                         $item_object->barcode );
                 }
             }
@@ -2037,7 +2037,7 @@ sub AddReturn {
                 )
               )
             {
-                _FixAccountForLostAndReturned( $item->itemnumber,
+                _FixAccountForLostAndFound( $item->itemnumber,
                     $borrowernumber, $barcode );
                 $messages->{'LostItemFeeRefunded'} = 1;
             }
@@ -2443,9 +2443,9 @@ sub _FixOverduesOnReturn {
     return $result;
 }
 
-=head2 _FixAccountForLostAndReturned
+=head2 _FixAccountForLostAndFound
 
-  &_FixAccountForLostAndReturned($itemnumber, [$borrowernumber, $barcode]);
+  &_FixAccountForLostAndFound($itemnumber, [$borrowernumber, $barcode]);
 
 Finds the most recent lost item charge for this item and refunds the borrower
 appropriatly, taking into account any payments or writeoffs already applied
@@ -2455,7 +2455,7 @@ Internal function, not exported, called only by AddReturn.
 
 =cut
 
-sub _FixAccountForLostAndReturned {
+sub _FixAccountForLostAndFound {
     my $itemnumber     = shift or return;
     my $borrowernumber = @_ ? shift : undef;
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
@@ -2467,7 +2467,7 @@ sub _FixAccountForLostAndReturned {
         {
             itemnumber      => $itemnumber,
             debit_type_code => 'LOST',
-            status          => [ undef, { '<>' => 'RETURNED' } ]
+            status          => [ undef, { '<>' => 'FOUND' } ]
         },
         {
             order_by => { -desc => [ 'date', 'accountlines_id' ] }
@@ -2506,11 +2506,13 @@ sub _FixAccountForLostAndReturned {
     if ( $credit_total > 0 ) {
         my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
         $credit = $account->add_credit(
-            {   amount      => $credit_total,
-                description => 'Item Returned ' . $item_id,
-                type        => 'LOST_RETURN',
+            {
+                amount      => $credit_total,
+                description => 'Item found ' . $item_id,
+                type        => 'LOST_FOUND',
                 interface   => C4::Context->interface,
-                library_id  => $branchcode
+                library_id  => $branchcode,
+                item_id     => $itemnumber
             }
         );
 
@@ -2518,7 +2520,7 @@ sub _FixAccountForLostAndReturned {
     }
 
     # Update the account status
-    $accountline->discard_changes->status('RETURNED');
+    $accountline->discard_changes->status('FOUND');
     $accountline->store;
 
     if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {

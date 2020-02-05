@@ -326,7 +326,7 @@ $credit_type can be any of:
   - 'CREDIT'
   - 'PAYMENT'
   - 'FORGIVEN'
-  - 'LOST_RETURN'
+  - 'LOST_FOUND'
   - 'WRITEOFF'
 
 =cut
@@ -741,7 +741,7 @@ sub reconcile_balance {
 our $offset_type = {
     'CREDIT'           => 'Manual Credit',
     'FORGIVEN'         => 'Writeoff',
-    'LOST_RETURN'      => 'Lost Item',
+    'LOST_FOUND'       => 'Lost Item Found',
     'PAYMENT'          => 'Payment',
     'WRITEOFF'         => 'Writeoff',
     'ACCOUNT'          => 'Account Fee',

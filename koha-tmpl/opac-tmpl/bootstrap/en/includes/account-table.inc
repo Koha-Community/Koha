@@ -175,7 +175,7 @@
             [%- CASE 'WRITEOFF'         -%]Writeoff
             [%- CASE 'FORGIVEN'         -%]Forgiven
             [%- CASE 'CREDIT'           -%]Credit
-            [%- CASE 'LOST_RETURN'      -%]Lost item fee refund
+            [%- CASE 'LOST_FOUND'       -%]Lost item fee refund
             [%- CASE                    -%][% account.credit_type.description | html %]
         [%- END -%]
     [%- ELSIF account.debit_type_code -%]
