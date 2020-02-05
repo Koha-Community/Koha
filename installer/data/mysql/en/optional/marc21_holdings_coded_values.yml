@@ -1,0 +1,509 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Coded values conforming to the Z39.71-2006 holdings statements for bibliographic items."
+  - "Refer to https://www.niso.org/publications/standards for details."
+
+tables:
+  - authorised_values:
+      translatable: [ lib ]
+      multiline: []
+      rows:
+        # General Holdings: Type of Unit Designator
+        - category: "HINGS_UT"
+          authorised_value: "0"
+          lib: "Information not available; Not applicable"
+
+        - category: "HINGS_UT"
+          authorised_value: "a"
+          lib: "Basic bibliographic unit"
+
+        - category: "HINGS_UT"
+          authorised_value: "c"
+          lib: "Secondary bibliographic unit: supplements, special issues, accompanying material, other secondary bibliographic units"
+
+        - category: "HINGS_UT"
+          authorised_value: "d"
+          lib: "Indexes"
+
+
+        # Physical Form Designators
+        - category: "HINGS_PF"
+          authorised_value: "au"
+          lib: "Cartographic material"
+
+        - category: "HINGS_PF"
+          authorised_value: "ad"
+          lib: "Cartographic material, atlas"
+
+        - category: "HINGS_PF"
+          authorised_value: "ag"
+          lib: "Cartographic material, diagram"
+
+        - category: "HINGS_PF"
+          authorised_value: "aj"
+          lib: "Cartographic material, map"
+
+        - category: "HINGS_PF"
+          authorised_value: "ak"
+          lib: "Cartographic material, profile"
+
+        - category: "HINGS_PF"
+          authorised_value: "aq"
+          lib: "Cartographic material, model"
+
+        - category: "HINGS_PF"
+          authorised_value: "ar"
+          lib: "Cartographic material, remote sensing image"
+
+        - category: "HINGS_PF"
+          authorised_value: "as"
+          lib: "Cartographic material, section"
+
+        - category: "HINGS_PF"
+          authorised_value: "ay"
+          lib: "Cartographic material, view"
+
+        - category: "HINGS_PF"
+          authorised_value: "az"
+          lib: "Cartographic material, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "cu"
+          lib: "Computer file"
+
+        - category: "HINGS_PF"
+          authorised_value: "ca"
+          lib: "Computer file, tape cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "cb"
+          lib: "Computer file, chip cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "cc"
+          lib: "Computer file, computer optical disk cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "cf"
+          lib: "Computer file, tape cassette"
+
+        - category: "HINGS_PF"
+          authorised_value: "ch"
+          lib: "Computer file, tape reel"
+
+        - category: "HINGS_PF"
+          authorised_value: "cj"
+          lib: "Computer file, magnetic disk"
+
+        - category: "HINGS_PF"
+          authorised_value: "cm"
+          lib: "Computer file, magneto-optical disk"
+
+        - category: "HINGS_PF"
+          authorised_value: "co"
+          lib: "Computer file, optical disk"
+
+        - category: "HINGS_PF"
+          authorised_value: "cr"
+          lib: "Computer file, remote"
+
+        - category: "HINGS_PF"
+          authorised_value: "cz"
+          lib: "Computer file, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "du"
+          lib: "Globe"
+
+        - category: "HINGS_PF"
+          authorised_value: "da"
+          lib: "Globe, celestial"
+
+        - category: "HINGS_PF"
+          authorised_value: "db"
+          lib: "Globe, planetary or lunar"
+
+        - category: "HINGS_PF"
+          authorised_value: "dc"
+          lib: "Globe, terrestrial"
+
+        - category: "HINGS_PF"
+          authorised_value: "de"
+          lib: "Globe, earth moon"
+
+        - category: "HINGS_PF"
+          authorised_value: "dz"
+          lib: "Globe, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "ou"
+          lib: "Kit"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "hu"
+          lib: "Microform"
+
+        - category: "HINGS_PF"
+          authorised_value: "ha"
+          lib: "Microform, aperture card"
+
+        - category: "HINGS_PF"
+          authorised_value: "hb"
+          lib: " Microform, microfilm cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "hc"
+          lib: " Microform, microfilm cassette"
+
+        - category: "HINGS_PF"
+          authorised_value: "hd"
+          lib: " Microform, microfilm reel"
+
+        - category: "HINGS_PF"
+          authorised_value: "he"
+          lib: "Microform, microfiche"
+
+        - category: "HINGS_PF"
+          authorised_value: "hf"
+          lib: "Microform, microfiche cassette"
+
+        - category: "HINGS_PF"
+          authorised_value: "hg"
+          lib: "Microform, micro-opaque"
+
+        - category: "HINGS_PF"
+          authorised_value: "hz"
+          lib: "Microform, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "mu"
+          lib: "Motion picture"
+
+        - category: "HINGS_PF"
+          authorised_value: "mc"
+          lib: "Motion picture, film cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "mf"
+          lib: "Motion picture, film cassette"
+
+        - category: "HINGS_PF"
+          authorised_value: "mr"
+          lib: "Motion picture, film reel"
+
+        - category: "HINGS_PF"
+          authorised_value: "mz"
+          lib: "Motion picture, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "ku"
+          lib: "Nonprojected graphic"
+
+        - category: "HINGS_PF"
+          authorised_value: "kc"
+          lib: "Nonprojected graphic, collage"
+
+        - category: "HINGS_PF"
+          authorised_value: "kd"
+          lib: "Nonprojected graphic, drawing"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "ke"
+          lib: "Nonprojected graphic, painting"
+
+        - category: "HINGS_PF"
+          authorised_value: "kf"
+          lib: "Nonprojected graphic, photomechanical print"
+
+        - category: "HINGS_PF"
+          authorised_value: "kg"
+          lib: "Nonprojected graphic, photonegative"
+
+        - category: "HINGS_PF"
+          authorised_value: "kh"
+          lib: "Nonprojected graphic, photoprint"
+
+        - category: "HINGS_PF"
+          authorised_value: "ki"
+          lib: "Nonprojected graphic, picture"
+
+        - category: "HINGS_PF"
+          authorised_value: "kj"
+          lib: "Nonprojected graphic, print"
+
+        - category: "HINGS_PF"
+          authorised_value: "kl"
+          lib: "Nonprojected graphic, technical drawing"
+
+        - category: "HINGS_PF"
+          authorised_value: "kn"
+          lib: "Nonprojected graphic, chart"
+
+        - category: "HINGS_PF"
+          authorised_value: "ko"
+          lib: "Nonprojected graphic, flash card"
+
+        - category: "HINGS_PF"
+          authorised_value: "kz"
+          lib: "Nonprojected graphic, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "qu"
+          lib: "Notated music"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "gu"
+          lib: "Projected graphic"
+
+        - category: "HINGS_PF"
+          authorised_value: "gc"
+          lib: "Projected graphic, filmstrip cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "gd"
+          lib: "Projected graphic, filmstrip"
+
+        - category: "HINGS_PF"
+          authorised_value: "gf"
+          lib: "Projected graphic, other type of filmstrip"
+
+        - category: "HINGS_PF"
+          authorised_value: "go"
+          lib: "Projected graphic, filmstrip roll"
+
+        - category: "HINGS_PF"
+          authorised_value: "gs"
+          lib: "Projected graphic, slide"
+
+        - category: "HINGS_PF"
+          authorised_value: "gt"
+          lib: "Projected graphic, transparency"
+
+        - category: "HINGS_PF"
+          authorised_value: "gz"
+          lib: "Projected graphic, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "ru"
+          lib: "Remote-sensing image"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "su"
+          lib: "Sound recording"
+
+        - category: "HINGS_PF"
+          authorised_value: "sd"
+          lib: "Sound recording, sound disk"
+
+        - category: "HINGS_PF"
+          authorised_value: "se"
+          lib: "Sound recording, cylinder"
+
+        - category: "HINGS_PF"
+          authorised_value: "sg"
+          lib: "Sound recording, sound cartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "si"
+          lib: "Sound recording, sound-track film"
+
+        - category: "HINGS_PF"
+          authorised_value: "sq"
+          lib: "Sound recording, roll"
+
+        - category: "HINGS_PF"
+          authorised_value: "ss"
+          lib: "Sound recording, sound cassette"
+
+        - category: "HINGS_PF"
+          authorised_value: "st"
+          lib: "Sound recording, sound-tape reel"
+
+        - category: "HINGS_PF"
+          authorised_value: "sw"
+          lib: "Sound recording, wire recording"
+
+        - category: "HINGS_PF"
+          authorised_value: "sz"
+          lib: "Sound recording, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "tu"
+          lib: "Text"
+
+        - category: "HINGS_PF"
+          authorised_value: "ta"
+          lib: "Text, regular print"
+
+        - category: "HINGS_PF"
+          authorised_value: "tb"
+          lib: "Text, large print"
+
+        - category: "HINGS_PF"
+          authorised_value: "tc"
+          lib: "Text, Braille"
+
+        - category: "HINGS_PF"
+          authorised_value: "td"
+          lib: "Text, loose-leaf"
+
+        - category: "HINGS_PF"
+          authorised_value: "tz"
+          lib: "Text, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "vu"
+          lib: "Videorecording"
+
+        - category: "HINGS_PF"
+          authorised_value: "vc"
+          lib: "Videorecording, videocartridge"
+
+        - category: "HINGS_PF"
+          authorised_value: "vd"
+          lib: "Videorecording, videodisc"
+
+        - category: "HINGS_PF"
+          authorised_value: "vf"
+          lib: "Videorecording, videocassette"
+
+        - category: "HINGS_PF"
+          authorised_value: "vr"
+          lib: "Videorecording, videoreel"
+
+        - category: "HINGS_PF"
+          authorised_value: "vz"
+          lib: "Videorecording, other"
+
+
+        - category: "HINGS_PF"
+          authorised_value: "zu"
+          lib: "Physical form is unspecified"
+
+        - category: "HINGS_PF"
+          authorised_value: "zm"
+          lib: "Multiple physical forms"
+
+        - category: "HINGS_PF"
+          authorised_value: "zz"
+          lib: "Other physical media"
+
+
+        # General Holdings: Completeness Designator
+        - category: "HINGS_C"
+          authorised_value: "0"
+          lib: "Information not available, or Retention is limited"
+
+        - category: "HINGS_C"
+          authorised_value: "1"
+          lib: "Complete (95%-100% held)"
+
+        - category: "HINGS_C"
+          authorised_value: "2"
+          lib: "Incomplete (50%-94% held)"
+
+        - category: "HINGS_C"
+          authorised_value: "3"
+          lib: "Very incomplete or scattered (less than 50% held)"
+
+        - category: "HINGS_C"
+          authorised_value: "4"
+          lib: "Not applicable"
+
+
+        # General Holdings: Acquisition Status Designator
+        # This data element specifies acquisition status for the unit at the time of the holdings report.
+        - category: "HINGS_AS"
+          authorised_value: "0"
+          lib: "Information not available, or Retention is limited"
+
+        - category: "HINGS_AS"
+          authorised_value: "1"
+          lib: "Other"
+
+        - category: "HINGS_AS"
+          authorised_value: "2"
+          lib: "Received and complete or Ceased"
+
+        - category: "HINGS_AS"
+          authorised_value: "3"
+          lib: "On order"
+
+        - category: "HINGS_AS"
+          authorised_value: "4"
+          lib: "Currently received"
+
+        - category: "HINGS_AS"
+          authorised_value: "5"
+          lib: "Not currently received"
+
+
+        # General Holdings: Retention Designator
+        # This data element specifies the retention policy for the unit at the time of the holdings report.
+        - category: "HINGS_RD"
+          authorised_value: "0"
+          lib: "Information not available"
+
+        - category: "HINGS_RD"
+          authorised_value: "1"
+          lib: "Other"
+
+        - category: "HINGS_RD"
+          authorised_value: "2"
+          lib: "Retained except as replaced by updates"
+
+        - category: "HINGS_RD"
+          authorised_value: "3"
+          lib: "Sample issue retained"
+
+        - category: "HINGS_RD"
+          authorised_value: "4"
+          lib: "Retained until replaced by microform, or other preservation format"
+
+        - category: "HINGS_RD"
+          authorised_value: "5"
+          lib: "Retained until replaced by cumulation, replacement volume, or revision"
+
+        - category: "HINGS_RD"
+          authorised_value: "6"
+          lib: "Limited retention (only some parts kept)"
+
+        - category: "HINGS_RD"
+          authorised_value: "7"
+          lib: "No retention (no parts kept)"
+
+        - category: "HINGS_RD"
+          authorised_value: "8"
+          lib: "Permanent retention (all parts kept permanently)"
