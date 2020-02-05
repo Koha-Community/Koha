@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE AuthorisedValues  %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -37,6 +38,8 @@
                           <th>Summary</th>
                           <th>Note</th>
                           <th>Managed by</th>
+                          <th>Managed on</th>
+                          <th>Suggested on</th>
                           <th>Status</th>
                         </tr>
                     </thead>
@@ -72,6 +75,12 @@
                                     [% ELSE %]
                                         &nbsp;
                                     [% END %]
+                                </td>
+                                <td data-order="[% s.manageddate | html %]">
+                                    [% s.manageddate | $KohaDates %]
+                                </td>
+                                <td data-order="[% s.suggesteddate | html %]">
+                                    [% s.suggesteddate | $KohaDates %]
                                 </td>
                                 <td>
                                     [% SWITCH s.STATUS %]
