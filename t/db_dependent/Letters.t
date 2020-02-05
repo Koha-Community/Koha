@@ -135,9 +135,10 @@ is( $messages->[0]->{status}, 'pending', 'EnqueueLetter stores the status pendin
 isnt( $messages->[0]->{time_queued}, undef, 'Time queued inserted by default in message_queue table' );
 is( $messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed equals time queued when created in message_queue table' );
 
-my $message_time_queued = $messages->[0]->{time_queued};
+# Setting time_queued to something else than now
+my $yesterday = dt_from_string->subtract( days => 1 );
+Koha::Notice::Messages->find($messages->[0]->{message_id})->time_queued($yesterday)->store;
 
-sleep 1;
 # SendQueuedMessages
 my $messages_processed = C4::Letters::SendQueuedMessages( { type => 'email' });
 is($messages_processed, 0, 'No queued messages processed if type limit passed with unused type');
@@ -150,7 +151,7 @@ is(
     'message marked failed if tried to send SMS message for borrower with no smsalertnumber set (bug 11208)'
 );
 isnt($messages->[0]->{updated_on}, $messages->[0]->{time_queued}, 'Time status changed differs from time queued when status changes' );
-is($messages->[0]->{time_queued}, $message_time_queued, 'Time queued remaines inmutable' );
+is(dt_from_string($messages->[0]->{time_queued}), $yesterday, 'Time queued remaines inmutable' );
 
 # ResendMessage
 my $resent = C4::Letters::ResendMessage($messages->[0]->{message_id});
