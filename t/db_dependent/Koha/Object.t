@@ -612,10 +612,10 @@ subtest 'store() tests' => sub {
         'Exception message is correct'
     );
 
-    is(
+    like(
        $@->duplicate_id,
-       'secret',
-       'Exception field is correct'
+       qr/(api_keys\.)?secret/,
+       'Exception field is correct (note that MySQL 8 is displaying the tablename)'
     );
 
     $schema->storage->dbh->{PrintError} = $print_error;
