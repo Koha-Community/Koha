@@ -83,6 +83,7 @@ cronlogaction();
 my $auto_renews = Koha::Checkouts->search({ auto_renew => 1 });
 
 my %report;
+$verbose = 1 unless $verbose or $confirm;
 print "Test run only\n" unless $confirm;
 while ( my $auto_renew = $auto_renews->next ) {
 
