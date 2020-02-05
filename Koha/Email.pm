@@ -19,6 +19,7 @@ package Koha::Email;
 
 use Modern::Perl;
 use Email::Valid;
+use Email::MessageID;
 
 use base qw(Class::Accessor);
 use C4::Context;
@@ -70,6 +71,8 @@ sub create_message_headers {
     $mail{'Message'}      = $params->{message}     if $params->{message};
     $mail{'Subject'}      = $params->{subject}     if $params->{subject};
     $mail{'Content-Type'} = $params->{contenttype} if $params->{contenttype};
+    $mail{'X-Mailer'}     = "Koha";
+    $mail{'Message-ID'}   = Email::MessageID->new->in_brackets;
     return %mail;
 }
 1;
