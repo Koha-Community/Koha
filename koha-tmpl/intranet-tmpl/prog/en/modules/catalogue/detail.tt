@@ -230,7 +230,7 @@
                 [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
                 <th>Call number</th>
                 [% IF volinfo %]
-                    [% IF itemdate_publisheddate #If there is at least one published date, use it for sorting%]
+                    [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting%]
                         <th class="title-string">Serial enumeration / chronology</th>
                     [% ELSE %]
                         <th>Serial enumeration / chronology</th>
@@ -278,7 +278,7 @@
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
                         <td class="enumchron">
-                            [% IF itemdate_publisheddate %]<span title="[% item.publisheddate | html %]">[% END %]
+                            [% IF itemdata_publisheddate %]<span title="[% item.publisheddate | html %]">[% END %]
                             [% IF ( itemdata_enumchron ) %]
                                 [% IF item.enumchron && item.serialseq %]
                                     <span class="enum">[% item.enumchron | html %]</span>
