@@ -74,6 +74,12 @@ __PACKAGE__->table("message_queue");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
+  is_nullable: 1
+
+=head2 updated_on
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
   default_value: current_timestamp
   is_nullable: 0
 
@@ -117,6 +123,12 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "time_queued",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
+  "updated_on",
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
@@ -181,8 +193,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9u39S/GLtZwnZGp+xcZOBA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-05 14:26:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fSWIVVJGliKtqQaNbmZKYQ
 
 sub koha_object_class {
     'Koha::Notice::Message';

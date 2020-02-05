@@ -20732,6 +20732,20 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18936: Convert issuingrules fields to circulation_rules)\n";
 }
 
+$DBversion = '19.12.00.019';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do("ALTER TABLE message_queue MODIFY time_queued timestamp NULL");
+
+    if( !column_exists( 'message_queue', 'updated_on' ) ) {
+        $dbh->do("ALTER TABLE message_queue ADD COLUMN updated_on timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER time_queued");
+        $dbh->do("UPDATE message_queue SET updated_on=time_queued");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23673 - modify time_queued and add updated_on to message_queue)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
