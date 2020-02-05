@@ -1,0 +1,82 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Allow access to the following servers to search and download record information:"
+  - "LIBRARY OF CONGRESS"
+  - "LIBRARY OF CONGRESS NAMES (authority records)"
+  - "LIBRARY OF CONGRESS SUBJECTS (authority records)"
+  - "COLUMBIA UNIVERSITY"
+
+
+tables:
+  - z3950servers:
+      translatable: [ servername ]
+      multiline: []
+      rows:
+        - host: "lx2.loc.gov"
+          port: 210
+          db: LCDB
+          userid: ""
+          password: ""
+          servername: "LIBRARY OF CONGRESS"
+          checked: 1
+          rank: 1
+          syntax: USMARC
+          encoding: utf8
+          recordtype: biblio
+
+        - host: "lx2.loc.gov"
+          port: 210
+          db: NAF
+          userid: ""
+          password: ""
+          servername: "LIBRARY OF CONGRESS NAMES"
+          checked: 1
+          rank: 1
+          syntax: USMARC
+          encoding: utf8
+          recordtype: authority
+
+        - host: "lx2.loc.gov"
+          port: 210
+          db: SAF
+          userid: ""
+          password: ""
+          servername: "LIBRARY OF CONGRESS SUBJECTS"
+          checked: 1
+          rank: 2
+          syntax: USMARC
+          encoding: utf8
+          recordtype: authority
+
+  - z3950servers:
+      translatable: [ servername ]
+      multiline: []
+      rows:
+        # Insert SRU server
+        - host: "lx2.loc.gov"
+          port: 210
+          db: LCDB
+          servername: "LIBRARY OF CONGRESS SRU"
+          syntax: USMARC
+          encoding: utf8
+          servertype: sru
+          sru_fields: "title=dc.title,isbn=bath.isbn,srchany=cql.anywhere,author=dc.author,issn=bath.issn,subject=dc.subject,stdid=bath.standardIdentifier"
