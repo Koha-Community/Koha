@@ -492,14 +492,22 @@ sub apply {
             }
 
             # Same logic exists in Koha::Account::pay
-            if (   $debit->amountoutstanding == 0
-                && $debit->itemnumber
+            if (
+                C4::Context->preference('MarkLostItemsAsReturned') =~
+                m|onpayment|
                 && $debit->debit_type_code
-                && $debit->debit_type_code eq 'LOST' )
+                && $debit->debit_type_code eq 'LOST'
+                && $debit->amountoutstanding == 0
+                && $debit->itemnumber
+                && !(
+                       $self->credit_type_code eq 'LOST_FOUND'
+                    && $self->itemnumber == $debit->itemnumber
+                )
+              )
             {
-                C4::Circulation::ReturnLostItem( $self->borrowernumber, $debit->itemnumber );
+                C4::Circulation::ReturnLostItem( $self->borrowernumber,
+                    $debit->itemnumber );
             }
-
         }
     });
 
