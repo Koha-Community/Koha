@@ -5,6 +5,7 @@ if( CheckVersion( $DBversion ) ) {
 
     if( !column_exists( 'message_queue', 'updated_on' ) ) {
         $dbh->do("ALTER TABLE message_queue ADD COLUMN updated_on timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER time_queued");
+        $dbh->do("UPDATE message_queue SET updated_on=time_queued");
     }
 
     SetVersion( $DBversion );
