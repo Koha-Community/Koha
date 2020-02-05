@@ -105,9 +105,16 @@ if ($add) {
             $patron->account->reconcile_balance;
         }
 
-        print $input->redirect(
-            "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
-        );
+        if ($add eq 'save and pay') {
+            print $input->redirect(
+                "/cgi-bin/koha/members/pay.pl?borrowernumber=$borrowernumber"
+            );
+        } else {
+            print $input->redirect(
+                "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber"
+            );
+        }
+
         exit;
     }
 }

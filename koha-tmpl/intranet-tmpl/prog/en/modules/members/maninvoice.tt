@@ -61,7 +61,9 @@
             </ol>
                     </fieldset>
                     <fieldset class="action">
-                        <input type="submit" name="add" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
+                        <button type="submit" name="add" value="save">Save</button>
+                        <button type="submit" name="add" value="save and pay">Save and pay</button>
+                        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
                     </fieldset>
                 </form>
 
