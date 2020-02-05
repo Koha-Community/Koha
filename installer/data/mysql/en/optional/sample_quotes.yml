@@ -1,0 +1,154 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Sample quotes"
+
+tables:
+  - quotes:
+      translatable: [ text ]
+      multiline: []
+      rows:
+        - id: 1
+          source: "George Washington"
+          text: "To be prepared for war is one of the most effectual means of preserving peace."
+
+        - id: 2
+          source: "Thomas Jefferson"
+          text: "When angry, count ten, before you speak; if very angry, an hundred."
+
+        - id: 3
+          source: "Abraham Lincoln"
+          text: "Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal."
+
+        - id: 4
+          source: "Abraham Lincoln"
+          text: "I have always found that mercy bears richer fruits than strict justice."
+
+        - id: 5
+          source: "Andrew Johnson"
+          text: "I feel incompetent to perform duties...which have been so unexpectedly thrown upon me."
+
+        - id: 6
+          source: "Rutherford B. Hayes"
+          text: "He serves his party best who serves his country best."
+
+        - id: 7
+          source: "Theodore Roosevelt"
+          text: "No President has ever enjoyed himself as much as I?"
+
+        - id: 8
+          source: "Theodore Roosevelt"
+          text: "Speak softly and carry a big stick."
+
+        - id: 9
+          source: "William H. Taft"
+          text: "I have come to the conclusion that the major part of the president is to increase the gate receipts of expositions and fairs and bring tourists to town."
+
+        - id: 11
+          source: "Woodrow Wilson"
+          text: "You cannot become thorough Americans if you think of yourselves in groups. America does not consist of groups. A man who thinks of himself as belonging to a particular national group in America has not yet become an American."
+
+        - id: 12
+          source: "Calvin Coolidge"
+          text: "If you don't say anything, you won't be called on to repeat it."
+
+        - id: 13
+          source: "Calvin Coolidge"
+          text: "Four fifths of all our troubles in this life would disappear if we would only sit down and keep still."
+
+        - id: 14
+          source: "Herbert Hoover"
+          text: "The slogan of progress is changing from the full dinner pail to the full garage."
+
+        - id: 15
+          source: "Franklin D. Roosevelt"
+          text: "Let me assert my firm belief that the only thing we have to fear is fear itself."
+
+        - id: 16
+          source: "Harry S. Truman"
+          text: "If you can't stand the heat, get out of the kitchen."
+
+        - id: 17
+          source: "Harry S. Truman"
+          text: "The atom bomb was no great decision. It was merely another powerful weapon in the arsenal of righteousness."
+
+        - id: 18
+          source: "Harry S. Truman"
+          text: "The buck stops here."
+
+        - id: 19
+          source: "Dwight D. Eisenhower"
+          text: "History does not long entrust the care of freedom to the weak or the timid."
+
+        - id: 20
+          source: "John F. Kennedy"
+          text: "My fellow Americans, ask not what your country can do for you; ask what you can do for your country."
+
+        - id: 22
+          source: "John F. Kennedy"
+          text: "I do not think it altogether inappropriate to introduce myself to this audience. I am the man who accompanied Jacqueline Kennedy to Paris, and I have enjoyed it."
+
+        - id: 23
+          source: "Lyndon B. Johnson"
+          text: "The Great Society is a place where every child can find knowledge to enrich his mind and to enlarge his talents. It is a place where the city of man serves not only the needs of the body and the demands of commerce but the desire for beauty and the hunger for community. It is a place where men are more concerned with the quality of their goals than the quantity of their goods."
+
+        - id: 24
+          source: "Richard Nixon"
+          text: "People have got to know whether or not their president is a crook. Well, I'm not a crook."
+
+        - id: 25
+          source: "Richard Nixon"
+          text: "When the President does it, that means that it is not illegal."
+
+        - id: 26
+          source: "Gerald R. Ford"
+          text: "Our Long national nightmare is over."
+
+        - id: 27
+          source: "Gerald R. Ford"
+          text: "Our constitution works. Our great republic is a government of laws, not of men."
+
+        - id: 28
+          source: "Jimmy Carter"
+          text: "A strong nation, like a strong person, can afford to be gentle, firm, thoughtful, and restrained. It can afford to extend a helping hand to others. It's a weak nation, like a weak person, that must behave with bluster and boasting and rashness and other signs of insecurity."
+
+        - id: 30
+          source: "Ronald Reagan"
+          text: "It is not my intention to do away with government. It is rather to make it work -work with us, not over us; stand by our side, not ride on our back. Government can and must provide opportunity, not smother it; foster productivity, not stifle it. This Administration's objective will be a healthy, vigorous, growing economy."
+
+        - id: 31
+          source: "Ronald Reagan"
+          text: "Each generation goes further than the generation preceding it because it stands on the shoulders of that generation. You will have opportunities beyond anything we've ever known."
+
+        - id: 32
+          source: "George H. W. Bush"
+          text: "We have ...drawn a line in the sand."
+
+        - id: 33
+          source: "George W. Bush"
+          text: "If America shows weakness and uncertainty, the world will drift toward tragedy. That will not happen on my watch."
+
+        - id: 34
+          source: "George W. Bush"
+          text: "Every nation in every region now has a decision to make. Either you are with us, or you are with the terrorists."
+
+sql_statements:
+  - "UPDATE quotes SET timestamp = NOW();"
