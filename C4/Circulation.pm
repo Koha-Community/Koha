@@ -959,7 +959,7 @@ sub CanBookBeIssued {
         }
         else {
             my $itemtype = Koha::ItemTypes->find($biblioitem->itemtype);
-            if ( $itemtype and $itemtype->notforloan == 1){
+            if ( $itemtype && defined $itemtype->notforloan && $itemtype->notforloan == 1){
                 if (!C4::Context->preference("AllowNotForLoanOverride")) {
                     $issuingimpossible{NOT_FOR_LOAN} = 1;
                     $issuingimpossible{itemtype_notforloan} = $effective_itemtype;
@@ -2294,7 +2294,7 @@ sub _calculate_new_debar_dt {
     if ( $deltadays->subtract($grace)->is_positive() ) {
         my $suspension_days = $deltadays * $finedays;
 
-        if ( $issuing_rule->{suspension_chargeperiod} > 1 ) {
+        if ( defined $issuing_rule->{suspension_chargeperiod} && $issuing_rule->{suspension_chargeperiod} > 1 ) {
             # No need to / 1 and do not consider / 0
             $suspension_days = DateTime::Duration->new(
                 days => floor( $suspension_days->in_units('days') / $issuing_rule->{suspension_chargeperiod} )
@@ -3784,7 +3784,16 @@ sub LostItem{
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
 
         if (C4::Context->preference('WhenLostChargeReplacementFee')){
-            C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "$issues->{'title'} $issues->{'barcode'} $issues->{'itemcallnumber'}");
+            C4::Accounts::chargelostitem(
+                $borrowernumber,
+                $itemnumber,
+                $issues->{'replacementprice'},
+                sprintf( "%s %s %s",
+                    $issues->{'title'}          || q{},
+                    $issues->{'barcode'}        || q{},
+                    $issues->{'itemcallnumber'} || q{},
+                ),
+            );
             #FIXME : Should probably have a way to distinguish this from an item that really was returned.
             #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
         }

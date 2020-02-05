@@ -268,7 +268,7 @@ sub CalcFine {
         my $charge_periods = $units / $issuing_rule->{chargeperiod};
         # If chargeperiod_charge_at = 1, we charge a fine at the start of each charge period
         # if chargeperiod_charge_at = 0, we charge at the end of each charge period
-        $charge_periods = $issuing_rule->{chargeperiod_charge_at} == 1 ? ceil($charge_periods) : floor($charge_periods);
+        $charge_periods = defined $issuing_rule->{chargeperiod_charge_at} && $issuing_rule->{chargeperiod_charge_at} == 1 ? ceil($charge_periods) : floor($charge_periods);
         $amount = $charge_periods * $issuing_rule->{fine};
     } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
 
@@ -527,7 +527,7 @@ sub UpdateFine {
     my $itemnum        = $params->{itemnumber};
     my $borrowernumber = $params->{borrowernumber};
     my $amount         = $params->{amount};
-    my $due            = $params->{due};
+    my $due            = $params->{due} // q{};
 
     $debug and warn "UpdateFine({ itemnumber => $itemnum, borrowernumber => $borrowernumber, due => $due, issue_id => $issue_id})";
 
