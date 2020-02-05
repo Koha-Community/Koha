@@ -89,13 +89,13 @@ while ( my $auto_renew = $auto_renews->next ) {
     # CanBookBeRenewed returns 'auto_renew' when the renewal should be done by this script
     my ( $ok, $error ) = CanBookBeRenewed( $auto_renew->borrowernumber, $auto_renew->itemnumber );
     if ( $error eq 'auto_renew' ) {
+        if ($verbose) {
+            say sprintf "Issue id: %s for borrower: %s and item: %s ". ( $commit ? 'will' : 'would') . " be renewed.",
+              $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber;
+        }
         if ($commit){
             my $date_due = AddRenewal( $auto_renew->borrowernumber, $auto_renew->itemnumber, $auto_renew->branchcode );
             $auto_renew->auto_renew_error(undef)->store;
-        }
-        if ( $verbose ){
-            print "Issue id: " . $auto_renew->issue_id . " for borrower: " . $auto_renew->borrowernumber . " and item: " . $auto_renew->itemnumber;
-            $commit ? print " will be renewed.\n" : print " would be renewed.\n";
         }
         push @{ $report{ $auto_renew->borrowernumber } }, $auto_renew;
     } elsif ( $error eq 'too_many'
@@ -108,9 +108,8 @@ while ( my $auto_renew = $auto_renews->next ) {
         or $error eq 'auto_too_soon'
         or $error eq 'item_denied_renewal' ) {
         if ( $verbose ) {
-            print "Issue id: " . $auto_renew->issue_id . " for borrower: " . $auto_renew->borrowernumber . " and item: " . $auto_renew->itemnumber;
-            $commit ? print " will not be renewed " : print " would not be renewed ";
-            print "($error)\n";
+            say sprintf "Issue id: %s for borrower: %s and item: %s ". ( $commit ? 'will' : 'would') . " not be renewed. (%s)",
+              $auto_renew->issue_id, $auto_renew->borrowernumber, $auto_renew->itemnumber, $error;
         }
         if ( not $auto_renew->auto_renew_error or $error ne $auto_renew->auto_renew_error ) {
             $auto_renew->auto_renew_error($error)->store if $commit;
