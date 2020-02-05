@@ -1,0 +1,209 @@
+---
+#
+#  Copyright 2020 Koha Development Team
+#
+#  This file is part of Koha.
+#
+#  Koha is free software; you can redistribute it and/or modify it under the
+#  terms of the GNU General Public License as published by the Free Software
+#  Foundation; either version 2 of the License, or (at your option) any later
+#  version.
+#
+#  Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+#  A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with Koha; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+description:
+  - "Sample patron types and categories. Types are currently hardcoded but you can manage categories after installation from the administration module."
+  - ""
+  - "Adult patron - default patron type"
+  - "                PT  - Patron"
+  - "                ST  - Student"
+  - "                BH  - Homebound"
+  - ""
+  - "Child - patron with a guarantor"
+  - "                K   - Kid"
+  - "                J   - Juvenile"
+  - "                YA  - Young Adult"
+  - ""
+  - "Organization - patron is an institution, not a person"
+  - "                ILL - Inter-library Loan"
+  - "                SC  - School"
+  - "                L   - Library"
+  - ""
+  - "Professional - a member of an organization (organization is guarantor)"
+  - "                T   - Teacher"
+  - "                S   - Staff"
+  - "                B   - Board"
+
+
+tables:
+  - categories:
+      translatable: [ description ]
+      multiline: []
+      rows:
+        #  Adult Patrons
+        - categorycode: 'PT'
+          description: 'Patron'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'A'
+
+        - categorycode: 'ST'
+          description: 'Student'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'A'
+
+        - categorycode: 'HB'
+          description: 'Home Bound'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'A'
+
+        #  Children
+        - categorycode: 'K'
+          description: 'Kid'
+          enrolmentperiod: 99
+          upperagelimit: 17
+          dateofbirthrequired: 5
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'C'
+
+        - categorycode: 'J'
+          description: 'Juvenile'
+          enrolmentperiod: 99
+          upperagelimit: 17
+          dateofbirthrequired: 5
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'C'
+
+        - categorycode: 'YA'
+          description: 'Young Adult'
+          enrolmentperiod: 99
+          upperagelimit: 17
+          dateofbirthrequired: 5
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'C'
+
+        #  Professionals
+        - categorycode: 'T'
+          description: 'Teacher'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 0
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'P'
+
+        - categorycode: 'B'
+          description: 'Board'
+          enrolmentperiod: 99
+          upperagelimit: 17
+          dateofbirthrequired: 5
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'P'
+
+        #  Institutional
+        - categorycode: 'IL'
+          description: 'Inter-Library Loan'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'I'
+
+        - categorycode: 'SC'
+          description: 'School'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'I'
+
+        - categorycode: 'L'
+          description: 'Library'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 1
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'I'
+
+        #  Staff
+        - categorycode: 'S'
+          description: 'Staff'
+          enrolmentperiod: 99
+          upperagelimit: 999
+          dateofbirthrequired: 18
+          finetype: ~
+          bulk: ~
+          enrolmentfee: '0.000000'
+          overduenoticerequired: 0
+          issuelimit: ~
+          reservefee: '0.000000'
+          category_type: 'S'
