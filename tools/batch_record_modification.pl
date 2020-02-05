@@ -50,6 +50,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         flagsrequired => { tools => 'records_batchmod' },
 });
 
+$template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) );
 
 my $sessionID = $input->cookie("CGISESSID");
 
@@ -63,13 +64,12 @@ if ( $completedJobID ) {
         report => $report,
         messages => $messages,
         view => 'report',
+        recordtype => $recordtype,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
     $job->clear();
     exit;
 }
-
-$template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) );
 
 my @templates = GetModificationTemplates( $mmtid );
 unless ( @templates ) {
