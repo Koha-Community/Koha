@@ -15,10 +15,23 @@
 <h1>Call number browser</h1>
 
 <div>
-    <form method="get" action="cn_browser.pl">
-    <label for="searchcn">Search call number:</label>
-    <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
-    <input id="cn_browser_submit" type="submit" value="Search" />
+    <form id="cn_browser" method="get" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
+        <label for="searchcn">Search call number:</label>
+        <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
+        <input id="cn_browser_submit" type="submit" value="Search" />
+        <input name="plugin_name" type="hidden" value="cn_browser.pl"/>
+        <input name="popup" type="hidden" value="[% popup %]"/>
+        </br>
+        <label for="cn_source">Callnumber classification scheme</label>
+        <select name="cn_source" form="cn_browser">
+            [% FOREACH class_source IN class_sources %]
+                [% IF class_source.cn_source == cn_source %]
+                    <option value="[% class_source.cn_source | html %]" selected="selected">[% class_source.description | html %]</option>
+                [% ELSE %]
+                    <option value="[% class_source.cn_source | html %]">[% class_source.description | html %]</option>
+                [% END %]
+            [% END %]
+        </select>
     </form>
 </div>
 <br />
@@ -39,6 +52,7 @@
             [% IF ( cn_loo.author ) %]
                 <span>by</span> [% cn_loo.author | html %]
             [% END %]
+            [% IF ( cn_loo.barcode ) %] ([% cn_loo.barcode %])[% END %]
         </a>
     </td>
     <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
@@ -46,16 +60,5 @@
 [% END %]
     </tbody>
 </table>
-
-[% MACRO jsinclude BLOCK %]
-    <script>
-        $(document).ready(function(){
-            $("#cn_browser_submit").click(function(){
-                window.location.href='/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=cn_browser.pl&popup&q='+$("#cn_browser_input").val();
-                return false;
-            });
-        });
-    </script>
-[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
