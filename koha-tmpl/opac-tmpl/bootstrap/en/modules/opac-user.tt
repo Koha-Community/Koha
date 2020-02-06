@@ -58,6 +58,12 @@
                         </div>
                     [% END %]
 
+                    [% IF ( borrower.blockedonfines ) %]
+                        <div class="alert" id="blockedonfines">
+                            <strong>Please note:</strong><span> Your account has outstanding fees & charges of [% amountoutstanding | $Price %]. Checkouts and holds are blocked because your fine balance is over the limit.</span>
+                        </div>
+                    [% END %]
+
                     [% IF ( borrower.warndeparture ) %]
                         <div class="alert" id="warndeparture">
                             <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% borrower.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>

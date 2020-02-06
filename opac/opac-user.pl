@@ -135,6 +135,11 @@ if (   C4::Context->preference('OpacRenewalAllowed')
     );
 }
 
+my $maxoutstanding = C4::Context->preference('maxoutstanding');
+if ( $amountoutstanding && ( $amountoutstanding > $maxoutstanding ) ){
+    $borr->{blockedonfines} = 1;
+}
+
 # Warningdate is the date that the warning starts appearing
 if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture') ) {
     my $days_to_expiry = Date_to_Days( $warning_year, $warning_month, $warning_day ) - Date_to_Days( $today_year, $today_month, $today_day );
