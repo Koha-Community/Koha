@@ -60,7 +60,7 @@ my $itemnumber1 = $builder->build_sample_item({ biblionumber => $biblionumber1, 
 my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber1, barcode => '0102', %item_infos })->itemnumber;
 
 my ($biblionumber2) = AddBiblio( MARC::Record->new, '' );
-my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber2, barcode => '0202', %item_infos })->itemnumber;
+my $itemnumber3 = $builder->build_sample_item({ biblionumber => $biblionumber2, barcode => '0202', %item_infos })->itemnumber;
 
 my $borrowernumber1 =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;
@@ -100,7 +100,7 @@ is( $issues->[1]->{itemnumber}, $itemnumber2, '' );
 $issues = C4::Members::GetAllIssues($borrowernumber2);
 is( @$issues, 0, 'GetAllIssues returns the correct number of elements' );
 
-AddIssue( $borrower2, '0203' );
+AddIssue( $borrower2, '0202' );
 $issues = C4::Members::GetAllIssues($borrowernumber1);
 is( @$issues, 2, 'GetAllIssues returns the correct number of elements' );
 is( $issues->[0]->{itemnumber}, $itemnumber1, '' );

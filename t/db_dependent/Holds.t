@@ -827,25 +827,26 @@ subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
 
     # Create 3 biblios with items
     my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
-    my ( undef, undef, $itemnumber_1 ) = AddItem(
-        {   homebranch    => $library1->branchcode,
-            holdingbranch => $library1->branchcode
-        },
-        $biblio_1->biblionumber
+    my $item_1   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_1->biblionumber,
+            library      => $library1->branchcode
+        }
     );
     my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype2->itemtype });
-    my ( undef, undef, $itemnumber_2 ) = AddItem(
-        {   homebranch    => $library2->branchcode,
-            holdingbranch => $library2->branchcode
-        },
-        $biblio_2->biblionumber
+    my $item_2   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_2->biblionumber,
+            library      => $library2->branchcode
+        }
     );
+    my $itemnumber_2 = $item_2->itemnumber;
     my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
-    my ( undef, undef, $itemnumber_3 ) = AddItem(
-        {   homebranch    => $library1->branchcode,
-            holdingbranch => $library1->branchcode
-        },
-        $biblio_3->biblionumber
+    my $item_3   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_3->biblionumber,
+            library      => $library1->branchcode
+        }
     );
 
     # Test 1: Patron 3 can place hold
@@ -1047,25 +1048,26 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
 
     # Create 3 biblios with items
     my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
-    my ( undef, undef, $itemnumber_1 ) = AddItem(
-        {   homebranch    => $library1->branchcode,
-            holdingbranch => $library1->branchcode
-        },
-        $biblio_1->biblionumber
+    my $item_1   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_1->biblionumber,
+            library      => $library1->branchcode
+        }
     );
     my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype2->itemtype });
-    my ( undef, undef, $itemnumber_2 ) = AddItem(
-        {   homebranch    => $library2->branchcode,
-            holdingbranch => $library2->branchcode
-        },
-        $biblio_2->biblionumber
+    my $item_2   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_2->biblionumber,
+            library      => $library2->branchcode
+        }
     );
+    my $itemnumber_2 = $item_2->itemnumber;
     my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
-    my ( undef, undef, $itemnumber_3 ) = AddItem(
-        {   homebranch    => $library1->branchcode,
-            holdingbranch => $library1->branchcode
-        },
-        $biblio_3->biblionumber
+    my $item_3   = $builder->build_sample_item(
+        {
+            biblionumber => $biblio_3->biblionumber,
+            library      => $library1->branchcode
+        }
     );
 
     # Test 1: Patron 3 can place hold

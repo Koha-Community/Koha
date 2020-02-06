@@ -404,7 +404,7 @@ is($new_count, $hold_notice_count + 1, 'patron not notified a second time (bug 1
 
 # avoiding the not_same_branch error
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
-my $item = Koha::Items->find($itemnumber);
+$item = Koha::Items->find($item->itemnumber);
 is(
     $item->safe_delete,
     'book_reserved',

@@ -70,7 +70,7 @@ Koha::CirculationRules->set_rule(
 
 subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
 
-    plan tests => 4;
+    plan tests => 3;
 
     # Set item-level item types
     t::lib::Mocks::mock_preference( "item-level_itypes", 1 );
