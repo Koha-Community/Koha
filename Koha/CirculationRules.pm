@@ -420,7 +420,7 @@ sub get_onshelfholds_policy {
             rule_name    => 'onshelfholds',
         }
     );
-    return $rule ? $rule->rule_value : undef;
+    return $rule ? $rule->rule_value : 0;
 }
 
 =head3 article_requestable_rules
