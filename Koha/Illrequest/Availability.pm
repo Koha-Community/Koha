@@ -21,7 +21,8 @@ use Modern::Perl;
 
 use JSON;
 use MIME::Base64 qw( encode_base64 );
-use URI::Escape qw ( uri_escape );
+use URI::Escape qw( uri_escape );
+use Encode qw( encode );
 
 use Koha::Plugins;
 
@@ -114,7 +115,7 @@ sub prep_metadata {
     # so this function returns something predictable that we can test!
     my $json = JSON->new;
     $json->canonical([1]);
-    return uri_escape(encode_base64($json->encode($metadata)));
+    return uri_escape(encode_base64(encode('utf-8',$json->encode($metadata))));
 }
 
 =head1 AUTHOR
