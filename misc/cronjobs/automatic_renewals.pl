@@ -23,10 +23,10 @@ automatic_renewals.pl - cron script to renew loans
 
 =head1 SYNOPSIS
 
-./automatic_renewals.pl [--send-notices]
+./automatic_renewals.pl [-c|--confirm] [--send-notices]
 
 or, in crontab:
-0 3 * * * automatic_renewals.pl
+0 3 * * * automatic_renewals.pl -c
 
 =head1 DESCRIPTION
 
@@ -44,11 +44,11 @@ Send AUTO_RENEWALS notices to patrons if the auto renewal has been done.
 
 Note that this option does not support digest yet.
 
-=item B<--verbose>
+=item B<-v|--verbose>
 
 Print report to standard out.
 
-=item B<--confirm>
+=item B<-c|--confirm>
 
 Without this parameter no changes will be made
 
