@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 use Koha::CirculationRules;
@@ -28,12 +28,12 @@ use Koha::Database;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
-$schema->storage->txn_begin;
-
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'set_rule + get_effective_rule' => sub {
     plan tests => 14;
+
+    $schema->storage->txn_begin;
 
     my $categorycode = $builder->build_object( { class => 'Koha::Patron::Categories' } )->categorycode;
     my $itemtype     = $builder->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
@@ -250,7 +250,35 @@ subtest 'set_rule + get_effective_rule' => sub {
     $our_branch_rules->delete;
     is( $our_branch_rules->count, 0, "We deleted 8 rules");
 
-
+    $schema->storage->txn_rollback;
 };
 
-$schema->storage->txn_rollback;
+subtest 'get_onshelfholds_policy() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item();
+
+    my $circ_rules = Koha::CirculationRules->new;
+    # Cleanup
+    $circ_rules->search({ rule_name => 'onshelfholds' })->delete;
+
+    $circ_rules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rule_name    => 'onshelfholds',
+            rule_value   => 1,
+        }
+    );
+
+    is( $circ_rules->get_onshelfholds_policy({ item => $item }), 1, 'If rule_value is set on a matching rule, return it' );
+    # Delete the rule (i.e. get_effective_rule returns undef)
+    $circ_rules->delete;
+    is( $circ_rules->get_onshelfholds_policy({ item => $item }), 0, 'If no matching rule, fallback to 0' );
+
+    $schema->storage->txn_rollback;
+};
