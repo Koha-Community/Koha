@@ -76,14 +76,6 @@ sub store {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
 
-    my %updated_columns = $self->_result->get_dirty_columns;
-    if (   exists $updated_columns{itemcallnumber}
-        or exists $updated_columns{cn_source} )
-    {
-        my $cn_sort = GetClassSort( $self->cn_source, $self->itemcallnumber, "" );
-        $self->cn_sort($cn_sort);
-    }
-
     my $today = dt_from_string;
     unless ( $self->in_storage ) { #AddItem
         unless ( $self->permanent_location ) {
@@ -98,6 +90,13 @@ sub store {
 
         unless ( $self->dateaccessioned ) {
             $self->dateaccessioned($today);
+        }
+
+        if (   $self->itemcallnumber
+            or $self->cn_source )
+        {
+            my $cn_sort = GetClassSort( $self->cn_source, $self->itemcallnumber, "" );
+            $self->cn_sort($cn_sort);
         }
 
         C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
@@ -138,8 +137,17 @@ sub store {
             }
         }
 
-        %updated_columns = $self->_result->get_dirty_columns;
+        my %updated_columns = $self->_result->get_dirty_columns;
         return $self->SUPER::store unless %updated_columns;
+
+        if (   exists $updated_columns{itemcallnumber}
+            or exists $updated_columns{cn_source} )
+        {
+            my $cn_sort = GetClassSort( $self->cn_source, $self->itemcallnumber, "" );
+            $self->cn_sort($cn_sort);
+        }
+
+
         if (    exists $updated_columns{location}
             and $self->location ne 'CART'
             and $self->location ne 'PROC'
