@@ -79,8 +79,8 @@ is ( IsItemIssued( $item->itemnumber ), 0, "item has been returned" );
 $item->discard_changes; # FIXME We should not need that
                         # If we do not, $self->checkout in safe_to_delete will not know the item has been checked out
 is(
-    $item->safe_delete,
-    1,
+    ref($item->safe_delete),
+    'Koha::Item',
     'item that is not on loan can be deleted',
 );
 
