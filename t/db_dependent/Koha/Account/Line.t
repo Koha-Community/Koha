@@ -1087,4 +1087,70 @@ subtest "reduce() tests" => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest "cancel() tests" => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    # Create a borrower
+    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $borrower = Koha::Patron->new( {
+        cardnumber => 'dariahall',
+        surname => 'Hall',
+        firstname => 'Daria',
+    } );
+    $borrower->categorycode( $categorycode );
+    $borrower->branchcode( $branchcode );
+    $borrower->store;
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branchcode, borrowernumber => $borrower->borrowernumber });
+
+    my $account = Koha::Account->new({ patron_id => $borrower->id });
+
+    my $line1 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => 10,
+            amountoutstanding => 10,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE',
+        }
+    )->store();
+    my $line2 = Koha::Account::Line->new(
+        {
+            borrowernumber    => $borrower->borrowernumber,
+            amount            => 20,
+            amountoutstanding => 20,
+            interface         => 'commandline',
+            debit_type_code   => 'OVERDUE',
+        }
+    )->store();
+
+    my $id = $account->pay({
+        lines  => [$line2],
+        amount => 5,
+    });
+
+    is( $account->balance(), 25, "Account balance is 25" );
+    is( $line1->amountoutstanding+0, 10, 'First fee has amount outstanding of 10' );
+    is( $line2->amountoutstanding+0, 15, 'Second fee has amount outstanding of 15' );
+
+    my $ret = $line1->cancel();
+    is( ref($ret), 'Koha::Account::Line', 'Cancel returns the account line' );
+    is( $account->balance(), 15, "Account balance is 15" );
+    is( $line1->amount+0, 0, 'First fee has amount of 0' );
+    is( $line1->amountoutstanding+0, 0, 'First fee has amount outstanding of 0' );
+
+    $ret = $line2->cancel();
+    is ($ret, undef, 'cancel returns undef when line cannot be cancelled');
+
+    my $account_payment = Koha::Account::Lines->find($id);
+    $ret = $account_payment->cancel();
+    is ($ret, undef, 'payment cannot be cancelled');
+
+    $schema->storage->txn_rollback;
+};
+
 1;

@@ -31,6 +31,7 @@
         [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
         [%- CASE 'VOID'       -%]<span> (Voided)</span>
         [%- CASE 'LOST'       -%]<span> (Lost)</span>
+        [%- CASE 'CANCELLED'  -%]<span> (Cancelled)</span>
         [%- CASE              -%]
     [%- END -%]
 [%- END -%]

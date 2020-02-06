@@ -287,6 +287,54 @@ sub void {
 
 }
 
+=head3 cancel
+
+  $debit_accountline->cancel();
+
+Cancel a charge. It will mark the debit as 'cancelled' by updating its
+status to 'CANCELLED'.
+Charges that have been fully or partially paid cannot be cancelled.
+
+Return self in case of success, undef otherwise
+
+=cut
+
+sub cancel {
+    my ($self) = @_;
+
+    # Make sure it is a charge we are cancelling
+    return unless $self->is_debit;
+
+    # Make sure it is not already cancelled
+    return if $self->status && $self->status eq 'CANCELLED';
+
+    # Make sure it has not be paid yet
+    return if $self->amount != $self->amountoutstanding;
+
+    if ( C4::Context->preference("FinesLog") ) {
+        logaction('FINES', 'CANCEL', $self->borrowernumber, Dumper({
+            action => 'cancel_charge',
+            borrowernumber => $self->borrowernumber,
+            amount => $self->amount,
+            amountoutstanding => $self->amountoutstanding,
+            description => $self->description,
+            debit_type_code => $self->debit_type_code,
+            note => $self->note,
+            itemnumber => $self->itemnumber,
+            manager_id => $self->manager_id,
+        }));
+    }
+
+    $self->set({
+        status => 'CANCELLED',
+        amountoutstanding => 0,
+        amount => 0,
+    });
+    $self->store();
+
+    return $self;
+}
+
 =head3 reduce
 
   $charge_accountline->reduce({
@@ -756,7 +804,7 @@ sub adjust {
 sub is_credit {
     my ($self) = @_;
 
-    return ( $self->amount < 0 );
+    return defined $self->credit_type_code;
 }
 
 =head3 is_debit

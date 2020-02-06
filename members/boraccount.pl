@@ -34,6 +34,7 @@ use Koha::Cash::Registers;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Items;
+use Koha::Token;
 
 my $input=CGI->new;
 
@@ -177,6 +178,10 @@ foreach my $renew_result(@renew_results) {
     };
 }
 
+my $csrf_token = Koha::Token->new->generate_csrf({
+    session_id => scalar $input->cookie('CGISESSID'),
+});
+
 $template->param(
     patron              => $patron,
     finesview           => 1,
@@ -186,6 +191,7 @@ $template->param(
     payment_id          => $payment_id,
     change_given        => $change_given,
     renew_results       => $renew_results_display,
+    csrf_token          => $csrf_token,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
