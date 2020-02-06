@@ -26,6 +26,8 @@ use C4::Auth;
 use C4::ClassSource;
 use C4::Output;
 
+use Koha::ClassSources;
+
 my $builder = sub {
     my ( $params ) = @_;
     my $function_name = $params->{id};
@@ -59,8 +61,6 @@ my $launcher = sub {
         }
     );
 
-    my $cn_sort;
-
     my $dbh = C4::Context->dbh;
     my $sth;
     my @cn;
@@ -86,17 +86,19 @@ my $launcher = sub {
         $search = $gt;
     }
 
+    my $cn_source = $cgi->param('cn_source') || C4::Context->preference("DefaultClassificationSource");
+    my @class_sources = Koha::ClassSources->search({ used => 1});
+
     #Don't show half the results of show lt or gt
     $real_limit = $results_per_page if $search ne $q;
-    $cn_sort = GetClassSort( undef, undef, $search );
-    my $cn_sort_q = GetClassSort( undef, undef, $q );
+    my $cn_sort = GetClassSort( $cn_source, undef, $search );
 
     my $red = 0;
     if ( $search ne $gt ) {
         my $green = 0;
 
         #Results before the cn_sort
-        $query = "SELECT b.title, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author
+        $query = "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
@@ -110,7 +112,7 @@ my $launcher = sub {
             if ( $data->{itemcallnumber} eq $q ) {
                 $data->{background} = 'red';
                 $red = 1;
-            } elsif ( ( GetClassSort( undef, undef, $data->{itemcallnumber} ) lt $cn_sort_q ) && !$green && !$red ) {
+            } elsif ( $data->{cn_sort} lt $cn_sort && !$green && !$red ) {
                 if ( $#cn != -1 ) {
                     unshift @cn, { 'background' => 'green' };
                     $globalGreen = 1;
@@ -126,7 +128,7 @@ my $launcher = sub {
         my $green = 0;
 
         #Results after the cn_sort
-        $query = "SELECT b.title, itemcallnumber, biblionumber, i.cn_sort, branchname, author
+        $query = "SELECT b.title, b.subtitle, itemcallnumber, biblionumber, barcode, cn_sort, branchname, author
         FROM items AS i
         JOIN biblio AS b USING (biblionumber)
         LEFT OUTER JOIN branches ON (branches.branchcode = homebranch)
@@ -141,7 +143,7 @@ my $launcher = sub {
             if ( $data->{itemcallnumber} eq $q ) {
                 $data->{background} = 'red';
                 $red = 1;
-            } elsif ( ( GetClassSort( undef, undef, $data->{itemcallnumber} ) gt $cn_sort_q ) && !$green && !$red && !$globalGreen ) {
+            } elsif ( $data->{cn_sort} gt $cn_sort && !$green && !$red && !$globalGreen ) {
                 push @cn, { 'background' => 'green' };
                 $green = 1;
             }
@@ -159,6 +161,9 @@ my $launcher = sub {
     $template->param( 'q'       => $q );
     $template->param( 'cn_loop' => \@cn ) if $#cn != -1;
     $template->param( 'popup'   => defined( $cgi->param('popup') ) );
+    $template->param( 'cn_source' => $cn_source ) if $cn_source;
+    $template->param( 'class_sources' => \@class_sources );
+
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
 };
