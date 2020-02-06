@@ -21322,16 +21322,31 @@ sub SetVersion {
 
 sub NewVersion {
     my ( $DBversion, $bug_number, $descriptions ) = @_;
+
     SetVersion($DBversion);
+
     unless ( ref($descriptions) ) {
         $descriptions = [ $descriptions ];
     }
+    my $first = 1;
     for my $description ( @$descriptions ) {
-        unless ( $bug_number ) {
-            say sprintf "Upgrade to %s done (%s)", $DBversion, $description;
+        if ( @$descriptions > 1 ) {
+            if ( $first ) {
+                unless ( $bug_number ) {
+                    say sprintf "Upgrade to %s done: %s", $DBversion, $description
+                } else {
+                    say sprintf "Upgrade to %s done: Bug %s - %s", $DBversion, $bug_number, $description;
+                }
+            }
+            say sprintf "\t\t\t\t\t- %s", $description
         } else {
-            say sprintf "Upgrade to %s done (Bug %s - %s)", $DBversion, $bug_number, $description;
+            unless ( $bug_number ) {
+                say sprintf "Upgrade to %s done: %s", $DBversion, $description;
+            } else {
+                say sprintf "Upgrade to %s done: Bug %s - %s", $DBversion, $bug_number, $description;
+            }
         }
+        $first = 0;
     }
 }
 
