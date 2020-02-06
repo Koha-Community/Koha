@@ -672,7 +672,6 @@ subtest 'pay() handles lost items when paying a specific lost fee' => sub {
             {
                 borrowernumber  => $patron->borrowernumber,
                 itemnumber      => $item->itemnumber,
-                debit_type_code => 'LOST'
             }
         )->next;
         my $checkout = Koha::Checkout->new(
