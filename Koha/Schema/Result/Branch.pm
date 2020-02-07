@@ -631,6 +631,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 repeatable_holidays
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::RepeatableHoliday>
+
+=cut
+
+__PACKAGE__->has_many(
+  "repeatable_holidays",
+  "Koha::Schema::Result::RepeatableHoliday",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 reserves
 
 Type: has_many
@@ -642,6 +657,21 @@ Related object: L<Koha::Schema::Result::Reserve>
 __PACKAGE__->has_many(
   "reserves",
   "Koha::Schema::Result::Reserve",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 special_holidays
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::SpecialHoliday>
+
+=cut
+
+__PACKAGE__->has_many(
+  "special_holidays",
+  "Koha::Schema::Result::SpecialHoliday",
   { "foreign.branchcode" => "self.branchcode" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -707,8 +737,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-14 09:59:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vWDJAm3K2jiyRS3htyip6A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-07 23:10:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8MMgxmWm5R7gR6DCh7DftQ
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
