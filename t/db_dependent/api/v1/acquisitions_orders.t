@@ -72,7 +72,7 @@ subtest 'list() tests' => sub {
         my $fields = {
             biblio_id => 'biblionumber',
             basket_id => 'basketno',
-            budget_id => 'budget_id',
+            fund_id   => 'budget_id',
         };
 
         my $size = keys %{$fields};
@@ -84,7 +84,7 @@ subtest 'list() tests' => sub {
             my $result =
             $t->get_ok("//$userid:$password@/api/v1/acquisitions/orders?$field=" . $order->$model_field)
               ->status_is(200)
-              ->json_has( [ $order, $another_order ] );
+              ->json_is( [ $order->to_api, $another_order->to_api ] );
         }
     };
 
