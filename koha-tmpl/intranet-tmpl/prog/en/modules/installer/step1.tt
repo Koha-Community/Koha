@@ -62,7 +62,6 @@
                                 [% FOREACH missing_module IN missing_modules %]
                                     <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
                                         <br /> Version: [% missing_module.version | html %]
-                                        <br /> Usage: [% missing_module.usage | html %]
                                     </li>
                                 [% END %]
                             </ul>

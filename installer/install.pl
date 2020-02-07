@@ -112,8 +112,7 @@ if ( $step && $step == 1 ) {
                 {
                     name    => $module,
                     version => $stats->{'min_ver'},
-                    require => $stats->{'required'},
-                    usage   => $stats->{'usage'},
+                    require => $stats->{'required'}
                 }
             );
         }
