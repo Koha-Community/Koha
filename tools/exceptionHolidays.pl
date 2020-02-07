@@ -18,6 +18,7 @@ checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
 
 
 my $branchcode = $input->param('showBranchName');
+my $originalbranchcode  = $branchcode;
 my $weekday = $input->param('showWeekday');
 my $day = $input->param('showDay');
 my $month = $input->param('showMonth');
@@ -27,8 +28,8 @@ my $description = $input->param('showDescription');
 my $holidaytype = $input->param('showHolidayType');
 my $datecancelrange_dt = eval { dt_from_string( scalar $input->param('datecancelrange') ) };
 my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
-
-my $calendar = C4::Calendar->new(branchcode => $branchcode);
+my $showoperation = $input->param('showOperation');
+my $allbranches = $input->param('allBranches');
 
 $title || ($title = '');
 if ($description) {
@@ -50,77 +51,93 @@ if ($datecancelrange_dt){
                 push @holiday_list, $dt->clone();
                 }
 }
-if ($input->param('showOperation') eq 'exception') {
-	$calendar->insert_exception_holiday(day => $day,
-										month => $month,
-									    year => $year,
-						                title => $title,
-						                description => $description);
-} elsif ($input->param('showOperation') eq 'exceptionrange' ) {
-        if (@holiday_list){
-            foreach my $date (@holiday_list){
-                $calendar->insert_exception_holiday(
-                    day         => $date->{local_c}->{day},
-                    month       => $date->{local_c}->{month},
-                    year       => $date->{local_c}->{year},
-                    title       => $title,
-                    description => $description
-                    );
+
+if($allbranches) {
+    my $libraries = Koha::Libraries->search;
+    while ( my $library = $libraries->next ) {
+        edit_holiday($showoperation, $library->branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype);
+    }
+} else {
+    edit_holiday($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype);
+}
+
+print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$originalbranchcode&calendardate=$calendardate");
+
+sub edit_holiday {
+    ($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype) = @_;
+    my $calendar = C4::Calendar->new(branchcode => $branchcode);
+
+    if ($showoperation eq 'exception') {
+        $calendar->insert_exception_holiday(day => $day,
+                                            month => $month,
+                                            year => $year,
+                                            title => $title,
+                                            description => $description);
+    } elsif ($showoperation eq 'exceptionrange' ) {
+            if (@holiday_list){
+                foreach my $date (@holiday_list){
+                    $calendar->insert_exception_holiday(
+                        day         => $date->{local_c}->{day},
+                        month       => $date->{local_c}->{month},
+                        year       => $date->{local_c}->{year},
+                        title       => $title,
+                        description => $description
+                        );
+                }
             }
-        }
-} elsif ($input->param('showOperation') eq 'edit') {
-    if($holidaytype eq 'weekday') {
-      $calendar->ModWeekdayholiday(weekday => $weekday,
-                                   title => $title,
-                                   description => $description);
-    } elsif ($holidaytype eq 'daymonth') {
-      $calendar->ModDaymonthholiday(day => $day,
-                                    month => $month,
+    } elsif ($showoperation eq 'edit') {
+        if($holidaytype eq 'weekday') {
+        $calendar->ModWeekdayholiday(weekday => $weekday,
                                     title => $title,
                                     description => $description);
-    } elsif ($holidaytype eq 'ymd') {
-      $calendar->ModSingleholiday(day => $day,
-                                  month => $month,
-                                  year => $year,
-                                  title => $title,
-                                  description => $description);
-    } elsif ($holidaytype eq 'exception') {
-      $calendar->ModExceptionholiday(day => $day,
-                                  month => $month,
-                                  year => $year,
-                                  title => $title,
-                                  description => $description);
-    }
-} elsif ($input->param('showOperation') eq 'delete') {
-	$calendar->delete_holiday(weekday => $weekday,
-	                          day => $day,
-  	                          month => $month,
-				              year => $year);
-}elsif ($input->param('showOperation') eq 'deleterange') {
-    if (@holiday_list){
-        foreach my $date (@holiday_list){
-            $calendar->delete_holiday_range(weekday => $weekday,
+        } elsif ($holidaytype eq 'daymonth') {
+        $calendar->ModDaymonthholiday(day => $day,
+                                        month => $month,
+                                        title => $title,
+                                        description => $description);
+        } elsif ($holidaytype eq 'ymd') {
+        $calendar->ModSingleholiday(day => $day,
+                                    month => $month,
+                                    year => $year,
+                                    title => $title,
+                                    description => $description);
+        } elsif ($holidaytype eq 'exception') {
+        $calendar->ModExceptionholiday(day => $day,
+                                    month => $month,
+                                    year => $year,
+                                    title => $title,
+                                    description => $description);
+        }
+    } elsif ($showoperation eq 'delete') {
+        $calendar->delete_holiday(weekday => $weekday,
+                                day => $day,
+                                month => $month,
+                                year => $year);
+    }elsif ($showoperation eq 'deleterange') {
+        if (@holiday_list){
+            foreach my $date (@holiday_list){
+                $calendar->delete_holiday_range(weekday => $weekday,
+                                                day => $date->{local_c}->{day},
+                                                month => $date->{local_c}->{month},
+                                                year => $date->{local_c}->{year});
+                }
+        }
+    }elsif ($showoperation eq 'deleterangerepeat') {
+        if (@holiday_list){
+            foreach my $date (@holiday_list){
+            $calendar->delete_holiday_range_repeatable(weekday => $weekday,
+                                            day => $date->{local_c}->{day},
+                                            month => $date->{local_c}->{month});
+            }
+        }
+    }elsif ($showoperation eq 'deleterangerepeatexcept') {
+        if (@holiday_list){
+            foreach my $date (@holiday_list){
+            $calendar->delete_exception_holiday_range(weekday => $weekday,
                                             day => $date->{local_c}->{day},
                                             month => $date->{local_c}->{month},
                                             year => $date->{local_c}->{year});
             }
-    }
-}elsif ($input->param('showOperation') eq 'deleterangerepeat') {
-    if (@holiday_list){
-        foreach my $date (@holiday_list){
-           $calendar->delete_holiday_range_repeatable(weekday => $weekday,
-                                         day => $date->{local_c}->{day},
-                                         month => $date->{local_c}->{month});
-        }
-    }
-}elsif ($input->param('showOperation') eq 'deleterangerepeatexcept') {
-    if (@holiday_list){
-        foreach my $date (@holiday_list){
-           $calendar->delete_exception_holiday_range(weekday => $weekday,
-                                         day => $date->{local_c}->{day},
-                                         month => $date->{local_c}->{month},
-                                         year => $date->{local_c}->{year});
         }
     }
 }
-print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$branchcode&calendardate=$calendardate");
