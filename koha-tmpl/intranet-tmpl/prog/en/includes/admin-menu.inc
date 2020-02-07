@@ -56,6 +56,7 @@
         <ul>
             [% IF ( CAN_user_parameters_manage_accounts ) %]
                 <li><a href="/cgi-bin/koha/admin/debit_types.pl">Debit types</a></li>
+                <li><a href="/cgi-bin/koha/admin/credit_types.pl">Credit types</a></li>
             [% END %]
             [% IF ( Koha.Preference('UseCashRegisters') && CAN_user_parameters_manage_cash_registers ) %]
                 <li><a href="/cgi-bin/koha/admin/cash_registers.pl">Cash registers</a></li>

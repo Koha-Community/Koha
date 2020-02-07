@@ -396,7 +396,7 @@ sub add_credit {
                 my $account_offset = Koha::Account::Offset->new(
                     {
                         credit_id => $line->id,
-                        type   => $Koha::Account::offset_type->{$credit_type},
+                        type   => $Koha::Account::offset_type->{$credit_type} // $Koha::Account::offset_type->{CREDIT},
                         amount => $amount
                     }
                 )->store();

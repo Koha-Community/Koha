@@ -116,7 +116,7 @@ if ($add) {
 else {
 
     my @credit_types = Koha::Account::CreditTypes->search_with_library_limits(
-        { can_be_added_manually => 1 },
+        { can_be_added_manually => 1, archived => 0 },
         {}, $library_id );
 
     $template->param(
