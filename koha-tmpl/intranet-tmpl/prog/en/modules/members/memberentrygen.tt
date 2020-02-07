@@ -20,7 +20,12 @@
             [% IF categoryname %]([% categoryname | html %])[% END %]
         [% END %]
     </title>
-    [% INCLUDE 'doc-head-close.inc' %]
+<style>
+legend:hover {
+    cursor: pointer;
+}
+</style>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="pat_memberentrygen" class="pat">
@@ -160,6 +165,31 @@
                                 </ul>
                             </div>
                         [% END %]
+
+                        [% SET fieldstohide = Koha.Preference('HideFieldsPatronAddForm') %]
+                        [% IF Koha.Preference('HideFieldsPatronAddForm') %][% UNLESS step %]
+                            <p id="selections">
+                                <input type="checkbox" id="toggle_hidden_fields" title="These fields are hidden by default by the HideFieldsPatronAddForm system preference"><strong>Show hidden fields:</strong>
+                                [% FOREACH field IN fieldstohide.split(',') %]
+                                    [% SWITCH field %]
+                                        [% CASE 'identity' %] Organization/Patron identity |
+                                        [% CASE 'guarantor' %] Guarantor information |
+                                        [% CASE 'primary_address' %] Main address |
+                                        [% CASE 'primary_contact' %] Contact information |
+                                        [% CASE 'alt_address' %] Alternate address |
+                                        [% CASE 'alt_contact' %] Alternate contact |
+                                        [% CASE 'lib_mgmt' %] Library management |
+                                        [% CASE 'lib_setup' %] Library setup |
+                                        [% CASE 'login' %] OPAC/Staff login |
+                                        [% CASE 'flags' %] Patron account flags |
+                                        [% CASE 'debarments' %] Patron restrictions |
+                                        [% CASE 'housebound' %] Housebound roles |
+                                        [% CASE 'additional' %] Additional attributes and identifiers |
+                                        [% CASE 'messaging' %] Patron messaging preferences |
+                                    [% END %]
+                                [% END %]
+                            </p>
+                        [% END %][% END %]
 
                         <div id="toolbar" class="btn-toolbar">
                             [% UNLESS ( check_member ) %]
@@ -496,7 +526,6 @@
                                         </fieldset> <!-- /#memberentry_guarantor -->
                                     </span> <!-- #/memberentry_guarantor_anchor -->
                                 [% END # /IF show_guarantor || guarantor  %]
-
 
                                 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
                                     [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -1377,7 +1406,91 @@
             }
         }
         var Sticky;
+        function showHideFields(){
+            [% UNLESS step == 1 %]
+                [% IF fieldstohide.match('identity') %]
+                    $("#memberentry_identity").find('legend').nextAll().toggle();
+                [% END %]
+                [% IF show_guarantor || guarantor %]
+                    [% IF fieldstohide.match('guarantor') %]
+                        $("#memberentry_guarantor").find('legend').nextAll().toggle();
+                    [% END %]
+                [% END %]
+                [% IF fieldstohide.match('primary_address') %]
+                    $("#memberentry_mainaddress").find('legend').nextAll().toggle();
+                [% END %]
+                [% IF fieldstohide.match('primary_contact') %]
+                    $("#memberentry_contact").find('legend').nextAll().toggle();
+                [% END %]
+            [% END %]
+            [% UNLESS step == 6 %]
+                [% IF fieldstohide.match('alt_address') %]
+                    $("#memberentry_address").find('legend').nextAll().toggle();
+                [% END %]
+            [% END %]
+            [% UNLESS step == 2 %]
+                [% IF fieldstohide.match('alt_contact') %]
+                    $("#memberentry_altaddress").find('legend').nextAll().toggle();
+                [% END %]
+            [% END %]
+            [% UNLESS step == 3 %]
+                [% IF fieldstohide.match('lib_mgmt') %]
+                        $("#memberentry_library_management").find('legend').nextAll().toggle();
+                [% END %]
+                [% UNLESS nodateenrolled && noopacnote && noborrowernotes %]
+                    [% IF fieldstohide.match('lib_setup') %]
+                        $("#memberentry_subscription").find('legend').nextAll().toggle();
+                    [% END %]
+                [% END %]
+                [% UNLESS nouserid && nopassword %]
+                    [% IF fieldstohide.match('login') %]
+                        $("#memberentry_userid").find('legend').nextAll().toggle();
+                    [% END %]
+                [% END %]
+                [% UNLESS ( opadd || opduplicate ) %]
+                    [% IF fieldstohide.match('flags') %]
+                        $("#memberentry_account_flags").find('legend').nextAll().toggle();
+                    [% END %]
+                [% END %]
+                [% IF fieldstohide.match('debarments') %]
+                    $("#memberentry_restrictions").find('legend').nextAll().toggle();
+                [% END %]
+            [% END %]
+            [% UNLESS step == 7 %]
+                [% IF Koha.Preference('HouseboundModule') %]
+                    [% IF fieldstohide.match('housebound') %]
+                        $("#memberentry_housebound_roles").find('legend').nextAll().toggle();
+                    [% END %]
+                [% END %]
+            [% END %]
+            [% UNLESS step == 4 %]
+                [% IF Koha.Preference('ExtendedPatronAttributes') %]
+                    [% IF fieldstohide.match('additional') %]
+                        $("#memberentry_patron_attributes").find('legend').nextAll().toggle();
+                    [% END %]
+                [% END %]
+            [% END %]
+            [% UNLESS step == 5 %]
+                [% IF Koha.Preference('EnhancedMessagingPreferences') %]
+                    [% IF fieldstohide.match('messaging') %]
+                        $("#memberentry_messaging_prefs").find('legend').nextAll().toggle();
+                        $("#messaging_prefs_loading").toggle();
+                    [% END %]
+                [% END %]
+            [% END %]
+        }
+
         $(document).ready(function() {
+            showHideFields();
+            $("#toggle_hidden_fields").change(function(){
+                showHideFields();
+            });
+
+            $("legend").click(function(){
+                $(this).nextAll().toggle();
+                $("#messaging_prefs_loading").hide();
+            });
+
             $("#saverecord").css({ 'margin-left': 0 });
 
             Sticky = $("#toolbar");

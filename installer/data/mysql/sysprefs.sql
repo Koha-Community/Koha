@@ -211,6 +211,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('GoogleOpenIDConnectDefaultBranch',  '','','This branch code will be used to create Google OpenID Connect patrons.','Textarea'),
 ('GoogleOpenIDConnectDefaultCategory','','','This category code will be used to create Google OpenID Connect patrons.','Textarea'),
 ('GoogleOpenIDConnectDomain', '', NULL, 'Restrict Google OpenID Connect to this domain (or subdomains of this domain). Leave blank for all Google domains', 'Free'),
+('HideFieldsPatronAddForm','',NULL,'Hide these fields by default when adding a new patron. These fields can still be expanded.','Multiple'),
 ('hidelostitems','0','','If ON, disables display of\"lost\" items in OPAC.','YesNo'),
 ('HidePatronName','0','','If this is switched on, patron\'s cardnumber will be shown instead of their name on the holds and catalog screens','YesNo'),
 ('hide_marc','0',NULL,'If ON, disables display of MARC fields, subfield codes & indicators (still shows data)','YesNo'),
