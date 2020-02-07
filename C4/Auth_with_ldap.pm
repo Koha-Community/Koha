@@ -393,7 +393,7 @@ sub update_local {
     );
 
     # MODIFY PASSWORD/LOGIN if password was mapped
-    _do_changepassword($userid, $borrowerid, $password) if $borrower->{'password'};
+    _do_changepassword($userid, $borrowerid, $password) if exists( $borrower->{'password'} );
 }
 
 1;
