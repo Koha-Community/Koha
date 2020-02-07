@@ -310,7 +310,7 @@ subtest 'update() tests' => sub {
         warning_like {
             $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
               ->status_is(409)
-              ->json_has( '/error' => "Fails when trying to update to an existing cardnumber or userid")
+              ->json_has( '/error', "Fails when trying to update to an existing cardnumber or userid")
               ->json_like( '/conflict' => qr/(borrowers\.)?cardnumber/ ); }
             qr/^DBD::mysql::st execute failed: Duplicate entry '(.*?)' for key '(borrowers\.)?cardnumber'/;
 
@@ -318,9 +318,15 @@ subtest 'update() tests' => sub {
         $newpatron->{ userid }     = "user" . $patron_1->id.$patron_2->id;
         $newpatron->{ surname }    = "user" . $patron_1->id.$patron_2->id;
 
-        $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
-          ->status_is(200, 'Patron updated successfully')
-          ->json_has($newpatron);
+        my $result = $t->put_ok( "//$userid:$password@/api/v1/patrons/" . $patron_2->borrowernumber => json => $newpatron )
+          ->status_is(200, 'Patron updated successfully');
+
+        # Put back the RO attributes
+        $newpatron->{patron_id} = $unauthorized_patron->to_api->{patron_id};
+        $newpatron->{restricted} = $unauthorized_patron->to_api->{restricted};
+        $newpatron->{anonymized} = $unauthorized_patron->to_api->{anonymized};
+        is_deeply($result->tx->res->json, $newpatron, 'Returned patron from update matches expected');
+
         is(Koha::Patrons->find( $patron_2->id )->cardnumber,
            $newpatron->{ cardnumber }, 'Patron is really updated!');
 
