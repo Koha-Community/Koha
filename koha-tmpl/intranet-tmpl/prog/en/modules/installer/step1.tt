@@ -61,7 +61,21 @@
                             <ul>
                                 [% FOREACH missing_module IN missing_modules %]
                                     <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
-                                        <br /> Version: [% missing_module.version | html %]
+                                        <br /> Version: [% missing_module.min_version | html %]
+                                    </li>
+                                [% END %]
+                            </ul>
+                        [% END %]
+
+                        [% IF ( upgrade_modules ) %]
+                            <h2>Web installer &rsaquo; Perl modules due for upgrade</h2>
+                            <p>Some Perl modules require upgrade. <span class="label label-danger">Important: </span>Required modules must be installed at the correct version before you may continue.<br />
+                            <ul>
+                                [% FOREACH upgrade_module IN upgrade_modules %]
+                                    <li><strong>[% upgrade_module.name | html %]</strong> [% IF ( upgrade_module.require ) %]<span class="label label-danger">Required</span>[% END %]
+                                        <br /> Installed version: [% upgrade_module.version | html %]
+                                        <br /> Minimum version: [% upgrade_module.min_version | html %]
+                                        <br /> Maximum version: [% upgrade_module.max_version | html %]
                                     </li>
                                 [% END %]
                             </ul>

@@ -60,9 +60,19 @@ sub versions_info {
 
                 my $module_infos = {
                     cur_ver  => 0,
-                    min_ver  => $reqs->requirements_for_module($module),
                     required => $type eq 'requires',
                 };
+
+                my $vers = $reqs->structured_requirements_for_module($module);
+                for my $req (@$vers) {
+                    if ( $req->[0] eq '>=' || $req->[0] eq '>' ) {
+                        $module_infos->{min_ver} = $req->[1];
+                    } elsif ( $req->[0] eq '<=' || $req->[0] eq '<' ) {
+                        $module_infos->{max_ver} = $req->[1];
+                    } else {
+                        push @{$module_infos->{exc_ver}}, $req->[1];
+                    }
+                }
 
                 my $attr;
 

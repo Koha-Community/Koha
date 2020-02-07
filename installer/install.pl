@@ -101,24 +101,42 @@ if ( $step && $step == 1 ) {
     my $perl_modules = C4::Installer::PerlModules->new;
     $perl_modules->versions_info;
 
-    my $modules = $perl_modules->get_attr('missing_pm');
-    if ( scalar(@$modules) ) {
-        my @components  = ();
-        foreach (@$modules) {
+    my $missing_modules = $perl_modules->get_attr('missing_pm');
+    my $upgrade_modules = $perl_modules->get_attr('upgrade_pm');
+    if ( scalar(@$missing_modules) || scalar(@$upgrade_modules) ) {
+        my @missing  = ();
+        my @upgrade = ();
+        foreach (@$missing_modules) {
             my ( $module, $stats ) = each %$_;
             $checkmodule = 0 if $stats->{'required'};
             push(
-                @components,
+                @missing,
                 {
                     name    => $module,
-                    version => $stats->{'min_ver'},
+                    min_version => $stats->{'min_ver'},
+                    max_version => $stats->{'max_ver'},
                     require => $stats->{'required'}
                 }
             );
         }
-        @components = sort { $a->{'name'} cmp $b->{'name'} } @components;
+        foreach (@$upgrade_modules) {
+            my ( $module, $stats ) = each %$_;
+            $checkmodule = 0 if $stats->{'required'};
+            push(
+                @upgrade,
+                {
+                    name    => $module,
+                    min_version => $stats->{'min_ver'},
+                    max_version => $stats->{'max_ver'},
+                    require => $stats->{'required'}
+                }
+            );
+        }
+        @missing = sort { $a->{'name'} cmp $b->{'name'} } @missing;
+        @upgrade = sort { $a->{'name'} cmp $b->{'name'} } @upgrade;
         $template->param(
-            missing_modules => \@components,
+            missing_modules => \@missing,
+            upgrade_modules => \@upgrade,
             checkmodule     => $checkmodule,
             op              => $op
         );
