@@ -275,9 +275,9 @@ sub ldap_entry_2_hash {
 		my  $data = $memberhash{ lc($mapping{$key}->{is}) }; # Net::LDAP returns all names in lowercase
 		$debug and printf STDERR "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
 		unless (defined $data) { 
-			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
+			$data = $mapping{$key}->{content} || undef;
 		}
-		$borrower{$key} = ($data ne '') ? $data : ' ' ;
+		$borrower{$key} = $data;
 	}
 	$borrower{initials} = $memberhash{initials} || 
 		( substr($borrower{'firstname'},0,1)
