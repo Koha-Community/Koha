@@ -175,9 +175,7 @@ subtest 'set_public() (unprivileged user tests)' => sub {
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
     $t->request_ok($tx)
       ->status_is(403)
-      ->json_has({
-          error => "Authorization failure. Missing required permission(s)."
-        });
+      ->json_is('/error', "Authorization failure. Missing required permission(s).");
 
     $tx = $t->ua->build_tx(
               POST => "/api/v1/public/patrons/"

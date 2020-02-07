@@ -190,10 +190,14 @@ subtest "Test endpoints with permission" => sub {
       ->json_is('/0/patron_id', $patron_2->borrowernumber)
       ->json_hasnt('/1');
 
+    # While suspended_until is date-time, it's always set to midnight.
+    my $expected_suspended_until = $suspended_until->strftime('%FT00:00:00%z');
+    substr($expected_suspended_until, -2, 0, ':');
+
     $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => $put_data )
       ->status_is(200)
       ->json_is( '/hold_id', $reserve_id )
-      ->json_is( '/suspended_until', output_pref({ dt => $suspended_until, dateformat => 'rfc3339' }) )
+      ->json_is( '/suspended_until', $expected_suspended_until )
       ->json_is( '/priority', 2 );
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )

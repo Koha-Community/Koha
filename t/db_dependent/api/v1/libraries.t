@@ -85,14 +85,17 @@ subtest 'list() tests' => sub {
 
         my $size = keys %{$fields};
 
-        plan tests => $size * 3;
+        plan tests => $size * (2 + 2 * $size);
 
         foreach my $field ( keys %{$fields} ) {
             my $model_field = $fields->{ $field };
-            my $result =
-            $t->get_ok("//$userid:$password@/api/v1/libraries?$field=" . $library->$model_field)
-              ->status_is(200)
-              ->json_has( [ $library, $another_library ] );
+            my $result = $t->get_ok("//$userid:$password@/api/v1/libraries?$field=" . $library->$model_field)
+              ->status_is(200);
+            foreach my $key ( keys %{$fields} ) {
+              my $key_field = $fields->{ $key };
+              $result->json_is( "/0/$key", $library->$key_field );
+              $result->json_is( "/1/$key", $another_library->$key_field );
+            }
         }
     };
 
