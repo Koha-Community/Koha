@@ -277,7 +277,7 @@ sub _build_order_atom {
     my $param = $string;
     $param =~ s/^(\+|\-|\s)//;
     if ( $result_set ) {
-        my $model_param = $result_set->from_api_mapping->{$param};
+        my $model_param = _from_api_param($param, $result_set);
         $param = $model_param if defined $model_param;
     }
 

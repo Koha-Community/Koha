@@ -72,12 +72,12 @@ get '/biblios' => sub {
         }
     });
     my $biblios = $c->objects->search($biblios_set);
-
-    $c->render( status => 200, json => {count => scalar(@$biblios)} );
+    $c->render( status => 200, json => {count => scalar(@$biblios), biblios => $biblios} );
 };
 
+
 # The tests
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Test::Mojo;
 
 use t::lib::TestBuilder;
@@ -327,8 +327,8 @@ subtest 'object.search helper with all query methods' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron1 = $builder->build_object( { class => "Koha::Patrons" , value => {cardnumber => 'cardpatron1', firstname=>'patron1'} } );
-    my $patron2 = $builder->build_object( { class => "Koha::Patrons" , value => {cardnumber => 'cardpatron2', firstname=>'patron2'} } );
+    my $patron1 = $builder->build_object( { class => "Koha::Patrons" , value => {firstname=>'patron1'} } );
+    my $patron2 = $builder->build_object( { class => "Koha::Patrons" , value => {firstname=>'patron2'} } );
     my $biblio1 = $builder->build_sample_biblio;
     my $biblio2 = $builder->build_sample_biblio;
     my $biblio3 = $builder->build_sample_biblio;
@@ -347,3 +347,20 @@ subtest 'object.search helper with all query methods' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'object.search helper order by embedded columns' => sub {
+    plan tests => 3;
+
+    my $patron1 = $builder->build_object( { class => "Koha::Patrons" , value => {firstname=>'patron1'} } );
+    my $patron2 = $builder->build_object( { class => "Koha::Patrons" , value => {firstname=>'patron2'} } );
+    my $biblio1 = $builder->build_sample_biblio;
+    my $biblio2 = $builder->build_sample_biblio;
+    my $suggestion1 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron1->borrowernumber, biblionumber => $biblio1->biblionumber} } );
+    my $suggestion2 = $builder->build_object( { class => "Koha::Suggestions", value => { suggestedby => $patron2->borrowernumber, biblionumber => $biblio2->biblionumber} } );
+
+    $t->get_ok('/biblios?_order_by=-suggestions.suggester.firstname' => json => [{"me.biblio_id" => $biblio1->biblionumber}, {"me.biblio_id" => $biblio2->biblionumber}])
+      ->json_is('/biblios/0/biblio_id' => $biblio2->biblionumber, 'Biblio 2 should be first')
+      ->json_is('/biblios/1/biblio_id' => $biblio1->biblionumber, 'Biblio 1 should be second');
+
+    $schema->storage->txn_begin;
+}
