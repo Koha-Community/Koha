@@ -210,8 +210,8 @@
     <fieldset class="rows">
     <legend>Output format</legend>
         <ol><li>
-            <label for="output_format_auth">File format: </label>
-            <select id="output_format_auth" name="output_format_auth">
+            <label for="output_format">File format: </label>
+            <select id="output_format_auth" name="output_format">
                 <option value="marc">marc</option>
                 <option value="xml">xml</option>
             </select>
@@ -330,7 +330,7 @@
                 var filename_auth = $('#filename_auth').val();
                 var file_name_auth = filename_auth.split(".");
                 var extension = $(this).val();
-                if (extension == "iso2709") {
+                if (extension == "marc") {
                     extension = "mrc";
                 }
                 $('#filename_auth').val(file_name_auth[0] + "." + extension);
