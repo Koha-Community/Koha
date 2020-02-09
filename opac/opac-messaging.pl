@@ -57,13 +57,10 @@ my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
     my $sms = $query->param('SMSnumber');
     my $sms_provider_id = $query->param('sms_provider_id');
-    if ( defined $sms && ( $patron->smsalertnumber // '' ) ne $sms
-            or ( $patron->sms_provider_id // '' ) ne $sms_provider_id ) {
-        $patron->set({
-            smsalertnumber  => $sms,
-            sms_provider_id => $sms_provider_id,
-        })->store;
-    }
+    $patron->set({
+        smsalertnumber  => $sms,
+        sms_provider_id => $sms_provider_id,
+    })->store;
 
     C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $patron->borrowernumber }, $template);
 }
