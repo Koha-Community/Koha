@@ -563,7 +563,14 @@
                             <li><a href="#otherholdings">Other holdings [% ' ( ' _ (otheritemloop.size || 0) _ ' )' | html %]</a></li>
                         [% END %]
                         [% IF ( MARCNOTES || notes || ( SyndeticsEnabled && SyndeticsSummary && SYNDETICS_SUMMARY )) %]
-                            <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% MARCNOTES.size %] )</a></li>
+                            [% SET title_notes_count = 0 %]
+                            [% IF MARCNOTES %]
+                                [% SET title_notes_count = MARCNOTES.size %]
+                            [% ELSIF notes %]
+                                [% SET title_notes_count = 1 %]
+                            [% END %]
+                            [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
+                            <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% title_notes_count %] )</a></li>
                         [% END %]
                         [% IF ( SYNDETICS_TOC ) %]
                             <li id="tab_toc"> <a href="#toc">TOC</a></li>
