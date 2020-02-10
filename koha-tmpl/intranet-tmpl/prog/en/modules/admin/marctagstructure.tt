@@ -233,7 +233,6 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
     <script>
         $(document).ready(function() {
             $("#table_marctagstructure").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -244,7 +243,7 @@
             }));
             $("#select_display").on("change",function(){
                 var checked = $(this).prop("checked") ? 1: 0;
-                $.cookie('marctagstructure_selectdisplay', checked);
+                Cookies.set("marctagstructure_selectdisplay", checked);
                 this.form.submit();
             });
         });
