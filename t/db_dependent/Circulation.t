@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 47;
+use Test::More tests => 48;
 use Test::MockModule;
 use Test::Deep qw( cmp_deeply );
 
@@ -40,8 +40,10 @@ use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::Items;
+use Koha::Item::Transfers;
 use Koha::Checkouts;
 use Koha::Patrons;
+use Koha::Holds;
 use Koha::CirculationRules;
 use Koha::Subscriptions;
 use Koha::Account::Lines;
@@ -3811,6 +3813,44 @@ subtest 'Do not return on renewal (LOST charge)' => sub {
     is( $patron->checkouts->count, 1,
         'Renewal should not return the item even if a LOST payment has been made earlier'
     );
+};
+
+subtest 'Filling a hold should cancel existing transfer' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference('AutomaticItemReturn', 1);
+
+    my $libraryA = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $libraryB = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                categorycode => $patron_category->{categorycode},
+                branchcode => $libraryA->branchcode,
+            }
+        }
+    )->store;
+
+    my $item = $builder->build_sample_item({
+        homebranch => $libraryB->branchcode,
+    });
+
+    my ( undef, $message ) = AddReturn( $item->barcode, $libraryA->branchcode, undef, undef );
+    is( Koha::Item::Transfers->search({ itemnumber => $item->itemnumber, datearrived => undef })->count, 1, "We generate a transfer on checkin");
+    AddReserve(
+        $libraryA->branchcode, $patron->borrowernumber, $item->biblionumber, '',
+        1, undef, undef, '',
+        undef, $item->itemnumber, undef, undef
+    );
+    my $reserves = Koha::Holds->search({ itemnumber => $item->itemnumber });
+    is( $reserves->count, 1, "Reserve is placed");
+    ( undef, $message ) = AddReturn( $item->barcode, $libraryA->branchcode, undef, undef );
+    my $reserve = $reserves->next;
+    ModReserveAffect( $item->itemnumber, $patron->borrowernumber, 0, $reserve->reserve_id );
+    $reserve->discard_changes;
+    ok( $reserve->found eq 'W', "Reserve is marked waiting" );
+    is( Koha::Item::Transfers->search({ itemnumber => $item->itemnumber, datearrived => undef })->count, 0, "No outstanding transfers when hold is waiting");
 };
 
 $schema->storage->txn_rollback;
