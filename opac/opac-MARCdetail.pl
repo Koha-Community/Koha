@@ -293,14 +293,21 @@ foreach my $field (@fields) {
         push @item_subfield_codes, $subf[$i][0];
         $witness{ $subf[$i][0] } = $sf_def->{lib};
 
+        # Allow repeatables (BZ 13574)
+        if( $item->{$subf[$i][0]} ) {
+            $item->{$subf[$i][0]} .= ' | ';
+        } else {
+            $item->{$subf[$i][0]} = q{};
+        }
+
         if ( $sf_def->{isurl} ) {
-            $item->{ $subf[$i][0] } = "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+            $item->{ $subf[$i][0] } .= "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
         }
         elsif ( $sf_def->{kohafield} eq "biblioitems.isbn" ) {
-            $item->{ $subf[$i][0] } = $subf[$i][1];
+            $item->{ $subf[$i][0] } .= $subf[$i][1];
         }
         else {
-            $item->{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
+            $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
                 $subf[$i][1], '', $tagslib, '', 'opac' );
         }
     }
