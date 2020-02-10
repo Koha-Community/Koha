@@ -426,6 +426,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('opacreadinghistory','1','','If ON, enables display of Patron Circulation History in OPAC','YesNo'),
 ('OpacRenewalAllowed','0',NULL,'If ON, users can renew their issues directly from their OPAC account','YesNo'),
 ('OpacRenewalBranch','checkoutbranch','itemhomebranch|patronhomebranch|checkoutbranch|none','Choose how the branch for an OPAC renewal is recorded in statistics','Choice'),
+('OPACReportProblem', 0, NULL, 'Allow patrons to submit problem reports for OPAC pages to the library or Koha Administrator', 'YesNo'),
 ('OpacResetPassword','0','','Shows the ''Forgot your password?'' link in the OPAC','YesNo'),
 ('OPACResultsLibrary', 'homebranch', 'homebranch|holdingbranch', 'Defines whether the OPAC displays the holding or home branch in search results when using XSLT', 'Choice'),
 ('OPACResultsSidebar','','70|10','Define HTML to be included on the search results page, underneath the facets sidebar','Textarea'),
