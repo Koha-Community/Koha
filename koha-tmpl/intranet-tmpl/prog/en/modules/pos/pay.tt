@@ -114,7 +114,6 @@
 
                             [% PROCESS account_payment_types %]
 
-                            [% IF Koha.Preference('UseCashRegisters') %]
                             <li>
                                 <label for="cash_register">Cash register: </label>
                                 <select name="cash_register" id="cash_register">
@@ -127,7 +126,6 @@
                                     [% END %]
                                 </select>
                             </li>
-                            [% END %]
                         </ol>
 
                     </fieldset>
