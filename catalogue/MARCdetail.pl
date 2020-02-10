@@ -276,14 +276,24 @@ foreach my $field (@fields) {
     for my $i ( 0 .. $#subf ) {
         next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab} ne 10 );
         next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} =~ /-7|-4|-3|-2|2|3|5|8/);
+
         push @item_subfield_codes, $subf[$i][0];
         $witness{ $subf[$i][0] } =
         $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
-        $item->{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
-        $norequests = 0
-          if  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan'
-          and $subf[$i][1] == 0;
+
+        # Allow repeatables (BZ 13574)
+        if( $item->{$subf[$i][0]}) {
+            $item->{$subf[$i][0]} .= ' | ';
+        } else {
+            $item->{$subf[$i][0]} = q{};
+        }
+        if( $tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl} ) {
+            $item->{$subf[$i][0]} .= "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+        } else {
+            $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc( $field->tag(), $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
+        }
+
+        $norequests = 0 if  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan' and $subf[$i][1] == 0;
     }
     push @item_loop, $item if $item;
 }
