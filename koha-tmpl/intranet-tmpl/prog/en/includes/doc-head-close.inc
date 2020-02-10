@@ -26,9 +26,9 @@
 var Koha = {};
 </script>
 
-<script src="[% themelang %]/js/locale_data.js"></script>
-<script src="[% interface %]/js/Gettext.js"></script>
-<script src="[% interface %]/js/i18n.js"></script>
+<script src="[% themelang | uri %]/js/locale_data.js"></script>
+<script src="[% interface | uri %]/js/Gettext.js"></script>
+<script src="[% interface | uri %]/js/i18n.js"></script>
 
 [% IF ( login ) %]
     [% Asset.css("css/login.css") | $raw %]
