@@ -1145,6 +1145,18 @@ sub ModReserveAffect {
     _koha_notify_reserve( $hold->reserve_id )
       if ( !$transferToDo && !$already_on_shelf );
 
+    if( !$transferToDo ){
+        _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
+        my $transfers = Koha::Item::Transfers->search({
+            itemnumber => $itemnumber,
+            datearrived => undef
+        });
+        while( my $transfer = $transfers->next ){
+            $transfer->datearrived( DateTime->now( time_zone => C4::Context->tz() ) )->store;
+        };
+    }
+
+
     _FixPriority( { biblionumber => $biblionumber } );
     my $item = Koha::Items->find($itemnumber);
     if ( $item->location && $item->location eq 'CART'
