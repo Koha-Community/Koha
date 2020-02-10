@@ -639,7 +639,7 @@ CREATE TABLE `deleteditems` (
   `cn_sort` varchar(255) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
   `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
-  `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
+  `uri` MEDIUMTEXT default NULL, -- URL for the item (MARC21 952$u)
   `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
   `more_subfields_xml` LONGTEXT default NULL, -- additional 952 subfields in XML format
   `enumchron` MEDIUMTEXT default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
@@ -888,7 +888,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `cn_sort` varchar(255) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
   `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
   `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
-  `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
+  `uri` MEDIUMTEXT default NULL, -- URL for the item (MARC21 952$u)
   `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
   `more_subfields_xml` LONGTEXT default NULL, -- additional 952 subfields in XML format
   `enumchron` MEDIUMTEXT default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
