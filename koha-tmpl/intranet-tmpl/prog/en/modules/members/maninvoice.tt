@@ -36,29 +36,38 @@
                 </ul>
                 <div class="tabs-container">
 
-                [% IF ( ERROR ) %]
-                [% IF ( ITEMNUMBER ) %]
-                  ERROR an invalid itemnumber was entered, please hit back and try again
+                [% IF error == 'itemnumber' %]
+                    <div id="error_message" class="dialog alert">
+                        Error: Invalid barcode entered, please try again
+                    </div>
+                [% ELSIF error %]
+                    <div id="error_message" class="dialog alert">
+                        An error occured, please try again: [% error %]
+                    </div>
                 [% END %]
-                [% ELSE %]
-                <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
+                <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice">
+                    <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
                     <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
-            <fieldset class="rows">
-            <legend>Manual invoice</legend>
-            <ol>
-                      <li>
-                        <label for="type">Type: </label>
-                        <select name="type" id="type">
-                          [% FOREACH debit_type IN debit_types %]
-                            <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
-                          [% END %]
-                        </select>
-                      </li>
-              <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
-                      <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" /></li>
-                      <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" /></li>
-                      <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" value="" step="any" min="0" /> Example: 5.00</li>
-            </ol>
+                    <fieldset class="rows">
+                        <legend>Manual invoice</legend>
+                        <ol>
+                            <li>
+                                <label for="type">Type: </label>
+                                <select name="type" id="type">
+                                    [% FOREACH debit_type IN debit_types %]
+                                    [% IF debit_type.code == type %]
+                                    <option value="[% debit_type.code | html %]" selected="selected">[% debit_type.description | html %]</option>
+                                    [% ELSE %]
+                                    <option value="[% debit_type.code | html %]">[% debit_type.description | html %]</option>
+                                    [% END %]
+                                    [% END %]
+                                </select>
+                            </li>
+                            <li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" value="[% barcode %]" /></li>
+                            <li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" value="[% desc %]" /></li>
+                            <li><label for="note">Note: </label><input type="text" name="note" size="50" id="note" value="[% note %]" /></li>
+                            <li><label for="amount">Amount: </label><input type="number" name="amount" id="amount" required="required" step="any" min="0" value="[% amount %]" /> Example: 5.00</li>
+                        </ol>
                     </fieldset>
                     <fieldset class="action">
                         <button type="submit" name="add" value="save">Save</button>
@@ -67,7 +76,6 @@
                     </fieldset>
                 </form>
 
-                [% END %]
                 </div>
             </div>
 
