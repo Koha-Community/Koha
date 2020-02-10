@@ -47,14 +47,14 @@
         });
 
         /* check cookie to hide/show marcdocs*/
-        if($.cookie("marcdocs_[% borrowernumber | html %]") == 'hide'){
+        if( Cookies.get("marcdocs_[% borrowernumber | html %]") == 'hide'){
             toggleMARCdocLinks(false);
         } else {
             toggleMARCdocLinks(true);
         }
 
         $("#marcDocsSelect").click(function(){
-            if($.cookie("marcdocs_[% borrowernumber | html %]") == 'hide'){
+            if( Cookies.get("marcdocs_[% borrowernumber | html %]") == 'hide'){
                 toggleMARCdocLinks(true);
             } else {
                 toggleMARCdocLinks(false);
@@ -62,7 +62,7 @@
         });
 
         /* check cookie to hide/show marc tags*/
-        var marctags_cookie = $.cookie("marctags_[% borrowernumber | html %]");
+        var marctags_cookie = Cookies.get("marctags_[% borrowernumber | html %]");
         if( marctags_cookie == 'hide'){
             toggleMARCTagLinks(false);
         } else if( marctags_cookie == 'show'){
@@ -76,7 +76,7 @@
         }
 
         $("#marcTagsSelect").click(function(){
-            if( $.cookie("marctags_[% borrowernumber | html %]") == 'hide'){
+            if( Cookies.get("marctags_[% borrowernumber | html %]") == 'hide'){
                 toggleMARCTagLinks(true)
             } else {
                 toggleMARCTagLinks(false);
@@ -125,7 +125,7 @@
 
             if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
 
-            $.cookie( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/' } );
+            Cookies.set( 'catalogue_editor_[% logged_in_user.borrowernumber | html %]', 'advanced', { expires: 365, path: '/' } );
 
             var biblionumber = [% biblionumber || "null" | html %];
 
@@ -260,11 +260,11 @@
     function toggleMARCdocLinks(flag){
         if( flag === true ){
             $(".marcdocs").show();
-            $.cookie("marcdocs_[% borrowernumber | html %]",'show', { path: "/", expires: 365 });
+            Cookies.set("marcdocs_[% borrowernumber | html %]",'show', { path: "/", expires: 365 });
             $("#marcDocsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
         } else {
             $(".marcdocs").hide();
-            $.cookie("marcdocs_[% borrowernumber | html %]",'hide', { path: "/", expires: 365 });
+            Cookies.set("marcdocs_[% borrowernumber | html %]",'hide', { path: "/", expires: 365 });
             $("#marcDocsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
         }
     }
@@ -273,12 +273,12 @@
         if( flag === true ){
             $(".tagnum").show();
             $(".subfieldcode").show();
-            $.cookie("marctags_[% borrowernumber | html %]",'show', { path: "/", expires: 365 });
+            Cookies.set("marctags_[% borrowernumber | html %]",'show', { path: "/", expires: 365 });
             $("#marcTagsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
         } else {
             $(".tagnum").hide();
             $(".subfieldcode").hide();
-            $.cookie("marctags_[% borrowernumber | html %]",'hide', { path: "/", expires: 365 });
+            Cookies.set("marctags_[% borrowernumber | html %]",'hide', { path: "/", expires: 365 });
             $("#marcTagsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
         }
     }
