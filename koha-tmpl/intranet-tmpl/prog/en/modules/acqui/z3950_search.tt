@@ -34,6 +34,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
              <li><label for="issn">ISSN: </label> <input type="text" id="issn" name="issn" value="[% issn | html %]" /></li>
              <li><label for="searchtitle">Title: </label> <input type="text" id="searchtitle"  name="title" value="[% title | html %]" class="focus" /></li>
              <li><label for="author">Author: </label> <input type="text" id="author" name="author" value="[% author | html %]" /></li>
+             <li><label for="publicationyear">Publication year: </label> <input type="text" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" /></li>
              <li><label for="subject">Subject heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
              <li><label for="srchany">Keyword (any): </label> <input type="text" id="srchany" name="srchany" value="" /></li>
              <li><label for="lccall">LC call number: </label> <input type="text" id="lccall" name="lccall" value="" /></li>
@@ -90,6 +91,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <p>You searched for:
         [% IF ( title ) %]<em>Title: </em><span class=term>[% title | html %]</span> [% END %]
         [% IF ( author ) %]<em>Author: </em><span class=term>[% author | html %]</span> [% END %]
+        [% IF ( publicationyear ) %]<em>Publication year: </em><span class=term>[% publicationyear | html %]</span> [% END %]
         [% IF ( isbn ) %]<em>ISBN: </em><span class=term>[% isbn | html %]</span> [% END %]
         [% IF ( issn ) %]<em>ISSN: </em><span class=term>[% issn | html %]</span> [% END %]
         [% IF ( lccall ) %]<em>LC call number: </em><span class=term>[% lccall | html %]</span> [% END %]
@@ -175,6 +177,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <input type="hidden" id="isbn" name="isbn" value="[% isbn | html %]" />
         <input type="hidden" id="lccall" name="lccall" value="[% lccall | html %]" />
         <input type="hidden" id="author" name="author" value="[% author | html %]" />
+        <input type="hidden" id="publicationyear" name="publicationyear" value="[% publicationyear | html %]" />
         <input type="hidden" id="subject" name="subject" value="[% subject | html %]" />
         <input type="hidden" id="dewey" name="dewey" value="[% dewey | html %]" />
         <input type="hidden" name="frameworkcode" value="[% frameworkcode | html %]" />
