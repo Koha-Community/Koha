@@ -580,17 +580,29 @@ sub save_report {
     my $area = $fields->{area};
     my $group = $fields->{group};
     my $subgroup = $fields->{subgroup};
-    my $cache_expiry = $fields->{cache_expiry} || 300;
+    my $cache_expiry = $fields->{cache_expiry};
     my $public = $fields->{public};
 
-    my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//;    # removes trailing whitespace and /;/
-    my $query = "INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,report_area,report_group,report_subgroup,type,notes,cache_expiry,public)  VALUES (?,now(),now(),?,?,?,?,?,?,?,?,?)";
-    $dbh->do($query, undef, $borrowernumber, $sql, $name, $area, $group, $subgroup, $type, $notes, $cache_expiry, $public);
+    my $now = dt_from_string;
+    my $report = Koha::Report->new(
+        {
+            borrowernumber  => $borrowernumber,
+            date_created    => $now, # Must be moved to Koha::Report->store
+            last_modified   => $now, # Must be moved to Koha::Report->store
+            savedsql        => $sql,
+            report_name     => $name,
+            report_area     => $area,
+            report_group    => $group,
+            report_subgroup => $subgroup,
+            type            => $type,
+            notes           => $notes,
+            cache_expiry    => $cache_expiry,
+            public          => $public,
+        }
+    )->store;
 
-    my $id = $dbh->selectrow_array("SELECT max(id) FROM saved_sql WHERE borrowernumber=? AND report_name=?", undef,
-                                   $borrowernumber, $name);
-    return $id;
+    return $report->id;
 }
 
 sub update_sql {
@@ -604,14 +616,21 @@ sub update_sql {
     my $cache_expiry = $fields->{cache_expiry};
     my $public = $fields->{public};
 
+    $sql =~ s/(\s*\;\s*)$//;    # removes trailing whitespace and /;/
+    my $report = Koha::Reports->find($id);
+    $report->last_modified(dt_from_string);
+    $report->savedsql($sql);
+    $report->report_name($name);
+    $report->notes($notes);
+    $report->report_group($group);
+    $report->report_subgroup($subgroup);
+    $report->cache_expiry($cache_expiry) if defined $cache_expiry;
+    $report->public($public);
     if( $cache_expiry >= 2592000 ){
-      die "Please specify a cache expiry less than 30 days\n";
+      die "Please specify a cache expiry less than 30 days\n"; # That's a bit harsh
     }
 
-    my $dbh        = C4::Context->dbh();
-    $sql =~ s/(\s*\;\s*)$//;    # removes trailing whitespace and /;/
-    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now(), report_name = ?, report_group = ?, report_subgroup = ?, notes = ?, cache_expiry = ?, public = ? WHERE id = ? ";
-    $dbh->do($query, undef, $sql, $name, $group, $subgroup, $notes, $cache_expiry, $public, $id );
+    return $report;
 }
 
 sub store_results {
