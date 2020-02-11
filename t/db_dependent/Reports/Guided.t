@@ -181,7 +181,7 @@ subtest 'GetParametersFromSQL+ValidateSQLParameters' => sub  {
 };
 
 subtest 'get_saved_reports' => sub {
-    plan tests => 16;
+    plan tests => 17;
     my $dbh = C4::Context->dbh;
     $dbh->do(q|DELETE FROM saved_sql|);
     $dbh->do(q|DELETE FROM saved_reports|);
@@ -215,6 +215,10 @@ subtest 'get_saved_reports' => sub {
         $count, "$count reports have been added" );
 
     ok( 0 < scalar @{ get_saved_reports( $report_ids[0] ) }, "filter takes report id" );
+
+    my $r1 = Koha::Reports->find($report_ids[0]);
+    $r1 = update_sql($r1->id, { borrowernumber => $r1->borrowernumber, name => 'Just another report' });
+    is( $r1->cache_expiry, 300, 'cache_expiry has the correct default value, from DBMS' );
 
     #Test delete_report
     is (delete_report(),undef, "Without id delete_report returns undef");
