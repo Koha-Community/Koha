@@ -628,9 +628,19 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $error, 'auto_too_soon',
         'Bug 14101: Cannot renew, renewal is automatic and premature, "No renewal before" = undef (returned code is auto_too_soon)' );
     AddReserve(
-        $branch, $reserving_borrowernumber, $biblio->biblionumber,
-        $bibitems,  $priority, $resdate, $expdate, $notes,
-        'a title', $item_4->itemnumber, $found
+        {
+            branchcode       => $branch,
+            borrowernumber   => $reserving_borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            itemnumber       => $bibitems,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            notes            => $notes,
+            title            => 'a title',
+            itemnumber       => $item_4->itemnumber,
+            found            => $found
+        }
     );
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber );
     is( $renewokay, 0, 'Still should not be able to renew' );
