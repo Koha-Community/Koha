@@ -39,6 +39,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+if ( !C4::Context->preference('OPACReportProblem') ){
+    print $input->redirect("/cgi-bin/koha/errors/404.pl");
+}
+
 my $problempage = $ENV{HTTP_REFERER};
 my $member = Koha::Patrons->find($borrowernumber);
 my $username = $member->userid;

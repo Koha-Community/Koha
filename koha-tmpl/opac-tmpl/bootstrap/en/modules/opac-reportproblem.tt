@@ -27,60 +27,54 @@
                 [% END %]
                     <h1>Report a problem</h1>
 
-                    [% IF Koha.Preference('OPACReportProblem') %]
-
-                        [% IF ( successfuladd ) %]
-                            <div class="alert alert-info">Your problem report has been sent to the [% IF ( recipient == 'admin' ) %]Koha Administrator[% ELSE %][% recipient %][% END %].</div>
-                        [% END %]
-                        [% IF ( ( nolibemail and noadminemail ) or norecipients ) %]
-                            <div class="alert">Unable to send problem reports.</div>
-                        [% ELSE %]
-                            <div id="reportproblem" class="maincontent toptabs">
-                                <form name="reportlibform" action="/cgi-bin/koha/opac-reportproblem.pl" method="post">
-                                    <input type="hidden" name="op" value="addreport">
-                                    <fieldset class="rows">
-                                        <ol>
-                                            <li>
-                                                <label for="recipient">Send problem report to: </label>
-                                                [% IF !nolibemail and noadminemail %]
+                    [% IF ( successfuladd ) %]
+                        <div class="alert alert-info">Your problem report has been sent to the [% IF ( recipient == 'admin' ) %]Koha Administrator[% ELSE %][% recipient %][% END %].</div>
+                    [% END %]
+                    [% IF ( ( nolibemail and noadminemail ) or norecipients ) %]
+                        <div class="alert">Unable to send problem reports.</div>
+                    [% ELSE %]
+                        <div id="reportproblem" class="maincontent toptabs">
+                            <form name="reportlibform" action="/cgi-bin/koha/opac-reportproblem.pl" method="post">
+                                <input type="hidden" name="op" value="addreport">
+                                <fieldset class="rows">
+                                    <ol>
+                                        <li>
+                                            <label for="recipient">Send problem report to: </label>
+                                            [% IF !nolibemail and noadminemail %]
+                                                <option value="library">A librarian</option>
+                                            [% ELSIF !noadminemail and nolibemail %]
+                                                <option value="admin">Koha Administrator</option>
+                                            [% ELSE %]
+                                                <select name="recipient" id="recipient">
                                                     <option value="library">A librarian</option>
-                                                [% ELSIF !noadminemail and nolibemail %]
                                                     <option value="admin">Koha Administrator</option>
-                                                [% ELSE %]
-                                                    <select name="recipient" id="recipient">
-                                                        <option value="library">A librarian</option>
-                                                        <option value="admin">Koha Administrator</option>
-                                                    </select>
-                                                [% END %]
-                                            </li>
-                                            <li>
-                                                <label for="place">Problem found on page: </label>
-                                                <input type="hidden" name="place" id="place" value="[% probpage %]">
-                                                [% probpage | html %]
-                                            </li>
-                                            <li>
-                                                <label for="user">Username: </label>
-                                                <input type="hidden" name="user" id="user" value="[% username %]" class="span3">
-                                                [% username | html %]
-                                            <li>
-                                                <label for="subject">Subject: </label>
-                                                <input type="text" name="subject" id="subject" value="[% subject %]" class="span3">
-                                            </li>
-                                            <li>
-                                                <label for="message">Message: </label>
-                                                <textarea name="message" id="message" rows="7" cols="60"></textarea>
-                                            </li>
-                                        </ol>
-                                    </fieldset>
-                                    <fieldset class="action">
-                                        <input type="submit" value="Submit" class="btn">
-                                    </fieldset>
-                                </form>
-                            </div>
-                        [% END %]
-
-                    [% ELSE %] <!-- OPACReportProblem preference -->
-                        <div class="alert">Your library has not activated this feature.</div>
+                                                </select>
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            <label for="place">Problem found on page: </label>
+                                            <input type="hidden" name="place" id="place" value="[% probpage %]">
+                                            [% probpage | html %]
+                                        </li>
+                                        <li>
+                                            <label for="user">Username: </label>
+                                            <input type="hidden" name="user" id="user" value="[% username %]" class="span3">
+                                            [% username | html %]
+                                        <li>
+                                            <label for="subject">Subject: </label>
+                                            <input type="text" name="subject" id="subject" value="[% subject %]" class="span3">
+                                        </li>
+                                        <li>
+                                            <label for="message">Message: </label>
+                                            <textarea name="message" id="message" rows="7" cols="60"></textarea>
+                                        </li>
+                                    </ol>
+                                </fieldset>
+                                <fieldset class="action">
+                                    <input type="submit" value="Submit" class="btn">
+                                </fieldset>
+                            </form>
+                        </div>
                     [% END %]
 
                 </div> <!-- / .span10/12 -->
