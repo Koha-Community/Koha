@@ -824,7 +824,7 @@ sub GetISBDView {
         # Process subfield
     }
 
-GetMarcStructure creates keys (lib, tab, mandatory, repeatable) for a display purpose.
+GetMarcStructure creates keys (lib, tab, mandatory, repeatable, important) for a display purpose.
 These different values should not be processed as valid subfields.
 
 =cut
