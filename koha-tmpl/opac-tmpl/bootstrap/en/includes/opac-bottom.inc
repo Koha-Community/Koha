@@ -20,6 +20,11 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
+                    [% IF Koha.Preference('OPACReportProblem') %]
+                        <div id="report_a_problem" class="noprint" style="float:left;">
+                            <a class="koha-url" href="/cgi-bin/koha/opac-reportproblem.pl">Report a problem</a>
+                        </div>
+                    [% END %]
                     <div id="koha_url" class="clearfix noprint">
                         <p>Powered by
                         [% IF template.name.match('opac-main.tt') %]
