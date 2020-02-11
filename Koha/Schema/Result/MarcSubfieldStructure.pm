@@ -63,6 +63,12 @@ __PACKAGE__->table("marc_subfield_structure");
   default_value: 0
   is_nullable: 0
 
+=head2 important
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =head2 kohafield
 
   data_type: 'varchar'
@@ -149,6 +155,8 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "mandatory",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "important",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "kohafield",
   { data_type => "varchar", is_nullable => 1, size => 40 },
   "tab",
@@ -214,8 +222,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-08-15 08:12:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pq6quXdds+U1JejYlrkcOw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-11 14:36:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lCe1ZenRM/9rXnRHXhDuSw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

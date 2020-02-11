@@ -20746,6 +20746,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23673 - modify time_queued and add updated_on to message_queue)\n";
 }
 
+$DBversion = '19.12.00.020';
+if ( CheckVersion($DBversion) ) {
+    if ( !column_exists( 'marc_subfield_structure', 'important') ){
+        $dbh->do("ALTER TABLE marc_subfield_structure ADD COLUMN important TINYINT(4) NOT NULL DEFAULT 0  AFTER mandatory");
+    }
+    if ( !column_exists( 'marc_tag_structure', 'important') ){
+        $dbh->do("ALTER TABLE marc_tag_structure ADD COLUMN important TINYINT(4) NOT NULL DEFAULT 0  AFTER mandatory");
+    }
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 8643 - Add important constraint to marc subfields)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
