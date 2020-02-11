@@ -1,6 +1,5 @@
 [% USE KohaDates %]
-<legend>Patron selection</legend>
-<table id="table_borrowers" class="table_borrowers">
+<table id="table_borrowers" class="selections-table">
     <thead>
         <tr>
             <th>Name</th>

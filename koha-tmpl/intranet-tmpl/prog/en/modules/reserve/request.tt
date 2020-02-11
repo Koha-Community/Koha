@@ -90,57 +90,54 @@
                 [% END %]
                 <fieldset class="brief">
                     <label>Search Patrons or clubs</label>
-                    <div id="circ_holds_select">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation"><a href="#holds_patronsearch_pane" aria-controls="holds_patronsearch_pane" role="tab" data-toggle="tab">Patrons</a></li>
-                            <li role="presentation"><a href="#holds_clubsearch_pane" aria-controls="holds_clubsearch_pane" role="tab" data-toggle="tab">Clubs</a></li>
+                    <div id="circ_holds_select" class="toptabs">
+                        <ul>
+                            <li><a href="#holds_patronsearch_pane">Patrons</a></li>
+                            <li><a href="#holds_clubsearch_pane">Clubs</a></li>
                         </ul>
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane" id="holds_patronsearch_pane">
-                                <form  id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
-                                    <div class="hint">Enter patron card number or partial name:</div>
-                                    <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
-                                    <input type="submit" value="Search" />
-                                    [% IF multi_hold %]
-                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                    [% ELSE %]
-                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                    [% END %]
+                        <div id="holds_patronsearch_pane">
+                            <form id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                                <div class="hint">Enter patron card number or partial name:</div>
+                                <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
+                                <input type="submit" value="Search" />
+                                [% IF multi_hold %]
+                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                [% ELSE %]
+                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                [% END %]
 
-                                    [% IF ( multi_hold ) %]
-                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                    [% END %]
-                                </form> <!-- /#holds_patronsearch -->
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="holds_clubsearch_pane">
-                                <form  id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
-                                    <div class="hint">Enter club id or partial name:</div>
-                                    <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
-                                    <input type="submit" value="Search" />
-                                    [% IF multi_hold %]
-                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                    [% ELSE %]
-                                        <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-                                    [% END %]
+                                [% IF ( multi_hold ) %]
+                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                [% END %]
+                            </form> <!-- /#holds_patronsearch -->
+                            [% IF borrowers %]
+                                [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
+                            [% END %]
+                        </div>
+                        <div id="holds_clubsearch_pane">
+                            <form id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                                <div class="hint">Enter club id or partial name:</div>
+                                <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
+                                <input type="submit" value="Search" />
+                                [% IF multi_hold %]
+                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                [% ELSE %]
+                                    <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+                                [% END %]
 
-                                    [% IF ( multi_hold ) %]
-                                        <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
-                                        <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
-                                    [% END %]
-                                </form> <!-- /#holds_patronsearch -->
-                            </div>
+                                [% IF ( multi_hold ) %]
+                                    <input type="hidden" name="multi_hold" value="[% multi_hold | html %]"/>
+                                    <input type="hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
+                                [% END %]
+                            </form> <!-- /#holds_patronsearch -->
+                            [% IF clubs %]
+                                [% INCLUDE 'clubs-table.inc' destination = "holds" %]
+                            [% END %]
                         </div>
                     </div>
-                    <p>
-                        [% IF borrowers %]
-                            [% INCLUDE 'circ-patron-search-results.inc' destination = "holds" %]
-                        [% ELSIF clubs %]
-                            [% INCLUDE 'clubs-table.inc' destination = "holds" %]
-                        [% END %]
-                    </p>
                 </fieldset>
             [% ELSIF club %]
                 <div class="dialog alert hide clubalert">
