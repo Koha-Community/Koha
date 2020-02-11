@@ -1,4 +1,4 @@
-<table id="clubs-table">
+<table id="clubs-table" class="selections-table">
     <thead>
         <tr>
             <th>Name</th>
@@ -29,7 +29,7 @@
             [% ELSE %]
                 <tr>
             [% END %]
-                <td>[% c.name | html %]</td>
+                <td><a href="[% data_url | url %]">[% c.name | html %]</a></td>
                 <td>[% c.club_template.name | html %]</td>
                 <td>[% c.description | html %]</td>
                 [% UNLESS destination == 'holds' %]
