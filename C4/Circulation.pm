@@ -2693,6 +2693,7 @@ sub CanBookBeRenewed {
 
     my $dbh    = C4::Context->dbh;
     my $renews = 1;
+    my $auto_renew = 0;
 
     my $item      = Koha::Items->find($itemnumber)      or return ( 0, 'no_item' );
     my $issue = $item->checkout or return ( 0, 'no_checkout' );
@@ -2794,17 +2795,19 @@ sub CanBookBeRenewed {
                 return ( 0, "too_soon" );
             }
             elsif ( $issue->auto_renew ) {
-                return ( 0, "auto_renew" );
+                $auto_renew = 1;
             }
         }
 
         # Fallback for automatic renewals:
         # If norenewalbefore is undef, don't renew before due date.
-        if ( $issue->auto_renew ) {
+        if ( $issue->auto_renew && !$auto_renew ) {
             my $now = dt_from_string;
-            return ( 0, "auto_renew" )
-              if $now >= dt_from_string( $issue->date_due, 'sql' );
-            return ( 0, "auto_too_soon" );
+            if ( $now >= dt_from_string( $issue->date_due, 'sql' ) ){
+                $auto_renew = 1;
+            } else {
+                return ( 0, "auto_too_soon" );
+            }
         }
     }
 
@@ -2874,6 +2877,7 @@ sub CanBookBeRenewed {
         }
     }
     return ( 0, "on_reserve" ) if $resfound;    # '' when no hold was found
+    return ( 0, "auto_renew" ) if $auto_renew && !$override_limit; # 0 if auto-renewal should not succeed
 
     return ( 1, undef );
 }

@@ -274,7 +274,7 @@ Koha::CirculationRules->set_rules(
 
 my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 subtest "CanBookBeRenewed tests" => sub {
-    plan tests => 75;
+    plan tests => 77;
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
@@ -638,6 +638,11 @@ subtest "CanBookBeRenewed tests" => sub {
     ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
     is( $renewokay, 0, 'Still should not be able to renew' );
     is( $error, 'on_reserve', 'returned code is on_reserve, auto_too_soon limit is overridden' );
+    $dbh->do('UPDATE circulation_rules SET rule_value = 0 where rule_name = "norenewalbefore"');
+    ( $renewokay, $error ) = CanBookBeRenewed( $renewing_borrowernumber, $item_4->itemnumber, 1 );
+    is( $renewokay, 0, 'Still should not be able to renew' );
+    is( $error, 'on_reserve', 'returned code is on_reserve, auto_renew only happens if not on reserve' );
+    ModReserveCancelAll($item_4->itemnumber, $reserving_borrowernumber);
 
 
 
