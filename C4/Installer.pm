@@ -486,7 +486,7 @@ sub load_sql {
                     my $table_name   = ( keys %$table )[0];                          # table name
                     my @rows         = @{ $table->{$table_name}->{rows} };           #
                     my @columns      = ( sort keys %{$rows[0]} );                    # column names
-                    my $fields       = join ",", @columns;                           # idem, joined
+                    my $fields       = join ",", map{sprintf("`%s`", $_)} @columns;  # idem, joined
                     my $placeholders = join ",", map { "?" } @columns;               # '?,..,?' string
                     my $query        = "INSERT INTO $table_name ( $fields ) VALUES ( $placeholders )";
                     my $sth          = $dbh->prepare($query);
