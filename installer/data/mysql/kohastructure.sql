@@ -3348,7 +3348,7 @@ CREATE TABLE `quotes` ( -- data for the quote of the day feature
   `id` int(11) NOT NULL AUTO_INCREMENT, -- unique id for the quote
   `source` MEDIUMTEXT DEFAULT NULL, -- source/credit for the quote
   `text` LONGTEXT NOT NULL, -- text of the quote
-  `timestamp` datetime NOT NULL, -- date and time that the quote last appeared in the opac
+  `timestamp` datetime NULL, -- date and time that the quote last appeared in the opac
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
