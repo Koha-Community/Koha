@@ -604,7 +604,7 @@ sub GetOtherReserves {
             ModReserveStatus($itemnumber,'W');
         }
 
-        $nextreservinfo = $checkreserves->{'borrowernumber'};
+        $nextreservinfo = $checkreserves;
     }
 
     return ( $messages, $nextreservinfo );
@@ -1191,7 +1191,7 @@ sub ModReserveCancelAll {
     #step 2 launch the subroutine of the others reserves
     ( $messages, $nextreservinfo ) = GetOtherReserves($itemnumber);
 
-    return ( $messages, $nextreservinfo );
+    return ( $messages, $nextreservinfo->{borrowernumber} );
 }
 
 =head2 ModReserveMinusPriority
@@ -2055,36 +2055,12 @@ available within the slip:
 sub ReserveSlip {
     my ($args) = @_;
     my $branchcode     = $args->{branchcode};
-    my $borrowernumber = $args->{borrowernumber};
-    my $biblionumber   = $args->{biblionumber};
-    my $itemnumber     = $args->{itemnumber};
-    my $barcode        = $args->{barcode};
+    my $reserve_id = $args->{reserve_id};
 
-
-    my $patron = Koha::Patrons->find($borrowernumber);
-
-    my $hold;
-    if ($itemnumber || $barcode ) {
-        $itemnumber ||= Koha::Items->find( { barcode => $barcode } )->itemnumber;
-
-        $hold = Koha::Holds->search(
-            {
-                biblionumber   => $biblionumber,
-                borrowernumber => $borrowernumber,
-                itemnumber     => $itemnumber
-            }
-        )->next;
-    }
-    else {
-        $hold = Koha::Holds->search(
-            {
-                biblionumber   => $biblionumber,
-                borrowernumber => $borrowernumber
-            }
-        )->next;
-    }
-
+    my $hold = Koha::Holds->find($reserve_id);
     return unless $hold;
+
+    my $patron = $hold->borrower;
     my $reserve = $hold->unblessed;
 
     return  C4::Letters::GetPreparedLetter (

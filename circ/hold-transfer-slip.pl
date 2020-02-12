@@ -35,10 +35,7 @@ my $input = new CGI;
 my $sessionID = $input->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
-my $biblionumber = $input->param('biblionumber');
-my $borrowernumber = $input->param('borrowernumber');
-my $itemnumber = $input->param('itemnumber');
-my $barcode = $input->param('barcode');
+my $reserve_id = $input->param('reserve_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -55,10 +52,7 @@ my $userenv = C4::Context->userenv;
 my ($slip, $is_html);
 if ( my $letter = ReserveSlip ({
     branchcode     => $session->param('branch') || $userenv->{branch},
-    borrowernumber => $borrowernumber,
-    biblionumber   => $biblionumber,
-    itemnumber     => $itemnumber,
-    barcode        => $barcode,
+    reserve_id => $reserve_id,
 }) ) {
     $slip = $letter->{content};
     $is_html = $letter->{is_html};

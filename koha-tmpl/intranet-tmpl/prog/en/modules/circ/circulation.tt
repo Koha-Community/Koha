@@ -263,7 +263,7 @@
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                                     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
-                                    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber | uri %]&amp;biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+                                    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
                                 </form>
                             [% END %]
 
@@ -273,7 +273,7 @@
                                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
                                     <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
                                     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
-                                    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber | uri %]&amp;biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+                                    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
                                 </form>
                             [% END %]
 
