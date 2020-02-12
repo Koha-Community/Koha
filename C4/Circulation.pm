@@ -1036,6 +1036,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
                     $needsconfirmation{'resbranchcode'} = $res->{branchcode};
                     $needsconfirmation{'reswaitingdate'} = $res->{'waitingdate'};
+                    $needsconfirmation{'reserve_id'} = $res->{reserve_id};
                 }
                 elsif ( $restype eq "Reserved" ) {
                     # The item is on reserve for someone else.
@@ -1046,6 +1047,7 @@ sub CanBookBeIssued {
                     $needsconfirmation{'resborrowernumber'} = $patron->borrowernumber;
                     $needsconfirmation{'resbranchcode'} = $patron->branchcode;
                     $needsconfirmation{'resreservedate'} = $res->{reservedate};
+                    $needsconfirmation{'reserve_id'} = $res->{reserve_id};
                 }
             }
         }

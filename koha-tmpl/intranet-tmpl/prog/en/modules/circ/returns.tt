@@ -936,11 +936,11 @@
 
             $(".print-slip").on('click', function(e) {
                 e.preventDefault();
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;biblionumber=[% biblionumber | uri %]');
+                Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
             });
 
             [% IF print_slip %]
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber | uri %]&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]');
+                Dopop('hold-transfer-slip.pl?reserve_id=[% reserve_id | uri %]');
             [% END %]
 
             var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) | $raw %]

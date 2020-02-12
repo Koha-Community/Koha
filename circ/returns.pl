@@ -80,9 +80,7 @@ if ($session->param('branch') eq 'NO_LIBRARY_SET'){
 if ( $query->param('print_slip') ) {
     $template->param(
         print_slip     => 1,
-        borrowernumber => scalar $query->param('borrowernumber'), # FIXME We should send a Koha::Patron and raise an error if not exist.
-        biblionumber   => scalar $query->param('biblionumber'),
-        itemnumber     => scalar $query->param('itemnumber'),
+        reserve_id => scalar $query->param('reserve_id'),
     );
 }
 
@@ -425,15 +423,10 @@ if ( $messages->{'ResFound'}) {
         my $diffBranchSend = !$branchCheck ? $reserve->{branchcode} : undef;
         ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id} );
         my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
-
-        my $patron = Koha::Patrons->find( $nextreservinfo );
-
         $template->param(
             hold_auto_filled => 1,
             print_slip       => C4::Context->preference('HoldsAutoFillPrintSlip'),
-            patron           => $patron,
-            borrowernumber   => $patron->id,
-            biblionumber     => $biblio->id,
+            reserve_id       => $nextreservinfo->{reserve_id},
         );
 
         if ( $messages->{'transfert'} ) {
