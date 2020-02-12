@@ -219,7 +219,7 @@
                 [% END %]
                 [% IF deliveryplace %]<li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) | html %]</li>[% END %]
                 [% IF billingplace %]<li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) | html %]</li>[% END %]
-                [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname | html %]</li>[% END %]
+                [% IF ( authorisedbyname ) %]<li><span class="label">[% tp('basket created by', 'Created by:') | html %]</span>  [% authorisedbyname | html %]</li>[% END %]
                 <li id="managedby">
                     <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                         <span class="label">Managed by:</span>

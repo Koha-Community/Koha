@@ -1,3 +1,4 @@
+[% PROCESS 'i18n.inc' %]
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
@@ -87,7 +88,7 @@
                                     <th class="title-numeric">Item count</th>
                                     <th class="title-numeric">Bibliographic record count</th>
                                     <th>Items expected</th>
-                                    <th>Created by</th>
+                                    <th>[% tp('basket created by', 'Created by') | html %]</th>
                                     <th class="title-string">Date</th>
                                     <th>Basket group</th>
                                     <th class="title-string">Closed</th>

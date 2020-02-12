@@ -1,3 +1,4 @@
+[% PROCESS 'i18n.inc' %]
 [% USE raw %]
 [% USE Asset %]
 [% USE To %]
@@ -1177,7 +1178,7 @@
                                                          <th>Type</th>
                                                          <th>Comment</th>
                                                          <th>Expiration</th>
-                                                         <th>Created</th>
+                                                         <th>[% tp('patron restriction created on', 'Created') | html %]</th>
                                                          [% IF CAN_user_borrowers_edit_borrowers && CAN_user_circulate_manage_restrictions %]
                                                            <th>Remove?</th>
                                                          [% END %]
