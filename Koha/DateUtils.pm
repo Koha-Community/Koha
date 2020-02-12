@@ -117,7 +117,7 @@ sub dt_from_string {
             (?<minute>\d{2})
             :
             (?<second>\d{2})
-            (([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))
+            (\.\d{1,3})?(([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))
         /xms;
     }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
