@@ -927,7 +927,7 @@ sub summary_info {
     my $fid      = $summary_map[$summary_type]->{fid};
     my $itemlist = &$func( $patron, $start, $end, $server );
 
-    syslog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", @{$itemlist} ) );
+    syslog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", map{ $_->{barcode} } @{$itemlist} ) );
     foreach my $i ( @{$itemlist} ) {
         $resp .= add_field( $fid, $i->{barcode}, $server );
     }
