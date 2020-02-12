@@ -3,9 +3,11 @@
 [% IF ( patron.borrowernumber ) %]
 <div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
 
-<input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
-<input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]">
-<input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]">
+[% IF Koha.Preference('showLastPatron') %]
+    <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
+    <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]">
+    <input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]">
+[% END %]
 
 [% IF ( patronimages ) %]
     <div>
