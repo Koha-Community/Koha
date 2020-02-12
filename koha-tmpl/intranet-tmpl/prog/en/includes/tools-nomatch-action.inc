@@ -10,5 +10,5 @@
             [% ELSE %]
                 <option value="ignore">
             [% END %]
-                Ignore incoming record (its items may still be processed)</option>
+                Ignore incoming record</option>
         </select>
