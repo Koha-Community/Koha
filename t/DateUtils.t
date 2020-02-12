@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 68;
+use Test::More tests => 71;
 
 use Test::MockModule;
 use Test::Warn;
@@ -124,6 +124,15 @@ $dt0 = dt_from_string( '2012-01-00T12:00:00Z', 'rfc3339' );
 isa_ok( $dt0, 'DateTime',
     'dt_from_string returns a DateTime object passed a zero rfc3339 day' );
 cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects rfc3339 day 0' );
+
+$dt0 = dt_from_string( '2012-01-01T23:59:00.0Z', 'rfc3339' );
+cmp_ok( $dt0->epoch(), 'eq', '1325462340', 'dt_from_string handles seconds with 1 decimal place' );
+
+$dt0 = dt_from_string( '2012-01-01T23:59:00.00Z', 'rfc3339' );
+cmp_ok( $dt0->epoch(), 'eq', '1325462340', 'dt_from_string handles seconds with 2 decimal places' );
+
+$dt0 = dt_from_string( '2012-01-01T23:59:00.000Z', 'rfc3339' );
+cmp_ok( $dt0->epoch(), 'eq', '1325462340', 'dt_from_string handles seconds with 3 decimal places' );
 
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
