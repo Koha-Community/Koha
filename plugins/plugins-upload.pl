@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use Archive::Extract;
 use CGI qw ( -utf8 );
+use Mojo::UserAgent;
 use File::Copy;
 use File::Temp;
 
@@ -46,6 +47,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $uploadfilename = $input->param('uploadfile');
 my $uploadfile     = $input->upload('uploadfile');
+my $uploadlocation = $input->param('uploadlocation');
 my $op             = $input->param('op') || q{};
 
 my ( $total, $handled, @counts, $tempfile, $tfh );
@@ -53,7 +55,7 @@ my ( $total, $handled, @counts, $tempfile, $tfh );
 my %errors;
 
 if ($plugins_enabled) {
-    if ( ( $op eq 'Upload' ) && $uploadfile ) {
+    if ( ( $op eq 'Upload' ) && ( $uploadfile || $uploadlocation ) ) {
         my $plugins_dir = C4::Context->config("pluginsdir");
         $plugins_dir = ref($plugins_dir) eq 'ARRAY' ? $plugins_dir->[0] : $plugins_dir;
 
@@ -69,15 +71,24 @@ if ($plugins_enabled) {
         $errors{'NOTKPZ'} = 1 if ( $uploadfilename !~ /\.kpz$/i );
         $errors{'NOWRITETEMP'}    = 1 unless ( -w $dirname );
         $errors{'NOWRITEPLUGINS'} = 1 unless ( -w $plugins_dir );
-        $errors{'EMPTYUPLOAD'}    = 1 unless ( length($uploadfile) > 0 );
+
+        if ( $uploadlocation ) {
+            my $ua = Mojo::UserAgent->new(max_redirects => 5);
+            my $tx = $ua->get($uploadlocation);
+            $tx->result->save_to($tempfile);
+        } else {
+            $errors{'EMPTYUPLOAD'}    = 1 unless ( length($uploadfile) > 0 );
+        }
 
         if (%errors) {
             $template->param( ERRORS => [ \%errors ] );
         } else {
-            while (<$uploadfile>) {
-                print $tfh $_;
+            if ( $uploadfile ) {
+                while (<$uploadfile>) {
+                    print $tfh $_;
+                }
+                close $tfh;
             }
-            close $tfh;
 
             my $ae = Archive::Extract->new( archive => $tempfile, type => 'zip' );
             unless ( $ae->extract( to => $plugins_dir ) ) {
@@ -90,11 +101,11 @@ if ($plugins_enabled) {
 
             Koha::Plugins->new()->InstallPlugins();
         }
-    } elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
+    } elsif ( ( $op eq 'Upload' ) && !$uploadfile && !$uploadlocation ) {
         warn "Problem uploading file or no file uploaded.";
     }
 
-    if ( $uploadfile && !%errors && !$template->param('ERRORS') ) {
+    if ( ($uploadfile || $uploadlocation) && !%errors && !$template->param('ERRORS') ) {
         print $input->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
     } else {
         output_html_with_http_headers $input, $cookie, $template->output;

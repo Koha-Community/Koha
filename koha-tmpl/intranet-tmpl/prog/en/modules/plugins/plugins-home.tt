@@ -71,7 +71,7 @@
                                     <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name %]</a></td>
                                     <td>[% sr.result.description %]</td>
                                     <td>[% sr.repo.name %]</td>
-                                    <td><button class="btn btn-install-plugin"><i class="fa fa-download"></i> Install</button></td>
+                                    <td><a class="btn btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
                                 </tr>
                             [% END %]
                         </table>
@@ -196,7 +196,6 @@
     [% INCLUDE 'calendar.inc' %]
     <script>
         $(document).ready(function(){
-            $(".btn-install-plugin").on("click", function() { alert("Sorry, this functionality doesn't exist yet!"); });
             $(".uninstall_plugin").on("click", function(){
                 $(".dropdown").removeClass("open");
                 var plugin_name = $(this).data("plugin-name");

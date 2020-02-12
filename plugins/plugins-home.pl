@@ -69,6 +69,14 @@ if ($plugins_enabled) {
                 my $response = from_json( get($url) );
                 foreach my $result ( @{ $response->{items} } ) {
                     next unless $result->{name} =~ /^koha-plugin-/;
+                    my $releases = $result->{url} . "/releases/latest";
+                    my $release = from_json( get($releases) );
+                    for my $asset ( @{$release->{assets}} ) {
+                        if ($asset->{browser_download_url} =~ m/\.kpz$/) {
+                            $result->{install_name} = $asset->{name};
+                            $result->{install_url} = $asset->{browser_download_url};
+                        }
+                    }
                     push( @results, { repo => $r, result => $result } );
                 }
             }
