@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 71;
+use Test::More tests => 72;
 
 use Test::MockModule;
 use Test::Warn;
@@ -131,8 +131,11 @@ cmp_ok( $dt0->epoch(), 'eq', '1325462340', 'dt_from_string handles seconds with 
 $dt0 = dt_from_string( '2012-01-01T23:59:00.00Z', 'rfc3339' );
 cmp_ok( $dt0->epoch(), 'eq', '1325462340', 'dt_from_string handles seconds with 2 decimal places' );
 
-$dt0 = dt_from_string( '2012-01-01T23:59:00.000Z', 'rfc3339' );
-cmp_ok( $dt0->epoch(), 'eq', '1325462340', 'dt_from_string handles seconds with 3 decimal places' );
+$dt0 = dt_from_string( '2012-01-01t23:59:59.999z', 'rfc3339' );
+cmp_ok( $dt0->epoch(), 'eq', '1325462399', 'dt_from_string handles seconds with 3 decimal places' );
+
+$dt0 = dt_from_string( '2012-01-01T23:59:59.999Z+02:00', 'rfc3339' );
+cmp_ok( $dt0->epoch(), 'eq', '1325462399', 'dt_from_string handles seconds with 3 decimal places and a timezone' );
 
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
