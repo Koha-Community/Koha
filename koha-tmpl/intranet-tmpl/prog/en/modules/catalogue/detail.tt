@@ -404,7 +404,11 @@ Note that permanent location is a code, and location may be an authval.
                     <td class="dateaccessioned"><span title="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( itemdata_uri ) %]
-                        <td class="uri"><a href="[% item.uri | url %]">[% item.uri | html %]</a></td>
+                        [% IF Koha.Preference('URLLinkText') %]
+                            <td class="uri"><a href="[% item.uri | url %]">[% Koha.Preference('URLLinkText') %]</a></td>
+                        [% ELSE %]
+                            <td class="uri"><a href="[% item.uri | url %]">Link to resource</a></td>
+                        [% END %]
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]
                         <td class="copynumber">[% item.copynumber | html %]</td>
