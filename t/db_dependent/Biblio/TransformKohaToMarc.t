@@ -17,7 +17,7 @@ $schema->storage->txn_begin;
 Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '300', tagsubfield => 'a' })->delete;
 Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'a', kohafield => "mytable.nicepages" })->store;
 Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '300', tagsubfield => 'b' })->delete;
-Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'b', kohafield => "mytable2.goodillustrations" })->store;
+Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '300', tagsubfield => 'b', kohafield => "mytable2.goodillustrations", repeatable => 1 })->store;
 Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
 my $record = C4::Biblio::TransformKohaToMarc({
@@ -40,20 +40,24 @@ is_deeply( \@subfields, [
 
 # Now test multiple mappings per kohafield too
 subtest "Multiple Koha to MARC mappings (BZ 10306)" => sub {
-    plan tests => 4;
+    plan tests => 5;
 
-    # Add260d mapping so that 300a and 260d both map to mytable.nicepages
-    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '260', tagsubfield => 'd' })->delete;
+    # Add 260d mapping so that 300a and 260d both map to mytable.nicepages
+    # Add 260e to test not-repeatable behavior
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '260' })->delete;
     Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '260', tagsubfield => 'd', kohafield => "mytable.nicepages" })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '260', tagsubfield => 'e', kohafield => "mytable.unrepeatable", repeatable => 0 })->store;
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
     # Include two values in goodillustrations too: should result in two
-    # subfields.
+    # subfields. But unrepeatable should result in one field.
     my $record = C4::Biblio::TransformKohaToMarc({
         "mytable2.goodillustrations" => "good | better",
         "mytable.nicepages"          => "nice",
+        "mytable.unrepeatable"       => "A | B",
     });
     is( $record->subfield('260','d'), "nice", "Check 260d" );
+    is( $record->subfield('260','e'), "A | B", "Check 260e" );
     is( $record->subfield('300','a'), "nice", "Check 300a" );
     is( $record->subfield('300','b'), "good", "Check first 300b" );
     is( ($record->field('300')->subfield('b'))[1], "better",

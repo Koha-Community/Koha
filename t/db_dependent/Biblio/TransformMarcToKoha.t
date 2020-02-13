@@ -19,7 +19,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -106,6 +106,23 @@ subtest 'Testing _adjust_pubyear' => sub {
     is( C4::Biblio::_adjust_pubyear('12? 1x'), '12? 1x', 'Too short' );
     is( C4::Biblio::_adjust_pubyear('198-'), '198-', 'Missing question mark' );
     is( C4::Biblio::_adjust_pubyear('198-?'), '1980', '198-?' );
+};
+
+subtest 'Test repeatable subfields' => sub {
+    plan tests => 2;
+
+    # Make 510x repeatable and 510y not
+    Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '510' })->delete;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '510', tagsubfield => 'x', kohafield => 'items.test', repeatable => 1 })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '510', tagsubfield => 'y', kohafield => 'items.norepeat', repeatable => 0 })->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+
+
+    my $marc = MARC::Record->new;
+    $marc->append_fields( MARC::Field->new( '510', '', '', x => '1', x => '2', y => '3 | 4', y => '5' ) ); # actually, we should only have one $y (BZ 24652)
+    my $result = C4::Biblio::TransformMarcToKoha( $marc );
+    is( $result->{test}, '1 | 2', 'Check 510x for two values' );
+    is( $result->{norepeat}, '3 | 4 | 5', 'Check 510y too' );
 };
 
 # Cleanup
