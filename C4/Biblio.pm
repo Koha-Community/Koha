@@ -1998,11 +1998,10 @@ sub TransformKohaToMarc {
             my $tagsubfield = $fld->{tagsubfield};
             next if !$tagfield;
 
-            # BZ 21800: split value if field is repeatable; NOTE that this also
-            # depends on the Default framework.
-            my @values = $params->{no_split} || !$fld->{repeatable}
-                ? ( $value )
-                : split(/\s?\|\s?/, $value, -1);
+            # BZ 21800: split value if field is repeatable.
+            my @values = _check_split($params, $fld, $value)
+                ? split(/\s?\|\s?/, $value, -1)
+                : ( $value );
             foreach my $value ( @values ) {
                 next if $value eq '';
                 $tag_hr->{$tagfield} //= [];
@@ -2021,6 +2020,19 @@ sub TransformKohaToMarc {
         $record->insert_fields_ordered( MARC::Field->new($tag, @ind, @sfl) );
     }
     return $record;
+}
+
+sub _check_split {
+    my ($params, $fld, $value) = @_;
+    return if index($value,'|') == -1; # nothing to worry about
+    return if $params->{no_split};
+
+    # if we did not get a specific framework, check default in $mss
+    return $fld->{repeatable} if !$params->{framework};
+
+    # here we need to check the specific framework
+    my $mss = Koha::MarcSubfieldStructures->find( $params->{framework}, $fld->{tagfield}, $fld->{tagsubfield} );
+    return 1 if $mss && $mss->repeatable;
 }
 
 =head2 PrepHostMarcField
