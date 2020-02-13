@@ -1055,9 +1055,9 @@ subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
     my $itemtype2 = $builder->build_object( { class => 'Koha::ItemTypes' } );
 
     # Create libraries
-    my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $library3  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries', value => {pickup_location => 1} } );
+    my $library2  = $builder->build_object( { class => 'Koha::Libraries', value => {pickup_location => 1} } );
+    my $library3  = $builder->build_object( { class => 'Koha::Libraries', value => {pickup_location => 1} } );
 
     # Create library groups hierarchy
     my $rootgroup  = $builder->build_object( { class => 'Koha::Library::Groups', value => {ft_local_hold_group => 1} } );
