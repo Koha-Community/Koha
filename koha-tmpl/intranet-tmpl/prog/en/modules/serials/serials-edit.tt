@@ -252,7 +252,7 @@ $(document).ready(function() {
                 <input type="hidden" name="subfield" value="[% iteminformatio.subfield | html %]" />
                 <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory | html %]" />
                 [% IF ( iteminformatio.repeatable ) %]
-                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
+                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
                         <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
@@ -404,7 +404,7 @@ $(document).ready(function() {
                 <input type="hidden" name="subfield" value="[% iteminformatio.subfield | html %]" />
                 <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory | html %]" />
                 [% IF ( iteminformatio.repeatable ) %]
-                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
+                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
                         <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
