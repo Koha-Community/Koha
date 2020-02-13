@@ -45,12 +45,14 @@ my $help;
 my $verbose;
 my $output_dir;
 my $log;
+my $maxdays;
 
 GetOptions(
     'h|help'    => \$help,
     'v|verbose' => \$verbose,
     'l|log'     => \$log,
     'o|out:s'   => \$output_dir,
+    'm|maxdays:i' => \$maxdays,
 );
 my $usage = << 'ENDUSAGE';
 
@@ -64,6 +66,7 @@ This script has the following parameters :
     -l --log: log the output to a file (optional if the -o parameter is given)
     -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
     -v --verbose
+    -m --maxdays: how many days back of overdues to process
 
 ENDUSAGE
 
@@ -97,7 +100,9 @@ if ($filename) {
     print {$fh} "\n";
 }
 my $counted = 0;
-my $overdues = Getoverdues();
+my $params;
+$params->{maximumdays} = $maxdays if $maxdays;
+my $overdues = Getoverdues($params);
 for my $overdue ( @{$overdues} ) {
     next if $overdue->{itemlost};
 
