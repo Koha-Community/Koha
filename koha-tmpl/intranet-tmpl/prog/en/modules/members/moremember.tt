@@ -702,8 +702,8 @@
                                     <a href="#relatives-issues" id="relatives-issues-tab">[% relatives_issues_count | html %] Relatives' checkouts</a>
                                 </li>
                             [% END %]
-                            <li>
-                                <a href="#finesandcharges">[% fines | $Price %] Fines &amp; Charges</a>
+                            <li id="finestab">
+                                <a href="#finesandcharges">Fines &amp; Charges ([% fines | $Price %])</a>
                             </li>
                             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                                 <li>
@@ -891,6 +891,11 @@
         columns_settings_issues_table = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
+            $("#finestab").hide();
+            [% IF fines %]
+                $("#finestab").show();
+            [% END %]
+
             if ( $('#clubs-tab').length ) {
                 $('#clubs-tab-link').on('click', function() {
                     $('#clubs-tab').text(_("Loading..."));
