@@ -75,7 +75,7 @@ if ($plugins_enabled) {
         if ( $uploadlocation ) {
             my $ua = Mojo::UserAgent->new(max_redirects => 5);
             my $tx = $ua->get($uploadlocation);
-            $tx->result->save_to($tempfile);
+            $tx->result->content->asset->move_to($tempfile);
         } else {
             $errors{'EMPTYUPLOAD'}    = 1 unless ( length($uploadfile) > 0 );
         }
