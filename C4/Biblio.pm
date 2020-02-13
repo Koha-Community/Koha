@@ -1997,7 +1997,10 @@ sub TransformKohaToMarc {
             my $tagfield    = $fld->{tagfield};
             my $tagsubfield = $fld->{tagsubfield};
             next if !$tagfield;
-            my @values = $params->{no_split}
+
+            # BZ 21800: split value if field is repeatable; NOTE that this also
+            # depends on the Default framework.
+            my @values = $params->{no_split} || !$fld->{repeatable}
                 ? ( $value )
                 : split(/\s?\|\s?/, $value, -1);
             foreach my $value ( @values ) {
