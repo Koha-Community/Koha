@@ -242,6 +242,9 @@ if ( $step == 5 ) {
         my $lengthunit      = $input->param('lengthunit');
         my $renewalsallowed = $input->param('renewalsallowed');
         my $renewalperiod   = $input->param('renewalperiod');
+        my $reservesallowed = $input->param('reservesallowed');
+        my $holds_per_day   = $input->param('holds_per_day');
+        my $holds_per_record = $input->param('holds_per_record');
         my $onshelfholds    = $input->param('onshelfholds') || 0;
         $maxissueqty =~ s/\s//g;
         $maxissueqty = undef if $maxissueqty !~ /^\d+/;
@@ -267,8 +270,8 @@ if ( $step == 5 ) {
                 firstremind                      => 0,
                 hardduedate                      => "",
                 hardduedatecompare               => -1,
-                holds_per_day                    => undef,
-                holds_per_record                 => 1,
+                holds_per_day                    => $holds_per_day,
+                holds_per_record                 => $holds_per_record,
                 maxissueqty                      => "",
                 maxonsiteissueqty                => "",
                 maxsuspensiondays                => "",
@@ -278,7 +281,7 @@ if ( $step == 5 ) {
                 opacitemholds                    => "N",
                 overduefinescap                  => "",
                 rentaldiscount                   => 0,
-                reservesallowed                  => 0,
+                reservesallowed                  => $reservesallowed,
                 suspension_chargeperiod          => undef,
               }
         };
