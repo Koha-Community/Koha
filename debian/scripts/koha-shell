@@ -63,6 +63,8 @@ elsif ( $? & 127 ) {
       ( $? & 127 ), ( $? & 128 ) ? 'with' : 'without';
 }
 
+exit $? >> 8;
+
 sub show_help {
     my ( $err, $msg ) = @_;
 
