@@ -283,7 +283,7 @@
                 <xsl:when test="$url='1'">
                     <xsl:if test="$field/marc:subfield[@code='b']">
                          <a>
-                         <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Provider:<xsl:value-of select="str:encode-uri($field/marc:subfield[@code='b'], true())"/>"</xsl:attribute>
+                         <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Provider:<xsl:value-of select="str:encode-uri($field/marc:subfield[@code='b'], true())"/></xsl:attribute>
                          <xsl:call-template name="subfieldSelect">
                              <xsl:with-param name="codes">b</xsl:with-param>
                          </xsl:call-template>
