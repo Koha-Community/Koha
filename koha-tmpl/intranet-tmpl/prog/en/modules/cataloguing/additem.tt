@@ -198,7 +198,7 @@
                 <input type="hidden" name="subfield"  value="[% ite.subfield | html %]" />
                 <input type="hidden" name="mandatory" value="[% ite.mandatory | html %]" />
                 [% IF ( ite.repeatable ) %]
-                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode); return false;">
+                    <a href="#" class="buttonPlus" onclick="CloneItemSubfield(this.parentNode.parentNode); return false;">
                         <img src="[% interface | html %]/[% theme | html %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
                     </a>
                 [% END %]
