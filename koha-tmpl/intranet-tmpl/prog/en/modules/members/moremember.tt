@@ -702,9 +702,11 @@
                                     <a href="#relatives-issues" id="relatives-issues-tab">[% relatives_issues_count | html %] Relatives' checkouts</a>
                                 </li>
                             [% END %]
-                            <li id="finestab">
-                                <a href="#finesandcharges">Fines &amp; Charges ([% fines | $Price %])</a>
-                            </li>
+                            [% IF ( fines ) %]
+                                <li id="finestab">
+                                    <a href="#finesandcharges">Fines &amp; Charges ([% fines | $Price %])</a>
+                                </li>
+                            [% END %]
                             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
                                 <li>
                                     [% IF ( holds_count ) %]
@@ -756,13 +758,15 @@
 
                         [% INCLUDE "relatives-issues-table.inc" %]
 
-                        <div id="finesandcharges">
-                            [% IF ( fines ) %]
-                                <p>Total due: [% fines | $Price %]</p>
-                            [% ELSE %]
-                                <p>No outstanding charges</p>
-                            [% END %]
-                        </div>
+                        [% IF ( fines ) %]
+                            <div id="finesandcharges">
+                                [% IF ( fines ) %]
+                                    <p>Total due: [% fines | $Price %]</p>
+                                [% ELSE %]
+                                    <p>No outstanding charges</p>
+                                [% END %]
+                            </div>
+                        [% END %]
 
                         [% IF CAN_user_clubs && ( enrollments.count || enrollable.count ) %]
                             <div id="clubs-tab">
@@ -891,10 +895,6 @@
         columns_settings_issues_table = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
-            $("#finestab").hide();
-            [% IF fines %]
-                $("#finestab").show();
-            [% END %]
 
             if ( $('#clubs-tab').length ) {
                 $('#clubs-tab-link').on('click', function() {
