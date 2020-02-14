@@ -74,13 +74,17 @@ subtest 'field_exists' => sub {
 subtest 'read_field' => sub {
     plan tests              => 2;
     subtest 'read subfield' => sub {
-        plan tests => 5;
+        plan tests => 6;
         my $record = new_record;
         $record->append_fields(
             MARC::Field->new(
                 650, ' ', '0',
                 a => 'Computer algorithms.',
                 9 => '463',
+            ),
+            MARC::Field->new(
+                600, ' ', '0',
+                0 => '123456',
             )
         );
 
@@ -129,6 +133,20 @@ subtest 'read_field' => sub {
             ],
             [],
             'There is no 3 650$a'
+        );
+        is_deeply(
+            [
+                read_field(
+                    {
+                        record        => $record,
+                        field         => '600',
+                        subfield      => '0',
+                        field_numbers => [1]
+                    }
+                )
+            ],
+            ['123456'],
+            'first 600$0'
         );
     };
     subtest 'read field' => sub {
@@ -191,7 +209,7 @@ subtest 'read_field' => sub {
 subtest 'update_field' => sub {
     plan tests                => 1;
     subtest 'update subfield' => sub {
-        plan tests => 5;
+        plan tests => 6;
         my $record = new_record;
 
         update_field(
@@ -250,6 +268,7 @@ subtest 'update_field' => sub {
                 952, ' ', ' ',
                 p => '3010023917',
                 y => 'BK',
+                0 => '123456',
             ),
         );
         update_field(
@@ -283,6 +302,23 @@ subtest 'update_field' => sub {
             [ '3010023917', '3010023918' ],
             'update all subfields 952$p with the different values'
         );
+
+        update_field(
+            {
+                record   => $record,
+                field    => '952',
+                subfield => '0',
+                values   => [ '654321' ]
+            }
+        );
+        my @fields_9520 =
+          read_field( { record => $record, field => '952', subfield => '0' } );
+        is_deeply(
+            \@fields_9520,
+            [ '654321', '654321' ],
+            'update all subfields 952$0 with the same value'
+        );
+
     };
 };
 

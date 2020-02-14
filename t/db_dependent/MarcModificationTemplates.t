@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 115;
+use Test::More tests => 125;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -55,7 +55,7 @@ is( AddModificationTemplateAction(
 # Getter
 
 my @actions = GetModificationTemplateActions( $template_id );
-is( @actions, 4, "4 actions are insered");
+is( @actions, 4, "4 actions are inserted");
 
 for my $action ( @actions ) {
     isnt( GetModificationTemplateAction( $action->{mmta_id} ), undef, "action with id $action->{mmta_id} exists" );
@@ -546,3 +546,134 @@ sub expected_record_2 {
     $record->append_fields(@fields);
     return $record;
 }
+
+# Tests related to use of subfield 0 ($0)
+
+sub new_record_0 {
+    my $record = MARC::Record->new;
+    $record->leader('03174nam a2200445 a 4500');
+    my @fields = (
+        MARC::Field->new(
+            100, '1', ' ',
+            0 => '12345',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            0 => '12345',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            0 => '42',
+            a => 'Computer programming.',
+            9 => '462',
+        ),
+    );
+    $record->append_fields(@fields);
+    return $record;
+}
+
+sub expected_record_0 {
+    my $record = MARC::Record->new;
+    $record->leader('03174nam a2200445 a 4500');
+    my @fields = (
+        MARC::Field->new(
+            245, '1', '4',
+            0 => '12345',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            0 => '42',
+            a => 'Computer programming.',
+            9 => '462',
+        ),
+        MARC::Field->new(
+            600, ' ', ' ',
+            0 => 'TestUpdated',
+        ),
+        MARC::Field->new(
+            100, ' ', ' ',
+            0 => 'TestUpdated',
+        ),
+        MARC::Field->new(
+            700, '1', '4',
+            0 => '12345',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+    );
+    $record->append_fields(@fields);
+    return $record;
+}
+
+$record = new_record_0();
+is( ModifyRecordWithTemplate( $template_id, $record ), undef, "The ModifyRecordWithTemplate returns undef" );
+
+$template_id = AddModificationTemplate("template_test_subfield_0");
+like( $template_id, qr|^\d+$|, "new template returns an id" );
+
+# Delete subfield 100$0
+is( AddModificationTemplateAction(
+    $template_id, 'delete_field', 0,
+    '100', '0', '', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 1: Delete subfield 100$0'
+), 1, 'Action 1: Delete subfield 100$0');
+
+# Add new subfield 100$0 with value "Test"
+is( AddModificationTemplateAction(
+    $template_id, 'add_field', 0,
+    '100', '0', 'Test', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 2: Add new subfield 100$0 with value "Test"'
+), 1, 'Action 2: Add new subfield 100$0');
+
+# Update existing or add new subfield 100$0 with value "TestUpdated"
+is( AddModificationTemplateAction(
+    $template_id, 'update_field', 0,
+    '100', '0', 'TestUpdated', '', '',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 3: Update existing or add new subfield 100$0 with value "TestUpdated"'
+), 1, 'Action 3: Update existing or add new subfield 100$0 with value "TestUpdated"');
+
+# Move subfield 100$0 to 600$0
+is( AddModificationTemplateAction(
+    $template_id, 'move_field', 0,
+    '100', '0', '', '600', '0',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 4: Move subfield 100$0 to 600$0'
+), 1, 'Action 4: Move subfield 100$0 to 600$0');
+
+# Copy subfield 600$0 to 100$0
+is( AddModificationTemplateAction(
+    $template_id, 'copy_field', 0,
+    '600', '0', '', '100', '0',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 5: Copy subfield 600$0 to 100$0'
+), 1, 'Action 5: Copy subfield 600$0 to 100$0');
+
+# Copy and replace subfield 245$0 to 700$0
+is( AddModificationTemplateAction(
+    $template_id, 'copy_and_replace_field', 0,
+    '245', '0', '', '700', '0',
+    '', '', '',
+    '', '', '', '', '', '',
+    'Action 6: Copy and replace subfield 245$0 to 700$0'
+), 1, 'Action 6: Copy and replace subfield 245$0 to 700$0');
+
+my @actions_0 = GetModificationTemplateActions( $template_id );
+is( @actions_0, 6, "6 actions are inserted");
+
+ModifyRecordWithTemplate( $template_id, $record );
+my $expected_record_0 = expected_record_0();
+is_deeply( $record, $expected_record_0, '100$0 has been deleted, added back, updated, moved to 600$0, and copied back to 100$0; finally, 245$0 has been copied and replaced to 700$0' );
