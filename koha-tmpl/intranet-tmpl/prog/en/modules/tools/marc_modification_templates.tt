@@ -133,14 +133,14 @@
 
                                             field
 
-                                            [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield ) %]$[% ActionsLoo.from_subfield | html %][% END %]
+                                            [% ActionsLoo.from_field | html %][% IF ( ActionsLoo.from_subfield.length ) %]$[% ActionsLoo.from_subfield | html %][% END %]
 
                                             [% IF ( ActionsLoo.field_value ) %]
                                                 with value <i>[% ActionsLoo.field_value | html %]</i>
                                             [% END %]
 
                                             [% IF ( ActionsLoo.to_field ) %]
-                                                to [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield ) %]$[% ActionsLoo.to_subfield | html %][% END %]
+                                                to [% ActionsLoo.to_field | html %][% IF ( ActionsLoo.to_subfield.length ) %]$[% ActionsLoo.to_subfield | html %][% END %]
 
                                                 [% IF ( ActionsLoo.to_regex_search ) %]
                                                      using RegEx s<strong>/[% ActionsLoo.to_regex_search | html %]/[% ActionsLoo.to_regex_replace | html %]/[% ActionsLoo.to_regex_modifiers | html %]</strong>
@@ -151,7 +151,7 @@
                                                 [% IF ( ActionsLoo.conditional_if ) %] if [% END %]
                                                 [% IF ( ActionsLoo.conditional_unless ) %] unless [% END %]
 
-                                                [% ActionsLoo.conditional_field | html %][% IF ( ActionsLoo.conditional_subfield ) %]$[% ActionsLoo.conditional_subfield | html %][% END %]
+                                                [% ActionsLoo.conditional_field | html %][% IF ( ActionsLoo.conditional_subfield.length ) %]$[% ActionsLoo.conditional_subfield | html %][% END %]
 
                                                 [% IF ( ActionsLoo.conditional_comparison_exists ) %] exists [% END %]
                                                 [% IF ( ActionsLoo.conditional_comparison_not_exists ) %] does not exist [% END %]

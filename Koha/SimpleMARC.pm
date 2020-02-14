@@ -164,7 +164,7 @@ sub update_field {
 
     if ( ! ( $record && $fieldName ) ) { return; }
 
-    if ( not $subfieldName or $subfieldName eq '' ) {
+    if ( not defined $subfieldName or $subfieldName eq '' ) {
         # FIXME I'm not sure the actual implementation is correct.
         die "This action is not implemented yet";
         #_update_field({ record => $record, field => $fieldName, values => \@values });
@@ -296,7 +296,7 @@ sub read_field {
     my $subfieldName = $params->{subfield};
     my $field_numbers = $params->{field_numbers} // [];
 
-    if ( not $subfieldName or $subfieldName eq '' ) {
+    if ( not defined $subfieldName or $subfieldName eq '' ) {
         _read_field({ record => $record, field => $fieldName, field_numbers => $field_numbers });
     } else {
         _read_subfield({ record => $record, field => $fieldName, subfield => $subfieldName, field_numbers => $field_numbers });
