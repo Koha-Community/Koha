@@ -36,7 +36,7 @@ eval { require Selenium::Remote::Driver; };
 if ( $@ ) {
     plan skip_all => "Selenium::Remote::Driver is needed for selenium tests.";
 } else {
-    plan tests => 8;
+    plan tests => 9;
 }
 
 my $s = t::lib::Selenium->new;
@@ -54,6 +54,43 @@ my $AudioAlerts_value = C4::Context->preference('AudioAlerts');
 C4::Context->set_preference('AudioAlerts', '1');
 
 our @cleanup;
+
+subtest 'SCI can load error pages' => sub {
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { flags => 0 } } );
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    my $password = Koha::AuthUtils::generate_password( $patron->category );
+    $patron->set_password( { password => $password } );
+
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare(
+        "INSERT INTO user_permissions (borrowernumber, module_bit, code) VALUES ( ?, 23,'self_checkin_module')");
+    $sth->execute( $patron->borrowernumber );
+
+    my $sci_mo = C4::Context->preference('SelfCheckInModule');
+    my $sci_js = C4::Context->preference('SelfCheckInUserJS');
+    C4::Context->set_preference(
+        'SelfCheckInUserJS',
+        '</script><img src="' . $s->opac_base_url . '/silk/famfamfam.png"/><script>'
+    );
+    C4::Context->set_preference( 'SelfCheckInModule', '1' );
+
+    my $sci_module = $s->opac_base_url . qq|sci/sci-main.pl|;
+    $driver->get($sci_module);
+    $s->fill_form( { userid => $patron->userid, password => $password } );
+    $s->driver->find_element('//form[@id="auth"]//input[@type="submit"]')->click;
+    $s->fill_form( { barcode_input => "DONTMATTER" } );
+    $s->driver->find_element('//form[@id="scan_form"]//button[@id="sci_append_button"]')->click;
+    $s->driver->find_element('//form[@id="scan_form"]//button[@id="sci_checkin_button"]')->click;
+    like( $driver->get_title(), qr(Self check-in), );
+
+    C4::Context->set_preference( 'SelfCheckInUserJS', $sci_js );
+    C4::Context->set_preference( 'SelfCheckInModule', $sci_mo );
+    push @cleanup, $patron, $patron->category, $patron->library;
+};
+
 subtest 'OPAC - borrowernumber, branchcode and categorycode as html attributes' => sub {
     plan tests => 3;
 
