@@ -20,7 +20,7 @@
         <input type="text" id="cn_browser_input" name="q" value="[% q | html %]" />
         <input id="cn_browser_submit" type="submit" value="Search" />
         <input name="plugin_name" type="hidden" value="cn_browser.pl"/>
-        <input name="popup" type="hidden" value="[% popup %]"/>
+        <input name="popup" type="hidden" value="[% popup | html %]"/>
         </br>
         <label for="cn_source">Callnumber classification scheme</label>
         <select name="cn_source" form="cn_browser">
@@ -52,7 +52,7 @@
             [% IF ( cn_loo.author ) %]
                 <span>by</span> [% cn_loo.author | html %]
             [% END %]
-            [% IF ( cn_loo.barcode ) %] ([% cn_loo.barcode %])[% END %]
+            [% IF ( cn_loo.barcode ) %] ([% cn_loo.barcode | html %])[% END %]
         </a>
     </td>
     <td style="background:[% cn_loo.background | html %];">[% cn_loo.branchname | html %]</td>
