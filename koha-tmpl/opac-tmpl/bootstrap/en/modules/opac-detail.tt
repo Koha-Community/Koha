@@ -1349,13 +1349,13 @@
                                     [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                         [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
                                         <a target="_blank" rel="noreferrer" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url">[% Koha.Preference('URLLinkText') | html %]</a>
-                                        [% ELSE %]
+                                        [% ELSIF ITEM_RESULT.uri %]
                                         <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url">[% Koha.Preference('URLLinkText') | html %]</a>
                                         [% END %]
                                     [% ELSE %]
                                         [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
                                         <a target="_blank" rel="noreferrer" href="[% ITEM_RESULT.uri | url %]" property="url">[% Koha.Preference('URLLinkText') | html %]</a>
-                                        [% ELSE %]
+                                        [% ELSIF ITEM_RESULT.uri %]
                                         <a href="[% ITEM_RESULT.uri | url %]" property="url">[% Koha.Preference('URLLinkText') | html %]</a>
                                         [% END %]
                                     [% END %]
@@ -1363,13 +1363,13 @@
                                     [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
                                         [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
                                         <a target="_blank" rel="noreferrer" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url">Link to resource</a>
-                                        [% ELSE %]
+                                        [% ELSIF ITEM_RESULT.uri %]
                                         <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url">Link to resource</a>
                                         [% END %]
                                     [% ELSE %]
                                         [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
                                         <a target="_blank" rel="noreferrer" href="[% ITEM_RESULT.uri | url %]" property="url">Link to resource</a>
-                                        [% ELSE %]
+                                        [% ELSIF ITEM_RESULT.uri %]
                                         <a href="[% ITEM_RESULT.uri | url %]" property="url">Link to resource</a>
                                         [% END %]
                                     [% END %]

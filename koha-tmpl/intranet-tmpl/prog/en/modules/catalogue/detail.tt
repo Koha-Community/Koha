@@ -406,8 +406,10 @@ Note that permanent location is a code, and location may be an authval.
                     [% IF ( itemdata_uri ) %]
                         [% IF Koha.Preference('URLLinkText') %]
                             <td class="uri"><a href="[% item.uri | url %]">[% Koha.Preference('URLLinkText') %]</a></td>
-                        [% ELSE %]
+                        [% ELSIF item.uri %]
                             <td class="uri"><a href="[% item.uri | url %]">Link to resource</a></td>
+                        [% ELSE %]
+                            <td></td>
                         [% END %]
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]
