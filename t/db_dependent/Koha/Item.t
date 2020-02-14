@@ -171,10 +171,10 @@ subtest 'pickup_locations' => sub {
 
     my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1, branchcode => undef } } );
     my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1, branchcode => undef } } );
-    my $library1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchcode => 'TEST1' } } );
-    my $library2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchcode => 'TEST2' } } );
-    my $library3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0, branchcode => 'TEST3' } } );
-    my $library4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, branchcode => 'TEST4' } } );
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, } } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, } } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0, } } );
+    my $library4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1, } } );
     my $group1_1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library1->branchcode } } );
     my $group1_2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library2->branchcode } } );
 
