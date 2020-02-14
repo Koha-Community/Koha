@@ -65,6 +65,7 @@ Koha::Account->new( { patron_id => $borrowernumber } )->pay(
         lines       => $lines, # Arrayref of Koha::Account::Line objects to pay
         credit_type => $type,  # credit_type_code code
         offset_type => $offset_type,    # offset type code
+        item_id     => $itemnumber,     # pass the itemnumber if this is a credit pertianing to a specific item (i.e LOST_FOUND)
     }
 );
 
@@ -83,8 +84,14 @@ sub pay {
     my $credit_type   = $params->{credit_type};
     my $offset_type   = $params->{offset_type} || $type eq 'WRITEOFF' ? 'Writeoff' : 'Payment';
     my $cash_register = $params->{cash_register};
+    my $item_id       = $params->{item_id};
 
     my $userenv = C4::Context->userenv;
+
+    $credit_type ||=
+      $type eq 'WRITEOFF'
+      ? 'WRITEOFF'
+      : 'PAYMENT';
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 
@@ -130,12 +137,16 @@ sub pay {
         }
 
         # Same logic exists in Koha::Account::Line::apply
-        if (   $new_amountoutstanding == 0
-            && $fine->itemnumber
+        if ( C4::Context->preference('MarkLostItemsAsReturned') =~ m|onpayment|
             && $fine->debit_type_code
-            && ( $fine->debit_type_code eq 'LOST' ) )
+            && $fine->debit_type_code eq 'LOST'
+            && $new_amountoutstanding == 0
+            && $fine->itemnumber
+            && !(  $credit_type eq 'LOST_FOUND'
+                && $item_id == $fine->itemnumber ) )
         {
-            C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
+            C4::Circulation::ReturnLostItem( $self->{patron_id},
+                $fine->itemnumber );
         }
 
         my $account_offset = Koha::Account::Offset->new(
@@ -197,12 +208,16 @@ sub pay {
             push @{$renew_outcomes}, $outcome;
         }
 
-        if (   $fine->amountoutstanding == 0
-            && $fine->itemnumber
+        if ( C4::Context->preference('MarkLostItemsAsReturned') =~ m|onpayment|
             && $fine->debit_type_code
-            && ( $fine->debit_type_code eq 'LOST' ) )
+            && $fine->debit_type_code eq 'LOST'
+            && $fine->amountoutstanding == 0
+            && $fine->itemnumber
+            && !(  $credit_type eq 'LOST_FOUND'
+                && $item_id == $fine->itemnumber ) )
         {
-            C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
+            C4::Circulation::ReturnLostItem( $self->{patron_id},
+                $fine->itemnumber );
         }
 
         my $account_offset = Koha::Account::Offset->new(
@@ -239,11 +254,6 @@ sub pay {
         last unless $balance_remaining > 0;
     }
 
-    $credit_type ||=
-      $type eq 'WRITEOFF'
-      ? 'WRITEOFF'
-      : 'PAYMENT';
-
     $description ||= $type eq 'WRITEOFF' ? 'Writeoff' : q{};
 
     my $payment = Koha::Account::Line->new(
@@ -260,6 +270,7 @@ sub pay {
             branchcode        => $library_id,
             register_id       => $cash_register,
             note              => $note,
+            itemnumber        => $item_id,
         }
     )->store();
 
