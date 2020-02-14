@@ -405,7 +405,7 @@ Note that permanent location is a code, and location may be an authval.
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( itemdata_uri ) %]
                         [% IF Koha.Preference('URLLinkText') %]
-                            <td class="uri"><a href="[% item.uri | url %]">[% Koha.Preference('URLLinkText') %]</a></td>
+                            <td class="uri"><a href="[% item.uri | url %]">[% Koha.Preference('URLLinkText') | html %]</a></td>
                         [% ELSIF item.uri %]
                             <td class="uri"><a href="[% item.uri | url %]">Link to resource</a></td>
                         [% ELSE %]
