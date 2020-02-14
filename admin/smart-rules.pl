@@ -66,8 +66,6 @@ my $can_edit_from_any_library = $logged_in_patron->has_permission( {parameters =
 $template->param( restricted_to_own_library => not $can_edit_from_any_library );
 $branch = C4::Context::mybranch() unless $can_edit_from_any_library;
 
-$branch = '*' if $branch eq 'NO_LIBRARY_SET';
-
 my $op = $input->param('op') || q{};
 my $language = C4::Languages::getlanguage();
 

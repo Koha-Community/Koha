@@ -73,13 +73,6 @@ my $override_high_holds_tmp = $query->param('override_high_holds_tmp');
 
 my $sessionID = $query->cookie("CGISESSID") ;
 my $session = get_session($sessionID);
-if (!C4::Context->userenv){
-    if ($session->param('branch') eq 'NO_LIBRARY_SET'){
-        # no branch set we can't issue
-        print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
-        exit;
-    }
-}
 
 my $barcodes = [];
 my $barcode =  $query->param('barcode');

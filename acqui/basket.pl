@@ -199,8 +199,7 @@ if ( $op eq 'delete_confirm' ) {
         # if requested, create basket group, close it and attach the basket
         if ($query->param('createbasketgroup')) {
             my $branchcode;
-            if(C4::Context->userenv and C4::Context->userenv->{'branch'}
-              and C4::Context->userenv->{'branch'} ne "NO_LIBRARY_SET") {
+            if(C4::Context->userenv and C4::Context->userenv->{'branch'}) {
                 $branchcode = C4::Context->userenv->{'branch'};
             }
             my $basketgroupid = NewBasketgroup( { name => $basket->{basketname},
@@ -543,8 +542,7 @@ sub edi_close_and_order {
         if ( $query->param('createbasketgroup') ) {
             my $branchcode;
             if (    C4::Context->userenv
-                and C4::Context->userenv->{'branch'}
-                and C4::Context->userenv->{'branch'} ne "NO_LIBRARY_SET" )
+                and C4::Context->userenv->{'branch'} )
             {
                 $branchcode = C4::Context->userenv->{'branch'};
             }

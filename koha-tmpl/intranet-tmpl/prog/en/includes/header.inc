@@ -78,12 +78,8 @@
                             </brand>
                         [% ELSE %]
                             <strong>
-                                [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
-                                    NO LIBRARY SET
-                                [% ELSE %]
-                                    <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
-                                    <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
-                                [% END %]
+                                <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
+                                <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                             </strong>
                         [% END %]
                     </span>
@@ -101,13 +97,9 @@
                                 [% LoginBranchname | html %]
                             </brand>
                         [% ELSE %]
-                            [% IF ( LoginBranchname == 'NO_LIBRARY_SET' ) %]
-                                NO LIBRARY SET
-                            [% ELSE %]
-                                Location: <br />
-                                <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
-                                <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
-                            [% END %]
+                            Location: <br />
+                            <span class="logged-in-branch-name">[% LoginBranchname | html %]</span>
+                            <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                         [% END %]
                     </li>
 

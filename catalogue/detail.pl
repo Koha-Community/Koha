@@ -382,8 +382,7 @@ foreach my $item (@items) {
         }
     }
 
-    if ($currentbranch and $currentbranch ne "NO_LIBRARY_SET"
-    and C4::Context->preference('SeparateHoldings')) {
+    if ($currentbranch and C4::Context->preference('SeparateHoldings')) {
         if ($itembranchcode and $itembranchcode eq $currentbranch) {
             push @itemloop, $item;
         } else {

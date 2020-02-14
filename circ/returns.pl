@@ -70,11 +70,6 @@ my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
 
 my $sessionID = $query->cookie("CGISESSID");
 my $session = get_session($sessionID);
-if ($session->param('branch') eq 'NO_LIBRARY_SET'){
-    # no branch set we can't return
-    print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
-    exit;
-}
 
 # Print a reserve slip on this page
 if ( $query->param('print_slip') ) {

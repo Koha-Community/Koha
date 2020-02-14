@@ -77,7 +77,6 @@ $branch =
   : Koha::Libraries->search->count() == 1                              ? undef
   :                                                                      undef;
 $branch ||= q{};
-$branch = q{} if $branch eq 'NO_LIBRARY_SET';
 
 my $op = $input->param('op');
 $op ||= q{};
