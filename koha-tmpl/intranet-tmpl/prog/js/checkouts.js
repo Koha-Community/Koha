@@ -233,10 +233,11 @@ $(document).ready(function() {
         $('#issues-table').show();
         $('#issues-table-actions').show();
 
+        var msg_loading = __('Loading... you may continue scanning.');
         issuesTable = KohaTable("issues-table", {
             "oLanguage": {
-                "sEmptyTable" : MSG_DT_LOADING_RECORDS,
-                "sProcessing": MSG_DT_LOADING_RECORDS,
+                "sEmptyTable" : msg_loading,
+                "sProcessing": msg_loading,
             },
             "bAutoWidth": false,
             "dom": 'B<"clearfix">rt',

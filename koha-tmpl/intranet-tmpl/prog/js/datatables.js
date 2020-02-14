@@ -1,6 +1,5 @@
 // These default options are for translation but can be used
 // for any other datatables settings
-// MSG_DT_* variables comes from datatables.inc
 // To use it, write:
 //  $("#table_id").dataTable($.extend(true, {}, dataTableDefaults, {
 //      // other settings
@@ -8,26 +7,26 @@
 var dataTablesDefaults = {
     "oLanguage": {
         "oPaginate": {
-            "sFirst"    : window.MSG_DT_FIRST || "First",
-            "sLast"     : window.MSG_DT_LAST || "Last",
-            "sNext"     : window.MSG_DT_NEXT || "Next",
-            "sPrevious" : window.MSG_DT_PREVIOUS || "Previous"
+            "sFirst"    : __('First'),
+            "sLast"     : __('Last'),
+            "sNext"     : __('Next'),
+            "sPrevious" : __('Previous'),
         },
-        "sEmptyTable"       : window.MSG_DT_EMPTY_TABLE || "No data available in table",
-        "sInfo"             : window.MSG_DT_INFO || "Showing _START_ to _END_ of _TOTAL_ entries",
-        "sInfoEmpty"        : window.MSG_DT_INFO_EMPTY || "No entries to show",
-        "sInfoFiltered"     : window.MSG_DT_INFO_FILTERED || "(filtered from _MAX_ total entries)",
-        "sLengthMenu"       : window.MSG_DT_LENGTH_MENU || "Show _MENU_ entries",
-        "sLoadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
-        "sProcessing"       : window.MSG_DT_PROCESSING || "Processing...",
-        "sSearch"           : window.MSG_DT_SEARCH || "Search:",
-        "sZeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found",
+        "sEmptyTable"       : __('No data available in table'),
+        "sInfo"             : __('Showing _START_ to _END_ of _TOTAL_ entries'),
+        "sInfoEmpty"        : __('No entries to show'),
+        "sInfoFiltered"     : __('(filtered from _MAX_ total entries)'),
+        "sLengthMenu"       : __('Show _MENU_ entries'),
+        "sLoadingRecords"   : __('Loading...'),
+        "sProcessing"       : __('Processing...'),
+        "sSearch"           : __('Search:'),
+        "sZeroRecords"      : __('No matching records found'),
         buttons: {
-            "copyTitle"     : window.MSG_DT_COPY_TITLE || "Copy to clipboard",
-            "copyKeys"      : window.MSG_DT_COPY_KEYS || "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.",
+            "copyTitle"     : __('Copy to clipboard'),
+            "copyKeys"      : __('Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.'),
             "copySuccess": {
-                _: window.MSG_DT_COPY_SUCCESS_X || "Copied %d rows to clipboard",
-                1: window.MSG_DT_COPY_SUCCESS_ONE || "Copied one row to clipboard"
+                _: __('Copied %d rows to clipboard'),
+                1: __('Copied one row to clipboard'),
             }
         }
     },
@@ -35,9 +34,9 @@ var dataTablesDefaults = {
     "buttons": [{
         fade: 100,
         className: "dt_button_clear_filter",
-        titleAttr: MSG_CLEAR_FILTER,
+        titleAttr: __('Clear filter'),
         enabled: false,
-        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + MSG_CLEAR_FILTER + '</span>',
+        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + __('Clear filter') + '</span>',
         available: function ( dt ) {
             // The "clear filter" button is made available if this test returns true
             if( dt.settings()[0].aanFeatures.f ){ // aanFeatures.f is null if there is no search form
@@ -49,7 +48,7 @@ var dataTablesDefaults = {
             node.addClass("disabled");
         }
     }],
-    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, window.MSG_DT_ALL || "All"]],
+    "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, __('All')]],
     "iDisplayLength": 20,
     initComplete: function( settings) {
         var tableId = settings.nTable.id
@@ -356,8 +355,9 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
      * from a configuration file (in English, "a," "an," and "the")
      */
 
-    if(CONFIG_EXCLUDE_ARTICLES_FROM_SORT){
-        var articles = CONFIG_EXCLUDE_ARTICLES_FROM_SORT.split(" ");
+    var config_exclude_articles_from_sort = __('a an the');
+    if (config_exclude_articles_from_sort){
+        var articles = config_exclude_articles_from_sort.split(" ");
         var rpattern = "";
         for(i=0;i<articles.length;i++){
             rpattern += "^" + articles[i] + " ";

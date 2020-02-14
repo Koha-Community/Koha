@@ -1,7 +1,7 @@
 /* Variables defined in letter.tt: */
-/* global _ module add_form copy_form no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_DT_LOADING_RECORDS MSG_NO_NOTICE_FOUND interface theme KohaTable columns_settings */
+/* global _ module add_form copy_form no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_NO_NOTICE_FOUND interface theme KohaTable columns_settings */
 
-var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ MSG_DT_LOADING_RECORDS +"</div>";
+var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ __('Loading...') +"</div>";
 
 var editing = 0;
 if( add_form == 1 && code !== '' ){
