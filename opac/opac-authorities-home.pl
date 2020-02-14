@@ -75,6 +75,7 @@ if ( $op eq "do_search" ) {
             debug           => 1,
         }
     );
+    $template->param( search_query => $search_query ) if C4::Context->preference('DumpSearchQueryTemplate');
 
     # multi page display gestion
     my $value_url = uri_escape_utf8($value[0]);
