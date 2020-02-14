@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Carp;
 
-use Koha::Course;
+use Koha::Course::Item;
 
 use base qw(Koha::Objects);
 

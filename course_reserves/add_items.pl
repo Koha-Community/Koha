@@ -39,12 +39,14 @@ my $action       = $cgi->param('action')       || '';
 my $course_id    = $cgi->param('course_id')    || '';
 my $barcode      = $cgi->param('barcode')      || '';
 my $return       = $cgi->param('return')       || '';
-my $itemnumber   = ($cgi->param('itemnumber') && $action eq 'lookup') ? $cgi->param('itemnumber') : '';
+my $itemnumber   = $cgi->param('itemnumber')   || '';
 my $is_edit      = $cgi->param('is_edit')      || '';
 
 $barcode =~ s/^\s*|\s*$//g; #remove leading/trailing whitespace
 
 my $item = Koha::Items->find( { ( $itemnumber ? ( itemnumber => $itemnumber ) : ( barcode => $barcode ) ) } );
+$itemnumber = $item->id if $item;
+
 my $title = ($item) ? $item->biblio->title : undef;
 
 my $step = ( $action eq 'lookup' && $item ) ? '2' : '1';
@@ -67,12 +69,12 @@ if ( !$item && $action eq 'lookup' ){
 $template->param( course => GetCourse($course_id) );
 
 if ( $action eq 'lookup' and $item ) {
-    my $course_item = GetCourseItem( itemnumber => $item->itemnumber );
+    my $course_item = Koha::Course::Items->find({ itemnumber => $item->id });
     my $course_reserve =
       ($course_item)
       ? GetCourseReserve(
         course_id => $course_id,
-        ci_id     => $course_item->{'ci_id'}
+        ci_id     => $course_item->ci_id,
       )
       : undef;
 
@@ -91,12 +93,26 @@ if ( $action eq 'lookup' and $item ) {
     );
 
 } elsif ( $action eq 'add' ) {
+    my $itype         = scalar $cgi->param('itype');
+    my $ccode         = scalar $cgi->param('ccode');
+    my $holdingbranch = scalar $cgi->param('holdingbranch');
+    my $location      = scalar $cgi->param('location');
+
+    my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
+    my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
+    my $holdingbranch_enabled = scalar $cgi->param('holdingbranch_enabled') ? 1 : 0;
+    my $location_enabled      = scalar $cgi->param('location_enabled') ? 1 : 0;
+
     my $ci_id = ModCourseItem(
-        itemnumber    => scalar $cgi->param('itemnumber'),
-        itype         => scalar $cgi->param('itype'),
-        ccode         => scalar $cgi->param('ccode'),
-        holdingbranch => scalar $cgi->param('holdingbranch'),
-        location      => scalar $cgi->param('location'),
+            itemnumber    => $itemnumber,
+            itype         => $itype,
+            ccode         => $ccode,
+            holdingbranch => $holdingbranch,
+            location      => $location,
+            itype_enabled         => $itype_enabled,
+            ccode_enabled         => $ccode_enabled,
+            holdingbranch_enabled => $holdingbranch_enabled,
+            location_enabled      => $location_enabled,
     );
 
     my $cr_id = ModCourseReserve(

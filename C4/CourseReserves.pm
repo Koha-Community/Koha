@@ -23,6 +23,11 @@ use C4::Context;
 use C4::Items qw(ModItem);
 use C4::Circulation qw(GetOpenIssue);
 
+use Koha::Courses;
+use Koha::Course::Instructors;
+use Koha::Course::Items;
+use Koha::Course::Reserves;
+
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
 
 BEGIN {
@@ -79,19 +84,17 @@ sub GetCourse {
     my ($course_id) = @_;
     warn whoami() . "( $course_id )" if $DEBUG;
 
-    my $query = "SELECT * FROM courses WHERE course_id = ?";
-    my $dbh   = C4::Context->dbh;
-    my $sth   = $dbh->prepare($query);
-    $sth->execute($course_id);
+    my $course = Koha::Courses->find( $course_id );
+    return undef unless $course;
+    $course = $course->unblessed;
 
-    my $course = $sth->fetchrow_hashref();
-
-    $query = "
+    my $dbh = C4::Context->dbh;
+    my $query = "
         SELECT b.* FROM course_instructors ci
         LEFT JOIN borrowers b ON ( ci.borrowernumber = b.borrowernumber )
         WHERE course_id =  ?
     ";
-    $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute($course_id);
     $course->{'instructors'} = $sth->fetchall_arrayref( {} );
 
@@ -305,7 +308,7 @@ sub EnableOrDisableCourseItem {
     ## or disable and already disabled item,
     ## as that would cause the fields to swap
     if ( $course_item->{'enabled'} ne $enabled ) {
-        _SwapAllFields($ci_id);
+        _SwapAllFields($ci_id, $enabled );
 
         my $query = "
             UPDATE course_items
@@ -493,23 +496,20 @@ sub _AddCourseItem {
     my (%params) = @_;
     warn identify_myself(%params) if $DEBUG;
 
-    my ( @fields, @values );
+    $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
 
-    push( @fields, 'itemnumber = ?' );
-    push( @values, $params{'itemnumber'} );
+    my %data = map { $_ => $params{$_} } @FIELDS;
+    my %enabled = map { $_ . "_enabled" => $params{ $_ . "_enabled" } } @FIELDS;
 
-    foreach (@FIELDS) {
-        push( @fields, "$_ = ?" );
-        push( @values, $params{$_} || undef );
-    }
+    my $ci = Koha::Course::Item->new(
+        {
+            itemnumber => $params{itemnumber},
+            %data,
+            %enabled,
+        }
+    )->store();
 
-    my $query = "INSERT INTO course_items SET " . join( ',', @fields );
-    my $dbh = C4::Context->dbh;
-    $dbh->do( $query, undef, @values );
-
-    my $ci_id = $dbh->last_insert_id( undef, undef, 'course_items', 'ci_id' );
-
-    return $ci_id;
+    return $ci->id;
 }
 
 =head2 _UpdateCourseItem
@@ -525,56 +525,33 @@ sub _UpdateCourseItem {
     my $ci_id         = $params{'ci_id'};
     my $course_item   = $params{'course_item'};
 
+    $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
+
     return unless ( $ci_id || $course_item );
 
-    $course_item = GetCourseItem( ci_id => $ci_id )
-      unless ($course_item);
-    $ci_id = $course_item->{'ci_id'} unless ($ci_id);
+    $course_item = Koha::Course::Items->find( $ci_id || $course_item->{ci_id} );
 
-    my %mod_params =
-      map {
-        defined $params{$_} && $params{$_} ne ''
-          ? ( $_ => $params{$_} )
-          : ()
-      } @FIELDS;
+    my %data = map { $_ => $params{$_} } @FIELDS;
+    my %enabled = map { $_ . "_enabled" => $params{ $_ . "_enabled" } } @FIELDS;
 
-    ModItem( \%mod_params, undef, $course_item->{'itemnumber'} );
-}
+    $course_item->update( { %data, %enabled } );
+    if ( $course_item->is_enabled ) {
+        my $item_fields = {};
+        $item_fields->{itype}         = $course_item->itype         if $course_item->itype_enabled;
+        $item_fields->{ccode}         = $course_item->ccode         if $course_item->ccode_enabled;
+        $item_fields->{location}      = $course_item->location      if $course_item->location_enabled;
+        $item_fields->{holdingbranch} = $course_item->holdingbranch if $course_item->holdingbranch_enabled;
 
-=head2 _ModStoredFields
-
-    _ModStoredFields( %params );
-
-    Updates the values for the 'original' fields in course_items
-    for a given ci_id
-
-=cut
-
-sub _ModStoredFields {
-    my (%params) = @_;
-    warn identify_myself(%params) if $DEBUG;
-
-    return unless ( $params{'ci_id'} );
-
-    my ( @fields_to_update, @values_to_update );
-
-    foreach (@FIELDS) {
-        if ( defined($params{$_}) ) {
-            push( @fields_to_update, $_ );
-            push( @values_to_update, $params{$_} );
-        }
+        ModItem( $item_fields, undef, $course_item->itemnumber ) if keys %$item_fields;
     }
-
-    my $query = "UPDATE course_items SET " . join( ',', map { "$_=?" } @fields_to_update ) . " WHERE ci_id = ?";
-
-    C4::Context->dbh->do( $query, undef, @values_to_update, $params{'ci_id'} )
-      if (@values_to_update);
 
 }
 
 =head2 _RevertFields
 
     _RevertFields( ci_id => $ci_id, fields => \@fields_to_revert );
+
+    Copies fields from course item storage back to the actual item
 
 =cut
 
@@ -584,17 +561,23 @@ sub _RevertFields {
 
     my $ci_id = $params{'ci_id'};
 
-    return unless ($ci_id);
+    return unless $ci_id;
 
-    my $course_item = GetCourseItem( ci_id => $params{'ci_id'} );
+    my $course_item = Koha::Course::Items->find( $ci_id );
 
-    my $mod_item_params;
-    foreach my $field ( @FIELDS ) {
-        next unless defined $course_item->{$field};
-        $mod_item_params->{$field} = $course_item->{$field};
-    }
+    my $item_fields = {};
+    $item_fields->{itype}         = $course_item->itype_storage         if $course_item->itype_enabled;
+    $item_fields->{ccode}         = $course_item->ccode_storage         if $course_item->ccode_enabled;
+    $item_fields->{location}      = $course_item->location_storage      if $course_item->location_enabled;
+    $item_fields->{holdingbranch} = $course_item->holdingbranch_storage if $course_item->holdingbranch_enabled;
 
-    ModItem( $mod_item_params, undef, $course_item->{'itemnumber'} ) if $mod_item_params && %$mod_item_params;
+    ModItem( $item_fields, undef, $course_item->itemnumber ) if keys %$item_fields;
+
+    $course_item->itype_storage(undef);
+    $course_item->ccode_storage(undef);
+    $course_item->location_storage(undef);
+    $course_item->holdingbranch_storage(undef);
+    $course_item->store();
 }
 
 =head2 _SwapAllFields
@@ -604,23 +587,41 @@ sub _RevertFields {
 =cut
 
 sub _SwapAllFields {
-    my ($ci_id) = @_;
+    my ( $ci_id, $enabled ) = @_;
     warn "C4::CourseReserves::_SwapFields( $ci_id )" if $DEBUG;
 
-    my $course_item = GetCourseItem( ci_id => $ci_id );
-    my $item = Koha::Items->find($course_item->{'itemnumber'});
+    my $course_item = Koha::Course::Items->find( $ci_id );
+    my $item = Koha::Items->find( $course_item->itemnumber );
 
-    my %course_item_fields;
-    my %item_fields;
-    foreach (@FIELDS) {
-        if ( defined( $course_item->{$_} ) ) {
-            $course_item_fields{$_} = $course_item->{$_};
-            $item_fields{$_}        = $item->$_ || q{};
-        }
+    if ( $enabled eq 'yes' ) { # Copy item fields to course item storage, course item fields to item
+        $course_item->itype_storage( $item->effective_itemtype )    if $course_item->itype_enabled;
+        $course_item->ccode_storage( $item->ccode )                 if $course_item->ccode_enabled;
+        $course_item->location_storage( $item->location )           if $course_item->location_enabled;
+        $course_item->holdingbranch_storage( $item->holdingbranch ) if $course_item->holdingbranch_enabled;
+        $course_item->store();
+
+        my $item_fields = {};
+        $item_fields->{itype}         = $course_item->itype         if $course_item->itype_enabled;
+        $item_fields->{ccode}         = $course_item->ccode         if $course_item->ccode_enabled;
+        $item_fields->{location}      = $course_item->location      if $course_item->location_enabled;
+        $item_fields->{holdingbranch} = $course_item->holdingbranch if $course_item->holdingbranch_enabled;
+
+        ModItem( $item_fields, undef, $course_item->itemnumber ) if keys %$item_fields;
+    } else { # Copy course item storage to item
+        my $item_fields = {};
+        $item_fields->{itype}         = $course_item->itype_storage         if $course_item->itype_enabled;
+        $item_fields->{ccode}         = $course_item->ccode_storage         if $course_item->ccode_enabled;
+        $item_fields->{location}      = $course_item->location_storage      if $course_item->location_enabled;
+        $item_fields->{holdingbranch} = $course_item->holdingbranch_storage if $course_item->holdingbranch_enabled;
+
+        ModItem( $item_fields, undef, $course_item->itemnumber ) if keys %$item_fields;
+
+        $course_item->itype_storage(undef);
+        $course_item->ccode_storage(undef);
+        $course_item->location_storage(undef);
+        $course_item->holdingbranch_storage(undef);
+        $course_item->store();
     }
-
-    ModItem( \%course_item_fields, undef, $course_item->{'itemnumber'} ) if %course_item_fields;
-    _ModStoredFields( %item_fields, ci_id => $ci_id );
 }
 
 =head2 GetCourseItems {
@@ -677,9 +678,10 @@ sub DelCourseItem {
 
     my $ci_id = $params{'ci_id'};
 
-    return unless ($ci_id);
+    my $course_item = Koha::Course::Items->find( $ci_id );
+    return unless $course_item;
 
-    _RevertFields( ci_id => $ci_id );
+    _RevertFields( ci_id => $ci_id ) if $course_item->enabled eq 'yes';
 
     my $query = "
         DELETE FROM course_items

@@ -42,6 +42,11 @@ my $location      = $cgi->param('location');
 my $staff_note    = $cgi->param('staff_note');
 my $public_note   = $cgi->param('public_note');
 
+my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
+my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
+my $holdingbranch_enabled = scalar $cgi->param('holdingbranch_enabled') ? 1 : 0;
+my $location_enabled      = scalar $cgi->param('location_enabled') ? 1 : 0;
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "course_reserves/batch_add_items.tt",
@@ -78,11 +83,15 @@ if ( $course_id && $course ) {
 
         foreach my $item (@items) {
             my $ci_id = ModCourseItem(
-                itemnumber    => $item->id,
-                itype         => $itype,
-                ccode         => $ccode,
-                holdingbranch => $holdingbranch,
-                location      => $location,
+                itemnumber            => $item->id,
+                itype                 => $itype,
+                ccode                 => $ccode,
+                holdingbranch         => $holdingbranch,
+                location              => $location,
+                itype_enabled         => $itype_enabled,
+                ccode_enabled         => $ccode_enabled,
+                holdingbranch_enabled => $holdingbranch_enabled,
+                location_enabled      => $location_enabled,
             );
 
             my $cr_id = ModCourseReserve(

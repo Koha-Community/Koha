@@ -101,17 +101,13 @@
                             <td>[% cr.item.itemcallnumber | html %]</td>
                             [% IF item_level_itypes %]
                             <td>
-                                [% IF cr.course_item.itype.defined %]
+                                [% IF cr.course_item.itype_enabled %]
                                     [% IF cr.course_item.enabled == 'yes' %]
-                                        <strong>[% ItemTypes.GetDescription( cr.item.itype) | html %]</strong>
-                                        [% IF cr.item.itype %]
-                                            ([% ItemTypes.GetDescription( cr.course_item.itype ) | html %])
-                                        [% END %]
+                                        <strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype ) | html %]</strong>
+                                        ([% ItemTypes.GetDescription( cr.course_item.itype_storage ) | html %])
                                     [% ELSE %]
                                         [% ItemTypes.GetDescription( cr.course_item.itype ) | html %]
-                                        [% IF cr.item.itype %]
-                                            (<strong>[% ItemTypes.GetDescription( cr.item.itype) | html %]</strong>)
-                                        [% END %]
+                                        (<strong>[% ItemTypes.GetDescription( cr.item.effective_itemtype) | html %]</strong>)
                                     [% END %]
                                 [% ELSE %]
                                      <i>Unchanged</i>
@@ -122,11 +118,11 @@
                             </td>
                             [% END %]
                             <td>
-                                 [% IF cr.course_item.ccode.defined %]
+                                 [% IF cr.course_item.ccode_enabled %]
                                      [% IF cr.course_item.enabled == 'yes' %]
                                         <strong>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]</strong>
                                         [% IF cr.item.ccode %]
-                                            ([% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) | html %])
+                                            ([% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode_storage ) | html %])
                                         [% END %]
                                      [% ELSE %]
                                         [% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) | html %]
@@ -142,11 +138,11 @@
                                  [% END %]
                             </td>
                             <td>
-                                [% IF cr.course_item.location.defined %]
+                                [% IF cr.course_item.location_enabled %]
                                     [% IF cr.course_item.enabled == 'yes' %]
                                         <strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>
                                         [% IF cr.item.permanent_location %]
-                                            ([% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %])
+                                            ([% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location_storage ) | html %])
                                         [% END %]
                                     [% ELSE %]
                                         [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %]
@@ -162,11 +158,11 @@
                                 [% END %]
                             </td>
                             <td>
-                                [% IF cr.course_item.holdingbranch.defined %]
+                                [% IF cr.course_item.holdingbranch_enabled %]
                                     [% IF cr.course_item.enabled == 'yes' %]
                                         <strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>
                                         [% IF cr.item.holdingbranch %]
-                                            ([% Branches.GetName( cr.course_item.holdingbranch ) | html %])
+                                            ([% Branches.GetName( cr.course_item.holdingbranch_storage ) | html %])
                                         [% END %]
                                     [% ELSE %]
                                         [% Branches.GetName( cr.course_item.holdingbranch ) | html %]

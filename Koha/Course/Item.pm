@@ -21,11 +21,47 @@ use Carp;
 
 use base qw(Koha::Object);
 
+use Koha::Course::Reserves;
+
 =head1 NAME
 
 Koha::Course::Item - Koha Course Item Object class
 
 =head1 API
+
+=head2 Methods
+
+=head3 is_enabled
+
+=cut
+
+sub is_enabled {
+    my ( $self ) = @_;
+
+    return $self->enabled eq 'yes';
+}
+
+=head3 course_reserves
+
+=cut
+
+sub course_reserves {
+    my ($self) = @_;
+
+    my $rs = $self->_result->course_reserves;
+    return Koha::Course::Reserves->_new_from_dbic( $rs );
+}
+
+=head3 item
+
+=cut
+
+sub item {
+    my ($self) = @_;
+
+    my $rs = $self->_result->itemnumber;
+    return Koha::Item->_new_from_dbic( $rs );
+}
 
 =head2 Internal methods
 
