@@ -3827,9 +3827,17 @@ CREATE TABLE `course_items` (
   `ci_id` int(11) NOT NULL AUTO_INCREMENT, -- course item id
   `itemnumber` int(11) NOT NULL, -- items.itemnumber for the item on reserve
   `itype` varchar(10) DEFAULT NULL, -- new itemtype for the item to have while on reserve (optional)
+  `itype_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
+  `itype_storage` varchar(10) DEFAULT NULL, -- a place to store the itype when item is on course reserve
   `ccode` varchar(80) DEFAULT NULL, -- new category code for the item to have while on reserve (optional)
+  `ccode_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if ccode should be changed while on course reserve
+  `ccode_storage` varchar(80) DEFAULT NULL, -- a place to store the ccode when item is on course reserve
   `holdingbranch` varchar(10) DEFAULT NULL, -- new holding branch for the item to have while on reserve (optional)
+  `holdingbranch_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
+  `holdingbranch_storage` varchar(10) DEFAULT NULL, -- a place to store the holdingbranch when item is on course reserve
   `location` varchar(80) DEFAULT NULL, -- new shelving location for the item to have while on reseve (optional)
+  `location_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
+  `location_storage` varchar(80) DEFAULT NULL, -- a place to store the location when the item is on course reserve
   `enabled` enum('yes','no') NOT NULL DEFAULT 'no', -- if at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`ci_id`),
