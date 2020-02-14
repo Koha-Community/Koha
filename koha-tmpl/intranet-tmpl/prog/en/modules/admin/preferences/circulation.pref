@@ -574,6 +574,13 @@ Circulation:
                   yes: "Block"
                   no: "Don't block"
             - staff from continuing to checkin items when a transfer is triggered.
+        -
+            - pref: StoreLastBorrower
+              default: 0
+              choices:
+                  yes: Store
+                  no: "Don't store"
+            - the last patron to return an item. This setting is independent of opacreadinghistory/AnonymousPatron.
     Holds Policy:
         -
             - In the staff client, split the holds queue into separate tables by
