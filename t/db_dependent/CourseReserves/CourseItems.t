@@ -38,17 +38,22 @@ create_dependent_objects();
 my ($biblionumber, $itemnumber) = create_bib_and_item();
 
 my $ci_id = ModCourseItem(
-    itemnumber    => $itemnumber,
-    itype         => 'BK_foo',
-    ccode         => 'BOOK',
-    holdingbranch => 'B2',
-    location      => 'TH',
+    itemnumber            => $itemnumber,
+    itype_enabled         => 1,
+    ccode_enabled         => 1,
+    holdingbranch_enabled => 1,
+    location_enabled      => 1,
+    itype                 => 'BK_foo',
+    ccode                 => 'BOOK',
+    holdingbranch         => 'B2',
+    location              => 'TH',
 );
 
 my $course = $builder->build({
     source => 'CourseReserve',
     value => {
         ci_id => $ci_id,
+        enabled => 'no',
     }
 });
 
@@ -60,23 +65,27 @@ my $cr_id = ModCourseReserve(
 );
 
 my $course_item = GetCourseItem( ci_id => $ci_id );
-is($course_item->{itype}, 'CD_foo', 'Course item itype should be CD_foo');
-is($course_item->{ccode}, 'CD', 'Course item ccode should be CD');
-is($course_item->{holdingbranch}, 'B1', 'Course item holding branch should be B1');
-is($course_item->{location}, 'HR', 'Course item location should be HR');
+is($course_item->{itype_storage}, 'CD_foo', 'Course item itype storage should be CD_foo');
+is($course_item->{ccode_storage}, 'CD', 'Course item ccode storage should be CD');
+is($course_item->{holdingbranch_storage}, 'B1', 'Course item holding branch storage should be B1');
+is($course_item->{location_storage}, 'HR', 'Course item location storage should be HR');
 
 my $item = Koha::Items->find($itemnumber);
-is($item->itype, 'BK_foo', 'Item type in course should be BK_foo');
+is($item->effective_itemtype, 'BK_foo', 'Item type in course should be BK_foo');
 is($item->ccode, 'BOOK', 'Item ccode in course should be BOOK');
 is($item->holdingbranch, 'B2', 'Item holding branch in course should be B2');
 is($item->location, 'TH', 'Item location in course should be TH');
 
 ModCourseItem(
-    itemnumber    => $itemnumber,
-    itype         => 'BK_foo',
-    ccode         => 'DVD',
-    holdingbranch => 'B3',
-    location      => 'TH',
+    itemnumber            => $itemnumber,
+    itype_enabled         => 1,
+    ccode_enabled         => 1,
+    holdingbranch_enabled => 1,
+    location_enabled      => 1,
+    itype                 => 'BK_foo',
+    ccode                 => 'DVD',
+    holdingbranch         => 'B3',
+    location              => 'TH',
 );
 
 ModCourseReserve(
@@ -87,20 +96,20 @@ ModCourseReserve(
 );
 
 $course_item = GetCourseItem( ci_id => $ci_id );
-is($course_item->{itype}, 'CD_foo', 'Course item itype should be CD_foo');
-is($course_item->{ccode}, 'CD', 'Course item ccode should be CD');
-is($course_item->{holdingbranch}, 'B1', 'Course item holding branch should be B1');
-is($course_item->{location}, 'HR', 'Course item location should be HR');
+is($course_item->{itype_storage}, 'CD_foo', 'Course item itype storage should be CD_foo');
+is($course_item->{ccode_storage}, 'CD', 'Course item ccode storage should be CD');
+is($course_item->{holdingbranch_storage}, 'B1', 'Course item holding branch storage should be B1');
+is($course_item->{location_storage}, 'HR', 'Course item location storage should be HR');
 
 $item = Koha::Items->find($itemnumber);
-is($item->itype, 'BK_foo', 'Item type in course should be BK_foo');
+is($item->effective_itemtype, 'BK_foo', 'Item type in course should be BK_foo');
 is($item->ccode, 'DVD', 'Item ccode in course should be DVD');
 is($item->holdingbranch, 'B3', 'Item holding branch in course should be B3');
 is($item->location, 'TH', 'Item location in course should be TH');
 
 DelCourseReserve( cr_id => $cr_id );
 $item = Koha::Items->find($itemnumber);
-is($item->itype, 'CD_foo', 'Item type removed from course should be set back to CD_foo');
+is($item->effective_itemtype, 'CD_foo', 'Item type removed from course should be set back to CD_foo');
 is($item->ccode, 'CD', 'Item ccode removed from course should be set back to CD');
 is($item->holdingbranch, 'B1', 'Item holding branch removed from course should be set back B1');
 is($item->location, 'HR', 'Item location removed from course should be TH');
@@ -112,11 +121,15 @@ $item = Koha::Items->find($itemnumber);
 is($item->ccode, '', 'Item ccode should be empty');
 
 my $ci_id2 = ModCourseItem(
-    itemnumber    => $itemnumber,
-    itype         => 'CD_foo',
-    ccode         => 'BOOK',
-    holdingbranch => 'B1',
-    location      => 'HR',
+    itemnumber            => $itemnumber,
+    itype_enabled         => 1,
+    ccode_enabled         => 1,
+    holdingbranch_enabled => 1,
+    location_enabled      => 1,
+    itype                 => 'CD_foo',
+    ccode                 => 'BOOK',
+    holdingbranch         => 'B1',
+    location              => 'HR',
 );
 
 my $cr_id2 = ModCourseReserve(
@@ -130,14 +143,18 @@ $item = Koha::Items->find($itemnumber);
 is($item->ccode, 'BOOK', 'Item ccode should be BOOK');
 
 my $course_item2 = GetCourseItem( ci_id => $ci_id2 );
-is($course_item2->{ccode}, '', 'Course item ccode should be empty');
+is($course_item2->{ccode_storage}, '', 'Course item ccode storage should be empty');
 
 ModCourseItem(
-    itemnumber    => $itemnumber,
-    itype         => 'CD_foo',
-    ccode         => 'DVD',
-    holdingbranch => 'B1',
-    location      => 'HR',
+    itemnumber            => $itemnumber,
+    itype_enabled         => 1,
+    ccode_enabled         => 1,
+    holdingbranch_enabled => 1,
+    location_enabled      => 1,
+    itype                 => 'CD_foo',
+    ccode                 => 'DVD',
+    holdingbranch         => 'B1',
+    location              => 'HR',
 );
 
 ModCourseReserve(
@@ -151,17 +168,21 @@ $item = Koha::Items->find($itemnumber);
 is($item->ccode, 'DVD', 'Item ccode should be DVD');
 
 ModCourseItem(
-    itemnumber    => $itemnumber,
-    itype         => 'BK',
-    ccode         => 'BOOK',
-    holdingbranch => '', # LEAVE UNCHANGED
-    location      => 'TH',
+    itemnumber            => $itemnumber,
+    itype_enabled         => 1,
+    ccode_enabled         => 1,
+    holdingbranch_enabled => 0,             # LEAVE UNCHANGED
+    location_enabled      => 1,
+    itype                 => 'BK',
+    ccode                 => 'BOOK',
+    holdingbranch         => undef,         # LEAVE UNCHANGED
+    location              => 'TH',
 );
 $item = Koha::Items->find($itemnumber);
 is($item->ccode, 'BOOK', 'Item ccode should be BOOK');
 
 $course_item2 = GetCourseItem( ci_id => $ci_id2 );
-is($course_item2->{ccode}, '', 'Course item ccode should be empty');
+is($course_item2->{ccode_storage}, '', 'Course item ccode storage should be empty');
 
 DelCourseReserve( cr_id => $cr_id2 );
 $item = Koha::Items->find($itemnumber);
@@ -195,7 +216,7 @@ subtest 'Ensure item info is preserved' => sub {
     #Remove course reservei
     DelCourseReserve( cr_id => $course_reserve_id );
     my $item_after = Koha::Items->find( $item->itemnumber );
-    is( $item->itype, $item_after->itype, "Itemtype is unchanged after adding to and removing from course reserves for inactive course");
+    is( $item->effective_itemtype, $item_after->itype, "Itemtype is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->location, $item_after->location, "Location is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->holdingbranch, $item_after->holdingbranch, "Holdingbranch is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->ccode, $item_after->ccode, "Collection is unchanged after adding to and removing from course reserves for inactive course");
@@ -225,7 +246,7 @@ subtest 'Ensure item info is preserved' => sub {
     #Remove course reserve
     DelCourseReserve( cr_id => $course_reserve_id );
     $item_after = Koha::Items->find( $item->itemnumber );
-    is( $item->itype, $item_after->itype, "Itemtype is unchanged after adding to and removing from course reserves for inactive course");
+    is( $item->effective_itemtype, $item_after->itype, "Itemtype is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->location, $item_after->location, "Location is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->holdingbranch, $item_after->holdingbranch, "Holdingbranch is unchanged after adding to and removing from course reserves for inactive course");
     is( $item->ccode, $item_after->ccode, "Collection is unchanged after adding to and removing from course reserves for inactive course");

@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo;[% IF is_edit || course_reserve %] Edit item[% ELSE %] Add items[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -16,7 +17,7 @@
         <div class="col-md-8 col-md-offset-2">
 
         [% IF course_reserve && !is_edit%]<div class="dialog message" id="already_on_reserve_this">This course already has this item on reserve.</div>[% END %]
-        [% IF course_item %]<div class="dialog message" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.size | html %]</div>[% END %]
+        [% IF course_item %]<div class="dialog message" id="already_on_reserve">Number of courses reserving this item: [% course_item.course_reserves.count | html %]</div>[% END %]
 
         <form method="post" action="/cgi-bin/koha/course_reserves/add_items.pl">
             <input type="hidden" name="course_id" value="[% course.course_id | html %]" />
@@ -39,11 +40,22 @@
                     [% IF item_level_itypes %]
                     <li>
                         <label class="required" for="itype">Item type:</label>
-                        <select id="itype" name="itype">
-                            <option value="">LEAVE UNCHANGED</option>
 
+                        [% IF course_item.itype_enabled %]
+                            <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" class="field-toggle" data-pulldown="itype" value="1" name="itype_enabled" id="itype_enabled" />
+                        [% END %]
+
+                        [% IF course_item.itype_enabled %]
+                            <select id="itype" name="itype">
+                        [% ELSE %]
+                            <select id="itype" name="itype" disabled="disabled">
+                        [% END %]
+
+                            <option value=""></option>
                             [% FOREACH it IN itypes %]
-                                [% IF course_item.itype.defined && ( ( course.enabled == 'yes' && it.itemtype == item.itype ) || ( course.enabled == 'no' && it.itemtype == course_item.itype ) ) %]
+                                [% IF it.itemtype == course_item.itype %]
                                     <option value="[% it.itemtype | html %]" selected="selected">[% it.description | html %]</option>
                                 [% ELSE %]
                                     <option value="[% it.itemtype | html %]">[% it.description | html %]</option>
@@ -55,11 +67,22 @@
 
                     <li>
                         <label class="required" for="ccode">Collection:</label>
-                        <select id="ccode" name="ccode">
-                            <option value="">LEAVE UNCHANGED</option>
 
+                        [% IF course_item.ccode_enabled %]
+                            <input type="checkbox" class="field-toggle" data-pulldown="ccode" value="1" name="ccode_enabled" id="ccode_enabled" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" class="field-toggle" data-pulldown="ccode" value="1" name="ccode_enabled" id="ccode_enabled" />
+                        [% END %]
+
+                        [% IF course_item.ccode_enabled %]
+                            <select id="ccode" name="ccode">
+                        [% ELSE %]
+                            <select id="ccode" name="ccode" disabled="disabled">
+                        [% END %]
+
+                            <option value=""></option>
                             [% FOREACH c IN ccodes %]
-                                [% IF course_item.ccode.defined && ( ( course.enabled == 'yes' && c.authorised_value == item.ccode ) || ( course.enabled == 'no' && c.authorised_value == course_item.ccode ) ) %]
+                                [% IF c.authorised_value == course_item.ccode %]
                                     <option value="[% c.authorised_value | html %]" selected="selected">[% c.lib | html %]</option>
                                 [% ELSE %]
                                     <option value="[% c.authorised_value | html %]">[% c.lib | html %]</option>
@@ -70,11 +93,22 @@
 
                     <li>
                         <label class="required" for="location">Shelving location:</label>
-                        <select id="location" name="location">
-                            <option value="">LEAVE UNCHANGED</option>
 
+                        [% IF course_item.location_enabled %]
+                            <input type="checkbox" class="field-toggle" data-pulldown="location" value="1" name="location_enabled" id="location_enabled" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" class="field-toggle" data-pulldown="location"  value="1" name="location_enabled" id="location_enabled" />
+                        [% END %]
+
+                        [% IF course_item.location_enabled %]
+                            <select id="location" name="location">
+                        [% ELSE %]
+                            <select id="location" name="location" disabled="disabled">
+                        [% END %]
+
+                            <option value=""></option>
                             [% FOREACH s IN locations %]
-                                [% IF course_item.location.defined && ( ( course.enabled == 'yes' && s.authorised_value == item.location ) || ( course.enabled == 'no' && s.authorised_value == course_item.location ) ) %]
+                                [% IF s.authorised_value == course_item.location %]
                                     <option value="[% s.authorised_value | html %]" selected="selected">[% s.lib | html %]</option>
                                 [% ELSE %]
                                     <option value="[% s.authorised_value | html %]">[% s.lib | html %]</option>
@@ -85,10 +119,22 @@
 
                     <li>
                         <label class="required" for="holdingbranch">Holding library:</label>
-                        <select id="holdingbranch" name="holdingbranch">
-                            <option value="">LEAVE UNCHANGED</option>
+
+                        [% IF course_item.holdingbranch_enabled %]
+                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" checked="checked" />
+                        [% ELSE %]
+                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="holdingbranch" name="holdingbranch_enabled" id="holdingbranch_enabled" />
+                        [% END %]
+
+                        [% IF course_item.holdingbranch_enabled %]
+                            <select id="holdingbranch" name="holdingbranch">
+                        [% ELSE %]
+                            <select id="holdingbranch" name="holdingbranch" disabled="disabled">
+                        [% END %]
+
+                            <option value=""></option>
                             [% FOREACH b IN Branches.all() %]
-                                [% IF course_item.holdingbranch.defined && ( ( course.enabled == 'yes' && b.branchcode == item.holdingbranch ) || ( course.enabled == 'no' && b.branchcode == course_item.holdingbranch ) ) %]
+                                [% IF b.branchcode == course_item.holdingbranch %]
                                     <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
                                 [% ELSE %]
                                     <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
@@ -118,5 +164,22 @@
         </form>
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            $('.field-toggle').change(function() {
+                if( this.checked ) {
+                    $('#' + $(this).data('pulldown') ).removeAttr('disabled');
+                } else {
+                    $('#' + $(this).data('pulldown') ).val('');
+                    $('#' + $(this).data('pulldown') ).attr('disabled', 'disabled');
+                }
+            });
+        });
+    //]]>
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
