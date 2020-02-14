@@ -1,4 +1,4 @@
-/* global _ irregularity more_than_one_serial subscriptionid tags interface theme mana_enabled MSG_FREQUENCY_LENGTH_ERROR MSG_BIBLIO_NOT_EXIST */
+/* global __ irregularity more_than_one_serial subscriptionid tags interface theme mana_enabled MSG_FREQUENCY_LENGTH_ERROR MSG_BIBLIO_NOT_EXIST */
 
 var globalnumpatterndata;
 var globalfreqdata;
@@ -55,7 +55,7 @@ function Check_page1() {
     } else {
         var bookseller_ids = BOOKSELLER_IDS;
         if ( $.inArray(Number(bookseller_id), bookseller_ids) == -1 ) {
-            alert ("The vendor does not exist");
+            alert ( __("The vendor does not exist") );
             return false;
         }
     }
