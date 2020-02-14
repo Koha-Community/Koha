@@ -98,23 +98,27 @@
 								<label for="user">Librarian:</label>
                                 <input type="text" name="user" id="user" value="[% user | html %]" />
 							</li>
-                        <li>
-                                <label for="modules">Modules:</label>
-                                <select name="modules" id="modules" multiple="multiple">
-                                    [% UNLESS modules %]
-                                        <option value="" selected="selected">All</option>
-                                    [% ELSE %]
-                                        <option value="">All</option>
-                                    [% END %]
-                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
-                                        [% IF modules.grep(modx).size %]
-                                            <option value="[% modx | html %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
+                            [% UNLESS src == "circ" %]
+                                <li>
+                                    <label for="modules">Modules:</label>
+                                    <select name="modules" id="modules" multiple="multiple">
+                                        [% UNLESS modules %]
+                                            <option value="" selected="selected">All</option>
                                         [% ELSE %]
-                                            <option value="[% modx | html %]">[% PROCESS translate_log_module module=modx %]</option>
+                                            <option value="">All</option>
                                         [% END %]
-                                    [% END %]
-                                </select>
-                            </li>
+                                        [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
+                                            [% IF modules.grep(modx).size %]
+                                                <option value="[% modx | html %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
+                                            [% ELSE %]
+                                                <option value="[% modx | html %]">[% PROCESS translate_log_module module=modx %]</option>
+                                            [% END %]
+                                        [% END %]
+                                    </select>
+                                </li>
+                            [% ELSE %]
+                                <input type="hidden" name="modules" value="MEMBERS" />
+                            [% END %]
                             <li>
                                 <label for="actions">Actions:</label>
                                 <select name="actions" id="actions" multiple="multiple">
@@ -133,10 +137,15 @@
                                     [% END %]
                                 </select>
                             </li>
-							<li>
-								<label for="object">Object: </label>
-                                <input type="text" id="object" name="object" value="[% object | html %]" />
-							</li>
+                            <li>
+                                [% IF src == 'circ' %]
+                                    <label for="object">Borrowernumber: </label>
+                                    <input type="text" id="object" name="object" value="[% object | html %]" readonly="readonly" title="This field cannot be modified from the circulation module." />
+                                [% ELSE %]
+                                    <label for="object">Object: </label>
+                                    <input type="text" id="object" name="object" value="[% object | html %]" />
+                                [% END %]
+                            </li>
 							<li>
 								<label for="info">Info:</label>
                                 <input type="text" id="info" name="info" value="[% info | html %]" />
