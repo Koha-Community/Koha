@@ -262,7 +262,13 @@
                                             <span>Unlimited</span>
                                         [% END %]
                                     </td>
-                                    <td>[% holds_per_record | html %]</td>
+                                    <td>
+                                        [% IF holds_per_record.defined && holds_per_record != '' %]
+                                            [% holds_per_record | html %]
+                                        [% ELSE %]
+                                            <span>Unlimited</span>
+                                        [% END %]
+                                    </td>
                                     <td>
                                         [% IF onshelfholds == 1 %]
                                             <span>Yes</span>
@@ -1016,11 +1022,13 @@
                             // Remove potential previous input added
                             $(current_column).find("input").remove();
                             $(current_column).append("<input type='hidden' name='"+name+"' value='"+val+"' />");
-                        } else if ( i == 4 || i == 5 || i == 25 ) {
+                        } else if ( i == 4 || i == 5 || i == 24 || i == 25 || i == 26 ) {
                             // If the value is not an integer for
                             //     - "Current checkouts allowed"
                             //     - "Current on-site checkouts allowed"
+                            //     - "Holds allowed (total)"
                             //     - "Holds allowed (daily)"
+                            //     - "Holds per record (count)"
                             // The value is "Unlimited" (or an equivalent translated string)
                             // an it should be set to an empty string
                             if( !((parseFloat(itm) == parseInt(itm)) && !isNaN(itm)) ) {
