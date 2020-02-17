@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE AuthorisedValues %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -52,7 +53,7 @@
             [% IF suggestion.reason %]
                 <li>
                     <span class="label">Reason:</span>
-                    [% SET avs = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
+                    [% SET suggestion_reasons = AuthorisedValues.GetAuthValueDropbox( 'SUGGEST' ) %]
                     [% SET other_reason = 1 %]
                     <select class="select-reason" id="reason" name="reason">
                         <option value=""> -- Choose a reason -- </option>
