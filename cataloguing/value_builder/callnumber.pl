@@ -68,7 +68,6 @@ my $launcher = sub {
         template_name   => "cataloguing/value_builder/ajax.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => {editcatalogue => '*'},
         debug           => 1,
     });

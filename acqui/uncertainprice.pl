@@ -61,7 +61,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/uncertainprice.tt",
 			     query => $input,
 			     type => "intranet",
-			     authnotrequired => 0,
 			     flagsrequired   => { acquisition => 'order_manage' },
 			     debug => 1,
                 });

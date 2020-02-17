@@ -43,7 +43,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         debug           => 1,
-        authnotrequired => 0,
         flagsrequired   => $needed_flags,
     }
 );

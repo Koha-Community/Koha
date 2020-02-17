@@ -32,7 +32,6 @@ our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => 'admin/edi_accounts.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'edi_manage' },
     }
 );

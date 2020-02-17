@@ -56,7 +56,6 @@ my $launcher = sub {
         {   template_name   => "cataloguing/value_builder/cn_browser.tt",
             query           => $cgi,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1 },
         }
     );

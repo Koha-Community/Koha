@@ -40,7 +40,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "virtualshelves/sendshelfform.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
     }
 );
@@ -64,7 +63,6 @@ if ($email) {
         template_name   => "virtualshelves/sendshelf.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
         }
     );

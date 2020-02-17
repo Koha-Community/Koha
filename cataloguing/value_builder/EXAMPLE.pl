@@ -116,7 +116,6 @@ my $launcher= sub {
         template_name => "cataloguing/value_builder/EXAMPLE.tt",
         query => $cgi,
         type => "intranet",
-        authnotrequired => 0,
         flagsrequired => {editcatalogue => '*'},
     });
     $template->param(

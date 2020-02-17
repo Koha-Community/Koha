@@ -54,7 +54,6 @@ if ( $op eq "delete" ) {
             template_name   => "authorities/authorities-home.tt",
             query           => $query,
             type            => 'intranet',
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }
@@ -105,7 +104,6 @@ if ( $op eq "do_search" ) {
             template_name   => "authorities/searchresultlist.tt",
             query           => $query,
             type            => 'intranet',
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }
@@ -203,7 +201,6 @@ if ( $op eq '' ) {
             template_name   => "authorities/authorities-home.tt",
             query           => $query,
             type            => 'intranet',
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }

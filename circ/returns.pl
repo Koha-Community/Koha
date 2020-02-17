@@ -63,7 +63,6 @@ my ( $template, $librarian, $cookie, $flags ) = get_template_and_user(
         template_name   => "circ/returns.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { circulate => "circulate_remaining_permissions" },
     }
 );

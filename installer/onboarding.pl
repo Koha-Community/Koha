@@ -305,7 +305,6 @@ my ( $template, $loggedinuser );
         template_name   => "onboarding/onboardingstep${step}.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         debug           => 1,
     }
 );

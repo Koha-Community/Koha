@@ -50,7 +50,6 @@ our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'members/pay.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { borrowers => 'edit_borrowers', updatecharges => $updatecharges_permissions },
         debug           => 1,
     }

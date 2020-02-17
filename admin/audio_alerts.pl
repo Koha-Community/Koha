@@ -39,7 +39,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/audio_alerts.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_audio_alerts' },
         debug           => 1,
     }

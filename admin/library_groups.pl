@@ -34,7 +34,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/library_groups.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_libraries' },
         debug           => 1,
     }

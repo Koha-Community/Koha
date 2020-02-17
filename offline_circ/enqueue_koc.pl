@@ -49,7 +49,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name => "offline_circ/enqueue_koc.tt",
     query => $query,
     type => "intranet",
-    authnotrequired => 0,
      flagsrequired   => { circulate => "circulate_remaining_permissions" },
 });
 

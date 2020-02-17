@@ -31,7 +31,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "circ/article-requests.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { circulate => "circulate_remaining_permissions" },
     }
 );

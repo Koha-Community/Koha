@@ -46,7 +46,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/smart-rules.tt",
                             query => $input,
                             type => "intranet",
-                            authnotrequired => 0,
                             flagsrequired => {parameters => 'manage_circ_rules'},
                             debug => 1,
                             });

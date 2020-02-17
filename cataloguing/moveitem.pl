@@ -52,7 +52,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
         template_name   => "cataloguing/moveitem.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { editcatalogue => 'edit_items' },
         debug           => 1,
     }

@@ -30,7 +30,6 @@ my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "reports/reports-home.tt",
 				query => $query,
 				type => "intranet",
-				authnotrequired => 0,
 				flagsrequired => {reports => '*'},
 				debug => 1,
 				});

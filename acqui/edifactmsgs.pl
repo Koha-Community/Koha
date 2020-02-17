@@ -30,7 +30,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
         template_name   => 'acqui/edifactmsgs.tt',
         query           => $q,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'edi_manage' },
         debug           => 1,
     }

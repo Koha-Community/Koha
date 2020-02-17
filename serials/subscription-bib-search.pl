@@ -83,7 +83,6 @@ if ( $op eq "do_search" && $query ) {
             template_name   => "serials/result.tt",
             query           => $input,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1, serials => '*' },
             debug           => 1,
         }
@@ -189,7 +188,6 @@ else {
             template_name   => "serials/subscription-bib-search.tt",
             query           => $input,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1, serials => '*' },
             debug           => 1,
         }

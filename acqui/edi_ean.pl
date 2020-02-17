@@ -51,7 +51,6 @@ else {
             template_name   => 'acqui/edi_ean.tt',
             query           => $query,
             type            => 'intranet',
-            authnotrequired => 0,
             flagsrequired   => { acquisition => 'order_manage' },
             debug           => 1,
         }

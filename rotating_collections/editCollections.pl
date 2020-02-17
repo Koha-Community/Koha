@@ -33,7 +33,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "rotating_collections/editCollections.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { tools => 'rotating_collections' },
         debug           => 1,
     }

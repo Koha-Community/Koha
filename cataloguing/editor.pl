@@ -40,7 +40,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => 'cataloguing/editor.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => {
             editcatalogue => {
                 'edit_catalogue'  => 1,

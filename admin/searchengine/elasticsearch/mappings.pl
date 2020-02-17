@@ -35,7 +35,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => 'admin/searchengine/elasticsearch/mappings.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_search_engine_config' },
     }
 );

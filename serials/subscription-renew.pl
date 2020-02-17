@@ -67,7 +67,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "serials/subscription-renew.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { serials => 'renew_subscription' },
         debug           => 1,
     }

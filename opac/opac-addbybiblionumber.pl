@@ -52,7 +52,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "opac-addbybiblionumber.tt",
         query           => $query,
         type            => "opac",
-        authnotrequired => 0,
     }
 );
 

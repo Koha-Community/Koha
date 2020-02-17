@@ -60,7 +60,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "about.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
         debug           => 1,
     }
