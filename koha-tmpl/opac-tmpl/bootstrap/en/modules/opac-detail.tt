@@ -570,7 +570,7 @@
                                 [% SET title_notes_count = 1 %]
                             [% END %]
                             [% IF SYNDETICS_SUMMARY %][% SET title_notes_count = title_notes_count + 1 %][% END %]
-                            <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% title_notes_count %] )</a></li>
+                            <li id="tab_descriptions"> <a href="#descriptions">Title notes ( [% title_notes_count | html %] )</a></li>
                         [% END %]
                         [% IF ( SYNDETICS_TOC ) %]
                             <li id="tab_toc"> <a href="#toc">TOC</a></li>
