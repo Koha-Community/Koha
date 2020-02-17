@@ -263,9 +263,9 @@
                                                     [% END %]
                                                 </ul>
                                             </li>
-                                        [% ELSIF guarantor_relationships.count > 0 %]
+                                        [% ELSIF guarantor_relationships.count > 0 OR ( patron.contactfirstname OR patron.contactname ) %]
                                                 <li>
-                                                [% IF guarantor_relationships.count > 1 %]
+                                                [% IF guarantor_relationships.count > 1 OR guarantor_relationships.count == 0 AND ( patron.contactfirstname OR patron.contactname ) %]
                                                     <span class="label">Guarantors:</span>
                                                 [% ELSE %]
                                                     <span class="label">Guarantor:</span>
@@ -274,8 +274,11 @@
                                                     [% FOREACH gr IN guarantor_relationships %]
                                                         [% SET guarantor = gr.guarantor %]
                                                         [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a></li>
+                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.id | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %][% IF gr.relationship %] ([% gr.relationship %])[% END %]</a></li>
                                                         [% END %]
+                                                    [% END %]
+                                                    [% IF patron.contactfirstname OR patron.contactname %]
+                                                        <li>[% patron.contactfirstname %] [% patron.contactname %][% IF patron.relationship %] ([% patron.relationship %])[% END %]</li>
                                                     [% END %]
                                                     </ul>
                                                 </li>
