@@ -2503,9 +2503,9 @@ sub _adjust_pubyear {
              (?<year>\d)[-]?[.Xx?]{3}
             |(?<year>\d{2})[.Xx?]{2}
             |(?<year>\d{3})[.Xx?]
-            |(?<year>\d)[-]{3}\?
-            |(?<year>\d\d)[-]{2}\?
-            |(?<year>\d{3})[-]\?
+            |(?<year>\d)[-]{1,3}\??
+            |(?<year>\d\d)[-]{1,2}\??
+            |(?<year>\d{3})[-]\??
     /xms ) { # the form 198-? occurred in Dutch ISBD rules
         my $digits = $+{year};
         $retval = $digits * ( 10 ** ( 4 - length($digits) ));
