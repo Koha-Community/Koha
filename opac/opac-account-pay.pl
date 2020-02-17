@@ -58,7 +58,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "opac-account-pay-error.tt",
         query           => $cgi,
         type            => "opac",
-        authnotrequired => 0,
         debug           => 1,
     }
 );

@@ -65,7 +65,6 @@ our ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/basketgroup.tt",
 			     query => $input,
 			     type => "intranet",
-			     authnotrequired => 0,
 			     flagsrequired => {acquisition => 'group_manage'},
 			     debug => 1,
                 });

@@ -33,7 +33,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "labels/label-edit-profile.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
         debug           => 1,
     }

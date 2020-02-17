@@ -159,7 +159,6 @@ unless($confirm_budget_exceeding) {
             template_name   => "acqui/addorder.tt",
             query           => $input,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => {acquisition => 'order_manage'},
         });
 
@@ -216,7 +215,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "acqui/booksellers.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'order_manage' },
         debug           => 1,
     }

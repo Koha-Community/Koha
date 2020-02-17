@@ -30,7 +30,6 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "admin/localization.tt",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_itemtypes' },
         query           => $query,
         type            => "intranet",

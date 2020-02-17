@@ -47,7 +47,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "tools/picture-upload.tt",
 					query => $input,
 					type => "intranet",
-					authnotrequired => 0,
 					flagsrequired => { tools => 'batch_upload_patron_images'},
 					debug => 0,
 					});

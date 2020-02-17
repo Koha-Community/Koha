@@ -15,7 +15,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/didyoumean.tt",
             query => $input,
             type => "intranet",
-            authnotrequired => 0,
             flagsrequired => {parameters => 'manage_didyoumean'},
             debug => 1,
             });

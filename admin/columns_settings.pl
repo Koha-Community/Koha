@@ -14,7 +14,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/columns_settings.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_column_config' },
         debug           => 1,
     }

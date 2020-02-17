@@ -59,7 +59,6 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
     template_name   =>  'catalogue/detail.tt',
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
     }
 );

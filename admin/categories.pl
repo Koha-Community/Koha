@@ -42,7 +42,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/categories.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_patron_categories' },
         debug           => 1,
     }

@@ -55,7 +55,6 @@ my ($template, $loggedinuser, $cookie, $userflags) = get_template_and_user({
     template_name => "acqui/addorderiso2709.tt",
     query => $input,
     type => "intranet",
-    authnotrequired => 0,
     flagsrequired   => { acquisition => 'order_manage' },
     debug => 1,
 });

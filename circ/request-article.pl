@@ -35,7 +35,6 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
         template_name   => "circ/request-article.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { circulate => 'circulate_remaining_permissions' },
     }
 );

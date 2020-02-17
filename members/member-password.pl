@@ -32,7 +32,6 @@ my ( $template, $loggedinuser, $cookie, $staffflags ) = get_template_and_user(
         template_name   => "members/member-password.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { borrowers => 'edit_borrowers' },
         debug           => 1,
     }

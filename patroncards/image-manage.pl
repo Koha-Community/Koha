@@ -19,7 +19,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
                     template_name       => "patroncards/image-manage.tt",
                     query               => $cgi,
                     type                => "intranet",
-                    authnotrequired     => 0,
                     flagsrequired       => {tools => 'batch_upload_patron_images'}, # FIXME: establish flag for patron card creator
                     debug               => 0,
                     });

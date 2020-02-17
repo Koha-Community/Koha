@@ -78,7 +78,6 @@ $query->param(-name=>'sco_user_login',-values=>[1]);
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "sco/sco-main.tt",
-        authnotrequired => 0,
         flagsrequired   => { self_check => "self_checkout_module" },
         query           => $query,
         type            => "opac",

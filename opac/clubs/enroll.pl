@@ -32,7 +32,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "clubs/enroll.tt",
         query           => $cgi,
         type            => "opac",
-        authnotrequired => 0,
     }
 );
 

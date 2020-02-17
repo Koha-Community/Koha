@@ -25,7 +25,6 @@ my ( $template, $loggedinuser, $cookie, $user_flags ) = get_template_and_user(
         template_name   => 'pos/pay.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { cash_management => 'takepayment' },
     }
 );

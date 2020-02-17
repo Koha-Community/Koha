@@ -441,7 +441,6 @@ my ( $template, $loggedinuser, $cookies ) = get_template_and_user(
         template_name   => "opac-user.tt",
         query           => $query,
         type            => "opac",
-        authnotrequired => 0,
         debug           => 1
     }
 );
@@ -467,7 +466,6 @@ $result = $schema->resultset('SearchHistory')->search()->count;
         template_name   => "opac-user.tt",
         query           => $query,
         type            => "opac",
-        authnotrequired => 0,
         debug           => 1
     }
 );

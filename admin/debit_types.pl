@@ -38,7 +38,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/debit_types.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'parameters_remaining_permissions' },
         debug           => 1,
     }

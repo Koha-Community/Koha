@@ -32,7 +32,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "admin/share_content.tt",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_mana' },
         debug           => 1,
     }

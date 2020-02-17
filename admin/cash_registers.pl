@@ -36,7 +36,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => 'admin/cash_registers.tt',
         query           => $cgi,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_cash_registers' },
     }
 );

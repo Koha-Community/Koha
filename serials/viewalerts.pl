@@ -32,7 +32,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => 'serials/viewalerts.tt',
                  query => $input,
                  type => "intranet",
-                 authnotrequired => 0,
                  flagsrequired => {serials => '*'},
                  debug => 1,
                  });

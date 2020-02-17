@@ -44,7 +44,6 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'admin/oai_set_mappings.tt',
     query           => $input,
     type            => 'intranet',
-    authnotrequired => 0,
     flagsrequired   => { 'parameters' => 'manage_oai_sets' },
     debug           => 1,
 } );
