@@ -79,7 +79,6 @@ sub plugin {
         {   template_name   => "cataloguing/value_builder/normarc_field_008.tt",
             query           => $input,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { editcatalogue => 1 },
             debug           => 1,
         }

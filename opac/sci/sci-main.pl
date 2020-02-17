@@ -40,7 +40,6 @@ $cgi->param( -name => 'sci_user_login', -values => [1] );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "sci/sci-main.tt",
-        authnotrequired => 0,
         flagsrequired   => { self_check => 'self_checkin_module' },
         query           => $cgi,
         type            => "opac"

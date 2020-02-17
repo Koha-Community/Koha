@@ -36,7 +36,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
     template_name   => "opac-patron-consent.tt",
     query           => $query,
     type            => "opac",
-    authnotrequired => 0,
 });
 
 my $patron = Koha::Patrons->find($borrowernumber);

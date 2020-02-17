@@ -69,7 +69,6 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
     {   template_name   => 'acqui/booksellers.tt',
         query           => $query,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { acquisition => '*' },
         debug           => 1,
     }

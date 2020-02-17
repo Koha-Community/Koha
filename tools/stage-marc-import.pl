@@ -66,7 +66,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "tools/stage-marc-import.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { tools => 'stage_marc_import' },
         debug           => 1,
     }

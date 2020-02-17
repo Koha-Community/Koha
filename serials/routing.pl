@@ -56,7 +56,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => 'serials/routing.tt',
         query           => $query,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { serials => 'routing' },
     }
 );

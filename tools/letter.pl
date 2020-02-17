@@ -76,7 +76,6 @@ our ( $template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user
         template_name   => 'tools/letter.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { tools => 'edit_notices' },
         debug           => 1,
     }

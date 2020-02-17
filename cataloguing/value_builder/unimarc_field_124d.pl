@@ -54,7 +54,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_124d.tt",
 			     query => $input,
 			     type => "intranet",
-			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });

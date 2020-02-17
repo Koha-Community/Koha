@@ -46,7 +46,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name => 'tools/batch_record_modification.tt',
         query => $input,
         type => "intranet",
-        authnotrequired => 0,
         flagsrequired => { tools => 'records_batchmod' },
 });
 

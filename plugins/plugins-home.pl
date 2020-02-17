@@ -36,7 +36,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name => ($plugins_enabled) ? "plugins/plugins-home.tt" : "plugins/plugins-disabled.tt",
         query         => $input,
         type          => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { plugins => '*' },
         debug           => 1,
     }

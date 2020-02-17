@@ -34,7 +34,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "tools/quotes-upload.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { tools => 'edit_quotes' },
         debug           => 1,
     }

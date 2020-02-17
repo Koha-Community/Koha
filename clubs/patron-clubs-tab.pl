@@ -34,7 +34,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "clubs/patron-clubs-tab.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { clubs => '*' },
     }
 );

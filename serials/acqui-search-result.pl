@@ -55,7 +55,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "serials/acqui-search-result.tt",
                  query => $query,
                  type => "intranet",
-                 authnotrequired => 0,
                  flagsrequired => {serials => '*'},
                  debug => 1,
                  });

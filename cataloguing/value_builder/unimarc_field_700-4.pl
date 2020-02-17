@@ -59,7 +59,6 @@ my ($input) = @_;
             template_name   => "cataloguing/value_builder/unimarc_field_700-4.tt",
             query           => $input,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { editcatalogue => '*' },
             debug           => 1,
         }

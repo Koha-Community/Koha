@@ -42,7 +42,6 @@ my ($template, $loggedinuser, $cookie, $flags) = get_template_and_user( {
     template_name   => 'acqui/cancelorder.tt',
     query           => $input,
     type            => 'intranet',
-    authnotrequired => 0,
     flagsrequired   => { 'acquisition' => 'order_manage' },
     debug           => 1,
 } );

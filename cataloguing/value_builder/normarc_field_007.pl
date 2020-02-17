@@ -55,7 +55,6 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/value_builder/normarc_field_007.tt",
 			     query => $input,
 			     type => "intranet",
-			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });

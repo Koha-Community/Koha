@@ -55,7 +55,6 @@ sub plugin {
             template_name => "cataloguing/value_builder/unimarc_field_116.tt",
             query         => $input,
             type          => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { editcatalogue => '*' },
             debug           => 1,
         }

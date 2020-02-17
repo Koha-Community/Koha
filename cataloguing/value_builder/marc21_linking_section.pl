@@ -78,7 +78,6 @@ my $launcher = sub {
             {   template_name   => "cataloguing/value_builder/marc21_linking_section.tt",
                 query           => $query,
                 type            => "intranet",
-                authnotrequired => 0,
                 flagsrequired   => { editcatalogue => '*' },
                 debug           => 1,
             }
@@ -199,7 +198,6 @@ my $launcher = sub {
             {   template_name   => "cataloguing/value_builder/marc21_linking_section.tt",
                 query           => $query,
                 type            => 'intranet',
-                authnotrequired => 0,
                 debug           => 1,
             }
         );
@@ -307,7 +305,6 @@ my $launcher = sub {
             {   template_name   => "cataloguing/value_builder/marc21_linking_section.tt",
                 query           => $query,
                 type            => "intranet",
-                authnotrequired => 0,
             }
         );
 

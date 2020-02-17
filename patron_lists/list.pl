@@ -33,7 +33,6 @@ my ( $template, $logged_in_user, $cookie ) = get_template_and_user(
         template_name   => "patron_lists/list.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired => { tools => 'manage_patron_lists' },
     }
 );
