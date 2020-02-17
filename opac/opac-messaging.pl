@@ -31,6 +31,7 @@ use C4::Members::Messaging;
 use C4::Form::MessagingPreferences;
 use Koha::Patrons;
 use Koha::SMS::Providers;
+use Koha::Token;
 
 my $query = CGI->new();
 
@@ -55,6 +56,11 @@ my $patron = Koha::Patrons->find( $borrowernumber ); # FIXME and if borrowernumb
 my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
 
 if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
+    die "Wrong CSRF token" unless Koha::Token->new->check_csrf({
+        session_id => scalar $query->cookie('CGISESSID'),
+        token  => scalar $query->param('csrf_token'),
+    });
+
     my $sms = $query->param('SMSnumber');
     my $sms_provider_id = $query->param('sms_provider_id');
     $patron->set({
@@ -77,5 +83,12 @@ if ( C4::Context->preference("SMSSendDriver") eq 'Email' ) {
     my @providers = Koha::SMS::Providers->search();
     $template->param( sms_providers => \@providers, sms_provider_id => $patron->sms_provider_id );
 }
+
+my $new_session_id = $cookie->value;
+$template->param(
+    csrf_token => Koha::Token->new->generate_csrf({
+            session_id => $new_session_id,
+        }),
+);
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
