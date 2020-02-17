@@ -50,7 +50,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "admin/adveditorshortcuts.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 1,
         flagsrequired   => { parameters => 'manage_keyboard_shortcuts' },
         debug           => 1,
     }
