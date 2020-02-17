@@ -261,8 +261,8 @@ elsif ($op eq 'add') {
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
     my $chargeperiod_charge_at = $input->param('chargeperiod_charge_at');
-    my $maxissueqty  = $input->param('maxissueqty');
-    my $maxonsiteissueqty  = $input->param('maxonsiteissueqty');
+    my $maxissueqty  = strip_non_numeric($input->param('maxissueqty'));
+    my $maxonsiteissueqty  = strip_non_numeric($input->param('maxonsiteissueqty'));
     my $renewalsallowed  = $input->param('renewalsallowed');
     my $renewalperiod    = $input->param('renewalperiod');
     my $norenewalbefore  = $input->param('norenewalbefore');
@@ -273,16 +273,10 @@ elsif ($op eq 'add') {
     my $no_auto_renewal_after_hard_limit = $input->param('no_auto_renewal_after_hard_limit') || '';
     $no_auto_renewal_after_hard_limit = eval { dt_from_string( $input->param('no_auto_renewal_after_hard_limit') ) } if ( $no_auto_renewal_after_hard_limit );
     $no_auto_renewal_after_hard_limit = output_pref( { dt => $no_auto_renewal_after_hard_limit, dateonly => 1, dateformat => 'iso' } ) if ( $no_auto_renewal_after_hard_limit );
-    my $reservesallowed  = $input->param('reservesallowed');
-    my $holds_per_record = $input->param('holds_per_record');
-    my $holds_per_day    = $input->param('holds_per_day');
-    $holds_per_day =~ s/\s//g;
-    $holds_per_day = '' if $holds_per_day !~ /^\d+/;
+    my $reservesallowed  = strip_non_numeric($input->param('reservesallowed'));
+    my $holds_per_record = strip_non_numeric($input->param('holds_per_record'));
+    my $holds_per_day    = strip_non_numeric($input->param('holds_per_day'));
     my $onshelfholds     = $input->param('onshelfholds') || 0;
-    $maxissueqty =~ s/\s//g;
-    $maxissueqty = '' if $maxissueqty !~ /^\d+/;
-    $maxonsiteissueqty =~ s/\s//g;
-    $maxonsiteissueqty = '' if $maxonsiteissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
     $issuelength = $issuelength eq q{} ? undef : $issuelength;
     my $lengthunit  = $input->param('lengthunit');
@@ -342,20 +336,15 @@ elsif ($op eq 'add') {
 }
 elsif ($op eq "set-branch-defaults") {
     my $categorycode  = $input->param('categorycode');
-    my $patron_maxissueqty   = $input->param('patron_maxissueqty');
+    my $patron_maxissueqty   = strip_non_numeric($input->param('patron_maxissueqty'));
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
+    $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
     my $holdallowed   = $input->param('holdallowed');
     my $hold_fulfillment_policy = $input->param('hold_fulfillment_policy');
     my $returnbranch  = $input->param('returnbranch');
-    my $max_holds = $input->param('max_holds');
-    $patron_maxissueqty =~ s/\s//g;
-    $patron_maxissueqty = '' if $patron_maxissueqty !~ /^\d+/;
-    $patron_maxonsiteissueqty =~ s/\s//g;
-    $patron_maxonsiteissueqty = '' if $patron_maxonsiteissueqty !~ /^\d+/;
+    my $max_holds = strip_non_numeric($input->param('max_holds'));
     $holdallowed =~ s/\s//g;
     $holdallowed = undef if $holdallowed !~ /^\d+/;
-    $max_holds =~ s/\s//g;
-    $max_holds = '' if $max_holds !~ /^\d+/;
 
     if ($branch eq "*") {
         Koha::CirculationRules->set_rules(
@@ -413,13 +402,10 @@ elsif ($op eq "set-branch-defaults") {
 }
 elsif ($op eq "add-branch-cat") {
     my $categorycode  = $input->param('categorycode');
-    my $patron_maxissueqty   = $input->param('patron_maxissueqty');
+    my $patron_maxissueqty = strip_non_numeric($input->param('patron_maxissueqty'));
     my $patron_maxonsiteissueqty = $input->param('patron_maxonsiteissueqty');
+    $patron_maxonsiteissueqty = strip_non_numeric($patron_maxonsiteissueqty);
     my $max_holds = $input->param('max_holds');
-    $patron_maxissueqty =~ s/\s//g;
-    $patron_maxissueqty = '' if $patron_maxissueqty !~ /^\d+/;
-    $patron_maxonsiteissueqty =~ s/\s//g;
-    $patron_maxonsiteissueqty = '' if $patron_maxonsiteissueqty !~ /^\d+/;
     $max_holds =~ s/\s//g;
     $max_holds = undef if $max_holds !~ /^\d+/;
 
@@ -619,4 +605,11 @@ sub by_itemtype {
     } else {
         return lc $a->{'translated_description'} cmp lc $b->{'translated_description'};
     }
+}
+
+sub strip_non_numeric {
+    my $string = shift;
+    $string =~ s/\s//g;
+    $string = '' if $string !~ /^\d+/;
+    return $string;
 }
