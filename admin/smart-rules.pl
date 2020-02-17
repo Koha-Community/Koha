@@ -562,7 +562,13 @@ my $itemtypes = Koha::ItemTypes->search_with_localization;
 
 my $humanbranch = ( $branch ne '*' ? $branch : undef );
 
-my $definedbranch = Koha::CirculationRules->search({ branchcode => $humanbranch })->count ? 1 : 0;
+my $all_rules = Koha::CirculationRules->search({ branchcode => $humanbranch });
+my $definedbranch = $all_rules->count ? 1 : 0;
+
+while ( my $r = $all_rules->next ) {
+    $r = $r->unblessed;
+    $rules->{ $r->{categorycode} }->{ $r->{itemtype} }->{ $r->{rule_name} } = $r->{rule_value};
+}
 
 $template->param(show_branch_cat_rule_form => 1);
 
@@ -572,6 +578,7 @@ $template->param(
     humanbranch       => $humanbranch,
     current_branch    => $branch,
     definedbranch     => $definedbranch,
+    all_rules         => $rules,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
