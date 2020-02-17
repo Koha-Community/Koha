@@ -1,5 +1,4 @@
 <div>
-    <div>[% service.name %]</div>
     <table class="ill-availability" id="[% service.id %]">
         <thead id="[% service.id %]-header">
             <tr>

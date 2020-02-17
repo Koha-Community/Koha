@@ -329,7 +329,7 @@
                                         </div>
                                         <div class="modal-body">
                                             [% FOR service IN services %]
-                                                <h4 class="ill_availability_sourcename">[% service.plugin %]</h4>
+                                                <h4 class="ill_availability_sourcename">[% service.name %]</h4>
                                                 [% INCLUDE 'ill-availability-table.inc' service=service %]
                                             [% END %]
                                             <span id="service_id_restrict" data-service_id_restrict_plugin="ILL availability - z39.50" data-service_id_restrict_ids=""></span>
@@ -744,7 +744,7 @@
                             </div>
                         </form>
                         [% FOR service IN services %]
-                            <h4 class="ill_availability_sourcename">[% service.plugin %]</h4>
+                            <h4 class="ill_availability_sourcename">[% service.name %]</h4>
                             [% INCLUDE 'ill-availability-table.inc' service=service %]
                         [% END %]
                     </div>
