@@ -791,6 +791,7 @@ sub checkauth {
     my $emailaddress    = shift;
     $type = 'opac' unless $type;
 
+    $authnotrequired = 0 unless C4::Context->preference("OpacPublic");
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
 
