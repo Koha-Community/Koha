@@ -244,9 +244,8 @@ __PACKAGE__->table("deleteditems");
 
 =head2 uri
 
-  data_type: 'varchar'
+  data_type: 'mediumtext'
   is_nullable: 1
-  size: 255
 
 =head2 itype
 
@@ -379,7 +378,7 @@ __PACKAGE__->add_columns(
   "materials",
   { data_type => "mediumtext", is_nullable => 1 },
   "uri",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "itype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "more_subfields_xml",
@@ -407,8 +406,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L7G0HG5gvgyhfpKb7LcUFw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-17 10:42:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1+z3OHx5OpOcP82k8vyAaA
 
 sub koha_objects_class {
     'Koha::Old::Items';

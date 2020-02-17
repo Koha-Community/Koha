@@ -20808,6 +20808,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24592 - Update LOST_RETURN to LOST_FOUND)\n";
 }
 
+$DBversion = '19.12.00.022';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE items MODIFY COLUMN uri MEDIUMTEXT" );
+    $dbh->do( "ALTER TABLE deleteditems MODIFY COLUMN uri MEDIUMTEXT" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20882 - items.uri to MEDIUMTEXT)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
