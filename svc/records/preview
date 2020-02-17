@@ -46,7 +46,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
     template_name   => "catalogue/showmarc.tt",
     query           => $query,
     type            => "intranet",
-    authnotrequired => 1,
 });
 
 $template->param( MARC_FORMATTED => $record->as_formatted );
