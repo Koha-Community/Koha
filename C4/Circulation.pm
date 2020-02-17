@@ -2195,6 +2195,8 @@ sub MarkIssueReturned {
     # FIXME Improve the return value and handle it from callers
     $schema->txn_do(sub {
 
+        my $patron = Koha::Patrons->find( $borrowernumber );
+
         # Update the returndate value
         if ( $returndate ) {
             $issue->returndate( $returndate )->store->discard_changes; # update and refetch
@@ -2218,9 +2220,18 @@ sub MarkIssueReturned {
 
         if ( C4::Context->preference('StoreLastBorrower') ) {
             my $item = Koha::Items->find( $itemnumber );
-            my $patron = Koha::Patrons->find( $borrowernumber );
             $item->last_returned_by( $patron );
         }
+
+        # Remove any OVERDUES related debarment if the borrower has no overdues
+        if ( C4::Context->preference('AutoRemoveOverduesRestrictions')
+          && $patron->debarred
+          && !$patron->has_overdues
+          && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
+        ) {
+            DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
+        }
+
     });
 
     return $issue_id;
