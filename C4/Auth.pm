@@ -170,7 +170,9 @@ sub get_template_and_user {
             $in->{'query'},
             $in->{'authnotrequired'},
             $in->{'flagsrequired'},
-            $in->{'type'}
+            $in->{'type'},
+            undef,
+            $in->{template_name},
         );
     }
 
@@ -786,9 +788,21 @@ sub checkauth {
     my $flagsrequired   = shift;
     my $type            = shift;
     my $emailaddress    = shift;
+    my $template_name   = shift;
     $type = 'opac' unless $type;
 
-    $authnotrequired = 0 unless C4::Context->preference("OpacPublic");
+    unless ( C4::Context->preference("OpacPublic") ) {
+        my @allowed_scripts_for_private_opac = qw(
+          opac-memberentry.tt
+          opac-registration-email-sent.tt
+          opac-registration-confirmation.tt
+          opac-memberentry-update-submitted.tt
+          opac-password-recovery.tt
+        );
+        $authnotrequired = 0 unless grep { $_ eq $template_name }
+          @allowed_scripts_for_private_opac;
+    }
+
     my $dbh     = C4::Context->dbh;
     my $timeout = _timeout_syspref();
 
@@ -1240,8 +1254,8 @@ sub checkauth {
     $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
     $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 
-    my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
-    my $template = C4::Templates::gettemplate( $template_name, $type, $query );
+    my $auth_template_name = ( $type eq 'opac' ) ? 'opac-auth.tt' : 'auth.tt';
+    my $template = C4::Templates::gettemplate( $auth_template_name, $type, $query );
     $template->param(
         login                                 => 1,
         INPUTS                                => \@inputs,
