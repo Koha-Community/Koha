@@ -41,7 +41,6 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         template_name   => 'acqui/invoice-files.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { 'acquisition' => '*' },
         debug           => 1,
     }

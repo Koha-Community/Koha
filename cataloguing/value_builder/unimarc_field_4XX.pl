@@ -89,7 +89,6 @@ sub plugin {
                   "cataloguing/value_builder/unimarc_field_4XX.tt",
                 query           => $query,
                 type            => "intranet",
-                authnotrequired => 0,
                 flagsrequired   => { editcatalogue => '*' },
                 debug           => 1,
             }
@@ -376,7 +375,6 @@ sub plugin {
                   "cataloguing/value_builder/unimarc_field_4XX.tt",
                 query           => $query,
                 type            => 'intranet',
-                authnotrequired => 0,
                 debug           => 1,
             }
         );
@@ -505,7 +503,6 @@ sub plugin {
                   "cataloguing/value_builder/unimarc_field_4XX.tt",
                 query           => $query,
                 type            => "intranet",
-                authnotrequired => 0,
             }
         );
 

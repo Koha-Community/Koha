@@ -37,7 +37,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "plugins/plugins-upload.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { plugins => 'manage' },
         debug           => 1,
     }

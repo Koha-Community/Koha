@@ -92,7 +92,6 @@ our ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
     {   template_name   => 'acqui/parcels.tt',
         query           => $input,
         type            => 'intranet',
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'order_receive' },
         debug           => 1,
     }

@@ -29,7 +29,6 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name => "acqui/csv/lateorders.tt",
     query => $input,
     type => "intranet",
-    authnotrequired => 0,
     flagsrequired => {acquisition => 'order_receive'},
 });
 my @ordernumbers = $input->multi_param('ordernumber');

@@ -51,7 +51,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "tools/automatic_item_modification_by_age.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { tools => 'items_batchmod' },
     }
 );

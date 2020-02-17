@@ -34,7 +34,6 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
     query           => $query,
     type            => "intranet",
     debug           => 1,
-    authnotrequired => 0,
     flagsrequired   => { catalogue => 1, },
 });
 

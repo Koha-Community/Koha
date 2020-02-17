@@ -35,7 +35,6 @@ my ($template, $loggedinuser, $cookie)
             template_name => "tools/marc_modification_templates.tt",
             query => $cgi,
             type => "intranet",
-            authnotrequired => 0,
             flagsrequired => { tools => 'marc_modification_templates' },
             debug => 1,
     });

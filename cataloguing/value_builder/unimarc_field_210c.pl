@@ -94,7 +94,6 @@ my ($input) = @_;
             = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tt",
                     query => $query,
                     type => 'intranet',
-                    authnotrequired => 0,
                     flagsrequired => {editcatalogue => '*'},
                     debug => 1,
                     });
@@ -125,7 +124,6 @@ my ($input) = @_;
             = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tt",
                     query => $query,
                     type => 'intranet',
-                    authnotrequired => 0,
                     flagsrequired => {editcatalogue => '*'},
                     debug => 1,
                     });

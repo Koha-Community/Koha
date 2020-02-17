@@ -55,7 +55,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             tools => '*',
             stockrotation => '*',
         },
-        authnotrequired => 0
     }
 );
 

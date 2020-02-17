@@ -43,7 +43,6 @@ my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => 'serials/claims.tt',
             query => $input,
             type => 'intranet',
-            authnotrequired => 0,
             flagsrequired => {serials => 'claim_serials'},
             debug => 1,
             });

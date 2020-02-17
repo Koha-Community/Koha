@@ -115,7 +115,6 @@ our ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
         template_name   => "acqui/neworderempty.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'order_manage' },
         debug           => 1,
     }
@@ -581,7 +580,6 @@ sub Load_Duplicate {
         template_name   => "acqui/neworderempty_duplicate.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { acquisition => 'order_manage' },
 #        debug           => 1,
     }

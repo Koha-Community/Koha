@@ -38,7 +38,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "admin/biblio_framework.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_marc_frameworks' },
         debug           => 1,
     }

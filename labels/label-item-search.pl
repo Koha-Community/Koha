@@ -146,7 +146,6 @@ if ($show_results) {
             template_name   => "labels/result.tt",
             query           => $query,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { borrowers => 'edit_borrowers' },
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
@@ -226,7 +225,6 @@ else {
             template_name   => "labels/search.tt",
             query           => $query,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }

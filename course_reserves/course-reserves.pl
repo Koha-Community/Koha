@@ -34,7 +34,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "course_reserves/course-reserves.tt",
         query           => $cgi,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
     }
 );

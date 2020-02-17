@@ -44,7 +44,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
     template_name => "admin/z3950servers.tt",
     query => $input,
     type => "intranet",
-    authnotrequired => 0,
     flagsrequired => { parameters => 'manage_search_targets' },
     debug => 1,
 });

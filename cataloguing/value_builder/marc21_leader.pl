@@ -63,7 +63,6 @@ my $launcher = sub {
         {   template_name   => "cataloguing/value_builder/marc21_leader.tt",
             query           => $input,
             type            => "intranet",
-            authnotrequired => 0,
             flagsrequired   => { editcatalogue => '*' },
             debug           => 1,
         }

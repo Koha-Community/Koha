@@ -31,7 +31,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
     template_name => $type eq "authority" ? "admin/sru_modmapping_auth.tt" : "admin/sru_modmapping.tt",
     query => $input,
     type => "intranet",
-    authnotrequired => 0,
     flagsrequired   => { parameters => 'manage_search_targets' },
 });
 

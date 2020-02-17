@@ -45,7 +45,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "admin/itemtypes.tt",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 0,
         flagsrequired   => { parameters => 'manage_itemtypes' },
         debug           => 1,
     }
