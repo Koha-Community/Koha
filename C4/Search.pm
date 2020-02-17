@@ -1815,7 +1815,7 @@ sub _build_initial_query {
     $params->{query_cgi} .= "&q=".uri_escape_utf8($params->{original_operand}) if $params->{original_operand};
 
     #e.g. " and kw,wrdl: test"
-    $params->{query_desc} .= $operator . $params->{index_plus} . " " . $params->{original_operand};
+    $params->{query_desc} .= ( $operator . ( $params->{index_plus} // q{} ) . " " . ( $params->{original_operand} // q{} );
 
     $params->{previous_operand} = 1 unless $params->{previous_operand}; #If there is no previous operand, mark this as one
 
