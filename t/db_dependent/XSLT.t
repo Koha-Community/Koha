@@ -34,7 +34,7 @@ my $builder = t::lib::TestBuilder->new;
 $schema->storage->txn_begin;
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
-    plan tests => 12;
+    plan tests => 13;
     my $item  = $builder->build_sample_item({});
 
     my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
@@ -57,9 +57,11 @@ subtest 'buildKohaItemsNamespace status tests' => sub {
         like($xml,qr{<status>reference</status>},"reference if positive itemtype notforloan value");
         Koha::ItemTypes->find($item->itype)->notforloan(0)->store;
 
+        my $substatus = Koha::AuthorisedValues->search({ category => 'NOT_LOAN', authorised_value => -1 })->next->lib;
         $item->notforloan(-1)->store;
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
-        like($xml,qr{<status>On order</status>},"On order if negative notforloan value");
+        like($xml,qr{<status>reallynotforloan</status>},"reallynotforloan if negative notforloan value");
+        like($xml,qr{<substatus>$substatus</substatus>},"substatus set if negative notforloan value");
 
         $item->notforloan(1)->store;
         $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
