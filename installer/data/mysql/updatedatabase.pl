@@ -17578,7 +17578,7 @@ if ( CheckVersion($DBversion) ) {
             SetVersion ($DBversion);
 }
 
-$DBversion = "18.11.14.001";
+$DBversion = "18.11.13.001";
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q{
         INSERT IGNORE INTO `userflags` (`bit`, `flag`, `flagdesc`, `defaulton`)
