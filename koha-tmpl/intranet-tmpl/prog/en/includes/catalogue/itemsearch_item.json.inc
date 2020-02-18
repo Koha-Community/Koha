@@ -7,7 +7,7 @@
 [%- biblioitem = item.biblioitem -%]
 [
   "[% FILTER escape_quotes = replace('"', '\"') ~%]
-    <input type="checkbox" name="itemnumber" value="[% item.itemnumber %]"/>
+    <input type="checkbox" name="itemnumber" value="[% item.itemnumber | html %]"/>
   [%~ END %]",
   "[% FILTER escape_quotes ~%]
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]" title="Go to record detail page">[% biblio.title | html %]</a>[% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author | html %]
