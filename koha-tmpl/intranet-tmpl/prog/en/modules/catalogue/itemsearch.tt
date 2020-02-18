@@ -524,7 +524,7 @@
 
               var caret = ' <span class="caret">';
               if (itemnumbers.size > 0) {
-                $('#export-button').html(_("Export selected results to") + caret);
+                $('#export-button').html(_("Export selected results (%s) to").format(itemnumbers.size) + caret);
               } else {
                 $('#export-button').html(_("Export all results to") + caret);
               }
