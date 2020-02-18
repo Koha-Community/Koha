@@ -28,6 +28,7 @@ use Unicode::Normalize;
 use C4::Context;
 use C4::Log;
 use Koha::Account;
+use Koha::ArticleRequests;
 use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::Club::Enrollments;

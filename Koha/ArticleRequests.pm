@@ -23,8 +23,8 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::ArticleRequest;
 use Koha::ArticleRequest::Status;
+use Koha::ArticleRequest;
 
 use base qw(Koha::Objects);
 
