@@ -860,11 +860,8 @@
                             <xsl:text> </xsl:text>
                             <a class='authlink'>
                                 <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
-                                <xsl:element name="img">
-                                    <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/z.png</xsl:attribute>
-                                    <xsl:attribute name="alt"></xsl:attribute>
-                                    <xsl:attribute name="height">15</xsl:attribute>
-                                    <xsl:attribute name="width">15</xsl:attribute>
+                                <xsl:element name="i">
+                                    <xsl:attribute name="class">fa fa-search</xsl:attribute>
                                 </xsl:element>
                             </a>
                         </xsl:if>
