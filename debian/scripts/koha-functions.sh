@@ -199,6 +199,20 @@ is_indexer_running()
     fi
 }
 
+is_worker_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-worker" \
+            --pidfiles="/var/run/koha/$instancename/" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 is_plack_enabled_opac()
 {
     local instancefile=$1

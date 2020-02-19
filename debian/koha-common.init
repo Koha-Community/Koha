@@ -62,6 +62,7 @@ do_start()
     koha-sip   --start $(koha-list --enabled --sip)
     koha-plack --start $(koha-list --enabled --plack)
     koha-z3950-responder --start --quiet $(koha-list --enabled --z3950)
+    koha-worker --start $(koha-list --enabled)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --start --quiet $(koha-list --enabled)
@@ -78,6 +79,7 @@ do_stop()
     koha-sip   --stop $(koha-list --sip)
     koha-plack --stop --quiet $(koha-list --enabled --plack)
     koha-z3950-responder --stop --quiet $(koha-list --enabled --z3950)
+    koha-worker --stop --quiet $(koha-list --enabled)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --stop --quiet $(koha-list --enabled)
@@ -92,6 +94,7 @@ do_reload() {
     koha-sip   --restart $(koha-list --enabled --sip)
     koha-plack --restart --quiet $(koha-list --enabled --plack)
     koha-z3950-responder --restart --quiet $(koha-list --enabled --z3950)
+    koha-worker --restart --quiet $(koha-list --enabled)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --restart --quiet $(koha-list --enabled)

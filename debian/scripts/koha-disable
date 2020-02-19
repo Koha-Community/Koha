@@ -72,6 +72,9 @@ do
             if is_indexer_running $name; then
                 koha-indexer --stop $name
             fi
+            if is_worker_running $name; then
+                koha-worker --stop $name
+            fi
         elif [ "$RET" = 2 ]; then
             warn "Error: Apache configuration file not present for instance $name."
         else

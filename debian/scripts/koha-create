@@ -828,6 +828,9 @@ then
     # Start Zebra.
     koha-zebra --start "$name"
 
+    # Start worker
+    koha-worker --start "$name"
+
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         # Start Indexer daemon
         koha-indexer --start "$name"
