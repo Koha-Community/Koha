@@ -20850,6 +20850,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug XXXXX - add DumpSearchQueryTemplate syspref)\n";
 }
 
+$DBversion = '19.12.00.026';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'z3950servers', 'attributes' ) ) {
+        $dbh->do( "ALTER TABLE z3950servers ADD COLUMN attributes VARCHAR(255) after add_xslt" );
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 11297 - Add support for custom PQF attributes for Z39.50 server searches)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
