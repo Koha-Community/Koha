@@ -243,19 +243,16 @@ sub edit {
 
     my $body = $c->req->json;
 
-    my $pickup_library_id = $body->{pickup_library_id};
-    my $priority          = $body->{priority};
-    my $suspended_until   = $body->{suspended_until};
-
-    if ($suspended_until) {
-        $suspended_until = output_pref(dt_from_string($suspended_until, 'rfc3339'));
-    }
+    my $pickup_library_id = $body->{pickup_library_id} // $hold->branchcode;
+    my $priority          = $body->{priority} // $hold->priority;
+    # suspended_until can also be set to undef
+    my $suspended_until   = exists $body->{suspended_until} ? $body->{suspended_until} : $hold->suspend_until;
 
     my $params = {
         reserve_id    => $hold_id,
         branchcode    => $pickup_library_id,
         rank          => $priority,
-        suspend_until => $suspended_until,
+        suspend_until => $suspended_until ? output_pref(dt_from_string($suspended_until, 'rfc3339')) : '',
         itemnumber    => $hold->itemnumber
     };
 

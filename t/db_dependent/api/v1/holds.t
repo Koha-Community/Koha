@@ -47,6 +47,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+my $branchcode2 = $builder->build({ source => 'Branch' })->{branchcode};
 my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
 # Generic password for everyone
@@ -198,7 +199,7 @@ subtest "Test endpoints without permission" => sub {
 
 subtest "Test endpoints with permission" => sub {
 
-    plan tests => 44;
+    plan tests => 57;
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
@@ -219,7 +220,24 @@ subtest "Test endpoints with permission" => sub {
       ->status_is(200)
       ->json_is( '/hold_id', $reserve_id )
       ->json_is( '/suspended_until', $expected_suspended_until )
-      ->json_is( '/priority', 2 );
+      ->json_is( '/priority', 2 )
+      ->json_is( '/pickup_library_id', $branchcode );
+
+    # Change only pickup library, everything else should remain
+    $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => { pickup_library_id => $branchcode2 } )
+      ->status_is(200)
+      ->json_is( '/hold_id', $reserve_id )
+      ->json_is( '/suspended_until', $expected_suspended_until )
+      ->json_is( '/priority', 2 )
+      ->json_is( '/pickup_library_id', $branchcode2 );
+
+    # Reset suspended_until, everything else should remain
+    $t->put_ok( "//$userid_1:$password@/api/v1/holds/$reserve_id" => json => { suspended_until => undef } )
+      ->status_is(200)
+      ->json_is( '/hold_id', $reserve_id )
+      ->json_is( '/suspended_until', undef )
+      ->json_is( '/priority', 2 )
+      ->json_is( '/pickup_library_id', $branchcode2 );
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
       ->status_is(200);
