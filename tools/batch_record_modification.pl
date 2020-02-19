@@ -23,7 +23,6 @@ use Modern::Perl;
 use CGI;
 use List::MoreUtils qw( uniq );
 use JSON qw( encode_json );
-use Net::RabbitFoot;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );

@@ -141,9 +141,9 @@
                     <td class="actions">
                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=view&amp;id=[% job.id | html %]"><i class="fa fa-eye"></i> View</a>
                         [% IF job.status == 'new' || job.status == 'started' %]
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-pencil"></i> Cancel</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/background_jobs.pl?op=cancel&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Cancel</a>
                         [% END %]
-                        <a class="btn btn-default btn-xs disabled" href="/cgi-bin/koha/admin/background_jobs.pl?op=replay&amp;id=[% job.id | html %]"><i class="fa fa-trash"></i> Replay</a>
+                        <a class="btn btn-default btn-xs disabled" href="/cgi-bin/koha/admin/background_jobs.pl?op=replay&amp;id=[% job.id | html %]"><i class="fa fa-refresh"></i> Replay</a>
                     </td>
                 </tr>
                 [% END %]
@@ -171,11 +171,11 @@
     [% INCLUDE 'datatables.inc' %]
     <script>
         $(document).ready(function() {
-            $("#table_cities").dataTable($.extend(true, {}, dataTablesDefaults, {
+            $("#table_background_jobs").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
                 ],
-                "aaSorting": [[ 1, "asc" ]],
+                "aaSorting": [[ 0, "desc" ]],
                 "iDisplayLength": 10,
                 "sPaginationType": "full_numbers"
             }));

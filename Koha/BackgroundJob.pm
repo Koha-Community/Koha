@@ -3,7 +3,7 @@ package Koha::BackgroundJob;
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 use Carp qw( croak );
-use Net::RabbitFoot;
+use Net::Stomp;
 
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
@@ -13,15 +13,9 @@ use base qw( Koha::Object );
 
 sub connect {
     my ( $self );
-    my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-        host => 'localhost', # TODO Move this to KOHA_CONF
-        port => 5672,
-        user => 'guest',
-        pass => 'guest',
-        vhost => '/',
-    );
-
-    return $conn;
+    my $stomp = Net::Stomp->new( { hostname => 'localhost', port => '61613' } );
+    $stomp->connect( { login => 'guest', passcode => 'guest' } );
+    return $stomp;
 }
 
 sub enqueue {
@@ -47,19 +41,8 @@ sub enqueue {
     $json_args = encode_json $job_args,
 
     my $conn = $self->connect;
-    my $channel = $conn->open_channel();
+    $conn->send({destination => $job_type, body => $json_args});
 
-    $channel->declare_queue(
-        queue => $job_type,
-        durable => 1,
-    );
-
-    $channel->publish(
-        exchange => '',
-        routing_key => $job_type, # TODO Must be different?
-        body => $json_args,
-    );
-    $conn->close;
     return $job_id;
 }
 

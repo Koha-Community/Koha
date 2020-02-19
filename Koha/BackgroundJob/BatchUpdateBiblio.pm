@@ -4,20 +4,17 @@ use Modern::Perl;
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use JSON qw( encode_json decode_json );
-use Net::RabbitFoot;
 
 use base 'Koha::BackgroundJob';
 
-our $channel;
 sub process {
-    my ( $self, $args, $channel ) = @_;
+    my ( $self, $args ) = @_;
 
     my $job_type = $args->{job_type};
 
     my $job = Koha::BackgroundJobs->find( $args->{job_id} );
 
     if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
-        $channel->ack;
         return;
     }
 
@@ -77,7 +74,6 @@ sub process {
         ->data(encode_json $job_data);
     $job->status('finished') if $job->status ne 'cancelled';
     $job->store;
-    $channel->ack(); # FIXME Is that ok even on failure?
 }
 
 sub enqueue {

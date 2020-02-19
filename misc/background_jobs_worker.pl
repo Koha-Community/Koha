@@ -23,30 +23,21 @@ use Koha::BackgroundJob;
 
 my $conn = Koha::BackgroundJob->connect;
 
-my $channel = $conn->open_channel();
-
 my $job_type = 'batch_biblio_record_modification';
-$channel->declare_queue(
-    queue => $job_type,
-    durable => 1,
-);
 
-$channel->qos(prefetch_count => 1,);
+$conn->subscribe({ destination => $job_type, ack => 'client' });
+while (1) {
+    my $frame = $conn->receive_frame;
+    if ( !defined $frame ) {
+        # maybe log connection problems
+        next;    # will reconnect automatically
+    }
 
-$channel->consume(
-    on_consume => sub {
-        my $var = shift;
-        my $body = $var->{body}->{payload};
-        say " [x] Received $body";
+    my $body = $frame->body;
+    my $args = decode_json($body);
 
-        my $args = decode_json( $body );
+    my $success = Koha::BackgroundJob::BatchUpdateBiblio->process( $args );
 
-        Koha::BackgroundJob::BatchUpdateBiblio->process($args, $channel);
-        say " [x] Done";
-    },
-    no_ack => 0,
-);
-
-warn "waiting forever";
-# Wait forever
-AnyEvent->condvar->recv;
+    $conn->ack( { frame => $frame } ); # FIXME depending on $success?
+}
+$conn->disconnect;

@@ -4,7 +4,6 @@ use Modern::Perl;
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
 use JSON qw( encode_json decode_json );
-use Net::RabbitFoot;
 
 use base 'Koha::BackgroundJob';
 
