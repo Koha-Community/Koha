@@ -565,6 +565,7 @@ my $humanbranch = ( $branch ne '*' ? $branch : undef );
 my $all_rules = Koha::CirculationRules->search({ branchcode => $humanbranch });
 my $definedbranch = $all_rules->count ? 1 : 0;
 
+my $rules = {};
 while ( my $r = $all_rules->next ) {
     $r = $r->unblessed;
     $rules->{ $r->{categorycode} }->{ $r->{itemtype} }->{ $r->{rule_name} } = $r->{rule_value};
