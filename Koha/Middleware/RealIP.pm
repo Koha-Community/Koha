@@ -106,7 +106,16 @@ sub get_trusted_proxies {
     my $proxies_conf = C4::Context->config('koha_trusted_proxies');
     return unless $proxies_conf;
     my @trusted_proxies_ip = split( / /, $proxies_conf );
-    my @trusted_proxies = map { Net::Netmask->new($_) } @trusted_proxies_ip;
+    my @trusted_proxies = ();
+    foreach my $ip (@trusted_proxies_ip){
+        my $mask = Net::Netmask->new2($ip);
+        if ($mask){
+            push(@trusted_proxies,$mask);
+        }
+        else {
+            warn "$Net::Netmask::error";
+        }
+    }
     return \@trusted_proxies;
 }
 
