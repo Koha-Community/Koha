@@ -309,15 +309,19 @@ sub suspend {
         $hold->suspend_hold($date);
         $hold->discard_changes;
         $c->res->headers->location( $c->req->url->to_string );
+        my $suspend_end_date;
+        if ($hold->suspend_until) {
+            $suspend_end_date = output_pref({
+                dt         => dt_from_string( $hold->suspend_until ),
+                dateformat => 'rfc3339',
+                dateonly   => 1
+                }
+            );
+        }
         return $c->render(
             status  => 201,
             openapi => {
-                end_date => output_pref(
-                    {   dt         => dt_from_string( $hold->suspend_until ),
-                        dateformat => 'rfc3339',
-                        dateonly   => 1
-                    }
-                )
+                end_date => $suspend_end_date
             }
         );
     }

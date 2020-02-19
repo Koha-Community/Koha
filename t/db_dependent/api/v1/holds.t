@@ -375,7 +375,7 @@ $schema->storage->txn_rollback;
 
 subtest 'suspend and resume tests' => sub {
 
-    plan tests => 21;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
@@ -403,14 +403,27 @@ subtest 'suspend and resume tests' => sub {
     $hold->discard_changes;    # refresh object
 
     ok( $hold->is_suspended, 'Hold is suspended' );
+    $t->json_is('/end_date', undef, 'Hold suspension has no end date');
+
+    my $end_date = output_pref({
+      dt         => dt_from_string( undef ),
+      dateformat => 'rfc3339',
+      dateonly   => 1
+    });
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" => json => { end_date => $end_date } );
+
+    $hold->discard_changes;    # refresh object
+
+    ok( $hold->is_suspended, 'Hold is suspended' );
     $t->json_is(
-        '/end_date',
-        output_pref(
-            {   dt         => dt_from_string( $hold->suspend_until ),
-                dateformat => 'rfc3339',
-                dateonly   => 1
-            }
-        )
+      '/end_date',
+      output_pref({
+        dt         => dt_from_string( $hold->suspend_until ),
+        dateformat => 'rfc3339',
+        dateonly   => 1
+      }),
+      'Hold suspension has correct end date'
     );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
