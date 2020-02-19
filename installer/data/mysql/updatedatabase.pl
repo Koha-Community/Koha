@@ -20847,7 +20847,7 @@ if( CheckVersion( $DBversion ) ) {
         VALUES ('DumpSearchQueryTemplate',0,'','Add the search query being passed to the search engine into the template for debugging','YesNo')
     });
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - add DumpSearchQueryTemplate syspref)\n";
+    print "Upgrade to $DBversion done (Bug 24103 - add DumpSearchQueryTemplate syspref)\n";
 }
 
 $DBversion = '19.12.00.026';
