@@ -502,3 +502,94 @@ function filterDataTable( table, column, term ){
         table.search( term ).draw("page");
     }
 }
+
+jQuery.fn.dataTable.ext.errMode = function(settings, note, message) {
+    console.warn(message);
+};
+
+(function($) {
+
+    $.fn.api = function(options) {
+        var settings = null;
+        if(options) {
+            settings = $.extend(true, {}, dataTablesDefaults, {
+                        'deferRender': true,
+                        "paging": true,
+                        'serverSide': true,
+                        'searching': true,
+                        'pagingType': 'full',
+                        'ajax': {
+                            'type': 'GET',
+                            'cache': true,
+                            'dataSrc': 'data',
+                            'beforeSend': function(xhr, settings) {
+                                this._xhr = xhr;
+                                if(options.embed) {
+                                    xhr.setRequestHeader('x-koha-embed', Array.isArray(options.embed)?options.embed.join(','):options.embed);
+                                }
+                                if(options.header_filter && options.query_parameters) {
+                                    xhr.setRequestHeader('x-koha-query', options.query_parameters);
+                                    delete options.query_parameters;
+                                }
+                            },
+                            'dataFilter': function(data, type) {
+                                var json = {data: JSON.parse(data)};
+                                if(total = this._xhr.getResponseHeader('x-total-count')) {
+                                    json.recordsTotal = total;
+                                    json.recordsFiltered = total;
+                                }
+                                return JSON.stringify(json);
+                            },
+                            'data': function( data, settings ) {
+                                var length = data.length;
+                                var start  = data.start;
+
+                                var dataSet = {
+                                    _page: Math.floor(start/length) + 1,
+                                    _per_page: length
+                                };
+
+                                var filter = data.search.value;
+                                var query_parameters = settings.aoColumns
+                                .filter(function(col) {
+                                    return col.bSearchable && typeof col.data == 'string' && (data.columns[col.idx].search.value != '' || filter != '')
+                                })
+                                .map(function(col) {
+                                    var part = {};
+                                    part[!col.data.includes('.')?'me.'+col.data:col.data] = {like: (data.columns[col.idx].search.value != '' ? data.columns[col.idx].search.value : filter)+'%'};
+                                    return part;
+                                });
+
+                                if(query_parameters.length) {
+                                    query_parameters = JSON.stringify(query_parameters.length === 1?query_parameters[0]:query_parameters);
+                                    if(options.header_filter) {
+                                        options.query_parameters = query_parameters;
+                                    } else {
+                                        dataSet.q = query_parameters;
+                                        delete options.query_parameters;
+                                    }
+                                } else {
+                                    delete options.query_parameters;
+                                }
+
+                                dataSet._match = 'starts_with';
+
+                                if(options.columns) {
+                                    var order = data.order;
+                                    order.forEach(function (e,i) {
+                                        var order_col      = e.column;
+                                        var order_by       = options.columns[order_col].data;
+                                        var order_dir      = e.dir == 'asc' ? '+' : '-';
+                                        dataSet._order_by = order_dir + (!order_by.includes('.')?'me.'+order_by:order_by);
+                                    });
+                                }
+
+                                return dataSet;
+                            }
+                        }
+                    }, options);
+        }
+        return $(this).dataTable(settings);
+    };
+
+})(jQuery);
