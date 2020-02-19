@@ -20840,6 +20840,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21633  - Remove finesMode 'test')\n";
 }
 
+$DBversion = '19.12.00.025';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (variable,value,options,explanation,type)
+        VALUES ('DumpSearchQueryTemplate',0,'','Add the search query being passed to the search engine into the template for debugging','YesNo')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug XXXXX - add DumpSearchQueryTemplate syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
