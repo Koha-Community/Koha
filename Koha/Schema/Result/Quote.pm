@@ -43,7 +43,7 @@ __PACKAGE__->table("quotes");
 
   data_type: 'datetime'
   datetime_undef_if_invalid: 1
-  is_nullable: 0
+  is_nullable: 1
 
 =cut
 
@@ -58,7 +58,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "datetime",
     datetime_undef_if_invalid => 1,
-    is_nullable => 0,
+    is_nullable => 1,
   },
 );
 
@@ -75,8 +75,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8xSMrGuJH9rbm73qOvU8Xg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-19 11:09:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CdcbCjhjmsLLDQ1AAOja7Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
