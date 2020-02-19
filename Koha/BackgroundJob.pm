@@ -31,6 +31,7 @@ sub enqueue {
     my $job_size = $params->{job_size};
     my $job_args = $params->{job_args};
 
+    my $borrowernumber = C4::Context->userenv->{number}; # FIXME Handle non GUI calls
     my $json_args = encode_json $job_args;
     $self->set({
         status => 'new',
@@ -38,7 +39,7 @@ sub enqueue {
         size => $job_size,
         data => $json_args,
         enqueued_on => dt_from_string,
-        borrowernumber => C4::Context->userenv->{id}, # FIXME Handle non GUI calls
+        borrowernumber => $borrowernumber,
     })->store;
 
     my $job_id = $self->id;
