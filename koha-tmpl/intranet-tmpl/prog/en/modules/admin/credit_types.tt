@@ -1,19 +1,18 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
-[% PROCESS i18n.inc %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;
     [% IF op =='add_form' %]
-       [% t('Credit types') %] &rsaquo;
+       Credit types &rsaquo;
        [% IF credit_type.code %]
-           [% t('Modify credit type') %]
+           Modify credit type
        [% ELSE %]
-           [% t('New credit type') %]
+           New credit type
        [% END %]
     [% ELSE %]
-       [% t('Credit types') %]
+       Credit types
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -24,11 +23,11 @@
 [% INCLUDE 'prefs-admin-search.inc' %]
 
 <div id="breadcrumbs">
-    <a href="/cgi-bin/koha/mainpage.pl">[% t('Home') %]</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">[% t('Administration') %]</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/credit_types.pl">[% t('Credit types') %]</a>
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/credit_types.pl">Credit types</a>
 [% IF op == 'add_form' %]
-&rsaquo; [% IF credit_type.code %][% t('Modify credit type') %][% ELSE %][% t('New credit type') %][% END %]
+&rsaquo; [% IF credit_type.code %]Modify credit type[% ELSE %]New credit type[% END %]
 [% END %]
 </div>
 
@@ -41,13 +40,13 @@
                 <div class="dialog [% m.type | html %]">
                     [% SWITCH m.code %]
                     [% CASE 'success_on_saving' %]
-                        [% t('Credit type saved successfully.') %]
+                        Credit type saved successfully.
                     [% CASE 'error_on_saving' %]
-                        [% t('An error occurred when saving this credit type.') %]
+                        An error occurred when saving this credit type.
                     [% CASE 'success_on_archive' %]
-                        [% t('Credit type archived successfully.') %]
+                        Credit type archived successfully.
                     [% CASE 'success_on_restore' %]
-                        [% t('Credit type restored successfully.') %]
+                        Credit type restored successfully.
                     [% CASE %]
                         [% m.code | html %]
                     [% END %]
@@ -56,9 +55,9 @@
 
                 [% IF op == 'add_form' %]
                     [% IF credit_type %]
-                        <h3>[% t('Modify a credit type') %]</h3>
+                        <h3>Modify a credit type</h3>
                     [% ELSE %]
-                        <h3>[% t('New credit type') %]</h3>
+                        <h3>New credit type</h3>
                     [% END %]
 
                     <form action="/cgi-bin/koha/admin/credit_types.pl" name="Aform" method="post" class="validated">
@@ -66,20 +65,20 @@
                         <fieldset class="rows">
                             <ol>
                                 <li>
-                                    <label for="code" class="required">[% t('Credit type code:') %] </label>
+                                    <label for="code" class="required">Credit type code: </label>
                                     [% IF credit_type %]
                                         <strong>[% credit_type.code | html %]</strong>
                                         <input type="hidden" name="code" value="[% code | html %]" />
                                     [% ELSE %]
-                                    <input type="text" name="code" id="code" size="80" maxlength="64" class="required" required="required"><span class="required">[% t('Required. Maximum length is 64 letters') %]</span>
+                                    <input type="text" name="code" id="code" size="80" maxlength="64" class="required" required="required"><span class="required">Required. Maximum length is 64 letters</span>
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="description" class="required">[% t('Description:') %] </label>
-                                    <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% credit_type.description | html %]" /> <span class="required">[% t('Required') %]</span>
+                                    <label for="description" class="required">Description: </label>
+                                    <input type="text" name="description" id="description" required="required" class="required" size="80" maxlength="100" value="[% credit_type.description | html %]" /> <span class="required">Required</span>
                                 </li>
                                 <li>
-                                    <label for="can_be_added_manually">[% t('Can be manually added ?') %] </label>
+                                    <label for="can_be_added_manually">Can be manually added ? </label>
                                     [% IF credit_type.can_be_added_manually %]
                                         <input type="checkbox" name="can_be_added_manually" id="can_be_added_manually" checked="checked" value="1" />
                                     [% ELSE %]
@@ -87,9 +86,9 @@
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="branches">[% t('Libraries limitation:') %] </label>
+                                    <label for="branches">Libraries limitation: </label>
                                     <select id="branches" name="branches" multiple size="10">
-                                        <option value="">[% t('All libraries') %]</option>
+                                        <option value="">All libraries</option>
                                         [% FOREACH branch IN branches_loop %]
                                         [% IF ( branch.selected ) %]
                                         <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
@@ -98,34 +97,34 @@
                                         [% END %]
                                         [% END %]
                                     </select>
-                                    <span>[% t("Select 'All libraries' if this credit type should be available at all libraries. Otherwise select libraries you want to associate credit type with.") %]</span>
+                                    <span>Select 'All libraries' if this credit type should be available at all libraries. Otherwise select libraries you want to associate credit type with.</span>
                                 </li>
                             </ol>
                         </fieldset>
 
                         <fieldset class="action">
-                            <button id="save_credit_type" class="btn btn-default"><i class="fa fa-save"></i> [% t('Save') %]</button>
-                            <a class="cancel btn-link" href="/cgi-bin/koha/admin/credit_types.pl"><i class="fa fa-times"></i> [% t('Cancel') %]</a>
+                            <button id="save_credit_type" class="btn btn-default"><i class="fa fa-save"></i> Save</button>
+                            <a class="cancel btn-link" href="/cgi-bin/koha/admin/credit_types.pl"><i class="fa fa-times"></i> Cancel</a>
                         </fieldset>
                     </form>
                 [% END %]
 
                 [% IF op == 'list' %]
                     <div id="toolbar" class="btn-toolbar">
-                        <a class="btn btn-default" id="newcredittype" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form"><i class="fa fa-plus"></i> [% t('New credit type') %]</a>
+                        <a class="btn btn-default" id="newcredittype" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form"><i class="fa fa-plus"></i> New credit type</a>
                     </div>
 
-                    <h3>[% t('Account credit types') %]</h3>
+                    <h3>Account credit types</h3>
                     [% IF credit_types.count %]
                         <table id="table_credit_types">
                             <thead>
-                                <th>[% t('Archived') %]</th>
-                                <th>[% t('System') %]</th>
-                                <th>[% t('Code') %]</th>
-                                <th>[% t('Description') %]</th>
-                                <th>[% t('Available for') %]</th>
-                                <th>[% t('Library limitations') %]</th>
-                                <th>[% t('Actions') %]</th>
+                                <th>Archived</th>
+                                <th>System</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>Available for</th>
+                                <th>Library limitations</th>
+                                <th>Actions</th>
                             </thead>
                             <tbody>
                                 [% FOREACH credit_type IN credit_types %]
@@ -134,7 +133,7 @@
                                     <td>[% credit_type.is_system | html %]</td>
                                     <td>[% credit_type.code | html %]</td>
                                     <td>[% credit_type.description | html %]</td>
-                                    <td>[% IF credit_type.can_be_added_manually %][% t('Manual credit') %][% END %]</td>
+                                    <td>[% IF credit_type.can_be_added_manually %]Manual credit[% END %]</td>
                                     <td>
                                         [% IF credit_type.library_limits.count > 0 %]
                                             [% library_limits_str = "" %]
@@ -149,15 +148,15 @@
                                                 [% limits_count = credit_type.library_limits.count %]
                                                 [% tnx('{count} library limitation', '{count} library limitations', limits_count, { count => limits_count }) %]
                                         [% ELSE %]
-                                            [% t('No limitation') %]
+                                            No limitation
                                         [% END %]
                                     </td>
                                     <td class="actions">
                                         [% IF !credit_type.is_system && !credit_type.archived %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa fa-pencil"></i> [% t('Edit') %]</a>
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=archive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-archive"></i> [% t('Archive') %]</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=add_form&amp;code=[% credit_type.code | uri %]&type=credit"><i class="fa fa-pencil"></i> Edit</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=archive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-archive"></i> Archive</a>
                                         [% ELSIF credit_type.archived %]
-                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=unarchive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-undo"></i> [% t('Restore') %]</a>
+                                        <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/credit_types.pl?op=unarchive&amp;code=[% credit_type.code | uri %]"><i class="fa fa-undo"></i> Restore</a>
                                         [% END %]
                                     </td>
                                 </tr>
@@ -166,8 +165,8 @@
                         </table>
                     [% ELSE %]
                         <div class="dialog message">
-                            [% t('There are no account credit types defined.') %]
-                            <a href="/cgi-bin/koha/admin/credit_types.pl?op=add_form">[% t('Create new credit type') %]</a>
+                            There are no account credit types defined.
+                            <a href="/cgi-bin/koha/admin/credit_types.pl?op=add_form">Create new credit type</a>
                         </div>
                     [% END %]
                 [% END %]
