@@ -404,12 +404,16 @@ Note that permanent location is a code, and location may be an authval.
                     <td class="dateaccessioned"><span title="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( itemdata_uri ) %]
-                        [% IF Koha.Preference('URLLinkText') %]
-                            <td class="uri"><a href="[% item.uri | url %]">[% Koha.Preference('URLLinkText') | html %]</a></td>
-                        [% ELSIF item.uri %]
-                            <td class="uri"><a href="[% item.uri | url %]">Link to resource</a></td>
+                        [% IF item.uri.split(' \| ').size > 1 %]
+                            <td class="uri">
+                                [% FOREACH uri IN item.uri.split(' \| ') %]<a href="[% uri | url %]">[% uri | html %]</a><br>[% END %]
+                            </td>
                         [% ELSE %]
-                            <td></td>
+                            <td class="uri">
+                                [% IF item.uri %]
+                                    <a href="[% item.uri | url %]">[% IF Koha.Preference('URLLinkText') %][% Koha.Preference('URLLinkText') | html %][% ELSE %]Link to resource[% END %]</a>
+                                [% END %]
+                            </td>
                         [% END %]
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]
