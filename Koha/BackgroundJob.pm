@@ -27,21 +27,29 @@ sub enqueue {
 
     my $borrowernumber = C4::Context->userenv->{number}; # FIXME Handle non GUI calls
     my $json_args = encode_json $job_args;
-    $self->set({
-        status => 'new',
-        type => $job_type,
-        size => $job_size,
-        data => $json_args,
-        enqueued_on => dt_from_string,
-        borrowernumber => $borrowernumber,
-    })->store;
+    my $job_id;
+    $self->_result->result_source->schema->txn_do(
+        sub {
+            $self->set(
+                {
+                    status         => 'new',
+                    type           => $job_type,
+                    size           => $job_size,
+                    data           => $json_args,
+                    enqueued_on    => dt_from_string,
+                    borrowernumber => $borrowernumber,
+                }
+            )->store;
 
-    my $job_id = $self->id;
-    $job_args->{job_id} = $job_id;
-    $json_args = encode_json $job_args,
+            $job_id = $self->id;
+            $job_args->{job_id} = $job_id;
+            $json_args = encode_json $job_args;
 
-    my $conn = $self->connect;
-    $conn->send({destination => $job_type, body => $json_args});
+            my $conn = $self->connect;
+            $conn->send_with_receipt( { destination => $job_type, body => $json_args } )
+              or Koha::Exception->throw('Job has not been enqueued');
+        }
+    );
 
     return $job_id;
 }

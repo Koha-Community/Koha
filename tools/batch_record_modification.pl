@@ -23,6 +23,7 @@ use Modern::Perl;
 use CGI;
 use List::MoreUtils qw( uniq );
 use JSON qw( encode_json );
+use Try::Tiny;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
@@ -149,17 +150,26 @@ if ( $op eq 'form' ) {
     # We want to modify selected records!
     my @record_ids = $input->multi_param('record_id');
 
-    my $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
-        {
-            mmtid       => $mmtid,
-            record_type => $recordtype,
-            record_ids  => \@record_ids,
-        }
-    );
-    $template->param(
-        view => 'enqueued',
-        job_id => $job_id,
-    );
+    try {
+        my $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+            {
+                mmtid       => $mmtid,
+                record_type => $recordtype,
+                record_ids  => \@record_ids,
+            }
+        );
+        $template->param(
+            view => 'enqueued',
+            job_id => $job_id,
+        );
+    } catch {
+        push @messages, {
+            type => 'error',
+            code => 'cannot_enqueue_job',
+            error => $_,
+        };
+        $template->param( view => 'errors' );
+    };
 }
 
 $template->param(

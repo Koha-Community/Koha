@@ -46,6 +46,8 @@
                                     Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | uri %]">[% message.authid | html %]</a> has not been modified. An error occurred on modifying it.
                                 [% ELSIF message.code == 'authority_modified' %]
                                     Bibliographic record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | uri %]">[% message.authid | html %]</a> has successfully been modified.
+                                [% ELSIF message.code == 'cannot_enqueue_job' %]
+                                    Cannot enqueue this job.
                                 [% END %]
                                 [% IF message.error %]
                                     (The error was: [% message.error | html %]. See the Koha logfile for more information).
