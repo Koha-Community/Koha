@@ -551,11 +551,9 @@ sub execute_query {
     $offset = 0    unless $offset;
     $limit  = 999999 unless $limit;
     $debug and print STDERR "execute_query($sql, $offset, $limit)\n";
-    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
-        return (undef, {  sqlerr => $1} );
-    } elsif ($sql !~ /^\s*SELECT\b\s*/i) {
-        return (undef, { queryerr => 'Missing SELECT'} );
-    }
+
+    my $errors = Koha::Reports->validate_sql($sql);
+    return (undef, @{$errors}[0]) if (scalar(@$errors));
 
     foreach my $sql_param ( @$sql_params ){
         if ( $sql_param =~ m/\n/ ){

@@ -239,12 +239,7 @@ elsif ( $phase eq 'Update SQL'){
 
     create_non_existing_group_and_subgroup($input, $group, $subgroup);
 
-    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
-        push @errors, {sqlerr => $1};
-    }
-    elsif ($sql !~ /^(SELECT)/i) {
-        push @errors, {queryerr => "No SELECT"};
-    }
+    push(@errors, @{Koha::Reports->validate_sql($sql)});
 
     if (@errors) {
         $template->param(
@@ -600,12 +595,7 @@ elsif ( $phase eq 'Save Report' ) {
 
     create_non_existing_group_and_subgroup($input, $group, $subgroup);
     ## FIXME this is AFTER entering a name to save the report under
-    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
-        push @errors, {sqlerr => $1};
-    }
-    elsif ($sql !~ /^(SELECT)/i) {
-        push @errors, {queryerr => "No SELECT"};
-    }
+    push(@errors, @{Koha::Reports->validate_sql($sql)});
 
     if (@errors) {
         $template->param(

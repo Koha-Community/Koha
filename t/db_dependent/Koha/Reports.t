@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use Koha::Report;
 use Koha::Reports;
@@ -70,3 +70,15 @@ subtest 'prep_report' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'validate_sql' => sub {
+    plan tests => 3 + 6*2;
+    my @badwords = ('UPDATE', 'DELETE', 'DROP', 'INSERT', 'SHOW', 'CREATE');
+    is_deeply( Koha::Reports->validate_sql(), [{ queryerr => 'Missing SELECT'}], 'Empty sql is missing SELECT' );
+    is_deeply( Koha::Reports->validate_sql('FOO'), [{ queryerr => 'Missing SELECT'}], 'Nonsense sql is missing SELECT' );
+    is_deeply( Koha::Reports->validate_sql('select FOO'), [], 'select FOO is good' );
+    foreach my $word (@badwords) {
+        is_deeply( Koha::Reports->validate_sql('select FOO;'.$word.' BAR'), [{ sqlerr => $word}], 'select FOO with '.$word.' BAR' );
+        is_deeply( Koha::Reports->validate_sql($word.' qux'), [{ sqlerr => $word}], $word.' qux' );
+    }
+}

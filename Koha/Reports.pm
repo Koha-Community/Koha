@@ -35,6 +35,28 @@ Koha::Reports - Koha Report Object set class
 
 =cut
 
+=head3 validate_sql
+
+Validate SQL query string so it only contains a select,
+not any of the harmful queries.
+
+=cut
+
+sub validate_sql {
+    my ($self, $sql) = @_;
+
+    $sql //= '';
+    my @errors = ();
+
+    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
+        push @errors, { sqlerr => $1 };
+    } elsif ($sql !~ /^\s*SELECT\b\s*/i) {
+        push @errors, { queryerr => 'Missing SELECT' };
+    }
+
+    return \@errors;
+}
+
 =head3 _type
 
 Returns name of corresponding DBIC resultset
