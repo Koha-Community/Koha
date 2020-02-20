@@ -21,6 +21,7 @@ use Mojo::Base 'Mojolicious';
 
 use C4::Context;
 use JSON::Validator::OpenAPI::Mojolicious;
+use Try::Tiny;
 
 =head1 NAME
 
@@ -67,33 +68,66 @@ sub startup {
     }
 
     my $validator = JSON::Validator::OpenAPI::Mojolicious->new;
-    $validator->load_and_validate_schema(
-        $self->home->rel_file("api/v1/swagger/swagger.json"),
-        {
-          allow_invalid_ref  => 1,
-        }
-      );
 
     push @{$self->routes->namespaces}, 'Koha::Plugin';
 
-    my $spec = $validator->schema->data;
-    $self->plugin(
-        'Koha::REST::Plugin::PluginRoutes' => {
-            spec      => $spec,
-            validator => $validator
-        }
-    );
+    # Try to load and merge all schemas first and validate the result just once.
+    my $spec;
+    try {
+        $spec = $validator->bundle(
+            {
+                replace => 1,
+                schema => $self->home->rel_file("api/v1/swagger/swagger.json")
+            }
+        );
 
-    $self->plugin(
-        OpenAPI => {
-            spec  => $spec,
-            route => $self->routes->under('/api/v1')->to('Auth#under'),
-            allow_invalid_ref =>
-              1,    # required by our spec because $ref directly under
-                    # Paths-, Parameters-, Definitions- & Info-object
-                    # is not allowed by the OpenAPI specification.
-        }
-    );
+        $self->plugin(
+            'Koha::REST::Plugin::PluginRoutes' => {
+                spec               => $spec,
+                validator          => undef
+            }
+        );
+
+        $self->plugin(
+            OpenAPI => {
+                spec  => $spec,
+                route => $self->routes->under('/api/v1')->to('Auth#under'),
+                allow_invalid_ref =>
+                1,    # required by our spec because $ref directly under
+                        # Paths-, Parameters-, Definitions- & Info-object
+                        # is not allowed by the OpenAPI specification.
+            }
+        );
+    }
+    catch {
+        # Validation of the complete spec failed. Resort to validation one-by-one
+        # to catch bad ones.
+        $validator->load_and_validate_schema(
+            $self->home->rel_file("api/v1/swagger/swagger.json"),
+            {
+                allow_invalid_ref  => 1,
+            }
+        );
+
+        $spec = $validator->schema->data;
+        $self->plugin(
+            'Koha::REST::Plugin::PluginRoutes' => {
+                spec      => $spec,
+                validator => $validator
+            }
+        );
+
+        $self->plugin(
+            OpenAPI => {
+                spec  => $spec,
+                route => $self->routes->under('/api/v1')->to('Auth#under'),
+                allow_invalid_ref =>
+                1,    # required by our spec because $ref directly under
+                        # Paths-, Parameters-, Definitions- & Info-object
+                        # is not allowed by the OpenAPI specification.
+            }
+        );
+    };
 
     $self->plugin( 'Koha::REST::Plugin::Pagination' );
     $self->plugin( 'Koha::REST::Plugin::Query' );

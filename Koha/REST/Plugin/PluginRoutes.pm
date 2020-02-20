@@ -69,6 +69,8 @@ sub register {
 sub inject_routes {
     my ( $spec, $plugin, $validator ) = @_;
 
+    return merge_spec( $spec, $plugin ) unless $validator;
+
     return try {
 
         my $backup_spec = merge_spec( clone($spec), $plugin );
