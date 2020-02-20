@@ -251,6 +251,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-19 16:07:13
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8tTH0fAzewvaXRYs8+VZcg
 
+__PACKAGE__->add_columns(
+    '+itype_enabled'         => { is_boolean => 1 },
+    '+ccode_enabled'         => { is_boolean => 1 },
+    '+holdingbranch_enabled' => { is_boolean => 1 },
+    '+location_enabled'      => { is_boolean => 1 },
+);
 
 sub koha_objects_class {
     'Koha::Course::Items';
