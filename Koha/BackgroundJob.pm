@@ -48,7 +48,12 @@ sub enqueue {
             $json_args = encode_json $job_args;
 
             my $conn = $self->connect;
-            $conn->send_with_receipt( { destination => $job_type, body => $json_args } )
+            # This namespace is wrong, it must be a vhost instead.
+            # But to do so it needs to be created on the server => much more work when a new Koha instance is created.
+            # Also, here we just want the Koha instance's name, but it's not in the config...
+            # Picking a random id (memcached_namespace) from the config
+            my $namespace = C4::Context->config('memcached_namespace');
+            $conn->send_with_receipt( { destination => sprintf("%s-%s", $namespace, $job_type), body => $json_args } )
               or Koha::Exceptions::Exception->throw('Job has not been enqueued');
         }
     );

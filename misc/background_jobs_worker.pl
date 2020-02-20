@@ -24,8 +24,10 @@ my $conn = Koha::BackgroundJob->connect;
 
 my @job_types = qw( batch_biblio_record_modification batch_authority_record_modification );
 
+# FIXME cf note in Koha::BackgroundJob about $namespace
+my $namespace = C4::Context->config('memcached_namespace');
 for my $job_type ( @job_types ) {
-    $conn->subscribe({ destination => $job_type, ack => 'client' });
+    $conn->subscribe({ destination => sprintf("%s-%s", $namespace, $job_type), ack => 'client' });
 }
 while (1) {
     my $frame = $conn->receive_frame;
