@@ -20860,6 +20860,50 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 11297 - Add support for custom PQF attributes for Z39.50 server searches)\n";
 }
 
+$DBversion = '19.12.00.027';
+if( CheckVersion( $DBversion ) ) {
+
+    # Add any pathalogical incorrect debit_types as credit_types as appropriate
+    $dbh->do(
+        qq{
+          INSERT IGNORE INTO account_credit_types (
+            code,
+            description,
+            can_be_added_manually,
+            is_system
+          )
+          SELECT
+            DISTINCT(debit_type_code),
+            "Unexpected type found during upgrade",
+            1,
+            0
+          FROM
+            accountlines
+          WHERE
+            amount < 0
+          AND
+            debit_type_code IS NOT NULL
+        }
+    );
+
+    # Correct any pathalogical cases
+    $dbh->do( qq{
+      UPDATE
+        accountlines
+      SET
+        credit_type_code = debit_type_code,
+        debit_type_code = NULL
+      WHERE
+        amount < 0
+      AND
+        debit_type_code IS NOT NULL
+    });
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24532 - Fix pathological cases of negative debits)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
