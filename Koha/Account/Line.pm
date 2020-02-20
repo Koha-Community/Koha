@@ -876,6 +876,64 @@ sub renew_item {
 
 }
 
+=head3 store
+
+Specific store method to generate credit number before saving
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    my $AutoCreditNumber = C4::Context->preference('AutoCreditNumber');
+    if ($AutoCreditNumber && !$self->in_storage && $self->is_credit && !$self->credit_number) {
+        my $rs = Koha::Database->new->schema->resultset($self->_type);
+
+        if ($AutoCreditNumber eq 'incremental') {
+            my $max = $rs->search({
+                credit_number => { -regexp => '^[0-9]+$' }
+            }, {
+                select => \'CAST(credit_number AS UNSIGNED)',
+                as => ['credit_number'],
+            })->get_column('credit_number')->max;
+            $max //= 0;
+            $self->credit_number($max + 1);
+        } elsif ($AutoCreditNumber eq 'annual') {
+            my $now = DateTime->now;
+            my $prefix = sprintf('%d-', $now->year);
+            my $max = $rs->search({
+                -and => [
+                    credit_number => { -regexp => '[0-9]{4}$' },
+                    credit_number => { -like => "$prefix%" },
+                ],
+            })->get_column('credit_number')->max;
+            $max //= $prefix . '0000';
+            my $incr = substr($max, length $prefix);
+            $self->credit_number(sprintf('%s%04d', $prefix, $incr + 1));
+        } elsif ($AutoCreditNumber eq 'branchyyyymmincr') {
+            my $userenv = C4::Context->userenv;
+            if ($userenv) {
+                my $branch = $userenv->{branch};
+                my $now = DateTime->now;
+                my $prefix = sprintf('%s%d%02d', $branch, $now->year, $now->month);
+                my $pattern = $prefix;
+                $pattern =~ s/([\?%_])/\\$1/g;
+                my $max = $rs->search({
+                    -and => [
+                        credit_number => { -regexp => '[0-9]{4}$' },
+                        credit_number => { -like => "$pattern%" },
+                    ],
+                })->get_column('credit_number')->max;
+                $max //= $prefix . '0000';
+                my $incr = substr($max, length $prefix);
+                $self->credit_number(sprintf('%s%04d', $prefix, $incr + 1));
+            }
+        }
+    }
+
+    return $self->SUPER::store();
+}
+
 =head2 Internal methods
 
 =cut

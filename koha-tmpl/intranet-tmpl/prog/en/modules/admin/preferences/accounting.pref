@@ -33,3 +33,10 @@ Accounting:
                 yes: "Enable"
                 no: "Disable"
             - " the point of sale feature to allow anonymous transactions with the accounting system. (Requires UseCashRegisters)"
+        -
+            - pref: AutoCreditNumber
+              choices:
+                '': 'Do not automatically generate credit numbers'
+                annual: 'Automatically generate credit numbers in the form <year>-0001'
+                branchyyyymmincr: 'Automatically generate credit numbers in the form <branchcode>yyyymm0001'
+                incremental: 'Automatically generate credit numbers in the form 1, 2, 3'

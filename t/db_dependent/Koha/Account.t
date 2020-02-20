@@ -1049,3 +1049,51 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'Koha::Account::pay() generates credit number' => sub {
+    plan tests => 34;
+
+    $schema->storage->txn_begin;
+
+    Koha::Account::Lines->delete();
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $account = $patron->account;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', { branch => $library->id } );
+
+    my $now = DateTime->now;
+    my $year = $now->year;
+    my $month = $now->month;
+    my ($accountlines_id, $accountline);
+
+    t::lib::Mocks::mock_preference('AutoCreditNumber', '');
+    $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
+    $accountline = Koha::Account::Lines->find($accountlines_id);
+    is($accountline->credit_number, undef, 'No credit number is generated when syspref is off');
+
+    t::lib::Mocks::mock_preference('AutoCreditNumber', 'incremental');
+    for my $i (1..11) {
+        $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
+        $accountline = Koha::Account::Lines->find($accountlines_id);
+        is($accountline->credit_number, $i);
+    }
+
+    t::lib::Mocks::mock_preference('AutoCreditNumber', 'annual');
+    for my $i (1..11) {
+        $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
+        $accountline = Koha::Account::Lines->find($accountlines_id);
+        is($accountline->credit_number, sprintf('%s-%04d', $year, $i));
+    }
+
+    t::lib::Mocks::mock_preference('AutoCreditNumber', 'branchyyyymmincr');
+    for my $i (1..11) {
+        $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
+        $accountline = Koha::Account::Lines->find($accountlines_id);
+        is($accountline->credit_number, sprintf('%s%d%02d%04d', $library->id, $year, $month, $i));
+    }
+
+    $schema->storage->txn_rollback;
+};

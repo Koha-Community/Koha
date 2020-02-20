@@ -45,6 +45,7 @@
     <thead>
       <tr>
           <th class="title-string">Date</th>
+          <th>Credit number</th>
           <th>Account type</th>
           <th>Description of charges</th>
           <th>Barcode</th>
@@ -64,6 +65,7 @@
 
    <tr>
    <td><span title="[% account.date | html %]">[% account.date |$KohaDates %]</span></td>
+        <td>[% account.credit_number | html %]</td>
         <td>[% PROCESS account_type_description account=account %]</td>
       <td>
         [%- IF account.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
