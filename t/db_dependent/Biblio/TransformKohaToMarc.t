@@ -12,6 +12,7 @@ use C4::Biblio;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+our $builder = t::lib::TestBuilder->new;
 
 # Create/overwrite some Koha to MARC mappings in default framework
 Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '300', tagsubfield => 'a' })->delete;
@@ -77,14 +78,17 @@ subtest "Working with control fields" => sub {
     is( $record->field('001')->data, 'all', 'Verify field 001' );
 };
 
-subtest "Add test for no_split option" => sub {
-    plan tests => 4;
+subtest "Add tests for _check_split" => sub {
+    plan tests => 7;
 
     Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'a' })->delete;
     Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'a', kohafield => 'items.fld1' })->store;
     Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'b' })->delete;
     Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'b', kohafield => 'items.fld1' })->store;
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+    # add 952a repeatable in another framework
+    my $fw =  $builder->build({ source => 'BiblioFramework' })->{frameworkcode};
+    Koha::MarcSubfieldStructure->new({ frameworkcode => $fw, tagfield => '952', tagsubfield => 'a', repeatable => 1 })->store;
 
     # Test single value in fld1
     my @cols = ( 'items.fld1' => '01' );
@@ -92,11 +96,18 @@ subtest "Add test for no_split option" => sub {
     is( $record->subfield( '952', 'a' ), '01', 'Check single in 952a' );
     is( $record->subfield( '952', 'b' ), '01', 'Check single in 952b' );
 
-    # Test glued (composite) value in fld1
+    # Test glued (composite) value in fld1 with no_split parameter
     @cols = ( 'items.fld1' => '01 | 02' );
     $record = C4::Biblio::TransformKohaToMarc( { @cols }, { no_split => 1 } );
     is( $record->subfield( '952', 'a' ), '01 | 02', 'Check composite in 952a' );
     is( $record->subfield( '952', 'b' ), '01 | 02', 'Check composite in 952b' );
+    # Test without no_split (subfield is not repeatable)
+    $record = C4::Biblio::TransformKohaToMarc( { @cols } );
+    is( $record->subfield( '952', 'a' ), '01 | 02', 'Check composite in 952a' );
+    # Test with other framework (repeatable)
+    $record =  C4::Biblio::TransformKohaToMarc( { @cols }, { framework => $fw } );
+    is( ($record->subfield( '952', 'a' ))[0], '01', "Framework $fw first 952a" );
+    is( ($record->subfield( '952', 'a' ))[1], '02', "Framework $fw second 952a" );
 };
 
 # Cleanup
