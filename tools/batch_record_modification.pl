@@ -33,6 +33,7 @@ use C4::MarcModificationTemplates qw( GetModificationTemplateActions GetModifica
 
 use Koha::Biblios;
 use Koha::BackgroundJob::BatchUpdateBiblio;
+use Koha::BackgroundJob::BatchUpdateAuthority;
 use Koha::MetadataRecord::Authority;
 use Koha::Virtualshelves;
 
@@ -151,13 +152,17 @@ if ( $op eq 'form' ) {
     my @record_ids = $input->multi_param('record_id');
 
     try {
-        my $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
-            {
-                mmtid       => $mmtid,
-                record_type => $recordtype,
-                record_ids  => \@record_ids,
-            }
-        );
+        my $params = {
+            mmtid       => $mmtid,
+            record_type => $recordtype,
+            record_ids  => \@record_ids,
+        };
+
+        my $job_id =
+          $recordtype eq 'biblio'
+          ? Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue($params)
+          : Koha::BackgroundJob::BatchUpdateAuthority->new->enqueue($params);
+
         $template->param(
             view => 'enqueued',
             job_id => $job_id,

@@ -7,7 +7,9 @@ use Net::Stomp;
 
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
-use Koha::BackgroundJobs;
+use Koha::Exceptions;
+use Koha::BackgroundJob::BatchUpdateBiblio;
+use Koha::BackgroundJob::BatchUpdateAuthority;
 
 use base qw( Koha::Object );
 
@@ -21,7 +23,7 @@ sub connect {
 sub enqueue {
     my ( $self, $params ) = @_;
 
-    my $job_type = $params->{job_type};
+    my $job_type = $self->job_type;
     my $job_size = $params->{job_size};
     my $job_args = $params->{job_args};
 
@@ -47,14 +49,25 @@ sub enqueue {
 
             my $conn = $self->connect;
             $conn->send_with_receipt( { destination => $job_type, body => $json_args } )
-              or Koha::Exception->throw('Job has not been enqueued');
+              or Koha::Exceptions::Exception->throw('Job has not been enqueued');
         }
     );
 
     return $job_id;
 }
 
-sub process { croak "This method must be subclassed" }
+sub process {
+    my ( $self, $args ) = @_;
+
+    my $job_type = $self->type;
+    return $job_type eq 'batch_biblio_record_modification'
+      ? Koha::BackgroundJob::BatchUpdateBiblio->process($args)
+      : $job_type eq 'batch_authority_record_modification'
+      ? Koha::BackgroundJob::BatchUpdateAuthority->process($args)
+      : Koha::Exceptions::Exception->throw('->process called without valid job_type');
+}
+
+sub job_type { croak "This method must be subclassed" }
 
 sub messages {
     my ( $self ) = @_;

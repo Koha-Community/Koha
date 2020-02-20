@@ -1,11 +1,18 @@
 package Koha::BackgroundJob::BatchUpdateBiblio;
 
 use Modern::Perl;
-use Koha::BackgroundJobs;
-use Koha::DateUtils qw( dt_from_string );
 use JSON qw( encode_json decode_json );
 
+use Koha::BackgroundJobs;
+use Koha::DateUtils qw( dt_from_string );
+use C4::Biblio;
+use C4::MarcModificationTemplates;
+
 use base 'Koha::BackgroundJob';
+
+sub job_type {
+    return 'batch_biblio_record_modification';
+}
 
 sub process {
     my ( $self, $args ) = @_;
@@ -17,6 +24,9 @@ sub process {
     if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
         return;
     }
+
+    # FIXME If the job has already been started, but started again (worker has been restart for instance)
+    # Then we will start from scratch and so double process the same records
 
     my $job_progress = 0;
     $job->started_on(dt_from_string)
@@ -89,7 +99,6 @@ sub enqueue {
     my @record_ids = @{ $args->{record_ids} };
 
     $self->SUPER::enqueue({
-        job_type => 'batch_biblio_record_modification', # FIXME Must be a global const
         job_size => scalar @record_ids,
         job_args => {mmtid => $mmtid, record_type => $record_type, record_ids => \@record_ids,}
     });

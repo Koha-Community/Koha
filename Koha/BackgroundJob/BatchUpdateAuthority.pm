@@ -1,21 +1,28 @@
 package Koha::BackgroundJob::BatchUpdateAuthority;
 
 use Modern::Perl;
+use JSON qw( encode_json decode_json );
+
+use C4::MarcModificationTemplates;
+use C4::AuthoritiesMarc;
 use Koha::BackgroundJobs;
 use Koha::DateUtils qw( dt_from_string );
-use JSON qw( encode_json decode_json );
+use Koha::MetadataRecord::Authority;
 
 use base 'Koha::BackgroundJob';
 
-our $channel;
+sub job_type {
+    return 'batch_authority_record_modification';
+}
+
 sub process {
-    my ( $self, $args, $channel ) = @_;
-
-    my $job_type = $args->{job_type};
-
-    return unless exists $args->{job_id};
+    my ( $self, $args ) = @_;
 
     my $job = Koha::BackgroundJobs->find( $args->{job_id} );
+
+    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+        return;
+    }
 
     my $job_progress = 0;
     $job->started_on(dt_from_string)
@@ -28,14 +35,13 @@ sub process {
     my @record_ids = @{ $args->{record_ids} };
 
     my $report = {
-        total_records => 0,
+        total_records => scalar @record_ids,
         total_success => 0,
     };
     my @messages;
     my $dbh = C4::Context->dbh;
     $dbh->{RaiseError} = 1;
     RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
-        $report->{total_records}++;
         next unless $record_id;
         # Authorities
         my $authid = $record_id;
@@ -68,11 +74,10 @@ sub process {
     $job_data->{report} = $report;
 
     $job->ended_on(dt_from_string)
-        ->status('finished')
-        ->data(encode_json $job_data)
-        ->store;
+        ->data(encode_json $job_data);
+    $job->status('finished') if $job->status ne 'cancelled';
+    $job->store;
 
-    $channel->ack(); # FIXME Is that ok even on failure?
 }
 
 sub enqueue {
@@ -88,7 +93,6 @@ sub enqueue {
     my @record_ids = @{ $args->{record_ids} };
 
     $self->SUPER::enqueue({
-        job_type => 'batch_record_modification',
         job_size => scalar @record_ids,
         job_args => {mmtid => $mmtid, record_type => $record_type, record_ids => \@record_ids,}
     });
