@@ -20228,7 +20228,7 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '19.11.00.000';
 if( CheckVersion( $DBversion ) ) {
-    NewVersion( $DBversion, undef '19.11.00 release' );
+    NewVersion( $DBversion, undef, '19.11.00 release' );
 }
 
 $DBversion = '19.12.00.000';
@@ -20724,8 +20724,8 @@ if ( CheckVersion($DBversion) ) {
     if ( !column_exists( 'marc_tag_structure', 'important') ){
         $dbh->do("ALTER TABLE marc_tag_structure ADD COLUMN important TINYINT(4) NOT NULL DEFAULT 0  AFTER mandatory");
     }
-    SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 8643 - Add important constraint to marc subfields)\n";
+
+    NewVersion( $DBversion, 8643, 'Add important constraint to marc subfields' );
 }
 
 $DBversion = '19.12.00.021';
@@ -20774,8 +20774,7 @@ if( CheckVersion( $DBversion ) ) {
           ( 'Lost Item Found' )
     });
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24592 - Update LOST_RETURN to LOST_FOUND)\n";
+    NewVersion( $DBversion, 24592, 'Update LOST_RETURN to LOST_FOUND');
 }
 
 $DBversion = '19.12.00.022';
@@ -20783,16 +20782,14 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do( "ALTER TABLE items MODIFY COLUMN uri MEDIUMTEXT" );
     $dbh->do( "ALTER TABLE deleteditems MODIFY COLUMN uri MEDIUMTEXT" );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 20882 - items.uri to MEDIUMTEXT)\n";
+    NewVersion( $DBversion, 20882, 'items.uri to MEDIUMTEXT');
 }
 
 $DBversion = '19.12.00.023';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "ALTER TABLE quotes MODIFY timestamp datetime NULL" );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24640 - Allow quotes.timestamp to be NULL)\n";
+    NewVersion( $DBversion, 24640, 'Allow quotes.timestamp to be NULL');
 }
 
 $DBversion = '19.12.00.024';
@@ -20806,8 +20803,8 @@ if( CheckVersion( $DBversion ) ) {
         explanation = "Choose the fines mode, 'off' (do not accrue fines) or 'production' (accrue overdue fines).  Requires accruefines cronjob or CalculateFinesOnReturn system preference."
         WHERE variable = 'finesMode'
     });
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 21633  - Remove finesMode 'test')\n";
+
+    NewVersion( $DBversion, 21633, 'Remove finesMode "test"');
 }
 
 $DBversion = '19.12.00.025';
@@ -20816,8 +20813,8 @@ if( CheckVersion( $DBversion ) ) {
         INSERT IGNORE INTO `systempreferences` (variable,value,options,explanation,type)
         VALUES ('DumpSearchQueryTemplate',0,'','Add the search query being passed to the search engine into the template for debugging','YesNo')
     });
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24103 - add DumpSearchQueryTemplate syspref)\n";
+
+    NewVersion( $DBversion, 24103, 'add DumpSearchQueryTemplate syspref');
 }
 
 $DBversion = '19.12.00.026';
@@ -20826,8 +20823,7 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do( "ALTER TABLE z3950servers ADD COLUMN attributes VARCHAR(255) after add_xslt" );
     }
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 11297 - Add support for custom PQF attributes for Z39.50 server searches)\n";
+    NewVersion( $DBversion, 11297, 'Add support for custom PQF attributes for Z39.50 server searches');
 }
 
 $DBversion = '19.12.00.027';
@@ -20869,9 +20865,7 @@ if( CheckVersion( $DBversion ) ) {
         debit_type_code IS NOT NULL
     });
 
-    # Always end with this (adjust the bug info)
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24532 - Fix pathological cases of negative debits)\n";
+    NewVersion( $DBversion, 24532, 'Fix pathological cases of negative debits');
 }
 
 $DBversion = '19.12.00.028';
@@ -20881,8 +20875,8 @@ if( CheckVersion( $DBversion ) ) {
         VALUES
         ('OpacBrowseSearch', '0',NULL, "Elasticsearch only: add a page allowing users to 'browse' all items in the collection",'YesNo')
     });
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 14567: Add OpacBrowseSearch syspref)\n";
+
+    NewVersion( $DBversion, 14567, 'Add OpacBrowseSearch syspref');
 }
 
 $DBversion = '19.12.00.029';
