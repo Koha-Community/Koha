@@ -1440,6 +1440,10 @@ sub _FixPriority {
     my $hold;
     if ( $reserve_id ) {
         $hold = Koha::Holds->find( $reserve_id );
+        if (!defined $hold){
+            # may have already been checked out and hold fulfilled
+            $hold = Koha::Old::Holds->find( $reserve_id );
+        }
         return unless $hold;
     }
 
