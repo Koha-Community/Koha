@@ -21306,21 +21306,23 @@ sub NewVersion {
         $descriptions = [ $descriptions ];
     }
     my $first = 1;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+    my $time = sprintf ( "%02d:%02d:%02d", $hour,$min,$sec);
     for my $description ( @$descriptions ) {
         if ( @$descriptions > 1 ) {
             if ( $first ) {
                 unless ( $bug_number ) {
-                    say sprintf "Upgrade to %s done: %s", $DBversion, $description
+                    say sprintf "Upgrade to %s done [%s]: %s", $DBversion, $time, $description;
                 } else {
-                    say sprintf "Upgrade to %s done: Bug %5s - %s", $DBversion, $bug_number, $description;
+                    say sprintf "Upgrade to %s done [%s]: Bug %5s - %s", $DBversion, $time, $bug_number, $description;
                 }
             }
-            say sprintf "\t\t\t\t\t- %s", $description
+            say sprintf "\t\t\t\t\t- %s", $description;
         } else {
             unless ( $bug_number ) {
-                say sprintf "Upgrade to %s done: %s", $DBversion, $description;
+                say sprintf "Upgrade to %s done [%s]: %s", $DBversion, $time, $description;
             } else {
-                say sprintf "Upgrade to %s done: Bug %5s - %s", $DBversion, $bug_number, $description;
+                say sprintf "Upgrade to %s done [%s]: Bug %5s - %s", $DBversion, $time, $bug_number, $description;
             }
         }
         $first = 0;
