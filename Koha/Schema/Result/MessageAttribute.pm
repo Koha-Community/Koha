@@ -117,4 +117,12 @@ __PACKAGE__->has_many(
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
+
+sub koha_object_class {
+  'Koha::Patron::Message::Attribute';
+}
+sub koha_objects_class {
+  'Koha::Patron::Message::Attributes';
+}
+
 1;
