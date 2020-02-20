@@ -18,6 +18,8 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use JSON qw( decode_json );
+use Try::Tiny;
+
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -64,7 +66,30 @@ if ( $op eq 'cancel' ) {
 
 if ( $op eq 'list' ) {
     my $jobs = Koha::BackgroundJobs->search({}, { order_by => { -desc => 'enqueued_on' }});
-    $template->param( jobs => $jobs, );
+    my @pending_jobs;
+    try {
+        my $conn = Koha::BackgroundJob->connect;
+        my $job_type = 'batch_biblio_record_modification';
+        $conn->subscribe({ destination => $job_type, ack => 'client' });
+        my @frames;
+        while (my $frame = $conn->receive_frame({timeout => 1})) {
+            last unless $frame;
+            my $body = $frame->body;
+            my $args = decode_json($body);
+            push @pending_jobs, $args->{job_id};
+            push @frames, $frame;
+        }
+        $conn->nack( { frame => $_ } ) for @frames;
+        $conn->disconnect;
+    } catch {
+        push @messages, {
+            type => 'error',
+            code => 'cannot_retrieve_jobs',
+            error => $_,
+        };
+    };
+
+    $template->param( jobs => $jobs, pending_jobs => \@pending_jobs, );
 }
 
 $template->param(
