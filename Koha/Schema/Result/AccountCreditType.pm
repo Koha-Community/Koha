@@ -47,6 +47,12 @@ __PACKAGE__->table("account_credit_types");
   default_value: 0
   is_nullable: 0
 
+=head2 archived
+
+  data_type: 'tinyint'
+  default_value: 0
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -57,6 +63,8 @@ __PACKAGE__->add_columns(
   "can_be_added_manually",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "is_system",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "archived",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
@@ -105,8 +113,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-14 09:59:52
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Uycu/23b681kWHNX+/gNiw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-20 14:48:55
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hdxcXxCqIDxwfSHjSr0VUg
 
 __PACKAGE__->add_columns(
     '+is_system' => { is_boolean => 1 }
