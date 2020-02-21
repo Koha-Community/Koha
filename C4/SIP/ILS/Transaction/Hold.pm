@@ -66,8 +66,10 @@ sub do_hold {
         return $self;
     }
 
+    my $priority = C4::Reserves::CalculatePriority($item->biblionumber);
     AddReserve(
         {
+            priority       => $priority,
             branch         => $branch,
             borrowernumber => $patron->borrowernumber,
             biblionumber   => $item->biblionumber
