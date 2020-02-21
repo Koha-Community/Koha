@@ -66,7 +66,8 @@ sub do_hold {
         return $self;
     }
 
-    AddReserve( $branch, $patron->borrowernumber, $item->biblionumber );
+    my $priority = C4::Reserves::CalculatePriority($item->biblionumber);
+    AddReserve( $branch, $patron->borrowernumber, $item->biblionumber, undef, $priority );
 
     # unfortunately no meaningful return value
     $self->ok(1);
