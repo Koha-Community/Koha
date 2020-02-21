@@ -51,8 +51,7 @@ use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
-use C4::External::BakerTaylor;
-use C4::External::BakerTaylor qw(&image_url &link_url);
+use C4::External::BakerTaylor qw( image_url link_url );
 
 use Koha::Libraries;
 use Koha::ItemTypes;
