@@ -34,6 +34,8 @@ use C4::Circulation;
 use C4::Tags qw(get_tags);
 use C4::XISBN qw(get_xisbns);
 use C4::External::Amazon;
+use C4::External::BakerTaylor;
+use C4::External::BakerTaylor qw(&image_url &link_url);
 use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
 use C4::Members;
 use C4::XSLT;
@@ -60,13 +62,6 @@ use Koha::Virtualshelves;
 use Koha::Patrons;
 use Koha::Ratings;
 use Koha::Reviews;
-
-BEGIN {
-	if (C4::Context->preference('BakerTaylorEnabled')) {
-		require C4::External::BakerTaylor;
-		import C4::External::BakerTaylor qw(&image_url &link_url);
-	}
-}
 
 my $query = CGI->new();
 

@@ -51,6 +51,8 @@ use C4::Koha;
 use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
+use C4::External::BakerTaylor;
+use C4::External::BakerTaylor qw(&image_url &link_url);
 
 use Koha::CirculationRules;
 use Koha::Libraries;
@@ -87,13 +89,6 @@ if ( $branch_group_limit ) {
             -name => 'limit',
             -values => [ $branch_group_limit ]
         );
-    }
-}
-
-BEGIN {
-    if (C4::Context->preference('BakerTaylorEnabled')) {
-        require C4::External::BakerTaylor;
-        import C4::External::BakerTaylor qw(&image_url &link_url);
     }
 }
 

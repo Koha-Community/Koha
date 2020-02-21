@@ -24,6 +24,8 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Koha;
 use C4::Circulation;
+use C4::External::BakerTaylor;
+use C4::External::BakerTaylor qw(&image_url &link_url);
 use C4::Reserves;
 use C4::Members;
 use C4::Members::AttributeTypes;
@@ -55,13 +57,6 @@ use Date::Calc qw(
 );
 
 my $query = new CGI;
-
-BEGIN {
-    if (C4::Context->preference('BakerTaylorEnabled')) {
-        require C4::External::BakerTaylor;
-        import C4::External::BakerTaylor qw(&image_url &link_url);
-    }
-}
 
 # CAS single logout handling
 # Will print header and exit
