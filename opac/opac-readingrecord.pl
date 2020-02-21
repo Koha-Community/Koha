@@ -25,6 +25,8 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;
+use C4::External::BakerTaylor;
+use C4::External::BakerTaylor qw(&image_url &link_url);
 use Koha::DateUtils;
 use MARC::Record;
 
@@ -136,13 +138,6 @@ if (C4::Context->preference('BakerTaylorEnabled')) {
 		BakerTaylorLinkURL  => &link_url(),
 		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
 	);
-}
-
-BEGIN {
-	if (C4::Context->preference('BakerTaylorEnabled')) {
-		require C4::External::BakerTaylor;
-		import C4::External::BakerTaylor qw(&image_url &link_url);
-	}
 }
 
 for(qw(AmazonCoverImages GoogleJackets)) { # BakerTaylorEnabled handled above
