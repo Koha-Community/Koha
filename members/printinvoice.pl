@@ -74,18 +74,6 @@ if ( $accountline->{'amountoutstanding'} <= 0 ) {
     $accountline->{'amountoutstandingcredit'} = 1;
 }
 
-my %row = (
-    'date'                    => dt_from_string( $accountline->{'date'} ),
-    'amountcredit'            => $accountline->{'amountcredit'},
-    'amountoutstandingcredit' => $accountline->{'amountoutstandingcredit'},
-    'description'             => $accountline->{'description'},
-    'amount'                  => sprintf( "%.2f", $accountline->{'amount'} ),
-    'amountoutstanding' =>
-      sprintf( "%.2f", $accountline->{'amountoutstanding'} ),
-    accounttype => $accountline->{accounttype},
-    'note'      => $accountline->{'note'},
-);
-
 my @account_offsets = Koha::Account::Offsets->search( { debit_id => $accountline_object->id } );
 
 my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_DEBIT', C4::Context::mybranch, 'print', $patron->lang );
