@@ -2126,16 +2126,6 @@ sub AddReturn {
             if C4::Context->preference("ReturnLog");
         }
 
-    # Remove any OVERDUES related debarment if the borrower has no overdues
-    if ( $borrowernumber
-      && $patron->debarred
-      && C4::Context->preference('AutoRemoveOverduesRestrictions')
-      && !Koha::Patrons->find( $borrowernumber )->has_overdues
-      && @{ GetDebarments({ borrowernumber => $borrowernumber, type => 'OVERDUES' }) }
-    ) {
-        DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
-    }
-
     # Check if this item belongs to a biblio record that is attached to an
     # ILL request, if it is we need to update the ILL request's status
     if (C4::Context->preference('CirculateILL')) {
