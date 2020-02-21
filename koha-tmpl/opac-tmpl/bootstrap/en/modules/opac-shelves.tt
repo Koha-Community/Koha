@@ -176,7 +176,7 @@
                                         <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="referer" value="view" />
-                                            <input type='hidden' name='category' value='[% category | html %]' />
+                                            <input type='hidden' name='category' value='[% shelf.category | html %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                             <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o"></i> Edit list</button>
                                         </form>
@@ -184,7 +184,7 @@
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="delete" />
                                             <input type="hidden" name="referer" value="list" />
-                                            <input type='hidden' name='category' value='[% category | html %]' />
+                                            <input type='hidden' name='category' value='[% shelf.category | html %]' />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
                                             <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-fw fa-remove"></i> Delete list</button>
                                         </form>
@@ -492,22 +492,22 @@
                         [% ELSE %]
                             <div id="toolbar" class="toolbar clearfix">
                                 <div class="list-actions">
-                                    <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a> <span class="sep"></span>
+                                    <a class="btn btn-link newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form"><i class="fa fa-fw fa-plus"></i> New list</a>
                                     [% IF can_manage_shelf %]
                                         <span class="sep">|</span>
                                         <form method="get" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="edit_form" />
                                             <input type="hidden" name="referer" value="view" />
-                                            <input type="hidden" name="category" value="category" />
+                                            <input type="hidden" name="category" value="[% shelf.category | html %]" />
                                             <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                            <input type="submit" class="editshelf" value="Edit list" />
+                                            <button type="submit" class="btn btn-link editshelf"><i class="fa fa-fw fa-pencil-square-o"></i> Edit list</button>
                                         </form>
 
                                         <form method="post" action="/cgi-bin/koha/opac-shelves.pl" class="form-inline">
                                             <input type="hidden" name="op" value="delete" />
-                                            <input type="hidden" name="shelfnumber" value="[% shelfnumber | html %]"/>
-                                            <input type="hidden" name="category" value="category" />
-                                            <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
+                                            <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]"/>
+                                            <input type="hidden" name="category" value="[% shelf.category | html %]" />
+                                            <button type="submit" class="btn btn-link remove deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"><i class="fa fa-fw fa-remove"></i> Delete list</button>
                                         </form>
                                     [% END %]
                                 </div> <!-- / .list-actions -->
@@ -956,11 +956,13 @@ $(function() {
         stickyClass: "floating"
     });
 
-    sortMenu( $("#sorting-form") );
+    [% IF itemsloop %]
+        sortMenu( $("#sorting-form") );
 
-    $("#sortfield").on("change", function(){
-        $('#sorting-form').submit();
-    });
+        $("#sortfield").on("change", function(){
+            $('#sorting-form').submit();
+        });
+    [% END %]
 
 }); // document.ready
 
