@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2020-01-21 14:25+0000\n"
+"PO-Revision-Date: 2020-02-17 15:54+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1579616725.892439\n"
+"X-POOTLE-MTIME: 1581954860.754686\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -555,15 +555,11 @@ msgstr "Тимчасові файли"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# . Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr ""
-". Веб-сайт, на якому опублікована статистика використання: <a href=\""
-"http://hea.koha-community.org\"> Веб-сайт спільноти Hea Koha </a>."
+msgstr ". Веб-сайт, на якому опублікована статистика використання: <a href=\"http://hea.koha-community.org\"> Веб-сайт спільноти Hea Koha </a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
-msgstr ""
-"<br> <strong> ПРИМІТКА: </strong> Інший параметр „UsageStats“ не має впливу, "
-"якщо для цього параметра встановлено значення „Ні“."
+msgstr "<br> <strong> ПРИМІТКА: </strong> Інший параметр „UsageStats“ не має впливу, якщо для цього параметра встановлено значення „Ні“."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
@@ -2048,12 +2044,20 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give th
 msgstr "Коли створюються примірники, надавати їм тимчасове розташування "
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# Don't show these"
-msgstr "Не показувати ці "
+msgid "cataloguing.pref#NotesBlacklist# <br />"
+msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
-msgstr " поля приміток у вкладці приміток щодо заголовку (подробиці біб-запису в ЕК) та у вкладці описів (подробиці біб-запису у бібліотечному інтерфейсі). Поля мають подаватися відокремлені комами та відповідно МАРК-формату Коха (наприклад, 3.. для UNIMARC, 5.. для MARC21)."
+msgid "cataloguing.pref#NotesBlacklist# Don't show"
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2582,18 +2586,6 @@ msgid "circulation.pref#AllowHoldsOnPatronsPossessions# a patron to place a hold
 msgstr "відвідувачу розміщувати резервування на запис, коли у нього вже є один або більше видних примірників, пов’язаних з цим записом."
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Allow"
-msgstr ""
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# Don't allow"
-msgstr ""
-
-# Circulation > Checkout Policy
-msgid "circulation.pref#AllowItemsOnHoldCheckout# checkouts of items reserved to someone else. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr "видачу примірників, зарезервованих для когось іншого. Якщо дозволено, не генерувати застереження „RESERVE_WAITING“ та „RESERVED“. Це також дозволяє самостійну видачу примірників. Якщо використовується черга резервування та встановлено на „Не дозволяти“, то вже зарезервовані примірники будуть позначені як „недоступні“."
-
-# Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# Allow"
 msgstr ""
 
@@ -2603,6 +2595,26 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSCO# checkouts of items reserved to someone else in the SCO module. If allowed do not generate RESERVE_WAITING and RESERVED warning. This allows self checkouts for those items."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -2831,10 +2843,7 @@ msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#AutoSwitchPatron# the automatic redirection to another patron when a patron barcode is scanned instead of a book."
-msgstr ""
-" автоматичне перенаправлення на іншого відвідувача, коли сканується штрих-"
-"код відвідувача замість книги. Це має бути виключеним, якщо у вас "
-"перекриваються штрих-коди відвідувачів та книг."
+msgstr " автоматичне перенаправлення на іншого відвідувача, коли сканується штрих-код відвідувача замість книги. Це має бути виключеним, якщо у вас перекриваються штрих-коди відвідувачів та книг."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# Do"
@@ -2846,9 +2855,7 @@ msgstr "Не проводити"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AutomaticItemReturn# automatically transfer items to their home library when they are returned."
-msgstr ""
-" автоматичне переміщення примірників в джерельну бібліотеку при їх "
-"поверненні."
+msgstr " автоматичне переміщення примірників в джерельну бібліотеку при їх поверненні."
 
 # Circulation > Batch checkout
 msgid "circulation.pref#BatchCheckouts# Allow"
@@ -2888,7 +2895,7 @@ msgstr "Блокувати"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# Don't block"
-msgstr ""
+msgstr "Не блокувати"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that have been withdrawn."
@@ -3292,9 +3299,7 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HoldsInNoissuesCharge# hold charges when summing up charges for noissuescharge."
-msgstr ""
-" плату за резервування при обрахунку сумарної заборгованості для "
-"співставлення зі змінною „noissuescharge“."
+msgstr " плату за резервування при обрахунку сумарної заборгованості для співставлення зі змінною „noissuescharge“."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueue# In the staff client, split the holds queue into separate tables by"
@@ -3499,9 +3504,7 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ManInvInNoissuesCharge# MANUAL_INV charges when summing up charges for noissuescharge."
-msgstr ""
-" користувацькі дебетові сплати при обрахунку сумарної заборгованості для "
-"співставлення зі змінною „noissuescharge“."
+msgstr " користувацькі дебетові сплати при обрахунку сумарної заборгованості для співставлення зі змінною „noissuescharge“."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#MarkLostItemsAsReturned# ."
@@ -3513,13 +3516,11 @@ msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# Prevent a patron from checking out if the patron has guarantees owing in total more than"
-msgstr ""
-"Заборонити відвідувачу видачу, якщо заборгованість у відвідувача загалом "
-"більше ніж "
+msgstr "Заборонити відвідувачу видачу, якщо заборгованість у відвідувача загалом більше ніж "
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoIssuesChargeGuarantees# [% local_currency %] in fines."
-msgstr " [% local_currency %] у штрафах."
+msgstr " [% local_currency %] пені."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#NoRenewalBeforePrecision# Calculate \"No renewal before\" based on"
@@ -6184,9 +6185,7 @@ msgstr ""
 
 # OPAC > OpenURL
 msgid "opac.pref#OPACOpenURLItemTypes# List of item type codes (separated by spaces) for those you want to show the OpenURL link:"
-msgstr ""
-"Перелік кодів типів одиниць (розділених пробілами) для яких необхідно "
-"показувати OpenURL-посилання: "
+msgstr "Перелік кодів типів одиниць (розділених пробілами) для яких необхідно показувати OpenURL-посилання: "
 
 # OPAC > Features
 msgid "opac.pref#OPACPatronDetails# Allow"
@@ -6546,7 +6545,7 @@ msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# (separate columns with |)"
-msgstr ""
+msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # OPAC > Appearance
 msgid "opac.pref#OpacHighlightedWords# Don't highlight"
@@ -6918,11 +6917,11 @@ msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# (separate columns with |)"
-msgstr ""
+msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-modification screen:"
-msgstr ""
+msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> не будуть відображатись на екрані самостійної реєстрації відвідувача: "
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
@@ -6946,19 +6945,19 @@ msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# (separate columns with |)"
-msgstr ""
+msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
-msgstr ""
+msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> є обовʼязковими до заповнення на екрані реєстрації відвідувача: "
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# (separate columns with |)"
-msgstr ""
+msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationBorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron self-registration screen:"
-msgstr ""
+msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> не будуть відображатись на екрані самостійної реєстрації відвідувача: "
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationDefaultCategory# Use the patron category code"
@@ -6986,9 +6985,7 @@ msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
-msgstr ""
-"Вилучати відвідувачів, що зареєстровалися через електронний каталог, але не "
-"були підтверджені протягом "
+msgstr "Вилучати відвідувачів, що зареєстровалися через електронний каталог, але не були підтверджені протягом "
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# days."
@@ -7400,11 +7397,11 @@ msgstr " (відокремлювати стовпці з допомогою зн
 
 # Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr ""
+msgstr "<strong>ПРИМІТКА:</strong>: якщо параметр „autoMemberNum“ увімкнено, значення параметра „BorrowerMandatoryField“ не повинно містити номер читацького квитка."
 
 # Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
-msgstr ""
+msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> є обовʼязковими до заповнення на екрані реєстрації відвідувача: "
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# When renewing borrowers, base the new expiry date on"
@@ -7424,11 +7421,11 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# (separate columns with |)"
-msgstr ""
+msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # Patrons > General
 msgid "patrons.pref#BorrowerUnwantedField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
-msgstr ""
+msgstr "Наступні <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>стовпці бази даних</a> не будуть відображатись на екрані реєстрації відвідувача: "
 
 # Patrons > General
 msgid "patrons.pref#BorrowersTitles# (separate multiple choices with |)"
@@ -7624,7 +7621,7 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#PatronQuickAddFields# (separate columns with |)"
-msgstr ""
+msgstr " (відокремлювати стовпці з допомогою знаку „|“)"
 
 # Patrons > General
 msgid "patrons.pref#PatronQuickAddFields# add these fields to the patron quick add form when entering a new patron. Displays only mandatory fields and fields specified here. If applicable the guarantor form will be shown as well, individual fields in that form will be ignored."
@@ -7776,7 +7773,7 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr ""
+msgstr "<strong>ПРИМІТКА:</strong>: якщо параметр „autoMemberNum“ увімкнено, значення параметра „BorrowerMandatoryField“ не повинно містити номер читацького квитка."
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
@@ -8380,9 +8377,7 @@ msgstr "Не заповнювати"
 
 # Serials
 msgid "serials.pref#PreserveSerialNotes# prefill the notes from the last 'Arrived' serial when generating the next 'Expected' issue."
-msgstr ""
-" заздалегідь примітки з останнього „прибулого“ серіального видання під час "
-"створення наступного випуску зі статусом „очікується“. "
+msgstr " заздалегідь примітки з останнього „прибулого“ серіального видання під час створення наступного випуску зі статусом „очікується“. "
 
 # Serials
 msgid "serials.pref#RenewSerialAddsSuggestion# Add"
@@ -8394,9 +8389,7 @@ msgstr "Не додавати"
 
 # Serials
 msgid "serials.pref#RenewSerialAddsSuggestion# a suggestion for a bibliographic record when its attached serial is renewed."
-msgstr ""
-" пропозицію щодо бібліографічного запису, коли долучене серіальне видання "
-"оновлене."
+msgstr " пропозицію щодо бібліографічного запису, коли долучене серіальне видання оновлене."
 
 # Serials
 msgid "serials.pref#RoutingListAddReserves# Don't place"
@@ -8408,9 +8401,7 @@ msgstr "Розміщувати"
 
 # Serials
 msgid "serials.pref#RoutingListAddReserves# received serials on hold if they are on a routing list."
-msgstr ""
-" отримані серіальні видання на резервування, якщо вони є у списку "
-"маршрутизації."
+msgstr " отримані серіальні видання на резервування, якщо вони є у списку маршрутизації."
 
 # Serials
 msgid "serials.pref#RoutingListNote# Include following note on all routing lists:"
@@ -8438,15 +8429,11 @@ msgstr " попередні випуски серіальних видань у 
 
 # Serials
 msgid "serials.pref#SubscriptionDuplicateDroppedInput# List of fields which must not be rewritten when a subscription is duplicated (Separated by pipe |)"
-msgstr ""
-"Перелік полів, які не потрібно переписувати, коли дублюється підписка ("
-"відокремлювати символом „|“): "
+msgstr "Перелік полів, які не потрібно переписувати, коли дублюється підписка (відокремлювати символом „|“): "
 
 # Serials
 msgid "serials.pref#SubscriptionHistory# When showing the subscription information for a bibliographic record, preselect"
-msgstr ""
-"Показуючи інформацію про підписку для бібліографічного запису, попередньо "
-"виберіть "
+msgstr "Показуючи інформацію про підписку для бібліографічного запису, попередньо виберіть "
 
 # Serials
 msgid "serials.pref#SubscriptionHistory# brief history"
@@ -8470,12 +8457,7 @@ msgstr "Робити"
 
 # Serials
 msgid "serials.pref#makePreviousSerialAvailable# previous serial automatically available when receiving a new serial issue. The previous issue can also be set to another item type when receiving a new one. Please note that the item-level_itypes syspref must be set to specific item."
-msgstr ""
-" попереднє серіальне видання автоматично доступним при отриманні нового "
-"випуску серіального видання. Для попереднього випуску також може бути "
-"встановлений інший тип одиниці при отриманні нового випуску. Зверніть увагу, "
-"що системний параметр „item-level_itypes“ має бути встановлено на конкретний "
-"примірник. "
+msgstr " попереднє серіальне видання автоматично доступним при отриманні нового випуску серіального видання. Для попереднього випуску також може бути встановлений інший тип одиниці при отриманні нового випуску. Зверніть увагу, що системний параметр „item-level_itypes“ має бути встановлено на конкретний примірник. "
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# Holdings tab"
@@ -8495,10 +8477,7 @@ msgstr "вкладку підписки"
 
 # Serials
 msgid "serials.pref#opacSerialDefaultTab# as default tab for serials in OPAC. Please note that the Serial Collection tab is currently available only for UNIMARC."
-msgstr ""
-" як типову вкладку для серіальних видань в електронному каталозі. Зверніть "
-"увагу, що вкладка „Зібрання серіального видання“ наразі доступна лише для "
-"формату UNIMARC. "
+msgstr " як типову вкладку для серіальних видань в електронному каталозі. Зверніть увагу, що вкладка „Зібрання серіального видання“ наразі доступна лише для формату UNIMARC. "
 
 # Staff Client
 msgid "staff_client.pref"
@@ -8886,10 +8865,7 @@ msgstr "Автоматично видаляти тимчасові вивант�
 
 # Tools > Upload
 msgid "tools.pref#UploadPurgeTemporaryFilesDays# days in cleanup_database cron job. NOTE: If you leave this field empty, the cron job will not delete any files. On the other hand a value of 0 means: delete all temporary files."
-msgstr ""
-" днів за допомогою періодичного сценарію „cleanup_database“. ПРИМІТКА: якщо "
-"ви залишите це поле порожнім, періодичне завдання не вилучить жодного файлу. "
-"З іншого боку, значення 0 означатиме вилучення усіх тимчасових файлів."
+msgstr " днів за допомогою періодичного сценарію „cleanup_database“. ПРИМІТКА: якщо ви залишите це поле порожнім, періодичне завдання не вилучить жодного файлу. З іншого боку, значення 0 означатиме вилучення усіх тимчасових файлів."
 
 # Web services
 msgid "web_services.pref"
