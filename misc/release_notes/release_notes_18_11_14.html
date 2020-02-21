@@ -1,0 +1,392 @@
+<h1 id="releasenotesforkoha18.11.14">RELEASE NOTES FOR KOHA 18.11.14</h1>
+
+<p>21 Feb 2020</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 18.11.14 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-18.11.14.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 18.11.14 is a bugfix/maintenance release.</p>
+
+<p>It includes 21 bugfixes.</p>
+
+<h3 id="systemrequirements">System requirements</h3>
+
+<p>Koha is continiously tested against the following configurations and as such these are the recommendations for 
+deployment: </p>
+
+<ul>
+<li>Debian Jessie with MySQL 5.5</li>
+<li>Debian Stretch with MariaDB 10.1 (MySQL 8.0 support is experimental)</li>
+<li>Ubuntu Bionic with MariaDB 10.1 (MariaDB 10.3 support is experimental) </li>
+</ul>
+
+<p>Additional notes:</p>
+
+<ul>
+<li>Perl 5.10 is required</li>
+<li>Zebra or Elasticsearch is required</li>
+</ul>
+
+<h2 id="criticalbugsfixed">Critical bugs fixed</h2>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17667">[17667]</a> Standing orders - cancelling a receipt increase the original quantity</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22868">[22868]</a> Circulation staff with suggestions_manage can have access to acquisition data</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24277">[24277]</a> Date Received in acquisitions cannot be changed</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14759">[14759]</a> Replacement for Text::Unaccent</li>
+</ul>
+
+<h2 id="otherbugsfixed">Other bugs fixed</h2>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9993">[9993]</a> On editing basket group delivery place resets to logged in library</li>
+</ul>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23896">[23896]</a> logaction should pass the correct interface to Koha::Logger</li>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24016">[24016]</a> manager_id in Koha::Patron::Message->store should not depend on userenv alone</p>
+
+<p><strong>Sponsored by</strong> <em>Koha-Suomi Oy</em></p>
+
+<blockquote>
+  <p>Using <code>userenv</code> within Koha::* object classes is deprecated in favour of passing parameters.</p>
+</blockquote></li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24213">[24213]</a> Koha::Object->get_from_storage should return undef if the object has been deleted</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24313">[24313]</a> XSLT errors should show in the logs</li>
+</ul>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24323">[24323]</a> Advanced editor - Invalid 008 with helper silently fails to save</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24423">[24423]</a> Broken link to return to record after batch item modification or deletion</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=22302">[22302]</a> ITEMTYPECAT description doesn't fall back to description if OPAC description is empty</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23528">[23528]</a> Show 'log in to add tags' link on all search result entries</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24061">[24061]</a> Print List (opac-shelves.pl) broken in Chrome</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24371">[24371]</a> OPAC 'Showing only available items/Show all items' is double encoded</li>
+</ul>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23987">[23987]</a> batchMod.pl provides a link back to the record after the record is deleted</li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<ul>
+<li><p><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=23113">[23113]</a> members/pay.tt account_grp is not longer used</p>
+
+<blockquote>
+  <p>This patch removes markup that is no longer required in the pay.tt template (this template is used in the accounting section for patrons).</p>
+</blockquote></li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24054">[24054]</a> Typo in ClaimReturnedWarningThreshold system preference</li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24330">[24330]</a> When importing patrons from CSV, automatically strip BOM from file if it exists</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24484">[24484]</a> Add explanatory text to batch patron deletion</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=24497">[24497]</a> CodeMirror indentation problems</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in Sphinx. The home page for Koha 
+documentation is </p>
+
+<ul>
+<li><a href="http://koha-community.org/documentation/">Koha Documentation</a></li>
+</ul>
+
+<p>As of the date of these release notes, only the English version of the
+Koha manual is available:</p>
+
+<ul>
+<li><a href="http://koha-community.org/manual/18.11/en/html/">Koha Manual</a></li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="https://gitlab.com/koha-community/koha-manual">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<ul>
+<li>Arabic (97.8%)</li>
+<li>Armenian (100%)</li>
+<li>Basque (65.8%)</li>
+<li>Chinese (China) (63.7%)</li>
+<li>Chinese (Taiwan) (99%)</li>
+<li>Czech (93.7%)</li>
+<li>Danish (55.1%)</li>
+<li>English (New Zealand) (87.9%)</li>
+<li>English (USA)</li>
+<li>Finnish (84.1%)</li>
+<li>French (99.8%)</li>
+<li>French (Canada) (98.8%)</li>
+<li>German (100%)</li>
+<li>German (Switzerland) (91.4%)</li>
+<li>Greek (78.6%)</li>
+<li>Hindi (99.8%)</li>
+<li>Italian (93.5%)</li>
+<li>Norwegian Bokmål (94.2%)</li>
+<li>Occitan (post 1500) (59.3%)</li>
+<li>Polish (86.3%)</li>
+<li>Portuguese (100%)</li>
+<li>Portuguese (Brazil) (87.1%)</li>
+<li>Slovak (89.5%)</li>
+<li>Spanish (100%)</li>
+<li>Swedish (90%)</li>
+<li>Tetun (53.6%)</li>
+<li>Turkish (97.9%)</li>
+<li>Ukrainian (61.8%)</li>
+<li>Vietnamese (54.4%)</li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 18.11.14 is</p>
+
+<ul>
+<li><p>Release Manager: Martin Renvoize</p></li>
+<li><p>Release Manager assistants:</p>
+
+<ul>
+<li>Tomás Cohen Arazi</li>
+<li>Jonathan Druart</li>
+</ul></li>
+<li><p>QA Manager: Katrin Fischer</p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li>Jonathan Druart</li>
+<li>Marcel de Rooy</li>
+<li>Joonas Kylmälä</li>
+<li>Josef Moravec</li>
+<li>Tomás Cohen Arazi</li>
+<li>Nick Clemens</li>
+<li>Kyle Hall</li>
+</ul></li>
+<li><p>Topic Experts:</p>
+
+<ul>
+<li>SIP2 -- Colin Campbell</li>
+<li>EDI -- Colin Campbell</li>
+<li>Elasticsearch -- Fridolin Somers</li>
+<li>REST API -- Tomás Cohen Arazi</li>
+<li>ILS-DI -- Arthur Suzuki</li>
+<li>UI Design -- Owen Leonard</li>
+<li>ILL -- Andrew Isherwood</li>
+</ul></li>
+<li><p>Bug Wranglers:</p>
+
+<ul>
+<li>Michal Denár</li>
+<li>Cori Lynn Arnold</li>
+<li>Lisette Scheer</li>
+<li>Amit Gupta</li>
+</ul></li>
+<li><p>Packaging Managers:</p>
+
+<ul>
+<li>Mirko Tietgen</li>
+<li>Mason James</li>
+</ul></li>
+<li><p>Documentation Managers:</p>
+
+<ul>
+<li>Caroline Cyr La Rose</li>
+<li>David Nind</li>
+</ul></li>
+<li><p>Documentation Team:</p>
+
+<ul>
+<li>Donna Bachowski</li>
+<li>Lucy Vaux-Harvey</li>
+<li>Sugandha Bajaj</li>
+</ul></li>
+<li><p>Translation Managers: </p>
+
+<ul>
+<li>Bernardo González Kriegel</li>
+</ul></li>
+<li><p>Release Maintainers:</p>
+
+<ul>
+<li>19.11 -- Joy Nelson</li>
+<li>19.05 -- Lucas Gass</li>
+<li>18.11 -- Hayley Mapley</li>
+</ul></li>
+<li><p>Release Maintainer mentors:</p>
+
+<ul>
+<li>19.11 -- Martin Renvoize</li>
+<li>19.05 -- Nick Clemens</li>
+<li>18.11 -- Chris Cormack</li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries who are known to have sponsored
+new features in Koha 18.11.14:</p>
+
+<ul>
+<li>Koha-Suomi Oy</li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 18.11.14.</p>
+
+<ul>
+<li>Tomás Cohen Arazi (1)</li>
+<li>Cori Lynn Arnold (1)</li>
+<li>Nick Clemens (4)</li>
+<li>Jonathan Druart (12)</li>
+<li>Lucas Gass (2)</li>
+<li>Kyle Hall (1)</li>
+<li>Bernardo González Kriegel (1)</li>
+<li>Joonas Kylmälä (1)</li>
+<li>Owen Leonard (3)</li>
+<li>Hayley Mapley (4)</li>
+<li>Martin Renvoize (1)</li>
+<li>David Roberts (1)</li>
+<li>Marcel de Rooy (1)</li>
+<li>Lari Taskula (2)</li>
+<li>Koha Translators (1)</li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 18.11.14</p>
+
+<ul>
+<li>ACPL (3)</li>
+<li>ByWater-Solutions (7)</li>
+<li>Catalyst (4)</li>
+<li>hypernova.fi (2)</li>
+<li>Koha Community Developers (12)</li>
+<li>koha-ptfs.co.uk (1)</li>
+<li>PTFS-Europe (1)</li>
+<li>Rijks Museum (1)</li>
+<li>The Donohue Group (1)</li>
+<li>Theke Solutions (1)</li>
+<li>Universidad Nacional de Córdoba (1)</li>
+<li>University of Helsinki (1)</li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha.</p>
+
+<ul>
+<li>Tomás Cohen Arazi (2)</li>
+<li>Christopher Brannon (1)</li>
+<li>Nick Clemens (1)</li>
+<li>Gabriel DeCarufel (1)</li>
+<li>Jonathan Druart (8)</li>
+<li>Katrin Fischer (14)</li>
+<li>Andrew Fuerste-Henry (4)</li>
+<li>Lucas Gass (32)</li>
+<li>Rhonda Kuiper (1)</li>
+<li>Joonas Kylmälä (3)</li>
+<li>Hayley Mapley (33)</li>
+<li>Kelly McElligott (1)</li>
+<li>Joy Nelson (30)</li>
+<li>David Nind (4)</li>
+<li>Martin Renvoize (34)</li>
+<li>Marcel de Rooy (8)</li>
+<li>Maryse Simard (2)</li>
+<li>George Williams (2)</li>
+<li>Maggie Wong (1)</li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="git://git.koha-community.org/koha.git">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is 18.11.x.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 21 Feb 2020 00:57:18.</p>
