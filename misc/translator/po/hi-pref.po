@@ -2111,12 +2111,20 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give th
 msgstr "cataloguing.pref # NewItemsDefaultLocation # जब आइटम बनाई गई हैं, उनमें से अस्थायी स्थान देना"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# Don't show these"
-msgstr "cataloguing.pref # NotesBlacklist # ये मत दिखाओ"
+msgid "cataloguing.pref#NotesBlacklist# <br />"
+msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
-msgstr "cataloguing.pref#NotesBlacklist# शीर्षक नोटों विभाजक में टिप्पणी क्षेत्रों (ओपेक के रिकार्ड का विवरण) और विवरण विभाजक में (स्टाफ ग्राहक के रिकार्ड का विवरण)। फिल्ड अल्पविराम से अलग दिखाई देते हैं चाहिए और कोहा मार्क प्रारूप के साथ अनुसार (जैसे 3 .. Unimarc, 5 के लिए .. MARC21 के लिए)"
+msgid "cataloguing.pref#NotesBlacklist# Don't show"
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2401,8 +2409,8 @@ msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
 msgstr "cataloguing.pref # itemcallnumber # मार्क subfield नक्शा"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "cataloguing.pref#itemcallnumber# एक आइटम नंबर करने के लिए कॉल। (यही कारण है कि में देखने के लिए कई उप क्षेत्रों को शामिल कर सकते हैं, उदाहरण के लिए <code>082ab</code> देखेंगे में 082 उपक्षेत्र a और b.)<br />उदाहरण के लिए (मार्क 21 रिकॉर्ड): <strong>डेवी</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>आइटम रिकॉर्ड से</strong>: <code>852hi</code>"
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)</br>Note: The order of the subfields in the record will be preserved.<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -2650,23 +2658,15 @@ msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# अनुमति नह�
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
-msgstr ""
-"circulation.pref#AllowItemsOnHoldCheckoutSIP# यदि अनुमत हो तो "
-"RESERVE_WAITING और RESERVED चेतावनी उत्पन्न न करें।"
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# यदि अनुमत हो तो RESERVE_WAITING और RESERVED चेतावनी उत्पन्न न करें।"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr ""
-"circulation.pref#AllowItemsOnHoldCheckoutSIP# यह उन वस्तुओं के लिए स्व-चे"
-"कआउट की अनुमति देता है। यदि लंबित होल्ड के साथ होल्ड क्यू आइटम का उपयोग करना "
-"\"अनुपलब्ध\" के रूप में चिह्नित किया जाएगा यदि यह \"अनुमति न दें\" के लिए से"
-"ट हो."
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# यह उन वस्तुओं के लिए स्व-चेकआउट की अनुमति देता है। यदि लंबित होल्ड के साथ होल्ड क्यू आइटम का उपयोग करना \"अनुपलब्ध\" के रूप में चिह्नित किया जाएगा यदि यह \"अनुमति न दें\" के लिए सेट हो."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
-msgstr ""
-"circulation.pref#AllowItemsOnHoldCheckoutSIP# SIP चेकआउट संदेशों के माध्यम से"
-" किसी और के लिए आरक्षित वस्तुओं के चेकआउट."
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# SIP चेकआउट संदेशों के माध्यम से किसी और के लिए आरक्षित वस्तुओं के चेकआउट."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3146,10 +3146,7 @@ msgstr "circulation.pref#ClaimReturnedLostValue# रिटर्न दावो
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
-msgstr ""
-"circulation.pref#ClaimReturnedWarningThreshold# लाइब्रेरियन को चेतावनी यदि "
-"संरक्षक ने अधिक से अधिक वापसी का दावा किया है, तो एक संरक्षक के पास अत्यधिक "
-"वापसी के दावे हैं"
+msgstr "circulation.pref#ClaimReturnedWarningThreshold# लाइब्रेरियन को चेतावनी यदि संरक्षक ने अधिक से अधिक वापसी का दावा किया है, तो एक संरक्षक के पास अत्यधिक वापसी के दावे हैं"
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
@@ -3265,19 +3262,15 @@ msgstr "circulation.pref#DisplayMultiPlaceHold# खोज परिणामो�
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Ignore the calendar"
-msgstr ""
-"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# कैलेंडर पर ध्यान न दें"
+msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# कैलेंडर पर ध्यान न दें"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Use the calendar"
-msgstr ""
-"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# कैलेंडर का उपयोग करें"
+msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# कैलेंडर का उपयोग करें"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# when calculating the period for reserves max pickup delay."
-msgstr ""
-"circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# जब आरक्षित अधिकतम पिकअप "
-"विलंब के लिए अवधि की गणना करते हैं."
+msgstr "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# जब आरक्षित अधिकतम पिकअप विलंब के लिए अवधि की गणना करते हैं."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Allow"
@@ -4242,9 +4235,7 @@ msgstr "circulation.pref#SuspensionsCalendar# कैलेंडर का उ�
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# when calculating the period for suspension expiration."
-msgstr ""
-"circulation.pref#SuspensionsCalendar# निलंबन समाप्ति के लिए अवधि की गणना करते"
-" समय."
+msgstr "circulation.pref#SuspensionsCalendar# निलंबन समाप्ति के लिए अवधि की गणना करते समय."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
@@ -4688,22 +4679,15 @@ msgstr "circulation.pref#useDaysMode# कैलेंडर पर ध्या�
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
-msgstr ""
-"circulation.pref#useDaysMode# अगले खुले दिन के लिए नियत तारीख को धकेलने के लि"
-"ए कैलेंडर का उपयोग करें"
+msgstr "circulation.pref#useDaysMode# अगले खुले दिन के लिए नियत तारीख को धकेलने के लिए कैलेंडर का उपयोग करें"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
-msgstr ""
-"circulation.pref#useDaysMode# साप्ताहिक ऋण अवधि के लिए अगले खुले मिलान वाले "
-"दिन, या अगले खुले दिन अन्यथा के लिए नियत तारीख को धकेलने के लिए कैलेंडर का "
-"उपयोग करें"
+msgstr "circulation.pref#useDaysMode# साप्ताहिक ऋण अवधि के लिए अगले खुले मिलान वाले दिन, या अगले खुले दिन अन्यथा के लिए नियत तारीख को धकेलने के लिए कैलेंडर का उपयोग करें"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
-msgstr ""
-"circulation.pref#useDaysMode# लाइब्रेरी बंद होने के दिनों को छोड़ने के लिए "
-"कैलेंडर का उपयोग करें"
+msgstr "circulation.pref#useDaysMode# लाइब्रेरी बंद होने के दिनों को छोड़ने के लिए कैलेंडर का उपयोग करें"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# when calculating the date due."
@@ -4827,9 +4811,7 @@ msgstr "enhanced_content.pref#AdlibrisCoversURL# आधार URL का उप�
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr ""
-"enhanced_content.pref#AdlibrisCoversURL# for the <a href=\""
-"https://www.adlibris.com/se\">Adlibris</a> कवर सेवा."
+msgstr "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> कवर सेवा."
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -8032,9 +8014,7 @@ msgstr "patrons.pref#FallbackToSMSIfNoEmail# सक्षम"
 
 # Patrons > General
 msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
-msgstr ""
-"patrons.pref#FallbackToSMSIfNoEmail# यदि कोई संरक्षक ईमेल परिभाषित नहीं है, "
-"तो एसएमएस द्वारा खरीद सुझाव संदेश भेजें."
+msgstr "patrons.pref#FallbackToSMSIfNoEmail# यदि कोई संरक्षक ईमेल परिभाषित नहीं है, तो एसएमएस द्वारा खरीद सुझाव संदेश भेजें."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -9607,3 +9587,4 @@ msgstr "web_services.pref # SvcMaxReportRows # केवल वापसी"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "web_services.pref # SvcMaxReportRows # एक रिपोर्ट रिपोर्टों वेब सेवा के माध्यम से अनुरोध किया की पंक्तियों।"
+

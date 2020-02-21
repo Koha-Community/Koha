@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-02 01:29-0300\n"
-"PO-Revision-Date: 2019-10-24 14:00+0000\n"
+"PO-Revision-Date: 2020-02-14 21:28+0000\n"
 "Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1571925636.876031\n"
+"X-POOTLE-MTIME: 1581715695.603142\n"
 "X-Poedit-Basepath: ../../../versioni/master/koha-tmpl\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Pootle-Path: /it/18.05/it-IT-pref.po\n"
@@ -2113,12 +2113,20 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give th
 msgstr "Quando le copie sono create dà loro questo default"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# Don't show these"
-msgstr "Non mostrare questi campi di note"
+msgid "cataloguing.pref#NotesBlacklist# <br />"
+msgstr ""
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
-msgstr "nella visualizzazione di dettaglio dell'Opac e dello Staff. I campi devono essere separati da virgola e a seconda del MARC scelto (3xx per Unimarc, 5xx per MARC21)"
+msgid "cataloguing.pref#NotesBlacklist# Don't show"
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
+msgstr ""
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2403,8 +2411,8 @@ msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
 msgstr "Definisci il sottocampo MARC"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "con cui far iniziare la collocazione. Puoi usare più di un sottocampo, ad esempio <code>082ab</code> controlla i sottocampi a e b di 082<br />Esempi (per MARC21): <strong>Dewey</strong>: <code>082ab</code> o <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> o <code>090ab</code>; <strong>dal tag 852</strong>: <code>852hi</code>"
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)</br>Note: The order of the subfields in the record will be preserved.<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -5460,7 +5468,7 @@ msgstr ""
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
-msgstr ""
+msgstr "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
@@ -5468,7 +5476,7 @@ msgstr "enhanced_content.pref#RecordedBooksLibraryID# ."
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref#RecordedBooksLibraryID# Show items from the RecordedBooks catalog of library ID"
-msgstr ""
+msgstr "enhanced_content.pref#RecordedBooksLibraryID# Mostra copie dal catalogo RecordedBooks della biblioteca"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -6116,11 +6124,11 @@ msgstr "agli utenti di sceglire nelle loro configurazioni della privacy se far v
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Allow"
-msgstr ""
+msgstr "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Consenti"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Don't allow"
-msgstr ""
+msgstr "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# Non consentire"
 
 # OPAC > Privacy
 msgid "opac.pref#AllowPatronToSetFinesVisibilityForGuarantor# patrons to choose their own privacy settings for showing the patron's fines to the patron's guarantor\"."
@@ -6328,15 +6336,15 @@ msgstr "L'Opac si trova all'indirizzo "
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Don't enable"
-msgstr ""
+msgstr "opac.pref#OPACDetailQRCode# Non abilitare"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# Enable"
-msgstr ""
+msgstr "opac.pref#OPACDetailQRCode# Abilita"
 
 # OPAC > Features
 msgid "opac.pref#OPACDetailQRCode# the option to show a QR Code on the OPAC bibliographic detail page."
-msgstr ""
+msgstr "opac.pref#OPACDetailQRCode# la visualizzazione di un QR Code nella pagina dei dettagli del record nell'OPAC."
 
 # OPAC > Appearance
 msgid "opac.pref#OPACDisplay856uAsImage# . Note: The corresponding OPACXSLT option must be turned on."

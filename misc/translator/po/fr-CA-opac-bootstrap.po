@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-15 20:29-0300\n"
+"POT-Creation-Date: 2020-02-16 15:04-0300\n"
 "PO-Revision-Date: 2019-12-20 21:45+0000\n"
 "Last-Translator: Caroline Cyr-La-Rose <caroline.cyr-la-rose@inlibro.com>\n"
 "Language-Team: French Canada <koha-translate@lists.koha-community.org>\n"
@@ -169,15 +169,16 @@ msgstr ""
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 
 #. %1$s:  END 
@@ -378,7 +379,7 @@ msgstr ""
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, c-format
 msgid "%s %s's fines and charges"
 msgstr "Les amendes et frais de %s %s"
@@ -2807,7 +2808,7 @@ msgstr "(%s en tout)"
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr "(En accumulation)"
@@ -2831,7 +2832,7 @@ msgstr ""
 msgid "(Checked out)"
 msgstr "(En prêt)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr "(Amnistié)"
@@ -2845,7 +2846,7 @@ msgstr ""
 "(L'exemplaire a été élagué et le prêt est bloqué par le règlement, contacter "
 "le personnel de la bibliothèque pour une assistance)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr ""
@@ -2902,7 +2903,7 @@ msgstr ""
 "(Veuillez noter qu'il peut y avoir un délai dans la mise à jour de vos "
 "données.)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, c-format
 msgid "(Replaced)"
 msgstr "(Remplacé)"
@@ -2933,7 +2934,7 @@ msgstr "(Remplacé)"
 msgid "(Required)"
 msgstr "(Obligatoire)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr "(Retourné)"
@@ -2983,7 +2984,7 @@ msgstr "(Utiliser l'OPAC)"
 msgid "(Use SRU instead)"
 msgstr "(Utiliser SRU)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr "(Annulé)"
@@ -3094,7 +3095,7 @@ msgstr ".%sVous avez des amendes.%s %s "
 msgid "...or..."
 msgstr "... ou ..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3501,12 +3502,12 @@ msgid "Amount"
 msgstr "Montant"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "Montant non réglé"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "Montant à payer&nbsp;: "
@@ -4941,7 +4942,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD Vidéo / Vidéodisque"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5115,7 +5116,7 @@ msgid "Descending"
 msgstr "Décroissant"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5673,7 +5674,7 @@ msgstr "Filmographies"
 msgid "Filter paid transactions"
 msgstr "Masquer les transactions payées"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr "Montant"
@@ -6214,7 +6215,7 @@ msgid "Home library:"
 msgstr "Site permanent"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "Fonctionnement de PayPal"
 
@@ -7293,7 +7294,7 @@ msgstr "Faire une "
 msgid "Make an "
 msgstr "Faire un(e)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, c-format
 msgid "Make payment"
 msgstr "Encaisser"
@@ -7739,11 +7740,6 @@ msgstr "Pas de listes privées."
 #, c-format
 msgid "No private lists."
 msgstr "Pas de listes privées."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "Aucune liste publique "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8384,13 +8380,13 @@ msgstr "Brevet"
 msgid "Patron comment on %s"
 msgstr "Commentaires de l'utilisateur sur %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "Payer les frais et amendes sélectionnés "
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr "Signe d'acceptation PayPal"
 
@@ -8399,7 +8395,7 @@ msgstr "Signe d'acceptation PayPal"
 msgid "Payment applied:"
 msgstr "Paiement effectué&nbsp;:"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "Méthode de paiement"
@@ -11441,8 +11437,8 @@ msgstr ""
 "l'administrateur de Koha."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, c-format
-msgid "To reset your password, enter your login or your email address. "
+#, fuzzy, c-format
+msgid "To reset your password, enter your login or your email address."
 msgstr ""
 "Pour réinitialiser votre mot de passe, saisissez votre identifiant et "
 "adresse courriel."
@@ -11462,13 +11458,13 @@ msgstr "Niveau supérieur"
 msgid "Topics"
 msgstr "Sujets"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "Total dû"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr "Total dû si crédit(s) appliqué(s):"
@@ -12174,7 +12170,7 @@ msgstr "Vous avez déjà ce titre en réservation."
 msgid "You have no article requests currently."
 msgstr "Vous n'avez pas de demande d'article en cours."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "Vous n'avez pas d'amendes ni de frais"

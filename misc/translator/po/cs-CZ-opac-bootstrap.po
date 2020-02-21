@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:23-0300\n"
-"PO-Revision-Date: 2019-11-17 13:18+0000\n"
+"POT-Creation-Date: 2020-02-16 14:54-0300\n"
+"PO-Revision-Date: 2020-02-12 21:06+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1573996706.996886\n"
+"X-POOTLE-MTIME: 1581541614.857624\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -158,15 +158,16 @@ msgstr "%s %s %s Poznámka: toto okno se automaticky zavře za 5 sekund. %s "
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
-#, c-format
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
+#, fuzzy, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 "%s %s %sPlatba %sProminuto %sProminuto %sKredit %sVrácený poplatek "
 "zaúčtovaný za ztrátu %s%s %s %s %s %sRegistrační poplatek %sPoplatek za "
@@ -371,7 +372,7 @@ msgstr ""
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, c-format
 msgid "%s %s's fines and charges"
 msgstr "%s %s's dlužných poplatků"
@@ -2790,7 +2791,7 @@ msgstr "(%s celkem)"
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr "(Narůstající)"
@@ -2812,7 +2813,7 @@ msgstr "(Čárový kód nebyl nalezen, požádejte prosím o pomoc obsluhu)"
 msgid "(Checked out)"
 msgstr "(Vypůjčeno)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr "(Prominuto)"
@@ -2826,7 +2827,7 @@ msgstr ""
 "(jednitka je evidovaná jako vyřazená a její vrácení je blokováno, požádejte "
 "prosím zaměstnance knihovny o pomoc)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr "(Ztraceno)"
@@ -2881,7 +2882,7 @@ msgid ""
 "online.)"
 msgstr "(Poznámka: zpracování Vaší žádosti o obnovení učtu může chvíli trvat.)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, c-format
 msgid "(Replaced)"
 msgstr "(Nahrazeno)"
@@ -2912,7 +2913,7 @@ msgstr "(Nahrazeno)"
 msgid "(Required)"
 msgstr "(Povinné)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr "(Vráceno)"
@@ -2959,7 +2960,7 @@ msgstr "(Nepodporováno - použijte on-line katalog)"
 msgid "(Use SRU instead)"
 msgstr "(Nepodporováno - použijte SRU)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr "(Zrušeno)"
@@ -3070,7 +3071,7 @@ msgstr ".%sMáte nezaplacené poplatky.%s %s"
 msgid "...or..."
 msgstr "...nebo..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3474,12 +3475,12 @@ msgid "Amount"
 msgstr "Částka (Kč)"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "Neuhrazená částka"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "Částka k zaplacení: "
@@ -4906,7 +4907,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD / jiný typ videodisku"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5080,7 +5081,7 @@ msgid "Descending"
 msgstr "Sestupně"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5634,7 +5635,7 @@ msgstr "Filmografie"
 msgid "Filter paid transactions"
 msgstr "Skrýt zaplacené poplatky"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr "Výše poplatku"
@@ -6175,7 +6176,7 @@ msgid "Home library:"
 msgstr "Domovská knihovna:"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "Jak fungují platby přes PayPal"
 
@@ -7241,7 +7242,7 @@ msgstr "Máte tip na knihu, kterou nemáme? "
 msgid "Make an "
 msgstr "Vytvořit "
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, c-format
 msgid "Make payment"
 msgstr "Provést platbu"
@@ -7688,11 +7689,6 @@ msgstr "Žádné soukromé seznamy"
 #, c-format
 msgid "No private lists."
 msgstr "Žádné soukromé seznamy."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "Žádné veřejné seznamy."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8320,13 +8316,13 @@ msgstr "Patentové dokumenty"
 msgid "Patron comment on %s"
 msgstr "Uživatelské komentáře k %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "Zaplatit vybrané pokuty a poplatky"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr "Logo příjmáme platby PayPal"
 
@@ -8335,7 +8331,7 @@ msgstr "Logo příjmáme platby PayPal"
 msgid "Payment applied:"
 msgstr "Platba provedena:"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "Platební metoda"
@@ -10097,9 +10093,11 @@ msgid "Showing only available items"
 msgstr "Zobrazeny pouze dostupné jednotky."
 
 #: opac-tmpl/bootstrap/en/modules/opac-recordedbooks-search.tt:30
-#, c-format
+#, fuzzy, c-format
 msgid "Sign in to view availability and checkout items or place holds"
 msgstr ""
+"Přihlášení je nutné pro zjištění dostupnosti, výpůjčky jednotek nebo "
+"zadávání rezervací"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:590
 #, c-format
@@ -11354,8 +11352,8 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "Pokud chcete tuto chybu nahlásit, kontaktujte správce systému Koha."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, c-format
-msgid "To reset your password, enter your login or your email address. "
+#, fuzzy, c-format
+msgid "To reset your password, enter your login or your email address."
 msgstr ""
 "Pokud chcete obnovit heslo, zadejte vaše přihlašovací jméno nebo emailovou "
 "adresu. "
@@ -11375,13 +11373,13 @@ msgstr "Nejvyšší úroveň"
 msgid "Topics"
 msgstr "Témata"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "Celkový dluh"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr "Dlužná částka celkem po odečtení kreditu:"
@@ -12081,7 +12079,7 @@ msgstr "Tento titul jste si již vyžádali."
 msgid "You have no article requests currently."
 msgstr "Nemáte žádné požadavky na kopie článků."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "Nemáte žádné upomínky ani jiné poplatky"

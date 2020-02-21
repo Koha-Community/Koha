@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-15 20:47-0300\n"
-"PO-Revision-Date: 2019-10-16 07:07+0000\n"
-"Last-Translator: Igor A. Sychev <ias@tpu.ru>\n"
+"POT-Creation-Date: 2020-02-16 15:34-0300\n"
+"PO-Revision-Date: 2020-02-10 09:05+0000\n"
+"Last-Translator: Igor A. Sychev <Igor.A.Sychev@mail.ru>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1571209668.698668\n"
+"X-POOTLE-MTIME: 1581325557.923906\n"
 "X-Pootle-Path: /ru/18.05/ru-RU-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -116,9 +116,10 @@ msgstr "%s %s %s АБИС Коха %s каталог %s &rsaquo; %s %s "
 #. %20$s:  i = i + 1 
 #. %21$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title-head.inc:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s %s No title %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
-msgstr "%s %s посетителем: %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
+msgstr ""
+"%s %s %s Без заглавия %s %s%s,%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END # / FOREACH ERROR 
@@ -159,15 +160,16 @@ msgstr ""
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 
 #. %1$s:  END 
@@ -196,9 +198,9 @@ msgstr "%s %s (не одобрено) %s "
 #. %1$s:  END 
 #. %2$s:  IF ( koha_spsuggest ) 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:119
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Did you mean: "
-msgstr "%s Вы имели в виду: "
+msgstr "%s %s Вы имели в виду: "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -331,9 +333,9 @@ msgstr "%s %s / %s %s "
 #. %1$s:  r.firstname | html 
 #. %2$s:  r.surname | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s currently owes fines and charges amounting to:"
-msgstr "Вы на текущий момент задолжали штраф и должны оплатить:"
+msgstr "%s %s на текущий момент имеется задолженность, необходимо оплатить:"
 
 #. %1$s:  firstname | $raw 
 #. %2$s:  surname | $raw 
@@ -354,10 +356,10 @@ msgstr ""
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
-#, fuzzy, c-format
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
+#, c-format
 msgid "%s %s's fines and charges"
-msgstr "Пени и штрафы"
+msgstr "%s %s пени и штрафы"
 
 # См. также: http://www.gpntb.ru/win/usmarc/ch2/box6.html
 #. %1$s:  SWITCH type 
@@ -507,11 +509,13 @@ msgstr ""
 #. %21$s:  END 
 #. %22$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:90
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Added %s by you %s %s Added %s by %s %s %s %s %s %s %s %s %s %s %s %s %s "
 "%s %s %s %s "
-msgstr "%s %s посетителем: %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s%s"
+msgstr ""
+"%s %s посетителем: %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
+"%s "
 
 #. %1$s:  IF (sendmailError) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:52
@@ -695,9 +699,9 @@ msgstr "%s Без результатов, попробуйте изменить 
 #. %4$s:  IF Koha.Preference('marcflavour')=='UNIMARC' 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/biblio-title.inc:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s No title %s %s%s,%s "
-msgstr "%s %s %s%s%sБез заглавия%s %s %s%s "
+msgstr "%s Без заглавия %s %s%s, %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:585
@@ -904,7 +908,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:20
 #, c-format
 msgid "%s This ppn is not found on the idref service. %s %s "
-msgstr "%s Указанный вами объект не найден в системе IDREF. %s %s "
+msgstr "%s Указанный вами объект не найден в системе IdRef. %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1170,9 +1174,9 @@ msgstr "%s%s%sАБИС Коха%s Электронный каталог &rsaquo;
 #. %4$s:  END 
 #. %5$s:  borrowernumber | html 
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout &rsaquo; Print Receipt for %s"
-msgstr "%s %s%s%s &rsaquo;  %sКоха %s &rsaquo; Самообслуживание"
+msgstr "%s%s%sКоха %s &rsaquo; Самообслуживание &rsaquo; %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1211,14 +1215,14 @@ msgstr "%s%s%sАБИС Коха%s &rsaquo; Электронный каталог
 #. %10$s:  ELSE 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:15
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s %s Results of search for '%s' %s "
 "Search results %s %s You did not specify any search criteria. %s"
 msgstr ""
-"%s %s %s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %s Результаты "
-"поиска %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s %s Вы не указали ни "
-"одного поискового критерия. %s %s "
+"%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %s %s Результаты поиска "
+"'%s' %s &nbsp;с ограничением:&nbsp; %s %s Вы не указали ни одного поискового "
+"критерия. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1279,15 +1283,15 @@ msgstr ""
 #. %12$s:  ELSE 
 #. %13$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %s Results of search %sfor '%s'%s"
 "%s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s"
 msgstr ""
-"%s %s %s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %s Результаты "
-"поиска %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s %s Вы не указали ни "
-"одного поискового критерия. %s %s "
+"%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %s Результаты поиска %s "
+"по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s %s Вы не указали ни одного "
+"поискового критерия. %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1314,11 +1318,11 @@ msgstr ""
 #. %7$s:  ELSE 
 #. %8$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:12
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; %sContents of %s%sYour lists%s"
 msgstr ""
-"%s %s %s %s%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %s Содержимое "
-"списка „%s“%s Мои списки %s%s "
+"%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %s Содержимое списка %s"
+"%s Мои списки %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1345,13 +1349,13 @@ msgstr ""
 #. %6$s:  ELSIF ( typeissuecancel ) 
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s%s%sKoha online%s catalog &rsaquo; %sSubscribe to a subscription alert %s "
 "Unsubscribe from a subscription alert %s"
 msgstr ""
-"%s %s%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Информация о "
-"подписке для «%s» %s "
+"%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; %sПодписаться на "
+"оповещение о подписке%sОтписаться от подписки на оповещения%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1686,11 +1690,9 @@ msgstr "%s%s%sАБИС Коха%s Электронный каталог &rsaquo;
 #. %3$s:  ELSE 
 #. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Subject cloud"
-msgstr ""
-"%s %s %s%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Последние "
-"комментарии %s "
+msgstr "%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Предметное облако"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1794,11 +1796,11 @@ msgstr "%s%s%sАБИС Коха%s Электронный каталог &rsaquo;
 #. %4$s:  END 
 #. %5$s:  unimarc3 | html 
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:2
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your search IDREF for ppn %s"
 msgstr ""
-"%s %s %s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Ваша история "
-"поисков %s "
+"%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Ваш поиск IdRef для ppn "
+"%s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1811,11 +1813,9 @@ msgstr "%s%s%sАБИС Коха%s Электронный каталог &rsaquo;
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-#, fuzzy
 msgid "%s%s%sKoha online%s catalog recent comments"
 msgstr ""
-"%s %s %s%s%s%sКоха %s &rsaquo; Электронный каталог &rsaquo; Последние "
-"комментарии %s "
+"%s%s%sКоха &rsaquo; Электронный каталог &rsaquo; Последние комментарии %s"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
@@ -1997,14 +1997,16 @@ msgstr "%s Собрание %s Тип единицы %s"
 #. %23$s:  IF ( serial.status8 ) 
 #. %24$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%sExpected%s %sArrived%s %sLate%s %sMissing%s %sMissing (never received)%s "
 "%sMissing (sold out)%s %sMissing (damaged)%s %sMissing (lost)%s %sNot "
 "available%s %sDelete%s %sClaimed%s %sStopped%s "
 msgstr ""
-"%s Ожидается %s %s Поступил %s %s Задерживается %s %s Отсутствует %s %s Не "
-"доступно %s %s Удалено %s %s Есть претензия %s %s Остановленно %s "
+"%sОжидается%s %sПоступил%s %sЗадерживается%s %sОтсутствует%s %sОтсутствует "
+"(не получено)%s %sОтсутствует (нет в продаже)%s %sОтсутствует (поврежден)%s "
+"%sОтсутствует (утерян)%s %sНет в наличии%s %sУдалено%s %sЕсть претензия%s %s "
+"Остановленно%s "
 
 #. %1$s:  IF ( messaging_preference.Item_Due ) 
 #. %2$s:  ELSIF ( messaging_preference.Advance_Notice ) 
@@ -2775,7 +2777,7 @@ msgstr "(%s в целом)"
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr ""
@@ -2797,7 +2799,7 @@ msgstr " не найден в базе данных. Попробуйте сно
 msgid "(Checked out)"
 msgstr "(Выдано)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr ""
@@ -2809,7 +2811,7 @@ msgid ""
 "for assistance)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr ""
@@ -2866,7 +2868,7 @@ msgstr ""
 "(Пожалуйста, учтите: при возобновлении учётной записи через веб может "
 "возникнуть задержка.)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, fuzzy, c-format
 msgid "(Replaced)"
 msgstr "юридические статьи"
@@ -2897,7 +2899,7 @@ msgstr "юридические статьи"
 msgid "(Required)"
 msgstr "(обязательное)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr ""
@@ -2941,7 +2943,7 @@ msgstr "(используйте ЭК взамен)"
 msgid "(Use SRU instead)"
 msgstr "(используйте SRU взамен)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr ""
@@ -3054,7 +3056,7 @@ msgstr ".%sУ вас есть неуплаченные штрафы.%s %s "
 msgid "...or..."
 msgstr "...или..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3461,12 +3463,12 @@ msgstr "Количество "
 
 # Объем неуплат
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "Сумма задолженности"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "Сумма к уплате: "
@@ -4341,9 +4343,9 @@ msgstr "Выдано"
 
 #. %1$s:  issues_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out (%s)"
-msgstr "Выдано ("
+msgstr "Выдано (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:281
 #, fuzzy, c-format
@@ -4356,15 +4358,14 @@ msgstr "Выдано"
 #. %4$s:  item.cardnumber | html 
 #. %5$s:  END 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:36
-#, fuzzy, c-format
+#, c-format
 msgid "Checked out to %s %s %s(%s)%s"
-msgstr "Выдано ("
+msgstr "Выдано: %s %s %s(%s)%s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:122
-#, fuzzy
 msgid "Checked out until %s"
-msgstr "Выдано ("
+msgstr "Выдано до: %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:122
@@ -4396,9 +4397,9 @@ msgstr "Выдачи"
 
 #. %1$s:  issues_count | html 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:261
-#, fuzzy, c-format
+#, c-format
 msgid "Checkouts (%s)"
-msgstr "Выдано ("
+msgstr "Выдачи (%s)"
 
 #. %1$s:  borrowername | html 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:277
@@ -4681,9 +4682,9 @@ msgstr "Подтвердите пароль"
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
-#, fuzzy, c-format
+#, c-format
 msgid "Confirm holds for:%s (%s)"
-msgstr "Подтвердите резервирования для:%s %s (%s)"
+msgstr "Подтвердите резервирования для:%s (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:117
 #, c-format
@@ -4916,7 +4917,7 @@ msgid "DVD video / Videodisc"
 msgstr "видео/видеодиск DVD"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5093,7 +5094,7 @@ msgid "Descending"
 msgstr "По убыванию"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5653,7 +5654,7 @@ msgstr "фильмографии"
 msgid "Filter paid transactions"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr ""
@@ -5778,9 +5779,8 @@ msgstr "Ноты и звукозаписи"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:122
-#, fuzzy
 msgid "Found %s results in the library's %s collection"
-msgstr "результаты в коллекции OverDrive."
+msgstr "Найдено %s результаты в коллекции %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5988,9 +5988,9 @@ msgstr "Группы библиотек"
 #. %7$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:158
-#, fuzzy, c-format
+#, c-format
 msgid "Guaranteed by %s %s %s %s %s, %s %s "
-msgstr "Издано: %s %s в %s %s %s, %s %s %s, %s %s "
+msgstr "Гарантируется %s %s %s %s %s, %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
@@ -6215,7 +6215,7 @@ msgid "Home library:"
 msgstr "Домашняя библиотека"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "Как работает PayPal"
 
@@ -6643,9 +6643,9 @@ msgid "Item checked in"
 msgstr "Выдано ("
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:186
-#, fuzzy, c-format
+#, c-format
 msgid "Item checked out"
-msgstr "Выдано экземпляров: %s"
+msgstr "Выданные экземпляры"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:83
 #, c-format
@@ -6673,14 +6673,14 @@ msgid "Item not checked in: please see circulation staff for assistance"
 msgstr " не найден в базе данных. Попробуйте снова."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:89
-#, fuzzy, c-format
+#, c-format
 msgid "Item renewal is not allowed."
-msgstr "%s Не продляется %s Не разрешено "
+msgstr "Продление экземпляра не допускается."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:191
-#, fuzzy, c-format
+#, c-format
 msgid "Item renewed"
-msgstr "%s Не продляется %s Не разрешено "
+msgstr "Ожидаемые единицы"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:56
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
@@ -6789,9 +6789,8 @@ msgstr "Коха"
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
-#, fuzzy
 msgid "Koha %s"
-msgstr "Коха"
+msgstr "Коха %s"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
@@ -7105,9 +7104,9 @@ msgstr "Расположени-е/я (состояние)"
 #. %2$s:  END 
 #. %3$s:  IF ( subscription.callnumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
-#, fuzzy, c-format
+#, c-format
 msgid "Location: %s %s %s "
-msgstr "Собрание: %s "
+msgstr "Расположение: %s %s %s "
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:36
 #, c-format
@@ -7297,7 +7296,7 @@ msgstr "Сделайте "
 msgid "Make an "
 msgstr "Сделайте "
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, fuzzy, c-format
 msgid "Make payment"
 msgstr "Сделайте "
@@ -7510,9 +7509,9 @@ msgstr ""
 
 #. %1$s:  INCLUDE 'biblio-title-head.inc' biblio=review 
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews-rss.tt:13
-#, fuzzy, c-format
+#, c-format
 msgid "New comment on %s"
-msgstr "Новый комментарий на заглавие: %s %s, %s%s"
+msgstr "Новый комментарий на %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:58
@@ -7747,11 +7746,6 @@ msgstr "Нет личных списков"
 msgid "No private lists."
 msgstr "Нет личных списков."
 
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "Нет общих списков"
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
 msgid "No public lists."
@@ -7874,9 +7868,9 @@ msgstr "Обычный вид"
 
 #. %1$s:  PROCESS error_message messages=error.messages 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid "Not checked in %s"
-msgstr "Выдано ("
+msgstr "Невозвращенный %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:604
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:264
@@ -8260,9 +8254,9 @@ msgstr "Поиск по коллекциям OverDrive для '%s'"
 
 #. %1$s:  priority | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:678
-#, fuzzy, c-format
+#, c-format
 msgid "Overall queue priority: %s"
-msgstr "Приоритет в очереди резервирований на экземпляр"
+msgstr "Приоритет в очереди резервирований на экземпляр: %s"
 
 #. %1$s:  overdues_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:152
@@ -8390,13 +8384,13 @@ msgstr "патентный документ"
 msgid "Patron comment on %s"
 msgstr "Комментарий посетителя от %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "Оплатить выбранные пени и штрафы"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
@@ -8405,7 +8399,7 @@ msgstr ""
 msgid "Payment applied:"
 msgstr "Оплата применена:"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "Способ оплаты"
@@ -9003,9 +8997,9 @@ msgstr "Издано: %s %s в %s %s %s, %s %s %s, %s %s "
 #. %1$s:  koha_new.timestamp | $KohaDates with_hours = 1 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:94
-#, fuzzy, c-format
+#, c-format
 msgid "Published on %s %s by "
-msgstr "(опубликовано %s)"
+msgstr "Опубликовано %s на %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:85
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:85
@@ -9212,9 +9206,8 @@ msgstr "Удалить"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:53
-#, fuzzy
 msgid "Remove facet %s"
-msgstr "Удалить поле"
+msgstr "Удалить поле %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:104
@@ -9458,9 +9451,9 @@ msgstr "Результаты поиска с %s по %s из %s"
 #. %5$s:  limit_desc | html 
 #. %6$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
-msgstr "%s Поиск %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s"
+msgstr "Поиск %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s"
 
 #. %1$s:  ms_value | html 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
@@ -9800,9 +9793,8 @@ msgstr "SearchCourseReserves "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:122
-#, fuzzy
 msgid "Searching %s..."
-msgstr "Ищем по OverDrive..."
+msgstr "Поиск %s…"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -10101,7 +10093,7 @@ msgstr "Показать"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 msgid "Show _MENU_ entries"
-msgstr "Виводить _MENU_ записей"
+msgstr "Выводить _MENU_ записей"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:12
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:58
@@ -10736,9 +10728,9 @@ msgstr "Обслуживание системы"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:64
-#, fuzzy, c-format
+#, c-format
 msgid "System-wide only"
-msgstr "%s общесистемные библиотечные новости. "
+msgstr "Только общесистемный"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #, c-format
@@ -10974,7 +10966,7 @@ msgstr "Корзина отправлена к: %s"
 #. %49$s:  subscription_LOO.monthlength | html 
 #. %50$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current subscription began on %s and is issued %s twice per day %s %s "
 "every day %s %s three times per week %s %s every week %s %s every 2 weeks %s "
@@ -10984,12 +10976,13 @@ msgid ""
 "on Friday %s %s on Saturday %s %s on Sunday %s for %s%s issues%s %s%s weeks"
 "%s %s%s months%s "
 msgstr ""
-"Текущая подписка началась %s и выходит выпуск каждый(ые/ую/ое) %s день %s %s "
-"неделю %s %s 2 недели %s %s 3 недели %s %s месяц %s %s 2 месяца %s %s 3 "
-"месяца %s %s 4 месяца %s %s квартал %s %s 2 квартали %s %s год %s %s 2 года "
-"%s %s понедельник %s %s вторник %s %s среду %s %s четверг %s %s пятницу %s "
-"%s субботу %s %s воскресенье %s продолжительностью %s%s выпуск(а/ов)%s %s%s "
-"неделю(и/ь)%s %s%s месяц(а/ев) %s "
+"Текущая подписка началась %s и выпуск выходит %s два раза в день %s %s "
+"каждый день %s %s три раза в неделю %s %s каждую неделю %s %s каждые 2 "
+"недели %s %s каждые 3 недели %s %s каждый месяц %s %s каждые 2 месяца %s %s "
+"ежеквартально %s %s два раза в год %s %s раз в год %s %s каждые 2 года %s %s "
+"незаконно %s %s в понедельник %s %s во вторник %s %s в среду %s %s в четверг "
+"%s %s в пятницу %s %s в субботу %s %s в воскресенье %s продолжительностью %s"
+"%s выпусков%s %s%s недель%s %s%s месяцев%s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:31
 #, c-format
@@ -11453,7 +11446,7 @@ msgstr "Чтобы внести изменения в запись, пожалу
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
 #, fuzzy, c-format
-msgid "To reset your password, enter your login or your email address. "
+msgid "To reset your password, enter your login or your email address."
 msgstr "Простите, но вы не ввели правильный адрес электронной почты."
 
 #. SCRIPT
@@ -11471,13 +11464,13 @@ msgstr "Верхний уровень"
 msgid "Topics"
 msgstr "Рубрики"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "Всего подлежит платежу"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr ""
@@ -11694,9 +11687,9 @@ msgstr "кассета/видеокассета VHS"
 
 #. %1$s:  extended_unique_id_failed_value | html 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:171
-#, fuzzy, c-format
+#, c-format
 msgid "Value is already in use (%s)"
-msgstr "уже есть в Вашей корзине"
+msgstr "уже есть в Вашей корзине (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:947
 #, fuzzy, c-format
@@ -11756,9 +11749,8 @@ msgstr "Посмотреть на Amazon.com"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1128
-#, fuzzy
 msgid "View record \"%s\""
-msgstr "Сохранить запись: "
+msgstr "Просмотреть запись \"%s\""
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:120
@@ -11830,9 +11822,9 @@ msgstr "Добро пожаловать, "
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:96
-#, fuzzy, c-format
+#, c-format
 msgid "Welcome, %s"
-msgstr "Добро пожаловать, "
+msgstr "Добро пожаловать, %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:44
 #, c-format
@@ -12073,11 +12065,11 @@ msgstr "мои предложения о приобретении"
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:136
-#, fuzzy, c-format
+#, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
-", Вы не можете продлевать книги через веб.  Пожалуйста, оплатите штрафы и "
-"тогда сможете продлевать книги."
+"Вы не можете продлевать книги через веб. Причина: %s. Пожалуйста, оплатите "
+"штрафы и тогда сможете продлевать книги."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:42
 #, c-format
@@ -12176,7 +12168,7 @@ msgstr "Вы уже ранее запрашивали это заглавие."
 msgid "You have no article requests currently."
 msgstr "Вы уже ранее запрашивали это заглавие."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "У вас нет штрафов и пени"
@@ -12301,9 +12293,8 @@ msgstr "Вы должны выбрать хотя бы одну единицу. 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:46
-#, fuzzy
 msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
-msgstr "%s Поиск %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s"
+msgstr "Вы искали %s по «%s»%s%s&nbsp;с ограничением:&nbsp;«%s»%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:70
 #, c-format
@@ -13265,12 +13256,13 @@ msgstr "show_loans"
 #. %11$s:  END 
 #. %12$s:  END 
 #: opac-tmpl/bootstrap/en/includes/holds-table.inc:125
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
 "of item type '%s' %s Pending %s %s %s "
 msgstr ""
-" начиная с %s %s В подвешенном состоянии %s до %s %s %s В ожидании %s %s "
+"начиная с %s %s приостановлено %s до %s %s %s %s в ожидании следующего "
+"доступного экземпляра'%s' %s до %s %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/maintenance.tt:35
 #, c-format

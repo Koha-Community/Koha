@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:28-0300\n"
+"POT-Creation-Date: 2020-02-16 15:02-0300\n"
 "PO-Revision-Date: 2019-03-27 11:23+0000\n"
 "Last-Translator: Mostafa Aghajani <aghajani.mostafa@gmail.com>\n"
 "Language-Team: Pendar <ebrahimi_info@yahoo.com>\n"
@@ -155,15 +155,16 @@ msgstr "%s %s %s ‏توجه: این پنجره به‌طور خودکار طی 
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 
 #. %1$s:  END 
@@ -352,7 +353,7 @@ msgstr ""
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, fuzzy, c-format
 msgid "%s %s's fines and charges"
 msgstr "جریمه ها و هزینه ها"
@@ -2727,7 +2728,7 @@ msgstr "(%s مجموع)"
 msgid "(123) 456-7890"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr ""
@@ -2750,7 +2751,7 @@ msgstr ""
 msgid "(Checked out)"
 msgstr "(امانت گرفته شده)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr ""
@@ -2762,7 +2763,7 @@ msgid ""
 "for assistance)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr ""
@@ -2819,7 +2820,7 @@ msgstr ""
 "(توجه: اگر شما به صورت آنلاین ثبت کنید ممکن است در بازگرداندن حساب کاربری "
 "شما تأخیر وجود داشته باشد.)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, fuzzy, c-format
 msgid "(Replaced)"
 msgstr "مقالات قانونی"
@@ -2850,7 +2851,7 @@ msgstr "مقالات قانونی"
 msgid "(Required)"
 msgstr "(ضروری)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr ""
@@ -2894,7 +2895,7 @@ msgstr "(به جای آن از اپک استفداه شود)"
 msgid "(Use SRU instead)"
 msgstr "(استفاده شود SRU به جای آن از)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr ""
@@ -3004,7 +3005,7 @@ msgstr ".%s شما جریمه‌هایی دارید.%s %s "
 msgid "...or..."
 msgstr "...یا..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr ""
@@ -3405,12 +3406,12 @@ msgid "Amount"
 msgstr "مبلغ"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "مبلغ واریز نشده"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "مبلغ قابل پرداخت: "
@@ -4842,7 +4843,7 @@ msgid "DVD video / Videodisc"
 msgstr "ویدئو دی وی دی/ویدئو دیسک"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5015,7 +5016,7 @@ msgid "Descending"
 msgstr "نزولی"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5573,7 +5574,7 @@ msgstr "فیلم شناسی ها"
 msgid "Filter paid transactions"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr ""
@@ -6115,7 +6116,7 @@ msgid "Home library:"
 msgstr "کتابخانه خانگی"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "پی‌پال چگونه کار می‌کند"
 
@@ -7182,7 +7183,7 @@ msgstr "ایجاد یک"
 msgid "Make an "
 msgstr "ایجاد یک "
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, c-format
 msgid "Make payment"
 msgstr "پرداخت کردن"
@@ -7628,11 +7629,6 @@ msgstr "فهرست خصوصی موجود نیست"
 #, c-format
 msgid "No private lists."
 msgstr "فهرست شخصی موجود نیست."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "فهرست عمومی موجود نیست"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8258,13 +8254,13 @@ msgstr "سند پروانه ثبت اختراع"
 msgid "Patron comment on %s"
 msgstr "نظر کاربر برای %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "جریمه‌ها و هزینه‌های انتخابی را پرداخت کنید"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
@@ -8273,7 +8269,7 @@ msgstr ""
 msgid "Payment applied:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "روش پرداخت"
@@ -11271,7 +11267,7 @@ msgstr "برای ایجاد تغییرات در رکورد خود لطفا با 
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
 #, fuzzy, c-format
-msgid "To reset your password, enter your login or your email address. "
+msgid "To reset your password, enter your login or your email address."
 msgstr "أدخل أي جزء من عناوين بريدهم الإلكتروني."
 
 #. SCRIPT
@@ -11289,13 +11285,13 @@ msgstr "سطح بالا"
 msgid "Topics"
 msgstr "a-موضوعي"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "مجموع بدهی"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr ""
@@ -11994,7 +11990,7 @@ msgstr "شما هم اکنون این عنوان را درخواست کرده ا
 msgid "You have no article requests currently."
 msgstr "شما هم اکنون این عنوان را درخواست کرده اید."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "شما جریمه یا هزینه ای ندارید."

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:32-0300\n"
+"POT-Creation-Date: 2020-02-16 15:08-0300\n"
 "PO-Revision-Date: 2020-01-17 14:20+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,15 +154,16 @@ msgstr "%s %s %s नोट: इस विंडो स्वतः 5 सेक�
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
-#, c-format
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
+#, fuzzy, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 "%s %s %sभुगतान %sराइटऑफ %sमाफ़ कर दिया %sक्रेडिट %sगायब आइटम शुल्क वापसी %s%s %s "
 "%s %s %sखाता निर्माण शुल्क %sखाता नवीनीकरण शुल्क %sखोई आइटम %sमेन्यूल फी %sनया कार्ड "
@@ -361,7 +362,7 @@ msgstr "%s %s आपको हमारे ऑनलाइन कैटलॉग
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, c-format
 msgid "%s %s's fines and charges"
 msgstr "%s %s's जुर्माना और शुल्क"
@@ -2740,7 +2741,7 @@ msgstr "(%s कुल)"
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr "(एकत्रित)"
@@ -2762,7 +2763,7 @@ msgstr "(डेटाबेस पर नहीं मिला, कृपया
 msgid "(Checked out)"
 msgstr "(बाहर) चेक"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr "(माफ़ कर दिया)"
@@ -2776,7 +2777,7 @@ msgstr ""
 "(आइटम को वापस ले लिया गया है और नीति द्वारा अवरुद्ध चेक-इन, सहायता के लिए लाइब्रेरी "
 "स्टाफ देखें)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr "(खोया)"
@@ -2833,7 +2834,7 @@ msgstr ""
 "(कृपया ध्यान दें: आपका खाता बहाल करने में एक विलंब हो सकती है .यदि आप ऑनलाइन सबमिट "
 "करते हैं)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, c-format
 msgid "(Replaced)"
 msgstr "(प्रतिस्थापित)"
@@ -2864,7 +2865,7 @@ msgstr "(प्रतिस्थापित)"
 msgid "(Required)"
 msgstr "(आवश्यक है)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr "(वापस किया गया)"
@@ -2910,7 +2911,7 @@ msgstr "(प्रयोग ओपेक के स्थान पर)"
 msgid "(Use SRU instead)"
 msgstr "(प्रयोग SRU के स्थान पर)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr "(अमान्य कर)"
@@ -3019,7 +3020,7 @@ msgstr ".%sआप पर जुर्माना देय.%s %s "
 msgid "...or..."
 msgstr "...या..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3420,12 +3421,12 @@ msgid "Amount"
 msgstr "मात्रा"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "राशि बकाया"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "भुगतान के लिए राशी"
@@ -4854,7 +4855,7 @@ msgid "DVD video / Videodisc"
 msgstr "डीवीडी वीडियो / Videodisc"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5025,7 +5026,7 @@ msgid "Descending"
 msgstr "घटते क्रम में"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5577,7 +5578,7 @@ msgstr "फिल्मोग्राफीज"
 msgid "Filter paid transactions"
 msgstr "फ़िल्टर भुगतान लेनदेन"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr "जुर्माना राशि"
@@ -6117,7 +6118,7 @@ msgid "Home library:"
 msgstr "होम लाइब्रेरी:"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "कैसे PayPal कार्य करता है"
 
@@ -7183,7 +7184,7 @@ msgstr "एक बनाओ"
 msgid "Make an "
 msgstr "एक करें"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, c-format
 msgid "Make payment"
 msgstr "भुगतान करें"
@@ -7629,11 +7630,6 @@ msgstr "निजी सूचिया नहीं "
 #, c-format
 msgid "No private lists."
 msgstr "निजी सूचिया नहीं ."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "सार्वजनिक सूचियों नहीं "
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8257,13 +8253,13 @@ msgstr "पेटेंट दस्तावेज़"
 msgid "Patron comment on %s"
 msgstr "पर संरक्षक टिप्पणी %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "चुने हुए जुर्माना और आरोपों का भुगतान"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr "पेपैल स्वीकृति मार्क"
 
@@ -8272,7 +8268,7 @@ msgstr "पेपैल स्वीकृति मार्क"
 msgid "Payment applied:"
 msgstr "भुगतान लागू:"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "भुगतान माध्यम"
@@ -11254,8 +11250,8 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "इस त्रुटि की रिपोर्ट करने के लिए, कोहा प्रशासक को ईमेल कर सकते हैं. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, c-format
-msgid "To reset your password, enter your login or your email address. "
+#, fuzzy, c-format
+msgid "To reset your password, enter your login or your email address."
 msgstr "अपना पासवर्ड रीसेट करने के लिए, अपना लॉगिन या ईमेल पता दर्ज करें"
 
 #. SCRIPT
@@ -11273,13 +11269,13 @@ msgstr "उच्च स्तर"
 msgid "Topics"
 msgstr "विषय"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "कारण कुल"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr "कुल देय यदि क्रेडिट(ओ) लागू होता है:"
@@ -11965,7 +11961,7 @@ msgstr "आपने पहले से ही इस शीर्षक का
 msgid "You have no article requests currently."
 msgstr "आपके पास वर्तमान में कोई भी लेख अनुरोध नहीं है."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "आपको कोई जुर्माना या शुल्क नही"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:38-0300\n"
+"POT-Creation-Date: 2020-02-16 15:19-0300\n"
 "PO-Revision-Date: 2015-10-08 08:45+0000\n"
 "Last-Translator: Vinea-SP_Hwang <snowfox8629@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -151,15 +151,16 @@ msgstr "%s %s %s 알림: 이 창은 5초 후에 자동으로 닫힙니다. %s "
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 
 #. %1$s:  END 
@@ -346,7 +347,7 @@ msgstr ""
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, fuzzy, c-format
 msgid "%s %s's fines and charges"
 msgstr "내 연체료 및 수수료"
@@ -2720,7 +2721,7 @@ msgstr "(전체 %s일)"
 msgid "(123) 456-7890"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr ""
@@ -2742,7 +2743,7 @@ msgstr "데이터베이스 내에서 찾지 못했습니다. 다시 시도해 �
 msgid "(Checked out)"
 msgstr "(대출됨)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr ""
@@ -2754,7 +2755,7 @@ msgid ""
 "for assistance)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr ""
@@ -2810,7 +2811,7 @@ msgid ""
 msgstr ""
 "계정 복원 신청을 온라인으로 제출하셨다면 처리하는 데 조금 시간이 걸립니다)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, fuzzy, c-format
 msgid "(Replaced)"
 msgstr "법률 조항"
@@ -2841,7 +2842,7 @@ msgstr "법률 조항"
 msgid "(Required)"
 msgstr "(필수 사항)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr ""
@@ -2885,7 +2886,7 @@ msgstr "(대신 OPAC 사용)"
 msgid "(Use SRU instead)"
 msgstr "(대신 SRU 사용)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr ""
@@ -2994,7 +2995,7 @@ msgstr "귀하의 연체료나 수수료는 없습니다"
 msgid "...or..."
 msgstr "...혹은..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr ""
@@ -3398,12 +3399,12 @@ msgid "Amount"
 msgstr "총계"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "미입수 총계"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr ""
@@ -4843,7 +4844,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD 비디오 / 비디오디스크"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5016,7 +5017,7 @@ msgid "Descending"
 msgstr "내림차순"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5572,7 +5573,7 @@ msgstr "작품목록"
 msgid "Filter paid transactions"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr ""
@@ -6115,7 +6116,7 @@ msgid "Home library:"
 msgstr "도서관 본관"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr ""
 
@@ -7180,7 +7181,7 @@ msgstr "Make a "
 msgid "Make an "
 msgstr "Make a "
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, fuzzy, c-format
 msgid "Make payment"
 msgstr "Make a "
@@ -7629,11 +7630,6 @@ msgstr "개인 목록이 없습니다"
 #, c-format
 msgid "No private lists."
 msgstr "개인 목록이 없습니다."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "공개 목록이 없습니다"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8260,13 +8256,13 @@ msgstr "특허 문서"
 msgid "Patron comment on %s"
 msgstr "이용자 의견 등록 %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, fuzzy, c-format
 msgid "Pay selected fines and charges"
 msgstr "내 연체료 및 수수료"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
@@ -8275,7 +8271,7 @@ msgstr ""
 msgid "Payment applied:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, fuzzy, c-format
 msgid "Payment method"
 msgstr "특허 문서"
@@ -11271,7 +11267,7 @@ msgstr "귀하의 정보를 바꾸기 위해서는 도서관에 문의하시기 
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
 #, fuzzy, c-format
-msgid "To reset your password, enter your login or your email address. "
+msgid "To reset your password, enter your login or your email address."
 msgstr "죄송합니다, 잘못된 메일주소를 입력하셨습니다."
 
 #. SCRIPT
@@ -11289,13 +11285,13 @@ msgstr "최상위 단계"
 msgid "Topics"
 msgstr "주제"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "전체 수수료"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr ""
@@ -11994,7 +11990,7 @@ msgstr "이 자료는 이미 예약 신청하셨습니다."
 msgid "You have no article requests currently."
 msgstr "이 자료는 이미 예약 신청하셨습니다."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "귀하의 연체료나 수수료는 없습니다"

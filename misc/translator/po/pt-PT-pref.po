@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2020-01-17 12:34+0000\n"
+"PO-Revision-Date: 2020-02-18 10:13+0000\n"
 "Last-Translator: vfernandes <vfernandes@keep.pt>\n"
 "Language-Team: <>\n"
 "Language: pt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1579264466.677325\n"
+"X-POOTLE-MTIME: 1582020806.477060\n"
 "X-Pootle-Path: /pt/18.05/pt-PT-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2110,12 +2110,26 @@ msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give th
 msgstr "Quanto os exemplares são criados, atribuir-lhes a localização temporária"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# Don't show these"
-msgstr "Não mostrar estes"
+msgid "cataloguing.pref#NotesBlacklist# <br />"
+msgstr "<br />"
 
 # Cataloging > Display
-msgid "cataloguing.pref#NotesBlacklist# note fields in title notes separator (OPAC record details) and in the description separator (Staff client record details). The fields should appear separated with commas and according with the Koha MARC format (eg 3.. for UNIMARC, 5.. for MARC21)"
-msgstr "campos de notas no separador das notas de título (detalhes do registo no OPAC) nem no separador da descrição (detalhes do registo no interface dos técnicos). Estes campos devem aparecer separados com virgulas e de acordo com o formato Koha MARC escolhido (isto é, 3.. para UNIMARC, 5.. para MARC21)"
+msgid "cataloguing.pref#NotesBlacklist# Don't show"
+msgstr "Não mostrar os campos de notas"
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
+msgstr ""
+"Para esconder os campos noutras páginas como a vista normal, use as "
+"configurações de visibilidade dos subcampos na secção dos modelos "
+"bibliográficos MARC na administração do sistema."
+
+# Cataloging > Display
+msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
+msgstr ""
+"de notas no separador 'Notas do título' e no separador 'Descrição' nas "
+"páginas de detalhes do OPAC e do interface dos técnicos. Use uma vírgula "
+"para separar os vários campos. Exemplos: 500,502 (MARC21); 300,328 (UNIMARC)."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2400,8 +2414,8 @@ msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
 msgstr "Mapear subcampo MARC"
 
 # Cataloging > Record Structure
-msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "para a cota do exemplar. (Isto pode conter vários subcampos; por exemplo <code>082ab</code> irá olhar para os subcampos a e b do 082.)<br />Exemplos (para registos MARC21): <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>para um registo de exemplar</strong>: <code>852hi</code>"
+msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)</br>Note: The order of the subfields in the record will be preserved.<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+msgstr "para a cota do exemplar. (Isto pode conter vários subcampos; por exemplo <code>082ab</code> irá olhar para os subcampos a e b do 082.)</br>Nota: A ordem dos subcampos no registo será mantida.<br />Exemplos (para registos MARC21): <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>para um registo de exemplar</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -2649,22 +2663,15 @@ msgstr "Não permitir"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
-msgstr ""
-"Se a preferência estiver activa não vai gerar os avisos RESERVE_WAITING e "
-"RESERVED."
+msgstr "Se a preferência estiver activa não vai gerar os avisos RESERVE_WAITING e RESERVED."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
-msgstr ""
-"Permite auto-empréstimos para os exemplares reservados. Se estiver a usar a "
-"fila de espera, os exemplares com reservas pendentes serão marcados como \""
-"indisponíveis\" se a preferência estiver como \"Não permitir\"."
+msgstr "Permite auto-empréstimos para os exemplares reservados. Se estiver a usar a fila de espera, os exemplares com reservas pendentes serão marcados como \"indisponíveis\" se a preferência estiver como \"Não permitir\"."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
-msgstr ""
-"o empréstimo de exemplares reservados para outras pessoas usando as "
-"mensagens SIP de empréstimo."
+msgstr "o empréstimo de exemplares reservados para outras pessoas usando as mensagens SIP de empréstimo."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -3144,9 +3151,7 @@ msgstr "para representar as reclamações de devolução"
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
-msgstr ""
-"Avisar os bibliotecários que um leitor tem demasiadas reclamações de "
-"devolução se um leitor tiver reclamado a devolução de mais do que"
+msgstr "Avisar os bibliotecários que um leitor tem demasiadas reclamações de devolução se um leitor tiver reclamado a devolução de mais do que"
 
 # Circulation > Return Claims
 msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
@@ -4679,15 +4684,11 @@ msgstr "Ignorar o calendário"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open day"
-msgstr ""
-"Usar o calendário para puxar a data de término para o próximo dia aberto"
+msgstr "Usar o calendário para puxar a data de término para o próximo dia aberto"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Use the calendar to push the due date to the next open matching weekday for weekly loan periods, or the next open day otherwise"
-msgstr ""
-"Usar o calendário para passar a data de término para o próximo dia da semana "
-"correspondente aberto para períodos de empréstimo semanal, ou para o próximo "
-"dia aberto nos outros casos"
+msgstr "Usar o calendário para passar a data de término para o próximo dia da semana correspondente aberto para períodos de empréstimo semanal, ou para o próximo dia aberto nos outros casos"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#useDaysMode# Use the calendar to skip days the library is closed"
@@ -4815,9 +4816,7 @@ msgstr "Usar o URL: "
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
-msgstr ""
-"para o serviço de capas da <a href=\"https://www.adlibris.com/se\""
-">Adlibris</a>."
+msgstr "para o serviço de capas da <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 
 # Enhanced Content > Local or remote cover images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -8020,9 +8019,7 @@ msgstr "Ativar"
 
 # Patrons > General
 msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
-msgstr ""
-"Enviar as mensagens das sugestões de aquisição por SMS se o email do leitor "
-"não estiver definido."
+msgstr "Enviar as mensagens das sugestões de aquisição por SMS se o email do leitor não estiver definido."
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"

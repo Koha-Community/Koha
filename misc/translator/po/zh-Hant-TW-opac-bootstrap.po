@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-15 20:56-0300\n"
-"PO-Revision-Date: 2020-01-16 09:44+0000\n"
+"POT-Creation-Date: 2020-02-16 15:47-0300\n"
+"PO-Revision-Date: 2020-02-21 10:45+0000\n"
 "Last-Translator: Anthony MAO <mao@lins.fju.edu.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1579167872.293546\n"
+"X-POOTLE-MTIME: 1582281945.659012\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -154,19 +154,20 @@ msgstr "%s %s %s 說明: 此視窗將於5秒後關閉。%s "
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
-"%s %s %s付款 %s豁免 %s免除 %s額度 %s重置費用 %s%s %s %s %s %s新增費用 %s續借"
-"費用 %s遺失館藏 %s人工費用 %s新增借書證 %s罰款 %s遺失館藏處理費 %s租金 %s日租"
-"金 %s續借館藏 %s續借日租館藏 %s預約費用 %s預約逾時 %s%s %s %s %s "
+"%s %s %s付款 %s豁免 %s免除 %s額度 %s重置費用 %s%s %s %s %s %s新增費用 %s續借費用 %s遺失館藏 %s人工費用 %"
+"s新增借書證 %s罰款 %s遺失館藏處理費 %s租金 %s日租金 %s續借館藏 %s續借日租館藏 %s預約費用 %s預約逾時 %s%s %s %s %s "
+"%s"
 
 #. %1$s:  END 
 #. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
@@ -353,7 +354,7 @@ msgstr "%s %s 從我們的線上目錄，將虛擬書架寄給您：%s。"
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, c-format
 msgid "%s %s's fines and charges"
 msgstr "%s %s 的罰款和費用"
@@ -2713,7 +2714,7 @@ msgstr "(%s 總計)"
 msgid "(123) 456-7890"
 msgstr "(123) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr "(累增)"
@@ -2735,7 +2736,7 @@ msgstr "(在資料庫找不到該條碼，請找館員協助)"
 msgid "(Checked out)"
 msgstr "(借出)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr "(豁免)"
@@ -2747,7 +2748,7 @@ msgid ""
 "for assistance)"
 msgstr "(該館藏依規定註銷且不能還入，請洽館員協助)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr "(遺失)"
@@ -2802,7 +2803,7 @@ msgid ""
 "online.)"
 msgstr "(請注意：將延遲恢復線上申請重建的帳號。)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, c-format
 msgid "(Replaced)"
 msgstr "(替換)"
@@ -2833,7 +2834,7 @@ msgstr "(替換)"
 msgid "(Required)"
 msgstr "(必備)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr "(已還入)"
@@ -2877,7 +2878,7 @@ msgstr "(使用 OPAC)"
 msgid "(Use SRU instead)"
 msgstr "(使用 SRU)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr "(無效)"
@@ -2986,7 +2987,7 @@ msgstr "。%s您的罰款。%s %s "
 msgid "...or..."
 msgstr "...或是..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3385,12 +3386,12 @@ msgid "Amount"
 msgstr "總計"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "待付總計"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "支付金額："
@@ -4809,7 +4810,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD / 影碟"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -4979,7 +4980,7 @@ msgid "Descending"
 msgstr "降羃"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5527,7 +5528,7 @@ msgstr "影片目錄"
 msgid "Filter paid transactions"
 msgstr "篩選已付款的交易"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr "罰款金額"
@@ -5554,7 +5555,7 @@ msgstr "罰款："
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:243
 #, c-format
 msgid "Finish"
-msgstr "最後"
+msgstr "結束"
 
 #: opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:31
 #, c-format
@@ -6056,7 +6057,7 @@ msgid "Home library:"
 msgstr "所屬圖書館："
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "PayPal 運作"
 
@@ -7102,7 +7103,7 @@ msgstr "做一個 "
 msgid "Make an "
 msgstr "做一個 "
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, c-format
 msgid "Make payment"
 msgstr "支付"
@@ -7546,11 +7547,6 @@ msgstr "無私人虛擬書架"
 #, c-format
 msgid "No private lists."
 msgstr "無私人虛擬書架。"
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "無公開虛擬書架"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8160,13 +8156,13 @@ msgstr "專利文件"
 msgid "Patron comment on %s"
 msgstr "讀者對 %s 的評論"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "支付選定的罰款和費用"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr "PayPal 接受標記"
 
@@ -8175,7 +8171,7 @@ msgstr "PayPal 接受標記"
 msgid "Payment applied:"
 msgstr "Payment 應用："
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "支付方式"
@@ -9217,7 +9213,7 @@ msgstr "恢復您的預約 "
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:123
 #, c-format
 msgid "Return this item"
-msgstr "回到這個館藏"
+msgstr "還入館藏"
 
 #. INPUT type=submit name=confirm
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:104
@@ -11117,7 +11113,7 @@ msgstr "報告此錯誤，應電子郵件給 Koha 管理者。"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
 #, c-format
-msgid "To reset your password, enter your login or your email address. "
+msgid "To reset your password, enter your login or your email address."
 msgstr "重設密碼時，請登入或電子郵件地址。"
 
 #. SCRIPT
@@ -11135,13 +11131,13 @@ msgstr "最高層級"
 msgid "Topics"
 msgstr "主題"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "總計欠款"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr "應付總額："
@@ -11812,7 +11808,7 @@ msgstr "您已預約此題名。"
 msgid "You have no article requests currently."
 msgstr "目前您沒有申請論文。"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "您沒有罰款及其他應付款"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:34-0300\n"
+"POT-Creation-Date: 2020-02-16 15:12-0300\n"
 "PO-Revision-Date: 2018-06-02 08:27+0000\n"
 "Last-Translator: ksorbo <keith@thesorbos.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1959,7 +1959,7 @@ msgstr ""
 #. %10$s:  CASE 
 #. %11$s:  m.code | html 
 #. %12$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:37
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:38
 #, c-format
 msgid ""
 "%s %s Cash register added successfully. %s An error occurred when adding "
@@ -2226,9 +2226,12 @@ msgstr "%sTidak dipinjam%s"
 #. %2$s:  IF ( resultsloo.notforloancount ) 
 #. %3$s:  resultsloo.notforloancount | html 
 #. %4$s:  END 
+#. %5$s:  IF ( resultsloo.onholdcount ) 
+#. %6$s:  resultsloo.onholdcount | html 
+#. %7$s:  END 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:121
 #, fuzzy, c-format
-msgid "%s %s Not for loan (%s)%s "
+msgid "%s %s Not for loan (%s)%s %s Waiting on hold (%s)%s "
 msgstr "%s %s Tidak sedang dipesan %s "
 
 #. %1$s:  END # /IF itemloo.nocancel 
@@ -2427,7 +2430,7 @@ msgstr ""
 #. %4$s:  IF expires_on 
 #. %5$s:  expires_on | $KohaDates 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:780
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:789
 #, fuzzy, c-format
 msgid "%s %s Waiting at %s %s until %s %s "
 msgstr "%s %s bulan %s hingga %s %s "
@@ -2542,7 +2545,7 @@ msgstr "%s Tidak ada permintaan terhadap pencarian ini. %s "
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:270
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:271
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s untuk "
@@ -2557,7 +2560,7 @@ msgstr "%s %s memiliki %s pemesanan menunggu untuk diambil."
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:151
+#: intranet-tmpl/prog/en/modules/members/pay.tt:145
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %stidak memiliki denda yang berlebihan."
@@ -3066,7 +3069,7 @@ msgstr "%s Tidak ada nilai yang ditentukan untuk %s %s %s %s "
 
 #. %1$s:  FOREACH error IN errors 
 #. %2$s:  IF ( error.sqlerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
 #, c-format
 msgid "%s %sThis report contains the SQL keyword "
 msgstr "%s %sLaporan tersebut berisi kata kunci SQL "
@@ -3128,7 +3131,7 @@ msgstr "%s %sat%sdiperkirakan pada%s %s since %s%s%s%s%s%s%s. "
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  cash_register.id | html 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:23
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #, fuzzy, c-format
 msgid ""
 "%s &rsaquo; %sModify cash register %s%sNew cash register%s %s &rsaquo; "
@@ -3435,7 +3438,7 @@ msgstr "%s ( %s ) %s %s nomorpanggil: %s%s"
 #. %1$s:  issue.item.biblio.title | html 
 #. %2$s:  issue.item.barcode | html 
 #. %3$s:  issue.date_due | $KohaDates as_due_date => 1 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:625
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
 #, fuzzy, c-format
 msgid "%s (%s). Due on %s"
 msgstr "%s %s pada "
@@ -3553,7 +3556,7 @@ msgstr "%s (tiba)%s %s %s oleh %s"
 
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:244
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:666
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:672
 msgid "%s - Click to Expand this Tag"
 msgstr ""
 
@@ -3792,7 +3795,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  patron.article_requests_current.count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:715
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:850
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:859
 #, c-format
 msgid "%s Article requests"
 msgstr ""
@@ -3837,7 +3840,7 @@ msgstr "%s Dipinjam (%s),"
 #. For the first occurrence,
 #. %1$s:  issuecount | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:694
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:830
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:839
 #, c-format
 msgid "%s Checkout(s)"
 msgstr "%s Meminjam"
@@ -3954,8 +3957,8 @@ msgstr "Buat sebuah lis baru"
 #. For the first occurrence,
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:25
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:40
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:26
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:41
 #, fuzzy, c-format
 msgid "%s Create a new club template %s "
 msgstr "%sSunting%sBuat%s Susunan teks kartu patron"
@@ -3985,7 +3988,7 @@ msgid "%s Days %s Hours %s Undefined %s "
 msgstr "%s %s %s Tidak ada barang yang lain. %s "
 
 #. %1$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:561
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:567
 #, fuzzy, c-format
 msgid "%s Default "
 msgstr "Baku"
@@ -4049,7 +4052,7 @@ msgid "%s Edit "
 msgstr "%sSuntingan"
 
 #. %1$s:  IF ( biblionumber ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:465
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:471
 #, fuzzy, c-format
 msgid "%s Editing "
 msgstr "%sSuntingan"
@@ -4070,7 +4073,7 @@ msgid "%s Enabled "
 msgstr "%S Diaktifkan"
 
 #. %1$s:  IF ( error ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:150
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:151
 #, c-format
 msgid "%s Error: "
 msgstr "%s Galat: "
@@ -4182,7 +4185,7 @@ msgstr "%s Nama depan: "
 #. For the first occurrence,
 #. %1$s:  holds_count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:707
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:842
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:851
 #, c-format
 msgid "%s Hold(s)"
 msgstr "%s Pesan pinjam"
@@ -4333,7 +4336,7 @@ msgid "%s Modify club "
 msgstr "%s%sMemodifikasi tag "
 
 #. %1$s:  IF club_template 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:38
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:39
 #, fuzzy, c-format
 msgid "%s Modify club template "
 msgstr "%s%sMemodifikasi tag "
@@ -4860,7 +4863,7 @@ msgstr "%s Tanggal pendaftaran: "
 #. For the first occurrence,
 #. %1$s:  relatives_issues_count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:698
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:837
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:846
 #, fuzzy, c-format
 msgid "%s Relatives' checkouts"
 msgstr "%sTidak dipinjam%s"
@@ -4920,7 +4923,7 @@ msgstr "%s Koleksi pilihan ditemukan untuk %s ("
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:33
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1020
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:117
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:712
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:721
 #, c-format
 msgid "%s Restriction added by overdues process %s %s %s %s "
 msgstr ""
@@ -4928,7 +4931,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  debarments.size | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:738
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:872
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:881
 #, c-format
 msgid "%s Restrictions"
 msgstr "%s Ristriksi"
@@ -5454,7 +5457,7 @@ msgid "%s after %s "
 msgstr "%s setelah %s "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "%s already in your cart"
 msgstr ""
 
@@ -5762,7 +5765,7 @@ msgid "%s item records found and staged"
 msgstr "%s rekaman barang ditemukan dan diadakan"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "%s item(s) added to your cart"
 msgstr ""
 
@@ -5964,31 +5967,31 @@ msgid "%s overwritten %s(last was %s)%s"
 msgstr "%s diganti %s(yang terakhir adalah %s)%s"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:212
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:218
 #, c-format
 msgid "%s patrons have been successfully deleted"
 msgstr "%s patron telah berhasil dihapus"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:210
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:216
 #, c-format
 msgid "%s patrons have been successfully moved to trash"
 msgstr "%s patron telah berhasil dipindahkan ke tong sampah"
 
 #. %1$s:  patrons_to_delete.size || 0 | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:147
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:153
 #, fuzzy, c-format
 msgid "%s patrons will be deleted"
 msgstr "%s%s %s0 %s patron akan dihapus"
 
 #. %1$s:  TotalDel | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:205
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:211
 #, fuzzy, c-format
 msgid "%s patrons would have been removed (if it wasn't a test run)"
 msgstr "%s patron telah berhasil dipindahkan ke tong sampah"
 
 #. %1$s:  patrons_to_anonymize.count || 0 | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:148
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:154
 #, fuzzy, c-format
 msgid "%s patrons' checkout histories will be anonymized"
 msgstr "%s%s %s0 %s Riwayat peminjaman akan dibuat anonim"
@@ -7262,9 +7265,9 @@ msgstr ""
 #. %1$s:  IF cash_register 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:62
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:63
 #, c-format
-msgid "%sModify cash register%sAdd new cash_register%s"
+msgid "%sModify cash register%sAdd new cash register%s"
 msgstr ""
 
 #. %1$s:  IF framework 
@@ -7469,7 +7472,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:308
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:310
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:312
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:147
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:148
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:165
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:347
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:468
@@ -7662,96 +7665,96 @@ msgstr ""
 msgid "%s✓%s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:721
+#: intranet-tmpl/prog/en/modules/about.tt:727
 #, c-format
 msgid ""
 "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian) "
 "Radoslav Kolev"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:755
+#: intranet-tmpl/prog/en/modules/about.tt:761
 #, c-format
 msgid ""
 "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian) Victor Titarchuk "
 "and Serhij Dubyk"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:762
+#: intranet-tmpl/prog/en/modules/about.tt:768
 #, c-format
 msgid ""
 "&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; "
 "(Ukrainian) Victor Titarchuk and Serhij Dubyk"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:736
+#: intranet-tmpl/prog/en/modules/about.tt:742
 #, c-format
 msgid "&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:761
+#: intranet-tmpl/prog/en/modules/about.tt:767
 #, c-format
 msgid "&#1575;&#1585;&#1583;&#1608;(Urdu) Ata ur Rehman"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:750
+#: intranet-tmpl/prog/en/modules/about.tt:756
 #, c-format
 msgid "&#1601;&#1575;&#1585;&#1587;&#1609; (Persian)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:724
+#: intranet-tmpl/prog/en/modules/about.tt:730
 #, c-format
 msgid "&#20013;&#25991; (Chinese)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:737
+#: intranet-tmpl/prog/en/modules/about.tt:743
 #, c-format
 msgid "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368; (Hindi)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:723
+#: intranet-tmpl/prog/en/modules/about.tt:729
 #, c-format
 msgid ""
 "&#2476;&#2494;&#2434;&#2482;&#2494; (Bengali) Parthasarathi Mukhopadhyay"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:743
+#: intranet-tmpl/prog/en/modules/about.tt:749
 #, c-format
 msgid "&#26085;&#26412;&#35486; (Japanese)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:751
+#: intranet-tmpl/prog/en/modules/about.tt:757
 #, c-format
 msgid "&#2835;&#2908;&#2879;&#2822; (&#x014D;&#7771;iy&#257;)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:745
+#: intranet-tmpl/prog/en/modules/about.tt:751
 #, c-format
 msgid "&#3221;&#3240;&#3277;&#3240;&#3233; (kanna&#7693;a)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:749
+#: intranet-tmpl/prog/en/modules/about.tt:755
 #, c-format
 msgid "&#3374;&#3378;&#3375;&#3390;&#3379;&#3330; (Malayalam)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:759
+#: intranet-tmpl/prog/en/modules/about.tt:765
 #, c-format
 msgid "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618; (Thai)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:719
+#: intranet-tmpl/prog/en/modules/about.tt:725
 #, c-format
 msgid ""
 "&#4768;&#4635;&#4653;&#4763; (Amharic) Getway II Ethiopia Co. (Yohannes "
 "Mulugeta (Team Leader), Tegene Assefa, Abiyot Bayou)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:744
+#: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
 msgid "&#54620;&#44397;&#50612; (Korean)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:735
+#: intranet-tmpl/prog/en/modules/about.tt:741
 #, c-format
 msgid ""
 "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940; (Greek, Modern [1453- ]) "
@@ -7759,7 +7762,7 @@ msgid ""
 "Papadopoulos), Theodoros Theodoropoulos, Panoraia Gaitanou and Kiriaki Roditi"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:726
+#: intranet-tmpl/prog/en/modules/about.tt:732
 #, c-format
 msgid "&#x010D;e&#353;tina (Czech)"
 msgstr ""
@@ -8019,7 +8022,7 @@ msgid "&rsaquo; %s Edit news item%sAdd news item%s%sNews%s"
 msgstr ""
 
 #. %1$s:  IF ( biblionumber ) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:453
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:459
 #, fuzzy, c-format
 msgid "&rsaquo; %s Editing "
 msgstr "%s &rsaquo; %s "
@@ -8031,7 +8034,7 @@ msgid "&rsaquo; %s Modify club "
 msgstr "%s &rsaquo; Tag baru%s %s"
 
 #. %1$s:  IF club_template 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
 #, fuzzy, c-format
 msgid "&rsaquo; %s Modify club template "
 msgstr "%s &rsaquo; Tag baru%s %s"
@@ -9672,7 +9675,7 @@ msgstr ""
 #. %6$s:  w.item.itemcallnumber | html 
 #. %7$s:  END 
 #. %8$s:  w.reservedate | $KohaDates 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:773
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:782
 #, fuzzy, c-format
 msgid "(%s), %s by %s %s %s [%s] %s Hold placed on %s. "
 msgstr "%s %s %s %s %s %s %s %s %s "
@@ -9769,7 +9772,7 @@ msgid ""
 "needed.)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:741
+#: intranet-tmpl/prog/en/modules/about.tt:747
 #, c-format
 msgid "(Indonesian)"
 msgstr ""
@@ -9779,8 +9782,8 @@ msgstr ""
 msgid "(Lost)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1708
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1730
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1715
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1737
 #, c-format
 msgid "(None)"
 msgstr ""
@@ -9788,7 +9791,7 @@ msgstr ""
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  IF (circborrowernumber) 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:467
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:473
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s"
 msgstr ""
@@ -9796,7 +9799,7 @@ msgstr ""
 #. %1$s:  biblionumber | html 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:455
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:461
 #, c-format
 msgid "(Record number %s) %s Add MARC record %s "
 msgstr ""
@@ -9931,7 +9934,7 @@ msgid "(exclusive) "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:131
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:469
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:475
 #, c-format
 msgid "(fast cataloging)"
 msgstr ""
@@ -10160,7 +10163,7 @@ msgstr ""
 msgid ", PA, USA (Koha 3.0 Zebra Integration sponsorship)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:732
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid ", Pascale Nalon (ENSMP), and many more "
 msgstr ""
@@ -10222,7 +10225,7 @@ msgid "- None -"
 msgstr "%s Tidak satupun "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "- Please select an item to place a hold"
 msgstr ""
 
@@ -10346,13 +10349,13 @@ msgstr ""
 msgid "...to "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:832
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:841
 #, c-format
 msgid "0 Checkouts"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:709
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:844
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
 #, c-format
 msgid "0 Holds"
 msgstr ""
@@ -10530,7 +10533,7 @@ msgid "A group with the title %s already exists. "
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "A hold cannot be requested on any of these items."
 msgstr ""
 
@@ -10713,7 +10716,7 @@ msgstr ""
 msgid "Access to all librarian functions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:633
+#: intranet-tmpl/prog/en/includes/permissions.inc:636
 #, c-format
 msgid "Access to the files stored on the server "
 msgstr ""
@@ -10814,11 +10817,6 @@ msgstr ""
 msgid "Acquisition"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:31
-#, c-format
-msgid "Acquisition and/or suggestion management"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/labels/search.tt:63
 #, c-format
@@ -10860,6 +10858,11 @@ msgstr ""
 #, c-format
 msgid "Acquisition information"
 msgstr ""
+
+#: intranet-tmpl/prog/en/includes/permissions.inc:31
+#, fuzzy, c-format
+msgid "Acquisition management"
+msgstr "%s &rsaquo; %s "
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:96
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:173
@@ -11003,7 +11006,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:222
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:73
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:74
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:135
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:136
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:426
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:266
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:186
@@ -11043,8 +11046,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:156
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:83
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:92
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:127
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:182
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:128
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:183
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:138
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:166
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:78
@@ -11165,7 +11168,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:684
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:21
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:161
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:109
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:110
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:45
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:614
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:810
@@ -11259,12 +11262,12 @@ msgid "Add a new item"
 msgstr "Tambah ke sebuah lis baru:"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:103
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:820
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:829
 #, c-format
 msgid "Add a new message"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:635
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:641
 #, fuzzy, c-format
 msgid "Add a new record"
 msgstr "Tambah ke sebuah lis baru:"
@@ -11323,12 +11326,12 @@ msgstr ""
 msgid "Add an item by barcode"
 msgstr "#- Tidak ada upaya untuk memprogram"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:318
+#: intranet-tmpl/prog/en/includes/permissions.inc:321
 #, c-format
 msgid "Add and delete funds (but can't modify funds) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:669
+#: intranet-tmpl/prog/en/includes/permissions.inc:672
 #, fuzzy, c-format
 msgid "Add and remove items from rotas "
 msgstr "%s %sebelum %s"
@@ -11353,7 +11356,7 @@ msgstr "Tambah bidang lain"
 msgid "Add basket group for "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:189
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:190
 #, c-format
 msgid "Add biblio"
 msgstr ""
@@ -11394,7 +11397,7 @@ msgstr ""
 msgid "Add comment"
 msgstr "Komentar:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:583
+#: intranet-tmpl/prog/en/includes/permissions.inc:586
 #, fuzzy, c-format
 msgid "Add course reserves "
 msgstr "%s %sebelum %s"
@@ -11579,8 +11582,8 @@ msgstr ""
 msgid "Add new definition"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:128
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:173
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:129
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:174
 #, fuzzy, c-format
 msgid "Add new field "
 msgstr "#- Agen bibliografi nasional"
@@ -11774,7 +11777,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:113
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:80
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:461
@@ -11783,7 +11786,7 @@ msgid "Add to cart"
 msgstr "Tambah ke troli"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:111
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:823
 #, c-format
 msgid "Add to list"
 msgstr ""
@@ -11832,17 +11835,17 @@ msgstr ""
 msgid "Add vendor note"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:680
+#: intranet-tmpl/prog/en/includes/permissions.inc:683
 #, fuzzy, c-format
 msgid "Add, edit and archive cash registers "
 msgstr "Buat sebuah lis baru"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:593
+#: intranet-tmpl/prog/en/includes/permissions.inc:596
 #, fuzzy, c-format
 msgid "Add, edit and delete courses "
 msgstr "Buat sebuah lis baru"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:463
+#: intranet-tmpl/prog/en/includes/permissions.inc:466
 #, c-format
 msgid "Add, edit and delete patron lists and their contents "
 msgstr ""
@@ -11852,12 +11855,12 @@ msgstr ""
 msgid "Add, modify and view patron information"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:253
+#: intranet-tmpl/prog/en/includes/permissions.inc:256
 #, c-format
 msgid "Add, modify and view patron information "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:137
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:138
 #, c-format
 msgid "Add/Edit items"
 msgstr ""
@@ -12020,7 +12023,7 @@ msgstr "%s Alamat 2: "
 msgid "Address line 3: "
 msgstr "%s Alamat 2: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:704
 #, c-format
 msgid "Address:"
 msgstr ""
@@ -12045,7 +12048,7 @@ msgstr ""
 #. %1$s:  total_adj + shipmentcost | $Price 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:337
 #, c-format
-msgid "Adjustments plus shipping:%s"
+msgid "Adjustments plus shipping: %s"
 msgstr ""
 
 #. IMG
@@ -12058,7 +12061,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:5
 #: intranet-tmpl/prog/en/includes/header.inc:57
 #: intranet-tmpl/prog/en/includes/acquisitions-menu.inc:14
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:22
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:23
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:14
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:14
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:25
@@ -12268,7 +12271,7 @@ msgid "Age required: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:327
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, fuzzy, c-format
 msgid "Age restricted"
 msgstr "%s Ristriksi"
@@ -12399,7 +12402,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:165
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:174
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:704
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 #, c-format
 msgid "All"
 msgstr ""
@@ -12437,7 +12440,7 @@ msgstr "%s (tidak aktif) %s %s"
 
 #. %1$s:  do_anonym | html 
 #. %2$s:  last_issue_date | $KohaDates 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:219
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:225
 #, c-format
 msgid "All checkouts (%s) older than %s have been anonymized"
 msgstr ""
@@ -12575,7 +12578,7 @@ msgstr ""
 msgid "Allow"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:43
+#: intranet-tmpl/prog/en/includes/permissions.inc:46
 #, c-format
 msgid "Allow access to the reports module"
 msgstr ""
@@ -12602,12 +12605,12 @@ msgstr ""
 msgid "Allow public downloads:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:61
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:62
 #, fuzzy, c-format
 msgid "Allow public enrollment:"
 msgstr "%s Catatan sirkulasi:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:46
+#: intranet-tmpl/prog/en/includes/permissions.inc:49
 #, c-format
 msgid ""
 "Allow staff members to modify permissions, usernames, and passwords for "
@@ -13060,7 +13063,7 @@ msgstr "#- Agen bibliografi nasional"
 msgid "Animals and Nature"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:115
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:121
 #, c-format
 msgid "Anonymize checkout history"
 msgstr ""
@@ -13077,7 +13080,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/patron-search.inc:94
 #: intranet-tmpl/prog/en/includes/patron-search.inc:104
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:92
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:98
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:27
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:38
 #: intranet-tmpl/prog/en/modules/members/member.tt:198
@@ -13143,8 +13146,8 @@ msgstr "%s Selalau menambah barang"
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:91
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:436
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:853
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:888
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:857
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:892
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:86
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:109
@@ -13240,7 +13243,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:214
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1060
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1066
 msgid "Apply filter"
 msgstr ""
 
@@ -13295,7 +13298,7 @@ msgstr ""
 msgid "Arcadia Public Library, USA"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:157
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:158
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:167
 #, c-format
 msgid "Archive"
@@ -13321,7 +13324,7 @@ msgid "Are you sure you want to cancel adding this quote?"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Apakah anda yakin ingin membatalkan pemesanan pinjam ini?"
 
@@ -13492,7 +13495,7 @@ msgid "Are you sure you want to delete the selected news?"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 msgid "Are you sure you want to delete the selected reports?"
 msgstr ""
 
@@ -13646,8 +13649,8 @@ msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:861
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1022
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:855
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1027
 #, fuzzy
 msgid "Are you sure you want to delete this message? This cannot be undone."
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
@@ -13686,7 +13689,7 @@ msgid "Are you sure you want to delete this record?"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 #, fuzzy
 msgid "Are you sure you want to delete this report? This cannot be undone."
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
@@ -13704,7 +13707,7 @@ msgid "Are you sure you want to delete this rule? This cannot be undone."
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 msgid "Are you sure you want to delete this saved report?"
 msgstr ""
 
@@ -13771,7 +13774,7 @@ msgid "Are you sure you want to edit another rule?"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "Are you sure you want to empty your cart?"
 msgstr "Apakah anda yakin ingin mengosongkan troli anda?"
 
@@ -13811,7 +13814,7 @@ msgid "Are you sure you want to remove label number(s): %s from this batch?"
 msgstr "Apakah anda yakin ingin menghapus barang-barang berikut dari daftar?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "Are you sure you want to remove the selected items?"
 msgstr "Apakah anda yakin ingin menghapus barang yang dipilih?"
 
@@ -13907,7 +13910,7 @@ msgid "Are you sure you want to void this credit?"
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/pay.tt:171
+#: intranet-tmpl/prog/en/modules/members/pay.tt:165
 msgid ""
 "Are you sure you want to write off %s in outstanding fines? This cannot be "
 "undone!"
@@ -13951,7 +13954,7 @@ msgstr ""
 msgid "Area:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:720
+#: intranet-tmpl/prog/en/modules/about.tt:726
 #, c-format
 msgid "Armenian Tigran Zargaryan"
 msgstr ""
@@ -14025,7 +14028,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:223
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:224
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:448
 msgid "At least two records must be selected for merging."
 msgstr ""
@@ -14073,7 +14076,7 @@ msgstr ""
 msgid "Attempt to delete record failed."
 msgstr "%s Alamat:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:658
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:667
 #, c-format
 msgid "Attention:"
 msgstr ""
@@ -14254,7 +14257,7 @@ msgstr "%s - %s%s %s - %s%s %s, %s%s %s, %s%s %s, %s%s %s "
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:269
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:101
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:153
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1061
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:257
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:662
@@ -14286,10 +14289,10 @@ msgstr ""
 msgid "Authorised value category"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:111
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:156
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:205
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:232
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:112
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:157
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:206
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:233
 #, fuzzy, c-format
 msgid "Authorised value category:"
 msgstr "%s Tidak ada nilai yang ditentukan untuk %s %s %s %s "
@@ -14349,7 +14352,7 @@ msgid "Authority #%s (%s)"
 msgstr ""
 
 #. %1$s:  loopro.object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:246
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:247
 #, fuzzy, c-format
 msgid "Authority %s"
 msgstr "#- Agen bibliografi nasional"
@@ -14540,7 +14543,7 @@ msgstr "%s rekaman yang dihapus."
 msgid "Automatic ordering: "
 msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:572
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:581
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:101
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:383
 #, fuzzy, c-format
@@ -14736,7 +14739,7 @@ msgstr "Kode batang"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:120
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:163
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:262
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:909
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:918
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:62
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:103
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
@@ -14812,7 +14815,7 @@ msgstr "%s %sTag %s Sub-bagian batsan %s %s %s %s "
 msgid "Barcode not found. The following items were found by searching:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1000
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1009
 #, c-format
 msgid "Barcode submitted"
 msgstr ""
@@ -15195,7 +15198,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:146
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:18
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:23
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:829
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:835
 #, c-format
 msgid "Batch item deletion"
 msgstr ""
@@ -15210,7 +15213,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:151
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:62
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:68
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:832
 #, c-format
 msgid "Batch item modification"
 msgstr ""
@@ -15230,7 +15233,7 @@ msgstr ""
 #. %3$s:  ELSE 
 #. %4$s:  unlimited_total | html 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:802
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:808
 #, c-format
 msgid "Batch operations with %s%s%s%s%s visible records "
 msgstr ""
@@ -15255,7 +15258,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:63
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:20
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:29
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:838
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:844
 #, c-format
 msgid "Batch patron modification"
 msgstr ""
@@ -15275,7 +15278,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:17
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:25
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:156
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:814
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, fuzzy, c-format
 msgid "Batch record deletion"
 msgstr "%s rekaman yang dihapus."
@@ -15284,7 +15287,7 @@ msgstr "%s rekaman yang dihapus."
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:161
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:17
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:25
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:811
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
 #, fuzzy, c-format
 msgid "Batch record modification"
 msgstr "%s rekaman yang dihapus."
@@ -15371,8 +15374,10 @@ msgstr ""
 msgid "BibTex"
 msgstr ""
 
-#. %1$s:  loopro.object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
+#. For the first occurrence,
+#. %1$s:  loopro.biblionumber | html 
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:236
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:238
 #, c-format
 msgid "Biblio %s"
 msgstr ""
@@ -15439,7 +15444,7 @@ msgid "Bibliographic record"
 msgstr ""
 
 #. %1$s:  object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:270
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:271
 #, c-format
 msgid "Bibliographic record %s"
 msgstr ""
@@ -15478,7 +15483,7 @@ msgid "Bibliographic record title"
 msgstr "#- Agen bibliografi nasional"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:151
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:809
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:815
 #: intranet-tmpl/prog/en/modules/about.tt:210
 #, fuzzy, c-format
 msgid "Bibliographic records"
@@ -15516,7 +15521,7 @@ msgstr "%s Numor kartu:"
 msgid "Biblionumber:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:159
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:160
 #, c-format
 msgid "Biblios in reservoir"
 msgstr ""
@@ -15844,7 +15849,7 @@ msgstr ""
 msgid "Browse the system logs"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:518
+#: intranet-tmpl/prog/en/includes/permissions.inc:521
 #, c-format
 msgid "Browse the system logs "
 msgstr ""
@@ -16158,8 +16163,8 @@ msgid "Cache expiry (seconds)"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:368
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:912
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:987
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:918
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:993
 #, c-format
 msgid "Cache expiry:"
 msgstr ""
@@ -16235,7 +16240,7 @@ msgstr "No. panggil"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:268
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:39
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:908
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:917
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:63
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:187
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:109
@@ -16481,7 +16486,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:144
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:238
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:217
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:67
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:288
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:188
@@ -16508,11 +16513,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:229
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:239
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:70
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:584
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:588
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:592
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:596
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:600
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:590
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:594
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:598
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:602
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:606
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/EXAMPLE.tt:18
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:90
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:159
@@ -16528,9 +16533,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:157
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:204
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:293
-#: intranet-tmpl/prog/en/modules/members/pay.tt:147
+#: intranet-tmpl/prog/en/modules/members/pay.tt:141
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:84
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:181
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:182
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:123
 #: intranet-tmpl/prog/en/modules/clubs/patron-enroll.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:252
@@ -16559,11 +16564,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:34
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
 #: intranet-tmpl/prog/en/modules/circ/selectbranchprinter.tt:87
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:460
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:461
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:52
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:76
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:76
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:111
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:112
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:36
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:71
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:144
@@ -16616,8 +16621,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:256
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:258
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:354
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:43
 #: intranet-tmpl/prog/en/modules/virtualshelves/addbybiblionumber.tt:111
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
@@ -16721,7 +16726,7 @@ msgstr "\" + _(\"Batal disatukan\") + \""
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:794
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:921
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
 msgid "Cancel marked holds"
 msgstr ""
 
@@ -16784,7 +16789,7 @@ msgstr ""
 msgid "Cancel upload"
 msgstr "\" + _(\"Batal disatukan\") + \""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:913
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:922
 #, fuzzy, c-format
 msgid "Cancel?"
 msgstr "Batal"
@@ -16855,7 +16860,7 @@ msgid "Cannot be toggled"
 msgstr "%s Tidak dapat diubah %s "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "Cannot be transferred to pickup library"
 msgstr ""
 
@@ -16882,7 +16887,7 @@ msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
 
 #. For the first occurrence,
 #. %1$s:  IF ( Koha.Preference('OnSiteCheckouts') && Koha.Preference('OnSiteCheckoutsForce') ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:650
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:659
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:47
 #, fuzzy, c-format
 msgid "Cannot check out! %s "
@@ -16956,7 +16961,7 @@ msgid "Cannot open this record in the basic editor"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:316
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, c-format
 msgid "Cannot place hold"
 msgstr ""
@@ -17112,8 +17117,8 @@ msgid "Card number: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:161
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:132
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:187
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:133
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:188
 #, fuzzy, c-format
 msgid "Card preview"
 msgstr "Tampilan Kartu MARC"
@@ -17188,7 +17193,7 @@ msgstr "Troli"
 msgid "Cas login"
 msgstr "Cas login"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:70
+#: intranet-tmpl/prog/en/includes/permissions.inc:73
 #, c-format
 msgid "Cash management"
 msgstr ""
@@ -17199,7 +17204,7 @@ msgstr ""
 msgid "Cash register"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:70
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:71
 #, fuzzy, c-format
 msgid "Cash register ID: "
 msgstr "%s Tanggal pendaftaran: "
@@ -17224,13 +17229,13 @@ msgid "Cash register: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:61
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:23
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:24
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:118
 #, c-format
 msgid "Cash registers"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:121
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:122
 #, fuzzy, c-format
 msgid "Cash registers for "
 msgstr "%s hasil ditemukan "
@@ -17306,7 +17311,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:26
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:453
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:459
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:9
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:138
@@ -17518,7 +17523,7 @@ msgid "Change category"
 msgstr "%s kerangka kerja"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:49
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:555
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:561
 #, fuzzy, c-format
 msgid "Change framework"
 msgstr "%s kerangka kerja"
@@ -17792,8 +17797,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/currencies-admin-search.inc:24
 #: intranet-tmpl/prog/en/includes/letters-search.inc:24
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:23
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:452
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:536
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:453
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:537
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:85
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:47
 #, c-format
@@ -17843,7 +17848,7 @@ msgstr ""
 msgid "Check the boxes for the libraries you accept to checkin items from."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:523
+#: intranet-tmpl/prog/en/includes/permissions.inc:526
 #, c-format
 msgid "Check the expiration of a serial "
 msgstr ""
@@ -18007,7 +18012,7 @@ msgstr ""
 msgid "Checked out on (hidden, unformatted)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:625
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:634
 #, fuzzy, c-format
 msgid "Checked out: "
 msgstr "Dipinjam ("
@@ -18055,8 +18060,8 @@ msgstr "%s Dipinjam (%s), "
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:522
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:647
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:523
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:656
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:64
 #, c-format
 msgid "Checking out to %s"
@@ -18121,7 +18126,7 @@ msgid "Checkout history for %s"
 msgstr ""
 
 #. %1$s:  patrons_to_anonymize.count | html 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:178
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:184
 #, fuzzy, c-format
 msgid "Checkout history for %s patrons will be anonymized "
 msgstr "%s %s Riwayat peminjaman untuk %s patron akan dibuat anonim"
@@ -18149,7 +18154,7 @@ msgstr ""
 msgid "Checkout or renew"
 msgstr "%s Dipinjam (%s), "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:539
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:540
 #, fuzzy, c-format
 msgid "Checkout settings"
 msgstr "Peminjaman"
@@ -18171,7 +18176,7 @@ msgid "Checkouts"
 msgstr "Peminjaman"
 
 #: intranet-tmpl/prog/en/includes/blocked-fines.inc:8
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:753
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:762
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:50
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:57
 #, c-format
@@ -18599,7 +18604,7 @@ msgstr ""
 msgid "Claim date"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:528
+#: intranet-tmpl/prog/en/includes/permissions.inc:531
 #, c-format
 msgid "Claim missing serials "
 msgstr ""
@@ -18630,8 +18635,8 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:724
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:731
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:859
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:866
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:868
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:875
 #, fuzzy, c-format
 msgid "Claim(s) "
 msgstr "%s Meminjam "
@@ -18742,13 +18747,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1148
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:443
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:559
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:560
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:135
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:738
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:279
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:357
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:158
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1061
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1067
 #, c-format
 msgid "Clear"
 msgstr "Hapus"
@@ -18841,7 +18846,7 @@ msgid "Clear on loan"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:516
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:517
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:124
 msgid "Clear screen"
 msgstr ""
@@ -18998,7 +19003,7 @@ msgstr ""
 
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:304
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:707
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
 msgid "Click to Expand this Tag"
 msgstr ""
 
@@ -19048,7 +19053,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:408
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:69
@@ -19064,7 +19069,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:299
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:201
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:803
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:809
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:256
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:408
 msgid "Clone this subfield"
@@ -19098,7 +19103,7 @@ msgstr "%s Catatan sirkulasi:"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:775
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:442
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:466
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:214
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:215
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:139
 #: intranet-tmpl/prog/en/modules/serials/subscription-renew.tt:24
 #: intranet-tmpl/prog/en/modules/serials/result.tt:62
@@ -19180,16 +19185,12 @@ msgstr ""
 msgid "Closed (%s)"
 msgstr "%s (%s)"
 
-#. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
-#, fuzzy
-msgid "Closed on %s"
-msgstr "%s %s - %s"
-
+#. For the first occurrence,
 #. %1$s:  invoiceclosedate | $KohaDates 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:71
+#: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
 #, fuzzy, c-format
-msgid "Closed on %s."
+msgid "Closed on %s"
 msgstr "%s %s - %s"
 
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:292
@@ -19209,7 +19210,7 @@ msgstr ""
 msgid "Club enrollments for "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:93
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:94
 #, fuzzy, c-format
 msgid "Club fields:"
 msgstr "#- Agen bibliografi nasional"
@@ -19245,7 +19246,7 @@ msgstr ""
 #. %1$s:  enrollments.count | html 
 #. %2$s:  enrollable.count | html 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:744
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:878
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:887
 #, fuzzy, c-format
 msgid "Clubs (%s/%s) "
 msgstr "%s (%s)"
@@ -19279,8 +19280,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:127
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:354
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1721
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1748
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
 #, c-format
 msgid "Code"
 msgstr ""
@@ -19520,7 +19521,7 @@ msgstr ""
 msgid "Columns settings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:167
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:168
 #, c-format
 msgid "Coming from"
 msgstr ""
@@ -19686,7 +19687,7 @@ msgstr ""
 msgid "Configure columns"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:598
+#: intranet-tmpl/prog/en/includes/permissions.inc:601
 #, fuzzy, c-format
 msgid "Configure plugins "
 msgstr "%s Ristriksi"
@@ -20371,7 +20372,7 @@ msgid ""
 "is correctly defined in koha-conf.xml. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:787
+#: intranet-tmpl/prog/en/modules/about.tt:793
 #, c-format
 msgid ""
 "Could not read the history.txt file. Please make sure &lt;docdir&gt; is "
@@ -20501,7 +20502,7 @@ msgstr "%s Numor kartu:"
 msgid "Course number:"
 msgstr "%s Numor kartu:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:49
+#: intranet-tmpl/prog/en/includes/permissions.inc:52
 #: intranet-tmpl/prog/en/includes/header.inc:48
 #: intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:9
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:20
@@ -20547,7 +20548,7 @@ msgstr "#- Agen bibliografi nasional"
 msgid "Create New"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:573
+#: intranet-tmpl/prog/en/includes/permissions.inc:576
 #, fuzzy, c-format
 msgid "Create SQL reports "
 msgstr "%s &rsaquo; Tag baru%s %s"
@@ -20577,7 +20578,7 @@ msgstr "Buat sebuah lis baru"
 msgid "Create a new record by importing the external (duplicate) record."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:533
+#: intranet-tmpl/prog/en/includes/permissions.inc:536
 #, fuzzy, c-format
 msgid "Create a new subscription "
 msgstr "%sTambah sebuah langganan yang baru%s ("
@@ -20598,12 +20599,12 @@ msgstr "%s Selalau menambah barang"
 msgid "Create analytics"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:643
+#: intranet-tmpl/prog/en/includes/permissions.inc:646
 #, fuzzy, c-format
 msgid "Create and edit club templates "
 msgstr "%sSunting%sBuat%s Susunan teks kartu patron"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:638
+#: intranet-tmpl/prog/en/includes/permissions.inc:641
 #, fuzzy, c-format
 msgid "Create and edit clubs "
 msgstr "Buat sebuah lis baru"
@@ -20623,7 +20624,7 @@ msgid ""
 "for the MARC editor."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:61
+#: intranet-tmpl/prog/en/includes/permissions.inc:64
 #, c-format
 msgid "Create and modify Interlibrary loan requests"
 msgstr ""
@@ -20732,7 +20733,7 @@ msgstr "Buat sebuah lis baru"
 msgid "Create patron list: "
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:453
+#: intranet-tmpl/prog/en/includes/permissions.inc:456
 #, c-format
 msgid "Create printable labels and barcodes from catalog and patron data "
 msgstr ""
@@ -20754,7 +20755,7 @@ msgstr ""
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:119
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:898
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:904
 #, c-format
 msgid "Create report from SQL"
 msgstr ""
@@ -20770,7 +20771,7 @@ msgstr ""
 msgid "Create routing list for "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:674
+#: intranet-tmpl/prog/en/includes/permissions.inc:677
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas "
 msgstr "Buat sebuah lis baru"
@@ -20834,7 +20835,7 @@ msgstr "%s Jenis jalan: "
 msgid "Credit type: "
 msgstr "%s Jenis jalan: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:761
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:770
 #, c-format
 msgid "Credits:"
 msgstr ""
@@ -21076,7 +21077,7 @@ msgstr ""
 msgid "Cyclical:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:727
+#: intranet-tmpl/prog/en/modules/about.tt:733
 #, c-format
 msgid "D&aelig;nsk (Danish)"
 msgstr ""
@@ -21117,7 +21118,7 @@ msgid "DVD video / Videodisc"
 msgstr "Video DVD / Diska video"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "Daily hold limit reached for patron"
 msgstr ""
 
@@ -21294,7 +21295,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:166
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:121
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:165
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:166
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:46
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:43
@@ -21312,7 +21313,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:70
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:191
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:193
-#: intranet-tmpl/prog/en/modules/about.tt:773
+#: intranet-tmpl/prog/en/modules/about.tt:779
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:30
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:162
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:350
@@ -21526,7 +21527,7 @@ msgstr "Jumlah yang berlebihan"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:272
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:116
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:150
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1051
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1057
 #, c-format
 msgid "Date:"
 msgstr "Tanggal:"
@@ -21611,8 +21612,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:95
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:287
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:373
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:917
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:992
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:923
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:998
 #, c-format
 msgid "Days"
 msgstr ""
@@ -21673,7 +21674,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:45
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:9
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:133
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:134
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:285
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:289
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:293
@@ -21842,7 +21843,7 @@ msgstr ""
 msgid "Define days when the library is closed"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:393
+#: intranet-tmpl/prog/en/includes/permissions.inc:396
 #, c-format
 msgid "Define days when the library is closed "
 msgstr ""
@@ -21884,7 +21885,7 @@ msgstr "%s Dari perpustakaan rumah "
 msgid "Define mappings"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:408
+#: intranet-tmpl/prog/en/includes/permissions.inc:411
 #, fuzzy, c-format
 msgid "Define notices "
 msgstr "%s Dari perpustakaan rumah "
@@ -22039,7 +22040,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:121
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:158
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:97
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:806
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:812
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:54
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:72
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:202
@@ -22062,7 +22063,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:73
 #: intranet-tmpl/prog/en/modules/reviews/reviewswaiting.tt:59
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:815
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:824
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:163
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:165
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:167
@@ -22154,7 +22155,7 @@ msgstr "%s %sebelum %s"
 msgid "Delete Images"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:568
+#: intranet-tmpl/prog/en/includes/permissions.inc:571
 #, fuzzy, c-format
 msgid "Delete SQL reports "
 msgstr "%s &rsaquo; Tag baru%s %s"
@@ -22180,12 +22181,12 @@ msgstr ""
 msgid "Delete all items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:273
+#: intranet-tmpl/prog/en/includes/permissions.inc:276
 #, fuzzy, c-format
 msgid "Delete all items at once "
 msgstr "Hapus lis"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:538
+#: intranet-tmpl/prog/en/includes/permissions.inc:541
 #, fuzzy, c-format
 msgid "Delete an existing subscription "
 msgstr "%sTambah sebuah langganan yang baru%s ("
@@ -22251,14 +22252,14 @@ msgstr "Hapus lis"
 msgid "Delete current subfield and copy to 'clipboard'"
 msgstr "Hapus lis"
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:212
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:239
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:213
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:240
 #, fuzzy, c-format
 msgid "Delete field"
 msgstr "Hapus lis"
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:119
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:164
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:120
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:165
 #, fuzzy, c-format
 msgid "Delete field:"
 msgstr "Hapus lis"
@@ -22322,31 +22323,31 @@ msgstr "%s Alamat:"
 msgid "Delete notice?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:388
+#: intranet-tmpl/prog/en/includes/permissions.inc:391
 #, c-format
 msgid ""
 "Delete old borrowers and anonymize circulation history (deletes borrower "
 "reading history) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:67
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:73
 #, c-format
 msgid "Delete patrons"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:158
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:164
 #, c-format
 msgid ""
 "Delete patrons directly from the database. Patron data will not be "
 "recoverable. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:70
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:76
 #, c-format
 msgid "Delete patrons who meet the following criteria:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:618
+#: intranet-tmpl/prog/en/includes/permissions.inc:621
 #, fuzzy, c-format
 msgid "Delete public lists "
 msgstr "Hapus lis"
@@ -22447,8 +22448,8 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:312
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:313
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:716
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:717
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:722
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:723
 msgid "Delete this Tag"
 msgstr ""
 
@@ -22490,7 +22491,7 @@ msgstr ""
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:806
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:812
 msgid "Delete this subfield"
 msgstr ""
 
@@ -22686,7 +22687,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:351
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:37
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:67
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:131
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:132
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:139
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:129
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:146
@@ -22708,7 +22709,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:167
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:149
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:774
+#: intranet-tmpl/prog/en/modules/about.tt:780
 #: intranet-tmpl/prog/en/modules/labels/label-manage.tt:70
 #, c-format
 msgid "Description"
@@ -22755,11 +22756,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:258
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:60
 #: intranet-tmpl/prog/en/modules/members/files.tt:72
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:56
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:106
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:151
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:200
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:227
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:57
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:107
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:152
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:201
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:228
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:54
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:73
 #: intranet-tmpl/prog/en/modules/admin/auth_subfields_structure.tt:232
@@ -22776,7 +22777,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep4.tt:33
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:40
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:170
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:82
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:83
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:77
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:334
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:82
@@ -22886,7 +22887,7 @@ msgstr "Perincian"
 msgid "Details of payment"
 msgstr "%s Dari perpustakaan manapun "
 
-#: intranet-tmpl/prog/en/modules/about.tt:734
+#: intranet-tmpl/prog/en/modules/about.tt:740
 #, c-format
 msgid ""
 "Deutsch (German) Friedrich zur Hellen, Robert Hillig, Katrin Fischer, Beda "
@@ -23070,17 +23071,18 @@ msgid "Display children too."
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:246
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:247
 msgid "Display detail for this authority"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:236
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:238
 msgid "Display detail for this biblio"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:256
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:257
 msgid "Display detail for this item"
 msgstr ""
 
@@ -23284,7 +23286,7 @@ msgstr ""
 msgid "Don't check out and print slip (P)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:589
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:598
 #, c-format
 msgid "Don't decrease checkout length based on holds"
 msgstr ""
@@ -23456,7 +23458,7 @@ msgstr ""
 msgid "Drop an image here"
 msgstr "%s berkas gambar"
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:153
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:154
 #, fuzzy, c-format
 msgid "Drop default"
 msgstr "Baku"
@@ -23574,7 +23576,7 @@ msgid "Duplicate patrons removed from batch number %s: %s"
 msgstr "%s Catatan sirkulasi: "
 
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:192
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:477
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:483
 #, c-format
 msgid "Duplicate record suspected"
 msgstr ""
@@ -23771,7 +23773,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:182
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:332
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:370
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:151
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:152
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:179
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:540
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:296
@@ -23865,7 +23867,7 @@ msgstr "%s (tidak aktif) %s %s"
 msgid "Edit SQL"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:977
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:983
 #, c-format
 msgid "Edit SQL report"
 msgstr ""
@@ -23886,7 +23888,7 @@ msgstr "#- Agen bibliografi nasional"
 msgid "Edit alert"
 msgstr "Sunting lis"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:543
+#: intranet-tmpl/prog/en/includes/permissions.inc:546
 #, fuzzy, c-format
 msgid "Edit an existing subscription "
 msgstr "%sTambah sebuah langganan yang baru%s ("
@@ -23898,7 +23900,7 @@ msgstr "%sTambah sebuah langganan yang baru%s ("
 msgid "Edit as new (duplicate)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:37
+#: intranet-tmpl/prog/en/includes/permissions.inc:40
 #, fuzzy, c-format
 msgid "Edit authorities"
 msgstr "#- Agen bibliografi nasional"
@@ -23926,7 +23928,7 @@ msgstr ""
 msgid "Edit basket group %s (%s) for "
 msgstr "%s %s %s Grup keranjang no. %s %s "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:134
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:135
 #, c-format
 msgid "Edit biblio"
 msgstr ""
@@ -23942,7 +23944,7 @@ msgstr "%s (tidak aktif) %s %s"
 msgid "Edit catalog (Modify bibliographic/holdings data)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:278
+#: intranet-tmpl/prog/en/includes/permissions.inc:281
 #, fuzzy, c-format
 msgid "Edit catalog (Modify bibliographic/holdings data) "
 msgstr "#- Agen bibliografi nasional"
@@ -23961,8 +23963,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:148
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:470
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:673
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:682
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:699
 #, fuzzy, c-format
 msgid "Edit details"
 msgstr "%s Catatan sirkulasi: "
@@ -24020,7 +24022,7 @@ msgstr "%s Selalau menambah barang"
 msgid "Edit items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:288
+#: intranet-tmpl/prog/en/includes/permissions.inc:291
 #, fuzzy, c-format
 msgid "Edit items "
 msgstr "%s Selalau menambah barang"
@@ -24080,7 +24082,7 @@ msgstr ""
 msgid "Edit quotes for QOTD feature"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:418
+#: intranet-tmpl/prog/en/includes/permissions.inc:421
 #, c-format
 msgid "Edit quotes for quote-of-the-day feature "
 msgstr ""
@@ -24229,7 +24231,7 @@ msgstr "Otoritas hasil pencarian"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:122
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:166
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:167
 #, c-format
 msgid "Edition"
 msgstr ""
@@ -24434,7 +24436,7 @@ msgstr ""
 msgid "End of interval"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:730
+#: intranet-tmpl/prog/en/modules/about.tt:736
 #, c-format
 msgid "English"
 msgstr ""
@@ -24459,7 +24461,7 @@ msgstr ""
 msgid "Enroll in "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:648
+#: intranet-tmpl/prog/en/includes/permissions.inc:651
 #, fuzzy, c-format
 msgid "Enroll patrons in clubs "
 msgstr "#- Agen bibliografi nasional"
@@ -24480,12 +24482,12 @@ msgstr ""
 msgid "Enrollment fee: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:142
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:143
 #, fuzzy, c-format
 msgid "Enrollment field"
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:134
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:135
 #, fuzzy, c-format
 msgid "Enrollment fields"
 msgstr "#- Agen bibliografi nasional"
@@ -24608,13 +24610,13 @@ msgstr ""
 msgid "Enter default values"
 msgstr "%s Catatan sirkulasi: "
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:525
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:526
 #, fuzzy, c-format
 msgid "Enter item barcode or keyword:"
 msgstr "#- Tidak ada upaya untuk memprogram"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:46
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:527
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:528
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:126
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:675
 #, c-format
@@ -24834,7 +24836,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:291
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:37
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:500
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:501
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:115
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:120
 #: intranet-tmpl/prog/en/modules/auth.tt:26
@@ -24947,7 +24949,7 @@ msgstr "%s %s %s %s Tidak ada %s"
 msgid "Escuela de Orientacion Lacaniana, Argentina"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:756
+#: intranet-tmpl/prog/en/modules/about.tt:762
 #, c-format
 msgid ""
 "Espa&ntilde;ol (Spanish) Bernardo González Kriegel, Héctor Castro and Tomás "
@@ -25048,7 +25050,7 @@ msgid "Example: Personal name=200|Entry element=210$a|300|009"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "Exceeded max holds per record"
 msgstr ""
 
@@ -25073,12 +25075,12 @@ msgstr ""
 msgid "Exclude last line (Rollup): "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:578
+#: intranet-tmpl/prog/en/includes/permissions.inc:581
 #, fuzzy, c-format
 msgid "Execute SQL reports "
 msgstr "%s &rsaquo; Tag baru%s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:93
+#: intranet-tmpl/prog/en/includes/permissions.inc:96
 #, fuzzy, c-format
 msgid "Execute overdue items report "
 msgstr "%s &rsaquo; Tag baru%s %s"
@@ -25088,7 +25090,7 @@ msgstr "%s &rsaquo; Tag baru%s %s"
 msgid "Existing SQL"
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:799
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:803
 #, c-format
 msgid "Existing holds"
 msgstr ""
@@ -25117,7 +25119,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/holds_table.inc:13
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1008
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:784
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:911
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:920
 #, c-format
 msgid "Expiration"
 msgstr ""
@@ -25149,8 +25151,8 @@ msgstr "%s Catatan sirkulasi: "
 #: intranet-tmpl/prog/en/includes/borrower_debarments.inc:63
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:136
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:146
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "Expiration:"
 msgstr ""
@@ -25274,7 +25276,7 @@ msgstr "#- Agen bibliografi nasional"
 msgid "Export authority records"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:423
+#: intranet-tmpl/prog/en/includes/permissions.inc:426
 #, fuzzy, c-format
 msgid "Export bibliographic and holdings data "
 msgstr "#- Agen bibliografi nasional"
@@ -25644,7 +25646,7 @@ msgstr ""
 msgid "Fast cataloging"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:298
+#: intranet-tmpl/prog/en/includes/permissions.inc:301
 #, fuzzy, c-format
 msgid "Fast cataloging "
 msgstr "Cas login"
@@ -25704,7 +25706,7 @@ msgid "Feedback:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/blocked-fines.inc:5
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:751
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:54
 #, c-format
 msgid "Fees &amp; Charges:"
@@ -25779,7 +25781,7 @@ msgid "Field 3"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:776
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:782
 #, fuzzy
 msgid "Field autofilled by plugin"
 msgstr "%s Ristriksi"
@@ -26035,7 +26037,7 @@ msgstr "Filmographies"
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:96
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:75
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:89
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1049
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1055
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:73
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:74
 #, c-format
@@ -26213,7 +26215,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:194
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:200
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:593
 msgid "Finish"
 msgstr "Selesai"
@@ -26477,7 +26479,7 @@ msgstr ""
 msgid "Force"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:83
+#: intranet-tmpl/prog/en/includes/permissions.inc:86
 #, c-format
 msgid "Force checkout if a limitation exists "
 msgstr ""
@@ -26597,7 +26599,7 @@ msgstr "%s Kerangka kerja "
 msgid "Framework description"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:732
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid "Fran&ccedil;ais (French) "
 msgstr ""
@@ -27015,7 +27017,7 @@ msgstr ""
 msgid "GST:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:733
+#: intranet-tmpl/prog/en/modules/about.tt:739
 #, c-format
 msgid "Galego (Galician) Ignacio Javier"
 msgstr ""
@@ -27303,12 +27305,12 @@ msgid ""
 msgstr ""
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1721
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
 msgid "Group code"
 msgstr ""
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1722
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
 msgid "Group name"
 msgstr ""
 
@@ -27788,7 +27790,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:47
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:779
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:906
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:98
 #, c-format
 msgid "Hold date"
@@ -28070,7 +28072,7 @@ msgstr ""
 msgid "Holds waiting over %s days: %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:769
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:778
 #, c-format
 msgid "Holds waiting:"
 msgstr ""
@@ -28204,7 +28206,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/linkitem.tt:8
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:25
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:21
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:452
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:458
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:13
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:9
@@ -28249,7 +28251,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/pay.tt:20
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:15
 #: intranet-tmpl/prog/en/modules/members/discharge.tt:16
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:15
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:16
@@ -28309,7 +28311,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:15
 #: intranet-tmpl/prog/en/modules/plugins/plugins-disabled.tt:12
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:12
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:21
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:22
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:13
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:14
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:25
@@ -28526,8 +28528,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:96
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:288
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:372
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:916
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:991
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:922
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:997
 #, c-format
 msgid "Hours"
 msgstr ""
@@ -28560,7 +28562,7 @@ msgstr ""
 msgid "How many issues do you want to receive?"
 msgstr "Apakah anda yakin ingin menghapus daftar ini?"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:154
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:160
 #, fuzzy, c-format
 msgid "How should patrons be deleted?"
 msgstr "%s%s %s0 %s patron akan dihapus"
@@ -28570,7 +28572,7 @@ msgstr "%s%s %s0 %s patron akan dihapus"
 msgid "How to process items: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:725
+#: intranet-tmpl/prog/en/modules/about.tt:731
 #, c-format
 msgid "Hrvatski (Croatian)"
 msgstr ""
@@ -28694,7 +28696,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:332
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:333
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:123
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:164
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:165
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:107
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:211
@@ -28871,7 +28873,7 @@ msgid ""
 "new one or overwrite the old one."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:67
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:68
 #, c-format
 msgid ""
 "If a template allows public enrollment, patrons can enroll in a club based "
@@ -28985,14 +28987,14 @@ msgstr ""
 msgid "If not, click here to start onboarding process."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:77
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:78
 #, c-format
 msgid ""
 "If set, a club based on this template can only be enrolled in by patrons "
 "with a valid email address."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:86
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:87
 #, c-format
 msgid ""
 "If set, only librarians logged in with this branch will be able to modify "
@@ -29410,7 +29412,7 @@ msgstr ""
 msgid "Import patron data"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:428
+#: intranet-tmpl/prog/en/includes/permissions.inc:431
 #, fuzzy, c-format
 msgid "Import patron data "
 msgstr "#- Agen bibliografi nasional"
@@ -29527,7 +29529,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:459
 #, fuzzy, c-format
 msgid "In your cart"
@@ -29639,7 +29641,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:76
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:232
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:542
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:701
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:705
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:62
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:105
 #, c-format
@@ -29660,12 +29662,12 @@ msgstr "Peminjaman"
 msgid "Inherit from system preferences"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:134
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:135
 #, fuzzy, c-format
 msgid "Initial float"
 msgstr "%s Inisial: "
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:99
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:100
 #, fuzzy, c-format
 msgid "Initial float: "
 msgstr "%s Inisial: "
@@ -30209,7 +30211,7 @@ msgid "Is hidden by default"
 msgstr "%sTersembunyi secara bawaan%sTerlihat%s"
 
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:193
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:478
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:484
 #, c-format
 msgid "Is this a duplicate of "
 msgstr ""
@@ -30298,7 +30300,7 @@ msgid ""
 "It is advisable to check for and resolve duplicate holds due to merging."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:742
+#: intranet-tmpl/prog/en/modules/about.tt:748
 #, c-format
 msgid ""
 "Italiano (Italian) for 3.2: Zeno Tajoli, Pietro Gozzetti and Paolo Pozzan; "
@@ -30332,7 +30334,7 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  loopro.object | html 
 #: intranet-tmpl/prog/en/modules/tools/viewlog.tt:235
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:256
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:257
 #, c-format
 msgid "Item %s"
 msgstr ""
@@ -30385,7 +30387,7 @@ msgstr ""
 msgid "Item cannot be renewed because it's an onsite checkout"
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:477
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:478
 #, c-format
 msgid "Item checked out"
 msgstr ""
@@ -30405,7 +30407,7 @@ msgid "Item count"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, fuzzy
 msgid "Item damaged"
 msgstr "Tanggal ditambahkan"
@@ -30618,7 +30620,7 @@ msgstr "%s Numor kartu:"
 msgid "Item processing:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:824
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:830
 #, fuzzy, c-format
 msgid "Item records"
 msgstr "# Rekaman"
@@ -30717,7 +30719,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:43
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:229
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:529
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:698
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:702
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:173
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:272
@@ -30963,7 +30965,7 @@ msgid "Items in batch number %s"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "Items in your cart: %s"
 msgstr ""
 
@@ -31037,6 +31039,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:137
 #, c-format
 msgid "January"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:717
+#: intranet-tmpl/prog/en/modules/about.tt:718
+#, c-format
+msgid "JavaScript Cookie"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:685
@@ -31188,7 +31196,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:178
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:156
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1056
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1062
 #, c-format
 msgid "Keyword:"
 msgstr ""
@@ -31812,7 +31820,7 @@ msgstr ""
 #. %6$s:  ELSIF op == 'delete_confirm' 
 #. %7$s:  cash_register.id | html 
 #. %8$s:  END 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:6
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:7
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Administration &rsaquo; Cash registers %s &rsaquo;%sModify "
@@ -33404,7 +33412,7 @@ msgstr "%sKoha &rsaquo; Perkakas &rsaquo; Label &rsaquo;: Pencarian%s "
 #. %2$s:  club_template.name | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:4
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:5
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Patron clubs &rsaquo; %s Modify club template "
@@ -33695,7 +33703,7 @@ msgstr ""
 msgid "Koha full call number"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:768
+#: intranet-tmpl/prog/en/modules/about.tt:774
 #, c-format
 msgid "Koha history timeline"
 msgstr ""
@@ -33740,7 +33748,7 @@ msgstr ""
 msgid "Koha offline circulation"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:52
+#: intranet-tmpl/prog/en/includes/permissions.inc:55
 #, c-format
 msgid "Koha plugins"
 msgstr ""
@@ -33797,7 +33805,7 @@ msgstr ""
 msgid "KohaAloha, New Zealand"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:732
+#: intranet-tmpl/prog/en/modules/about.tt:738
 #, c-format
 msgid "Kohala"
 msgstr ""
@@ -33987,7 +33995,7 @@ msgstr "Bahasa: "
 msgid "Languages"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:747
+#: intranet-tmpl/prog/en/modules/about.tt:753
 #, c-format
 msgid "Lao Anousak Anthony Souphavanh"
 msgstr ""
@@ -34140,7 +34148,7 @@ msgstr ""
 msgid "Late orders"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:746
+#: intranet-tmpl/prog/en/modules/about.tt:752
 #, c-format
 msgid "Latina (Latin)"
 msgstr ""
@@ -34369,7 +34377,7 @@ msgstr "%s (tidak aktif) %s %s "
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:52
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:36
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:132
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:133
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:49
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:32
@@ -34541,7 +34549,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:34
 #: intranet-tmpl/prog/en/modules/members/member.tt:210
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:658
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:81
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:82
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:69
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:281
 #: intranet-tmpl/prog/en/modules/auth.tt:76
@@ -34562,7 +34570,7 @@ msgstr "Perpustakaan:"
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:84
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep3.tt:52
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:185
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:86
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:87
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:72
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:293
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:407
@@ -34605,7 +34613,7 @@ msgstr ""
 msgid "Light Gray"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:448
+#: intranet-tmpl/prog/en/includes/permissions.inc:451
 #, c-format
 msgid ""
 "Limit batch item modification to subfields defined in the "
@@ -34618,7 +34626,7 @@ msgstr ""
 msgid "Limit collection code to: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:293
+#: intranet-tmpl/prog/en/includes/permissions.inc:296
 #, c-format
 msgid ""
 "Limit item modification to subfields defined in the "
@@ -34843,7 +34851,7 @@ msgid "List updated."
 msgstr "Nama lis"
 
 #: intranet-tmpl/prog/en/includes/cat-menu.inc:2
-#: intranet-tmpl/prog/en/includes/permissions.inc:55
+#: intranet-tmpl/prog/en/includes/permissions.inc:58
 #: intranet-tmpl/prog/en/includes/header.inc:33
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:41
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:334
@@ -34866,13 +34874,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:540
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:798
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:223
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:224
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:458
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:443
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:112
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:118
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 msgid "Loading"
 msgstr "Memuat"
 
@@ -34885,7 +34893,7 @@ msgstr "Memuat"
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:772
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:180
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:211
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:212
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:136
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:162
@@ -34932,7 +34940,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:173
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:15
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:446
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:452
 #, c-format
 msgid "Loading, please wait..."
 msgstr ""
@@ -34942,21 +34950,21 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
 #: intranet-tmpl/prog/en/includes/datatables.inc:5
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:244
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:861
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1022
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:885
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1056
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:175
 #, c-format
 msgid "Loading..."
 msgstr "Memuat..."
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:764
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:892
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:901
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "Memuat..."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1022
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1027
 msgid "Loading... you may continue scanning."
 msgstr ""
 
@@ -35109,7 +35117,7 @@ msgstr ""
 msgid "Log in as a different user"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:659
+#: intranet-tmpl/prog/en/includes/permissions.inc:662
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -35227,7 +35235,7 @@ msgstr ""
 msgid "Lost status: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:699
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:708
 #, c-format
 msgid "Lost: "
 msgstr ""
@@ -35277,7 +35285,7 @@ msgstr ""
 msgid "Lund University Library, Sweden"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:748
+#: intranet-tmpl/prog/en/modules/about.tt:754
 #, c-format
 msgid "M&#257;ori"
 msgstr ""
@@ -35425,8 +35433,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:160
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:131
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:186
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:132
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:187
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:381
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:255
@@ -35532,6 +35540,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:673
 #: intranet-tmpl/prog/en/modules/about.tt:706
 #: intranet-tmpl/prog/en/modules/about.tt:709
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#: intranet-tmpl/prog/en/modules/about.tt:718
 #, c-format
 msgid "MIT license"
 msgstr ""
@@ -35552,7 +35562,7 @@ msgstr ""
 msgid "Macros..."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:738
+#: intranet-tmpl/prog/en/modules/about.tt:744
 #, c-format
 msgid "Magyar (Hungarian)Agnes Imecs"
 msgstr ""
@@ -35612,7 +35622,7 @@ msgstr ""
 msgid "Make claim"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:155
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:156
 #, fuzzy, c-format
 msgid "Make default"
 msgstr "%s (%s days) "
@@ -35721,17 +35731,17 @@ msgstr "\" + _(\"Batal disatukan\") + \""
 msgid "Manage CSV export profiles"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:458
+#: intranet-tmpl/prog/en/includes/permissions.inc:461
 #, fuzzy, c-format
 msgid "Manage CSV export profiles "
 msgstr "%sMengolah berkas unggahan "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:213
+#: intranet-tmpl/prog/en/includes/permissions.inc:216
 #, fuzzy, c-format
 msgid "Manage Did you mean? configuration "
 msgstr "Riwayat pencarian"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:653
+#: intranet-tmpl/prog/en/includes/permissions.inc:656
 #, c-format
 msgid "Manage EDIFACT transmissions "
 msgstr ""
@@ -35746,7 +35756,7 @@ msgstr "\" + _(\"Batal disatukan\") + \""
 msgid "Manage Koha system settings (Administration panel)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:178
+#: intranet-tmpl/prog/en/includes/permissions.inc:181
 #, c-format
 msgid "Manage MARC bibliographic and authority frameworks and test them "
 msgstr ""
@@ -35756,7 +35766,7 @@ msgstr ""
 msgid "Manage MARC modification templates"
 msgstr "%s Catatan sirkulasi:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:243
+#: intranet-tmpl/prog/en/includes/permissions.inc:246
 #, c-format
 msgid "Manage Mana KB content sharing "
 msgstr ""
@@ -35766,12 +35776,12 @@ msgstr ""
 msgid "Manage OAI Sets"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:193
+#: intranet-tmpl/prog/en/includes/permissions.inc:196
 #, fuzzy, c-format
 msgid "Manage OAI sets "
 msgstr "\" + _(\"Batal disatukan\") + \""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:233
+#: intranet-tmpl/prog/en/includes/permissions.inc:236
 #, fuzzy, c-format
 msgid "Manage SMS cellular providers "
 msgstr "%s &rsaquo; %s"
@@ -35781,12 +35791,12 @@ msgstr "%s &rsaquo; %s"
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:208
+#: intranet-tmpl/prog/en/includes/permissions.inc:211
 #, fuzzy, c-format
 msgid "Manage Z39.50 and SRU server configuration "
 msgstr "Riwayat pencarian"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:108
+#: intranet-tmpl/prog/en/includes/permissions.inc:111
 #, fuzzy, c-format
 msgid "Manage account debit and credit types "
 msgstr "Hapus barang yang dipilih"
@@ -35797,7 +35807,7 @@ msgstr "Hapus barang yang dipilih"
 msgid "Manage additional fields"
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:228
+#: intranet-tmpl/prog/en/includes/permissions.inc:231
 #, c-format
 msgid ""
 "Manage additional fields for baskets or subscriptions (requires "
@@ -35811,54 +35821,54 @@ msgid ""
 "patron card layout."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:353
+#: intranet-tmpl/prog/en/includes/permissions.inc:356
 #, c-format
 msgid "Manage all baskets and order lines, regardless of restrictions on them "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:328
+#: intranet-tmpl/prog/en/includes/permissions.inc:331
 #, fuzzy, c-format
 msgid "Manage all funds "
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:223
+#: intranet-tmpl/prog/en/includes/permissions.inc:226
 #, fuzzy, c-format
 msgid "Manage audio alerts "
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:148
+#: intranet-tmpl/prog/en/includes/permissions.inc:151
 #, fuzzy, c-format
 msgid "Manage authorized value categories and authorized values "
 msgstr ""
 "%sModifikasi nilai otoritas%s %sNilai otoritas baru%s %sKategori baru%s "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:348
+#: intranet-tmpl/prog/en/includes/permissions.inc:351
 #, fuzzy, c-format
 msgid "Manage basket and order lines "
 msgstr "Dikelola oleh"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:343
+#: intranet-tmpl/prog/en/includes/permissions.inc:346
 #, fuzzy, c-format
 msgid "Manage basket groups "
 msgstr "%s %s %s Grup keranjang no. %s %s "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:368
+#: intranet-tmpl/prog/en/includes/permissions.inc:371
 #, fuzzy, c-format
 msgid "Manage budget plannings "
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:363
+#: intranet-tmpl/prog/en/includes/permissions.inc:366
 #, fuzzy, c-format
 msgid "Manage budgets "
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:113
-#: intranet-tmpl/prog/en/includes/permissions.inc:128
+#: intranet-tmpl/prog/en/includes/permissions.inc:116
+#: intranet-tmpl/prog/en/includes/permissions.inc:131
 #, fuzzy, c-format
 msgid "Manage circulation rules "
 msgstr "%s Catatan sirkulasi: "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:118
+#: intranet-tmpl/prog/en/includes/permissions.inc:121
 #, c-format
 msgid ""
 "Manage circulation rules for any library. If not set the logged in user can "
@@ -35866,27 +35876,27 @@ msgid ""
 "manage_circ_rules is still required) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:173
+#: intranet-tmpl/prog/en/includes/permissions.inc:176
 #, fuzzy, c-format
 msgid "Manage cities and towns "
 msgstr "Dikelola oleh"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:183
+#: intranet-tmpl/prog/en/includes/permissions.inc:186
 #, fuzzy, c-format
 msgid "Manage classification sources and filing rules "
 msgstr "%s (tidak aktif) %s %s "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:218
+#: intranet-tmpl/prog/en/includes/permissions.inc:221
 #, fuzzy, c-format
 msgid "Manage column configuration "
 msgstr "Riwayat pencarian"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:338
+#: intranet-tmpl/prog/en/includes/permissions.inc:341
 #, fuzzy, c-format
 msgid "Manage contracts "
 msgstr "%s Catatan kontak: "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:378
+#: intranet-tmpl/prog/en/includes/permissions.inc:381
 #, fuzzy, c-format
 msgid "Manage currencies and exchange rates "
 msgstr "%s Alamat:"
@@ -35896,7 +35906,7 @@ msgstr "%s Alamat:"
 msgid "Manage custom fields for item search."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:158
+#: intranet-tmpl/prog/en/includes/permissions.inc:161
 #, fuzzy, c-format
 msgid "Manage extended patron attributes "
 msgstr "%s %stidak memiliki denda yang berlebihan. "
@@ -35906,12 +35916,12 @@ msgstr "%s %stidak memiliki denda yang berlebihan. "
 msgid "Manage frequencies "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:323
+#: intranet-tmpl/prog/en/includes/permissions.inc:326
 #, fuzzy, c-format
 msgid "Manage funds "
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:133
+#: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, fuzzy, c-format
 msgid "Manage global system preferences "
 msgstr "%sModifikasi %sTambah %s sebuah preferensi sistem"
@@ -35944,17 +35954,17 @@ msgstr ""
 msgid "Manage invoice files"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:168
+#: intranet-tmpl/prog/en/includes/permissions.inc:171
 #, fuzzy, c-format
 msgid "Manage item circulation alerts "
 msgstr "%s Catatan sirkulasi: "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:198
+#: intranet-tmpl/prog/en/includes/permissions.inc:201
 #, fuzzy, c-format
 msgid "Manage item search fields "
 msgstr "%s Numor kartu: "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, fuzzy, c-format
 msgid "Manage item types "
 msgstr "Semua jenis barang"
@@ -35969,12 +35979,12 @@ msgstr "\" + _(\"Batal disatukan\") + \""
 msgid "Manage items assigned to "
 msgstr "Dikelola oleh"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:248
+#: intranet-tmpl/prog/en/includes/permissions.inc:251
 #, c-format
 msgid "Manage keyboard shortcuts for the advanced cataloging editor "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:138
+#: intranet-tmpl/prog/en/includes/permissions.inc:141
 #, fuzzy, c-format
 msgid "Manage libraries and library groups "
 msgstr "%s (tidak aktif) %s %s "
@@ -35984,7 +35994,7 @@ msgstr "%s (tidak aktif) %s %s "
 msgid "Manage library EDI EANs"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:163
+#: intranet-tmpl/prog/en/includes/permissions.inc:166
 #, c-format
 msgid "Manage library transfer limits and transport cost matrix "
 msgstr ""
@@ -35994,7 +36004,7 @@ msgstr ""
 msgid "Manage lists of patrons."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:473
+#: intranet-tmpl/prog/en/includes/permissions.inc:476
 #, fuzzy, c-format
 msgid "Manage marc modification templates "
 msgstr "%s Catatan sirkulasi:"
@@ -36009,7 +36019,7 @@ msgstr ""
 msgid "Manage orders"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:153
+#: intranet-tmpl/prog/en/includes/permissions.inc:156
 #, fuzzy, c-format
 msgid "Manage patron categories "
 msgstr "Dikelola oleh"
@@ -36035,17 +36045,17 @@ msgstr ""
 msgid "Manage plugins"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:603
+#: intranet-tmpl/prog/en/includes/permissions.inc:606
 #, c-format
 msgid "Manage plugins ( install / uninstall ) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:313
+#: intranet-tmpl/prog/en/includes/permissions.inc:316
 #, fuzzy, c-format
 msgid "Manage purchase suggestions "
 msgstr "Saran pembelian baru"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:188
+#: intranet-tmpl/prog/en/includes/permissions.inc:191
 #, fuzzy, c-format
 msgid "Manage record matching rules "
 msgstr "%s Alamat:"
@@ -36056,7 +36066,7 @@ msgstr "%s Alamat:"
 msgid "Manage request"
 msgstr "\" + _(\"Batal disatukan\") + \""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:88
+#: intranet-tmpl/prog/en/includes/permissions.inc:91
 #, fuzzy, c-format
 msgid "Manage restrictions for accounts "
 msgstr "%s Catatan kontak: "
@@ -36066,7 +36076,7 @@ msgstr "%s Catatan kontak: "
 msgid "Manage rotating collections"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:498
+#: intranet-tmpl/prog/en/includes/permissions.inc:501
 #, fuzzy, c-format
 msgid "Manage rotating collections "
 msgstr "%s Alamat:"
@@ -36077,12 +36087,12 @@ msgid ""
 "Manage rules for automatically matching MARC records during record imports."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:203
+#: intranet-tmpl/prog/en/includes/permissions.inc:206
 #, fuzzy, c-format
 msgid "Manage search engine configuration "
 msgstr "Riwayat pencarian"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:40
+#: intranet-tmpl/prog/en/includes/permissions.inc:43
 #, fuzzy, c-format
 msgid "Manage serial subscriptions"
 msgstr "%s &nbsp; %s Deskripsi:"
@@ -36111,12 +36121,12 @@ msgstr ""
 msgid "Manage stages"
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:67
+#: intranet-tmpl/prog/en/includes/permissions.inc:70
 #, c-format
 msgid "Manage stockrotation operations"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:563
+#: intranet-tmpl/prog/en/includes/permissions.inc:566
 #, c-format
 msgid ""
 "Manage subscriptions from any branch (only applies when IndependentBranches "
@@ -36133,12 +36143,12 @@ msgstr ""
 msgid "Manage templates for modifying MARC records during import."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:628
+#: intranet-tmpl/prog/en/includes/permissions.inc:631
 #, fuzzy, c-format
 msgid "Manage uploaded files ("
 msgstr "%sMengolah berkas unggahan "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:238
+#: intranet-tmpl/prog/en/includes/permissions.inc:241
 #, fuzzy, c-format
 msgid "Manage usage statistics settings "
 msgstr "%s &rsaquo; Hasil%s "
@@ -36148,7 +36158,7 @@ msgstr "%s &rsaquo; Hasil%s "
 msgid "Manage vendor EDI accounts for import/export"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:373
+#: intranet-tmpl/prog/en/includes/permissions.inc:376
 #, fuzzy, c-format
 msgid "Manage vendors "
 msgstr "Dikelola oleh"
@@ -36186,7 +36196,7 @@ msgstr "Dikelola oleh"
 msgid "Managed staged MARC records, including completing and reversing imports"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:468
+#: intranet-tmpl/prog/en/includes/permissions.inc:471
 #, c-format
 msgid ""
 "Managed staged MARC records, including completing and reversing imports "
@@ -36293,7 +36303,7 @@ msgstr ""
 msgid "March"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:103
+#: intranet-tmpl/prog/en/includes/permissions.inc:106
 #, c-format
 msgid "Mark checkout notes as seen/not seen "
 msgstr ""
@@ -36686,7 +36696,7 @@ msgid "Message subject:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:81
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:798
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:807
 #, c-format
 msgid "Messages:"
 msgstr ""
@@ -36754,8 +36764,8 @@ msgid "Minute"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:371
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:921
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:996
 #, c-format
 msgid "Minutes"
 msgstr ""
@@ -36853,7 +36863,7 @@ msgstr ""
 msgid "Modal title"
 msgstr "Judul serial"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:478
+#: intranet-tmpl/prog/en/includes/permissions.inc:481
 #, fuzzy, c-format
 msgid "Moderate patron comments "
 msgstr "#- Agen bibliografi nasional"
@@ -36868,7 +36878,7 @@ msgstr ""
 msgid "Moderate patron tags"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:483
+#: intranet-tmpl/prog/en/includes/permissions.inc:486
 #, fuzzy, c-format
 msgid "Moderate patron tags "
 msgstr "#- Agen bibliografi nasional"
@@ -36986,12 +36996,12 @@ msgstr "#- Agen bibliografi nasional"
 msgid "Modify filing rule"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:333
+#: intranet-tmpl/prog/en/includes/permissions.inc:336
 #, c-format
 msgid "Modify funds (can't create lines, but can modify existing ones) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:263
+#: intranet-tmpl/prog/en/includes/permissions.inc:266
 #, c-format
 msgid "Modify holds priority "
 msgstr ""
@@ -37205,8 +37215,8 @@ msgstr ""
 #. IMG
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:332
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:334
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:735
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:737
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:741
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:743
 msgid "Move Up"
 msgstr ""
 
@@ -37271,7 +37281,7 @@ msgstr ""
 msgid "Move hold up"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:165
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:171
 #, c-format
 msgid ""
 "Move patrons to the deleted patrons table. They can be deleted permanently "
@@ -37283,7 +37293,7 @@ msgstr ""
 msgid "Move remaining unspent funds"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:164
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:170
 #, c-format
 msgid "Move these patrons to the trash"
 msgstr ""
@@ -37442,7 +37452,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:35
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:49
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:66
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:130
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:131
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:145
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:63
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:190
@@ -37451,8 +37461,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:144
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:88
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:66
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1722
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1749
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1729
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 #, c-format
 msgid "Name"
 msgstr ""
@@ -37529,11 +37539,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:128
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:51
 #: intranet-tmpl/prog/en/modules/serials/subscription-numberpatterns.tt:56
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:50
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:101
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:146
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:195
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:222
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:51
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:102
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:147
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:196
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:223
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:48
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:129
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:79
@@ -37548,7 +37558,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:285
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:213
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep1.tt:27
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:76
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:77
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:107
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:73
 #: intranet-tmpl/prog/en/modules/admin/additional-fields.tt:129
@@ -37599,12 +37609,12 @@ msgstr ""
 msgid "Near East University"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:729
+#: intranet-tmpl/prog/en/modules/about.tt:735
 #, c-format
 msgid "Nederlands-Belgi&euml; (Dutch-Belgium)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:728
+#: intranet-tmpl/prog/en/modules/about.tt:734
 #, c-format
 msgid "Nederlands-Nederland (Dutch-The Netherlands) Sponsored by Rijksmuseum"
 msgstr ""
@@ -37793,7 +37803,7 @@ msgstr ""
 msgid "New budget-parent is beneath budget"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:118
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:119
 #, c-format
 msgid "New cash register"
 msgstr ""
@@ -37827,7 +37837,7 @@ msgstr ""
 msgid "New club "
 msgstr "%s Meminjam "
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:190
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:191
 #, fuzzy, c-format
 msgid "New club field"
 msgstr "%s Meminjam "
@@ -37881,7 +37891,7 @@ msgstr ""
 msgid "New document"
 msgstr "%s pengiriman"
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:217
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:218
 #, fuzzy, c-format
 msgid "New enrollment field"
 msgstr "#- Agen bibliografi nasional"
@@ -38215,7 +38225,7 @@ msgid "Next &gt;&gt;"
 msgstr "Berikutnya &gt;&gt;"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:133
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:139
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:380
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:405
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:457
@@ -38335,10 +38345,10 @@ msgstr "%s : %s "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
 #, c-format
 msgid "No (default)"
 msgstr ""
@@ -38520,7 +38530,7 @@ msgid "No color"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 msgid "No columns selected!"
 msgstr ""
 
@@ -38536,7 +38546,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:59
+#: intranet-tmpl/prog/en/includes/js_includes.inc:60
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:406
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:416
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:158
@@ -38686,12 +38696,12 @@ msgid "No item matches this barcode"
 msgstr "#- Tidak ada upaya untuk memprogram"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "No item was added to your cart (already in your cart)!"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "No item was selected"
 msgstr "Tidak ada barang yang dipilih"
 
@@ -38721,7 +38731,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:285
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:329
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:754
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:758
 #, c-format
 msgid "No items are available"
 msgstr ""
@@ -38772,7 +38782,7 @@ msgid "No limit"
 msgstr "Tidak ada batas"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:267
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:268
 #, c-format
 msgid "No log found %s for "
 msgstr ""
@@ -38814,7 +38824,7 @@ msgid "No matching records found"
 msgstr "Tidak ditemukan catatan yang cocok"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 #, fuzzy
 msgid "No matching reports found"
 msgstr "%s Menambah barang hanya jika cocok dengan bib yang ditemukan"
@@ -38876,7 +38886,7 @@ msgstr "#- Agen bibliografi nasional"
 msgid "No patron cardnumber in offline database (proceeding anyway): %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:482
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:483
 #, c-format
 msgid "No patron matched "
 msgstr ""
@@ -38886,17 +38896,17 @@ msgstr ""
 msgid "No patron may put this book on hold."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:206
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:212
 #, fuzzy, c-format
 msgid "No patron records have been actually removed"
 msgstr "%s patron telah berhasil dihapus"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:221
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:227
 #, c-format
 msgid "No patron records have been anonymized"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:215
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:221
 #, c-format
 msgid "No patron records have been removed"
 msgstr ""
@@ -39038,7 +39048,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist-auth.tt:39
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:279
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:150
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:151
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:30
 #, c-format
 msgid "No results found"
@@ -39200,8 +39210,8 @@ msgstr ""
 msgid "No, let me think about it"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:492
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:494
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:498
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:500
 #, fuzzy, c-format
 msgid "No, save as new record"
 msgstr "%s Numor kartu:"
@@ -39289,7 +39299,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:132
 #: intranet-tmpl/prog/en/includes/auth-finder-search.inc:134
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:198
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:199
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:53
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:123
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:144
@@ -39324,7 +39334,7 @@ msgid "None defined"
 msgstr "%s %sTidak satupun dinyatakan"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "None of these items can normally be put on hold for this patron."
 msgstr ""
 
@@ -39394,12 +39404,12 @@ msgstr ""
 msgid "Normalization rule: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:739
+#: intranet-tmpl/prog/en/modules/about.tt:745
 #, c-format
 msgid "Norsk Bokmål (Norwegian) Axel Bojer and Thomas Gramstad"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:740
+#: intranet-tmpl/prog/en/modules/about.tt:746
 #, c-format
 msgid "Norsk Nynorsk (Norwegian) Unni Knutsen and Marit Kristine Ådland"
 msgstr ""
@@ -39501,7 +39511,7 @@ msgid "Not for loan"
 msgstr ""
 
 #. %1$s:  AuthorisedValues.GetByCode( 'NOT_LOAN', itemloo.notforloan ) | html 
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:673
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:677
 #, fuzzy, c-format
 msgid "Not for loan (%s)"
 msgstr "%s %s Tidak sedang dipesan %s "
@@ -39526,7 +39536,7 @@ msgid "Not for loan: "
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, fuzzy
 msgid "Not holdable"
 msgstr "%s Tidak ada pesan pinjam yang diizinkan"
@@ -39763,13 +39773,13 @@ msgstr "Catatan/Komentar"
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:178
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:369
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:421
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:792
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:801
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:573
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:628
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:721
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:920
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:955
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:995
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:961
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1001
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:121
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:281
 #, c-format
@@ -40553,8 +40563,8 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:604
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:606
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:613
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:615
 #, fuzzy, c-format
 msgid "On-site checkout"
 msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
@@ -40564,7 +40574,7 @@ msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
 msgid "On-site checkouts"
 msgstr "%s Meminjam"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:598
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:607
 #, c-format
 msgid "On-site checkouts only. Automatic due date: "
 msgstr ""
@@ -40606,7 +40616,7 @@ msgid "One or more selected items cannot be placed on hold."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "One or more selected items cannot be reserved."
 msgstr ""
 
@@ -40657,7 +40667,7 @@ msgstr "%s Selalau menambah barang"
 msgid "Only items currently available:"
 msgstr "%s tidak tersedia:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:653
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:662
 #, c-format
 msgid "Only on-site checkouts are allowed"
 msgstr ""
@@ -40680,6 +40690,7 @@ msgstr ""
 msgid "Opac notes:"
 msgstr "Catatan"
 
+#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:76
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:299
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:300
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:304
@@ -40732,11 +40743,6 @@ msgstr "Sembunyikan jendela"
 #, c-format
 msgid "Open on:"
 msgstr ""
-
-#: intranet-tmpl/prog/en/modules/acqui/invoice.tt:76
-#, fuzzy, c-format
-msgid "Open."
-msgstr "%s ."
 
 #: intranet-tmpl/prog/en/modules/about.tt:637
 #, c-format
@@ -41244,7 +41250,7 @@ msgstr ""
 msgid "Overdues with fines"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:732
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
 #, c-format
 msgid "Overdues: Patron has ITEMS OVERDUE."
 msgstr ""
@@ -41258,7 +41264,7 @@ msgstr ""
 msgid "Override and renew"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:98
+#: intranet-tmpl/prog/en/includes/permissions.inc:101
 #, c-format
 msgid "Override blocked renewals "
 msgstr ""
@@ -41274,7 +41280,7 @@ msgstr ""
 msgid "Override renewal restrictions:"
 msgstr "%s Ristriksi"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:725
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:734
 #, c-format
 msgid "Override restriction temporarily"
 msgstr ""
@@ -41614,7 +41620,7 @@ msgid "Patron activity"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, fuzzy
 msgid "Patron already has hold for this item"
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
@@ -41724,9 +41730,9 @@ msgid "Patron category: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:17
-#: intranet-tmpl/prog/en/includes/permissions.inc:58
+#: intranet-tmpl/prog/en/includes/permissions.inc:61
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:28
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:15
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:23
@@ -41799,7 +41805,7 @@ msgstr ""
 #. %1$s:  IF ( creditsamount ) 
 #. %2$s:  creditsamount | $Price 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:761
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:770
 #, c-format
 msgid "Patron has a credit%s of %s%s "
 msgstr ""
@@ -41847,7 +41853,7 @@ msgid "Patron has nothing checked out."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:824
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:951
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:960
 #, c-format
 msgid "Patron has nothing on hold."
 msgstr ""
@@ -41875,14 +41881,14 @@ msgid "Patron has outstanding fines: %s"
 msgstr "%s %stidak memiliki denda yang berlebihan. "
 
 #. %1$s:  IF CAN_user_borrowers_edit_borrowers && ( !Koha.Preference('IndependentBranchesPatronModifications') || borrower.branch == branch ) 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:663
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
 #, fuzzy, c-format
 msgid "Patron has pending modifications. %s "
 msgstr "%s %stidak memiliki denda yang berlebihan. "
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:268
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:307
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:737
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:741
 #, fuzzy, c-format
 msgid "Patron has previously checked out this title"
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
@@ -41940,7 +41946,7 @@ msgid "Patron is currently unrestricted."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, fuzzy
 msgid "Patron is from different library"
 msgstr "%s Dari perpustakaan manapun "
@@ -42013,7 +42019,7 @@ msgid "Patron not found."
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:972
 #, fuzzy, c-format
 msgid "Patron not found. "
 msgstr "%s %sTag %s Sub-bagian batsan %s %s %s %s "
@@ -42075,7 +42081,7 @@ msgstr "%s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 msgid "Patron number: "
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:836
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:842
 #, fuzzy, c-format
 msgid "Patron records"
 msgstr "#- Agen bibliografi nasional"
@@ -42163,13 +42169,13 @@ msgstr "%s %stidak memiliki denda yang berlebihan. "
 #. %3$s:  END 
 #. %4$s:  IF ( patron.debarredcomment ) 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:111
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:704
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:713
 #, c-format
 msgid "Patron's account is restricted %s until %s %s %s with the explanation: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:169
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:704
 #, c-format
 msgid "Patron's address in doubt"
 msgstr ""
@@ -42213,7 +42219,7 @@ msgstr ""
 #. %1$s:  IF ( expiry ) 
 #. %2$s:  expiry | $KohaDates 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:686
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:695
 #, c-format
 msgid "Patron's card has expired. %s Patron's card expired on %s %s "
 msgstr ""
@@ -42234,7 +42240,7 @@ msgid "Patron's card is expired."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:368
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:699
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:708
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:229
 #, c-format
 msgid "Patron's card is lost"
@@ -42248,7 +42254,7 @@ msgstr "%s Catatan sirkulasi: "
 #. For the first occurrence,
 #. %1$s:  expiry | $KohaDates 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:146
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:681
 #, c-format
 msgid "Patron's card will expire soon. Patron's card expires on %s "
 msgstr ""
@@ -42261,7 +42267,7 @@ msgstr ""
 
 #. %1$s:  chargesamount_guarantees | $Price 
 #. %2$s:  IF noissues 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:751
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:760
 #, c-format
 msgid "Patron's guarantees collectively owe %s. %s "
 msgstr ""
@@ -42459,7 +42465,7 @@ msgid "Pay all fines"
 msgstr ""
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:143
+#: intranet-tmpl/prog/en/modules/members/pay.tt:137
 msgid "Pay amount"
 msgstr ""
 
@@ -42496,7 +42502,7 @@ msgid "Pay fines for %s %s"
 msgstr ""
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:144
+#: intranet-tmpl/prog/en/modules/members/pay.tt:138
 msgid "Pay selected"
 msgstr ""
 
@@ -42548,7 +42554,7 @@ msgstr ""
 msgid "Pending holds"
 msgstr "Mengirim lis anda"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:663
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:672
 #, fuzzy, c-format
 msgid "Pending modifications:"
 msgstr "%s rekaman yang dihapus."
@@ -42598,27 +42604,27 @@ msgstr ""
 msgid "Perform a new search"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:438
+#: intranet-tmpl/prog/en/includes/permissions.inc:441
 #, fuzzy, c-format
 msgid "Perform batch deletion of items "
 msgstr "%s rekaman yang dihapus."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:488
+#: intranet-tmpl/prog/en/includes/permissions.inc:491
 #, c-format
 msgid "Perform batch deletion of records (bibliographic or authority) "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:443
+#: intranet-tmpl/prog/en/includes/permissions.inc:446
 #, fuzzy, c-format
 msgid "Perform batch modification of items "
 msgstr "%s rekaman yang dihapus."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:413
+#: intranet-tmpl/prog/en/includes/permissions.inc:416
 #, fuzzy, c-format
 msgid "Perform batch modification of patrons "
 msgstr "%s rekaman yang dihapus."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:493
+#: intranet-tmpl/prog/en/includes/permissions.inc:496
 #, fuzzy, c-format
 msgid "Perform batch modification of records (biblios or authorities) "
 msgstr "%s rekaman yang dihapus."
@@ -42628,12 +42634,12 @@ msgstr "%s rekaman yang dihapus."
 msgid "Perform inventory of your catalog"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:433
+#: intranet-tmpl/prog/en/includes/permissions.inc:436
 #, c-format
 msgid "Perform inventory of your catalog "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:664
+#: intranet-tmpl/prog/en/includes/permissions.inc:667
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42689,12 +42695,12 @@ msgstr "%s Dari perpustakaan manapun "
 msgid "Permanent shelving location"
 msgstr "Lokasi rak"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:123
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:129
 #, c-format
 msgid "Permanently delete checkout history older than"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:157
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:163
 #, c-format
 msgid "Permanently delete these patrons"
 msgstr ""
@@ -42759,7 +42765,7 @@ msgid "Pick up location"
 msgstr "Lokasi penerbit"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:783
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:910
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:919
 #, c-format
 msgid "Pickup at"
 msgstr ""
@@ -42851,10 +42857,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:491
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:493
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:495
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:774
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:776
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:779
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:781
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:778
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:780
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:783
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:785
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:15
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:152
 #, c-format
@@ -42887,16 +42893,16 @@ msgid "Place hold for %s %s (%s)"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "Place hold on this item?"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "Place hold?"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:268
+#: intranet-tmpl/prog/en/includes/permissions.inc:271
 #, fuzzy, c-format
 msgid "Place holds for patrons "
 msgstr "Mencari:"
@@ -43015,7 +43021,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:247
 msgid "Please check at least one action"
 msgstr ""
 
@@ -43027,7 +43033,7 @@ msgstr ""
 #. %1$s:  ELSIF ( error.cache_expiry ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1022
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1028
 #, c-format
 msgid ""
 "Please check the log for further details. %sPlease select a cache expiry "
@@ -43171,7 +43177,7 @@ msgid "Please enter a "
 msgstr "Masukkan kategori pencarian"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:247
 #, fuzzy
 msgid "Please enter a date!"
 msgstr "Masukkan kategori pencarian"
@@ -43266,7 +43272,7 @@ msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:247
 msgid "Please enter at least one criterion for deletion!"
 msgstr ""
 
@@ -43441,7 +43447,7 @@ msgid "Please return this item to %s "
 msgstr "Anda harus memilih paling sedikit satu barang, "
 
 #. %1$s:  ELSIF ( error.queryerr ) 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1021
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
 #, c-format
 msgid ""
 "Please return to the &quot;Saved Reports&quot; screen and delete this report "
@@ -43697,7 +43703,7 @@ msgstr ""
 msgid "Policy for %s: %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:752
+#: intranet-tmpl/prog/en/modules/about.tt:758
 #, c-format
 msgid "Polski (Polish)"
 msgstr ""
@@ -43740,7 +43746,7 @@ msgstr ""
 msgid "Port: "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:753
+#: intranet-tmpl/prog/en/modules/about.tt:759
 #, c-format
 msgid "Portugu&ecirc;s (Portuguese)"
 msgstr ""
@@ -43890,7 +43896,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/str/tinymce_i18n.inc:1
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:452
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:177
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:209
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:133
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:112
 #, c-format
@@ -44142,7 +44148,7 @@ msgid "Print slip "
 msgstr "Cetak lis"
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:517
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:518
 #, fuzzy
 msgid "Print slip and clear screen"
 msgstr "#- Agen bibliografi nasional"
@@ -44248,8 +44254,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/holds_table.inc:5
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:785
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:231
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:700
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:912
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:704
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:921
 #, c-format
 msgid "Priority"
 msgstr "Prioritas"
@@ -44540,7 +44546,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:252
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:511
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:721
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:725
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:277
 #, c-format
 msgid "Publication year:"
@@ -45018,7 +45024,7 @@ msgstr ""
 msgid "Receive items from : %s %s[%s] %s (order #%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:358
+#: intranet-tmpl/prog/en/includes/permissions.inc:361
 #, fuzzy, c-format
 msgid "Receive orders and manage shipments "
 msgstr "%s Menerima permintaan dari %s %s "
@@ -45393,17 +45399,17 @@ msgstr "Relevansi"
 msgid "Religious organization"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:78
+#: intranet-tmpl/prog/en/includes/permissions.inc:81
 #, fuzzy, c-format
 msgid "Remaining circulation permissions "
 msgstr "%s Catatan sirkulasi:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:303
+#: intranet-tmpl/prog/en/includes/permissions.inc:306
 #, c-format
 msgid "Remaining permissions for managing fines and fees "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:123
+#: intranet-tmpl/prog/en/includes/permissions.inc:126
 #, fuzzy, c-format
 msgid "Remaining system parameters permissions "
 msgstr "%s Catatan sirkulasi:"
@@ -45413,7 +45419,7 @@ msgstr "%s Catatan sirkulasi:"
 msgid "Remember due date for next check in"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:553
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:554
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:133
 #, c-format
 msgid "Remember for session:"
@@ -45520,7 +45526,7 @@ msgstr "Edisi-edisi"
 msgid "Remove condition"
 msgstr "Edisi-edisi"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:588
+#: intranet-tmpl/prog/en/includes/permissions.inc:591
 #, fuzzy, c-format
 msgid "Remove course reserves "
 msgstr "%s %sebelum %s"
@@ -45651,8 +45657,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:470
 #: intranet-tmpl/prog/en/modules/circ/renew.tt:169
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:29
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:673
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:682
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:699
 #, c-format
 msgid "Renew"
 msgstr "Memperbarui"
@@ -45668,7 +45674,7 @@ msgstr ""
 msgid "Renew #%s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:553
+#: intranet-tmpl/prog/en/includes/permissions.inc:556
 #, fuzzy, c-format
 msgid "Renew a subscription "
 msgstr "%s &nbsp; %s Deskripsi:"
@@ -45828,8 +45834,8 @@ msgstr ""
 #. A
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:308
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:309
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:712
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:718
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:719
 msgid "Repeat this Tag"
 msgstr ""
 
@@ -45965,17 +45971,17 @@ msgid ""
 "%s)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1703
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1710
 #, fuzzy, c-format
 msgid "Report group:"
 msgstr "%s Numor kartu:"
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
 #, c-format
 msgid "Report is public:"
 msgstr ""
@@ -45992,13 +45998,13 @@ msgstr "#- Agen bibliografi nasional"
 msgid "Report name"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:900
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:906
 #, c-format
 msgid "Report name:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
 #, c-format
 msgid "Report name: "
 msgstr ""
@@ -46011,7 +46017,7 @@ msgstr ""
 msgid "Report plugins"
 msgstr "%s Ristriksi"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1725
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1732
 #, fuzzy, c-format
 msgid "Report subgroup:"
 msgstr "%s Numor kartu:"
@@ -46146,7 +46152,7 @@ msgstr "Artikel legal"
 msgid "Requested item type"
 msgstr "Artikel legal"
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:71
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:72
 #, fuzzy, c-format
 msgid "Require valid email address:"
 msgstr "%s Numor kartu: "
@@ -46267,7 +46273,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:287
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:500
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:204
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:798
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:804
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:43
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:259
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:411
@@ -46312,7 +46318,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:258
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:284
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:310
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:52
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:53
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:50
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:45
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep5.tt:56
@@ -46347,7 +46353,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:151
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:240
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:308
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:78
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:79
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:59
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:62
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:67
@@ -46410,10 +46416,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:214
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:626
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:902
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:926
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:979
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1002
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:908
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:932
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:985
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1008
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:276
 #: intranet-tmpl/prog/en/modules/services/itemrecorddisplay.tt:33
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:42
@@ -46544,7 +46550,7 @@ msgstr ""
 msgid "Responses enabled: "
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:160
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:161
 #: intranet-tmpl/prog/en/modules/admin/debit_types.tt:169
 #, c-format
 msgid "Restore"
@@ -46584,7 +46590,7 @@ msgstr ""
 msgid "Restricted status of an item"
 msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:704
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:713
 #, c-format
 msgid "Restricted:"
 msgstr ""
@@ -46599,7 +46605,7 @@ msgstr "%s Ristriksi"
 msgid "Restriction expiration"
 msgstr "Penjelasan"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:470
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:471
 #, c-format
 msgid "Restriction overridden temporarily"
 msgstr ""
@@ -46666,7 +46672,7 @@ msgstr "#- Agen bibliografi nasional"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:520
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 msgid "Results from Mana Knowledge Base"
 msgstr ""
 
@@ -46683,7 +46689,7 @@ msgstr "Hasil"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:818
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:945
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:954
 msgid "Resume all suspended holds"
 msgstr "Lanjutkan kembali semua pemesanan yang ditahan"
 
@@ -46704,7 +46710,7 @@ msgid "Return claims"
 msgstr "%s Meminjam"
 
 #. %1$s:  return_claims.count | html 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:738
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:747
 #, c-format
 msgid "Return claims: Patron has %s RETURN CLAIMS."
 msgstr ""
@@ -46752,7 +46758,7 @@ msgstr "%s Meminjam"
 msgid "Return to patron detail"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1027
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1033
 #, fuzzy, c-format
 msgid "Return to previous page"
 msgstr "%s Meminjam"
@@ -46786,7 +46792,7 @@ msgid "Return to rotating collections home"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:963
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:972
 #, fuzzy, c-format
 msgid "Return to search"
 msgstr "%s Meminjam"
@@ -46933,7 +46939,7 @@ msgstr ""
 msgid "Rollover:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:754
+#: intranet-tmpl/prog/en/modules/about.tt:760
 #, c-format
 msgid "Rom&acirc;n&#259; (Romanian)"
 msgstr ""
@@ -46999,7 +47005,7 @@ msgstr ""
 msgid "Routing"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:558
+#: intranet-tmpl/prog/en/includes/permissions.inc:561
 #, fuzzy, c-format
 msgid "Routing "
 msgstr "Bahasa: "
@@ -47054,7 +47060,7 @@ msgstr "%s Jenis jalan: "
 msgid "Rows"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:860
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:866
 #, c-format
 msgid "Rows per page: "
 msgstr ""
@@ -47206,8 +47212,8 @@ msgstr "Nomor SMS:"
 msgid "SMS provider:"
 msgstr "profil "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:924
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1000
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:930
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1006
 #, c-format
 msgid "SQL:"
 msgstr ""
@@ -47298,9 +47304,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:91
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:73
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:35
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:518
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:522
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:535
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:524
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:528
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:541
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:90
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:438
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:89
@@ -47314,7 +47320,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:39
 #: intranet-tmpl/prog/en/modules/members/housebound.tt:315
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:83
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:180
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:181
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:86
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:139
@@ -47328,7 +47334,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:382
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:107
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:108
 #: intranet-tmpl/prog/en/modules/admin/share_content.tt:91
 #: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:70
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:144
@@ -47395,12 +47401,12 @@ msgid "Save all %s preferences"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:226
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:529
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:535
 #, c-format
 msgid "Save and continue editing"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:528
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:534
 #, c-format
 msgid "Save and edit items"
 msgstr ""
@@ -47410,7 +47416,7 @@ msgstr ""
 msgid "Save and preview routing slip"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:527
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:533
 #, c-format
 msgid "Save and view record"
 msgstr ""
@@ -47482,7 +47488,7 @@ msgstr "%s Tidak dapat diubah %s "
 
 #. INPUT type=submit name=submit
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:631
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:931
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
 #, fuzzy
 msgid "Save report"
 msgstr "%s Numor kartu:"
@@ -47533,7 +47539,7 @@ msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
 msgid "Saved preference %s"
 msgstr "%s preferensi "
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:937
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:943
 #, c-format
 msgid "Saved report results"
 msgstr ""
@@ -47543,7 +47549,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:59
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:60
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:144
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1032
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1038
 #, c-format
 msgid "Saved reports"
 msgstr ""
@@ -47622,7 +47628,7 @@ msgstr ""
 msgid "Schedule tasks to run"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:503
+#: intranet-tmpl/prog/en/includes/permissions.inc:506
 #, c-format
 msgid "Schedule tasks to run "
 msgstr ""
@@ -48274,8 +48280,8 @@ msgid "Secondary phone: "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:370
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:914
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:989
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:920
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:995
 #, c-format
 msgid "Seconds (default)"
 msgstr ""
@@ -48292,7 +48298,7 @@ msgid "Section"
 msgstr ""
 
 #. %1$s:  BIG_LOO.number | html 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:659
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:665
 #, fuzzy, c-format
 msgid "Section %s"
 msgstr "%s %s %s Dipinjam %s "
@@ -48307,7 +48313,7 @@ msgstr ""
 msgid "See any subscription attached to this biblio"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:732
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:741
 #, c-format
 msgid "See highlighted items below"
 msgstr ""
@@ -48343,8 +48349,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1706
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1728
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1713
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1735
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:116
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -48602,12 +48608,6 @@ msgid ""
 "GIF, JPEG, PNG, and XPM formats."
 msgstr ""
 
-#. SCRIPT
-#: intranet-tmpl/prog/en/includes/calendar.inc:2
-#, fuzzy
-msgid "Select date"
-msgstr "Pilih sebuah lis"
-
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:125
 #, c-format
 msgid "Select day: "
@@ -48819,7 +48819,7 @@ msgstr "Pilih semua"
 msgid "Selector: "
 msgstr "Pilih semua"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:64
+#: intranet-tmpl/prog/en/includes/permissions.inc:67
 #, fuzzy, c-format
 msgid "Self check modules"
 msgstr "%s Meminjam"
@@ -48877,36 +48877,36 @@ msgid "Send to Mana KB"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:829
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:835
 msgid "Send visible items to batch item deletion"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:826
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:832
 #, fuzzy
 msgid "Send visible items to batch item modification"
 msgstr "%s rekaman yang dihapus."
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:823
 #, fuzzy
 msgid "Send visible records to a list"
 msgstr "Pilih semua"
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:814
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:820
 #, fuzzy
 msgid "Send visible records to batch record deletion"
 msgstr "%s rekaman yang dihapus."
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:811
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:817
 #, fuzzy
 msgid "Send visible records to batch record modification"
 msgstr "%s rekaman yang dihapus."
 
 #. A
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:838
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:844
 msgid "Send visible results to batch patron modification"
 msgstr ""
 
@@ -49075,7 +49075,7 @@ msgstr "%s Numor kartu: "
 msgid "Serials planning"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:548
+#: intranet-tmpl/prog/en/includes/permissions.inc:551
 #, fuzzy, c-format
 msgid "Serials receiving "
 msgstr "Koleksi serial"
@@ -49191,7 +49191,7 @@ msgstr "%s Nama depan: "
 msgid "Set by"
 msgstr "%s Nama depan:"
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:680
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:689
 #, c-format
 msgid "Set due date to expiry:"
 msgstr ""
@@ -49231,7 +49231,7 @@ msgstr ""
 msgid "Set notice/status triggers for overdue items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:403
+#: intranet-tmpl/prog/en/includes/permissions.inc:406
 #, c-format
 msgid "Set notice/status triggers for overdue items "
 msgstr ""
@@ -49290,7 +49290,7 @@ msgid "Set virtual keyboard layout"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:45
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:543
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:549
 #, c-format
 msgid "Settings "
 msgstr ""
@@ -49561,7 +49561,7 @@ msgstr "Tampilkan"
 msgid "Show MARC"
 msgstr "Tampilkan"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:550
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:556
 #, c-format
 msgid "Show MARC tag documentation links"
 msgstr ""
@@ -49657,7 +49657,7 @@ msgstr "Tampilkan semua barang"
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:466
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:685
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:689
 #, c-format
 msgid "Show all items (%s hidden)"
 msgstr ""
@@ -49835,7 +49835,7 @@ msgstr "%s &nbsp; %s Deskripsi:"
 msgid "Show subscriptions"
 msgstr "%s &nbsp; %s Deskripsi:"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:552
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:558
 #, c-format
 msgid "Show tags"
 msgstr ""
@@ -49999,6 +49999,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:333
 #, c-format
 msgid "Some system preferences have badly formatted YAML content: %s "
+msgstr ""
+
+#. SCRIPT
+#: intranet-tmpl/prog/en/includes/cateditor-ui.inc:41
+msgid "Something went wrong, cannot save"
 msgstr ""
 
 #. SCRIPT
@@ -50233,14 +50238,14 @@ msgstr ""
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:808
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:935
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:944
 #, c-format
 msgid "Specify date on which to resume %s: "
 msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  INCLUDE 'date-format.inc' 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:547
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:548
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:131
 #, c-format
 msgid "Specify due date %s: "
@@ -50427,7 +50432,7 @@ msgstr "%s Numor kartu:"
 msgid "Stage MARC records for import"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:508
+#: intranet-tmpl/prog/en/includes/permissions.inc:511
 #, fuzzy, c-format
 msgid "Stage MARC records into the reservoir "
 msgstr "%s Numor kartu:"
@@ -50526,7 +50531,7 @@ msgstr ""
 msgid "Standing orders do not close when received."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:167
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:168
 #, c-format
 msgid "Start adding cash registers"
 msgstr ""
@@ -50706,7 +50711,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:39
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:393
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:37
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:915
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:924
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
 #: intranet-tmpl/prog/en/modules/circ/checkout-notes.tt:72
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:482
@@ -50937,11 +50942,6 @@ msgstr "%s (tidak aktif) %s %s "
 msgid "Sub total "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:135
-#, c-format
-msgid "Sub total:"
-msgstr ""
-
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:263
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:32
@@ -51008,12 +51008,12 @@ msgid "Subgroup"
 msgstr ""
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1748
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1755
 msgid "Subgroup code"
 msgstr ""
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1749
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1756
 msgid "Subgroup name"
 msgstr ""
 
@@ -51232,7 +51232,7 @@ msgid "Subscription #%s"
 msgstr ""
 
 #. %1$s:  loopro.object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:243
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:244
 #, fuzzy, c-format
 msgid "Subscription %s "
 msgstr "%s &nbsp; %s Deskripsi:"
@@ -51548,6 +51548,7 @@ msgstr ""
 msgid "Suggestions"
 msgstr ""
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:34
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:423
 #, c-format
 msgid "Suggestions management"
@@ -51695,7 +51696,7 @@ msgstr ""
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:803
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:930
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:939
 msgid "Suspend all holds"
 msgstr "Tahan semua pesanan"
 
@@ -51712,7 +51713,7 @@ msgid "Suspend until:"
 msgstr "Tahan semua pesanan"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:787
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:914
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:923
 #, c-format
 msgid "Suspend?"
 msgstr ""
@@ -51729,7 +51730,7 @@ msgstr ""
 msgid "Suspension in days (day)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:757
+#: intranet-tmpl/prog/en/modules/about.tt:763
 #, c-format
 msgid "Svenska (Swedish)"
 msgstr ""
@@ -51740,7 +51741,7 @@ msgstr ""
 msgid "Switch languages"
 msgstr "%s (tidak aktif) %s %s"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:546
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:552
 #, c-format
 msgid "Switch to advanced editor"
 msgstr ""
@@ -51886,7 +51887,7 @@ msgstr ""
 msgid "System preferences"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:760
+#: intranet-tmpl/prog/en/modules/about.tt:766
 #, c-format
 msgid ""
 "T&uuml;rk&ccedil;e (Turkish) pre-3.8: Selma Aslan; for 3.8+, Suleyman "
@@ -52043,8 +52044,8 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:379
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:168
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:178
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:770
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:778
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:776
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:784
 #, c-format
 msgid "Tag editor"
 msgstr ""
@@ -52296,7 +52297,7 @@ msgstr ""
 msgid "Test prediction pattern"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:171
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:177
 #, c-format
 msgid "Test run: Do not remove any patrons."
 msgstr ""
@@ -52311,7 +52312,7 @@ msgstr ""
 msgid "Testing..."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:758
+#: intranet-tmpl/prog/en/modules/about.tt:764
 #, c-format
 msgid "Tetun (Tetum) Karen Myers"
 msgstr ""
@@ -52477,7 +52478,7 @@ msgid ""
 "for statistical purposes"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:117
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:123
 #, c-format
 msgid ""
 "The AnonymousPatron system preference is not defined. You can use this "
@@ -52850,7 +52851,7 @@ msgstr ""
 msgid "The following error occurred while importing the database structure:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1017
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1023
 #, c-format
 msgid "The following error was encountered:"
 msgstr ""
@@ -53011,7 +53012,7 @@ msgid "The item has been removed from the list."
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 #, fuzzy
 msgid "The item has been removed from your cart"
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
@@ -53309,7 +53310,7 @@ msgstr ""
 msgid "The record id "
 msgstr "%s%sRecord ini tidak mempunyai barang.%s"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:633
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:639
 #, c-format
 msgid "The record you are trying to edit doesn't exist."
 msgstr ""
@@ -53527,7 +53528,7 @@ msgstr ""
 msgid "There are no authorized values defined for %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:167
+#: intranet-tmpl/prog/en/modules/admin/cash_registers.tt:168
 #, fuzzy, c-format
 msgid "There are no cash registers defined. "
 msgstr "%s Saat ini tidak ada koleksi yang ditetapkan. %s "
@@ -53849,13 +53850,13 @@ msgstr ""
 msgid "These are enabled."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:94
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:95
 #, c-format
 msgid ""
 "These fields will be used in the creation of clubs based on this template"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:135
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:136
 #, c-format
 msgid ""
 "These fields will be used when enrolling a patron in a club based on this "
@@ -53869,7 +53870,7 @@ msgid "These items have a hold ratio &ge; %s."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:241
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:247
 msgid ""
 "These patrons will be permanently removed from the database and cannot be "
 "recovered"
@@ -53879,6 +53880,26 @@ msgstr ""
 #, c-format
 msgid "Theses"
 msgstr "Tesis"
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:67
+#, fuzzy, c-format
+msgid "They are in a patron category of type staff."
+msgstr "%s Saat ini tidak ada koleksi yang ditetapkan. %s "
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:66
+#, c-format
+msgid "They are the guarantor to another patron."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:65
+#, c-format
+msgid "They have a non-zero account balance."
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:64
+#, fuzzy, c-format
+msgid "They have items currently checked out."
+msgstr "%s Tidak dapat meminjam! %sPerhatian:%s"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:165
@@ -54072,7 +54093,7 @@ msgid "This item cannot be removed. It is checked out"
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "This item has been added to your cart"
 msgstr ""
 
@@ -54110,7 +54131,7 @@ msgid "This item has previously been checked out to this patron."
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "This item is already in your cart"
 msgstr ""
 
@@ -54183,12 +54204,12 @@ msgid "This item must be returned to %s."
 msgstr "%s barang yang tidak dapat dihapus: %s%s%s"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "This item normally cannot be put on hold except for patrons from %s."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 msgid "This item normally cannot be put on hold."
 msgstr ""
 
@@ -54253,7 +54274,7 @@ msgstr "%s Nomor permintaan yang ini tidak ada. %s "
 msgid "This patron has not submitted any purchase suggestions"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:500
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:501
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:115
 #, c-format
 msgid ""
@@ -54401,7 +54422,8 @@ msgstr ""
 #, c-format
 msgid ""
 "This tool allows you to delete patrons and anonymize checkout history. For "
-"deleting patrons, any combination of limits can be used."
+"deleting patrons, any combination of limits can be used. Patrons will not be "
+"deleted if they meet one or more of the following conditions:"
 msgstr ""
 
 #. %1$s:  field.marcfield | html 
@@ -54616,7 +54638,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:119
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:29
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:163
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:164
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:78
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:90
 #: intranet-tmpl/prog/en/modules/serials/result.tt:15
@@ -54629,13 +54651,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:40
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:81
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:227
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:696
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:700
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:105
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:30
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:126
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:35
 #: intranet-tmpl/prog/en/modules/basket/basket.tt:251
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:907
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:916
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:59
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:41
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:104
@@ -55037,7 +55059,7 @@ msgid "Too many checked out. %s checked out, only %s are allowed."
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:938
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:942
 #, fuzzy
 msgid "Too many holds"
 msgstr "%s %s Tidak sedang dipesan %s "
@@ -55157,7 +55179,7 @@ msgstr "%s Ristriksi"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:30
 #: intranet-tmpl/prog/en/modules/patron_lists/add-modify.tt:18
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:13
-#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
+#: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:24
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
 #: intranet-tmpl/prog/en/modules/clubs/club-enrollments.tt:15
 #: intranet-tmpl/prog/en/modules/clubs/clubs.tt:16
@@ -55586,7 +55608,7 @@ msgid "Translate item type %s"
 msgstr "Semua jenis barang"
 
 #: intranet-tmpl/prog/en/modules/admin/localization.tt:67
-#: intranet-tmpl/prog/en/modules/about.tt:716
+#: intranet-tmpl/prog/en/modules/about.tt:722
 #, c-format
 msgid "Translation"
 msgstr ""
@@ -56229,7 +56251,7 @@ msgstr "%s Provinsi: "
 
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:77
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:267
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1007
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1013
 #, c-format
 msgid "Update SQL"
 msgstr ""
@@ -56267,7 +56289,7 @@ msgid "Update existing or add new"
 msgstr ""
 
 #. INPUT type=submit name=submit
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:911
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:915
 msgid "Update hold(s)"
 msgstr ""
 
@@ -56411,7 +56433,7 @@ msgstr ""
 msgid "Upload any file"
 msgstr "%s berkas gambar"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:623
+#: intranet-tmpl/prog/en/includes/permissions.inc:626
 #, fuzzy, c-format
 msgid "Upload any file "
 msgstr "%s berkas gambar"
@@ -56463,7 +56485,7 @@ msgstr ""
 msgid "Upload local cover image"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:513
+#: intranet-tmpl/prog/en/includes/permissions.inc:516
 #, fuzzy, c-format
 msgid "Upload local cover images "
 msgstr "%s berkas gambar"
@@ -56511,7 +56533,7 @@ msgstr ""
 msgid "Upload patron images in a batch or one at a time"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:383
+#: intranet-tmpl/prog/en/includes/permissions.inc:386
 #, fuzzy, c-format
 msgid "Upload patron images in a batch or one at a time "
 msgstr "%sTambah sebuah langganan yang baru%s ("
@@ -56660,7 +56682,7 @@ msgstr ""
 msgid "Use a file "
 msgstr "%s berkas gambar"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:34
+#: intranet-tmpl/prog/en/includes/permissions.inc:37
 #, c-format
 msgid "Use all tools (expand for granular tools permissions)"
 msgstr ""
@@ -56709,7 +56731,7 @@ msgstr ""
 msgid "Use for staff search groups "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1020
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1026
 #, c-format
 msgid ""
 "Use of this keyword is not allowed in Koha reports due to security and data "
@@ -56722,7 +56744,7 @@ msgstr ""
 msgid "Use records from the following list: "
 msgstr "%s barang yang ditemukan untuk %s%s%sSEMUA perpustakaan%s "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:608
+#: intranet-tmpl/prog/en/includes/permissions.inc:611
 #, fuzzy, c-format
 msgid "Use report plugins "
 msgstr "%s Ristriksi"
@@ -56739,7 +56761,7 @@ msgstr "%s Ristriksi"
 msgid "Use saved"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:283
+#: intranet-tmpl/prog/en/includes/permissions.inc:286
 #, c-format
 msgid "Use the advanced cataloging editor (requires edit_catalogue) "
 msgstr ""
@@ -56786,7 +56808,7 @@ msgstr ""
 msgid "Use tool plugins"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:613
+#: intranet-tmpl/prog/en/includes/permissions.inc:616
 #, fuzzy, c-format
 msgid "Use tool plugins "
 msgstr "%s Ristriksi"
@@ -56853,7 +56875,7 @@ msgstr ""
 msgid "Useful resources"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:629
+#: intranet-tmpl/prog/en/includes/permissions.inc:632
 #, c-format
 msgid "Useless without upload_general_files"
 msgstr ""
@@ -57218,12 +57240,12 @@ msgstr ""
 msgid "Vendor: %s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:119
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:125
 #, c-format
 msgid "Verify you want to anonymize patron checkout history"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:68
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:74
 #, c-format
 msgid "Verify you want to delete patrons"
 msgstr ""
@@ -57314,7 +57336,7 @@ msgstr ""
 msgid "View all libraries"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:665
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:674
 #, fuzzy, c-format
 msgid "View all pending patron modifications"
 msgstr "%s rekaman yang dihapus."
@@ -57403,7 +57425,7 @@ msgstr "Perincian lebih lanjut"
 msgid "View online payment plugins"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:258
+#: intranet-tmpl/prog/en/includes/permissions.inc:261
 #, c-format
 msgid ""
 "View patron infos from any libraries. If not set the logged in user could "
@@ -57431,7 +57453,7 @@ msgid "View report plugins"
 msgstr "%s Ristriksi"
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:125
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:721
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:730
 #, c-format
 msgid "View restrictions"
 msgstr ""
@@ -57556,7 +57578,7 @@ msgstr "Menunggu"
 msgid "Warn"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:145
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:151
 #: intranet-tmpl/prog/en/modules/about.tt:114
 #: intranet-tmpl/prog/en/modules/about.tt:254
 #: intranet-tmpl/prog/en/modules/about.tt:257
@@ -58123,7 +58145,7 @@ msgstr ""
 msgid "Write news for the OPAC and staff interfaces"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:398
+#: intranet-tmpl/prog/en/includes/permissions.inc:401
 #, c-format
 msgid "Write news for the OPAC and staff interfaces "
 msgstr ""
@@ -58136,7 +58158,7 @@ msgid "Write off"
 msgstr ""
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:145
+#: intranet-tmpl/prog/en/modules/members/pay.tt:139
 msgid "Write off all"
 msgstr ""
 
@@ -58150,13 +58172,13 @@ msgstr ""
 msgid "Write off an individual fine"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:308
+#: intranet-tmpl/prog/en/includes/permissions.inc:311
 #, fuzzy, c-format
 msgid "Write off fines and fees "
 msgstr "Tidak ada barang yang dipilih"
 
 #. INPUT type=submit name=writeoff_selected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:146
+#: intranet-tmpl/prog/en/modules/members/pay.tt:140
 #, fuzzy
 msgid "Write off selected"
 msgstr "Tidak ada barang yang dipilih"
@@ -58302,10 +58324,10 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:388
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:363
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:365
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:907
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:909
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:982
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:984
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:913
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:988
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:990
 #, c-format
 msgid "Yes"
 msgstr "Ya"
@@ -58426,7 +58448,7 @@ msgstr ""
 msgid "Yes, delete this tag"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:482
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:488
 #, c-format
 msgid "Yes, edit existing items"
 msgstr ""
@@ -58452,7 +58474,7 @@ msgid "Yes: Edit existing authority"
 msgstr ""
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:487
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:493
 msgid "Yes: View existing items"
 msgstr ""
 
@@ -58787,7 +58809,7 @@ msgid ""
 "using Koha"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1003
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1012
 #, c-format
 msgid ""
 "You have already submitted a barcode, please wait for the checkout to "
@@ -58866,7 +58888,7 @@ msgid ""
 "%s. %s "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:680
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:689
 #, c-format
 msgid ""
 "You have the ReturnBeforeExpiry system preference enabled this means if the "
@@ -58993,8 +59015,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:861
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1022
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:855
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:1027
 msgid "You must select checkout(s) to export"
 msgstr ""
 
@@ -59004,7 +59026,7 @@ msgid "You must select one or more patrons to remove"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1086
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1092
 msgid "You must select one or more reports to delete"
 msgstr ""
 
@@ -59136,7 +59158,7 @@ msgid "Your cart "
 msgstr "Troli anda "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:37
+#: intranet-tmpl/prog/en/includes/js_includes.inc:38
 msgid "Your cart is currently empty"
 msgstr "Troli anda saat ini kosong"
 
@@ -59243,7 +59265,7 @@ msgid "Your patron lists"
 msgstr "#- Agen bibliografi nasional"
 
 #. %1$s:  reportname | html 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:966
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:972
 #, fuzzy, c-format
 msgid "Your report \"%s\" has been saved"
 msgstr "%s rekaman yang dihapus."
@@ -59319,7 +59341,7 @@ msgstr "pencarian"
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:165
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:277
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:17
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:539
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:545
 #, c-format
 msgid "Z39.50/SRU search"
 msgstr ""
@@ -59637,7 +59659,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:281
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:325
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:750
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:754
 #, c-format
 msgid "already has a hold"
 msgstr ""
@@ -59947,6 +59969,13 @@ msgstr ""
 msgid "by Google is a family of fonts licensed under the "
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#, c-format
+msgid ""
+"by Klaus Hartl is a jQuery plugin for setting, reading, and deleting browser "
+"cookies, licensed under the "
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/about.tt:709
 #, c-format
 msgid ""
@@ -60070,7 +60099,7 @@ msgstr ""
 msgid "check to delete this field"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:172
 #, c-format
 msgid "cleanup_database"
 msgstr ""
@@ -60279,7 +60308,7 @@ msgstr "%sModifikasi %sTambah %s sebuah preferensi sistem"
 msgid "display detail for this librarian."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:635
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:641
 #, fuzzy, c-format
 msgid "do a catalog search"
 msgstr "%s Nama depan: "
@@ -60361,7 +60390,7 @@ msgstr "%s koleksi"
 msgid "euro-currency sign"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:722
+#: intranet-tmpl/prog/en/modules/about.tt:728
 #, c-format
 msgid ""
 "euskara (Basque) Fernando Berrizbeitia, the librarians of Eima Katalogoa, "
@@ -60457,6 +60486,7 @@ msgstr ""
 msgid "from"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:235
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:487
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
@@ -60687,6 +60717,13 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:38
 #, c-format
 msgid "is"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:718
+#, c-format
+msgid ""
+"is a \"simple, lightweight JavaScript API for handling cookies,\" licensed "
+"under the "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:697
@@ -60932,6 +60969,12 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:603
 #, c-format
 msgid "jQueryUI"
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:714
+#: intranet-tmpl/prog/en/modules/about.tt:715
+#, c-format
+msgid "jquery.cookie"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:642
@@ -61269,7 +61312,7 @@ msgid "on reserve"
 msgstr "%s %sebelum %s"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:281
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:750
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:754
 #, c-format
 msgid "on this item "
 msgstr ""
@@ -61307,13 +61350,13 @@ msgid "or"
 msgstr "atau"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:270
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:635
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:641
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:142
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:148
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:465
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:470
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:673
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:690
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:682
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:699
 #, c-format
 msgid "or "
 msgstr ""
@@ -61328,12 +61371,12 @@ msgstr ""
 msgid "or any available"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1747
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1754
 #, c-format
 msgid "or create"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1720
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1727
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "perjanjian"
@@ -61570,7 +61613,7 @@ msgstr ""
 msgid "same library, same patron category, same item type"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:166
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:172
 #, fuzzy, c-format
 msgid "script. "
 msgstr "Penjelasan: "
@@ -61812,7 +61855,7 @@ msgstr ""
 msgid "suggestion #%s"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:731
+#: intranet-tmpl/prog/en/modules/about.tt:737
 #, c-format
 msgid "suomi, suomen kieli (Finnish) Pasi Korkalo"
 msgstr ""
@@ -61829,7 +61872,7 @@ msgid "tag %s subfield %s %s in tab %s"
 msgstr "%s %sTag %s Sub-bagian batsan %s %s %s %s "
 
 #. A
-#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:623
+#: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:629
 msgid "tag_anchor_%s_%s%s"
 msgstr ""
 
@@ -61915,7 +61958,7 @@ msgid "to "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:285
-#: intranet-tmpl/prog/en/modules/reserve/request.tt:754
+#: intranet-tmpl/prog/en/modules/reserve/request.tt:758
 #, c-format
 msgid "to be placed on hold"
 msgstr ""
@@ -61977,7 +62020,7 @@ msgid "unrecognized command"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:806
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:933
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:942
 #, c-format
 msgid "until"
 msgstr ""
@@ -62086,27 +62129,27 @@ msgstr ""
 msgid "which should be set up by your system administrator. "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:102
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:108
 #, fuzzy, c-format
 msgid "who are in patron list: "
 msgstr "#- Agen bibliografi nasional"
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:84
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:90
 #, c-format
 msgid "who have not been connected since:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:73
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:79
 #, c-format
 msgid "who have not borrowed since:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:78
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:84
 #, c-format
 msgid "whose expiration date is before:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:90
+#: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:96
 #, c-format
 msgid "whose patron category is:"
 msgstr ""
@@ -62270,7 +62313,7 @@ msgstr "%s %s ke %s %s "
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:128
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:209
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:256
-#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:207
+#: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:132
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:158
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:380
@@ -62286,7 +62329,7 @@ msgstr "%s %s ke %s %s "
 msgid "×"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/about.tt:718
+#: intranet-tmpl/prog/en/modules/about.tt:724
 #, c-format
 msgid ""
 "العربية (Arabic) Version 3.2 to 3.4, 3.16 & 3.18 by KnowledgeWare "

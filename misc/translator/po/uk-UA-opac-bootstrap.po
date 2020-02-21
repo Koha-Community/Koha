@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:54-0300\n"
-"PO-Revision-Date: 2020-01-21 14:35+0000\n"
+"POT-Creation-Date: 2020-02-16 15:44-0300\n"
+"PO-Revision-Date: 2020-02-17 16:55+0000\n"
 "Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -21,7 +21,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1579617309.764206\n"
+"X-POOTLE-MTIME: 1581958506.737785\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -163,15 +163,16 @@ msgstr "%s %s %s Примітка: це вікно автоматично зак
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 
 #. %1$s:  END 
@@ -371,7 +372,7 @@ msgstr ""
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, c-format
 msgid "%s %s's fines and charges"
 msgstr "%s %s — штрафи та сплати"
@@ -975,8 +976,8 @@ msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
 "%s %s %s %s %s. "
 msgstr ""
-"%s Очікується %s Зарезервовано %s для відвідувача %s у підрозділі %s у "
-"підрозділ %s „%s“ починаючи з %s%s%s%s%s%s%s. "
+"%s Очікується %s Зарезервовано %s для відвідувача %s на %s очікується %s "
+"„%s“ з %s %s %s %s %s %s %s. "
 
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
@@ -2941,7 +2942,7 @@ msgstr "(%s загалом)"
 msgid "(123) 456-7890"
 msgstr "(032) 456-7890"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr "(Нарахування)"
@@ -2965,7 +2966,7 @@ msgstr ""
 msgid "(Checked out)"
 msgstr "(Видано)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr "(Прощено)"
@@ -2979,7 +2980,7 @@ msgstr ""
 "(Примірник вилучено і повернення заблоковано правилами, будь ласка, "
 "зверніться до співробітників бібліотеки для отримання допомоги)."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr "(Втрачено)"
@@ -3036,7 +3037,7 @@ msgstr ""
 "(Зверніть увагу: може бути затримка з поновленням Вашого облікового запису, "
 "якщо подаєте через Інтернет.)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, c-format
 msgid "(Replaced)"
 msgstr "(Замінено)"
@@ -3067,7 +3068,7 @@ msgstr "(Замінено)"
 msgid "(Required)"
 msgstr " (обов’язкове)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr "(Повернуто)"
@@ -3117,7 +3118,7 @@ msgstr "(використовуйте ЕК натомість)"
 msgid "(Use SRU instead)"
 msgstr "(використовуйте SRU натомість)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr "(Анульовано)"
@@ -3228,7 +3229,7 @@ msgstr ".%s У Вас є  пені. %s %s "
 msgid "...or..."
 msgstr "...або..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr "0.00"
@@ -3647,12 +3648,12 @@ msgstr "Кількість "
 
 # Обсяг несплат
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, c-format
 msgid "Amount outstanding"
 msgstr "Сума заборгованості"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr "Сума до оплати: "
@@ -4180,7 +4181,7 @@ msgstr "Стисло"
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:35
 #, c-format
 msgid "Brief history"
-msgstr "Історія стисло"
+msgstr "Коротка хронологія"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/includes/authorities-search-results.inc:13
@@ -4722,7 +4723,7 @@ msgstr "Клацніть, щоб переглянути у Google Books"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1146
 #, c-format
 msgid "Close"
-msgstr "Зачинити"
+msgstr "Закрити"
 
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
 #, c-format
@@ -4732,17 +4733,17 @@ msgstr "Зачинити оглядач полиці"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:30
 #, c-format
 msgid "Close this window"
-msgstr "Зачинити це вікно"
+msgstr "Закрити це вікно"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:108
 #, c-format
 msgid "Close this window."
-msgstr "Зачинити це вікно."
+msgstr "Закрити це вікно"
 
 #: opac-tmpl/bootstrap/en/modules/opac-sendbasketform.tt:20
 #, c-format
 msgid "Close window"
-msgstr "Зачинити вікно"
+msgstr "Закрити вікно"
 
 #. %1$s:  borrower_club_enrollments.count || 0 | html 
 #. %2$s:  borrower_enrollable_clubs.count || 0 | html 
@@ -5094,7 +5095,7 @@ msgid "DVD video / Videodisc"
 msgstr "відео/відеодиск DVD"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -5269,7 +5270,7 @@ msgid "Descending"
 msgstr "За спаданням"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5536,7 +5537,7 @@ msgstr "Електронна пошта: "
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:30
 #, c-format
 msgid "Empty and close"
-msgstr "Очистити і зачинити"
+msgstr "Очистити та закрити"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:348
 #, c-format
@@ -5829,7 +5830,7 @@ msgstr "фільмографії"
 msgid "Filter paid transactions"
 msgstr "Фільтрувати оплачені операції"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr "Сума штрафу"
@@ -5980,7 +5981,7 @@ msgstr "від: "
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:36
 #, c-format
 msgid "Full history"
-msgstr "Історія повністю"
+msgstr "Повна хронологія"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:20
 #, c-format
@@ -6387,7 +6388,7 @@ msgid "Home library:"
 msgstr "Джерельна бібліотека: "
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr "Як працює PayPal"
 
@@ -7473,7 +7474,7 @@ msgstr "Зробіть "
 msgid "Make an "
 msgstr "Зробити "
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, c-format
 msgid "Make payment"
 msgstr "Здійснити оплату"
@@ -7920,11 +7921,6 @@ msgstr "Немає приватних списків"
 #, c-format
 msgid "No private lists."
 msgstr "Немає приватних списків."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, c-format
-msgid "No public lists"
-msgstr "Немає загальних списків"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, c-format
@@ -8560,13 +8556,13 @@ msgstr "патентний документ"
 msgid "Patron comment on %s"
 msgstr "Коментар відвідувача від %s"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, c-format
 msgid "Pay selected fines and charges"
 msgstr "Оплатити вибрані штрафи та сплати"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr "Знак прийняття PayPal"
 
@@ -8575,7 +8571,7 @@ msgstr "Знак прийняття PayPal"
 msgid "Payment applied:"
 msgstr "Оплата застосовується:"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, c-format
 msgid "Payment method"
 msgstr "Спосіб сплати"
@@ -9988,12 +9984,13 @@ msgstr "Додатковий телефон: "
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:35
 #, c-format
 msgid "Section"
-msgstr "Відділення"
+msgstr "Розділ"
 
+# розділ «Аналітична геометрія» курсу вищої математики, може бути число чи абревіатура
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:36
 #, c-format
 msgid "Section:"
-msgstr "Відділення: "
+msgstr "Розділ: "
 
 #. IMG
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
@@ -10694,7 +10691,7 @@ msgstr "Затвердити"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:55
 msgid "Submit and close this window"
-msgstr "Прийняти і зачинити це вікно"
+msgstr "Прийняти і закрити це вікно"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -11626,8 +11623,8 @@ msgstr ""
 "адміністратору Коха."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, c-format
-msgid "To reset your password, enter your login or your email address. "
+#, fuzzy, c-format
+msgid "To reset your password, enter your login or your email address."
 msgstr ""
 "Щоб скинути свій пароль, введіть свій логін чи свою електронну адресу. "
 
@@ -11646,13 +11643,13 @@ msgstr "Верхній рівень"
 msgid "Topics"
 msgstr "Рубрики"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, c-format
 msgid "Total due"
 msgstr "Загалом підлягає платежу"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr "Сума заборгованості при застосуванні кредиту: "
@@ -12355,7 +12352,7 @@ msgstr "Ви вже раніше запитували цей заголовок.
 msgid "You have no article requests currently."
 msgstr "У наразі немає замовлень на статті."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, c-format
 msgid "You have no fines or charges"
 msgstr "У Вас немає штрафів та стягнень"

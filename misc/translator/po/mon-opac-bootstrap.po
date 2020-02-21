@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 20:40-0300\n"
+"POT-Creation-Date: 2020-02-16 15:23-0300\n"
 "PO-Revision-Date: 2019-03-14 08:03+0000\n"
 "Last-Translator: Baataraa <mgllibrary@gmail.com>\n"
 "Language-Team: Institute of Informatics, MAS <nyam@hotmail.com>\n"
@@ -148,15 +148,16 @@ msgstr "%s %s %s Санамж: энэ цонх 5 секундын дотор а�
 #. %27$s:  account.debit_type.description | html 
 #. %28$s: - END -
 #. %29$s: - END -
-#. %30$s: - PROCESS account_status_description account=account -
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:173
+#. %30$s: - SWITCH account.status -
+#. %31$s: - CASE 'UNRETURNED' -
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:171
 #, c-format
 msgid ""
 "%s %s %sPayment %sWriteoff %sForgiven %sCredit %sLost item fee refund %s%s "
 "%s %s %s %sAccount creation fee %sAccount renewal fee %sLost item %sManual "
 "fee %sNew card %sFine %sLost item processing fee %sRental fee %sDaily rental "
 "fee %sRenewal of rental item %sRewewal of daily rental item %sHold fee "
-"%sHold waiting too long %s%s %s %s %s "
+"%sHold waiting too long %s%s %s %s %s %s"
 msgstr ""
 
 #. %1$s:  END 
@@ -340,7 +341,7 @@ msgstr "%s %s таны картыг илгээсэн."
 
 #. %1$s:  r.patron.firstname | html 
 #. %2$s:  r.patron.surname | html 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:88
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:86
 #, fuzzy, c-format
 msgid "%s %s's fines and charges"
 msgstr "Торгууль ба төлбөр"
@@ -2423,7 +2424,7 @@ msgstr "(нийт %s)"
 msgid "(123) 456-7890"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:207
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:200
 #, c-format
 msgid "(Accruing)"
 msgstr ""
@@ -2445,7 +2446,7 @@ msgstr "Таны Ашиглагчийн нэр өгөгдлийн санд ба�
 msgid "(Checked out)"
 msgstr "(Уншлагад гарсан)"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:210
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:203
 #, c-format
 msgid "(Forgiven)"
 msgstr ""
@@ -2457,7 +2458,7 @@ msgid ""
 "for assistance)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:212
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:205
 #, c-format
 msgid "(Lost)"
 msgstr ""
@@ -2512,7 +2513,7 @@ msgid ""
 "online.)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:209
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:202
 #, fuzzy, c-format
 msgid "(Replaced)"
 msgstr "Хуулийн өгүүллүүд"
@@ -2543,7 +2544,7 @@ msgstr "Хуулийн өгүүллүүд"
 msgid "(Required)"
 msgstr "Хүсэгдсэн"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:208
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:201
 #, c-format
 msgid "(Returned)"
 msgstr ""
@@ -2587,7 +2588,7 @@ msgstr ""
 msgid "(Use SRU instead)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:211
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:204
 #, c-format
 msgid "(Voided)"
 msgstr ""
@@ -2696,7 +2697,7 @@ msgstr "Танд торгууль, эсвэл төлбар алга."
 msgid "...or..."
 msgstr "...эсвэл..."
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:165
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
 #, c-format
 msgid "0.00"
 msgstr ""
@@ -3097,12 +3098,12 @@ msgid "Amount"
 msgstr "Хэмжээ"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:13
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:97
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
 #, fuzzy, c-format
 msgid "Amount outstanding"
 msgstr "Үлдэж байгаа хэмжээ"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:164
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:162
 #, c-format
 msgid "Amount to pay: "
 msgstr ""
@@ -4548,7 +4549,7 @@ msgid "DVD video / Videodisc"
 msgstr "DVD видео / Видео диск"
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:9
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:92
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:627
@@ -4722,7 +4723,7 @@ msgid "Descending"
 msgstr ""
 
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:11
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:95
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:93
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:11
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:46
 #, c-format
@@ -5283,7 +5284,7 @@ msgstr "Кинографик"
 msgid "Filter paid transactions"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:96
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:94
 #, c-format
 msgid "Fine amount"
 msgstr ""
@@ -5810,7 +5811,7 @@ msgid "Home library:"
 msgstr "Үндсэн номын сан"
 
 #. A
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "How PayPal Works"
 msgstr ""
 
@@ -6870,7 +6871,7 @@ msgstr ""
 msgid "Make an "
 msgstr "Төлбөрүүд"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:163
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:161
 #, fuzzy, c-format
 msgid "Make payment"
 msgstr "Төлбөрүүд"
@@ -7323,11 +7324,6 @@ msgstr "Хувийн жагсаалтууд алга."
 #, fuzzy, c-format
 msgid "No private lists."
 msgstr "Хувийн жагсаалт үгүй."
-
-#: opac-tmpl/bootstrap/en/includes/masthead.inc:50
-#, fuzzy, c-format
-msgid "No public lists"
-msgstr "Нийтийн жагсаалтууд алга."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:739
 #, fuzzy, c-format
@@ -7952,13 +7948,13 @@ msgstr "Патентын баримт бичиг"
 msgid "Patron comment on %s"
 msgstr "Сэтгэгдлүүд"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:139
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:137
 #, fuzzy, c-format
 msgid "Pay selected fines and charges"
 msgstr "Торгууль ба төлбөр"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:146
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:144
 msgid "PayPal Acceptance Mark"
 msgstr ""
 
@@ -7967,7 +7963,7 @@ msgstr ""
 msgid "Payment applied:"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:140
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:138
 #, fuzzy, c-format
 msgid "Payment method"
 msgstr "Патентын баримт бичиг"
@@ -10954,7 +10950,7 @@ msgstr "Номын санд бэлэн"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
 #, c-format
-msgid "To reset your password, enter your login or your email address. "
+msgid "To reset your password, enter your login or your email address."
 msgstr ""
 
 #. SCRIPT
@@ -10973,13 +10969,13 @@ msgstr "%s <a1>Дээд түвшин</a>"
 msgid "Topics"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:52
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:130
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:51
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #, fuzzy, c-format
 msgid "Total due"
 msgstr "Шуудангийн хаяг"
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:74
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
 msgstr ""
@@ -11676,7 +11672,7 @@ msgstr ""
 msgid "You have no article requests currently."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/includes/account-table.inc:84
+#: opac-tmpl/bootstrap/en/includes/account-table.inc:82
 #, fuzzy, c-format
 msgid "You have no fines or charges"
 msgstr "Танд торгууль, эсвэл төлбар алга."
