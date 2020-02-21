@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2019-11-06 13:57+0000\n"
+"PO-Revision-Date: 2020-01-24 07:14+0000\n"
 "Last-Translator: Tomáš Wünsch <fraktik@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1573048656.241337\n"
+"X-POOTLE-MTIME: 1579850097.784074\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1494,7 +1494,7 @@ msgstr "Vložením \"d\" můžete čas definovat ve dnech, např. 1d znamená č
 
 # Administration > Login options
 msgid "admin.pref#timeout# Inactivity timeout in seconds to automatically log out users: "
-msgstr "Nastavte hodnotu času nečinnosti v sekundách, po jaké dojde k automaticky odhlásit uživatele: "
+msgstr "Nastavte hodnotu času nečinnosti v sekundách, po jaké automaticky odhlásit uživatele: "
 
 # Administration > Interface options
 msgid "admin.pref#virtualshelves# Allow staff and patrons to create and view saved lists of books: "
@@ -2376,6 +2376,10 @@ msgstr "Rozhraní"
 msgid "circulation.pref Interlibrary Loans"
 msgstr "Meziknihovní výpůjčky"
 
+# Circulation > Return Claims
+msgid "circulation.pref Return Claims"
+msgstr ""
+
 # Circulation > Self Checkout
 msgid "circulation.pref Self Checkout"
 msgstr "Samoobslužné výpůjčky"
@@ -2907,6 +2911,42 @@ msgstr "Deaktivovat"
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# the navigation sidebar on all Circulation pages."
 msgstr "boční navigační panel na všech stránkách modulu Výpůjčky."
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# ."
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims returned\","
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# ask if a lost fee should be charged"
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# charge a lost fee"
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
+msgstr ""
+
+# Circulation > Return Claims
+msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
@@ -3903,7 +3943,7 @@ msgstr ", které jsou"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#StockRotation# Disable"
-msgstr ""
+msgstr "Zakázat"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#StockRotation# Enable"
@@ -7088,7 +7128,7 @@ msgstr "Nepovolit"
 
 # Patrons > General
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# staff to set the ability for a patron's checkouts to be viewed by linked patrons in the OPAC."
-msgstr ""
+msgstr "knihovníkům možnost nastavit zobrazování výpůjček čtenáře propojeným čtenářům v OPAC."
 
 # Patrons > General
 msgid "patrons.pref#AutoEmailOpacUser# Don't send"
@@ -7244,7 +7284,7 @@ msgstr "patrons.pref#EnhancedMessagingPreferences# knihovníkům určovat kdy a 
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
-msgstr ""
+msgstr "<br><strong>Poznámka: </strong> EnhancedMessagingPreferences musí být zapnuto."
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -7256,7 +7296,7 @@ msgstr "Zobrazit"
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on the OPAC."
-msgstr ""
+msgstr "čtenářům nastavení zpráv v OPAC."
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -7296,7 +7336,7 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
-msgstr ""
+msgstr "Zakázat"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Enforced"
@@ -7308,7 +7348,7 @@ msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Permissive"
-msgstr ""
+msgstr "Benevolentní"
 
 # Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Set GDPR policy to"
@@ -7376,11 +7416,11 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# <br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
-msgstr ""
+msgstr "<br><strong>Poznámka:</strong> Pokud povolený uživatel není superknihovníkem, musí zároveň mít nastaven přízpříznak \"povoleno\"."
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow all permitted users"
-msgstr ""
+msgstr "Zpřístupni všem povoleným uživatelům"
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow only superlibrarians"
@@ -7388,15 +7428,15 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# to access/change superlibrarian privileges."
-msgstr ""
+msgstr "přístup či změnu k právům superknihovníka (superlibrarian)."
 
 # Patrons > General
 msgid "patrons.pref#RequireStrongPassword# (Must contain at least one digit, one lowercase and one uppercase)."
-msgstr ""
+msgstr "(Musí obsahovat kombinaci přinejmenším jedné číslice, malé písmena a velkého písmene)."
 
 # Patrons > General
 msgid "patrons.pref#RequireStrongPassword# Don't require"
-msgstr ""
+msgstr "Nepožadovat"
 
 # Patrons > General
 msgid "patrons.pref#RequireStrongPassword# Require"
@@ -7404,11 +7444,11 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#RequireStrongPassword# a strong password for staff and patrons"
-msgstr ""
+msgstr "silné heslo pro knihovníky i čtenáře"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
-msgstr ""
+msgstr "<br> Pokud si přejete posílat SMS skrze E-maily, nastavte SMSSendDriver na hodnotu \"Email\"."
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
@@ -7424,7 +7464,7 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#SMSSendUsername# Define a username/login"
-msgstr ""
+msgstr "Zadej uživatelské jméno (login)"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendUsername# and a password"
@@ -7432,11 +7472,11 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#SMSSendUsername# for emails sent using \"Email\" send driver."
-msgstr ""
+msgstr "pro e-maily odeslané přes ovladač (driver) \"Email\"."
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
-msgstr ""
+msgstr "(oddělte pole pomocí |, poslední záznam neukončujte \"|\"). Výchozí stav (pokud nevyplněno): location|itype|ccode"
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# Show the following fields from the items database table as columns on the statistics tab on the patron record: "
@@ -7464,7 +7504,7 @@ msgstr "Nezaznamenávat"
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the borrowers.lastseen will be updated with the current time."
-msgstr ""
+msgstr "Při každém čtenářově připojení bude hodnota \"borowers.lastseen\" aktualizována na současný čas."
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
@@ -7472,7 +7512,7 @@ msgstr "poslední aktivitu čtenáře."
 
 # Patrons > General
 msgid "patrons.pref#UseEmailReceipts# Don't send"
-msgstr ""
+msgstr "Neposílat"
 
 # Patrons > General
 msgid "patrons.pref#UseEmailReceipts# Send"
@@ -7480,7 +7520,7 @@ msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#UseEmailReceipts# email receipts to patrons for payments and writeoffs."
-msgstr ""
+msgstr "e-mailová potvrzení čtenářům o zaplacených i odpuštěných platbách."
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
@@ -7516,7 +7556,7 @@ msgstr "Nepovolit"
 
 # Patrons > General
 msgid "patrons.pref#intranetreadinghistory# staff to access a patron's checkout and hold history (reading history is still stored, regardless of staff being allowed access or not)."
-msgstr ""
+msgstr "zaměstnancům přístup k historii výpůjček a rezervací čtenáře (záznam co čtenář četl je ukládána do systému tak jako tak)."
 
 # Patrons > General
 msgid "patrons.pref#minPasswordLength# Login passwords for staff and patrons must be at least"
@@ -7604,7 +7644,7 @@ msgstr "pole (oddělit hodnoty svislítkem |). Záložky se objeví v pořadí s
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Disable"
-msgstr ""
+msgstr "Zakázat"
 
 # Searching > Features
 msgid "searching.pref#BrowseResultSelection# Enable"
@@ -8680,7 +8720,7 @@ msgstr "web_services.pref#RESTBasicAuth# <a href=\"https://www.w3.org/Protocols/
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Disable"
-msgstr ""
+msgstr "Zakázat"
 
 # Web services > REST API
 msgid "web_services.pref#RESTBasicAuth# Enable"
@@ -8688,7 +8728,7 @@ msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Disable"
-msgstr ""
+msgstr "Zakázat"
 
 # Web services > REST API
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Enable"

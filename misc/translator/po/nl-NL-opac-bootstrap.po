@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-01-15 21:56-0300\n"
-"PO-Revision-Date: 2020-01-17 11:25+0000\n"
+"POT-Creation-Date: 2020-02-16 16:59-0300\n"
+"PO-Revision-Date: 2020-02-14 07:53+0000\n"
 "Last-Translator: Ronald Wijlens <r.j.wijlens@saxion.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: nl_NL\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Pootle 2.8\n"
 "X-Pootle-Path: /nl_NL/18.05/nl-NL-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-"X-POOTLE-MTIME: 1579260323.961534\n"
+"X-POOTLE-MTIME: 1581666826.134617\n"
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -406,7 +406,7 @@ msgstr ""
 "%s %sBetaald, bedankt %sBetaald, bedankt (contant via SIP2) %sBetaald, "
 "bedankt (VISA via SIP2) %sBetaald, bedankt (creditcard via SIP2) %sNieuwe "
 "kaart %sBoete %sAdministratiekosten %sDivers %sZoek item %sAfschrijving "
-"%sOplopende boete %sTe lang wachtende reservering %sHuurkosten "
+"%sOplopende boete %sTe lang wachtende aanvraag %sHuurkosten "
 "%sKwijtgescholden %sZoek item boete terugbetaling %sVerwerkingskosten "
 "%sBetaling %sAfschrijving %sTegoed %sTegoed %s%s %s %s, %s%s %s, %s%s "
 "%s(%s)%s "
@@ -751,7 +751,7 @@ msgstr ""
 "bevatten. %s %s Het wachtwoord mag niet straten of eindigen met een spatie. "
 "%s %s Uw huidige wachtwoord was incorrect ingegeven. Als dit probleem "
 "aanhoudt, vraag a.u.b. een bibliotheekmedewerker om uw wachtwoord te "
-"resetten. %s"
+"resetten. %s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
 #. %2$s:  ELSIF ar.status == 'PROCESSING' 
@@ -920,7 +920,7 @@ msgstr "%s Dit ppn werd niet gevonden op de idref service. %s %s "
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:230
 #, c-format
 msgid "%s This record has no items. %s "
-msgstr "%s Dit record heeft geen items.%s "
+msgstr "%s Dit record heeft geen items. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -1003,9 +1003,9 @@ msgid ""
 "%s You will be charged a hold fee of %s when you collect this item %s You "
 "will be charged a hold fee of %s for placing this hold %s "
 msgstr ""
-"%s Er wordt een bedrag van %s in rekening gebracht wanneer u dit item %s "
-"ophaalt. Er wordt een bedrag van %s in rekening gebracht voor deze "
-"reservering %s "
+"%s Er wordt een bedrag van %s in rekening gebracht bij het ophalen van dit "
+"exemplaar %s Er wordt een bedrag van %s in rekening gebracht voor deze "
+"aanvraag %s "
 
 #. %1$s:  resul.used | html 
 #: opac-tmpl/bootstrap/en/modules/opac-authoritiessearchresultlist.tt:95
@@ -1442,7 +1442,7 @@ msgstr "%s%s%sKoha online%s catalogus &rsaquo; Opmerkingen over %s"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:9
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Course reserves for %s"
-msgstr "%s%s%sKoha online%s catalogus &rsaquo; Cursus reserveringen voor %s"
+msgstr "%s%s%sKoha online%s catalogus &rsaquo; Literatuurlijst voor %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1592,7 +1592,7 @@ msgstr "%s%s%sKoha online%s catalogus &rsaquo; OverDrive zoekactie naar '%s'"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:8
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Placing a hold"
-msgstr "%s%s%sKoha online%s catalogus &rsaquo; Een reservering plaatsen"
+msgstr "%s%s%sKoha online%s catalogus &rsaquo; Een aanvraag plaatsen"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle | html 
@@ -1988,8 +1988,8 @@ msgid ""
 "%sItem due %sAdvance notice %sUpcoming events %sHold filled %sItem check-in "
 "%sItem checkout %sUnknown %s"
 msgstr ""
-"%sItem verwacht %sAankondiging %sEvenementen %sReserveringen %sItem "
-"ingenomen %sItem uitgeleend %sOnbekend %s"
+"%sExemplaar verwacht %sAankondiging %sAankomende evenementen %sVerwerkte "
+"aanvragen %sExemplaar ingenomen %sExemplaar uitgeleend %sOnbekend %s"
 
 #. %1$s:  IF ( advsearchloo.advanced_search_type == 'itemtypes' ) 
 #. %2$s:  ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) 
@@ -3486,24 +3486,24 @@ msgstr "Iedereen die deze lijst ziet"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Apr"
-msgstr "apr"
+msgstr "Apr"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "April"
-msgstr "april"
+msgstr "April"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
 msgid "Are you sure you want to cancel this article request?"
-msgstr "Weet u zeker dat u deze reservering wilt annuleren?"
+msgstr "Weet u zeker dat u deze artikelaanvraag wilt annuleren?"
 
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
 msgid "Are you sure you want to cancel this hold?"
-msgstr "Weet u zeker dat u deze reservering wilt annuleren?"
+msgstr "Weet u zeker dat u deze aanvraag wilt annuleren?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
@@ -3558,7 +3558,7 @@ msgstr "Weet u zeker dat u het delen hiervan wilt verwijderen?"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
 msgid "Are you sure you want to resume all suspended holds?"
-msgstr "Weet u zeker dat u alle opgeschorte reserveringen wilt hervatten?"
+msgstr "Weet u zeker dat u alle opgeschorte aanvragen wilt hervatten?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
@@ -3568,7 +3568,7 @@ msgstr "Weet u zeker dat u dit item wilt inleveren?"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:925
 msgid "Are you sure you want to suspend all holds?"
-msgstr "Weet u zeker dat u alle reserveringen wilt blokkeren?"
+msgstr "Weet u zeker dat u alle aanvragen wilt opschorten?"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:854
 #, c-format
@@ -3639,12 +3639,12 @@ msgstr "Audiovisueel profiel:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Aug"
-msgstr "aug"
+msgstr "Aug"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "August"
-msgstr "augustus"
+msgstr "Augustus"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:54
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:482
@@ -4098,7 +4098,7 @@ msgstr "CancelRecall "
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:767
 #, c-format
 msgid "Cancels an active hold request for the patron."
-msgstr "Annuleert een actieve reserveringsaanvraag voor de gebruiker."
+msgstr "Annuleert een actieve aanvraag van de gebruiker."
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:362
@@ -4127,7 +4127,7 @@ msgstr "Kaartnummer moet exact %s tekens lang zijn."
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:51
 #, c-format
 msgid "Card number:"
-msgstr "kaartnummer:"
+msgstr "Kaartnummer:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:26
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:613
@@ -4367,7 +4367,7 @@ msgstr "Klik hier om in te loggen."
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:173
 #, c-format
 msgid "Click here to view"
-msgstr "klik hier om te bekijken"
+msgstr "Klik hier om te bekijken"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:644
 #, c-format
@@ -4400,7 +4400,7 @@ msgstr "Klik om deze rol uit te breiden"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:469
 #, c-format
 msgid "Click to open in new window"
-msgstr "Klik om een nieuw venster te openen"
+msgstr "Klik om in nieuw venster te openen"
 
 #. DIV
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
@@ -4542,14 +4542,14 @@ msgstr "Opmerkingen%s"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:446
 msgid "Confirm hold"
-msgstr "Bevestig reservering"
+msgstr "Bevestig aanvraag"
 
 #. %1$s:  INCLUDE 'patron-title.inc' patron = logged_in_user 
 #. %2$s:  logged_in_user.cardnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
 #, c-format
 msgid "Confirm holds for:%s (%s)"
-msgstr "Bevestig reserveringen voor:%s (%s)"
+msgstr "Bevestig aanvraag voor:%s (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
 #, c-format
@@ -4852,12 +4852,12 @@ msgstr "Dagen vantevoren"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Dec"
-msgstr "dec"
+msgstr "Dec"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "December"
-msgstr "december"
+msgstr "December"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:64
@@ -5117,7 +5117,7 @@ msgstr "Verwacht %s"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:104
 #, c-format
 msgid "ERROR: Internal error: incomplete hold request. "
-msgstr "FOUT: Interne fout: onvolledig reserveringsverzoek. "
+msgstr "FOUT: Interne fout: onvolledige aanvraag. "
 
 #. %1$s:  bad_biblionumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:80
@@ -5457,12 +5457,12 @@ msgstr "Fax:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Feb"
-msgstr "feb"
+msgstr "Feb"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "February"
-msgstr "februari"
+msgstr "Februari"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) | html 
 #. %2$s:  ISSUE.renewalfee | $Price 
@@ -5546,7 +5546,7 @@ msgstr "Inschrijving afronden"
 #: opac-tmpl/bootstrap/en/includes/page-numbers.inc:6
 #, c-format
 msgid "First"
-msgstr "Voornaam"
+msgstr "Eerste"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:272
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:274
@@ -5613,7 +5613,7 @@ msgstr "Formaat"
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:10
 #, c-format
 msgid "Format:"
-msgstr "Formaat:"
+msgstr "Format:"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:71
@@ -5623,7 +5623,7 @@ msgstr "Gevonden"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 msgid "Found %s results in the library's %s collection"
-msgstr "%s resultaten in de %s collectie van de bibliotheek."
+msgstr "Er zijn %s resultaten gevonden in de %s collectie"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -5633,12 +5633,12 @@ msgstr "Vr"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Fri"
-msgstr "vrij"
+msgstr "Vrij"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Friday"
-msgstr "vrijdag"
+msgstr "Vrijdag"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:21
 #, c-format
@@ -5779,7 +5779,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:147
 #, c-format
 msgid "Go"
-msgstr "OK"
+msgstr "Ga"
 
 #. LI
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1118
@@ -5886,17 +5886,17 @@ msgstr "Markeer"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
 #, c-format
 msgid "Hold date:"
-msgstr "Reserveringsdatum:"
+msgstr "Aanvraagdatum:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:276
 #, c-format
 msgid "Hold not needed after:"
-msgstr "Reservering niet nodig na:"
+msgstr "Aanvraag niet nodig na:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:300
 #, c-format
 msgid "Hold notes:"
-msgstr "Bezit opmerking:"
+msgstr "Opmerking bij aanvraag:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, c-format
@@ -5937,18 +5937,18 @@ msgstr "Exemplaren:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 msgid "Holds"
-msgstr "Reserveringen"
+msgstr "Aanvragen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
 #, c-format
 msgid "Holds "
-msgstr "Reserveringen "
+msgstr "Aanvragen "
 
 #. %1$s:  RESERVES.count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:165
 #, c-format
 msgid "Holds (%s)"
-msgstr "Reserveringen (%s)"
+msgstr "Aanvragen (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:22
 #: opac-tmpl/bootstrap/en/modules/svc/suggestion.tt:13
@@ -6041,7 +6041,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:44
 #, c-format
 msgid "I have read the "
-msgstr "Ik heb gelezen de"
+msgstr "Ik heb gelezen de "
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:54
 #, c-format
@@ -6320,7 +6320,7 @@ msgid ""
 "2018."
 msgstr ""
 "Om u ingelogd te kunnen houden, dient u toestemming te geven om uw "
-"persoonlijke gegevens te verwerken conform de AVG van 25 mei 2018"
+"persoonlijke gegevens te verwerken conform de AVG van 25 mei 2018."
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( item.transfertfrom ) | html 
@@ -6521,32 +6521,32 @@ msgstr "Items: "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Jan"
-msgstr "jan"
+msgstr "Jan"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "January"
-msgstr "januari"
+msgstr "Januari"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Jul"
-msgstr "jul"
+msgstr "Jul"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "July"
-msgstr "jul"
+msgstr "Juli"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Jun"
-msgstr "jun"
+msgstr "Jun"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "June"
-msgstr "juni"
+msgstr "Juni"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:298
 #, c-format
@@ -6727,7 +6727,7 @@ msgstr "Bibliotheek:"
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:31
 #, c-format
 msgid "Library: "
-msgstr "Bibliotheek.: "
+msgstr "Bibliotheek: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:137
 #, c-format
@@ -6835,7 +6835,7 @@ msgstr "Laden"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:753
 #, c-format
 msgid "Loading "
-msgstr "Laden..."
+msgstr "Laden "
 
 #. For the first occurrence,
 #. SCRIPT
@@ -7093,12 +7093,12 @@ msgstr "Beheerd door:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Mar"
-msgstr "mrt"
+msgstr "Maa"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "March"
-msgstr "maart"
+msgstr "Maart"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:490
 #, c-format
@@ -7109,7 +7109,7 @@ msgstr "Overeenkomst:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "May"
-msgstr "mei"
+msgstr "Mei"
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:140
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:143
@@ -7162,7 +7162,7 @@ msgstr "Ontbrekende nummers: %s "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Mo"
-msgstr "ma"
+msgstr "Ma"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:619
 #, c-format
@@ -7177,7 +7177,7 @@ msgstr "Maa"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Monday"
-msgstr "maandag"
+msgstr "Maandag"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1037
 #, c-format
@@ -7439,7 +7439,7 @@ msgstr "Geen ingangen te tonen"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 msgid "No holds"
-msgstr "geen reserveringen"
+msgstr "Geen aanvragen"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
@@ -7532,12 +7532,12 @@ msgstr "Geen verlengingen over"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:99
 #, c-format
 msgid "No reserves have been selected for this course."
-msgstr "Geen reserveringen geselecteerd voor deze cursus."
+msgstr "Geen bronnen geselecteerd voor deze cursus."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 msgid "No results found in the library's %s collection"
-msgstr "Geen resultaten in de %s collectie van de bibliotheek."
+msgstr "Geen resultaten in de %s collectie"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:71
@@ -7593,7 +7593,7 @@ msgstr "Geen"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:116
 #, c-format
 msgid "None of the libraries are available for pickup location. "
-msgstr "Er zijn geen afhaalbibliotheken beschikbaar."
+msgstr "Er zijn geen afhaalbibliotheken beschikbaar. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:344
 #, c-format
@@ -7677,9 +7677,8 @@ msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
 "locally. Please come to the library to retrieve these items %s %s "
 msgstr ""
-"Let op: De reglementen staan het aanvragen van een exemplaar niet toe indien "
-"deze ter plekke beschikbaar is. Kom a.u.b. naar de bibliotheek om deze items "
-"op te halen %s %s "
+"Let op: De bibliotheek staat aanvragen van boeken niet toe indien deze ter "
+"plekke beschikbaar zijn. Kom naar de bibliotheek om ze daar te lenen %s %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:47
 #, c-format
@@ -7792,7 +7791,7 @@ msgstr "Melding:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Nov"
-msgstr "nov"
+msgstr "Nov"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:591
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1044
@@ -7809,7 +7808,7 @@ msgstr "Select Schrijver: "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "November"
-msgstr "november"
+msgstr "November"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:79
 #, c-format
@@ -7848,12 +7847,12 @@ msgstr "OF"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Oct"
-msgstr "okt"
+msgstr "Okt"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "October"
-msgstr "oktober"
+msgstr "Oktober"
 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:51
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
@@ -7884,8 +7883,7 @@ msgstr ""
 #, c-format
 msgid "One or more holds were not placed due to existing holds."
 msgstr ""
-"Eén of meer reserveringen zijn niet geplaatst vanwege reeds bestaande "
-"reserveringen."
+"Eén of meer aanvragen zijn niet geplaatst vanwege reeds bestaande aanvragen."
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:340
 #, c-format
@@ -8191,17 +8189,17 @@ msgstr "Afhaalbibliotheek:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Place a hold on"
-msgstr "Plaats reservering op"
+msgstr "Plaats aanvraag op"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:169
 #, c-format
 msgid "Place a hold on "
-msgstr "Plaats reservering op "
+msgstr "Plaats aanvraag op "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:457
 msgid "Place a hold on: "
-msgstr "Plaats reservering op: "
+msgstr "Plaats aanvraag op: "
 
 #. %1$s:  biblio.title | html 
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:27
@@ -8221,7 +8219,7 @@ msgstr "Plaats artikel aanvraag voor %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:766
 #, c-format
 msgid "Place hold"
-msgstr "Plaats reservering"
+msgstr "Plaats aanvraag"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:184
@@ -8243,7 +8241,7 @@ msgstr "Plaatsen"
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:19
 #, c-format
 msgid "Placing a hold"
-msgstr "Reservering plaatsen"
+msgstr "Aanvraag plaatsen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:610
 #, c-format
@@ -8445,7 +8443,7 @@ msgstr "Let op: "
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:31
 #, c-format
 msgid "Please save your consent below or log out. Thank you!"
-msgstr "Sla uw toestemming op voordat u uitlogt. Dank u."
+msgstr "Sla uw toestemming op voordat u uitlogt. Dank u!"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:196
@@ -9160,12 +9158,12 @@ msgstr "Hervatten"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #, c-format
 msgid "Resume all suspended holds"
-msgstr "Hervat alle geblokkeerde reserveringen"
+msgstr "Hervat alle opgeschorte aanvragen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:734
 #, c-format
 msgid "Resume your hold on "
-msgstr "Hervat reservering op "
+msgstr "Hervat aanvraag op "
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:88
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:113
@@ -9238,8 +9236,8 @@ msgid ""
 msgstr ""
 "Geeft specifieke informatie terug over de gebruiker, gebaseerd op opties die "
 "in het verzoek aangegeven zijn. Deze functie kan optioneel contactinformatie "
-"van de gebruiker teruggeven, reserveringsinformatie, leeninformatie en "
-"berichten."
+"van de gebruiker teruggeven, boetegegevens, aanvraaginformatie, "
+"leeninformatie en berichten."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1389
@@ -9295,7 +9293,7 @@ msgstr "SRW-DC"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sa"
-msgstr "za"
+msgstr "Za"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:238
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:240
@@ -9306,12 +9304,12 @@ msgstr "Aanhef:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sat"
-msgstr "zat"
+msgstr "Zat"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Saturday"
-msgstr "zaterdag"
+msgstr "Zaterdag"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-patron-consent.tt:54
@@ -9638,12 +9636,12 @@ msgstr "Uw lijst wordt verstuurd"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sep"
-msgstr "sep"
+msgstr "Sep"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "September"
-msgstr "september"
+msgstr "September"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:170
 #, c-format
@@ -9977,7 +9975,7 @@ msgstr "Sorry, u kunt niet reserveren."
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:74
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
-msgstr "Sorry, u kunt niet meer dan %s reserveringen plaatsen. "
+msgstr "Sorry, u kunt niet meer dan %s aanvragen plaatsen. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:145
 #, c-format
@@ -10109,7 +10107,7 @@ msgstr "Huisnummer:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Su"
-msgstr "zo"
+msgstr "Zo"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:173
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:175
@@ -10308,12 +10306,12 @@ msgstr "Samenvatting"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sun"
-msgstr "zon"
+msgstr "Zon"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Sunday"
-msgstr "zondag"
+msgstr "Zondag"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
@@ -10340,7 +10338,7 @@ msgstr "Opschorten"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:779
 #, c-format
 msgid "Suspend all holds"
-msgstr "Blokkeer alle reserveringen"
+msgstr "Blokkeer alle aanvragen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:741
 #, c-format
@@ -10350,7 +10348,7 @@ msgstr "Opschorten tot:"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:736
 #, c-format
 msgid "Suspend your hold on "
-msgstr "Schort uw reservering op, op "
+msgstr "Aanvraag opschorten op "
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead-langmenu.inc:4
@@ -10463,7 +10461,7 @@ msgstr "Term:"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Th"
-msgstr "do"
+msgstr "Do"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:27
 #, c-format
@@ -10623,7 +10621,7 @@ msgid ""
 msgstr ""
 "Het verwijderen van uw leesgeschiedenis is niet gelukt, omdat er een "
 "probleem is met de instelling van deze functie. Help het systeem te "
-"verbeteren door de bibliotheek te informeren over deze fout."
+"verbeteren door de bibliotheek te informeren over deze fout"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:93
 #, c-format
@@ -10776,7 +10774,7 @@ msgstr "De transactie id '%s' voor deze betaling is ongeldig."
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:182
 #, c-format
 msgid "The userid "
-msgstr "De gebruikers-ID "
+msgstr "De gebruikersid "
 
 #. %1$s:  subscriptionsnumber | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:798
@@ -10968,7 +10966,7 @@ msgstr "Deze titel kan niet aangevraagd worden."
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Thu"
-msgstr "don"
+msgstr "Don"
 
 #. IMG
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:99
@@ -10979,7 +10977,7 @@ msgstr "Miniatuurweergave"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Thursday"
-msgstr "donderdag"
+msgstr "Donderdag"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:337
@@ -11104,7 +11102,7 @@ msgstr "Totaal verschuldigd"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:657
 #, c-format
 msgid "Total holds: %s"
-msgstr "Totaal aantal reserveringen: %s"
+msgstr "Totaal aantal aanvragen: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:362
 #, c-format
@@ -11114,17 +11112,17 @@ msgstr "Verdragen "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Tu"
-msgstr "di"
+msgstr "Di"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Tue"
-msgstr "di"
+msgstr "Din"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Tuesday"
-msgstr "dinsdag"
+msgstr "Dinsdag"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
 #, c-format
@@ -11416,7 +11414,7 @@ msgstr "Let op: Dit kan niet ongedaan gemaakt worden. Bevestig opnieuw"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "We"
-msgstr "wo"
+msgstr "Wo"
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:41
 #, c-format
@@ -11435,12 +11433,12 @@ msgstr "Website"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Wed"
-msgstr "woe"
+msgstr "Woe"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 msgid "Wednesday"
-msgstr "woensdag"
+msgstr "Woensdag"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:102
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:149
@@ -11734,9 +11732,9 @@ msgid ""
 "after a fixed number of failed login attempts%s. Please contact a library "
 "staff member if you continue to have problems."
 msgstr ""
-"Onjuiste gebruikersnaam of wachtwoord ingevoerd. Probeer het opnieuw. Let op:"
-" wachtwoorden zijn hoofdlettergevoelig%s en accounts worden geblokkeerd na "
-"een bepaald aantal mislukte inlogpogingen%s. Neem contact op met de "
+"Onjuiste gebruikersnaam of wachtwoord ingevoerd. Probeer het opnieuw. Let "
+"op: wachtwoorden zijn hoofdlettergevoelig%s en accounts worden geblokkeerd "
+"na een bepaald aantal mislukte inlogpogingen%s. Neem contact op met de "
 "bibliotheek bij aanhoudende problemen."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:50
@@ -12228,7 +12226,7 @@ msgstr "Uw aanvraag bevatte geen retouren."
 #: opac-tmpl/bootstrap/en/modules/opac-routing-lists.tt:20
 #, c-format
 msgid "Your routing lists"
-msgstr "uw circulatielijsten"
+msgstr "Uw circulatielijsten"
 
 #. %1$s:  IF hash 
 #. %2$s:  hash | html 
@@ -12305,7 +12303,7 @@ msgstr "[% filter of"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1016
 #, c-format
 msgid "[%s tag not supported by your browser.]"
-msgstr "[%s tag niet ondersteund door uw browser.] "
+msgstr "[%s tag niet ondersteund door uw browser.]"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
@@ -12410,7 +12408,7 @@ msgstr "wijzig uw wachtwoord"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:152
 #, c-format
 msgid "checkout(s)"
-msgstr "Uitlening(en)"
+msgstr "uitlening(en)"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:314
 #, c-format
@@ -12438,7 +12436,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
 #, c-format
 msgid "date after which hold request is no longer needed"
-msgstr "datum waarna de reserveringsaanvraag niet meer nodig is"
+msgstr "datum waarna de aanvraag niet meer nodig is"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:719
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:750
@@ -12464,7 +12462,7 @@ msgstr "desired_due_date"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:164
 #, c-format
 msgid "due in fines and charges"
-msgstr "Openstaande boetes en kosten"
+msgstr "verschuldigd in boetes en kosten"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:463
 #, c-format
@@ -12495,7 +12493,7 @@ msgstr "hier"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:158
 #, c-format
 msgid "hold(s) pending"
-msgstr "lopende reservering(en)"
+msgstr "wachtende aanvragen"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:161
 #, c-format
@@ -12691,7 +12689,7 @@ msgstr "van de"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:155
 #, c-format
 msgid "overdue(s)"
-msgstr "Te laat melding(en)"
+msgstr "te laat melding(en)"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:488
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:69
@@ -12731,7 +12729,7 @@ msgstr "primair e-mailadres"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:906
 #, c-format
 msgid "privacy policy"
-msgstr "Privacybeleid"
+msgstr "privacybeleid"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:585
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:587
@@ -13016,7 +13014,7 @@ msgstr "gebruikers wachtwoord"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:462
 #, c-format
 msgid "userid"
-msgstr "gebruiker-ID"
+msgstr "gebruikerid"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:486
 #, c-format
@@ -13037,7 +13035,7 @@ msgstr "toon normaal"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:71
 msgid "waiting holds:"
-msgstr "reserveringen in de wacht:"
+msgstr "klaarstaande aanvragen:"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:182
 #, c-format
@@ -13063,8 +13061,7 @@ msgstr ""
 #, c-format
 msgid "whether or not to return hold request information in the response"
 msgstr ""
-"of er wel of geen reserveringsinformatie meegestuurd moet worden in de "
-"reactie"
+"of er wel of geen aanvraaginformatie meegestuurd moet worden in de reactie"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:519
 #, c-format
@@ -13100,8 +13097,8 @@ msgid ""
 "you can only place %s more holds. Please uncheck the checkboxes for the "
 "items you wish to not place holds on. "
 msgstr ""
-"u kunt nog slechts %s reserveringen plaatsen. Vink de items uit waarop u "
-"geen reservering wilt plaatsen. "
+"u kunt nog slechts %s aanvragen plaatsen. Vink de exemplaren uit die u niet "
+"wilt aanvragen. "
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:30
 #, c-format
