@@ -124,14 +124,15 @@ if($op eq 'delete_confirm'){
         foreach my $serialid (@serialsid){
             my @itemnumbers = Koha::Serial::Items->search({serialid => $serialid})->get_column('itemnumber');
             foreach my $itemnumber (@itemnumbers){
-                C4::Items::DelItem({'biblionumber' => $biblionumber, 'itemnumber' => $itemnumber});
+                my $delcheck = C4::Items::DelItemCheck($biblionumber, $itemnumber);
+                $template->param(error_delitem => 1) if $delcheck != 1;
             }
         }
     }
     for my $serialid (@serialsid){
-        ModSerialStatus($serialid,"","","","",6);
+        my $serial = Koha::Serials->find($serialid);
+        ModSerialStatus($serialid, $serial->serialseq, $serial->planneddate, $serial->publisheddate, $serial->publisheddatetext, 6, "");
     }
-    print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
 }
 
 my $subscriptioncount;

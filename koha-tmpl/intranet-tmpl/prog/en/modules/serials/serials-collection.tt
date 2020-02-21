@@ -55,6 +55,12 @@
     </div>
 [% END %]
 
+[% IF ( error_delitem ) %]
+    <div class="dialog alert">
+        <p><strong>Error</strong>: one or more associated items could not be deleted at this time.</p>
+    </div>
+[% END %]
+
 [% IF ( subscriptions ) %]
 <table>
 [% IF ( subscriptions.size == 1 ) %]
