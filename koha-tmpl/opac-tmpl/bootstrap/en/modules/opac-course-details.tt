@@ -5,6 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Course reserves for [% course.course_name | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -106,15 +107,19 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script>
     $(document).ready(function() {
-        $("#course-items-table").dataTable($.extend(true, {}, dataTablesDefaults, {
+        columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'course-items-table', 'json' ) | $raw %];
+        KohaTable("#course-items-table", {
             "dom": '<"top"flp>rt<"clear">',
-            "columnDefs": [
+            "sorting": [[ 1, "asc" ]],
+            "autoWidth": false,
+            "asColumnDefs": [
                 { "type": "anti-the", "targets" : [ "anti-the" ] },
-                { "type": "title-string", "targets" : [ "title-string" ] }
+                { "type": "title-string", "targets" : [ "title-string" ] },
             ]
-        }));
+        }, columns_settings );
     });
     </script>
 [% END %]
