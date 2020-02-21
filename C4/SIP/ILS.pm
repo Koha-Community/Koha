@@ -164,12 +164,12 @@ sub checkout {
 
             $item->{patron}   = $patron_id;
             $item->{due_date} = $circ->{due};
-            push( @{ $patron->{items} }, $item_id );
+            push( @{ $patron->{items} }, { barcode => $item_id } );
             $circ->desensitize( !$item->magnetic_media );
 
             syslog(
                 "LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
-                $patron_id, join( ', ', @{ $patron->{items} } )
+                $patron_id, join( ', ', map{ $_->{barcode} } @{ $patron->{items} } )
             );
         }
         else {
