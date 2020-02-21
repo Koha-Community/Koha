@@ -25,8 +25,7 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;
-use C4::External::BakerTaylor;
-use C4::External::BakerTaylor qw(&image_url &link_url);
+use C4::External::BakerTaylor qw( image_url link_url );
 use Koha::DateUtils;
 use MARC::Record;
 
