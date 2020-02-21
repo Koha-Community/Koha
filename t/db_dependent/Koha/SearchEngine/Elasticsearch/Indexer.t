@@ -30,7 +30,7 @@ my $schema = Koha::Database->schema();
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
 subtest 'create_index() tests' => sub {
-    plan tests => 4;
+    plan tests => 5;
     my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
     $se->mock( 'get_elasticsearch_params', sub {
             my ($self, $sub ) = @_;
@@ -59,7 +59,10 @@ subtest 'create_index() tests' => sub {
         MARC::Field->new('245', '', '', 'a' => 'Title')
     );
     my $records = [$marc_record];
-    ok($indexer->update_index([1], $records), 'Update Index');
+
+    my $response = $indexer->update_index([1], $records);
+    is( $response->{errors}, 0, "no error on update_index" );
+    is( scalar(@{$response->{items}}), 1, "1 item indexed" );
 
     is(
         $indexer->drop_index(),
