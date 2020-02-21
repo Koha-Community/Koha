@@ -160,6 +160,7 @@
                             <input type="hidden" name="koha_login_context" value="opac" />
                             <fieldset class="brief">
                             [% FOREACH INPUT IN INPUTS %]
+                                [% NEXT IF INPUT.name == 'logout.x' %]
                                 <input type="hidden" name="[% INPUT.name | html %]" value="[% INPUT.value | html %]" />
                             [% END %]
                             <label for="userid">Login</label>
