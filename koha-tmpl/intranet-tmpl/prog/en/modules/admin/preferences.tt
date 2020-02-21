@@ -80,7 +80,11 @@
                     [% IF ( CHUNK.type_text ) %]
                     [% CHUNK.contents | $raw %]
                     [% ELSIF ( CHUNK.type_input ) %]
-                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type | html %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" value="[% CHUNK.value | html %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                        [% IF CHUNK.name == 'UsageStatsGeolocation' %]
+                            <input type="[%IF CHUNK.input_type %][% CHUNK.input_type | html %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" value="[% CHUNK.value | html %]" autocomplete="off" readonly="readonly" size="40" style="width: auto;"/> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                        [% ELSE %]
+                            <input type="[%IF CHUNK.input_type %][% CHUNK.input_type | html %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" value="[% CHUNK.value | html %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                        [% END %]
                     [% ELSIF ( CHUNK.type_select ) %]
                     <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]">
                         [% FOREACH CHOICE IN CHUNK.CHOICES.sort('value') %]
