@@ -20925,6 +20925,37 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17702 - Add column account_credit_types.archived)\n";
 }
 
+$DBversion = '19.12.00.030';
+if( CheckVersion( $DBversion ) ) {
+
+    # get list of installed translations
+    require C4::Languages;
+    my @langs;
+    my $tlangs = C4::Languages::getTranslatedLanguages();
+
+    foreach my $language ( @$tlangs ) {
+        foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
+            push @langs, $sublanguage->{'rfc4646_subtag'};
+        }
+    }
+
+    # Get any existing value from the opacheader system preference
+    my ($opacheader) = $dbh->selectrow_array( q|
+        SELECT value FROM systempreferences WHERE variable='opacheader';
+    |);
+    if( $opacheader ){
+        foreach my $lang ( @langs ) {
+            print "Inserting opacheader contents into $lang news item...\n";
+            # If there is a value in the opacheader preference, insert it into opac_news
+            $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opacheader_$langs[0]", $opacheader);
+        }
+    }
+    # Remove the opacheader system preference
+    $dbh->do("DELETE FROM systempreferences WHERE variable='opacheader'");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Bug 22880: Move contents of opacheader preference to Koha news system)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
