@@ -20885,8 +20885,7 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do('ALTER TABLE account_credit_types ADD COLUMN archived tinyint(1) NOT NULL DEFAULT 0 AFTER is_system');
     }
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 17702 - Add column account_credit_types.archived)\n";
+    NewVersion( $DBversion, 17702, 'Add column account_credit_types.archived');
 }
 
 $DBversion = '19.12.00.030';
@@ -20907,17 +20906,20 @@ if( CheckVersion( $DBversion ) ) {
     my ($opacheader) = $dbh->selectrow_array( q|
         SELECT value FROM systempreferences WHERE variable='opacheader';
     |);
+
+    my @detail;
     if( $opacheader ){
         foreach my $lang ( @langs ) {
-            print "Inserting opacheader contents into $lang news item...\n";
             # If there is a value in the opacheader preference, insert it into opac_news
             $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, ?, '', ?)", undef, "opacheader_$langs[0]", $opacheader);
+            push @detail, "Inserted opacheader contents into $lang news item...\n";
         }
     }
     # Remove the opacheader system preference
     $dbh->do("DELETE FROM systempreferences WHERE variable='opacheader'");
-    SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (Bug 22880: Move contents of opacheader preference to Koha news system)\n";
+
+    unshift @detail, 'Move contents of opacheader preference to Koha news system';
+    NewVersion( $DBversion, 22880, \@detail);
 }
 
 $DBversion = '19.12.00.031';
@@ -20925,8 +20927,8 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do( q|
 ALTER TABLE article_requests MODIFY COLUMN created_on timestamp NULL, MODIFY COLUMN updated_on timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
     |);
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 22273: Column article_requests.created_on should not be updated)\n";
+
+    NewVersion( $DBversion, 22273, "Column article_requests.created_on should not be updated" );
 }
 
 $DBversion = '19.12.00.032';
@@ -20935,8 +20937,7 @@ if( CheckVersion( $DBversion ) ) {
         DELETE FROM systempreferences WHERE variable="UseQueryParser"
     |);
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24735 - Remove UseQueryParser system preference)\n";
+    NewVersion( $DBversion, 24735, "Remove UseQueryParser system preference" );
 }
 
 $DBversion = '19.12.00.033';
@@ -20964,9 +20965,7 @@ if ( CheckVersion($DBversion) ) {
         (25, 'cashup', 'Perform cash register cashup action')
     });
 
-    SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 23355 - Add cash_register_actions table)\n";
-    print "Upgrade to $DBversion done (Bug 23355 - Add cash register cashup permissions)\n";
+    NewVersion( $DBversion, 23355, [ "Add cash_register_actions table", "Add cash register cashup permissions" ] );
 }
 
 $DBversion = '19.12.00.034';
@@ -20994,8 +20993,7 @@ if ( CheckVersion($DBversion) ) {
     }
     );
 
-    SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 24081 - Add DISCOUNT to account_credit_types and account_offset_types, Add accounts discount permission)\n";
+    NewVersion( $DBversion, 24081, "Add DISCOUNT to account_credit_types and account_offset_types, Add accounts discount permission");
 }
 
 $DBversion = '19.12.00.035';
@@ -21007,8 +21005,7 @@ if ( CheckVersion($DBversion) ) {
         (25, 'anonymous_refund', 'Perform refund actions from cash registers')
     });
 
-    SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 23442 - Add a refund option to the point of sale system)\n";
+    NewVersion( $DBversion, 23442, "Add a refund option to the point of sale system" );
 }
 
 $DBversion = '19.12.00.036';
@@ -21020,8 +21017,7 @@ if( CheckVersion( $DBversion ) ) {
             ('AccessControlAllowOrigin', '', NULL, 'Set the Access-Control-Allow-Origin header to the specified value', 'Free');
     });
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24369 - Add CORS support to Koha)\n";
+    NewVersion( $DBversion, 24369, "Add CORS support to Koha");
 }
 
 $DBversion = '19.12.00.037';
@@ -21031,16 +21027,14 @@ if( CheckVersion( $DBversion ) ) {
     
     $dbh->do( q| INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('RenewAccruingItemWhenPaid', '0', 'If enabled, when the fines on an item accruing is paid off, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue', '', 'YesNo'); | );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 23051 - Add RenewAccruingItemInOpac syspref)\n";
-    print "Upgrade to $DBversion done (Bug 23051 - Add RenewAccruingItemWhenPaid syspref)\n";
+    NewVersion( $DBversion, 23051, [ "Add RenewAccruingItemInOpac syspref", "Add RenewAccruingItemWhenPaid syspref" ]);
 }
 
 $DBversion = '19.12.00.038';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( q| INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('CirculateILL', '0', 'If enabled, it is possible to circulate ILL requested items from within ILL', '', 'YesNo'); | );
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 23112  - Add CirculateILL syspref)\n";
+
+    NewVersion( $DBversion, 23112, "Add CirculateILL syspref");
 }
 
 $DBversion = '19.12.00.039';
