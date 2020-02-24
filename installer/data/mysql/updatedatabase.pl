@@ -21306,8 +21306,7 @@ sub NewVersion {
         $descriptions = [ $descriptions ];
     }
     my $first = 1;
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-    my $time = sprintf ( "%02d:%02d:%02d", $hour,$min,$sec);
+    my $time = POSIX::strftime("%H:%M:%S",localtime);
     for my $description ( @$descriptions ) {
         if ( @$descriptions > 1 ) {
             if ( $first ) {
