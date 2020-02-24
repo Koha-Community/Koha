@@ -35,7 +35,7 @@ sub wanted {
     push @files, $name
         unless $name =~ /\/(\.git|koha-tmpl|node_modules|swagger-ui)(\/.*)?$/ ||
                $name =~ /\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip|patch)$/ ||
-               $name =~ m[(xt/find-license-problems|xt/fix-old-fsf-address)] ||
+               $name =~ m[(xt/find-license-problems|xt/fix-old-fsf-address|misc/translator/po2json)] ||
                ! -f $name;
 }
 
