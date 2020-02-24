@@ -65,6 +65,24 @@ sub get_effective_marcorgcode {
     return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
 }
 
+=head3 get_effective_email
+
+  my $to_email = Koha::Library->get_effective_email;
+
+Returns an effective email address which should be accessible to librarians at the branch.
+
+=cut
+
+sub get_effective_email {
+    my ($self) = @_;
+
+    return
+         $self->branchreplyto
+      || $self->branchemail
+      || C4::Context->preference('ReplytoDefault')
+      || C4::Context->preference('KohaAdminEmailAddress');
+}
+
 =head3 library_groups
 
 Return the Library groups of this library
