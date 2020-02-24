@@ -2,9 +2,9 @@ $DBversion = 'XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
     # get list of installed translations
-    use C4::Languages qw(getTranslatedLanguages);
+    require C4::Languages;
     my @langs;
-    my $tlangs = getTranslatedLanguages();
+    my $tlangs = C4::Languages::getTranslatedLanguages();
 
     foreach my $language ( @$tlangs ) {
         foreach my $sublanguage ( @{$language->{'sublanguages_loop'}} ) {
