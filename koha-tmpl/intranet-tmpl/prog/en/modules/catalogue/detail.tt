@@ -182,7 +182,7 @@
             <a href="#holdings">Holdings ([% itemloop.size() || 0 | html %])</a>
         </li>
     [% END %]
-[% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions</a></li>[% END %]
+[% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions ([% ( MARCNOTES.size || 1 ) | html %])</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
