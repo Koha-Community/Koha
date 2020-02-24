@@ -905,9 +905,9 @@ $(document).ready(function() {
                                   + ( oObj.enumchron || "" )
                               + '</a>';
                               if ( oObj.author ) {
-                                title += 'by ' + oObj.author;
+                                title += ' by ' + oObj.author;
                               }
-                              title += '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=' + oObj.biblionumber + '&itemnumber=' + oObj.itemnumber + '">' + oObj.barcode + '</a>';
+                              title += ' <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=' + oObj.biblionumber + '&itemnumber=' + oObj.itemnumber + '">' + oObj.barcode + '</a>';
 
                               return title;
                         }
