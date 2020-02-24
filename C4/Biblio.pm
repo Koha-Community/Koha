@@ -1990,7 +1990,7 @@ sub TransformKohaToMarc {
 
     # In the next call we use the Default framework, since it is considered
     # authoritative for Koha to Marc mappings.
-    my $mss = GetMarcSubfieldStructure( '', { unsafe => 1 } ); # do not change framewok
+    my $mss = GetMarcSubfieldStructure( '', { unsafe => 1 } ); # do not change framework
     my $tag_hr = {};
     while ( my ($kohafield, $value) = each %$hash ) {
         foreach my $fld ( @{ $mss->{$kohafield} } ) {
@@ -2023,6 +2023,7 @@ sub TransformKohaToMarc {
 }
 
 sub _check_split {
+# Checks if $value must be split; may consult passed framework
     my ($params, $fld, $value) = @_;
     return if index($value,'|') == -1; # nothing to worry about
     return if $params->{no_split};
@@ -2031,8 +2032,13 @@ sub _check_split {
     return $fld->{repeatable} if !$params->{framework};
 
     # here we need to check the specific framework
-    my $mss = Koha::MarcSubfieldStructures->find( $params->{framework}, $fld->{tagfield}, $fld->{tagsubfield} );
-    return 1 if $mss && $mss->repeatable;
+    my $mss = GetMarcSubfieldStructure($params->{framework}, { unsafe => 1 });
+    foreach my $fld2 ( @{ $mss->{ $fld->{kohafield} } } ) {
+        next if $fld2->{tagfield} ne $fld->{tagfield};
+        next if $fld2->{tagsubfield} ne $fld->{tagsubfield};
+        return 1 if $fld2->{repeatable};
+    }
+    return;
 }
 
 =head2 PrepHostMarcField

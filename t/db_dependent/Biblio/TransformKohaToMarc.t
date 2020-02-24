@@ -79,7 +79,7 @@ subtest "Working with control fields" => sub {
 };
 
 subtest "Add tests for _check_split" => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'a' })->delete;
     Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '952', tagsubfield => 'a', kohafield => 'items.fld1' })->store;
@@ -88,7 +88,7 @@ subtest "Add tests for _check_split" => sub {
     Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
     # add 952a repeatable in another framework
     my $fw =  $builder->build({ source => 'BiblioFramework' })->{frameworkcode};
-    Koha::MarcSubfieldStructure->new({ frameworkcode => $fw, tagfield => '952', tagsubfield => 'a', repeatable => 1 })->store;
+    Koha::MarcSubfieldStructure->new({ frameworkcode => $fw, tagfield => '952', tagsubfield => 'a', repeatable => 1, kohafield => 'items.fld1' })->store;
 
     # Test single value in fld1
     my @cols = ( 'items.fld1' => '01' );
@@ -105,9 +105,11 @@ subtest "Add tests for _check_split" => sub {
     $record = C4::Biblio::TransformKohaToMarc( { @cols } );
     is( $record->subfield( '952', 'a' ), '01 | 02', 'Check composite in 952a' );
     # Test with other framework (repeatable)
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-". $fw );
     $record =  C4::Biblio::TransformKohaToMarc( { @cols }, { framework => $fw } );
     is( ($record->subfield( '952', 'a' ))[0], '01', "Framework $fw first 952a" );
     is( ($record->subfield( '952', 'a' ))[1], '02', "Framework $fw second 952a" );
+    is( ref(Koha::Caches->get_instance->get_from_cache( "MarcSubfieldStructure-". $fw )), 'HASH', 'We did hit the cache' );
 };
 
 # Cleanup
