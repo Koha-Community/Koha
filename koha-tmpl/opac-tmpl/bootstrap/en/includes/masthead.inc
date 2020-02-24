@@ -5,7 +5,7 @@
 [% USE KohaNews %]
 [% PROCESS 'html_helpers.inc' %]
 [% SET OpacLangSelectorMode = Koha.Preference('OpacLangSelectorMode') %]
-[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => news_lang, library => branchcode, blocktitle => 0 ) %]
+[% SET OpacHeader = KohaNews.get( location => "opacheader", lang => lang, library => branchcode, blocktitle => 0 ) %]
 
 <div id="wrap">
     <div id="header-region" class="noprint">
