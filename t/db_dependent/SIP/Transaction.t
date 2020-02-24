@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -207,6 +207,66 @@ subtest cancel_hold => sub {
     my $hold = $transaction->drop_hold();
     is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
     is( $item->holds->count(), 0,  "Item has 0 holds remaining");
+};
+
+subtest do_hold => sub {
+    plan tests => 7;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_1 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    my $patron_2 = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode   => $library->branchcode,
+                categorycode => $patron_1->categorycode,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $reserve1 = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_1->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib" );
+    is( $item->holds->count(),         1, "Hold was placed on specific item" );
+
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron_2->cardnumber );
+    my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
+    my $transaction = C4::SIP::ILS::Transaction::Hold->new();
+    is(
+        ref $transaction,
+        "C4::SIP::ILS::Transaction::Hold",
+        "New transaction created"
+    );
+    is( $transaction->patron($sip_patron),
+        $sip_patron, "Patron assigned to transaction" );
+    is( $transaction->item($sip_item),
+        $sip_item, "Item assigned to transaction" );
+    my $hold = $transaction->do_hold();
+    is( $item->biblio->holds->count(), 2, "Bib has 2 holds" );
+
+    is( $patron_2->holds->next->priority, 2, 'Hold placed from SIP should have a correct priority of 2');
 };
 
 $schema->storage->txn_rollback;
