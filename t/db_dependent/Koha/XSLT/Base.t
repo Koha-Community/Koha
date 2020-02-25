@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use File::Temp qw/tempfile/;
-use Test::More tests => 32;
+use Test::More tests => 33;
 use Test::Warn;
 
 use Koha::XSLT::Base;
@@ -70,7 +70,9 @@ $output = $engine->transform({ xml => undef, code => $xsl_1 });
 is( $engine->err, Koha::XSLT::Base::XSLTH_ERR_7, 'Engine returns error on undefined text' );
 
 # Empty string tests
-$output = $engine->transform({ xml => '', code => $xsl_1 });
+warning_like {$output = $engine->transform({ xml => '', code => $xsl_1 }) }
+    qr/XSLT::Base: Empty String/,
+    'Empty string warning detected';
 is( $engine->err, Koha::XSLT::Base::XSLTH_ERR_5, 'Engine returns error on empty string' );
 
 # Non-XML tests
