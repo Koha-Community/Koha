@@ -455,6 +455,7 @@ foreach my $branchcode (@branches) {
     my $library             = Koha::Libraries->find($branchcode);
     my $admin_email_address = $library->branchemail
       || C4::Context->preference('KohaAdminEmailAddress');
+    my $branch_email_address = $library->inbound_email_address;
     my @output_chunks;    # may be sent to mail or stdout or csv file.
 
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
@@ -821,7 +822,7 @@ END_SQL
                 borrowernumber         => undef,
                 message_transport_type => 'email',
                 attachments            => [$attachment],
-                to_address             => $admin_email_address,
+                to_address             => $branch_email_address,
             }
         ) unless $test_mode;
     }
