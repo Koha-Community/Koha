@@ -26,7 +26,7 @@
 var Koha = {};
 </script>
 
-[% IF lang != 'en' %]
+[% IF lang && lang != 'en' %]
     [% Asset.js(lang _ '/js/locale_data.js') | $raw %]
 [% END %]
 [% Asset.js('js/Gettext.js') | $raw %]
