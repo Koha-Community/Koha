@@ -93,6 +93,11 @@ __PACKAGE__->table("message_queue");
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 reply_address
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 content_type
 
   data_type: 'mediumtext'
@@ -138,6 +143,8 @@ __PACKAGE__->add_columns(
   "to_address",
   { data_type => "longtext", is_nullable => 1 },
   "from_address",
+  { data_type => "longtext", is_nullable => 1 },
+  "reply_address",
   { data_type => "longtext", is_nullable => 1 },
   "content_type",
   { data_type => "mediumtext", is_nullable => 1 },
@@ -193,8 +200,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-05 14:26:34
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fSWIVVJGliKtqQaNbmZKYQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-02-25 09:43:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9M95gvHiqvdGdahHEHaFaA
 
 sub koha_object_class {
     'Koha::Notice::Message';
