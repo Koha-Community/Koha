@@ -34,7 +34,7 @@ use t::lib::Mocks qw( mock_preference );
 use C4::Context;
 use C4::Breeding;
 use Koha::Database;
-use Koha::XSLT_Handler;
+use Koha::XSLT::Base;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -208,7 +208,7 @@ sub test_do_xslt {
     );
     my $file= $FindBin::Bin.'/XSLT_Handler/test01.xsl';
     my $server= { add_xslt => $file };
-    my $engine=Koha::XSLT_Handler->new;
+    my $engine=Koha::XSLT::Base->new;
 
     #ready for the main test
     my @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine );
@@ -219,7 +219,7 @@ sub test_do_xslt {
     #forcing an error on the xslt side
     $server->{add_xslt} = 'notafile.xsl';
     @res = C4::Breeding::_do_xslt_proc( $biblio, $server, $engine );
-    is( $res[1], Koha::XSLT_Handler::XSLTH_ERR_2, 'Error code found' );
+    is( $res[1], Koha::XSLT::Base::XSLTH_ERR_2, 'Error code found' );
     #We still expect the original record back
     is( ref $res[0], 'MARC::Record', 'Still got back MARC record' );
     is ( $res[0]->subfield('245','a'), 'Just a title',

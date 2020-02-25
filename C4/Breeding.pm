@@ -30,7 +30,7 @@ use C4::ImportBatch;
 use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
 use C4::Languages;
 use Koha::Database;
-use Koha::XSLT_Handler;
+use Koha::XSLT::Base;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -163,7 +163,7 @@ sub Z3950Search {
                     _translate_query( $server, $squery )));
         $s++;
     }
-    my $xslh = Koha::XSLT_Handler->new;
+    my $xslh = Koha::XSLT::Base->new;
 
     my $nremaining = $s;
     while ( $nremaining-- ) {

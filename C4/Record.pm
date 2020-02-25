@@ -34,7 +34,7 @@ use Template;
 use Text::CSV::Encoded; #marc2csv
 use Koha::Items;
 use Koha::SimpleMARC qw(read_field);
-use Koha::XSLT_Handler;
+use Koha::XSLT::Base;
 use Koha::CsvProfiles;
 use Koha::AuthorisedValues;
 use Carp;
@@ -291,7 +291,7 @@ sub marc2dcxml {
             carp "\t". $warn;
         };
     } elsif ( $record =~ /^MARC::Record/ ) { # if OK makes xslt transformation
-        my $xslt_engine = Koha::XSLT_Handler->new;
+        my $xslt_engine = Koha::XSLT::Base->new;
         if ( $format =~ /^(dc|oaidc|srwdc|rdfdc)$/i ) {
             $output = $xslt_engine->transform( $marcxml, $xsl );
         } else {

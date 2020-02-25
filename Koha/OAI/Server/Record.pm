@@ -47,7 +47,7 @@ sub new {
         my $args = {
             OPACBaseURL => "'" . C4::Context->preference('OPACBaseURL') . "'"
         };
-        # call Koha::XSLT_Handler now
+        # call Koha::XSLT::Base now
         $record_dom = $repository->{xslt_engine}->transform({
             xml        => $marcxml,
             file       => $repository->stylesheet($format),

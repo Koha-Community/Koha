@@ -31,7 +31,7 @@ use C4::Circulation;
 use C4::Reserves;
 use Koha::AuthorisedValues;
 use Koha::ItemTypes;
-use Koha::XSLT_Handler;
+use Koha::XSLT::Base;
 use Koha::Libraries;
 
 use Encode;
@@ -49,7 +49,7 @@ BEGIN {
     @EXPORT = qw(
         &XSLTParse4Display
     );
-    $engine=Koha::XSLT_Handler->new( { do_not_return_source => 1 } );
+    $engine=Koha::XSLT::Base->new( { do_not_return_source => 1 } );
 }
 
 =head1 NAME
