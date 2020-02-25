@@ -20,11 +20,23 @@
 
 use Modern::Perl;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
+
+use t::lib::TestBuilder;
+use t::lib::Mocks;
+
+use C4::Reserves;
+use Koha::CirculationRules;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::SIP::ILS');
 }
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new();
 
 my $class = 'C4::SIP::ILS';
 my $institution = { id => 'CPL', };
@@ -56,3 +68,58 @@ is( $ils->test_cardnumber_compare( 'A1234', 'a1234' ),
 
 is( $ils->test_cardnumber_compare( 'A1234', 'b1234' ),
     q{}, 'borrower bc test identifies difference' );
+
+subtest cancel_hold => sub {
+    plan tests => 5;
+
+    my $library = $builder->build_object ({ class => 'Koha::Libraries' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode, flags => 1 });
+
+    my $item = $builder->build_sample_item({
+        library       => $library->branchcode,
+    });
+
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $patron->categorycode,
+            branchcode   => $library->branchcode,
+            itemtype     => $item->effective_itemtype,
+            rules        => {
+                onshelfholds     => 1,
+                reservesallowed  => 3,
+                holds_per_record => 3,
+                issuelength      => 5,
+                lengthunit       => 'days',
+            }
+        }
+    );
+
+    my $reserve1 = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
+    is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
+    is( $item->holds->count(),1,"Hold was placed on specific item");
+
+    my $ils = C4::SIP::ILS->new({ id => $library->branchcode });
+    my $sip_patron = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $transaction = $ils->cancel_hold($patron->cardnumber,undef,$item->barcode,undef);
+
+    is( $transaction->{screen_msg},"Hold Cancelled.","We get a success message when hold cancelled");
+
+    is( $item->biblio->holds->count(), 0, "Bib has 0 holds remaining");
+    is( $item->holds->count(), 0,  "Item has 0 holds remaining");
+};
+$schema->storage->txn_rollback;
