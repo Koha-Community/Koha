@@ -554,9 +554,9 @@ $(document).ready(function() {
                         let content = "";
 
                         if ( oObj.return_claim_id ) {
-                          content = `<span class="badge">${oObj.return_claim_created_on_formatted}</span>`;
+                          content = '<span class="badge">' + oObj.return_claim_created_on_formatted + '</span>';
                         } else {
-                          content = `<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="${oObj.itemnumber}"><i class="fa fa-exclamation-circle"></i> ${RETURN_CLAIMED_MAKE}</a>`;
+                          content = '<a class="btn btn-default btn-xs claim-returned-btn" data-itemnumber="' + oObj.itemnumber + '"><i class="fa fa-exclamation-circle"></i>' + RETURN_CLAIMED_MAKE + '</a>';
                         }
                         return content;
                     }
@@ -854,7 +854,7 @@ $(document).ready(function() {
 
         $('#claims-returned-modal').modal('hide')
 
-        $(`.claim-returned-btn[data-itemnumber='${itemnumber}']`).replaceWith(`<img id='return_claim_spinner_${itemnumber}' src='${interface}/${theme}/img/spinner-small.gif' />`);
+        $('.claim-returned-btn[data-itemnumber="' + itemnumber + '"]').replaceWith('<img id="return_claim_spinner_' + itemnumber + ' src=' + interface + '/' + theme + '/img/spinner-small.gif />');
 
         params = {
             item_id: itemnumber,
@@ -871,7 +871,7 @@ $(document).ready(function() {
 
             let content = "";
             if ( data.claim_id ) {
-                content = `<span class="badge">${created_on.toLocaleDateString()}</span>`;
+                content = '<span class="badge">' + created_on.toLocaleDateString() + '</span>';
                 $(id).parent().parent().addClass('ok');
             } else {
                 content = RETURN_CLAIMED_FAILURE;
@@ -909,14 +909,14 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                              let title = `<a class="return-claim-title strong" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=${oObj.biblionumber}">
-                                  ${oObj.title}
-                                  ${oObj.enumchron || ""}
-                              </a>`;
+                              let title = '<a class="return-claim-title strong" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + oObj.biblionumber + '">'
+                                  + oObj.title
+                                  + ( oObj.enumchron || "" )
+                              + '</a>';
                               if ( oObj.author ) {
-                                title += `by ${oObj.author}`;
+                                title += 'by ' + oObj.author;
                               }
-                              title += `<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=${oObj.biblionumber}&itemnumber=${oObj.itemnumber}">${oObj.barcode}</a>`;
+                              title += '<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=' + oObj.biblionumber + '&itemnumber=' + oObj.itemnumber + '">' + oObj.barcode + '</a>';
 
                               return title;
                         }
@@ -924,10 +924,8 @@ $(document).ready(function() {
                     {
                         "sClass": "return-claim-notes-td",
                         "mDataProp": function ( oObj ) {
-                            return `
-                                <span id="return-claim-notes-static-${oObj.id}" class="return-claim-notes" data-return-claim-id="${oObj.id}">${oObj.notes}</span>
-                                <i style="float:right" class="fa fa-pencil-square-o" title="Double click to edit"></i>
-                            `;
+                            return '<span id="return-claim-notes-static-' + oObj.id + '" class="return-claim-notes" data-return-claim-id="' + oObj.id + '">' + oObj.notes + '</span>'
+                                + '<i style="float:right" class="fa fa-pencil-square-o" title="Double click to edit"></i>';
                         }
                     },
                     {
@@ -946,32 +944,30 @@ $(document).ready(function() {
                         "mDataProp": function ( oObj ) {
                             if ( ! oObj.resolution ) return "";
 
-                            let desc = `<strong>${oObj.resolution_data.lib}</strong> on <i>${oObj.resolved_on}</i>`;
-                            if (oObj.resolved_by_data) desc += ` by <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=${oObj.resolved_by_data.borrowernumber}">${oObj.resolved_by_data.firstname || ""} ${oObj.resolved_by_data.surname || ""}</a>`;
+                            let desc = '<strong>' + oObj.resolution_data.lib + '</strong> on <i>' + oObj.resolved_on + '</i>';
+                            if (oObj.resolved_by_data) desc += ' by <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + oObj.resolved_by_data.borrowernumber + '">' + ( oObj.resolved_by_data.firstname || "" ) + ( oObj.resolved_by_data.surname || "" ) + '</a>';
                             return desc;
                         }
                     },
                     {
                         "mDataProp": function ( oObj ) {
                             let delete_html = oObj.resolved_on
-                                ? `<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="${oObj.id}"><i class="fa fa-trash"></i> Delete</a></li>`
+                                ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash"></i> Delete</a></li>'
                                 : "";
                             let resolve_html = ! oObj.resolution
-                                ? `<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="${oObj.id}"><i class="fa fa-check-square"></i> Resolve</a></li>`
+                                ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '"><i class="fa fa-check-square"></i> Resolve</a></li>'
                                 : "";
 
-                            return `
-                                <div class="btn-group">
-                                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Actions <span class="caret"></span>
-                                  </button>
-                                  <ul class="dropdown-menu">
-                                    <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="${oObj.id}"><i class="fa fa-edit"></i> Edit notes</a></li>
-                                    ${resolve_html}
-                                    ${delete_html}
-                                  </ul>
-                                </div>
-                            `;
+                            return  '<div class="btn-group">'
+                                  + ' <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+                                  + '  Actions <span class="caret"></span>'
+                                  + ' </button>'
+                                  + ' <ul class="dropdown-menu">'
+                                  + '  <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="' + oObj.id + '"><i class="fa fa-edit"></i> Edit notes</a></li>'
+                                  + resolve_html
+                                  + delete_html
+                                  + ' </ul>'
+                                  + ' </div>';
                         }
                     },
                 ],
@@ -998,21 +994,20 @@ $(document).ready(function() {
 
     $('body').on('click', '.return-claim-tools-editnotes', function() {
         let id = $(this).data('return-claim-id');
-        $(`#return-claim-notes-static-${id}`).parent().dblclick();
+        $('#return-claim-notes-static-' + id).parent().dblclick();
     });
     $('body').on('dblclick', '.return-claim-notes-td', function() {
         let elt = $(this).children('.return-claim-notes');
         let id = elt.data('return-claim-id');
-        if ( $(`#return-claim-notes-editor-textarea-${id}`).length == 0 ) {
+        if ( $('#return-claim-notes-editor-textarea-' + id).length == 0 ) {
             let note = elt.text();
-            let editor = `
-                <span id="return-claim-notes-editor-${id}">
-                    <textarea id="return-claim-notes-editor-textarea-${id}">${note}</textarea>
-                    <br/>
-                    <a class="btn btn-default btn-xs claim-returned-notes-editor-submit" data-return-claim-id="${id}"><i class="fa fa-save"></i> Update</a>
-                    <a class="claim-returned-notes-editor-cancel" data-return-claim-id="${id}" href="#">Cancel</a>
-                </span>
-            `;
+            let editor =
+                '  <span id="return-claim-notes-editor-' + id + '">'
+                + ' <textarea id="return-claim-notes-editor-textarea-' + id + '">' + note + '</textarea>'
+                + ' <br/>'
+                + ' <a class="btn btn-default btn-xs claim-returned-notes-editor-submit" data-return-claim-id="' + id + '"><i class="fa fa-save"></i> Update</a>'
+                + ' <a class="claim-returned-notes-editor-cancel" data-return-claim-id="' + id + '" href="#">Cancel</a>'
+                + '</span>';
             elt.hide();
             $(editor).insertAfter( elt );
         }
@@ -1020,7 +1015,7 @@ $(document).ready(function() {
 
     $('body').on('click', '.claim-returned-notes-editor-submit', function(){
         let id = $(this).data('return-claim-id');
-        let notes = $(`#return-claim-notes-editor-textarea-${id}`).val();
+        let notes = $('#return-claim-notes-editor-textarea-' + id).val();
 
         let params = {
             notes: notes,
@@ -1030,11 +1025,11 @@ $(document).ready(function() {
         $(this).parent().remove();
 
         $.ajax({
-            url: `/api/v1/return_claims/${id}/notes`,
+            url: '/api/v1/return_claims/' + id + '/notes',
             type: 'PUT',
             data: JSON.stringify(params),
             success: function( data ) {
-                let notes = $(`#return-claim-notes-static-${id}`);
+                let notes = $('#return-claim-notes-static-' + id);
                 notes.text(data.notes);
                 notes.show();
             },
@@ -1045,7 +1040,7 @@ $(document).ready(function() {
     $('body').on('click', '.claim-returned-notes-editor-cancel', function(){
         let id = $(this).data('return-claim-id');
         $(this).parent().remove();
-        $(`#return-claim-notes-static-${id}`).show();
+        $('#return-claim-notes-static-' + id).show();
     });
 
     // Hanld return claim deletion
@@ -1055,7 +1050,7 @@ $(document).ready(function() {
             let id = $(this).data('return-claim-id');
 
             $.ajax({
-                url: `/api/v1/return_claims/${id}`,
+                url: '/api/v1/return_claims/' + id,
                 type: 'DELETE',
                 success: function( data ) {
                     refreshReturnClaimsTable();
@@ -1085,7 +1080,7 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url: `/api/v1/return_claims/${id}/resolve`,
+            url: '/api/v1/return_claims/' + id + '/resolve',
             type: 'PUT',
             data: JSON.stringify(params),
             success: function( data ) {
