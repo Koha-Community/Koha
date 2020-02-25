@@ -2380,6 +2380,7 @@ CREATE TABLE `message_queue` (
   `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `to_address` LONGTEXT,
   `from_address` LONGTEXT,
+  `reply_address` LONGTEXT,
   `content_type` MEDIUMTEXT,
   PRIMARY KEY `message_id` (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
