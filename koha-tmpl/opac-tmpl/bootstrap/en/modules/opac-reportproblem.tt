@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Report a Problem</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Report a problem</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -28,7 +28,7 @@
                     <h1>Report a problem</h1>
 
                     [% IF ( successfuladd ) %]
-                        <div class="alert alert-info">Your problem report has been sent to the [% IF ( recipient == 'admin' ) %]Koha Administrator[% ELSE %][% recipient %][% END %].</div>
+                        <div class="alert alert-info">Your problem report has been sent to the [% IF ( recipient == 'admin' ) %]Koha Administrator[% ELSE %][% recipient | html %][% END %].</div>
                     [% END %]
                     [% IF ( ( nolibemail and noadminemail ) or norecipients ) %]
                         <div class="alert">Unable to send problem reports.</div>
@@ -53,16 +53,16 @@
                                         </li>
                                         <li>
                                             <label for="place">Problem found on page: </label>
-                                            <input type="hidden" name="place" id="place" value="[% probpage %]">
+                                            <input type="hidden" name="place" id="place" value="[% probpage | html %]">
                                             [% probpage | html %]
                                         </li>
                                         <li>
                                             <label for="user">Username: </label>
-                                            <input type="hidden" name="user" id="user" value="[% username %]" class="span3">
+                                            <input type="hidden" name="user" id="user" value="[% username | html %]" class="span3">
                                             [% username | html %]
                                         <li>
                                             <label for="subject">Subject: </label>
-                                            <input type="text" name="subject" id="subject" value="[% subject %]" class="span3">
+                                            <input type="text" name="subject" id="subject" value="[% subject | html %]" class="span3">
                                         </li>
                                         <li>
                                             <label for="message">Message: </label>

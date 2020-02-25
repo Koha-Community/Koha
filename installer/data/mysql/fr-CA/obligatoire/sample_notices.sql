@@ -66,7 +66,8 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 ('acquisition','ACQ_NOTIF_ON_RECEIV','','Notification lors de la réception',0,'Commande reçue','Bonjour <<borrowers.firstname>> <<borrowers.surname>bbbb>,\r\n\r\nLa commande <<aqorders.ordernumber>> (<<biblio.title>>) a été reçue.\r\n\r\n<<branches.branchname>>','email');
 
 INSERT INTO `letter` (module, code, name, title, content, message_transport_type) VALUES
-('suggestions','TO_PROCESS','Notification pour le responsable du poste budgétaire', 'Une suggestion est prête à être traitée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\n\nUne nouvelle suggestion est prête à être traitée : <<suggestions.title>> par <<suggestions.author>>.\n\nMerci,\n\n<<branches.branchname>>', 'email');
+('suggestions','TO_PROCESS','Notification pour le responsable du poste budgétaire', 'Une suggestion est prête à être traitée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\n\nUne nouvelle suggestion est prête à être traitée : <<suggestions.title>> par <<suggestions.author>>.\n\nMerci,\n\n<<branches.branchname>>', 'email'),
+('members', 'PROBLEM_REPORT','OPAC Problem Report','OPAC Problem Report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email');
 
 INSERT INTO `letter` (module, code, name, title, content, message_transport_type) VALUES
 ('suggestions', 'NOTIFY_MANAGER', 'Notify manager of a suggestion', "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email');

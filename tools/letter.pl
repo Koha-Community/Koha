@@ -261,6 +261,10 @@ sub add_form {
         if ( $module eq 'circulation' and $code and $code =~ /^AR_/  ) {
             push @{$field_selection}, add_fields('article_requests');
         }
+
+        if ( $module eq 'members' and $code and $code eq 'PROBLEM_REPORT' ) {
+            push @{$field_selection}, add_fields('problem_reports');
+        }
     }
 
     my $preview_is_available = 0;

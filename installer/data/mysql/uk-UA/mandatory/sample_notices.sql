@@ -83,7 +83,9 @@ INSERT INTO `letter` (module, code, name, title, content, message_transport_type
  'Дорог(ий/а) <<borrowers.firstname>> <<borrowers.surname>>,\n\n нова пропозиція гоотова до обробки: „<<suggestions.title>>“ / <<suggestions.author>>.\n\n Спасибі,\n\n<<branches.branchname>>',
  'email'),
 
-('suggestions', 'NOTIFY_MANAGER', 'Notify manager of a suggestion', "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email')
+('suggestions', 'NOTIFY_MANAGER', 'Notify manager of a suggestion', "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email'),
+
+('members', 'PROBLEM_REPORT','OPAC Problem Report','OPAC Problem Report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email')
 ;
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)

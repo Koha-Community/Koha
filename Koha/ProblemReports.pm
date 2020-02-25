@@ -2,7 +2,7 @@ package Koha::ProblemReports;
 
 # This file is part of Koha.
 #
-# Copyright 2019 Aleisha Amohia <aleisha@catalyst.net.nz>
+# Copyright 2020 Aleisha Amohia <aleisha@catalyst.net.nz>
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software

@@ -756,6 +756,7 @@ sub _parseletter_sth {
     ($table eq 'borrower_modifications') ? "SELECT * FROM $table WHERE verification_token = ?" :
     ($table eq 'subscription') ? "SELECT * FROM $table WHERE subscriptionid = ?" :
     ($table eq 'serial') ? "SELECT * FROM $table WHERE serialid = ?" :
+    ($table eq 'problem_reports') ? "SELECT * FROM $table WHERE reportid = ?" :
     undef ;
     unless ($query) {
         warn "ERROR: No _parseletter_sth query for table '$table'";

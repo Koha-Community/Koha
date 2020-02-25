@@ -1162,3 +1162,20 @@ tables:
             - "Thank you,"
             - ""
             - "[% branch.branchname %]"
+
+        - module: members
+          code: PROBLEM_REPORT
+          branchcode: ""
+          name: "OPAC Problem Report"
+          is_html: 0
+          title: "OPAC Problem Report"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Username: <<problem_reports.username>>"
+            - ""
+            - "Problem page: <<problem_reports.problempage>>"
+            - ""
+            - "Title: <<problem_reports.title>>"
+            - ""
+            - "Message: <<problem_reports.content>>"

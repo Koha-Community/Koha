@@ -89,17 +89,22 @@ if ( $op eq 'addreport' ) {
         probpage => $place,
     );
 
-    my $problemreport = $problem->unblessed;
-    $problemreport->{code} = 'PROBLEM_REPORT';
-    $problemreport->{content} .= "\nUsername: $username";
-    $problemreport->{content} .= "\nProblem page: $place";
-    my $transport = 'email';
+    # send notice to library
+    my $letter = C4::Letters::GetPreparedLetter(
+        module => 'members',
+        letter_code => 'PROBLEM_REPORT',
+        branchcode => $problem->branchcode,
+        tables => {
+            'problem_reports', $problem->reportid
+        }
+    );
 
     my $from_address = $member->email || $member->emailpro || $member->B_email || $koha_admin;
+    my $transport = 'email';
 
     if ( $recipient eq 'admin' ) {
         C4::Letters::EnqueueLetter({
-            letter                 => $problemreport,
+            letter                 => $letter,
             borrowernumber         => $borrowernumber,
             message_transport_type => $transport,
             to_address             => $koha_admin,
@@ -110,7 +115,7 @@ if ( $op eq 'addreport' ) {
             C4::Context->preference('ReplytoDefault') ||
             $library->branchemail;
         C4::Letters::EnqueueLetter({
-            letter                 => $problemreport,
+            letter                 => $letter,
             borrowernumber         => $borrowernumber,
             message_transport_type => $transport,
             to_address             => $to_address,
