@@ -25,10 +25,10 @@
 # TODO We need additional tests for Z3950SearchAuth, BreedingSearch
 
 use Modern::Perl;
-
-use FindBin;
+use File::Temp qw/tempfile/;
 use Test::More tests => 5;
 use Test::Warn;
+
 use t::lib::Mocks qw( mock_preference );
 
 use C4::Context;
@@ -206,7 +206,7 @@ sub test_do_xslt {
         MARC::Field->new('100', ' ', ' ', a => 'John Writer'),
         MARC::Field->new('245', ' ', ' ', a => 'Just a title'),
     );
-    my $file= $FindBin::Bin.'/XSLT_Handler/test01.xsl';
+    my $file= xsl_file();
     my $server= { add_xslt => $file };
     my $engine=Koha::XSLT::Base->new;
 
@@ -265,4 +265,38 @@ sub test_add_rowdata {
 
    # Test repeatble tags,the trailing whitespace is a normal side-effect of _add_custom_row_data
    is_deeply(\$returned_row->{"035\$a"}, \["First 035 ", "Second 035 "],"_add_rowdata supports repeatable tags");
+}
+
+sub xsl_file {
+    return mytempfile( q{<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:marc="http://www.loc.gov/MARC21/slim"
+>
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
+
+  <xsl:template match="record|marc:record">
+      <record>
+      <xsl:apply-templates/>
+      <datafield tag="990" ind1='' ind2=''>
+        <subfield code="a">
+          <xsl:text>I saw you</xsl:text>
+        </subfield>
+      </datafield>
+      </record>
+  </xsl:template>
+
+  <xsl:template match="node()">
+    <xsl:copy select=".">
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+</xsl:stylesheet>} );
+}
+
+sub mytempfile {
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.xsl', UNLINK => 1 );
+    print $fh $_[0]//'';
+    close $fh;
+    return $fn;
 }
