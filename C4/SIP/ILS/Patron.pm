@@ -286,7 +286,7 @@ sub drop_hold {
     foreach (qw(hold_items unavail_holds)) {
         $self->{$_} or next;
         for (my $i = 0; $i < scalar @{$self->{$_}}; $i++) {
-            my $held_item = $self->{$_}[$i]->{item_id} or next;
+            my $held_item = $self->{$_}[$i]->{barcode} or next;
             if ($held_item eq $item_id) {
                 splice @{$self->{$_}}, $i, 1;
                 $result++;
