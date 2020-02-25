@@ -900,7 +900,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                              let title = `<a class="return-claim-title strong" href="/cgi-bin/koha/circ/request-rcticle.pl?biblionumber=[% rc.checkout.item.biblionumber | html %]">
+                              let title = `<a class="return-claim-title strong" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=${oObj.biblionumber}">
                                   ${oObj.title}
                                   ${oObj.enumchron || ""}
                               </a>`;
