@@ -1,5 +1,5 @@
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 
 use MARC::Record;
@@ -90,3 +90,10 @@ is_deeply(
     [ [ 'x', $default_x ] ],
     '099$x contains the default value'
 );
+
+# Test controlfield default
+$record->field('008')->update( undef );
+C4::Acquisition::FillWithDefaultValues($record);
+is( $record->field('008')->data, $default_x, 'Controlfield got default' );
+
+$schema->storage->txn_rollback;
