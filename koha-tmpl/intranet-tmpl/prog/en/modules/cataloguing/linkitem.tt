@@ -1,11 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsquo; Link to host item</title>
+<title>Koha &rsaquo; Cataloging &rsquo; Link to host record</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_linkitem" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host item to <i>[% bibliotitle | html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host record to <i>[% bibliotitle | html %]</i></div>
 
 <div class="container-fluid">
     <div class="row">
@@ -42,7 +42,7 @@
 
     	    [% IF ( missingbarcode ) %]
 	    <fieldset id="barcode_fieldset">
-        <label for="barcode_fieldset">Select the host item to link[% IF ( bibliotitle ) %] to <i>[% bibliotitle | html %]</i>[% END %]</label>
+        <label for="barcode_fieldset">Select the host record to link[% IF ( bibliotitle ) %] to <i>[% bibliotitle | html %]</i>[% END %]</label>
 		    <div class="hint">Enter item barcode:</div>
 		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> 
 	    </fieldset>
