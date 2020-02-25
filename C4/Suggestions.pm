@@ -473,11 +473,7 @@ sub NewSuggestion {
             if ( $emailpurchasesuggestions eq "BranchEmailAddress" ) {
                 my $library =
                   Koha::Libraries->find( $full_suggestion->{branchcode} );
-                $toaddress =
-                     $library->branchreplyto
-                  || $library->branchemail
-                  || C4::Context->preference('ReplytoDefault')
-                  || C4::Context->preference('KohaAdminEmailAddress');
+                $toaddress = $library->inbound_email_address;
             }
             elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
                 $toaddress = C4::Context->preference('ReplytoDefault')
