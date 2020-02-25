@@ -81,7 +81,7 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
                 },
             );
 
-            my $to_address = $branch->branchemail || $branch->branchreplyto || C4::Context->ReplytoDefault || C4::Context->preference('KohaAdminEmailAddress');
+            my $to_address = $branch->get_effective_email;
             my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
             C4::Letters::EnqueueLetter({
