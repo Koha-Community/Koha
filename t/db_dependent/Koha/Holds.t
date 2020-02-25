@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2017 Koha Development team
+# Copyright 2020 Koha Development team
 #
 # This file is part of Koha
 #
@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Warn;
 
 use C4::Reserves;
@@ -33,6 +33,30 @@ my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'DB constraints' => sub {
+    plan tests => 1;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $item = $builder->build_sample_item;
+    my $hold_info = {
+        branchcode     => $patron->branchcode,
+        borrowernumber => $patron->borrowernumber,
+        biblionumber   => $item->biblionumber,
+        priority       => 1,
+        title          => "title for fee",
+        itemnumber     => $item->itemnumber,
+    };
+
+    my $reserve_id = C4::Reserves::AddReserve($hold_info);
+    my $hold = Koha::Holds->find( $reserve_id );
+
+    warning_like {
+        eval { $hold->priority(undef)->store }
+    }
+    qr{.*DBD::mysql::st execute failed: Column 'priority' cannot be null.*},
+      'DBD should have raised an error about priority that cannot be null';
+};
 
 subtest 'cancel' => sub {
     plan tests => 12;
