@@ -184,87 +184,87 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     [% IF ( sort_by == "relevance_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=relevance[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Relevance</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=relevance[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Relevance</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=relevance[% PROCESS sort_search_query %]">Relevance</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=relevance[% PROCESS sort_search_query %]">Relevance</a></li>
                                     [% END %]
                                     <li class="dropdown-header">Popularity</li>
                                     [% IF ( sort_by == "popularity_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=popularity_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Popularity (most to least)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=popularity_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Popularity (most to least)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=popularity_dsc[% PROCESS sort_search_query %]">Popularity (most to least)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=popularity_dsc[% PROCESS sort_search_query %]">Popularity (most to least)</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "popularity_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=popularity_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Popularity (least to most)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=popularity_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Popularity (least to most)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=popularity_asc[% PROCESS sort_search_query %]">Popularity (least to most)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=popularity_asc[% PROCESS sort_search_query %]">Popularity (least to most)</a></li>
                                     [% END %]
 
                                     <li class="dropdown-header">Author</li>
 
                                     [% IF ( sort_by == "author_az" || sort_by == "author_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=author_a[% PROCESS sort_search_query %]z"><i class="fa fa-check"></i> Author (A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=author_a[% PROCESS sort_search_query %]z"><i class="fa fa-check"></i> Author (A-Z)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=author_az[% PROCESS sort_search_query %]">Author (A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=author_az[% PROCESS sort_search_query %]">Author (A-Z)</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "author_za" || sort_by == "author_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=author_za[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Author (Z-A)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=author_za[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Author (Z-A)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=author_za[% PROCESS sort_search_query %]">Author (Z-A)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=author_za[% PROCESS sort_search_query %]">Author (Z-A)</a></li>
                                     [% END %]
 
                                     <li class="dropdown-header">Call number</li>
 
                                     [% IF ( sort_by == "call_number_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=call_number_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Call Number (0-9 to A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=call_number_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Call Number (0-9 to A-Z)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=call_number_asc[% PROCESS sort_search_query %]">Call Number (0-9 to A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=call_number_asc[% PROCESS sort_search_query %]">Call Number (0-9 to A-Z)</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "call_number_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=call_number_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Call number (Z-A to 9-0)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=call_number_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Call number (Z-A to 9-0)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=call_number_dsc[% PROCESS sort_search_query %]">Call number (Z-A to 9-0)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=call_number_dsc[% PROCESS sort_search_query %]">Call number (Z-A to 9-0)</a></li>
                                     [% END %]
 
                                     <li class="dropdown-header">Dates</li>
                                     [% IF ( sort_by == "pubdate_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=pubdate_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Publication/Copyright date: newest to oldest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=pubdate_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Publication/Copyright date: newest to oldest</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=pubdate_dsc[% PROCESS sort_search_query %]">Publication/Copyright date: newest to oldest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=pubdate_dsc[% PROCESS sort_search_query %]">Publication/Copyright date: newest to oldest</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "pubdate_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=pubdate_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Publication/Copyright date: oldest to newest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=pubdate_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Publication/Copyright date: oldest to newest</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=pubdate_asc[% PROCESS sort_search_query %]">Publication/Copyright date: oldest to newest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=pubdate_asc[% PROCESS sort_search_query %]">Publication/Copyright date: oldest to newest</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "acqdate_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=acqdate_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Acquisition date: newest to oldest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=acqdate_dsc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Acquisition date: newest to oldest</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=acqdate_dsc[% PROCESS sort_search_query %]">Acquisition date: newest to oldest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=acqdate_dsc[% PROCESS sort_search_query %]">Acquisition date: newest to oldest</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "acqdate_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=acqdate_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Acquisition date: oldest to newest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=acqdate_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Acquisition date: oldest to newest</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=acqdate_asc[% PROCESS sort_search_query %]">Acquisition date: oldest to newest</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=acqdate_asc[% PROCESS sort_search_query %]">Acquisition date: oldest to newest</a></li>
                                     [% END %]
 
                                     <li class="dropdown-header">Title</li>
                                     [% IF ( sort_by == "title_az" || sort_by == "title_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=title_az[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Title (A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=title_az[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Title (A-Z)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=title_az[% PROCESS sort_search_query %]">Title (A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=title_az[% PROCESS sort_search_query %]">Title (A-Z)</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "title_za" || sort_by == "title_dsc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=title_za[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Title (Z-A)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=title_za[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Title (Z-A)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=title_za[% PROCESS sort_search_query %]">Title (Z-A)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=title_za[% PROCESS sort_search_query %]">Title (Z-A)</a></li>
                                     [% END %]
                                 </ul>
                             </div> <!-- /.btn-group -->
@@ -272,14 +272,14 @@
                             [% IF Koha.Preference('numSearchResultsDropdown') && Koha.Preference('SearchEngine') == "Zebra" %]
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Results per page: [% results_per_page %] <span class="caret"></span>
+                                        Results per page: [% results_per_page | html %] <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         [% IF Koha.Preference('numSearchResults') %]
-                                            <li><a href="#" id="resultsperpage-default">
+                                            <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% Koha.Preference('numSearchResults')%][% PROCESS sort_search_query %]" id="resultsperpage-default">
                                                 [% IF results_per_page == Koha.Preference('numSearchResults') %]
                                                     <i class="fa fa-check"></i>
-                                                [% END %] Library default: [% Koha.Preference('numSearchResults') %]
+                                                [% END %] Library default: [% Koha.Preference('numSearchResults') | html %]
                                             </a></li>
                                         [% END %]
                                         <li><a href="/cgi-bin/koha/catalogue/search.pl?count=20[% PROCESS sort_search_query %]">[% IF results_per_page == '20' %]<i class="fa fa-check"></i>[% END %] 20</a></li>
