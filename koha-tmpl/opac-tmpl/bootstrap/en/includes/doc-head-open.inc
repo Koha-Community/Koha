@@ -6,7 +6,7 @@
 [% IF Koha.Preference('DumpTemplateVarsOpac') %]
     [% TRY %]
         [% USE Stash %]
-        [% USE Dumper %]
+        [% USE Dumper ( Indent=1, SortKeys=1 ) %]
         <!--
         [% FILTER replace('<!--', '<!- -') %]
             [% FILTER replace('-->', '- ->') %]
