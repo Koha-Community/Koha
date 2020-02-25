@@ -6,8 +6,6 @@
 <title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description | html %] by [% authcat | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>td.locked { background-image: url('[% interface | html %]/[% theme | html %]/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 5px 5px; } a.control { font-size:85%;text-decoration:none; } .plan_entry { text-align: right; width:90%; }</style>
-<script>
-</script>
 </head>
 
 <body id="admin_aqplan" class="admin">
@@ -317,9 +315,6 @@
                     if (type != "button" && type != "submit" ) {
                       $(this).val("");
                       $(this).prop('disabled', false);
-                    }
-                    if ( type == "checkbox" ) {
-                      $(this).prop('checked', false);
                     }
                 });
                 $("#budget_est_"+budget_id).text($("#budget_tot_"+budget_id).prev().text());
