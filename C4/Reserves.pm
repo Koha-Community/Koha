@@ -282,14 +282,14 @@ sub AddReserve {
             },
         ) ) {
 
-            my $admin_email_address = $library->branchemail || C4::Context->preference('KohaAdminEmailAddress');
+            my $branch_email_address = $library->inbound_email_address;
 
             C4::Letters::EnqueueLetter(
-                {   letter                 => $letter,
+                {
+                    letter                 => $letter,
                     borrowernumber         => $borrowernumber,
                     message_transport_type => 'email',
-                    from_address           => $admin_email_address,
-                    to_address           => $admin_email_address,
+                    to_address             => $branch_email_address,
                 }
             );
         }
