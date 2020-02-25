@@ -912,9 +912,9 @@ sub EnqueueLetter {
     my $dbh       = C4::Context->dbh();
     my $statement = << 'ENDSQL';
 INSERT INTO message_queue
-( borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, content_type )
+( borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, to_address, from_address, reply_address, content_type )
 VALUES
-( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      NOW(),       ?,          ?,            ? )
+( ?,              ?,       ?,       ?,        ?,           ?,                      ?,      NOW(),       ?,          ?,            ?,           ? )
 ENDSQL
 
     my $sth    = $dbh->prepare($statement);
@@ -928,6 +928,7 @@ ENDSQL
         'pending',                                # status
         $params->{'to_address'},                  # to_address
         $params->{'from_address'},                # from_address
+        $params->{'reply_address'},               # reply_address
         $params->{'letter'}->{'content-type'},    # content_type
     );
     return $dbh->last_insert_id(undef,undef,'message_queue', undef);
@@ -1124,7 +1125,7 @@ sub GetMessage {
     return unless $message_id;
     my $dbh = C4::Context->dbh;
     return $dbh->selectrow_hashref(q|
-        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, updated_on, to_address, from_address, content_type
+        SELECT message_id, borrowernumber, subject, content, metadata, letter_code, message_transport_type, status, time_queued, updated_on, to_address, from_address, reply_address, content_type
         FROM message_queue
         WHERE message_id = ?
     |, {}, $message_id );
@@ -1228,7 +1229,7 @@ sub _get_unsent_messages {
 
     my $dbh = C4::Context->dbh();
     my $statement = qq{
-        SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.to_address, mq.content_type, b.branchcode, mq.letter_code
+        SELECT mq.message_id, mq.borrowernumber, mq.subject, mq.content, mq.message_transport_type, mq.status, mq.time_queued, mq.from_address, mq.reply_address, mq.to_address, mq.content_type, b.branchcode, mq.letter_code
         FROM message_queue mq
         LEFT JOIN borrowers b ON b.borrowernumber = mq.borrowernumber
         WHERE status = ?
@@ -1314,7 +1315,7 @@ sub _send_message_by_email {
                 : ()
             ),
             from    => $message->{'from_address'} || $branch_email,
-            replyto => $branch_replyto,
+            replyto => $message->{'reply_address'} || $branch_replyto,
             sender  => $branch_returnpath,
             subject => $subject,
             message => $is_html ? _wrap_html( $content, $subject ) : $content,
