@@ -77,7 +77,7 @@
                                     </li>
                                 [% ELSE %]
                                     <li class="disabled">
-                                        <a href="club-enrollments.pl?id=[% c.id | uri %]">
+                                        <a href="#" data-toggle="tooltip" data-placement="left" title="Nobody enrolled for this club yet">
                                             <i class="fa fa-list-ul"></i> Enrollments
                                         </a>
                                     </li>
