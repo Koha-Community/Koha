@@ -532,6 +532,7 @@ $offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 $offset = ($page-1)*$results_per_page if $page>1;
 my $hits;
+my $weight_search = $cgi->param('weight_search') || 0;
 
 # Define some global variables
 my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
@@ -562,7 +563,7 @@ if (C4::Context->preference('OpacSuppression')) {
     {
         suppress => $suppress,
         is_opac => 1,
-        weighted_fields => !$cgi->param('advsearch')
+        weighted_fields => $weight_search
     }
 );
 

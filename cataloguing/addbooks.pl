@@ -74,7 +74,7 @@ if ($query) {
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     ( undef, $builtquery, undef, $query_cgi, undef, undef, undef, undef, undef, undef ) =
-      $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
+      $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang, { weighted_fields => 1 });
 
     $template->param( search_query => $builtquery ) if C4::Context->preference('DumpSearchQueryTemplate');
 

@@ -427,6 +427,7 @@ my $count = C4::Context->preference('numSearchResults') || 20;
 my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
 my $whole_record = $params->{'whole_record'} || 0;
+my $weight_search = $params->{'weight_search'} || 0;
 $offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 #my $offset = ($page-1)*$results_per_page;
@@ -446,7 +447,7 @@ my $searcher = Koha::SearchEngine::Search->new(
     $query_type
   )
   = $builder->build_query_compat( \@operators, \@operands, \@indexes, \@limits,
-    \@sort_by, $scan, $lang, { weighted_fields => !$cgi->param('advsearch'), whole_record => $whole_record });
+    \@sort_by, $scan, $lang, { weighted_fields => $weight_search, whole_record => $whole_record });
 
 $template->param( search_query => $query ) if C4::Context->preference('DumpSearchQueryTemplate');
 
