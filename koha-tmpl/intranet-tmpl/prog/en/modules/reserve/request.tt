@@ -963,27 +963,16 @@
         columns_settings_borrowers_table = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'table_borrowers', 'json' ) | $raw %]
 
         $(document).ready(function() {
-            [% UNLESS clubs %]
-                $('#circ_holds_select').tabs({
-                    active: 0,
-                    activate: function(){
-                        $(this).find("input.focus").focus();
-                    },
-                    create: function(){
-                        $(this).find("input.focus").focus();
-                    }
-                });
-            [% ELSE %]
-                $('#circ_holds_select').tabs({
-                    active: 1,
-                    activate: function(){
-                        $(this).find("input.focus").focus();
-                    },
-                    create: function(){
-                        $(this).find("input.focus").focus();
-                    }
-                });
-            [% END %]
+            [% SET active = clubs ? 1 : 0 %]
+            $('#circ_holds_select').tabs({
+                active: [% active %],
+                activate: function(){
+                    $(this).find("input.focus").focus();
+                },
+                create: function(){
+                    $(this).find("input.focus").focus();
+                }
+            });
             function ToggleHoldsToPlace() {
                 if ( $("#requestany").prop('checked') ) {
                     $("#holds_to_place_count").prop('disabled', false);
