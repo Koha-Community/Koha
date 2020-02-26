@@ -61,6 +61,7 @@ use C4::Search;		# enabled_staff_search_views
 use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::Patrons;
+use Koha::DateUtils;
 
 use List::MoreUtils qw( uniq );
 
@@ -259,6 +260,7 @@ my %witness
 my @item_subfield_codes;
 my @item_loop;
 my $norequests = 1;
+
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
     my @subf = $field->subfields;
@@ -286,6 +288,11 @@ foreach my $field (@fields) {
         }
 
         $norequests = 0 if  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan' and $subf[$i][1] == 0;
+
+        if ( $subf[$i][0] eq 'd' || $subf[$i][0] eq 'q' || $subf[$i][0] eq 'r' || $subf[$i][0] eq 's' || $subf[$i][0] eq 'w' ){
+            # date accessioned || on loan || date last seen || date last borrowed || replacement price date
+            $item->{$subf[$i][0]} = output_pref({ dt => dt_from_string( $item->{$subf[$i][0]} ), dateonly => 1 });
+        }
     }
     push @item_loop, $item if $item;
 }
