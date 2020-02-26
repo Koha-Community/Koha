@@ -2,6 +2,7 @@
 
 # This file is part of Koha.
 #
+# Copyright 2020 Koha Development team
 # Copyright (C) 2017  Mark Tompsett
 #
 # Koha is free software; you can redistribute it and/or modify it
@@ -19,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -61,15 +62,9 @@ t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 
 my $bibnum = $builder->build_sample_biblio({ frameworkcode => $frameworkcode })->biblionumber;
 
-# Create a helper item instance for testing
-my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
-    {
-        homebranch    => $branch_1,
-        holdingbranch => $branch_1,
-        itype         => $itemtype
-    },
-    $bibnum
-);
+my $item = $builder->build_sample_item(
+    { library => $branch_1, itype => $itemtype, biblionumber => $bibnum, enumchron => "enum", copynumber => "copynum" } );
+my $itemnumber = $item->itemnumber;
 
 # Modify item; setting barcode.
 my $testbarcode = '97531';
@@ -98,7 +93,7 @@ my $dummy_template_values = {
     template_stat    => 1,
 };
 
-my $label = C4::Labels::Label->new(
+my $label_info = {
     batch_id         => $batch_id,
     item_number      => $itemnumber,
     llx              => $llx,
@@ -115,18 +110,30 @@ my $label = C4::Labels::Label->new(
     font_size        => $layout->get_attr('font_size'),
     callnum_split    => $layout->get_attr('callnum_split'),
     justify          => $layout->get_attr('text_justify'),
-    format_string    => $layout->get_attr('format_string'),
     text_wrap_cols   => $layout->get_text_wrap_cols(
         label_width      => $dummy_template_values->{'label_width'},
         left_text_margin => $dummy_template_values->{'left_text_margin'}
     ),
-);
+};
 
+my $format_string = '100a 245a';
+my $label = C4::Labels::Label->new(%$label_info, format_string => $format_string);
 my $label_text = $label->create_label();
 ok( defined $label_text, 'Label Text Value defined.' );
-
 my $label_csv_data = $label->csv_data();
-ok( defined $label_csv_data, 'Label CSV Data defined' );
+is_deeply( $label_csv_data,
+    [ sprintf( "%s %s", $item->biblio->author, $item->biblio->title ) ] );
+
+$format_string = '100a 245a,enumchron copynumber';
+$label = C4::Labels::Label->new(%$label_info, format_string => $format_string);
+$label_csv_data = $label->csv_data();
+is_deeply(
+    $label_csv_data,
+    [
+        sprintf( "%s %s", $item->biblio->author, $item->biblio->title ),
+        sprintf( "%s %s", $item->enumchron,      $item->copynumber )
+    ]
+);
 
 $schema->storage->txn_rollback();
 
