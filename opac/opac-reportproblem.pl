@@ -27,6 +27,7 @@ use Koha::ProblemReport;
 use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Util::Navigation;
 
 my $input = new CGI;
 
@@ -43,7 +44,8 @@ if ( !C4::Context->preference('OPACReportProblem') ){
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
 }
 
-my $problempage = $ENV{HTTP_REFERER};
+my $problempage = C4::Context->preference('OPACBaseURL') . Koha::Util::Navigation::local_referer($input );
+
 my $member = Koha::Patrons->find($borrowernumber);
 my $username = $member->userid;
 my $branchcode = $member->branchcode;
