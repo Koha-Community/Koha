@@ -964,9 +964,25 @@
 
         $(document).ready(function() {
             [% UNLESS clubs %]
-                $('#circ_holds_select').tabs({active: 0});
+                $('#circ_holds_select').tabs({
+                    active: 0,
+                    activate: function(){
+                        $(this).find("input.focus").focus();
+                    },
+                    create: function(){
+                        $(this).find("input.focus").focus();
+                    }
+                });
             [% ELSE %]
-                $('#circ_holds_select').tabs({active: 1});
+                $('#circ_holds_select').tabs({
+                    active: 1,
+                    activate: function(){
+                        $(this).find("input.focus").focus();
+                    },
+                    create: function(){
+                        $(this).find("input.focus").focus();
+                    }
+                });
             [% END %]
             function ToggleHoldsToPlace() {
                 if ( $("#requestany").prop('checked') ) {
@@ -1247,17 +1263,6 @@
                 [% END %]
             [% END %]
 
-            if ( $(".focus").is(":visible") ) {
-                $(".focus").focus();
-            }
-
-            $('[href="#holds_patronsearch_pane"]').click( function() {
-                $('#patron').focus();
-            })
-
-            $('[href="#holds_clubsearch_pane"]').click( function() {
-                $('#club').focus();
-            })
         });
     </script>
 [% END %]
