@@ -797,7 +797,6 @@ if ( C4::Context->preference('EasyAnalyticalRecords') ) {
     }
 }
 
-
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
 
@@ -854,7 +853,21 @@ my @item_value_loop;
 my @header_value_loop;
 for my $row ( @big_array ) {
     my %row_data;
-    my @item_fields = map +{ field => $_ || '' }, @$row{ sort keys(%witness) };
+    my @item_fields;
+    foreach my $key (sort keys %witness){
+        my $item_field;
+        if ( $row->{$key} ){
+            $item_field->{field} = $row->{$key};
+        } else {
+            $item_field->{field} = '';
+        }
+        if ( $key eq 'd' || $key eq 'q' || $key eq 'r' || $key eq 's' || $key eq 'w' ){
+            # date accessioned || on loan || date last seen || date last borrowed || replacement price date
+            $item_field->{field} = output_pref({ dt => dt_from_string( $row->{$key} ), dateonly => 1 });
+        }
+
+        push @item_fields, $item_field;
+    }
     $row_data{item_value} = [ @item_fields ];
     $row_data{itemnumber} = $row->{itemnumber};
     #reporting this_row values
