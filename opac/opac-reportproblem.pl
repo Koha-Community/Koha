@@ -52,40 +52,20 @@ my $member = Koha::Patrons->find($borrowernumber);
 my $username = $member->userid;
 my $branchcode = $member->branchcode;
 my $library = Koha::Libraries->find($branchcode);
-my $recipients = 2;
-
-if (
-    ( !defined($library->branchreplyto) || $library->branchreplyto eq '' ) &&
-    ( C4::Context->preference('ReplytoDefault') eq '' ) &&
-    ( !defined($library->branchemail) || $library->branchemail eq '' )
-    ) {
-    $template->param( nolibemail => 1 );
-    $recipients--;
-}
-
-my $koha_admin = C4::Context->preference('KohaAdminEmailAddress');
-if ( $koha_admin eq '' ) {
-    $template->param( noadminemail => 1 );
-    $recipients--;
-}
 
 $template->param(
     username => $username,
     probpage => $problempage,
+    library => $library,
 );
 
 my $op = $input->param('op') || '';
 if ( $op eq 'addreport' ) {
 
-    if ( $recipients == 0 ){
-        print $input->redirect("/cgi-bin/koha/opac-reportproblem?norecipients=1.pl");
-        exit;
-    }
-
     my $subject = $input->param('subject');
     my $message = $input->param('message');
     my $place = $input->param('place');
-    my $recipient = $input->param('recipient') || 'library';
+    my $recipient = $input->param('recipient') || 'admin';
     my $problem = Koha::ProblemReport->new(
         {
             title          => $subject,
@@ -121,18 +101,15 @@ if ( $op eq 'addreport' ) {
             letter                 => $letter,
             borrowernumber         => $borrowernumber,
             message_transport_type => $transport,
-            to_address             => $koha_admin,
+            to_address             => C4::Context->preference('KohaAdminEmailAddress'),
             from_address           => $from_address,
         });
     } else {
-        my  $to_address = $library->branchreplyto ||
-            C4::Context->preference('ReplytoDefault') ||
-            $library->branchemail;
         C4::Letters::EnqueueLetter({
             letter                 => $letter,
             borrowernumber         => $borrowernumber,
             message_transport_type => $transport,
-            to_address             => $to_address,
+            to_address             => $library->branchemail,
             from_address           => $from_address,
         });
     }
