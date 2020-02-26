@@ -27,7 +27,22 @@
                 [% END %]
                 <h1>Report a problem</h1>
 
-                [% IF ( successfuladd ) %]
+                [% FOR m IN messages %]
+                    <div class="alert alert-[% m.type | html %]">
+                        [% SWITCH m.code %]
+                        [% CASE 'success_on_send' %]
+                            [% IF recipient == 'admin' %]
+                                Your problem report has been sent to the Koha administrator.
+                            [% ELSE %]
+                                Your problem report has been sent to the library.
+                            [% END %]
+                        [% CASE 'error_on_send' %][#% We really should avoid reaching this! %]
+                            Something wrong happened when sending the report. Please contact your library.
+                        [% END %]
+                    </div>
+                [% END %]
+
+                [% IF success_on_send %]
                     <div class="alert alert-info">
                         [% IF recipient == 'admin' %]
                             Your problem report has been sent to the Koha administrator.
@@ -36,6 +51,7 @@
                         [% END %]
                     </div>
                 [% END %]
+
                 <div id="reportproblem" class="maincontent toptabs">
                     <form name="reportlibform" action="/cgi-bin/koha/opac-reportproblem.pl" method="post">
                         <input type="hidden" name="op" value="addreport">
@@ -53,9 +69,9 @@
                                     [% END %]
                                 </li>
                                 <li>
-                                    <label for="place">Problem found on page: </label>
-                                    <input type="hidden" name="place" id="place" value="[% probpage | html %]">
-                                    [% probpage | html %]
+                                    <label for="problempage">Problem found on page: </label>
+                                    <input type="hidden" name="problempage" id="problempage" value="[% problempage | html %]">
+                                    [% problempage | html %]
                                 </li>
                                 <li>
                                     <label for="user">Username: </label>

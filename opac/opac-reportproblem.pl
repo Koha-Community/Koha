@@ -19,12 +19,12 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use Try::Tiny;
+
 use C4::Auth;    # get_template_and_user
 use C4::Output;
-use C4::Members;
 use C4::Letters;
 use Koha::ProblemReport;
-use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Util::Navigation;
@@ -48,15 +48,16 @@ if (   !C4::Context->preference('OPACReportProblem')
 
 my $problempage = C4::Context->preference('OPACBaseURL') . Koha::Util::Navigation::local_referer($input );
 
-my $member = Koha::Patrons->find($borrowernumber);
-my $username = $member->userid;
-my $branchcode = $member->branchcode;
+my $patron = Koha::Patrons->find($borrowernumber);
+my $username = $patron->userid;
+my $branchcode = $patron->branchcode;
 my $library = Koha::Libraries->find($branchcode);
+my @messages;
 
 $template->param(
-    username => $username,
-    probpage => $problempage,
-    library => $library,
+    username    => $username,
+    problempage => $problempage,
+    library     => $library,
 );
 
 my $op = $input->param('op') || '';
@@ -64,55 +65,76 @@ if ( $op eq 'addreport' ) {
 
     my $subject = $input->param('subject');
     my $message = $input->param('message');
-    my $place = $input->param('place');
+    my $problempage = $input->param('problempage');
     my $recipient = $input->param('recipient') || 'admin';
-    my $problem = Koha::ProblemReport->new(
-        {
-            title          => $subject,
-            content        => $message,
-            borrowernumber => $borrowernumber,
-            branchcode     => $branchcode,
-            username       => $username,
-            problempage    => $place,
-            recipient      => $recipient,
-        }
-    )->store;
-    $template->param(
-        recipient => $recipient,
-        successfuladd => 1,
-        probpage => $place,
-    );
 
-    # send notice to library
-    my $letter = C4::Letters::GetPreparedLetter(
-        module => 'members',
-        letter_code => 'PROBLEM_REPORT',
-        branchcode => $problem->branchcode,
-        tables => {
-            'problem_reports', $problem->reportid
-        }
-    );
+    try {
+        my $schema = Koha::Database->new->schema;
+        $schema->txn_do(
+            sub {
+                my $problem = Koha::ProblemReport->new(
+                    {
+                        title          => $subject,
+                        content        => $message,
+                        borrowernumber => $borrowernumber,
+                        branchcode     => $branchcode,
+                        username       => $username,
+                        problempage    => $problempage,
+                        recipient      => $recipient,
+                    }
+                )->store;
 
-    my $from_address = C4::Context->preference('KohaAdminEmailAddress');
-    my $transport = 'email';
+                # send notice to library
+                my $letter = C4::Letters::GetPreparedLetter(
+                    module => 'members',
+                    letter_code => 'PROBLEM_REPORT',
+                    branchcode => $problem->branchcode,
+                    tables => {
+                        'problem_reports', $problem->reportid
+                    }
+                );
 
-    if ( $recipient eq 'admin' ) {
-        C4::Letters::EnqueueLetter({
-            letter                 => $letter,
-            borrowernumber         => $borrowernumber,
-            message_transport_type => $transport,
-            to_address             => C4::Context->preference('KohaAdminEmailAddress'),
-            from_address           => $from_address,
-        });
-    } else {
-        C4::Letters::EnqueueLetter({
-            letter                 => $letter,
-            borrowernumber         => $borrowernumber,
-            message_transport_type => $transport,
-            to_address             => $library->branchemail,
-            from_address           => $from_address,
-        });
+                my $from_address = C4::Context->preference('KohaAdminEmailAddress');
+                my $transport = 'email';
+
+                if ( $recipient eq 'admin' ) {
+                    C4::Letters::EnqueueLetter({
+                        letter                 => $letter,
+                        borrowernumber         => $borrowernumber,
+                        message_transport_type => $transport,
+                        to_address             => C4::Context->preference('KohaAdminEmailAddress'),
+                        from_address           => $from_address,
+                    });
+                } else {
+                    C4::Letters::EnqueueLetter({
+                        letter                 => $letter,
+                        borrowernumber         => $borrowernumber,
+                        message_transport_type => $transport,
+                        to_address             => $library->branchemail,
+                        from_address           => $from_address,
+                    });
+                }
+
+                push @messages, {
+                    type => 'info',
+                    code => 'success_on_send',
+                };
+
+                $template->param(
+                    recipient => $recipient,
+                );
+            }
+        );
+    }
+    catch {
+        warn "Something wrong happened when sending the report problem: $_";
+        push @messages, {
+            type => 'error',
+            code => 'error_on_send',
+        };
     }
 }
+
+$template->param( messages => \@messages );
 
 output_html_with_http_headers $input, $cookie, $template->output;
