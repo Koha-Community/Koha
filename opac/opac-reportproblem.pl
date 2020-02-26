@@ -82,7 +82,17 @@ if ( $op eq 'addreport' ) {
     my $message = $input->param('message');
     my $place = $input->param('place');
     my $recipient = $input->param('recipient') || 'library';
-    my $problem = Koha::ProblemReport->new({ title => $subject, content => $message, borrowernumber => $borrowernumber, branchcode => $branchcode, username => $username, problempage => $place, recipient => $recipient, reportdate => dt_from_string() })->store;
+    my $problem = Koha::ProblemReport->new(
+        {
+            title          => $subject,
+            content        => $message,
+            borrowernumber => $borrowernumber,
+            branchcode     => $branchcode,
+            username       => $username,
+            problempage    => $place,
+            recipient      => $recipient,
+        }
+    )->store;
     $template->param(
         recipient => $recipient,
         successfuladd => 1,
