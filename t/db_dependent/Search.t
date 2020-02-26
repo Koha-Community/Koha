@@ -656,29 +656,6 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
                 "Warning is raised correctly for invalid tags in MARC::Record";
     is(scalar(@newresults), 0, 'a record that cannot be parsed by MARC::Record is simply skipped (bug 10684)');
 
-    # Testing exploding indexes
-    my $term;
-    my $searchmodule = new Test::MockModule('C4::Search');
-    $searchmodule->mock('SimpleSearch', sub {
-        my $query = shift;
-
-        is($query, "he:$term", "Searching for expected term '$term' for exploding") or return '', [], 0;
-
-        my $record = MARC::Record->new;
-        if ($query =~ m/Arizona/) {
-            $record->add_fields(
-                [ '001', '1234' ],
-                [ '151', ' ', ' ', a => 'Arizona' ],
-                [ '551', ' ', ' ', a => 'United States', w => 'g' ],
-                [ '551', ' ', ' ', a => 'Maricopa County', w => 'h' ],
-                [ '551', ' ', ' ', a => 'Navajo County', w => 'h' ],
-                [ '551', ' ', ' ', a => 'Pima County', w => 'h' ],
-                [ '551', ' ', ' ', a => 'New Mexico' ],
-                );
-        }
-        return '', [ $record->as_usmarc() ], 1;
-    });
-
     my ($auths, $count) = SearchAuthorities(
         ['mainentry'], ['and'], [''], ['starts'],
         ['shakespeare'], 0, 10, '', '', 1
