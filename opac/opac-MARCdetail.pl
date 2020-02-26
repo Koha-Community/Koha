@@ -63,6 +63,7 @@ use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
+use Koha::DateUtils;
 
 my $query = CGI->new();
 
@@ -290,6 +291,7 @@ foreach my $field (@fields) {
         my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
         next if ( ($sf_def->{tab}||0) != 10 );
         next if ( ($sf_def->{hidden}||0) > 0 );
+
         push @item_subfield_codes, $subf[$i][0];
         $witness{ $subf[$i][0] } = $sf_def->{lib};
 
@@ -309,6 +311,11 @@ foreach my $field (@fields) {
         else {
             $item->{ $subf[$i][0] } .= GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
                 $subf[$i][1], '', $tagslib, '', 'opac' );
+        }
+
+        if ( $subf[$i][0] eq 'd' || $subf[$i][0] eq 'q' || $subf[$i][0] eq 'r' || $subf[$i][0] eq 's' || $subf[$i][0] eq 'w' ){
+            # date accessioned || on loan || date last seen || date last borrowed || replacement price date
+            $item->{$subf[$i][0]} = output_pref({ dt => dt_from_string( $item->{$subf[$i][0]} ), dateonly => 1 });;
         }
     }
     push @item_loop, $item if $item;
