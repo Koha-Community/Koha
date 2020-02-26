@@ -92,7 +92,7 @@ if ( $op eq "do_search" && $query ) {
     # add the limits if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     my $ccodelimit    = $input->param('ccodelimit');
-    my $op = C4::Context->preference('UseQueryParser') ? '&&' : 'and';
+    my $op = 'and';
     $query .= " $op $itype_or_itemtype:$itemtypelimit" if $itemtypelimit;
     $query .= " $op ccode:$ccodelimit" if $ccodelimit;
     $debug && warn $query;

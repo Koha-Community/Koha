@@ -49,7 +49,6 @@ $ENV{'__DB_USER__'} = C4::Context->config('user')      // 'kohaadmin';
 $ENV{'__DB_PASS__'} = C4::Context->config('pass')      // 'katikoan';
 
 my @files = ( "$source/etc/koha-conf.xml",
-              "$source/etc/searchengine/queryparser.yaml",
             );
 
 find(sub { push @files, $File::Find::name if ( -f $File::Find::name ); }, "$source/etc/zebradb");

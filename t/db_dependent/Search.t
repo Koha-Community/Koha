@@ -22,6 +22,7 @@ use utf8;
 use YAML;
 
 use C4::Debug;
+use C4::AuthoritiesMarc qw( SearchAuthorities );
 use C4::XSLT;
 require C4::Context;
 
@@ -97,7 +98,6 @@ our $QueryStemming = 0;
 our $QueryAutoTruncate = 0;
 our $QueryWeightFields = 0;
 our $QueryFuzzy = 0;
-our $UseQueryParser = 0;
 our $SearchEngine = 'Zebra';
 our $marcflavour = 'MARC21';
 our $htdocs = File::Spec->rel2abs(dirname($0));
@@ -118,8 +118,6 @@ $contextmodule->mock('preference', sub {
         return $QueryWeightFields;
     } elsif ($pref eq 'QueryFuzzy') {
         return $QueryFuzzy;
-    } elsif ($pref eq 'UseQueryParser') {
-        return $UseQueryParser;
     } elsif ($pref eq 'SearchEngine') {
         return $SearchEngine;
     } elsif ($pref eq 'maxRecordsForFacets') {
@@ -196,11 +194,6 @@ $contextmodule->mock('preference', sub {
         return 0;
     }
 });
-$contextmodule->mock('queryparser', sub {
-    my $QParser     = Koha::QueryParser::Driver::PQF->new();
-    $QParser->load_config("$datadir/etc/searchengine/queryparser.yaml");
-    return $QParser;
-});
 
 our $bibliomodule = new Test::MockModule('C4::Biblio');
 
@@ -269,7 +262,6 @@ sub run_marc21_search_tests {
     $QueryAutoTruncate = 0;
     $QueryWeightFields = 0;
     $QueryFuzzy = 0;
-    $UseQueryParser = 0;
     $marcflavour = 'MARC21';
 
     my $indexes = C4::Search::getIndexes();
@@ -485,19 +477,6 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
     is($results_hashref->{biblioserver}->{hits}, 12,
        'search using index whose name contains "ns" returns expected results (bug 10271)');
 
-    $UseQueryParser = 1;
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ 'book' ], [ 'kw' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
-    is($results_hashref->{biblioserver}->{hits}, 101, "Search for 'book' with index set to 'kw' returns 101 hits");
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([ 'and' ], [ 'book', 'another' ], [ 'kw', 'kw' ], [], [], 0, 'en');
-    ($error, $results_hashref, $facets_loop) = getRecords($query,$simple_query,[ ], [ 'biblioserver' ],20,0,\%branches,\%itemtypes,$query_type,0);
-    is($results_hashref->{biblioserver}->{hits}, 1, "Search for 'kw:book && kw:another' returns 1 hit");
-    $UseQueryParser = 0;
-
     ( $error, $query, $simple_query, $query_cgi,
     $query_desc, $limit, $limit_cgi, $limit_desc,
     $query_type ) = buildQuery([], [ '' ], [ 'kw' ], [ 'available' ], [], 0, 'en');
@@ -700,66 +679,6 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         return '', [ $record->as_usmarc() ], 1;
     });
 
-    $UseQueryParser = 1;
-    $term = 'Arizona';
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ $term ], [ 'su-br' ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Advanced search for broader subjects", $query, 'Arizona', 'United States');
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ $term ], [ 'su-na' ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Advanced search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ $term ], [ 'su-rl' ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Advanced search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ "$term", 'history' ], [ 'su-rl', 'kw' ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Advanced search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
-    like($query, qr/history/, "Advanced search for related subjects and keyword 'history' searches for 'history'");
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ 'history', "$term" ], [ 'kw', 'su-rl' ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Order of terms doesn't matter for advanced search", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
-    like($query, qr/history/, "Order of terms doesn't matter for advanced search");
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ "su-br($term)" ], [  ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Simple search for broader subjects", $query, 'Arizona', 'United States');
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ "su-na($term)" ], [  ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Simple search for narrower subjects", $query, 'Arizona', 'Maricopa County', 'Navajo County', 'Pima County');
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ "su-rl($term)" ], [  ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Simple search for related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
-
-    ( $error, $query, $simple_query, $query_cgi,
-    $query_desc, $limit, $limit_cgi, $limit_desc,
-    $query_type ) = buildQuery([], [ "history && su-rl($term)" ], [  ], [  ], [], 0, 'en');
-    matchesExplodedTerms("Simple search for related subjects and keyword 'history' searches related subjects", $query, 'Arizona', 'United States', 'Maricopa County', 'Navajo County', 'Pima County');
-    like($query, qr/history/, "Simple search for related subjects and keyword 'history' searches for 'history'");
-
-    sub matchesExplodedTerms {
-        my ($message, $query, @terms) = @_;
-        my $match = '(' . join ('|', map { " \@attr 1=Subject \@attr 4=1 \"$_\"" } @terms) . "){" . scalar(@terms) . "}";
-        like($query, qr/$match/, $message);
-    }
-
-    # authority records
-    use_ok('C4::AuthoritiesMarc');
-    $UseQueryParser = 0;
-
     my ($auths, $count) = SearchAuthorities(
         ['mainentry'], ['and'], [''], ['starts'],
         ['shakespeare'], 0, 10, '', '', 1
@@ -790,29 +709,6 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         ['professional wrestler'], 0, 10, '', '', 1
     );
     is($count, 1, 'MARC21 authorities: one hit on "all" (entire record) contains "professional wrestler"');
-
-    $UseQueryParser = 1;
-
-    ($auths, $count) = SearchAuthorities(
-        ['mainentry'], ['and'], [''], ['starts'],
-        ['shakespeare'], 0, 10, '', '', 1
-    );
-    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" (QP)');
-    ($auths, $count) = SearchAuthorities(
-        ['mainentry'], ['and'], [''], ['starts'],
-        ['shakespeare'], 0, 10, '', 'HeadingAsc', 1
-    );
-    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" sorted by heading ascending (QP)');
-    ($auths, $count) = SearchAuthorities(
-        ['mainentry'], ['and'], [''], ['starts'],
-        ['shakespeare'], 0, 10, '', 'HeadingDsc', 1
-    );
-    is($count, 1, 'MARC21 authorities: one hit on mainentry starts with "shakespeare" sorted by heading descending (QP)');
-    ($auths, $count) = SearchAuthorities(
-        ['match'], ['and'], [''], ['contains'],
-        ['沙士北亞威廉姆'], 0, 10, '', '', 1
-    );
-    is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆" (QP)');
 
     # retrieve records that are larger than the MARC limit of 99,999 octets
     ( undef, $results_hashref, $facets_loop ) =
@@ -899,7 +795,6 @@ sub run_unimarc_search_tests {
     $QueryAutoTruncate = 0;
     $QueryWeightFields = 0;
     $QueryFuzzy = 0;
-    $UseQueryParser = 0;
     $marcflavour = 'UNIMARC';
 
     index_sample_records_and_launch_zebra($datadir, 'unimarc');
@@ -917,7 +812,6 @@ sub run_unimarc_search_tests {
 
     # authority records
     use_ok('C4::AuthoritiesMarc');
-    $UseQueryParser = 0;
 
     my ($auths, $count) = SearchAuthorities(
         ['mainentry'], ['and'], [''], ['contains'],
@@ -971,7 +865,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 112;
+    plan tests => 84;
     run_marc21_search_tests();
 };
 

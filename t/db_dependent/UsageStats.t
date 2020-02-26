@@ -566,7 +566,6 @@ sub mocking_systempreferences_to_a_set_value {
         TraceCompleteSubfields
         TraceSubjectSubdivisions
         UseICU
-        UseQueryParser
         defaultSortField
         displayFacetCount
         OPACdefaultSortField

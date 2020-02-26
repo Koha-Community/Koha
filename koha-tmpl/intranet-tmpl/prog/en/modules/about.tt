@@ -184,7 +184,7 @@
         </div>
 
         <div id="sysinfo">
-    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships %]
+    [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnNoActiveCurrency || warnIsRootUser || xml_config_warnings.size || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || has_ai_issues || oauth2_missing_deps || bad_yaml_prefs || warnRelationships %]
         [% IF (warnIsRootUser) %]
             <h2>Warning regarding current user</h2>
             <p>You are logged in as the database administrative user. This is not recommended because some parts of Koha will not function as expected when using this account.</p>
@@ -246,7 +246,7 @@
             [% END %]
         [% END %]
 
-        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnNoActiveCurrency || QueryParserError || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules %]
+        [% IF warnPrefBiblioAddsAuthorities || warnPrefEasyAnalyticalRecords || warnPrefAnonymousPatronOPACPrivacy || warnPrefAnonymousPatronAnonSuggestions || warnPrefAnonymousPatronOPACPrivacy_PatronDoesNotExist || warnPrefAnonymousPatronAnonSuggestions_PatronDoesNotExist || warnNoActiveCurrency || AutoSelfCheckPatronDoesNotHaveSelfCheckPerm || AutoSelfCheckPatronHasTooManyPerm || warnStatisticsFieldsError || warnNoTemplateCaching || warnILLConfiguration || oauth2_missing_deps || bad_yaml_prefs || warnIssuingRules %]
             <h2>Warnings regarding the system configuration</h2>
             <table>
                 <caption>Preferences and parameters</caption>
@@ -273,18 +273,6 @@
                 [% END %]
                 [% IF warnStatisticsFieldsError %]
                     <tr><th scope="row"><b>Warning</b> </th><td>System preference 'StatisticsFields' contains field names not belonging to the items database table: [% warnStatisticsFieldsError | html %] </td></tr>
-                [% END %]
-                [% IF QueryParserError %]
-                    <tr><th scope="row"><b>Warning</b> </th><td>
-                        You have set UseQueryParser but there was a problem inititializing QueryParser.
-                    [% IF QueryParserError.fallback %]
-                        The 'queryparser_config' entry is missing in your configuration file.
-                        The following configuration file was used without success: [% QueryParserError.file | html %].
-                    [% ELSE %]
-                        The following configuration file was used without success: [% QueryParserError.file | html %].
-                    [% END %]
-                        </td>
-                    </tr>
                 [% END %]
                 [% IF AutoSelfCheckPatronDoesNotHaveSelfCheckPerm %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
@@ -355,13 +343,6 @@
                     <td>The &lt;zebra_auth_index_mode&gt; entry set to 'grs1', which is no longer supported.
                         Please use DOM instead. To switch follow this page of wiki:
                         <a href="https://wiki.koha-community.org/wiki/Switching_to_dom_indexing">Switching to dom indexing</a>
-                    </td>
-                </tr>
-                [% ELSIF config_entry.error == 'queryparser_entry_missing' %]
-                <tr>
-                    <th scope="row"><b>Warning</b></th>
-                    <td>You have set UseQueryParser but the 'queryparser_config' entry is missing in your configuration
-                        file. [% config_entry.file | html %] is used as a fallback.
                     </td>
                 </tr>
                 [% ELSIF config_entry.error == 'use_zebra_facets_entry_missing' %]

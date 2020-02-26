@@ -673,7 +673,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UseEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
 ('UseICU','0','1','Tell Koha if ICU indexing is in use for Zebra or not.','YesNo'),
 ('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
-('UseQueryParser','0',NULL,'If enabled, try to use QueryParser for queries.','YesNo'),
 ('UseTransportCostMatrix','0','','Use Transport Cost Matrix when filling holds','YesNo'),
 ('UseWYSIWYGinSystemPreferences','0','','Show WYSIWYG editor when editing certain HTML system preferences.','YesNo'),
 ('viewISBD','1','','Allow display of ISBD view of bibiographic records','YesNo'),

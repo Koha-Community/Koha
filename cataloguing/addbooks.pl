@@ -68,21 +68,14 @@ if ($query) {
     # build query
     my @operands = $query;
 
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     my $builtquery;
     my $query_cgi;
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
     my $searcher = Koha::SearchEngine::Search->new(
         { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
-    if ($QParser) {
-        $builtquery = $query;
-        $query_cgi = "q=".uri_escape_utf8($query);
-    } else {
-        ( undef, $builtquery, undef, $query_cgi, undef, undef, undef, undef, undef, undef ) =
-          $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
-    }
+    ( undef, $builtquery, undef, $query_cgi, undef, undef, undef, undef, undef, undef ) =
+      $builder->build_query_compat( undef, \@operands, undef, undef, undef, 0, $lang );
 
     $template->param( search_query => $builtquery ) if C4::Context->preference('DumpSearchQueryTemplate');
 

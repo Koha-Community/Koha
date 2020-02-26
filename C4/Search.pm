@@ -99,22 +99,10 @@ sub FindDuplicate {
         $query = "isbn:$result->{isbn}";
     }
     else {
-        my $QParser;
-        $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-        my $titleindex;
-        my $authorindex;
-        my $op;
 
-        if ($QParser) {
-            $titleindex = 'title|exact';
-            $authorindex = 'author|exact';
-            $op = '&&';
-            $QParser->custom_data->{'QueryAutoTruncate'} = C4::Context->preference('QueryAutoTruncate');
-        } else {
-            $titleindex = 'ti,ext';
-            $authorindex = 'au,ext';
-            $op = 'and';
-        }
+        my $titleindex = 'ti,ext';
+        my $authorindex = 'au,ext';
+        my $op = 'and';
 
         $result->{title} =~ s /\\//g;
         $result->{title} =~ s /\"//g;
@@ -233,25 +221,12 @@ sub SimpleSearch {
     my $results = [];
     my $total_hits = 0;
 
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') && ! ($query =~ m/\w,\w|\w=\w/));
-    if ($QParser) {
-        $QParser->custom_data->{'QueryAutoTruncate'} = C4::Context->preference('QueryAutoTruncate');
-    }
-
     # Initialize & Search Zebra
     for ( my $i = 0 ; $i < @servers ; $i++ ) {
         eval {
             $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
-            if ($QParser) {
-                $query =~ s/=/:/g unless $options{skip_normalize};
-                $QParser->parse( $query );
-                $query = $QParser->target_syntax($servers[$i]);
-                $zoom_queries[$i] = new ZOOM::Query::PQF( $query, $zconns[$i]);
-            } else {
-                $query =~ s/:/=/g unless $options{skip_normalize};
-                $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
-            }
+            $query =~ s/:/=/g unless $options{skip_normalize};
+            $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
             $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
 
             # error handling
@@ -1277,134 +1252,6 @@ sub getIndexes{
     return \@indexes;
 }
 
-=head2 _handle_exploding_index
-
-    my $query = _handle_exploding_index($index, $term)
-
-Callback routine to generate the search for "exploding" indexes (i.e.
-those indexes which are turned into multiple or-connected searches based
-on authority data).
-
-=cut
-
-sub _handle_exploding_index {
-    my ($QParser, $filter, $params, $negate, $server) = @_;
-    my $index = $filter;
-    my $term = join(' ', @$params);
-
-    return unless ($index =~ m/(su-br|su-na|su-rl)/ && $term);
-
-    my $marcflavour = C4::Context->preference('marcflavour');
-
-    my $codesubfield = $marcflavour eq 'UNIMARC' ? '5' : 'w';
-    my $wantedcodes = '';
-    my @subqueries = ( "\@attr 1=Subject \@attr 4=1 \"$term\"");
-    my ($error, $results, $total_hits) = SimpleSearch( "he:$term", undef, undef, [ "authorityserver" ] );
-    foreach my $auth (@$results) {
-        my $record = MARC::Record->new_from_usmarc($auth);
-        my @references = $record->field('5..');
-        if (@references) {
-            if ($index eq 'su-br') {
-                $wantedcodes = 'g';
-            } elsif ($index eq 'su-na') {
-                $wantedcodes = 'h';
-            } elsif ($index eq 'su-rl') {
-                $wantedcodes = '';
-            }
-            foreach my $reference (@references) {
-                my $codes = $reference->subfield($codesubfield);
-                push @subqueries, '@attr 1=Subject @attr 4=1 "' . $reference->as_string('abcdefghijlmnopqrstuvxyz') . '"' if (($codes && $codes eq $wantedcodes) || !$wantedcodes);
-            }
-        }
-    }
-    my $query = ' @or ' x (scalar(@subqueries) - 1) . join(' ', @subqueries);
-    return $query;
-}
-
-=head2 parseQuery
-
-    ( $operators, $operands, $indexes, $limits,
-      $sort_by, $scan, $lang ) =
-            parseQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
-
-Shim function to ease the transition from buildQuery to a new QueryParser.
-This function is called at the beginning of buildQuery, and modifies
-buildQuery's input. If it can handle the input, it returns a query that
-buildQuery will not try to parse.
-
-=cut
-
-sub parseQuery {
-    my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = @_;
-
-    my @operators = $operators ? @$operators : ();
-    my @indexes   = $indexes   ? @$indexes   : ();
-    my @operands  = $operands  ? @$operands  : ();
-    my @limits    = $limits    ? @$limits    : ();
-    my @sort_by   = $sort_by   ? @$sort_by   : ();
-
-    my $query = $operands[0];
-    my $index;
-    my $term;
-    my $query_desc;
-
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser') || $query =~ s/^qp=//);
-    undef $QParser if ($query =~ m/^(ccl=|pqf=|cql=)/ || grep (/\w,\w|\w=\w/, @operands, @indexes) );
-    undef $QParser if (scalar @limits > 0);
-
-    if ($QParser)
-    {
-        $QParser->custom_data->{'QueryAutoTruncate'} = C4::Context->preference('QueryAutoTruncate');
-        $query = '';
-        for ( my $ii = 0 ; $ii <= @operands ; $ii++ ) {
-            next unless $operands[$ii];
-            $query .= $operators[$ii-1] && $operators[ $ii - 1 ] eq 'or' ? ' || ' : ' && '
-              if ($query);
-            if ( $operands[$ii] =~ /^[^"]\W*[-|_\w]*:\w.*[^"]$/ ) {
-                $query .= $operands[$ii];
-            }
-            elsif ( $indexes[$ii] && $indexes[$ii] =~ m/su-/ ) {
-                $query .= $indexes[$ii] . '(' . $operands[$ii] . ')';
-            }
-            else {
-                $query .=
-                  ( $indexes[$ii] ? "$indexes[$ii]:" : '' ) . $operands[$ii];
-            }
-        }
-        foreach my $limit (@limits) {
-        }
-        if ( scalar(@sort_by) > 0 ) {
-            my $modifier_re =
-              '#(' . join( '|', @{ $QParser->modifiers } ) . ')';
-            $query =~ s/$modifier_re//g;
-            foreach my $modifier (@sort_by) {
-                $query .= " #$modifier";
-            }
-        }
-
-        $query_desc = $query;
-        $query_desc =~ s/\s+/ /g;
-        if ( C4::Context->preference("QueryWeightFields") ) {
-        }
-        $QParser->add_bib1_filter_map( 'su-br' => 'biblioserver' =>
-              { 'target_syntax_callback' => \&_handle_exploding_index } );
-        $QParser->add_bib1_filter_map( 'su-na' => 'biblioserver' =>
-              { 'target_syntax_callback' => \&_handle_exploding_index } );
-        $QParser->add_bib1_filter_map( 'su-rl' => 'biblioserver' =>
-              { 'target_syntax_callback' => \&_handle_exploding_index } );
-        $QParser->parse($query);
-        $operands[0] = "pqf=" . $QParser->target_syntax('biblioserver');
-    }
-    else {
-        require Koha::QueryParser::Driver::PQF;
-        my $modifier_re = '#(' . join( '|', @{Koha::QueryParser::Driver::PQF->modifiers}) . ')';
-        s/$modifier_re//g for @operands;
-    }
-
-    return ( $operators, \@operands, $indexes, $limits, $sort_by, $scan, $lang, $query_desc);
-}
-
 =head2 buildQuery
 
 ( $error, $query,
@@ -1427,7 +1274,6 @@ sub buildQuery {
     warn "---------\nEnter buildQuery\n---------" if $DEBUG;
 
     my $query_desc;
-    ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang, $query_desc) = parseQuery($operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
 
     # dereference
     my @operators = $operators ? @$operators : ();
@@ -1487,12 +1333,8 @@ sub buildQuery {
         return ( undef, $', $', "q=cql=".uri_escape_utf8($'), $', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
-        if ($query_desc) {
-            $query_cgi = "q=".uri_escape_utf8($query_desc);
-        } else {
-            $query_desc = $';
-            $query_cgi = "q=pqf=".uri_escape_utf8($');
-        }
+        $query_desc = $';
+        $query_cgi = "q=pqf=".uri_escape_utf8($');
         return ( undef, $', $', $query_cgi, $query_desc, '', '', '', 'pqf' );
     }
 

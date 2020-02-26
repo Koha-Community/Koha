@@ -783,53 +783,6 @@ sub restore_dbh
     # return something, then this function should, too.
 }
 
-=head2 queryparser
-
-  $queryparser = C4::Context->queryparser
-
-Returns a handle to an initialized Koha::QueryParser::Driver::PQF object.
-
-=cut
-
-sub queryparser {
-    my $self = shift;
-    unless (defined $context->{"queryparser"}) {
-        $context->{"queryparser"} = &_new_queryparser();
-    }
-
-    return
-      defined( $context->{"queryparser"} )
-      ? $context->{"queryparser"}->new
-      : undef;
-}
-
-=head2 _new_queryparser
-
-Internal helper function to create a new QueryParser object. QueryParser
-is loaded dynamically so as to keep the lack of the QueryParser library from
-getting in anyone's way.
-
-=cut
-
-sub _new_queryparser {
-    my $qpmodules = {
-        'OpenILS::QueryParser'           => undef,
-        'Koha::QueryParser::Driver::PQF' => undef
-    };
-    if ( can_load( 'modules' => $qpmodules ) ) {
-        my $QParser     = Koha::QueryParser::Driver::PQF->new();
-        my $config_file = $context->config('queryparser_config');
-        $config_file ||= '/etc/koha/searchengine/queryparser.yaml';
-        if ( $QParser->load_config($config_file) ) {
-            # Set 'keyword' as the default search class
-            $QParser->default_search_class('keyword');
-            # TODO: allow indexes to be configured in the database
-            return $QParser;
-        }
-    }
-    return;
-}
-
 =head2 userenv
 
   C4::Context->userenv;

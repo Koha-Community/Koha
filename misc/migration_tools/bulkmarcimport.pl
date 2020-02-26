@@ -598,14 +598,7 @@ sub build_query {
 	  my $string = build_simplequery($matchingpoint,$record);
 	  push @searchstrings,$string if (length($string)>0);
         }
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-    my $op;
-    if ($QParser) {
-        $op = '&&';
-    } else {
-        $op = 'and';
-    }
+    my $op = 'and';
     return join(" $op ",@searchstrings);
 }
 sub build_simplequery {
@@ -621,14 +614,7 @@ sub build_simplequery {
 		  }
         }
     }
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-    my $op;
-    if ($QParser) {
-        $op = '&&';
-    } else {
-        $op = 'and';
-    }
+    my $op = 'and';
     return join(" $op ",@searchstrings);
 }
 sub report_item_errors {

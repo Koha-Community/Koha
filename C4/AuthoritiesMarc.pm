@@ -113,8 +113,6 @@ sub SearchAuthorities {
     $sortby="" unless $sortby;
     my $query;
     my $qpquery = '';
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     my $attr = '';
         # the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
         # the authtypecode. Then, search on $a of this tag_to_report
@@ -132,9 +130,6 @@ sub SearchAuthorities {
         }
         if ($n>1){
             while ($n>1){$query= "\@or ".$query;$n--;}
-        }
-        if ($QParser) {
-            $qpquery .= '(authtype:' . join('|| authtype:', @auths) . ')';
         }
     }
 
@@ -203,9 +198,6 @@ sub SearchAuthorities {
             $q2 .= $attr;
             $dosearch = 1;
             ++$attr_cnt;
-            if ($QParser) {
-                $qpquery .= " $tags->[$i]:\"$value->[$i]\"";
-            }
         }    #if value
     }
     ##Add how many queries generated
@@ -226,21 +218,8 @@ sub SearchAuthorities {
     } elsif ($sortby eq 'AuthidDsc') {
         $orderstring = '@attr 7=2 @attr 4=109 @attr 1=Local-Number 0';
     }
-    if ($QParser) {
-        $qpquery .= ' all:all' unless $value->[0];
-
-        if ( $value->[0] =~ m/^qp=(.*)$/ ) {
-            $qpquery = $1;
-        }
-
-        $qpquery .= " #$sortby" unless $sortby eq '';
-
-        $QParser->parse( $qpquery );
-        $query = $QParser->target_syntax('authorityserver');
-    } else {
-        $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
-        $query="\@or $orderstring $query" if $orderstring;
-    }
+    $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
+    $query="\@or $orderstring $query" if $orderstring;
 
     $offset = 0 if not defined $offset or $offset < 0;
     my $counter = $offset;
@@ -758,14 +737,7 @@ sub FindDuplicateAuthority {
     my $auth_tag_to_report = Koha::Authority::Types->find($authtypecode)->auth_tag_to_report;
 #     warn "record :".$record->as_formatted."  auth_tag_to_report :$auth_tag_to_report";
     # build a request for SearchAuthorities
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
-    my $op;
-    if ($QParser) {
-        $op = '&&';
-    } else {
-        $op = 'AND';
-    }
+    my $op = 'AND';
     $authtypecode =~ s#/#\\/#; # GENRE/FORM contains forward slash which is a reserved character
     my $query='at:'.$authtypecode.' ';
     my $filtervalues=qr([\001-\040\Q!'"`#$%&*+,-./:;<=>?@(){[}_|~\E\]]);

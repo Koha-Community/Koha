@@ -304,7 +304,6 @@ sub BuildReport {
         TraceCompleteSubfields
         TraceSubjectSubdivisions
         UseICU
-        UseQueryParser
         defaultSortField
         displayFacetCount
         OPACdefaultSortField

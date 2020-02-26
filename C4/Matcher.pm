@@ -622,26 +622,18 @@ sub get_matches {
 
     my $matches = {};
 
-    my $QParser;
-    $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
     foreach my $matchpoint ( @{ $self->{'matchpoints'} } ) {
         my @source_keys = _get_match_keys( $source_record, $matchpoint );
 
         next if scalar(@source_keys) == 0;
 
-        # FIXME - because of a bug in QueryParser, an expression ofthe
-        # format 'isbn:"isbn1" || isbn:"isbn2" || isbn"isbn3"...'
-        # does not get parsed correctly, so we will not
-        # do AggressiveMatchOnISBN if UseQueryParser is on
         @source_keys = C4::Koha::GetVariationsOfISBNs(@source_keys)
           if ( $matchpoint->{index} =~ /^isbn$/i
-            && C4::Context->preference('AggressiveMatchOnISBN') )
-            && !C4::Context->preference('UseQueryParser');
+            && C4::Context->preference('AggressiveMatchOnISBN') );
 
         @source_keys = C4::Koha::GetVariationsOfISSNs(@source_keys)
           if ( $matchpoint->{index} =~ /^issn$/i
-            && C4::Context->preference('AggressiveMatchOnISSN') )
-            && !C4::Context->preference('UseQueryParser');
+            && C4::Context->preference('AggressiveMatchOnISSN') );
 
         # build query
         my $query;
@@ -650,18 +642,10 @@ sub get_matches {
         my $total_hits;
         if ( $self->{'record_type'} eq 'biblio' ) {
 
-            #NOTE: The QueryParser can't handle the CCL syntax of 'qualifier','qualifier', so fallback to non-QueryParser.
-            #NOTE: You can see this in C4::Search::SimpleSearch() as well in a different way.
-            if ($QParser && $matchpoint->{'index'} !~ m/\w,\w/) {
-                $query = join( " || ",
-                    map { "$matchpoint->{'index'}:$_" } @source_keys );
-            }
-            else {
-                my $phr = ( C4::Context->preference('AggressiveMatchOnISBN') || C4::Context->preference('AggressiveMatchOnISSN') )  ? ',phr' : q{};
-                $query = join( " OR ",
-                    map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys );
-                    #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
-            }
+            my $phr = ( C4::Context->preference('AggressiveMatchOnISBN') || C4::Context->preference('AggressiveMatchOnISSN') )  ? ',phr' : q{};
+            $query = join( " OR ",
+                map { "$matchpoint->{'index'}$phr=\"$_\"" } @source_keys );
+                #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
 
             # Use state variables to avoid recreating the objects every time.
             # With Elasticsearch this also avoids creating a massive amount of
