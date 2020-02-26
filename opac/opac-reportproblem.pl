@@ -40,7 +40,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-if ( !C4::Context->preference('OPACReportProblem') ){
+if (   !C4::Context->preference('OPACReportProblem')
+    || !C4::Context->preference('KohaAdminEmailAddress') )
+{
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
 }
 
