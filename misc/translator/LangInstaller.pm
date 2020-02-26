@@ -701,8 +701,8 @@ sub extract_messages {
     }
 
     my @js_dirs = (
-        "$intranetdir/koha-tmpl/intranet-tmpl/prog/js",
-        "$intranetdir/koha-tmpl/opac-tmpl/bootstrap/js",
+        "$intrahtdocs/prog/js",
+        "$opachtdocs/bootstrap/js",
     );
 
     my @js_files;
