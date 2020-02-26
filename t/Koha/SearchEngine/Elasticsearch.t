@@ -118,7 +118,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 51;
+    plan tests => 53;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -193,6 +193,16 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => 0,
             marc_type => 'marc21',
             marc_field => '220',
+        },
+        {
+            name => 'uniform_title',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '240a',
         },
         {
             name => 'title_wildcard',
@@ -309,6 +319,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('100', '', '', a => 'Author 1'),
         MARC::Field->new('110', '', '', a => 'Corp Author'),
         MARC::Field->new('210', '', '', a => 'Title 1'),
+        MARC::Field->new('240', '', '4', a => 'The uniform title with nonfiling indicator'),
         MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
         MARC::Field->new('999', '', '', c => '1234567'),
         # '  ' for testing trimming of white space in boolean value callback:
@@ -431,6 +442,18 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         $docs->[0]->{'local_classification'},
         [$callno, $callno2, $long_callno],
         'First document local_classification field should be set correctly'
+    );
+
+    # Nonfiling characters for sort fields
+    is_deeply(
+        $docs->[0]->{uniform_title},
+        ['The uniform title with nonfiling indicator'],
+        'First document uniform_title field should contain the title verbatim'
+    );
+    is_deeply(
+        $docs->[0]->{uniform_title__sort},
+        ['uniform title with nonfiling indicator'],
+        'First document uniform_title__sort field should contain the title with the first four initial characters removed'
     );
 
     # Second record:
