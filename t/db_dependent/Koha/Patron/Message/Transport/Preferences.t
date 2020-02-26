@@ -47,8 +47,8 @@ subtest 'Test Koha::Patron::Message::Transport::Preferences' => sub {
 
     $schema->storage->txn_begin;
 
-    my $attribute = build_a_test_attribute();
-    my $mtt       = build_a_test_transport_type();
+    my $attribute = $builder->build_object({ class => 'Koha::Patron::Message::Attributes' });
+    my $mtt       = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
     my $letter    = build_a_test_letter({
         mtt => $mtt->message_transport_type
     });
@@ -61,7 +61,7 @@ subtest 'Test Koha::Patron::Message::Transport::Preferences' => sub {
     })->store;
 
     subtest 'For a patron' => sub {
-        my $patron    = build_a_test_patron();
+        my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
         my $preference = Koha::Patron::Message::Preference->new({
             borrowernumber       => $patron->borrowernumber,
             message_attribute_id => $attribute->message_attribute_id,
@@ -85,7 +85,7 @@ subtest 'Test Koha::Patron::Message::Transport::Preferences' => sub {
     };
 
     subtest 'For a category' => sub {
-        my $category   = build_a_test_category();
+        my $category   = $builder->build_object({ class => 'Koha::Patron::Categories' });
         my $preference = Koha::Patron::Message::Preference->new({
             categorycode         => $category->categorycode,
             message_attribute_id => $attribute->message_attribute_id,
@@ -111,29 +111,6 @@ subtest 'Test Koha::Patron::Message::Transport::Preferences' => sub {
     $schema->storage->txn_rollback;
 };
 
-sub build_a_test_attribute {
-    my ($params) = @_;
-
-    $params->{takes_days} = $params->{takes_days} && $params->{takes_days} > 0
-                            ? 1 : 0;
-
-    my $attribute = $builder->build({
-        source => 'MessageAttribute',
-        value => $params,
-    });
-
-    return Koha::Patron::Message::Attributes->find(
-        $attribute->{message_attribute_id}
-    );
-}
-
-sub build_a_test_category {
-    my $categorycode   = $builder->build({
-        source => 'Category' })->{categorycode};
-
-    return Koha::Patron::Categories->find($categorycode);
-}
-
 sub build_a_test_letter {
     my ($params) = @_;
 
@@ -154,26 +131,6 @@ sub build_a_test_letter {
         code   => $letter->{code},
         branchcode => $letter->{branchcode},
     });
-}
-
-sub build_a_test_patron {
-    my $categorycode   = $builder->build({
-        source => 'Category' })->{categorycode};
-    my $branchcode     = $builder->build({
-        source => 'Branch' })->{branchcode};
-    my $borrowernumber = $builder->build({
-        source => 'Borrower' })->{borrowernumber};
-
-    return Koha::Patrons->find($borrowernumber);
-}
-
-sub build_a_test_transport_type {
-    my $mtt = $builder->build({
-        source => 'MessageTransportType' });
-
-    return Koha::Patron::Message::Transport::Types->find(
-        $mtt->{message_transport_type}
-    );
 }
 
 1;

@@ -51,9 +51,9 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
 
     $schema->storage->txn_begin;
 
-    my $attribute = build_a_test_attribute();
+    my $attribute = $builder->build_object({ class => 'Koha::Patron::Message::Attributes' });
     my $letter = build_a_test_letter();
-    my $mtt = build_a_test_transport_type();
+    my $mtt = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
     Koha::Patron::Message::Transport->new({
         message_attribute_id   => $attribute->message_attribute_id,
         message_transport_type => $mtt->message_transport_type,
@@ -65,7 +65,7 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
     subtest 'Test for a patron' => sub {
         plan tests => 3;
 
-        my $patron = build_a_test_patron();
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         Koha::Patron::Message::Preference->new({
             borrowernumber       => $patron->borrowernumber,
             message_attribute_id => $attribute->message_attribute_id,
@@ -99,7 +99,7 @@ subtest 'Test Koha::Patron::Message::Preferences' => sub {
     };
 
     subtest 'Test for a category' => sub {
-        my $category = build_a_test_category();
+        my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
         Koha::Patron::Message::Preference->new({
             categorycode         => $category->categorycode,
             message_attribute_id => $attribute->message_attribute_id,
@@ -167,7 +167,7 @@ subtest 'Add preferences from defaults' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = build_a_test_patron();
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     my ($default, $mtt1, $mtt2) = build_a_test_category_preference({
         patron => $patron,
     });
@@ -198,7 +198,7 @@ subtest 'Test Koha::Patron::Message::Preference->message_transport_types' => sub
 
         $schema->storage->txn_begin;
 
-        my $patron = build_a_test_patron();
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
             patron => $patron
         });
@@ -261,7 +261,7 @@ HERE
             my $transports = $pref->message_transport_types;
             is($appender, undef, 'Nothing in buffer yet');
 
-            my $mtt_new = build_a_test_transport_type();
+            my $mtt_new = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
             Koha::Patron::Message::Transport::Preference->new({
                 borrower_message_preference_id =>
                                 $pref->borrower_message_preference_id,
@@ -286,7 +286,7 @@ HERE
 
         $schema->storage->txn_begin;
 
-        my $patron = build_a_test_patron();
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
             patron => $patron
         });
@@ -386,10 +386,10 @@ HERE
 
         $schema->storage->txn_begin;
 
-        my $patron    = build_a_test_patron();
+        my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
         my $letter    = build_a_test_letter();
-        my $attribute = build_a_test_attribute();
-        my $mtt       = build_a_test_transport_type();
+        my $attribute = $builder->build_object({ class => 'Koha::Patron::Message::Attributes' });
+        my $mtt       = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
         Koha::Patron::Message::Transport->new({
             message_attribute_id   => $attribute->message_attribute_id,
             message_transport_type => $mtt->message_transport_type,
@@ -421,8 +421,8 @@ subtest 'Test Koha::Patron::Message::Preference->message_name' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron      = build_a_test_patron();
-    my $attribute   = build_a_test_attribute();
+    my $patron      = $builder->build_object({ class => 'Koha::Patrons' });
+    my $attribute   = $builder->build_object({ class => 'Koha::Patron::Message::Attributes' });
     my ($preference, $mtt1, $mtt2) = build_a_test_complete_preference({
         patron => $patron,
         attr   => $attribute,
@@ -453,7 +453,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
 
         $schema->storage->txn_begin;
 
-        my $patron = build_a_test_patron();
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         eval { Koha::Patron::Message::Preference->new({
             borrowernumber => $patron->borrowernumber,
             categorycode   => $patron->categorycode,
@@ -489,7 +489,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
             .' was the categorycode.');
 
         my $attribute = build_a_test_attribute({ takes_days => 0 });
-        my $patron    = build_a_test_patron();
+        my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
         eval { Koha::Patron::Message::Preference->new({
                 borrowernumber => $patron->borrowernumber,
                 message_attribute_id => $attribute->message_attribute_id,
@@ -523,7 +523,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
         is ($@->parameter, 'message_transport_types', 'The previous exception '
             .'tells us it was the message_transport_types.');
 
-        my $mtt_new = build_a_test_transport_type();
+        my $mtt_new = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
         eval {
             Koha::Patron::Message::Preference->new({
                 borrowernumber => $patron->borrowernumber,
@@ -591,9 +591,9 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
 
         $schema->storage->txn_begin;
 
-        my $attribute = build_a_test_attribute();
+        my $attribute = $builder->build_object({ class => 'Koha::Patron::Message::Attributes' });
         my $letter = build_a_test_letter();
-        my $mtt = build_a_test_transport_type();
+        my $mtt = $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
         Koha::Patron::Message::Transport->new({
             message_attribute_id   => $attribute->message_attribute_id,
             message_transport_type => $mtt->message_transport_type,
@@ -601,7 +601,7 @@ subtest 'Test adding a new preference with invalid parameters' => sub {
             letter_module          => $letter->module,
             letter_code            => $letter->code,
         })->store;
-        my $patron    = build_a_test_patron();
+        my $patron    = $builder->build_object({ class => 'Koha::Patrons' });
         my $preference = Koha::Patron::Message::Preference->new({
             borrowernumber => $patron->borrowernumber,
             message_attribute_id => $attribute->message_attribute_id,
@@ -640,13 +640,6 @@ sub build_a_test_attribute {
     );
 }
 
-sub build_a_test_category {
-    my $categorycode   = $builder->build({
-        source => 'Category' })->{categorycode};
-
-    return Koha::Patron::Categories->find($categorycode);
-}
-
 sub build_a_test_letter {
     my ($params) = @_;
 
@@ -669,26 +662,6 @@ sub build_a_test_letter {
     });
 }
 
-sub build_a_test_patron {
-    my $categorycode   = $builder->build({
-        source => 'Category' })->{categorycode};
-    my $branchcode     = $builder->build({
-        source => 'Branch' })->{branchcode};
-    my $borrowernumber = $builder->build({
-        source => 'Borrower' })->{borrowernumber};
-
-    return Koha::Patrons->find($borrowernumber);
-}
-
-sub build_a_test_transport_type {
-    my $mtt = $builder->build({
-        source => 'MessageTransportType' });
-
-    return Koha::Patron::Message::Transport::Types->find(
-        $mtt->{message_transport_type}
-    );
-}
-
 sub build_a_test_category_preference {
     my ($params) = @_;
 
@@ -698,8 +671,8 @@ sub build_a_test_category_preference {
                     : build_a_test_attribute($params->{days_in_advance});
 
     my $letter = $params->{letter} ? $params->{letter} : build_a_test_letter();
-    my $mtt1 = $params->{mtt1} ? $params->{mtt1} : build_a_test_transport_type();
-    my $mtt2 = $params->{mtt2} ? $params->{mtt2} : build_a_test_transport_type();
+    my $mtt1 = $params->{mtt1} ? $params->{mtt1} : $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
+    my $mtt2 = $params->{mtt2} ? $params->{mtt2} : $builder->build_object({ class => 'Koha::Patron::Message::Transport::Types' });
 
     Koha::Patron::Message::Transport->new({
         message_attribute_id   => $attr->message_attribute_id,
