@@ -109,7 +109,7 @@ if ( $op eq 'addreport' ) {
         }
     );
 
-    my $from_address = $member->email || $member->emailpro || $member->B_email || $koha_admin;
+    my $from_address = C4::Context->preference('KohaAdminEmailAddress');
     my $transport = 'email';
 
     if ( $recipient eq 'admin' ) {
