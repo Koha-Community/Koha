@@ -307,27 +307,33 @@
                                                 <td>
                                                     <div class="coverimages">
                                                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber | html %]">
+                                                            [% IF ( itemsloo.title ) %]
+                                                                [% img_title = itemsloo.title %]
+                                                            [% ELSE %]
+                                                                [% img_title = itemsloo.biblionumber %]
+                                                            [% END %]
+
                                                             [% IF ( OPACLocalCoverImages ) %]
-                                                                <span title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
+                                                                <span title="[% img_title | html %]" class="[% itemsloo.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                             [% END %]
                                                             [% IF ( AdlibrisEnabled && itemsloo.normalized_isbn ) %]
                                                                 <img src="[% AdlibrisURL | html %]?isbn=[% itemsloo.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" />
                                                             [% END %]
                                                             [% IF ( OPACAmazonCoverImages ) %]
                                                                 [% IF ( itemsloo.normalized_isbn ) %]
-                                                                    <span title="[% itemsloo.biblionumber | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" /></span>
+                                                                    <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% itemsloo.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" /></span>
                                                                 [% ELSE %]
                                                                     <span class="no-image">No cover image available</span>
                                                                 [% END %]
                                                             [% END %]
 
                                                             [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                                <span title="[% itemsloo.biblionumber | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]" alt="" /></span>
+                                                                <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc | html %]&amp;oclc=[% itemsloo.normalized_oclc | html %]" alt="" /></span>
                                                             [% END %]
 
                                                             [% IF ( GoogleJackets ) %]
                                                                 [% IF ( itemsloo.normalized_isbn ) %]
-                                                                    <div title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
+                                                                    <div title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></div>
                                                                 [% ELSE %]
                                                                     <span class="no-image">No cover image available</span>
                                                                 [% END %]
@@ -336,7 +342,7 @@
                                                             [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                                                                 [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
                                                                 [% IF ( coce_id ) %]
-                                                                    <span title="[% itemsloo.biblionumber |url %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
+                                                                    <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
                                                                 [% ELSE %]
                                                                     <span class="no-image">No cover image available</span>
                                                                 [% END %]
@@ -345,7 +351,7 @@
 
                                                             [% IF OpenLibraryCovers %]
                                                                 [% IF itemsloo.normalized_isbn %]
-                                                                    <span title="[% itemsloo.biblionumber | html %]" class="[% itemsloo.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
+                                                                    <span title="[% img_title | html %]" class="[% itemsloo.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
                                                                 [% ELSE %]
                                                                     <span class="no-image">No cover image available</span>
                                                                 [% END %]

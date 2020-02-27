@@ -250,19 +250,24 @@
                                             <td class="bibliocol">
                                                 <div class="coverimages itemtype_[% SEARCH_RESULT.itemtype | html %]">
                                                     <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
+                                                        [% IF ( SEARCH_RESULT.title ) %]
+                                                            [% img_title = SEARCH_RESULT.title %]
+                                                        [% ELSE %]
+                                                            [% img_title = SEARCH_RESULT.biblionumber %]
+                                                        [% END %]
                                                         [% IF ( OPACLocalCoverImages ) %]
-                                                            <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
+                                                            <span title="[% img_title | html %]" class="[% SEARCH_RESULT.biblionumber | html %]" id="local-thumbnail[% loop.count | html %]"></span>
                                                         [% END %]
 
                                                         [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
-                                                            <span title="[% SEARCH_RESULT.biblionumber | html %]" id="adlibris-thumbnail[% loop.count | html %]">
+                                                            <span title="[% img_title | html %]" id="adlibris-thumbnail[% loop.count | html %]">
                                                                 <img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]"
                                                                      alt="Adlibris thumbnail for ISBN: [% SEARCH_RESULT.normalized_isbn | html %]" class="adlibris-cover" />
                                                             </span>
                                                         [% END %]
                                                         [% IF ( OPACAmazonCoverImages ) %]
                                                             [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                                                    <span title="[% SEARCH_RESULT.biblionumber | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="item-thumbnail" /></span>
+                                                                    <span title="[% img_title | html %]" id="amazon-thumbnail[% loop.count | html %]"><img src="https://images-na.ssl-images-amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn | html %].01.TZZZZZZZ.jpg" alt="" class="item-thumbnail" /></span>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
@@ -270,7 +275,7 @@
 
                                                         [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                                             [% IF ( SEARCH_RESULT.normalized_isbn || SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_oclc ) %]
-                                                                    <span title="[% SEARCH_RESULT.biblionumber | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc | html %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %]" alt="" class="item-thumbnail" /></span>
+                                                                    <span title="[% img_title | html %]" id="syndetics-thumbnail[% loop.count | html %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc | html %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc | html %]" alt="" class="item-thumbnail" /></span>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
@@ -278,7 +283,7 @@
 
                                                         [% IF ( GoogleJackets ) %]
                                                             [% IF ( SEARCH_RESULT.normalized_isbn ) %]
-                                                                <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></span>
+                                                                <span title="[% img_title | html %]" class="[% SEARCH_RESULT.normalized_isbn | html %]" id="gbs-thumbnail[% loop.count | html %]"></span>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
@@ -287,7 +292,7 @@
                                                         [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
                                                           [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn | html %]
                                                           [% IF ( coce_id ) %]
-                                                            <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
+                                                            <span title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
                                                           [% ELSE %]
                                                             <span class="no-image">No cover image available</span>
                                                           [% END %]
@@ -295,7 +300,7 @@
 
                                                         [% IF OpenLibraryCovers %]
                                                             [% IF SEARCH_RESULT.normalized_isbn %]
-                                                                <span title="[% SEARCH_RESULT.biblionumber | html %]" class="[% SEARCH_RESULT.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
+                                                                <span title="[% img_title | html %]" class="[% SEARCH_RESULT.normalized_isbn | html %]" id="openlibrary-thumbnail[% loop.count | html %]"></span>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]

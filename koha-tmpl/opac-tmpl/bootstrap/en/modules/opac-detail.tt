@@ -53,8 +53,14 @@
                 <div id="catalogue_detail_biblio" class="maincontent">
 
                     <div id="bookcover">
+                    [% IF ( biblio.title ) %]
+                        [% img_title = biblio.title %]
+                    [% ELSE %]
+                        [% img_title = biblio.biblionumber %]
+                    [% END %]
+
                     [% IF ( OPACLocalCoverImages ) %]
-                        <div title="[% biblio.biblionumber | html %]" class="[% biblio.biblionumber | html %]" id="local-thumbnail-preview"></div>
+                        <div title="[% img_title | html %]" class="[% biblio.biblionumber | html %]" id="local-thumbnail-preview"></div>
                     [% END %]
 
                     [% IF ( AdlibrisEnabled && normalized_isbn ) %]
@@ -79,14 +85,14 @@
                     [% END %]
 
                     [% IF ( GoogleJackets ) %]
-                        <div title="[% biblio.biblionumber | html %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail-preview"></div>
+                        <div title="[% img_title | html %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
                       [% coce_id = normalized_ean || normalized_isbn | html %]
-                      <div title="[% biblio.biblionumber | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></div>
+                      <div title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></div>
                     [% END %]
                     [% IF OpenLibraryCovers %]
-                        <div title="[% biblio.biblionumber | html %]" class="[% normalized_isbn | html %]" id="openlibrary-thumbnail-preview"></div>
+                        <div title="[% img_title | html %]" class="[% normalized_isbn | html %]" id="openlibrary-thumbnail-preview"></div>
                     [% END %]
                     [% bt_id = ( normalized_upc || normalized_isbn ) %]
                     [% IF ( BakerTaylorEnabled && bt_id ) %]
