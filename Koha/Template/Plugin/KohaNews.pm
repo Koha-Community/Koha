@@ -45,11 +45,15 @@ sub get {
 
     my $content = &GetNewsToDisplay( $news_lang, $library );
 
-    return {
-        content => $content,
-        location => $display_location,
-        blocktitle => $blocktitle
-    };
+    if( @$content ){
+        return {
+            content => $content,
+            location => $display_location,
+            blocktitle => $blocktitle
+        };
+    } else {
+        return 0;
+    }
 }
 
 1;
