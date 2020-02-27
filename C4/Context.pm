@@ -1063,8 +1063,7 @@ variable to be set correctly.
 sub set_remote_address {
     if ( C4::Context->config('koha_trusted_proxies') ) {
         require CGI;
-        my $cgi    = CGI->new;
-        my $header = $cgi->http('HTTP_X_FORWARDED_FOR');
+        my $header = CGI->http('HTTP_X_FORWARDED_FOR');
 
         if ($header) {
             require Koha::Middleware::RealIP;
