@@ -22,9 +22,15 @@
 
                     [% FOREACH item IN shelfbrowser_items %]
                         <td>
+                            [% IF ( item.title ) %]
+                                [% img_title = item.title %]
+                            [% ELSE %]
+                                [% img_title = item.biblionumber %]
+                            [% END %]
+
                             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | uri %]#shelfbrowser">
                                 [% IF ( OPACLocalCoverImages ) %]
-                                    <div title="[% item.biblionumber |url %]" class="[% item.biblionumber | html %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% item.biblionumber | html %]"></div>
+                                    <div title="[% img_title | html %]" class="[% item.biblionumber | html %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% item.biblionumber | html %]"></div>
                                 [% END %]
                                 [% IF ( OPACAmazonCoverImages ) %]
                                     [% IF ( item.browser_normalized_isbn ) %]
@@ -46,14 +52,14 @@
 
                                 [% IF ( GoogleJackets ) %]
                                     [% IF ( item.browser_normalized_isbn ) %]
-                                        <div title="[% item.biblionumber |url %]" class="[% item.browser_normalized_isbn | html %]" id="gbs-thumbnail-preview[% loop.count | html %]"></div>
+                                        <div title="[% img_title | html %]" class="[% item.browser_normalized_isbn | html %]" id="gbs-thumbnail-preview[% loop.count | html %]"></div>
                                     [% ELSE %]
                                         <span class="no-image">No cover image available</span>
                                     [% END %]
                                 [% END %]
                                 [% IF ( Koha.Preference('OpacCoce') && Koha.Preference('CoceProviders') ) %]
                                   [% coce_id = item.browser_normalized_ean || item.browser_normalized_isbn | html %]
-                                  <div title="[% item.biblionumber |url %]" class="[% coce_id | html %]" id="coce-thumbnail-preview-[% coce_id | html %]"></div>
+                                  <div title="[% img_title | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview-[% coce_id | html %]"></div>
                                 [% END %]
                                 [% IF ( BakerTaylorEnabled ) %]
                                     [% bt_id = ( item.browser_normalized_upc || item.browser_normalized_isbn ) | html %]
