@@ -300,7 +300,7 @@ subtest 'LookupPatron test' => sub {
 
 subtest 'Holds test' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -426,6 +426,40 @@ subtest 'Holds test' => sub {
 
     is( $reply->{code}, 'alreadypossession', "Patron has issued same book" );
     is( $reply->{pickup_location}, undef, "No reserve placed");
+
+    # Test Patron cannot reserve if expired and BlockExpiredPatronOpacActions
+    my $category = $builder->build({
+        source => 'Category',
+        value => { BlockExpiredPatronOpacActions => -1 }
+        });
+
+    my $branch_1 = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $expired_borrowernumber = Koha::Patron->new({
+        firstname =>  'Expired',
+        surname => 'Patron',
+        categorycode => $category->{categorycode},
+        branchcode => $branch_1,
+        dateexpiry => '2000-01-01',
+    })->store->borrowernumber;
+
+    t::lib::Mocks::mock_preference('BlockExpiredPatronOpacActions', 1);
+
+    my $item5 = $builder->build({
+        source => 'Item',
+        value => {
+            biblionumber => $biblio_with_no_item->{biblionumber},
+            damaged => 0,
+        }
+    });
+
+    $query = new CGI;
+    $query->param( 'patron_id', $expired_borrowernumber);
+    $query->param( 'bib_id', $biblio_with_no_item->{biblionumber});
+    $query->param( 'item_id', $item5->{itemnumber});
+
+    $reply = C4::ILSDI::Services::HoldItem( $query );
+    is( $reply->{code}, 'PatronExpired', "Patron is expired" );
 
     $schema->storage->txn_rollback;
 };
