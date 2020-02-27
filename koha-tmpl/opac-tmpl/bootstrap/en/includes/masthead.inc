@@ -150,9 +150,7 @@
         [% IF ( OpacHeader ) %]
             <div class="container-fluid">
                 <div class="row-fluid">
-                    <div id="opacheader">
-                        [% PROCESS koha_news_block news => OpacHeader %]
-                    </div>
+                    [% PROCESS koha_news_block news => OpacHeader %]
                 </div>
             </div>
         [% END %]
