@@ -426,5 +426,13 @@ __END_SRU_PUBLICSERVER__
     </repo>
  </plugin_repos>
 
+ <koha_xslt_security>
+ <!-- Uncomment the following entry ONLY when you explicitly want the XSLT
+      parser to expand entities like <!ENTITY secret SYSTEM "/etc/secrets">.
+      This is unsafe and therefore NOT recommended!
+     <expand_entities_unsafe>1</expand_entities_unsafe>
+ -->
+ </koha_xslt_security>
+
 </config>
 </yazgfs>
