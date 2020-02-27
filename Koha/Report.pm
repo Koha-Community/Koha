@@ -36,6 +36,36 @@ Koha::Report - Koha Report Object class
 
 =cut
 
+# FIXME We could only return an error code instead of the arrayref
+# Only 1 error is returned
+# TODO Koha::Report->store should check this before saving
+=head3 is_sql_valid
+
+my ( $is_sql_valid, $errors ) = $report->is_sql_valid;
+
+$errors is a arrayref of hashrefs, keys can be sqlerr or queryerr.
+
+Validate SQL query string so it only contains a select,
+not any of the harmful queries.
+
+=cut
+
+sub is_sql_valid {
+    my ($self) = @_;
+
+    my $sql = $self->savedsql;
+    $sql //= '';
+    my @errors = ();
+
+    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
+        push @errors, { sqlerr => $1 };
+    } elsif ($sql !~ /^\s*SELECT\b\s*/i) {
+        push @errors, { queryerr => 'Missing SELECT' };
+    }
+
+    return ( @errors ? 0 : 1, \@errors );
+}
+
 =head3 get_search_info
 
 Return search info

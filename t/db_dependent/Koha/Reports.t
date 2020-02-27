@@ -71,14 +71,41 @@ subtest 'prep_report' => sub {
 
 $schema->storage->txn_rollback;
 
-subtest 'validate_sql' => sub {
-    plan tests => 3 + 6*2;
-    my @badwords = ('UPDATE', 'DELETE', 'DROP', 'INSERT', 'SHOW', 'CREATE');
-    is_deeply( Koha::Reports->validate_sql(), [{ queryerr => 'Missing SELECT'}], 'Empty sql is missing SELECT' );
-    is_deeply( Koha::Reports->validate_sql('FOO'), [{ queryerr => 'Missing SELECT'}], 'Nonsense sql is missing SELECT' );
-    is_deeply( Koha::Reports->validate_sql('select FOO'), [], 'select FOO is good' );
+subtest 'is_sql_valid' => sub {
+    plan tests => 3 + 6 * 2;
+    my @badwords = ( 'UPDATE', 'DELETE', 'DROP', 'INSERT', 'SHOW', 'CREATE' );
+    is_deeply(
+        [ Koha::Report->new( { savedsql => '' } )->is_sql_valid ],
+        [ 0, [ { queryerr => 'Missing SELECT' } ] ],
+        'Empty sql is missing SELECT'
+    );
+    is_deeply(
+        [ Koha::Report->new( { savedsql => 'FOO' } )->is_sql_valid ],
+        [ 0, [ { queryerr => 'Missing SELECT' } ] ],
+        'Nonsense sql is missing SELECT'
+    );
+    is_deeply(
+        [ Koha::Report->new( { savedsql => 'select FOO' } )->is_sql_valid ],
+        [ 1, [] ],
+        'select FOO is good'
+    );
     foreach my $word (@badwords) {
-        is_deeply( Koha::Reports->validate_sql('select FOO;'.$word.' BAR'), [{ sqlerr => $word}], 'select FOO with '.$word.' BAR' );
-        is_deeply( Koha::Reports->validate_sql($word.' qux'), [{ sqlerr => $word}], $word.' qux' );
+        is_deeply(
+            [
+                Koha::Report->new(
+                    { savedsql => 'select FOO;' . $word . ' BAR' }
+                )->is_sql_valid
+            ],
+            [ 0, [ { sqlerr => $word } ] ],
+            'select FOO with ' . $word . ' BAR'
+        );
+        is_deeply(
+            [
+                Koha::Report->new( { savedsql => $word . ' qux' } )
+                  ->is_sql_valid
+            ],
+            [ 0, [ { sqlerr => $word } ] ],
+            $word . ' qux'
+        );
     }
-}
+  }

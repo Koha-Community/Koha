@@ -239,7 +239,8 @@ elsif ( $phase eq 'Update SQL'){
 
     create_non_existing_group_and_subgroup($input, $group, $subgroup);
 
-    push(@errors, @{Koha::Reports->validate_sql($sql)});
+    my ( $is_sql_valid, $validation_errors ) = Koha::Report->new({ savedsql => $sql })->is_sql_valid;
+    push(@errors, @$validation_errors) unless $is_sql_valid;
 
     if (@errors) {
         $template->param(
@@ -595,7 +596,8 @@ elsif ( $phase eq 'Save Report' ) {
 
     create_non_existing_group_and_subgroup($input, $group, $subgroup);
     ## FIXME this is AFTER entering a name to save the report under
-    push(@errors, @{Koha::Reports->validate_sql($sql)});
+    my ( $is_sql_valid, $validation_errors ) = Koha::Report->new({ savedsql => $sql })->is_sql_valid;
+    push(@errors, @$validation_errors) unless $is_sql_valid;
 
     if (@errors) {
         $template->param(

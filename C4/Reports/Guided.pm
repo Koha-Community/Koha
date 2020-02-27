@@ -552,8 +552,8 @@ sub execute_query {
     $limit  = 999999 unless $limit;
     $debug and print STDERR "execute_query($sql, $offset, $limit)\n";
 
-    my $errors = Koha::Reports->validate_sql($sql);
-    return (undef, @{$errors}[0]) if (scalar(@$errors));
+    my ( $is_sql_valid, $errors ) = Koha::Report->new({ savedsql => $sql })->is_sql_valid;
+    return (undef, @{$errors}[0]) unless $is_sql_valid;
 
     foreach my $sql_param ( @$sql_params ){
         if ( $sql_param =~ m/\n/ ){
