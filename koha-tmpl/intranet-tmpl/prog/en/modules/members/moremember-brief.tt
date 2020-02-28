@@ -84,7 +84,7 @@
             <li><span class="label">Library: </span>[% patron.library.branchname | html %]</li>
             [% IF ( patron.sort1 ) %]<li><span class="label">Sort field 1:</span>[% AuthorisedValues.GetByCode('Bsort1', patron.sort1) | html %]</li>[% END %]
             [% IF ( patron.sort2 ) %]<li><span class="label">Sort field 2:</span>[% AuthorisedValues.GetByCode('Bsort2', patron.sort2) | html %]</li>[% END %]
-            [% UNLESS ( patron.autorenewal ) %]<li>Auto renewal: Patron has opted out</li>[% END %]
+            [% UNLESS ( patron.autorenew_checkouts ) %]<li>Auto renewal: Patron has opted out</li>[% END %]
         </ol>
     </div>
     </div>

@@ -2751,7 +2751,7 @@ sub CanBookBeRenewed {
             return ( 0, 'overdue');
         }
 
-        if ( $issue->auto_renew && $patron->autorenewal ) {
+        if ( $issue->auto_renew && $patron->autorenew_checkouts ) {
 
             if ( $patron->category->effective_BlockExpiredPatronOpacActions and $patron->is_expired ) {
                 return ( 0, 'auto_account_expired' );
@@ -2807,10 +2807,10 @@ sub CanBookBeRenewed {
 
             if ( $soonestrenewal > DateTime->now( time_zone => C4::Context->tz() ) )
             {
-                return ( 0, "auto_too_soon" ) if $issue->auto_renew && $patron->autorenewal;
+                return ( 0, "auto_too_soon" ) if $issue->auto_renew && $patron->autorenew_checkouts;
                 return ( 0, "too_soon" );
             }
-            elsif ( $issue->auto_renew && $patron->autorenewal ) {
+            elsif ( $issue->auto_renew && $patron->autorenew_checkouts ) {
                 $auto_renew = 1;
             }
         }

@@ -874,28 +874,28 @@ legend:hover {
                                             </li>
                                         [% END # /UNLESS nosort2 %]
 
-                                        [% UNLESS noautorenewal %]
+                                        [% UNLESS noautorenew_checkouts %]
                                             <li class="radio">
-                                                <label for="yes-autorenewal">
+                                                <label for="yes-autorenew_checkouts">
                                                     Allow auto-renewal of items:
                                                 </label>
-                                                    [% IF ( autorenewal ) %]
-                                                        <label for="yes-autorenewal">
+                                                    [% IF ( autorenew_checkouts ) %]
+                                                        <label for="yes-autorenew_checkouts">
                                                             Yes
-                                                            <input type="radio" id="yes-autorenewal" name="autorenewal" value="1" checked="checked" />
+                                                            <input type="radio" id="yes-autorenew_checkouts" name="autorenew_checkouts" value="1" checked="checked" />
                                                         </label>
-                                                        <label for="no-autorenewal">
+                                                        <label for="no-autorenew_checkouts">
                                                             No
-                                                            <input type="radio" id="no-autorenewal" name="autorenewal" value="0" />
+                                                            <input type="radio" id="no-autorenew_checkouts" name="autorenew_checkouts" value="0" />
                                                         </label>
                                                     [% ELSE %]
-                                                        <label for="yes-autorenewal">
+                                                        <label for="yes-autorenew_checkouts">
                                                             Yes
-                                                            <input type="radio" id="yes-autorenewal" name="autorenewal" value="1" />
+                                                            <input type="radio" id="yes-autorenew_checkouts" name="autorenew_checkouts" value="1" />
                                                         </label>
-                                                        <label for="no-autorenewal">
+                                                        <label for="no-autorenew_checkouts">
                                                             No
-                                                            <input type="radio" id="no-autorenewal" name="autorenewal" value="0" checked="checked" />
+                                                            <input type="radio" id="no-autorenew_checkouts" name="autorenew_checkouts" value="0" checked="checked" />
                                                         </label>
                                                     [% END %]
                                             </li>

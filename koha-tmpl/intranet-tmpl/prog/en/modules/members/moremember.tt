@@ -516,8 +516,8 @@
                                                 [% AuthorisedValues.GetByCode('Bsort2', patron.sort2) | html %]
                                             </li>
                                         [% END %]
-                                        [% UNLESS ( patron.autorenewal ) %]
-                                            <li id="patron-autorenewal">
+                                        [% UNLESS ( patron.autorenew_checkouts ) %]
+                                            <li id="patron-autorenew_checkouts">
                                                 <span class="label">Auto renewal:</span>
                                                 Patron has opted out
                                             </li>
