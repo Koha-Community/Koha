@@ -16,8 +16,7 @@
             [% ELSE %]
                 Modify patron
             [% END %]
-            [% IF (firstname) %][% firstname | html %] [% END %]
-            [% IF (surname) %][% surname | html %] [% END %]
+            [% INCLUDE 'patron-title.inc' no_html = 1 %]
             ([% IF categoryname -%]
                 [%- categoryname | html -%]
             [%- ELSE -%]
@@ -43,8 +42,7 @@
             &rsaquo;
             [% IF (firstname || surname ) %]
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">
-                    [% IF (firstname) %][% firstname | html %] [% END %]
-                    [% IF (surname) %][% surname | html %] [% END %]
+                    [% INCLUDE 'patron-title.inc' %]
                 </a>  &rsaquo;
             [% END %]
             <strong>
@@ -100,8 +98,7 @@
                             [% ELSE %]
                                 Modify patron
                             [% END %]
-                            [% IF (firstname) %][% firstname | html %] [% END %]
-                            [% IF (surname) %][% surname | html %] [% END %]
+                            [% INCLUDE 'patron-title.inc' %]
                             ([%IF categoryname %]
                                 [% categoryname | html %]
                             [% ELSE %]
