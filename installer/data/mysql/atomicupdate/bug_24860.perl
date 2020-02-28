@@ -16,6 +16,11 @@ if ( CheckVersion( $DBversion ) ) {
         });
     }
 
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('EnableItemGroupHolds','0','','Enable volume level holds feature','YesNo')
+    });
+
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 24860 - Add ability to place item group level holds)\n";
 }
