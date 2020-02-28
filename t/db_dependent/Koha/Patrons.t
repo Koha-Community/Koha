@@ -712,8 +712,8 @@ subtest 'get_age' => sub {
         {
             today           => '2020-02-28',
             add_m12_m6_m1   => { date => '2007-08-27', expected_age => 12 },
-            add_m18_0_p1    => { date => '2002-02-28', expected_age => 17 },
-            add_m18_0_0     => { date => '2002-02-28', expected_age => 18 },
+            add_m18_0_p1    => { date => '2002-02-28', expected_age => 18 },
+            add_m18_0_0     => { date => '2002-02-27', expected_age => 18 },
             add_m18_m12_m31 => { date => '2001-01-28', expected_age => 19 },
             add_m18_m12_m30 => { date => '2001-01-29', expected_age => 19 } ,
             add_0_m1_m1     => { date => '2020-01-27', expected_age => 0  },
@@ -792,13 +792,13 @@ subtest 'is_valid_age' => sub {
             add_m5_0_0 =>
               { date => '2015-02-28', expected_age => 5, valid => 1 },
             add_m5_0_p1 =>
-              { date => '2015-02-28', expected_age => 5, valid => 0 },
+              { date => '2015-03-01', expected_age => 5, valid => 0 },
             add_m5_0_m1 =>
               { date => '2015-02-27', expected_age => 5, valid => 1 },
             add_m11_0_0 =>
               { date => '2009-02-28', expected_age => 11, valid => 0 },
             add_m11_0_p1 =>
-              { date => '2009-02-28', expected_age => 11, valid => 1 },
+              { date => '2009-03-01', expected_age => 11, valid => 1 },
             add_m11_0_m1 =>
               { date => '2009-02-27', expected_age => 11, valid => 0 },
         },
