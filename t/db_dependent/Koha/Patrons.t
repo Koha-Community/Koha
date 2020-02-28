@@ -703,20 +703,53 @@ subtest 'get_routing_lists' => sub {
 };
 
 subtest 'get_age' => sub {
-    plan tests => 7;
+    plan tests => 31;
 
     my $patron = $builder->build( { source => 'Borrower' } );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
     my @dates = (
         {
-            today           => '2020-02-28',
-            add_m12_m6_m1   => { date => '2007-08-27', expected_age => 12 },
-            add_m18_0_p1    => { date => '2002-02-28', expected_age => 18 },
-            add_m18_0_0     => { date => '2002-02-27', expected_age => 18 },
-            add_m18_m12_m31 => { date => '2001-01-28', expected_age => 19 },
-            add_m18_m12_m30 => { date => '2001-01-29', expected_age => 19 } ,
-            add_0_m1_m1     => { date => '2020-01-27', expected_age => 0  },
+            today            => '2020-02-28',
+            has_12           => { date => '2007-08-27', expected_age => 12 },
+            almost_18        => { date => '2002-03-01', expected_age => 17 },
+            has_18_today     => { date => '2002-02-28', expected_age => 18 },
+            had_18_yesterday => { date => '2002-02-27', expected_age => 18 },
+            almost_16        => { date => '2004-02-29', expected_age => 15 },
+            has_16_today     => { date => '2004-02-28', expected_age => 16 },
+            had_16_yesterday => { date => '2004-02-27', expected_age => 16 },
+            new_born         => { date => '2020-01-27', expected_age => 0 },
+        },
+        {
+            today            => '2020-02-29',
+            has_12           => { date => '2007-08-27', expected_age => 12 },
+            almost_18        => { date => '2002-03-01', expected_age => 17 },
+            has_18_today     => { date => '2002-02-28', expected_age => 18 },
+            had_18_yesterday => { date => '2002-02-27', expected_age => 18 },
+            almost_16        => { date => '2004-03-01', expected_age => 15 },
+            has_16_today     => { date => '2004-02-29', expected_age => 16 },
+            had_16_yesterday => { date => '2004-02-28', expected_age => 16 },
+            new_born         => { date => '2020-01-27', expected_age => 0 },
+        },
+        {
+            today            => '2020-03-01',
+            has_12           => { date => '2007-08-27', expected_age => 12 },
+            almost_18        => { date => '2002-03-02', expected_age => 17 },
+            has_18_today     => { date => '2002-03-01', expected_age => 18 },
+            had_18_yesterday => { date => '2002-02-28', expected_age => 18 },
+            almost_16        => { date => '2004-03-02', expected_age => 15 },
+            has_16_today     => { date => '2004-03-01', expected_age => 16 },
+            had_16_yesterday => { date => '2004-02-29', expected_age => 16 },
+        },
+        {
+            today            => '2019-01-31',
+            has_12           => { date => '2006-08-27', expected_age => 12 },
+            almost_18        => { date => '2001-02-01', expected_age => 17 },
+            has_18_today     => { date => '2001-01-31', expected_age => 18 },
+            had_18_yesterday => { date => '2001-01-30', expected_age => 18 },
+            almost_16        => { date => '2003-02-01', expected_age => 15 },
+            has_16_today     => { date => '2003-01-31', expected_age => 16 },
+            had_16_yesterday => { date => '2003-01-30', expected_age => 16 },
         },
     );
 
