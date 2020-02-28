@@ -39,14 +39,12 @@ my $xslt=<<"EOT";
   </xsl:template>
 </xsl:stylesheet>
 EOT
-my $xslt_file = mytempfile($xslt);
-
-my $output= $engine->transform( "<ignored/>", $xslt_file );
+my $output= $engine->transform({ xml => "<ignored/>", code => $xslt });
 like($output, qr/Big secret/, 'external entity got through');
 
 t::lib::Mocks::mock_config( 'koha_xslt_security', { expand_entities_unsafe => 0 } );
 $engine=Koha::XSLT::Base->new;
-$output= $engine->transform( "<ignored/>", $xslt_file );
+$output= $engine->transform({ xml => "<ignored/>", code => $xslt });
 unlike($output, qr/Big secret/, 'external entity did not get through');
 
 # Adding a document call to trigger callback for read_file
@@ -59,8 +57,7 @@ $xslt=<<"EOT";
   </xsl:template>
 </xsl:stylesheet>
 EOT
-$xslt_file = mytempfile($xslt);
-warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+warnings_like { $output= $engine->transform({ xml => "<ignored/>", code => $xslt }); }
     [ qr/read_file called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for read_file';
 
@@ -73,8 +70,7 @@ $xslt=<<"EOT";
   </xsl:template>
 </xsl:stylesheet>
 EOT
-$xslt_file = mytempfile($xslt);
-warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+warnings_like { $output= $engine->transform({ xml => "<ignored/>", code => $xslt }); }
     [ qr/write_file called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for write_file';
 
@@ -87,8 +83,7 @@ $xslt=<<"EOT";
   </xsl:template>
 </xsl:stylesheet>
 EOT
-$xslt_file = mytempfile($xslt);
-warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+warnings_like { $output= $engine->transform({ xml => "<ignored/>", code => $xslt }); }
     [ qr/read_net called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for read_net';
 
@@ -103,8 +98,7 @@ $xslt=<<"EOT";
   </xsl:template>
 </xsl:stylesheet>
 EOT
-$xslt_file = mytempfile($xslt);
-warnings_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
+warnings_like { $output= $engine->transform({ xml => "<ignored/>", code => $xslt }); }
     [ qr/write_net called in XML::LibXSLT/, qr/runtime error/ ],
     'Triggered security callback for write_net';
 
@@ -118,19 +112,18 @@ $xslt=<<"EOT";
   <xsl:template match="/"/>
 </xsl:stylesheet>
 EOT
-$xslt_file = mytempfile($xslt);
 $engine->print_warns(1);
 {
     my @warn;
     local $SIG{__WARN__} = sub { push @warn, $_[0]; };
-    $output= $engine->transform( "<ignored/>", $xslt_file );
+    $output= $engine->transform({ xml => "<ignored/>", code => $xslt });
     is( ( grep { /failed to load external/ } @warn ), 1, 'Expected import error' );
     is( ( grep { /read_net/ } @warn ), 0, 'No read_net warn for remote import' );
 }
 
 sub mytempfile {
-    my ( $fh, $fn ) = tempfile( SUFFIX => '.xsl', UNLINK => 1 );
-    print $fh $_[0]//'';
+    my ($fh, $fn) = tempfile( UNLINK => 1 );
+    print $fh $_[0] if $_[0];
     close $fh;
     return $fn;
 }
