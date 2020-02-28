@@ -708,37 +708,45 @@ subtest 'get_age' => sub {
     my $patron = $builder->build( { source => 'Borrower' } );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    my $dt = dt_from_string('2020-02-28');
+    my @dates = (
+        {
+            today           => '2020-02-28',
+            add_m12_m6_m1   => { date => '2007-08-27', expected_age => 12 },
+            add_m18_0_p1    => { date => '2002-02-28', expected_age => 17 },
+            add_m18_0_0     => { date => '2002-02-28', expected_age => 18 },
+            add_m18_m12_m31 => { date => '2001-01-28', expected_age => 19 },
+            add_m18_m12_m30 => { date => '2001-01-29', expected_age => 19 } ,
+            add_0_m1_m1     => { date => '2020-01-27', expected_age => 0  },
+        },
+    );
 
-    Time::Fake->offset( $dt->epoch );
     $patron->dateofbirth( undef );
     is( $patron->get_age, undef, 'get_age should return undef if no dateofbirth is defined' );
 
-    my $add_m12_m6_m1 = '2007-08-27';
-    $patron->dateofbirth( dt_from_string($add_m12_m6_m1, 'iso') );
-    is( $patron->get_age, 12, 'Patron should be 12' );
+    for my $date ( @dates ) {
 
-    my $add_m18_0_p1 = '2002-02-28';
-    $patron->dateofbirth( dt_from_string($add_m18_0_p1, 'iso'));
-    is( $patron->get_age, 17, 'Patron should be 17, happy birthday tomorrow!' );
+        my $dt = dt_from_string($date->{today});
 
-    my $add_m18_0_0 = '2002-02-28';
-    $patron->dateofbirth( dt_from_string($add_m18_0_0, 'iso'));
-    is( $patron->get_age, 18, 'Patron should be 18' );
+        Time::Fake->offset( $dt->epoch );
 
-    my $add_m18_m12_m31 = '2001-01-28';
-    $patron->dateofbirth( dt_from_string($add_m18_m12_m31, 'iso'));
-    is( $patron->get_age, 19, 'Patron should be 19' );
+        for my $k ( keys %$date ) {
+            next if $k eq 'today';
 
-    my $add_m18_m12_m30 = '2001-01-29';
-    $patron->dateofbirth( dt_from_string($add_m18_m12_m30, 'iso' ));
-    is( $patron->get_age, 19, 'Patron should be 19 again' );
+            my $dob = $date->{$k};
+            $patron->dateofbirth( dt_from_string( $dob->{date}, 'iso' ) );
+            is(
+                $patron->get_age,
+                $dob->{expected_age},
+                sprintf(
+                    "Today=%s, dob=%s, should be %d",
+                    $date->{today}, $dob->{date}, $dob->{expected_age}
+                )
+            );
+        }
 
-    my $add_0_m1_m1 = '2020-01-27';
-    $patron->dateofbirth( dt_from_string($add_0_m1_m1, 'iso' ));
-    is( $patron->get_age, 0, 'Patron is a newborn child' );
+        Time::Fake->reset;
 
-    Time::Fake->reset;
+    }
 
     $patron->delete;
 };
@@ -772,43 +780,54 @@ subtest 'is_valid_age' => sub {
     $patron->dateofbirth( undef );
     is( $patron->is_valid_age, 1, 'Patron with no dateofbirth is always valid for any category');
 
-    my $add_m12_m6_m1 = '2007-08-27';
-    $patron->dateofbirth( dt_from_string($add_m12_m6_m1, 'iso') );
-    is( $patron->is_valid_age, 0, 'Patron is 12, so the age is above allowed range 5-10 years');
+    my @dates = (
+        {
+            today => '2020-02-28',
+            add_m12_m6_m1 =>
+              { date => '2007-08-27', expected_age => 12, valid => 0 },
+            add_m3_m6_m1 =>
+              { date => '2016-08-27', expected_age => 3, valid => 0 },
+            add_m7_m6_m1 =>
+              { date => '2015-02-28', expected_age => 7, valid => 1 },
+            add_m5_0_0 =>
+              { date => '2015-02-28', expected_age => 5, valid => 1 },
+            add_m5_0_p1 =>
+              { date => '2015-02-28', expected_age => 5, valid => 0 },
+            add_m5_0_m1 =>
+              { date => '2015-02-27', expected_age => 5, valid => 1 },
+            add_m11_0_0 =>
+              { date => '2009-02-28', expected_age => 11, valid => 0 },
+            add_m11_0_p1 =>
+              { date => '2009-02-28', expected_age => 11, valid => 1 },
+            add_m11_0_m1 =>
+              { date => '2009-02-27', expected_age => 11, valid => 0 },
+        },
+    );
 
-    my $add_m3_m6_m1 = '2016-08-27';
-    $patron->dateofbirth( dt_from_string($add_m3_m6_m1, 'iso'));
-    is( $patron->is_valid_age, 0, 'Patron is 3, so the age is below allowed range 5-10 years');
+    for my $date ( @dates ) {
 
-    my $add_m7_m6_m1 = '2015-02-28';
-    $patron->dateofbirth( dt_from_string($add_m7_m6_m1, 'iso'));
-    is( $patron->is_valid_age, 1, 'Patron is 7, so the age perfectly suits allowed range 5-10 years');
+        my $dt = dt_from_string($date->{today});
 
-    my $add_m5_0_1 = '2015-02-28';
-    $patron->dateofbirth( dt_from_string($add_m5_0_1, 'iso' ));
-    is( $patron->is_valid_age, 1, 'Patron celebrates the 5th birthday today, so the age is allowed for this category');
+        Time::Fake->offset( $dt->epoch );
 
-    my $add_m5_0_p1 = '2015-02-28';
-    $patron->dateofbirth( dt_from_string($add_m5_0_p1, 'iso'));
-    is( $patron->is_valid_age, 0, 'Patron will celebrate the 5th birthday tomorrow, so the age is NOT allowed for this category');
+        for my $k ( keys %$date ) {
+            next if $k eq 'today';
 
-    my $add_m5_0_m1 = '2015-02-27';
-    $patron->dateofbirth( dt_from_string($add_m5_0_m1, 'iso'));
-    is( $patron->is_valid_age, 1, 'Patron celebrated the 5th birthday yesterday, so the age is allowed for this category');
+            my $dob = $date->{$k};
+            $patron->dateofbirth( dt_from_string( $dob->{date}, 'iso' ) );
+            is(
+                $patron->is_valid_age,
+                $dob->{valid},
+                sprintf(
+                    "Today=%s, dob=%s, is %s, should be valid=%s",
+                    $date->{today}, $dob->{date}, $dob->{expected_age}, $dob->{valid}
+                )
+            );
+        }
 
-    my $add_m11_0_p0 = '2009-02-28';
-    $patron->dateofbirth( dt_from_string($add_m11_0_p0, 'iso'));
-    is( $patron->is_valid_age, 0, 'Patron celebrate the 11th birthday today, so the age is NOT allowed for this category');
+        Time::Fake->reset;
 
-    my $add_m11_0_p1 = '2009-02-28';
-    $patron->dateofbirth( dt_from_string($add_m11_0_p1, 'iso'));
-    is( $patron->is_valid_age, 1, 'Patron will celebrate the 11th birthday tomorrow, so the age is allowed for this category');
-
-    my $add_m11_0_m1 = '2009-02-27';
-    $patron->dateofbirth( dt_from_string($add_m11_0_m1, 'iso' ));
-    is( $patron->is_valid_age, 0, 'Patron celebrated the 11th birthday yesterday, so the age is NOT allowed for this category');
-
-    Time::Fake->reset;
+    }
 
     $patron->delete;
     $category->delete;
