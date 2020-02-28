@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2018 Koha Development team
+# Copyright 2020 Koha Development team
 #
 # This file is part of Koha
 #
@@ -19,13 +19,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
 
 use Koha::CirculationRules;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -279,6 +280,99 @@ subtest 'get_onshelfholds_policy() tests' => sub {
     # Delete the rule (i.e. get_effective_rule returns undef)
     $circ_rules->delete;
     is( $circ_rules->get_onshelfholds_policy({ item => $item }), 0, 'If no matching rule, fallback to 0' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_useDaysMode_effective_value' => sub {
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $item_1 = $builder->build_sample_item();
+    my $item_2 = $builder->build_sample_item();
+
+    my $circ_rules =
+      Koha::CirculationRules->search( { rule_name => 'useDaysMode' } )->delete;
+
+    # Default value 'Datedue' at pref level
+    t::lib::Mocks::mock_preference( 'useDaysMode', 'Datedue' );
+
+    is(
+        Koha::CirculationRules->get_useDaysMode_effective_value(
+            {
+                categorycode => undef,
+                itemtype     => $item_1->effective_itemtype,
+                branchcode   => undef
+            }
+        ),
+        'Datedue',
+        'useDaysMode default to pref value if the rule does not exist'
+    );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rule_name    => 'useDaysMode',
+            rule_value   => 'Calendar',
+        }
+    );
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => $item_1->effective_itemtype,
+            rule_name    => 'useDaysMode',
+            rule_value   => 'Days',
+        }
+    );
+
+    is(
+        Koha::CirculationRules->get_useDaysMode_effective_value(
+            {
+                categorycode => undef,
+                itemtype     => $item_1->effective_itemtype,
+                branchcode   => undef
+            }
+        ),
+        'Days',
+        "useDaysMode for item_1 is the specific rule"
+    );
+    is(
+        Koha::CirculationRules->get_useDaysMode_effective_value(
+            {
+                categorycode => undef,
+                itemtype     => $item_2->effective_itemtype,
+                branchcode   => undef
+            }
+        ),
+        'Calendar',
+        "useDaysMode for item_2 is the one defined for the default circ rule"
+    );
+
+    Koha::CirculationRules->set_rule(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => $item_2->effective_itemtype,
+            rule_name    => 'useDaysMode',
+            rule_value   => '',
+        }
+    );
+
+    is(
+        Koha::CirculationRules->get_useDaysMode_effective_value(
+            {
+                categorycode => undef,
+                itemtype     => $item_2->effective_itemtype,
+                branchcode   => undef
+            }
+        ),
+        'Datedue',
+        'useDaysMode default to pref value if the rule exists but set to""'
+    );
 
     $schema->storage->txn_rollback;
 };
