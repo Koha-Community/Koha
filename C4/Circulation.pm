@@ -3048,14 +3048,10 @@ sub AddRenewal {
             DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
         }
 
-        unless ( C4::Context->interface eq 'opac' ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
-            $branch = ( C4::Context->userenv && defined C4::Context->userenv->{branch} ) ? C4::Context->userenv->{branch} : $branch;
-        }
-
         # Add the renewal to stats
         UpdateStats(
             {
-                branch         => $branch,
+                branch         => $item_object->renewalbranch({branch => $branch}),
                 type           => 'renew',
                 amount         => $charge,
                 itemnumber     => $itemnumber,

@@ -701,6 +701,45 @@ sub as_marc_field {
     return $field;
 }
 
+=head3 renewalbranch
+
+Returns the branch to be recorded in statistics renewal of the item
+
+=cut
+
+sub renewalbranch {
+
+    my ($self, $params ) = @_;
+
+    my $interface = C4::Context->interface;
+    my $branchcode;
+    if ( $interface eq 'opac' ){
+        my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
+        if( !defined $renewalbranch ){
+            $branchcode = 'OPACRenew';
+        }
+        elsif ( $renewalbranch eq 'itemhomebranch' ) {
+            $branchcode = $self->homebranch;
+        }
+        elsif ( $renewalbranch eq 'patronhomebranch' ) {
+            $branchcode = $self->checkout->patron->branchcode;
+        }
+        elsif ( $renewalbranch eq 'checkoutbranch' ) {
+            $branchcode = $self->checkout->branchcode;
+        }
+        elsif ( $renewalbranch eq 'NULL' ) {
+            $branchcode = '';
+        }
+        else {
+            $branchcode = 'OPACRenew';
+        }
+    } else {
+        $branchcode = ( C4::Context->userenv && defined C4::Context->userenv->{branch} )
+            ? C4::Context->userenv->{branch} : $params->{branch};
+    }
+    return $branchcode;
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Item object
