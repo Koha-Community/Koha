@@ -17,15 +17,7 @@
                 Modify patron
             [% END %]
             [% INCLUDE 'patron-title.inc' no_html = 1 %]
-            ([% IF categoryname -%]
-                [%- categoryname | html -%]
-            [%- ELSE -%]
-                [%- IF ( I ) %]Organization[% END -%]
-                [%- IF ( A ) %]Adult[% END -%]
-                [%- IF ( C ) %]Child[% END -%]
-                [%- IF ( P ) %]Professional[% END -%]
-                [%- IF ( S ) %]Staff[% END -%]
-            [% END %])
+            [% IF categoryname %]([% categoryname | html %])[% END %]
         [% END %]
     </title>
     [% INCLUDE 'doc-head-close.inc' %]
@@ -53,15 +45,7 @@
                 [% ELSE %]
                     Modify patron
                 [% END %]
-                ([%IF categoryname %]
-                    [% categoryname | html %]
-                [% ELSE %]
-                    [% IF ( I ) %] Organization [% END %]
-                    [% IF ( A ) %] Adult [% END %]
-                    [% IF ( C ) %] Child [% END %]
-                    [% IF ( P ) %] Professional [% END %]
-                    [% IF ( S ) %] Staff [% END %]
-                [% END %])
+                [% IF categoryname %]([% categoryname | html %])[% END %]
             </strong>
         [% END %]
     </div> <!-- /#breadcrumbs -->
@@ -99,15 +83,7 @@
                                 Modify patron
                             [% END %]
                             [% INCLUDE 'patron-title.inc' %]
-                            ([%IF categoryname %]
-                                [% categoryname | html %]
-                            [% ELSE %]
-                                [% IF ( I ) %] Organization [% END %]
-                                [% IF ( A ) %] Adult [% END %]
-                                [% IF ( C ) %] Child [% END %]
-                                [% IF ( P ) %] Professional [% END %]
-                                [% IF ( S ) %] Staff [% END %]
-                            [% END %])
+                            [% IF categoryname %]([% categoryname | html %])[% END %]
                         </h1>
 
                         [% IF quickadd && opadd && !check_member %]
