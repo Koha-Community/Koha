@@ -3576,7 +3576,7 @@ sub updateWrongTransfer {
 $newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower);
 
 this function calculates the due date given the start date and configured circulation rules,
-checking against the holidays calendar as per the 'useDaysMode' syspref.
+checking against the holidays calendar as per the useDaysMode circulation rule.
 C<$startdate>   = DateTime object representing start date of loan period (assumed to be today)
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
@@ -3610,8 +3610,16 @@ sub CalcDateDue {
     }
 
 
+    my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+        {
+            categorycode => $borrower->{categorycode},
+            itemtype     => $itemtype,
+            branchcode   => $branch,
+        }
+    );
+
     # calculate the datedue as normal
-    if ( C4::Context->preference('useDaysMode') eq 'Days' )
+    if ( $useDaysMode_value eq 'Days' )
     {    # ignoring calendar
         if ( $loanlength->{lengthunit} eq 'hours' ) {
             $datedue->add( hours => $loanlength->{$length_key} );
@@ -3628,7 +3636,7 @@ sub CalcDateDue {
         else { # days
             $dur = DateTime::Duration->new( days => $loanlength->{$length_key});
         }
-        my $calendar = Koha::Calendar->new( branchcode => $branch );
+        my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $useDaysMode_value );
         $datedue = $calendar->addDate( $datedue, $dur, $loanlength->{lengthunit} );
         if ($loanlength->{lengthunit} eq 'days') {
             $datedue->set_hour(23);
@@ -3666,8 +3674,8 @@ sub CalcDateDue {
                 $datedue = $expiry_dt->clone->set_time_zone( C4::Context->tz );
             }
         }
-        if ( C4::Context->preference('useDaysMode') ne 'Days' ) {
-          my $calendar = Koha::Calendar->new( branchcode => $branch );
+        if ( $useDaysMode_value ne 'Days' ) {
+          my $calendar = Koha::Calendar->new( branchcode => $branch, days_mode => $useDaysMode_value );
           if ( $calendar->is_holiday($datedue) ) {
               # Don't return on a closed day
               $datedue = $calendar->prev_open_days( $datedue, 1 );

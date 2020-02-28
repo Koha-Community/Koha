@@ -487,6 +487,36 @@ sub guess_article_requestable_itemtypes {
     return $res;
 }
 
+=head3 get_useDaysMode_effective_value
+
+Return the value for useDaysMode defined in the circulation rules.
+If not defined (or empty string), the value of the system preference useDaysMode is returned
+
+=cut
+
+sub get_useDaysMode_effective_value {
+    my ( $class, $params ) = @_;
+
+    my $categorycode     = $params->{categorycode};
+    my $itemtype         = $params->{itemtype};
+    my $branchcode       = $params->{branchcode};
+
+    my $useDaysMode_rule = $class->get_effective_rule(
+        {
+            categorycode => $categorycode,
+            itemtype     => $itemtype,
+            branchcode   => $branchcode,
+            rule_name    => 'useDaysMode',
+        }
+    );
+
+    return ( defined($useDaysMode_rule)
+          and $useDaysMode_rule->rule_value ne '' )
+      ? $useDaysMode_rule->rule_value
+      : C4::Context->preference('useDaysMode');
+
+}
+
 
 =head3 type
 

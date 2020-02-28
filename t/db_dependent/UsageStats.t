@@ -416,7 +416,6 @@ sub mocking_systempreferences_to_a_set_value {
         ReturnBeforeExpiry
         TransfersMaxDaysWarning
         UseBranchTransferLimits
-        useDaysMode
         UseTransportCostMatrix
         UseCourseReserves
         finesCalendar

@@ -155,7 +155,6 @@ sub BuildReport {
         ReturnBeforeExpiry
         TransfersMaxDaysWarning
         UseBranchTransferLimits
-        useDaysMode
         UseTransportCostMatrix
         UseCourseReserves
         finesCalendar
