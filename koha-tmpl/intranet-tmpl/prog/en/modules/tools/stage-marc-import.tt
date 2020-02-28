@@ -213,9 +213,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% Asset.js("js/file-upload.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     <script>
         var xhr;
         $(document).ready(function(){
