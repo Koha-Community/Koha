@@ -127,6 +127,14 @@ unless ( $cgi->param('service') ) {
     exit 0;
 }
 
+# Set the userenv
+C4::Context->_new_userenv(1);
+C4::Context->set_userenv(
+    undef, undef, undef, 'ILSDI', 'ILSDI', undef,
+    undef, undef, undef, undef,  undef
+);
+C4::Context->interface('opac');
+
 # If user requested a service description, then display it
 if ( scalar $cgi->param('service') eq "Describe" and any { scalar $cgi->param('verb') eq $_ } @services ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
