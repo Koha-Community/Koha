@@ -24,6 +24,10 @@
         in: query
         description: Internal biblio identifier
         type: integer
+      - name: item_group_id
+        in: query
+        description: Internal item group identifier
+        type: integer
       - name: pickup_library_id
         in: query
         description: Internal library identifier for the pickup library
@@ -137,6 +141,11 @@
               type: integer
             biblio_id:
               description: Internal biblio identifier
+              type:
+                - integer
+                - "null"
+            item_group_id:
+              description: Internal item group identifier
               type:
                 - integer
                 - "null"

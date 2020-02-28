@@ -192,6 +192,7 @@ sub AddReserve {
     my $found          = $params->{found};
     my $itemtype       = $params->{itemtype};
     my $non_priority   = $params->{non_priority};
+    my $item_group_id  = $params->{item_group_id};
 
     $resdate ||= dt_from_string;
 
@@ -240,6 +241,7 @@ sub AddReserve {
         {
             borrowernumber => $borrowernumber,
             biblionumber   => $biblionumber,
+            item_group_id  => $item_group_id,
             reservedate    => $resdate,
             branchcode     => $branch,
             priority       => $priority,
