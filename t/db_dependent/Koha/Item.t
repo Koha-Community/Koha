@@ -463,17 +463,13 @@ subtest 'renewalbranch' => sub {
 
     C4::Context->interface( 'opac' );
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch', '');
-    is( $item->renewalbranch, 'OPACRenew', "If interface opac and OpacRenewalBranch blank, we get the OPACRenew");
-    is( $item->renewalbranch({branch=>'CHICKEN'}), 'OPACRenew', "If interface opac and OpacRenewalBranch blank, we get the OPACRenew even if branch passes");
-
     t::lib::Mocks::mock_preference('OpacRenewalBranch', undef);
     is( $item->renewalbranch, 'OPACRenew', "If interface opac and OpacRenewalBranch undef, we get OPACRenew");
     is( $item->renewalbranch({branch=>'COW'}), 'OPACRenew', "If interface opac and OpacRenewalBranch undef, we get OPACRenew even if branch passed");
 
-    t::lib::Mocks::mock_preference('OpacRenewalBranch', 'NULL');
-    is( $item->renewalbranch, '', "If interface opac and OpacRenewalBranch is string 'NULL', we get blank string");
-    is( $item->renewalbranch({branch=>'COW'}), '', "If interface opac and OpacRenewalBranch is string 'NULL', we get blank string even if branch passed");
+    t::lib::Mocks::mock_preference('OpacRenewalBranch', 'none');
+    is( $item->renewalbranch, '', "If interface opac and OpacRenewalBranch is none, we get blank string");
+    is( $item->renewalbranch({branch=>'COW'}), '', "If interface opac and OpacRenewalBranch is none, we get blank string even if branch passed");
 
     t::lib::Mocks::mock_preference('OpacRenewalBranch', 'checkoutbranch');
     is( $item->renewalbranch, $checkout->branchcode, "If interface opac and OpacRenewalBranch set to checkoutbranch, we get branch of checkout");

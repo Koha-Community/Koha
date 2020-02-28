@@ -715,7 +715,7 @@ sub renewalbranch {
     my $branchcode;
     if ( $interface eq 'opac' ){
         my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
-        if( !defined $renewalbranch ){
+        if( !defined $renewalbranch || $renewalbranch eq 'opacrenew' ){
             $branchcode = 'OPACRenew';
         }
         elsif ( $renewalbranch eq 'itemhomebranch' ) {
@@ -727,11 +727,8 @@ sub renewalbranch {
         elsif ( $renewalbranch eq 'checkoutbranch' ) {
             $branchcode = $self->checkout->branchcode;
         }
-        elsif ( $renewalbranch eq 'NULL' ) {
-            $branchcode = '';
-        }
         else {
-            $branchcode = 'OPACRenew';
+            $branchcode = "";
         }
     } else {
         $branchcode = ( C4::Context->userenv && defined C4::Context->userenv->{branch} )
