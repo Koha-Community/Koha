@@ -20,7 +20,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 14;
+use Test::More tests => 13;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -85,22 +85,33 @@ t::lib::Mocks::mock_config('koha_trusted_proxies', '1.1.1.0:255.255.255.0');
 $address = Koha::Middleware::RealIP::get_real_ip( $remote_address, $x_forwarded_for_header );
 is($address,'2.2.2.2',"Trust proxy (1.1.1.1) using an IP address and netmask separated by a colon, so use the X-Forwarded-For header for the remote address");
 
-require Net::Netmask;
-SKIP: {
-    skip "Net::Netmask at 1.9104+ supports IPv6", 2 unless Net::Netmask->VERSION < 1.9104;
+subtest "IPv6 support" => sub {
+    my ($remote_address,$x_forwarded_for_header,$address);
+    require Net::Netmask;
+    if (Net::Netmask->VERSION < 1.9104){
+        $remote_address         = "2001:db8:1234:5678:abcd:1234:abcd:1234";
+        $x_forwarded_for_header = "2.2.2.2";
+        t::lib::Mocks::mock_config( 'koha_trusted_proxies', '2001:db8:1234:5678::/64' );
 
-    $remote_address         = "2001:db8:1234:5678:abcd:1234:abcd:1234";
-    $x_forwarded_for_header = "2.2.2.2";
-    t::lib::Mocks::mock_config( 'koha_trusted_proxies', '2001:db8:1234:5678::/64' );
-    warning_is {
-        $address = Koha::Middleware::RealIP::get_real_ip( $remote_address,
-            $x_forwarded_for_header );
+        warning_is {
+            $address = Koha::Middleware::RealIP::get_real_ip( $remote_address,
+                $x_forwarded_for_header );
+        }
+        "could not parse 2001:db8:1234:5678::/64",
+          "Warn on IPv6 koha_trusted_proxies";
+        is(
+            $address,
+            '2001:db8:1234:5678:abcd:1234:abcd:1234',
+            "Unable to parse IPv6 address for trusted proxy, so ignore the X-Forwarded-For header"
+        );
+        done_testing(2);
+    } else {
+        $remote_address         = "2001:db8:1234:5678:abcd:1234:abcd:1234";
+        $x_forwarded_for_header = "2.2.2.2";
+        t::lib::Mocks::mock_config( 'koha_trusted_proxies', '2001:db8:1234:5678::/64' );
+
+        $address = Koha::Middleware::RealIP::get_real_ip( $remote_address,$x_forwarded_for_header );
+        is($address,'2.2.2.2',"Trust proxy (2001:db8:1234:5678:abcd:1234:abcd:1234) using IPv6 CIDR notation, so use the X-Forwarded-For header for the remote address");
+        done_testing(1);
     }
-    "could not parse 2001:db8:1234:5678::/64",
-      "Warn on IPv6 koha_trusted_proxies";
-    is(
-        $address,
-        '2001:db8:1234:5678:abcd:1234:abcd:1234',
-        "IPv6 support was added in 1.9104 version of Net::Netmask"
-    );
-}
+};
