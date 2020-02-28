@@ -8,6 +8,7 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/humanmsg.css") | $raw %]
 <style>
     #jobpanel,#jobstatus,#jobfailed { display : none; }
     span.change-status { font-style:italic; color:#666; display:none; }
@@ -421,6 +422,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
     [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
