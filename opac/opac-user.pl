@@ -43,6 +43,7 @@ use Koha::Patrons;
 use Koha::Patron::Messages;
 use Koha::Patron::Discharge;
 use Koha::Patrons;
+use Koha::Token;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -83,6 +84,18 @@ $template->param( shibbolethAuthentication => C4::Context->config('useshibboleth
 
 # get borrower information ....
 my $patron = Koha::Patrons->find( $borrowernumber );
+
+if( $query->param('update_arc') && C4::Context->preference("AllowPatronToControlAutorenewal") ){
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf({
+            session_id => scalar $query->cookie('CGISESSID'),
+            token  => scalar $query->param('csrf_token'),
+        });
+
+    my $autorenew_checkouts = $query->param('borrower_autorenew_checkouts');
+    $patron->autorenew_checkouts( $autorenew_checkouts )->store() if defined $autorenew_checkouts;
+}
+
 my $borr = $patron->unblessed;
 # unblessed is a hash vs. object/undef. Hence the use of curly braces here.
 my $borcat = $borr ? $borr->{categorycode} : q{};
@@ -164,6 +177,9 @@ $template->param(
                     surname           => $borr->{surname},
                     RENEW_ERROR       => $renew_error,
                     borrower          => $borr,
+                    csrf_token             => Koha::Token->new->generate_csrf({
+                        session_id => scalar $query->cookie('CGISESSID'),
+                    }),
                 );
 
 #get issued items ....

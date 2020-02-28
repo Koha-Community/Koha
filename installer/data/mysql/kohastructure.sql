@@ -3441,7 +3441,6 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `privacy` int(11) DEFAULT NULL,
   `extended_attributes` MEDIUMTEXT DEFAULT NULL,
   `gdpr_proc_consent` datetime, -- data processing consent
-  `autorenew_checkouts` TINYINT(1) NOT NULL DEFAULT 1, -- flag for allowing auto-renewal
   PRIMARY KEY (`verification_token` (191),`borrowernumber`),
   KEY `verification_token` (`verification_token` (191)),
   KEY `borrowernumber` (`borrowernumber`)

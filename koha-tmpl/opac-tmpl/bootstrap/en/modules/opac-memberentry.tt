@@ -258,33 +258,6 @@
                                         [% END %]
                                     </li>
                                 [% END %]
-                                [% UNLESS hidden.defined('autorenew_checkouts') %]
-                                    <li class="lradio">
-                                        <label for="yes-autorenew_checkouts">
-                                            Allow auto-renewal:
-                                        </label>
-                                            [% IF ( borrower.autorenew_checkouts ) %]
-                                                <label class="radio inline" for="yes-autorenew_checkouts">
-                                                    Yes
-                                                    <input type="radio" id="yes-autorenew_checkouts" name="borrower_autorenew_checkouts" value="1" checked="checked" />
-                                                </label>
-
-                                                <label class="radio inline" for="no-autorenew_checkouts">
-                                                    No
-                                                    <input type="radio" id="no-autorenew_checkouts" name="borrower_autorenew_checkouts" value="0" />
-                                                </label>
-                                            [% ELSE %]
-                                                <label class="radio inline" for="yes-autorenew_checkouts">
-                                                    Yes
-                                                    <input type="radio" id="yes-autorenew_checkouts" name="borrower_autorenew_checkouts" value="1" />
-                                                </label>
-                                                <label class="radio inline" for="no-autorenew_checkouts">
-                                                    No
-                                                    <input type="radio" id="no-autorenew_checkouts" name="borrower_autorenew_checkouts" value="0" checked="checked" />
-                                                </label>
-                                            [% END %]
-                                    </li>
-                                [% END %]
                             </ol>
                         </fieldset>
                 [% END # / defined 'branchcode' %]

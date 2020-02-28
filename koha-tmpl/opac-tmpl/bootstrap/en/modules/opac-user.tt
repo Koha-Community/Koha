@@ -49,6 +49,36 @@
 
                     <p><a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here if you're not [% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></p>
 
+                    [% IF Koha.Preference('AllowPatronToControlAutorenewal') %]
+                    <form id="autorenewal_option" action="/cgi-bin/koha/opac-user.pl" method="post">
+                            <label for="yes-autorenew_checkouts">
+                                Allow auto-renewal:
+                            </label>
+                                [% IF ( borrower.autorenew_checkouts ) %]
+                                    <label class="radio inline" for="yes-autorenew_checkouts">
+                                        Yes
+                                        <input type="radio" id="yes-autorenew_checkouts" name="borrower_autorenew_checkouts" value="1" checked="checked" />
+                                    </label>
+
+                                    <label class="radio inline" for="no-autorenew_checkouts">
+                                        No
+                                        <input type="radio" id="no-autorenew_checkouts" name="borrower_autorenew_checkouts" value="0" />
+                                    </label>
+                                [% ELSE %]
+                                    <label class="radio inline" for="yes-autorenew_checkouts">
+                                        Yes
+                                        <input type="radio" id="yes-autorenew_checkouts" name="borrower_autorenew_checkouts" value="1" />
+                                    </label>
+                                    <label class="radio inline" for="no-autorenew_checkouts">
+                                        No
+                                        <input type="radio" id="no-autorenew_checkouts" name="borrower_autorenew_checkouts" value="0" checked="checked" />
+                                    </label>
+                                [% END %]
+                        <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
+                        <input type="hidden" name="update_arc" value="1" />
+                        <input type="submit" value="Update autorenewal preference" />
+                    </form>
+                    [% END %]
                     [% IF ( patronupdate ) %]<div class="alert alert-info"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 
                     [% IF failed_holds %]
