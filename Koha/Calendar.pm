@@ -1,14 +1,14 @@
 package Koha::Calendar;
-use strict;
-use warnings;
-use 5.010;
 
+use Modern::Perl;
+
+use Carp;
 use DateTime;
 use DateTime::Set;
 use DateTime::Duration;
 use C4::Context;
 use Koha::Caches;
-use Carp;
+use Koha::Exceptions;
 
 sub new {
     my ( $classname, %options ) = @_;
@@ -47,7 +47,6 @@ sub _init {
           1;
     }
 
-    $self->{days_mode}       ||= C4::Context->preference('useDaysMode');
     $self->{test}            = 0;
     return;
 }
@@ -137,6 +136,10 @@ sub single_holidays {
 sub addDate {
     my ( $self, $startdate, $add_duration, $unit ) = @_;
 
+
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addDate: days_mode")
+        unless exists $self->{days_mode};
+
     # Default to days duration (legacy support I guess)
     if ( ref $add_duration ne 'DateTime::Duration' ) {
         $add_duration = DateTime::Duration->new( days => $add_duration );
@@ -165,6 +168,9 @@ sub addHours {
     # If we are using the calendar behave for now as if Datedue
     # was the chosen option (current intended behaviour)
 
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addHours: days_mode")
+        unless exists $self->{days_mode};
+
     if ( $self->{days_mode} ne 'Days' &&
           $self->is_holiday($base_date) ) {
 
@@ -185,7 +191,8 @@ sub addDays {
     my ( $self, $startdate, $days_duration ) = @_;
     my $base_date = $startdate->clone();
 
-    $self->{days_mode} ||= q{};
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->addDays: days_mode")
+        unless exists $self->{days_mode};
 
     if ( $self->{days_mode} eq 'Calendar' ) {
         # use the calendar to skip all days the library is closed
@@ -234,6 +241,9 @@ sub addDays {
 
 sub get_push_amt {
     my ( $self, $base_date) = @_;
+
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->get_push_amt: days_mode")
+        unless exists $self->{days_mode};
 
     my $dow = $base_date->day_of_week;
     return (
@@ -288,6 +298,10 @@ sub is_holiday {
 
 sub next_open_days {
     my ( $self, $dt, $to_add ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->next_open_days: days_mode")
+        unless exists $self->{days_mode};
+
     my $base_date = $dt->clone();
 
     $base_date->add(days => $to_add);
@@ -300,6 +314,10 @@ sub next_open_days {
 
 sub prev_open_days {
     my ( $self, $dt, $to_sub ) = @_;
+
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->get_open_days: days_mode")
+        unless exists $self->{days_mode};
+
     my $base_date = $dt->clone();
 
     # It feels logical to be passed a positive number, though we're
@@ -322,6 +340,9 @@ sub days_forward {
     my $self     = shift;
     my $start_dt = shift;
     my $num_days = shift;
+
+    Koha::Exceptions::MissingParameter->throw("Missing mandatory option for Koha:Calendar->days_forward: days_mode")
+        unless exists $self->{days_mode};
 
     return $start_dt unless $num_days > 0;
 

@@ -109,6 +109,9 @@ our $RULE_KINDS = {
     issuelength => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    useDaysMode => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     lengthunit => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
