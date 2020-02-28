@@ -52,7 +52,7 @@ my $holiday = $builder->build(
     }
 );
 
-my $calendar = Koha::Calendar->new( branchcode => $library->branchcode );
+my $calendar = Koha::Calendar->new( branchcode => $library->branchcode, days_mode => 'Calendar' );
 
 subtest 'days_forward' => sub {
 

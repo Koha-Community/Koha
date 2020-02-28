@@ -207,15 +207,7 @@ my $holiday_for_another_branch = DateTime->new(
 
 {    ## 'Datedue' tests
 
-    $module_context->unmock('preference');
-    $module_context->mock(
-        'preference',
-        sub {
-            return 'Datedue';
-        }
-    );
-
-    $cal = Koha::Calendar->new( branchcode => 'MPL' );
+    $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Datedue' );
 
     is($cal->addDate( $dt, $one_day_dur, 'days' ), # tuesday
         dt_from_string('2012-07-05','iso'),
@@ -246,15 +238,7 @@ my $holiday_for_another_branch = DateTime->new(
 
 {   ## 'Calendar' tests'
 
-    $module_context->unmock('preference');
-    $module_context->mock(
-        'preference',
-        sub {
-            return 'Calendar';
-        }
-    );
-
-    $cal = Koha::Calendar->new( branchcode => 'MPL' );
+    $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Calendar' );
 
     $dt = dt_from_string('2012-07-03','iso');
 
@@ -281,15 +265,8 @@ my $holiday_for_another_branch = DateTime->new(
 
 
 {   ## 'Days' tests
-    $module_context->unmock('preference');
-    $module_context->mock(
-        'preference',
-        sub {
-            return 'Days';
-        }
-    );
 
-    $cal = Koha::Calendar->new( branchcode => 'MPL' );
+    $cal = Koha::Calendar->new( branchcode => 'MPL', days_mode => 'Days' );
 
     $dt = dt_from_string('2012-07-03','iso');
 
@@ -324,11 +301,9 @@ my $holiday_for_another_branch = DateTime->new(
 }
 
 subtest 'days_mode parameter' => sub {
-    plan tests => 2;
+    plan tests => 1;
 
     t::lib::Mocks::mock_preference('useDaysMode', 'Days');
-    my $cal = Koha::Calendar->new( branchcode => 'CPL' );
-    is( $cal->{days_mode}, 'Days', q|If not set, days_mode defaults to syspref's value|);
 
     $cal = Koha::Calendar->new( branchcode => 'CPL', days_mode => 'Calendar' );
     is( $cal->{days_mode}, 'Calendar', q|If set, days_mode is correctly set|);
