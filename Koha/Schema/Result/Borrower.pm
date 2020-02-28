@@ -1665,7 +1665,8 @@ __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
     '+lost'          => { is_boolean => 1 },
     '+gonenoaddress' => { is_boolean => 1 },
-    '+privacy_guarantor_fines' => { is_boolean => 1 }
+    '+privacy_guarantor_fines' => { is_boolean => 1 },
+    '+autorenew_checkouts' => { is_boolean => 1 }
 );
 
 sub koha_objects_class {
