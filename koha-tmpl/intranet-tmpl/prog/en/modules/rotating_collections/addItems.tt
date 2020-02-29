@@ -94,10 +94,7 @@
               <div>
                 <h2>Items in <i>[% colTitle | html %]</i></h2>
                 [% IF ( collectionItemsLoop ) %]
-                [% FOREACH collectionItemsLoo IN collectionItemsLoop %]
-                    [% totalItems = loop.size %]
-                [% END %]
-                <h3>Total Items: [% totalItems | html%]</h3>
+                  <h3>Total items: [% collectionItemsLoop.size | html%]</h3>
                   <table>
                     <tr>
                       <th>Title</th>
