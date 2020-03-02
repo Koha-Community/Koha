@@ -936,8 +936,12 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            let updated_on = new Date( oObj.updated_on );
-                            return updated_on.toLocaleDateString();
+                            if ( oObj.updated_on ) {
+                                let updated_on = new Date( oObj.updated_on );
+                                return updated_on.toLocaleDateString();
+                            } else {
+                                return "";
+                            }
                         }
                     },
                     {
