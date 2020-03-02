@@ -37,6 +37,9 @@
             [% END %]
             <th>Barcode</th>
             <th>Checked out from</th>
+            [% IF Koha.Preference('RecordIssuer') %]
+            <th>Checked out by</th>
+            [% END %]
             <th>Renewed</th>
             <th class='title-string'>Checkout on</th>
             <th class='title-string'>Due date</th>
@@ -63,6 +66,13 @@
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>
+                [% IF Koha.Preference('RecordIssuer') %]
+                <td>[% IF checkout.issuer %]
+                    <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% checkout.issuer | uri %]">
+                    [% checkout.issued_by.firstname | html %] [% checkout.issued_by.surname | html %]
+                    </a>
+                    [% END %]</td>
+                [% END %]
                 <td>[% IF checkout.renewals %]
                         Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates  with_hours => 1 %]</small>
                             [% END %]

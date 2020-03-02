@@ -106,6 +106,20 @@ sub patron {
     return Koha::Patron->_new_from_dbic( $patron_rs );
 }
 
+=head3 issued_by
+
+my $issued_by = $checkout->issued_by
+
+Return the patron by whom the checkout was done
+
+=cut
+
+sub issued_by {
+    my ( $self ) = @_;
+    my $issued_by_rs = $self->_result->issuer;
+    return Koha::Patron->_new_from_dbic( $issued_by_rs );
+}
+
 =head3 to_api_mapping
 
 This method returns the mapping for representing a Koha::Checkout object
@@ -117,6 +131,7 @@ sub to_api_mapping {
     return {
         issue_id        => 'checkout_id',
         borrowernumber  => 'patron_id',
+        issuer          => 'issuer_id',
         itemnumber      => 'item_id',
         date_due        => 'due_date',
         branchcode      => 'library_id',

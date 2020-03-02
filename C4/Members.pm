@@ -276,16 +276,18 @@ sub GetAllIssues {
 'SELECT *, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp
   FROM issues
   LEFT JOIN items on items.itemnumber=issues.itemnumber
+  LEFT JOIN borrowers on borrowers.borrowernumber=issues.issuer
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  WHERE borrowernumber=?
+  WHERE issues.borrowernumber=?
   UNION ALL
   SELECT *, old_issues.timestamp as issuestimestamp, old_issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp
   FROM old_issues
   LEFT JOIN items on items.itemnumber=old_issues.itemnumber
+  LEFT JOIN borrowers on borrowers.borrowernumber=old_issues.issuer
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  WHERE borrowernumber=? AND old_issues.itemnumber IS NOT NULL
+  WHERE old_issues.borrowernumber=? AND old_issues.itemnumber IS NOT NULL
   order by ' . $order;
     if ($limit) {
         $query .= " limit $limit";

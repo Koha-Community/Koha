@@ -1520,6 +1520,17 @@ sub AddIssue {
                 auto_renew      => $auto_renew ? 1 : 0,
             };
 
+            # Get ID of logged in user.  if called from a batch job,
+            # no user session exists and C4::Context->userenv() returns
+            # the scalar '0'. Only do this is the syspref says so
+            if ( C4::Context->preference('RecordIssuer') ) {
+                my $userenv = C4::Context->userenv();
+                my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : undef;
+                if ($usernumber) {
+                    $issue_attributes->{issuer} = $usernumber;
+                }
+            }
+
             # In the case that the borrower has an on-site checkout
             # and SwitchOnSiteCheckouts is enabled this converts it to a regular checkout
             $issue = Koha::Checkouts->find( { itemnumber => $item_object->itemnumber } );

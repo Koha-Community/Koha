@@ -58,6 +58,9 @@
         <th>Number of renewals</th>
         <th class="title-string">Checked out on</th>
         <th>Checked out from</th>
+        [% IF Koha.Preference('RecordIssuer') %]
+        <th>Checked out by</th>
+        [% END %]
         <th class="title-string">Date due</th>
         <th class="title-string">Return date</th>
         </tr>
@@ -94,6 +97,9 @@
             <span title="[% issue.issuedate | html %]">[% issue.issuedate |$KohaDates  with_hours => 1 %]</span>
           </td>
           <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
+          [% IF Koha.Preference('RecordIssuer') %]
+          <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
+          [% END %]
           <td>
             [% IF issue.date_due %]
                 <span title="[% issue.date_due | html %]">[% issue.date_due |$KohaDates  with_hours => 1 %]</span>
