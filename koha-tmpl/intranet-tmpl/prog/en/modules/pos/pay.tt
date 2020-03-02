@@ -55,7 +55,7 @@
                                     <td>[% invoice.description | html %]</td>
                                     <td>[% invoice.default_amount | $Price %]</td>
                                     <td>
-                                        <button class="add_button" data-invoice-code="[% invoice.code | html %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
+                                        <button type="button" class="add_button" data-invoice-code="[% invoice.code | html %]" data-invoice-title="[% invoice.description | html %]" data-invoice-price="[% invoice.default_amount | html %]"><i class="fa fa-plus"></i> Add</button>
                                     </td>
                                 </tr>
                             [% END %]
@@ -161,7 +161,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default approve" id="modal_submit" type="button"><i class="fa fa-check"></i> Yes</button>
-                <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i> No</button>
+                <button class="btn btn-default deny cancel" href="#" data-dismiss="modal" aria-hidden="true" type="button"><i class="fa fa-times"></i> No</button>
             </div>
         </div>
     </div>
@@ -234,7 +234,7 @@
         defaultPrice.value,
         1,
         null,
-        '<button class="drop"><i class="fa fa-trash"></i> Remove</button>',
+        '<button class="drop" type="button"><i class="fa fa-trash"></i> Remove</button>',
         invoiceCode
         ]
       );
