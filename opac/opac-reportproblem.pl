@@ -94,8 +94,8 @@ if ( $op eq 'addreport' ) {
                     }
                 );
 
-                my $from_address = C4::Context->preference('KohaAdminEmailAddress');
                 my $transport = 'email';
+                my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
                 if ( $recipient eq 'admin' ) {
                     C4::Letters::EnqueueLetter({
@@ -103,7 +103,7 @@ if ( $op eq 'addreport' ) {
                         borrowernumber         => $borrowernumber,
                         message_transport_type => $transport,
                         to_address             => C4::Context->preference('KohaAdminEmailAddress'),
-                        from_address           => $from_address,
+                        reply_address          => $reply_address,
                     });
                 } else {
                     C4::Letters::EnqueueLetter({
@@ -111,7 +111,7 @@ if ( $op eq 'addreport' ) {
                         borrowernumber         => $borrowernumber,
                         message_transport_type => $transport,
                         to_address             => $library->branchemail,
-                        from_address           => $from_address,
+                        reply_address          => $reply_address,
                     });
                 }
 
