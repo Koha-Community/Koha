@@ -108,8 +108,8 @@
                             </li>
                             <li>
                                 <label>Change to give: </label>
-                                <span id="change">0.00</span>
-                                <input type="hidden" name="change" value="0.00"/>
+                                <span id="change">[% 0 | $Price %]</span>
+                                <input type="hidden" name="change" value="[% 0 | $Price %]"/>
                             </li>
 
                             [% PROCESS account_payment_types %]
@@ -156,7 +156,7 @@
             </div>
             <div class="modal-body">
                 <p>The amount collected from the patron is higher than the amount to be paid.</p>
-                <p>The change to give is <b><span id="modal_change">0.00</span></b>.</p>
+                <p>The change to give is <b><span id="modal_change">[% 0 | $Price %]</span></b>.</p>
                 <p>Confirm this payment?</p>
             </div>
             <div class="modal-footer">
@@ -242,9 +242,10 @@
 
     function updateChangeValues() {
         var change = $('#change')[0];
+        var zero_formatted = "[% 0 | $Price %]";
         change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
         if (change.innerHTML <= 0) {
-            change.innerHTML = "0.00";
+            change.innerHTML = zero_formatted;
         } else {
             change.value = change.innerHTML;
             moneyFormat(change);
