@@ -3,7 +3,6 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Koha %]
-[% USE Borrowers %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
@@ -182,11 +181,11 @@
                             [% END %]
 
                             <!-- Patron is restricted and checkin was backdated -->
-                            [% IF return_date_was_overriden && Borrowers.IsDebarred( borrower ) %]
+                            [% IF return_date_was_overriden && issue.patron.is_debarred %]
                                 <div id="restricted_backdated" class="dialog message">
                                     <h3>
-                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
-                                            [% patron.firstname | html %] [% patron.surname | html %]
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issue.patron.borrowernumber | uri %]">
+                                            [% issue.patron.firstname | html %] [% issue.patron.surname | html %]
                                         </a>
                                         is restricted. Please verify this patron should still be restricted.
                                     </h3>
