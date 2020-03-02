@@ -18,7 +18,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Data::Dumper qw/Dumper/;
 use File::Temp qw/tempfile/;
 use Test::More tests => 8;
 use Test::Warn;
@@ -118,7 +117,7 @@ $engine->print_warns(1);
     my @warn;
     local $SIG{__WARN__} = sub { push @warn, $_[0]; };
     $output= $engine->transform({ xml => "<ignored/>", code => $xslt });
-    is( ( grep { /failed to load external/ } @warn ), 1, 'Expected import error. Additional info: '.Dumper(@warn) );
+    is( ( grep { /failed to load (external entity|HTTP resource)/ } @warn ), 1, 'Expected import error' ); # we saw both messages on Jenkins passing by
     is( ( grep { /read_net/ } @warn ), 0, 'No read_net warn for remote import' );
 }
 
