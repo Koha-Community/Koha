@@ -1853,7 +1853,7 @@ CREATE TABLE `club_holds_to_patron_holds` (
   `club_hold_id` int(11) NOT NULL,
   `patron_id` int(11) NOT NULL,
   `hold_id` int(11) DEFAULT NULL,
-  `error_code` enum('damaged','ageRestricted','itemAlreadyOnHold','tooManyHoldsForThisRecord','tooManyReservesToday','tooManyReserves','notReservable','cannotReserveFromOtherBranches','libraryNotFound','libraryNotPickupLocation','cannotBeTransferred') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `error_code` enum('damaged','ageRestricted','itemAlreadyOnHold','tooManyHoldsForThisRecord','tooManyReservesToday','tooManyReserves','notReservable','cannotReserveFromOtherBranches','libraryNotFound','libraryNotPickupLocation','cannotBeTransferred','noReservesAllowed') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `error_message` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `clubs_holds_paton_holds_ibfk_1` (`club_hold_id`),
