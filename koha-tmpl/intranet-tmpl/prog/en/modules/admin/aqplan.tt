@@ -282,6 +282,7 @@
     <script>
         jQuery.validator.addClassRules({ plan_entry: { pnumber: true } }); // require that input be a number in fields with the class 'plan_entry'
         jQuery.validator.addMethod("pnumber", $.validator.methods.number, _("Please enter a valid number.") );
+        var zero_formatted = "[% 0 | $Price on_editing => 1 %]";
         $(document).ready(function() {
             $("#selections input").on("change",function(e){
                 var num = $(this).attr("id");
@@ -313,7 +314,7 @@
                 $(edit_row).find("input").each(function(){
                     var type = $(this).attr("type");
                     if (type != "button" && type != "submit" ) {
-                      $(this).val("0.00");
+                      $(this).val(zero_formatted);
                       $(this).prop('disabled', false);
                     }
                 });
