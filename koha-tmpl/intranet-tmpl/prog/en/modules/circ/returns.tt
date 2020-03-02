@@ -89,7 +89,7 @@
                                             [% INCLUDE display_bormessagepref %]
                                         [% END %]
 
-                                        [% IF ( patron.debarred ) %]
+                                        [% IF ( patron.is_debarred ) %]
                                             <li class="error">Patron is RESTRICTED</li>
                                         [% END %]
 
@@ -431,7 +431,7 @@
                                                             <li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>
                                                         [% END %]
 
-                                                        [% IF ( patron.debarred ) %]
+                                                        [% IF ( patron.is_debarred ) %]
                                                             <li class="error">Patron is RESTRICTED</li>
                                                         [% END %]
 
@@ -601,7 +601,7 @@
                                                             [% INCLUDE display_bormessagepref %]
                                                         [% END %]
 
-                                                        [% IF ( patron.debarred ) %]
+                                                        [% IF ( patron.is_debarred ) %]
                                                             <li class="error">Patron is RESTRICTED</li>
                                                         [% END %]
 
