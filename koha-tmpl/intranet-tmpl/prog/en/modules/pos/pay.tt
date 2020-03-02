@@ -245,14 +245,19 @@
         var zero_formatted = "[% 0 | $Price %]";
         change.innerHTML = Math.round(($('#collected')[0].value - $('#paid')[0].value) * 100) / 100;
         if (change.innerHTML <= 0) {
+            var paid = $('#paid')[0];
+            moneyFormat(paid);
+            $('#collected').rules( "add", { min: Number(paid.value) });
+            $("#payForm").valid()
             change.innerHTML = zero_formatted;
+            $(':input[name="change"]').val(zero_formatted);
         } else {
             change.value = change.innerHTML;
             moneyFormat(change);
             change.innerHTML = change.value;
+            $(':input[name="change"]').val(change.value);
         }
 
-        $(':input[name="change"]').val(change.value);
         $('#modal_change').html(change.innerHTML);
     }
 
@@ -355,6 +360,15 @@
         $('#modal_submit').click(function() {
             checked = true;
             $('#payForm').submit();
+        });
+
+        $( "#payForm" ).validate({
+            rules: {
+                paid: { required: true },
+                collected: {
+                    required: true
+                }
+            }
         });
 
         $('#payForm').submit(function(e){
