@@ -110,7 +110,7 @@ if ( $op eq 'addreport' ) {
                         letter                 => $letter,
                         borrowernumber         => $borrowernumber,
                         message_transport_type => $transport,
-                        to_address             => $library->branchemail,
+                        to_address             => $library->get_effective_email,
                         reply_address          => $reply_address,
                     });
                 }
