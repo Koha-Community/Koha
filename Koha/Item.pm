@@ -701,30 +701,30 @@ sub as_marc_field {
     return $field;
 }
 
-=head3 renewalbranch
+=head3 renewal_branchcode
 
-Returns the branch to be recorded in statistics renewal of the item
+Returns the branchcode to be recorded in statistics renewal of the item
 
 =cut
 
-sub renewalbranch {
+sub renewal_branchcode {
 
     my ($self, $params ) = @_;
 
     my $interface = C4::Context->interface;
     my $branchcode;
     if ( $interface eq 'opac' ){
-        my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
-        if( !defined $renewalbranch || $renewalbranch eq 'opacrenew' ){
+        my $renewal_branchcode = C4::Context->preference('OpacRenewalBranch');
+        if( !defined $renewal_branchcode || $renewal_branchcode eq 'opacrenew' ){
             $branchcode = 'OPACRenew';
         }
-        elsif ( $renewalbranch eq 'itemhomebranch' ) {
+        elsif ( $renewal_branchcode eq 'itemhomebranch' ) {
             $branchcode = $self->homebranch;
         }
-        elsif ( $renewalbranch eq 'patronhomebranch' ) {
+        elsif ( $renewal_branchcode eq 'patronhomebranch' ) {
             $branchcode = $self->checkout->patron->branchcode;
         }
-        elsif ( $renewalbranch eq 'checkoutbranch' ) {
+        elsif ( $renewal_branchcode eq 'checkoutbranch' ) {
             $branchcode = $self->checkout->branchcode;
         }
         else {
