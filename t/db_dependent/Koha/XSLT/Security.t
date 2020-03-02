@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 use File::Temp qw/tempfile/;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Warn;
 
 use Koha::XSLT_Handler;
@@ -120,9 +120,13 @@ $xslt=<<"EOT";
 EOT
 $xslt_file = mytempfile($xslt);
 $engine->print_warns(1);
-warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
-    qr/I\/O warning : failed to load external entity/,
-    'Remote import does not fail on read_net';
+{
+    my @warn;
+    local $SIG{__WARN__} = sub { push @warn, $_[0]; };
+    $output= $engine->transform( "<ignored/>", $xslt_file );
+    is( ( grep { /failed to load (external entity|HTTP resource)/ } @warn ), 1, 'Expected import error' ); # we saw both messages on Jenkins passing by
+    is( ( grep { /read_net/ } @warn ), 0, 'No read_net warn for remote import' );
+}
 
 sub mytempfile {
     my ( $fh, $fn ) = tempfile( SUFFIX => '.xsl', UNLINK => 1 );
