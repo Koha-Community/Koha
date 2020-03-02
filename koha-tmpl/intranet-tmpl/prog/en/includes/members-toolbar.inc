@@ -1,6 +1,5 @@
 [% INCLUDE 'blocking_errors.inc' %]
 [% USE Koha %]
-[% USE Borrowers %]
 [% USE Branches %]
 [% USE Categories %]
 [% USE AuthorisedValues %]
@@ -25,7 +24,7 @@
                 <li><a id="printsummary" href="#">Print summary</a></li>
                 <li><a id="printslip" href="#">Print slip</a></li>
                 <li><a id="printquickslip" href="#">Print quick slip</a></li>
-                [% IF Borrowers.HasOverdues( patron.borrowernumber ) %]
+                [% IF patron.has_overdues %]
                     <li><a id="print_overdues" href="#">Print overdues</a></li>
                 [% END %]
             </ul>
