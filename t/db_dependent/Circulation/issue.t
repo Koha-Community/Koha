@@ -36,6 +36,7 @@ use Koha::Items;
 use Koha::Library;
 use Koha::Patrons;
 use Koha::CirculationRules;
+use Koha::Statistics;
 
 BEGIN {
     require_ok('C4::Circulation');
@@ -243,61 +244,37 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
 
     $se->mock( 'interface', sub { return 'opac' } );
 
-    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'opacrenew' );
-    my $item = $builder->build_sample_item({ itype => $itemtype});
-    my $opac_renew_issue = C4::Circulation::AddIssue( $borrower_1, $item->barcode );
-    AddRenewal(
-        $borrower_id1,
-        $item->itemnumber,
-        "Stavromula", $datedue1, $daysago10
-    );
-    my $stat = $schema->resultset('Statistic')->search({ itemnumber => $item->itemnumber, type => 'renew' })->next;
-    is( $stat->branch, "OPACRenew", "OpacRenewalBranch is respected for OpacRenewalBranch = OPACRenew" );
+    my $item_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron       = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $logged_in_user = $builder->build_object( { class => 'Koha::Patrons' } );
+    t::lib::Mocks::mock_userenv( { patron => $logged_in_user } );
 
-    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'checkoutbranch' );
-    my $item2 = $builder->build_sample_item({ itype => $itemtype});
-    $opac_renew_issue = C4::Circulation::AddIssue( $borrower_1, $item2->barcode );
-    AddRenewal(
-        $borrower_id1,
-        $item2->itemnumber,
-        "Stavromula", $datedue1, $daysago10
-    );
-    $stat = $schema->resultset('Statistic')->search({ itemnumber => $item2->itemnumber, type => 'renew' })->next;
-    is( $stat->branch, $patron_1->branchcode, "OpacRenewalBranch is respected for OpacRenewalBranch = checkoutbranch" );
+    my $OpacRenewalBranch = {
+        opacrenew        => "OPACRenew",
+        checkoutbranch   => $logged_in_user->branchcode,
+        patronhomebranch => $patron->branchcode,
+        itemhomebranch   => $item_library->branchcode,
+        none             => "",
+    };
 
-    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'patronhomebranch' );
-    my $item3 = $builder->build_sample_item({ itype => $itemtype});
-    $opac_renew_issue = C4::Circulation::AddIssue( $borrower_1, $item3->barcode );
-    AddRenewal(
-        $borrower_id1,
-        $item3->itemnumber,
-        "Stavromula", $datedue1, $daysago10
-    );
-    $stat = $schema->resultset('Statistic')->search({ itemnumber => $item3->itemnumber, type => 'renew' })->next;
-    my $patron = Koha::Patrons->find( $borrower_id1 );
-    is( $stat->branch, $patron->branchcode, "OpacRenewalBranch is respected for OpacRenewalBranch = patronhomebranch" );
+    while ( my ( $syspref, $expected_branchcode ) = each %$OpacRenewalBranch ) {
 
-    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'itemhomebranch' );
-    my $item4 = $builder->build_sample_item({ itype => $itemtype});
-    $opac_renew_issue = C4::Circulation::AddIssue( $borrower_1, $item4->barcode );
-    AddRenewal(
-        $borrower_id1,
-        $item4->itemnumber,
-        "Stavromula", $datedue1, $daysago10
-    );
-    $stat = $schema->resultset('Statistic')->search({ itemnumber => $item4->itemnumber, type => 'renew' })->next;
-    is( $stat->branch, $item4->homebranch, "OpacRenewalBranch is respected for OpacRenewalBranch = itemhomebranch" );
+        t::lib::Mocks::mock_preference( 'OpacRenewalBranch', $syspref );
 
-    t::lib::Mocks::mock_preference( 'OpacRenewalBranch', 'none' );
-    my $item5 = $builder->build_sample_item({ itype => $itemtype});
-    $opac_renew_issue = C4::Circulation::AddIssue( $borrower_1, $item5->barcode );
-    AddRenewal(
-        $borrower_id1,
-        $item5->itemnumber,
-        "Stavromula", $datedue1, $daysago10
-    );
-    $stat = $schema->resultset('Statistic')->search({ itemnumber => $item5->itemnumber, type => 'renew' })->next;
-    is( $stat->branch, "", "OpacRenewalBranch is respected for OpacRenewalBranch none" );
+        my $item = $builder->build_sample_item(
+            { library => $item_library->branchcode, itype => $itemtype } );
+        my $opac_renew_issue =
+          C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+        AddRenewal( $patron->borrowernumber, $item->itemnumber,
+            "Stavromula", $datedue1, $daysago10 );
+
+        my $stat = Koha::Statistics->search(
+            { itemnumber => $item->itemnumber, type => 'renew' } )->next;
+        is( $stat->branch, $expected_branchcode,
+            "->renewal_branchcode is respected for OpacRenewalBranch = $syspref"
+        );
+    }
 };
 
 #Test GetBiblioIssues
