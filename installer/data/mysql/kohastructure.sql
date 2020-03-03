@@ -2713,6 +2713,7 @@ CREATE TABLE `account_offsets` (
 -- Table structure for table `cash_register_actions`
 --
 
+DROP TABLE IF EXISTS `cash_register_actions`;
 CREATE TABLE `cash_register_actions` (
   `id` int(11) NOT NULL auto_increment, -- unique identifier for each account register action
   `code` varchar(24) NOT NULL, -- action code denoting the type of action recorded (enum),
