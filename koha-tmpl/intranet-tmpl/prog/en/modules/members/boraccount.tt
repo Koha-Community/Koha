@@ -90,6 +90,9 @@
         [% IF CAN_user_updatecharges_refund && account.is_debit && ( account.amountoutstanding != account.amount ) && !(account.status == 'REFUNDED') && !(account.debit_type_code == 'PAYOUT') %]
           <button type="button" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-money"></i> Issue refund</button>
         [% END %]
+        [% IF CAN_user_updatecharges_discount && account.is_debit && ( account.amountoutstanding == account.amount ) && !(account.debit_type_code == 'PAYOUT') %]
+          <button type="button" data-toggle="modal" data-target="#applyDiscountModal" data-item="[%- PROCESS account_type_description account=account -%]" data-accountline="[% account.accountlines_id | html %]" data-amount="[% account.amount | $Price %]" data-amountoutstanding="[% account.amountoutstanding | $Price %]" class="btn btn-default btn-xs"><i class="fa fa-percent"></i> Apply discount</button>
+        [% END %]
       </td>
     </tr>
 
@@ -147,7 +150,7 @@
                                 [% IF payment_types > 3 %]
                                 <li>
                                     <label for="transaction_type">Transaction type: </label>
-                                    <select name="transaction_type" id="transaction_type">
+                                    <select name="transaction_type" id="payout_transaction_type">
                                         [% FOREACH pt IN payment_types %]
                                             [% UNLESS excluded.grep("^$pt.authorised_value\$").size %]
                                             <option value="[% pt.authorised_value | html %]">[% pt.lib | html %]</option>
@@ -214,7 +217,7 @@
                                 [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
                                 <li>
                                     <label for="transaction_type">Transaction type: </label>
-                                    <select name="transaction_type" id="transaction_type">
+                                    <select name="transaction_type" id="refund_transaction_type">
                                         <option value="AC">Account credit</option>
                                         [% IF payment_types %]
                                         [% FOREACH pt IN payment_types %]
@@ -251,6 +254,45 @@
             </div> <!-- /.modal-dialog -->
         </form> <!-- /#refund_form -->
     </div> <!-- /#issueRefundModal -->
+
+    <!-- Apply discount modal -->
+    <div class="modal" id="applyDiscountModal" tabindex="-1" role="dialog" aria-labelledby="applyDiscountLabel">
+        <form  id="discount_form" action="/cgi-bin/koha/members/boraccount.pl" method="get" enctype="multipart/form-data" class="validated">
+            <input type="hidden" name="accountlines_id" value="" id="discountline">
+            <input type="hidden" name="action" value="discount">
+            <input type="hidden" name="borrowernumber" value="[% account.borrowernumber | html %]">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="applyDiscountLabel">Apply discount</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="rows">
+                            <ol>
+                                <li>
+                                    <span id="item" class="label">Account type: </span><span></span>
+                                </li>
+                                <li>
+                                    <span id="charged" class="label">Amount charged: </span><span></span>
+                                </li>
+                                <li>
+                                    <label class="required" for="amount">Discount to apply: </label>
+                                    <input type="number" step="0.01" id="discount" name="amount" min="0.00" required="required">
+                                    <span class="required">Required</span>
+                                </li>
+                            </ol>
+                        </fieldset> <!-- /.rows -->
+                    </div> <!-- /.modal-body -->
+                    <div class="modal-footer">
+                        <input type="hidden" name="op" value="discount">
+                        <button type="submit" class="btn btn-default">Confirm</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div> <!-- /.modal-footer -->
+                </div> <!-- /.modal-content -->
+            </div> <!-- /.modal-dialog -->
+        </form> <!-- /#discount_form -->
+    </div> <!-- /#applyDiscountModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -304,7 +346,7 @@
                 var amount = button.data('amount') * -1;
                 $("#paid + span").replaceWith(amount);
                 $("#amount").attr({ "value": amount, "max": amount });
-                $("#amount, #transaction_type").focus();
+                $("#amount, #payout_transaction_type").focus();
             });
 
             $("#issueRefundModal").on("shown.bs.modal", function(e){
@@ -318,7 +360,19 @@
                 var paid = amount - amountoutstanding;
                 $("#paid + span").replaceWith(paid);
                 $("#returned").attr({ "value": paid, "max": paid });
-                $("#returned, #transaction_type").focus();
+                $("#returned, #refund_transaction_type").focus();
+            });
+
+            $("#applyDiscountModal").on("shown.bs.modal", function(e){
+                var button = $(e.relatedTarget);
+                var item = button.data('item');
+                $("#item + span").replaceWith(item);
+                var accountline = button.data('accountline');
+                $('#discountline').val(accountline);
+                var amount = button.data('amount');
+                $("#charged + span").replaceWith(amount);
+                $("#discount").attr({ "max": amount });
+                $("#discount").focus();
             });
         });
     </script>

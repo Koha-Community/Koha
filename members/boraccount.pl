@@ -151,6 +151,26 @@ if ( $action eq 'refund' ) {
     );
 }
 
+if ( $action eq 'discount' ) {
+    my $charge_id        = scalar $input->param('accountlines_id');
+    my $charge           = Koha::Account::Lines->find($charge_id);
+    my $amount           = scalar $input->param('amount');
+    $schema->txn_do(
+        sub {
+
+            my $discount = $charge->reduce(
+                {
+                    reduction_type => 'DISCOUNT',
+                    branch         => $library_id,
+                    staff_id       => $logged_in_user->id,
+                    interface      => 'intranet',
+                    amount         => $amount
+                }
+            );
+        }
+    );
+}
+
 #get account details
 my $total = $patron->account->balance;
 
