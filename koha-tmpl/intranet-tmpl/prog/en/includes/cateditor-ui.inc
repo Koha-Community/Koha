@@ -706,7 +706,6 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         var macro = Preferences.user.macros[name];
         macroEditor.setValue( macro.contents );
         macroEditor.setOption( 'readOnly', false );
-        $( '#macro-format' ).val( macro.format || 'its' );
         if ( macro.history ) macroEditor.setHistory( macro.history );
     }
 
@@ -763,7 +762,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         if ( !name || macroEditor.savedGeneration == macroEditor.changeGeneration() ) return;
 
         macroEditor.savedGeneration = macroEditor.changeGeneration();
-        storeMacro( name, { contents: macroEditor.getValue(), modified: (new Date()).valueOf(), history: macroEditor.getHistory(), format: $('#macro-format').val() } );
+//        storeMacro( name, { contents: macroEditor.getValue(), modified: (new Date()).valueOf(), history: macroEditor.getHistory(), format: $('#macro-format').val() } );
         $('#macro-save-message').text(_("Saved"));
         showSavedMacros();
     }
@@ -860,16 +859,6 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         saveableBackends.sort();
         $.each( saveableBackends, function( undef, backend ) {
             $( '#save-dropdown' ).append( '<li><a href="#" data-backend="' + backend[1] + '">' + backend[0] + '</a></li>' );
-        } );
-
-        var macro_format_list = $.map( Macros.formats, function( format, name ) {
-            return $.extend( { name: name }, format );
-        } );
-        macro_format_list.sort( function( a, b ) {
-            return a.description.localeCompare(b.description);
-        } );
-        $.each( macro_format_list, function() {
-            $('#macro-format').append( '<option value="' + this.name + '">' + this.description + '</option>' );
         } );
 
         // Click bindings
@@ -978,7 +967,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
 
         $('#run-macro').click( function() {
-            var result = Macros.Run( editor, $('#macro-format').val(), macroEditor.getValue() );
+            var result = Macros.Run( editor, 'rancor', macroEditor.getValue() );
 
             if ( !result.errors.length ) {
                 $('#macro-ui').modal('hide');

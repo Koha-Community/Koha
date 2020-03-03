@@ -17,13 +17,9 @@
  * along with Koha; if not, see <http://www.gnu.org/licenses>.
  */
 
-define( [ 'macros/its', 'macros/rancor' ], function( ITSMacro, RancorMacro ) {
+define( [ 'macros/rancor' ], function( RancorMacro ) {
     var Macros = {
         formats: {
-            its: {
-                description: 'TLC® ITS',
-                Run: ITSMacro.Run,
-            },
             rancor: {
                 description: 'Rancor',
                 Run: RancorMacro.Run,
