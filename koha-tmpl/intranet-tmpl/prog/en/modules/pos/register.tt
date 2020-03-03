@@ -28,7 +28,7 @@
             [% ELSE %]
 
             <div id="toolbar" class="btn-toolbar">
-                <a id="cashup" href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-default"><i class="fa fa-money"></i> Record cashup</a>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa fa-money"></i> Record cashup</button>
             </div>
 
             <h1>Register transaction details for [% register.name | html %]</h1>
@@ -144,6 +144,25 @@
             </aside>
         </div>
     </div><!-- /.row -->
+
+    <!-- Confirm cashup modal -->
+    <div class="modal" id="confirmCashupModal" tabindex="-1" role="dialog" aria-labelledby="confirmCashupLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="confirmCashupLabel">Confirm cashup of <em>[% register.description | html %]</em></h4>
+                </div>
+                <div class="modal-body">
+                    Please confirm that you have removed [% accountlines.total( payment_type => 'CASH') * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
+                </div> <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <a href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-default">Confirm</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div> <!-- /.modal-footer -->
+            </div> <!-- /.modal-content -->
+        </div> <!-- /.modal-dialog -->
+    </div> <!-- /#confirmCashupModal -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
