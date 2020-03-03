@@ -20975,6 +20975,36 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24735 - Remove UseQueryParser system preference)\n";
 }
 
+$DBversion = '19.12.00.033';
+if ( CheckVersion($DBversion) ) {
+
+    # Add cash_register_actions table
+    $dbh->do(qq{
+        CREATE TABLE  IF NOT EXISTS `cash_register_actions` (
+          `id` int(11) NOT NULL auto_increment, -- unique identifier for each account register action
+          `code` varchar(24) NOT NULL, -- action code denoting the type of action recorded (enum),
+          `register_id` int(11) NOT NULL, -- id of cash_register this action belongs to,
+          `manager_id` int(11) NOT NULL, -- staff member performing the action
+          `amount` decimal(28,6) DEFAULT NULL, -- amount recorded in action (signed)
+          `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+          PRIMARY KEY (`id`),
+          CONSTRAINT `cash_register_actions_manager` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT `cash_register_actions_register` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    });
+
+    # Add cashup permission
+    $dbh->do(qq{
+        INSERT IGNORE permissions (module_bit, code, description)
+        VALUES
+        (25, 'cashup', 'Perform cash register cashup action')
+    });
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 23355 - Add cash_register_actions table)\n";
+    print "Upgrade to $DBversion done (Bug 23355 - Add cash register cashup permissions)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
