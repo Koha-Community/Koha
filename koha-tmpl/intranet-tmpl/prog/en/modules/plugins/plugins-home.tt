@@ -41,11 +41,13 @@
                             </div>
 
                             <div class="btn-group">
-                                <form class="form-inline">
+                                <form class="form-inline" id="plugin-search-form">
                                     <div class="form-group">
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="plugin-search" id="plugin-repo-search" placeholder="Search for plugins" value="[% search_term | html %]"/>
-                                            <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="button" id="plugin-search-button"><i class="fa fa-search"></i></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -200,6 +202,10 @@
                 $(".dropdown").removeClass("open");
                 var plugin_name = $(this).data("plugin-name");
                 return confirmDelete( _("Are you sure you want to uninstall the plugin %s?").format( plugin_name ) );
+            });
+
+            $("#plugin-search-button").on("click", function(){
+                $("#plugin-search-form").submit();
             });
         });
     </script>
