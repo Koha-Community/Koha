@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 11;
 use Test::Exception;
 
 use C4::Circulation qw/AddIssue AddReturn/;

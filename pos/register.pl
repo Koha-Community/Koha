@@ -73,8 +73,8 @@ else {
     if ( $op eq 'cashup' ) {
         $cash_register->add_cashup(
             {
-                staff_id => $logged_in_user->id,
-                amount   => $cash_register->outstanding_accountlines->total
+                manager_id => $logged_in_user->id,
+                amount     => $cash_register->outstanding_accountlines->total
             }
         );
     }

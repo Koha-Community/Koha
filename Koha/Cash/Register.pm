@@ -209,6 +209,13 @@ sub drop_default {
 
 =head3 add_cashup
 
+    my $action = $cash_register->add_cashup(
+        {
+            manager_id => $logged_in_user->id,
+            amount     => $cash_register->outstanding_accountlines->total
+        }
+    );
+
 Add a new cashup action to the till, returns the added action.
 
 =cut
@@ -219,7 +226,7 @@ sub add_cashup {
     my $rs = $self->_result->add_to_cash_register_actions(
         {
             code       => 'CASHUP',
-            manager_id => $params->{staff_id},
+            manager_id => $params->{manager_id},
             amount     => $params->{amount}
         }
     )->discard_changes;

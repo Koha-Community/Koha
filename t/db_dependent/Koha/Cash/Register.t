@@ -160,7 +160,7 @@ subtest 'cashup' => sub {
 
         ok(
             $cashup1 = $register->add_cashup(
-                { user_id => $patron->id, amount => '12.00' }
+                { manager_id => $patron->id, amount => '12.00' }
             ),
             'call successfull'
         );
@@ -184,7 +184,7 @@ subtest 'cashup' => sub {
         plan tests => 3;
 
         my $cashup2 =
-          $register->add_cashup( { user_id => $patron->id, amount => '6.00' } );
+          $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
 
         my $last_cashup = $register->last_cashup;
         is(
@@ -220,7 +220,7 @@ subtest 'cashup' => sub {
         is( $accountlines->count, 2, 'No cashup, all accountlines returned' );
 
         my $cashup3 =
-          $register->add_cashup( { user_id => $patron->id, amount => '2.50' } );
+          $register->add_cashup( { manager_id => $patron->id, amount => '2.50' } );
 
         $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 0, 'Cashup added, no accountlines returned' );
