@@ -1649,14 +1649,9 @@ Composing rels: L</aqorder_users> -> ordernumber
 
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-23 13:21:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f25Xar862YgzWuWq5/LIRA
 
-__PACKAGE__->belongs_to(
-    "guarantor",
-    "Koha::Schema::Result::Borrower",
-    { borrowernumber => "guarantorid" },
-);
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-03 16:19:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+f1QrESEOMGM1coANPgWtQ
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
