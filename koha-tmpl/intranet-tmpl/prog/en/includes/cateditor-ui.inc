@@ -694,79 +694,220 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     }
 
     //> Macro functions
-    function loadMacro( name ) {
+    var canCreatePublic = "[% CAN_user_editcatalogue_create_shared_macros | html %]";
+    var canDeletePublic = "[% CAN_user_editcatalogue_delete_shared_macros | html %]";
+
+    function deleteMacro( id ){
+        $( '#macro-list' ).empty();
+        var shared = macroEditor.activeMacroShared;
+        var id = macroEditor.activeMacroId;
+        macroEditor.activeMacroId = null;
+        api_url = "/api/v1/advancededitormacros/";
+        if( shared ) { api_url += "shared/" }
+        let options = {
+            url: api_url + id,
+            method: "DELETE",
+            contentType: "application/json",
+        };
+        $.ajax(options)
+            .then(function(result) {
+                humanMsg.displayAlert( _("Macro successfully deleted") );
+                showSavedMacros();
+            })
+            .fail(function(err) {
+                humanMsg.displayAlert( _("Failed to delete macro:") + err.responseText, { className: 'humanError' } );
+            });
+    }
+
+
+    function loadMacro( name, id, shared ) {
         $( '#macro-list li' ).removeClass( 'active' );
+        $(".macro_shared").prop("checked",false).hide();
+        $("#delete-macro").prop("disabled",true);
+        macroEditor.setOption( 'readOnly', false );
         macroEditor.activeMacro = name;
+        macroEditor.activeMacroId = id;
 
         if ( !name ) {
             macroEditor.setValue( '' );
             return;
         }
+        $( '#macro-list li[data-name="' + name + '"][data-id="' + id + '"]' ).addClass( 'active' );
+        api_url = "/api/v1/advancededitormacros/";
+        if( shared ) { api_url += "shared/" }
+        let options = {
+            url: api_url + id,
+            method: "GET",
+            contentType: "application/json",
+        };
+        $.ajax(options)
+            .then(function(result) {
+                macroEditor.setValue( result.macro_text );
+                $(".macro_shared").show();
+                if( result.shared ){
+                    $(".macro_shared").prop("checked",true);
+                    if( canCreatePublic ){
+                        macroEditor.setOption( 'readOnly', false );
+                    } else {
+                        macroEditor.setOption( 'readOnly', true );
+                    }
+                    if( canDeletePublic ){
+                        $("#delete-macro").prop("disabled",false);
+                    }
+                } else {
+                    macroEditor.setOption( 'readOnly', false );
+                    $("#delete-macro").prop("disabled",false);
+                }
+                macroEditor.activeMacroShared = result.shared;
+            })
+            .fail(function(err) {
+                humanMsg.displayAlert( _("Failed to load macros:") + err.responseText, { className: 'humanError' } );
+            });
 
-        $( '#macro-list li[data-name="' + name + '"]' ).addClass( 'active' );
-        var macro = Preferences.user.macros[name];
-        macroEditor.setValue( macro.contents );
-        macroEditor.setOption( 'readOnly', false );
-        if ( macro.history ) macroEditor.setHistory( macro.history );
     }
 
-    function storeMacro( name, macro ) {
-        if ( macro ) {
-            Preferences.user.macros[name] = macro;
-        } else {
-            delete Preferences.user.macros[name];
-        }
-
-        Preferences.Save( [% logged_in_user.borrowernumber | html %] );
-    }
-
-    function showSavedMacros( macros ) {
-        var scrollTop = $('#macro-list').scrollTop();
-        $( '#macro-list' ).empty();
+    function convertOldMacros(){
+        $("#convert-macros").remove();
         var macro_list = $.map( Preferences.user.macros, function( macro, name ) {
             return $.extend( { name: name }, macro );
         } );
         macro_list.sort( function( a, b ) {
             return a.name.localeCompare(b.name);
         } );
-        $.each( macro_list, function( undef, macro ) {
-            var $li = $( '<li data-name="' + macro.name + '"><a href="#">' + macro.name + '</a><ol class="macro-info"></ol></li>' );
-            $li.click( function() {
-                loadMacro(macro.name);
-                return false;
-            } );
-            if ( macro.name == macroEditor.activeMacro ) $li.addClass( 'active' );
-            var modified = macro.modified && new Date(macro.modified);
-            $li.find( '.macro-info' ).append(
-                '<li><span class="label">' + _("Last changed:") + '</span>' +
-                ( modified ? ( modified.toLocaleDateString() + ', ' + modified.toLocaleTimeString() ) : _("never") ) + '</li>'
-            );
-            $('#macro-list').append($li);
+        $.each( macro_list, function( index, macro ) {
+            let options = {
+                url: "/api/v1/advancededitormacros/",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: macro.name,
+                    patron_id: [% logged_in_user.borrowernumber | html %],
+                    macro_text: macro.contents,
+                    shared: false
+                })
+            };
+            $.ajax(options)
+                .then(function(undef, result) {
+                    delete Preferences.user.macros[macro.name];
+                    Preferences.Save( [% logged_in_user.borrowernumber | html %] );
+                    if( index == macro_list.length -1 ){
+                        showSavedMacros();
+                    }
+
+                })
+                .fail(function(err) {
+                    humanMsg.displayAlert( _("Failed to create macro:") + err.responseText, { className: 'humanError' } );
+                });
         } );
+    }
+
+    function showSavedMacros( macros ) {
+        var scrollTop = $('#macro-list').scrollTop();
+        $( '#macro-list' ).empty();
+        $("#convert-macros").remove();
+        if( Object.keys(Preferences.user.macros).length ){
+            $convert = $( '<button class="btn btn-default" id="convert-macros" title="Convert browser storage macros"><i class="fa fa-adjust"></i> Convert old macros</button>' );
+            $convert.click( function(){
+                if( !confirm( _("This will retrieve macros stored in the brower, save them in the database, and delete them from the browser. Proceed?") ) ){
+                    return;
+                }
+                convertOldMacros();
+            });
+            $("#macro-toolbar").prepend($convert);
+        }
+        let options = {
+            url: "/api/v1/advancededitormacros/",
+            method: "GET",
+            contentType: "application/json",
+        };
+        $.ajax(options)
+            .then(function(result) {
+                    $.each(result,function( undef, macro ){
+                        var $li = $( '<li data-name="' + macro.name + '" data-id="' + macro.macro_id + '"><a href="#">'+ macro.macro_id + ' - ' + macro.name + '</a><ol class="macro-info"></ol></li>' );
+                        if ( macro.macro_id == macroEditor.activeMacroId ) $li.addClass( 'active' );
+                        $li.click( function() {
+                            loadMacro(macro.name, macro.macro_id, macro.shared);
+                            return false;
+                        } );
+                        $('#macro-list').append($li);
+                    });
+            })
+            .fail(function(err) {
+                humanMsg.displayAlert( _("Failed to load macros:") + err.responseText, { className: 'humanError' } );
+            });
         var $new_li = $( '<li class="new-macro"><a href="#">' + _("New macro...") + '</a></li>' );
         $new_li.click( function() {
             // TODO: make this a bit less retro
             var name = prompt(_("Please enter the name for the new macro:"));
             if (!name) return;
 
-            if ( !Preferences.user.macros[name] ) storeMacro( name, { format: "rancor", contents: "" } );
-            showSavedMacros();
-            loadMacro( name );
+//            if ( !Preferences.user.macros[name] ) storeMacro( name, { format: "rancor", contents: "" } );
+            let options = {
+                url: "/api/v1/advancededitormacros/",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: name,
+                    patron_id: [% logged_in_user.borrowernumber | html %],
+                    macro_text: "",
+                    shared: false
+                })
+            };
+            $.ajax(options)
+                .then(function(undef, result) {
+                    showSavedMacros();
+                    loadMacro( result.name, result.macro_id );
+                })
+                .fail(function(err) {
+                    humanMsg.displayAlert( _("Failed to create macro:") + err.responseText, { className: 'humanError' } );
+                });
         } );
         $('#macro-list').append($new_li);
         $('#macro-list').scrollTop(scrollTop);
     }
 
-    function saveMacro() {
+    function saveMacro(shared) {
         var name = macroEditor.activeMacro;
+        var macro_id = macroEditor.activeMacroId;
+        var was_shared = macroEditor.activeMacroShared;
 
-        if ( !name || macroEditor.savedGeneration == macroEditor.changeGeneration() ) return;
+        if ( !name || macroEditor.savedGeneration == macroEditor.changeGeneration() && was_shared == shared ) return;
 
         macroEditor.savedGeneration = macroEditor.changeGeneration();
-        storeMacro( name, { contents: macroEditor.getValue(), modified: (new Date()).valueOf(), history: macroEditor.getHistory() } );
-        $('#macro-save-message').text(_("Saved"));
-        showSavedMacros();
+        api_url = "/api/v1/advancededitormacros/";
+        if( shared || was_shared ) { api_url += "shared/" }
+
+        let options = {
+            url: api_url + macro_id,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+                name: name,
+                patron_id: [% logged_in_user.borrowernumber | html %],
+                macro_text: macroEditor.getValue(),
+                shared: shared
+            })
+        };
+        $.ajax(options)
+            .then(function(result) {
+                $('#macro-save-message').text(_("Saved"));
+                macroEditor.activeMacroShared = shared;
+                showSavedMacros();
+            })
+            .fail(function(err) {
+                humanMsg.displayAlert( _("Failed to save macro:") + err.responseText, { className: 'humanError' } );
+            });
     }
+
+    $(".macro_shared").change(function(){
+        if(this.checked){
+            saveMacro(true);
+        } else {
+            saveMacro(false);
+        }
+    });
+
+    // END Macro functions
 
     $(document).ready( function() {
         // Editor setup
@@ -844,7 +985,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
                 if ( saveTimeout ) clearTimeout( saveTimeout );
                 saveTimeout = setTimeout( function() {
-                    saveMacro();
+                    saveMacro(macroEditor.activeMacroShared);
 
                     saveTimeout = null;
                 }, 500 );
@@ -995,9 +1136,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         $('#delete-macro').click( function() {
             if ( !macroEditor.activeMacro || !confirm( _("Are you sure you want to delete this macro?") ) ) return;
-
-            storeMacro( macroEditor.activeMacro, undefined );
-            showSavedMacros();
+            deleteMacro();
             loadMacro( undefined );
 
             return false;

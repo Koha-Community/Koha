@@ -264,6 +264,12 @@
         <div id="macro-toolbar" class="btn-toolbar">
             <button class="btn btn-default" id="run-macro" title="Run and edit macros"><i class="fa fa-play"></i> Run macro</button>
             <button class="btn btn-default" id="delete-macro" title="Delete macro"><i class="fa fa-trash"></i> Delete macro</button>
+            <label class="macro_shared" for="public" style="display:none;">Public macro:</label>
+            [% IF CAN_user_editcatalogue_create_shared_macros %]
+                <input class="macro_shared" type="checkbox" name="public" style="display:none;"/>
+            [% ELSE %]
+                <input class="macro_shared" type="checkbox" name="public" style="display:none;" disabled/>
+            [% END %]
             <div id="macro-save-message"></div>
         </div>
     </div>

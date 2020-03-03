@@ -150,7 +150,6 @@ sub add_shared {
         return $c->render( status  => 403,
                            openapi => { error => "To create private macros you must use advancededitor" } );
     }
-
     return try {
         my $macro = Koha::AdvancedEditorMacro->new( _to_model( $c->validation->param('body') ) );
         $macro->store;
