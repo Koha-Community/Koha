@@ -80,7 +80,7 @@
                             [% IF credit.debit %]
                             <tr>
                                 <td>
-                                    [% accountline.accountlines_id %]
+                                    [% accountline.accountlines_id | html %]
                                 </td>
                                 <td>
                                     { "type": "credit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }
@@ -104,7 +104,7 @@
                             [% IF debit.credit %]
                             <tr>
                                 <td>
-                                    [% accountline.accountlines_id %]
+                                    [% accountline.accountlines_id | html %]
                                 </td>
                                 <td>
                                     { "type": "debit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }
