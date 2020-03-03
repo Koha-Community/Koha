@@ -121,53 +121,35 @@
             [% IF register.cashups %]
             <h2>Older transactions</h2>
             <form method="GET" action="/cgi-bin/koha/pos/register.pl">
-			<fieldset class="rows">
-                            Please select a date range to display transactions for:
-                            <ol>
-                                <li>
-                                    <label for="trange_f">From: </label>
-                                    <input type="text" size="10" id="from" name="trange_f" value="[% trange_f | html %]"/>
-                                    <label class="inline" for="trange_t">To: </label>
-                                    [% IF trange_t %]
-                                    <input size="10" id="to" name="trange_t" value="[% trange_t | html %]" type="text"/>
-                                    [% ELSE %]
-                                    <input size="10" id="to" name="trange_t" value="[% register.last_cashup.timestamp | $KohaDates with_hours => 0, dateformat => 'metric' %]" type="text"/>
-                                    [% END %]
-                                    <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
-                                </li>
-                            </ol>
-			</fieldset>
+                <fieldset class="rows">
+                    Please select a date range to display transactions for:
+                    <ol>
+                        <li>
+                            <label for="trange_f">From: </label>
+                            <input type="text" size="10" id="from" name="trange_f" value="[% trange_f | html %]"/>
+                            <label class="inline" for="trange_t">To: </label>
+                            <input size="10" id="to" name="trange_t" value="[% trange_t | $KohaDates with_hours => 0%]" type="text"/>
+                            <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                        </li>
+                    </ol>
+                </fieldset>
 
-            <div class="action">
-	            <input type="hidden" name="registerid" value="[% register.id | html %]">
-	            <input type="submit" value="Display" />
-            </div>
+                <div class="action">
+                    <input type="hidden" name="registerid" value="[% register.id | html %]">
+                    <input type="submit" value="Display" />
+                </div>
             </form>
 
             [% IF trange_f %]
             <table id="past_sales" class="past_sales_table">
                 <thead>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        DATA
-                    </th>
-                    <th>
-                        Transaction
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Total
-                    </th>
-                    <th>
-                        Actions
-                    </th>
+                    <th>ID</th>
+                    <th>DATA</th>
+                    <th>Transaction</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
                     [% FOREACH accountline IN past_accountlines %]
@@ -175,10 +157,11 @@
                             [% FOREACH credit IN accountline.credit_offsets %]
                             [% IF credit.debit %]
                             <tr>
-                                <td>[% accountline.accountlines_id %]</td>
+                                <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "credit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
                                 <td></td>
-                                <td>[%- PROCESS account_type_description account=credit.debit -%]
+                                <td>
+                                    [%- PROCESS account_type_description account=credit.debit -%]
                                     [%- IF credit.debit.description -%] ([% credit.debit.description | html %])[%- END -%]
                                     [%- IF ( credit.debit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% credit.debit.item.biblionumber | uri %]&amp;itemnumber=[% credit.debit.itemnumber | uri %]">[% credit.debit.item.biblio.title | html %]</a>)[%- END -%]
                                 </td>
@@ -196,7 +179,7 @@
                             [% FOREACH debit IN accountline.debit_offsets %]
                             [% IF debit.credit %]
                             <tr>
-                                <td>[% accountline.accountlines_id %]</td>
+                                <td>[% accountline.accountlines_id | html %]</td>
                                 <td>{ "type": "debit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
                                 <td></td>
                                 <td>[%- PROCESS account_type_description account=debit.credit -%]</td>
