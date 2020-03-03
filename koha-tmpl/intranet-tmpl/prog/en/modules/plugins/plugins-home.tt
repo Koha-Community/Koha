@@ -70,9 +70,9 @@
 
                             [% FOREACH sr IN search_results %]
                                 <tr>
-                                    <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name %]</a></td>
-                                    <td>[% sr.result.description %]</td>
-                                    <td>[% sr.repo.name %]</td>
+                                    <td><a href="[% sr.result.html_url | url %]" target="_new">[% sr.result.name | html %]</a></td>
+                                    <td>[% sr.result.description | html %]</td>
+                                    <td>[% sr.repo.name | html %]</td>
                                     <td><a class="btn btn-default btn-sm btn-install-plugin" href="/cgi-bin/koha/plugins/plugins-upload.pl?op=Upload&uploadfile=[% sr.result.install_name | uri %]&uploadlocation=[% sr.result.install_url | uri %]"><i class="fa fa-download"></i> Install</a></td>
                                 </tr>
                             [% END %]
