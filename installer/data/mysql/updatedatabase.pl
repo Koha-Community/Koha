@@ -20668,10 +20668,9 @@ if( CheckVersion( $DBversion ) ) {
             WHERE id NOT IN (
                 SELECT MIN(id)
                 FROM ( SELECT * FROM library_groups ) AS lg
-                WHERE parent_id IS NOT NULL
                 GROUP BY parent_id, branchcode
             )
-            AND parent_id IS NOT NULL;
+            AND NOT(parent_id IS NULL OR branchcode IS NULL);
         |);
         $dbh->do(q|
             ALTER TABLE library_groups
