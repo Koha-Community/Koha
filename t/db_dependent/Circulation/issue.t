@@ -240,9 +240,7 @@ my $stat = $dbh->selectrow_hashref("SELECT * FROM statistics WHERE type = 'renew
 ok( $stat, "Bug 17781 - 'Improper branchcode set during renewal' still fixed" );
 
 subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
-    plan tests => 5;
-
-    $se->mock( 'interface', sub { return 'opac' } );
+    plan tests => 10;
 
     my $item_library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron       = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -261,19 +259,41 @@ subtest 'Show that AddRenewal respects OpacRenewalBranch and interface' => sub {
 
         t::lib::Mocks::mock_preference( 'OpacRenewalBranch', $syspref );
 
-        my $item = $builder->build_sample_item(
-            { library => $item_library->branchcode, itype => $itemtype } );
-        my $opac_renew_issue =
-          C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+        {
+            $se->mock( 'interface', sub { return 'opac' } );
 
-        AddRenewal( $patron->borrowernumber, $item->itemnumber,
-            "Stavromula", $datedue1, $daysago10 );
+            my $item = $builder->build_sample_item(
+                { library => $item_library->branchcode, itype => $itemtype } );
+            my $opac_renew_issue =
+              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
-        my $stat = Koha::Statistics->search(
-            { itemnumber => $item->itemnumber, type => 'renew' } )->next;
-        is( $stat->branch, $expected_branchcode,
-            "->renewal_branchcode is respected for OpacRenewalBranch = $syspref"
-        );
+            AddRenewal( $patron->borrowernumber, $item->itemnumber,
+                "Stavromula", $datedue1, $daysago10 );
+
+            my $stat = Koha::Statistics->search(
+                { itemnumber => $item->itemnumber, type => 'renew' } )->next;
+            is( $stat->branch, $expected_branchcode,
+                "->renewal_branchcode is respected for OpacRenewalBranch = $syspref"
+            );
+        }
+
+        {
+            $se->mock( 'interface', sub { return 'intranet' } );
+
+            my $item = $builder->build_sample_item(
+                { library => $item_library->branchcode, itype => $itemtype } );
+            my $opac_renew_issue =
+              C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+            AddRenewal( $patron->borrowernumber, $item->itemnumber,
+                "Stavromula", $datedue1, $daysago10 );
+
+            my $stat = Koha::Statistics->search(
+                { itemnumber => $item->itemnumber, type => 'renew' } )->next;
+            is( $stat->branch, $logged_in_user->branchcode,
+                "->renewal_branchcode is always logged in branch for intranet"
+            );
+        }
     }
 };
 
