@@ -130,6 +130,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-07-23 13:21:03
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Oaee+hS82IEJHHBGuOXDtw
 
+sub koha_objects_class {
+    'Koha::Cash::Register::Actions';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+sub koha_object_class {
+    'Koha::Cash::Register::Action';
+}
+
 1;
