@@ -53,6 +53,9 @@
                     [% IF ( CAN_user_tools ) %]
                         <li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
                     [% END %]
+                    [% IF ( Koha.Preference('EnablePointOfSale') && Koha.Preference('UseCashRegisters') && CAN_user_cash_management_takepayment ) %]
+                        <li><a href="/cgi-bin/koha/pos/pay.pl">Point of sale</a></li>
+                    [% END %]
                     [% IF ( CAN_user_parameters ) %]
                         <li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li>
                     [% END %]
