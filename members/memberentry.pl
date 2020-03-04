@@ -436,7 +436,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
         delete $newdata{password2};
-        my $patron = eval { Koha::Patron->new(\%newdata)->store };
+        $patron = eval { Koha::Patron->new(\%newdata)->store };
         if ( $@ ) {
             # FIXME Urgent error handling here, we cannot fail without relevant feedback
             # Lot of code will need to be removed from this script to handle exceptions raised by Koha::Patron->store
@@ -532,7 +532,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             delete $newdata{'userid'};
         }
 
-        my $patron = Koha::Patrons->find( $borrowernumber );
+        $patron = Koha::Patrons->find( $borrowernumber );
         $newdata{debarredcomment} = $newdata{debarred_comment};
         delete $newdata{debarred_comment};
         delete $newdata{password2};
