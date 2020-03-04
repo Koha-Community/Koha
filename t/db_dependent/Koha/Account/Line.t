@@ -274,7 +274,7 @@ subtest 'apply() tests' => sub {
             itemnumber     => $item->id,
             branchcode     => $library->id,
             date           => \'NOW()',
-            accounttype    => 'OVERDUE',
+            debit_type_code => 'OVERDUE',
             status         => 'UNRETURNED',
             interface      => 'cli',
             amount => '1',
@@ -287,6 +287,7 @@ subtest 'apply() tests' => sub {
     my $called = 0;
     my $module = new Test::MockModule('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
+    $module->mock('CanBookBeRenewed', sub { return 1; });
     my $credit_renew = $account->add_credit({ amount => 100, user_id => $patron->id, interface => 'commandline' });
     my $debits_renew = Koha::Account::Lines->search({ accountlines_id => $accountline->id })->as_list;
     $credit_renew->apply( { debits => $debits_renew, offset_type => 'Manual Credit' } );
@@ -336,7 +337,7 @@ subtest 'Keep account info when related patron, staff, item or cash_register is 
 
     $patron->delete;
     $line = $line->get_from_storage;
-    is( $line->borro1wernumber, undef, "The account line should not be deleted when the related patron is delete");
+    is( $line->borrowernumber, undef, "The account line should not be deleted when the related patron is delete");
 
     $register->delete;
     $line = $line->get_from_storage;
@@ -370,7 +371,7 @@ subtest 'Renewal related tests' => sub {
         borrowernumber    => $patron->borrowernumber,
         manager_id        => $staff->borrowernumber,
         itemnumber        => $item->itemnumber,
-        accounttype       => "OVERDUE",
+        debit_type_code   => "OVERDUE",
         status            => "UNRETURNED",
         amountoutstanding => 0,
         interface         => 'commandline',
@@ -380,15 +381,15 @@ subtest 'Renewal related tests' => sub {
     $line->amountoutstanding(5);
     is( $line->renewable, 0, "Item is returned as unrenewable when it has outstanding fine" );
     $line->amountoutstanding(0);
-    $line->accounttype("VOID");
+    $line->debit_type_code("VOID");
     is( $line->renewable, 0, "Item is returned as unrenewable when it has the wrong account type" );
-    $line->accounttype("OVERDUE");
+    $line->debit_type_code("OVERDUE");
     $line->status("RETURNED");
     is( $line->renewable, 0, "Item is returned as unrenewable when it has the wrong account status" );
 
 
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 0 );
-    is ($line->renew_item, 0, 'Attempt to renew fails when syspref is not set');
+    is ($line->renew_item, undef, 'Attempt to renew fails when syspref is not set');
     t::lib::Mocks::mock_preference( 'RenewAccruingItemWhenPaid', 1 );
     is_deeply(
         $line->renew_item,
@@ -414,6 +415,7 @@ subtest 'Renewal related tests' => sub {
     my $called = 0;
     my $module = new Test::MockModule('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
+    $module->mock('CanBookBeRenewed', sub { return 1; });
     $line->renew_item;
     is( $called, 1, 'Attempt to renew succeeds when conditions are met' );
 

@@ -125,7 +125,7 @@ sub pay {
             # We're ignoring the definition of $interface above, by all
             # accounts we can't rely on C4::Context::interface, so here
             # we're only using what we've been explicitly passed
-            my $outcome = $fine->renew_item($params->{interface});
+            my $outcome = $fine->renew_item({ interface => $interface });
             push @{$renew_outcomes}, $outcome if $outcome;
         }
 

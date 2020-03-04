@@ -2951,7 +2951,7 @@ sub AddRenewal {
     my $schema = Koha::Database->schema;
     $schema->txn_do(sub{
 
-        if ( !skipfinecalc && C4::Context->preference('CalculateFinesOnReturn') ) {
+        if ( !$skipfinecalc && C4::Context->preference('CalculateFinesOnReturn') ) {
             _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
         }
         _FixOverduesOnReturn( $borrowernumber, $itemnumber, undef, 'RENEWED' );

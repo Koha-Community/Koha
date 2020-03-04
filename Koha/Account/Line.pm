@@ -769,6 +769,8 @@ sub to_api_mapping {
         note              => 'internal_note',
     };
 
+}
+
 =head3 renewable
 
     my $bool = $line->renewable;
@@ -780,8 +782,8 @@ sub renewable {
 
     return (
         $self->amountoutstanding == 0 &&
-        $self->accounttype &&
-        $self->accounttype eq 'OVERDUE' &&
+        $self->debit_type_code &&
+        $self->debit_type_code eq 'OVERDUE' &&
         $self->status &&
         $self->status eq 'UNRETURNED'
     ) ? 1 : 0;

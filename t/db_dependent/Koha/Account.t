@@ -941,7 +941,7 @@ subtest 'pay() renews items when appropriate' => sub {
             borrowernumber => $patron->id,
             itemnumber     => $item->id,
             date           => \'NOW()',
-            accounttype    => 'OVERDUE',
+            debit_type_code => 'OVERDUE',
             status         => 'UNRETURNED',
             interface      => 'cli',
             amount => '1',
@@ -954,6 +954,7 @@ subtest 'pay() renews items when appropriate' => sub {
     my $called = 0;
     my $module = new Test::MockModule('C4::Circulation');
     $module->mock('AddRenewal', sub { $called = 1; });
+    $module->mock('CanBookBeRenewed', sub { return 1; });
     $account->pay(
         {
             amount     => '1',

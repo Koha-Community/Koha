@@ -3326,7 +3326,7 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
