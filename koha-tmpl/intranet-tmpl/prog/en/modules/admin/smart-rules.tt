@@ -719,7 +719,7 @@
                 <tr>
                     <td>
                         <select name="refund">
-                          [#% Default branch %#]
+                          [%# Default branch %]
                           [% IF ( current_branch == '*' ) %]
                             [% IF ( defaultRefundRule ) %]
                             <option value="1" selected="selected">
@@ -736,7 +736,7 @@
                                 No
                             </option>
                           [% ELSE %]
-                          [#% Branch-specific %#]
+                          [%# Branch-specific %]
                             [% IF ( not refundLostItemFeeRule ) %]
                                 <option value="*" selected="selected">
                             [% ELSE %]
