@@ -317,4 +317,4 @@ subtest 'copy_to_branch' => sub {
 
     $schema->storage->txn_rollback;
 
-}
+};
