@@ -102,7 +102,7 @@
                                             [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
                                                 <a class="login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
                                             [% ELSE %]
-                                                <a href="/cgi-bin/koha/opac-user.pl" class="login-link loginModal-trigger" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                                <a href="/cgi-bin/koha/opac-user.pl" class="login-link loginModal-trigger"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
                                             [% END %]
                                         [% END %]
                                     [% END %]
