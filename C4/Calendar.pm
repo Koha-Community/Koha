@@ -690,14 +690,36 @@ sub copy_to_branch {
     my $today = sprintf ISO_DATE_FORMAT, $y,$m,$d;
 
     my $wdh = $self->get_week_days_holidays;
-    $target_calendar->insert_week_day_holiday( weekday => $_, %{ $wdh->{$_} } )
-      foreach keys %$wdh;
-    $target_calendar->insert_day_month_holiday(%$_)
-      foreach values %{ $self->get_day_month_holidays };
-    $target_calendar->insert_exception_holiday(%$_)
-      foreach grep { $_->{date} gt $today } values %{ $self->get_exception_holidays };
-    $target_calendar->insert_single_holiday(%$_)
-      foreach grep { $_->{date} gt $today } values %{ $self->get_single_holidays };
+    my $target_wdh = $target_calendar->get_week_days_holidays;
+    foreach my $key (keys %$wdh) {
+        unless (grep { $_ eq $key } keys %$target_wdh) {
+            $target_calendar->insert_week_day_holiday( weekday => $key, %{ $wdh->{$key} } )
+        }
+    }
+
+    my $dmh = $self->get_day_month_holidays;
+    my $target_dmh = $target_calendar->get_day_month_holidays;
+    foreach my $values (values %$dmh) {
+        unless (grep { $_->{day} eq $values->{day} && $_->{month} eq $values->{month} } values %$target_dmh) {
+            $target_calendar->insert_day_month_holiday(%{ $values });
+        }
+    }
+
+    my $exception_holidays = $self->get_exception_holidays;
+    my $target_exceptions = $target_calendar->get_exception_holidays;
+    foreach my $values ( grep {$_->{date} gt $today} values %{ $exception_holidays }) {
+        unless ( grep { $_->{date} eq $values->{date} } values %$target_exceptions) {
+            $target_calendar->insert_exception_holiday(%{ $values });
+        }
+    }
+
+    my $single_holidays = $self->get_single_holidays;
+    my $target_singles = $target_calendar->get_single_holidays;
+    foreach my $values ( grep {$_->{date} gt $today} values %{ $single_holidays }) {
+        unless ( grep { $_->{date} eq $values->{date} } values %$target_singles){
+            $target_calendar->insert_single_holiday(%{ $values });
+        }
+    }
 
     return 1;
 }
