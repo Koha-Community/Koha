@@ -51,27 +51,13 @@
             [% END %]
             <table id="sales" class="table_sales">
                 <thead>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        DATA
-                    </th>
-                    <th>
-                        Transaction
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Total
-                    </th>
-                    <th>
-                        Actions
-                    </th>
+                    <th>ID</th>
+                    <th>DATA</th>
+                    <th>Transaction</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
                     [% FOREACH accountline IN accountlines %]
@@ -79,21 +65,15 @@
                             [% FOREACH credit IN accountline.credit_offsets %]
                             [% IF credit.debit %]
                             <tr>
-                                <td>
-                                    [% accountline.accountlines_id | html %]
-                                </td>
-                                <td>
-                                    { "type": "credit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }
-                                </td>
+                                <td>[% accountline.accountlines_id | html %]</td>
+                                <td>{ "type": "credit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
                                 <td></td>
                                 <td>
                                     [%- PROCESS account_type_description account=credit.debit -%]
                                     [%- IF credit.debit.description -%] ([% credit.debit.description | html %])[%- END -%]
                                     [%- IF ( credit.debit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% credit.debit.item.biblionumber | uri %]&amp;itemnumber=[% credit.debit.itemnumber | uri %]">[% credit.debit.item.biblio.title | html %]</a>)[%- END -%]
                                 </td>
-                                <td>
-                                    [% credit.debit.amount | $Price %]
-                                </td>
+                                <td>[% credit.debit.amount | $Price %]</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -103,23 +83,15 @@
                             [% FOREACH debit IN accountline.debit_offsets %]
                             [% IF debit.credit %]
                             <tr>
-                                <td>
-                                    [% accountline.accountlines_id | html %]
-                                </td>
-                                <td>
-                                    { "type": "debit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }
-                                </td>
+                                <td>[% accountline.accountlines_id | html %]</td>
+                                <td>{ "type": "debit", "description": "[%- PROCESS account_type_description account=accountline -%] ([% accountline.payment_type | html %])", "amount": "[% accountline.amount * -1 | $Price %]" }</td>
                                 <td></td>
-                                <td>
-                                    [%- PROCESS account_type_description account=debit.credit -%]
-                                </td>
+                                <td>[%- PROCESS account_type_description account=debit.credit -%]</td>
                                 <td>
                                     [%- IF debit.credit.description %][% debit.credit.description | html %][%- END -%]
                                     [%- IF ( debit.credit.itemnumber ) -%] (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% debit.credit.item.biblionumber | uri %]&amp;itemnumber=[% debit.credit.itemnumber | uri %]">[% debit.credit.item.biblio.title | html %]</a>)[%- END -%]
                                 </td>
-                                <td>
-                                    [% debit.credit.amount | $Price %]
-                                </td>
+                                <td>[% debit.credit.amount | $Price %]</td>
                                 <td></td>
                             </tr>
                             [% END %]
