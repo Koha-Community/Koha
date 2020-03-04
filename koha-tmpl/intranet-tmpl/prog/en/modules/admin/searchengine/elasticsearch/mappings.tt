@@ -196,6 +196,11 @@ a.add, a.delete {
                           [% ELSE %]
                             <option value="date">Date</option>
                           [% END %]
+                          [% IF search_field.type == "year" %]
+                            <option value="year" selected="selected">Year</option>
+                          [% ELSE %]
+                            <option value="year">Year</option>
+                          [% END %]
                           [% IF search_field.type == "number" %]
                             <option value="number" selected="selected">Number</option>
                           [% ELSE %]

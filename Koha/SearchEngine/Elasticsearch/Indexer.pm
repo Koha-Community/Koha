@@ -117,6 +117,9 @@ sub update_index {
             type => 'data', # is just hard coded in Indexer.pm?
             body => \@body
         );
+        if ($response->{errors}) {
+            carp "One or more ElasticSearch errors occured when indexing documents";
+        }
     }
     return $response;
 }
