@@ -186,6 +186,9 @@ SKIP: {
         $s->fill_form( { categorycode => $category_code, description => 'Test category', enrolmentperiod => 12, category_type => 'A' } );
         $s->submit_form;
 
+        # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our category is not hidden
+        $driver->find_element('//select[@name="patron_categories_length"]/option[@value="-1"]')->click;
+
         $s->click(
             {
                 href => '/admin/categories.pl?op=delete_confirm&categorycode=' . $category_code,
