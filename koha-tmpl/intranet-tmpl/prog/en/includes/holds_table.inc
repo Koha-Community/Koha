@@ -201,10 +201,10 @@
 
                         [% IF Koha.Preference('AutoResumeSuspendedHolds') %]
                             <label for="suspend_until_[% hold.reserve_id | html %]">[% IF ( hold.suspend ) %] on [% ELSE %] until [% END %]</label>
-                            <input type="text" name="suspend_until" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
+                            <input type="text" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" size="10" value="[% hold.suspend_until | $KohaDates %]" class="datepicker suspend_until_datepicker" />
                             <a href='#' onclick="document.getElementById('suspend_until_[% hold.reserve_id | html %]').value='';">Clear date</a>
                         [% ELSE %]
-                            <input type="hidden" name="suspend_until" id="suspend_until_[% hold.reserve_id | html %]" value=""/>
+                            <input type="hidden" name="suspend_until_[% hold.reserve_id | html %]" id="suspend_until_[% hold.reserve_id | html %]" value=""/>
                         [% END %]
                     [% END %]
                 [% END # IF SuspendHoldsIntranet %]

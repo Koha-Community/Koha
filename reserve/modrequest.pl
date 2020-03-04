@@ -49,7 +49,6 @@ my @reservedates = $query->multi_param('reservedate');
 my @expirationdates = $query->multi_param('expirationdate');
 my @branch = $query->multi_param('pickup');
 my @itemnumber = $query->multi_param('itemnumber');
-my @suspend_until=$query->multi_param('suspend_until');
 my $multi_hold = $query->param('multi_hold');
 my $biblionumbers = $query->param('biblionumbers');
 my $count=@rank;
@@ -70,13 +69,14 @@ if ($CancelBorrowerNumber) {
 else {
     for (my $i=0;$i<$count;$i++){
         undef $itemnumber[$i] if !$itemnumber[$i];
+        my $suspend_until = $query->param( "suspend_until_" . $reserve_id[$i] );
         my $params = {
             rank => $rank[$i],
             reserve_id => $reserve_id[$i],
             expirationdate => $expirationdates[$i] ? dt_from_string($expirationdates[$i]) : undef,
             branchcode => $branch[$i],
             itemnumber => $itemnumber[$i],
-            suspend_until => $suspend_until[$i]
+            defined $suspend_until ? ( suspend_until => $suspend_until ) : (),
         };
         if (C4::Context->preference('AllowHoldDateInFuture')) {
             $params->{reservedate} = $reservedates[$i] ? dt_from_string($reservedates[$i]) : undef;
