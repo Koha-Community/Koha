@@ -133,7 +133,7 @@
                             </div>
                             [% ELSE %]
                             <div class="alert">
-                                There was a problem checking this item out, please check for problems with the <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% whole.value.patron.borrowernumber %]">patron's account</a>
+                                There was a problem checking this item out, please check for problems with the <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% whole.value.patron.borrowernumber | uri %]">patron's account</a>
                             </div>
                             [% END %]
                         [% END %]
@@ -154,9 +154,9 @@
                                                 <option value=""></option>
                                                 [% FOREACH stat IN whole.value.statistical %]
                                                     [% IF stat.borrowernumber == params.inhouse %]
-                                                        <option value="[% stat.cardnumber %]" selected>[% stat.firstname %] [% stat.surname %]</option>
+                                                        <option value="[% stat.cardnumber | html %]" selected>[% INCLUDE 'patron-title.inc' patron = stat %]</option>
                                                     [% ELSE %]
-                                                        <option value="[% stat.cardnumber %]">[% stat.firstname %] [% stat.surname %]</option>
+                                                        <option value="[% stat.cardnumber | html %]">[% INCLUDE 'patron-title.inc' patron = stat %]</option>
                                                     [% END %]
                                                 [% END %]
                                             </select>
@@ -193,7 +193,7 @@
                                         [% IF items.size == 1 %]
                                             <li>
                                                 <label for="barcode" class="ill_checkout_barcode_label">Item barcode:</label>
-                                                [% items.0.barcode %]
+                                                [% items.0.barcode | html %]
                                             </li>
                                         [% END %]
                                         <li class="ill_checkout_branchcode">
@@ -206,7 +206,7 @@
                                             [% ELSE %]
                                                 [% FOREACH branch IN whole.value.libraries.unblessed %]
                                                     [% IF branch.branchcode == branchcode %]
-                                                        [% branch.branchname %]
+                                                        [% branch.branchname | html %]
                                                     [% END %]
                                                 [% END %]
                                             [% END %]
@@ -225,8 +225,8 @@
                                     <input type="hidden" value="check_out" name="method">
                                     <input type="hidden" value="form" name="stage">
                                     [% IF items.size == 1 %]
-                                        <input name="branchcode" type="hidden" value="[% branchcode  %]">
-                                        <input name="item_type" type="hidden" value="[% items.0.itype %]">
+                                        <input name="branchcode" type="hidden" value="[% branchcode | html %]">
+                                        <input name="item_type" type="hidden" value="[% items.0.itype | html %]">
                                     [% END %]
                                     <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                                     <input type="submit" value="Submit">
