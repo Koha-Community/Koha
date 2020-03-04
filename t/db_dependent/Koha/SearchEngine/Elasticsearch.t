@@ -132,7 +132,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 53;
+    plan tests => 59;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -297,7 +297,28 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => 1,
             marc_type => 'marc21',
             marc_field => '952l',
+          },
+          {
+            name => 'copydate',
+            type => 'year',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '260c',
+          },
+          {
+            name => 'date-of-publication',
+            type => 'year',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '008_/7-10',
         },
+
     );
 
     my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
@@ -329,12 +350,14 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     $marc_record_1->append_fields(
         MARC::Field->new('001', '123'),
         MARC::Field->new('007', 'ku'),
+        MARC::Field->new('008', '901111s1962 xxk|||| |00| ||eng c'),
         MARC::Field->new('020', '', '', a => '1-56619-909-3'),
         MARC::Field->new('100', '', '', a => 'Author 1'),
         MARC::Field->new('110', '', '', a => 'Corp Author'),
         MARC::Field->new('210', '', '', a => 'Title 1'),
         MARC::Field->new('240', '', '4', a => 'The uniform title with nonfiling indicator'),
         MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => 'c1962'),
         MARC::Field->new('999', '', '', c => '1234567'),
         # '  ' for testing trimming of white space in boolean value callback:
         MARC::Field->new('952', '', '', 0 => '  ', g => '123.30', o => $callno, l => 3),
@@ -344,20 +367,34 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     my $marc_record_2 = MARC::Record->new();
     $marc_record_2->leader('     cam  22      a 4500');
     $marc_record_2->append_fields(
+        MARC::Field->new('008', '901111s19uu xxk|||| |00| ||eng c'),
         MARC::Field->new('100', '', '', a => 'Author 2'),
         # MARC::Field->new('210', '', '', a => 'Title 2'),
         # MARC::Field->new('245', '', '', a => 'Title: second record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => '1963-2003'),
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
     );
-    my $records = [ $marc_record_1, $marc_record_2 ];
+
+    my $marc_record_3 = MARC::Record->new();
+    $marc_record_3->leader('     cam  22      a 4500');
+    $marc_record_3->append_fields(
+        MARC::Field->new('008', '901111s19uu xxk|||| |00| ||eng c'),
+        MARC::Field->new('100', '', '', a => 'Author 2'),
+        # MARC::Field->new('210', '', '', a => 'Title 3'),
+        # MARC::Field->new('245', '', '', a => 'Title: third record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => ' 89 '),
+        MARC::Field->new('999', '', '', c => '1234568'),
+        MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
+    );
+    my $records = [$marc_record_1, $marc_record_2, $marc_record_3];
 
     $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
 
     my $docs = $see->marc_records_to_documents($records);
 
     # First record:
-    is(scalar @{$docs}, 2, 'Two records converted to documents');
+    is(scalar @{$docs}, 3, 'Two records converted to documents');
 
     is_deeply($docs->[0]->{control_number}, ['123'], 'First record control number should be set correctly');
 
@@ -470,6 +507,16 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'First document uniform_title__sort field should contain the title with the first four initial characters removed'
     );
 
+    # Tests for 'year' type
+    is(scalar @{$docs->[0]->{'date-of-publication'}}, 1, 'First document date-of-publication field should contain one value');
+    is_deeply($docs->[0]->{'date-of-publication'}, ['1962'], 'First document date-of-publication field should be set correctly');
+
+    is_deeply(
+      $docs->[0]->{'copydate'},
+      ['1962'],
+      'First document copydate field should be set correctly'
+    );
+
     # Second record:
 
     is(scalar @{$docs->[1]->{author}}, 1, 'Second document author field should contain one value');
@@ -492,6 +539,26 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         $docs->[1]->{local_classification__sort},
         [substr($long_callno, 0, 255)],
         'Second document local_classification__sort field should be set correctly'
+    );
+
+    # Tests for 'year' type
+    is_deeply(
+      $docs->[1]->{'copydate'},
+      ['1963', '2003'],
+      'Second document copydate field should be set correctly'
+    );
+    is_deeply(
+      $docs->[1]->{'date-of-publication'},
+      ['1900'],
+      'Second document date-of-publication field should be set correctly'
+    );
+
+    # Third record:
+
+    is_deeply(
+      $docs->[2]->{'copydate'},
+      ['0890'],
+      'Third document copydate field should be set correctly'
     );
 
     # Mappings marc_type:

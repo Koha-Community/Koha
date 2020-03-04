@@ -39,7 +39,7 @@ use Search::Elasticsearch;
 use Try::Tiny;
 use YAML::Syck;
 
-use List::Util qw( sum0 reduce );
+use List::Util qw( sum0 reduce all );
 use MARC::File::XML;
 use MIME::Base64;
 use Encode qw(encode);
@@ -209,6 +209,8 @@ sub get_elasticsearch_mappings {
                     $es_type = 'integer';
                 } elsif ($type eq 'isbn' || $type eq 'stdno') {
                     $es_type = 'stdno';
+                } elsif ($type eq 'year') {
+                    $es_type = 'year';
                 }
 
                 if ($search) {
@@ -469,28 +471,44 @@ sub _process_mappings {
         # Copy (scalar) data since can have multiple targets
         # with differing options for (possibly) mutating data
         # so need a different copy for each
-        my $_data = $data;
-        $record_document->{$target} //= [];
+        my $data_copy = $data;
         if (defined $options->{substr}) {
             my ($start, $length) = @{$options->{substr}};
-            $_data = length($data) > $start ? substr $data, $start, $length : '';
+            $data_copy = length($data) > $start ? substr $data_copy, $start, $length : '';
         }
+
+        # Add data to values array for callbacks processing
+        my $values = [$data_copy];
+
+        # Value callbacks takes subfield data (or values from previous
+        # callbacks) as argument, and returns a possibly different list of values.
+        # Note that the returned list may also be empty.
         if (defined $options->{value_callbacks}) {
-            $_data = reduce { $b->($a) } ($_data, @{$options->{value_callbacks}});
-        }
-        if (defined $options->{property}) {
-            $_data = {
-                $options->{property} => $_data
+            foreach my $callback (@{$options->{value_callbacks}}) {
+                # Pass each value to current callback which returns a list
+                # (scalar is fine too) resulting either in a list or
+                # a list of lists that will be flattened by perl.
+                # The next callback will receive the possibly expanded list of values.
+                $values = [ map { $callback->($_) } @{$values} ];
             }
+        }
+
+        # Skip mapping if all values has been removed
+        next unless @{$values};
+
+        if (defined $options->{property}) {
+            $values = [ map { { $options->{property} => $_ } } @{$values} ];
         }
         if (defined $options->{nonfiling_characters_indicator}) {
             my $nonfiling_chars = $meta->{field}->indicator($options->{nonfiling_characters_indicator});
             $nonfiling_chars = looks_like_number($nonfiling_chars) ? int($nonfiling_chars) : 0;
-            if ($nonfiling_chars) {
-                $_data = substr $_data, $nonfiling_chars;
-            }
+            # Nonfiling chars does not make sense for multiple values
+            # Only apply on first element
+            $values->[0] = substr $values->[0], $nonfiling_chars;
         }
-        push @{$record_document->{$target}}, $_data;
+
+        $record_document->{$target} //= [];
+        push @{$record_document->{$target}}, @{$values};
     }
 }
 
@@ -883,6 +901,15 @@ sub _field_mappings {
             # Trim whitespace at both ends
             $value =~ s/^\s+|\s+$//g;
             return $value ? 'true' : 'false';
+        };
+    }
+    elsif ($target_type eq 'year') {
+        $default_options->{value_callbacks} //= [];
+        # Only accept years containing digits and "u"
+        push @{$default_options->{value_callbacks}}, sub {
+            my ($value) = @_;
+            # Replace "u" with "0" for sorting
+            return map { s/[u\s]/0/gr } ( $value =~ /[0-9u\s]{4}/g );
         };
     }
 
