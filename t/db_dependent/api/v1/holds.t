@@ -392,7 +392,7 @@ subtest 'suspend and resume tests' => sub {
 
     my $hold = $builder->build_object(
         {   class => 'Koha::Holds',
-            value => { suspend => 0, suspend_until => undef, waitingdate => undef }
+            value => { suspend => 0, suspend_until => undef, waitingdate => undef, found => undef }
         }
     );
 
