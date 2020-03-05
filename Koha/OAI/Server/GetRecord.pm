@@ -44,9 +44,10 @@ sub new {
     my @bind_params = ($biblionumber);
     if ( $items_included ) {
         # Take latest timestamp of biblio and any items
+        # Or timestamp of deleted items where bib not deleted
         $sql .= "
             UNION
-            SELECT timestamp from deleteditems
+            SELECT deleteditems.timestamp FROM deleteditems JOIN biblio USING (biblionumber)
             WHERE biblionumber=?
             UNION
             SELECT timestamp from items
