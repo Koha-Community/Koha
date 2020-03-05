@@ -827,15 +827,6 @@ sub renew_item {
 
     my $itemnumber = $self->item->itemnumber;
     my $borrowernumber = $self->patron->borrowernumber;
-    # Only do something if this item has no fines left on it
-    my $fine = C4::Overdues::GetFine($itemnumber, $borrowernumber);
-    if ($fine && $fine > 0) {
-        return {
-            itemnumber => $itemnumber,
-            error      => 'has_fine',
-            success    => 0
-        };
-    }
     my ( $can_renew, $error ) = C4::Circulation::CanBookBeRenewed(
         $borrowernumber,
         $itemnumber
