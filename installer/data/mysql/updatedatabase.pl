@@ -20364,6 +20364,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20882 - items.uri to MEDIUMTEXT)\n";
 }
 
+$DBversion = '19.11.03.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE quotes MODIFY timestamp datetime NULL" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24640 - Allow quotes.timestamp to be NULL)\n";
+}
+
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
