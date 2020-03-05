@@ -55,13 +55,24 @@ else {
 
 my $op = $input->param('op') // '';
 if ( $op eq 'cashup' ) {
-    for my $register ( $registers->as_list ) {
+    my $registerid = $input->param('registerid');
+    if ( $registerid ) {
+        my $register = Koha::Cash::Registers->find( { id => $registerid } );
         $register->add_cashup(
             {
                 user_id => $logged_in_user->id,
                 amount  => $register->outstanding_accountlines->total
             }
         );
+    } else {
+        for my $register ( $registers->as_list ) {
+            $register->add_cashup(
+                {
+                    user_id => $logged_in_user->id,
+                    amount  => $register->outstanding_accountlines->total
+                }
+            );
+        }
     }
 }
 
