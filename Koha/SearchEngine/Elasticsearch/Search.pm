@@ -49,7 +49,6 @@ use Koha::SearchEngine::QueryBuilder;
 use Koha::SearchEngine::Search;
 use Koha::Exceptions::Elasticsearch;
 use MARC::Record;
-use Catmandu::Store::ElasticSearch;
 use MARC::File::XML;
 use Data::Dumper; #TODO remove
 use Carp qw(cluck);
@@ -117,15 +116,17 @@ faster than pulling all the data in, usually.
 
 sub count {
     my ( $self, $query ) = @_;
+    my $elasticsearch = $self->get_elasticsearch();
+    my $conf = $self->get_elasticsearch_params();
 
-    my $params = $self->get_elasticsearch_params();
-    $self->store(
-        Catmandu::Store::ElasticSearch->new( %$params, trace_calls => 0, ) )
-      unless $self->store;
+    # TODO: Probably possible to exclude results
+    # and just return number of hits
+    my $result = $elasticsearch->search(
+        index => $conf->{index_name},
+        body => $query
+    );
 
-    my $search = $self->store->bag->search( %$query);
-    my $count = $search->total() || 0;
-    return $count;
+    return $result->{hits}->{total};
 }
 
 =head2 search_compat
@@ -405,18 +406,17 @@ the default value for this setting in case it is not set)
 sub max_result_window {
     my ($self) = @_;
 
-    $self->store(
-        Catmandu::Store::ElasticSearch->new(%{ $self->get_elasticsearch_params })
-    ) unless $self->store;
+    my $elasticsearch = $self->get_elasticsearch();
+    my $conf = $self->get_elasticsearch_params();
 
-    my $index_name = $self->store->index_name;
-    my $settings = $self->store->es->indices->get_settings(
-        index  => $index_name,
-        params => { include_defaults => 'true', flat_settings => 'true' },
+    my $response = $elasticsearch->indices->get_settings(
+        index => $conf->{index_name},
+        flat_settings => 'true',
+        include_defaults => 'true'
     );
 
-    my $max_result_window = $settings->{$index_name}->{settings}->{'index.max_result_window'};
-    $max_result_window //= $settings->{$index_name}->{defaults}->{'index.max_result_window'};
+    my $max_result_window = $response->{$conf->{index_name}}->{settings}->{'index.max_result_window'};
+    $max_result_window //= $response->{$conf->{index_name}}->{defaults}->{'index.max_result_window'};
 
     return $max_result_window;
 }

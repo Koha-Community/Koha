@@ -17,11 +17,6 @@ use t::lib::Mocks;
 use Koha::Database;
 use Koha::SearchEngine::Search;
 
-BEGIN {
-    my $mock = Test::MockObject->new();
-    $mock->fake_module( 'Catmandu::Store::ElasticSearch' );
-}
-
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 

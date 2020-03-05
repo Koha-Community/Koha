@@ -76,11 +76,10 @@ sub is_testable {
     my @needed_module_names;
     my $return_value = 1;
     if ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Indexer/xsm ) {
-        @needed_module_names =
-          ( 'Catmandu::Importer::MARC', 'Catmandu::Store::ElasticSearch' );
+        @needed_module_names = ( 'Search::Elasticsearch' );
     }
     elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Search/xsm ) {
-        @needed_module_names = ( 'Catmandu::Store::ElasticSearch' );
+        @needed_module_names = ( 'Search::Elasticsearch' );
     }
     elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch/xsm ) {
         @needed_module_names = ( 'Search::Elasticsearch' );

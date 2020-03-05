@@ -24,14 +24,8 @@ use List::Util qw(any);
 use base qw(Koha::SearchEngine::Elasticsearch);
 use Data::Dumper;
 
-# For now just marc, but we can do anything here really
-use Catmandu::Importer::MARC;
-use Catmandu::Store::ElasticSearch;
-
 use Koha::Exceptions;
 use C4::Context;
-
-Koha::SearchEngine::Elasticsearch::Indexer->mk_accessors(qw( store ));
 
 =head1 NAME
 
@@ -106,7 +100,7 @@ sub update_index {
     my $documents = $self->marc_records_to_documents($records);
     my @body;
 
-    for (my $i=0; $i < scalar @$biblionums; $i++) {
+    for (my $i = 0; $i < scalar @$biblionums; $i++) {
         my $id = $biblionums->[$i];
         my $document = $documents->[$i];
         push @body, {
@@ -292,18 +286,18 @@ C<$biblionums> is an arrayref of biblionumbers to delete from the index.
 sub delete_index {
     my ($self, $biblionums) = @_;
 
-    if ( !$self->store ) {
-        my $params  = $self->get_elasticsearch_params();
-        $self->store(
-            Catmandu::Store::ElasticSearch->new(
-                %$params,
-                index_settings => $self->get_elasticsearch_settings(),
-                index_mappings => $self->get_elasticsearch_mappings(),
-            )
-        );
+    my $elasticsearch = $self->get_elasticsearch();
+    my $conf  = $self->get_elasticsearch_params();
+
+    my @body = map { { delete => { _id => $_ } } } @{$biblionums};
+    my $result = $elasticsearch->bulk(
+        index => $conf->{index_name},
+        type => 'data',
+        body => \@body,
+    );
+    if ($result->{errors}) {
+        croak "An Elasticsearch error occured during bulk delete";
     }
-    $self->store->bag->delete("$_") foreach @$biblionums;
-    $self->store->bag->commit;
 }
 
 =head2 delete_index_background($biblionums)

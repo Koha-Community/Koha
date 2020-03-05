@@ -90,8 +90,9 @@ instance level and will be reused if method is called multiple times.
 sub get_elasticsearch {
     my $self = shift @_;
     unless (defined $self->{elasticsearch}) {
-        my $conf = $self->get_elasticsearch_params();
-        $self->{elasticsearch} = Search::Elasticsearch->new($conf);
+        $self->{elasticsearch} = Search::Elasticsearch->new(
+            $self->get_elasticsearch_params()
+        );
     }
     return $self->{elasticsearch};
 }
@@ -1129,7 +1130,6 @@ A string that indicates the MARC type that this mapping is for, e.g. 'marc21',
 =item C<$marc_field>
 
 A string that describes the MARC field that contains the data to extract.
-These are of a form suited to Catmandu's MARC fixers.
 
 =back
 
