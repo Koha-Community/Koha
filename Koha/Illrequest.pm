@@ -495,6 +495,8 @@ sub _core_status_graph {
             ui_method_name => 'Check out',
             needs_prefs    => [ 'CirculateILL' ],
             needs_perms    => [ 'user_circulate_circulate_remaining_permissions' ],
+            # An array of functions that all must return true
+            needs_all      => [ sub { my $r = shift;  return $r->biblio; } ],
             method         => 'check_out',
             next_actions   => [ ],
             ui_method_icon => 'fa-upload',
@@ -1049,6 +1051,25 @@ sub requires_moderation {
     return $require_moderation->{$self->status};
 }
 
+=head3 biblio
+
+    my $biblio = $request->biblio;
+
+For a given request, return the biblio associated with it,
+or undef if none exists
+
+=cut
+
+sub biblio {
+    my ( $self ) = @_;
+
+    return if !$self->biblio_id;
+
+    return Koha::Biblios->find({
+        biblionumber => $self->biblio_id
+    });
+}
+
 =head3 check_out
 
     my $stage_summary = $request->check_out;
@@ -1072,9 +1093,8 @@ sub check_out {
         {},
         { order_by => ['branchcode'] }
     );
-    my $biblio = Koha::Biblios->find({
-        biblionumber => $self->biblio_id
-    });
+    my $biblio = $self->biblio;
+
     # Find all statistical patrons
     my $statistical_patrons = Koha::Patrons->search(
         { 'category_type' => 'x' },
