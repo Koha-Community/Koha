@@ -46,9 +46,7 @@ Return the library linked to this cash register
 
 sub library {
     my ($self) = @_;
-    my $rs = $self->_result->branch;
-    return unless $rs;
-    return Koha::Library->_new_from_dbic($rs);
+    return Koha::Library->_new_from_dbic($self->_result->branch);
 }
 
 =head3 cashups
@@ -67,7 +65,7 @@ sub cashups {
     my $rs =
       $self->_result->search_related( 'cash_register_actions',
         $merged_conditions, $attrs );
-    return unless $rs;
+
     return Koha::Cash::Register::Actions->_new_from_dbic($rs);
 }
 
@@ -100,7 +98,6 @@ sub accountlines {
     my ($self) = @_;
 
     my $rs = $self->_result->accountlines;
-    return unless $rs;
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
 
@@ -136,7 +133,7 @@ sub outstanding_accountlines {
     my $rs =
       $self->_result->search_related( 'accountlines', $merged_conditions,
         $attrs );
-    return unless $rs;
+
     return Koha::Account::Lines->_new_from_dbic($rs);
 }
 
@@ -148,6 +145,7 @@ Local store method to prevent direct manipulation of the 'branch_default' field
 
 sub store {
     my ($self) = @_;
+
     $self->_result->result_source->schema->txn_do(
         sub {
             if ( $self->_result->is_column_changed('branch_default') ) {
@@ -163,6 +161,7 @@ sub store {
             }
         }
     );
+
     return $self;
 }
 
