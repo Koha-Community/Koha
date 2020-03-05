@@ -523,7 +523,7 @@ sub get_po_from_target {
                                 }
                             }
                         } else {
-                            if ( length($row->{$field}) > 1                         # discard small strings
+                            if ( defined $row->{$field} and length($row->{$field}) > 1                         # discard null values and small strings
                                  and not $po->{ $row->{$field} } ) {
                                 my $msg = new Locale::PO(
                                             -msgid => $row->{$field}, -msgstr => '',
@@ -653,6 +653,7 @@ sub translate_yaml {
                         }
                     }
                 } else {
+                    next unless defined $row->{$field};                                 # next if null value
                     my $po = $po_ref->{"\"$row->{$field}\""};                           # quoted key
                     if ( $po  and not defined( $po->fuzzy() )                           # not fuzzy
                               and length( $po->msgid() ) > 2                            # not empty msgid
