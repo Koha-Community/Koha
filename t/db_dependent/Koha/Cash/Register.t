@@ -203,6 +203,11 @@ subtest 'cashup' => sub {
     subtest 'outstanding_accountlines' => sub {
         plan tests => 4;
 
+        # add_cashup should not happen simultaneously with any other action
+        # that results in an accountline attached to the same cash register.
+        # In testing, we need to sleep for a second after each action that
+        # adds to the database. (We cannot use Time::Fake as timestamps are
+        # being added at the DB level, not in perl.
         my $accountline1 = $builder->build_object(
             {
                 class => 'Koha::Account::Lines',
@@ -215,12 +220,14 @@ subtest 'cashup' => sub {
                 value => { register_id => $register->id },
             }
         );
+        sleep 1;
 
         my $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 2, 'No cashup, all accountlines returned' );
 
         my $cashup3 =
           $register->add_cashup( { manager_id => $patron->id, amount => '2.50' } );
+        sleep 1;
 
         $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 0, 'Cashup added, no accountlines returned' );
@@ -231,6 +238,7 @@ subtest 'cashup' => sub {
                 value => { register_id => $register->id },
             }
         );
+        sleep 1;
 
         $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 1,
