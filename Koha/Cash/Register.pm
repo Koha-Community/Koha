@@ -126,7 +126,7 @@ sub outstanding_accountlines {
 
     my $local_conditions =
       $since->count
-      ? { 'timestamp' => { '>' => $since->get_column('timestamp')->as_query } }
+      ? { 'date' => { '>' => $since->get_column('timestamp')->as_query } }
       : {};
     my $merged_conditions =
       $conditions
