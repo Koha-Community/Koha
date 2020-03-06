@@ -33,6 +33,7 @@ use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Exception;
+use Test::Deep qw/ cmp_deeply ignore /;
 
 use Test::More tests => 12;
 
@@ -120,7 +121,7 @@ subtest 'Basic object tests' => sub {
 
 subtest 'Working with related objects' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -160,6 +161,16 @@ subtest 'Working with related objects' => sub {
 
     is($illrq_obj->illrequestattributes->count + 1, Koha::Illrequestattributes->search->count,
        "Fetching expected number of Illrequestattributes for our request.");
+
+    is($illrq_obj->biblio, undef, "->biblio returns undef if no biblio");
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+    my $req_bib = $builder->build_object({
+        class => 'Koha::Illrequests',
+        value => {
+            biblio_id      => $biblio->biblionumber
+        }
+    });
+    isa_ok($req_bib->biblio, 'Koha::Biblio', "OK accessing related biblio");
 
     $illrq_obj->delete;
     is(Koha::Illrequestattributes->search->count, 1,
@@ -244,8 +255,13 @@ subtest 'Status Graph tests' => sub {
     # Compare the updated graph to the expected graph
     # The structure we compare against here is just a copy of the structure found
     # in Koha::Illrequest::_core_status_graph() + the new node we created above
-    is_deeply( $new_graph,
+    cmp_deeply( $new_graph,
         {
+        TEST => {
+            prev_actions   => [ ],
+            id             => 'TEST',
+            next_actions   => [ ],
+        },
         NEW => {
             prev_actions => [ ],                           # Actions containing buttons
                                                            # leading to this status
@@ -264,7 +280,7 @@ subtest 'Status Graph tests' => sub {
             name           => 'Requested',
             ui_method_name => 'Confirm request',
             method         => 'confirm',
-            next_actions   => [ 'REQREV', 'COMP' ],
+            next_actions   => [ 'REQREV', 'COMP', 'CHK' ],
             ui_method_icon => 'fa-check',
         },
         GENREQ => {
@@ -273,7 +289,7 @@ subtest 'Status Graph tests' => sub {
             name           => 'Requested from partners',
             ui_method_name => 'Place request with partners',
             method         => 'generic_confirm',
-            next_actions   => [ 'COMP' ],
+            next_actions   => [ 'COMP', 'CHK' ],
             ui_method_icon => 'fa-send-o',
         },
         REQREV => {
@@ -284,11 +300,6 @@ subtest 'Status Graph tests' => sub {
             method         => 'cancel',
             next_actions   => [ 'REQ', 'GENREQ', 'KILL' ],
             ui_method_icon => 'fa-times',
-        },
-        TEST => {
-            prev_actions   => [ ],
-            id             => 'TEST',
-            next_actions   => [ ],
         },
         QUEUED => {
             prev_actions   => [ ],
@@ -314,7 +325,7 @@ subtest 'Status Graph tests' => sub {
             name           => 'Completed',
             ui_method_name => 'Mark completed',
             method         => 'mark_completed',
-            next_actions   => [ ],
+            next_actions   => [ 'CHK' ],
             ui_method_icon => 'fa-check',
         },
         KILL => {
@@ -326,6 +337,27 @@ subtest 'Status Graph tests' => sub {
             next_actions   => [ ],
             ui_method_icon => 'fa-trash',
         },
+        CHK => {
+            prev_actions   => [ 'REQ', 'GENREQ', 'COMP' ],
+            id             => 'CHK',
+            name           => 'Checked out',
+            ui_method_name => 'Check out',
+            needs_prefs    => [ 'CirculateILL' ],
+            needs_perms    => [ 'user_circulate_circulate_remaining_permissions' ],
+            needs_all      => ignore(),
+            method         => 'check_out',
+            next_actions   => [ ],
+            ui_method_icon => 'fa-upload',
+        },
+        RET => {
+            prev_actions   => [ 'CHK' ],
+            id             => 'RET',
+            name           => 'Returned to library',
+            ui_method_name => 'Check in',
+            method         => 'check_in',
+            next_actions   => [ 'COMP' ],
+            ui_method_icon => 'fa-download',
+        }
     },
         "new node + core_status_graph = bigger status graph"
     ) || diag explain $new_graph;
@@ -782,7 +814,12 @@ subtest 'Checking out' => sub {
 
     $schema->storage->txn_begin;
 
-    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itemtype = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            notforloan => 1
+        }
+    });
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
     my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
     my $patron = $builder->build_object({
@@ -850,6 +887,9 @@ subtest 'Checking out' => sub {
     });
 
     # Passed validation
+    #
+    # We need to mock the user environment for AddIssue
+    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
     #
     # Delete the items we created, so we can test that we can create one
     Koha::Items->find({ itemnumber => $item1->itemnumber })->delete;
