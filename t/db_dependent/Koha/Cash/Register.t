@@ -55,12 +55,21 @@ subtest 'library' => sub {
 };
 
 subtest 'accountlines' => sub {
-    plan tests => 3;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
     my $register =
       $builder->build_object( { class => 'Koha::Cash::Registers' } );
+
+    my $accountlines = $register->accountlines;
+    is( ref($accountlines), 'Koha::Account::Lines',
+'Koha::Cash::Register->accountlines should always return a Koha::Account::Lines set'
+    );
+    is( $accountlines->count, 0,
+'Koha::Cash::Register->accountlines should always return the correct number of accountlines'
+    );
+
     my $accountline1 = $builder->build_object(
         {
             class => 'Koha::Account::Lines',
@@ -74,7 +83,7 @@ subtest 'accountlines' => sub {
         }
     );
 
-    my $accountlines = $register->accountlines;
+    $accountlines = $register->accountlines;
     is( ref($accountlines), 'Koha::Account::Lines',
 'Koha::Cash::Register->accountlines should return a set of Koha::Account::Lines'
     );
@@ -146,7 +155,7 @@ subtest 'branch_default' => sub {
 };
 
 subtest 'cashup' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -200,8 +209,41 @@ subtest 'cashup' => sub {
         is( $last_cashup, undef, 'undef is returned when no cashup exists' );
     };
 
-    subtest 'outstanding_accountlines' => sub {
+    subtest 'cashups' => sub {
         plan tests => 4;
+
+        my $cashups = $register->cashups;
+        is( ref($cashups), 'Koha::Cash::Register::Actions',
+'Koha::Cash::Register->cashups should always return a Koha::Cash::Register::Actions set'
+        );
+        is( $cashups->count, 0,
+'Koha::Cash::Register->cashups should always return the correct number of cashups'
+        );
+
+        my $cashup3 =
+          $register->add_cashup( { manager_id => $patron->id, amount => '6.00' } );
+
+        $cashups = $register->cashups;
+        is( ref($cashups), 'Koha::Cash::Register::Actions',
+'Koha::Cash::Register->cashups should return a Koha::Cash::Register::Actions set'
+        );
+        is( $cashups->count, 1,
+'Koha::Cash::Register->cashups should return the correct number of cashups'
+        );
+
+        $cashup3->delete;
+    };
+
+    subtest 'outstanding_accountlines' => sub {
+        plan tests => 6;
+
+        my $accountlines = $register->outstanding_accountlines;
+        is( ref($accountlines), 'Koha::Account::Lines',
+'Koha::Cash::Register->outstanding_accountlines should always return a Koha::Account::Lines set'
+        );
+        is( $accountlines->count, 0,
+'Koha::Cash::Register->outstanding_accountlines should always return the correct number of accountlines'
+        );
 
         my $accountline1 = $builder->build_object(
             {
@@ -216,7 +258,7 @@ subtest 'cashup' => sub {
             }
         );
 
-        my $accountlines = $register->outstanding_accountlines;
+        $accountlines = $register->outstanding_accountlines;
         is( $accountlines->count, 2, 'No cashup, all accountlines returned' );
 
         my $cashup3 =
