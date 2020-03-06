@@ -47,7 +47,7 @@ is( $job->size, "56", '->set() does not scribble over private object data' );
 $job->finish("finished");
 is( $job->status, 'completed', "testing finished" );
 
-ok( $job->results );    #Will return undef unless finished
+ok( $job->results, 'Test if we have results' );
 
 my $second_job = C4::BackgroundJob->new( $sessionID, "making new job" );
 is( ref( C4::BackgroundJob->fetch( $sessionID, $job->id ) ),        "C4::BackgroundJob", 'job_$jobid should be a C4::BackgroundJob for uncleared job 1' );
