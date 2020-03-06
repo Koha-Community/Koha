@@ -35,7 +35,10 @@ $schema->storage->txn_begin;
 
 subtest 'buildKohaItemsNamespace status tests' => sub {
     plan tests => 13;
-    my $item  = $builder->build_sample_item({});
+    my $itype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $item  = $builder->build_sample_item({ itype => $itype->itemtype });
+    $item->biblioitem->itemtype($itemtype->itemtype)->store;
 
     my $xml = C4::XSLT::buildKohaItemsNamespace( $item->biblionumber,[]);
     like($xml,qr{<status>available</status>},"Item is available when no other status applied");
