@@ -130,7 +130,7 @@ sub add_credit {
         my $outstanding_credit = $credit->amountoutstanding;
         if ($debits) {
             # pay them!
-            $outstanding_credit = $credit->apply({ debits => [ $debits->as_list ], offset_type => 'payment' })->{outstanding_amount};
+            $outstanding_credit = $credit->apply({ debits => [ $debits->as_list ], offset_type => 'payment' });
         }
 
         if ($outstanding_credit) {
