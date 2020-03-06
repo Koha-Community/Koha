@@ -57,14 +57,14 @@
 
                         [% BLOCK all_checkin_messages %]
                             [% IF hold_auto_filled %]
-                                <div class="dialog alert hold-auto-filled">
+                                <div class="dialog message hold-auto-filled">
                                     [% IF ( reservenotes ) %]
                                         <h4>Notes: [% reservenotes | html %]</h4>
                                     [% END %]
                                     <h3>Hold filled for:</h3>
                                     <ul>
                                         <li>
-                                            [% INCLUDE 'patron-title.inc' patron=patron %]
+                                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 invert_name=1 %]
                                             <span class="patron-category"> - [% patron.category.description | html %]</span>
                                         </li>
 
@@ -163,9 +163,7 @@
                                         [% FOREACH rc IN ReturnClaims %]
                                             [% SET patron = rc.patron %]
                                             <li>
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
-                                                    [% patron.firstname | html %] [% patron.surname | html %]
-                                                </a>
+                                                [% INCLUDE 'patron-title.inc' hide_patron_infos_if_needed=1 invert_name=1 %]
                                             </li>
                                         [% END %]
                                     </ul>
@@ -175,7 +173,7 @@
                             <!-- Patron has waiting holds -->
                             [% IF ( waiting_holds ) %]
                                 <div id="awaiting-pickup" class="dialog message">
-                                    <h3>[% holdsfirstname | html %] [% holdssurname | html %] has [% waiting_holds | html %] hold(s) waiting for pickup.</h3>
+                                    <h3>[% INCLUDE 'patron-title.inc' patron=issue.patron hide_patron_infos_if_needed=1 invert_name=1 %] has [% waiting_holds | html %] hold(s) waiting for pickup.</h3>
                                     <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber | uri %]">Check out to this patron</a>.</p>
                                 </div>
                             [% END %]
@@ -184,9 +182,7 @@
                             [% IF return_date_was_overriden && issue.patron.is_debarred %]
                                 <div id="restricted_backdated" class="dialog message">
                                     <h3>
-                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issue.patron.borrowernumber | uri %]">
-                                            [% issue.patron.firstname | html %] [% issue.patron.surname | html %]
-                                        </a>
+                                        [% INCLUDE 'patron-title.inc' patron=issue.patron hide_patron_infos_if_needed=1 invert_name=1 %]
                                         is restricted. Please verify this patron should still be restricted.
                                     </h3>
                                 </div>
@@ -418,7 +414,7 @@
                                                     <h4>Hold for:</h4>
                                                     <ul>
                                                         <li>
-                                                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+                                                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
                                                             <span class="patron-category"> - [% patron.category.description | html %]</span>
                                                         </li>
                                                         [% INCLUDE display_holdpatron_address %]
@@ -577,7 +573,7 @@
                                                     <h5>Hold for:</h5>
                                                     <ul>
                                                         <li>
-                                                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
+                                                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 invert_name=1 link_to="circulation_reserves" %]
                                                             <span class="patron-category"> - [% patron.category.description | html %]</span>
                                                         </li>
 
@@ -855,9 +851,7 @@
                                         </td>
                                         <td class="ci-patron">
                                             [% IF ( riloo.duedate ) %]
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.patron.borrowernumber | uri %]">
-                                                    [% riloo.patron.surname | html %], [% riloo.patron.firstname | html %] ([% riloo.patron.category.description | html %])
-                                                </a>
+                                                [% INCLUDE 'patron-title.inc' patron=riloo.patron hide_patron_infos_if_needed=1 invert_name=1 %]
                                                 [% IF riloo.borissuescount %]
                                                     <span class="results_summary nowrap">
                                                         <span class="label">Checkouts:</span>
