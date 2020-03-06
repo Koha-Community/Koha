@@ -34,6 +34,8 @@ use Test::MockObject;
 use Test::MockModule;
 use Test::Exception;
 use Test::Deep qw/ cmp_deeply ignore /;
+use Test::Warn;
+use Carp::Always;
 
 use Test::More tests => 12;
 
@@ -810,7 +812,7 @@ subtest 'Censorship' => sub {
 
 subtest 'Checking out' => sub {
 
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -821,7 +823,7 @@ subtest 'Checking out' => sub {
         }
     });
     my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+    my $biblio = $builder->build_sample_biblio();
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
         value => { category_type => 'x' }
@@ -864,20 +866,8 @@ subtest 'Checking out' => sub {
         inhouse => 1
     });
     # Too many items attached to biblio
-    my $item1 = $builder->build_object({
-        class => 'Koha::Items',
-        value => {
-            biblionumber => $biblio->biblionumber,
-            biblioitemnumber => 1
-        }
-    });
-    my $item2 = $builder->build_object({
-        class => 'Koha::Items',
-        value => {
-            biblionumber => $biblio->biblionumber,
-            biblioitemnumber => 2
-        }
-    });
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
     my $form_stage_two_items = $request->check_out({
         stage     => 'form',
         item_type => $itemtype->itemtype,
@@ -886,32 +876,30 @@ subtest 'Checking out' => sub {
         itemcount => 1
     });
 
-    # Passed validation
-    #
-    # We need to mock the user environment for AddIssue
-    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
-    #
     # Delete the items we created, so we can test that we can create one
-    Koha::Items->find({ itemnumber => $item1->itemnumber })->delete;
-    Koha::Items->find({ itemnumber => $item2->itemnumber })->delete;
-    # Create a biblioitem
-    my $biblioitem = $builder->build_object({
-        class => 'Koha::Biblioitems',
-        value => {
-            biblionumber => $biblio->biblionumber
-        }
-    });
+    $item1->delete;
+    $item2->delete;
+
+    # We need to mock the user environment for AddIssue
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+    #
+
     # First we pass bad parameters to the item creation to test we're
     # catching the failure of item creation
-    # Note: This will generate a DBD::mysql error when running this test!
-    my $form_stage_bad_branchcode = $request->check_out({
-        stage     => 'form',
-        item_type => $itemtype->itemtype,
-        branchcode => '---'
-    });
+    my $form_stage_bad_branchcode;
+    warning_like {
+        $form_stage_bad_branchcode = $request->check_out({
+            stage     => 'form',
+            item_type => $itemtype->itemtype,
+            branchcode => '---'
+        });
+    } qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/,
+    "Item creation fails on bad parameters";
+
     is_deeply($form_stage_bad_branchcode->{value}->{errors}, {
         item_creation => 1
-    });
+    },"We get expected failure of item creation");
+
     # Now create a proper item
     my $form_stage_good_branchcode = $request->check_out({
         stage      => 'form',
@@ -927,7 +915,8 @@ subtest 'Checking out' => sub {
                 NOT_FOR_LOAN => 1,
                 itemtype_notforloan => $itemtype->itemtype
             }
-        }
+        },
+        "We get expected error on notforloan of item"
     );
     # Delete the item that was created
     $biblio->items->delete;
@@ -939,7 +928,7 @@ subtest 'Checking out' => sub {
         }
     });
     # We need to mock the user environment for AddIssue
-    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
     my $form_stage_loanable = $request->check_out({
         stage      => 'form',
         item_type  => $itemtype_loanable->itemtype,
