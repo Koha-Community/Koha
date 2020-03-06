@@ -2637,7 +2637,7 @@ CREATE TABLE `accountlines` (
   `issue_id` int(11) NULL DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
   `itemnumber` int(11) default NULL,
-  `date` date default NULL,
+  `date` timestamp NULL,
   `amount` decimal(28,6) default NULL,
   `description` LONGTEXT,
   `credit_type_code` varchar(80) default NULL,
