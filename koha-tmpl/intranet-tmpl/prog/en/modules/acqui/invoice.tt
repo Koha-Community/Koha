@@ -98,20 +98,23 @@
             <li><span class="label">Status:</span>
                 Closed on [% invoiceclosedate | $KohaDates %]</li>
 
-            <li>
-                <label for="reopen">Reopen: </label>
                 [% IF CAN_user_acquisition_reopen_closed_invoices AND NOT readonly %]
-                    <input type="checkbox" name="reopen" id="reopen" />
-                [% ELSE %]
-                    <input type="checkbox" name="reopen" id="reopen" readonly="disabled" />
-                [% END %]
-            </li>
-            [% ELSE %]
-            <li><span class="label">Status:</span>
-                Open</li>
-
-                <li><label for="close">Close: </label> <input type="checkbox" name="close" id="close" />
+                    <li>
+                        <label for="reopen">Reopen: </label>
+                        <input type="checkbox" name="reopen" id="reopen" />
                     </li>
+                [% END %]
+            [% ELSE %]
+                <li>
+                    <span class="label">Status:</span>
+                    Open
+                </li>
+                [% UNLESS ( readonly ) %]
+                    <li>
+                        <label for="close">Close: </label>
+                        <input type="checkbox" name="close" id="close" />
+                    </li>
+                [% END %]
             [% END %]
             </ol>
         [% UNLESS readonly %]
