@@ -992,8 +992,8 @@ sub _get_marc_mapping_rules {
         if ($self->index eq $Koha::SearchEngine::BIBLIOS_INDEX) {
             # Format is: nonfiling characters indicator => field names list
             %title_fields = (
-                1 => [630, 730, 740],
-                2 => [130, 222, 240, 242, 243, 440, 830]
+                1 => [130, 630, 730, 740],
+                2 => [222, 240, 242, 243, 245, 440, 830]
             );
         }
         elsif ($self->index eq $Koha::SearchEngine::AUTHORITIES_INDEX) {
