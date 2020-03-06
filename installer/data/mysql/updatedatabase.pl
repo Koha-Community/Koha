@@ -21059,6 +21059,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24369 - Add CORS support to Koha)\n";
 }
 
+$DBversion = '19.12.00.037';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q| INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('RenewAccruingItemInOpac', '0', 'If enabled, when the fines on an item accruing is paid off in the OPAC via a payment plugin, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue', '', 'YesNo'); | );
+    
+    $dbh->do( q| INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) VALUES ('RenewAccruingItemWhenPaid', '0', 'If enabled, when the fines on an item accruing is paid off, attempt to renew that item. If the syspref "RenewalPeriodBase" is set to "due date", renewed items may still be overdue', '', 'YesNo'); | );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 23051 - Add RenewAccruingItemInOpac syspref)\n";
+    print "Upgrade to $DBversion done (Bug 23051 - Add RenewAccruingItemWhenPaid syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
