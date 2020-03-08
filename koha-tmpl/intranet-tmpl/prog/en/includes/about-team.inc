@@ -69,13 +69,13 @@
             currently installed Koha version. They will be in these roles up until <strong>[% t.release_date | $KohaDates %]</strong>, when the next
             team will be elected.</p>
 
-            <li><strong>Release maintainer:</strong>
-                  [% FOREACH m IN t.maintainer %]
-                    [% IF m.version == ( v ) %]
+            [% FOREACH m IN t.maintainer %]
+                [% IF m.version == ( v ) %]
+                <li><strong>Release maintainer:</strong>
                       [% INCLUDE person p=m %]
-                    [% END %]
-                  [% END %]
-            </li>
+                </li>
+                [% END %]
+            [% END %]
             
             [% IF t.maintainer_assistants %]
               [% FOREACH m IN t.maintainer_assistants %]
@@ -111,9 +111,19 @@
         [% END %]
 
         [% IF t.documentation %]
+        [%- IF t.documentation.list.size == 1 %]
         <li><strong>Documentation manager:</strong>
             [% INCLUDE person p=t.documentation %]
         </li>
+        [% ELSE %]
+        <li><strong>Documentation managers:</strong>
+            <ul>
+                [% FOREACH doc_manager IN t.documentation %]
+                <li>[% INCLUDE person p=doc_manager %]</li>
+                [% END %]
+            </ul>
+        </li>
+        [% END %]
         [% END %]
 
         [% IF t.documentation_team %]
@@ -133,9 +143,19 @@
         [% END %]
 
         [% IF t.packaging %]
+        [%- IF t.packaging.list.size == 1 %]
         <li><strong>Packaging manager:</strong>
             [% INCLUDE person p=t.packaging %]
         </li>
+        [% ELSE %]
+        <li><strong>Packaging managers:</strong>
+            <ul>
+                [% FOREACH packaging_manager IN t.packaging %]
+                <li>[% INCLUDE person p=packaging_manager %]</li>
+                [% END %]
+            </ul>
+        </li>
+        [% END %]
         [% END %]
 
         [% IF t.ci %]
