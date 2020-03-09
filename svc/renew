@@ -67,7 +67,7 @@ if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference
 }
 
 if ( $data->{renew_okay} ) {
-    $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due, undef, $seen );
+    $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due, undef, undef, $seen );
     $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );
 }
 
