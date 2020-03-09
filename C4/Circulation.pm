@@ -2107,6 +2107,7 @@ sub AddReturn {
         type           => $stat_type,
         itemnumber     => $itemnumber,
         itemtype       => $itemtype,
+        location       => $item->location,
         borrowernumber => $borrowernumber,
         ccode          => $item->ccode,
     });
