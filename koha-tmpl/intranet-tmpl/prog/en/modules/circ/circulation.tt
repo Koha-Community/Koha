@@ -752,7 +752,7 @@
 
                                     [% SET ClaimReturnedWarningThreshold = Koha.Preference('ClaimReturnedWarningThreshold') %]
                                     [% SET return_claims = patron.return_claims %]
-                                    [% IF return_claims.count %]
+                                    [% IF return_claims.count > ClaimReturnedWarningThreshold %]
                                         <li><span class="circ-hlt return-claims">Return claims: Patron has [% return_claims.count | html %] RETURN CLAIMS.</span>
                                     [% END %]
 
