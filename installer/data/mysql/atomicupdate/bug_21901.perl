@@ -34,9 +34,15 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     unless ( foreign_key_exists( 'serial', 'serial_ibfk_1' ) ) {
-        $dbh->do(q|
-            DELETE FROM serial WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
-        |);
+        my $serials = $dbh->selectall_arrayref(q|
+            SELECT serialid FROM serial WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+        |, { Slice => {} });
+        if ( @$serials ) {
+            warn q|WARNING - The following serials are deleted, they were not attached to an existing bibliographic record (serialid): | . join ", ", map { $_->{serialid} } @$serials;
+            $dbh->do(q|
+                DELETE FROM serial WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+            |);
+        }
         $dbh->do(q|
             ALTER TABLE serial
             ADD CONSTRAINT serial_ibfk_1 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
@@ -49,9 +55,15 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     unless ( foreign_key_exists( 'serial', 'serial_ibfk_2' ) ) {
-        $dbh->do(q|
-            DELETE FROM serial WHERE subscriptionid NOT IN (SELECT subscriptionid FROM subscription)
-        |);
+        my $serials = $dbh->selectall_arrayref(q|
+            SELECT serialid FROM serial WHERE subscriptionid NOT IN (SELECT subscriptionid FROM subscription)
+        |, { Slice => {} });
+        if ( @$serials ) {
+            warn q|WARNING - The following serials are deleted, they were not attached to an existing subscription (serialid): | . join ", ", map { $_->{serialid} } @$serials;
+            $dbh->do(q|
+                DELETE FROM serial WHERE subscriptionid NOT IN (SELECT subscriptionid FROM subscription)
+            |);
+        }
         $dbh->do(q|
             ALTER TABLE serial
             ADD CONSTRAINT serial_ibfk_2 FOREIGN KEY (subscriptionid) REFERENCES subscription (subscriptionid) ON DELETE CASCADE ON UPDATE CASCADE
@@ -90,9 +102,16 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     unless ( foreign_key_exists( 'subscription', 'subscription_ibfk_3' ) ) {
-        $dbh->do(q|
-            DELETE FROM subscription WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
-        |);
+        my $subscriptions = $dbh->selectall_arrayref(q|
+            SELECT subscriptionid FROM subscription WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+        |, { Slice => {} });
+        if ( @$subscriptions ) {
+            warn q|WARNING - The following subscriptions are deleted, they were not attached to an existing bibliographic record (subscriptionid): | . join ", ", map { $_->{subscriptionid} } @$subscriptions;
+
+            $dbh->do(q|
+                DELETE FROM subscription WHERE biblionumber NOT IN (SELECT biblionumber FROM biblio)
+            |);
+        }
         $dbh->do(q|
             ALTER TABLE subscription
             ADD CONSTRAINT subscription_ibfk_3 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE
