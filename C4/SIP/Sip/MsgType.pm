@@ -1092,6 +1092,7 @@ sub handle_fee_paid {
 
     my $disallow_overpayment  = $server->{account}->{disallow_overpayment};
     my $payment_type_writeoff = $server->{account}->{payment_type_writeoff} || q{};
+    my $register_id           = $server->{account}->{register_id};
 
     my $is_writeoff = $pay_type eq $payment_type_writeoff;
 
@@ -1104,7 +1105,7 @@ sub handle_fee_paid {
 
     $ils->check_inst_id( $inst_id, "handle_fee_paid" );
 
-    my $pay_result = $ils->pay_fee( $patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency, $is_writeoff, $disallow_overpayment );
+    my $pay_result = $ils->pay_fee( $patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency, $is_writeoff, $disallow_overpayment, $register_id );
     $status = $pay_result->{status};
     my $pay_response = $pay_result->{pay_response};
 
