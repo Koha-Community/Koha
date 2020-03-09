@@ -131,7 +131,7 @@ sub pending {
                         Koha::Patron::Attribute->new(
                         {   borrowernumber => $row->{borrowernumber},
                             code           => $attr->{code},
-                            attribute      => $attr->{value}
+                            attribute      => exists $attr->{attribute} ? $attr->{attribute} : $attr->{value},
                         }
                         );
                 }

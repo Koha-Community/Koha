@@ -131,17 +131,18 @@ sub approve {
                     );
                 }
                 foreach my $attr ( @{$extended_attributes} ) {
+                    $attr->{attribute} = exists $attr->{attribute} ? $attr->{attribute} : $attr->{value};
                     Koha::Patron::Attribute->new(
                         {   borrowernumber => $patron->borrowernumber,
                             code           => $attr->{code},
-                            attribute      => $attr->{value}
+                            attribute      => $attr->{attribute},
                         }
                     )->store
-                        if $attr->{value} # there's a value
+                        if $attr->{attribute} # there's a value
                            or
-                          (    defined $attr->{value} # there's a value that is 0, and not
-                            && $attr->{value} ne ""   # the empty string which means delete
-                            && $attr->{value} == 0
+                          (    defined $attr->{attribute} # there's a value that is 0, and not
+                            && $attr->{attribute} ne ""   # the empty string which means delete
+                            && $attr->{attribute} == 0
                           );
                 }
             }
