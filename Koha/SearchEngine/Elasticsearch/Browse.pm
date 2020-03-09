@@ -49,10 +49,6 @@ as "suggestible" in the database when indexing takes place.
 use base qw(Koha::SearchEngine::Elasticsearch);
 use Modern::Perl;
 
-use Catmandu::Store::ElasticSearch;
-
-Koha::SearchEngine::Elasticsearch::Browse->mk_accessors(qw( store ));
-
 =head2 browse
 
     my $results = $browser->browse($prefix, $field, \%options);
@@ -108,15 +104,14 @@ in order of some form of relevance.
 sub browse {
     my ($self, $prefix, $field, $options) = @_;
 
-    my $params = $self->get_elasticsearch_params();
-    $self->store(
-        Catmandu::Store::ElasticSearch->new(
-            %$params,
-        )
-    ) unless $self->store;
-
     my $query = $self->_build_query($prefix, $field, $options);
-    my $results = $self->store->bag->search(%$query);
+    my $elasticsearch = $self->get_elasticsearch();
+    my $conf = $self->get_elasticsearch_params();
+    my $results = $elasticsearch->search(
+        index => $conf->{index_name},
+        body => $query
+    );
+
     return $results->{suggest}{suggestions}[0]{options};
 }
 

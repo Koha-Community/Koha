@@ -296,7 +296,7 @@ sub delete_index {
         body => \@body,
     );
     if ($result->{errors}) {
-        croak "An Elasticsearch error occured during bulk delete";
+        croak "An Elasticsearch error occurred during bulk delete";
     }
 }
 
