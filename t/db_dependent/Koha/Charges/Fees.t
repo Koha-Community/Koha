@@ -61,12 +61,14 @@ my $itemtype = $builder->build_object(
     {
         class => 'Koha::ItemTypes',
         value => {
-            rentalcharge_daily  => '0.00',
-            rentalcharge_hourly => '0.00',
-            rentalcharge        => '0.00',
-            processfee          => '0.00',
-            defaultreplacecost  => '0.00',
-        },
+            rentalcharge_daily           => '0.00',
+            rentalcharge_daily_calendar  => 1,
+            rentalcharge_hourly          => '0.00',
+            rentalcharge_hourly_calendar => 1,
+            rentalcharge                 => '0.00',
+            processfee                   => '0.00',
+            defaultreplacecost           => '0.00',
+          },
     }
 );
 my $item = $builder->build_object(
@@ -307,7 +309,7 @@ subtest 'from_date accessor' => sub {
 };
 
 subtest 'accumulate_rentalcharge tests' => sub {
-    plan tests => 7;
+    plan tests => 9;
 
     my $fees = Koha::Charges::Fees->new(
         {
@@ -346,6 +348,13 @@ subtest 'accumulate_rentalcharge tests' => sub {
     is( $charge, 6.00,
 'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed'
     );
+
+    $itemtype->rentalcharge_daily_calendar(0)->store();
+    $charge = $fees->accumulate_rentalcharge();
+    is( $charge, 6.00,
+'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and rentalcharge_daily_calendar = 0'
+    );
+    $itemtype->rentalcharge_daily_calendar(1)->store();
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
     # DateTime 1..7 (Mon..Sun), C4::Calender 0..6 (Sun..Sat)
@@ -408,6 +417,13 @@ subtest 'accumulate_rentalcharge tests' => sub {
     is( $charge, 18.00,
 "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u)"
     );
+
+    $itemtype->rentalcharge_hourly_calendar(0)->store();
+    $charge = $fees->accumulate_rentalcharge();
+    is( $charge, 24.00,
+"Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u) and rentalcharge_hourly_calendar = 0"
+    );
+    $itemtype->rentalcharge_hourly_calendar(1)->store();
 
     $calendar->delete_holiday( weekday => $closed_day );
     $charge = $fees->accumulate_rentalcharge();
