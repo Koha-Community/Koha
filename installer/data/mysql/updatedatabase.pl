@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/USr/bin/perl
 
 # Database Updater
 # This script checks for required updates to the database.
@@ -18971,6 +18971,15 @@ $DBversion = "19.05.08.000";
 if ( CheckVersion($DBversion) ) {
         print "Upgrade to $DBversion done (YY.MM.XX release)\n";
             SetVersion ($DBversion);
+}
+
+$DBversion = "19.05.08.001";
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE items MODIFY COLUMN uri MEDIUMTEXT" );
+    $dbh->do( "ALTER TABLE deleteditems MODIFY COLUMN uri MEDIUMTEXT" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20882 - items.uri to MEDIUMTEXT)\n";
 }
 
 # SEE bug 13068
