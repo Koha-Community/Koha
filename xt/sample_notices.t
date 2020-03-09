@@ -22,7 +22,7 @@ use Test::More qw(no_plan);
 
 
 my $root_dir = 'installer/data/mysql';
-my $base_notices_file = "en/mandatory/sample_notices.sql";
+my $base_notices_file = "en/mandatory/sample_notices.yml";
 my @trans_notices_files = qw(
     fr-FR/1-Obligatoire/sample_notices.sql
     fr-CA/obligatoire/sample_notices.sql
@@ -38,7 +38,7 @@ my @trans_notices_files = qw(
 ok(
     open( my $ref_fh, "<", "$root_dir/$base_notices_file" ),
     "Open reference sample notices file $root_dir/$base_notices_file" );
-my $ref_notice = get_notices_from_file( $ref_fh );
+my $ref_notice = get_notices_from_yml_file( $ref_fh );
 my @ref_notices = sort { lc $a cmp lc $b } keys %$ref_notice;
 cmp_ok(
     $#ref_notices, '>=', 0,
@@ -53,7 +53,7 @@ foreach my $file_name ( @trans_notices_files ) {
 # Get sample notices from SQL file populating letters table with INSERT
 # statement.
 #
-sub get_notices_from_file {
+sub get_notices_from_sql_file {
     my $fh = shift;
     my %notice;
     while ( <$fh> ) {
@@ -62,6 +62,16 @@ sub get_notices_from_file {
     }
     return \%notice;
 }
+sub get_notices_from_yml_file {
+    my $fh = shift;
+    my %notice;
+    while ( <$fh> ) {
+        next unless /^\s+code:\s([\_A-Z_]*)$/;
+        $notice{$1} = 1;
+    }
+    return \%notice;
+}
+
 
 
 sub compare_notices {
@@ -69,7 +79,7 @@ sub compare_notices {
     ok(
        open( my $trans_fh,"<", "$root_dir/$trans_file" ),
        "Open translated sample notices file $root_dir/$trans_file" );
-    my $trans_notice = get_notices_from_file( $trans_fh );
+    my $trans_notice = get_notices_from_sql_file( $trans_fh );
     use YAML;
     my @trans_notices = sort { lc $a cmp lc $b } keys %$trans_notice;
     cmp_ok(
