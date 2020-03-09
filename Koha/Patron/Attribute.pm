@@ -106,7 +106,8 @@ displayed instead of the code.
 sub description {
     my ( $self) = @_;
     if ( $self->type->authorised_value_category ) {
-        return $self->authorised_value->lib;
+        my $av = $self->authorised_value;
+        return $av ? $av->lib : "";
     }
     return $self->attribute;
 }
