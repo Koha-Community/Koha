@@ -115,7 +115,6 @@ sub to_api_mapping {
         branchurl        => 'url',
         issuing          => undef,
         branchip         => 'ip',
-        branchprinter    => undef,
         branchnotes      => 'notes',
         marcorgcode      => 'marc_org_code',
     };

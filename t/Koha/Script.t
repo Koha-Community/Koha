@@ -33,7 +33,6 @@ is_deeply(
         'cardnumber'    => undef,
         'firstname'     => 'CLI',
         'branchname'    => undef,
-        'branchprinter' => undef,
         'emailaddress'  => undef,
         'number'        => undef,
         'shibboleth'    => undef,

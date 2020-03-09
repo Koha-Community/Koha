@@ -186,7 +186,6 @@ my $samplebranch = {
     branchemail    => 'sample email',
     branchurl      => 'sample url',
     branchip       => 'sample ip',
-    branchprinter  => undef,
     branchnotes    => 'sample note',
     opac_info      => 'sample opac',
 };
