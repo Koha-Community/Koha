@@ -47,11 +47,23 @@ __PACKAGE__->table("itemtypes");
   is_nullable: 1
   size: [28,6]
 
+=head2 rentalcharge_daily_calendar
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
+
 =head2 rentalcharge_hourly
 
   data_type: 'decimal'
   is_nullable: 1
   size: [28,6]
+
+=head2 rentalcharge_hourly_calendar
+
+  data_type: 'tinyint'
+  default_value: 1
+  is_nullable: 0
 
 =head2 defaultreplacecost
 
@@ -123,8 +135,12 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "rentalcharge_daily",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "rentalcharge_daily_calendar",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "rentalcharge_hourly",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
+  "rentalcharge_hourly_calendar",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
   "defaultreplacecost",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "processfee",
@@ -227,8 +243,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07048 @ 2019-07-04 04:56:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Qo6jabJSQGeYJ542ebSJfg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-09 17:13:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7ojvTzsDvdHPAJMwJrAZ7A
 
 # Use the ItemtypeLocalization view to create the join on localization
 our $LANGUAGE;
