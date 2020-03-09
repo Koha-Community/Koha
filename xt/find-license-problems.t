@@ -42,7 +42,7 @@ sub wanted {
 find({ wanted => \&wanted, no_chdir => 1 }, File::Spec->curdir());
 
 foreach my $name (@files) {
-    open( FILE, $name ) || return 0;
+    open( FILE, $name ) || die "cannot open file $name $!";
     my ( $hascopyright, $hasgpl, $hasv3, $hasorlater, $haslinktolicense,
         $hasfranklinst, $is_not_us ) = (0)x7;
     while ( my $line = <FILE> ) {
