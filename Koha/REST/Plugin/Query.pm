@@ -124,7 +124,7 @@ Generates the DBIC prefetch attribute based on embedded relations, and merges in
             return unless defined $embed;
 
             my @prefetches;
-            foreach my $key (keys %{$embed}) {
+            foreach my $key (sort keys(%{$embed})) {
                 my $parsed = _parse_prefetch($key, $embed, $result_set);
                 push @prefetches, $parsed if defined $parsed;
             }
@@ -353,20 +353,24 @@ sub _merge_embed {
 sub _parse_prefetch {
     my ( $key, $embed, $result_set) = @_;
 
-    return unless exists $result_set->prefetch_whitelist->{$key};
+    my $pref_key = $key;
+    $pref_key =~ s/_count$// if $embed->{$key}->{is_count};
+    return unless exists $result_set->prefetch_whitelist->{$pref_key};
 
-    my $ko_class = $result_set->prefetch_whitelist->{$key};
-    return $key unless defined $embed->{$key}->{children} && defined $ko_class;
+    my $ko_class = $result_set->prefetch_whitelist->{$pref_key};
+    return $pref_key unless defined $embed->{$key}->{children} && defined $ko_class;
 
-    my $prefetch = {};
-    foreach my $child (keys %{$embed->{$key}->{children}}) {
+    my @prefetches;
+    foreach my $child (sort keys(%{$embed->{$key}->{children}})) {
         my $parsed = _parse_prefetch($child, $embed->{$key}->{children}, $ko_class->new);
-        $prefetch->{$key} = $parsed if defined $parsed;
+        push @prefetches, $parsed if defined $parsed;
     }
 
-    return unless scalar(keys %{$prefetch});
+    return $pref_key unless scalar(@prefetches);
 
-    return $prefetch;
+    return {$pref_key => $prefetches[0]} if scalar(@prefetches) eq 1;
+
+    return {$pref_key => \@prefetches};
 }
 
 sub _from_api_param {
