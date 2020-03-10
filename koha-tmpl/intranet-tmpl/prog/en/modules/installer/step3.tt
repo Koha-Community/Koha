@@ -1,3 +1,4 @@
+[% USE raw %]
 [% INCLUDE 'doc-head-open.inc' %]
 
 <title>Koha &rsaquo; Web installer &rsaquo;
@@ -249,7 +250,7 @@
                         <p>Update report :</p>
                         <ul>
                             [% FOREACH update_repor IN update_report %]
-                                <li>[% update_repor.line | html %]</li>
+                                <li>[% update_repor.line | $raw %]</li>
                             [% END %]
                         </ul>
                     [% END %]

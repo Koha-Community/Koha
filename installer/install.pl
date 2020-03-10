@@ -403,7 +403,7 @@ elsif ( $step && $step == 3 ) {
         close $fh;
         if (@report) {
             $template->param( update_report =>
-                  [ map { { line => $_ } } split( /\n/, join( '', @report ) ) ]
+                  [ map { local $_ = $_; $_ =~ s/\t/&emsp;&emsp;/g; { line => $_ } } split( /\n/, join( '', @report ) ) ]
             );
             $template->param( has_update_succeeds => 1 );
         }
