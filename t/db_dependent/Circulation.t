@@ -3820,8 +3820,8 @@ subtest 'Filling a hold should cancel existing transfer' => sub {
 
     t::lib::Mocks::mock_preference('AutomaticItemReturn', 1);
 
-    my $libraryA = $builder->build_object( { class => 'Koha::Libraries' } )->store;
-    my $libraryB = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $libraryA = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $libraryB = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron = $builder->build_object(
         {
             class => 'Koha::Patrons',
@@ -3838,11 +3838,12 @@ subtest 'Filling a hold should cancel existing transfer' => sub {
 
     my ( undef, $message ) = AddReturn( $item->barcode, $libraryA->branchcode, undef, undef );
     is( Koha::Item::Transfers->search({ itemnumber => $item->itemnumber, datearrived => undef })->count, 1, "We generate a transfer on checkin");
-    AddReserve(
-        $libraryA->branchcode, $patron->borrowernumber, $item->biblionumber, '',
-        1, undef, undef, '',
-        undef, $item->itemnumber, undef, undef
-    );
+    AddReserve({
+        branchcode     => $libraryA->branchcode,
+        borrowernumber => $patron->borrowernumber,
+        biblionumber   => $item->biblionumber,
+        itemnumber     => $item->itemnumber
+    });
     my $reserves = Koha::Holds->search({ itemnumber => $item->itemnumber });
     is( $reserves->count, 1, "Reserve is placed");
     ( undef, $message ) = AddReturn( $item->barcode, $libraryA->branchcode, undef, undef );

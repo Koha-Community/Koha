@@ -1142,9 +1142,6 @@ sub ModReserveAffect {
     $hold->itemnumber($itemnumber);
     $hold->set_waiting($transferToDo);
 
-    _koha_notify_reserve( $hold->reserve_id )
-      if ( !$transferToDo && !$already_on_shelf );
-
     if( !$transferToDo ){
         _koha_notify_reserve( $hold->reserve_id ) unless $already_on_shelf;
         my $transfers = Koha::Item::Transfers->search({
@@ -1152,7 +1149,7 @@ sub ModReserveAffect {
             datearrived => undef
         });
         while( my $transfer = $transfers->next ){
-            $transfer->datearrived( DateTime->now( time_zone => C4::Context->tz() ) )->store;
+            $transfer->datearrived( dt_from_string() )->store;
         };
     }
 
