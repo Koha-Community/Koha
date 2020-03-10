@@ -21078,6 +21078,20 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 23112  - Add CirculateILL syspref)\n";
 }
 
+$DBversion = '19.12.00.039';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "DROP TABLE IF EXISTS printers" );
+
+    if( column_exists( 'branches', 'branchprinter' ) ) {
+        $dbh->do( "ALTER TABLE branches DROP COLUMN branchprinter" );
+    }
+
+    $dbh->do(qq{ DELETE FROM systempreferences WHERE variable = "printcirculationslips"} );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17845 - Drop unused table printers and branchprinter column)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
