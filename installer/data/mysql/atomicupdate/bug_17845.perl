@@ -2,8 +2,8 @@ $DBversion = 'XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "DROP TABLE IF EXISTS printers" );
 
-    if( !column_exists( 'branches', 'branchprinter' ) ) {
-      $dbh->do( "ALTER TABLE branches DROP COLUMN branchprinter" );
+    if( column_exists( 'branches', 'branchprinter' ) ) {
+        $dbh->do( "ALTER TABLE branches DROP COLUMN branchprinter" );
     }
 
     $dbh->do(qq{ DELETE FROM systempreferences WHERE variable = "printcirculationslips"} );
