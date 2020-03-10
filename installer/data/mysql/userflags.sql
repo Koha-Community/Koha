@@ -22,5 +22,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (22,'ill','The Interlibrary Loans Module',0),
 (23,'self_check','Self check modules',0),
 (24, 'stockrotation', 'Manage stockrotation operations', 0),
-(25, 'cash_management', 'Cash management', 0)
+(25, 'cash_management', 'Cash management', 0),
+(26, 'problem_reports', 'Manage problem reports', 0)
 ;

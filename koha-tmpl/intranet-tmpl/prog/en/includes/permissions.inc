@@ -72,6 +72,9 @@
     [%- CASE 'cash_management' -%]
         <span class="main_permission cash_management_permission">Cash management</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'problem_reports' -%]
+        <span class="main_permission problem_reports_permission">OPAC problem reports management</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
@@ -717,6 +720,12 @@
     [%- CASE 'anonymous_refund' -%]
         <span class="sub_permission anonymous_refund_subpermission">
             Perform anonymous refund actions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+  [%# problem_reports %]
+    [%- CASE 'manage_problem_reports' -%]
+        <span class="sub_permission manage_problem_reports_subpermission">
+            Manage OPAC problem reports
         </span>
         <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
