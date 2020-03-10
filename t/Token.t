@@ -27,7 +27,7 @@ use C4::Context;
 use Koha::Token;
 
 C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv(0,42,0,'firstname','surname', 'CPL', 'Library 1', 0, ', ');
+C4::Context->set_userenv(0,42,0,'firstname','surname', 'CPL', 'Library 1', 0, '');
 
 my $tokenizer = Koha::Token->new;
 is( length( $tokenizer->generate ), 1, "Generate without parameters" );
@@ -67,8 +67,7 @@ subtest 'Same id (cookie CGISESSID) with an other logged in user' => sub {
     $result = $tokenizer->check_csrf({
         session_id => $id, token => $csrftoken,
     });
-    is( $result, 1, "CSRF token verified" );
-    C4::Context->set_userenv(0,43,0,'firstname','surname', 'CPL', 'Library 1', 0, ', ');
+    C4::Context->set_userenv(0,43,0,'firstname','surname', 'CPL', 'Library 1', 0, '');
     $result = $tokenizer->check_csrf({
         session_id => $id, token => $csrftoken,
     });
@@ -77,7 +76,7 @@ subtest 'Same id (cookie CGISESSID) with an other logged in user' => sub {
 
 subtest 'Same logged in user with another session (cookie CGISESSID)' => sub {
     plan tests => 2;
-    C4::Context->set_userenv(0,42,0,'firstname','surname', 'CPL', 'Library 1', 0, ', ');
+    C4::Context->set_userenv(0,42,0,'firstname','surname', 'CPL', 'Library 1', 0, '');
     $csrftoken = $tokenizer->generate_csrf({ session_id => $id });
     $result = $tokenizer->check_csrf({
         session_id => $id, token => $csrftoken,

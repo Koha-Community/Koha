@@ -47,7 +47,7 @@ sub import {
         # Set userenv
         C4::Context->_new_userenv(1);
         C4::Context->set_userenv(
-            undef, undef, undef, 'CRON', 'CRON', undef,
+            undef, undef, undef, 'CRON', 'CRON',
             undef, undef, undef, undef,  undef
         );
 
@@ -58,7 +58,7 @@ sub import {
     else {
         # Set userenv
         C4::Context->set_userenv(
-            undef, undef, undef, 'CLI', 'CLI', undef,
+            undef, undef, undef, 'CLI', 'CLI',
             undef, undef, undef, undef,  undef
         );
 

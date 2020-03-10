@@ -41,7 +41,7 @@ if ($list_batches) {
 
 # FIXME dummy user so that logging won't fail
 # in future, probably should tie to a real user account
-C4::Context->set_userenv(0, 'batch', 0, 'batch', 'batch', 'batch', 'batch', 'batch');
+C4::Context->set_userenv(0, 'batch', 0, 'batch', 'batch', 'batch', 'batch');
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
