@@ -162,7 +162,7 @@ BEGIN {
             itemnumber       => $itemnumber,
             found            => $found,
             itemtype         => $itemtype,
-            item_gorup_id    => $item_group_id
+            item_group_id    => $item_group_id
         }
     );
 
@@ -956,6 +956,7 @@ sub CheckReserves {
                 # See if this item is more important than what we've got so far
                 if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
                     $item ||= Koha::Items->find($itemnumber);
+                    next if $res->{item_group_id} && ( !$item->item_group || $item->item_group->id != $res->{item_group_id} );
                     next if $res->{itemtype} && $res->{itemtype} ne $item->effective_itemtype;
                     $patron ||= Koha::Patrons->find( $res->{borrowernumber} );
                     my $branch = GetReservesControlBranch( $item->unblessed, $patron->unblessed );
@@ -1748,7 +1749,8 @@ sub _Findgroupreserve {
                reserves.itemnumber          AS itemnumber,
                reserves.reserve_id          AS reserve_id,
                reserves.itemtype            AS itemtype,
-               reserves.non_priority        AS non_priority
+               reserves.non_priority        AS non_priority,
+               reserves.item_group_id           AS item_group_id
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (reserve_id)
@@ -1784,16 +1786,19 @@ sub _Findgroupreserve {
                reserves.itemnumber          AS itemnumber,
                reserves.reserve_id          AS reserve_id,
                reserves.itemtype            AS itemtype,
-               reserves.non_priority        AS non_priority
+               reserves.non_priority        AS non_priority,
+               reserves.item_group_id           AS item_group_id
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (reserve_id)
+        LEFT JOIN item_group_items ON ( item_group_items.item_id = hold_fill_targets.itemnumber )
         WHERE found IS NULL
         AND priority > 0
         AND item_level_request = 0
         AND hold_fill_targets.itemnumber = ?
         AND reservedate <= DATE_ADD(NOW(),INTERVAL ? DAY)
         AND suspend = 0
+        AND reserves.item_group_id = item_group_items.item_group_id
         ORDER BY priority
     };
     $sth = $dbh->prepare($title_level_target_query);
@@ -1819,7 +1824,8 @@ sub _Findgroupreserve {
                reserves.itemnumber                 AS itemnumber,
                reserves.reserve_id                 AS reserve_id,
                reserves.itemtype                   AS itemtype,
-               reserves.non_priority        AS non_priority
+               reserves.non_priority               AS non_priority,
+               reserves.item_group_id              AS item_group_id
         FROM reserves
         WHERE reserves.biblionumber = ?
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
