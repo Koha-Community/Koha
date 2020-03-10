@@ -2359,6 +2359,7 @@ sub TransformHtmlToMarc {
         }
     }
 
+    @fields = sort { $a->tag() cmp $b->tag() } @fields;
     $record->append_fields(@fields);
     return $record;
 }
