@@ -17,11 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Circulation;
+use C4::Reserves;
 use Koha::DateUtils qw( dt_from_string );
 
 my $builder = t::lib::TestBuilder->new;
@@ -31,13 +32,16 @@ my @got;
 my @wanted;
 
 #Transfert on unknown barcode
-my $badbc = 'wherethehelldoyoucomefrom';
-@got = C4::Circulation::transferbook( $library->{branchcode}, $badbc );
-@wanted = ( 0, { 'BadBarcode' => $badbc } );
-is_deeply( \@got , \@wanted, 'bad barcode case');
+my $item = $builder->build_sample_item();
+my $badbc = $item->barcode;
+$item->delete;
+
+my ( $dotransfer, $messages ) = C4::Circulation::transferbook( $library->{branchcode}, $badbc );
+is( $dotransfer, 0, "Can't transfer a bad barcode");
+is_deeply( $messages, { BadBarcode => $badbc }, "We got the expected barcode");
 
 subtest 'transfer an issued item' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
     t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
@@ -61,6 +65,16 @@ subtest 'transfer an issued item' => sub {
     # We are making sure there is no regression, feel free to change the behavior if needed.
     # * WasReturned does not seem like a variable that should contain a borrowernumber
     # * Should we return even if the transfer did not happen? (same branches)
-    my @got = transferbook( $library->branchcode, $item->barcode );
-    is( $got[1]->{WasReturned}, $patron->borrowernumber, 'transferbook should have return a WasReturned flag is the item was issued before the transferbook call');
+    my ($dotransfer, $messages) = transferbook( $library->branchcode, $item->barcode );
+    is( $messages->{WasReturned}, $patron->borrowernumber, 'transferbook should have return a WasReturned flag is the item was issued before the transferbook call');
+
+    AddReserve({
+        branchcode     => $item->homebranch,
+        borrowernumber => $patron->borrowernumber,
+        biblionumber   => $item->biblionumber,
+        itemnumber     => $item->itemnumber,
+    });
+    ($dotransfer, $messages ) = transferbook( $library->branchcode, $item->barcode );
+    is( $messages->{ResFound}->{ResFound}, 'Reserved', "We found the reserve");
+    is( $messages->{ResFound}->{itemnumber}, $item->itemnumber, "We got the reserve info");
 };
