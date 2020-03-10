@@ -112,12 +112,6 @@ __PACKAGE__->table("branches");
   is_nullable: 1
   size: 15
 
-=head2 branchprinter
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
 =head2 branchnotes
 
   data_type: 'longtext'
@@ -183,8 +177,6 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", is_nullable => 1 },
   "branchip",
   { data_type => "varchar", is_nullable => 1, size => 15 },
-  "branchprinter",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
   "branchnotes",
   { data_type => "longtext", is_nullable => 1 },
   "opac_info",
@@ -737,8 +729,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-12-26 10:51:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vxx2lpU/W6cC5muhVAO1jw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-10 09:57:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:juk2V/100I2EIrxFNhjI7A
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
