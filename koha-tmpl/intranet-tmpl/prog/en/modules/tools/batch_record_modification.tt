@@ -269,7 +269,7 @@
                                     <select name="add_bibs_to_list" id="add_bibs_to_list">
                                         <option value="">Select a list</option>
                                         [% FOREACH list IN lists %]
-                                            <option class="shelf" value="[% list.shelfnumber %]">[% list.shelfname %]</option>
+                                            <option class="shelf" value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
                                         [% END %]
                                     </select>
                                 </li>
@@ -401,7 +401,7 @@
                     var bibs = new Array();
                     [% FOREACH message IN messages %]
                         [% IF message.code == 'biblio_modified' %]
-                            bibs.push("biblionumber="+[% message.biblionumber %]);
+                            bibs.push("biblionumber="+[% message.biblionumber | html %]);
                         [% END %]
                     [% END %]
                     var bibstring = bibs.join("&");
