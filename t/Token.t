@@ -67,6 +67,7 @@ subtest 'Same id (cookie CGISESSID) with an other logged in user' => sub {
     $result = $tokenizer->check_csrf({
         session_id => $id, token => $csrftoken,
     });
+    is( $result, 1, "CSRF token verified" );
     C4::Context->set_userenv(0,43,0,'firstname','surname', 'CPL', 'Library 1', 0, '');
     $result = $tokenizer->check_csrf({
         session_id => $id, token => $csrftoken,
