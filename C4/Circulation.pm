@@ -356,8 +356,7 @@ sub transferbook {
       CheckReserves( $itemnumber );
     if ( $resfound and not $ignoreRs ) {
         $resrec->{'ResFound'} = $resfound;
-
-        #         $messages->{'ResFound'} = $resrec;
+        $messages->{'ResFound'} = $resrec;
         $dotransfer = 1;
     }
 

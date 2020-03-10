@@ -185,6 +185,7 @@ my $biblionumber;
 if ($found) {
     my $res = $messages->{'ResFound'};
     $itemnumber = $res->{'itemnumber'};
+    $borrowernumber = $res->{'borrowernumber'};
 
     if ( $res->{'ResFound'} eq "Waiting" ) {
         $waiting = 1;
