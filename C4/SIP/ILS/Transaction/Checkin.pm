@@ -56,20 +56,23 @@ sub do_checkin {
     }
     my $barcode = $self->{item}->id;
 
-    $return_date =   substr( $return_date, 0, 4 )
-                   . '-'
-                   . substr( $return_date, 4, 2 )
-                   . '-'
-                   . substr( $return_date, 6, 2 )
-                   . q{ }
-                   . substr( $return_date, 12, 2 )
-                   . ':'
-                   . substr( $return_date, 14, 2 )
-                   . ':'
-                   . substr( $return_date, 16, 2 );
+    if ( $return_date ) {
+        $return_date =   substr( $return_date, 0, 4 )
+                       . '-'
+                       . substr( $return_date, 4, 2 )
+                       . '-'
+                       . substr( $return_date, 6, 2 )
+                       . q{ }
+                       . substr( $return_date, 12, 2 )
+                       . ':'
+                       . substr( $return_date, 14, 2 )
+                       . ':'
+                       . substr( $return_date, 16, 2 );
+        $return_date = dt_from_string($return_date);
+    }
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
-    my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, dt_from_string($return_date));
+    my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, $return_date);
 
     if ( $checked_in_ok ) {
         delete $messages->{ItemLocationUpdated};
