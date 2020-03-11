@@ -313,8 +313,12 @@ foreach my $field (@fields) {
                 $subf[$i][1], '', $tagslib, '', 'opac' );
         }
 
-        if ( $subf[$i][0] eq 'd' || $subf[$i][0] eq 'q' || $subf[$i][0] eq 'r' || $subf[$i][0] eq 's' || $subf[$i][0] eq 'w' ){
-            # date accessioned || on loan || date last seen || date last borrowed || replacement price date
+        if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.dateaccessioned' ||
+            $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.onloan' ||
+            $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.datelastseen' ||
+            $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.datelastborrowed' ||
+            $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.replacementpricedate'
+        ){
             $item->{$subf[$i][0]} = output_pref({ dt => dt_from_string( $item->{$subf[$i][0]} ), dateonly => 1 });;
         }
     }
