@@ -1,0 +1,68 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Copyright 2020 Aleisha Amohia <aleisha@catalyst.net.nz>
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+use JSON qw( to_json );
+use CGI;
+use C4::Service;
+use C4::Auth qw /check_cookie_auth/;
+use C4::Output qw(:DEFAULT :ajax);
+use Koha::ProblemReports;
+
+=head1 NAME
+
+svc/problem_reports - Web service for managing OPAC problem reports
+
+=head1 DESCRIPTION
+
+=cut
+
+# AJAX requests
+my $is_ajax = is_ajax();
+my $query = new CGI;
+my ( $auth_status, $sessionID ) = check_cookie_auth( $query->cookie('CGISESSID'), { problem_reports => 1 } );
+if ( $auth_status ne "ok" ) {
+    exit 0;
+}
+if ($is_ajax) {
+    my $report_id = $query->param('report_id');
+    my $report = Koha::ProblemReports->find($report_id);
+    my $action = $query->param('action');
+    my $status = 'success';
+    if ( $action eq 'viewed' ) {
+        $report->set({ status => 'V' })->store;
+        if ( $report->status ne 'V' ) {
+            $status = 'failure';
+        }
+    } elsif ( $action eq 'closed' ) {
+        $report->set({ status => 'C' })->store;
+        if ( $report->status ne 'C' ) {
+            $status = 'failure';
+        }
+    } elsif ( $action eq 'new' ) {
+        $report->set({ status => 'N' })->store;
+        if ( $report->status ne 'N' ) {
+            $status = 'failure';
+        }
+    }
+    my $json = to_json ( { status => $status } );
+    output_with_http_headers $query, undef, $json, 'js';
+    exit;
+}

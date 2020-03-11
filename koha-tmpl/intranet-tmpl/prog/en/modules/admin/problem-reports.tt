@@ -1,0 +1,235 @@
+[% USE raw %]
+[% USE Asset %]
+[% USE Koha %]
+[% USE KohaDates %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; OPAC problem reports</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_problem-reports" class="admin">
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+    OPAC problem reports
+</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+            <h1>OPAC problem reports</h1>
+
+            <div class="dialog alert" id="error" style="display:none;"></div>
+
+            [% IF ( selected_count ) %]
+                <div class="dialog message">
+                    [% IF ( action == 'viewed' ) %]
+                        <span>[% selected_count | html %] problem report(s) marked as viewed.</span>
+                    [% ELSIF ( action == 'closed' ) %]
+                        <span>[% selected_count | html %] problem report(s) marked as closed.</span>
+                    [% ELSIF ( action == 'new' ) %]
+                        <span>[% selected_count | html %] problem report(s) marked as new.</span>
+                    [% ELSE %]
+                        <span>Failed to change the status of [% selected_count | html %] problem report(s).</span>
+                    [% END %]
+                </div>
+            [% END %]
+
+            [% IF ( problem_reports.count ) %]
+                <form id="mark_selected" method="post" action="/cgi-bin/koha/admin/problem-reports.pl">
+                    <div id="toolbar" class="btn-toolbar">
+                        <button type="submit" class="btn btn-default markviewed" name="mark_selected-viewed" value="viewed" disabled="disabled"><i class="fa fa-eye"></i> Mark viewed</button>
+                        <button type="submit" class="btn btn-default markclosed" name="mark_selected-closed" value="closed" disabled="disabled"><i class="fa fa-times-circle"></i> Mark closed</button>
+                        <button type="submit" class="btn btn-default marknew" name="mark_selected-new" value="new" disabled="disabled"><i class="fa fa-star"></i> Mark new</button>
+                    </div>
+
+                    <fieldset class="action" style="cursor:pointer;">
+                        <a class="SelectAll"><i class="fa fa-check"></i> Select all</a>
+                        | <a class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                        | <a class="HideViewed"><i class="fa fa-minus-square"></i> Hide viewed</a>
+                        | <a class="HideClosed"><i class="fa fa-minus-square"></i> Hide closed</a>
+                        | <a class="HideNew"><i class="fa fa-minus-square"></i> Hide new</a>
+                        | <a class="ShowAll"><i class="fa fa-bars"></i> Show all</a>
+                    </fieldset>
+
+                    <table id="problemreportstable">
+                        <thead>
+                            <tr>
+                                <th class="NoSort">&nbsp;</th>
+                                <th class="anti-the">Message</th>
+                                <th>Problem page</th>
+                                <th class="title-string">Created on</th>
+                                <th>Set by</th>
+                                <th>Status</th>
+                                <th class="NoSort">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH report IN problem_reports %]
+                                <tr>
+                                    <td><input type="checkbox" name="report_ids" value="[% report.reportid | html %]"></td>
+                                    <td>
+                                        <b>[% report.title | html %]</b><br>
+                                        [% report.content | html %]
+                                    </td>
+                                    <td><a href="[% report.problempage | uri %]">[% report.problempage | html %]</a></td>
+                                    <td><span title="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</span></td>
+                                    <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
+                                    <td class="status[% report.status | html %]" name="status">
+                                        [% IF ( report.status == 'V' ) %]
+                                            <span id="status_[% report.reportid | html %]">Viewed</span>
+                                        [% ELSIF ( report.status == 'C' ) %]
+                                            <span id="status_[% report.reportid | html %]">Closed</span>
+                                        [% ELSE %]
+                                            <span id="status_[% report.reportid | html %]">New</span>
+                                        [% END %]
+                                    </td>
+                                    <td class="actions">
+                                        [% IF ( report.status == 'N' ) %]
+                                            <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" disabled="disabled" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
+                                        [% ELSIF ( report.status == 'V' ) %]
+                                            <button name="viewed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
+                                        [% ELSE %]
+                                            <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+
+                </form>
+
+            [% ELSE %]
+                <div class="dialog message">There are currently no problem reports.</div>
+            [% END %] <!-- problem reports -->
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+
+    </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function(){
+            $("#problemreportstable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "order": [[ 1, "asc" ]],
+                "aoColumnDefs": [
+                    { "orderable": false, "searchable": false, 'targets': [ 'NoSort' ] },
+                    { "type": "title-string", "targets" : [ "title-string" ] },
+                    { "type": "anti-the", "targets": [ "anti-the" ] }
+                ],
+                "pagingType": "full"
+            }));
+
+            $(".SelectAll").on("click", function(){
+                $("input[name='report_ids'][type='checkbox']").prop("checked", true);
+                $(".markviewed").prop("disabled", false);
+                $(".markclosed").prop("disabled", false);
+                $(".marknew").prop("disabled", false);
+            });
+
+            $(".ClearAll").on("click", function(){
+                $("input[name='report_ids'][type='checkbox']").prop("checked", false);
+                $(".markviewed").prop("disabled", true);
+                $(".markclosed").prop("disabled", true);
+                $(".marknew").prop("disabled", true);
+            });
+
+            $(".HideViewed").on("click", function(){
+                $(".statusV").parent().hide();
+            });
+
+            $(".HideClosed").on("click", function(){
+                $(".statusC").parent().hide();
+            });
+
+            $(".HideNew").on("click", function(){
+                $(".statusN").parent().hide();
+            });
+
+            $(".ShowAll").on("click", function(){
+                $("tr").show();
+            });
+
+            $("#error").hide();
+
+            $("#problemreportstable").on("change", "input[type='checkbox']", function(){
+                if ( $("input[type='checkbox']").is(":checked") ) {
+                    $(".markviewed").prop("disabled", false);
+                    $(".markclosed").prop("disabled", false);
+                    $(".marknew").prop("disabled", false);
+                } else {
+                    $(".markviewed").prop("disabled", true);
+                    $(".markclosed").prop("disabled", true);
+                    $(".marknew").prop("disabled", true);
+                }
+            });
+
+            $("#problemreportstable").on("click", "button.viewed, button.closed, button.new", function(event){
+                event.preventDefault(); // prevent form submission
+                var $action = $(this).attr("name");
+                var $report_id = $(this).data('report_id');
+                var ajaxData = {
+                    'action': $action,
+                    'report_id': $report_id,
+                };
+
+                $.ajax({
+                    url: '/cgi-bin/koha/svc/problem_reports/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: ajaxData,
+                })
+
+                .done(function(data){
+                    if (data.status == 'success'){
+                        if ( $action == 'viewed' ){
+                            $("#status_" + $report_id).text(_("Viewed"));
+                            $(event.target).parent().siblings("status").removeClass().addClass("statusV");
+                            $(event.target).siblings(".closed").prop("disabled", false);
+                            $(event.target).siblings(".new").prop("disabled", false);
+                            $(event.target).prop("disabled", true);
+                        } else if ( $action == 'new' ){
+                            $("#status_" + $report_id).text(_("New"));
+                            $(event.target).parent().siblings("status").removeClass().addClass("statusN");
+                            $(event.target).siblings(".closed").prop("disabled", false);
+                            $(event.target).siblings(".viewed").prop("disabled", false);
+                            $(event.target).prop("disabled", true);
+                        } else {
+                            $("#status_" + $report_id).text(_("Closed"));
+                            $(event.target).parent().siblings("status").removeClass().addClass("statusC");
+                            $(event.target).siblings(".viewed").prop("disabled", false);
+                            $(event.target).siblings(".new").prop("disabled", false);
+                            $(event.target).prop("disabled", true);
+                        }
+                    } else {
+                        $("#error").text(_("Unable to change status of problem report."));
+                        $("#error").show();
+                    }
+                })
+                .error(function(data){
+                    $("#error").text(_("Unable to change status of problem report."));
+                    $("#error").show();
+                });
+            });
+        });
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
