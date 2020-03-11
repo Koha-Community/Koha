@@ -5,11 +5,24 @@ use CGI;
 use Encode qw( encode );
 use Test::More tests => 2;
 
+use Koha::Caches;
+use Koha::Database;
+use Koha::MarcSubfieldStructures;
 use C4::Biblio;
 
-my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", '' );
+our ( $biblionumbertagfield, $biblionumbertagsubfield );
+my $schema  = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+
+# Move field for biblionumber to imaginary 399
+Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'biblio.biblionumber' })->delete;
+Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '399', tagsubfield => 'a' })->delete;
+Koha::MarcSubfieldStructure->new({ frameworkcode => '', tagfield => '399', tagsubfield => 'a', kohafield => "biblio.biblionumber" })->store;
+Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
+
 subtest 'Biblio record' => sub {
-    plan tests => 10;
+    plan tests => 17;
     my $leader = '00203nam a2200097   4500';
     my $input  = CGI->new;
     $input->param( -name => 'biblionumber',                                        -value => '42' );
@@ -41,15 +54,30 @@ subtest 'Biblio record' => sub {
     $input->param( -name => 'tag_200_subfield_f_593269_445603',                    -value => 'author' );
     $input->param( -name => 'tag_200_code_h_593269_616594',                        -value => 'h' );                                            # Empty field
     $input->param( -name => 'tag_200_subfield_h_593269_616594',                    -value => '' );
+
+    # Add a field 390 before our 399
+    $input->param( -name => "tag_390_indicator1_123", -value => "" );
+    $input->param( -name => "tag_390_indicator2_123", -value => "" );
+    $input->param( -name => "tag_390_code_a_123", -value => 'a' );
+    $input->param( -name => "tag_390_subfield_a_123", -value => '390a' );
+
+    # Our imaginary biblionumber field in 399
     $input->param( -name => "tag_${biblionumbertagfield}_indicator1_588794844868", -value => "" );
     $input->param( -name => "tag_${biblionumbertagfield}_indicator2_588794844868", -value => "" );
     $input->param( -name => "tag_${biblionumbertagfield}_code_${biblionumbertagsubfield}_588794_784323",     -value => $biblionumbertagsubfield );
     $input->param( -name => "tag_${biblionumbertagfield}_subfield_${biblionumbertagsubfield}_588794_784323", -value => $biblionumbertagfield );
 
+    # A field (490) after 399
+    $input->param( -name => "tag_490_indicator1_1123", -value => "" );
+    $input->param( -name => "tag_490_indicator2_1123", -value => "" );
+    $input->param( -name => "tag_490_code_b_1123", -value => 'b' );
+    $input->param( -name => "tag_490_subfield_b_1123", -value => '490b' );
+
     my $record = C4::Biblio::TransformHtmlToMarc($input, 1);
 
     my @all_fields = $record->fields;
-    is( @all_fields, 5, 'The record should have been created with 5 fields (biblionumber + 2x010 + 1x100 + 1x200)' );
+    is( @all_fields, 7, 'The record should have been created with 7 fields' );
+        # biblionumber + 2x010 + 100 + 200 + 390 + 490
     my @fields_010 = $record->field('010');
     is( @fields_010, 2, 'The record should have been created with 2 010' );
     my @fields_100 = $record->field('100');
@@ -68,6 +96,15 @@ subtest 'Biblio record' => sub {
     is( @subfields_biblionumber, 1, 'The record should contain only one biblionumber field' );
 
     is( $record->leader, $leader, 'The leader should have been kept' );
+
+    # Check the order of some fields
+    is( $all_fields[0]->tag, '010', 'First field expected 010' );
+    is( $all_fields[1]->tag, '010', 'Second field also 010' );
+    is( $all_fields[2]->tag, '100', 'Third field is 100' );
+    is( $all_fields[3]->tag, '200', 'Fourth field is 200' );
+    is( $all_fields[4]->tag, '390', 'Fifth field is 390' );
+    is( $all_fields[5]->subfield('a'), 42, 'Sixth field contains bibnumber' );
+    is( $all_fields[6]->tag, '490', 'Last field is 490' );
 };
 
 subtest 'Add authority record' => sub {
@@ -90,3 +127,6 @@ subtest 'Add authority record' => sub {
     my @subfields_biblionumber = $record->subfield( $biblionumbertagfield, $biblionumbertagsubfield );
     is( @subfields_biblionumber, 1, 'The record should contain the field which are mapped to biblio.biblionumber' );
 };
+
+Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
+$schema->storage->txn_rollback;
