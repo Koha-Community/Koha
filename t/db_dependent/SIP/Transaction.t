@@ -4,7 +4,7 @@
 # Current state is very rudimentary. Please help to extend it!
 
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -14,9 +14,12 @@ use C4::SIP::ILS::Transaction::RenewAll;
 use C4::SIP::ILS::Transaction::Checkout;
 use C4::SIP::ILS::Transaction::FeePayment;
 use C4::SIP::ILS::Transaction::Hold;
+use C4::SIP::ILS::Transaction::Checkout;
+use C4::SIP::ILS::Transaction::Checkin;
 
 use C4::Reserves;
 use Koha::CirculationRules;
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -267,6 +270,57 @@ subtest do_hold => sub {
     is( $item->biblio->holds->count(), 2, "Bib has 2 holds" );
 
     is( $patron_2->holds->next->priority, 2, 'Hold placed from SIP should have a correct priority of 2');
+};
+
+subtest do_checkin => sub {
+    plan tests => 8;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode,
+            }
+        }
+    );
+
+    t::lib::Mocks::mock_userenv(
+        { branchcode => $library->branchcode, flags => 1 } );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+
+    # Checkout
+    my $sip_patron  = C4::SIP::ILS::Patron->new( $patron->cardnumber );
+    my $sip_item    = C4::SIP::ILS::Item->new( $item->barcode );
+    my $co_transaction = C4::SIP::ILS::Transaction::Checkout->new();
+    is( $co_transaction->patron($sip_patron),
+        $sip_patron, "Patron assigned to transaction" );
+    is( $co_transaction->item($sip_item),
+        $sip_item, "Item assigned to transaction" );
+    my $checkout = $co_transaction->do_checkout();
+    is( $patron->checkouts->count, 1, 'Checkout should have been done successfully');
+
+    # Checkin
+    my $ci_transaction = C4::SIP::ILS::Transaction::Checkin->new();
+    is( $ci_transaction->patron($sip_patron),
+        $sip_patron, "Patron assigned to transaction" );
+    is( $ci_transaction->item($sip_item),
+        $sip_item, "Item assigned to transaction" );
+
+    my $checkin = $ci_transaction->do_checkin($library->branchcode, C4::SIP::Sip::timestamp);
+    is( $patron->checkouts->count, 0, 'Checkin should have been done successfully');
+
+    # Test checkin without return date
+    $co_transaction->do_checkout;
+    is( $patron->checkouts->count, 1, 'Checkout should have been done successfully');
+    $ci_transaction->do_checkin($library->branchcode, undef);
+    is( $patron->checkouts->count, 0, 'Checkin should have been done successfully');
 };
 
 $schema->storage->txn_rollback;
