@@ -59,6 +59,7 @@ sub dt_from_string {
 
     return if $date_string and $date_string =~ m|^0000-0|;
 
+    my $do_fallback = defined($date_format) ? 0 : 1;
     $tz = C4::Context->tz unless $tz;;
 
     return DateTime->now( time_zone => $tz ) unless $date_string;
@@ -123,7 +124,7 @@ sub dt_from_string {
             (?<minute>\d{2})
             :
             (?<second>\d{2})
-            (\.\d{1,3})?(([Zz])|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9])))
+            (\.\d{1,3})?(([Zz]$)|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9])))
         /xms;
     }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
@@ -151,7 +152,7 @@ sub dt_from_string {
                 )?
             )?
     |xms;
-    $regex .= $time_re;
+    $regex .= $time_re unless ( $date_format eq 'rfc3339' );
     $fallback_re .= $time_re;
 
     my %dt_params;
@@ -169,7 +170,7 @@ sub dt_from_string {
         if ( $+{offset} ) {
             $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . $+{minutes} );
         }
-    } elsif ( $date_string =~ $fallback_re ) {
+    } elsif ( $do_fallback && $date_string =~ $fallback_re ) {
         %dt_params = (
             year   => $+{year},
             month  => $+{month},
