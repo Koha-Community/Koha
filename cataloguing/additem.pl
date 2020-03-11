@@ -861,7 +861,13 @@ for my $row ( @big_array ) {
         } else {
             $item_field->{field} = '';
         }
-        if ( $key eq 'd' || $key eq 'q' || $key eq 'r' || $key eq 's' || $key eq 'w' ){
+
+        my ($tmpa, $dateaccessioned) = &GetMarcFromKohaField( "items.dateaccessioned" );
+        my ($tmpb, $onloan) = &GetMarcFromKohaField( "items.onloan" );
+        my ($tmpc, $datelastseen) = &GetMarcFromKohaField( "items.datelastseen" );
+        my ($tmpd, $datelastborrowed) = &GetMarcFromKohaField( "items.datelastborrowed" );
+        my ($tmpe, $replacementpricedate) = &GetMarcFromKohaField( "items.replacementpricedate" );
+        if ( $key eq $dateaccessioned || $key eq $onloan || $key eq $datelastseen || $key eq $datelastborrowed || $key eq $replacementpricedate ){
             # date accessioned || on loan || date last seen || date last borrowed || replacement price date
             $item_field->{field} = output_pref({ dt => dt_from_string( $row->{$key} ), dateonly => 1 });
         }
