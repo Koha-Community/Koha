@@ -270,7 +270,7 @@
             copy.find('input,select').not('[type="hidden"]').each(function() {
                 $(this).val('');
             });
-            copy.find('.form-field-conjunction').prop('disabled', false);
+            copy.find('.form-field-conjunction').prop('disabled', false).val('and');
             form_field.after(copy);
       link.remove();
             copy.find('select.form-field-column').change();
