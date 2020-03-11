@@ -105,6 +105,9 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-02 15:01:04
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Wx556VlgXYqdP2XyQ87Jzg
 
+__PACKAGE__->add_columns(
+            '+shared' => { is_boolean => 1 },
+        );
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
