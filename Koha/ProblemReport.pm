@@ -33,6 +33,20 @@ Koha::ProblemReport - Koha Problem Report Object class
 
 =cut
 
+=head3 patron
+
+my $patron = $report->patron
+
+Return the patron for who the report has been done
+
+=cut
+
+sub patron {
+    my ( $self ) = @_;
+    my $patron_rs = $self->_result->borrowernumber;
+    return Koha::Patron->_new_from_dbic( $patron_rs );
+}
+
 =head3 type
 
 =cut
