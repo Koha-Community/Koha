@@ -21323,7 +21323,7 @@ sub NewVersion {
                 unless ( $bug_number ) {
                     say sprintf "Upgrade to %s done: %s", $DBversion, $description
                 } else {
-                    say sprintf "Upgrade to %s done: Bug %s - %s", $DBversion, $bug_number, $description;
+                    say sprintf "Upgrade to %s done: Bug %5s - %s", $DBversion, $bug_number, $description;
                 }
             }
             say sprintf "\t\t\t\t\t- %s", $description
@@ -21331,7 +21331,7 @@ sub NewVersion {
             unless ( $bug_number ) {
                 say sprintf "Upgrade to %s done: %s", $DBversion, $description;
             } else {
-                say sprintf "Upgrade to %s done: Bug %s - %s", $DBversion, $bug_number, $description;
+                say sprintf "Upgrade to %s done: Bug %5s - %s", $DBversion, $bug_number, $description;
             }
         }
         $first = 0;
