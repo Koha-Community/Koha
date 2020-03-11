@@ -123,7 +123,7 @@ sub dt_from_string {
             (?<minute>\d{2})
             :
             (?<second>\d{2})
-            (\.\d{1,3})?(([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))
+            (\.\d{1,3})?(([Zz])|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9])))
         /xms;
     }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
@@ -166,6 +166,9 @@ sub dt_from_string {
             second => $+{second},
         );
         $ampm = $+{ampm};
+        if ( $+{offset} ) {
+            $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . $+{minutes} );
+        }
     } elsif ( $date_string =~ $fallback_re ) {
         %dt_params = (
             year   => $+{year},
@@ -202,7 +205,7 @@ sub dt_from_string {
         DateTime->new(
             %dt_params,
             # No TZ for dates 'infinite' => see bug 13242
-            ( $dt_params{year} < 9999 ? ( time_zone => $tz->name ) : () ),
+            ( $dt_params{year} < 9999 ? ( time_zone => $tz ) : () ),
         );
     };
     if ($@) {
@@ -210,7 +213,7 @@ sub dt_from_string {
         $dt = DateTime->new(
             %dt_params,
             # No TZ for dates 'infinite' => see bug 13242
-            ( $dt_params{year} < 9999 ? ( time_zone => $tz->name ) : () ),
+            ( $dt_params{year} < 9999 ? ( time_zone => $tz ) : () ),
         );
     }
     return $dt;
