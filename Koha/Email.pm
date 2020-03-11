@@ -56,8 +56,8 @@ sub create_message_headers {
         $mail{'To'} = C4::Context->preference('SendAllEmailsTo');
     }
     else {
-        $mail{'Cc'} = $params->{cc};
-        $mail{'Bcc'} = $params->{bcc};
+        $mail{'Cc'}  = $params->{cc}  if exists $params->{cc};
+        $mail{'Bcc'} = $params->{bcc} if exists $params->{bcc};
     }
 
     if ( C4::Context->preference('ReplytoDefault') ) {
