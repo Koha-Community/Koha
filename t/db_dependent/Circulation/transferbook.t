@@ -28,8 +28,6 @@ use Koha::DateUtils qw( dt_from_string );
 my $builder = t::lib::TestBuilder->new;
 
 my $library = $builder->build( { source => 'Branch' } );
-my @got;
-my @wanted;
 
 #Transfert on unknown barcode
 my $item = $builder->build_sample_item();
