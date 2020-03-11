@@ -198,6 +198,8 @@
                         <td class="hq-barcode">
                             [% IF ( itemsloo.item_level_request ) %]
                                 <em>Only item:</em> <strong>[% itemsloo.barcode | html %]</strong>
+                            [% ELSIF itemsloo.item_group_id %]
+                                <strong>[% itemsloo.barcode | html %]</strong> <em>or any item from item_group <strong>[% itemsloo.item_group_description | html %]</strong></em>
                             [% ELSE %]
                                 <strong>[% itemsloo.barcode | html %]</strong> <em>or any available</em>
                             [% END %]

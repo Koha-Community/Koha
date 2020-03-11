@@ -131,11 +131,14 @@ sub GetHoldsQueueItems {
                          biblio.copyrightdate, biblio.subtitle, biblio.medium,
                          biblio.part_number, biblio.part_name,
                          biblioitems.publicationyear, biblioitems.pages, biblioitems.size,
-                         biblioitems.isbn, biblioitems.editionstatement, items.copynumber
+                         biblioitems.isbn, biblioitems.editionstatement, items.copynumber,
+                         item_groups.item_group_id, item_groups.description AS item_group_description
                   FROM tmp_holdsqueue
                        JOIN biblio      USING (biblionumber)
                   LEFT JOIN biblioitems USING (biblionumber)
                   LEFT JOIN items       USING (  itemnumber)
+                  LEFT JOIN item_group_items ON ( items.itemnumber =  item_group_items.item_id )
+                  LEFT JOIN item_groups ON ( item_group_items.item_group_id = item_groups.item_group_id )
                   WHERE 1=1
                 /;
     if ($params->{branchlimit}) {
@@ -275,7 +278,7 @@ sub GetPendingHoldRequestsForBib {
     my $dbh = C4::Context->dbh;
 
     my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserve_id, reserves.branchcode,
-                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype, item_level_hold
+                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch, itemtype, item_level_hold, item_group_id
                          FROM reserves
                          JOIN borrowers USING (borrowernumber)
                          WHERE biblionumber = ?
@@ -458,6 +461,8 @@ sub MapItemsToHoldRequests {
 
                 next if $request->{itemnumber} && $request->{itemnumber} != $item->{itemnumber};
 
+                next if $request->{item_group_id} && $item->{_object}->item_group && $item->{_object}->item_group->id ne $request->{item_group_id};
+
                 next unless $item->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
                 my $local_holds_priority_item_branchcode =
@@ -512,7 +517,9 @@ sub MapItemsToHoldRequests {
                 and  _checkHoldPolicy($items_by_itemnumber{ $request->{itemnumber} }, $request) # Don't fill item level holds that contravene the hold pickup policy at this time
                 and ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
                     || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
-
+                and ( !$request->{item_group_id} # If hold item_group is set, item's item_group must match
+                      || ( $items_by_itemnumber{ $request->{itemnumber} }->{_object}->item_group
+                        && $items_by_itemnumber{ $request->{itemnumber} }->{_object}->item_group->id eq $request->{item_group_id} ) )
                 and $items_by_itemnumber{ $request->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } )
 
               )
@@ -569,6 +576,8 @@ sub MapItemsToHoldRequests {
                     && _checkHoldPolicy($item, $request) # Don't fill item level holds that contravene the hold pickup policy at this time
                     && ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
                         || ( $request->{itemnumber} && ( $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} ) ) )
+                    && ( !$request->{item_group_id} # If hold item_group is set, item's item_group must match
+                        || ( $item->{_object}->item_group && $item->{_object}->item_group->id eq $request->{item_group_id} ) )
                   )
                 {
                     $itemnumber = $item->{itemnumber};
@@ -593,6 +602,13 @@ sub MapItemsToHoldRequests {
                     # If hold itemtype is set, item's itemtype must match
                     next unless ( !$request->{itemtype}
                         || $item->{itype} eq $request->{itemtype} );
+
+                    # If hold item_group is set, item's item_group must match
+                    next unless (
+                        !$request->{item_group_id}
+                        || (   $item->{_object}->item_group
+                            && $item->{_object}->item_group->id eq $request->{item_group_id} )
+                    );
 
                     $itemnumber = $item->{itemnumber};
                     last;
@@ -627,6 +643,13 @@ sub MapItemsToHoldRequests {
                     next unless ( !$request->{itemtype}
                         || $item->{itype} eq $request->{itemtype} );
 
+                    # If hold item_group is set, item's item_group must match
+                    next unless (
+                        !$request->{item_group_id}
+                        || (   $item->{_object}->item_group
+                            && $item->{_object}->item_group->id eq $request->{item_group_id} )
+                    );
+
                     $itemnumber = $item->{itemnumber};
                     $holdingbranch = $branch;
                     last PULL_BRANCHES;
@@ -643,6 +666,14 @@ sub MapItemsToHoldRequests {
                         || $current_item->{itype} eq $request->{itemtype} );
 
                     next unless $items_by_itemnumber{ $current_item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
+
+                    # If hold item_group is set, item's item_group must match
+                    next unless (
+                        !$request->{item_group_id}
+                        || (   $current_item->{_object}->item_group
+                            && $current_item->{_object}->item_group->id eq $request->{item_group_id} )
+                    );
+
 
                     $itemnumber = $current_item->{itemnumber};
                     last; # quit this loop as soon as we have a suitable item
@@ -663,6 +694,13 @@ sub MapItemsToHoldRequests {
                         # If hold itemtype is set, item's itemtype must match
                         next unless ( !$request->{itemtype}
                             || $item->{itype} eq $request->{itemtype} );
+
+                        # If hold item_group is set, item's item_group must match
+                        next unless (
+                            !$request->{item_group_id}
+                            || (   $item->{_object}->item_group
+                                && $item->{_object}->item_group->id eq $request->{item_group_id} )
+                        );
 
                         next unless $items_by_itemnumber{ $item->{itemnumber} }->{_object}->can_be_transferred( { to => $libraries->{ $request->{branchcode} } } );
 
