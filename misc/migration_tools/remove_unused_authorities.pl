@@ -38,7 +38,7 @@ GetOptions(
     'h|help'             => \$want_help,
 );
 
-if ( $want_help || !$confirm ) {
+if ( $want_help || !($test || $confirm) ) {
     print_usage();
     exit 0;
 }
