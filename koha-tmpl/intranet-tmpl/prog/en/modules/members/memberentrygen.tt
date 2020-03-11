@@ -166,10 +166,10 @@ legend:hover {
                             </div>
                         [% END %]
 
-                        [% SET fieldstohide = Koha.Preference('HideFieldsPatronAddForm') %]
-                        [% IF Koha.Preference('HideFieldsPatronAddForm') %][% UNLESS step %]
+                        [% SET fieldstohide = Koha.Preference('CollapseFieldsPatronAddForm') %]
+                        [% IF Koha.Preference('CollapseFieldsPatronAddForm') %][% UNLESS step %]
                             <p id="selections">
-                                <input type="checkbox" id="toggle_hidden_fields" title="These fields are hidden by default by the HideFieldsPatronAddForm system preference"><strong>Show hidden fields:</strong>
+                                <input type="checkbox" id="toggle_hidden_fields" title="These fields are hidden by default by the CollapseFieldsPatronAddForm system preference"><strong>Show hidden fields:</strong>
                                 [% FOREACH field IN fieldstohide.split(',') %]
                                     [% SWITCH field %]
                                         [% CASE 'identity' %] Organization/Patron identity |
@@ -1414,6 +1414,7 @@ legend:hover {
                 [% IF show_guarantor || guarantor %]
                     [% IF fieldstohide.match('guarantor') %]
                         $("#memberentry_guarantor").find('legend').nextAll().toggle();
+                        $("#guarantor_template").toggle();
                     [% END %]
                 [% END %]
                 [% IF fieldstohide.match('primary_address') %]
