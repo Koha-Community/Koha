@@ -249,8 +249,13 @@
                     [% IF ( has_update_succeeds ) %]
                         <p>Update report :</p>
                         <ul>
-                            [% FOREACH update_repor IN update_report %]
-                                <li>[% update_repor.line | $raw %]</li>
+                            [% FOREACH l IN update_report %]
+                                [% SET line = l.line %]
+                                [% IF line.match('^Upgrade to') %]
+                                    <li>[% line | $raw %]</li>
+                                [% ELSE %]
+                                    [% line | $raw %]<br/>
+                                [% END %]
                             [% END %]
                         </ul>
                     [% END %]
