@@ -1327,6 +1327,21 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 problem_reports
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::ProblemReport>
+
+=cut
+
+__PACKAGE__->has_many(
+  "problem_reports",
+  "Koha::Schema::Result::ProblemReport",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 ratings
 
 Type: has_many
@@ -1673,8 +1688,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 12:04:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lc2beHgnH2egLaVzXEcLPg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-01 09:42:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1G8678sy3UnvmJffzcU/Hg
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
