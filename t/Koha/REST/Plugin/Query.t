@@ -24,6 +24,7 @@ use Try::Tiny;
 use Koha::Cities;
 use Koha::Holds;
 use Koha::Biblios;
+use Koha::Patron::Relationship;
 
 app->log->level('error');
 
@@ -124,6 +125,50 @@ get '/dbic_merge_prefetch' => sub {
                 children => {
                     "orders" => {}
                 }
+            }
+        });
+
+    $c->dbic_merge_prefetch({
+        attributes => $attributes,
+        result_set => $result_set
+    });
+
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_prefetch_recursive' => sub {
+    my $c = shift;
+    my $attributes = {};
+    my $result_set = Koha::Patron::Relationship->new;
+    $c->stash('koha.embed', {
+      "guarantee" => {
+        "children" => {
+          "article_requests" => {},
+          "housebound_profile" => {
+            "children" => {
+              "housebound_visits" => {}
+            }
+          },
+          "housebound_role" => {}
+        }
+      }
+    });
+
+    $c->dbic_merge_prefetch({
+        attributes => $attributes,
+        result_set => $result_set
+    });
+
+    $c->render( json => $attributes, status => 200 );
+};
+
+get '/dbic_merge_prefetch_count' => sub {
+    my $c = shift;
+    my $attributes = {};
+    my $result_set = Koha::Patron::Relationship->new;
+    $c->stash('koha.embed', {
+            "guarantee_count" => {
+              "is_count" => 1
             }
         });
 
@@ -298,13 +343,25 @@ subtest 'dbic_merge_sorting() tests' => sub {
 };
 
 subtest '/dbic_merge_prefetch' => sub {
-    plan tests => 4;
+    plan tests => 10;
 
     my $t = Test::Mojo->new;
 
     $t->get_ok('/dbic_merge_prefetch')->status_is(200)
-      ->json_like( '/prefetch/0' => qr/item|biblio/ )
-      ->json_like( '/prefetch/1' => qr/item|biblio/ );
+      ->json_is( '/prefetch/0' => 'biblio' )
+      ->json_is( '/prefetch/1' => 'item' );
+
+    $t->get_ok('/dbic_merge_prefetch_recursive')->status_is(200)
+      ->json_is('/prefetch/0' => {
+        guarantee => [
+          'article_requests',
+          {housebound_profile => 'housebound_visits'},
+          'housebound_role'
+        ]
+      });
+
+    $t->get_ok('/dbic_merge_prefetch_count')->status_is(200)
+      ->json_is('/prefetch/0' => 'guarantee');
 };
 
 subtest '/merge_q_params' => sub {
