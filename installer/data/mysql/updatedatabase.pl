@@ -14374,7 +14374,7 @@ if( CheckVersion( $DBversion ) ) {
 
         my $expirationdate = dt_from_string($hold->{waitingdate});
         if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
-            my $calendar = Koha::Calendar->new( branchcode => $hold->{branchcode} );
+            my $calendar = Koha::Calendar->new( branchcode => $hold->{branchcode}, days_mode => C4::Context->preference('useDaysMode') );
             $expirationdate = $calendar->days_forward( $expirationdate, $max_pickup_delay );
         } else {
             $expirationdate->add( days => $max_pickup_delay );
