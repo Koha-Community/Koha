@@ -862,14 +862,13 @@ for my $row ( @big_array ) {
             $item_field->{field} = '';
         }
 
-        my ($tmpa, $dateaccessioned) = &GetMarcFromKohaField( "items.dateaccessioned" );
-        my ($tmpb, $onloan) = &GetMarcFromKohaField( "items.onloan" );
-        my ($tmpc, $datelastseen) = &GetMarcFromKohaField( "items.datelastseen" );
-        my ($tmpd, $datelastborrowed) = &GetMarcFromKohaField( "items.datelastborrowed" );
-        my ($tmpe, $replacementpricedate) = &GetMarcFromKohaField( "items.replacementpricedate" );
-        if ( $key eq $dateaccessioned || $key eq $onloan || $key eq $datelastseen || $key eq $datelastborrowed || $key eq $replacementpricedate ){
-            # date accessioned || on loan || date last seen || date last borrowed || replacement price date
-            $item_field->{field} = output_pref({ dt => dt_from_string( $row->{$key} ), dateonly => 1 });
+        for my $kohafield (
+            qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate )
+          )
+        {
+            my ( undef, $subfield ) = GetMarcFromKohaField($kohafield);
+            next unless $key eq $subfield;
+            $item_field->{field} = output_pref( { str => $row->{$key}, dateonly => 1 } );
         }
 
         push @item_fields, $item_field;
