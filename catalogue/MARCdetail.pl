@@ -289,14 +289,10 @@ foreach my $field (@fields) {
 
         $norequests = 0 if  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan' and $subf[$i][1] == 0;
 
-        if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.dateaccessioned' ||
-             $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.onloan' ||
-             $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.datelastseen' ||
-             $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.datelastborrowed' ||
-             $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.replacementpricedate'
-        ){
-            $item->{$subf[$i][0]} = output_pref({ dt => dt_from_string( $item->{$subf[$i][0]} ), dateonly => 1 });
-        }
+        my $kohafield = $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield};
+        $item->{ $subf[$i][0] } = output_pref( { str => $item->{ $subf[$i][0] }, dateonly => 1 } )
+          if grep { $kohafield eq $_ }
+              qw( items.dateaccessioned items.onloan items.datelastseen items.datelastborrowed items.replacementpricedate );
     }
     push @item_loop, $item if $item;
 }
