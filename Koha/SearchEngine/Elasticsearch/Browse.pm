@@ -106,9 +106,8 @@ sub browse {
 
     my $query = $self->_build_query($prefix, $field, $options);
     my $elasticsearch = $self->get_elasticsearch();
-    my $conf = $self->get_elasticsearch_params();
     my $results = $elasticsearch->search(
-        index => $conf->{index_name},
+        index => $self->index_name,
         body => $query
     );
 

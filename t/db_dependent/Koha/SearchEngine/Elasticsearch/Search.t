@@ -117,7 +117,7 @@ SKIP: {
     is ($searcher->max_result_window, 10000, 'By default, max_result_window is 10000');
 
     $searcher->get_elasticsearch()->indices->put_settings(
-        index => $searcher->get_elasticsearch_params()->{index_name},
+        index => $searcher->index_name,
         body => {
             'index' => {
                 'max_result_window' => 12000,

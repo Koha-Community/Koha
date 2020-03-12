@@ -32,12 +32,12 @@ use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 subtest 'create_index() tests' => sub {
     plan tests => 5;
     my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
-    $se->mock( 'get_elasticsearch_params', sub {
+    $se->mock( '_read_configuration', sub {
             my ($self, $sub ) = @_;
-            my $method = $se->original( 'get_elasticsearch_params' );
-            my $params = $method->( $self );
-            $params->{index_name} .= '__test';
-            return $params;
+            my $method = $se->original( '_read_configuration' );
+            my $conf = $method->( $self );
+            $conf->{index_name} .= '__test';
+            return $conf;
         });
 
     my $indexer;

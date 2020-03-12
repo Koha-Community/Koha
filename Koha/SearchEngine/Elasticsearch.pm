@@ -45,7 +45,7 @@ use Encode qw(encode);
 use Business::ISBN;
 use Scalar::Util qw(looks_like_number);
 
-__PACKAGE__->mk_ro_accessors(qw( index ));
+__PACKAGE__->mk_ro_accessors(qw( index index_name ));
 __PACKAGE__->mk_accessors(qw( sort_fields ));
 
 # Constants to refer to the standard index names
@@ -66,15 +66,27 @@ The name of the index to use, generally 'biblios' or 'authorities'.
 
 =back
 
+=item index_name
+
+The Elasticsearch index name with Koha instance prefix.
+
+=back
+
+
 =head1 FUNCTIONS
 
 =cut
 
 sub new {
     my $class = shift @_;
-    my $self = $class->SUPER::new(@_);
+    my ($params) = @_;
+
     # Check for a valid index
-    Koha::Exceptions::MissingParameter->throw('No index name provided') unless $self->index;
+    Koha::Exceptions::MissingParameter->throw('No index name provided') unless $params->{index};
+    my $config = _read_configuration();
+    $params->{index_name} = $config->{index_name} . '_' . $params->{index};
+
+    my $self = $class->SUPER::new(@_);
     return $self;
 }
 
@@ -122,36 +134,21 @@ This is configured by the following in the C<config> block in koha-conf.xml:
 sub get_elasticsearch_params {
     my ($self) = @_;
 
-    # Copy the hash so that we're not modifying the original
-    my $conf = C4::Context->config('elasticsearch');
-    die "No 'elasticsearch' block is defined in koha-conf.xml.\n" if ( !$conf );
-    my $es = { %{ $conf } };
+    my $conf;
+    try {
+        $conf = _read_configuration();
+    } catch {
+        if ( ref($_) eq 'Koha::Exceptions::Config::MissingEntry' ) {
+            croak($_->message);
+        }
+    };
+    # Extract relevant parts of configuration
+    my $params = {
+        nodes => $conf->{nodes}
+    };
+    $params->{cxn_pool} //= 'Static';
 
-    # Helpfully, the multiple server lines end up in an array for us anyway
-    # if there are multiple ones, but not if there's only one.
-    my $server = $es->{server};
-    delete $es->{server};
-    if ( ref($server) eq 'ARRAY' ) {
-
-        # store it called 'nodes' (which is used by newer Search::Elasticsearch)
-        $es->{nodes} = $server;
-    }
-    elsif ($server) {
-        $es->{nodes} = [$server];
-    }
-    else {
-        die "No elasticsearch servers were specified in koha-conf.xml.\n";
-    }
-    die "No elasticsearch index_name was specified in koha-conf.xml.\n"
-      if ( !$es->{index_name} );
-    # Append the name of this particular index to our namespace
-    $es->{index_name} .= '_' . $self->index;
-
-    $es->{key_prefix} = 'es_';
-    $es->{cxn_pool} //= 'Static';
-    $es->{request_timeout} //= 60;
-
-    return $es;
+    return $params;
 }
 
 =head2 get_elasticsearch_settings
@@ -1233,9 +1230,11 @@ sub _read_configuration {
     my $configuration;
 
     my $conf = C4::Context->config('elasticsearch');
-    Koha::Exceptions::Config::MissingEntry->throw(
-        "Missing 'elasticsearch' block in config file")
-      unless defined $conf;
+    unless ( defined $conf ) {
+        Koha::Exceptions::Config::MissingEntry->throw(
+            "Missing <elasticsearch> entry in koha-conf.xml"
+        );
+    }
 
     if ( $conf && $conf->{server} ) {
         my $nodes = $conf->{server};
@@ -1248,7 +1247,8 @@ sub _read_configuration {
     }
     else {
         Koha::Exceptions::Config::MissingEntry->throw(
-            "Missing 'server' entry in config file for elasticsearch");
+            "Missing <elasticsearch>/<server> entry in koha-conf.xml"
+        );
     }
 
     if ( defined $conf->{index_name} ) {
@@ -1256,7 +1256,8 @@ sub _read_configuration {
     }
     else {
         Koha::Exceptions::Config::MissingEntry->throw(
-            "Missing 'index_name' entry in config file for elasticsearch");
+            "Missing <elasticsearch>/<index_name> entry in koha-conf.xml",
+        );
     }
 
     return $configuration;

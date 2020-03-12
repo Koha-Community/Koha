@@ -46,7 +46,7 @@ subtest '_read_configuration() tests' => sub {
       'Configuration problem, exception thrown';
     is(
         $@->message,
-        "Missing 'elasticsearch' block in config file",
+        "Missing <elasticsearch> entry in koha-conf.xml",
         'Exception message is correct'
     );
 
@@ -59,7 +59,7 @@ subtest '_read_configuration() tests' => sub {
       'Configuration problem, exception thrown';
     is(
         $@->message,
-        "Missing 'server' entry in config file for elasticsearch",
+        "Missing <elasticsearch>/<server> entry in koha-conf.xml",
         'Exception message is correct'
     );
 
@@ -72,7 +72,7 @@ subtest '_read_configuration() tests' => sub {
       'Configuration problem, exception thrown';
     is(
         $@->message,
-        "Missing 'index_name' entry in config file for elasticsearch",
+        "Missing <elasticsearch>/<index_name> entry in koha-conf.xml",
         'Exception message is correct'
     );
 

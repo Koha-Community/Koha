@@ -95,8 +95,7 @@ Arrayref of C<MARC::Record>s.
 
 sub update_index {
     my ($self, $biblionums, $records) = @_;
-    my $conf = $self->get_elasticsearch_params();
-    my $elasticsearch = $self->get_elasticsearch();
+
     my $documents = $self->marc_records_to_documents($records);
     my @body;
 
@@ -112,8 +111,9 @@ sub update_index {
     }
     my $response;
     if (@body) {
+        my $elasticsearch = $self->get_elasticsearch();
         $response = $elasticsearch->bulk(
-            index => $conf->{index_name},
+            index => $self->index_name,
             type => 'data', # is just hard coded in Indexer.pm?
             body => \@body
         );
@@ -235,14 +235,13 @@ failes.
 
 sub update_mappings {
     my ($self) = @_;
-    my $conf = $self->get_elasticsearch_params();
     my $elasticsearch = $self->get_elasticsearch();
     my $mappings = $self->get_elasticsearch_mappings();
 
     foreach my $type (keys %{$mappings}) {
         try {
             my $response = $elasticsearch->indices->put_mapping(
-                index => $conf->{index_name},
+                index => $self->index_name,
                 type => $type,
                 body => {
                     $type => $mappings->{$type}
@@ -251,8 +250,9 @@ sub update_mappings {
         } catch {
             $self->set_index_status_recreate_required();
             my $reason = $_[0]->{vars}->{body}->{error}->{reason};
+            my $index_name = $self->index_name;
             Koha::Exceptions::Exception->throw(
-                error => "Unable to update mappings for index \"$conf->{index_name}\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
+                error => "Unable to update mappings for index \"$index_name\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
             );
         };
     }
@@ -287,11 +287,9 @@ sub delete_index {
     my ($self, $biblionums) = @_;
 
     my $elasticsearch = $self->get_elasticsearch();
-    my $conf  = $self->get_elasticsearch_params();
-
     my @body = map { { delete => { _id => $_ } } } @{$biblionums};
     my $result = $elasticsearch->bulk(
-        index => $conf->{index_name},
+        index => $self->index_name,
         type => 'data',
         body => \@body,
     );
@@ -321,9 +319,8 @@ Drops the index from the Elasticsearch server.
 sub drop_index {
     my ($self) = @_;
     if ($self->index_exists) {
-        my $conf = $self->get_elasticsearch_params();
         my $elasticsearch = $self->get_elasticsearch();
-        $elasticsearch->indices->delete(index => $conf->{index_name});
+        $elasticsearch->indices->delete(index => $self->index_name);
         $self->set_index_status_recreate_required();
     }
 }
@@ -336,11 +333,10 @@ Creates the index (including mappings) on the Elasticsearch server.
 
 sub create_index {
     my ($self) = @_;
-    my $conf = $self->get_elasticsearch_params();
     my $settings = $self->get_elasticsearch_settings();
     my $elasticsearch = $self->get_elasticsearch();
     $elasticsearch->indices->create(
-        index => $conf->{index_name},
+        index => $self->index_name,
         body => {
             settings => $settings
         }
@@ -357,10 +353,9 @@ empty string to indicate whether index exists or not.
 
 sub index_exists {
     my ($self) = @_;
-    my $conf = $self->get_elasticsearch_params();
     my $elasticsearch = $self->get_elasticsearch();
     return $elasticsearch->indices->exists(
-        index => $conf->{index_name},
+        index => $self->index_name,
     );
 }
 

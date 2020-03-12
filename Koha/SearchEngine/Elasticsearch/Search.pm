@@ -82,7 +82,6 @@ Returns
 sub search {
     my ($self, $query, $page, $count, %options) = @_;
 
-    my $params = $self->get_elasticsearch_params();
     # 20 is the default number of results per page
     $query->{size} = $count // 20;
     # ES doesn't want pages, it wants a record to start from.
@@ -95,7 +94,7 @@ sub search {
     my $elasticsearch = $self->get_elasticsearch();
     my $results = eval {
         $elasticsearch->search(
-            index => $params->{index_name},
+            index => $self->index_name,
             body => $query
         );
     };
@@ -117,12 +116,11 @@ faster than pulling all the data in, usually.
 sub count {
     my ( $self, $query ) = @_;
     my $elasticsearch = $self->get_elasticsearch();
-    my $conf = $self->get_elasticsearch_params();
 
     # TODO: Probably possible to exclude results
     # and just return number of hits
     my $result = $elasticsearch->search(
-        index => $conf->{index_name},
+        index => $self->index_name,
         body => $query
     );
 
@@ -407,16 +405,15 @@ sub max_result_window {
     my ($self) = @_;
 
     my $elasticsearch = $self->get_elasticsearch();
-    my $conf = $self->get_elasticsearch_params();
 
     my $response = $elasticsearch->indices->get_settings(
-        index => $conf->{index_name},
+        index => $self->index_name,
         flat_settings => 'true',
         include_defaults => 'true'
     );
 
-    my $max_result_window = $response->{$conf->{index_name}}->{settings}->{'index.max_result_window'};
-    $max_result_window //= $response->{$conf->{index_name}}->{defaults}->{'index.max_result_window'};
+    my $max_result_window = $response->{$self->index_name}->{settings}->{'index.max_result_window'};
+    $max_result_window //= $response->{$self->index_name}->{defaults}->{'index.max_result_window'};
 
     return $max_result_window;
 }
