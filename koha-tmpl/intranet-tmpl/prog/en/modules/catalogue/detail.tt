@@ -225,34 +225,34 @@
     <table class="items_table" id="[% tab | html %]_table">
         <thead>
             <tr>
-                [% IF (StaffDetailItemSelection) %]<th class="NoSort"></th>[% END %]
-                [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
-                <th>Current location</th>
-                <th>Home library</th>
-                [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
-                <th>Call number</th>
+                [% IF (StaffDetailItemSelection) %]<th id="[% tab | html %]_checkbox" data-colname="[% tab | html %]_checkbox" class="NoSort"></th>[% END %]
+                [% IF ( item_level_itypes ) %]<th id="[% tab | html %]_itype" data-colname="[% tab | html %]_itype">Item type</th>[% END %]
+                <th id="[% tab | html %]_holdingbranch" data-colname="[% tab | html %]_holdingbranch">Current location</th>
+                <th id="[% tab | html %]_homebranch" data-colname="[% tab | html %]_homebranch">Home library</th>
+                [% IF ( itemdata_ccode ) %]<th id="[% tab | html %]_ccode" data-colname="[% tab | html %]_ccode">Collection</th>[% END %]
+                <th id="[% tab | html %]_itemcallnumber" data-colname="[% tab | html %]_itemcallnumber">Call number</th>
                 [% IF volinfo %]
-                    [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting%]
-                        <th class="title-string">Serial enumeration / chronology</th>
+                [% IF itemdata_publisheddate #If there is at least one published date, use it for sorting%]
+                        <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron" class="title-string">Serial enumeration / chronology</th>
                     [% ELSE %]
-                        <th>Serial enumeration / chronology</th>
+                        <th id="[% tab | html %]_enumchron" data-colname="[% tab | html %]_enumchron">Serial enumeration / chronology</th>
                     [% END %]
                 [% END %]
-                <th>Status</th>
-                <th class="title-string">Last seen</th>
-                <th class="title-string">Date accessioned</th>
-                <th>Barcode</th>
-                [% IF ( itemdata_uri ) %]<th>URL</th>[% END %]
-                [% IF ( itemdata_copynumber ) %]<th>Copy number</th>[% END %]
-                [% IF ( itemdata_stocknumber ) %]<th>Inventory number</th>[% END %]
-                [% IF materials %]<th>Materials specified</th>[% END %]
-                [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
-                [% IF ( itemdata_nonpublicnotes ) %]<th>Non-public notes</th>[% END %]
-                [% IF ( hostrecords ) %]<th>Host records</th>[% END %]
-                [% IF ( analyze ) %]<th>Used in</th><th></th>[% END %]
-                [% IF ( ShowCourseReserves ) %]<th>Course Reserves</th>[% END %]
-                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th class="NoSort">Spine label</th>[% END %]
-                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th class="NoSort">&nbsp;</th>[% END %]
+                <th id="[% tab | html %]_status" data-colname="[% tab | html %]_status">Status</th>
+                <th id="[% tab | html %]_lastseen" data-colname="[% tab | html %]_lastseen" class="title-string">Last seen</th>
+                <th id="[% tab | html %]_datesccessioned" date-colname="[% tab | html %]_datesccessioned" class="title-string">Date accessioned</th>
+                <th id="[% tab | html %]_barcode" data-colname="[% tab | html %]_barcode">Barcode</th>
+                [% IF ( itemdata_uri ) %]<th id="[% tab | html %]_uri" data-colname="[% tab | html %]_uri">URL</th>[% END %]
+                [% IF ( itemdata_copynumber ) %]<th id="[% tab | html %]_copynumber" data-colname="[% tab | html %]_copynumber">Copy number</th>[% END %]
+                [% IF ( itemdata_stocknumber ) %]<th id="[% tab | html %]_stocknumber" data-colname="[% tab | html %]_stocknumber">Inventory number</th>[% END %]
+                [% IF materials %]<th id="[% tab | html %]_materials" data-colname="[% tab | html %]_materials">Materials specified</th>[% END %]
+                [% IF ( itemdata_itemnotes ) %]<th id="[% tab | html %]_itemnotes" data-colname="[% tab | html %]_itemnotes">Public notes</th>[% END %]
+                [% IF ( itemdata_nonpublicnotes ) %]<th id="[% tab | html %]_itemnotes_nonpublic" data-colname="[% tab | html %]_itemnotes_nonpublic">Non-public notes</th>[% END %]
+                [% IF ( hostrecords ) %]<th id="[% tab | html %]_hostrecord" data-colname="[% tab | html %]_hostrecord">Host records</th>[% END %]
+                [% IF ( analyze ) %]<th id="[% tab | html %]_usedin" data-colname="[% tab | html %]_usedin">Used in</th><th></th>[% END %]
+                [% IF ( ShowCourseReserves ) %]<th id="[% tab | html %]_course_reserves" data-colname="[% tab | html %]_course_reserves">Course Reserves</th>[% END %]
+                [% IF ( SpineLabelShowPrintOnBibDetails ) %]<th id="[% tab | html %]_spinelabel" data-colname="[% tab | html %]_spinelabel" class="NoSort">Spine label</th>[% END %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]<th id="[% tab | html %]_actions" data-colname="[% tab | html %]_actions"class="NoSort">&nbsp;</th>[% END %]
             </tr>
         </thead>
         <tbody>
@@ -1115,7 +1115,7 @@ Note that permanent location is a code, and location may be an authval.
 
         $(document).ready(function() {
             var ids = ['holdings_table', 'otherholdings_table'];
-
+            var columns_settings = [ [% ColumnsSettings.GetColumns('catalogue', 'detail','holdings_table','json') | $raw %], [% ColumnsSettings.GetColumns('catalogue', 'detail','otherholdings_table','json')  | $raw %] ];
             for (var i in ids) {
                 var id = ids[i];
                 var dt_parameters = {
@@ -1125,9 +1125,11 @@ Note that permanent location is a code, and location may be an authval.
                     "aoColumnDefs": [
                         { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                         { "sType": "title-string", "aTargets" : [ "title-string" ] }
-                    ]
+                    ],
+                    "bKohaColumnsUseNames": true,
+                    "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                 };
-                var table = KohaTable(id, dt_parameters, null, 'with_filters');
+                var table = KohaTable(id, dt_parameters, columns_settings[i], 'with_filters');
             }
 
             [% IF Koha.Preference('AcquisitionDetails') %]
