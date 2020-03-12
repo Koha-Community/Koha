@@ -33,7 +33,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use Test::Warn;
 
@@ -117,29 +117,21 @@ subtest 'ModItem tests' => sub {
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
-    my $item = $builder->build({
-        source => 'Item',
-        value  => {
-            itemlost     => 0,
-            damaged      => 0,
-            withdrawn    => 0,
-            itemlost_on  => undef,
-            damaged_on   => undef,
-            withdrawn_on => undef,
-        }
-    });
+    my $item    = $builder->build_sample_item();
 
     my @fields = qw( itemlost withdrawn damaged );
     for my $field (@fields) {
-        $item->{$field} = 1;
-        ModItem( $item, $item->{biblionumber}, $item->{itemnumber} );
-        my $post_mod_item = Koha::Items->find({ itemnumber => $item->{itemnumber} })->unblessed;
-        is( output_pref({ str => $post_mod_item->{$field."_on"}, dateonly => 1 }), output_pref({ dt => dt_from_string(), dateonly => 1 }), "When updating $field, $field"."_on is updated" );
+        my $field_on = $field."_on";
 
-        $item->{$field} = 0;
-        ModItem( $item, $item->{biblionumber}, $item->{itemnumber} );
-        $post_mod_item = Koha::Items->find({ itemnumber => $item->{itemnumber} })->unblessed;
-        is( $post_mod_item->{$field."_on"}, undef, "When clearing $field, $field"."_on is cleared" );
+        $item->$field(1);
+        ModItem( $item->unblessed, $item->biblionumber, $item->itemnumber );
+        $item->discard_changes;
+        is( output_pref({ str => $item->$field_on, dateonly => 1 }), output_pref({ dt => dt_from_string(), dateonly => 1 }), "When updating $field, $field_on is updated" );
+
+        $item->$field(0);
+        ModItem( $item->unblessed, $item->biblionumber, $item->itemnumber );
+        $item->discard_changes;
+        is( $item->$field_on, undef, "When clearing $field, $field_on is cleared" );
     }
 
     $schema->storage->txn_rollback;
@@ -152,19 +144,7 @@ subtest 'ModItemTransfer tests' => sub {
     $schema->storage->txn_begin;
 
     my $builder = t::lib::TestBuilder->new;
-    my $item    = $builder->build_object(
-        {
-            class => 'Koha::Items',
-            value  => {
-                itemlost     => 0,
-                damaged      => 0,
-                withdrawn    => 0,
-                itemlost_on  => undef,
-                damaged_on   => undef,
-                withdrawn_on => undef,
-            }
-        }
-    )->store;
+    my $item    = $builder->build_sample_item();
 
     my $library1 = $builder->build(
         {
