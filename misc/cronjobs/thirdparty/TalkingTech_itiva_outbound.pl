@@ -311,7 +311,7 @@ sub GetWaitingHolds {
 
     my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
 
-    my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
+    my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname, borrowers.categorycode,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, reserves.waitingdate,
                 reserves.branchcode AS site, branches.branchname AS site_name,
                 TO_DAYS(NOW())-TO_DAYS(reserves.waitingdate) AS days_since_waiting
@@ -332,7 +332,16 @@ sub GetWaitingHolds {
     $sth->execute();
     my @results;
     while ( my $issue = $sth->fetchrow_hashref() ) {
-        my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'} );
+        my $item = Koha::Items->find({ barcode => $issue->{barcode} });
+        my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+            {
+                categorycode => $issue->{categorycode},
+                itemtype     => $item->effective_itemtype,
+                branchcode   => $issue->{site},
+            }
+        );
+
+        my $calendar = Koha::Calendar->new( branchcode => $issue->{'site'}, days_mode => $useDaysMode_value );
 
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
         my $pickup_date = $waiting_date->clone->add( days => $pickupdelay );

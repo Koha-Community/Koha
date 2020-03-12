@@ -1240,9 +1240,16 @@ sub checkHighHolds {
 
         my $issuedate = dt_from_string();
 
-        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-
         my $itype = $item_object->effective_itemtype;
+        my $useDaysMode_value = Koha::CirculationRules->get_useDaysMode_effective_value(
+            {
+                categorycode => $borrower->{categorycode},
+                itemtype     => $itype,
+                branchcode   => $branchcode,
+            }
+        );
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode, days_mode => $useDaysMode_value );
+
         my $orig_due = C4::Circulation::CalcDateDue( $issuedate, $itype, $branchcode, $borrower );
 
         my $decreaseLoanHighHoldsDuration = C4::Context->preference('decreaseLoanHighHoldsDuration');
