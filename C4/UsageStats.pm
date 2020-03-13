@@ -207,9 +207,6 @@ sub BuildReport {
         BakerTaylorEnabled
         GoogleJackets
         HTML5MediaEnabled
-        IDreamBooksReadometer
-        IDreamBooksResults
-        IDreamBooksReviews
         LibraryThingForLibrariesEnabled
         LocalCoverImages
         OPACLocalCoverImages

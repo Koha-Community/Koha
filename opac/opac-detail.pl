@@ -1195,9 +1195,6 @@ if (C4::Context->preference('OPACLocalCoverImages') == 1) {
     $template->{VARS}->{localimages} = \@images;
 }
 
-$template->{VARS}->{IDreamBooksReviews} = C4::Context->preference('IDreamBooksReviews');
-$template->{VARS}->{IDreamBooksReadometer} = C4::Context->preference('IDreamBooksReadometer');
-$template->{VARS}->{IDreamBooksResults} = C4::Context->preference('IDreamBooksResults');
 $template->{VARS}->{OPACPopupAuthorsSearch} = C4::Context->preference('OPACPopupAuthorsSearch');
 
 if (C4::Context->preference('OpacHighlightedWords')) {

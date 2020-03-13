@@ -468,9 +468,6 @@ sub mocking_systempreferences_to_a_set_value {
         BakerTaylorEnabled
         GoogleJackets
         HTML5MediaEnabled
-        IDreamBooksReadometer
-        IDreamBooksResults
-        IDreamBooksReviews
         LibraryThingForLibrariesEnabled
         LocalCoverImages
         OPACLocalCoverImages
