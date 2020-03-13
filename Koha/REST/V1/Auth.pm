@@ -205,7 +205,9 @@ sub authenticate_api_request {
                                                 { remote_addr => $remote_addr });
         if ($status eq "ok") {
             my $session = get_session($sessionID);
-            $user = Koha::Patrons->find($session->param('number'));
+            $user = Koha::Patrons->find( $session->param('number') )
+              unless $session->param('sessiontype')
+                 and $session->param('sessiontype') eq 'anon';
         }
         elsif ($status eq "maintenance") {
             Koha::Exceptions::UnderMaintenance->throw(
@@ -231,12 +233,20 @@ sub authenticate_api_request {
 
     $c->stash('koha.user' => $user);
 
-    # We do not need any authorization
-    unless ($authorization) {
+    if ( !$authorization ) {
+        # We do not need any authorization
         # Check the parameters
         validate_query_parameters( $c, $spec );
         return 1;
     }
+    else {
+        # We are required authorizarion, there needs
+        # to be an identified user
+        Koha::Exceptions::Authentication::Required->throw(
+            error => 'Authentication failure.' )
+          unless $user;
+    }
+
 
     my $permissions = $authorization->{'permissions'};
     # Check if the user is authorized
