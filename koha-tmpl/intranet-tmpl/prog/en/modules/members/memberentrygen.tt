@@ -169,7 +169,7 @@ legend:hover {
                         [% SET fieldstohide = Koha.Preference('CollapseFieldsPatronAddForm') %]
                         [% IF Koha.Preference('CollapseFieldsPatronAddForm') %][% UNLESS step %]
                             <p id="selections">
-                                <input type="checkbox" id="toggle_hidden_fields" title="These fields are hidden by default by the CollapseFieldsPatronAddForm system preference"><strong>Show hidden fields:</strong>
+                                <input type="checkbox" id="toggle_hidden_fields" title="These fields are collapsed by default by the CollapseFieldsPatronAddForm system preference"><strong>Show collapsed fields:</strong>
                                 [% FOREACH field IN fieldstohide.split(',') %]
                                     [% SWITCH field %]
                                         [% CASE 'identity' %] Organization/Patron identity |
