@@ -7,14 +7,14 @@
     .noshow {display: none;}
 </style>
 </head>
-<body id="circ_selectbranchprinter" class="circ">
+<body id="circ_set-library" class="circ">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
-&rsaquo; <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
 </div>
 
 <div class="main container-fluid">
@@ -53,7 +53,7 @@ Updated:<ul>
 
 [% ELSE %]
 
-<form method="post" action="selectbranchprinter.pl">
+<form method="post" action="set-library.pl">
 <fieldset class="rows">
     <legend>Set library</legend>
     <ol>

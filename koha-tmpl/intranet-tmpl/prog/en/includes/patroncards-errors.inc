@@ -32,7 +32,7 @@
         [% ELSIF ( error == 202 ) %]
             <span>An error has occurred. </span>[% INCLUDE asksysadmin %]
         [% ELSIF ( error == 203 ) %]
-            <span>A non-existent or invalid library code was supplied. Please verify that you have a library set. </span><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
+            <span>A non-existent or invalid library code was supplied. Please verify that you have a library set. </span><a href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
         [% ELSIF ( error == 301 ) %]
             <span>An error has occurred while attempting to upload the image file. </span>[% INCLUDE asksysadmin %]
         [% ELSIF ( error == 302 ) %]
@@ -44,7 +44,7 @@
         [% ELSIF ( error == 401 ) %]
             <span>An error has occurred and no items have been added to batch [% batch_id | html %]. </span>[% INCLUDE asksysadmin %]
         [% ELSIF ( error == 402 ) %]
-            <span>No items added because the library is not set. Please set your library before adding items to a batch. </span><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
+            <span>No items added because the library is not set. Please set your library before adding items to a batch. </span><a href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
         [% ELSIF ( error == 403 ) %]
             <span>An error has occurred and the item(s) was not removed from batch [% batch_id | html %]. </span>[% INCLUDE asksysadmin %]
         [% ELSIF ( error == 404 ) %]

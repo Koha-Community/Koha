@@ -110,12 +110,12 @@
                     [% IF ( IndependentBranches ) %]
                         [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                     <li>
-                        <a class="toplinks" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
+                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
                     </li>
                         [% END %]
                     [% ELSE %]
                     <li>
-                        <a class="toplinks" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
+                        <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
                     </li>
                     [% END %]
                     [% IF EnableSearchHistory %]

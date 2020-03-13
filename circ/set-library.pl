@@ -30,7 +30,7 @@ use Koha::Libraries;
 my $query = CGI->new();
 
 my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
-    template_name   => "circ/selectbranchprinter.tt",
+    template_name   => "circ/set-library.tt",
     query           => $query,
     type            => "intranet",
     debug           => 1,
@@ -77,7 +77,7 @@ foreach ($query->param()) {
 }
 
 my $referer =  $query->param('oldreferer') || $ENV{HTTP_REFERER};
-$referer =~ /selectbranchprinter\.pl/ and undef $referer;   # avoid sending them back to this same page.
+$referer =~ /set-library\.pl/ and undef $referer;   # avoid sending them back to this same page.
 
 if (scalar @updated and not scalar @recycle_loop) {
     # we updated something, and there were no extra params to POST: quick redirect

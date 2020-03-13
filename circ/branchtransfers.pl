@@ -47,7 +47,7 @@ if (!C4::Context->userenv){
 	$session = get_session($sessionID) if $sessionID;
     if (!$session){
 		# no branch set we can't transfer
-		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+        print $query->redirect("/cgi-bin/koha/circ/set-library.pl");
 		exit;
 	}
 }
