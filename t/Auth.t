@@ -22,7 +22,6 @@ use Test::Warn;
 use C4::Auth qw / in_iprange /;
 
 $ENV{REMOTE_ADDR} = '192.168.1.30';
-my $ipset1 = "192.168.1.30";
 
 ok(in_iprange("192.168.1.30"), 'simple single ip matching remote ip');
 ok(!in_iprange("192.168.1.31"), 'simple single ip not match remote ip');
