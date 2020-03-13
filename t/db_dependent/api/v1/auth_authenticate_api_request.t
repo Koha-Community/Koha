@@ -100,7 +100,7 @@ subtest 'token-based tests' => sub {
 
 subtest 'cookie-based tests' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -118,6 +118,25 @@ subtest 'cookie-based tests' => sub {
     ok( defined $user, 'The \'koha.user\' object is defined in the stash') and
     is( ref($user), 'Koha::Patron', 'Stashed koha.user object type is Koha::Patron') and
     is( $user->borrowernumber, $borrowernumber, 'The stashed user is the right one' );
+
+    subtest 'logged-out tests' => sub {
+        plan tests => 3;
+
+        # Generate an anonymous session
+        my $session = C4::Auth::get_session('');
+        $session->param( 'ip',          $remote_address );
+        $session->param( 'lasttime',    time() );
+        $session->param( 'sessiontype', 'anon' );
+        $session->flush;
+
+        my $tx = $t->ua->build_tx( GET => '/api/v1/libraries' );
+        $tx->req->cookies({ name => 'CGISESSID', value => $session->id });
+        $tx->req->env({ REMOTE_ADDR => $remote_address });
+
+        $t->request_ok($tx)
+          ->status_is( 401, 'Anonymous session on permission protected resource returns 401' )
+          ->json_is( { error => 'Authentication failure.' } );
+    };
 
     $schema->storage->txn_rollback;
 };
