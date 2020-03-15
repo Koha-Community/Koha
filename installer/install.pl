@@ -212,6 +212,11 @@ elsif ( $step && $step == 3 ) {
     elsif ( $op && $op eq 'finish' ) {
         $installer->set_version_syspref();
 
+        my $langchoice = $query->param('fwklanguage');
+        $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
+        $langchoice =~ s/[^a-zA-Z_-]*//g;
+        $installer->set_languages_syspref($langchoice);
+
 # Installation is finished.
 # We just deny anybody access to install
 # And we redirect people to mainpage.
