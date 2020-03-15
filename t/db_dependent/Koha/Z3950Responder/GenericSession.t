@@ -109,11 +109,11 @@ subtest 'test_search' => sub {
 
     is($rs->size(), 2, 'Two results returned');
 
-    my $returned1 = MARC::Record->new_from_xml($rs->record(0)->raw());
+    my $returned1 = MARC::Record->new_from_xml($rs->record(0)->raw(), 'UTF-8');
     ok($returned1, 'Record 1 returned as MARCXML');
     is($returned1->as_xml, $marc_record_1->as_xml, 'Record 1 returned properly');
 
-    my $returned2= MARC::Record->new_from_xml($rs->record(1)->raw());
+    my $returned2= MARC::Record->new_from_xml($rs->record(1)->raw(), 'UTF-8');
     ok($returned2, 'Record 2 returned as MARCXML');
     is($returned2->as_xml, $marc_record_2->as_xml, 'Record 2 returned properly');
 
@@ -140,11 +140,11 @@ subtest 'test_search' => sub {
     my @records = $nodes[0]->getElementsByTagNameNS($marc_ns, 'record');
     is(scalar(@records), 2, 'Two results returned');
 
-    $returned1 = MARC::Record->new_from_xml($records[0]->toString());
+    $returned1 = MARC::Record->new_from_xml($records[0]->toString(), 'UTF-8');
     ok($returned1, 'Record 1 returned as MARCXML');
     is($returned1->as_xml, $marc_record_1->as_xml, 'Record 1 returned properly');
 
-    $returned2= MARC::Record->new_from_xml($records[1]->toString());
+    $returned2= MARC::Record->new_from_xml($records[1]->toString(), 'UTF-8');
     ok($returned2, 'Record 2 returned as MARCXML');
     is($returned2->as_xml, $marc_record_2->as_xml, 'Record 2 returned properly');
 

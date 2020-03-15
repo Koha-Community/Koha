@@ -95,7 +95,7 @@ sub next {
     return if !$row;
     my $marcxml = C4::Biblio::GetXmlBiblio( $row->get_column('biblionumber') );
     if ( $marcxml ) {
-        $marc = MARC::Record->new_from_xml( $marcxml );
+        $marc = MARC::Record->new_from_xml( $marcxml, 'UTF-8' );
     }
     else {
         confess "No marcxml column returned in the request.";
