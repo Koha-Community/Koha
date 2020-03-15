@@ -175,7 +175,7 @@ sub marc_framework_sql_list {
           sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
 
         $cell{"frameworks"} = \@fwks;
-        $cell{"label"}      = ucfirst($requirelevel);
+        $cell{"label"}      = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i)?'mandatory':'optional';
         $cell{"code"}       = lc($requirelevel);
         push @fwklist, \%cell;
     }
@@ -257,7 +257,7 @@ sub sample_data_sql_list {
         my @fwks = sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
 
         $cell{"frameworks"} = \@fwks;
-        $cell{"label"}      = ucfirst($requirelevel);
+        $cell{"label"}      = ($requirelevel =~ /(mandatory|requi|oblig|necess)/i)?'mandatory':'optional';
         $cell{"code"}       = lc($requirelevel);
         push @levellist, \%cell;
     }
