@@ -204,7 +204,7 @@ sub EmbedItemsInImportBiblio {
     |, { Slice => {} }, $import_record_id );
     my @item_fields;
     for my $import_item ( @$import_items ) {
-        my $item_marc = MARC::Record::new_from_xml($import_item->{marcxml});
+        my $item_marc = MARC::Record::new_from_xml($import_item->{marcxml}, 'UTF-8');
         push @item_fields, $item_marc->field($itemtag);
     }
     $record->append_fields(@item_fields);
