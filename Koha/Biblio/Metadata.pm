@@ -67,7 +67,7 @@ sub record {
     my $record;
 
     if ( $self->format eq 'marcxml' ) {
-        $record = eval { MARC::Record::new_from_xml( $self->metadata, 'utf-8', $self->schema ); };
+        $record = eval { MARC::Record::new_from_xml( $self->metadata, 'UTF-8', $self->schema ); };
         my $marcxml_error = $@;
         chomp $marcxml_error;
         unless ($record) {

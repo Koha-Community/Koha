@@ -54,7 +54,7 @@ sub add_bib {
     print $query->header(-type => 'text/xml', -charset => 'utf-8');
 
     my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
-    my $record = eval {MARC::Record::new_from_xml( $inxml, "utf8", $marcflavour)};
+    my $record = eval {MARC::Record::new_from_xml( $inxml, "UTF-8", $marcflavour)};
     my $do_not_escape = 0;
     if ($@) {
         $result->{'status'} = "failed";

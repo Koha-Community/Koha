@@ -121,7 +121,7 @@ foreach my $res (@$results) {
     MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
     my $record;
     eval {
-        $record = MARC::Record::new_from_xml($marcxml, "utf8", C4::Context->preference('marcflavour'));
+        $record = MARC::Record::new_from_xml($marcxml, "UTF-8", C4::Context->preference('marcflavour'));
     };
     if($@) {
         warn "(biblio $biblionumber) Error while creating record from marcxml: $@";
