@@ -88,7 +88,10 @@
                                 Defaulting to the frameworks supplied for English (en)<span></h4>
                             [% END %]
                             [% FOREACH frameworksloo IN frameworksloop %]
-                                <h4>[% frameworksloo.label | html %]</h4>
+                                [%- SWITCH frameworksloo.label -%]
+                                  [%- CASE 'mandatory' -%]<h4>Mandatory</h4>
+                                  [%- CASE 'optional'  -%]<h4>Optional</h4>
+                                [%- END -%]
 
                                 <div class="checkboxes">
 
@@ -125,7 +128,10 @@
                         [% END %]
 
                         [% FOREACH levelloo IN levelloop %]
-                            <h4>[% levelloo.label | html %]</h4>
+                            [%- SWITCH levelloo.label -%]
+                              [%- CASE 'mandatory' -%]<h4>Mandatory</h4>
+                              [%- CASE 'optional'  -%]<h4>Optional</h4>
+                            [%- END -%]
 
                             <div class="checkboxes">
 
