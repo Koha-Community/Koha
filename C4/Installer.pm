@@ -447,6 +447,32 @@ sub set_version_syspref {
     C4::Context->clear_syspref_cache();
 }
 
+=head2 set_languages_syspref
+
+  $installer->set_languages_syspref();
+
+Add the installation language to 'language' and 'opaclanguages' system preferences
+if different from 'en'
+
+=cut
+
+sub set_languages_syspref {
+    my $self     = shift;
+    my $language = shift;
+
+    return if ( not $language or $language eq 'en' );
+
+    warn "UPDATE Languages";
+    # intranet
+    my $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='language'");
+    $pref->execute("en,$language");
+    # opac
+    $pref = $self->{'dbh'}->prepare("UPDATE systempreferences SET value=? WHERE variable='opaclanguages'");
+    $pref->execute("en,$language");
+
+    C4::Context->clear_syspref_cache();
+}
+
 =head2 load_sql
 
   my $error = $installer->load_sql($filename);
