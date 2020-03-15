@@ -1158,7 +1158,7 @@ sub GetMarcBiblio {
 
     if ($marcxml) {
         $record = eval {
-            MARC::Record::new_from_xml( $marcxml, "utf8",
+            MARC::Record::new_from_xml( $marcxml, "UTF-8",
                 C4::Context->preference('marcflavour') );
         };
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }

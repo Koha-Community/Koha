@@ -97,7 +97,7 @@ foreach my $issue ( @{$issues} ) {
     if ( $marcxml ) {
         $marcxml = StripNonXmlChars( $marcxml );
         my $marc_rec =
-          MARC::Record::new_from_xml( $marcxml, 'utf8',
+          MARC::Record::new_from_xml( $marcxml, 'UTF-8',
             C4::Context->preference('marcflavour') );
         $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
     }

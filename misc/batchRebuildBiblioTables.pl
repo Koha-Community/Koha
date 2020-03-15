@@ -63,7 +63,7 @@ while (my ($biblionumber, $frameworkcode) = $sth->fetchrow) {
 
     $marcxml = C4::Charset::StripNonXmlChars( $marcxml );
     my $record = eval {
-        MARC::Record::new_from_xml($marcxml, 'utf8', $marcflavour);
+        MARC::Record::new_from_xml($marcxml, 'UTF-8', $marcflavour);
     };
     if ($@) {
         push @errors, $biblionumber;
