@@ -298,7 +298,10 @@
                                             [% END %]
                                         </select>
                                         [% IF Koha.Preference('ILLCheckAvailability') %]
-                                            <button type="button" id="generic_confirm_search">Search selected partners</button>
+                                            <div id="generic_confirm_search_count">Partners available for searching: <span id="generic_confirm_enabled">none</span></div>
+                                            <div id="generic_confirm_search">
+                                                <button type="button">Search selected partners</button>
+                                            </div>
                                         [% END %]
                                     </li>
                                     <li>
