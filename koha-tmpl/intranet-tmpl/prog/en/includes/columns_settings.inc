@@ -8,7 +8,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
     var selector = '#' + id_selector;
 
     $(columns_settings).each( function() {
-        var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( 'th' );
+        var named_id = $( 'thead th[data-colname="' + this.columnname + '"]', selector ).index( selector + ' th' );
         var used_id = dt_parameters.bKohaColumnsUseNames ? named_id : counter;
         if ( used_id == -1 ) return;
 
