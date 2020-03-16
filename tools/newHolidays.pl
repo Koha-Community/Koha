@@ -33,6 +33,8 @@ use Koha::DateUtils;
 my $input               = new CGI;
 my $dbh                 = C4::Context->dbh();
 
+checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
+
 our $branchcode          = $input->param('newBranchName');
 my $originalbranchcode  = $branchcode;
 our $weekday             = $input->param('newWeekday');

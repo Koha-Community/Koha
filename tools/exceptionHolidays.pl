@@ -14,6 +14,9 @@ use Koha::DateUtils;
 my $input = new CGI;
 my $dbh = C4::Context->dbh();
 
+checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
+
+
 my $branchcode = $input->param('showBranchName');
 my $weekday = $input->param('showWeekday');
 my $day = $input->param('showDay');
