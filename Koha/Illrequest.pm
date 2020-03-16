@@ -39,7 +39,6 @@ use Koha::Biblios;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Libraries;
-use C4::Items qw( AddItem );
 use C4::Circulation qw( CanBookBeIssued AddIssue  );
 
 use base qw(Koha::Object);
@@ -1166,15 +1165,15 @@ sub check_out {
         my $itemnumber;
         if ($item_count == 0) {
             my $item_hash = {
+                biblionumber  => $self->biblio_id,
                 homebranch    => $params->{branchcode},
                 holdingbranch => $params->{branchcode},
                 location      => $params->{branchcode},
                 itype         => $params->{item_type},
                 barcode       => 'ILL-' . $self->illrequest_id
             };
-            my (undef, undef, $item_no) =
-                AddItem($item_hash, $self->biblio_id);
-            $itemnumber = $item_no;
+            my $item = Koha::Item->new($item_hash);
+            $itemnumber = $item->itemnumber;
         } else {
             $itemnumber = $items[0]->itemnumber;
         }
