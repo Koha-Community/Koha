@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 157;
+use Test::More tests => 158;
 use Test::Warn;
 use Encode qw( encode_utf8 );
 use utf8;
@@ -165,7 +165,10 @@ open(my $handle_3a, "<", $filename_3a) or die "cannot open < $filename_3: $!";
 my $params_3a = { file => $handle_3a, matchpoint => 'cardnumber', overwrite_cardnumber => 1};
 
 # When ...
-my $result_3a = $patrons_import->import_patrons($params_3a);
+my $result_3a;
+warning_is { $result_3a = $patrons_import->import_patrons($params_3a) }
+           undef,
+           "No warning raised by import_patrons";
 
 # Then ...
 is($result_3a->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons when matched and overwrite set');
