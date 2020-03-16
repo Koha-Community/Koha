@@ -762,7 +762,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         if ( !name || macroEditor.savedGeneration == macroEditor.changeGeneration() ) return;
 
         macroEditor.savedGeneration = macroEditor.changeGeneration();
-//        storeMacro( name, { contents: macroEditor.getValue(), modified: (new Date()).valueOf(), history: macroEditor.getHistory(), format: $('#macro-format').val() } );
+        storeMacro( name, { contents: macroEditor.getValue(), modified: (new Date()).valueOf(), history: macroEditor.getHistory() } );
         $('#macro-save-message').text(_("Saved"));
         showSavedMacros();
     }
