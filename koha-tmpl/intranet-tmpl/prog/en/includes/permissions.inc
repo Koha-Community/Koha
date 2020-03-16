@@ -389,6 +389,11 @@
             Delete old borrowers and anonymize circulation history (deletes borrower reading history)
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'batch_extend_due_dates' -%]
+        <span class="sub_permission batch_extend_due_dates_subpermission">
+            Perform batch extend due dates
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_calendar' -%]
         <span class="sub_permission edit_calendar_subpermission">
             Define days when the library is closed
