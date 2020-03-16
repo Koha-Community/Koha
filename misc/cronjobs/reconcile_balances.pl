@@ -81,7 +81,8 @@ cronlogaction();
 
 my @patron_ids = map { $_->borrowernumber } Koha::Account::Lines->search(
         {
-            amountoutstanding => { '<' => 0 }
+            amountoutstanding => { '<' => 0 },
+            borrowernumber => { '!=' => undef }
         },
         {
             columns  => [ qw/borrowernumber/ ],
