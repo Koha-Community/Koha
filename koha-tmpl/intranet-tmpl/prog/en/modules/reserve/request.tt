@@ -976,7 +976,7 @@
         $(document).ready(function() {
             [% SET active = clubs ? 1 : 0 %]
             $('#circ_holds_select').tabs({
-                active: [% active %],
+                active: [% active | $raw %],
                 activate: function(){
                     $(this).find("input.focus").focus();
                 },
