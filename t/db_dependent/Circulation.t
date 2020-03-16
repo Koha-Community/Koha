@@ -1805,10 +1805,11 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     );
     $rule->store();
 
-    my $five_days_ago = dt_from_string->subtract( days => 5 );
+    my $now = dt_from_string;
+    my $five_days_ago = $now->clone->subtract( days => 5 );
     # We want to charge 2 days every day, without grace
     # With 5 days of overdue: 5 * Z
-    my $expected_expiration = dt_from_string->add( days => ( 5 * 2 ) / 1 );
+    my $expected_expiration = $now->clone->add( days => ( 5 * 2 ) / 1 );
     test_debarment_on_checkout(
         {
             item            => $item_1,
@@ -1822,7 +1823,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     # We want to charge 2 days every 2 days, without grace
     # With 5 days of overdue: (5 * 2) / 2
     $rule->suspension_chargeperiod(2)->store;
-    $expected_expiration = dt_from_string->add( days => floor( 5 * 2 ) / 2 );
+    $expected_expiration = $now->clone->add( days => floor( 5 * 2 ) / 2 );
     test_debarment_on_checkout(
         {
             item            => $item_1,
@@ -1837,7 +1838,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     # With 5 days of overdue: ((5-1) / 3 ) * 2
     $rule->suspension_chargeperiod(3)->store;
     $rule->firstremind(1)->store;
-    $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 1 ) / 3 ) * 2 ) );
+    $expected_expiration = $now->clone->add( days => floor( ( ( 5 - 1 ) / 3 ) * 2 ) );
     test_debarment_on_checkout(
         {
             item            => $item_1,
@@ -1858,7 +1859,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
 
     # Adding a holiday 2 days ago
     my $calendar = C4::Calendar->new(branchcode => $library->{branchcode});
-    my $two_days_ago = dt_from_string->subtract( days => 2 );
+    my $two_days_ago = $now->clone->subtract( days => 2 );
     $calendar->insert_single_holiday(
         day             => $two_days_ago->day,
         month           => $two_days_ago->month,
@@ -1867,7 +1868,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
         description     => 'holidayDesc 2 days ago'
     );
     # With 5 days of overdue, only 4 (x finedays=2) days must charged (one was an holiday)
-    $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) );
+    $expected_expiration = $now->clone->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) );
     test_debarment_on_checkout(
         {
             item            => $item_1,
@@ -1879,7 +1880,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     );
 
     # Adding a holiday 2 days ahead, with finesCalendar=noFinesWhenClosed it should be skipped
-    my $two_days_ahead = dt_from_string->add( days => 2 );
+    my $two_days_ahead = $now->clone->add( days => 2 );
     $calendar->insert_single_holiday(
         day             => $two_days_ahead->day,
         month           => $two_days_ahead->month,
@@ -1889,7 +1890,7 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     );
 
     # Same as above, but we should skip D+2
-    $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) + 1 );
+    $expected_expiration = $now->clone->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) + 1 );
     test_debarment_on_checkout(
         {
             item            => $item_1,
@@ -1925,8 +1926,8 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             item            => $item_1,
             library         => $library,
             patron          => $patron,
-            return_date     => dt_from_string->add(days => 5),
-            expiration_date => dt_from_string->add(days => 5 + (5 * 2 - 1) ),
+            return_date     => $now->clone->add(days => 5),
+            expiration_date => $now->clone->add(days => 5 + (5 * 2 - 1) ),
         }
     );
 };
@@ -2014,9 +2015,9 @@ subtest 'AddReturn | is_overdue' => sub {
     $rule->store();
 
     my $now   = dt_from_string;
-    my $one_day_ago   = dt_from_string->subtract( days => 1 );
-    my $five_days_ago = dt_from_string->subtract( days => 5 );
-    my $ten_days_ago  = dt_from_string->subtract( days => 10 );
+    my $one_day_ago   = $now->clone->subtract( days => 1 );
+    my $five_days_ago = $now->clone->subtract( days => 5 );
+    my $ten_days_ago  = $now->clone->subtract( days => 10 );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
     # No return date specified, today will be used => 10 days overdue charged
@@ -2674,8 +2675,9 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
         .10,   1
     );
 
-    my $five_days_go = output_pref({ dt => dt_from_string->add( days => 5 ), dateonly => 1});
-    my $ten_days_go  = output_pref({ dt => dt_from_string->add( days => 10), dateonly => 1 });
+    my $now   = dt_from_string;
+    my $five_days_go = output_pref({ dt => $now->clone->add( days => 5 ), dateonly => 1});
+    my $ten_days_go  = output_pref({ dt => $now->clone->add( days => 10), dateonly => 1 });
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
