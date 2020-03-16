@@ -1701,14 +1701,15 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     $rule->store();
 
     # Patron cannot issue item_1, they have overdues
-    my $five_days_ago = dt_from_string->subtract( days => 5 );
-    my $ten_days_ago  = dt_from_string->subtract( days => 10 );
+    my $now = dt_from_string;
+    my $five_days_ago = $now->clone->subtract( days => 5 );
+    my $ten_days_ago  = $now->clone->subtract( days => 10 );
     AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
     AddIssue( $patron, $item_2->{barcode}, $ten_days_ago )
       ;    # Add another overdue
 
     t::lib::Mocks::mock_preference( 'CumulativeRestrictionPeriods', '0' );
-    AddReturn( $item_1->{barcode}, $library->{branchcode}, undef, dt_from_string );
+    AddReturn( $item_1->{barcode}, $library->{branchcode}, undef, $now );
     my $debarments = Koha::Patron::Debarments::GetDebarments(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
     is( scalar(@$debarments), 1 );
@@ -1717,20 +1718,20 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     # Same for the others
     my $expected_expiration = output_pref(
         {
-            dt         => dt_from_string->add( days => ( 5 - 1 ) * 2 ),
+            dt         => $now->clone->add( days => ( 5 - 1 ) * 2 ),
             dateformat => 'sql',
             dateonly   => 1
         }
     );
     is( $debarments->[0]->{expiration}, $expected_expiration );
 
-    AddReturn( $item_2->{barcode}, $library->{branchcode}, undef, dt_from_string );
+    AddReturn( $item_2->{barcode}, $library->{branchcode}, undef, $now );
     $debarments = Koha::Patron::Debarments::GetDebarments(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
     is( scalar(@$debarments), 1 );
     $expected_expiration = output_pref(
         {
-            dt         => dt_from_string->add( days => ( 10 - 1 ) * 2 ),
+            dt         => $now->clone->add( days => ( 10 - 1 ) * 2 ),
             dateformat => 'sql',
             dateonly   => 1
         }
@@ -1744,26 +1745,26 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
     AddIssue( $patron, $item_2->{barcode}, $ten_days_ago )
       ;    # Add another overdue
-    AddReturn( $item_1->{barcode}, $library->{branchcode}, undef, dt_from_string );
+    AddReturn( $item_1->{barcode}, $library->{branchcode}, undef, $now );
     $debarments = Koha::Patron::Debarments::GetDebarments(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
     is( scalar(@$debarments), 1 );
     $expected_expiration = output_pref(
         {
-            dt         => dt_from_string->add( days => ( 5 - 1 ) * 2 ),
+            dt         => $now->clone->add( days => ( 5 - 1 ) * 2 ),
             dateformat => 'sql',
             dateonly   => 1
         }
     );
     is( $debarments->[0]->{expiration}, $expected_expiration );
 
-    AddReturn( $item_2->{barcode}, $library->{branchcode}, undef, dt_from_string );
+    AddReturn( $item_2->{barcode}, $library->{branchcode}, undef, $now );
     $debarments = Koha::Patron::Debarments::GetDebarments(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
     is( scalar(@$debarments), 1 );
     $expected_expiration = output_pref(
         {
-            dt => dt_from_string->add( days => ( 5 - 1 ) * 2 + ( 10 - 1 ) * 2 ),
+            dt => $now->clone->add( days => ( 5 - 1 ) * 2 + ( 10 - 1 ) * 2 ),
             dateformat => 'sql',
             dateonly   => 1
         }
@@ -3047,7 +3048,8 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     $context = Test::MockModule->new('C4::Context');
     $context->mock( userenv => { branch => undef, interface => 'CRON'} ); #Test statistical logging of renewal via cron (atuo_renew)
 
-    $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
+    my $now = dt_from_string;
+    $date = output_pref( { dt => $now, dateonly => 1, dateformat => 'iso' } );
     $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     my $sth = $dbh->prepare("SELECT COUNT(*) FROM statistics WHERE itemnumber = ? AND branch = ?");
     $sth->execute($item->id, $library->id);
@@ -3127,9 +3129,10 @@ subtest 'Incremented fee tests' => sub {
     is( $item->effective_itemtype, $itemtype->id,
         "Itemtype set correctly for item" );
 
-    my $dt_from     = dt_from_string();
-    my $dt_to       = dt_from_string()->add( days => 7 );
-    my $dt_to_renew = dt_from_string()->add( days => 13 );
+    my $now         = dt_from_string;
+    my $dt_from     = $now->clone;
+    my $dt_to       = $now->clone->add( days => 7 );
+    my $dt_to_renew = $now->clone->add( days => 13 );
 
     # Daily Tests
     t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
@@ -3221,8 +3224,8 @@ subtest 'Incremented fee tests' => sub {
     is( $itemtype->rentalcharge_hourly,
         '0.25', 'Hourly rental charge stored and retreived correctly' );
 
-    $dt_to       = dt_from_string()->add( hours => 168 );
-    $dt_to_renew = dt_from_string()->add( hours => 312 );
+    $dt_to       = $now->clone->add( hours => 168 );
+    $dt_to_renew = $now->clone->add( hours => 312 );
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
     $issue =
@@ -3314,7 +3317,7 @@ subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
 
     my ( $issuingimpossible, $needsconfirmation );
     my $dt_from = dt_from_string();
-    my $dt_due = dt_from_string()->add( days => 3 );
+    my $dt_due = $dt_from->clone->add( days => 3 );
 
     $itemtype->rentalcharge('1.000000')->store;
     ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
