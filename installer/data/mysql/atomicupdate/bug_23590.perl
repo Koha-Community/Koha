@@ -13,6 +13,28 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do(q|
             ALTER TABLE suggestions ADD COLUMN lastmodificationdate DATE DEFAULT NULL AFTER lastmodificationby
         |);
+
+        my $suggestions = $dbh->selectall_arrayref(q|
+            SELECT suggestionid, managedby, manageddate, acceptedby, accepteddate, rejectedby, rejecteddate
+            FROM suggestions
+        |, { Slice => {} });
+        for my $suggestion ( @$suggestions ) {
+            my ( $max_date ) = sort ( $suggestion->{manageddate} || (), $suggestion->{accepteddate} || (), $suggestion->{rejecteddate} || () );
+            next unless $max_date;
+            my $last_modif_by = ( defined $suggestion->{manageddate} and $max_date eq $suggestion->{manageddate} )
+              ? $suggestion->{managedby}
+              : ( defined $suggestion->{accepteddate} and $max_date eq $suggestion->{accepteddate} )
+              ? $suggestion->{acceptedby}
+              : ( defined $suggestion->{rejecteddate} and $max_date eq $suggestion->{rejecteddate} )
+              ? $suggestion->{rejectedby}
+              : undef;
+            next unless $last_modif_by;
+            $dbh->do(q|
+                UPDATE suggestions
+                SET lastmodificationdate = ?, lastmodificationby = ?
+                WHERE suggestionid = ?
+            |, undef, $max_date, $last_modif_by, $suggestion->{suggestionid});
+        }
     }
 
     # Always end with this (adjust the bug info)
