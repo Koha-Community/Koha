@@ -387,7 +387,11 @@
             <tr>
                 <th><label for="lastmodificationdate">Last modification on:</label> </th>
                 <td>[% lastmodificationdate | $KohaDates %]</td>
-                <td>[% INCLUDE 'patron-title.inc' patron=lastmodificationby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( lastmodificationby_patron.branchcode ) | html %] ([% lastmodificationby_patron.category.description | html %])</td>
+                <td>
+                    [% IF lastmodificationby_patron %]
+                        [% INCLUDE 'patron-title.inc' patron=lastmodificationby_patron hide_patron_infos_if_needed=1 %] [% Branches.GetName( lastmodificationby_patron.branchcode ) | html %] ([% lastmodificationby_patron.category.description | html %])
+                    [% END %]
+                </td>
             </tr>
             </tbody>
         </table></li>
