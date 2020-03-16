@@ -281,7 +281,9 @@ sub ModItemFromMarc {
     my $item_object = Koha::Items->find($itemnumber);
     my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
     $item->{cn_source} = delete $item->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
-    $item_object->set($item);
+    $item->{itemnumber} = $itemnumber;
+    $item->{biblionumber} = $biblionumber;
+    $item_object = $item_object->set_or_blank($item);
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
     $item_object->store;

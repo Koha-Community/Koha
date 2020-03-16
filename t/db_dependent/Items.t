@@ -33,7 +33,7 @@ use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 
 use Test::Warn;
 
@@ -972,6 +972,46 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
     is( @subs, 2, 'Expect two subfields' );
     is( $subs[0], 'A', 'First subfield matches' );
     is( $subs[1], 'B', 'Second subfield matches' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'ModItemFromMarc' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my ($itemfield) = GetMarcFromKohaField( 'items.itemnumber' );
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $biblio = $builder->build_sample_biblio;
+    my ( $lost_tag, $lost_sf ) = GetMarcFromKohaField( 'items.itemlost' );
+    my $item_record = new MARC::Record;
+    $item_record->append_fields(
+        MARC::Field->new(
+            $itemfield, '', '',
+            'y' => $itemtype->itemtype,
+        ),
+        MARC::Field->new(
+            $itemfield, '', '',
+            $lost_sf => '1',
+        ),
+    );
+    my (undef, undef, $itemnumber) = AddItemFromMarc($item_record,
+        $biblio->biblionumber);
+
+    my $item = Koha::Items->find($itemnumber);
+    is( $item->itemlost, 1, 'itemlost picked from the item marc');
+
+    my $updated_item_record = new MARC::Record;
+    $updated_item_record->append_fields(
+        MARC::Field->new(
+            $itemfield, '', '',
+            'y' => $itemtype->itemtype,
+        )
+    );
+
+    my $updated_item = ModItemFromMarc($updated_item_record, $biblio->biblionumber, $itemnumber);
+    is( $updated_item->{itemlost}, 0, 'itemlost should have been reset to the default value in DB' );
 
     $schema->storage->txn_rollback;
 };

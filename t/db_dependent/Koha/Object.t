@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use Test::Exception;
 use Test::Warn;
 use DateTime;
@@ -815,6 +815,40 @@ subtest 'prefetch_whitelist() tests' => sub {
         'Koha::Acquisition::Order',
         'Guessed the object class correctly'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_or_blank' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item;
+    my $item_info = $item->unblessed;
+    $item = $item->set_or_blank($item_info);
+    is_deeply($item->unblessed, $item_info, 'set_or_blank assign the correct value if unchanged');
+
+    # int not null
+    delete $item_info->{itemlost};
+    $item = $item->set_or_blank($item_info);
+    is($item->itemlost, 0, 'set_or_blank should have set itemlost to 0, default value defined in DB');
+
+    # int nullable
+    delete $item_info->{restricted};
+    $item = $item->set_or_blank($item_info);
+    is($item->restricted, undef, 'set_or_blank should have set restristed to null' );
+
+    # datetime nullable
+    delete $item_info->{dateaccessioned};
+    $item = $item->set_or_blank($item_info);
+    is($item->dateaccessioned, undef, 'set_or_blank should have set dateaccessioned to null');
+
+    # timestamp not null
+    delete $item_info->{timestamp};
+    $item = $item->set_or_blank($item_info);
+    isnt($item->timestamp, undef, 'set_or_blank should have set timestamp to a correct value');
 
     $schema->storage->txn_rollback;
 };

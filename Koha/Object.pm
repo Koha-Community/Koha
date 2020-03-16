@@ -269,6 +269,41 @@ sub set {
     return $self->_result()->set_columns($properties) ? $self : undef;
 }
 
+=head3 $object->set_or_blank( $properties_hashref )
+
+$object->set_or_blank(
+    {
+        property1 => $property1,
+        property2 => $property2,
+        property3 => $propery3,
+    }
+);
+
+If not listed in $properties_hashref, the property will be set to the default
+value defined at DB level, or nulled.
+
+=cut
+
+
+sub set_or_blank {
+    my ( $self, $properties ) = @_;
+
+    my $columns_info = $self->_result->result_source->columns_info;
+
+    foreach my $col ( keys %{$columns_info} ) {
+
+        next if exists $properties->{$col};
+
+        if ( $columns_info->{$col}->{is_nullable} ) {
+            $properties->{$col} = undef;
+        } else {
+            $properties->{$col} = $columns_info->{$col}->{default_value};
+        }
+    }
+
+    return $self->set($properties);
+}
+
 =head3 $object->unblessed();
 
 Returns an unblessed representation of object.
