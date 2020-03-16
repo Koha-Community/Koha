@@ -180,7 +180,7 @@ if ( $op =~ /save/i ) {
 
                     my $letter = C4::Letters::GetPreparedLetter(
                         module      => 'suggestions',
-                        letter_code => 'TO_PROCESS',
+                        letter_code => 'NOTIFY_MANAGER',
                         branchcode  => $patron->branchcode,
                         lang        => $patron->lang,
                         tables      => {

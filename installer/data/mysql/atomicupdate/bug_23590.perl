@@ -35,7 +35,12 @@ if( CheckVersion( $DBversion ) ) {
                 WHERE suggestionid = ?
             |, undef, $max_date, $last_modif_by, $suggestion->{suggestionid});
         }
+
     }
+
+    $dbh->do( q|
+        INSERT IGNORE INTO letter(module, code, branchcode, name, is_html, title, content, message_transport_type, lang) VALUES ('suggestions', 'NOTIFY_MANAGER', '', 'Notify manager of a suggestion', 0, "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email', 'default');
+    | );
 
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );

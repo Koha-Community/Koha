@@ -1145,3 +1145,20 @@ tables:
             - "Thank you,"
             - ""
             - "<<branches.branchname>>"
+
+        - module: suggestions
+          code: NOTIFY_MANAGER
+          branchcode: ""
+          name: "Notify manager of a suggestion"
+          is_html: 0
+          title: "A suggestion has been assigned to you"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Dear [% borrower.firstname %] [% borrowers.surname %],"
+            - ""
+            - "A new suggestion has been assigned to you: [% suggestion.title %]."
+            - ""
+            - "Thank you,"
+            - ""
+            - "[% branch.branchname %]"
