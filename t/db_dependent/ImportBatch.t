@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 14;
+use Test::More tests => 15;
+use utf8;
 use File::Basename;
 use File::Temp qw/tempfile/;
 
@@ -105,7 +106,7 @@ my @fields = (
     ),
     MARC::Field->new(
         $item_tag, ' ', ' ',
-        e => 'my edition',
+        e => 'my edition ❤',
         i => 'my item part',
     ),
     MARC::Field->new(
@@ -122,6 +123,8 @@ AddItemsToImportBiblio( $id_import_batch1, $import_record_id, $record, 0 );
 my $record_from_import_biblio_with_items = C4::ImportBatch::GetRecordFromImportBiblio( $import_record_id, 'embed_items' );
 $original_record->leader($record_from_import_biblio_with_items->leader());
 is_deeply( $record_from_import_biblio_with_items, $original_record, 'GetRecordFromImportBiblio should return the record with items if specified' );
+my $utf8_field = $record_from_import_biblio_with_items->subfield($item_tag, 'e');
+is($utf8_field, 'my edition ❤');
 $original_record->delete_fields($original_record->field($item_tag)); #Remove items fields
 my $record_from_import_biblio_without_items = C4::ImportBatch::GetRecordFromImportBiblio( $import_record_id );
 $original_record->leader($record_from_import_biblio_without_items->leader());
