@@ -37,6 +37,9 @@
     [% IF ( CAN_user_tools_edit_patrons ) %]
     <li><a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a></li>
     [% END %]
+    [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
+    <li><a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a></li>
+    [% END %]
     [% IF ( CAN_user_tools_moderate_tags ) %]
     <li><a href="/cgi-bin/koha/tags/review.pl">Tag moderation</a></li>
     [% END %]

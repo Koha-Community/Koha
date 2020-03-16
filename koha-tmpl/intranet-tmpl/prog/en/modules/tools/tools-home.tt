@@ -15,7 +15,7 @@
         <div class="col-sm-4">
 [% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons
   || CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons
-  || CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) %]
+  || CAN_user_tools_edit_patrons || CAN_user_tools_batch_extend_due_dates || CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) %]
 <h3>Patrons and circulation</h3>
 [% END %]
 <dl>
@@ -62,6 +62,11 @@
     [% IF ( CAN_user_tools_edit_patrons ) %]
     <dt><a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a></dt>
     <dd>Modify patrons in batch</dd>
+    [% END %]
+
+    [% IF ( CAN_user_tools_batch_extend_due_dates ) %]
+    <dt><a href="/cgi-bin/koha/tools/batch_extend_due_dates.pl">Batch extend due dates</a></dt>
+    <dd>Modify the due date checkouts in batch</dd>
     [% END %]
 
     [% IF ( CAN_user_tools_moderate_tags ) %]
