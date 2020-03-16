@@ -140,6 +140,7 @@
     [%- CASE 'edit_templates' -%]<span>Create and edit club templates</span>
     [%- CASE 'enroll' -%]<span>Enroll patrons in clubs</span>
     [%- CASE 'edi_manage' -%]<span>Manage EDIFACT transmissions</span>
+    [%- CASE 'batch_extend_due_dates' -%]<span>Perform batch extend due dates</span>
   [%# self_check %]
     [%- CASE 'self_checkin_module' -%]<span>Log into the self check-in module. Note: this permission prevents the patron from using any other OPAC functionality</span>
     [%- CASE 'self_checkout_module' -%]<span>Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID</span>
