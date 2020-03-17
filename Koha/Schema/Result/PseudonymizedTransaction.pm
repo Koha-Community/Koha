@@ -143,6 +143,12 @@ __PACKAGE__->table("pseudonymized_transactions");
   is_nullable: 1
   size: 10
 
+=head2 homebranch
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 10
+
 =head2 location
 
   data_type: 'varchar'
@@ -219,6 +225,8 @@ __PACKAGE__->add_columns(
   "itemtype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "holdingbranch",
+  { data_type => "varchar", is_nullable => 1, size => 10 },
+  "homebranch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "location",
   { data_type => "varchar", is_nullable => 1, size => 80 },
@@ -308,8 +316,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-11 17:12:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bzHjcKCHYf+bixeA1dhKIQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-17 16:28:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jgUZi4W5vJo33KdKI7+jyQ
 
 __PACKAGE__->add_columns(
     '+has_cardnumber' => { is_boolean => 1 },
