@@ -181,7 +181,7 @@ function select_user(borrowernumber, borrower, relationship) {
         var guarantor_id = $('#guarantor_id').val();
         if ( guarantor_id ) {
             fieldset.find('.new_guarantor_id').first().val( guarantor_id );
-            fieldset.find('.new_guarantor_id_text').first().text( guarantor_id );
+            fieldset.find('.new_guarantor_id_text').first().text( borrower.cardnumber );
         } else {
             fieldset.find('.guarantor_id').first().hide();
         }

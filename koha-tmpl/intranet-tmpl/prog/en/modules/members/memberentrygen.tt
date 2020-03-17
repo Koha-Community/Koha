@@ -352,8 +352,8 @@
                             </li>
                         [% ELSE %]
                             <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
-                                <span class="label">Patron #:</span>
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor_id | html %]</a>
+                                <span class="label">Patron card number:</span>
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor.cardnumber | html %]</a>
                             </li>
 
                             [% IF r.guarantor.surname %]
@@ -383,12 +383,47 @@
                     </ol>
                 </fieldset>
             [% END # END relationships foreach %]
+            [% IF guarantor && (!relationships) %]
+                <fieldset class="rows">
+                    <ol>
+                        <li class="guarantor-details" data-borrowernumber="0">
+                            <span class="label">Patron card number:</span>
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.cardnumber | html %]</a>
+                            <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
+                        </li>
+
+                        <li>
+                            <label for="guarantor_surname">Surname: </label>
+                            <span class="new_guarantor_surname_text">[% guarantor.surname | html %]</span>
+                        </li>
+
+                        <li>
+                            <label for="guarantor_firstname">First name: </label>
+                            <span class="new_guarantor_firstname_text">[% guarantor.firstname | html %]</span>
+                        </li>
+
+                        <li>
+                            <label for="guarantor_relationship">Relationship: </label>
+                            <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                                [% FOREACH pr IN possible_relationships.split('\|') %]
+                                    <option value="[% pr | html %]">[% pr | html %]</option>
+                                [% END %]
+                            </select>
+                        </li>
+
+                        <li>
+                            <label for="guarantor_cancel">&nbsp;</label>
+                            <span><a href="#" class="guarantor_cancel">Remove</a></span>
+                        </li>
+                    </ol>
+                </fieldset>
+            [% END %]
         </span>
 
         <fieldset class="rows guarantor" id="guarantor_template">
             <ol>
                 <li class="guarantor-details" data-borrowernumber="0">
-                    <span class="label">Patron #:</span>
+                    <span class="label">Patron card number:</span>
                     <span class="new_guarantor_id_text"></span>
                     <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value=""/>
                 </li>
@@ -484,7 +519,7 @@
                     <label for="contactname">
                 [% END %]
                 Guarantor surname: </label>
-                <input type="text" id="contactname" name="contactname" value="[% contactname | html %]" />
+                <input type="text" id="contactname" name="contactname" value="[% patron.contactname | html %]" />
                 [% IF ( mandatorycontactname ) %]<span class="required">Required</span>[% END %]<div class="hint">Non-patron guarantor surname</div>
             </li>
         [% END %]
@@ -497,7 +532,7 @@
                     <label for="contactfirstname">
                 [% END %]
                 Guarantor first name: </label>
-                <input type="text" id="contactfirstname" name="contactfirstname" value="[% contactfirstname | html %]" />
+                <input type="text" id="contactfirstname" name="contactfirstname" value="[% patron.contactfirstname | html %]" />
                 [% IF ( mandatorycontactfirstname ) %]<span class="required">Required</span>[% END %]<div class="hint">Non-patron guarantor first name</div>
             </li>
         [% END %]
@@ -528,7 +563,7 @@
                     <label for="phone">
                 [% END %]
                 Primary phone: </label>
-                <input type="text" id="phone" name="phone" value="[% phone | html %]" />
+                <input type="text" id="phone" name="phone" value="[% patron.phone | html %]" />
                 [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
             </li>
         [% END %]
@@ -541,7 +576,7 @@
                     <label for="phonepro">
                 [% END %]
                 Secondary phone: </label>
-                <input type="text" id="phonepro" name="phonepro" value="[% phonepro | html %]" />
+                <input type="text" id="phonepro" name="phonepro" value="[% patron.phonepro | html %]" />
                 [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -554,7 +589,7 @@
                     <label for="mobile">
                 [% END %]
                 Other phone: </label>
-                <input type="text" id="mobile" name="mobile" value="[% mobile | html %]" />
+                <input type="text" id="mobile" name="mobile" value="[% patron.mobile | html %]" />
                 [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -567,7 +602,7 @@
                     <label for="email">
                 [% END %]
                 Primary email: </label>
-                <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
+                <input type="text" id="email" name="email" size="45" value="[% patron.email | html %]" />
                 [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
             </li>
         [% END %]
@@ -580,7 +615,7 @@
                     <label for="emailpro">
                 [% END %]
                 Secondary email: </label>
-                <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
+                <input type="text" id="emailpro" name="emailpro" size="45" value="[% patron.emailpro | html %]" />
                 [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -593,7 +628,7 @@
                     <label for="fax">
                 [% END %]
                 Fax: </label>
-                <input type="text" id="fax" name="fax" value="[% fax | html %]" />
+                <input type="text" id="fax" name="fax" value="[% patron.fax | html %]" />
                 [% IF ( mandatoryfax ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
