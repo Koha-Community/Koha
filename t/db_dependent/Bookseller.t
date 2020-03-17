@@ -764,10 +764,7 @@ $schema->storage->txn_rollback();
 sub field_filter {
     my ($struct) = @_;
 
-    for my $field (
-        'currency',        'invoiceprice',
-        'listprice',       'contacts'
-      )
+    for my $field ( qw(invoiceprice listprice contacts) )
     {
 
         if ( grep { /^$field$/ } keys %$struct ) {

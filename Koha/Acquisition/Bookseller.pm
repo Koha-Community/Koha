@@ -85,7 +85,6 @@ on the API.
 
 sub to_api_mapping {
     return {
-        currency        => undef,
         listprice       => 'list_currency',
         invoiceprice    => 'invoice_currency',
         gstreg          => 'gst',
