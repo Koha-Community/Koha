@@ -85,7 +85,6 @@ on the API.
 
 sub to_api_mapping {
     return {
-        booksellerfax   => undef,
         bookselleremail => undef,
         booksellerurl   => undef,
         currency        => undef,
