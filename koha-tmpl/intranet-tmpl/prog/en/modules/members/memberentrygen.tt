@@ -99,13 +99,9 @@ legend:hover {
                         [% IF ( check_member ) %]
                             <div class="dialog alert">
                                 <h3>Duplicate patron record?</h3>
-                                <p><a href="#" onclick="Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]');return false;" ><i class="fa fa-window-restore"></i> View existing record</a></p>
-                                <button id="duplicate" type="submit" class="new">
-                                    <i class="fa fa-pencil"></i> It is a duplicate. Edit existing record
-                                </button>
-                                <button type="submit" id="not-duplicate" class="new">
-                                    <i class="fa fa-plus"></i> Not a duplicate. Save as new record
-                                </button>
+                                <p><a class="popup_patronview" href="/cgi-bin/koha/members/moremember.pl?print=brief&amp;borrowernumber=[% check_member | uri %]"><i class="fa fa-window-restore"></i> View existing record</a></p>
+                                <button id="duplicate" type="submit" class="new"> <i class="fa fa-pencil"></i> It is a duplicate. Edit existing record </button>
+                                <button type="submit" id="not-duplicate" class="new"> <i class="fa fa-plus"></i> Not a duplicate. Save as new record </button>
                             </div>
                         [% END %]
 
@@ -321,7 +317,7 @@ legend:hover {
                                                         [% END %]
                                                         Date of birth:
                                                         </label>
-                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="write_age();" value="[% dateofbirth | html UNLESS opduplicate %]" class="datepicker" />
+                                                        <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% dateofbirth | html UNLESS opduplicate %]" class="datepicker" />
                                                          [% IF ( mandatorydateofbirth ) %]
                                                             <span class="required">Required</span>
                                                         [% END %]
@@ -817,7 +813,7 @@ legend:hover {
 
                                         <li>
                                             <label for="categorycode_entry" class="required">Category: </label>
-                                            <select id="categorycode_entry" name="categorycode" onchange="update_category_code(this);">
+                                            <select id="categorycode_entry" name="categorycode">
                                                 [% FOREACH typeloo IN typeloop %]
                                                     [% FOREACH categoryloo IN typeloo.categoryloop %]
                                                         [% IF ( loop.first ) %]
@@ -962,11 +958,7 @@ legend:hover {
                                                 [% END %]
                                                     Registration date:
                                                 </label>
-                                                [% IF ( dateformat == "metric" ) %]
-                                                    <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled | html %]" class="datepickerfrom" />
-                                                [% ELSE %]
-                                                    <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="datepickerfrom" />
-                                                [% END %]
+                                                <input type="text" id="from" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled | html %]" class="datepickerfrom" />
                                                 [% IF ( mandatorydateenrolled ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -989,19 +981,11 @@ legend:hover {
                                             [% END %]
                                                     Expiry date (leave blank for auto calc):
                                                 </label>
-                                                [% IF ( dateformat == "metric" ) %]
-                                                    [% UNLESS ( opadd ) %]
-                                                        <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry | html UNLESS opduplicate %]" class="datepickerto" />
-                                                    [% ELSE %]
-                                                        <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" class="datepickerto" />
-                                                    [% END %]
+                                                [% UNLESS ( opadd ) %]
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="datepickerto" />
                                                 [% ELSE %]
-                                                    [% UNLESS ( opadd ) %]
-                                                        <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html UNLESS opduplicate %]" class="datepickerto" />
-                                                    [% ELSE %]
-                                                        <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="datepickerto" />
-                                                    [% END %]
-                                                [% END # /IF ( dateformat == "metric" ) %]
+                                                    <input type="text" id="to" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry | html %]" class="datepickerto" />
+                                                [% END %]
                                                 [% IF ( mandatorydateexpiry ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -1288,12 +1272,12 @@ legend:hover {
                                                 <ol>
                                                     <li>
                                                         <label for="debarred_comment">Comment: </label>
-                                                        <input type="text" id="debarred_comment" name="debarred_comment" onchange="$('#add_debarment').val(1);" />
+                                                        <input type="text" id="debarred_comment" name="debarred_comment" />
                                                     </li>
                                                     <li>
                                                         <label for="debarred_expiration">Expiration: </label>
-                                                        <input name="debarred_expiration" id="debarred_expiration" size="10" value="" class="datepicker" onchange="$('#add_debarment').val(1);" type="text" />
-                                                        <a href='javascript:void(0)' onclick="$('#debarred_expiration').val('');">Clear date</a>
+                                                        <input name="debarred_expiration" id="debarred_expiration" size="10" value="" class="datepicker" type="text" />
+                                                        <a href="#" id="clear_debarred_expiration">Clear date</a>
                                                     </li>
                                                 </ol>
                                                 <p>
@@ -1381,9 +1365,9 @@ legend:hover {
                                                                 <textarea rows="2" cols="30" id="[% patron_attribute.form_id | html %]" name="[% patron_attribute.form_id | html %]">[% patron_attribute.value | html %]</textarea>
                                                             [% END # /IF ( patron_attribute.use_dropdown ) %]
                                                             <input type="hidden" id="[% patron_attribute.form_id | html %]_code" name="[% patron_attribute.form_id | html %]_code" value="[% patron_attribute.code | html %]" />
-                                                            <a href="#" onclick="clear_entry(this); return false;"><i class="fa fa-fw fa-trash"></i> Clear</a>
+                                                            <a href="#" class="clear_attribute"><i class="fa fa-fw fa-trash"></i> Clear</a>
                                                             [% IF ( patron_attribute.repeatable ) %]
-                                                                <a href="#" onclick="clone_entry(this); return false;"><i class="fa fa-fw fa-plus"></i> New</a>
+                                                                <a href="#" class="clone_attribute"><i class="fa fa-fw fa-plus"></i> New</a>
                                                             [% END %]
                                                         </li>
                                                     [% END # /FOREACH patron_attribute %]
@@ -1645,6 +1629,39 @@ legend:hover {
             $('#not-duplicate').on('click', function() {
                 $("input[name='nodouble']").val('1');
                 $('#entryform').submit();
+            });
+
+            $(".popup_patronview").on("click", function(e){
+                e.preventDefault();
+                var url = $(this).attr("href");
+                openWindow( url, "patronview" );
+            });
+
+            $("#dateofbirth").on("change", function(){
+                 write_age();
+            });
+
+            $("#debarred_comment, #debarred_expiration").on("change", function(){
+                $("#add_debarment").val(1);
+            });
+
+            $("#clear_debarred_expiration").on("click", function(e){
+                e.preventDefault();
+                $('#debarred_expiration').val("");
+            });
+
+            $(".clear_attribute").on("click", function(e){
+                e.preventDefault();
+                clear_entry( this );
+            });
+
+            $(".clone_attribute").on("click", function(e){
+                e.preventDefault();
+                clone_entry( this );
+            });
+
+            $("#categorycode_entry").on("change", function(){
+                update_category_code(this);
             });
         });
 
