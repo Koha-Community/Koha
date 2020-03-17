@@ -65,34 +65,7 @@ __PACKAGE__->table("aqbooksellers");
   data_type: 'longtext'
   is_nullable: 1
 
-=head2 othersupplier
-
-  data_type: 'longtext'
-  is_nullable: 1
-
-=head2 currency
-
-  data_type: 'varchar'
-  default_value: (empty string)
-  is_nullable: 0
-  size: 10
-
-=head2 booksellerfax
-
-  data_type: 'longtext'
-  is_nullable: 1
-
 =head2 notes
-
-  data_type: 'longtext'
-  is_nullable: 1
-
-=head2 bookselleremail
-
-  data_type: 'longtext'
-  is_nullable: 1
-
-=head2 booksellerurl
 
   data_type: 'longtext'
   is_nullable: 1
@@ -184,17 +157,7 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 30 },
   "accountnumber",
   { data_type => "longtext", is_nullable => 1 },
-  "othersupplier",
-  { data_type => "longtext", is_nullable => 1 },
-  "currency",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 10 },
-  "booksellerfax",
-  { data_type => "longtext", is_nullable => 1 },
   "notes",
-  { data_type => "longtext", is_nullable => 1 },
-  "bookselleremail",
-  { data_type => "longtext", is_nullable => 1 },
-  "booksellerurl",
   { data_type => "longtext", is_nullable => 1 },
   "postal",
   { data_type => "longtext", is_nullable => 1 },
@@ -382,8 +345,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DyaF9RbcNAOjPQ1lrxHV3A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-17 08:54:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1lSFcy25po9EBzkNkjL5UA
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 },
