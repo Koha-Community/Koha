@@ -416,8 +416,8 @@ legend:hover {
                                                                 </li>
                                                             [% ELSE %]
                                                                 <li class="guarantor-details" data-borrowernumber="[% r.guarantor_id | $raw %]">
-                                                                    <span class="label">Patron #:</span>
-                                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor_id | html %]</a>
+                                                                    <span class="label">Patron card number:</span>
+                                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% r.guarantor_id | uri %]" target="blank">[% r.guarantor.cardnumber | html %]</a>
                                                                 </li>
 
                                                                 [% IF r.guarantor.surname %]
@@ -451,8 +451,8 @@ legend:hover {
                                                     <fieldset class="rows">
                                                         <ol>
                                                             <li class="guarantor-details" data-borrowernumber="0">
-                                                                <span class="label">Patron #:</span>
-                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.borrowernumber | html %]</a>
+                                                                <span class="label">Patron card number:</span>
+                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.cardnumber | html %]</a>
                                                                 <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
                                                             </li>
 
@@ -487,7 +487,7 @@ legend:hover {
                                             <fieldset class="rows guarantor" id="guarantor_template">
                                                 <ol>
                                                     <li class="guarantor-details" data-borrowernumber="0">
-                                                        <span class="label">Patron #:</span>
+                                                        <span class="label">Patron card number:</span>
                                                         <span class="new_guarantor_id_text"></span>
                                                         <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value=""/>
                                                     </li>
