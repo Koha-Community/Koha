@@ -24,6 +24,7 @@ use CGI;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
+use C4::Items qw( ModItem );
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -126,14 +127,15 @@ elsif ( $op eq 'modify' ) {
     my $checkouts =
       Koha::Checkouts->search( { issue_id => { -in => \@issue_ids } } );
     while ( my $checkout = $checkouts->next ) {
-        if ($new_hard_due_date) {
-            $checkout->date_due($new_hard_due_date)->store;
-        }
-        else {
-            my $dt = dt_from_string( $checkout->date_due )
-              ->add( days => $due_date_days );
-            $checkout->date_due($dt)->store;
-        }
+        my $new_due_date = $new_hard_due_date
+          || dt_from_string( $checkout->date_due )->add( days => $due_date_days );
+
+        # Update checkout's due date
+        $checkout->date_due($new_due_date)->store;
+
+        # Update items.onloan
+        ModItem( { onloan => $new_due_date->strftime('%Y-%m-%d %H:%M') },
+            undef, $checkout->itemnumber );
     }
 
     $template->param(
