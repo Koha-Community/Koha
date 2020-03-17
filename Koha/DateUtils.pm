@@ -60,7 +60,8 @@ sub dt_from_string {
     return if $date_string and $date_string =~ m|^0000-0|;
 
     my $do_fallback = defined($date_format) ? 0 : 1;
-    $tz = C4::Context->tz unless $tz;;
+    my $server_tz = C4::Context->tz;
+    $tz = C4::Context->tz unless $tz;
 
     return DateTime->now( time_zone => $tz ) unless $date_string;
 
@@ -126,6 +127,9 @@ sub dt_from_string {
             (?<second>\d{2})
             (\.\d{1,3})?(([Zz]$)|((?<offset>[\+|\-])(?<hours>[01][0-9]|2[0-3]):(?<minutes>[0-5][0-9])))
         /xms;
+
+        # Default to UTC (when 'Z' is passed) for inbound timezone.
+        $tz = DateTime::TimeZone->new( name => 'UTC' );
     }
     elsif ( $date_format eq 'iso' or $date_format eq 'sql' ) {
         # iso or sql format are yyyy-dd-mm[ hh:mm:ss]"
@@ -168,6 +172,7 @@ sub dt_from_string {
         );
         $ampm = $+{ampm};
         if ( $+{offset} ) {
+            # If offset given, set inbound timezone using it.
             $tz = DateTime::TimeZone->new( name => $+{offset} . $+{hours} . $+{minutes} );
         }
     } elsif ( $do_fallback && $date_string =~ $fallback_re ) {
@@ -217,6 +222,7 @@ sub dt_from_string {
             ( $dt_params{year} < 9999 ? ( time_zone => $tz ) : () ),
         );
     }
+    $dt->set_time_zone($server_tz);
     return $dt;
 }
 
