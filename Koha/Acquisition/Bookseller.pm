@@ -89,7 +89,6 @@ sub to_api_mapping {
         bookselleremail => undef,
         booksellerurl   => undef,
         currency        => undef,
-        othersupplier   => undef,
         listprice       => 'list_currency',
         invoiceprice    => 'invoice_currency',
         gstreg          => 'gst',
