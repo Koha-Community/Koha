@@ -73,7 +73,7 @@ subtest 'Config does not exist' => sub {
 
 subtest 'Koha::Anonymized::Transactions tests' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -92,7 +92,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
         'No pseudonymized transaction if Pseudonymization is off' );
 
     t::lib::Mocks::mock_preference( 'Pseudonymization', 1 );
-    t::lib::Mocks::mock_preference( 'PseudonymizationTransactionFields', 'datetime,transaction_branchcode,transaction_type,itemnumber,itemtype,holdingbranch,location,itemcallnumber,ccode'
+    t::lib::Mocks::mock_preference( 'PseudonymizationTransactionFields', 'datetime,transaction_branchcode,transaction_type,itemnumber,itemtype,holdingbranch,homebranch,location,itemcallnumber,ccode'
     );
     $item = $builder->build_sample_item;
     t::lib::Mocks::mock_userenv({ branchcode => $item->homebranch });
@@ -108,6 +108,7 @@ subtest 'Koha::Anonymized::Transactions tests' => sub {
     is( $pseudonymized->itemnumber,             $item->itemnumber );
     is( $pseudonymized->itemtype,               $item->effective_itemtype );
     is( $pseudonymized->holdingbranch,          $item->holdingbranch );
+    is( $pseudonymized->homebranch,             $item->homebranch );
     is( $pseudonymized->location,               $item->location );
     is( $pseudonymized->itemcallnumber,         $item->itemcallnumber );
     is( $pseudonymized->ccode,                  $item->ccode );

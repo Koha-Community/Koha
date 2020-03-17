@@ -23,6 +23,7 @@ if( CheckVersion( $DBversion ) ) {
               `itemnumber` int(11) default NULL,
               `itemtype` varchar(10) default NULL,
               `holdingbranch` varchar(10) default null,
+              `homebranch` varchar(10) default null,
               `location` varchar(80) default NULL,
               `itemcallnumber` varchar(255) default NULL,
               `ccode` varchar(80) default NULL,
@@ -44,7 +45,7 @@ if( CheckVersion( $DBversion ) ) {
     |);
     $dbh->do(q|
         INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
-        VALUES ('PseudonymizationTransactionFields','','datetime,transaction_branchcode,transaction_type,itemnumber,itemtype,holdingbranch,location,itemcallnumber,ccode','Transaction fields to copy to the pseudonymized_transactions table','multiple')
+        VALUES ('PseudonymizationTransactionFields','','datetime,transaction_branchcode,transaction_type,itemnumber,itemtype,holdingbranch,homebranch,location,itemcallnumber,ccode','Transaction fields to copy to the pseudonymized_transactions table','multiple')
     |);
 
     unless( TableExists( 'pseudonymized_borrower_attributes' ) ) {

@@ -53,6 +53,9 @@ sub new_from_statistic {
     if ( grep { $_ eq 'holdingbranch' } @t_fields_to_copy ) {
         $values->{holdingbranch} = $statistic->item->holdingbranch;
     }
+    if ( grep { $_ eq 'homebranch' } @t_fields_to_copy ) {
+        $values->{homebranch} = $statistic->item->homebranch;
+    }
     if ( grep { $_ eq 'transaction_type' } @t_fields_to_copy ) {
         $values->{transaction_type} = $statistic->type;
     }
@@ -64,6 +67,7 @@ sub new_from_statistic {
     @t_fields_to_copy = grep {
              $_ ne 'transaction_branchcode'
           && $_ ne 'holdingbranch'
+          && $_ ne 'homebranch'
           && $_ ne 'transaction_type'
           && $_ ne 'itemcallnumber'
     } @t_fields_to_copy;

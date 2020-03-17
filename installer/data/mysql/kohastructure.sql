@@ -1907,6 +1907,7 @@ CREATE TABLE `pseudonymized_transactions` (
   `itemnumber` int(11) default NULL,
   `itemtype` varchar(10) default NULL,
   `holdingbranch` varchar(10) default null,
+  `homebranch` varchar(10) default null,
   `location` varchar(80) default NULL,
   `itemcallnumber` varchar(255) default NULL,
   `ccode` varchar(80) default NULL,
