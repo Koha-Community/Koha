@@ -765,7 +765,6 @@ sub field_filter {
     my ($struct) = @_;
 
     for my $field (
-        'bookselleremail',
         'currency',        'invoiceprice',
         'listprice',       'contacts'
       )

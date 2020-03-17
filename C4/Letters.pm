@@ -449,7 +449,6 @@ sub SendAlerts {
 
         my @email;
         my @cc;
-        push @email, $databookseller->{bookselleremail} if $databookseller->{bookselleremail};
         push @email, $datacontact->{email}           if ( $datacontact && $datacontact->{email} );
         unless (@email) {
             warn "Bookseller $dataorders->[0]->{booksellerid} without emails";
