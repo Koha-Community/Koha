@@ -2783,13 +2783,8 @@ CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquis
   `address3` LONGTEXT, -- third line of vendor physical address
   `address4` LONGTEXT, -- fourth line of vendor physical address
   `phone` varchar(30) default NULL, -- vendor phone number
-  `accountnumber` LONGTEXT, -- unused in Koha
-  `othersupplier` LONGTEXT,  -- unused in Koha
-  `currency` varchar(10) NOT NULL default '', -- unused in Koha
-  `booksellerfax` LONGTEXT, -- vendor fax number
+  `accountnumber` LONGTEXT, -- vendor account number
   `notes` LONGTEXT, -- order notes
-  `bookselleremail` LONGTEXT, -- vendor email
-  `booksellerurl` LONGTEXT, -- unused in Koha
   `postal` LONGTEXT, -- vendor postal address (all lines)
   `url` varchar(255) default NULL, -- vendor web address
   `active` tinyint(4) default NULL, -- is this vendor active (1 for yes, 0 for no)
