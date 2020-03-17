@@ -553,39 +553,20 @@ subtest 'Holds test with start_date and end_date' => sub {
 
     $schema->storage->txn_begin;
 
-    my $pickup_branch = $builder->build(
+    my $pickup_library = $builder->build_object(
         {
-            source => 'Branch',
+            class  => 'Koha::Libraries',
             value  => {
                 pickup_location => 1,
             }
         }
     );
 
-    my $patron = $builder->build({
-        source => 'Borrower',
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
     });
 
-    my $biblio = $builder->build({
-        source => 'Biblio',
-    });
-
-    my $biblioitems = $builder->build({
-        source => 'Biblioitem',
-        value => {
-            biblionumber => $biblio->{biblionumber},
-        }
-    });
-
-    my $item = $builder->build({
-        source => 'Item',
-        value => {
-            homebranch => $pickup_branch->{branchcode},
-            holdingbranch => $pickup_branch->{branchcode},
-            biblionumber => $biblio->{biblionumber},
-            damaged => 0,
-        }
-    });
+    my $item = $builder->build_sample_item({ library => $pickup_library->branchcode });
 
     Koha::CirculationRules->set_rule(
         {
@@ -598,28 +579,26 @@ subtest 'Holds test with start_date and end_date' => sub {
     );
 
     my $query = new CGI;
-    $query->param( 'pickup_location', $pickup_branch->{branchcode} );
-    $query->param( 'patron_id', $patron->{borrowernumber});
-    $query->param( 'bib_id', $biblio->{biblionumber});
-    $query->param( 'item_id', $item->{itemnumber});
+    $query->param( 'pickup_location', $pickup_library->branchcode );
+    $query->param( 'patron_id', $patron->borrowernumber);
+    $query->param( 'bib_id', $item->biblionumber);
+    $query->param( 'item_id', $item->itemnumber);
     $query->param( 'start_date', '2020-03-20');
     $query->param( 'expiry_date', '2020-04-22');
 
     my $reply = C4::ILSDI::Services::HoldItem( $query );
-    is ($reply->{pickup_location}, $pickup_branch->{branchname}, "Item hold with date parameters was placed");
-    my $hold = Koha::Holds->search({ biblionumber => $biblio->{biblionumber}})->next();
-    use Data::Dumper;
-    print Dumper($hold);
-    is( $hold->biblionumber, $biblio->{biblionumber}, "correct biblionumber");
+    is ($reply->{pickup_location}, $pickup_library->branchname, "Item hold with date parameters was placed");
+    my $hold = Koha::Holds->search({ biblionumber => $item->biblionumber})->next();
+    is( $hold->biblionumber, $item->biblionumber, "correct biblionumber");
     is( $hold->reservedate, '2020-03-20', "Item hold has correct start date" );
     is( $hold->expirationdate, '2020-04-22', "Item hold has correct end date" );
 
     $hold->delete();
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
-    is ($reply->{pickup_location}, $pickup_branch->{branchname}, "Record hold with date parameters was placed");
-    $hold = Koha::Holds->search({ biblionumber => $biblio->{biblionumber}})->next();
-    is( $hold->biblionumber, $biblio->{biblionumber}, "correct biblionumber");
+    is ($reply->{pickup_location}, $pickup_library->branchname, "Record hold with date parameters was placed");
+    $hold = Koha::Holds->search({ biblionumber => $item->biblionumber})->next();
+    is( $hold->biblionumber, $item->biblionumber, "correct biblionumber");
     is( $hold->reservedate, '2020-03-20', "Record hold has correct start date" );
     is( $hold->expirationdate, '2020-04-22', "Record hold has correct end date" );
 
