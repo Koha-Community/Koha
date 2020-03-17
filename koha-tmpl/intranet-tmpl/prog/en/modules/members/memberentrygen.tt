@@ -581,7 +581,7 @@ legend:hover {
                                                     [% END %]
                                                         Guarantor surname:
                                                     </label>
-                                                    <input type="text" id="contactname" name="contactname" value="[% contactname | html %]" />
+                                                    <input type="text" id="contactname" name="contactname" value="[% patron.contactname | html %]" />
                                                     [% IF ( mandatorycontactname ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -598,7 +598,7 @@ legend:hover {
                                                     [% END %]
                                                         Guarantor first name:
                                                     </label>
-                                                    <input type="text" id="contactfirstname" name="contactfirstname" value="[% contactfirstname | html %]" />
+                                                    <input type="text" id="contactfirstname" name="contactfirstname" value="[% patron.contactfirstname | html %]" />
                                                     [% IF ( mandatorycontactfirstname ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -633,7 +633,7 @@ legend:hover {
                                                     [% END %]
                                                         Primary phone:
                                                     </label>
-                                                    <input type="text" id="phone" name="phone" value="[% phone | html %]" />
+                                                    <input type="text" id="phone" name="phone" value="[% patron.phone | html %]" />
                                                     [% IF ( mandatoryphone ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -650,7 +650,7 @@ legend:hover {
                                                     [% END %]
                                                         Secondary phone:
                                                     </label>
-                                                    <input type="text" id="phonepro" name="phonepro" value="[% phonepro | html %]" />
+                                                    <input type="text" id="phonepro" name="phonepro" value="[% patron.phonepro | html %]" />
                                                     [% IF ( mandatoryphonepro ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -666,7 +666,7 @@ legend:hover {
                                                     [% END %]
                                                         Other phone:
                                                     </label>
-                                                    <input type="text" id="mobile" name="mobile" value="[% mobile | html %]" />
+                                                    <input type="text" id="mobile" name="mobile" value="[% patron.mobile | html %]" />
                                                     [% IF ( mandatorymobile ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -682,7 +682,7 @@ legend:hover {
                                                     [% END %]
                                                         Primary email:
                                                     </label>
-                                                    <input type="text" id="email" name="email" size="45" value="[% email | html %]" />
+                                                    <input type="text" id="email" name="email" size="45" value="[% patron.email | html %]" />
                                                     [% IF ( mandatoryemail ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -699,7 +699,7 @@ legend:hover {
                                                     [% END %]
                                                         Secondary email:
                                                     </label>
-                                                    <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro | html %]" />
+                                                    <input type="text" id="emailpro" name="emailpro" size="45" value="[% patron.emailpro | html %]" />
                                                     [% IF ( mandatoryemailpro ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
@@ -715,7 +715,7 @@ legend:hover {
                                                     [% END %]
                                                         Fax:
                                                     </label>
-                                                    <input type="text" id="fax" name="fax" value="[% fax | html %]" />
+                                                    <input type="text" id="fax" name="fax" value="[% patron.fax | html %]" />
                                                     [% IF ( mandatoryfax ) %]
                                                         <span class="required">Required</span>
                                                     [% END %]
