@@ -766,7 +766,6 @@ sub field_filter {
 
     for my $field (
         'bookselleremail',
-        'booksellerurl',
         'currency',        'invoiceprice',
         'listprice',       'contacts'
       )
