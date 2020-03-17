@@ -30,6 +30,8 @@ use C4::Calendar;
 my $input               = new CGI;
 my $dbh                 = C4::Context->dbh();
 
+checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
+
 my $branchcode          = $input->param('branchcode');
 my $from_branchcode     = $input->param('from_branchcode');
 
