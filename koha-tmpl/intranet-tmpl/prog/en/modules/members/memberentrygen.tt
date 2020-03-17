@@ -447,6 +447,41 @@ legend:hover {
                                                         </ol>
                                                     </fieldset>
                                                 [% END # END relationships foreach %]
+                                                [% IF guarantor && (!relationships) %]
+                                                    <fieldset class="rows">
+                                                        <ol>
+                                                            <li class="guarantor-details" data-borrowernumber="0">
+                                                                <span class="label">Patron #:</span>
+                                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]" target="blank">[% guarantor.borrowernumber | html %]</a>
+                                                                <input type="hidden" class="new_guarantor_id" name="new_guarantor_id" value="[% guarantor.borrowernumber | html %]"/>
+                                                            </li>
+
+                                                            <li>
+                                                                <label for="guarantor_surname">Surname: </label>
+                                                                <span class="new_guarantor_surname_text">[% guarantor.surname | html %]</span>
+                                                            </li>
+
+                                                            <li>
+                                                                <label for="guarantor_firstname">First name: </label>
+                                                                <span class="new_guarantor_firstname_text">[% guarantor.firstname | html %]</span>
+                                                            </li>
+
+                                                            <li>
+                                                                <label for="guarantor_relationship">Relationship: </label>
+                                                                <select class="new_guarantor_relationship" name="new_guarantor_relationship">
+                                                                    [% FOREACH pr IN possible_relationships.split('\|') %]
+                                                                        <option value="[% pr | html %]">[% pr | html %]</option>
+                                                                    [% END %]
+                                                                </select>
+                                                            </li>
+
+                                                            <li>
+                                                                <label for="guarantor_cancel">&nbsp;</label>
+                                                                <span><a href="#" class="guarantor_cancel">Remove</a></span>
+                                                            </li>
+                                                        </ol>
+                                                    </fieldset>
+                                                [% END %]
                                             </span> <!-- #/guarantor_relationships -->
 
                                             <fieldset class="rows guarantor" id="guarantor_template">
