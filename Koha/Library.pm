@@ -80,7 +80,8 @@ sub inbound_email_address {
          $self->branchreplyto
       || $self->branchemail
       || C4::Context->preference('ReplytoDefault')
-      || C4::Context->preference('KohaAdminEmailAddress');
+      || C4::Context->preference('KohaAdminEmailAddress')
+      || undef;
 }
 
 =head3 library_groups

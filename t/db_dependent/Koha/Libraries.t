@@ -454,7 +454,7 @@ subtest '->get_effective_marcorgcode' => sub {
 
 subtest '->inbound_email_address' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -482,10 +482,13 @@ subtest '->inbound_email_address' => sub {
     is( $library_1->inbound_email_address, 'reply@mylibrary.com',
        'Fallback to ReplytoDefault email address when branchreplyto and branchemail are undefined');
 
-    t::lib::Mocks::mock_preference( 'ReplytoDefault', undef );
+    t::lib::Mocks::mock_preference( 'ReplytoDefault', '' );
     is( $library_1->inbound_email_address, 'admin@mylibrary.com',
-       'Fallback to KohaAdminEmailAddress email address when branchreplyto, branchemail and eplytoDefault are undefined');
+       'Fallback to KohaAdminEmailAddress email address when branchreplyto, branchemail and ReplytoDefault are undefined');
 
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', '' );
+    is( $library_1->inbound_email_address, undef,
+       'Return undef when  email address when branchreplyto, branchemail, ReplytoDefault and KohaAdminEmailAddress are undefined');
     $schema->storage->txn_rollback;
 };
 
