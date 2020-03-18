@@ -21105,7 +21105,7 @@ if( CheckVersion( $DBversion ) ) {
 
     # Update existing NULL priorities
     $dbh->do(q|
-        UPDATE reserves SET priority = 0 WHERE priority IS NULL
+        UPDATE reserves SET priority = 1 WHERE priority IS NULL
     |);
 
     $dbh->do(q|
@@ -21113,7 +21113,7 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     $dbh->do(q|
-        UPDATE old_reserves SET priority = 0 WHERE priority IS NULL
+        UPDATE old_reserves SET priority = 1 WHERE priority IS NULL
     |);
 
     $dbh->do(q|
