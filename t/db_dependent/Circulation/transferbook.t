@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -27,16 +27,25 @@ use Koha::DateUtils qw( dt_from_string );
 
 my $builder = t::lib::TestBuilder->new;
 
-my $library = $builder->build( { source => 'Branch' } );
+subtest 'transfer a non-existant item' => sub {
+    plan tests => 2;
 
-#Transfert on unknown barcode
-my $item = $builder->build_sample_item();
-my $badbc = $item->barcode;
-$item->delete;
+    my $library = $builder->build( { source => 'Branch' } );
 
-my ( $dotransfer, $messages ) = C4::Circulation::transferbook( $library->{branchcode}, $badbc );
-is( $dotransfer, 0, "Can't transfer a bad barcode");
-is_deeply( $messages, { BadBarcode => $badbc }, "We got the expected barcode");
+    #Transfert on unknown barcode
+    my $item  = $builder->build_sample_item();
+    my $badbc = $item->barcode;
+    $item->delete;
+
+    my ( $dotransfer, $messages ) =
+      C4::Circulation::transferbook( $library->{branchcode}, $badbc );
+    is( $dotransfer, 0, "Can't transfer a bad barcode" );
+    is_deeply(
+        $messages,
+        { BadBarcode => $badbc },
+        "We got the expected barcode"
+    );
+};
 
 subtest 'transfer an issued item' => sub {
     plan tests => 3;
