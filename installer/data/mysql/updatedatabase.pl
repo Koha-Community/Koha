@@ -21124,6 +21124,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24722 - Enforce NOT NULL constraint for reserves.priority)\n";
 }
 
+$DBversion = '19.12.00.042';
+if( CheckVersion( $DBversion ) ) {
+    if (!column_exists('message_queue', 'reply_address')) {
+        $dbh->do('ALTER TABLE message_queue ADD COLUMN reply_address LONGTEXT AFTER from_address');
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22821 - Add reply_address to message_queue)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
