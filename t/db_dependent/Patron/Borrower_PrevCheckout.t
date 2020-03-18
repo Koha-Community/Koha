@@ -377,24 +377,8 @@ my $CBBI_patron = $builder->build({source => 'Borrower', value => { categorycode
 $patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} );
 # Our Items
 
-my $new_item = $builder->build({
-    source => 'Item',
-    value => {
-        notforloan => 0,
-        withdrawn  => 0,
-        itemlost   => 0,
-        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
-    },
-});
-my $prev_item = $builder->build({
-    source => 'Item',
-    value => {
-        notforloan => 0,
-        withdrawn  => 0,
-        itemlost   => 0,
-        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
-    },
-});
+my $new_item = $builder->build_sample_item->unblessed;
+my $prev_item = $builder->build_sample_item->unblessed;
 # Second is Checked Out
 BAIL_OUT("CanBookBeIssued Issue failed")
     unless AddIssue($patron->unblessed, $prev_item->{barcode});
