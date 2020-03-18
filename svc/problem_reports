@@ -47,18 +47,18 @@ if ($is_ajax) {
     my $action = $query->param('action');
     my $status = 'success';
     if ( $action eq 'viewed' ) {
-        $report->set({ status => 'V' })->store;
-        if ( $report->status ne 'V' ) {
+        $report->set({ status => 'Viewed' })->store;
+        if ( $report->status ne 'Viewed' ) {
             $status = 'failure';
         }
     } elsif ( $action eq 'closed' ) {
-        $report->set({ status => 'C' })->store;
-        if ( $report->status ne 'C' ) {
+        $report->set({ status => 'Closed' })->store;
+        if ( $report->status ne 'Closed' ) {
             $status = 'failure';
         }
     } elsif ( $action eq 'new' ) {
-        $report->set({ status => 'N' })->store;
-        if ( $report->status ne 'N' ) {
+        $report->set({ status => 'New' })->store;
+        if ( $report->status ne 'New' ) {
             $status = 'failure';
         }
     }

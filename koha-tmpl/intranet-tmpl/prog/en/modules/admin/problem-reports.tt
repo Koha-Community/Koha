@@ -64,6 +64,7 @@
                                 <th class="NoSort">&nbsp;</th>
                                 <th class="anti-the">Message</th>
                                 <th>Problem page</th>
+                                <th>Sent to</th>
                                 <th class="title-string">Created on</th>
                                 <th>Set by</th>
                                 <th>Status</th>
@@ -79,21 +80,14 @@
                                         [% report.content | html %]
                                     </td>
                                     <td><a href="[% report.problempage | uri %]">[% report.problempage | html %]</a></td>
+                                    <td>[% report.recipient %]</td>
                                     <td><span title="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</span></td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
-                                    <td class="status[% report.status | html %]" name="status">
-                                        [% IF ( report.status == 'V' ) %]
-                                            <span id="status_[% report.reportid | html %]">Viewed</span>
-                                        [% ELSIF ( report.status == 'C' ) %]
-                                            <span id="status_[% report.reportid | html %]">Closed</span>
-                                        [% ELSE %]
-                                            <span id="status_[% report.reportid | html %]">New</span>
-                                        [% END %]
-                                    </td>
+                                    <td class="status[% report.status | html %]" name="status"><span id="status_[% report.reportid | html %]">[% report.status | html %]</span></td>
                                     <td class="actions">
-                                        [% IF ( report.status == 'N' ) %]
+                                        [% IF ( report.status == 'New' ) %]
                                             <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" disabled="disabled" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
-                                        [% ELSIF ( report.status == 'V' ) %]
+                                        [% ELSIF ( report.status == 'Viewed' ) %]
                                             <button name="viewed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
                                         [% ELSE %]
                                             <button name="viewed" data-report_id="[% report.reportid | html %]" class="viewed btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark viewed</button> <button name="closed" disabled="disabled" data-report_id="[% report.reportid | html %]" class="closed btn btn-default btn-xs"><i class="fa fa-times-circle"></i> Mark closed</button> <button name="new" data-report_id="[% report.reportid | html %]" class="new btn btn-default btn-xs"><i class="fa fa-star"></i> Mark new</button>
@@ -151,16 +145,18 @@
                 $(".marknew").prop("disabled", true);
             });
 
+
+
             $(".HideViewed").on("click", function(){
-                $(".statusV").parent().hide();
+                $(".statusViewed").parent().hide();
             });
 
             $(".HideClosed").on("click", function(){
-                $(".statusC").parent().hide();
+                $(".statusClosed").parent().hide();
             });
 
             $(".HideNew").on("click", function(){
-                $(".statusN").parent().hide();
+                $(".statusNew").parent().hide();
             });
 
             $(".ShowAll").on("click", function(){
@@ -201,19 +197,19 @@
                     if (data.status == 'success'){
                         if ( $action == 'viewed' ){
                             $("#status_" + $report_id).text(_("Viewed"));
-                            $(event.target).parent().siblings("status").removeClass().addClass("statusV");
+                            $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusViewed");
                             $(event.target).siblings(".closed").prop("disabled", false);
                             $(event.target).siblings(".new").prop("disabled", false);
                             $(event.target).prop("disabled", true);
                         } else if ( $action == 'new' ){
                             $("#status_" + $report_id).text(_("New"));
-                            $(event.target).parent().siblings("status").removeClass().addClass("statusN");
+                            $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusNew");
                             $(event.target).siblings(".closed").prop("disabled", false);
                             $(event.target).siblings(".viewed").prop("disabled", false);
                             $(event.target).prop("disabled", true);
                         } else {
                             $("#status_" + $report_id).text(_("Closed"));
-                            $(event.target).parent().siblings("status").removeClass().addClass("statusC");
+                            $(event.target).parent().siblings("[name='status']").removeClass().addClass("statusClosed");
                             $(event.target).siblings(".viewed").prop("disabled", false);
                             $(event.target).siblings(".new").prop("disabled", false);
                             $(event.target).prop("disabled", true);

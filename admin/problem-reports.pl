@@ -48,18 +48,18 @@ my @report_ids = $query->multi_param('report_ids');
 if ( $action eq 'viewed' ) {
     foreach my $report_id ( @report_ids ) {
         my $report = Koha::ProblemReports->find($report_id);
-        $report->set({ status => 'V' })->store;
+        $report->set({ status => 'Viewed' })->store;
                                 }
 } elsif ( $action eq 'closed' ) {
     foreach my $report_id ( @report_ids ) {
         my $report = Koha::ProblemReports->find($report_id);
-        $report->set({ status => 'C' })->store;
+        $report->set({ status => 'Closed' })->store;
     }
 
 } elsif ( $action eq 'new' ) {
     foreach my $report_id ( @report_ids ) {
         my $report = Koha::ProblemReports->find($report_id);
-        $report->set({ status => 'N' })->store;
+        $report->set({ status => 'New' })->store;
     }
 }
 

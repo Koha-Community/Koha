@@ -46,8 +46,9 @@ __PACKAGE__->table("problem_reports");
 =head2 borrowernumber
 
   data_type: 'integer'
+  default_value: 0
   is_foreign_key: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 branchcode
 
@@ -86,9 +87,9 @@ __PACKAGE__->table("problem_reports");
 =head2 status
 
   data_type: 'varchar'
-  default_value: 'N'
+  default_value: 'NEW'
   is_nullable: 0
-  size: 1
+  size: 6
 
 =cut
 
@@ -100,7 +101,12 @@ __PACKAGE__->add_columns(
   "content",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 255 },
   "borrowernumber",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  {
+    data_type      => "integer",
+    default_value  => 0,
+    is_foreign_key => 1,
+    is_nullable    => 0,
+  },
   "branchcode",
   {
     data_type => "varchar",
@@ -128,7 +134,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "status",
-  { data_type => "varchar", default_value => "N", is_nullable => 0, size => 1 },
+  { data_type => "varchar", default_value => "NEW", is_nullable => 0, size => 6 },
 );
 
 =head1 PRIMARY KEY
@@ -157,12 +163,7 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  {
-    is_deferrable => 1,
-    join_type     => "LEFT",
-    on_delete     => "CASCADE",
-    on_update     => "CASCADE",
-  },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 =head2 branchcode
@@ -181,8 +182,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-11 08:28:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qVNVIuurFD6Q6p4YA5Kptg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2020-03-18 22:36:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XQn+sJwh4s+EK9vf2gQ7Qw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

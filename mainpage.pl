@@ -75,7 +75,7 @@ my $pending_article_requests = Koha::ArticleRequests->search_limited(
         $branch ? ( 'me.branchcode' => $branch ) : (),
     }
 )->count;
-my $pending_problem_reports = Koha::ProblemReports->search({ status => 'N' });
+my $pending_problem_reports = Koha::ProblemReports->search({ status => 'New' });
 
 $template->param(
     pendingcomments                => $pendingcomments,
