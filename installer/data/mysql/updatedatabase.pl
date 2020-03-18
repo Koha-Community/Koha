@@ -21109,7 +21109,7 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     $dbh->do(q|
-        ALTER TABLE reserves MODIFY priority SMALLINT(6) NOT NULL
+        ALTER TABLE reserves MODIFY priority SMALLINT(6) NOT NULL DEFAULT 1
     |);
 
     $dbh->do(q|
@@ -21117,7 +21117,7 @@ if( CheckVersion( $DBversion ) ) {
     |);
 
     $dbh->do(q|
-        ALTER TABLE old_reserves MODIFY priority SMALLINT(6) NOT NULL
+        ALTER TABLE old_reserves MODIFY priority SMALLINT(6) NOT NULL DEFAULT 1
     |);
 
     SetVersion( $DBversion );
