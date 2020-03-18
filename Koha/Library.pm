@@ -65,15 +65,15 @@ sub get_effective_marcorgcode {
     return $self->marcorgcode || C4::Context->preference("MARCOrgCode");
 }
 
-=head3 get_effective_email
+=head3 inbound_email_address
 
-  my $to_email = Koha::Library->get_effective_email;
+  my $to_email = Koha::Library->inbound_email_address;
 
 Returns an effective email address which should be accessible to librarians at the branch.
 
 =cut
 
-sub get_effective_email {
+sub inbound_email_address {
     my ($self) = @_;
 
     return

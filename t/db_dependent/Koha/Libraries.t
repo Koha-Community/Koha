@@ -452,7 +452,7 @@ subtest '->get_effective_marcorgcode' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest '->get_effective_email' => sub {
+subtest '->inbound_email_address' => sub {
 
     plan tests => 4;
 
@@ -471,19 +471,19 @@ subtest '->get_effective_email' => sub {
     t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'admin@mylibrary.com' );
     t::lib::Mocks::mock_preference( 'ReplytoDefault', 'reply@mylibrary.com' );
 
-    is( $library_1->get_effective_email, $library_1->branchreplyto,
+    is( $library_1->inbound_email_address, $library_1->branchreplyto,
        'If defined, use branches replyto address');
 
     $library_1->branchreplyto(undef)->store();
-    is( $library_1->get_effective_email, $library_1->branchemail,
+    is( $library_1->inbound_email_address, $library_1->branchemail,
        'Fallback to branches email address when branchreplyto is undefined');
 
     $library_1->branchemail(undef)->store();
-    is( $library_1->get_effective_email, 'reply@mylibrary.com',
+    is( $library_1->inbound_email_address, 'reply@mylibrary.com',
        'Fallback to ReplytoDefault email address when branchreplyto and branchemail are undefined');
 
     t::lib::Mocks::mock_preference( 'ReplytoDefault', undef );
-    is( $library_1->get_effective_email, 'admin@mylibrary.com',
+    is( $library_1->inbound_email_address, 'admin@mylibrary.com',
        'Fallback to KohaAdminEmailAddress email address when branchreplyto, branchemail and eplytoDefault are undefined');
 
     $schema->storage->txn_rollback;
