@@ -21100,6 +21100,30 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17374 - update description of DefaultPatronSearchFields)\n";
 }
 
+$DBversion = '19.12.00.041';
+if( CheckVersion( $DBversion ) ) {
+
+    # Update existing NULL priorities
+    $dbh->do(q|
+        UPDATE reserves SET priority = 0 WHERE priority IS NULL
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE reserves MODIFY priority SMALLINT(6) NOT NULL
+    |);
+
+    $dbh->do(q|
+        UPDATE old_reserves SET priority = 0 WHERE priority IS NULL
+    |);
+
+    $dbh->do(q|
+        ALTER TABLE old_reserves MODIFY priority SMALLINT(6) NOT NULL
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24722 - Enforce NOT NULL constraint for reserves.priority)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';

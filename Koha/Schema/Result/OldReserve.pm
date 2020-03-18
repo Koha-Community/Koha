@@ -78,7 +78,7 @@ __PACKAGE__->table("old_reserves");
 =head2 priority
 
   data_type: 'smallint'
-  is_nullable: 1
+  is_nullable: 0
 
 =head2 found
 
@@ -165,7 +165,7 @@ __PACKAGE__->add_columns(
   "reservenotes",
   { data_type => "longtext", is_nullable => 1 },
   "priority",
-  { data_type => "smallint", is_nullable => 1 },
+  { data_type => "smallint", is_nullable => 0 },
   "found",
   { data_type => "varchar", is_nullable => 1, size => 1 },
   "timestamp",
@@ -297,8 +297,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-06-17 07:24:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZgGAW7ODBby3hGNJ41eeMA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-18 08:36:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RDZP4TEaFZUexg9jVg6DbA
 
 sub koha_object_class {
     'Koha::Old::Hold';
