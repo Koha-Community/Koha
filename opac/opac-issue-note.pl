@@ -81,7 +81,7 @@ if ( $action eq 'issuenote' && C4::Context->preference('AllowCheckoutNotes') ) {
                 },
             );
 
-            my $to_address = $branch->get_effective_email;
+            my $to_address = $branch->inbound_email_address;
             my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
             C4::Letters::EnqueueLetter({
