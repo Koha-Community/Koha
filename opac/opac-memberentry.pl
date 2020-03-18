@@ -493,7 +493,8 @@ sub DelUnchangedFields {
 
 
     foreach my $key ( keys %new_data ) {
-        if ( ($current_data->{$key} eq $new_data{$key}) || $hidden_fields->{$key} ) {
+        next if defined($new_data{$key}) xor defined($current_data->{$key});
+        if ( !defined($new_data{$key}) || $current_data->{$key} eq $new_data{$key} || $hidden_fields->{$key} ) {
            delete $new_data{$key};
         }
     }
