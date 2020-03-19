@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::Biblios;
+use Koha::RecordProcessor;
 use C4::Biblio qw(DelBiblio);
 
 use MARC::Record::MiJ;
@@ -145,6 +146,102 @@ sub delete {
                 openapi => { error => "Something went wrong, check the logs." }
             );
         }
+    };
+}
+
+=head3 get_public
+
+Controller function that handles retrieving a single biblio object
+
+=cut
+
+sub get_public {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblio = Koha::Biblios->find(
+        { biblionumber => $c->validation->param('biblio_id') },
+        { prefetch     => ['metadata'] } );
+
+    unless ($biblio) {
+        return $c->render(
+            status  => 404,
+            openapi => {
+                error => "Object not found."
+            }
+        );
+    }
+
+    return try {
+
+        my $record = $biblio->metadata->record;
+
+        my $opachiddenitems_rules = C4::Context->yaml_preference('OpacHiddenItems');
+        my $patron = $c->stash('koha.user');
+
+        # Check if the biblio should be hidden for unprivileged access
+        # unless there's a logged in user, and there's an exception for it's
+        # category
+        unless ( $patron and $patron->category->override_hidden_items ) {
+            if ( $biblio->hidden_in_opac({ rules => $opachiddenitems_rules }) )
+            {
+                return $c->render(
+                    status  => 404,
+                    openapi => {
+                        error => "Object not found."
+                    }
+                );
+            }
+        }
+
+        my $marcflavour = C4::Context->preference("marcflavour");
+
+        my $record_processor = Koha::RecordProcessor->new({
+            filters => 'ViewPolicy',
+            options => {
+                interface => 'opac',
+                frameworkcode => $biblio->frameworkcode
+            }
+        });
+        # Apply framework's filtering to MARC::Record object
+        $record_processor->process($record);
+
+        $c->respond_to(
+            marcxml => {
+                status => 200,
+                format => 'marcxml',
+                text   => $record->as_xml_record
+            },
+            mij => {
+                status => 200,
+                format => 'mij',
+                text   => $record->to_mij
+            },
+            marc => {
+                status => 200,
+                format => 'marc',
+                text   => $record->as_usmarc
+            },
+            txt => {
+                status => 200,
+                format => 'text/plain',
+                text   => $record->as_formatted
+            },
+            any => {
+                status  => 406,
+                openapi => [
+                    "application/marcxml+xml",
+                    "application/marc-in-json",
+                    "application/marc",
+                    "text/plain"
+                ]
+            }
+        );
+    }
+    catch {
+        return $c->render(
+            status  => 500,
+            openapi => { error => "Something went wrong, check the logs ($_)" }
+        );
     };
 }
 
