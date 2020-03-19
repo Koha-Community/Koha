@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 125;
+use Test::More tests => 126;
 
 use Koha::Database;
 use Koha::SimpleMARC;
@@ -415,6 +415,51 @@ subtest "not_equals" => sub {
     is_deeply( $record, $expected_record, 'None 650 have been moved, no $650$b exists' );
 };
 
+subtest "when conditional field doesn't match the from field" => sub {
+    plan tests => 3;
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+    my $template_id = AddModificationTemplate("template_name");
+    AddModificationTemplateAction(
+        $template_id, 'delete_field', 0,
+        '650', '9', '', '', '',
+        '', '', '',
+        'if', '245', 'a', 'equals', 'Bad title', '',
+        'Delete fields 650$9 if 245$a == "Bad title"'
+    );
+    my $record = new_record();
+    ModifyRecordWithTemplate( $template_id, $record );
+    my $expected_record = expected_record_3();
+    is_deeply( $record, $expected_record, '650$9 fields have been deleted when 245$a == "Bad title"' );
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+    $template_id = AddModificationTemplate("template_name");
+    AddModificationTemplateAction(
+        $template_id, 'delete_field', 0,
+        '650', '9', '', '', '',
+        '', '', '',
+        'if', '245', 'a', 'exists', '', '',
+        'Delete fields 650$9 if 245$a exists'
+    );
+    $record = new_record();
+    ModifyRecordWithTemplate( $template_id, $record );
+    $expected_record = expected_record_3();
+    is_deeply( $record, $expected_record, '650$9 fields have been deleted because 245$a exists' );
+
+    $dbh->do(q|DELETE FROM marc_modification_templates|);
+    $template_id = AddModificationTemplate("template_name");
+    AddModificationTemplateAction(
+        $template_id, 'delete_field', 1,
+        '650', '', '', '', '',
+        '', '', '',
+        'if', '245', 'a', 'exists', '', '',
+        'Delete 1st field 650 if 245$a exists'
+    );
+    $record = new_record();
+    ModifyRecordWithTemplate( $template_id, $record );
+    $expected_record = expected_record_4();
+    is_deeply( $record, $expected_record, '1st 650 field has been deleted because 245$a exists' );
+};
+
 sub new_record {
     my $record = MARC::Record->new;
     $record->leader('03174nam a2200445 a 4500');
@@ -541,6 +586,81 @@ sub expected_record_2 {
             651, ' ', '0',
             a => 'Computer programming.',
             9 => '462',
+        ),
+    );
+    $record->append_fields(@fields);
+    return $record;
+}
+
+sub expected_record_3 {
+    my $record = MARC::Record->new;
+    $record->leader('03174nam a2200445 a 4500');
+    my @fields = (
+        MARC::Field->new(
+            100, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            a => 'Bad title',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Computer programming.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Computer programming.',
+        ),
+        MARC::Field->new(
+            952, ' ', ' ',
+            p => '3010023917',
+            y => 'BK',
+            c => 'GEN',
+            d => '2001-06-25',
+        ),
+    );
+    $record->append_fields(@fields);
+    return $record;
+}
+
+sub expected_record_4 {
+    my $record = MARC::Record->new;
+    $record->leader('03174nam a2200445 a 4500');
+    my @fields = (
+        MARC::Field->new(
+            100, '1', ' ',
+            a => 'Knuth, Donald Ervin',
+            d => '1938',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            a => 'The art of computer programming',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            245, '1', '4',
+            a => 'Bad title',
+            c => 'Donald E. Knuth.',
+        ),
+        MARC::Field->new(
+            650, ' ', '0',
+            a => 'Computer programming.',
+            9 => '499',
+        ),
+        MARC::Field->new(
+            952, ' ', ' ',
+            p => '3010023917',
+            y => 'BK',
+            c => 'GEN',
+            d => '2001-06-25',
         ),
     );
     $record->append_fields(@fields);

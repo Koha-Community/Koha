@@ -585,9 +585,15 @@ sub ModifyRecordWithTemplate {
                     }
                 ];
                 $field_numbers = [Koha::MoreUtils::singleton ( @$field_numbers, @$all_fields ) ];
-                $do = $conditional eq 'if'
-                    ? @$field_numbers
-                    : not @$field_numbers;
+                if ( $from_field == $conditional_field ){
+                    $do = $conditional eq 'if'
+                        ? @$field_numbers
+                        : not @$field_numbers;
+                } else {
+                    $do = $conditional eq 'if'
+                        ? not @$field_numbers
+                        : @$field_numbers;
+                }
             }
         }
 
@@ -599,8 +605,23 @@ sub ModifyRecordWithTemplate {
             # A condition has been given
             if ( @$field_numbers > 0 ) {
                 if ( $field_number == 1 ) {
-                    # We want only the first matching
-                    $field_numbers = [ $field_numbers->[0] ];
+                    # We want only the first
+                    if ( $from_field == $conditional_field ){
+                        # want first field matching condition
+                        $field_numbers = [ $field_numbers->[0] ];
+                    } else {
+                        # condition doesn't match, so just want first occurrence of from field
+                        $field_numbers = [ 1 ];
+                    }
+                } else {
+                    unless ( $from_field == $conditional_field ){
+                        # condition doesn't match from fields so need all occurrences of from fields for action
+                        $field_numbers = field_exists({
+                            record => $record,
+                            field => $from_field,
+                            subfield => $from_subfield,
+                        });
+                    }
                 }
             }
             # There was no condition
