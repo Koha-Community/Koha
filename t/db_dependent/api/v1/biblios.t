@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+use Test::MockModule;
 use Test::Mojo;
 use Test::Warn;
 
@@ -144,6 +145,144 @@ subtest 'delete() tests' => sub {
 
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
       ->status_is(404);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_public() tests' => sub {
+
+    plan tests => 25;
+
+    $schema->storage->txn_begin;
+
+    my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => {
+                flags        => undef, # opac user
+                categorycode => $category->categorycode
+            }
+        }
+    );
+    my $password = 'thePassword123';
+    $patron->set_password( { password => $password, skip_validation => 1 } );
+    $patron->discard_changes;
+    my $userid = $patron->userid;
+
+    my $biblio = $builder->build_sample_biblio({
+        title  => 'The unbearable lightness of being',
+        author => 'Milan Kundera'
+    });
+
+    # Make sure author in shown in the OPAC
+    my $subfields = Koha::MarcSubfieldStructures->search({ tagfield => '100' });
+    while ( my $subfield = $subfields->next ) {
+        $subfield->set({ hidden => -1 })->store;
+    }
+    Koha::Caches->get_instance()->flush_all;
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                => { Accept => 'application/weird+format' } )
+      ->status_is(406)
+      ->json_is( [ "application/marcxml+xml",
+                   "application/marc-in-json",
+                   "application/marc",
+                   "text/plain" ] );
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+      ->status_is(200)
+      ->content_like( qr{100\s+_aMilan Kundera} )
+      ->content_like( qr{245\s+_aThe unbearable lightness of being} );
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marcxml+xml' } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marc-in-json' } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marc' } )
+      ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+      ->status_is(200)
+      ->content_is($biblio->metadata->record->as_formatted);
+
+    subtest 'anonymous access' => sub {
+        plan tests => 9;
+
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marcxml+xml' } )
+          ->status_is(200);
+
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber
+                    => { Accept => 'application/marc-in-json' } )
+        ->status_is(200);
+
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber
+                    => { Accept => 'application/marc' } )
+        ->status_is(200);
+
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber
+                    => { Accept => 'text/plain' } )
+        ->status_is(200)
+        ->content_is($biblio->metadata->record->as_formatted);
+    };
+
+    # Hide author in OPAC
+    $subfields = Koha::MarcSubfieldStructures->search({ tagfield => '100' });
+    while ( my $subfield = $subfields->next ) {
+        $subfield->set({ hidden => 1 })->store;
+    }
+
+    Koha::Caches->get_instance()->flush_all;
+
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+      ->status_is(200)
+      ->content_unlike( qr{100\s+_aMilan Kundera} )
+      ->content_like( qr{245\s+_aThe unbearable lightness of being} );
+
+    subtest 'hidden_in_opac tests' => sub {
+
+        plan tests => 6;
+
+        my $biblio_hidden_in_opac = 1;
+
+        my $biblio_class = Test::MockModule->new('Koha::Biblio');
+        # force biblio hidden in OPAC
+        $biblio_class->mock( 'hidden_in_opac', sub { return $biblio_hidden_in_opac; } );
+
+        $t->get_ok( "/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+          ->status_is(404, 'hidden_in_opac + anonymous => hidden');
+
+        my $category_override_hidden_items = 0;
+        my $category_class = Test::MockModule->new('Koha::Patron::Category');
+        $category_class->mock( 'override_hidden_items', sub { return $category_override_hidden_items; } );
+        $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+          ->status_is(404, "hidden_in_opac + patron whose category doesn't override => hidden");
+
+        # Make the category override
+        $category_override_hidden_items = 1;
+        $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+          ->status_is(200, "hidden_in_opac + patron whose category that overrides => displayed");
+
+        t::lib::Mocks::mock_preference('OpacHiddenItems');
+    };
+
+    $biblio->delete;
+    $t->get_ok( "//$userid:$password@/api/v1/public/biblios/" . $biblio->biblionumber
+                 => { Accept => 'application/marc' } )
+      ->status_is(404)
+      ->json_is( '/error', 'Object not found.' );
 
     $schema->storage->txn_rollback;
 };
