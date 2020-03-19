@@ -19,70 +19,45 @@
 
 use Modern::Perl;
 
-use YAML::Syck qw( LoadFile );
-use C4::Context;
 use Getopt::Long qw(:config no_ignore_case);
-use Data::Printer;
+use C4::Context;
+use C4::Installer;
 
 sub print_usage {
      ( my $basename = $0 ) =~ s|.*/||;
      print <<USAGE;
 
 $basename
- Load file in YAML format into database
+ Load file in YAML format into database.
 
 Usage:
 $0 [--file=FILE]
 $0 -h
-
- -f, --file=FILE         File to load.
  -h, --help              Show this help
+ -f, --file=FILE         File to load.
+ --load                  Load the file into the database
 
 USAGE
 }
 
 # Getting parameters
-my $file;
-my $help;
+my ( @files, $dump, $load, $help );
 
 GetOptions(
- 'file|f=s'     => \$file,
- 'help|h'       => \$help
+ 'help|h'        => \$help,
+ 'load'          => \$load,
+ 'file|f=s@'     => \@files,
 ) or print_usage, exit 1;
 
-if ($help or not $file) {
- print_usage;
- exit;
+if ($help or not @files or not $load) {
+    print_usage;
+    exit;
 }
 
-my $dbh  = C4::Context->dbh;
-my $yaml;
-eval {
-    $yaml = LoadFile( $file );                                    # Load YAML
-};
-if ($@){
-    die "Something went wrong loading file $file ($@)";
-}
-
-for my $table ( @{ $yaml->{'tables'} } ) {
-    my $table_name   = ( keys %$table )[0];                          # table name
-    my @rows         = @{ $table->{$table_name}->{rows} };           #
-    my @columns      = ( sort keys %{$rows[0]} );                    # column names
-    my $fields       = join ",", map{sprintf("`%s`", $_)} @columns;  # idem, joined
-    my $placeholders = join ",", map { "?" } @columns;               # '?,..,?' string
-    my $query        = "INSERT INTO $table_name ( $fields ) VALUES ( $placeholders )";
-    my $sth          = $dbh->prepare($query);
-    my @multiline    = @{ $table->{$table_name}->{'multiline'} };    # to check multiline values;
-    foreach my $row ( @rows ) {
-        my @values = map {
-                        my $col = $_;
-                        ( @multiline and grep { $_ eq $col } @multiline )
-                        ? join "\r\n", @{$row->{$col}}                # join multiline values
-                        : $row->{$col};
-                     } @columns;
-        $sth->execute( @values );
+my $installer = C4::Installer->new;
+if ( $load ) {
+    for my $f ( @files ) {
+        my $error = $installer->load_sql($f);
+        say $error if $error;
     }
-}
-for my $statement ( @{ $yaml->{'sql_statements'} } ) {               # extra SQL statements
-    $dbh->do($statement);
 }
