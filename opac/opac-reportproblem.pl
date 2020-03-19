@@ -97,12 +97,13 @@ if ( $op eq 'addreport' ) {
                 my $transport = 'email';
                 my $reply_address = $patron->email || $patron->emailpro || $patron->B_email;
 
-                if ( $recipient eq 'admin' ) {
+                if ( $recipient eq 'library' and defined($library->get_effective_email) and $library->get_effective_email ne C4::Context->preference('KohaAdminEmailAddress') ) {
+                    # the problem report is intended for a librarian and will be received at a library email address
                     C4::Letters::EnqueueLetter({
                         letter                 => $letter,
                         borrowernumber         => $borrowernumber,
                         message_transport_type => $transport,
-                        to_address             => C4::Context->preference('KohaAdminEmailAddress'),
+                        to_address             => $library->get_effective_email,
                         reply_address          => $reply_address,
                     });
                 } else {
@@ -110,7 +111,7 @@ if ( $op eq 'addreport' ) {
                         letter                 => $letter,
                         borrowernumber         => $borrowernumber,
                         message_transport_type => $transport,
-                        to_address             => $library->get_effective_email,
+                        to_address             => C4::Context->preference('KohaAdminEmailAddress'),
                         reply_address          => $reply_address,
                     });
                 }
