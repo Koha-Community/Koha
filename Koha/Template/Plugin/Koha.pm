@@ -58,4 +58,8 @@ sub Version {
     };
 }
 
+sub ArePluginsEnabled {
+    return C4::Context->config('enable_plugins');
+}
+
 1;

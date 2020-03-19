@@ -1,3 +1,5 @@
+[% USE Koha %]
+
 <div id="navmenu">
     <div id="navmenulist">
 
@@ -26,7 +28,7 @@
                 <li><a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds</a></li>
             </ul>
 
-        [% IF UseKohaPlugins %]
+        [% IF Koha.ArePluginsEnabled() %]
             <h5>Report plugins</h5>
             <ul>
                 <li><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=report">Report plugins</a></li>

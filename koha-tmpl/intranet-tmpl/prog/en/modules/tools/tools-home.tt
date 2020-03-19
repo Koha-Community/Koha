@@ -84,7 +84,7 @@
 
 <div class="col-sm-4 col-sm-push-4">
 [% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_news
-  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( UseKohaPlugins && CAN_user_plugins_tool )
+  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool )
   || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
 <h3>Additional tools</h3>
 [% END %]
@@ -119,7 +119,7 @@
     <dd>Quote editor for Quote-of-the-day feature in OPAC</dd>
     [% END %]
 
-    [% IF ( UseKohaPlugins && CAN_user_plugins_tool ) %]
+    [% IF ( Koha.ArePluginsEnabled() && CAN_user_plugins_tool ) %]
     <dt><a href="/cgi-bin/koha/plugins/plugins-home.pl?method=tool">Tool plugins</a></dt>
     <dd>Use tool plugins</dd>
     [% END %]
