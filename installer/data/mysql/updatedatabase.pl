@@ -21191,6 +21191,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24818: Update 'accountlines.date' from DATE to TIMESTAMP)\n";
 }
 
+$DBversion = '19.12.00.047';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        ALTER TABLE biblioimages
+        ADD `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        AFTER `thumbnail`;
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22987 - Add biblioimages.timestamp)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
