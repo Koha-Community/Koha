@@ -37,7 +37,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -67,7 +67,8 @@ subtest 'get() tests' => sub {
       ->json_is( [ "application/json",
                    "application/marcxml+xml",
                    "application/marc-in-json",
-                   "application/marc" ] );
+                   "application/marc",
+                   "text/plain" ] );
 
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
                  => { Accept => 'application/json' } )
@@ -86,6 +87,11 @@ subtest 'get() tests' => sub {
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
                  => { Accept => 'application/marc' } )
       ->status_is(200);
+
+    $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
+                 => { Accept => 'text/plain' } )
+      ->status_is(200)
+      ->content_is($biblio->metadata->record->as_formatted);
 
     $biblio->delete;
     $t->get_ok( "//$userid:$password@/api/v1/biblios/" . $biblio->biblionumber
