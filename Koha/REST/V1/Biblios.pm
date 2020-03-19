@@ -82,13 +82,19 @@ sub get {
                     format => 'marc',
                     text   => $record->as_usmarc
                 },
+                txt => {
+                    status => 200,
+                    format => 'text/plain',
+                    text   => $record->as_formatted
+                },
                 any => {
                     status  => 406,
                     openapi => [
                         "application/json",
                         "application/marcxml+xml",
                         "application/marc-in-json",
-                        "application/marc"
+                        "application/marc",
+                        "text/plain"
                     ]
                 }
             );
