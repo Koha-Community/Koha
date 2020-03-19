@@ -37,6 +37,7 @@ my $startdate       = $input->param('from');
 my $enddate         = $input->param('to');
 my $ratio           = $input->param('ratio');
 my $include_ordered = $input->param('include_ordered');
+my $include_suspended = $input->param('include_suspended');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -104,6 +105,7 @@ my $include_aqorders_qty_join =
   : q{};
 
 my $nfl_comparison = $include_ordered ? '<=' : '=';
+my $sus_comparison = $include_suspended ? '<=' : '<';
 my $strsth =
 "SELECT reservedate,
         reserves.borrowernumber as borrowernumber,
@@ -138,6 +140,7 @@ my $strsth =
  $include_aqorders_qty_join
  WHERE
  notforloan $nfl_comparison 0 AND damaged = 0 AND itemlost = 0 AND withdrawn = 0
+ AND suspend $sus_comparison 1
  $sqldatewhere
 ";
 
@@ -199,6 +202,7 @@ $template->param(
     to              => $enddate,
     ratio           => $ratio,
     include_ordered => $include_ordered,
+    include_suspended => $include_suspended,
     reserveloop     => \@reservedata,
 );
 

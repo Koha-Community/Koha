@@ -141,6 +141,15 @@
     <li>
 
     <li>
+        <label for="include_suspended">Included suspended:</label>
+        [% IF include_suspended %]
+            <input id="include_suspended" name="include_suspended" type="checkbox" checked="checked"/>
+        [% ELSE %]
+            <input id="include_suspended" name="include_suspended" type="checkbox"/>
+        [% END %]
+    <li>
+
+    <li>
         <label for="from">Start date:</label>
         <input type="text" size="10" id="from" name="from" value="[% from | $KohaDates %]" class="datepickerfrom" />
     </li>
