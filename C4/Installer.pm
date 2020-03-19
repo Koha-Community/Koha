@@ -487,19 +487,21 @@ sub load_sql {
                     my @rows         = @{ $table->{$table_name}->{rows} };           #
                     my @columns      = ( sort keys %{$rows[0]} );                    # column names
                     my $fields       = join ",", map{sprintf("`%s`", $_)} @columns;  # idem, joined
-                    my $placeholders = join ",", map { "?" } @columns;               # '?,..,?' string
-                    my $query        = "INSERT INTO $table_name ( $fields ) VALUES ( $placeholders )";
-                    my $sth          = $dbh->prepare($query);
+                    my $query        = "INSERT INTO $table_name ( $fields ) VALUES ";
                     my @multiline    = @{ $table->{$table_name}->{'multiline'} };    # to check multiline values;
+                    my $placeholders = '(' . join ( ",", map { "?" } @columns ) . ')'; # '(?,..,?)' string
+                    my @values;
                     foreach my $row ( @rows ) {
-                        my @values = map {
+                        push @values, map {
                                         my $col = $_;
                                         ( @multiline and grep { $_ eq $col } @multiline )
                                         ? join "\r\n", @{$row->{$col}}                # join multiline values
                                         : $row->{$col};
                                      } @columns;
-                        $sth->execute( @values );
                     }
+                    # Doing only 1 INSERT query for the whole table
+                    $query .= join ', ', ( $placeholders ) x scalar @rows;
+                    $dbh->do( $query, undef, @values );
                 }
                 for my $statement ( @{ $yaml->{'sql_statements'} } ) {               # extra SQL statements
                     $dbh->do($statement);
