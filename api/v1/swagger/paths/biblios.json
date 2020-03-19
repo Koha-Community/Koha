@@ -132,5 +132,70 @@
         }
       }
     }
+  },
+  "/public/biblios/{biblio_id}": {
+    "get": {
+      "x-mojo-to": "Biblios#get_public",
+      "operationId": "getBiblioPublic",
+      "tags": [
+        "biblios"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/biblio_id_pp"
+        }
+      ],
+      "produces": [
+        "application/marcxml+xml",
+        "application/marc-in-json",
+        "application/marc",
+        "text/plain"
+      ],
+      "responses": {
+        "200": {
+          "description": "A biblio"
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "406": {
+          "description": "Not acceptable",
+          "schema": {
+            "type": "array",
+            "description": "Accepted content-types",
+            "items": {
+                "type": "string"
+            }
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
   }
 }
