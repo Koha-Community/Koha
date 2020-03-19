@@ -40,7 +40,6 @@ BEGIN {
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 subtest 'check_password hook tests' => sub {

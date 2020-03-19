@@ -3448,7 +3448,7 @@ sub _after_biblio_action_hooks {
     my $biblio_id = $args->{biblio_id};
     my $action    = $args->{action};
 
-    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+    if ( C4::Context->config("enable_plugins") ) {
 
         my @plugins = Koha::Plugins->new->GetPlugins({
             method => 'after_biblio_action',

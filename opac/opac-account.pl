@@ -84,8 +84,7 @@ $template->param(
     payment_error       => scalar $query->param('payment-error') || q{},
 );
 
-my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
-if ( $plugins_enabled ) {
+if ( C4::Context->config("enable_plugins") ) {
     my @plugins = Koha::Plugins->new()->GetPlugins({
         method => 'opac_online_payment',
     });

@@ -190,7 +190,6 @@ subtest "RecordsFromMarcPlugin" => sub {
     close $fh;
 
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
-    t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 
     my $plugins = Koha::Plugins->new;
     $plugins->InstallPlugins;

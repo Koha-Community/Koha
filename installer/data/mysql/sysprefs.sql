@@ -674,7 +674,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('useDischarge','','','Allows librarians to discharge borrowers and borrowers to request a discharge','YesNo'),
 ('UseEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
 ('UseICU','0','1','Tell Koha if ICU indexing is in use for Zebra or not.','YesNo'),
-('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
 ('UseTransportCostMatrix','0','','Use Transport Cost Matrix when filling holds','YesNo'),
 ('UseWYSIWYGinSystemPreferences','0','','Show WYSIWYG editor when editing certain HTML system preferences.','YesNo'),
 ('viewISBD','1','','Allow display of ISBD view of bibiographic records','YesNo'),

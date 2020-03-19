@@ -30,7 +30,7 @@ use C4::Output;
 use C4::Debug;
 use C4::Context;
 
-my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
+my $plugins_enabled = C4::Context->config("enable_plugins");
 
 my $input  = new CGI;
 my $method = $input->param('method');

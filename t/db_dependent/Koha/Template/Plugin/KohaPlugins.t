@@ -24,7 +24,6 @@ BEGIN {
     use_ok('Koha::Plugin::Test');
 }
 
-t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 t::lib::Mocks::mock_config( 'enable_plugins', 1 );
 
 my $schema = Koha::Database->new->schema;
@@ -53,7 +52,6 @@ ok( index( $plugin->get_plugins_opac_head, 'Koha::Plugin::Test::opac_head' ) != 
 ok( index( $plugin->get_plugins_intranet_js, 'Koha::Plugin::Test::intranet_js' ) != -1, 'Test plugin intranet_js return value is part of code returned by get_plugins_intranet_js' );
 ok( index( $plugin->get_plugins_intranet_head, 'Koha::Plugin::Test::intranet_head' ) != -1, 'Test plugin intranet_head return value is part of code returned by get_plugins_intranet_head' );
 
-t::lib::Mocks::mock_preference('UseKohaPlugins',0);
 t::lib::Mocks::mock_config('enable_plugins',0);
 is( $plugin->get_plugins_opac_js, q{}, 'Test plugin opac_js return value is empty' );
 is( $plugin->get_plugins_opac_head, q{}, 'Test plugin opac_head return value is empty' );

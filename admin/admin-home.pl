@@ -24,7 +24,7 @@ use Koha::Plugins;
 
 my $query = new CGI;
 
-my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
+my $plugins_enabled = C4::Context->config("enable_plugins");
 my $mana_url        = C4::Context->config('mana_config');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

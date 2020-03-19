@@ -230,10 +230,7 @@ sub store {
                 $self->privacy($default_privacy);
 
                 # Call any check_password plugins if password is passed
-                if (   C4::Context->preference('UseKohaPlugins')
-                    && C4::Context->config("enable_plugins")
-                    && $self->password )
-                {
+                if ( C4::Context->config("enable_plugins") && $self->password ) {
                     my @plugins = Koha::Plugins->new()->GetPlugins({
                         method => 'check_password',
                     });
@@ -749,7 +746,7 @@ sub set_password {
         }
     }
 
-    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+    if ( C4::Context->config("enable_plugins") ) {
         # Call any check_password plugins
         my @plugins = Koha::Plugins->new()->GetPlugins({
             method => 'check_password',

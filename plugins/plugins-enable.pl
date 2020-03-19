@@ -23,8 +23,7 @@ use C4::Context;
 use C4::Auth qw(check_cookie_auth);
 use Koha::Plugins::Handler;
 
-die("Koha plugins are disabled!")
-  unless C4::Context->preference('UseKohaPlugins');
+die("Koha plugins are disabled!") unless C4::Context->config("enable_plugins");
 
 my $input = new CGI;
 

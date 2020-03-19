@@ -48,7 +48,6 @@ subtest 'Bad plugins tests' => sub {
 
     # enable plugins
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
-    t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 
     # remove any existing plugins that might interfere
     Koha::Plugins::Methods->search->delete;
@@ -84,7 +83,6 @@ subtest 'Disabled plugins tests' => sub {
 
     # enable plugins
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
-    t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 
     my $good_plugin;
 

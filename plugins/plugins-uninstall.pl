@@ -29,8 +29,7 @@ use C4::Members;
 use C4::Debug;
 use Koha::Plugins::Handler;
 
-die("Koha plugins are disabled!")
-  unless C4::Context->preference('UseKohaPlugins');
+die("Koha plugins are disabled!") unless C4::Context->config("enable_plugins");
 
 my $input = new CGI;
 

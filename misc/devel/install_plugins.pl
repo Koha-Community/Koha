@@ -31,9 +31,7 @@ GetOptions( 'help|?' => \$help );
 
 pod2usage(1) if $help;
 
-my $plugins_enabled = C4::Context->preference('UseKohaPlugins')
-  && C4::Context->config("enable_plugins");
-unless ($plugins_enabled) {
+unless ( C4::Context->config("enable_plugins") ) {
     print
 "The plugin system must be enabled for one to be able to install plugins\n";
     exit 1;

@@ -807,7 +807,7 @@ sub _after_item_action_hooks {
 
     my $action = $params->{action};
 
-    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+    if ( C4::Context->config("enable_plugins") ) {
 
         my @plugins = Koha::Plugins->new->GetPlugins({
             method => 'after_item_action',

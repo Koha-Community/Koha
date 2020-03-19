@@ -35,8 +35,7 @@ sub get {
     my $self = shift;
     my $c = $self->openapi->valid_input or return;
 
-    if (   C4::Context->preference('UseKohaPlugins')
-        && C4::Context->config("enable_plugins") )
+    if ( C4::Context->config("enable_plugins") )
     {
         my $path = $c->req->url->path->leading_slash(1);
 

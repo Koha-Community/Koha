@@ -213,7 +213,6 @@ sub BuildReport {
         NovelistSelectEnabled
         OpenLibraryCovers
         OpenLibrarySearch
-        UseKohaPlugins
         SyndeticsEnabled
         TagsEnabled
         CalendarFirstDayOfWeek

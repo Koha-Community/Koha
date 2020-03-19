@@ -506,7 +506,6 @@ sub get_template_and_user {
             OPACLocalCoverImages                                                       => C4::Context->preference('OPACLocalCoverImages'),
             AllowMultipleCovers                                                        => C4::Context->preference('AllowMultipleCovers'),
             EnableBorrowerFiles                                                        => C4::Context->preference('EnableBorrowerFiles'),
-            UseKohaPlugins                                                             => C4::Context->preference('UseKohaPlugins'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
             useDischarge                                                               => C4::Context->preference('useDischarge'),
             pending_checkout_notes                                                     => scalar Koha::Checkouts->search({ noteseen => 0 }),

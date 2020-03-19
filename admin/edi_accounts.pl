@@ -52,10 +52,7 @@ if ( $op eq 'acct_form' ) {
     );
     $template->param( vendors => \@vendors );
 
-    my $plugins_enabled = C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins");
-    $template->param( plugins_enabled => $plugins_enabled );
-
-    if ( $plugins_enabled ) {
+    if ( C4::Context->config("enable_plugins") ) {
         my @plugins = Koha::Plugins->new()->GetPlugins({
             method => 'edifact',
         });

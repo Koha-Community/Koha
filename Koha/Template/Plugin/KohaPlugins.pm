@@ -47,8 +47,7 @@ to output to the head section of opac pages.
 =cut
 
 sub get_plugins_opac_head {
-    return q{}
-      unless C4::Context->preference('UseKohaPlugins');
+    return q{} unless C4::Context->config("enable_plugins");
 
     my $p = Koha::Plugins->new();
 
@@ -75,8 +74,7 @@ to output to the javascript section of at the bottom of opac pages.
 =cut
 
 sub get_plugins_opac_js {
-    return q{}
-      unless C4::Context->preference('UseKohaPlugins');
+    return q{} unless C4::Context->config("enable_plugins");
 
     my $p = Koha::Plugins->new();
 
@@ -103,8 +101,7 @@ to output to the head section of intranet pages.
 =cut
 
 sub get_plugins_intranet_head {
-    return q{}
-      unless C4::Context->preference('UseKohaPlugins');
+    return q{} unless C4::Context->config("enable_plugins");
 
     my $p = Koha::Plugins->new();
 
@@ -131,8 +128,7 @@ to output to the javascript section of at the bottom of intranet pages.
 =cut
 
 sub get_plugins_intranet_js {
-    return q{}
-      unless C4::Context->preference('UseKohaPlugins');
+    return q{} unless C4::Context->config("enable_plugins");
 
     my $p = Koha::Plugins->new();
 
