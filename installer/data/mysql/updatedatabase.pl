@@ -21134,6 +21134,30 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22821 - Add reply_address to message_queue)\n";
 }
 
+$DBversion = '19.12.00.043';
+if( CheckVersion( $DBversion ) ) {
+
+    # Add return reasons to enum
+    $dbh->do(
+        qq{
+            ALTER TABLE
+                `branchtransfers`
+            MODIFY COLUMN
+                `reason` enum(
+                    'Manual',
+                    'StockrotationAdvance',
+                    'StockrotationRepatriation',
+                    'ReturnToHome',
+                    'ReturnToHolding'
+                )
+            AFTER `comments`
+          }
+    );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24296 - Add 'return' reasons to branchtransfers enum)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
