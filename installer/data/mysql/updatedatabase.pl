@@ -21182,6 +21182,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 4461 - Add CollapseFieldsPatronAddForm system preference)\n";
 }
 
+$DBversion = '19.12.00.046';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "ALTER TABLE accountlines MODIFY COLUMN date TIMESTAMP NULL" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24818: Update 'accountlines.date' from DATE to TIMESTAMP)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';

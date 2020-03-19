@@ -48,7 +48,7 @@ __PACKAGE__->table("accountlines");
 
 =head2 date
 
-  data_type: 'date'
+  data_type: 'timestamp'
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
@@ -144,7 +144,11 @@ __PACKAGE__->add_columns(
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "date",
-  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "amount",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "description",
@@ -363,8 +367,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-24 16:33:42
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q4Ahb8xIxAsjT/aF9yjrdQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-19 09:20:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BuE4CYsSH4BwXZoQKE2MWw
 
 sub koha_objects_class {
     'Koha::Account::Lines';
