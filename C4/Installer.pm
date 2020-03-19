@@ -496,12 +496,12 @@ sub process_yml_table {
     my $placeholders = '(' . join ( ",", map { "?" } @columns ) . ')'; # '(?,..,?)' string
     my @values;
     foreach my $row ( @rows ) {
-        push @values, map {
+        push @values, [ map {
                         my $col = $_;
                         ( @multiline and grep { $_ eq $col } @multiline )
                         ? join "\r\n", @{$row->{$col}}                # join multiline values
                         : $row->{$col};
-                     } @columns;
+                     } @columns ];
     }
     return { query => $query, placeholders => $placeholders, values => \@values };
 }
@@ -535,8 +535,9 @@ sub load_sql {
                     my $placeholders = $query_info->{placeholders};
                     my $values       = $query_info->{values};
                     # Doing only 1 INSERT query for the whole table
-                    $query .= join ', ', ( $placeholders ) x scalar @values;
-                    $dbh->do( $query, undef, @values );
+                    my @all_rows_values = map { @$_ } @$values;
+                    $query .= join ', ', ( $placeholders ) x scalar @$values;
+                    $dbh->do( $query, undef, @all_rows_values );
                 }
                 for my $statement ( @{ $yaml->{'sql_statements'} } ) {               # extra SQL statements
                     $dbh->do($statement);
