@@ -1118,19 +1118,16 @@ sub ModSerialStatus {
             my ( $missinglist, $recievedlist ) = $sth->fetchrow;
 
             if ( $status == ARRIVED || ($oldstatus == ARRIVED && $status != ARRIVED) ) {
-                $recievedlist .= "; $serialseq"
-                    if ($recievedlist !~ /(^|;)\s*$serialseq(?=;|$)/);
+                $recievedlist = _handle_seqno($serialseq, $recievedlist);
             }
 
             # in case serial has been previously marked as missing
             if (grep /$status/, (EXPECTED, ARRIVED, LATE, CLAIMED)) {
-                $missinglist=~ s/(^|;)\s*$serialseq(?=;|$)//g;
+                $missinglist = _handle_seqno($serialseq, $missinglist, 'REMOVE');
             }
 
-            $missinglist .= "; $serialseq"
-                if ( ( grep { $_ == $status } ( MISSING_STATUSES ) ) && ( $missinglist !~/(^|;)\s*$serialseq(?=;|$)/ ) );
-            $missinglist .= "; not issued $serialseq"
-                if ( $status == NOT_ISSUED && $missinglist !~ /(^|;)\s*$serialseq(?=;|$)/ );
+            $missinglist = _handle_seqno($serialseq, $missinglist) if grep { $_ == $status } MISSING_STATUSES;
+            $missinglist .= "; not issued $serialseq" if $status == NOT_ISSUED and not _handle_seqno($serialseq, $missinglist, 'CHECK');
 
             $query = "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
             $sth   = $dbh->prepare($query);
@@ -1171,6 +1168,24 @@ sub ModSerialStatus {
     }
 
     return;
+}
+
+sub _handle_seqno {
+# Adds or removes seqno from list when needed; returns list
+# Or checks and returns true when present
+
+    my ( $seq, $list, $op ) = @_; # op = ADD | REMOVE | CHECK (default: ADD)
+    my $seq_r = $seq;
+    $seq_r =~ s/([()])/\\$1/g; # Adjust disturbing parentheses for regex, maybe extend in future
+
+    if( !$op or $op eq 'ADD' ) {
+        $list .= "; $seq" if $list !~ /(^|;)\s*$seq_r(?=;|$)/;
+    } elsif( $op eq 'REMOVE' ) {
+        $list=~ s/(^|;)\s*(not issued )?$seq_r(?=;|$)//g;
+    } else { # CHECK
+        return $list =~ /(^|;)\s*$seq_r(?=;|$)/ ? 1 : q{};
+    }
+    return $list;
 }
 
 =head2 GetNextExpected
