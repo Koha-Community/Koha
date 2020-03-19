@@ -21170,6 +21170,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24846 - Add a new permission for new tool batch extend due dates)\n";
 }
 
+$DBversion = '19.12.00.045';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) 
+        VALUES
+        ('CollapseFieldsPatronAddForm','',NULL,'Collapse these fields by default when adding a new patron. These fields can still be expanded.','Multiple') 
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 4461 - Add CollapseFieldsPatronAddForm system preference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
