@@ -791,7 +791,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
     my $account = $patron->account;
 
-    my $today  = dt_from_string;
     my $res    = 3;
     my $rent   = 5;
     my $manual = 7;
@@ -821,7 +820,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron->borrowernumber,
-            date              => $today,
             description       => 'a Manual invoice fee',
             debit_type_code   => 'Copie',
             amountoutstanding => $manual,
@@ -969,7 +967,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     my $debit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1900-01-01',
+            date              => '1970-01-01 00:00:01',
             amountoutstanding => 0,
             interface         => 'commandline',
             debit_type_code   => 'LOST'
@@ -978,7 +976,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     my $credit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1900-01-01',
+            date              => '1970-01-01 00:00:01',
             amountoutstanding => -5,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
@@ -1002,7 +1000,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $debit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1900-01-01',
+            date              => '1970-01-01 00:00:01',
             amountoutstanding => 5,
             interface         => 'commanline',
             debit_type_code   => 'LOST'
@@ -1011,7 +1009,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $credit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1900-01-01',
+            date              => '1970-01-01 00:00:01',
             amountoutstanding => 0,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
@@ -1036,7 +1034,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $debit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1900-01-01',
+            date              => '1970-01-01 00:00:01',
             amountoutstanding => 0,
             interface         => 'commandline',
             debit_type_code   => 'LOST'
@@ -1045,7 +1043,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $credit = Koha::Account::Line->new(
         {
             borrowernumber    => $patron->id,
-            date              => '1900-01-01',
+            date              => '1970-01-01 00:00:01',
             amountoutstanding => 0,
             interface         => 'commandline',
             credit_type_code  => 'PAYMENT'
