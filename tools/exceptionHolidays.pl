@@ -17,18 +17,18 @@ my $dbh = C4::Context->dbh();
 checkauth($input, 0, {tools=> 'edit_calendar'}, 'intranet');
 
 
-my $branchcode = $input->param('showBranchName');
+our $branchcode = $input->param('showBranchName');
 my $originalbranchcode  = $branchcode;
-my $weekday = $input->param('showWeekday');
-my $day = $input->param('showDay');
-my $month = $input->param('showMonth');
-my $year = $input->param('showYear');
-my $title = $input->param('showTitle');
-my $description = $input->param('showDescription');
-my $holidaytype = $input->param('showHolidayType');
+our $weekday = $input->param('showWeekday');
+our $day = $input->param('showDay');
+our $month = $input->param('showMonth');
+our $year = $input->param('showYear');
+our $title = $input->param('showTitle');
+our $description = $input->param('showDescription');
+our $holidaytype = $input->param('showHolidayType');
 my $datecancelrange_dt = eval { dt_from_string( scalar $input->param('datecancelrange') ) };
 my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
-my $showoperation = $input->param('showOperation');
+our $showoperation = $input->param('showOperation');
 my $allbranches = $input->param('allBranches');
 
 $title || ($title = '');
@@ -40,7 +40,7 @@ if ($description) {
 }   
 
 # We make an array with holiday's days
-my @holiday_list;
+our @holiday_list;
 if ($datecancelrange_dt){
             my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
 
@@ -55,16 +55,16 @@ if ($datecancelrange_dt){
 if($allbranches) {
     my $libraries = Koha::Libraries->search;
     while ( my $library = $libraries->next ) {
-        edit_holiday($showoperation, $library->branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype);
+        edit_holiday($showoperation, $library->branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype, @holiday_list);
     }
 } else {
-    edit_holiday($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype);
+    edit_holiday($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype, @holiday_list);
 }
 
 print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$originalbranchcode&calendardate=$calendardate");
 
 sub edit_holiday {
-    ($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype) = @_;
+    ($showoperation, $branchcode, $weekday, $day, $month, $year, $title, $description, $holidaytype, @holiday_list) = @_;
     my $calendar = C4::Calendar->new(branchcode => $branchcode);
 
     if ($showoperation eq 'exception') {
