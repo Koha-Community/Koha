@@ -853,16 +853,22 @@ sub _join_queries {
       map { s/^mc-//r } grep { defined($_) && $_ ne '' && $_ =~ /^mc-/ } @parts;
     return () unless @norm_parts + @mc_parts;
     return ( @norm_parts, @mc_parts )[0] if @norm_parts + @mc_parts == 1;
-    my $grouped_mc =
-      @mc_parts ? '(' . ( join ' OR ', map { "($_)" } @mc_parts ) . ')' : ();
 
-    # Handy trick: $x || () inside a join means that if $x ends up as an
-    # empty string, it gets replaced with (), which makes join ignore it.
-    # (bad effect: this'll also happen to '0', this hopefully doesn't matter
-    # in this case.)
-    join( ' AND ',
-        join( ' AND ', map { "($_)" } @norm_parts ) || (),
-        $grouped_mc || () );
+    # Group limits by field, so they can be OR'ed together
+    my %mc_limits;
+    foreach my $mc_part (@mc_parts) {
+        my ($field, $value) = split /:/, $mc_part, 2;
+        $mc_limits{$field} //= [];
+        push @{ $mc_limits{$field} }, $value;
+    }
+
+    @mc_parts = map {
+        sprintf('%s:(%s)', $_, join (' OR ', @{ $mc_limits{$_} }));
+    } sort keys %mc_limits;
+
+    @norm_parts = map { "($_)" } @norm_parts;
+
+    return join( ' AND ', @norm_parts, @mc_parts);
 }
 
 =head2 _make_phrases
