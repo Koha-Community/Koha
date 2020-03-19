@@ -57,10 +57,12 @@
                 <legend>OPAC</legend>
                 [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
             </fieldset>
+            <!-- TODO not yet implemented
             <fieldset id="didyoumeanintranet">
                 <legend>Intranet</legend>
                 [% PROCESS pluginlist plugins=INTRApluginlist type='intranet' %]
             </fieldset>
+            -->
             <fieldset class="action"><button class="save-all submit" type="submit">Save configuration</button> <a href="/cgi-bin/koha/admin/didyoumean.pl" class="force_reload cancel">Cancel</a></fieldset>
         </form>
 
@@ -96,9 +98,8 @@
 
         function yesimeant() {
             var OPACdidyoumean = serialize_plugins('opac');
-            var INTRAdidyoumean = serialize_plugins('intranet');
 
-            var data = "pref_OPACdidyoumean=" + encodeURIComponent(OPACdidyoumean) + "&pref_INTRAdidyoumean=" + encodeURIComponent(INTRAdidyoumean);
+            var data = "pref_OPACdidyoumean=" + encodeURIComponent(OPACdidyoumean);
 
             $.ajax({
                 data: data,

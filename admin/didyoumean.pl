@@ -22,15 +22,12 @@ my ($template, $loggedinuser, $cookie)
 
 my $opacplugins = from_json(C4::Context->preference('OPACdidyoumean') || '[]');
 
-my $intraplugins = from_json(C4::Context->preference('INTRAdidyoumean') || '[]');
-
 my @pluginlist = Koha::SuggestionEngine::AvailablePlugins();
 foreach my $plugin (@pluginlist) {
     next if $plugin eq 'Koha::SuggestionEngine::Plugin::Null';
     next unless (can_load( modules => { "$plugin" => undef } ));
     push @$opacplugins, { name => $plugin->NAME } unless grep { $_->{name} eq $plugin->NAME } @$opacplugins;
-    push @$intraplugins, { name => $plugin->NAME } unless grep { $_->{name} eq $plugin->NAME } @$intraplugins;
 }
 $template->{VARS}->{OPACpluginlist} = $opacplugins;
-$template->{VARS}->{INTRApluginlist} = $intraplugins;
+
 output_html_with_http_headers $input, $cookie, $template->output;
