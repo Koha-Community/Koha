@@ -38,6 +38,8 @@ Actions:
     --rebuild         Trigger a rebuild process
 
 Options:
+    --delete|-d       Delete elasticsearch index before reindexing.
+    --reset|-r        Reset elasticsearch mappings from file.
     --authorities|-a  Only run process for authorities.
     --biblios|-b      Only run process for biblios.
     -c|--commit n     Specify how many records will be batched up before
@@ -98,6 +100,14 @@ run_rebuild_elasticsearch()
     fi
     rebuild_opts="--processes ${processes}"
 
+    if [ "${delete}" = "yes" ]; then
+        rebuild_opts="${rebuild_opts} -d"
+    fi
+
+    if [ "${reset}" = "yes" ]; then
+        rebuild_opts="${rebuild_opts} -r"
+    fi
+
     if [ "${biblios}" = "yes" ]; then
         rebuild_opts="${rebuild_opts} -b"
     fi
@@ -134,6 +144,12 @@ while [ -n "$*" ]; do
     case "$1" in
         -h|--help)
             usage ; exit 0
+            ;;
+        -d|--delete)
+            delete="yes"
+            ;;
+        -r|--reset)
+            reset="yes"
             ;;
         -b|--biblios)
             toggle_biblios_only
