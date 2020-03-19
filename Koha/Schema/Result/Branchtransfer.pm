@@ -72,7 +72,7 @@ __PACKAGE__->table("branchtransfers");
 =head2 reason
 
   data_type: 'enum'
-  extra: {list => ["Manual","StockrotationAdvance","StockrotationRepatriation"]}
+  extra: {list => ["Manual","StockrotationAdvance","StockrotationRepatriation","ReturnToHome","ReturnToHolding"]}
   is_nullable: 1
 
 =cut
@@ -121,7 +121,13 @@ __PACKAGE__->add_columns(
   {
     data_type => "enum",
     extra => {
-      list => ["Manual", "StockrotationAdvance", "StockrotationRepatriation"],
+      list => [
+        "Manual",
+        "StockrotationAdvance",
+        "StockrotationRepatriation",
+        "ReturnToHome",
+        "ReturnToHolding",
+      ],
     },
     is_nullable => 1,
   },
@@ -187,8 +193,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-01-28 15:04:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PD2BJD5BaNcemKr2k7zPGA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-19 09:20:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PLfyg+VMkwXhVqkTeTdGWw
 
 sub koha_object_class {
     'Koha::Item::Transfer';
