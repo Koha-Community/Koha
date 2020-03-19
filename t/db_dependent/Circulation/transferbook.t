@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -47,7 +47,9 @@ subtest 'transfer a non-existant item' => sub {
     );
 };
 
-#FIXME:'UseBranchTransferLimits tests missing
+#subtest 'UseBranchTransferLimits tests' => sub {
+#    plan tests => 0;
+#};
 
 subtest 'transfer already at destination' => sub {
     plan tests => 5;
