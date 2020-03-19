@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::Mocks;
 
 use_ok('Koha::SearchEngine::Elasticsearch::QueryBuilder');
@@ -221,6 +221,35 @@ subtest '_clean_search_term() tests' => sub {
 
     $res = $qb->_clean_search_term('test {another part');
     is($res, 'test  another part', 'unbalanced curly brackets replaced correctly');
+};
+
+subtest '_join_queries' => sub {
+    plan tests => 6;
+
+    my $params = {
+        index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX,
+    };
+    my $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new($params);
+
+    my $query;
+
+    $query = $qb->_join_queries('foo');
+    is($query, 'foo', 'should work with a single param');
+
+    $query = $qb->_join_queries(undef, '', 'foo', '', undef);
+    is($query, 'foo', 'should ignore undef or empty queries');
+
+    $query = $qb->_join_queries('foo', 'bar');
+    is($query, '(foo) AND (bar)', 'should join queries with an AND');
+
+    $query = $qb->_join_queries('homebranch:foo', 'onloan:false');
+    is($query, '(homebranch:foo) AND (onloan:false)', 'should also work when field is specified');
+
+    $query = $qb->_join_queries('homebranch:foo', 'mc-itype:BOOK', 'mc-itype:EBOOK');
+    is($query, '(homebranch:foo) AND itype:(BOOK OR EBOOK)', 'should join with OR when using an "mc-" field');
+
+    $query = $qb->_join_queries('homebranch:foo', 'mc-itype:BOOK', 'mc-itype:EBOOK', 'mc-location:SHELF');
+    is($query, '(homebranch:foo) AND itype:(BOOK OR EBOOK) AND location:(SHELF)', 'should join "mc-" parts with AND if not the same field');
 };
 
 1;
