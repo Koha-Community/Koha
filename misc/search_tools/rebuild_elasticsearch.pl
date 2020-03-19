@@ -27,6 +27,13 @@ rebuild_elasticsearch.pl - inserts records from a Koha database into Elasticsear
 
 B<rebuild_elasticsearch.pl>
 [B<-c|--commit>=C<count>]
+[B<-d|--delete>]
+[B<-r|--reset>]
+[B<-a|--authorities>]
+[B<-b|--biblios>]
+[B<-bn|--bnumber>]
+[B<-ai|--authid>]
+[B<-p|--processes>]
 [B<-v|--verbose>]
 [B<-h|--help>]
 [B<--man>]
@@ -47,6 +54,11 @@ Higher should be faster, but will cause more RAM usage. Default is 5000.
 =item B<-d|--delete>
 
 Delete the index and recreate it before indexing.
+
+=item B<-r|--reset>
+
+Reload mappings from files (specified in koha-conf.xml) before indexing.
+Implies --delete.
 
 =item B<-a|--authorities>
 
@@ -98,7 +110,9 @@ use Koha::Script;
 use C4::Context;
 use Koha::MetadataRecord::Authority;
 use Koha::BiblioUtils;
+use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Indexer;
+use Koha::Caches;
 use MARC::Field;
 use MARC::Record;
 use Modern::Perl;
@@ -106,7 +120,7 @@ use Pod::Usage;
 
 my $verbose = 0;
 my $commit = 5000;
-my ($delete, $help, $man, $processes);
+my ($delete, $reset, $help, $man, $processes);
 my ($index_biblios, $index_authorities);
 my (@biblionumbers,@authids);
 
@@ -115,6 +129,7 @@ $|=1; # flushes output
 GetOptions(
     'c|commit=i'    => \$commit,
     'd|delete'      => \$delete,
+    'r|reset'       => \$reset,
     'a|authorities' => \$index_authorities,
     'b|biblios'     => \$index_biblios,
     'bn|bnumber=i' => \@biblionumbers,
@@ -138,6 +153,14 @@ pod2usage(1) if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 
 _sanity_check();
+
+if ($reset){
+    Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
+    my $cache = Koha::Caches->get_instance();
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac');
+    $delete = 1;
+}
 
 _verify_index_state($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, $delete) if ($index_biblios);
 _verify_index_state($Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX, $delete) if ($index_authorities);
