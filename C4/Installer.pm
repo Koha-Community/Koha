@@ -485,6 +485,27 @@ error.
 
 =cut
 
+sub process_yml_table {
+    my ($table) = @_;
+    my $table_name   = ( keys %$table )[0];                          # table name
+    my @rows         = @{ $table->{$table_name}->{rows} };           #
+    my @columns      = ( sort keys %{$rows[0]} );                    # column names
+    my $fields       = join ",", map{sprintf("`%s`", $_)} @columns;  # idem, joined
+    my $query        = "INSERT INTO $table_name ( $fields ) VALUES ";
+    my @multiline    = @{ $table->{$table_name}->{'multiline'} };    # to check multiline values;
+    my $placeholders = '(' . join ( ",", map { "?" } @columns ) . ')'; # '(?,..,?)' string
+    my @values;
+    foreach my $row ( @rows ) {
+        push @values, map {
+                        my $col = $_;
+                        ( @multiline and grep { $_ eq $col } @multiline )
+                        ? join "\r\n", @{$row->{$col}}                # join multiline values
+                        : $row->{$col};
+                     } @columns;
+    }
+    return { query => $query, placeholders => $placeholders, values => \@values };
+}
+
 sub load_sql {
     my $self = shift;
     my $filename = shift;
@@ -509,24 +530,12 @@ sub load_sql {
             eval {
                 my $yaml         = LoadFile( $filename );                            # Load YAML
                 for my $table ( @{ $yaml->{'tables'} } ) {
-                    my $table_name   = ( keys %$table )[0];                          # table name
-                    my @rows         = @{ $table->{$table_name}->{rows} };           #
-                    my @columns      = ( sort keys %{$rows[0]} );                    # column names
-                    my $fields       = join ",", map{sprintf("`%s`", $_)} @columns;  # idem, joined
-                    my $query        = "INSERT INTO $table_name ( $fields ) VALUES ";
-                    my @multiline    = @{ $table->{$table_name}->{'multiline'} };    # to check multiline values;
-                    my $placeholders = '(' . join ( ",", map { "?" } @columns ) . ')'; # '(?,..,?)' string
-                    my @values;
-                    foreach my $row ( @rows ) {
-                        push @values, map {
-                                        my $col = $_;
-                                        ( @multiline and grep { $_ eq $col } @multiline )
-                                        ? join "\r\n", @{$row->{$col}}                # join multiline values
-                                        : $row->{$col};
-                                     } @columns;
-                    }
+                    my $query_info   = process_yml_table($table);
+                    my $query        = $query_info->{query};
+                    my $placeholders = $query_info->{placeholders};
+                    my $values       = $query_info->{values};
                     # Doing only 1 INSERT query for the whole table
-                    $query .= join ', ', ( $placeholders ) x scalar @rows;
+                    $query .= join ', ', ( $placeholders ) x scalar @values;
                     $dbh->do( $query, undef, @values );
                 }
                 for my $statement ( @{ $yaml->{'sql_statements'} } ) {               # extra SQL statements
