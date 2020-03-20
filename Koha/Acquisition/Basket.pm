@@ -57,8 +57,9 @@ Returns the I<Koha::Patron> for the basket creator.
 
 sub creator {
     my ($self) = @_;
-    return Koha::Patrons->find( $self->authorisedby )
-        if $self->authorisedby;
+    my $borrowernumber = $self->authorisedby; # FIXME missing FK here
+    return unless $borrowernumber;
+    return Koha::Patrons->find( $borrowernumber );
 }
 
 =head3 basket_group
