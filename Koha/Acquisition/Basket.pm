@@ -125,11 +125,11 @@ sub to_api_mapping {
         creationdate            => 'creation_date',
         closedate               => 'close_date',
         booksellerid            => 'vendor_id',
-        authorisedby            => 'authorised_by',
+        authorisedby            => 'creator_id',
         booksellerinvoicenumber => undef,
         basketgroupid           => 'basket_group_id',
-        deliveryplace           => 'delivery_place',
-        billingplace            => 'billing_place',
+        deliveryplace           => 'delivery_library_id',
+        billingplace            => 'billing_library_id',
         branch                  => 'library_id',
         is_standing             => 'standing'
     };
