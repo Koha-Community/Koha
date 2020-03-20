@@ -51,6 +51,13 @@ __PACKAGE__->table("biblioimages");
   data_type: 'mediumblob'
   is_nullable: 0
 
+=head2 timestamp
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  default_value: current_timestamp
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -64,6 +71,13 @@ __PACKAGE__->add_columns(
   { data_type => "mediumblob", is_nullable => 0 },
   "thumbnail",
   { data_type => "mediumblob", is_nullable => 0 },
+  "timestamp",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    default_value => \"current_timestamp",
+    is_nullable => 0,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -96,8 +110,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WdDuaUrR0IC6+8jJwlev6A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-20 10:39:00
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f6elSD3dDk6vWE4bUirmew
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
