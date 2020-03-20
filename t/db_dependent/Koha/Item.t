@@ -155,10 +155,10 @@ subtest 'pickup_locations' => sub {
 
     # Cleanup database
     Koha::Holds->search->delete;
+    $dbh->do('DELETE FROM issues');
     Koha::Patrons->search->delete;
     Koha::Items->search->delete;
     Koha::Libraries->search->delete;
-    $dbh->do('DELETE FROM issues');
     Koha::CirculationRules->search->delete;
     Koha::CirculationRules->set_rules(
         {
@@ -439,7 +439,7 @@ subtest 'deletion' => sub {
 };
 
 subtest 'renewal_branchcode' => sub {
-    plan tests => 15;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
