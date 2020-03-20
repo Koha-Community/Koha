@@ -594,13 +594,17 @@ if (C4::Context->preference("IndependentBranches")) {
     }
 }
 if ($op eq 'add'){
-    if ( $guarantor_id ) {
-        my $guarantordata = $guarantor->unblessed;
-        foreach (qw(streetnumber address streettype address2
-          zipcode country city state phone phonepro mobile fax email emailpro branchcode
-          B_streetnumber B_streettype B_address B_address2
-          B_city B_state B_zipcode B_country B_email B_phone)) {
-              $newdata{$_} = $guarantordata->{$_};
+    if ($guarantor_id) {
+        foreach (
+            qw(
+                streetnumber address streettype address2 zipcode country city state phone phonepro mobile
+                fax email emailpro branchcode
+                B_streetnumber B_streettype B_address B_address2
+                B_city B_state B_zipcode B_country B_email B_phone
+            )
+          )
+        {
+            $newdata{$_} = $guarantor->$_;
         }
     }
     $template->param( updtype => 'I', step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1, step_7 => 1);
