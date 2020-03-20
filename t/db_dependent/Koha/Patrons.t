@@ -2021,7 +2021,7 @@ subtest 'anonymize' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'extended_attributes' => sub {
-    plan tests => 10;
+    plan tests => 11;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -2045,6 +2045,10 @@ subtest 'extended_attributes' => sub {
             staff_searchable => 1
         }
     )->store;
+
+    my $deleted_attribute_type = $builder->build_object({ class => 'Koha::Patron::Attribute::Types' });
+    my $deleted_attribute_type_code = $deleted_attribute_type->code;
+    $deleted_attribute_type->delete;
 
     my $new_library = $builder->build( { source => 'Branch' } );
     my $attribute_type_limited = Koha::Patron::Attribute::Type->new(
@@ -2074,6 +2078,10 @@ subtest 'extended_attributes' => sub {
         {
             attribute => 'my attribute limited 2',
             code => $attribute_type_limited->code(),
+        },
+        {
+            attribute => 'my nonexistent attribute 2',
+            code => $deleted_attribute_type_code,
         }
     ];
 
@@ -2084,7 +2092,13 @@ subtest 'extended_attributes' => sub {
     $patron_1->extended_attributes->filter_by_branch_limitations->delete;
     $patron_2->extended_attributes->filter_by_branch_limitations->delete;
     $patron_1->extended_attributes($attributes_for_1);
-    $patron_2->extended_attributes($attributes_for_2);
+
+    my $print_error = $schema->storage->dbh->{PrintError};
+    $schema->storage->dbh->{PrintError} = 0;
+    warning_like {
+        $patron_2->extended_attributes($attributes_for_2);
+    } [ qr/a foreign key constraint fails/, qr/a foreign key constraint fails/ ], 'nonexistent attribute should have not exploded but print a warning';
+    $schema->storage->dbh->{PrintError} = $print_error;
 
     my $extended_attributes_for_1 = $patron_1->extended_attributes;
     is( $extended_attributes_for_1->count, 3, 'There should be 3 attributes now for patron 1');

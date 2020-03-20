@@ -1467,7 +1467,14 @@ sub extended_attributes {
 
                 # Insert the new ones
                 for my $attribute (@$attributes) {
-                    $self->_result->create_related('borrower_attributes', $attribute);
+                    eval {
+                        $self->_result->create_related('borrower_attributes', $attribute);
+                    };
+                    # FIXME We should:
+                    # 1 - Raise an exception
+                    # 2 - Execute in a transaction and don't save
+                    #  or Insert anyway but display a message on the UI
+                    warn $@ if $@;
                 }
             }
         );
