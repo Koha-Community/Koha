@@ -17,13 +17,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use C4::Circulation;
 use C4::Reserves;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Item::Transfers;
 
 my $builder = t::lib::TestBuilder->new;
 
@@ -45,6 +46,45 @@ subtest 'transfer a non-existant item' => sub {
         { BadBarcode => $badbc },
         "We got the expected barcode"
     );
+};
+
+subtest 'field population tests' => sub {
+    plan tests => 6;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    t::lib::Mocks::mock_userenv( { branchcode => $library->branchcode } );
+
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode }
+        }
+    );
+
+    my $item = $builder->build_sample_item(
+        {
+            library => $library->branchcode,
+        }
+    );
+
+    my $trigger = "Manual";
+    my ($dotransfer, $messages ) = transferbook( $library2->branchcode, $item->barcode, undef, $trigger );
+    is( $dotransfer, 1, 'Transfer succeeded' );
+    is_deeply(
+        $messages,
+        { 'WasTransfered' => 1 },
+        "WasTransfered was set correctly"
+    );
+
+    my $transfers = Koha::Item::Transfers->search({ itemnumber => $item->itemnumber, datearrived => undef });
+    is( $transfers->count, 1, 'One transfer created');
+
+    my $transfer = $transfers->next;
+    is ($transfer->frombranch, $library->branchcode, 'frombranch set correctly');
+    is ($transfer->tobranch, $library2->branchcode, 'tobranch set correctly');
+    is ($transfer->reason, $trigger, 'reason set if passed');
 };
 
 #FIXME:'UseBranchTransferLimits tests missing
@@ -69,7 +109,7 @@ subtest 'transfer already at destination' => sub {
     );
 
     my ($dotransfer, $messages ) = transferbook( $library->branchcode, $item->barcode );
-    is( $dotransfer, 0, 'Transfer of reserved item failed with ignore reserves: true' );
+    is( $dotransfer, 0, 'Transfer of item failed when destination equals holding branch' );
     is_deeply(
         $messages,
         { 'DestinationEqualsHolding' => 1 },
