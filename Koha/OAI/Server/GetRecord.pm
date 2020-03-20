@@ -48,7 +48,7 @@ sub new {
         $sql .= "
             UNION
             SELECT deleteditems.timestamp FROM deleteditems JOIN biblio USING (biblionumber)
-            WHERE biblionumber=?
+            WHERE deleteditems.biblionumber=?
             UNION
             SELECT timestamp from items
             WHERE biblionumber=?
