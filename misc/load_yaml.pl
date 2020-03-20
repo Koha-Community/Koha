@@ -41,7 +41,7 @@ USAGE
 }
 
 # Getting parameters
-my ( @files, $dump, $load, $help );
+my ( @files, $load, $help );
 
 GetOptions(
  'help|h'        => \$help,

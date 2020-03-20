@@ -473,15 +473,12 @@ sub set_languages_syspref {
     C4::Context->clear_syspref_cache();
 }
 
-=head2 load_sql
+=head2 process_yml_table
 
-  my $error = $installer->load_sql($filename);
+  my $query_info   = $installer->process_yml_table($table);
 
-Runs the specified input file using a sql loader DBIx::RunSQL, or a yaml loader
-Returns any strings sent to STDERR
-
-# FIXME This should be improved: sometimes the caller and load_sql warn the same
-error.
+Analyzes a table loaded in YAML format.
+Returns the values required to build an insert statement.
 
 =cut
 
@@ -505,6 +502,18 @@ sub process_yml_table {
     }
     return { query => $query, placeholders => $placeholders, values => \@values };
 }
+
+=head2 load_sql
+
+  my $error = $installer->load_sql($filename);
+
+Runs the specified input file using a sql loader DBIx::RunSQL, or a yaml loader
+Returns any strings sent to STDERR
+
+# FIXME This should be improved: sometimes the caller and load_sql warn the same
+error.
+
+=cut
 
 sub load_sql {
     my $self = shift;
