@@ -21203,6 +21203,31 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22987 - Add biblioimages.timestamp)\n";
 }
 
+$DBversion = '19.12.00.048';
+if( CheckVersion( $DBversion ) ) {
+
+    # Add rotating collection states to reason enum
+    $dbh->do(
+        qq{
+            ALTER TABLE
+                `branchtransfers`
+            MODIFY COLUMN
+                `reason` enum(
+                    'Manual',
+                    'StockrotationAdvance',
+                    'StockrotationRepatriation',
+                    'ReturnToHome',
+                    'ReturnToHolding',
+                    'RotatingCollection'
+                )
+            AFTER `comments`
+          }
+    );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 24299 - Add 'collection' reasons to branchtransfers enum)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
