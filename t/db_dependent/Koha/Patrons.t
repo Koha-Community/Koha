@@ -2021,7 +2021,7 @@ subtest 'anonymize' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'extended_attributes' => sub {
-    plan tests => 11;
+    plan tests => 14;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -2045,6 +2045,8 @@ subtest 'extended_attributes' => sub {
             staff_searchable => 1
         }
     )->store;
+
+    my $attribute_type3 = $builder->build_object({ class => 'Koha::Patron::Attribute::Types' });
 
     my $deleted_attribute_type = $builder->build_object({ class => 'Koha::Patron::Attribute::Types' });
     my $deleted_attribute_type_code = $deleted_attribute_type->code;
@@ -2111,6 +2113,63 @@ subtest 'extended_attributes' => sub {
 
     $attribute_12 = $patron_2->get_extended_attribute( $attribute_type1->code );
     is( $attribute_12->attribute, 'my attribute12', 'Koha::Patron->get_extended_attribute should return the correct attribute value' );
+
+    warning_is {
+        $extended_attributes_for_2 = $patron_2->extended_attributes->merge_with(
+            [
+                {
+                    attribute => 'my attribute12 XXX',
+                    code      => $attribute_type1->code(),
+                },
+                {
+                    attribute => 'my nonexistent attribute 2',
+                    code      => $deleted_attribute_type_code,
+                },
+                {
+                    attribute => 'my attribute 3', # Adding a new attribute using merge_with
+                    code      => $attribute_type3->code,
+                },
+            ]
+        );
+    }
+    "Cannot merge element: unrecognized code = '$deleted_attribute_type_code'",
+    "Trying to merge_with using a nonexistent attribute code should display a warning";
+
+    is( @$extended_attributes_for_2, 3, 'There should be 3 attributes now for patron 3');
+    my $expected_attributes_for_2 = [
+        {
+            code      => $attribute_type1->code(),
+            attribute => 'my attribute12 XXX',
+        },
+        {
+            code      => $attribute_type_limited->code(),
+            attribute => 'my attribute limited 2',
+        },
+        {
+            attribute => 'my attribute 3',
+            code      => $attribute_type3->code,
+        },
+    ];
+    # Sorting them by code
+    $expected_attributes_for_2 = [ sort { $a->{code} cmp $b->{code} } @$expected_attributes_for_2 ];
+
+    is_deeply(
+        [
+            {
+                code      => $extended_attributes_for_2->[0]->{code},
+                attribute => $extended_attributes_for_2->[0]->{attribute}
+            },
+            {
+                code      => $extended_attributes_for_2->[1]->{code},
+                attribute => $extended_attributes_for_2->[1]->{attribute}
+            },
+            {
+                code      => $extended_attributes_for_2->[2]->{code},
+                attribute => $extended_attributes_for_2->[2]->{attribute}
+            },
+        ],
+        $expected_attributes_for_2
+    );
 
     # TODO - What about multiple? POD explains the problem
     my $non_existent = $patron_2->get_extended_attribute( 'not_exist' );

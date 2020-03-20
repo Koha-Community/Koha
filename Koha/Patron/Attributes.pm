@@ -96,7 +96,7 @@ $new_attributes is an arrayref of hashrefs
 sub merge_with {
     my ( $self, $new_attributes ) = @_;
 
-    my @merged = $self->as_list;
+    my @merged = @{$self->unblessed};
     my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search };
     for my $attr ( @$new_attributes ) {
         unless ( $attr->{code} ) {
@@ -112,7 +112,7 @@ sub merge_with {
         }
         unless ( $attribute_type->{repeatable} ) {
             # filter out any existing attributes of the same code
-            @merged = grep {$attr->{code} ne $_->code} @merged;
+            @merged = grep {$attr->{code} ne $_->{code}} @merged;
         }
 
         push @merged, $attr;
