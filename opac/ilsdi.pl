@@ -128,10 +128,10 @@ unless ( $cgi->param('service') ) {
 }
 
 # Set the userenv
-C4::Context->_new_userenv(1);
+C4::Context->_new_userenv( 'ILSDI_'.time() );
 C4::Context->set_userenv(
-    undef, undef, undef, 'ILSDI', 'ILSDI', undef,
-    undef, undef, undef, undef,  undef
+    undef, undef, undef, 'ILSDI', 'ILSDI',
+    undef, undef, undef, undef, undef,
 );
 C4::Context->interface('opac');
 
