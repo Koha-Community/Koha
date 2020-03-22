@@ -89,7 +89,7 @@
                     </div>
                 [% END %]
                 <fieldset class="brief">
-                    <label>Search Patrons or clubs</label>
+                    <label>Search patrons or clubs</label>
                     <div id="circ_holds_select" class="toptabs">
                         <ul>
                             <li><a href="#holds_patronsearch_pane">Patrons</a></li>
@@ -118,7 +118,7 @@
                         </div>
                         <div id="holds_clubsearch_pane">
                             <form id="holds_clubsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
-                                <div class="hint">Enter club id or partial name:</div>
+                                <div class="hint">Enter club ID or partial name:</div>
                                 <input type="text" size="40" id="club" class="focus" name="findclub" autocomplete="off" />
                                 <input type="submit" value="Search" />
                                 [% IF multi_hold %]
