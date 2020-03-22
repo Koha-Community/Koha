@@ -28,18 +28,18 @@ use Koha::AuthorisedValues;
 
 =head1 DESCRIPTION
 
-This plugin is based on authorised values INVENTORY.
+This plugin is based on authorised values from INVENTORY.
 It is used for stocknumber computation.
 
-If no prefix is submitted, or prefix does not contain only
-numbers, it returns the inserted code (= keep a field unchanged)
+If no prefix is submitted, or the prefix does contain only
+numbers, it returns the inserted code (= keep the field unchanged).
 
-If a prefix is submited, we look for the highest stocknumber
-with this prefix, and return it incremented.
+If a prefix is submitted, we look for the highest stocknumber
+with this prefix and return it incremented.
 
 In this case, a stocknumber has this form (e.g. "PREFIX 0009678570"):
-PREFIX containing letters, a space separator, and
-10 digits with leading 0s if needed
+PREFIX containing letters, a space separator and 10 digits with leading
+0s if needed.
 
 =cut
 
