@@ -52,7 +52,7 @@
                     [% IF Koha.Preference('AllowPatronToControlAutorenewal') %]
                     <form id="autorenewal_option" action="/cgi-bin/koha/opac-user.pl" method="post">
                             <label for="yes-autorenew_checkouts">
-                                Allow auto-renewal:
+                                Allow auto renewal:
                             </label>
                                 [% IF ( borrower.autorenew_checkouts ) %]
                                     <label class="radio inline" for="yes-autorenew_checkouts">
@@ -76,7 +76,7 @@
                                 [% END %]
                         <input type="hidden" name="csrf_token" value="[% csrf_token | html %]" />
                         <input type="hidden" name="update_arc" value="1" />
-                        <input type="submit" value="Update autorenewal preference" />
+                        <input type="submit" value="Update auto renewal preference" />
                     </form>
                     [% END %]
                     [% IF ( patronupdate ) %]<div class="alert alert-info"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]

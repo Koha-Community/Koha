@@ -34,7 +34,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowMultipleIssuesOnABiblio',1,'Allow/Don\'t allow patrons to check out multiple items from one biblio','','YesNo'),
 ('AllowNotForLoanOverride','0','','If ON, Koha will allow the librarian to loan a not for loan item.','YesNo'),
 ('AllowOfflineCirculation','0','','If on, enables HTML5 offline circulation functionality.','YesNo'),
-('AllowPatronToControlAutorenewal','0',NULL,'If enabled, patrons will have a field in their account tp choose whether their checkouts are auto renewed or not','YesNo'),
+('AllowPatronToControlAutorenewal','0',NULL,'If enabled, patrons will have a field in their account to choose whether their checkouts are auto renewed or not','YesNo'),
 ('AllowPatronToSetCheckoutsVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set checkouts to be visible to his or her guarantor',  'YesNo'),
 ('AllowPatronToSetFinesVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set fines to be visible to his or her guarantor',  'YesNo'),
 ('AllowPKIAuth','None','None|Common Name|emailAddress','Use the field from a client-side SSL certificate to look a user in the Koha database','Choice'),
