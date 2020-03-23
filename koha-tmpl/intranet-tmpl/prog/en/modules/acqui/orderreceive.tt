@@ -305,9 +305,9 @@
             <input type="text" size="20" name="unitprice" id="unitprice_currency" value="" />
             [% IF currencies.count %]
                 <select name="currency">
-                    <option value="[% active_currency.rate %]" selected="selected">[% active_currency.currency %] ([% active_currency.symbol %])</option>
+                    <option value="[% active_currency.rate | html %]" selected="selected">[% active_currency.currency | html %] ([% active_currency.symbol | html %])</option>
                     [% FOR currency IN currencies %]
-                        <option value="[% currency.rate %]">[% currency.currency %] ([% currency.symbol %])</option>
+                        <option value="[% currency.rate | html %]">[% currency.currency | html %] ([% currency.symbol | html %])</option>
                     [% END %]
                 </select>
             [% END %]
