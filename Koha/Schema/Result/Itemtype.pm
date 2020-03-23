@@ -246,6 +246,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-09 17:13:18
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7ojvTzsDvdHPAJMwJrAZ7A
 
+__PACKAGE__->add_columns(
+    '+rentalcharge_hourly_calendar' => { is_boolean => 1 },
+    '+rentalcharge_daily_calendar'  => { is_boolean => 1 },
+);
+
 # Use the ItemtypeLocalization view to create the join on localization
 our $LANGUAGE;
 __PACKAGE__->has_many(
