@@ -73,10 +73,10 @@ sub drop_hold {
 	my $self = shift;
     my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
     unless ($patron) {
-		$self->screen_msg('drop_hold called with undefined patron');
-		$self->ok(0);
-		return $self;
-	}
+        $self->screen_msg('drop_hold called with undefined patron');
+        $self->ok(0);
+        return $self;
+    }
 
     my $item = Koha::Items->find({ barcode => $self->{item}->id });
     my $holds = $item->holds->search({ borrowernumber => $patron->borrowernumber });
@@ -93,10 +93,10 @@ sub change_hold {
 	my $self = shift;
     my $patron = Koha::Patrons->find( $self->{patron}->borrowernumber );
     unless ($patron) {
-		$self->screen_msg('change_hold called with undefined patron');
-		$self->ok(0);
-		return $self;
-	}
+        $self->screen_msg('change_hold called with undefined patron');
+        $self->ok(0);
+        return $self;
+    }
     my $item = Koha::Items->find({ barcode => $self->{item}->id });
     unless ($item) {
 		$self->screen_msg('No biblio record matches barcode "' . $self->{item}->id . '".');
