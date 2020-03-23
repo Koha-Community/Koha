@@ -160,6 +160,7 @@ sub new {
 
 my %fields = (
     id                      => 0,
+    borrowernumber          => 0,
     name                    => 0,
     address                 => 0,
     email_addr              => 0,
