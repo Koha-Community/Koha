@@ -588,10 +588,10 @@ sub _RevertFields {
     return unless ($ci_id);
 
     my $course_item = GetCourseItem( ci_id => $params{'ci_id'} );
-    my $course_item_object;
+    my $course_item_object = Koha::Items->find($course_item->{'itemnumber'});
     foreach my $field ( @FIELDS ) {
         next unless defined $course_item->{$field};
-        $course_item->$field($course_item->{$field});
+        $course_item_object->$field($course_item->{$field});
     }
     $course_item_object->store;
 }
