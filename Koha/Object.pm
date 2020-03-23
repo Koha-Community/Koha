@@ -155,7 +155,7 @@ sub store {
                   && $columns_info->{$col}->{datetime_undef_if_invalid} )
               {
                   # timestamp
-                  # $self->_result()->set_column($col => $columns_info->{$col}->{default_value});
+                  $self->_result()->set_column($col => $columns_info->{$col}->{default_value});
               }
         }
     }

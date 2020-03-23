@@ -156,8 +156,6 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        $self->timestamp(undef) if $self->timestamp; # Maybe move this to Koha::Object->store?
-
         C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
 
         $self->_after_item_action_hooks({ action => 'modify' });

@@ -58,7 +58,7 @@ subtest 'is_changed / make_column_dirty' => sub {
     $object->categorycode( $categorycode );
     $object->branchcode( $branchcode );
     $object->surname("Test Surname");
-    $object->store();
+    $object->store->discard_changes;
     is( $object->is_changed(), 0, "Object is unchanged" );
     $object->surname("Test Surname");
     is( $object->is_changed(), 0, "Object is still unchanged" );
