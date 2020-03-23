@@ -20,6 +20,7 @@ package C4::Acquisition;
 
 use Modern::Perl;
 use Carp;
+use Text::CSV_XS;
 use C4::Context;
 use C4::Debug;
 use C4::Suggestions;
