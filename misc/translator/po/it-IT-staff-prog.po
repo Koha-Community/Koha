@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 16:51-0300\n"
+"POT-Creation-Date: 2020-03-19 08:45-0300\n"
 "PO-Revision-Date: 2020-01-07 13:53+0000\n"
 "Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: CILEA <z.tajoli@cineca.it>\n"
@@ -2662,7 +2662,7 @@ msgstr "%s %s ha %s prenotazione(i) in attesa da prelevare."
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:140
+#: intranet-tmpl/prog/en/modules/members/pay.tt:145
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s non ha multe pendenti."
@@ -9904,8 +9904,8 @@ msgstr ""
 msgid "(Indonesian)"
 msgstr "(Indonesiano)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1424
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1446
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1425
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1447
 #, c-format
 msgid "(None)"
 msgstr "(Nessuno)"
@@ -10843,7 +10843,7 @@ msgstr "Accedi a file sul server, come log o report"
 msgid "Access to all librarian functions"
 msgstr "Accesso a tutte le funzioni del sistema"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:137
+#: intranet-tmpl/prog/en/includes/permissions.inc:138
 #, c-format
 msgid "Access to the files stored on the server"
 msgstr "Accesso ai file contenuti nel server"
@@ -10949,11 +10949,6 @@ msgstr "Multa complessiva"
 msgid "Acquisition"
 msgstr "Acquisizioni"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:12
-#, c-format
-msgid "Acquisition and/or suggestion management"
-msgstr "Gestione delle acquisizioni e dei suggerimenti"
-
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/labels/search.tt:63
 #, c-format
@@ -10995,6 +10990,11 @@ msgstr "Dettagli di acquisizione"
 #, c-format
 msgid "Acquisition information"
 msgstr "Informazioni per l'acquisto"
+
+#: intranet-tmpl/prog/en/includes/permissions.inc:12
+#, fuzzy, c-format
+msgid "Acquisition management"
+msgstr "Gestione dei suggerimenti"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:87
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:138
@@ -11427,12 +11427,12 @@ msgstr "Aggiungi un attributo utente"
 msgid "Add an attribute"
 msgstr "Aggiungi un attributo utente"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:74
+#: intranet-tmpl/prog/en/includes/permissions.inc:75
 #, fuzzy, c-format
 msgid "Add and delete funds (but can't modify funds)"
 msgstr "Aggiungi e cancella (ma non modifica) budgets"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, fuzzy, c-format
 msgid "Add and remove items from rotas"
 msgstr "Aggiungi o rimuovi copie"
@@ -11503,7 +11503,7 @@ msgstr "Aggiungi classificazione"
 msgid "Add comment"
 msgstr "Aggiungi commento"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:127
+#: intranet-tmpl/prog/en/includes/permissions.inc:128
 #, c-format
 msgid "Add course reserves"
 msgstr "Aggiungi 'testi per i corsi'"
@@ -11913,18 +11913,18 @@ msgstr "Aggiungi un fornitore"
 msgid "Add vendor note"
 msgstr "Aggiungi una nota al fornitore"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:129
+#: intranet-tmpl/prog/en/includes/permissions.inc:130
 #, c-format
 msgid "Add, edit and delete courses"
 msgstr "Aggiungi, modifica e cancella corsi"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:103
+#: intranet-tmpl/prog/en/includes/permissions.inc:104
 #, c-format
 msgid "Add, edit and delete patron lists and their contents"
 msgstr "Aggiungi, modifica e cancella le liste degli utenti"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:7
-#: intranet-tmpl/prog/en/includes/permissions.inc:62
+#: intranet-tmpl/prog/en/includes/permissions.inc:63
 #, c-format
 msgid "Add, modify and view patron information"
 msgstr "Aggiungi, modifica e visualizza le informazioni utente"
@@ -12672,7 +12672,7 @@ msgstr "Allen Reinmeyer"
 msgid "Allow"
 msgstr "Permetti"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:16
+#: intranet-tmpl/prog/en/includes/permissions.inc:17
 #, c-format
 msgid "Allow access to the reports module"
 msgstr "Permetti di accedere al modulo dei report"
@@ -12700,7 +12700,7 @@ msgstr "Permetti scarichi pubblici:"
 msgid "Allow public enrollment:"
 msgstr "Permetti l'iscrizione pubblica:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:17
+#: intranet-tmpl/prog/en/includes/permissions.inc:18
 #, c-format
 msgid "Allow staff members to modify permissions for other staff members"
 msgstr ""
@@ -13344,11 +13344,10 @@ msgstr ""
 "Applicata una diversa regola di corrispondenza. Numero di record corrisposti "
 "ora %s "
 
-#. INPUT type=submit name=apply_credits
-#: intranet-tmpl/prog/en/modules/members/pay.tt:118
-#, fuzzy
-msgid "Apply credits"
-msgstr "Aggiungi credito"
+#: intranet-tmpl/prog/en/modules/members/pay.tt:126
+#, fuzzy, c-format
+msgid "Apply "
+msgstr "Applica filtro"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:204
@@ -13749,8 +13748,8 @@ msgstr "Sei sicuro di voler eliminare il messaggio?"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:782
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:967
 msgid "Are you sure you want to delete this message? This cannot be undone."
 msgstr ""
 "Sei sicuro di voler eliminare questo messaggio? Questo non può essere "
@@ -13776,7 +13775,7 @@ msgid "Are you sure you want to delete this patron from the card batch?"
 msgstr "Sei sicuro di voler cancellare questo utente dal batch delle tessere ?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
 msgid ""
 "Are you sure you want to delete this patron image? This cannot be undone."
 msgstr ""
@@ -13967,7 +13966,7 @@ msgid "Are you sure you want to reopen this subscription?"
 msgstr "Sei sicuro di voler riaprire questo abbonamento?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
 msgid ""
 "Are you sure you want to replace the current patron image? This cannot be "
 "undone."
@@ -14002,7 +14001,7 @@ msgid "Are you sure you want to void this credit?"
 msgstr "Sei sicuro di voler annullare questo credito?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 msgid ""
 "Are you sure you want to write off %s in outstanding fines? This cannot be "
 "undone!"
@@ -15953,7 +15952,7 @@ msgstr "Scorri i records selezionati"
 msgid "Browse system logs"
 msgstr "Sfoglia i log di sistema"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:114
+#: intranet-tmpl/prog/en/includes/permissions.inc:115
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Browse the system logs"
@@ -16635,7 +16634,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:166
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:223
-#: intranet-tmpl/prog/en/modules/members/pay.tt:136
+#: intranet-tmpl/prog/en/modules/members/pay.tt:141
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:82
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:181
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:123
@@ -17877,7 +17876,7 @@ msgid "Check the boxes for the libraries you accept to checkin items from."
 msgstr ""
 "Spunta le caselle delle biblioteche che accettano le copie in restituzione."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:115
+#: intranet-tmpl/prog/en/includes/permissions.inc:116
 #, c-format
 msgid "Check the expiration of a serial"
 msgstr "Controlla la scadenza di un seriale"
@@ -18721,7 +18720,7 @@ msgstr "Sollecito per acquisto"
 msgid "Claim date"
 msgstr "Data di sollecito"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:116
+#: intranet-tmpl/prog/en/includes/permissions.inc:117
 #, c-format
 msgid "Claim missing serials"
 msgstr "Richiedi i fascicoli mancanti"
@@ -19394,8 +19393,8 @@ msgstr "Clubs a cui attualmente non si è iscritti "
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:328
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 #, c-format
 msgid "Code"
 msgstr "Codice"
@@ -19741,7 +19740,7 @@ msgstr "Configurazione"
 msgid "Configure columns"
 msgstr "Configurazione delle colonne"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:130
+#: intranet-tmpl/prog/en/includes/permissions.inc:131
 #, c-format
 msgid "Configure plugins"
 msgstr "Permette di configurare i plugin"
@@ -20539,7 +20538,7 @@ msgstr "Numero corso"
 msgid "Course number:"
 msgstr "Numero di corso:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:18
+#: intranet-tmpl/prog/en/includes/permissions.inc:19
 #: intranet-tmpl/prog/en/includes/header.inc:43
 #: intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:9
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:20
@@ -20579,7 +20578,7 @@ msgstr "Crea un ordine EDIFACT"
 msgid "Create New"
 msgstr "Crea"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:125
+#: intranet-tmpl/prog/en/includes/permissions.inc:126
 #, c-format
 msgid "Create SQL reports"
 msgstr "Crea report SQL"
@@ -20611,7 +20610,7 @@ msgstr ""
 "Crea un nuovo record importandolo da altri cataloghi (catalogazione "
 "derivata)."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:117
+#: intranet-tmpl/prog/en/includes/permissions.inc:118
 #, c-format
 msgid "Create a new subscription"
 msgstr "Aggiungi un nuovo abbonamento"
@@ -20626,12 +20625,12 @@ msgstr "Crea un nuovo template"
 msgid "Create analytics"
 msgstr "Crea analitici:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:139
+#: intranet-tmpl/prog/en/includes/permissions.inc:140
 #, c-format
 msgid "Create and edit club templates"
 msgstr "Crea e modifica un modello di club"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:138
+#: intranet-tmpl/prog/en/includes/permissions.inc:139
 #, c-format
 msgid "Create and edit clubs"
 msgstr "Crea e modifica clubs"
@@ -20656,7 +20655,7 @@ msgstr ""
 "definiscano le caratteristiche dei tuoi record MARC (definizioni di campi e "
 "sottocampi) così come i templates per l'editor MARC."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:22
+#: intranet-tmpl/prog/en/includes/permissions.inc:23
 #, c-format
 msgid "Create and modify Interlibrary loan requests"
 msgstr "Crea o modifica richieste di interlibrary loan"
@@ -20754,7 +20753,7 @@ msgstr "Crea una nuova lista"
 msgid "Create patron list: "
 msgstr "Creare lista utente:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:101
+#: intranet-tmpl/prog/en/includes/permissions.inc:102
 #, c-format
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr ""
@@ -20794,7 +20793,7 @@ msgstr "Crea Routing List"
 msgid "Create routing list for "
 msgstr "Crea Routing List per "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas"
 msgstr "Aggiungi, modifica e cancella corsi"
@@ -21895,7 +21894,7 @@ msgstr ""
 msgid "Define currencies and exchange rates used for acquisitions."
 msgstr "Definisci le valute e i tassi di cambio usati per le acquisizioni."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:89
+#: intranet-tmpl/prog/en/includes/permissions.inc:90
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Define days when the library is closed"
@@ -21935,7 +21934,7 @@ msgstr "Definisci le biblioteche."
 msgid "Define mappings"
 msgstr "Definisci le equivalenze (mapping)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:92
+#: intranet-tmpl/prog/en/includes/permissions.inc:93
 #, c-format
 msgid "Define notices"
 msgstr "Definisci un avviso"
@@ -22228,7 +22227,7 @@ msgstr "Elimina EAN %s di %s?"
 msgid "Delete Images"
 msgstr "Cancella immagini"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:124
+#: intranet-tmpl/prog/en/includes/permissions.inc:125
 #, c-format
 msgid "Delete SQL reports"
 msgstr "Eliminare i report SQL"
@@ -22254,12 +22253,12 @@ msgstr "Cancella tutto"
 msgid "Delete all items"
 msgstr "Cancella tutte le copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:66
+#: intranet-tmpl/prog/en/includes/permissions.inc:67
 #, c-format
 msgid "Delete all items at once"
 msgstr "Cancella tutte le copie in una volta"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:118
+#: intranet-tmpl/prog/en/includes/permissions.inc:119
 #, c-format
 msgid "Delete an existing subscription"
 msgstr "Cancella abbonamento"
@@ -22388,7 +22387,7 @@ msgstr "Cancella macro"
 msgid "Delete notice?"
 msgstr "Cancelli il messaggio?"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:88
+#: intranet-tmpl/prog/en/includes/permissions.inc:89
 #, c-format
 msgid ""
 "Delete old borrowers and anonymize circulation history (deletes borrower "
@@ -22414,7 +22413,7 @@ msgstr ""
 msgid "Delete patrons who meet the following criteria:"
 msgstr "Cancella gli utenti che corrispondono a questi criteri"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:134
+#: intranet-tmpl/prog/en/includes/permissions.inc:135
 #, c-format
 msgid "Delete public lists"
 msgstr "Cancellare liste pubbliche"
@@ -23900,7 +23899,7 @@ msgstr "Modifica azioni"
 msgid "Edit alert"
 msgstr "Modifica avviso"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:119
+#: intranet-tmpl/prog/en/includes/permissions.inc:120
 #, c-format
 msgid "Edit an existing subscription"
 msgstr "Cancella abbonamento esistente"
@@ -23912,7 +23911,7 @@ msgstr "Cancella abbonamento esistente"
 msgid "Edit as new (duplicate)"
 msgstr "Modifica come nuovo (duplica)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:14
+#: intranet-tmpl/prog/en/includes/permissions.inc:15
 #, c-format
 msgid "Edit authorities"
 msgstr "Modifica authority"
@@ -23952,7 +23951,7 @@ msgid "Edit budget %s"
 msgstr "Modifica budget %s"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:10
-#: intranet-tmpl/prog/en/includes/permissions.inc:67
+#: intranet-tmpl/prog/en/includes/permissions.inc:68
 #, c-format
 msgid "Edit catalog (Modify bibliographic/holdings data)"
 msgstr ""
@@ -24010,7 +24009,7 @@ msgstr "Modifica le copie"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
-#: intranet-tmpl/prog/en/includes/permissions.inc:68
+#: intranet-tmpl/prog/en/includes/permissions.inc:69
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:474
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:239
 #, c-format
@@ -24065,7 +24064,7 @@ msgstr "Modifica i suggerimenti per gli acquisti #%s"
 msgid "Edit quotes for QOTD feature"
 msgstr "Modifica le citazioni per la funzionalità QOTD"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:94
+#: intranet-tmpl/prog/en/includes/permissions.inc:95
 #, c-format
 msgid "Edit quotes for quote-of-the-day feature"
 msgstr "Modificare citazioni per la funzione QOTD dell'OPAC"
@@ -24439,7 +24438,7 @@ msgstr "Iscrivi"
 msgid "Enroll in "
 msgstr "Iscrivi a"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:140
+#: intranet-tmpl/prog/en/includes/permissions.inc:141
 #, c-format
 msgid "Enroll patrons in clubs"
 msgstr "Iscrivi utenti ai club"
@@ -25051,12 +25050,12 @@ msgstr "Eccezioni"
 msgid "Exclude last line (Rollup): "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:126
+#: intranet-tmpl/prog/en/includes/permissions.inc:127
 #, c-format
 msgid "Execute SQL reports"
 msgstr "Esegui report SQL"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:33
+#: intranet-tmpl/prog/en/includes/permissions.inc:34
 #, c-format
 msgid "Execute overdue items report"
 msgstr "Esegui il report delle copie in ritardo"
@@ -25241,7 +25240,7 @@ msgstr "Esporta come file PDF"
 msgid "Export authority records"
 msgstr "Esporta records di authority"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:95
+#: intranet-tmpl/prog/en/includes/permissions.inc:96
 #, c-format
 msgid "Export bibliographic and holdings data"
 msgstr "Esporta dati bibliografici e dati di copia"
@@ -25553,7 +25552,7 @@ msgid "Farmington Public Library, USA"
 msgstr "Farmington Public Library, USA"
 
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:21
-#: intranet-tmpl/prog/en/includes/permissions.inc:70
+#: intranet-tmpl/prog/en/includes/permissions.inc:71
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:39
 #, c-format
 msgid "Fast cataloging"
@@ -26323,7 +26322,7 @@ msgstr ""
 msgid "Force"
 msgstr "Forza"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:31
+#: intranet-tmpl/prog/en/includes/permissions.inc:32
 #, c-format
 msgid "Force checkout if a limitation exists"
 msgstr "Forza il prestito se esiste una limitazione"
@@ -27202,12 +27201,12 @@ msgstr ""
 "lista di valori 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 msgid "Group code"
 msgstr "Codice gruppo"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1439
 msgid "Group name"
 msgstr "Nome gruppo"
 
@@ -29170,7 +29169,7 @@ msgstr ""
 msgid "Import into the borrowers table"
 msgstr "Importa nella tabella degli utenti"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:96
+#: intranet-tmpl/prog/en/includes/permissions.inc:97
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
 #, c-format
 msgid "Import patron data"
@@ -33822,7 +33821,7 @@ msgstr "Koha classificazione normalizzata per ordinamento"
 msgid "Koha offline circulation"
 msgstr "Circolazione offline di Koha"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:19
+#: intranet-tmpl/prog/en/includes/permissions.inc:20
 #, c-format
 msgid "Koha plugins"
 msgstr "Plugin di Koha"
@@ -34669,7 +34668,7 @@ msgstr "Libriotech, Norway"
 msgid "Licenses"
 msgstr "Licenze"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:100
+#: intranet-tmpl/prog/en/includes/permissions.inc:101
 #, c-format
 msgid ""
 "Limit batch item modification to subfields defined in the "
@@ -34685,7 +34684,7 @@ msgstr ""
 msgid "Limit collection code to: "
 msgstr "Limita alla collezione:"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:69
+#: intranet-tmpl/prog/en/includes/permissions.inc:70
 #, c-format
 msgid ""
 "Limit item modification to subfields defined in the "
@@ -34890,7 +34889,7 @@ msgid "List updated."
 msgstr "Lista aggiornata."
 
 #: intranet-tmpl/prog/en/includes/cat-menu.inc:2
-#: intranet-tmpl/prog/en/includes/permissions.inc:20
+#: intranet-tmpl/prog/en/includes/permissions.inc:21
 #: intranet-tmpl/prog/en/includes/header.inc:28
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:42
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:342
@@ -34988,8 +34987,8 @@ msgstr "Caricamento in corso, si prega di attendere..."
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:238
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:992
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:164
 #, c-format
 msgid "Loading..."
@@ -35002,7 +35001,7 @@ msgid "Loading... "
 msgstr "Caricamento in corso..."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:967
 msgid "Loading... you may continue scanning."
 msgstr "In caricamento ... puoi continuare a scansionare."
 
@@ -35148,7 +35147,7 @@ msgstr "Login"
 msgid "Log in as a different user"
 msgstr "Accedi come altro utente"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#: intranet-tmpl/prog/en/includes/permissions.inc:144
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -35738,7 +35737,7 @@ msgstr "Gestisci %s records preparati"
 msgid "Manage API keys"
 msgstr "Gestisci i sets OAI"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:102
+#: intranet-tmpl/prog/en/includes/permissions.inc:103
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Manage CSV export profiles"
@@ -35746,12 +35745,12 @@ msgstr ""
 "Crea dei profili CSV per personalizzare l'esportazione di dati dalle liste o "
 "dal carrello"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:57
+#: intranet-tmpl/prog/en/includes/permissions.inc:58
 #, fuzzy, c-format
 msgid "Manage Did you mean? configuration"
 msgstr "Configurazione motore ricerca"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:141
+#: intranet-tmpl/prog/en/includes/permissions.inc:142
 #, c-format
 msgid "Manage EDIFACT transmissions"
 msgstr "Gestione delle trasmissioni EDIFACT"
@@ -35766,7 +35765,7 @@ msgstr "Gestione di una richiesta di prestito interbibliotecario"
 msgid "Manage Koha system settings (Administration panel)"
 msgstr "Gestisci le configurazioni di Koha (Pannello di amministrazione)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:49
+#: intranet-tmpl/prog/en/includes/permissions.inc:50
 #, fuzzy, c-format
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr "Test della griglia di catalogazione bibliografica MARC"
@@ -35781,12 +35780,12 @@ msgstr "Gestisci i templates per la modifica del MARC"
 msgid "Manage OAI Sets"
 msgstr "Gestisci i sets OAI"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:53
+#: intranet-tmpl/prog/en/includes/permissions.inc:54
 #, fuzzy, c-format
 msgid "Manage OAI sets"
 msgstr "Gestisci i sets OAI"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:60
+#: intranet-tmpl/prog/en/includes/permissions.inc:61
 #, fuzzy, c-format
 msgid "Manage SMS cellular providers"
 msgstr "Provider SMS"
@@ -35796,7 +35795,7 @@ msgstr "Provider SMS"
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:56
+#: intranet-tmpl/prog/en/includes/permissions.inc:57
 #, fuzzy, c-format
 msgid "Manage Z39.50 and SRU server configuration"
 msgstr "Amministrazione dei server Z39.50/SRU"
@@ -35810,52 +35809,52 @@ msgstr ""
 "Gestisci immagini addizionali da usare come logo, decorazione o background "
 "del layout tessera utente."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:81
+#: intranet-tmpl/prog/en/includes/permissions.inc:82
 #, fuzzy, c-format
 msgid "Manage all baskets and order lines, regardless of restrictions on them"
 msgstr "Gestisci ordini e raccoglitori senza restrizioni al riguardo"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:76
+#: intranet-tmpl/prog/en/includes/permissions.inc:77
 #, fuzzy, c-format
 msgid "Manage all funds"
 msgstr "Gestisci tutti i budgets"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:59
+#: intranet-tmpl/prog/en/includes/permissions.inc:60
 #, fuzzy, c-format
 msgid "Manage audio alerts"
 msgstr "Gestisci i budgets"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:43
+#: intranet-tmpl/prog/en/includes/permissions.inc:44
 #, fuzzy, c-format
 msgid "Manage authorized value categories and authorized values"
 msgstr "Definisci le categorie e i loro valori autorizzati."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:80
+#: intranet-tmpl/prog/en/includes/permissions.inc:81
 #, fuzzy, c-format
 msgid "Manage basket and order lines"
 msgstr "Cancella raccoglitore ed ordini"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:79
+#: intranet-tmpl/prog/en/includes/permissions.inc:80
 #, fuzzy, c-format
 msgid "Manage basket groups"
 msgstr "Cambia ordine d'acquisto"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:84
+#: intranet-tmpl/prog/en/includes/permissions.inc:85
 #, c-format
 msgid "Manage budget plannings"
 msgstr "Gestire la pianificazione dei budget"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:83
+#: intranet-tmpl/prog/en/includes/permissions.inc:84
 #, c-format
 msgid "Manage budgets"
 msgstr "Gestisci i budgets"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:39
+#: intranet-tmpl/prog/en/includes/permissions.inc:40
 #, fuzzy, c-format
 msgid "Manage circulation rules"
 msgstr "gestisci regole di circolazione delle copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:37
+#: intranet-tmpl/prog/en/includes/permissions.inc:38
 #, fuzzy, c-format
 msgid ""
 "Manage circulation rules for any library. If not set the logged in user can "
@@ -35866,27 +35865,27 @@ msgstr ""
 "collegato può vedere solo i dati utenti dalla sua biblioteca o gruppo di "
 "biblioteche."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:48
+#: intranet-tmpl/prog/en/includes/permissions.inc:49
 #, fuzzy, c-format
 msgid "Manage cities and towns"
 msgstr "Città e paesi"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:51
+#: intranet-tmpl/prog/en/includes/permissions.inc:52
 #, fuzzy, c-format
 msgid "Manage classification sources and filing rules"
 msgstr "Regole di normalizzazione della classificazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:58
+#: intranet-tmpl/prog/en/includes/permissions.inc:59
 #, fuzzy, c-format
 msgid "Manage column configuration"
 msgstr "Salva configurazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:78
+#: intranet-tmpl/prog/en/includes/permissions.inc:79
 #, c-format
 msgid "Manage contracts"
 msgstr "Gestisci i contratti"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:86
+#: intranet-tmpl/prog/en/includes/permissions.inc:87
 #, fuzzy, c-format
 msgid "Manage currencies and exchange rates"
 msgstr "Valute e tassi di cambio"
@@ -35896,7 +35895,7 @@ msgstr "Valute e tassi di cambio"
 msgid "Manage custom fields for item search."
 msgstr "Gestisci campi proprietati per la ricerca delle copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:45
+#: intranet-tmpl/prog/en/includes/permissions.inc:46
 #, fuzzy, c-format
 msgid "Manage extended patron attributes"
 msgstr "Sostituisci solo gli attributi utente inclusi"
@@ -35906,12 +35905,12 @@ msgstr "Sostituisci solo gli attributi utente inclusi"
 msgid "Manage frequencies "
 msgstr "Gestisci le frequenze "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:75
+#: intranet-tmpl/prog/en/includes/permissions.inc:76
 #, fuzzy, c-format
 msgid "Manage funds"
 msgstr "Gestisci i budgets"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:40
+#: intranet-tmpl/prog/en/includes/permissions.inc:41
 #, fuzzy, c-format
 msgid "Manage global system preferences"
 msgstr "Preferenze di sistema globali"
@@ -35948,17 +35947,17 @@ msgstr ""
 msgid "Manage invoice files"
 msgstr "Gestisci i files collegati alle fatture"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:47
+#: intranet-tmpl/prog/en/includes/permissions.inc:48
 #, fuzzy, c-format
 msgid "Manage item circulation alerts"
 msgstr "Avvisi di circolazione delle copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:54
+#: intranet-tmpl/prog/en/includes/permissions.inc:55
 #, fuzzy, c-format
 msgid "Manage item search fields"
 msgstr "Campi per ricerca di copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:42
+#: intranet-tmpl/prog/en/includes/permissions.inc:43
 #, fuzzy, c-format
 msgid "Manage item types"
 msgstr "Tipi di copia disponibili"
@@ -35969,12 +35968,12 @@ msgstr "Tipi di copia disponibili"
 msgid "Manage items assigned to &quot;%s&quot;"
 msgstr "Gestisci le copie assegnate a &quot;%s&quot;"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:50
+#: intranet-tmpl/prog/en/includes/permissions.inc:51
 #, fuzzy, c-format
 msgid "Manage keywords to Koha mappings"
 msgstr "Mappatura da keyword a MARC"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:41
+#: intranet-tmpl/prog/en/includes/permissions.inc:42
 #, fuzzy, c-format
 msgid "Manage libraries and library groups"
 msgstr "Definisci le biblioteche e i gruppi."
@@ -35984,7 +35983,7 @@ msgstr "Definisci le biblioteche e i gruppi."
 msgid "Manage library EDI EANs"
 msgstr "Gestisci gli EANs EDI della biblioteca"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:46
+#: intranet-tmpl/prog/en/includes/permissions.inc:47
 #, c-format
 msgid "Manage library transfer limits and transport cost matrix"
 msgstr ""
@@ -35995,7 +35994,7 @@ msgstr ""
 msgid "Manage lists of patrons."
 msgstr "Gestisci le liste degli utenti"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:105
+#: intranet-tmpl/prog/en/includes/permissions.inc:106
 #, c-format
 msgid "Manage marc modification templates"
 msgstr "Gestire i templates per la modifica del MARC"
@@ -36010,7 +36009,7 @@ msgstr "Gestisci lo schema di numerazione"
 msgid "Manage orders"
 msgstr "Gestisci gli ordini"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:44
+#: intranet-tmpl/prog/en/includes/permissions.inc:45
 #, fuzzy, c-format
 msgid "Manage patron categories"
 msgstr "Categorie utente"
@@ -36036,17 +36035,17 @@ msgstr "Gestisci le multe e le tariffe"
 msgid "Manage plugins"
 msgstr "Gestisci i plugin"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:131
+#: intranet-tmpl/prog/en/includes/permissions.inc:132
 #, c-format
 msgid "Manage plugins ( install / uninstall )"
 msgstr "Gestisci i plugin (installa / disinstalla)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:73
+#: intranet-tmpl/prog/en/includes/permissions.inc:74
 #, fuzzy, c-format
 msgid "Manage purchase suggestions"
 msgstr "Nuovo suggerimento di acquisto"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:52
+#: intranet-tmpl/prog/en/includes/permissions.inc:53
 #, fuzzy, c-format
 msgid "Manage record matching rules"
 msgstr "Nuova regola di corrispondenza record"
@@ -36056,12 +36055,12 @@ msgstr "Nuova regola di corrispondenza record"
 msgid "Manage request"
 msgstr "Gestione di una richiesta"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:32
+#: intranet-tmpl/prog/en/includes/permissions.inc:33
 #, c-format
 msgid "Manage restrictions for accounts"
 msgstr "Gestire le restrizioni degli utenti"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:110
+#: intranet-tmpl/prog/en/includes/permissions.inc:111
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid "Manage rotating collections"
@@ -36075,12 +36074,12 @@ msgstr ""
 "Gestisci le regole per la corrispondenza automatica durante l'importazione "
 "dei records MARC nell'area temporanea."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:55
+#: intranet-tmpl/prog/en/includes/permissions.inc:56
 #, fuzzy, c-format
 msgid "Manage search engine configuration"
 msgstr "Configurazione motore ricerca"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:15
+#: intranet-tmpl/prog/en/includes/permissions.inc:16
 #, c-format
 msgid "Manage serial subscriptions"
 msgstr "Gestisci gli abbonamenti alle risorse in continuazione"
@@ -36104,12 +36103,12 @@ msgstr "Gestisci i records MARC preparati %s &rsaquo; Batch %s %s "
 msgid "Manage staged records"
 msgstr "Gestisci i records preparati"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:24
+#: intranet-tmpl/prog/en/includes/permissions.inc:25
 #, fuzzy, c-format
 msgid "Manage stockrotation operations"
 msgstr "Gestisci le raccolte mobili"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:123
+#: intranet-tmpl/prog/en/includes/permissions.inc:124
 #, c-format
 msgid ""
 "Manage subscriptions from any branch (only applies when IndependentBranches "
@@ -36129,12 +36128,12 @@ msgid "Manage templates for modifying MARC records during import."
 msgstr ""
 "Gestisci i template per modificare i record MARC durante l'importazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:136
+#: intranet-tmpl/prog/en/includes/permissions.inc:137
 #, c-format
 msgid "Manage uploaded files ("
 msgstr "Gestire i file caricati ("
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:61
+#: intranet-tmpl/prog/en/includes/permissions.inc:62
 #, fuzzy, c-format
 msgid "Manage usage statistics settings"
 msgstr "Condividi le tue statistiche d'uso"
@@ -36144,7 +36143,7 @@ msgstr "Condividi le tue statistiche d'uso"
 msgid "Manage vendor EDI accounts for import/export"
 msgstr "Gestire gli account EDI del fornitore per l'import/export"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:85
+#: intranet-tmpl/prog/en/includes/permissions.inc:86
 #, c-format
 msgid "Manage vendors"
 msgstr "Gestisci i fornitori"
@@ -36176,7 +36175,7 @@ msgstr "Gestito da:"
 msgid "Managed in tab: "
 msgstr "Gestito nella scheda: "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:104
+#: intranet-tmpl/prog/en/includes/permissions.inc:105
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
@@ -36334,7 +36333,7 @@ msgstr "Mark Gavillet"
 msgid "Mark Tompsett"
 msgstr "Mark Tompsett"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:35
+#: intranet-tmpl/prog/en/includes/permissions.inc:36
 #, c-format
 msgid "Mark checkout notes as seen/not seen"
 msgstr "Marca le note di prestito come viste / non viste"
@@ -36932,7 +36931,7 @@ msgstr "Lun"
 msgid "Mobile phone number"
 msgstr "Numero cellulare"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:106
+#: intranet-tmpl/prog/en/includes/permissions.inc:107
 #, c-format
 msgid "Moderate patron comments"
 msgstr "Modera i commenti degli utenti."
@@ -36942,7 +36941,7 @@ msgstr "Modera i commenti degli utenti."
 msgid "Moderate patron comments. "
 msgstr "Modera i commenti degli utenti. "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:107
+#: intranet-tmpl/prog/en/includes/permissions.inc:108
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
 #, c-format
 msgid "Moderate patron tags"
@@ -37056,12 +37055,12 @@ msgstr "Modifica il campo"
 msgid "Modify filing rule"
 msgstr "Modifica regola di normalizzazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:77
+#: intranet-tmpl/prog/en/includes/permissions.inc:78
 #, fuzzy, c-format
 msgid "Modify funds (can't create lines, but can modify existing ones)"
 msgstr "Modifica budget (non puoi creare ma  modificare gli esistenti)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:64
+#: intranet-tmpl/prog/en/includes/permissions.inc:65
 #, c-format
 msgid "Modify holds priority"
 msgstr "Modifica priorità prenotazioni"
@@ -37538,8 +37537,8 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:145
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:66
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1439
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1466
 #, c-format
 msgid "Name"
 msgstr "Nome"
@@ -41195,10 +41194,10 @@ msgstr "Output:"
 msgid "Outstanding"
 msgstr "Importo in sospeso"
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:118
-#, c-format
-msgid "Outstanding credits could be applied "
-msgstr ""
+#: intranet-tmpl/prog/en/modules/members/pay.tt:125
+#, fuzzy, c-format
+msgid "Outstanding credits could be applied: "
+msgstr "Regola di corrispondenza applicata:"
 
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:27
 #, fuzzy, c-format
@@ -41262,7 +41261,7 @@ msgstr "Ritardi: l'utente ha COPIE in ritardo."
 msgid "Override and renew"
 msgstr "Ignora e rinnova"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:34
+#: intranet-tmpl/prog/en/includes/permissions.inc:35
 #, c-format
 msgid "Override blocked renewals"
 msgstr "Abilita a superare il blocco dei rinnovi"
@@ -41679,7 +41678,7 @@ msgid "Patron category: "
 msgstr "Categoria utente: "
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:17
-#: intranet-tmpl/prog/en/includes/permissions.inc:21
+#: intranet-tmpl/prog/en/includes/permissions.inc:22
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:28
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
@@ -42381,7 +42380,7 @@ msgid "Pay all fines"
 msgstr "Paga tutte le multe"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:132
+#: intranet-tmpl/prog/en/modules/members/pay.tt:137
 msgid "Pay amount"
 msgstr "Importo del pagamento"
 
@@ -42422,7 +42421,7 @@ msgid "Pay fines for %s %s"
 msgstr "Paga multe per %s %s"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:133
+#: intranet-tmpl/prog/en/modules/members/pay.tt:138
 msgid "Pay selected"
 msgstr "Paga"
 
@@ -42548,38 +42547,38 @@ msgstr "Tags da lavorare"
 msgid "Perform a new search"
 msgstr "Fai una nuova ricerca"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:98
+#: intranet-tmpl/prog/en/includes/permissions.inc:99
 #, c-format
 msgid "Perform batch deletion of items"
 msgstr "Cancellazione batch delle copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:108
+#: intranet-tmpl/prog/en/includes/permissions.inc:109
 #, c-format
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr "Fai una cancellazione batch di records (bibliografici o authority)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:99
+#: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, c-format
 msgid "Perform batch modification of items"
 msgstr "Modifica batch delle copie"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:93
+#: intranet-tmpl/prog/en/includes/permissions.inc:94
 #, c-format
 msgid "Perform batch modification of patrons"
 msgstr "Permetti la modifica batch degli utenti"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:109
+#: intranet-tmpl/prog/en/includes/permissions.inc:110
 #, c-format
 msgid "Perform batch modification of records (biblios or authorities)"
 msgstr "Modifica via batch dei records (bibliografici o di authority)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:97
+#: intranet-tmpl/prog/en/includes/permissions.inc:98
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, c-format
 msgid "Perform inventory of your catalog"
 msgstr "Esegui l'inventario del tuo catalogo"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -42863,7 +42862,7 @@ msgstr "Prenota questa copia"
 msgid "Place hold?"
 msgstr "Prenota?"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:65
+#: intranet-tmpl/prog/en/includes/permissions.inc:66
 #, c-format
 msgid "Place holds for patrons"
 msgstr "Prenota per gli utenti"
@@ -43012,7 +43011,7 @@ msgstr ""
 "Si prega di scegliere un tempo di durata della cache inferiore a 30 giorni "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
 msgid "Please choose a file to upload"
 msgstr "Seleziona il file da caricare"
 
@@ -44947,7 +44946,7 @@ msgstr "Data di ricezione"
 msgid "Receive items from : %s %s[%s] %s (order #%s)"
 msgstr "Ricevi copie da : %s %s[%s] %s (ordine n.%s)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:82
+#: intranet-tmpl/prog/en/includes/permissions.inc:83
 #, fuzzy, c-format
 msgid "Receive orders and manage shipments"
 msgstr "Ricevi un nuovo invio"
@@ -45294,17 +45293,17 @@ msgstr "Rilevanza"
 msgid "Religious organization"
 msgstr "Ente religioso"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:30
+#: intranet-tmpl/prog/en/includes/permissions.inc:31
 #, c-format
 msgid "Remaining circulation permissions"
 msgstr "Rimanenti permessi per la circolazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:71
+#: intranet-tmpl/prog/en/includes/permissions.inc:72
 #, c-format
 msgid "Remaining permissions for managing fines and fees"
 msgstr "Restanti permessi per gestire multe e tariffe"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:38
+#: intranet-tmpl/prog/en/includes/permissions.inc:39
 #, c-format
 msgid "Remaining system parameters permissions"
 msgstr "Rimanenti permessi per i parametri di sistema"
@@ -45425,7 +45424,7 @@ msgstr ""
 msgid "Remove condition"
 msgstr "Rimuovi condizione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:128
+#: intranet-tmpl/prog/en/includes/permissions.inc:129
 #, c-format
 msgid "Remove course reserves"
 msgstr "Per rimuovere 'Testi per i corsi'"
@@ -45557,7 +45556,7 @@ msgstr "Rinnova "
 msgid "Renew #%s"
 msgstr "Rinnova %s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:121
+#: intranet-tmpl/prog/en/includes/permissions.inc:122
 #, c-format
 msgid "Renew a subscription"
 msgstr "Rinnova un abbonamento"
@@ -45833,7 +45832,7 @@ msgstr ""
 "Report dopo aver mosso gli ordini non ricevuti dal budget %s (%s - %s) a %s "
 "(%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1420
 #, c-format
 msgid "Report group:"
 msgstr "Gruppo di report:"
@@ -45872,7 +45871,7 @@ msgstr "Nome del report: "
 msgid "Report plugins"
 msgstr "Plugins (Report)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1441
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1442
 #, c-format
 msgid "Report subgroup:"
 msgstr "Sottogruppo di report:"
@@ -46799,7 +46798,7 @@ msgstr "Rotating collections"
 msgid "Round Rock Public Library, USA"
 msgstr "Nelsonville Public Library, Ohio, USA"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:122
+#: intranet-tmpl/prog/en/includes/permissions.inc:123
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:152
 #, c-format
 msgid "Routing"
@@ -47392,7 +47391,7 @@ msgstr "Pianifica"
 msgid "Schedule "
 msgstr "Pianifica "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:111
+#: intranet-tmpl/prog/en/includes/permissions.inc:112
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Schedule tasks to run"
@@ -48063,8 +48062,8 @@ msgstr "Visto"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:71
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1423
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1445
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:117
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -48510,7 +48509,7 @@ msgstr "Selettore"
 msgid "Selector: "
 msgstr "Selettore"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:23
+#: intranet-tmpl/prog/en/includes/permissions.inc:24
 #, c-format
 msgid "Self check modules"
 msgstr "Moduli dell'autoprestito"
@@ -48740,7 +48739,7 @@ msgstr "Risorse in continuazione (nuovo fascicolo)"
 msgid "Serials planning"
 msgstr "Pianificazione delle risorse in continuazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:120
+#: intranet-tmpl/prog/en/includes/permissions.inc:121
 #, c-format
 msgid "Serials receiving"
 msgstr "Ricevi risorse in continuazione"
@@ -48886,7 +48885,7 @@ msgstr "Imposta la data di inventario a:"
 msgid "Set library"
 msgstr "Imposta biblioteca"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:91
+#: intranet-tmpl/prog/en/includes/permissions.inc:92
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:49
 #, c-format
 msgid "Set notice/status triggers for overdue items"
@@ -49976,7 +49975,7 @@ msgstr "Raccogli i record MARC"
 msgid "Stage MARC records for import"
 msgstr "Deposito MARC records per l'importazione"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:112
+#: intranet-tmpl/prog/en/includes/permissions.inc:113
 #, c-format
 msgid "Stage MARC records into the reservoir"
 msgstr "Prepara i records MARC nell'area temporanea"
@@ -50529,11 +50528,6 @@ msgstr "Sotto classificazione"
 msgid "Sub total "
 msgstr "Subtotale "
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:125
-#, c-format
-msgid "Sub total:"
-msgstr "Subtotale:"
-
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:261
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:33
@@ -50600,12 +50594,12 @@ msgid "Subgroup"
 msgstr "Sottogruppo"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 msgid "Subgroup code"
 msgstr "Codice sottogruppo"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1466
 msgid "Subgroup name"
 msgstr "Nome sottogruppo"
 
@@ -51110,6 +51104,7 @@ msgstr "Gestione dei suggerimenti"
 msgid "Suggestions"
 msgstr "Suggerimenti"
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:13
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:418
 #, c-format
 msgid "Suggestions management"
@@ -54866,7 +54861,13 @@ msgstr "Totale consultazioni attualmente autorizzate"
 msgid "Total due"
 msgstr "Totale dovuto"
 
+#: intranet-tmpl/prog/en/modules/members/pay.tt:129
+#, c-format
+msgid "Total due if credit applied:"
+msgstr ""
+
 #: intranet-tmpl/prog/en/modules/members/pay.tt:54
+#: intranet-tmpl/prog/en/modules/members/pay.tt:120
 #, c-format
 msgid "Total due:"
 msgstr "Totale dovuto:"
@@ -55877,7 +55878,7 @@ msgid "Upload another KOC file"
 msgstr "Carica un altro file KOC"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:128
-#: intranet-tmpl/prog/en/includes/permissions.inc:135
+#: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, c-format
 msgid "Upload any file"
 msgstr "Carica qualsiasi file"
@@ -55929,7 +55930,7 @@ msgstr "Carica le immagini"
 msgid "Upload local cover image"
 msgstr "Carica le immagini di copertine locali"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:113
+#: intranet-tmpl/prog/en/includes/permissions.inc:114
 #, c-format
 msgid "Upload local cover images"
 msgstr "Carica immagini di copertine locali"
@@ -55972,7 +55973,7 @@ msgstr "Carica l'immagine dell'utente"
 msgid "Upload patron images"
 msgstr "Carica le immagini utente"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:87
+#: intranet-tmpl/prog/en/includes/permissions.inc:88
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
@@ -56101,7 +56102,7 @@ msgstr "Usa un file"
 msgid "Use a file "
 msgstr "Usa un file "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:13
+#: intranet-tmpl/prog/en/includes/permissions.inc:14
 #, c-format
 msgid "Use all tools (expand for granular tools permissions)"
 msgstr "Usa tutti gli strumenti (espandere per permessi più granulari)"
@@ -56163,7 +56164,7 @@ msgstr ""
 "proteggere la sicurezza e l'integrità dei dati a rischio. Sono consentite "
 "solo le SELECT. "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:132
+#: intranet-tmpl/prog/en/includes/permissions.inc:133
 #, c-format
 msgid "Use report plugins"
 msgstr "Usa i plugin di tipo report"
@@ -56224,7 +56225,7 @@ msgstr "Usa la form a sinistra per cercare abbonamenti"
 msgid "Use the toolbar above to create a new %s."
 msgstr "Usa la barra qui sopra per creare un nuovo %s."
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:133
+#: intranet-tmpl/prog/en/includes/permissions.inc:134
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Use tool plugins"
@@ -56267,7 +56268,7 @@ msgstr "Utilizzato:"
 msgid "Useful resources"
 msgstr "Risorse utili"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:136
+#: intranet-tmpl/prog/en/includes/permissions.inc:137
 #, c-format
 msgid "Useless without upload_general_files"
 msgstr "Inutile senza upload_general_files"
@@ -56788,7 +56789,7 @@ msgstr "Vedi fattura"
 msgid "View online payment plugins"
 msgstr "Vedi i plugin per il pagamento online"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:63
+#: intranet-tmpl/prog/en/includes/permissions.inc:64
 #, c-format
 msgid ""
 "View patron infos from any libraries. If not set the logged in user could "
@@ -57529,7 +57530,7 @@ msgstr "Donne"
 msgid "Working day"
 msgstr "Giorno lavorativo"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:90
+#: intranet-tmpl/prog/en/includes/permissions.inc:91
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
@@ -57545,7 +57546,7 @@ msgid "Write off"
 msgstr "Cancella"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:134
+#: intranet-tmpl/prog/en/modules/members/pay.tt:139
 msgid "Write off all"
 msgstr "Cancella tutto"
 
@@ -57559,13 +57560,13 @@ msgstr "Paga una somma per tutte le multe selezionate"
 msgid "Write off an individual fine"
 msgstr "Cancella una singola multa"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:72
+#: intranet-tmpl/prog/en/includes/permissions.inc:73
 #, c-format
 msgid "Write off fines and fees"
 msgstr "Cancella multe e tariffe"
 
 #. INPUT type=submit name=writeoff_selected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:135
+#: intranet-tmpl/prog/en/modules/members/pay.tt:140
 #, fuzzy
 msgid "Write off selected"
 msgstr "Numero di % selezionati"
@@ -58419,8 +58420,8 @@ msgstr "È necessario selezionare almeno due fatture da unire."
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:782
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:967
 msgid "You must select checkout(s) to export"
 msgstr "Devi scegliere un prestito(i) da esportare"
 
@@ -60400,7 +60401,7 @@ msgstr "m/"
 msgid "magnifying glass"
 msgstr "lente d'ingrandimento"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:36
+#: intranet-tmpl/prog/en/includes/permissions.inc:37
 #, c-format
 msgid "manage circulation rules"
 msgstr "gestisci regole di circolazione delle copie"
@@ -60635,12 +60636,12 @@ msgstr "o sottocampo MARC."
 msgid "or any available"
 msgstr "oppure ogni copia disponibile"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
 #, c-format
 msgid "or create"
 msgstr "o crea"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
 #, c-format
 msgid "or create:"
 msgstr "o crea:"

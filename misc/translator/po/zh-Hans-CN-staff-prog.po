@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 17:10-0300\n"
+"POT-Creation-Date: 2020-03-19 09:03-0300\n"
 "PO-Revision-Date: 2019-06-02 08:05+0000\n"
 "Last-Translator: jerryeast <haod.wu@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -2508,7 +2508,7 @@ msgstr "%s %s 有 %s 本预约书到馆等待提取。"
 
 #. %1$s:  patron.firstname | html 
 #. %2$s:  patron.surname | html 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:140
+#: intranet-tmpl/prog/en/modules/members/pay.tt:145
 #, c-format
 msgid "%s %s has no outstanding fines."
 msgstr "%s %s 没有待缴罚款。"
@@ -9570,8 +9570,8 @@ msgstr "(内含，缺省 %s 天之前到 %s%s 在 %s今天%s，必要时可设�
 msgid "(Indonesian)"
 msgstr "(印尼)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1424
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1446
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1425
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1447
 #, c-format
 msgid "(None)"
 msgstr "(无)"
@@ -10480,7 +10480,7 @@ msgstr ""
 msgid "Access to all librarian functions"
 msgstr "近用图书馆员的全部功能"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:137
+#: intranet-tmpl/prog/en/includes/permissions.inc:138
 #, fuzzy, c-format
 msgid "Access to the files stored on the server"
 msgstr "选择新增入采购单的文件"
@@ -10585,11 +10585,6 @@ msgstr "罚款"
 msgid "Acquisition"
 msgstr "采访"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:12
-#, c-format
-msgid "Acquisition and/or suggestion management"
-msgstr "采访与/或推荐管理"
-
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
 #: intranet-tmpl/prog/en/modules/labels/search.tt:63
 #, c-format
@@ -10631,6 +10626,11 @@ msgstr "采访详情"
 #, c-format
 msgid "Acquisition information"
 msgstr "采访信息"
+
+#: intranet-tmpl/prog/en/includes/permissions.inc:12
+#, fuzzy, c-format
+msgid "Acquisition management"
+msgstr "推荐管理"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:87
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:138
@@ -11065,12 +11065,12 @@ msgstr "新增属性"
 msgid "Add an attribute"
 msgstr "新增属性"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:74
+#: intranet-tmpl/prog/en/includes/permissions.inc:75
 #, fuzzy, c-format
 msgid "Add and delete funds (but can't modify funds)"
 msgstr "新增且删除预算 (但不能修改预算)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:145
+#: intranet-tmpl/prog/en/includes/permissions.inc:146
 #, fuzzy, c-format
 msgid "Add and remove items from rotas"
 msgstr "新增/删除馆藏"
@@ -11141,7 +11141,7 @@ msgstr "新增分类法来源"
 msgid "Add comment"
 msgstr "通过的评论"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:127
+#: intranet-tmpl/prog/en/includes/permissions.inc:128
 #, c-format
 msgid "Add course reserves"
 msgstr "新增课程指定用书"
@@ -11549,18 +11549,18 @@ msgstr "新增供应商"
 msgid "Add vendor note"
 msgstr "新增供应商说明"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:129
+#: intranet-tmpl/prog/en/includes/permissions.inc:130
 #, c-format
 msgid "Add, edit and delete courses"
 msgstr "新增、编辑与删除课程"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:103
+#: intranet-tmpl/prog/en/includes/permissions.inc:104
 #, c-format
 msgid "Add, edit and delete patron lists and their contents"
 msgstr "新增、编辑与删除读者虚拟书架及其内容"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:7
-#: intranet-tmpl/prog/en/includes/permissions.inc:62
+#: intranet-tmpl/prog/en/includes/permissions.inc:63
 #, c-format
 msgid "Add, modify and view patron information"
 msgstr ""
@@ -12306,7 +12306,7 @@ msgstr "Allen Reinmeye"
 msgid "Allow"
 msgstr "允许"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:16
+#: intranet-tmpl/prog/en/includes/permissions.inc:17
 #, c-format
 msgid "Allow access to the reports module"
 msgstr "允许近用报表模块"
@@ -12332,7 +12332,7 @@ msgstr "允许大众下载："
 msgid "Allow public enrollment:"
 msgstr "允许大众下载："
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:17
+#: intranet-tmpl/prog/en/includes/permissions.inc:18
 #, c-format
 msgid "Allow staff members to modify permissions for other staff members"
 msgstr "允许馆员修改其它馆员的权限"
@@ -12962,11 +12962,10 @@ msgstr "显示的位置："
 msgid "Applied different matching rule. Number of records matched now %s "
 msgstr "使用其它映射规则。符合的纪录数为 %s "
 
-#. INPUT type=submit name=apply_credits
-#: intranet-tmpl/prog/en/modules/members/pay.tt:118
-#, fuzzy
-msgid "Apply credits"
-msgstr "新增额度"
+#: intranet-tmpl/prog/en/modules/members/pay.tt:126
+#, fuzzy, c-format
+msgid "Apply "
+msgstr "使用筛选器"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:204
@@ -13367,8 +13366,8 @@ msgstr "确定删除此封面吗？"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:782
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:967
 #, fuzzy
 msgid "Are you sure you want to delete this message? This cannot be undone."
 msgstr "确定删除此读者照片吗？删除后不能恢复。"
@@ -13393,7 +13392,7 @@ msgid "Are you sure you want to delete this patron from the card batch?"
 msgstr "确定从批次读者证中删除此读者吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
 msgid ""
 "Are you sure you want to delete this patron image? This cannot be undone."
 msgstr "确定删除此读者照片吗？删除后不能恢复。"
@@ -13582,7 +13581,7 @@ msgid "Are you sure you want to reopen this subscription?"
 msgstr "确定再打开此订阅吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
 msgid ""
 "Are you sure you want to replace the current patron image? This cannot be "
 "undone."
@@ -13616,7 +13615,7 @@ msgid "Are you sure you want to void this credit?"
 msgstr "确定这么做吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/pay.tt:155
+#: intranet-tmpl/prog/en/modules/members/pay.tt:160
 msgid ""
 "Are you sure you want to write off %s in outstanding fines? This cannot be "
 "undone!"
@@ -15535,7 +15534,7 @@ msgstr "删除选定的记录"
 msgid "Browse system logs"
 msgstr "浏览系统纪录"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:114
+#: intranet-tmpl/prog/en/includes/permissions.inc:115
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:99
 #, c-format
 msgid "Browse the system logs"
@@ -16207,7 +16206,7 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:122
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:166
 #: intranet-tmpl/prog/en/modules/members/paycollect.tt:223
-#: intranet-tmpl/prog/en/modules/members/pay.tt:136
+#: intranet-tmpl/prog/en/modules/members/pay.tt:141
 #: intranet-tmpl/prog/en/modules/members/member-password.tt:82
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:181
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:123
@@ -17445,7 +17444,7 @@ msgstr "勾选图书馆，接受还入馆藏。"
 msgid "Check the boxes for the libraries you accept to checkin items from."
 msgstr "勾选图书馆，接受还入馆藏。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:115
+#: intranet-tmpl/prog/en/includes/permissions.inc:116
 #, c-format
 msgid "Check the expiration of a serial"
 msgstr "检查期刊的到期日"
@@ -18265,7 +18264,7 @@ msgstr "催缺"
 msgid "Claim date"
 msgstr "催缺日期"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:116
+#: intranet-tmpl/prog/en/includes/permissions.inc:117
 #, c-format
 msgid "Claim missing serials"
 msgstr "催缺期刊卷期"
@@ -18925,8 +18924,8 @@ msgstr "注册费："
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:128
 #: intranet-tmpl/prog/en/modules/admin/itemtypes.tt:328
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:166
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 #, c-format
 msgid "Code"
 msgstr "代码"
@@ -19271,7 +19270,7 @@ msgstr "组态"
 msgid "Configure columns"
 msgstr "组态栏"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:130
+#: intranet-tmpl/prog/en/includes/permissions.inc:131
 #, c-format
 msgid "Configure plugins"
 msgstr "组态外挂程序"
@@ -20054,7 +20053,7 @@ msgstr "课程别名"
 msgid "Course number:"
 msgstr "课程别名："
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:18
+#: intranet-tmpl/prog/en/includes/permissions.inc:19
 #: intranet-tmpl/prog/en/includes/header.inc:43
 #: intranet-tmpl/prog/en/modules/course_reserves/invalid-course.tt:9
 #: intranet-tmpl/prog/en/modules/course_reserves/course.tt:20
@@ -20094,7 +20093,7 @@ msgstr "新增纪录"
 msgid "Create New"
 msgstr "新增"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:125
+#: intranet-tmpl/prog/en/includes/permissions.inc:126
 #, c-format
 msgid "Create SQL reports"
 msgstr "新增 SQL 报表"
@@ -20124,7 +20123,7 @@ msgstr "新增虚拟书架"
 msgid "Create a new record by importing the external (duplicate) record."
 msgstr "输入外部纪录以新增纪录。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:117
+#: intranet-tmpl/prog/en/includes/permissions.inc:118
 #, c-format
 msgid "Create a new subscription"
 msgstr "新增订阅"
@@ -20139,12 +20138,12 @@ msgstr "新增模板"
 msgid "Create analytics"
 msgstr "新增分析"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:139
+#: intranet-tmpl/prog/en/includes/permissions.inc:140
 #, fuzzy, c-format
 msgid "Create and edit club templates"
 msgstr "新增模板"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:138
+#: intranet-tmpl/prog/en/includes/permissions.inc:139
 #, fuzzy, c-format
 msgid "Create and edit clubs"
 msgstr "新增虚拟书架"
@@ -20166,7 +20165,7 @@ msgstr ""
 "新增与管理权威框架，设置 MARC 纪录 (定义字段与分栏) 的字符，MARC 编辑器的模"
 "版。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:22
+#: intranet-tmpl/prog/en/includes/permissions.inc:23
 #, c-format
 msgid "Create and modify Interlibrary loan requests"
 msgstr ""
@@ -20264,7 +20263,7 @@ msgstr "新增虚拟书架"
 msgid "Create patron list: "
 msgstr "新增读者"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:101
+#: intranet-tmpl/prog/en/includes/permissions.inc:102
 #, c-format
 msgid "Create printable labels and barcodes from catalog and patron data"
 msgstr "从目录与读者数据新增可打印的书标与条码"
@@ -20302,7 +20301,7 @@ msgstr "新增传阅清单"
 msgid "Create routing list for "
 msgstr "新增传阅清单给 "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:146
+#: intranet-tmpl/prog/en/includes/permissions.inc:147
 #, fuzzy, c-format
 msgid "Create, edit and delete rotas"
 msgstr "新增、编辑与删除课程"
@@ -21390,7 +21389,7 @@ msgstr ""
 msgid "Define currencies and exchange rates used for acquisitions."
 msgstr "设置币别与汇率供采访使用。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:89
+#: intranet-tmpl/prog/en/includes/permissions.inc:90
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:89
 #, c-format
 msgid "Define days when the library is closed"
@@ -21428,7 +21427,7 @@ msgstr "设置图书馆与群组。"
 msgid "Define mappings"
 msgstr "设置映射"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:92
+#: intranet-tmpl/prog/en/includes/permissions.inc:93
 #, c-format
 msgid "Define notices"
 msgstr "设置通知"
@@ -21704,7 +21703,7 @@ msgstr "删除基金%s 吗？"
 msgid "Delete Images"
 msgstr "删除照片"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:124
+#: intranet-tmpl/prog/en/includes/permissions.inc:125
 #, fuzzy, c-format
 msgid "Delete SQL reports"
 msgstr "新增 SQL 报表"
@@ -21730,12 +21729,12 @@ msgstr "全部删除"
 msgid "Delete all items"
 msgstr "删除全部馆藏"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:66
+#: intranet-tmpl/prog/en/includes/permissions.inc:67
 #, c-format
 msgid "Delete all items at once"
 msgstr "立即删除全部馆藏"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:118
+#: intranet-tmpl/prog/en/includes/permissions.inc:119
 #, c-format
 msgid "Delete an existing subscription"
 msgstr "删除订阅"
@@ -21865,7 +21864,7 @@ msgstr "删除宏"
 msgid "Delete notice?"
 msgstr "删除通知吗？"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:88
+#: intranet-tmpl/prog/en/includes/permissions.inc:89
 #, c-format
 msgid ""
 "Delete old borrowers and anonymize circulation history (deletes borrower "
@@ -21889,7 +21888,7 @@ msgstr ""
 msgid "Delete patrons who meet the following criteria:"
 msgstr "删除符合下列范畴的读者："
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:134
+#: intranet-tmpl/prog/en/includes/permissions.inc:135
 #, c-format
 msgid "Delete public lists"
 msgstr "删除公共虚拟书架"
@@ -23368,7 +23367,7 @@ msgstr "编辑动作 %s"
 msgid "Edit alert"
 msgstr "编辑提示"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:119
+#: intranet-tmpl/prog/en/includes/permissions.inc:120
 #, c-format
 msgid "Edit an existing subscription"
 msgstr "编辑订阅"
@@ -23380,7 +23379,7 @@ msgstr "编辑订阅"
 msgid "Edit as new (duplicate)"
 msgstr "编辑视为新增(复制)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:14
+#: intranet-tmpl/prog/en/includes/permissions.inc:15
 #, c-format
 msgid "Edit authorities"
 msgstr "编辑权威"
@@ -23420,7 +23419,7 @@ msgid "Edit budget %s"
 msgstr "编辑预算 %s"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:10
-#: intranet-tmpl/prog/en/includes/permissions.inc:67
+#: intranet-tmpl/prog/en/includes/permissions.inc:68
 #, c-format
 msgid "Edit catalog (Modify bibliographic/holdings data)"
 msgstr "编辑目录 (修改书目/馆藏数据)"
@@ -23476,7 +23475,7 @@ msgstr "编辑馆藏"
 
 #: intranet-tmpl/prog/en/includes/serials-toolbar.inc:38
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:39
-#: intranet-tmpl/prog/en/includes/permissions.inc:68
+#: intranet-tmpl/prog/en/includes/permissions.inc:69
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:474
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:239
 #, c-format
@@ -23532,7 +23531,7 @@ msgstr "编辑采访推荐 #%s"
 msgid "Edit quotes for QOTD feature"
 msgstr "编辑引句供每日一句使用"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:94
+#: intranet-tmpl/prog/en/includes/permissions.inc:95
 #, c-format
 msgid "Edit quotes for quote-of-the-day feature"
 msgstr "编辑今日引句功能"
@@ -23906,7 +23905,7 @@ msgstr "注册费"
 msgid "Enroll in "
 msgstr "注册费"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:140
+#: intranet-tmpl/prog/en/includes/permissions.inc:141
 #, fuzzy, c-format
 msgid "Enroll patrons in clubs"
 msgstr "在清单里的读者"
@@ -24512,12 +24511,12 @@ msgstr "例外"
 msgid "Exclude last line (Rollup): "
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:126
+#: intranet-tmpl/prog/en/includes/permissions.inc:127
 #, c-format
 msgid "Execute SQL reports"
 msgstr "执行 SQL 报表"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:33
+#: intranet-tmpl/prog/en/includes/permissions.inc:34
 #, c-format
 msgid "Execute overdue items report"
 msgstr "执行逾期馆藏报表"
@@ -24704,7 +24703,7 @@ msgstr "输出为CSV"
 msgid "Export authority records"
 msgstr "输出权威纪录"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:95
+#: intranet-tmpl/prog/en/includes/permissions.inc:96
 #, c-format
 msgid "Export bibliographic and holdings data"
 msgstr "输出书目与馆藏数据"
@@ -25019,7 +25018,7 @@ msgid "Farmington Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
 
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:21
-#: intranet-tmpl/prog/en/includes/permissions.inc:70
+#: intranet-tmpl/prog/en/includes/permissions.inc:71
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:39
 #, c-format
 msgid "Fast cataloging"
@@ -25773,7 +25772,7 @@ msgstr "对此图书馆而言，可指定读者借出馆藏的最大量，而不
 msgid "Force"
 msgstr "强制"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:31
+#: intranet-tmpl/prog/en/includes/permissions.inc:32
 #, c-format
 msgid "Force checkout if a limitation exists"
 msgstr "若有限制则强迫借出"
@@ -26641,12 +26640,12 @@ msgid ""
 msgstr "群组属性类型含禁用题名(根据容许值类型 'PA_CLASS')"
 
 #. INPUT type=text name=group
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
 msgid "Group code"
 msgstr "群组代码"
 
 #. INPUT type=text name=groupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1439
 msgid "Group name"
 msgstr "群组名称"
 
@@ -28548,7 +28547,7 @@ msgstr "从试算表 (.csv、.xml、.ods) 输入框架结构 (字段、分栏)"
 msgid "Import into the borrowers table"
 msgstr "输入借阅者表单"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:96
+#: intranet-tmpl/prog/en/includes/permissions.inc:97
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:39
 #, c-format
 msgid "Import patron data"
@@ -33026,7 +33025,7 @@ msgstr "Koha正常化分类法供排序之用"
 msgid "Koha offline circulation"
 msgstr "Koha脱机流通"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:19
+#: intranet-tmpl/prog/en/includes/permissions.inc:20
 #, c-format
 msgid "Koha plugins"
 msgstr "Koha 外挂"
@@ -33868,7 +33867,7 @@ msgstr "Libriotech公司，挪威"
 msgid "Licenses"
 msgstr "授权"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:100
+#: intranet-tmpl/prog/en/includes/permissions.inc:101
 #, c-format
 msgid ""
 "Limit batch item modification to subfields defined in the "
@@ -33883,7 +33882,7 @@ msgstr ""
 msgid "Limit collection code to: "
 msgstr "馆藏代码限制为："
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:69
+#: intranet-tmpl/prog/en/includes/permissions.inc:70
 #, c-format
 msgid ""
 "Limit item modification to subfields defined in the "
@@ -34084,7 +34083,7 @@ msgid "List updated."
 msgstr "最新更新"
 
 #: intranet-tmpl/prog/en/includes/cat-menu.inc:2
-#: intranet-tmpl/prog/en/includes/permissions.inc:20
+#: intranet-tmpl/prog/en/includes/permissions.inc:21
 #: intranet-tmpl/prog/en/includes/header.inc:28
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:42
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:342
@@ -34183,8 +34182,8 @@ msgstr "上传中，请稍候..."
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:34
 #: intranet-tmpl/prog/en/includes/datatables.inc:11
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:238
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:992
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:164
 #, c-format
 msgid "Loading..."
@@ -34197,7 +34196,7 @@ msgid "Loading... "
 msgstr "装入中..."
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:967
 msgid "Loading... you may continue scanning."
 msgstr "装入中......您可继续扫瞄。"
 
@@ -34343,7 +34342,7 @@ msgstr "登录"
 msgid "Log in as a different user"
 msgstr "以其它用户登录"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:143
+#: intranet-tmpl/prog/en/includes/permissions.inc:144
 #, c-format
 msgid ""
 "Log into the self check-in module. Note: this permission prevents the patron "
@@ -34916,18 +34915,18 @@ msgstr "管理待处理纪录"
 msgid "Manage API keys"
 msgstr "管理OAI 数据集"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:102
+#: intranet-tmpl/prog/en/includes/permissions.inc:103
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:94
 #, c-format
 msgid "Manage CSV export profiles"
 msgstr "管理CSV输出配置文件"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:57
+#: intranet-tmpl/prog/en/includes/permissions.inc:58
 #, fuzzy, c-format
 msgid "Manage Did you mean? configuration"
 msgstr "存储组态"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:141
+#: intranet-tmpl/prog/en/includes/permissions.inc:142
 #, c-format
 msgid "Manage EDIFACT transmissions"
 msgstr ""
@@ -34942,7 +34941,7 @@ msgstr "管理刊期 "
 msgid "Manage Koha system settings (Administration panel)"
 msgstr "管理 Koha 系统设置 (管理面板)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:49
+#: intranet-tmpl/prog/en/includes/permissions.inc:50
 #, fuzzy, c-format
 msgid "Manage MARC bibliographic and authority frameworks and test them"
 msgstr "MARC 书目框架测试"
@@ -34957,12 +34956,12 @@ msgstr "管理MARC 修改模板"
 msgid "Manage OAI Sets"
 msgstr "管理OAI 数据集"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:53
+#: intranet-tmpl/prog/en/includes/permissions.inc:54
 #, fuzzy, c-format
 msgid "Manage OAI sets"
 msgstr "管理OAI 数据集"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:60
+#: intranet-tmpl/prog/en/includes/permissions.inc:61
 #, fuzzy, c-format
 msgid "Manage SMS cellular providers"
 msgstr "&rsaquo; CSV输出配置文件 "
@@ -34972,7 +34971,7 @@ msgstr "&rsaquo; CSV输出配置文件 "
 msgid "Manage Stock rotation rotas, rota stages and rota items"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:56
+#: intranet-tmpl/prog/en/includes/permissions.inc:57
 #, fuzzy, c-format
 msgid "Manage Z39.50 and SRU server configuration"
 msgstr "Z39.50/SRU 服务器管理"
@@ -34984,52 +34983,52 @@ msgid ""
 "patron card layout."
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:81
+#: intranet-tmpl/prog/en/includes/permissions.inc:82
 #, fuzzy, c-format
 msgid "Manage all baskets and order lines, regardless of restrictions on them"
 msgstr "管理所有订单与预算篮，不论有何限制"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:76
+#: intranet-tmpl/prog/en/includes/permissions.inc:77
 #, fuzzy, c-format
 msgid "Manage all funds"
 msgstr "管理所有预算"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:59
+#: intranet-tmpl/prog/en/includes/permissions.inc:60
 #, fuzzy, c-format
 msgid "Manage audio alerts"
 msgstr "管理预算"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:43
+#: intranet-tmpl/prog/en/includes/permissions.inc:44
 #, fuzzy, c-format
 msgid "Manage authorized value categories and authorized values"
 msgstr "设置类型与容许值。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:80
+#: intranet-tmpl/prog/en/includes/permissions.inc:81
 #, fuzzy, c-format
 msgid "Manage basket and order lines"
 msgstr "删除采购单与订单"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:79
+#: intranet-tmpl/prog/en/includes/permissions.inc:80
 #, fuzzy, c-format
 msgid "Manage basket groups"
 msgstr "改变采购单群组"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:84
+#: intranet-tmpl/prog/en/includes/permissions.inc:85
 #, c-format
 msgid "Manage budget plannings"
 msgstr "管理隔算规画"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:83
+#: intranet-tmpl/prog/en/includes/permissions.inc:84
 #, c-format
 msgid "Manage budgets"
 msgstr "管理预算"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:39
+#: intranet-tmpl/prog/en/includes/permissions.inc:40
 #, fuzzy, c-format
 msgid "Manage circulation rules"
 msgstr "管理流通规则"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:37
+#: intranet-tmpl/prog/en/includes/permissions.inc:38
 #, c-format
 msgid ""
 "Manage circulation rules for any library. If not set the logged in user can "
@@ -35037,27 +35036,27 @@ msgid ""
 "manage_circ_rules is still required)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:48
+#: intranet-tmpl/prog/en/includes/permissions.inc:49
 #, fuzzy, c-format
 msgid "Manage cities and towns"
 msgstr "县市与乡镇"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:51
+#: intranet-tmpl/prog/en/includes/permissions.inc:52
 #, fuzzy, c-format
 msgid "Manage classification sources and filing rules"
 msgstr "分类法排序规则"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:58
+#: intranet-tmpl/prog/en/includes/permissions.inc:59
 #, fuzzy, c-format
 msgid "Manage column configuration"
 msgstr "存储组态"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:78
+#: intranet-tmpl/prog/en/includes/permissions.inc:79
 #, c-format
 msgid "Manage contracts"
 msgstr "管理合约"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:86
+#: intranet-tmpl/prog/en/includes/permissions.inc:87
 #, fuzzy, c-format
 msgid "Manage currencies and exchange rates"
 msgstr "币别与汇率"
@@ -35067,7 +35066,7 @@ msgstr "币别与汇率"
 msgid "Manage custom fields for item search."
 msgstr "管理客制化字段供馆藏寻找"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:45
+#: intranet-tmpl/prog/en/includes/permissions.inc:46
 #, fuzzy, c-format
 msgid "Manage extended patron attributes"
 msgstr "祗取代读者属性"
@@ -35077,12 +35076,12 @@ msgstr "祗取代读者属性"
 msgid "Manage frequencies "
 msgstr "管理刊期 "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:75
+#: intranet-tmpl/prog/en/includes/permissions.inc:76
 #, fuzzy, c-format
 msgid "Manage funds"
 msgstr "管理预算"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:40
+#: intranet-tmpl/prog/en/includes/permissions.inc:41
 #, fuzzy, c-format
 msgid "Manage global system preferences"
 msgstr "整体系统首选"
@@ -35115,17 +35114,17 @@ msgstr ""
 msgid "Manage invoice files"
 msgstr "管理收据档"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:47
+#: intranet-tmpl/prog/en/includes/permissions.inc:48
 #, fuzzy, c-format
 msgid "Manage item circulation alerts"
 msgstr "馆藏流通报警"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:54
+#: intranet-tmpl/prog/en/includes/permissions.inc:55
 #, fuzzy, c-format
 msgid "Manage item search fields"
 msgstr "馆藏寻找字段"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:42
+#: intranet-tmpl/prog/en/includes/permissions.inc:43
 #, fuzzy, c-format
 msgid "Manage item types"
 msgstr "Available itypes"
@@ -35136,12 +35135,12 @@ msgstr "Available itypes"
 msgid "Manage items assigned to &quot;%s&quot;"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:50
+#: intranet-tmpl/prog/en/includes/permissions.inc:51
 #, fuzzy, c-format
 msgid "Manage keywords to Koha mappings"
 msgstr "键词映射至 MARC"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:41
+#: intranet-tmpl/prog/en/includes/permissions.inc:42
 #, fuzzy, c-format
 msgid "Manage libraries and library groups"
 msgstr "设置图书馆与群组。"
@@ -35151,7 +35150,7 @@ msgstr "设置图书馆与群组。"
 msgid "Manage library EDI EANs"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:46
+#: intranet-tmpl/prog/en/includes/permissions.inc:47
 #, c-format
 msgid "Manage library transfer limits and transport cost matrix"
 msgstr ""
@@ -35161,7 +35160,7 @@ msgstr ""
 msgid "Manage lists of patrons."
 msgstr "管理读者清单。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:105
+#: intranet-tmpl/prog/en/includes/permissions.inc:106
 #, c-format
 msgid "Manage marc modification templates"
 msgstr "管理 MARC 修改模板"
@@ -35176,7 +35175,7 @@ msgstr "管理编号模式 "
 msgid "Manage orders"
 msgstr "管理订单"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:44
+#: intranet-tmpl/prog/en/includes/permissions.inc:45
 #, fuzzy, c-format
 msgid "Manage patron categories"
 msgstr "读者类型"
@@ -35202,17 +35201,17 @@ msgstr "管理读者罚款与费用"
 msgid "Manage plugins"
 msgstr "管理外挂"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:131
+#: intranet-tmpl/prog/en/includes/permissions.inc:132
 #, c-format
 msgid "Manage plugins ( install / uninstall )"
 msgstr "管理外挂程序 (安装/删除)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:73
+#: intranet-tmpl/prog/en/includes/permissions.inc:74
 #, fuzzy, c-format
 msgid "Manage purchase suggestions"
 msgstr "新增采访推荐"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:52
+#: intranet-tmpl/prog/en/includes/permissions.inc:53
 #, fuzzy, c-format
 msgid "Manage record matching rules"
 msgstr "新增纪录匹配规则"
@@ -35223,12 +35222,12 @@ msgstr "新增纪录匹配规则"
 msgid "Manage request"
 msgstr "管理刊期 "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:32
+#: intranet-tmpl/prog/en/includes/permissions.inc:33
 #, c-format
 msgid "Manage restrictions for accounts"
 msgstr "管理帐号的限制"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:110
+#: intranet-tmpl/prog/en/includes/permissions.inc:111
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:192
 #, c-format
 msgid "Manage rotating collections"
@@ -35240,12 +35239,12 @@ msgid ""
 "Manage rules for automatically matching MARC records during record imports."
 msgstr "管理输入纪录时自动比较 MARC 纪录规则。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:55
+#: intranet-tmpl/prog/en/includes/permissions.inc:56
 #, fuzzy, c-format
 msgid "Manage search engine configuration"
 msgstr "存储组态"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:15
+#: intranet-tmpl/prog/en/includes/permissions.inc:16
 #, c-format
 msgid "Manage serial subscriptions"
 msgstr "管理期刊订阅"
@@ -35269,12 +35268,12 @@ msgstr "管理待输入 MARC 纪录 %s &rsaquo; 批次 %s %s "
 msgid "Manage staged records"
 msgstr "管理待处理纪录"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:24
+#: intranet-tmpl/prog/en/includes/permissions.inc:25
 #, fuzzy, c-format
 msgid "Manage stockrotation operations"
 msgstr "管理巡回馆藏"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:123
+#: intranet-tmpl/prog/en/includes/permissions.inc:124
 #, c-format
 msgid ""
 "Manage subscriptions from any branch (only applies when IndependentBranches "
@@ -35291,12 +35290,12 @@ msgstr "管理推荐"
 msgid "Manage templates for modifying MARC records during import."
 msgstr "管理模板供输入 MARC 纪录使用。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:136
+#: intranet-tmpl/prog/en/includes/permissions.inc:137
 #, fuzzy, c-format
 msgid "Manage uploaded files ("
 msgstr "%s分析上传文件 "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:61
+#: intranet-tmpl/prog/en/includes/permissions.inc:62
 #, fuzzy, c-format
 msgid "Manage usage statistics settings"
 msgstr "读者统计"
@@ -35306,7 +35305,7 @@ msgstr "读者统计"
 msgid "Manage vendor EDI accounts for import/export"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:85
+#: intranet-tmpl/prog/en/includes/permissions.inc:86
 #, c-format
 msgid "Manage vendors"
 msgstr "管理供货商"
@@ -35338,7 +35337,7 @@ msgstr "管理器："
 msgid "Managed in tab: "
 msgstr "在分页管理："
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:104
+#: intranet-tmpl/prog/en/includes/permissions.inc:105
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:212
 #, c-format
 msgid "Managed staged MARC records, including completing and reversing imports"
@@ -35496,7 +35495,7 @@ msgstr "Mark Gavillet"
 msgid "Mark Tompsett"
 msgstr "Mark Tompsett"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:35
+#: intranet-tmpl/prog/en/includes/permissions.inc:36
 #, c-format
 msgid "Mark checkout notes as seen/not seen"
 msgstr ""
@@ -36093,7 +36092,7 @@ msgstr "星期一"
 msgid "Mobile phone number"
 msgstr "行动电话号码"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:106
+#: intranet-tmpl/prog/en/includes/permissions.inc:107
 #, c-format
 msgid "Moderate patron comments"
 msgstr "审核读者评论"
@@ -36103,7 +36102,7 @@ msgstr "审核读者评论"
 msgid "Moderate patron comments. "
 msgstr "审核读者评论。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:107
+#: intranet-tmpl/prog/en/includes/permissions.inc:108
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:69
 #, c-format
 msgid "Moderate patron tags"
@@ -36217,12 +36216,12 @@ msgstr "修改字段"
 msgid "Modify filing rule"
 msgstr "修改排序规则"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:77
+#: intranet-tmpl/prog/en/includes/permissions.inc:78
 #, fuzzy, c-format
 msgid "Modify funds (can't create lines, but can modify existing ones)"
 msgstr "修改预算 (不能新增，祗能修改既有的)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:64
+#: intranet-tmpl/prog/en/includes/permissions.inc:65
 #, c-format
 msgid "Modify holds priority"
 msgstr "修改预约优先顺位"
@@ -36695,8 +36694,8 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/admin/sms_providers.tt:31
 #: intranet-tmpl/prog/en/modules/admin/printers.tt:145
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:66
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1438
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1439
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1466
 #, c-format
 msgid "Name"
 msgstr "名称"
@@ -40276,10 +40275,10 @@ msgstr "输出："
 msgid "Outstanding"
 msgstr "待处理"
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:118
-#, c-format
-msgid "Outstanding credits could be applied "
-msgstr ""
+#: intranet-tmpl/prog/en/modules/members/pay.tt:125
+#, fuzzy, c-format
+msgid "Outstanding credits could be applied: "
+msgstr "采用的映射规则："
 
 #: intranet-tmpl/prog/en/modules/admin/overdrive.tt:27
 #, fuzzy, c-format
@@ -40343,7 +40342,7 @@ msgstr ""
 msgid "Override and renew"
 msgstr "取消与续借"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:34
+#: intranet-tmpl/prog/en/includes/permissions.inc:35
 #, c-format
 msgid "Override blocked renewals"
 msgstr "取消禁止的续借"
@@ -40759,7 +40758,7 @@ msgid "Patron category: "
 msgstr "读者类型："
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:17
-#: intranet-tmpl/prog/en/includes/permissions.inc:21
+#: intranet-tmpl/prog/en/includes/permissions.inc:22
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:28
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:23
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:20
@@ -41448,7 +41447,7 @@ msgid "Pay all fines"
 msgstr "支付全部罚款"
 
 #. INPUT type=submit name=paycollect
-#: intranet-tmpl/prog/en/modules/members/pay.tt:132
+#: intranet-tmpl/prog/en/modules/members/pay.tt:137
 msgid "Pay amount"
 msgstr "支付总额"
 
@@ -41489,7 +41488,7 @@ msgid "Pay fines for %s %s"
 msgstr "为 %s %s 支付罚款"
 
 #. INPUT type=submit name=payselected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:133
+#: intranet-tmpl/prog/en/modules/members/pay.tt:138
 msgid "Pay selected"
 msgstr "支付指定的"
 
@@ -41615,38 +41614,38 @@ msgstr "待决标签"
 msgid "Perform a new search"
 msgstr "执行新的寻找"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:98
+#: intranet-tmpl/prog/en/includes/permissions.inc:99
 #, c-format
 msgid "Perform batch deletion of items"
 msgstr "执行批次删除馆藏"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:108
+#: intranet-tmpl/prog/en/includes/permissions.inc:109
 #, c-format
 msgid "Perform batch deletion of records (bibliographic or authority)"
 msgstr "执行删除批次记录 (书目或权威)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:99
+#: intranet-tmpl/prog/en/includes/permissions.inc:100
 #, c-format
 msgid "Perform batch modification of items"
 msgstr "执行批次修改馆藏"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:93
+#: intranet-tmpl/prog/en/includes/permissions.inc:94
 #, c-format
 msgid "Perform batch modification of patrons"
 msgstr "执行批次修改读者"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:109
+#: intranet-tmpl/prog/en/includes/permissions.inc:110
 #, c-format
 msgid "Perform batch modification of records (biblios or authorities)"
 msgstr "执行批次修改记录 (书目或权威)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:97
+#: intranet-tmpl/prog/en/includes/permissions.inc:98
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:177
 #, fuzzy, c-format
 msgid "Perform inventory of your catalog"
 msgstr "执行目录的盘点 (登录簿)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:144
+#: intranet-tmpl/prog/en/includes/permissions.inc:145
 #, c-format
 msgid ""
 "Perform self checkout at the OPAC. It should be used for the patron matching "
@@ -41928,7 +41927,7 @@ msgstr "预约这个馆藏吗？"
 msgid "Place hold?"
 msgstr "预约吗？"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:65
+#: intranet-tmpl/prog/en/includes/permissions.inc:66
 #, c-format
 msgid "Place holds for patrons"
 msgstr "放置读者的预约"
@@ -42072,7 +42071,7 @@ msgid "Please choose a cache_expiry less than 30 days "
 msgstr "请选择cache_expiry小于30天 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:807
 msgid "Please choose a file to upload"
 msgstr "请选择上传的文件"
 
@@ -43992,7 +43991,7 @@ msgstr "签收曰期"
 msgid "Receive items from : %s %s[%s] %s (order #%s)"
 msgstr "收到馆藏，来自%s %s[%s] %s (订单号 #%s)"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:82
+#: intranet-tmpl/prog/en/includes/permissions.inc:83
 #, fuzzy, c-format
 msgid "Receive orders and manage shipments"
 msgstr "收到新的运货单"
@@ -44339,17 +44338,17 @@ msgstr "相关"
 msgid "Religious organization"
 msgstr "机构"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:30
+#: intranet-tmpl/prog/en/includes/permissions.inc:31
 #, c-format
 msgid "Remaining circulation permissions"
 msgstr "待处理流通权限"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:71
+#: intranet-tmpl/prog/en/includes/permissions.inc:72
 #, c-format
 msgid "Remaining permissions for managing fines and fees"
 msgstr "待处理管理罚款与费用权限"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:38
+#: intranet-tmpl/prog/en/includes/permissions.inc:39
 #, c-format
 msgid "Remaining system parameters permissions"
 msgstr "待处理系统首选权限"
@@ -44464,7 +44463,7 @@ msgstr ""
 msgid "Remove condition"
 msgstr "删除限制？"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:128
+#: intranet-tmpl/prog/en/includes/permissions.inc:129
 #, c-format
 msgid "Remove course reserves"
 msgstr "删除课程指定用书"
@@ -44597,7 +44596,7 @@ msgstr "续订 "
 msgid "Renew #%s"
 msgstr "续订 #%s"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:121
+#: intranet-tmpl/prog/en/includes/permissions.inc:122
 #, c-format
 msgid "Renew a subscription"
 msgstr "续订"
@@ -44871,7 +44870,7 @@ msgid ""
 "%s)"
 msgstr "移动预算内未签收的订单报表 %s (%s - %s) to %s (%s - %s)"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1419
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1420
 #, c-format
 msgid "Report group:"
 msgstr "报表群组："
@@ -44910,7 +44909,7 @@ msgstr "报表名称："
 msgid "Report plugins"
 msgstr "报表外挂程序"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1441
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1442
 #, c-format
 msgid "Report subgroup:"
 msgstr "报表次群组："
@@ -45836,7 +45835,7 @@ msgstr "巡回馆藏"
 msgid "Round Rock Public Library, USA"
 msgstr "尼尔森维尔公共图书馆系统，俄亥俄州，美国"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:122
+#: intranet-tmpl/prog/en/includes/permissions.inc:123
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:152
 #, c-format
 msgid "Routing"
@@ -46429,7 +46428,7 @@ msgstr "工作"
 msgid "Schedule "
 msgstr "工作"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:111
+#: intranet-tmpl/prog/en/includes/permissions.inc:112
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:109
 #, c-format
 msgid "Schedule tasks to run"
@@ -47102,8 +47101,8 @@ msgstr "看见"
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:21
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:71
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1422
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1444
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1423
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1445
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:117
 #: intranet-tmpl/prog/en/modules/labels/result.tt:72
 #, c-format
@@ -47535,7 +47534,7 @@ msgstr "选择器"
 msgid "Selector: "
 msgstr "选择器"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:23
+#: intranet-tmpl/prog/en/includes/permissions.inc:24
 #, fuzzy, c-format
 msgid "Self check modules"
 msgstr "Perl 模块"
@@ -47767,7 +47766,7 @@ msgstr "期刊(传阅清单)"
 msgid "Serials planning"
 msgstr "期刊计画"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:120
+#: intranet-tmpl/prog/en/includes/permissions.inc:121
 #, c-format
 msgid "Serials receiving"
 msgstr "收到期刊"
@@ -47915,7 +47914,7 @@ msgstr "设置盘点日："
 msgid "Set library"
 msgstr "设置图书馆："
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:91
+#: intranet-tmpl/prog/en/includes/permissions.inc:92
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:49
 #, c-format
 msgid "Set notice/status triggers for overdue items"
@@ -48989,7 +48988,7 @@ msgstr "管理待处理的 MARC 纪录"
 msgid "Stage MARC records for import"
 msgstr "待输入的 MARC 记录"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:112
+#: intranet-tmpl/prog/en/includes/permissions.inc:113
 #, c-format
 msgid "Stage MARC records into the reservoir"
 msgstr "待处理的 MARC 纪录进入存储库"
@@ -49539,11 +49538,6 @@ msgstr "次分类法"
 msgid "Sub total "
 msgstr "小计 "
 
-#: intranet-tmpl/prog/en/modules/members/pay.tt:125
-#, c-format
-msgid "Sub total:"
-msgstr "小计："
-
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:35
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:261
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:33
@@ -49610,12 +49604,12 @@ msgid "Subgroup"
 msgstr "次群组"
 
 #. INPUT type=text name=subgroup
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
 msgid "Subgroup code"
 msgstr "次群组代码"
 
 #. INPUT type=text name=subgroupdesc
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1465
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1466
 msgid "Subgroup name"
 msgstr "次群组名称"
 
@@ -50121,6 +50115,7 @@ msgstr "推荐管理"
 msgid "Suggestions"
 msgstr "推荐"
 
+#: intranet-tmpl/prog/en/includes/permissions.inc:13
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:418
 #, c-format
 msgid "Suggestions management"
@@ -53714,7 +53709,13 @@ msgstr "借出总数"
 msgid "Total due"
 msgstr "总计欠款"
 
+#: intranet-tmpl/prog/en/modules/members/pay.tt:129
+#, fuzzy, c-format
+msgid "Total due if credit applied:"
+msgstr "采用的映射规则"
+
 #: intranet-tmpl/prog/en/modules/members/pay.tt:54
+#: intranet-tmpl/prog/en/modules/members/pay.tt:120
 #, c-format
 msgid "Total due:"
 msgstr "总计欠款："
@@ -54727,7 +54728,7 @@ msgid "Upload another KOC file"
 msgstr "上传其它 KOC 文件"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:128
-#: intranet-tmpl/prog/en/includes/permissions.inc:135
+#: intranet-tmpl/prog/en/includes/permissions.inc:136
 #, fuzzy, c-format
 msgid "Upload any file"
 msgstr "上传文件"
@@ -54779,7 +54780,7 @@ msgstr "上传照片"
 msgid "Upload local cover image"
 msgstr "上传在地封面"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:113
+#: intranet-tmpl/prog/en/includes/permissions.inc:114
 #, c-format
 msgid "Upload local cover images"
 msgstr "上传在地封面"
@@ -54822,7 +54823,7 @@ msgstr "上传读者照片"
 msgid "Upload patron images"
 msgstr "上传读者照片"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:87
+#: intranet-tmpl/prog/en/includes/permissions.inc:88
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:74
 #, c-format
 msgid "Upload patron images in a batch or one at a time"
@@ -54951,7 +54952,7 @@ msgstr "使用文件"
 msgid "Use a file "
 msgstr "使用文件 "
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:13
+#: intranet-tmpl/prog/en/includes/permissions.inc:14
 #, c-format
 msgid "Use all tools (expand for granular tools permissions)"
 msgstr "使用全部工具 (扩充至全部工具权限)"
@@ -55010,7 +55011,7 @@ msgstr ""
 "因为安全与数据整合风险的关系，此键词不能使用于 Koha 报表。祗能使用 SELECT 询"
 "问。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:132
+#: intranet-tmpl/prog/en/includes/permissions.inc:133
 #, c-format
 msgid "Use report plugins"
 msgstr "使用报表外挂程序"
@@ -55066,7 +55067,7 @@ msgstr "使用左方的寻找表单检索订阅。"
 msgid "Use the toolbar above to create a new %s."
 msgstr "使用上端的工具列新增 %s。"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:133
+#: intranet-tmpl/prog/en/includes/permissions.inc:134
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:119
 #, c-format
 msgid "Use tool plugins"
@@ -55110,7 +55111,7 @@ msgstr "使用"
 msgid "Useful resources"
 msgstr "有用的资源"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:136
+#: intranet-tmpl/prog/en/includes/permissions.inc:137
 #, c-format
 msgid "Useless without upload_general_files"
 msgstr ""
@@ -55628,7 +55629,7 @@ msgstr "查看发票"
 msgid "View online payment plugins"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:63
+#: intranet-tmpl/prog/en/includes/permissions.inc:64
 #, c-format
 msgid ""
 "View patron infos from any libraries. If not set the logged in user could "
@@ -56337,7 +56338,7 @@ msgstr "女性"
 msgid "Working day"
 msgstr "工作天"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:90
+#: intranet-tmpl/prog/en/includes/permissions.inc:91
 #: intranet-tmpl/prog/en/modules/tools/tools-home.tt:104
 #, c-format
 msgid "Write news for the OPAC and staff interfaces"
@@ -56353,7 +56354,7 @@ msgid "Write off"
 msgstr "豁免"
 
 #. INPUT type=submit name=woall
-#: intranet-tmpl/prog/en/modules/members/pay.tt:134
+#: intranet-tmpl/prog/en/modules/members/pay.tt:139
 msgid "Write off all"
 msgstr "全部豁免"
 
@@ -56367,13 +56368,13 @@ msgstr "支付选定的罚款"
 msgid "Write off an individual fine"
 msgstr "豁免一个罚款"
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:72
+#: intranet-tmpl/prog/en/includes/permissions.inc:73
 #, c-format
 msgid "Write off fines and fees"
 msgstr "注销罚款与费用"
 
 #. INPUT type=submit name=writeoff_selected
-#: intranet-tmpl/prog/en/modules/members/pay.tt:135
+#: intranet-tmpl/prog/en/modules/members/pay.tt:140
 #, fuzzy
 msgid "Write off selected"
 msgstr "# 的 % 选定"
@@ -57170,8 +57171,8 @@ msgstr "您必须至少选择两个收据以备合并。"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/moremember.tt:788
-#: intranet-tmpl/prog/en/modules/circ/circulation.tt:971
+#: intranet-tmpl/prog/en/modules/members/moremember.tt:782
+#: intranet-tmpl/prog/en/modules/circ/circulation.tt:967
 msgid "You must select checkout(s) to export"
 msgstr "您必须选择借出才能输出"
 
@@ -59082,7 +59083,7 @@ msgstr "m/"
 msgid "magnifying glass"
 msgstr ""
 
-#: intranet-tmpl/prog/en/includes/permissions.inc:36
+#: intranet-tmpl/prog/en/includes/permissions.inc:37
 #, c-format
 msgid "manage circulation rules"
 msgstr "管理流通规则"
@@ -59317,12 +59318,12 @@ msgstr "或 MARC 分栏。"
 msgid "or any available"
 msgstr "或任何可取得"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1463
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1464
 #, c-format
 msgid "or create"
 msgstr "或新增"
 
-#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1436
+#: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1437
 #, fuzzy, c-format
 msgid "or create:"
 msgstr "或新增"
