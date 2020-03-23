@@ -422,7 +422,7 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 lastseen
@@ -453,6 +453,12 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'tinyint'
   default_value: 0
+  is_nullable: 0
+
+=head2 autorenew_checkouts
+
+  data_type: 'tinyint'
+  default_value: 1
   is_nullable: 0
 
 =cut
@@ -625,7 +631,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "lastseen",
@@ -647,11 +653,13 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "anonymized",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "autorenew_checkouts",
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-05-22 04:33:29
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zK1jC6Wawwj8B2ch9KFByw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-23 11:45:25
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fVl4c/8pymGaZBDR3EOrNg
 
 sub koha_objects_class {
     'Koha::Old::Patrons';
