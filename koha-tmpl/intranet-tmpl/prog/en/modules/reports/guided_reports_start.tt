@@ -249,12 +249,12 @@
                                                 [% UNLESS ( loop.odd ) %]<tr class="odd">[% ELSE %]<tr>[% END %]
                                                     <td class="report_checkbox">
                                                         [% IF ( CAN_user_reports_delete_reports ) %] <!-- not break CSS -->
-                                                            <input type="checkbox" name="ids" value="[% savedreport.id | html %]" />
+                                                            <input type="checkbox" name="ids" id="ids[% savedreport.id | html %]" value="[% savedreport.id | html %]" />
                                                         [% END %]
                                                         <input type="hidden" class="report_sql" value="[% savedreport.savedsql |html %]">
                                                     </td>
                                                     <td class="report_id">
-                                                        <label for="ids">[% savedreport.id | html %]</label>
+                                                        <label for="ids[% savedreport.id | html %]">[% savedreport.id | html %]</label>
                                                     </td>
                                                     <td class="report_name">
                                                         [% IF ( savedreport.report_name ) %]
