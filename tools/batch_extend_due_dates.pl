@@ -24,7 +24,6 @@ use CGI;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
-use C4::Items qw( ModItem );
 use Koha::Checkouts;
 use Koha::DateUtils qw( dt_from_string );
 
@@ -134,8 +133,7 @@ elsif ( $op eq 'modify' ) {
         $checkout->date_due($new_due_date)->store;
 
         # Update items.onloan
-        ModItem( { onloan => $new_due_date->strftime('%Y-%m-%d %H:%M') },
-            undef, $checkout->itemnumber );
+        $checkout->item->onloan($new_due_date)->store;
     }
 
     $template->param(
