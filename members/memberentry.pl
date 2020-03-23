@@ -594,17 +594,14 @@ if (C4::Context->preference("IndependentBranches")) {
         }
     }
 }
+
+# Define the fields to be pre-filled in guarantee records
+my $prefillguarantorfields=C4::Context->preference("PrefillGuaranteeField");
+my @prefill_fields=split(/\,/,$prefillguarantorfields);
+
 if ($op eq 'add'){
     if ($guarantor_id) {
-        foreach (
-            qw(
-                streetnumber address streettype address2 zipcode country city state phone phonepro mobile
-                fax email emailpro branchcode
-                B_streetnumber B_streettype B_address B_address2
-                B_city B_state B_zipcode B_country B_email B_phone
-            )
-          )
-        {
+        foreach (@prefill_fields) {
             $newdata{$_} = $guarantor->$_;
         }
     }
