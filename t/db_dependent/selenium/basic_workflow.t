@@ -35,6 +35,7 @@
 use Modern::Perl;
 
 use Time::HiRes qw(gettimeofday);
+use POSIX qw(strftime);
 use C4::Context;
 use C4::Biblio qw( AddBiblio ); # We shouldn't use it
 
@@ -196,6 +197,16 @@ SKIP: {
             ) {
                 # It's a varchar(10)
                 $v = 't_value_x';
+            }
+            elsif (
+                $id =~ m|^tag_952_subfield_w| # replacementpricedate
+            ) {
+                $v = strftime("%Y-%m-%d", localtime);
+            }
+            elsif (
+                $id =~ m|^tag_952_subfield_d| # dateaccessioned
+            ) {
+                $v = ""; # The input has been prefilled with %Y-%m-%d already
             }
             else {
                 $v = 't_value_bib' . $biblionumber;
