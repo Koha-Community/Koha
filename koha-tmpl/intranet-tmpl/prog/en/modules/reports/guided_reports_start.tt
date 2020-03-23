@@ -94,7 +94,7 @@
             &rsaquo; Step 6 of 6: Select how you want the report ordered
         [% END %]
     [% END %]
-</div>
+</div> <!-- /#breadcrumbs -->
 
 <div id="update_sql" class="modal" tabindex="-1" role="dialog" aria-labelledby="update_sql_label" aria-hidden="true">
     <div class="modal-dialog">
@@ -110,9 +110,9 @@
                 <a href="#" class="btn btn-default" id="update_sql_button" role="button" data-toggle="modal">Update</a>
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
             </div>
-        </div>
-    </div>
-</div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- #update_sql -->
 
 <div class="main container-fluid">
     <div class="row">
@@ -154,7 +154,7 @@
                         <input type="hidden" name="phase" value="View Dictionary"/>
                         <input type="submit" name="submit" value="View dictionary"/>
                     </form>
-                [% END %]
+                [% END # /IF (start) %]
 
                 [% IF report_converted %]
                     <div class="dialog message">
@@ -359,7 +359,7 @@
                                 </form>
                             </div>
                         </div>
-                    [% ELSE %]
+                    [% ELSE # IF ( savedreports ) %]
                         <div class="dialog message">
                             [% IF (filter_set || filters.date || filters.author || filters.keyword) %]
                                 <h4>No saved reports match your criteria. </h4>
@@ -386,10 +386,10 @@
                                 [% IF ( CAN_user_reports_create_reports ) %]
                                     <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a new report?</a>
                                 [% END %]
-                            [% END %]
-                        </div>
-                    [% END %]
-                [% END %]
+                            [% END # IF (filter_set || filters.date || filters.author || filters.keyword) %]
+                        </div> <!-- /.dialog.message -->
+                    [% END # /IF ( savedreports ) %]
+                [% END # /IF ( saved1 ) %]
 
                 [% INCLUDE 'mana/mana-share-report.inc' %]
 
@@ -444,13 +444,13 @@
                                     </li>
                                 [% END %]
                             </ol>
-                        </fieldset>
+                        </fieldset> <!-- /.rows -->
                         <fieldset class="action">
                             <input type="hidden" name="phase" value="Report on this Area" />
                             <input type="submit" name="submit" value="Next &gt;&gt;" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /build1 %]
 
                 [% IF ( build2 ) %]
                     <h1>Build a report</h1>
@@ -478,7 +478,7 @@
                             <input type="submit" name="submit" value="Next &gt;&gt;" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /IF (build2 ) %]
 
                 [% IF ( build3 ) %]
                     <h1>Build a report</h1>
@@ -519,21 +519,21 @@
                                         <input type="button" name="Add" value="Add" class="button" style="width:6em;" id="addColumn" /><br />
                                         <input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" id="delColumn" />
                                     </div>
-                                </div>
+                                </div> <!-- /.col-sm-6 -->
 
                                 <div class="col-sm-6">
                                     <select id="selectedColumns" name="columns" multiple="multiple" size="25" style="width:200px; height:300px;">
                                     </select>
                                 </div>
-                            </div>
+                            </div> <!-- /.row -->
                         </fieldset>
                         <fieldset class="action">
                             <input type="hidden" name="phase" value="Choose these columns" />
                             <input type="button" name="back" value="&lt;&lt; Back" class="goback" />
                             <input type="submit" name="submit" value="Next &gt;&gt;" />
                         </fieldset>
-                    </form>
-                [% END %]
+                    </form> <!-- /#column_submit -->
+                [% END # /IF ( build3 ) %]
 
                 [% IF ( build4 ) %]
                     <h1>Build a report</h1>
@@ -620,7 +620,7 @@
                             <input type="submit" name="submit" value="Next &gt;&gt;" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /IF ( build4 ) %]
 
                 [% IF ( build5 ) %]
                     <h1>Build a report</h1>
@@ -658,7 +658,7 @@
                             <input type="submit" name="submit" value="Next &gt;&gt;" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /IF ( build5 ) %]
 
                 [% IF ( build6 ) %]
                     <h1>Build a report</h1>
@@ -696,7 +696,7 @@
                             <input type="submit" name="submit" value="Finish" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END #/ IF ( build6 ) %]
 
                 [% IF ( showreport ) %]
                     <h1>Confirm custom report</h1>
@@ -715,7 +715,7 @@
                             <input type="submit" name="submit" value="Save" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END #/ IF ( showreport ) %]
 
                 [% IF ( save ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
@@ -743,7 +743,7 @@
                             <input type="submit" name="submit" value="Save report" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /IF( save ) %]
 
                 [% IF ( warn_authval_problem ) %]
                     <div class="dialog alert">
@@ -780,7 +780,7 @@
                             <button type="button" class="new goback"><i class="fa fa-fw fa-pencil"></i> Edit SQL</button>
                         </form>
                     </div>
-                [% END %]
+                [% END # /IF ( warn_authval_problem )%]
 
                 [% IF ( enter_params ) %]
                     <form action='/cgi-bin/koha/reports/guided_reports.pl'>
@@ -797,7 +797,7 @@
                                 [% END %]
                             </div>
                             <fieldset class="action"><input type="submit" value="Edit SQL" /></fieldset>
-                        [% ELSE %]
+                        [% ELSE #  IF ( auth_val_error ) %]
                             <input type='hidden' name='phase' value='Run this report' />
                             <h1>Enter parameters for report [% name | html %]:</h1>
                             [% IF ( notes ) %]
@@ -828,16 +828,16 @@
                                                     [% END %]
                                                 </select>
                                             </li>
-                                        [% END %]
-                                    [% END %]
+                                        [% END # /IF sql_param.input == 'date' %]
+                                    [% END # /FOREACH sql_param %]
                                 </ol>
-                            </fieldset>
+                            </fieldset> <!-- /.rows -->
                             <fieldset class="action">
                                 <input type="submit" value="Run the report" />
                             </fieldset>
-                        [% END %]
+                        [% END # / IF ( auth_val_error ) %]
                     </form>
-                [% END %]
+                [% END # /IF ( enter_params ) %]
 
                 [% IF ( execute ) %]
                     <h1>[% name | html %]</h1>
@@ -978,7 +978,7 @@
                                         </ul> <!-- /.dropdown-menu -->
                                     </div> <!-- /.dropdown -->
                                 </p>
-                            [% END %]
+                            [% END # /IF ( batch_biblionumbers || batch_itemnumbers || batch_cardnumbers ) %]
                         [% END # UNLESS ( errors ) %]
                     [% END # IF ( execute ) %]
 
@@ -1004,7 +1004,7 @@
                                 [% END %]
                             [% END %]
                         </select>
-                    </form>
+                    </form> <!-- /#limitselect -->
 
                     <div class="pages">[% pagination_bar | $raw %]</div>
                     [% UNLESS ( errors ) %]
@@ -1026,7 +1026,7 @@
 
                     [% INCLUDE 'chart.inc' %]
 
-                [% END %]
+                [% END #/IF ( execute ) %]
 
                 [% IF ( create ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" id="sql_report_form">
@@ -1060,7 +1060,7 @@
                                             <option value="1">Yes</option>
                                         </select>
                                     </li>
-                                [% END %]
+                                [% END # /IF (public) %]
 
                                 [% IF (usecache) %]
                                     <li>
@@ -1073,13 +1073,13 @@
                                             <option value="days">Days</option>
                                         </select>
                                     </li>
-                                [% END %]
+                                [% END # /IF (usecache) %]
                                 <li>
                                     <label for="notes">Notes:</label>
                                     <textarea id="notes" name="notes" cols="50" rows="2">[% notes | html %]</textarea>
                                 </li>
                             </ol>
-                        </fieldset>
+                        </fieldset> <!-- /.rows -->
 
                         <fieldset class="rows">
                             <legend>SQL:</legend>
@@ -1095,7 +1095,7 @@
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
                         </fieldset>
                     </form>
-                [% END %]
+                [% END #/IF ( create ) %]
 
                 [% IF saved_results %]
                     <h1>Saved report results</h1>
@@ -1110,7 +1110,7 @@
                             </tr>
                         [% END %]
                     </table>
-                [% END %]
+                [% END # /IF saved_results %]
 
                 [% IF ( showsql ) %]
                     <fieldset class="rows">
@@ -1128,7 +1128,7 @@
                             </li>
                         </ol>
                     </fieldset>
-                [% END %]
+                [% END # /IF ( showsql ) %]
 
                 [% IF ( save_successful ) %]
                     [% UNLESS ( errors ) %]
@@ -1170,7 +1170,7 @@
                                             <option value="1">Yes</option>
                                         </select>
                                     </li>
-                                [% END %]
+                                [% END # /IF (public) %]
 
                                 [% IF (usecache) %]
                                     <li>
@@ -1189,7 +1189,7 @@
                                     <textarea id="notes" name="notes" cols="50" rows="2">[% notes | html %]</textarea>
                                 </li>
                             </ol>
-                        </fieldset>
+                        </fieldset> <!-- /.rows -->
 
                         <fieldset class="rows">
                             <legend>SQL:</legend>
@@ -1204,7 +1204,7 @@
                             <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved" class="cancel">Cancel</a>
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /IF ( editsql ) %]
 
                 [% IF ( errors ) %]
                     <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
@@ -1232,7 +1232,7 @@
                             <input type="submit" name="submit" value="Saved reports" />
                         </fieldset>
                     </form>
-                [% END %]
+                [% END # /IF ( errors ) %]
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
@@ -1261,13 +1261,13 @@
                                         <input type="text" id="filter_keyword" name="filter_keyword" value="[% filters.keyword | html %]" size="16" />
                                     </li>
                                 </ol>
-                            </fieldset>
+                            </fieldset> <!-- /.brief -->
                             <fieldset class="action">
                                 <input type="submit" value="Apply filter" />
                                 <a id="resetReportsFilter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1">Clear</a>
                             </fieldset>
                         </form>
-                    </div>
+                    </div> <!-- /#saved-reports-filter -->
                 [% END %]
                 [% INCLUDE 'guided-reports-view.inc' %]
             </aside>
