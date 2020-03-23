@@ -408,11 +408,11 @@ subtest 'accumulate_rentalcharge tests' => sub {
         }
     );
 
-    t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
+    $itemtype->rentalcharge_hourly_calendar(0)->store();
     $charge = $fees->accumulate_rentalcharge();
     is( $charge, 24.00, 'Hourly rental charge calculated correctly (96h * 0.25u)' );
 
-    t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
+    $itemtype->rentalcharge_hourly_calendar(1)->store();
     $charge = $fees->accumulate_rentalcharge();
     is( $charge, 18.00,
 "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u)"
@@ -423,8 +423,8 @@ subtest 'accumulate_rentalcharge tests' => sub {
     is( $charge, 24.00,
 "Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed $dayname (96h - 24h * 0.25u) and rentalcharge_hourly_calendar = 0"
     );
-    $itemtype->rentalcharge_hourly_calendar(1)->store();
 
+    $itemtype->rentalcharge_hourly_calendar(1)->store();
     $calendar->delete_holiday( weekday => $closed_day );
     $charge = $fees->accumulate_rentalcharge();
     is( $charge, 24.00, 'Hourly rental charge calculated correctly with finesCalendar = noFinesWhenClosed (96h - 0h * 0.25u)' );

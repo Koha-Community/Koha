@@ -112,7 +112,7 @@ sub accumulate_rentalcharge {
     my $calendar = Koha::Calendar->new( branchcode => $self->library->id );
 
     if ( $units eq 'hours' ) {
-        if ( $itemtype->rentalcharge_hourly_calendar && C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+        if ( $itemtype->rentalcharge_hourly_calendar ) {
             $duration = $calendar->hours_between(
                 $self->from_date->truncate( to => 'minute' ),
                 $self->to_date->truncate( to => 'minute' )
@@ -124,7 +124,7 @@ sub accumulate_rentalcharge {
         }
     }
     else {
-        if ( $itemtype->rentalcharge_daily_calendar && C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+        if ( $itemtype->rentalcharge_daily_calendar ) {
             $duration =
               $calendar->days_between( $self->from_date, $self->to_date );
         }
