@@ -253,9 +253,9 @@ sub AddItemBatchFromMarc {
         my $item_object = Koha::Item->new($item)->store;
         push @itemnumbers, $item_object->itemnumber; # FIXME not checking error
 
-        logaction("CATALOGUING", "ADD", $item->itemnumber, "item") if C4::Context->preference("CataloguingLog");
+        logaction("CATALOGUING", "ADD", $item_object->itemnumber, "item") if C4::Context->preference("CataloguingLog");
 
-        my $new_item_marc = _marc_from_item_hash($item->unblessed, $frameworkcode, $unlinked_item_subfields);
+        my $new_item_marc = _marc_from_item_hash($item_object->unblessed, $frameworkcode, $unlinked_item_subfields);
         $item_field->replace_with($new_item_marc->field($itemtag));
     }
 
