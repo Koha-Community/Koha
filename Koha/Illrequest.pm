@@ -1172,8 +1172,10 @@ sub check_out {
                 itype         => $params->{item_type},
                 barcode       => 'ILL-' . $self->illrequest_id
             };
-            my $item = Koha::Item->new($item_hash);
-            $itemnumber = $item->itemnumber;
+            try {
+                my $item = Koha::Item->new($item_hash)->store;
+                $itemnumber = $item->itemnumber;
+            };
         } else {
             $itemnumber = $items[0]->itemnumber;
         }
