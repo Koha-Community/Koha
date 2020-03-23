@@ -129,25 +129,25 @@
     <li>
         <label for="ratio">Hold ratio:</label>
         <input type="text" size="5" id="ratio" name="ratio" value="[% ratio | html %]" />
-    <li>
+    </li>
 
-    <li>
-        <label for="include_ordered">Included ordered:</label>
+    <li class="checkbox">
         [% IF include_ordered %]
             <input id="include_ordered" name="include_ordered" type="checkbox" checked="checked"/>
         [% ELSE %]
             <input id="include_ordered" name="include_ordered" type="checkbox"/>
         [% END %]
-    <li>
+        <label for="include_ordered">Include ordered</label>
+    </li>
 
-    <li>
-        <label for="include_suspended">Included suspended:</label>
+    <li class="checkbox">
         [% IF include_suspended %]
             <input id="include_suspended" name="include_suspended" type="checkbox" checked="checked"/>
         [% ELSE %]
             <input id="include_suspended" name="include_suspended" type="checkbox"/>
         [% END %]
-    <li>
+        <label for="include_suspended">Include suspended</label>
+    </li>
 
     <li>
         <label for="from">Start date:</label>
