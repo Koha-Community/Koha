@@ -20431,6 +20431,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24532 - Fix misidentified credit_types from bug 23049 )\n";
 }
 
+
+$DBversion = '19.11.03.005';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(qq{
+       INSERT IGNORE permissions (module_bit, code, description)
+       VALUES
+          (13, 'batch_extend_due_dates', 'Perform batch extend due dates')
+    });
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 24846 - Add a new permission for new tool batch extend due dates)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
