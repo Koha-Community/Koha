@@ -33,7 +33,7 @@ use Koha::AuthorisedValues;
 use Koha::Libraries;
 use Koha::Patrons;
 
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils;
 
 my $input           = new CGI;
 my $op              = $input->param('op') || 'else';
@@ -130,10 +130,12 @@ my $patrons_total_suggestions_count = 0;
 if ( $borrowernumber ){
     if ( C4::Context->preference("MaxTotalSuggestions") ne '' && C4::Context->preference("NumberOfSuggestionDays") ne '' ) {
         my $suggesteddate_from = dt_from_string()->subtract(days=>C4::Context->preference("NumberOfSuggestionDays"));
-        $patrons_total_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, suggesteddate_from => $suggesteddate_from } ) } ;
+        $suggesteddate_from = output_pref({ dt => $suggesteddate_from, dateformat => 'iso', dateonly => 1 });
+        $patrons_total_suggestions_count = Koha::Suggestions->search({ suggestedby => $borrowernumber, suggesteddate => { '>=' => $suggesteddate_from } })->count;
+
     }
     if ( C4::Context->preference("MaxOpenSuggestions") ne '' ) {
-        $patrons_pending_suggestions_count = scalar @{ SearchSuggestion( { suggestedby => $borrowernumber, STATUS => 'ASKED' } ) } ;
+        $patrons_pending_suggestions_count = Koha::Suggestions->search({ suggestedby => $borrowernumber, STATUS => 'ASKED' } )->count ;
     }
 }
 
