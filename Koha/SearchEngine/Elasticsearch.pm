@@ -747,7 +747,7 @@ sub _array_to_marc {
     my @mappings = _field_mappings($facet, $suggestible, $sort, $search, $target_name, $target_type, $range)
 
 Get mappings, an internal data structure later used by
-L<_process_mappings($mappings, $data, $record_document, $altscript)> to process MARC target
+L<_process_mappings($mappings, $data, $record_document, $meta)> to process MARC target
 data for a MARC mapping.
 
 The returned C<$mappings> is not to to be confused with mappings provided by
