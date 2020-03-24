@@ -33,7 +33,7 @@
         [% CASE 'error_on_update' %]
             An error occurred when updating this desk. Perhaps it already exists.
         [% CASE 'error_on_insert' %]
-            An error occurred when adding this desk. The desk id might already exist.
+            An error occurred when adding this desk. The desk ID might already exist.
         [% CASE 'error_on_delete' %]
             An error occurred when deleting this desk. Check the logs.
         [% CASE 'success_on_update' %]
@@ -98,14 +98,14 @@
     <div class="dialog alert">
         <h3>Delete desk "[% desk.desk_name | html %]?"</h3>
         <table>
-            <tr><th>Desk id</th>
+            <tr><th>Desk ID</th>
                 <td>[% desk.desk_id | html %]</td>
             </tr>
             <tr><th>Desk</th>
                 <td>[% desk.desk_name | html %]</td>
             </tr>
-            <tr><th>Branchcode</th>
-                <td>[% desk.branchcode | html %]</td>
+            <tr><th>Library</th>
+                <td>[% Branches.GetName( desk.branchcode ) | html %]</td>
             </tr>
         </table>
         <form action="/cgi-bin/koha/admin/desks.pl" method="post">
@@ -145,7 +145,7 @@
                 <tr>
                     <td>[% desk.desk_id | html %]</td>
                     <td>[% desk.desk_name | html %]</td>
-                    <td>[% desk.branchcode | html %]</td>
+                    <td>[% Branches.GetName( desk.branchcode ) | html %]</td>
                     <td class="actions">
                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/desks.pl?op=add_form&amp;desk_id=[% desk.desk_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
                         <a class="btn btn-default btn-xs" href="/cgi-bin/koha/admin/desks.pl?op=delete_confirm&amp;desk_id=[% desk.desk_id | html %]"><i class="fa fa-trash"></i> Delete</a>
