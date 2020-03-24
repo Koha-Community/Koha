@@ -1650,12 +1650,12 @@ legend:hover {
                 $('#debarred_expiration').val("");
             });
 
-            $(".clear_attribute").on("click", function(e){
+            $("#memberentry_patron_attributes").on("click", ".clear_attribute", function(e){
                 e.preventDefault();
                 clear_entry( this );
             });
 
-            $(".clone_attribute").on("click", function(e){
+            $("#memberentry_patron_attributes").on("click", ".clone_attribute", function(e){
                 e.preventDefault();
                 clone_entry( this );
             });
