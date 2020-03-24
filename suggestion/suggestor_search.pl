@@ -48,7 +48,7 @@ my $patron_categories = Koha::Patron::Categories->search_limited;
 $template->param(
     view => ( $input->request_method() eq "GET" ) ? "show_form" : "show_results",
     columns => ['cardnumber', 'name', 'dateofbirth', 'address', 'action' ],
-    json_template => 'suggestion/tables/suggestion_search.tt',
+    json_template => 'suggestion/tables/suggestor_search.tt',
     selection_type => 'select',
     alphabet        => ( C4::Context->preference('alphabet') || join ' ', 'A' .. 'Z' ),
     categories      => $patron_categories,

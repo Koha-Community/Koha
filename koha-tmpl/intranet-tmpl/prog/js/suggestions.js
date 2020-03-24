@@ -9,9 +9,9 @@ function select_user(borrowernumber, borrower) {
 }
 
 $(document).ready(function(){
-    $('body').on('click', '#suggestion_search', function(e) {
+    $('body').on('click', '#suggestor_search', function(e) {
         e.preventDefault();
-        var newin = window.open('suggestion_search.pl','popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
+        var newin = window.open('suggestor_search.pl','popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
     });
 
 });
