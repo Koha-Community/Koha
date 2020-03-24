@@ -26,6 +26,7 @@ use Test::Exception;
 use DateTime;
 
 use Koha::Account;
+use Koha::Account::CreditTypes;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::DateUtils qw( dt_from_string );
@@ -1051,7 +1052,7 @@ subtest 'Koha::Account::Line::apply() handles lost items' => sub {
 };
 
 subtest 'Koha::Account::pay() generates credit number' => sub {
-    plan tests => 34;
+    plan tests => 37;
 
     $schema->storage->txn_begin;
 
@@ -1069,6 +1070,10 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
     my $month = $now->month;
     my ($accountlines_id, $accountline);
 
+    my $credit_type = Koha::Account::CreditTypes->find('PAYMENT');
+    $credit_type->credit_number_enabled(1);
+    $credit_type->store();
+
     t::lib::Mocks::mock_preference('AutoCreditNumber', '');
     $accountlines_id = $account->pay({ amount => '1.00', library_id => $library->id })->{payment_id};
     $accountline = Koha::Account::Lines->find($accountlines_id);
@@ -1080,6 +1085,9 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
         $accountline = Koha::Account::Lines->find($accountlines_id);
         is($accountline->credit_number, $i);
     }
+    $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
+    $accountline = Koha::Account::Lines->find($accountlines_id);
+    is($accountline->credit_number, undef);
 
     t::lib::Mocks::mock_preference('AutoCreditNumber', 'annual');
     for my $i (1..11) {
@@ -1087,6 +1095,9 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
         $accountline = Koha::Account::Lines->find($accountlines_id);
         is($accountline->credit_number, sprintf('%s-%04d', $year, $i));
     }
+    $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
+    $accountline = Koha::Account::Lines->find($accountlines_id);
+    is($accountline->credit_number, undef);
 
     t::lib::Mocks::mock_preference('AutoCreditNumber', 'branchyyyymmincr');
     for my $i (1..11) {
@@ -1094,6 +1105,9 @@ subtest 'Koha::Account::pay() generates credit number' => sub {
         $accountline = Koha::Account::Lines->find($accountlines_id);
         is($accountline->credit_number, sprintf('%s%d%02d%04d', $library->id, $year, $month, $i));
     }
+    $accountlines_id = $account->pay({ type => 'WRITEOFF', amount => '1.00', library_id => $library->id })->{payment_id};
+    $accountline = Koha::Account::Lines->find($accountlines_id);
+    is($accountline->credit_number, undef);
 
     $schema->storage->txn_rollback;
 };

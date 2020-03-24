@@ -77,17 +77,23 @@ if ( $op eq 'add_form' ) {
 elsif ( $op eq 'add_validate' ) {
     my $description           = $input->param('description');
     my $can_be_added_manually = $input->param('can_be_added_manually') || 0;
+    my $credit_number_enabled = $input->param('credit_number_enabled') || 0;
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     if ( not defined $credit_type ) {
         $credit_type = Koha::Account::CreditType->new( { code => $code } );
     }
-    $credit_type->description($description);
-    $credit_type->can_be_added_manually($can_be_added_manually);
+    unless ($credit_type->is_system) {
+        $credit_type->description($description);
+        $credit_type->can_be_added_manually($can_be_added_manually);
+    }
+    $credit_type->credit_number_enabled($credit_number_enabled);
 
     try {
         $credit_type->store;
-        $credit_type->replace_library_limits( \@branches );
+        unless ($credit_type->is_system) {
+            $credit_type->replace_library_limits( \@branches );
+        }
         push @messages, { type => 'message', code => 'success_on_saving' };
     }
     catch {

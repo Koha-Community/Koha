@@ -2663,6 +2663,7 @@ CREATE TABLE `account_credit_types` (
   `code` varchar(80) NOT NULL,
   `description` varchar(200) DEFAULT NULL,
   `can_be_added_manually` tinyint(4) NOT NULL DEFAULT 1,
+  `credit_number_enabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT "Is autogeneration of credit number enabled for this credit type",
   `is_system` tinyint(1) NOT NULL DEFAULT 0,
   `archived` tinyint(1) NOT NULL DEFAULT 0, -- boolean flag to denote if this till is archived or not
   PRIMARY KEY (`code`)

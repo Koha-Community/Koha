@@ -886,7 +886,13 @@ sub store {
     my ($self) = @_;
 
     my $AutoCreditNumber = C4::Context->preference('AutoCreditNumber');
-    if ($AutoCreditNumber && !$self->in_storage && $self->is_credit && !$self->credit_number) {
+    my $credit_number_enabled = $self->is_credit && $self->credit_type->credit_number_enabled;
+
+    if ($AutoCreditNumber && $credit_number_enabled && !$self->in_storage) {
+        if (defined $self->credit_number) {
+            Koha::Exceptions::Account->throw('AutoCreditNumber is enabled but credit_number is already defined');
+        }
+
         my $rs = Koha::Database->new->schema->resultset($self->_type);
 
         if ($AutoCreditNumber eq 'incremental') {
