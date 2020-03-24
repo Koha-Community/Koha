@@ -425,7 +425,7 @@ __PACKAGE__->table("borrowers");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: 'current_timestamp()'
+  default_value: current_timestamp
   is_nullable: 0
 
 =head2 lastseen
@@ -646,7 +646,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => "current_timestamp()",
+    default_value => \"current_timestamp",
     is_nullable => 0,
   },
   "lastseen",
@@ -1658,8 +1658,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-23 11:45:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SkCqcE0Wpja6r/hZ0yZLNA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 11:25:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6G2Szd+G4io5YH4nsxr2eg
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

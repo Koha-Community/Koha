@@ -422,7 +422,7 @@ __PACKAGE__->table("deletedborrowers");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: 'current_timestamp()'
+  default_value: current_timestamp
   is_nullable: 0
 
 =head2 lastseen
@@ -631,7 +631,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => "current_timestamp()",
+    default_value => \"current_timestamp",
     is_nullable => 0,
   },
   "lastseen",
@@ -658,8 +658,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-23 11:45:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fVl4c/8pymGaZBDR3EOrNg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 11:25:33
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kWv72D508m4D23rxA7QKCw
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },

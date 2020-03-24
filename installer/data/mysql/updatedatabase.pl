@@ -21253,6 +21253,24 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 21443, "Add ability to exclude holidays when calculating rentals fees by time period");
 }
 
+$DBversion = '19.12.00.053';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists('borrowers','autorenew_checkouts') ){
+        $dbh->do( "ALTER TABLE borrowers ADD COLUMN autorenew_checkouts TINYINT(1) NOT NULL DEFAULT 1 AFTER anonymized" );
+    }
+    unless( column_exists('deletedborrowers','autorenew_checkouts') ){
+        $dbh->do( "ALTER TABLE deletedborrowers ADD COLUMN autorenew_checkouts TINYINT(1) NOT NULL DEFAULT 1 AFTER anonymized" );
+    }
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences
+        ( `variable`, `value`, `options`, `explanation`, `type` )
+        VALUES
+        ('AllowPatronToControlAutorenewal','0',NULL,'If enabled, patrons will have a field in their account to choose whether their checkouts are auto renewed or not','YesNo')
+    });
+
+    NewVersion( $DBversion, 24476, "Allow patrons to opt-out of autorenewal");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
