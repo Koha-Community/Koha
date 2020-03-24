@@ -1,6 +1,9 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Categories %]
+[% USE KohaNews %]
+[% PROCESS 'html_helpers.inc' %]
+[% SET OpacLoginInstructions = KohaNews.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -176,8 +179,8 @@
                                 </div>
                             [% END %]
                             <div id="nologininstructions">
-                            [% IF Koha.Preference('OpacLoginInstructions') %]
-                                [% Koha.Preference('OpacLoginInstructions') | $raw %]
+                            [% IF ( OpacLoginInstructions ) %]
+                                [% PROCESS koha_news_block news => OpacLoginInstructions %]
                             [% ELSE %]
                                 <h3>Don't have a password yet?</h3>
                                 <p>If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
