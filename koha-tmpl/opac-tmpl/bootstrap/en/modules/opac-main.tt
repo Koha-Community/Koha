@@ -7,6 +7,7 @@
 [% USE KohaNews %]
 [% SET OpacNavRight = KohaNews.get( location => "OpacNavRight", lang => lang, library => branchcode ) %]
 [% SET OpacMainUserBlock = KohaNews.get( location => "OpacMainUserBlock", lang => lang, library => branchcode ) %]
+[% SET OpacLoginInstructions = KohaNews.get( location => "OpacLoginInstructions", lang => lang, library => branchcode ) %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -175,9 +176,9 @@
                                         <fieldset class="action">
                                             <input type="submit" value="Log in" class="btn" />
                                         </fieldset>
-                                        [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
+                                        [% IF ( OpacLoginInstructions ) %]
                                             <div id="nologininstructions-main" class="nologininstructions">
-                                                [% Koha.Preference( 'OpacLoginInstructions' ) | $raw %]
+                                                [% PROCESS koha_news_block news => OpacLoginInstructions %]
                                             </div>
                                         [% END %]
                                         [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
