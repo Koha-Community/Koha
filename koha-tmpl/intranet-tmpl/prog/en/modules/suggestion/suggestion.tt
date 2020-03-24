@@ -180,7 +180,7 @@
                 <td>[% manageddate | $KohaDates %]</td>
                 <td>
                         [% IF ( managedby_patron.borrowernumber ) %]
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_patron.borrowernumber | uri %]">[% managedby_patron.surname | html %], [% managedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_patron.borrowernumber | uri %]">[% managedby_patron.surname | html %], [% managedby_patron.firstname | html %] ([% managedby_patron.cardnumber | html %])</a>
                             [% Branches.GetName( managedby_patron.branchcode ) | html %] ([% managedby_patron.category.description | html %])
                         [% END %]
                 </td>
@@ -190,7 +190,7 @@
                 <td>[% accepteddate | $KohaDates %]</td>
                 <td>
                     [% IF ( acceptedby_patron.borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_patron.borrowernumber | uri %]">[% acceptedby_patron.surname | html %], [% acceptedby_patron.firstname | html %] ([% acceptedby_patron.cardnumber | html %])</a>
                         [% Branches.GetName( acceptedby_patron.branchcode ) | html %] ([% acceptedby_patron.category.description | html %])
                     [% END %]
                 </td>
@@ -581,7 +581,7 @@
                     [% IF ( suggestions_loo.suggesteddate ) %][% suggestions_loo.suggesteddate | $KohaDates %][% END %]
                 </td>
                 <td>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby | html %][% END %]</a>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.managedby | uri %]">[% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby | html %][% END %]</a>
                 </td>
                 <td data-order="[% suggestions_loo.manageddate | html %]">
                     [% IF ( suggestions_loo.manageddate ) %][% suggestions_loo.manageddate | $KohaDates %][% END %]
