@@ -150,17 +150,20 @@ that it may return to it's stage.branch to continue its rota as normal.
 
 sub repatriate {
     my ( $self, $msg ) = @_;
+
     # Create the transfer.
-    my $transfer_stored = Koha::Item::Transfer->new({
-        'itemnumber' => $self->itemnumber_id,
-        'frombranch' => $self->itemnumber->holdingbranch,
-        'tobranch'   => $self->stage->branchcode_id,
-        'datesent'   => dt_from_string(),
-        'comments'   => $msg,
-        'reason'     => "StockrotationRepatriation"
-    })->store;
-    $self->itemnumber->homebranch($self->stage->branchcode_id)->store;
-    return $transfer_stored;
+    my $transfer = $self->itemnumber->request_transfer(
+        {
+            to      => $self->stage->branchcode,
+            reason  => "StockrotationRepatriation",
+            comment => $msg
+        }
+    );
+
+    # Ensure the homebranch is still in sync with the rota stage
+    $self->itemnumber->homebranch( $self->stage->branchcode_id )->store;
+
+    return $transfer;
 }
 
 =head3 advance
@@ -180,49 +183,55 @@ advance the item as per usual.
 =cut
 
 sub advance {
-    my ( $self ) = @_;
-    my $item = $self->itemnumber;
-    my $transfer = Koha::Item::Transfer->new({
-        'itemnumber' => $self->itemnumber_id,
-        'frombranch' => $item->holdingbranch,
-        'datesent'   => dt_from_string(),
-        'reason'     => "StockrotationAdvance"
-    });
+    my ($self)         = @_;
+    my $item           = $self->itemnumber;
+    my $current_branch = $item->holdingbranch;
+    my $transfer;
 
+    # Find and interpret our stage
+    my $stage = $self->stage;
+    my $new_stage;
     if ( $self->indemand && !$self->fresh ) {
-        $self->indemand(0)->store;  # De-activate indemand
-        $transfer->tobranch($self->stage->branchcode_id);
-        $transfer->datearrived(dt_from_string());
-    } else {
-        # Find and update our stage.
-        my $stage = $self->stage;
-        my $new_stage;
-        if ( $self->fresh ) {   # Just added to rota
+        $self->indemand(0)->store;                          # De-activate indemand
+        $new_stage = $stage;
+    }
+    else {
+        # New to rota?
+        if ( $self->fresh ) {
             $new_stage = $self->stage->first_sibling || $self->stage;
-            $transfer->tobranch($new_stage->branchcode_id);
-            $transfer->datearrived(dt_from_string()) # Already at first branch
-                if $item->holdingbranch eq $new_stage->branchcode_id;
-            $self->fresh(0)->store;         # Reset fresh
-        } elsif ( !$stage->last_sibling ) { # Last stage
-            if ( $stage->rota->cyclical ) { # Cyclical rota?
-                # Revert to first stage.
-                $new_stage = $stage->first_sibling || $stage;
-                $transfer->tobranch($new_stage->branchcode_id);
-                $transfer->datearrived(dt_from_string());
-            } else {
-                $self->delete;  # StockRotationItem is done.
+            $self->fresh(0)->store;                         # Reset fresh
+        }
+        # Last stage?
+        elsif ( !$stage->last_sibling ) {
+            # Cyclical rota?
+            if ( $stage->rota->cyclical ) {
+                $new_stage =
+                  $stage->first_sibling || $stage;           # Revert to first stage.
+            }
+            else {
+                $self->delete;                               # StockRotationItem is done.
                 return 1;
             }
-        } else {
-            # Just advance.
-            $new_stage = $self->stage->next_sibling;
         }
-        $self->stage_id($new_stage->stage_id)->store;        # Set new stage
-        $item->homebranch($new_stage->branchcode_id)->store; # Update homebranch
-        $transfer->tobranch($new_stage->branchcode_id);      # Send to new branch
+        else {
+            $new_stage = $self->stage->next_sibling;         # Just advance
+        }
     }
 
-    return $transfer->store;
+    # Update stage and record transfer
+    $self->stage_id( $new_stage->stage_id )->store;          # Set new stage
+    $item->homebranch( $new_stage->branchcode_id )->store;   # Update homebranch
+    $transfer = $item->request_transfer(
+        {
+            to            => $new_stage->branchcode,
+            reason        => "StockrotationAdvance",
+            ignore_limits => 1
+        }
+    );                                                       # Add transfer
+    $transfer->receive
+      if $item->holdingbranch eq $new_stage->branchcode_id;  # Already at branch
+
+    return $transfer;
 }
 
 =head3 investigate
