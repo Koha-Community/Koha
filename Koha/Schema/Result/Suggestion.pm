@@ -77,6 +77,18 @@ __PACKAGE__->table("suggestions");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 lastmodificationby
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
+=head2 lastmodificationdate
+
+  data_type: 'date'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 STATUS
 
   accessor: 'status'
@@ -227,6 +239,10 @@ __PACKAGE__->add_columns(
   "rejectedby",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "rejecteddate",
+  { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "lastmodificationby",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "lastmodificationdate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "STATUS",
   {
@@ -379,6 +395,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 lastmodificationby
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "lastmodificationby",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "lastmodificationby" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 managedby
 
 Type: belongs_to
@@ -440,8 +476,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UsG/gxLa0HMMbcpbscV29Q
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 12:04:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2j+YaHKq7Jq1ku10CGlynA
 
 __PACKAGE__->belongs_to(
   "suggester",

@@ -1482,6 +1482,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 suggestions_lastmodificationbies
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions_lastmodificationbies",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.lastmodificationby" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 suggestions_managedbies
 
 Type: has_many
@@ -1658,8 +1673,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 11:25:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6G2Szd+G4io5YH4nsxr2eg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 12:04:30
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lc2beHgnH2egLaVzXEcLPg
 
 __PACKAGE__->add_columns(
     '+anonymized'    => { is_boolean => 1 },
