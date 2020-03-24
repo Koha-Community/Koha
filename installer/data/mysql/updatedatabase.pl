@@ -21211,6 +21211,23 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24854, "Remove IDreamBooks* system preferences");
 }
 
+$DBversion = '19.12.00.051';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE systempreferences SET options = 'itemhomebranch|patronhomebranch|checkoutbranch|none' WHERE variable='OpacRenewalBranch'
+    });
+    $dbh->do(q{
+        UPDATE systempreferences SET value = "none" WHERE variable='OpacRenewalBranch'
+        AND value = 'NULL'
+    });
+    $dbh->do(q{
+        UPDATE systempreferences SET value = 'opacrenew' WHERE variable='OpacRenewalBranch'
+        AND value NOT IN ('checkoutbranch','itemhomebranch','opacrenew','patronhomebranch','none')
+    });
+
+    NewVersion( $DBversion, 24759, "Cleanup OpacRenewalBranch");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
