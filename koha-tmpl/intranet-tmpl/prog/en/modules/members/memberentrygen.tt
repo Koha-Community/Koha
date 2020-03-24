@@ -191,8 +191,8 @@ legend:hover {
                             </p>
                         [% END %][% END %]
 
-                        <div id="toolbar" class="btn-toolbar">
-                            [% UNLESS ( check_member ) %]
+                        [% UNLESS ( check_member ) %]
+                            <div id="toolbar" class="btn-toolbar">
                                 [% IF quickadd && opadd %]
                                     <button class="btn btn-default toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
                                 [% END %]
@@ -204,8 +204,8 @@ legend:hover {
                                 [% END %]
                                     <i class="fa fa-times"></i> Cancel
                                 </a>
-                            [% END %]
-                        </div>
+                            </div>
+                        [% END %]
 
                         <form name="form" id="entryform" action="/cgi-bin/koha/members/memberentry.pl" method="post" autocomplete="off" class="toggler">
                             [% UNLESS ( check_member ) %]
