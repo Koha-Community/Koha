@@ -916,7 +916,11 @@
             [% IF op == "save" %]
                 var notify = $('#notify');
                 if ( notify.length ) {
-                    if ( borrowernumber == [% logged_in_user.borrowernumber | html %] || borrowernumber == [% managedby_patron.borrowernumber | html %] ) {
+                    [% IF managedby_patron %]
+                        if ( borrowernumber == [% logged_in_user.borrowernumber | html %] || borrowernumber == [% managedby_patron.borrowernumber | html %] ) {
+                    [% ELSE %]
+                        if ( borrowernumber == [% logged_in_user.borrowernumber | html %] ) {
+                    [% END %]
                         $(notify).prop('checked', false).prop('disabled', true);
                     } else {
                         $(notify).prop('disabled', false);
