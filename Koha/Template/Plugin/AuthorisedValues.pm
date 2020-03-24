@@ -81,17 +81,12 @@ sub GetDescriptionByKohaField {
             authorised_value => $params->{authorised_value},
         }
     );
-    my $av_check = $params->{authorised_value};
-    if ($params->{opac}) {
-        if ($av->{opac_description}) {
-            $av_check = $av->{opac_description}
-        } elsif ($av->{lib}) {
-            $av_check = $av->{lib}
-        }
-    } elsif ($av->{lib}) {
-        $av_check = $av->{lib}
-    }
-    return $av_check
+
+    my $description = $av->{lib} || $params->{authorised_value} || '';
+
+    return $params->{opac}
+      ? $av->{opac_description} || $description
+      : $description;
 }
 
 1;

@@ -73,7 +73,7 @@ subtest 'GetByCode' => sub {
 
 subtest 'GetDescriptionByKohaField' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -145,6 +145,9 @@ subtest 'GetDescriptionByKohaField' => sub {
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => $non_existent_av } );
     is( $av, $non_existent_av, 'If both OPAC and staff descriptions are missing, the parameter should be displayed');
+    $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
+        { kohafield => 'dummy.field', authorised_value => undef } );
+    is( $av, '', 'If both OPAC and staff descriptions are missing, and the parameter is undef, an empty string should be displayed');
 
     $schema->storage->txn_rollback;
 };
