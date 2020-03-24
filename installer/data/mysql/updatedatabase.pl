@@ -21047,16 +21047,14 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(qq{ DELETE FROM systempreferences WHERE variable = "printcirculationslips"} );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 17845 - Drop unused table printers and branchprinter column)\n";
+    NewVersion( $DBversion, 17845, "Drop unused table printers and branchprinter column");
 }
 
 $DBversion = '19.12.00.040';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "UPDATE systempreferences SET  explanation = 'Comma separated list defining the default fields to be used during a patron search using the \"standard\" option. If empty Koha will default to \"surname,firstname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page.' WHERE variable='DefaultPatronSearchFields' " );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 17374 - update description of DefaultPatronSearchFields)\n";
+    NewVersion( $DBversion, 17374, "Update description of DefaultPatronSearchFields");
 }
 
 $DBversion = '19.12.00.041';
@@ -21079,8 +21077,7 @@ if( CheckVersion( $DBversion ) ) {
         ALTER TABLE old_reserves MODIFY priority SMALLINT(6) NOT NULL DEFAULT 1
     |);
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24722 - Enforce NOT NULL constraint for reserves.priority)\n";
+    NewVersion( $DBversion, 24722, "Enforce NOT NULL constraint for reserves.priority");
 }
 
 $DBversion = '19.12.00.042';
@@ -21089,8 +21086,7 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do('ALTER TABLE message_queue ADD COLUMN reply_address LONGTEXT AFTER from_address');
     }
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 22821 - Add reply_address to message_queue)\n";
+    NewVersion( $DBversion, 22821, "Add reply_address to message_queue");
 }
 
 $DBversion = '19.12.00.043';
@@ -21113,8 +21109,7 @@ if( CheckVersion( $DBversion ) ) {
           }
     );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24296 - Add 'return' reasons to branchtransfers enum)\n";
+    NewVersion( $DBversion, 24296, "Add 'return' reasons to branchtransfers enum");
 }
 
 $DBversion = '19.12.00.044';
@@ -21125,8 +21120,7 @@ if( CheckVersion( $DBversion ) ) {
         (13, 'batch_extend_due_dates', 'Perform batch extend due dates')
     });
 
-    SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 24846 - Add a new permission for new tool batch extend due dates)\n";
+    NewVersion( $DBversion, 24846, "Add a new permission for new tool batch extend due dates");
 }
 
 $DBversion = '19.12.00.045';
@@ -21137,8 +21131,7 @@ if( CheckVersion( $DBversion ) ) {
         ('CollapseFieldsPatronAddForm','',NULL,'Collapse these fields by default when adding a new patron. These fields can still be expanded.','Multiple') 
     });
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 4461 - Add CollapseFieldsPatronAddForm system preference)\n";
+    NewVersion( $DBversion, 4461, "Add CollapseFieldsPatronAddForm system preference");
 }
 
 $DBversion = '19.12.00.046';
@@ -21146,8 +21139,7 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do( "ALTER TABLE accountlines MODIFY COLUMN date TIMESTAMP NULL" );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24818: Update 'accountlines.date' from DATE to TIMESTAMP)\n";
+    NewVersion( $DBversion, 24818, "Update 'accountlines.date' from DATE to TIMESTAMP");
 }
 
 $DBversion = '19.12.00.047';
@@ -21158,8 +21150,7 @@ if( CheckVersion( $DBversion ) ) {
         AFTER `thumbnail`;
     });
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 22987 - Add biblioimages.timestamp)\n";
+    NewVersion( $DBversion, 22987, "Add biblioimages.timestamp");
 }
 
 $DBversion = '19.12.00.048';
@@ -21183,8 +21174,7 @@ if( CheckVersion( $DBversion ) ) {
           }
     );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24299 - Add 'collection' reasons to branchtransfers enum)\n";
+    NewVersion( $DBversion, 24299, "Add 'collection' reasons to branchtransfers enum");
 }
 
 $DBversion = '19.12.00.049';
@@ -21211,15 +21201,14 @@ if( CheckVersion( $DBversion ) ) {
           }
     );
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24299 - Add 'reserve' reasons to branchtransfers enum)\n";
+    NewVersion( $DBversion, 24299, "Add 'reserve' reasons to branchtransfers enum");
 }
 
 $DBversion = '19.12.00.050';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "DELETE FROM systempreferences WHERE variable in ('IDreamBooksReadometer','IDreamBooksResults','IDreamBooksReviews')" );
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 24854 - Remove IDreamBooks* system preferences)\n";
+
+    NewVersion( $DBversion, 24854, "Remove IDreamBooks* system preferences");
 }
 
 # SEE bug 13068

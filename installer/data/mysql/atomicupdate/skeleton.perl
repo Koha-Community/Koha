@@ -9,6 +9,5 @@ if( CheckVersion( $DBversion ) ) {
     # }
 
     # Always end with this (adjust the bug info)
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+    NewVersion( $DBversion, XXXXX, "Description");
 }
