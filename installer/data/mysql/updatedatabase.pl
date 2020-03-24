@@ -21228,6 +21228,31 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24759, "Cleanup OpacRenewalBranch");
 }
 
+$DBversion = '19.12.00.052';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'itemtypes', 'rentalcharge_daily_calendar' ) ) {
+        $dbh->do(q{
+            ALTER TABLE itemtypes ADD COLUMN
+            rentalcharge_daily_calendar tinyint(1) NOT NULL DEFAULT 1
+            AFTER rentalcharge_daily;
+        });
+    }
+
+    if( !column_exists( 'itemtypes', 'rentalcharge_hourly_calendar' ) ) {
+        $dbh->do(q{
+            ALTER TABLE itemtypes ADD COLUMN
+            rentalcharge_hourly_calendar tinyint(1) NOT NULL DEFAULT 1
+            AFTER rentalcharge_hourly;
+        });
+    }
+
+    my $finesCalendar = C4::Context->preference('finesCalendar');
+    my $value = $finesCalendar eq 'noFinesWhenClosed' ? 1 : 0;
+    $dbh->do("UPDATE itemtypes SET rentalcharge_hourly_calendar = $value, rentalcharge_daily_calendar = $value");
+
+    NewVersion( $DBversion, 21443, "Add ability to exclude holidays when calculating rentals fees by time period");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
