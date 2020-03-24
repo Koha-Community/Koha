@@ -52,7 +52,7 @@ sub get {
             blocktitle => $blocktitle
         };
     } else {
-        return 0;
+        return;
     }
 }
 
