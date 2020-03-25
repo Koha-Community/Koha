@@ -34,7 +34,7 @@
         window.$date = function(value, options) {
             var tz = (options&&options.tz)||def_tz;
             var m = moment(value);
-            if(tz) m.tz(tz);
+            if((m.creationData().format !== 'YYYY-MM-DD')&&tz) m.tz(tz);
 
             var dateformat = (options&&options.dateformat)||def_date_format;
             var withtime = (options&&options.withtime)||false;

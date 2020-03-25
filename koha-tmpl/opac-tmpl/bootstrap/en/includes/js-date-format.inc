@@ -24,10 +24,16 @@
             return time_pattern;
         };
 
+        /*
+         * A JS equivilent of the KohaDates TT Plugin. Passed an rfc3339 formatted date string,
+         * or JS Date, the function will return a date string formatted as per the koha instance config.
+         * Optionally accepts a dateformat parameter to allow override of the configured output format
+         * as well as a 'withtime' boolean denoting whether to include time or not in the output string.
+         */
         window.$date = function(value, options) {
             var tz = (options&&options.tz)||def_tz;
             var m = moment(value);
-            if(tz) m.tz(tz);
+            if((m.creationData().format !== 'YYYY-MM-DD')&&tz) m.tz(tz);
 
             var dateformat = (options&&options.dateformat)||def_date_format;
             var withtime = (options&&options.withtime)||false;
