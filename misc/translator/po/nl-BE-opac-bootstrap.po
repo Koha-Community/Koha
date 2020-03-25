@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 16:21-0300\n"
+"POT-Creation-Date: 2020-03-19 08:12-0300\n"
 "PO-Revision-Date: 2019-11-09 11:30+0000\n"
 "Last-Translator: Hans Supply <hans.supply@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -1892,20 +1892,24 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s0 biblios%s "
 msgstr "%s0 biblios%s "
 
-#. %1$s:  IF ( starting_homebranch ) 
+#. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
-#. %3$s:  END 
-#. %4$s:  IF ( starting_location ) 
-#. %5$s:  starting_location | html 
-#. %6$s:  END 
-#. %7$s:  IF ( starting_ccode ) 
-#. %8$s:  starting_ccode | html 
-#. %9$s:  END 
+#. %3$s:  END -
+#. %4$s: - IF ( starting_homebranch && starting_location ) 
+#. %5$s:  END 
+#. %6$s: - IF ( starting_location ) 
+#. %7$s: - starting_location | html -
+#. %8$s:  END -
+#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
+#. %10$s:  END 
+#. %11$s: - IF ( starting_ccode ) 
+#. %12$s: - starting_ccode | html -
+#. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
-"%s "
+"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+"%sCollection: %s%s "
 msgstr ""
 "%sBladeren %s Boekenplanken%s%s, Plaatskenmerk: %s%s%s, Verzamelingscode: %s"
 "%s "
@@ -4460,7 +4464,7 @@ msgstr "Klik om te bekijken bij Google Books"
 msgid "Close"
 msgstr "sluit"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
 #, c-format
 msgid "Close shelf browser"
 msgstr "Sluit de boekenplank grasduiner"
@@ -7486,7 +7490,7 @@ msgstr "Nieuwe tag:"
 msgid "News from %s%s%sthe library%s"
 msgstr "Nieuws van %s%s%sde bibliotheek%s"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:72
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7543,10 +7547,10 @@ msgstr "Er werden geen veranderingen aangebracht."
 msgid "No checkouts"
 msgstr "Geen uitleningen"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:40
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:49
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:33
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:42
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:236
@@ -8752,7 +8756,7 @@ msgstr "Vorige"
 msgid "Preview"
 msgstr "Vooruitblik"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:18
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9744,7 +9748,7 @@ msgid "Section:"
 msgstr "sectie:"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316

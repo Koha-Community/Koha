@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 16:06-0300\n"
-"PO-Revision-Date: 2020-02-20 06:14+0000\n"
+"POT-Creation-Date: 2020-03-19 07:57-0300\n"
+"PO-Revision-Date: 2020-03-24 19:04+0000\n"
 "Last-Translator: tigran <tigran@flib.sci.am>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "Language: hy\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-Bookmarks: 1755,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-POOTLE-MTIME: 1582179250.638955\n"
+"X-POOTLE-MTIME: 1585076690.904464\n"
 "X-Pootle-Path: /hy/18.05/hy-Armn-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1888,22 +1888,27 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s0 biblios%s "
 msgstr "%s0 մատեններ%s "
 
-#. %1$s:  IF ( starting_homebranch ) 
+#. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
-#. %3$s:  END 
-#. %4$s:  IF ( starting_location ) 
-#. %5$s:  starting_location | html 
-#. %6$s:  END 
-#. %7$s:  IF ( starting_ccode ) 
-#. %8$s:  starting_ccode | html 
-#. %9$s:  END 
+#. %3$s:  END -
+#. %4$s: - IF ( starting_homebranch && starting_location ) 
+#. %5$s:  END 
+#. %6$s: - IF ( starting_location ) 
+#. %7$s: - starting_location | html -
+#. %8$s:  END -
+#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
+#. %10$s:  END 
+#. %11$s: - IF ( starting_ccode ) 
+#. %12$s: - starting_ccode | html -
+#. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
 #, c-format
 msgid ""
-"%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
-"%s "
+"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+"%sCollection: %s%s "
 msgstr ""
-"%sԹերթել %s Դարակներ%s%s, Դարակային տեղադրում: %s%s %s, Հավաքածուի կոդ: %s%s "
+"%sԹերթել %s դարակներ%s %s, %s %sԴարակային տեղադրում: %s%s %s, %s %s "
+"Հավաքածու: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -4437,7 +4442,7 @@ msgstr "Սեղմիր Google Books-ում դիտելու համար"
 msgid "Close"
 msgstr "Փակել"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
 #, c-format
 msgid "Close shelf browser"
 msgstr "Փակիր դարակի դիտակը"
@@ -7453,7 +7458,7 @@ msgstr "Նոր ցուցիչ։"
 msgid "News from %s%s%sthe library%s"
 msgstr "Նորություններ %s%s%sգրադարանից%s"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:72
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7510,10 +7515,10 @@ msgstr "Փոփոխություններ չեն արված։"
 msgid "No checkouts"
 msgstr "Դուրս տրումներ չկան"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:40
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:49
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:33
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:42
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:236
@@ -8709,7 +8714,7 @@ msgstr "Prev"
 msgid "Preview"
 msgstr "Նախնական դիտում"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:18
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9702,7 +9707,7 @@ msgid "Section:"
 msgstr "Բաժին։"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316

@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 15:53-0300\n"
-"PO-Revision-Date: 2020-02-12 21:03+0000\n"
+"POT-Creation-Date: 2020-03-19 07:44-0300\n"
+"PO-Revision-Date: 2020-03-05 23:09+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1581541411.553193\n"
+"X-POOTLE-MTIME: 1583449751.066617\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -374,16 +374,19 @@ msgstr ""
 #. %28$s: - SET data.title          = title -
 #. %29$s: - END -
 #. %30$s: # Parameter no_html - if 1, the html tags are NOT generated 
-#. %31$s: - IF data.title 
-#. %32$s: - IF no_html 
-#. %33$s: - span_start = '' 
-#. %34$s: - span_end   = '' 
-#. %35$s: - ELSE 
+#. %31$s: - IF no_title 
+#. %32$s:  SET data.title = "" 
+#. %33$s:  END -
+#. %34$s: - IF data.title 
+#. %35$s: - IF no_html 
+#. %36$s: - span_start = '' 
+#. %37$s: - span_end   = '' 
+#. %38$s: - ELSE 
 #: intranet-tmpl/prog/en/includes/patron-title.inc:1
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
-"%s %s %s %s %s %s %s %s %s %s [%%- span_start = '"
+"%s %s %s %s %s %s%s%s %s %s %s %s %s [%%- span_start = '"
 msgstr ""
 "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "
 "%s %s %s %s %s %s %s %s %s %s [%%- span_start = '"
@@ -513,7 +516,7 @@ msgstr ""
 #. %33$s:  Branches.GetName( patron.branchcode ) | html -
 #. %34$s: - END -
 #. %35$s: - IF hide_patron_infos_if_needed AND ( display_patron_name OR display_cardnumber ) -
-#: intranet-tmpl/prog/en/includes/patron-title.inc:55
+#: intranet-tmpl/prog/en/includes/patron-title.inc:56
 #, c-format
 msgid ""
 "%s %s %s %s %s %s (%s)%s %s %s%s, %s %s (%s) %s %s %s%s %s (%s) %s %s %s %s "
@@ -1174,7 +1177,7 @@ msgstr "%s %s %s Bez názvu, číslo košíku: %s %s "
 #. %2$s:  PROCESS items_table tab="otherholdings" items=otheritemloop 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:468
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:476
 #, c-format
 msgid "%s %s %s No other items. %s "
 msgstr "%s %s %s Žádné další jednotky. %s "
@@ -1204,16 +1207,17 @@ msgstr "%s %s %s Žádné další jednotky. %s "
 #. %23$s:  UNLESS ( item.itemnotforloan || item.notforloan_per_itemtype || item.onloan || item.itemlost || item.withdrawn || item.damaged || item.transfertwhen || hold ) 
 #. %24$s:  END 
 #. %25$s:  IF ( item.restricted ) 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:322
-#, fuzzy, c-format
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:330
+#, c-format
 msgid ""
 "%s %s %s Not for loan %s (%s) %s %s %s %s %s Waiting at %s since %s. %s Item-"
 "level hold (placed %s) for delivery at %s. %s There is an item level hold on "
 "this item (priority = %s). %s %s Hold for: %s %s %s %s Available %s %s "
 msgstr ""
-"%s %s %s Nelze vypůjčit %s (%s) %s %s %s %s Čeká na vyzvednutí v %s od %s. "
-"%s Rezervace na jednotku (zadána %s) k doručení do %s. %s %s Rezervace pro: "
-"%s %s %s %s Dostupné %s %s"
+"%s %s %s Není určeno k půjčování %s (%s) %s %s %s %s %s Čeká na vyzvednutí v "
+"%s od %s. %s Rezervace na jednotku (zadána %s) k doručení do %s. %s Na tuto "
+"konkrétní jednotku je vytvořena rezervace (priorita = %s). %s %s Rezervace "
+"pro: %s %s %s %s Dostupné %s %s "
 
 #. %1$s:  END 
 #. %2$s:  SWITCH unit.type 
@@ -1968,7 +1972,7 @@ msgstr ""
 "pravděpodobně existuje. %s Při vkládání katalogizační šablony došlo k chybě. "
 "Toto šablona již pravděpodobně existuje. %s Při odstraňování katalogizační "
 "šablony došlo k chybě. Ověřte logovací záznamy. %s Katalogizační šablona "
-"byloa úspěšně aktualizováno. %s Katalogizačn šablona byla úspěšně vložena. "
+"byla úspěšně aktualizována. %s Katalogizační šablona byla úspěšně vložena. "
 "%s Katalogizační šablona byla úspěšně odstraněna. %s Kód katalogizační "
 "šablony již existuje. %s %s %s "
 
@@ -2738,7 +2742,7 @@ msgstr ""
 
 #. %1$s:  END 
 #. %2$s:  IF ( MEMBERS ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:271
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:280
 #, c-format
 msgid "%s %s for "
 msgstr "%s %s pro "
@@ -3115,7 +3119,7 @@ msgstr "%s %sJednotek%sJednotka%s, které mají ke dni %s upomínku%s "
 #. %5$s:  CASE 'complete' 
 #. %6$s:  CASE 'cancelled' 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:614
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:622
 #, c-format
 msgid "%s %sNew %sOrdered %sPartial %sComplete %sCancelled %s "
 msgstr "%s %sNové %sObjednáno %sČástečně dodáno %sDodáno %sZrušené %s "
@@ -4616,7 +4620,7 @@ msgstr "%s Rezervace nejsou povolené "
 #. %1$s:  ELSE # - No image passed JavaScript takes care 
 #. %2$s:  END 
 #. %3$s:  IF ( CAN_user_tools_upload_local_cover_images ) 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:679
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:687
 #, c-format
 msgid ""
 "%s No images have been uploaded for this bibliographic record yet. %s %s "
@@ -4806,7 +4810,7 @@ msgstr "%s NEBO %s "
 
 #. %1$s:  UNLESS TransferWhenCancelAllWaitingHolds 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:94
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:95
 #, c-format
 msgid ""
 "%s Only items that need not be transferred will be cancelled "
@@ -5340,7 +5344,7 @@ msgstr "%s Neexistuje žádná podmínka pro toto pravidlo. %s %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:638
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:646
 #, c-format
 msgid "%s There is no order for this biblio. %s "
 msgstr "%s K tomuto záznamu nebyla nalezena žádná objednávka. %s "
@@ -5623,7 +5627,7 @@ msgid "%s already in your cart"
 msgstr "%s jsou již v košíku"
 
 #. %1$s:  item.countanalytics | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:386
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:394
 #, c-format
 msgid "%s analytics"
 msgstr "%s podřízených záznamů"
@@ -5994,7 +5998,7 @@ msgstr ""
 "nastavené na %s"
 
 #. %1$s:  total | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:199
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:208
 #, c-format
 msgid "%s lines found."
 msgstr "%s nalezených řádků."
@@ -6528,7 +6532,7 @@ msgstr "%s%s jediný štítek%s%s jediné štítky%s"
 #. %7$s:  loopro.object | html 
 #. %8$s:  END 
 #. %9$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:228
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
 #, c-format
 msgid "%s%s%s %s (%s) %sMember %s%s%s "
 msgstr "%s%s%s %s (%s) %sČlen %s%s%s "
@@ -7249,7 +7253,7 @@ msgstr ""
 #. %22$s:  END 
 #. %23$s:  IF ( latestserial.status8 ) 
 #. %24$s:  END 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:532
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:540
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:223
 #, c-format
 msgid ""
@@ -9823,7 +9827,7 @@ msgstr "&rsaquo;%s Upravit %s Rezervovat %s"
 msgid "&rsaquo;Data deleted %s %s Item types administration %s"
 msgstr "&rsaquo;Údaje odstraněny %s %s Administrace typů jednotek %s"
 
-#: intranet-tmpl/prog/en/includes/patron-title.inc:36
+#: intranet-tmpl/prog/en/includes/patron-title.inc:37
 #, c-format
 msgid "' %%] [%%- span_end = '"
 msgstr "' %%] [%%- span_end = '"
@@ -10088,7 +10092,7 @@ msgid "(Tax inc.)"
 msgstr "(Včetně daně)"
 
 #. %1$s:  subscriptionsnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:506
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:514
 #, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "(Existují %s předplatné spojené s tímto titulem)."
@@ -10567,8 +10571,8 @@ msgstr ""
 msgid ". Please re-enter the new password."
 msgstr ". Prosím, zadejte znovu nové heslo."
 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:44
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:45
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:56
 #, c-format
 msgid ". Please retain this item and check it in to process the hold. "
 msgstr ". Pro vyřízení rezervace musí být jednotka nejprve vrácena. "
@@ -10678,7 +10682,7 @@ msgid "1/2"
 msgstr "1/2"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:197
-#, fuzzy, c-format
+#, c-format
 msgid "1st"
 msgstr "První"
 
@@ -10746,7 +10750,7 @@ msgstr ": jednotka je vypůjčena."
 #. %3$s:  HTML5MediaSet.srcblock | html 
 #. %4$s:  HTML5MediaSet.typeblock | html 
 #. %5$s:  HTML5MediaParent | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:693
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:701
 #, c-format
 msgid ""
 "<%s controls preload=none> <%s src=\"%s\"%s /> [%s tag not supported by your "
@@ -11145,9 +11149,9 @@ msgid "Acquisition information"
 msgstr "Akviziční informace"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:31
-#, fuzzy, c-format
+#, c-format
 msgid "Acquisition management"
-msgstr "Správa návrhů a podání"
+msgstr "Správa akvizičního modulu"
 
 #: intranet-tmpl/prog/en/includes/admin-menu.inc:87
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:154
@@ -11218,10 +11222,9 @@ msgstr "Statistika akvizic"
 msgid "Acquisitions statistics "
 msgstr "Statistika akvizic "
 
-#: intranet-tmpl/prog/en/includes/waiting_holds.inc:16
 #: intranet-tmpl/prog/en/modules/tools/scheduler.tt:67
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:336
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:206
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:215
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:92
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:60
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:313
@@ -11257,6 +11260,7 @@ msgstr "Akce při NEnalezení shody: "
 
 #: intranet-tmpl/prog/en/includes/mana/mana-subscription-search-result.inc:22
 #: intranet-tmpl/prog/en/includes/mana/mana-report-search-result.inc:45
+#: intranet-tmpl/prog/en/includes/waiting_holds.inc:16
 #: intranet-tmpl/prog/en/modules/tags/review.tt:84
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:90
 #: intranet-tmpl/prog/en/modules/tools/quotes-upload.tt:56
@@ -11352,7 +11356,7 @@ msgstr "Akce "
 msgid "Actions for "
 msgstr "Akce pro "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:119
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:123
 #, c-format
 msgid "Actions:"
 msgstr "Akce:"
@@ -11364,9 +11368,8 @@ msgstr "Aktivovat"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
-#, fuzzy
 msgid "Activate filters"
-msgstr "Aktivovat"
+msgstr "Zapnout filtry"
 
 #: intranet-tmpl/prog/en/modules/tools/stockrotation.tt:64
 #: intranet-tmpl/prog/en/modules/members/apikeys.tt:57
@@ -12292,7 +12295,7 @@ msgstr "Opravy"
 
 #. %1$s:  total_adj + shipmentcost | $Price 
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:337
-#, fuzzy, c-format
+#, c-format
 msgid "Adjustments plus shipping: %s"
 msgstr "Opravy a poštovné: %s"
 
@@ -12564,12 +12567,12 @@ msgstr "Alingsås Public Library, Švédsko"
 #: intranet-tmpl/prog/en/includes/av-build-dropbox.inc:15
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
 #: intranet-tmpl/prog/en/includes/subscriptions-search.inc:33
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:105
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:107
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:122
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:124
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:148
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:150
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:106
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:108
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:126
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:128
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:157
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:159
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:265
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:267
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:196
@@ -13146,7 +13149,7 @@ msgstr "Došlo k chybě. Doklad nemohl být vytvořen."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:772
 msgid "An error occurred on deleting this image"
 msgstr "Při odstraňování obrázku se vyskytla chyba"
 
@@ -13400,7 +13403,7 @@ msgstr "Libovolný: "
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:26
 #, c-format
 msgid "Anyone seeing this list"
-msgstr "Tento seznam může vidět kdokoli"
+msgstr "Kdokoliv, kdo vidí tento seznam"
 
 #: intranet-tmpl/prog/en/modules/about.tt:47
 #, c-format
@@ -13738,7 +13741,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:102
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:772
 msgid "Are you sure you want to delete this cover image?"
 msgstr "Opravdu chcete odstranit tuto obálku?"
 
@@ -13978,7 +13981,7 @@ msgstr "Opravdu chcete odstranit vybrané čtenáře z této dávky?"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:184
 msgid "Are you sure you want to remove the selected patrons?"
-msgstr "Opravdu chcete odstranit vybrané čtenáře?"
+msgstr "Opravdu chcete odstranit vybrané čtenáře ze seznamu?"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tags/list.tt:87
@@ -14174,7 +14177,7 @@ msgstr "Požadovaný "
 #: intranet-tmpl/prog/en/includes/about-team.inc:193
 #, c-format
 msgid "Assistant:"
-msgstr ""
+msgstr "Asistent:"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -14184,7 +14187,7 @@ msgid "At least two records must be selected for merging."
 msgstr "Pro sloučení je třeba vybrat dva záznamy."
 
 #. %1$s:  Branches.GetName(subscription.branchcode) || subscription.branchcode | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:509
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:517
 #, c-format
 msgid "At library: %s"
 msgstr "V knihovně: %s"
@@ -14506,7 +14509,7 @@ msgid "Authority #%s (%s)"
 msgstr "Autorita č. %s (%s)"
 
 #. %1$s:  loopro.object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:247
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:256
 #, c-format
 msgid "Authority %s"
 msgstr "Autoritní %s"
@@ -14881,7 +14884,7 @@ msgstr "Sloupcový"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:7
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:38
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:211
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:217
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:31
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:57
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
@@ -15068,7 +15071,7 @@ msgid "Basic parameters"
 msgstr "Základní nastavení"
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:17
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:566
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:574
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:360
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:142
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:263
@@ -15144,7 +15147,7 @@ msgstr "Košík byl smazán"
 msgid "Basket details"
 msgstr "Podrobnosti košíku"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:565
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:573
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:144
 #: intranet-tmpl/prog/en/modules/acqui/duplicate_orders.tt:265
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:116
@@ -15526,8 +15529,8 @@ msgstr "BibTex"
 
 #. For the first occurrence,
 #. %1$s:  loopro.biblionumber | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:236
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:238
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:245
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:247
 #, c-format
 msgid "Biblio %s"
 msgstr "Bibliografický %s"
@@ -15594,7 +15597,7 @@ msgid "Bibliographic record"
 msgstr "Bibliografický záznam"
 
 #. %1$s:  object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:271
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:280
 #, c-format
 msgid "Bibliographic record %s"
 msgstr "Bibliografický záznam %s"
@@ -15679,6 +15682,8 @@ msgid ""
 "Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
 "Asunción), Argentina"
 msgstr ""
+"Biblioteca Provincial Fr. Mamerto Esquiú (Provincia Franciscana de la "
+"Asunción), Argentina"
 
 #: intranet-tmpl/prog/en/modules/about.tt:469
 #, c-format
@@ -15686,9 +15691,9 @@ msgid "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Germany"
 msgstr "Bibliotheksservice-Zentrum Baden-Württemberg (BSZ), Německo"
 
 #: intranet-tmpl/prog/en/modules/about.tt:473
-#, fuzzy, c-format
+#, c-format
 msgid "Bibliothèque Universitaire des Langues et Civilisations ("
-msgstr "Bibliothèque universitaire des langues et civilisations ("
+msgstr "Bibliothèque Universitaire des Langues et Civilisations ("
 
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:105
@@ -15819,6 +15824,7 @@ msgstr "Jméno čtenáře"
 msgid "Borrower number"
 msgstr "Číslo čtenáře"
 
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:142
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:434
 #: intranet-tmpl/prog/en/modules/members/moremember-brief.tt:60
 #, c-format
@@ -15850,7 +15856,7 @@ msgid "Braille"
 msgstr "Braillovo písmo"
 
 #: intranet-tmpl/prog/en/includes/ill-list-table.inc:21
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:30
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:43
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:33
 #, c-format
 msgid "Branch"
@@ -15884,7 +15890,7 @@ msgstr "Krátká ukázka"
 #: intranet-tmpl/prog/en/modules/about.tt:471
 #, c-format
 msgid "Brimbank City Council, Australia"
-msgstr ""
+msgstr "Brimbank City Council, Austrálie"
 
 #. ABBR
 #: intranet-tmpl/prog/en/includes/authorities-search-results.inc:19
@@ -16271,7 +16277,7 @@ msgstr "California College of the Arts, USA"
 
 #. OPTGROUP
 #: intranet-tmpl/prog/en/includes/resort_form.inc:33
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:28
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:41
 #, c-format
 msgid "Call Number"
 msgstr "Signatura"
@@ -16395,8 +16401,13 @@ msgstr "Signatura"
 msgid "Callnumber classification scheme"
 msgstr "Klasifikační schéma signatury"
 
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:25
+#, fuzzy, c-format
+msgid "Callnumber classification scheme:"
+msgstr "Klasifikační schéma signatury"
+
 #. %1$s:  subscription.callnumber | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:513
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:521
 #, c-format
 msgid "Callnumber: %s "
 msgstr "Signatura: %s "
@@ -16444,7 +16455,7 @@ msgstr "Není možné uzavřít košík s jednotkami, které mají nejisté ceny
 #. DIV
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:150
 msgid "Can not reopen baskets that are part of a basket group."
-msgstr ""
+msgstr "Košíky, které jsou součástí skupiny košíků, nelze znovu otevřít."
 
 #. %1$s:  IF ( error.cardnumber ) 
 #. %2$s:  error.cardnumber | html 
@@ -16733,12 +16744,12 @@ msgid "Cancel a confirmed request"
 msgstr "Zrušit již potvrzený požadavek"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:92
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:93
 msgid "Cancel all"
 msgstr "Zrušit vše"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:90
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:91
 msgid "Cancel and Transfer all"
 msgstr "Zrušit a přesunout vše"
 
@@ -17964,7 +17975,7 @@ msgstr "Vypůjčeno "
 #. %6$s:  INCLUDE 'patron-title.inc' patron=item.CheckedOutFor hide_patron_infos_if_needed=1 
 #. %7$s:  END 
 #. %8$s:  item.datedue | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:274
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:282
 #, c-format
 msgid "Checked out %s %s %s by %s to %s %s %s : due %s "
 msgstr "Vypůjčeno %s %s %s v %s čtenáři %s %s %s : do %s "
@@ -18426,7 +18437,7 @@ msgstr "Poznámka"
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:23
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:20
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:25
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:17
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:18
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:13
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:22
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:45
@@ -18605,7 +18616,7 @@ msgid "Claim missing serials "
 msgstr "Reklamovat chybějící čísla periodik "
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:150
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:149
 msgid "Claim order"
 msgstr "Reklamovat"
 
@@ -18872,7 +18883,7 @@ msgstr "Klikněte sem pro návrat stránku dodavatele"
 msgid "Click here to see the merged record."
 msgstr "Klikněte sem pro zobrazení sloučeného záznamu."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:665
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:673
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Klikněte na obrázek pro jeho zobrazení v prohlížeči obrázků"
@@ -19085,7 +19096,7 @@ msgstr "Klonování pravidel výpůjček a upomínek selhalo!"
 #: intranet-tmpl/prog/en/modules/tools/upload.tt:148
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:172
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:31
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:742
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:750
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:435
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:459
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:208
@@ -20127,7 +20138,7 @@ msgstr "Kopírovat oznámení"
 
 #: intranet-tmpl/prog/en/columns.def:108
 #: intranet-tmpl/prog/en/includes/waiting_holds.inc:14
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:213
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:219
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:312
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:127
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:170
@@ -20393,7 +20404,7 @@ msgstr "Courier New"
 msgid "Course #"
 msgstr "Kurz č. "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:221
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:227
 #, c-format
 msgid "Course Reserves"
 msgstr "Kurzy"
@@ -20504,7 +20515,7 @@ msgstr "Vytvořit novou šablonu"
 msgid "Create an item record when receiving this serial"
 msgstr "Vytvořit jednotku při příjmu tohoto periodika"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:391
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:399
 #, c-format
 msgid "Create analytics"
 msgstr "Přidat analytický popis"
@@ -20705,7 +20716,7 @@ msgid "Created by:"
 msgstr "Vytvořil:"
 
 #: intranet-tmpl/prog/en/columns.def:119
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:568
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:576
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:362
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:65
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:199
@@ -20935,7 +20946,7 @@ msgid "Currently available templates"
 msgstr "Aktuálně dostupné šablony"
 
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:272
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:280
 #, c-format
 msgid "Currently in local use %s "
 msgstr "Vypůjčeno do studovny %s "
@@ -21027,7 +21038,7 @@ msgstr "Denní poplatek za půjčení: "
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:187
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:28
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:322
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:330
 #, c-format
 msgid "Damaged"
 msgstr "Poškozený"
@@ -21147,7 +21158,7 @@ msgstr "Databáze: "
 #: intranet-tmpl/prog/en/modules/tags/review.tt:86
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:244
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:315
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:203
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:212
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:49
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:86
 #: intranet-tmpl/prog/en/modules/catalogue/search-history.tt:129
@@ -21179,7 +21190,7 @@ msgstr "Databáze: "
 msgid "Date"
 msgstr "Datum"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:210
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:216
 #, c-format
 msgid "Date accessioned"
 msgstr "Datum zapsání"
@@ -21207,7 +21218,7 @@ msgstr "Datum vložení"
 msgid "Date and time: "
 msgstr "Datum a čas:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:522
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:530
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, c-format
 msgid "Date arrived"
@@ -21324,7 +21335,7 @@ msgstr "Datum objednávky "
 msgid "Date placed between:"
 msgstr "Datum vytvoření mezi:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:523
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:531
 #, c-format
 msgid "Date published"
 msgstr "Datum vydání"
@@ -21476,9 +21487,8 @@ msgstr "Dní předem"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
-#, fuzzy
 msgid "Deactivate filters"
-msgstr "Hledat filtry"
+msgstr "Vypnout filtry"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/calendar.inc:2
@@ -21722,9 +21732,9 @@ msgid ""
 msgstr "Definice upozornění (tisk a posílání upomínek apod.)"
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:74
-#, fuzzy, c-format
+#, c-format
 msgid "Define patron categories."
-msgstr "Definuje kategorie čtenářů."
+msgstr "Definujte kategorie čtenářů."
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:92
 #, c-format
@@ -22123,7 +22133,7 @@ msgid "Delete group"
 msgstr "Smazat skupinu"
 
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:69
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:674
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:682
 #, c-format
 msgid "Delete image"
 msgstr "Odstranit obrázek"
@@ -22886,22 +22896,22 @@ msgid "Display children too."
 msgstr "Zobrazit také dětské."
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:247
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:256
 msgid "Display detail for this authority"
 msgstr "Zobrazit detail této autority"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:236
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:238
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:245
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:247
 msgid "Display detail for this biblio"
 msgstr "Zobrazit detaily pro toto biblio"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:257
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:266
 msgid "Display detail for this item"
 msgstr "Zobrazit detail této jednotky"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:163
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:172
 #, c-format
 msgid "Display from: "
 msgstr "Zobrazit od: "
@@ -22929,7 +22939,7 @@ msgid "Display location:"
 msgstr "Zobrazit umístění:"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:228
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:237
 msgid "Display member details."
 msgstr "Zobrazit detail čtenáře."
 
@@ -22969,7 +22979,7 @@ msgstr "Zobrazit metadata poskytovatele "
 msgid "Display them"
 msgstr "Zobrazit"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:167
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:176
 #, c-format
 msgid "Display to: "
 msgstr "Zobrazit do: "
@@ -23224,7 +23234,7 @@ msgid "Download list "
 msgstr "Stáhnout seznam "
 
 #. INPUT type=submit name=save
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:722
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:730
 msgid "Download record"
 msgstr "Stáhnout záznam"
 
@@ -23259,15 +23269,15 @@ msgid "Draw guide boxes: "
 msgstr "Tisknout pomocné rámečky (pro ořez): "
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:92
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:718
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:726
 #, c-format
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
 #: intranet-tmpl/prog/en/modules/about.tt:489
-#, fuzzy, c-format
+#, c-format
 msgid "Duchesne County Library, USA"
-msgstr "Washoe County Library System, USA"
+msgstr "Duchesne County Library, USA"
 
 #. %1$s:  itemloo.date_due | $KohaDates  as_due_date => 1 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:400
@@ -23544,7 +23554,7 @@ msgstr "První rezervace"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:166
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:60
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:80
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:415
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:423
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:92
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:113
 #: intranet-tmpl/prog/en/modules/serials/subscription-frequencies.tt:148
@@ -24020,7 +24030,7 @@ msgid "Edition: "
 msgstr "Vydání: "
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:166
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:646
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:654
 #, c-format
 msgid "Editions"
 msgstr "Vydání"
@@ -24735,7 +24745,7 @@ msgstr "Předpokládaná cena za kus "
 msgid "Estimated delivery date"
 msgstr "Předpokládané datum doručení"
 
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:170
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:168
 #, c-format
 msgid "Estimated delivery date from: "
 msgstr "Předpokládané datum doručení od: "
@@ -24965,7 +24975,7 @@ msgstr "Vysvětlení: "
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:171
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:77
 #: intranet-tmpl/prog/en/includes/columns_settings.inc:3
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:191
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:105
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:99
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:81
@@ -25078,13 +25088,12 @@ msgstr "Exportovat výchozí šablonu"
 #. A
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:144
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:214
-#, fuzzy
 msgid ""
 "Export framework structure (fields, subfields) to a spreadsheet file (.csv "
 "or .ods)"
 msgstr ""
-"Exportovat strukturu šablony (pole, podpole) do tabulkového souboru (.csv, ."
-"xml, .ods)"
+"Exportovat strukturu šablony (pole, podpole) do tabulkového souboru (.csv "
+"nebo .ods)"
 
 #. INPUT type=button
 #: intranet-tmpl/prog/en/modules/patroncards/manage.tt:114
@@ -25333,9 +25342,9 @@ msgid "Famfamfam iconset"
 msgstr "Sada ikon Famfamfam"
 
 #: intranet-tmpl/prog/en/modules/about.tt:492
-#, fuzzy, c-format
+#, c-format
 msgid "Fargo Public Library, USA"
-msgstr "Farmington Public Library, USA"
+msgstr "Fargo Public Library, USA"
 
 #: intranet-tmpl/prog/en/modules/about.tt:493
 #, c-format
@@ -25433,12 +25442,12 @@ msgstr "Žena "
 #: intranet-tmpl/prog/en/modules/about.tt:491
 #, c-format
 msgid "Fenway Library Organization, USA"
-msgstr ""
+msgstr "Fenway Library Organization, USA"
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:114
 #, c-format
 msgid "Fetch all data for chart"
-msgstr ""
+msgstr "Získat všechna data pro graf"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:35
 #, c-format
@@ -25741,7 +25750,7 @@ msgstr "Filmografie"
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:413
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:441
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:71
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:188
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:186
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:185
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:204
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:188
@@ -25792,7 +25801,7 @@ msgid "Filter partner libraries:"
 msgstr "Filtrovat spolupracující knihovny:"
 
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:24
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:164
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:162
 #, c-format
 msgid "Filter results:"
 msgstr "Filtrovat výsledky:"
@@ -26853,7 +26862,7 @@ msgstr "Vyhledávání jednotek"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:211
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:147
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:196
-#, fuzzy, c-format
+#, c-format
 msgid "Go to page : "
 msgstr "Jít na stranu : "
 
@@ -27236,7 +27245,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:501
 #, c-format
 msgid "Higher Education Libraries of Massachusetts, USA"
-msgstr ""
+msgstr "Higher Education Libraries of Massachusetts, USA"
 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:71
 #, c-format
@@ -27483,7 +27492,7 @@ msgstr "Aktuální knihovna:"
 msgid "Holdings (%s)"
 msgstr "Jednotky (%s)"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:452
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:460
 #, c-format
 msgid "Holdings:"
 msgstr "Jednotky:"
@@ -27528,14 +27537,14 @@ msgstr "Povolené rezervace (celkem)"
 
 #: intranet-tmpl/prog/en/includes/circ-nav.inc:32
 #: intranet-tmpl/prog/en/modules/circ/circulation-home.tt:67
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:18
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:19
 #, c-format
 msgid "Holds awaiting pickup"
 msgstr "Rezervace čekající na vyzvednutí"
 
 #. %1$s:  show_date | $KohaDates 
 #. %2$s:  IF ( all_branches_link ) 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:33
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:34
 #, c-format
 msgid "Holds awaiting pickup for your library on: %s %s "
 msgstr "Rezervace čekající na vyzvednutí pro vaší knihovnu na: %s %s "
@@ -27553,7 +27562,7 @@ msgid "Holds history for %s"
 msgstr "Historie rezervací pro %s"
 
 #. %1$s:  ReservesMaxPickUpDelay | html 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:82
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:83
 #, c-format
 msgid "Holds listed here have been awaiting pickup for more than %s days."
 msgstr "Rezervace zde uvedené čekají na vyzvednutí více než %s dní."
@@ -27611,7 +27620,7 @@ msgstr "Rezervace k vyzvednutí objednané mezi %s a %s"
 
 #. %1$s:  Koha.Preference('ReservesMaxPickUpDelay') | html 
 #. %2$s:  overcount | html 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:69
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:70
 #, c-format
 msgid "Holds waiting over %s days: %s "
 msgstr "Rezervace čekající více než %s dní: %s "
@@ -27622,7 +27631,7 @@ msgid "Holds waiting:"
 msgstr "Čekající rezervace:"
 
 #. %1$s:  reservecount | html 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:67
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:68
 #, c-format
 msgid "Holds waiting: %s"
 msgstr "Čekající rezervace:: %s"
@@ -27841,7 +27850,7 @@ msgstr "Každoročně opakovaná uzavírka"
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:23
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:20
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:25
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:16
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:17
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:24
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:13
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:21
@@ -28017,7 +28026,7 @@ msgstr "Vodorovně: "
 msgid "Horowhenua Library Trust"
 msgstr "Horowhenua Library Trust"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:219
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:225
 #, c-format
 msgid "Host records"
 msgstr "Hostitelské záznamy"
@@ -28892,13 +28901,13 @@ msgstr "Importovat"
 
 #. %1$s:  loo.frameworkcode | html 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:249
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import %s framework structure (fields and subfields) from a spreadsheet file "
 "(.csv or .ods)"
 msgstr ""
-"Importovat strukturu (pole a podpole) šablony %s z tabulkového souboru (."
-"csv, .xml, .ods)"
+"Importovat strukturu (pole a podpole) šablony %s z tabulkového souboru (.csv "
+"nebo .ods)"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:319
 #, c-format
@@ -28926,23 +28935,22 @@ msgid "Import batch deleted successfully"
 msgstr "Importní dávka byla úspěšně odstraněna"
 
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import default framework structure (fields and subfields) from a spreadsheet "
 "file (.csv or .ods)"
 msgstr ""
 "Importovat strukturu výchozí šablony (pole a podpole) z tabulkového souboru "
-"(.csv, .xml, .ods)"
+"(.csv nebo .ods)"
 
 #. A
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:146
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:216
-#, fuzzy
 msgid ""
 "Import framework structure (fields, subfields) from a spreadsheet file (.csv "
 "or .ods)"
 msgstr ""
-"Import struktury šablony (pole, podpole) z tabulkového souboru (.csv, .xml, ."
+"Import struktury šablony (pole, podpole) z tabulkového souboru (.csv nebo ."
 "ods)"
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:130
@@ -29069,7 +29077,7 @@ msgstr "Na cestě"
 #. %1$s:  Branches.GetName( item.transfertfrom ) | html 
 #. %2$s:  Branches.GetName( item.transfertto ) | html 
 #. %3$s:  item.transfertwhen | $KohaDates 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:287
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:295
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "Na cestě z %s do %s od %s"
@@ -29176,12 +29184,12 @@ msgstr "indikátor 2"
 msgid "Individual libraries:"
 msgstr "Prohledávat knihovnu:"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:208
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:217
 #, c-format
 msgid "Info"
 msgstr "Info"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:141
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:150
 #, c-format
 msgid "Info:"
 msgstr "Info:"
@@ -29301,12 +29309,12 @@ msgstr "Nedostatečné oprávnění."
 msgid "Integer"
 msgstr "Celé číslo"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:209
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:218
 #, c-format
 msgid "Interface"
 msgstr "Rozhraní"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:145
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:154
 #, c-format
 msgid "Interface:"
 msgstr "Rozhraní:"
@@ -29333,7 +29341,7 @@ msgid "Internal Server Error, please reload the page"
 msgstr "Vnitřní chyba serveru, prosím znovunačtěte stránku"
 
 #: intranet-tmpl/prog/en/columns.def:93
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:572
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:580
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:365
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:70
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:51
@@ -29375,9 +29383,9 @@ msgid "Into an application"
 msgstr "Do aplikace"
 
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:113
-#, fuzzy, c-format
+#, c-format
 msgid "Into an application "
-msgstr "Do aplikace: "
+msgstr "Do aplikace "
 
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:156
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:262
@@ -29487,7 +29495,7 @@ msgstr "Revize"
 #: intranet-tmpl/prog/en/columns.def:101
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:9
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:223
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:214
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:220
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:128
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:171
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:270
@@ -29495,7 +29503,7 @@ msgstr "Revize"
 msgid "Inventory number"
 msgstr "Přírůstkové číslo"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:564
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:572
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:359
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:63
@@ -29504,7 +29512,7 @@ msgid "Invoice"
 msgstr "Doklad "
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:588
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:596
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:410
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:79
 msgid "Invoice detail page"
@@ -29653,7 +29661,7 @@ msgstr "Vydání"
 msgid "Issue "
 msgstr "Vydání "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:521
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:529
 #, c-format
 msgid "Issue #"
 msgstr "Číslo #"
@@ -29755,8 +29763,8 @@ msgstr "Jednotka "
 
 #. For the first occurrence,
 #. %1$s:  loopro.object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:235
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:257
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:244
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:266
 #, c-format
 msgid "Item %s"
 msgstr "Jednotka %s"
@@ -31991,7 +31999,7 @@ msgid "Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on %s"
 msgstr ""
 "Koha &rsaquo; Výpůjčky &rsaquo; Rezervace &rsaquo; Podat rezervaci na %s"
 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:8
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:9
 #, c-format
 msgid "Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup"
 msgstr "Koha &rsaquo; Výpůjčky &rsaquo; Rezervece čekající na vyzvednutí"
@@ -33399,7 +33407,7 @@ msgstr "Verze systému Koha: "
 #: intranet-tmpl/prog/en/modules/about.tt:507
 #, c-format
 msgid "Koha-Suomi Oy, Finland"
-msgstr ""
+msgstr "Koha-Suomi Oy, Finsko"
 
 #: intranet-tmpl/prog/en/modules/about.tt:506
 #, c-format
@@ -33466,9 +33474,9 @@ msgid "LGPL v2.1"
 msgstr "LGPL v2.1"
 
 #: intranet-tmpl/prog/en/modules/about.tt:708
-#, fuzzy, c-format
+#, c-format
 msgid "LGPL v3.0"
-msgstr "LGPL v2.1"
+msgstr "LGPL v3.0"
 
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:93
 #, c-format
@@ -33690,7 +33698,7 @@ msgid "Last run"
 msgstr "Naposledy spuštěno"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:189
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:209
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:215
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:41
 #, c-format
 msgid "Last seen"
@@ -33889,7 +33897,7 @@ msgstr "Knihovna"
 msgid "LibLime, USA"
 msgstr "LibLime, USA"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:204
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:213
 #, c-format
 msgid "Librarian"
 msgstr "Knihovník"
@@ -34443,7 +34451,7 @@ msgstr "Seznamy, které obsahují tento titul: "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:288
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:485
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:127
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:772
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:218
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:188
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:457
@@ -34460,7 +34468,7 @@ msgstr "Načítá se..."
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:27
 #: intranet-tmpl/prog/en/modules/authorities/blinddetail-biblio-search.tt:13
 #: intranet-tmpl/prog/en/modules/patron_lists/lists.tt:103
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:739
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:747
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:179
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:114
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:205
@@ -34646,7 +34654,7 @@ msgid "Location: "
 msgstr "Umístění: "
 
 #. %1$s:  AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:512
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:520
 #, c-format
 msgid "Location: %s"
 msgstr "Umístění: %s"
@@ -34730,7 +34738,7 @@ msgstr "Los Gatos Public Library, USA"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:29
 #, c-format
 msgid "Lost"
-msgstr "Ztráceno"
+msgstr "Ztraceno"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:131
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:132
@@ -34739,9 +34747,9 @@ msgid "Lost card"
 msgstr "Ztracený průkaz"
 
 #: intranet-tmpl/prog/en/columns.def:61
-#, fuzzy, c-format
+#, c-format
 msgid "Lost card flag"
-msgstr "Příznak pro ztracenou průkazku."
+msgstr "Příznak pro ztracenou průkazku"
 
 #: intranet-tmpl/prog/en/modules/members/maninvoice.tt:47
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:112
@@ -34857,9 +34865,9 @@ msgid "Lucida Console"
 msgstr "Lucida Console"
 
 #: intranet-tmpl/prog/en/modules/about.tt:512
-#, fuzzy, c-format
+#, c-format
 msgid "Lund University Library, Sweden"
-msgstr "Gothenburg University Library, Sweden"
+msgstr "Lund University Library, Švédsko"
 
 #: intranet-tmpl/prog/en/modules/about.tt:750
 #, c-format
@@ -34895,7 +34903,7 @@ msgstr "MARC"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:95
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:50
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:721
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:729
 #, c-format
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
@@ -34907,7 +34915,7 @@ msgstr "MARC (Unicode/UTF-8, Standard)"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:94
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:49
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:720
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:728
 #, c-format
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8)"
@@ -35007,7 +35015,7 @@ msgstr "MARC kód organizace"
 
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:416
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:736
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:744
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:159
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:96
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_auth_search.tt:111
@@ -35094,7 +35102,7 @@ msgstr "MARC21/USMARC"
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:93
 #: intranet-tmpl/prog/en/includes/authorities-toolbar.inc:48
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:134
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:719
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:727
 #, c-format
 msgid "MARCXML"
 msgstr "MARCXML"
@@ -35132,7 +35140,7 @@ msgid "MIT license"
 msgstr "MIT licence"
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:97
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:717
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:725
 #, c-format
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
@@ -36083,7 +36091,7 @@ msgid "Materials"
 msgstr "Materiály"
 
 #: intranet-tmpl/prog/en/columns.def:104
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:215
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:221
 #, c-format
 msgid "Materials specified"
 msgstr "Přílohy"
@@ -36372,7 +36380,7 @@ msgid "Missing issues:"
 msgstr "Chybějící čísla:"
 
 #. %1$s:  subscription.missinglist | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:515
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:523
 #, c-format
 msgid "Missing issues: %s "
 msgstr "Chybějící čísla: %s "
@@ -36611,7 +36619,7 @@ msgstr "Upravit rozdělovací pravidlo"
 msgid "Modify the statistics you share with the Koha community"
 msgstr "Upravit statistiky, které sdílíte s komunitou Koha."
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:205
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:214
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:99
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:431
 #, c-format
@@ -36630,7 +36638,7 @@ msgstr "Modul je aktuální"
 msgid "Module upgrade needed"
 msgstr "Modul vyžaduje upgrade"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:102
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:103
 #, c-format
 msgid "Modules:"
 msgstr "Moduly:"
@@ -37104,7 +37112,7 @@ msgstr "Jméno:"
 msgid "Name: "
 msgstr "Název: "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:181
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:190
 #, c-format
 msgid "Named:"
 msgstr "Pod názvem:"
@@ -37133,7 +37141,7 @@ msgstr "Užší termín"
 #: intranet-tmpl/prog/en/modules/about.tt:515
 #, c-format
 msgid "National Library of Finland, Finland"
-msgstr ""
+msgstr "National Library of Finland, Finsko"
 
 #: intranet-tmpl/prog/en/modules/about.tt:416
 #, c-format
@@ -37692,9 +37700,9 @@ msgid "New vendor"
 msgstr "Nový dodavatel"
 
 #: intranet-tmpl/prog/en/modules/about.tt:516
-#, fuzzy, c-format
+#, c-format
 msgid "Newcastle City Council, United Kingdom"
-msgstr "Cheshire Libraries, Spojené království"
+msgstr "Newcastle City Council, Spojené království"
 
 #: intranet-tmpl/prog/en/includes/tools-menu.inc:116
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:17
@@ -38147,8 +38155,8 @@ msgstr "Rezervace nejsou povoleny"
 msgid "No holds allowed:"
 msgstr "Rezervace nejsou povoleny:"
 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:78
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:101
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:79
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:102
 #, c-format
 msgid "No holds found."
 msgstr "Rezervace nenalezeny."
@@ -38185,7 +38193,7 @@ msgid "No images are currently available. "
 msgstr "Žádné obrázky nejsou momentálně dostupné. "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:772
 msgid "No images have been uploaded for this bibliographic record yet."
 msgstr "U toho záznamu zatím není žádný obrázek obálky. Můžete nějaký "
 
@@ -38299,7 +38307,7 @@ msgid "No limit"
 msgstr "Bez omezení"
 
 #. %1$s:  IF ( CATALOGUING ) 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:268
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:277
 #, c-format
 msgid "No log found %s for "
 msgstr "Nebyl nalezen žádný záznam %s pro "
@@ -38450,7 +38458,7 @@ msgstr "Žádné nevyřízené prezenční výpůjčky."
 msgid "No phone stored."
 msgstr "Telefon není k dispozici."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:455
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:463
 #: intranet-tmpl/prog/en/modules/catalogue/stockrotation.tt:142
 #, c-format
 msgid "No physical items for this record"
@@ -38793,7 +38801,7 @@ msgstr "Neveřejná poznámka"
 msgid "Non-public note:"
 msgstr "Neveřejná poznámka:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:217
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:223
 #, c-format
 msgid "Non-public notes"
 msgstr "Neveřejné poznámky"
@@ -39063,7 +39071,7 @@ msgstr "Nelze prodloužit"
 msgid "Not seen"
 msgstr "Nepřečteno"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:525
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:533
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:53
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:38
 #: intranet-tmpl/prog/en/modules/members/accountline-details.tt:48
@@ -39398,8 +39406,8 @@ msgstr "Listopad"
 msgid "NoveList Select"
 msgstr "NoveList Select"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:429
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:461
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:437
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:469
 #, c-format
 msgid "Novelist Select: "
 msgstr "NoveList Select: "
@@ -39753,8 +39761,8 @@ msgstr "VYPNUTO"
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:75
 #: intranet-tmpl/prog/en/modules/serials/acqui-search.tt:14
 #: intranet-tmpl/prog/en/modules/acqui/cancelorder.tt:61
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:48
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:59
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:49
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:60
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:198
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:226
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:426
@@ -39901,12 +39909,12 @@ msgstr "NEBO:"
 msgid "OS version ('uname -a'): "
 msgstr "Verze operačního systému ('uname -a'): "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:207
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:216
 #, c-format
 msgid "Object"
 msgstr "Objekt"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:137
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:145
 #, c-format
 msgid "Object: "
 msgstr "Objekt: "
@@ -40135,7 +40143,7 @@ msgid "Online Public Access Catalog"
 msgstr "Online katalog"
 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:63
-#, fuzzy, c-format
+#, c-format
 msgid "Only 1 MARC tag mapped to items"
 msgstr "Pouze jedno pole MARC může být mapováno na jednotky"
 
@@ -40388,7 +40396,7 @@ msgid "Order date"
 msgstr "Datum objednávky"
 
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:206
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:169
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:167
 #, c-format
 msgid "Order date:"
 msgstr "Datum objednávky:"
@@ -40428,7 +40436,7 @@ msgstr "Řádek objednávky:"
 msgid "Order note"
 msgstr "Poznámka k objednávce"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:567
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:575
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:361
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:64
 #, c-format
@@ -40671,7 +40679,7 @@ msgstr "Další telefon: "
 msgid "Others..."
 msgstr "Další..."
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:173
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:182
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:148
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:152
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:254
@@ -42249,7 +42257,7 @@ msgid "Pickup library:"
 msgstr "Knihovna, v níž bude text připraven k vyzvednutí:"
 
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:195
-#, fuzzy, c-format
+#, c-format
 msgid "Pickup location"
 msgstr "Vyzvednout v"
 
@@ -42431,7 +42439,7 @@ msgstr "Plano Independent School, USA"
 #: intranet-tmpl/prog/en/modules/about.tt:525
 #, c-format
 msgid "Plant and Food Research Limited, New Zealand"
-msgstr ""
+msgstr "Plant and Food Research Limited, Nový Zéland"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:174
 #, c-format
@@ -42934,9 +42942,8 @@ msgstr "Prosím vyberte %s."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:288
-#, fuzzy
 msgid "Please select a CSV (.csv) or ODS (.ods) spreadsheet file."
-msgstr "Vyberte soubor ve formátu CSV (.csv), ODS (.ods) nebo XML (.xml)."
+msgstr "Vyberte soubor ve formátu CSV (.csv) nebo ODS (.ods)."
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:288
@@ -42987,7 +42994,7 @@ msgstr "Vyberte prosím alespoň jednu položku."
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:212
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:202
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:200
 msgid "Please select at least one item to export."
 msgstr "Vyberte, prosím, alespoň jednu položku pro export."
 
@@ -43508,7 +43515,7 @@ msgstr "Vytisknout číslo průkazu jako čárový kód: "
 msgid "Print card number as text under barcode: "
 msgstr "Vytisknout číslo průkazu jako text pod čárovým kódem: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:378
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:386
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:94
 #, c-format
 msgid "Print label"
@@ -43905,7 +43912,7 @@ msgstr "Veřejná poznámka:"
 msgid "Public note: "
 msgstr "Veřejná poznámka: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:216
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:222
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:40
 #, c-format
 msgid "Public notes"
@@ -44162,7 +44169,7 @@ msgstr "Manager týmu kontroly kvality (QA):"
 msgid "Quality assurance team:"
 msgstr "Tým zajištění kvality (QA):"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:571
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:579
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:368
 #: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:121
@@ -44399,7 +44406,7 @@ msgstr "Přijmout"
 msgid "Receive a new shipment"
 msgstr "Přijmout novou zásilku"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:569
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:577
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:363
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:66
 #, c-format
@@ -44956,7 +44963,7 @@ msgstr "Odstranit vybrané položky"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:165
 #, c-format
 msgid "Remove selected patrons"
-msgstr "Odstranit vybrané čtenáře"
+msgstr "Odstranit vybrané čtenáře ze seznamu"
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:115
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:165
@@ -46102,12 +46109,11 @@ msgstr "Zpět ke košíku"
 msgid "Return to the basket without making a new order."
 msgstr "Vrátit se do košíku bez vytvoření nové objednávky."
 
-# Návrat k záznamu?
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:204
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:243
-#, fuzzy, c-format
+#, c-format
 msgid "Return to the cataloging module"
-msgstr "Zpět k záznamu"
+msgstr "Zpět do modulu katalogizace"
 
 # Návrat k záznamu?
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:206
@@ -46688,7 +46694,7 @@ msgstr "Uložit popis"
 msgid "Save quotes"
 msgstr "Uložit citáty"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:715
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:723
 #, c-format
 msgid "Save record"
 msgstr "Uložit záznam"
@@ -47501,9 +47507,9 @@ msgid "Seen"
 msgstr "Přečtené"
 
 #: intranet-tmpl/prog/en/modules/about.tt:533
-#, fuzzy, c-format
+#, c-format
 msgid "Sefton Council, United Kingdom"
-msgstr "software.coop, Spojené Království"
+msgstr "Sefton Council, Spojené Království"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/tools/overduerules.tt:34
@@ -47774,7 +47780,7 @@ msgstr ""
 msgid "Select day: "
 msgstr "Vyberte den: "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:716
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:724
 #, c-format
 msgid "Select download format: "
 msgstr "Vyberte formát pro stažení: "
@@ -48131,7 +48137,8 @@ msgstr "Informace o fondu periodik pro "
 msgid "Serial edition "
 msgstr "Vydání periodika "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:207
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:209
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:211
 #, c-format
 msgid "Serial enumeration / chronology"
 msgstr "Číslo periodika / chronologie"
@@ -48579,7 +48586,7 @@ msgid "Shibboleth login failed"
 msgstr "Přihlašení Shibboleth selhalo"
 
 #: intranet-tmpl/prog/en/modules/admin/adveditorshortcuts.tt:30
-#, fuzzy, c-format
+#, c-format
 msgid "Shift is \"Shift\""
 msgstr "Shift je \"Shift\""
 
@@ -48773,7 +48780,7 @@ msgstr "Zobrazit všechny položky"
 
 #. For the first occurrence,
 #. %1$s:  hiddencount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:439
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:447
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:448
 #, c-format
 msgid "Show all items (%s hidden)"
@@ -49268,9 +49275,9 @@ msgid "Source records"
 msgstr "Zdrojové záznamy"
 
 #: intranet-tmpl/prog/en/modules/about.tt:536
-#, fuzzy, c-format
+#, c-format
 msgid "South Taranaki District Council, New Zealand"
-msgstr "Hauraki District Libraries, New Zealand"
+msgstr "South Taranaki District Council, Nový Zéland"
 
 #: intranet-tmpl/prog/en/modules/about.tt:535
 #, c-format
@@ -49350,7 +49357,7 @@ msgstr "Vyčerpáno"
 msgid "Spent amount:"
 msgstr "Utracená částka:"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:218
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:224
 #, c-format
 msgid "Spine label"
 msgstr "Hřbetní štítek"
@@ -49409,9 +49416,9 @@ msgid "Staff - Internal note"
 msgstr "Interní poznámka"
 
 #: intranet-tmpl/prog/en/includes/permissions.inc:10
-#, fuzzy, c-format
+#, c-format
 msgid "Staff access, allows viewing of catalogue in staff client"
-msgstr "Přístup do intranetu, povoluje přístup do katalogu v intranetu."
+msgstr "Přístup do intranetu, povoluje přístup do katalogu v intranetu"
 
 #. A
 #: intranet-tmpl/prog/en/includes/prefs-menu.inc:16
@@ -49736,9 +49743,9 @@ msgstr "Průvodci statistikou"
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:332
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:402
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:26
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:208
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:524
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:570
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:214
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:532
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:578
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:119
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:93
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:279
@@ -50173,7 +50180,7 @@ msgstr "Předmětová hesla:"
 #: intranet-tmpl/prog/en/modules/course_reserves/batch_add_items.tt:95
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:87
 #: intranet-tmpl/prog/en/modules/rotating_collections/editCollections.tt:128
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:193
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:202
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:100
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:161
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:216
@@ -50250,7 +50257,7 @@ msgstr "Odeslat návrh"
 msgid "Submitting comment "
 msgstr "Odesílání komentáře "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:573
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:581
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:149
 #: intranet-tmpl/prog/en/modules/admin/usage_statistics.tt:151
 #, c-format
@@ -50264,7 +50271,7 @@ msgid "Subscription #%s"
 msgstr "Předplatné #%s"
 
 #. %1$s:  loopro.object | html 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:244
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:253
 #, c-format
 msgid "Subscription %s "
 msgstr "Předplatné %s "
@@ -50284,7 +50291,7 @@ msgstr "Dávková úprava předplatného"
 msgid "Subscription begin"
 msgstr "Počátek odběru"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:574
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:582
 #, c-format
 msgid "Subscription callnumber"
 msgstr "Signatura předplatného"
@@ -50295,7 +50302,7 @@ msgstr "Signatura předplatného"
 msgid "Subscription closed %s "
 msgstr "Předplatné uzavřeno %s "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:551
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:559
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:52
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:336
 #, c-format
@@ -50458,9 +50465,8 @@ msgstr "Nahrazení"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:37
-#, fuzzy
 msgid "Subtitle"
-msgstr "Mezisoučet "
+msgstr "Podtitul"
 
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:38
 #, c-format
@@ -50532,9 +50538,9 @@ msgid "Suggested date from:"
 msgstr "Datum vložení od:"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:471
-#, fuzzy, c-format
+#, c-format
 msgid "Suggested on"
-msgstr "Navrženo od"
+msgstr "Navrhnuto dne"
 
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:233
 #, c-format
@@ -51411,7 +51417,7 @@ msgid "The "
 msgstr "  "
 
 #. %1$s:  subscription.staffdisplaycount | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:518
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:526
 #, c-format
 msgid "The %s latest issues related to this subscription:"
 msgstr "%s posledních čísel z tohoto odběru:"
@@ -51421,12 +51427,12 @@ msgstr "%s posledních čísel z tohoto odběru:"
 #. %3$s:  unit.itemtype | html 
 #. %4$s:  unit.lengthunit | html 
 #: intranet-tmpl/prog/en/modules/about.tt:392
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The %s, %s, %s issuingrule will fallback to 'days' for 'lengthunit' as it is "
 "incorrectly defined as %s. "
 msgstr ""
-"Časová jednotka pro pravidlo výpůjček: %s, %s, %s bude nastevena na 'dny', "
+"Časová jednotka pro pravidlo výpůjček: %s, %s, %s bude nastavena na 'dny', "
 "protože je nastavena nevhodně na %s."
 
 #: intranet-tmpl/prog/en/modules/about.tt:347
@@ -52102,7 +52108,7 @@ msgid "The notice has been correctly enqueued."
 msgstr "Upozornění bylo zařazeno do fronty pro odeslání."
 
 #. %1$s:  ERROR_LOO.bad_delay | html 
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:166
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:164
 #, c-format
 msgid "The number of days (%s) must be a number between 0 and 999."
 msgstr "Počet dní (%s) musí být číslo mezi 0 a 999."
@@ -52540,7 +52546,7 @@ msgstr "Hodnota \"%s\" není v mapování podporována"
 #: intranet-tmpl/prog/en/modules/about.tt:541
 #, c-format
 msgid "Theke Solutions, Argentina"
-msgstr ""
+msgstr "Theke Solutions, Argentina"
 
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:174
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:176
@@ -52648,7 +52654,7 @@ msgstr "V tomto souboru nejsou zatím žádné jednotky."
 msgid "There are no itemtypes defined"
 msgstr "Nejsou definovány žádné typy jednotek (itemtypes)"
 
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:154
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:152
 #, c-format
 msgid "There are no late orders."
 msgstr "Nenalezeny žádné opožděné objednávky."
@@ -52693,10 +52699,10 @@ msgstr "U tohoto dodavatele nemáte žádné otevřené košíky."
 #. %1$s:  IF ( location ) 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:65
-#, fuzzy, c-format
+#, c-format
 msgid "There are no overdues for today%s at the selected location%s."
 msgstr ""
-"K dnešnímu dni nejsou žádné zpožděné výpujčky %s ve vybrané knihovně %s."
+"K dnešnímu dni nejsou žádné zpožděné výpůjčky %s ve vybrané knihovně %s."
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:89
 #, c-format
@@ -52802,7 +52808,7 @@ msgstr "Nejsou zde žádné tituly označené termínem "
 #, c-format
 msgid ""
 "There is an error with this bibliographic record, the view may be degraded. "
-msgstr ""
+msgstr "Bibliografický záznam obsahuje chyby, zobrazení nemusí být úplné."
 
 #. %1$s:  itemtags | html 
 #: intranet-tmpl/prog/en/modules/admin/checkmarc.tt:58
@@ -53058,6 +53064,11 @@ msgid "This fee is charged once per checkout/renewal per item"
 msgstr ""
 "Tento poplatek je účtován za každou položku jedenkráte za zapůjčení/obnovení"
 
+#. INPUT type=text name=object
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:143
+msgid "This field cannot be modified from the circulation module."
+msgstr ""
+
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:253
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:355
@@ -53118,7 +53129,7 @@ msgstr ""
 "Toto číslo dokladu již bylo použito. Chcete dodávku přiřadit k již "
 "existujícímu dokladu?"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:505
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:513
 #, c-format
 msgid "This is a serial subscription"
 msgstr "Toto je odběr (předplatné) periodika"
@@ -53252,12 +53263,12 @@ msgstr ""
 "posunuta, ale nikoli zrušena."
 
 #. %1$s:  Branches.GetName( branchname ) | html 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:43
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:44
 #, c-format
 msgid "This item is on hold for pick-up at %s"
 msgstr "Tato jednotka je rezervována a bude vyzvednuta v %s"
 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:54
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
 #, c-format
 msgid "This item is on hold for pick-up at your library"
 msgstr "Tato jednotka je rezervována a bude vyzvednuta ve vaší knihovně"
@@ -53509,7 +53520,7 @@ msgstr "Toto podpole bude odstraněno"
 msgid "This subscription depends on another supplier"
 msgstr "Tento odběr závisí na dalším dodavateli."
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:511
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:519
 #, c-format
 msgid "This subscription is closed."
 msgstr "Tento odběr (předplatné) je ukončen."
@@ -53752,7 +53763,7 @@ msgstr "TinyMCE WYSIWYG editor v3.5.8 "
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:305
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:306
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:118
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:29
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:69
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:159
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:78
@@ -53941,7 +53952,7 @@ msgstr "K "
 msgid "To Date : "
 msgstr "K datu : "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:179
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:188
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:154
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:159
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:260
@@ -54072,7 +54083,7 @@ msgstr ""
 "Pro oznámení neplatného odkazu, nebo jakéhokoli jiného problému, prosíme "
 "kontaktujte správce systému Koha. "
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:176
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:185
 #, c-format
 msgid "To screen in the browser:"
 msgstr "Na obrazovku v prohlížeči:"
@@ -54119,7 +54130,7 @@ msgid "To:"
 msgstr "Do:"
 
 #: intranet-tmpl/prog/en/includes/filter-orders.inc:94
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:174
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:172
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:77
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:43
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:96
@@ -54878,7 +54889,7 @@ msgid "UNIMARC"
 msgstr "UNIMARC"
 
 #: intranet-tmpl/prog/en/columns.def:143
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:212
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:218
 #, c-format
 msgid "URL"
 msgstr "URL"
@@ -55000,7 +55011,7 @@ msgstr "Zrušit schválení"
 msgid "Unauthorized user "
 msgstr "Neověřený uživatel "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:298
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:306
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Nedostupné (ztracené nebo nezvěstné)"
@@ -55448,7 +55459,7 @@ msgstr "Aktualizuje se struktura databáze"
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:684
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:692
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:310
 #: intranet-tmpl/prog/en/modules/plugins/plugins-upload.tt:45
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:184
@@ -55485,13 +55496,13 @@ msgstr "Nahrát další obrázky pro použití na průkazkách"
 
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:51
 #: intranet-tmpl/prog/en/modules/catalogue/imageviewer.tt:81
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:684
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:692
 #, c-format
 msgid "Upload an image file: "
 msgstr "Nahrát obrazový soubor: "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:764
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:772
 msgid "Upload an image file: %sUpload%s"
 msgstr "Nahrát soubor obrázku: %sUpload%s"
 
@@ -55909,7 +55920,7 @@ msgstr "Vhodné pro tiskárny s oboustranným tiskem"
 
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:175
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:35
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:220
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:226
 #, c-format
 msgid "Used in"
 msgstr "Počet propojených záznamů"
@@ -56122,7 +56133,7 @@ msgid "Variable: "
 msgstr "Proměnná: "
 
 #: intranet-tmpl/prog/en/includes/acquisitions-toolbar.inc:23
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:563
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:571
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:88
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:23
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:36
@@ -56153,7 +56164,7 @@ msgid "Vendor EDI accounts"
 msgstr "Dodavatelské EDI účty"
 
 #. A
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:583
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:591
 msgid "Vendor detail page"
 msgstr "Podrobnosti o dodavateli"
 
@@ -56271,7 +56282,7 @@ msgstr "Hledání dodavatele: nalezeno %s výsledků pro '%s'"
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:90
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:31
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:218
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:179
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:177
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:118
 #, c-format
 msgid "Vendor:"
@@ -56384,7 +56395,7 @@ msgid "View a count of items held at your library grouped by item type"
 msgstr ""
 "Zobrazit počet jednotek ve vaší knihovně seskupených podle typu jednotky"
 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:35
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:36
 #, c-format
 msgid "View all libraries"
 msgstr "Zobrazit všechny knihovny"
@@ -57133,7 +57144,7 @@ msgid "With selected search: "
 msgstr "Vybraná hledání: "
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:188
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:310
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:318
 #, c-format
 msgid "Withdrawn"
 msgstr "Staženo z oběhu"
@@ -58957,7 +58968,7 @@ msgstr "biblionumber|borrowernumber"
 msgid "budget_code"
 msgstr "Kód rozpočtu (budget_code)"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:40
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/cn_browser.tt:53
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:268
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:95
 #, c-format
@@ -59006,7 +59017,7 @@ msgstr "od %s"
 #. %24$s:  IF ( XISBN.size ) 
 #. %25$s:  END 
 #. %26$s:  XISBN.size | html 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:650
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:658
 #, c-format
 msgid ""
 "by %s &copy;%s %s %s %s(%s)%s %s, %s%s %s%s%s %s%s%s %s %s %s%s %s%s%s %s, %s"
@@ -59314,7 +59325,7 @@ msgstr "den/dny "
 msgid "days "
 msgstr "dní "
 
-#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:169
+#: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:167
 #, c-format
 msgid "days ago"
 msgstr "dní před dnešní dnem"
@@ -59384,7 +59395,7 @@ msgid "disabling the 'Mana' system preference"
 msgstr "vypnutí systémového nastavení 'Mana'"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:218
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:227
 msgid "display detail for this librarian."
 msgstr "zobrazit podrobnosti pro tohoto knihovníka"
 
@@ -59547,7 +59558,7 @@ msgstr "hodnoty šablony"
 msgid "from"
 msgstr "z"
 
-#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:235
+#: intranet-tmpl/prog/en/modules/tools/viewlog.tt:244
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:224
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:487
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:494
@@ -59848,8 +59859,8 @@ msgstr "není"
 msgid "is now debarred until %s."
 msgstr "má omezené služby do %s."
 
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:44
-#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:55
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:45
+#: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:56
 #, c-format
 msgid "is on hold for "
 msgstr "je rezervováno pro "
@@ -59910,12 +59921,12 @@ msgstr "domovská knihovna jednotky"
 msgid "item's home library "
 msgstr "domovská knihovna jednotky"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:445
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:453
 #, c-format
 msgid "itemdata_copynumber"
 msgstr "itemdata_copynumber"
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:444
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:452
 #, c-format
 msgid "itemdata_enumchron"
 msgstr "itemdata_enumchron"
@@ -60675,7 +60686,7 @@ msgstr "selektor"
 msgid "separate by a blank. (e.g., 100a 200 606) "
 msgstr "oddělujte mezerou (např. 100a 200 606) "
 
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:446
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:454
 #, c-format
 msgid "serial"
 msgstr "periodikum"
@@ -61260,7 +61271,7 @@ msgstr "| Stav: %s "
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:165
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:23
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:278
-#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:735
+#: intranet-tmpl/prog/en/modules/catalogue/detail.tt:743
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:421
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:445
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:175

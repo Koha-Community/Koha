@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 15:53-0300\n"
-"PO-Revision-Date: 2019-12-19 14:19+0000\n"
-"Last-Translator: Karel Matějka <k.matejka@email.cz>\n"
+"POT-Creation-Date: 2020-03-19 07:44-0300\n"
+"PO-Revision-Date: 2020-03-05 23:09+0000\n"
+"Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/"
 ">\n"
 "Language: cs\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1576765176.948387\n"
+"X-POOTLE-MTIME: 1583449742.679759\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1899,20 +1899,24 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s0 biblios%s "
 msgstr "%s0 záznamů%s "
 
-#. %1$s:  IF ( starting_homebranch ) 
+#. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
-#. %3$s:  END 
-#. %4$s:  IF ( starting_location ) 
-#. %5$s:  starting_location | html 
-#. %6$s:  END 
-#. %7$s:  IF ( starting_ccode ) 
-#. %8$s:  starting_ccode | html 
-#. %9$s:  END 
+#. %3$s:  END -
+#. %4$s: - IF ( starting_homebranch && starting_location ) 
+#. %5$s:  END 
+#. %6$s: - IF ( starting_location ) 
+#. %7$s: - starting_location | html -
+#. %8$s:  END -
+#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
+#. %10$s:  END 
+#. %11$s: - IF ( starting_ccode ) 
+#. %12$s: - starting_ccode | html -
+#. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
-"%s "
+"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+"%sCollection: %s%s "
 msgstr ""
 "%sProhlížení regálů knihovny %s %s %s, Část fondu: %s%s %s, Kód sbírky: %s%s "
 
@@ -3496,7 +3500,7 @@ msgstr "Kdokoli"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:30
 #, c-format
 msgid "Anyone seeing this list"
-msgstr "Kdokoliv kdo může seznam zobrazit"
+msgstr "Kdokoliv, kdo vidí tento seznam"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -4450,7 +4454,7 @@ msgstr "Otevřít v Google Books"
 msgid "Close"
 msgstr "Zavřít"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
 #, c-format
 msgid "Close shelf browser"
 msgstr "Ukončit prohlížení regálu"
@@ -7462,7 +7466,7 @@ msgstr "Nový štítek:"
 msgid "News from %s%s%sthe library%s"
 msgstr "Novinky z %s%s%sknihovny%s"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:72
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7519,10 +7523,10 @@ msgstr "Nebyla provedena žádná změna."
 msgid "No checkouts"
 msgstr "Žádné výpůjčky"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:40
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:49
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:33
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:42
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:236
@@ -8726,7 +8730,7 @@ msgstr "Předchozí"
 msgid "Preview"
 msgstr "Náhled"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:18
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9719,7 +9723,7 @@ msgid "Section:"
 msgstr "Část:"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
@@ -9996,9 +10000,9 @@ msgid "Show last 50 items"
 msgstr "Zobrazit posledních 50 záznamů"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Show less"
-msgstr "Zobrazit seznamy"
+msgstr "Zobrazit méně"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
@@ -11314,10 +11318,10 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "Pokud chcete tuto chybu nahlásit, kontaktujte správce systému Koha."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login or your email address."
 msgstr ""
-"Pokud chcete obnovit heslo, zadejte vaše přihlašovací jméno nebo emailovou "
+"Pokud chcete obnovit heslo, zadejte vaše přihlašovací jméno nebo e-mailovou "
 "adresu. "
 
 #. SCRIPT

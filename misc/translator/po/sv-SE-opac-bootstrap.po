@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-16 16:30-0300\n"
-"PO-Revision-Date: 2019-10-29 09:44+0000\n"
+"POT-Creation-Date: 2020-03-19 08:23-0300\n"
+"PO-Revision-Date: 2020-03-24 08:27+0000\n"
 "Last-Translator: Tomas.jiglind <tomas.jiglind@mariestad.se>\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1572342258.157813\n"
+"X-POOTLE-MTIME: 1585038448.687414\n"
 "X-Pootle-Path: /sv/18.05/sv-SE-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1883,20 +1883,24 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s0 biblios%s "
 msgstr "%s0 biblios%s "
 
-#. %1$s:  IF ( starting_homebranch ) 
+#. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
-#. %3$s:  END 
-#. %4$s:  IF ( starting_location ) 
-#. %5$s:  starting_location | html 
-#. %6$s:  END 
-#. %7$s:  IF ( starting_ccode ) 
-#. %8$s:  starting_ccode | html 
-#. %9$s:  END 
+#. %3$s:  END -
+#. %4$s: - IF ( starting_homebranch && starting_location ) 
+#. %5$s:  END 
+#. %6$s: - IF ( starting_location ) 
+#. %7$s: - starting_location | html -
+#. %8$s:  END -
+#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
+#. %10$s:  END 
+#. %11$s: - IF ( starting_ccode ) 
+#. %12$s: - starting_ccode | html -
+#. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
-#, c-format
+#, fuzzy, c-format
 msgid ""
-"%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
-"%s "
+"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+"%sCollection: %s%s "
 msgstr "%sBläddrar %s Hyllor%s %s, Placering: %s%s %s, Avdelning: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
@@ -4265,9 +4269,8 @@ msgstr "Utlånad till och med %s"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Checked out until: "
-msgstr "Utlånad till och med %s"
+msgstr "Utlånad till och med: "
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:4
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:15
@@ -4438,7 +4441,7 @@ msgstr "Klicka för att visa i Google Books"
 msgid "Close"
 msgstr "Stäng "
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
 #, c-format
 msgid "Close shelf browser"
 msgstr "Stäng hyllsökare"
@@ -7466,7 +7469,7 @@ msgstr "Ny tagg: "
 msgid "News from %s%s%sthe library%s"
 msgstr "Nyheter från %s%s%sbiblioteket%s"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:72
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7523,10 +7526,10 @@ msgstr "Inga ändringar gjorda."
 msgid "No checkouts"
 msgstr "Inga utlån "
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:40
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:49
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:33
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:42
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:236
@@ -8719,7 +8722,7 @@ msgstr "Föregående"
 msgid "Preview"
 msgstr "Förhandsvisning "
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:18
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9716,7 +9719,7 @@ msgid "Section:"
 msgstr "Avsnitt:"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
@@ -11306,11 +11309,11 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "För att rapportera detta fel kan du e-posta Koha-administratören. "
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login or your email address."
 msgstr ""
-"För att återställa ditt lösenord, ange ditt användarnamn eller din e-"
-"postadress. "
+"För att återställa ditt lösenord, ange ditt användarnamn eller din "
+"e-postadress."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2

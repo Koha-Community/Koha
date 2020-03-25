@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-10 19:14+0200\n"
-"PO-Revision-Date: 2019-12-05 10:01+0000\n"
+"PO-Revision-Date: 2020-03-24 06:45+0000\n"
 "Last-Translator: Frank Chou <frank@sris.com.tw>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1575540104.938271\n"
+"X-POOTLE-MTIME: 1585032307.390147\n"
 "X-Pootle-Path: /zh_TW/18.05/zh-Hans-TW-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -2044,19 +2044,23 @@ msgstr "新增館藏記錄時，暫記其排架位置為"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# <br />"
-msgstr ""
+msgstr "cataloguing.pref#NotesBlacklist# <br />"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# Don't show"
-msgstr ""
+msgstr "cataloguing.pref#NotesBlacklist# 不顯示"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# For hiding fields from other pages like the normal view, use the visibility settings for subfields in the MARC bibliographic frameworks section of the administration module."
 msgstr ""
+"cataloguing.pref#NotesBlacklist# 可以隱藏基本檢視的欄位，可以用管理者介面的管理功能中的 MARC "
+"書目框架的分欄能見度設定。"
 
 # Cataloging > Display
 msgid "cataloguing.pref#NotesBlacklist# note fields in the 'Title notes' tab and in the 'Description' tab on the OPAC and staff interface detail pages. Use a comma to separate multiple fields. Examples: 500,502 (MARC21); 300,328 (UNIMARC)."
 msgstr ""
+"cataloguing.pref#NotesBlacklist# 在 OPAC 與館員介面的詳目中，頁面下方的'題名附註' (OPAC)分頁與 '說明' "
+"(管理介面)分頁的欄位。使用逗點區隔多個欄位。如：500,502 (MARC21)；300,328 (UNIMARC)。"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# (Leave blank if not used. Define a range like <code>192.168.</code>.)"
@@ -2428,10 +2432,6 @@ msgstr "circulation.pref 介面"
 msgid "circulation.pref Interlibrary Loans"
 msgstr "館際互借"
 
-# Circulation > Return Claims
-msgid "circulation.pref Return Claims"
-msgstr ""
-
 # Circulation > Self Checkout
 msgid "circulation.pref Self Checkout"
 msgstr "自助借出"
@@ -2458,7 +2458,7 @@ msgstr "每次交易後自動計算借貸值。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# E.g. enter target audience keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure to map agerestriction in Koha to MARC mapping (e.g. 521$a). A MARC field value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave empty to not apply an age restriction."
-msgstr "如，輸入預期讀者的鍵詞以 | (直線) FSK|PEGI|Age|區隔(|前後沒有空格)。確定從 Koha 的年齡限制對映至 MARC 的對映 (如 521$a)。FSK 12 或 PEGI 12 的 MARC 欄位值指的是：借閱者必須滿 12 歲。若為空格，則不適用於年齡限制。"
+msgstr "如，輸入預期讀者的關鍵詞以 | (直線) FSK|PEGI|Age|區隔(|前後沒有空格)。確定從 Koha 的年齡限制對映至 MARC 的對映 (如 521$a)。FSK 12 或 PEGI 12 的 MARC 欄位值指的是：借閱者必須滿 12 歲。若為空格，則不適用於年齡限制。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# Restrict patrons with the following target audience values from checking out inappropriate materials:"
@@ -2598,23 +2598,28 @@ msgstr "在 SCO 模組中供出已被其他人預約的館藏。若允許，則�
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Allow"
-msgstr ""
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# 允許"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# Don't allow"
-msgstr ""
+msgstr "circulation.pref#AllowItemsOnHoldCheckoutSIP# 不允許"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# If allowed do not generate RESERVE_WAITING and RESERVED warning."
 msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# 若允許，則不產生 RESERVE_WAITING 與 "
+"RESERVED 警示。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# This allows self checkouts for those items. If using the holds queue items with pending holds will be marked as \"unavailable\" if this set to \"Don't Allow\"."
 msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# 此設定允許自助借出該等館藏。若把它設為 \"不允許\""
+"，使用預約佇列館藏時，將標示為 \"不可得\"。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowItemsOnHoldCheckoutSIP# checkouts of items reserved to someone else via SIP checkout messages."
 msgstr ""
+"circulation.pref#AllowItemsOnHoldCheckoutSIP# 允許讀者透過 SIP 借出訊息通知將保留的館藏借出。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Allow"
@@ -2995,42 +3000,6 @@ msgstr "停用"
 # Circulation > Interface
 msgid "circulation.pref#CircSidebar# the navigation sidebar on all Circulation pages."
 msgstr "在流通頁面的瀏覽邊欄。"
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedChargeFee# ."
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedChargeFee# When marking a checkout as \"claims returned\","
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedChargeFee# ask if a lost fee should be charged"
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedChargeFee# charge a lost fee"
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedChargeFee# don't charge a lost fee"
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedLostValue# Use the LOST authorised value"
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedLostValue# to represent returns claims"
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# Warn librarians that a patron has excessive return claims if the patron has claimed the return of more than"
-msgstr ""
-
-# Circulation > Return Claims
-msgid "circulation.pref#ClaimReturnedWarningThreshold# items."
-msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
@@ -3847,15 +3816,15 @@ msgstr "依巡迴館藏清單轉移館藏的圖書館"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#RoundFinesAtPayment# Do"
-msgstr ""
+msgstr "circulation.pref#RoundFinesAtPayment# 做"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#RoundFinesAtPayment# Don't"
-msgstr ""
+msgstr "circulation.pref#RoundFinesAtPayment# 不做"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#RoundFinesAtPayment# round fines to the nearest cent when collecting payments. Enabling this preference allows paying fines of partial cents which may not be visible in the interface."
-msgstr ""
+msgstr "circulation.pref#RoundFinesAtPayment# 收取罰款時計算到最接近的整數。啟用此偏好後，允許僅支付部份金額。"
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-based self checkout screen:"
@@ -4071,15 +4040,15 @@ msgstr "暫停從 OPAC 預約的功能。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# Calculate suspension expiration based on days overdue"
-msgstr ""
+msgstr "circulation.pref#SuspensionsCalendar# 根據逾期天數計算停權"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# directly."
-msgstr ""
+msgstr "circulation.pref#SuspensionsCalendar# 直接。"
 
 # Circulation > Fines Policy
 msgid "circulation.pref#SuspensionsCalendar# not including days the library is closed."
-msgstr ""
+msgstr "circulation.pref#SuspensionsCalendar# 不納入閉館日。"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#SwitchOnSiteCheckouts# Don't switch"
@@ -4370,10 +4339,6 @@ msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system prefer
 msgstr "<br><strong>說明</strong> 此系統偏好需啟用 <code>misc/cronjobs/fines.pl</code> 工作排程。請洽您的系統管理員。"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
-msgstr "計算(但祗寄給管理者)"
-
-# Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate and charge"
 msgstr "計算並收取"
 
@@ -4395,7 +4360,7 @@ msgstr "啟用"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeFallbackSearch# the automatic use of a keyword catalog search if the phrase entered as a barcode on the checkout page does not turn up any results during an item barcode search."
-msgstr "在借出頁面鍵入條碼後，系統沒有任何回應時，自動轉換為鍵詞搜尋。"
+msgstr "在借出頁面鍵入條碼後，系統沒有任何回應時，自動轉換為關鍵詞搜尋。"
 
 # Circulation > Interface
 msgid "circulation.pref#itemBarcodeInputFilter# Convert from CueCat form"
@@ -4619,11 +4584,13 @@ msgstr "OPAC 搜尋結果與詳情頁面的封面來自瑞典廠商 <a href=\"ht
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversURL# Use base URL: "
-msgstr ""
+msgstr "enhanced_content.pref#AdlibrisCoversURL# 使用 URL："
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversURL# for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
 msgstr ""
+"enhanced_content.pref#AdlibrisCoversURL# 採用 <a href=\""
+"https://www.adlibris.com/se\">Adlibris</a> 封面服務。"
 
 # Enhanced Content > Local Cover Images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -7548,7 +7515,7 @@ msgstr "啟用"
 
 # Patrons > General
 msgid "patrons.pref#FallbackToSMSIfNoEmail# Send purchase suggestion messages by SMS if no patron email is defined."
-msgstr ""
+msgstr "patrons.pref#FallbackToSMSIfNoEmail# 無電子郵件的讀者，以 SMS 送出採訪建議。"
 
 # Patrons > General
 msgid "patrons.pref#FeeOnChangePatronCategory# Do"
@@ -8961,6 +8928,8 @@ msgstr "Mana KB 認證用的安全符記："
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-PMH</a> server. (available at: /cgi-bin/koha/oai.pl?verb=Identify)"
 msgstr ""
+"web_services.pref#OAI-PMH# <a href=\"http://www.openarchives.org/pmh/\">OAI-"
+"PMH</a> 伺服器。(在此：/cgi-bin/koha/oai.pl?verb=Identify)"
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH# Disable"
@@ -9089,4 +9058,3 @@ msgstr "祗送回"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "經由報表頁面服務指定報表的列數。"
-

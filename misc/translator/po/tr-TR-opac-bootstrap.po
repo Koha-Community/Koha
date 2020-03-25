@@ -4,9 +4,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-16 16:33-0300\n"
-"PO-Revision-Date: 2020-02-05 11:42+0000\n"
-"Last-Translator: Nazlı Çetin <nazlibaser@gmail.com>\n"
+"POT-Creation-Date: 2020-03-19 08:27-0300\n"
+"PO-Revision-Date: 2020-03-19 13:50+0000\n"
+"Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1580902958.320932\n"
+"X-POOTLE-MTIME: 1584625838.532982\n"
 "X-Pootle-Path: /tr/18.05/tr-TR-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -770,9 +770,8 @@ msgstr "%s Ara %siçin '%s'%s%s&nbsp;ile sınırla(r):&nbsp;'%s'%s"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
-#, fuzzy
 msgid "%s Search RSS feed"
-msgstr "%s Ara"
+msgstr "%s RSS özet akışında ara"
 
 #. %1$s:  LibraryName | html 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:88
@@ -1762,9 +1761,8 @@ msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Arama geçmişiniz"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:8
-#, fuzzy
 msgid "%s%s%sKoha online%s catalog recent comments"
-msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; En son yorumlar"
+msgstr "%s%s%sKoha çevrimiçi%s katalog en son yorumlar"
 
 #. %1$s:  IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) 
 #. %2$s:  OPACBaseURL | html 
@@ -1809,16 +1807,16 @@ msgstr "%s, yazar %s%s"
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:45
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
 
 #. %1$s:  OPACBaseURL | url 
 #. %2$s:  SEARCH_RESULT.biblionumber | uri 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:43
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
 
 #. For the first occurrence,
 #. %1$s:  OPACBaseURL | html 
@@ -1871,9 +1869,9 @@ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 #. %2$s:  query_cgi | html 
 #. %3$s:  limit_cgi | html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:26
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
-msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
+msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss"
 
 #. %1$s:  OPACBaseURL | html 
 #. %2$s:  shelf.shelfnumber | html 
@@ -1895,21 +1893,27 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s0 biblios%s "
 msgstr "%s0 biblios%s"
 
-#. %1$s:  IF ( starting_homebranch ) 
+#. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
-#. %3$s:  END 
-#. %4$s:  IF ( starting_location ) 
-#. %5$s:  starting_location | html 
-#. %6$s:  END 
-#. %7$s:  IF ( starting_ccode ) 
-#. %8$s:  starting_ccode | html 
-#. %9$s:  END 
+#. %3$s:  END -
+#. %4$s: - IF ( starting_homebranch && starting_location ) 
+#. %5$s:  END 
+#. %6$s: - IF ( starting_location ) 
+#. %7$s: - starting_location | html -
+#. %8$s:  END -
+#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
+#. %10$s:  END 
+#. %11$s: - IF ( starting_ccode ) 
+#. %12$s: - starting_ccode | html -
+#. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
 #, c-format
 msgid ""
-"%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
-"%s "
-msgstr "%sTaranıyor %s Raflar%s%s, Raf Konumu: %s%s%s, Koleksiyon kodu: %s%s "
+"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+"%sCollection: %s%s "
+msgstr ""
+"%sTaranıyor %s raflar%s %s, %s %sRaftaki Konumu: %s%s %s, %s %sKoleksiyon: "
+"%s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -3135,9 +3139,8 @@ msgstr "Erişim engellendi"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Access online"
-msgstr "Erişim engellendi"
+msgstr "Çevrimiçi erişim"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:29
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:127
@@ -3522,7 +3525,6 @@ msgstr "Bu ayırmayı iptal etmek istediğinizden emin misiniz?"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Are you sure you want to check out this item?"
 msgstr "Bu materyali ödünç almak istediğinizden emin misiniz?"
 
@@ -4283,9 +4285,8 @@ msgstr "%s tarihine kadar ödünç verildi "
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Checked out until: "
-msgstr "%s tarihine kadar ödünç verildi "
+msgstr "Teslim etme tarihi:"
 
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:4
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:15
@@ -4456,7 +4457,7 @@ msgstr "Google Books içerisinde görmek için tıklayın"
 msgid "Close"
 msgstr "Kapat"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
 #, c-format
 msgid "Close shelf browser"
 msgstr "Raf tarayıcısını kapatın"
@@ -5131,9 +5132,8 @@ msgstr "iCal/.ics dosyası olarak indirin"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Download as: "
-msgstr "Listeyi karşıdan indir  "
+msgstr "Farklı indir:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:12
 #, c-format
@@ -6205,9 +6205,9 @@ msgstr "ISBN: %s %s %s; %s %s"
 
 #. %1$s:  SEARCH_RESULT.isbn | html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "ISBN:%s"
-msgstr "ISBN: %s"
+msgstr "ISBN:%s"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:184
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:186
@@ -6526,9 +6526,8 @@ msgstr "Materyal ödünç verilemiyor."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "Item cannot be checked out. There are no available formats"
-msgstr "Materyal ödünç verilemiyor."
+msgstr "Materyal ödünç alınamıyor. Kullanılabilir biçim yok"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:201
 #, c-format
@@ -6682,9 +6681,8 @@ msgstr "Koha"
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:8
-#, fuzzy
 msgid "Koha %s"
-msgstr "Koha"
+msgstr "Koha %s"
 
 #. LINK
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:15
@@ -7023,9 +7021,9 @@ msgid "Log in"
 msgstr "Oturum aç"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:564
-#, fuzzy, c-format
+#, c-format
 msgid "Log in to add tags"
-msgstr "Etiket eklemek için oturumu açın."
+msgstr "Tag eklemek için oturum açın"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:429
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:431
@@ -7144,13 +7142,13 @@ msgstr "Kayıp materyal %s"
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:132
 #, c-format
 msgid "Lost item fee refund %s"
-msgstr ""
+msgstr "Kayıp materyal ücret iadesi %s"
 
 #. %1$s: - CASE 'PAY'     -
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:133
 #, c-format
 msgid "Lost item processing fee %s"
-msgstr ""
+msgstr "Kayıp materyal işlem ücreti %s "
 
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:19
@@ -7419,7 +7417,7 @@ msgstr "Yeni"
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:123
 #, c-format
 msgid "New card %s"
-msgstr ""
+msgstr "Yeni kart %s"
 
 #. %1$s:  review.title | html 
 #. %2$s:  FOREACH subtitl IN review.subtitle 
@@ -7484,7 +7482,7 @@ msgstr "Yeni etiket:"
 msgid "News from %s%s%sthe library%s"
 msgstr "Kütüphaneden %s%s%shaberler%s"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:72
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7541,10 +7539,10 @@ msgstr "Hiçbir değişiklik yapılmadı."
 msgid "No checkouts"
 msgstr "Ödünç alma yok"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:40
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:49
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:33
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:42
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:236
@@ -8154,9 +8152,8 @@ msgstr "OverDrive Hesabı"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
-#, fuzzy
 msgid "OverDrive account page"
-msgstr "OverDrive Hesabı"
+msgstr "OverDrive hesabı sayfası"
 
 #. For the first occurrence,
 #. %1$s:  q | html 
@@ -8309,9 +8306,9 @@ msgstr "PayPal Kabul İşareti"
 #. %1$s: - CASE 'Pay00'   -
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:119
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:134
-#, fuzzy, c-format
+#, c-format
 msgid "Payment %s"
-msgstr "Ödeme yöntemi"
+msgstr "Ödeme %s"
 
 #. %1$s: - CASE 'Pay02'   -
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:121
@@ -8749,7 +8746,7 @@ msgstr "Önceki"
 msgid "Preview"
 msgstr "Ön izleme"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:18
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9125,9 +9122,8 @@ msgstr "Çıkar"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:53
-#, fuzzy
 msgid "Remove facet %s"
-msgstr "Alanı kaldır"
+msgstr "Faseti kaldır %s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:101
@@ -9742,7 +9738,7 @@ msgid "Section:"
 msgstr "Bölüm:"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
@@ -9764,12 +9760,12 @@ msgstr "Ayrıca bakınız:"
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 msgid "See: %s%s%snext biblio%s"
-msgstr ""
+msgstr "Bkz.: %s%s%sbir sonraki bibliyo%s"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1091
 msgid "See: %s%s%sprevious biblio%s"
-msgstr ""
+msgstr "Bkz.: %s%s%sbir önceki bibliyo%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:29
 #, c-format
@@ -10018,9 +10014,9 @@ msgid "Show last 50 items"
 msgstr "Son 50 materyali göster"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Show less"
-msgstr "Listeleri göster"
+msgstr "Daha az göster"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
@@ -10566,9 +10562,9 @@ msgstr "Pazar"
 
 #. %1$s: - CASE 'L'       -
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:126
-#, fuzzy, c-format
+#, c-format
 msgid "Sundry %s"
-msgstr "Giriş %s"
+msgstr "Muhtelif %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:259
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:261
@@ -11331,11 +11327,10 @@ msgid "To report this error, you can email the Koha Administrator."
 msgstr "Bu hatayı bildirmek için, Koha Yöneticisine e-posta gönderebilirsiniz."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login or your email address."
 msgstr ""
-"Şifrenizi sıfırlamak için, oturum açma bilgilerinizi veya e-posta adresinizi "
-"girin."
+"Şifrenizi sıfırlamak için giriş bilgilerinizi veya e-posta adresinizi girin."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -11360,7 +11355,7 @@ msgstr "Toplam borç"
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:72
 #, c-format
 msgid "Total due if credit(s) applied:"
-msgstr ""
+msgstr "Kredi uygulandığında ödenmesi gereken toplam tutar:"
 
 #. %1$s:  holds_count | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:660
@@ -11635,9 +11630,8 @@ msgstr "Amazon.com üzerinde görüntüle"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
-#, fuzzy
 msgid "View record \"%s\""
-msgstr "Künyeyi kaydet"
+msgstr "\"%s\" kaydını görüntüle"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:108
@@ -11763,9 +11757,9 @@ msgstr "Makbuz yazdırmak ister misiniz?"
 #. %1$s: - CASE 'HE'      -
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:128
 #: opac-tmpl/bootstrap/en/includes/account-table.inc:135
-#, fuzzy, c-format
+#, c-format
 msgid "Writeoff %s"
-msgstr "%s tarihinde %s tarafından yazılmış"
+msgstr "Ceza sil %s"
 
 #. %1$s:  message.message_date | $KohaDates 
 #. %2$s:  Branches.GetName(message.branchcode) | html 
@@ -12186,9 +12180,8 @@ msgstr "En az bir materyal seçmelisiniz. "
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:44
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:46
-#, fuzzy
 msgid "You searched %s for '%s'%s%s with limit(s): '%s'%s"
-msgstr "%s Ara %siçin '%s'%s%s&nbsp;ile sınırla(r):&nbsp;'%s'%s"
+msgstr "'%s'%s%s with limit(s) için arama yaptınız %s:'%s'%s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:70
 #, c-format
@@ -12722,6 +12715,9 @@ msgid ""
 "%s&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place="
 "%s&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 msgstr ""
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au=%s"
+"&rft.btitle=%s&rft.date=%s&rft.tpages=%s&rft.isbn=%s&rft.aucorp=&rft.place=%s"
+"&rft.pub=%s&rft.edition=%s&rft.series=%s&rft.genre="
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
@@ -12926,9 +12922,8 @@ msgstr "koha %s kataloğu"
 
 #. ABBR
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
-#, fuzzy
 msgid "koha:biblionumber:%s"
-msgstr "Yer numarası: %s"
+msgstr "koha:biblionumber:%s"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:401
 #, c-format
@@ -13460,4 +13455,4 @@ msgstr "×"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:176
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:180
 msgid "‡%s %s"
-msgstr ""
+msgstr "‡%s %s"

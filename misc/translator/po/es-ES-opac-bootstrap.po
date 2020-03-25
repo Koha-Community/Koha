@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2020-02-16 15:59-0300\n"
-"PO-Revision-Date: 2019-10-21 17:13+0000\n"
-"Last-Translator: Héctor Castro <hector.hecaxmmx@gmail.com>\n"
-"Language-Team: Koha Translation Team <koha-translate@lists.koha-community."
-"org>\n"
+"POT-Creation-Date: 2020-03-19 07:50-0300\n"
+"PO-Revision-Date: 2020-03-22 22:52+0000\n"
+"Last-Translator: Bernardo Gonzalez Kriegel <bgkriegel@gmail.com>\n"
+"Language-Team: Koha Translation Team <koha-translate@lists.koha-"
+"community.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-POOTLE-MTIME: 1571678009.956965\n"
+"X-POOTLE-MTIME: 1584917526.311680\n"
 "X-Pootle-Path: /es/18.05/es-ES-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1902,22 +1902,27 @@ msgstr "%s/cgi-bin/koha/opac-showreviews.pl&amp;format=rss2"
 msgid "%s0 biblios%s "
 msgstr "%s0 biblios%s "
 
-#. %1$s:  IF ( starting_homebranch ) 
+#. %1$s: - IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch | html 
-#. %3$s:  END 
-#. %4$s:  IF ( starting_location ) 
-#. %5$s:  starting_location | html 
-#. %6$s:  END 
-#. %7$s:  IF ( starting_ccode ) 
-#. %8$s:  starting_ccode | html 
-#. %9$s:  END 
+#. %3$s:  END -
+#. %4$s: - IF ( starting_homebranch && starting_location ) 
+#. %5$s:  END 
+#. %6$s: - IF ( starting_location ) 
+#. %7$s: - starting_location | html -
+#. %8$s:  END -
+#. %9$s: - IF ( starting_homebranch && starting_ccode ) 
+#. %10$s:  END 
+#. %11$s: - IF ( starting_ccode ) 
+#. %12$s: - starting_ccode | html -
+#. %13$s:  END -
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:4
 #, c-format
 msgid ""
-"%sBrowsing %s Shelves%s %s, Shelving location: %s%s %s, Collection code: %s"
-"%s "
+"%sBrowsing %s shelves%s %s, %s %sShelving location: %s%s %s, %s "
+"%sCollection: %s%s "
 msgstr ""
-"%sNavegando %s Estantes%s %s, Ubicación: %s%s %s, Código de colección: %s%s "
+"%sNavegando %s Estantes%s %s, %s %sUbicación: %s%s %s, %s %sCódigo de "
+"colección: %s%s "
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -4471,7 +4476,7 @@ msgstr "Haga clic para ver en Google Books"
 msgid "Close"
 msgstr "Cerrar"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:8
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:10
 #, c-format
 msgid "Close shelf browser"
 msgstr "Cerrar el navegador de estanterías"
@@ -7510,7 +7515,7 @@ msgstr "Nueva etiqueta:"
 msgid "News from %s%s%sthe library%s"
 msgstr "Noticias de %s%s%sla biblioteca%s"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:72
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -7567,10 +7572,10 @@ msgstr "No se han realizaron cambios."
 msgid "No checkouts"
 msgstr "Sin préstamos"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:31
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:40
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:49
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:33
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:42
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:51
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:63
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:109
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:228
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:236
@@ -8779,7 +8784,7 @@ msgstr "Previo"
 msgid "Preview"
 msgstr "Vista previa"
 
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:18
 #: opac-tmpl/bootstrap/en/includes/opac-bottom.inc:121
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:4
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
@@ -9772,7 +9777,7 @@ msgid "Section:"
 msgstr "Sección:"
 
 #. IMG
-#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:59
+#: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:61
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:305
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:316
@@ -9953,7 +9958,7 @@ msgstr "Información de serie:"
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:59
 #, c-format
 msgid "Series title"
-msgstr "Título de publicación periódica"
+msgstr "Título de la serie"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:196
 #, c-format
@@ -10050,9 +10055,9 @@ msgid "Show last 50 items"
 msgstr "Mostrar los últimos 50 ejemplares"
 
 #: opac-tmpl/bootstrap/en/includes/opac-facets.inc:68
-#, fuzzy, c-format
+#, c-format
 msgid "Show less"
-msgstr "Mostrar listas"
+msgstr "Mostrar menos"
 
 #. A
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:36
@@ -11389,11 +11394,11 @@ msgstr ""
 "Administrador de Koha."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:95
-#, fuzzy, c-format
+#, c-format
 msgid "To reset your password, enter your login or your email address."
 msgstr ""
 "Para restablecer su contraseña, ingrese su nombre de usuario o su dirección "
-"de correo electrónico. "
+"de correo electrónico."
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
