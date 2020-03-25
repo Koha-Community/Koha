@@ -42,27 +42,20 @@
         <noscript><div class="dialog alert"><strong>Please enable Javascript:</strong>
             Configuring 'Did you mean?' plugins requires Javascript. If
             you are unable to use Javascript, you may be able to enter the
-            configuration (which is stored in JSON in the OPACdidyoumean and
-            INTRAdidyoumean system preferences) in the Local Preferences tab in
+            configuration (which is stored in JSON in the OPACdidyoumean system preferences)
+            in the Local preferences tab in
             the system preference editor, but this is unsupported, not
             recommended, and likely will not work.</div></noscript>
         <div id="didyoumeanlegend">
             Please put the 'Did you mean?' plugins in order by significance, from
             most significant to least significant, and check the box to enable those
-            plugins that you want to use. (NOTE: 'Did you mean?' functionality
-            is not yet enabled on the staff client)
+            plugins that you want to use.
         </div>
         <form action="/cgi-bin/koha/admin/didyoumean.pl" method="post">
             <fieldset id="didyoumeanopac">
                 <legend>OPAC</legend>
                 [% PROCESS pluginlist plugins=OPACpluginlist type='opac' %]
             </fieldset>
-            <!-- TODO not yet implemented
-            <fieldset id="didyoumeanintranet">
-                <legend>Intranet</legend>
-                [% PROCESS pluginlist plugins=INTRApluginlist type='intranet' %]
-            </fieldset>
-            -->
             <fieldset class="action"><button class="save-all submit" type="submit">Save configuration</button> <a href="/cgi-bin/koha/admin/didyoumean.pl" class="force_reload cancel">Cancel</a></fieldset>
         </form>
 
