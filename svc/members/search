@@ -72,6 +72,11 @@ if ( $searchmember
     } if $member;
 }
 
+if ($has_permission) {
+    my ( $permission, $subpermission ) = split /\./, $has_permission;
+    $has_permission = {permission => $permission, subpermission => $subpermission};
+}
+
 # Perform the patrons search
 $results = C4::Utils::DataTables::Members::search(
     {
@@ -82,21 +87,9 @@ $results = C4::Utils::DataTables::Members::search(
         searchtype => $searchtype,
         searchfieldstype => $searchfieldstype,
         dt_params => \%dt_params,
+        ( $has_permission ? ( has_permission => $has_permission ) : () ),
     }
 ) unless $results;
-
-# It is not recommanded to use the has_permission param if you use the pagination
-# The filter is done AFTER requested the data
-if ($has_permission) {
-    my ( $permission, $subpermission ) = split /\./, $has_permission;
-    my @patrons_with_permission;
-    for my $patron ( @{ $results->{patrons} } ) {
-        push @patrons_with_permission, $patron
-            if haspermission( $patron->{userid}, { $permission => $subpermission } );
-    }
-    $results->{patrons} = \@patrons_with_permission;
-    $results->{iTotalDisplayRecords} = scalar( @patrons_with_permission );
-}
 
 $template->param(
     sEcho => $sEcho,
