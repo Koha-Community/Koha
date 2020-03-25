@@ -24,7 +24,11 @@ use base qw( Template::Plugin );
 use C4::Context;
 use Koha;
 
-=pod
+=head1 NAME
+
+Koha::Template::Plugin::Koha - General Koha Template Toolkit plugin
+
+=head1 SYNOPSIS
 
 This plugin contains various Koha replated Template Toolkit functions
 to help streamline Koha and to move logic from the Perl code into the
@@ -37,6 +41,12 @@ For example: [% IF Koha.Preference( 'MyPreference ) == 'SettingA' %]
 removes the necessity of setting a template variable in Perl code for
 each and every system preference, even if no evaluation of the setting
 is necessary.
+
+=cut
+
+=head1 API
+
+=head2 Class Methods
 
 =cut
 
@@ -57,6 +67,12 @@ sub Version {
         development => ( $development ne '000' ) ? $development : undef,
     };
 }
+
+=head3 ArePluginsEnabled
+
+Returns true if plugins are enabled, false otherwise.
+
+=cut
 
 sub ArePluginsEnabled {
     return C4::Context->config('enable_plugins');
