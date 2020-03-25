@@ -126,13 +126,13 @@
           [% END %]
             <span>Check to make this attribute staff_searchable in the staff patron search.</span>
        </li>
-       <li><label for="display_checkout">Display in check-out: </label>
+       <li><label for="display_checkout">Display in patron's brief information: </label>
             [% IF attribute_type AND attribute_type.display_checkout %]
                 <input type="checkbox" id="display_checkout" name="display_checkout" checked="checked" />
 	    [% ELSE %]
 	        <input type="checkbox" id="display_checkout" name="display_checkout" />
 	    [% END %]
-            <span>Check to show this attribute in patron check-out.</span>
+            <span>Check to show this attribute in the brief information panel in the patron's record (staff interface).</span>
        </li>
 
         <li><label for="authorised_value_category">Authorized value category: </label>
