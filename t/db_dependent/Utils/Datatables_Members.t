@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 52;
 
 use C4::Context;
 use C4::Members;
@@ -56,7 +56,8 @@ my $john_doe = $builder->build({
             branchcode   => $branchcode,
             dateofbirth  => '1983-03-01',
             userid       => 'john.doe',
-            initials     => 'pacman'
+            initials     => 'pacman',
+            flags        => 0,
         },
 });
 
@@ -68,7 +69,8 @@ my $john_smith = $builder->build({
             surname      => 'Smith',
             branchcode   => $branchcode,
             dateofbirth  => '1982-02-01',
-            userid       => 'john.smith'
+            userid       => 'john.smith',
+            flags        => 0,
         },
 });
 
@@ -80,7 +82,8 @@ my $jane_doe = $builder->build({
             surname      => 'Doe',
             branchcode   => $branchcode,
             dateofbirth  => '1983-03-01',
-            userid       => 'jane.doe'
+            userid       => 'jane.doe',
+            flags        => 0,
         },
 });
 my $jeanpaul_dupont = $builder->build({
@@ -91,7 +94,8 @@ my $jeanpaul_dupont = $builder->build({
             surname      => 'Dupont',
             branchcode   => $branchcode,
             dateofbirth  => '1982-02-01',
-            userid       => 'jeanpaul.dupont'
+            userid       => 'jeanpaul.dupont',
+            flags        => 0,
         },
 });
 my $dupont_brown = $builder->build({
@@ -102,7 +106,8 @@ my $dupont_brown = $builder->build({
             surname      => 'Brown',
             branchcode   => $branchcode,
             dateofbirth  => '1979-01-01',
-            userid       => 'dupont.brown'
+            userid       => 'dupont.brown',
+            flags        => 0,
         },
 });
 
@@ -493,6 +498,57 @@ subtest 'Search by any borrowers field (bug 17374)' => sub {
     is( $search_results->{ iTotalDisplayRecords }, 1, "We find only 1 patron when searching for initials 'pacman'" );
 
     is( $search_results->{ patrons }[0]->{ cardnumber }, $john_doe->{cardnumber}, "We find the correct patron when sesrching by initials" )
+};
+
+subtest 'Search with permissions' => sub {
+    plan tests => 2;
+
+    my $superlibrarian = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $branchcode, flags => 1 }
+        }
+    );
+    my $librarian_with_full_permission = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $branchcode, flags => 4100 }
+        }
+    );    # 4100 = 4096 (2^12 suggestions) + 4 (2^2 catalogue)
+    my $librarian_with_subpermission = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $branchcode } } );
+    C4::Context->dbh->do(
+        q|INSERT INTO user_permissions(borrowernumber, module_bit, code) VALUES(?,?,?)|,
+        undef,
+        $librarian_with_subpermission->borrowernumber,
+        12,
+        'suggestions_manage'
+    );
+
+    my $search_results = C4::Utils::DataTables::Members::search(
+        {
+            searchmember     => "",
+            searchfieldstype => 'standard',
+            searchtype       => 'contain',
+            branchcode       => $branchcode,
+            has_permission   => {
+                permission    => 'suggestions',
+                subpermission => 'suggestions_manage'
+            },
+            dt_params => { iDisplayLength => 3, iDisplayStart => 0 },
+        }
+    );
+    is( $search_results->{iTotalDisplayRecords},
+        3, "We find 3 patrons with suggestions_manage permission" );
+    is_deeply(
+        [ map { $_->{borrowernumber} } @{ $search_results->{patrons} } ],
+        [
+            $superlibrarian->borrowernumber,
+            $librarian_with_full_permission->borrowernumber,
+            $librarian_with_subpermission->borrowernumber
+        ],
+        'We got the 3 patrons we expected'
+    );
 };
 
 # End
