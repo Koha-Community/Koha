@@ -267,7 +267,7 @@ sub raw_elasticsearch_mappings {
             { search_field_id => $search_field->id },
             {
                 join     => 'search_marc_map',
-                order_by => { -asc => 'search_marc_map.marc_field' }
+                order_by => { -asc => ['search_marc_map.marc_type','search_marc_map.marc_field'] }
             }
         );
 
@@ -279,8 +279,8 @@ sub raw_elasticsearch_mappings {
 
             $mappings->{ $marc_map->index_name }{ $search_field->name }{label} = $search_field->label;
             $mappings->{ $marc_map->index_name }{ $search_field->name }{type} = $search_field->type;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order;
-            $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight || undef;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{facet_order} = $search_field->facet_order if defined $search_field->facet_order;
+            $mappings->{ $marc_map->index_name }{ $search_field->name }{weight} = $search_field->weight if defined $search_field->weight;
 
             push (@{ $mappings->{ $marc_map->index_name }{ $search_field->name }{mappings} },
                 {
