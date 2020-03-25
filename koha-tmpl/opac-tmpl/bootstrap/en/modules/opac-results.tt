@@ -164,7 +164,7 @@
                                             <div class="sort_by pull-right">
                                                 <select id="sort_by" class="resort" name="sort_by"> [% INCLUDE 'resort_form.inc' %] </select>
 
-                                                [% IF Koha.Preference('OPACnumSearchResultsDropdown') && Koha.Preference('SearchEngine') == "Zebra" %]
+                                                [% IF Koha.Preference('OPACnumSearchResultsDropdown') %]
                                                     <label for="results_per_page">Results per page: </label>
                                                     <select id="results_per_page" name="count">
                                                         [% IF Koha.Preference('OPACnumSearchResults') %]
