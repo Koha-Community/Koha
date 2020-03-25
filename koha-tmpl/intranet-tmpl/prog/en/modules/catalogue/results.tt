@@ -276,7 +276,7 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         [% IF Koha.Preference('numSearchResults') %]
-                                            <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% Koha.Preference('numSearchResults')%][% PROCESS sort_search_query %]" id="resultsperpage-default">
+                                            <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% Koha.Preference('numSearchResults') | uri %][% PROCESS sort_search_query %]" id="resultsperpage-default">
                                                 [% IF results_per_page == Koha.Preference('numSearchResults') %]
                                                     <i class="fa fa-check"></i>
                                                 [% END %] Library default: [% Koha.Preference('numSearchResults') | html %]
