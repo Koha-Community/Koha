@@ -14,6 +14,7 @@ sub search {
     my $branchcode = $params->{branchcode};
     my $searchtype = $params->{searchtype} || 'contain';
     my $searchfieldstype = $params->{searchfieldstype} || 'standard';
+    my $has_permission = $params->{has_permission};
     my $dt_params = $params->{dt_params};
 
     unless ( $searchmember ) {
@@ -28,12 +29,31 @@ sub search {
 
     my ($sth, $query, $iTotalQuery, $iTotalRecords, $iTotalDisplayRecords);
     my $dbh = C4::Context->dbh;
-    # Get the iTotalRecords DataTable variable
-    $query = $iTotalQuery = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
-    if ( @restricted_branchcodes ) {
-        $iTotalQuery .= " WHERE borrowers.branchcode IN (" . join( ',', ('?') x @restricted_branchcodes ) . ")";
+
+    # Get the module_bit from a given permission code
+    if ( $has_permission ) {
+        ($has_permission->{module_bit}) = $dbh->selectrow_array(q|
+            SELECT bit FROM userflags WHERE flag=?
+        |, undef, $has_permission->{permission});
     }
-    ($iTotalRecords) = $dbh->selectrow_array( $iTotalQuery, undef, @restricted_branchcodes );
+
+    # Get the iTotalRecords DataTable variable
+    $iTotalQuery = "SELECT COUNT(borrowers.borrowernumber) FROM borrowers";
+    if ( $has_permission ) {
+        $iTotalQuery .= ' LEFT JOIN user_permissions on borrowers.borrowernumber=user_permissions.borrowernumber';
+    }
+
+    my (@where, @conditions);
+    if ( @restricted_branchcodes ) {
+        push @where, "borrowers.branchcode IN (" . join( ',', ('?') x @restricted_branchcodes ) . ")";
+        push @conditions, @restricted_branchcodes;
+    }
+    if ( $has_permission ) {
+        push @where, '( borrowers.flags = 1 OR borrowers.flags & (1 << ?) OR module_bit=? AND code=? )';
+        push @conditions, ($has_permission->{module_bit}) x 2, $has_permission->{subpermission};
+    }
+    $iTotalQuery .= ' WHERE ' . join ' AND ', @where if @where;
+    ($iTotalRecords) = $dbh->selectrow_array( $iTotalQuery, undef, @conditions );
 
     # Do that after iTotalQuery!
     if ( defined $branchcode and $branchcode ) {
@@ -58,6 +78,7 @@ sub search {
 
     my $select = "SELECT
         borrowers.borrowernumber, borrowers.surname, borrowers.firstname,
+        borrowers.flags,
         borrowers.streetnumber, borrowers.streettype, borrowers.address,
         borrowers.address2, borrowers.city, borrowers.state, borrowers.zipcode,
         borrowers.country, cardnumber, borrowers.dateexpiry,
@@ -66,8 +87,12 @@ sub search {
         categories.description AS category_description, categories.category_type,
         branches.branchname, borrowers.phone";
     my $from = "FROM borrowers
-        LEFT JOIN branches ON borrowers.branchcode = branches.branchcode
-        LEFT JOIN categories ON borrowers.categorycode = categories.categorycode";
+                LEFT JOIN branches ON borrowers.branchcode = branches.branchcode
+                LEFT JOIN categories ON borrowers.categorycode = categories.categorycode";
+    if ( $has_permission ) {
+        $from .= '
+                LEFT JOIN user_permissions on borrowers.borrowernumber=user_permissions.borrowernumber';
+    }
     my @where_args;
     my @where_strs;
     if(defined $firstletter and $firstletter ne '') {
@@ -142,8 +167,12 @@ sub search {
             if @where_strs_or;
     }
 
-    my $where;
-    $where = " WHERE " . join (" AND ", @where_strs) if @where_strs;
+    if ( $has_permission ) {
+        push @where_strs, '( borrowers.flags = 1 OR borrowers.flags & (1 << ?) OR module_bit=? AND code=? )';
+        push @where_args, ($has_permission->{module_bit}) x 2, $has_permission->{subpermission};
+    }
+
+    my $where = " WHERE " . join (" AND ", @where_strs) if @where_strs;
     my $orderby = dt_build_orderby($dt_params);
 
     my $limit;
