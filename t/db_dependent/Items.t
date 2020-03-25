@@ -964,7 +964,16 @@ subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
 
     Koha::MarcSubfieldStructures->search({ tagfield => '952', tagsubfield => '8' })->delete; # theoretical precaution
     Koha::MarcSubfieldStructures->search({ kohafield => 'items.ccode' })->delete;
-    my $mapping = Koha::MarcSubfieldStructure->new({ frameworkcode => q{}, tagfield => '952', tagsubfield => '8', kohafield => 'items.ccode' })->store;
+    my $mapping = Koha::MarcSubfieldStructure->new(
+        {
+            frameworkcode => q{},
+            tagfield      => '952',
+            tagsubfield   => '8',
+            kohafield     => 'items.ccode',
+            repeatable    => 1
+        }
+    )->store;
+    Koha::Caches->get_instance->clear_from_cache( "MarcSubfieldStructure-" );
 
     # Start testing
     my $marc = C4::Items::Item2Marc( $item, $biblio->{biblionumber} );
