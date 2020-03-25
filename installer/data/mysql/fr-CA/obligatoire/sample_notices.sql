@@ -68,6 +68,9 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 INSERT INTO `letter` (module, code, name, title, content, message_transport_type) VALUES
 ('suggestions','TO_PROCESS','Notification pour le responsable du poste budgétaire', 'Une suggestion est prête à être traitée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\n\nUne nouvelle suggestion est prête à être traitée : <<suggestions.title>> par <<suggestions.author>>.\n\nMerci,\n\n<<branches.branchname>>', 'email');
 
+INSERT INTO `letter` (module, code, name, title, content, message_transport_type) VALUES
+('suggestions', 'NOTIFY_MANAGER', 'Notify manager of a suggestion', "A suggestion has been assigned to you", "Dear [% borrower.firstname %] [% borrower.surname %],\nA suggestion has been assigned to you: [% suggestion.title %].\nThank you,\n[% branch.branchname %]", 'email');
+
 INSERT INTO letter ( module, code, branchcode, name, is_html, title, content, message_transport_type ) VALUES
 ('circulation', 'OVERDUES_SLIP', '', 'Ticket pour les documents en retard', '0', 'OVERDUES_SLIP', 'Le(s) document(s) est/sont présentement en retard :
 
