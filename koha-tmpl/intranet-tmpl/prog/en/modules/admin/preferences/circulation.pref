@@ -544,6 +544,7 @@ Circulation:
                   no: "Don't"
             - calculate and update overdue charges when an item is returned.
             - "<br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
+            - "<br /><strong>NOTE: This system preference requires FinesMode to be set to 'Calculate and charge.'</strong>"
         -
             - pref: UpdateItemLocationOnCheckin
               type: textarea
@@ -883,8 +884,7 @@ Circulation:
                   off: "Don't calculate"
                   production: Calculate and charge
             - fines (when <code>misc/cronjobs/fines.pl</code> is being run).
-            - "<br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask your system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> If the misc/cronjobs/fines.pl cronjob is being run, accruing and final fines will be calculated when the cron runs and accruing fines will be finalized when an item is returned. If CalculateFinesOnReturn is enabled, final fines will be calculated when an item is returned."
         -
             - If a lost item is returned, apply the refunding rules defined in the
             - pref: RefundLostOnReturnControl
