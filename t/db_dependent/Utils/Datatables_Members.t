@@ -541,7 +541,7 @@ subtest 'Search with permissions' => sub {
     is( $search_results->{iTotalDisplayRecords},
         3, "We find 3 patrons with suggestions_manage permission" );
     is_deeply(
-        [ map { $_->{borrowernumber} } @{ $search_results->{patrons} } ],
+        [ sort map { $_->{borrowernumber} } @{ $search_results->{patrons} } ],
         [
             $superlibrarian->borrowernumber,
             $librarian_with_full_permission->borrowernumber,
