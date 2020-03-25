@@ -19017,6 +19017,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 24846 - Add a new permission for new tool batch extend due dates)\n";
 }
 
+$DBversion = "19.05.09.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (19.05.09 release)\n";
+            SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
