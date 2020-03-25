@@ -117,6 +117,15 @@
                             <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                         [% END %]
                     </li>
+                    <li class="loggedin-menu-label">
+                        Desk: <br />
+                        [% IF ( LoginDeskname == '' AND Desks.defined ) %]
+                           <span class="logged-in-desk-name">NO DESK SET</span>
+                        [% ELSIF ( LoginDeskname != '' ) %]
+                            <span class="logged-in-desk-name">[% LoginDeskname | html %]</span>
+                            <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
+                        [% END %]
+                    </li>
 
                     <li role="separator" class="loggedin-menu-label divider"></li>
                     [% IF ( IndependentBranches ) %]
