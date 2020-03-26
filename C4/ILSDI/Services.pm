@@ -235,6 +235,9 @@ sub GetRecords {
                 '+as'     => ['barcode'],
             }
         )->unblessed;
+        foreach my $checkout (@$checkouts) {
+            delete $checkout->{'borrowernumber'};
+        }
         my @items            = $biblio->items->as_list;
 
         $biblioitem->{items}->{item} = [];
