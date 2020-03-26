@@ -194,6 +194,9 @@ sub dt_from_string {
     $dt_params{day} = '01' if $dt_params{day} eq '00';
 
     # Set default hh:mm:ss to 00:00:00
+    my $date_only = ( !defined( $dt_params{hour} )
+        && !defined( $dt_params{minute} )
+        && !defined( $dt_params{second} ) );
     $dt_params{hour}   = 00 unless defined $dt_params{hour};
     $dt_params{minute} = 00 unless defined $dt_params{minute};
     $dt_params{second} = 00 unless defined $dt_params{second};
@@ -207,6 +210,7 @@ sub dt_from_string {
         }
     }
 
+    my $floating = 0;
     my $dt = eval {
         DateTime->new(
             %dt_params,
@@ -216,13 +220,17 @@ sub dt_from_string {
     };
     if ($@) {
         $tz = DateTime::TimeZone->new( name => 'floating' );
+        $floating = 1;
         $dt = DateTime->new(
             %dt_params,
             # No TZ for dates 'infinite' => see bug 13242
             ( $dt_params{year} < 9999 ? ( time_zone => $tz ) : () ),
         );
     }
-    $dt->set_time_zone($server_tz);
+
+    # Convert to configured timezone (unless we started with a dateonly string or had to drop to floating time)
+    $dt->set_time_zone($server_tz) unless ( $date_only || $floating );
+
     return $dt;
 }
 
