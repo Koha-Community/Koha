@@ -63,6 +63,7 @@ Updated:<ul>
         <li><label for="branch">Choose library:</label>
         <select name="branch" id="branch">
             [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
+                        [% PROCESS options_for_yallah yallah => Branches.all( selected => branch ) %]
         </select></li>
     [% END %]
     </ol>

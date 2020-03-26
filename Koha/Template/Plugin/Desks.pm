@@ -37,20 +37,6 @@ got or the current one.
 
 =head2 Methods
 
-=head3 GetName
-
-[% Desk.GetName(desk_id) %]
-
-return desk name or empty string
-
-=cut
-
-sub GetName {
-    my ( $self, $desk_id ) = @_;
-    my $d = Koha::Desks->search( { desk_id => $desk_id} )->unblessed;
-    return @$d ? $d->{'desk_name'} : q{};
-}
-
 =head3 GetLoggedInDeskId
 
 [% Desks.GetLoggedInDeskId %]
@@ -62,9 +48,9 @@ return the desk name that is attached to the session or empty string
 sub GetLoggedInDeskId {
     my ($self) = @_;
 
-    return C4::Context->userenv ?
-        C4::Context->userenv->{'desk_id'} :
-        '';
+    return C4::Context->userenv
+      ? C4::Context->userenv->{'desk_id'}
+      : '';
 }
 
 =head3 GetLoggedInDeskName
@@ -78,61 +64,27 @@ Return the desk name that is attached to the session or empty string
 sub GetLoggedInDeskName {
     my ($self) = @_;
 
-    return C4::Context->userenv ?
-        C4::Context->userenv->{'desk_name'} :
-        '';
+    return C4::Context->userenv
+      ? C4::Context->userenv->{'desk_name'}
+      : '';
 }
 
-=head3 all
+=head3 ListForLibrary
 
-[% Desks.all %]
+[% Desks.ListForLibrary %]
 
 returns all desks existing at the library
 
 =cut
 
-sub all {
-    my ( $self, $params ) = @_;
-    my $selected = $params->{selected};
-    my $unfiltered = $params->{unfiltered} || 0;
-    my $search_params = $params->{search_params} || {};
-
-    if ( !$unfiltered ) {
-        $search_params->{only_from_group} = $params->{only_from_group} || 0;
-    }
-
-    my $desks = $unfiltered
-      ? Koha::Desks->search( $search_params, { order_by => ['desk_name'] } )->unblessed
-      : Koha::Desks->search_filtered( $search_params, { order_by => ['desk_name'] } )->unblessed;
-
-    for my $d ( @$desks ) {
-        if (       defined $selected and $d->{desk_id} eq $selected
-            or not defined $selected and C4::Context->userenv and $d->{branchcode} eq ( C4::Context->userenv->{desk_id} // q{} )
-        ) {
-            $d->{selected} = 1;
-        }
-    }
-
-    return $desks;
-}
-
-=head3 defined
-
-[% Desks.defined %]
-
-return 1 if there is at least a desk defined for the library.
-
-=cut
-
-sub defined {
-    my ( $self ) = @_;
-    my $desks = Koha::Desks->search()->unblessed;
-    if (@$desks) {
-        return 1 ;
-    }
-    else {
-        return 0;
-    }
+sub ListForLibrary {
+    my ($self) = @_;
+    my $branch_limit =
+      C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
+    return scalar Koha::Desks->search(
+        { branchcode => $branch_limit },
+        { order_by   => { '-asc' => 'desk_name' } }
+    );
 }
 
 1;

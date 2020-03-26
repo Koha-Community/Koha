@@ -86,7 +86,7 @@
                                 <span class="logged-in-branch-code content_hidden">[% Branches.GetLoggedInBranchcode | html %]</span>
                             </strong>
                         [% END %]
-                        [% IF (Desks.defined) %]
+                        [% IF Desks.ListForLibrary.count %]
                             <span class="separator">|</span>
                             <strong>
                                 [% IF ( Desks.GetLoggedInDeskName == '' ) %]
@@ -119,7 +119,7 @@
                     </li>
                     <li class="loggedin-menu-label">
                         Desk: <br />
-                        [% IF ( Desks.GetLoggedInDeskName == '' AND Desks.defined ) %]
+                        [% IF ( Desks.GetLoggedInDeskName == '' AND Desks.ListForLibrary.count ) %]
                            <span class="logged-in-desk-name">NO DESK SET</span>
                         [% ELSIF ( Desks.GetLoggedInDeskName != '' ) %]
                             <span class="logged-in-desk-name">[% Desks.GetLoggedInDeskName | html %]</span>
@@ -139,7 +139,7 @@
                         <a class="toplinks" href="/cgi-bin/koha/circ/set-library.pl">Set library</a>
                     </li>
                     [% END %]
-                    [% IF Desks.defined %]
+                    [% IF Desks.ListForLibrary.count %]
                     <li>
                         <a class="toplinks" href="/cgi-bin/koha/circ/selectdesk.pl">Set desk</a>
                     </li>
