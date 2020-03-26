@@ -119,15 +119,15 @@ fieldset.rows label.viewlog {
                                     <label for="modules">Modules:</label>
                                     <div class="log_modules">
                                         [% UNLESS modules %]
-                                            <label for="moduleALL" class="viewlog">All <input type="checkbox" id="moduleALL" name="modules" value="" checked="checked"></label>
+                                            <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value="" checked="checked"> All</label>
                                         [% ELSE %]
-                                            <label for="moduleALL" class="viewlog">All <input type="checkbox" id="moduleALL" name="modules" value=""></label>
+                                            <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
                                         [% END %]
                                         [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
                                             [% IF modules.grep(modx).size %]
-                                                <label for="module[% modx | html %]" class="viewlog">[% PROCESS translate_log_module module=modx %] <input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"></label>
+                                                <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% ELSE %]
-                                                <label for="module[% modx | html %]" class="viewlog">[% PROCESS translate_log_module module=modx %] <input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]"></label>
+                                                <label for="module[% modx | html %]" class="viewlog"><input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]"> [% PROCESS translate_log_module module=modx %]</label>
                                             [% END %]
                                         [% END %]
                                     </div>
@@ -139,16 +139,16 @@ fieldset.rows label.viewlog {
                                 <label for="actions">Actions:</label>
                                 <div class="log_modules">
                                     [% UNLESS actions %]
-                                        <label for="actionALL" class="viewlog">All <input type="checkbox" id="actionALL" name="actions" value="" checked="checked"></label>
+                                        <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value="" checked="checked"> All</label>
                                     [% ELSE %]
-                                        <label for="actionALL" class="viewlog">All <input type="checkbox" id="actionALL" name="actions" value=""></label>
+                                        <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value=""> All</label>
                                     [% END %]
 
                                     [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'CHANGE PASS' 'Run' ] %]
                                         [% IF actions.grep(actx).size %]
-                                            <label for="action[% actx | html %]" class="viewlog">[% PROCESS translate_log_action action=actx %] <input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]" checked="checked"></label>
+                                            <label for="action[% actx | html %]" class="viewlog"><input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]" checked="checked"> [% PROCESS translate_log_action action=actx %]</label>
                                         [% ELSE %]
-                                            <label for="action[% actx | html %]" class="viewlog">[% PROCESS translate_log_action action=actx %] <input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]"></label>
+                                            <label for="action[% actx | html %]" class="viewlog"><input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]"> [% PROCESS translate_log_action action=actx %]</label>
                                         [% END %]
                                     [% END %]
                                 </div>
@@ -169,16 +169,16 @@ fieldset.rows label.viewlog {
                             <li>
                                 <label for="interfaces">Interface:</label>
                                 [% UNLESS interfaces %]
-                                    <label for="interfaceALL" class="viewlog">All <input type="checkbox" id="interfaceALL" name="interfaces" value="" checked="checked"></label>
+                                    <label for="interfaceALL" class="viewlog"><input type="checkbox" id="interfaceALL" name="interfaces" value="" checked="checked"> All</label>
                                 [% ELSE %]
-                                    <label for="interfaceALL" class="viewlog">All <input type="checkbox" id="interfaceALL" name="interfaces" value=""></label>
+                                    <label for="interfaceALL" class="viewlog"><input type="checkbox" id="interfaceALL" name="interfaces" value=""> All</label>
                                 [% END %]
 
                                 [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' ] %]
                                     [% IF interfaces.grep(interf).size %]
-                                        <label for="interface[% interf | html %]" class="viewlog">[% PROCESS translate_log_interface log_interface=interf %] <input type="checkbox" id="interface[% interf | html %]" name="interfaces" value="" checked="checked"></label>
+                                        <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value="" checked="checked"> [% PROCESS translate_log_interface log_interface=interf %]</label>
                                     [% ELSE %]
-                                        <label for="interface[% interf | html %]" class="viewlog">[% PROCESS translate_log_interface log_interface=interf %] <input type="checkbox" id="interface[% interf | html %]" name="interfaces" value=""></label>
+                                        <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value=""> [% PROCESS translate_log_interface log_interface=interf %]</label>
                                     [% END %]
                                 [% END %]
                             </li>
