@@ -11,14 +11,16 @@ function untickAll(section){
 }
 
 $(document).ready(function(){
-    tickAll('modules');
+
+    if ( $('input[name="modules"]:checked').length == 0 ) {
+        tickAll('modules');
+    }
     $("#moduleALL").change(function(){
         if ( this.checked == true ){
             tickAll('modules');
         } else {
             untickAll('modules');
         }
-
     });
     $("input[name='modules']").change(function(){
         if ( $("input[name='modules']:checked").length == $("input[name='modules']").length - 1 ){
@@ -26,7 +28,9 @@ $(document).ready(function(){
         }
     });
 
-    tickAll('actions');
+    if ( $('input[name="actions"]:checked').length == 0 ) {
+        tickAll('actions');
+    }
     $("#actionALL").change(function(){
         if ( this.checked == true ){
             tickAll('actions');
@@ -41,7 +45,9 @@ $(document).ready(function(){
         }
     });
 
-    tickAll('interfaces');
+    if ( $('input[name="interfaces"]:checked').length == 0 ) {
+        tickAll('interfaces');
+    }
     $("#interfaceALL").change(function(){
         if ( this.checked == true ){
             tickAll('interfaces');

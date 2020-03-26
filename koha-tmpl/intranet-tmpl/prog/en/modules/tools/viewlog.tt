@@ -118,7 +118,7 @@ fieldset.rows label.viewlog {
                                 <li>
                                     <label for="modules">Modules:</label>
                                     <div class="log_modules">
-                                        [% UNLESS modules %]
+                                        [% IF modules.size == 0 %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value="" checked="checked"> All</label>
                                         [% ELSE %]
                                             <label for="moduleALL" class="viewlog"><input type="checkbox" id="moduleALL" name="modules" value=""> All</label>
@@ -138,7 +138,7 @@ fieldset.rows label.viewlog {
                             <li>
                                 <label for="actions">Actions:</label>
                                 <div class="log_modules">
-                                    [% UNLESS actions %]
+                                    [% IF actions.length == 0 %]
                                         <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value="" checked="checked"> All</label>
                                     [% ELSE %]
                                         <label for="actionALL" class="viewlog"><input type="checkbox" id="actionALL" name="actions" value=""> All</label>
@@ -168,7 +168,7 @@ fieldset.rows label.viewlog {
 							</li>
                             <li>
                                 <label for="interfaces">Interface:</label>
-                                [% UNLESS interfaces %]
+                                [% IF interfaces.size == 0 %]
                                     <label for="interfaceALL" class="viewlog"><input type="checkbox" id="interfaceALL" name="interfaces" value="" checked="checked"> All</label>
                                 [% ELSE %]
                                     <label for="interfaceALL" class="viewlog"><input type="checkbox" id="interfaceALL" name="interfaces" value=""> All</label>
@@ -176,9 +176,9 @@ fieldset.rows label.viewlog {
 
                                 [% FOREACH interf IN [ 'INTRANET' 'OPAC' 'SIP' 'COMMANDLINE' ] %]
                                     [% IF interfaces.grep(interf).size %]
-                                        <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value="" checked="checked"> [% PROCESS translate_log_interface log_interface=interf %]</label>
+                                        <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value="[% interf | html %]" checked="checked"> [% PROCESS translate_log_interface log_interface=interf %]</label>
                                     [% ELSE %]
-                                        <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value=""> [% PROCESS translate_log_interface log_interface=interf %]</label>
+                                        <label for="interface[% interf | html %]" class="viewlog"><input type="checkbox" id="interface[% interf | html %]" name="interfaces" value="[% interf | html %]"> [% PROCESS translate_log_interface log_interface=interf %]</label>
                                     [% END %]
                                 [% END %]
                             </li>
