@@ -21344,6 +21344,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20415, "Remove UseKohaPlugins preference");
 }
 
+$DBversion = '19.12.00.057';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "DELETE FROM systempreferences WHERE variable='INTRAdidyoumean'" );
+
+    NewVersion( $DBversion, 20415, "Remove INTRAdidyoumean preference");
+}
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
