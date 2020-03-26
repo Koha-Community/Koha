@@ -172,7 +172,7 @@ sub search {
         push @where_args, ($has_permission->{module_bit}) x 2, $has_permission->{subpermission};
     }
 
-    my $where = " WHERE " . join (" AND ", @where_strs) if @where_strs;
+    my $where = @where_strs ? " WHERE " . join (" AND ", @where_strs) : undef;
     my $orderby = dt_build_orderby($dt_params);
 
     my $limit;
