@@ -51,6 +51,7 @@
     <th>Barcode</th>
     <th>Due date</th>
     <th>Return date</th>
+    <th>Issue date</th>
     <th class="NoSort">Payment note</th>
     <th>Amount</th>
     <th>Amount outstanding</th>
@@ -105,6 +106,11 @@
             [% line.checkout.returndate | $KohaDates with_hours => 1 %]
         [% END %]
     </td>
+    <td>
+        [% IF line.issue_id %]
+            [% line.checkout.issuedate | $KohaDates %]
+        [% END %]
+    </td>
     <td class="actions">
         <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
         <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-remove"></i></a></span>
@@ -117,16 +123,16 @@
 
 <tfoot>
     <tr>
-        <td class="total" colspan="10">Total due:</td>
+        <td class="total" colspan="11">Total due:</td>
         <td style="text-align: right;">[% total | $Price %]</td>
     </tr>
     [% IF outstanding_credits.total_outstanding < 0 %]
         <tr>
-            <td class="total" colspan="10">Outstanding credits could be applied: </td>
+            <td class="total" colspan="11">Outstanding credits could be applied: </td>
             <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="apply_credits" value="apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
         </tr>
         <tr>
-            <td class="total" colspan="10">Total due if credit applied:</td>
+            <td class="total" colspan="11">Total due if credit applied:</td>
             <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
         </tr>
     [% END %]
