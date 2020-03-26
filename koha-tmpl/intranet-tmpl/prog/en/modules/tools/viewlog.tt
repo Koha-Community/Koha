@@ -18,8 +18,17 @@
 <style>
 fieldset.rows label.viewlog {
     float: none;
-    padding-left: 15px;
     font-weight: normal;
+    margin: 0;
+    min-width: 9em;
+    padding: .5em;
+    text-align: left;
+    white-space: nowrap;
+    width: auto;
+}
+.log_modules {
+    display: flex;
+    flex-wrap: wrap;
 }
 </style>
 </head>
@@ -108,37 +117,41 @@ fieldset.rows label.viewlog {
                             [% UNLESS src == "circ" %]
                                 <li>
                                     <label for="modules">Modules:</label>
-                                    [% UNLESS modules %]
-                                        <label for="moduleALL" class="viewlog">All <input type="checkbox" id="moduleALL" name="modules" value="" checked="checked"></label>
-                                    [% ELSE %]
-                                        <label for="moduleALL" class="viewlog">All <input type="checkbox" id="moduleALL" name="modules" value=""></label>
-                                    [% END %]
-                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
-                                        [% IF modules.grep(modx).size %]
-                                            <label for="module[% modx | html %]" class="viewlog">[% PROCESS translate_log_module module=modx %] <input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"></label>
+                                    <div class="log_modules">
+                                        [% UNLESS modules %]
+                                            <label for="moduleALL" class="viewlog">All <input type="checkbox" id="moduleALL" name="modules" value="" checked="checked"></label>
                                         [% ELSE %]
-                                            <label for="module[% modx | html %]" class="viewlog">[% PROCESS translate_log_module module=modx %] <input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]"></label>
+                                            <label for="moduleALL" class="viewlog">All <input type="checkbox" id="moduleALL" name="modules" value=""></label>
                                         [% END %]
-                                    [% END %]
+                                        [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
+                                            [% IF modules.grep(modx).size %]
+                                                <label for="module[% modx | html %]" class="viewlog">[% PROCESS translate_log_module module=modx %] <input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]" checked="checked"></label>
+                                            [% ELSE %]
+                                                <label for="module[% modx | html %]" class="viewlog">[% PROCESS translate_log_module module=modx %] <input type="checkbox" id="module[% modx | html %]" name="modules" value="[% modx | html %]"></label>
+                                            [% END %]
+                                        [% END %]
+                                    </div>
                                 </li>
                             [% ELSE %]
                                 <input type="hidden" name="modules" value="MEMBERS" />
                             [% END %]
                             <li>
                                 <label for="actions">Actions:</label>
-                                [% UNLESS actions %]
-                                    <label for="actionALL" class="viewlog">All <input type="checkbox" id="actionALL" name="actions" value="" checked="checked"></label>
-                                [% ELSE %]
-                                    <label for="actionALL" class="viewlog">All <input type="checkbox" id="actionALL" name="actions" value=""></label>
-                                [% END %]
-
-                                [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'CHANGE PASS' 'Run' ] %]
-                                    [% IF actions.grep(actx).size %]
-                                        <label for="action[% actx | html %]" class="viewlog">[% PROCESS translate_log_action action=actx %] <input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]" checked="checked"></label>
+                                <div class="log_modules">
+                                    [% UNLESS actions %]
+                                        <label for="actionALL" class="viewlog">All <input type="checkbox" id="actionALL" name="actions" value="" checked="checked"></label>
                                     [% ELSE %]
-                                        <label for="action[% actx | html %]" class="viewlog">[% PROCESS translate_log_action action=actx %] <input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]"></label>
+                                        <label for="actionALL" class="viewlog">All <input type="checkbox" id="actionALL" name="actions" value=""></label>
                                     [% END %]
-                                [% END %]
+
+                                    [% FOREACH actx IN [ 'ADD' 'DELETE' 'MODIFY' 'ISSUE' 'RETURN' 'RENEW' 'CREATE' 'CANCEL' 'SUSPEND' 'RESUME' 'ADDCIRCMESSAGE' 'DELCIRCMESSAGE' 'STATUS_CHANGE' 'CHANGE PASS' 'Run' ] %]
+                                        [% IF actions.grep(actx).size %]
+                                            <label for="action[% actx | html %]" class="viewlog">[% PROCESS translate_log_action action=actx %] <input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]" checked="checked"></label>
+                                        [% ELSE %]
+                                            <label for="action[% actx | html %]" class="viewlog">[% PROCESS translate_log_action action=actx %] <input type="checkbox" id="action[% actx | html %]" name="actions" value="[% actx | html %]"></label>
+                                        [% END %]
+                                    [% END %]
+                                </div>
                             </li>
                             <li>
                                 [% IF src == 'circ' %]
