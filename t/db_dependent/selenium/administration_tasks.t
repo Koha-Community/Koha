@@ -125,6 +125,9 @@ SKIP: {
           ;    # New library
         $s->fill_form( { branchcode => $branchcode, branchname => 'my library' } );
         $s->submit_form;
+
+        # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our library is not hidden
+        $driver->find_element('//select[@name="libraries_length"]/option[@value="-1"]')->click;
         $s->click(
             {
                 href => '/admin/branches.pl?op=add_form&branchcode=' . $branchcode,
