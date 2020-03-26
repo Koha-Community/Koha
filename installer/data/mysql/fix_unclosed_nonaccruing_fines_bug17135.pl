@@ -76,7 +76,7 @@ sub Bug_17135_fix {
 
     my $control = C4::Context->preference('CircControl');
     my $mode = C4::Context->preference('finesMode');
-    my $today = DateTime->now( time_zone => C4::Context->tz() );
+    my $today = dt_from_string();
     my $dbh = C4::Context->dbh;
 
     ## fetch the unclosed FU fines linked to the issues by issue_id

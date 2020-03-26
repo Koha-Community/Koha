@@ -20,6 +20,7 @@ use DateTime;
 
 use C4::Circulation;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Biblio;
 use Koha::Item;
@@ -38,7 +39,7 @@ my $builder = t::lib::TestBuilder->new;
 $dbh->{RaiseError} = 1;
 $schema->storage->txn_begin();
 
-my $now_value       = DateTime->now();
+my $now_value       = dt_from_string();
 my $mocked_datetime = Test::MockModule->new('DateTime');
 $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 
@@ -112,7 +113,7 @@ $builder->build(
 
 
 my $orig_due = C4::Circulation::CalcDateDue(
-    DateTime->now(time_zone => C4::Context->tz()),
+    dt_from_string(),
     $item->effective_itemtype,
     $patron->branchcode,
     $patron->unblessed

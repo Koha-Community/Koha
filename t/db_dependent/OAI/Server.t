@@ -72,7 +72,7 @@ $dbh->do('DELETE FROM oai_sets');
 
 set_fixed_time(CORE::time());
 
-my $base_datetime = DateTime->now();
+my $base_datetime = dt_from_string();
 my $date_added = $base_datetime->ymd . ' ' .$base_datetime->hms . 'Z';
 my $date_to = substr($date_added, 0, 10) . 'T23:59:59Z';
 my (@header, @marcxml, @oaidc);

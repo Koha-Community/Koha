@@ -410,7 +410,7 @@ Koha::Calendar - Object containing a branches calendar
   use Koha::Calendar
 
   my $c = Koha::Calendar->new( branchcode => 'MAIN' );
-  my $dt = DateTime->now();
+  my $dt = dt_from_string();
 
   # are we open
   $open = $c->is_holiday($dt);

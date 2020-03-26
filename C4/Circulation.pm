@@ -703,7 +703,7 @@ sub CanBookBeIssued {
     if ($duedate && ref $duedate ne 'DateTime') {
         $duedate = dt_from_string($duedate);
     }
-    my $now = DateTime->now( time_zone => C4::Context->tz() );
+    my $now = dt_from_string();
     unless ( $duedate ) {
         my $issuedate = $now->clone();
 
@@ -1234,7 +1234,7 @@ sub checkHighHolds {
             }
         }
 
-        my $issuedate = DateTime->now( time_zone => C4::Context->tz() );
+        my $issuedate = dt_from_string();
 
         my $calendar = Koha::Calendar->new( branchcode => $branchcode );
 
@@ -1313,7 +1313,7 @@ sub AddIssue {
 
     # $issuedate defaults to today.
     if ( !defined $issuedate ) {
-        $issuedate = DateTime->now( time_zone => C4::Context->tz() );
+        $issuedate = dt_from_string();
     }
     else {
         if ( ref $issuedate ne 'DateTime' ) {
@@ -1463,7 +1463,7 @@ sub AddIssue {
                     holdingbranch => C4::Context->userenv->{'branch'},
                     itemlost      => 0,
                     onloan        => $datedue->ymd(),
-                    datelastborrowed => DateTime->now( time_zone => C4::Context->tz() )->ymd(),
+                    datelastborrowed => dt_from_string(),
                 },
                 $item_object->biblionumber,
                 $item_object->itemnumber,
@@ -2766,7 +2766,7 @@ sub CanBookBeRenewed {
                 $soonestrenewal->truncate( to => 'day' );
             }
 
-            if ( $soonestrenewal > DateTime->now( time_zone => C4::Context->tz() ) )
+            if ( $soonestrenewal > dt_from_string() )
             {
                 return ( 0, "auto_too_soon" ) if $issue->auto_renew;
                 return ( 0, "too_soon" );
@@ -2888,7 +2888,7 @@ sub AddRenewal {
     my $itemnumber      = shift or return;
     my $branch          = shift;
     my $datedue         = shift;
-    my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz);
+    my $lastreneweddate = shift || dt_from_string();
 
     my $item_object   = Koha::Items->find($itemnumber) or return;
     my $biblio = $item_object->biblio;
@@ -2927,7 +2927,7 @@ sub AddRenewal {
 
             $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                             dt_from_string( $issue->date_due, 'sql' ) :
-                                            DateTime->now( time_zone => C4::Context->tz());
+                                            dt_from_string();
             $datedue =  CalcDateDue($datedue, $itemtype, $circ_library->branchcode, $patron_unblessed, 'is a renewal');
         }
 
@@ -3556,9 +3556,7 @@ sub CalcDateDue {
             $datedue = $startdate->clone;
         }
     } else {
-        $datedue =
-          DateTime->now( time_zone => C4::Context->tz() )
-          ->truncate( to => 'minute' );
+        $datedue = dt_from_string()->truncate( to => 'minute' );
     }
 
 
@@ -4035,7 +4033,7 @@ sub GetAgeRestriction {
             }
 
             #Get how many days the borrower has to reach the age restriction
-            my @Today = split /-/, DateTime->today->ymd();
+            my @Today = split /-/, dt_from_string()->ymd();
             my $daysToAgeRestriction = Date_to_Days(@alloweddate) - Date_to_Days(@Today);
             #Negative days means the borrower went past the age restriction age
             return ($restriction_year, $daysToAgeRestriction);

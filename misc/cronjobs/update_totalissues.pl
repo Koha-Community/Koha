@@ -32,6 +32,7 @@ use Getopt::Long;
 use Pod::Usage;
 
 use Koha::Script -cron;
+use Koha::DateUtils qw/ dt_from_string /;
 use C4::Context;
 use C4::Biblio;
 use C4::Log;
@@ -122,7 +123,7 @@ sub process_items {
 
 sub process_stats {
     if ($interval) {
-        my $dt = DateTime->now;
+        my $dt = dt_from_string();
 
         my %units = (
             h => 'hours',

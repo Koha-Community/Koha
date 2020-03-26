@@ -24,6 +24,7 @@ use Carp;
 use C4::Context;
 use Koha::Checkout;
 use Koha::Database;
+use Koha::DateUtils;
 
 use base qw(Koha::Objects);
 
@@ -48,7 +49,7 @@ sub calculate_dropbox_date {
     my $branchcode = $userenv->{branch} // q{};
 
     my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-    my $today        = DateTime->now( time_zone => C4::Context->tz() );
+    my $today        = dt_from_string();
     my $dropbox_date = $calendar->addDate( $today, -1 );
 
     return $dropbox_date;

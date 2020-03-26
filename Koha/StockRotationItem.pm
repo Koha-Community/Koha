@@ -129,7 +129,7 @@ sub needs_advancing {
         );
         my $duration = DateTime::Duration
             ->new( days => $self->stage->duration );
-        if ( $arrival + $duration le DateTime->now ) {
+        if ( $arrival + $duration le dt_from_string() ) {
             return 1;
         } else {
             return 0;
@@ -155,7 +155,7 @@ sub repatriate {
         'itemnumber' => $self->itemnumber_id,
         'frombranch' => $self->itemnumber->holdingbranch,
         'tobranch'   => $self->stage->branchcode_id,
-        'datesent'   => DateTime->now,
+        'datesent'   => dt_from_string(),
         'comments'   => $msg || "StockrotationRepatriation",
     })->store;
     $self->itemnumber->homebranch($self->stage->branchcode_id)->store;
@@ -184,14 +184,14 @@ sub advance {
     my $transfer = Koha::Item::Transfer->new({
         'itemnumber' => $self->itemnumber_id,
         'frombranch' => $item->holdingbranch,
-        'datesent'   => DateTime->now,
+        'datesent'   => dt_from_string(),
         'comments'   => "StockrotationAdvance"
     });
 
     if ( $self->indemand && !$self->fresh ) {
         $self->indemand(0)->store;  # De-activate indemand
         $transfer->tobranch($self->stage->branchcode_id);
-        $transfer->datearrived(DateTime->now);
+        $transfer->datearrived(dt_from_string());
     } else {
         # Find and update our stage.
         my $stage = $self->stage;
@@ -199,7 +199,7 @@ sub advance {
         if ( $self->fresh ) {   # Just added to rota
             $new_stage = $self->stage->first_sibling || $self->stage;
             $transfer->tobranch($new_stage->branchcode_id);
-            $transfer->datearrived(DateTime->now) # Already at first branch
+            $transfer->datearrived(dt_from_string()) # Already at first branch
                 if $item->holdingbranch eq $new_stage->branchcode_id;
             $self->fresh(0)->store;         # Reset fresh
         } elsif ( !$stage->last_sibling ) { # Last stage
@@ -207,7 +207,7 @@ sub advance {
                 # Revert to first stage.
                 $new_stage = $stage->first_sibling || $stage;
                 $transfer->tobranch($new_stage->branchcode_id);
-                $transfer->datearrived(DateTime->now);
+                $transfer->datearrived(dt_from_string());
             } else {
                 $self->delete;  # StockRotationItem is done.
                 return 1;

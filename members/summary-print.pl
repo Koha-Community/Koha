@@ -25,6 +25,7 @@ use C4::Members;
 use C4::Circulation qw( GetIssuingCharges );
 use C4::Reserves;
 use C4::Items;
+use Koha::DateUtils;
 use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::Patrons;
@@ -109,7 +110,7 @@ sub build_reserve_data {
 
     my $return = [];
 
-    my $today = DateTime->now( time_zone => C4::Context->tz );
+    my $today = dt_from_string();
     $today->truncate( to => 'day' );
 
     while ( my $reserve = $reserves->next() ) {

@@ -84,7 +84,7 @@ my $mode         = C4::Context->preference('finesMode');
 my $delim = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
 
 my %is_holiday;
-my $today = DateTime->now( time_zone => C4::Context->tz() );
+my $today = dt_from_string();
 my $filename;
 if ($log or $output_dir) {
     $filename = get_filename($output_dir);

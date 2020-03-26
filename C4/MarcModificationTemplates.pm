@@ -24,6 +24,7 @@ use DateTime;
 use C4::Context;
 use Koha::SimpleMARC;
 use Koha::MoreUtils;
+use Koha::DateUtils;
 
 use vars qw(@ISA @EXPORT);
 
@@ -501,7 +502,7 @@ sub ModifyRecordWithTemplate {
     warn( "C4::MarcModificationTemplates::ModifyRecordWithTemplate( $template_id, $record )" ) if DEBUG;
     warn( "Unmodified Record:\n" . $record->as_formatted() ) if DEBUG >= 10;
 
-    my $current_date = DateTime->now()->ymd();
+    my $current_date = dt_from_string()->ymd();
     my $branchcode = '';
     $branchcode = C4::Context->userenv->{branch} if C4::Context->userenv;
 

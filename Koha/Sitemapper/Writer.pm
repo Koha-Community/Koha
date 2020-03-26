@@ -23,7 +23,7 @@ use Moo;
 use Modern::Perl;
 use XML::Writer;
 use IO::File;
-use DateTime;
+use Koha::DateUtils;
 
 
 my $MAX = 50000;
@@ -106,7 +106,7 @@ sub end {
 
     my $w = $self->_writer_create("sitemapindex.xml");
     $w->startTag('sitemapindex', 'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9');
-    my $now = DateTime->now()->ymd;
+    my $now = dt_from_string()->ymd;
     for my $i ( 1..$self->count ) {
         $w->startTag('sitemap');
             $w->startTag('loc');

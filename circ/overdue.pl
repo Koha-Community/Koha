@@ -214,7 +214,7 @@ if ($noreport) {
     #  FIX 2: ensure there are indexes for columns participating in the WHERE clauses, where feasible/reasonable
 
 
-    my $today_dt = DateTime->now(time_zone => C4::Context->tz);
+    my $today_dt = dt_from_string();
     $today_dt->truncate(to => 'minute');
     my $todaysdate = $today_dt->strftime('%Y-%m-%d %H:%M');
 

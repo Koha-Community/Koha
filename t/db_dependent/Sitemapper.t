@@ -21,6 +21,7 @@ use Modern::Perl;
 use File::Basename;
 use File::Path;
 use DateTime;
+use Koha::DateUtils;
 use Test::MockModule;
 use Test::More tests => 16;
 use Carp qw/croak carp/;
@@ -31,7 +32,7 @@ BEGIN {
     use_ok('Koha::Sitemapper::Writer');
 }
 
-my $now_value       = DateTime->now();
+my $now_value       = dt_from_string();
 my $mocked_datetime = Test::MockModule->new('DateTime');
 $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 

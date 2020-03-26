@@ -26,6 +26,7 @@ use DateTime;
 use Readonly;
 use Business::ISBN;
 use Koha::Database;
+use Koha::DateUtils;
 use C4::Budgets qw( GetBudget );
 
 use Koha::Acquisition::Orders;
@@ -51,7 +52,7 @@ sub new {
 
         # convenient alias
         $self->{basket} = $self->{orderlines}->[0]->basketno;
-        $self->{message_date} = DateTime->now( time_zone => 'local' );
+        $self->{message_date} = dt_from_string();
     }
 
     # validate that its worth proceeding

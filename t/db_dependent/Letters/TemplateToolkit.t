@@ -58,7 +58,7 @@ $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM letter|);
 
-my $now_value       = DateTime->now();
+my $now_value       = dt_from_string();
 my $mocked_datetime = Test::MockModule->new('DateTime');
 $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 

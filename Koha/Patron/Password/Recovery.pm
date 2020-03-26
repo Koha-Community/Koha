@@ -21,6 +21,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Letters;
 use Crypt::Eksblowfish::Bcrypt qw(en_base64);
+use Koha::DateUtils;
 
 use vars qw(@ISA @EXPORT);
 
@@ -115,7 +116,7 @@ sub SendPasswordRecoveryEmail {
 
     # insert into database
     my $expirydate =
-      DateTime->now( time_zone => C4::Context->tz() )->add( days => 2 );
+      dt_from_string()->add( days => 2 );
     if ($update) {
         my $rs =
           $schema->resultset('BorrowerPasswordRecovery')

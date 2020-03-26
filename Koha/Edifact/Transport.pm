@@ -29,6 +29,7 @@ use File::Slurp;
 use File::Copy;
 use File::Basename qw( fileparse );
 use Koha::Database;
+use Koha::DateUtils;
 use Encode qw( from_to );
 
 sub new {
@@ -40,7 +41,7 @@ sub new {
         account     => $acct,
         schema      => $schema,
         working_dir => C4::Context::temporary_directory,    #temporary work directory
-        transfer_date => DateTime->now( time_zone => 'local' ),
+        transfer_date => dt_from_string(),
     };
 
     bless $self, $class;
