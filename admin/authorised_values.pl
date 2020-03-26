@@ -104,17 +104,7 @@ if ($op eq 'add_form') {
     my $duplicate_entry = 0;
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
-    my $already_exists = Koha::AuthorisedValues->search(
-        {
-            category => $new_category,
-            authorised_value => $new_authorised_value,
-        }
-    )->next;
-
-    if ( $already_exists and ( not $id or $already_exists->id != $id ) ) {
-        push @messages, {type => 'error', code => 'already_exists' };
-    }
-    elsif ( $new_category eq 'branches' or $new_category eq 'itemtypes' or $new_category eq 'cn_source' ) {
+    if ( $new_category eq 'branches' or $new_category eq 'itemtypes' or $new_category eq 'cn_source' ) {
         push @messages, {type => 'error', code => 'invalid_category_name' };
     }
     elsif ( $id ) { # Update
@@ -136,17 +126,18 @@ if ($op eq 'add_form') {
         }
     }
     else { # Insert
-        my $av = Koha::AuthorisedValue->new( {
-            category => $new_category,
-            authorised_value => $new_authorised_value,
-            lib => scalar $input->param('lib') || undef,
-            lib_opac => scalar $input->param('lib_opac') || undef,
-            imageurl => $imageurl,
-        } );
-
         eval {
-            $av->store;
+            my $av = Koha::AuthorisedValue->new(
+                {
+                    category         => $new_category,
+                    authorised_value => $new_authorised_value,
+                    lib              => scalar $input->param('lib') || undef,
+                    lib_opac         => scalar $input->param('lib_opac') || undef,
+                    imageurl         => $imageurl,
+                }
+            )->store;
             $av->replace_library_limits( \@branches );
+            $av->store;
         };
 
         if ( $@ ) {
