@@ -21349,7 +21349,7 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do( "DELETE FROM systempreferences WHERE variable='INTRAdidyoumean'" );
 
-    NewVersion( $DBversion, 20415, "Remove INTRAdidyoumean preference");
+    NewVersion( $DBversion, 20399, "Remove INTRAdidyoumean preference");
 }
 
 $DBversion = '19.12.00.058';
