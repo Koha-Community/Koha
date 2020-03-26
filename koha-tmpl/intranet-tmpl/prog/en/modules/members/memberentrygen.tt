@@ -875,7 +875,7 @@ legend:hover {
                                                 <label for="yes-autorenew_checkouts">
                                                     Allow auto-renewal of items:
                                                 </label>
-                                                    [% IF ( autorenew_checkouts ) %]
+                                                    [% IF ( autorenew_checkouts || opadd ) %]
                                                         <label for="yes-autorenew_checkouts">
                                                             Yes
                                                             <input type="radio" id="yes-autorenew_checkouts" name="autorenew_checkouts" value="1" checked="checked" />
