@@ -94,7 +94,6 @@ INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES 
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'BZ', 'Belize');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CA', 'Canada');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CC', 'Cocos, île des');
-INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CC', 'Keeling');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CD', 'Congo, Répubublique Démocratique');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CF', 'Centrafricaine, République');
 INSERT INTO `authorised_values` ( `category`, `authorised_value`, `lib`) VALUES ( 'COUNTRY', 'CG', 'Congo');
