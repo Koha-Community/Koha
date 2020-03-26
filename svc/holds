@@ -68,6 +68,7 @@ my $holds_rs = Koha::Holds->search(
 my @holds;
 while ( my $h = $holds_rs->next() ) {
     my $item = $h->item();
+    my $item_group = $h->item_group();
 
     my $biblionumber = $h->biblio()->biblionumber();
 
@@ -151,6 +152,11 @@ while ( my $h = $holds_rs->next() ) {
             $hold->{not_transferred}    = 1;
             $hold->{not_transferred_by} = $h->item()->holding_branch()->branchname();
         }
+    }
+
+    if ($item_group) {
+        $hold->{item_group_id}          = $item_group->id;
+        $hold->{item_group_description} = $item_group->description;
     }
 
     push( @holds, $hold );

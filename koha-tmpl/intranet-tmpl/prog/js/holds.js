@@ -278,6 +278,10 @@ $(document).ready(function() {
                                 data += __("Next available %s item").format(oObj.itemtype_limit);
                             }
 
+                            if ( oObj.item_group_id ) {
+                                data += _("Next available item group <strong>%s</strong> item").format( oObj.item_group_description );
+                            }
+
                             if ( oObj.barcode ) {
                                 data += "<em>";
                                 if ( oObj.found == "W" ) {
