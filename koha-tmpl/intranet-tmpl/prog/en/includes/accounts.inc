@@ -22,7 +22,7 @@
            [%- CASE 'RENT'             -%]Rental fee
            [%- CASE 'RENT_DAILY'       -%]Daily rental fee
            [%- CASE 'RENT_RENEW'       -%]Renewal of rental item
-           [%- CASE 'RENT_DAILY_RENEW' -%]Rewewal of daily rental item
+           [%- CASE 'RENT_DAILY_RENEW' -%]Renewal of daily rental item
            [%- CASE 'RESERVE'          -%]Hold fee
            [%- CASE 'RESERVE_EXPIRED'  -%]Hold waiting too long
            [%- CASE 'Payout'           -%]Payout
