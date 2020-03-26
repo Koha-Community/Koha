@@ -1087,24 +1087,23 @@
         </xsl:if>
 
         <!-- 583 -->
-        <xsl:if test="marc:datafield[@tag=583]">
-        <xsl:for-each select="marc:datafield[@tag=583]">
-            <xsl:if test="@ind1=1 or @ind1=' '">
+        <xsl:if test="marc:datafield[@tag=583 and not(@ind1=0)]">
             <span class="results_summary actionnote">
                 <span class="label">Action note: </span>
-                <xsl:choose>
-                <xsl:when test="marc:subfield[@code='z']">
-                    <xsl:value-of select="marc:subfield[@code='z']"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">abcdefgijklnou</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:otherwise>
-                </xsl:choose>
+                <xsl:for-each select="marc:datafield[@tag=583 and not(@ind1=0)]">
+                    <xsl:choose>
+                    <xsl:when test="marc:subfield[@code='z']">
+                        <xsl:value-of select="marc:subfield[@code='z']"/><xsl:text> </xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">abcdefgijklnou</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
+                </xsl:for-each>
             </span>
-            </xsl:if>
-        </xsl:for-each>
         </xsl:if>
 
         <!-- 508 -->
