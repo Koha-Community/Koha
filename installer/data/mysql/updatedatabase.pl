@@ -21296,6 +21296,7 @@ if( CheckVersion( $DBversion ) ) {
 
         $dbh->do(q|
             ALTER TABLE suggestions ADD CONSTRAINT `suggestions_ibfk_lastmodificationby` FOREIGN KEY (`lastmodificationby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
+            A
         |);
     }
 
@@ -21334,6 +21335,15 @@ if( CheckVersion( $DBversion ) ) {
 
     NewVersion( $DBversion, 23590, "Add lastmodificationby and lastmodificationdate to the suggestions table");
 }
+
+$DBversion = '19.12.00.056';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "DELETE FROM systempreferences WHERE variable='UseKohaPlugins'" );
+
+    NewVersion( $DBversion, 20415, "Remove UseKohaPlugins preference");
+}
+
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
