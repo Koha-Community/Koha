@@ -19781,7 +19781,7 @@ if ( CheckVersion($DBversion) ) {
               ('RENT', 'Rental fee', 0, NULL, 1),
               ('RENT_DAILY', 'Daily rental fee', 0, NULL, 1),
               ('RENT_RENEW', 'Renewal of rental item', 0, NULL, 1),
-              ('RENT_DAILY_RENEW', 'Rewewal of daily rental item', 0, NULL, 1),
+              ('RENT_DAILY_RENEW', 'Renewal of daily rental item', 0, NULL, 1),
               ('RESERVE', 'Hold fee', 0, NULL, 1)
         }
     );

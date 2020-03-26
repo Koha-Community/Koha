@@ -9,6 +9,6 @@ INSERT INTO account_debit_types ( code, description, can_be_added_manually, defa
 ('RENT', 'Rental fee', 0, NULL, 1),
 ('RENT_DAILY', 'Daily rental fee', 0, NULL, 1),
 ('RENT_RENEW', 'Renewal of rental item', 0, NULL, 1),
-('RENT_DAILY_RENEW', 'Rewewal of daily rental item', 0, NULL, 1),
+('RENT_DAILY_RENEW', 'Renewal of daily rental item', 0, NULL, 1),
 ('RESERVE', 'Hold fee', 0, NULL, 1),
 ('RESERVE_EXPIRED', 'Hold waiting too long', 0, NULL, 1);
