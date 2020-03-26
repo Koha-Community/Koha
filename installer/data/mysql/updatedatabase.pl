@@ -21352,6 +21352,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20415, "Remove INTRAdidyoumean preference");
 }
 
+$DBversion = '19.12.00.058';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`,`type`) VALUES
+        ('OPACnumSearchResultsDropdown', 0, NULL, 'Enable option list of number of results per page to show in OPAC search results','YesNo'),
+        ('numSearchResultsDropdown', 0, NULL, 'Enable option list of number of results per page to show in staff client search results','YesNo')
+    });
+
+    NewVersion( $DBversion, 14715, "Add sysprefs numSearchResultsDropdown and OPACnumSearchResultsDropdown");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
