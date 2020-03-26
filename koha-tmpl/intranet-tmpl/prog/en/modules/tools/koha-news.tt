@@ -296,6 +296,10 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
     [% INCLUDE 'str/tinymce_i18n.inc' %]
     <script>
         tinyMCE.init({
+            verify_html: false,
+            force_br_newlines : false,
+            force_p_newlines : false,
+            forced_root_block : '',
             branding : false,
             content_css : "[% interface | html %]/[% theme | html %]/css/tinymce.css",
             menubar : "file edit view insert format tools table",
