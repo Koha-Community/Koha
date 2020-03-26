@@ -417,7 +417,7 @@ if ( defined $htmlfilename ) {
   if ( $htmlfilename eq '' ) {
     $fh = *STDOUT;
   } else {
-    my $today = DateTime->now(time_zone => C4::Context->tz );
+    my $today = dt_from_string();
     open $fh, ">:encoding(UTF-8)",File::Spec->catdir ($htmlfilename,"notices-".$today->ymd().".html");
   }
   
@@ -438,7 +438,7 @@ elsif ( defined $text_filename ) {
   if ( $text_filename eq '' ) {
     $fh = *STDOUT;
   } else {
-    my $today = DateTime->now(time_zone => C4::Context->tz );
+    my $today = dt_from_string();
     open $fh, ">",File::Spec->catdir ($text_filename,"notices-".$today->ymd().".txt");
   }
 }

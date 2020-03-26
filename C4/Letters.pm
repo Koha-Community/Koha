@@ -796,7 +796,7 @@ sub _parseletter {
     }
 
     if ($letter->{content} && $letter->{content} =~ /<<today>>/) {
-        my $todaysdate = output_pref( DateTime->now() );
+        my $todaysdate = output_pref( dt_from_string() );
         $letter->{content} =~ s/<<today>>/$todaysdate/go;
     }
 

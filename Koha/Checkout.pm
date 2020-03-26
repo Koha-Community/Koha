@@ -54,7 +54,8 @@ will be the reference date.
 
 sub is_overdue {
     my ( $self, $dt ) = @_;
-    $dt ||= DateTime->now( time_zone => C4::Context->tz );
+    $dt ||= dt_from_string();
+
     my $is_overdue =
       DateTime->compare( dt_from_string( $self->date_due, 'sql' ), $dt ) == -1
       ? 1

@@ -302,7 +302,7 @@ if ($barcode) {
       AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date );
 
     if ($returned) {
-        my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minute');
+        my $time_now = dt_from_string()->truncate( to => 'minute');
         my $date_due_dt = dt_from_string( $issue->date_due, 'sql' );
         my $duedate = $date_due_dt->strftime('%Y-%m-%d %H:%M');
         $returneditems{0}      = $barcode;
@@ -311,7 +311,7 @@ if ($barcode) {
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $duedate;
         unless ( $dropboxmode ) {
-            $input{return_overdue} = 1 if (DateTime->compare($date_due_dt, DateTime->now()) == -1);
+            $input{return_overdue} = 1 if (DateTime->compare($date_due_dt, dt_from_string()) == -1);
         } else {
             $input{return_overdue} = 1 if (DateTime->compare($date_due_dt, $dropboxdate) == -1);
         }
@@ -569,7 +569,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{duedate} = output_pref($duedate);
             my $patron = Koha::Patrons->find( $riborrowernumber{$_} );
             unless ( $dropboxmode ) {
-                $ri{return_overdue} = 1 if (DateTime->compare($duedate, DateTime->now()) == -1);
+                $ri{return_overdue} = 1 if (DateTime->compare($duedate, dt_from_string()) == -1);
             } else {
                 $ri{return_overdue} = 1 if (DateTime->compare($duedate, $dropboxdate) == -1);
             }

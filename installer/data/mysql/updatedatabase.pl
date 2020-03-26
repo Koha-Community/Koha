@@ -16262,7 +16262,7 @@ $DBversion = '18.06.00.016';
 if( CheckVersion( $DBversion ) ) {
     my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
     my $days = C4::Context->preference('MaxPickupDelay') || 7;
-    my $date = DateTime->now()->add( days => $days );
+    my $date = dt_from_string()->add( days => $days );
     my $sql  = q|UPDATE reserves SET expirationdate = ? WHERE expirationdate IS NULL AND waitingdate IS NOT NULL|;
     $dbh->do( $sql, undef, $dtf->format_datetime($date) );
     SetVersion( $DBversion );

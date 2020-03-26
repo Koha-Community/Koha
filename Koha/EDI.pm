@@ -27,6 +27,7 @@ use Business::ISBN;
 use DateTime;
 use C4::Context;
 use Koha::Database;
+use Koha::DateUtils;
 use C4::Acquisition qw( NewBasket CloseBasket ModOrder);
 use C4::Suggestions qw( ModSuggestion );
 use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio GetFrameworkCode GetMarcFromKohaField );
@@ -174,7 +175,7 @@ sub process_ordrsp {
                             ordernumber             => $ordernumber,
                             cancellationreason      => $reason,
                             orderstatus             => 'cancelled',
-                            datecancellationprinted => DateTime->now()->ymd(),
+                            datecancellationprinted => dt_from_string()->ymd(),
                         }
                     );
                 }
@@ -624,7 +625,7 @@ sub quote_item {
     # database definitions should set some of these defaults but dont
     my $order_hash = {
         biblionumber       => $bib->{biblionumber},
-        entrydate          => DateTime->now( time_zone => 'local' )->ymd(),
+        entrydate          => dt_from_string()->ymd(),
         basketno           => $basketno,
         listprice          => $item->price,
         quantity           => $order_quantity,

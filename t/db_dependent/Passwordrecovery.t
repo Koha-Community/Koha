@@ -21,6 +21,7 @@ use C4::Context;
 use Mail::Sendmail;
 use C4::Letters;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Patrons;
 use t::lib::TestBuilder;
 
@@ -112,21 +113,21 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
     {
         borrowernumber => $borrowernumber1,
         uuid           => $uuid1,
-        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->add( days => 2 )->datetime()
+        valid_until    => dt_from_string()->add( days => 2 )->datetime()
     }
 );
 $schema->resultset('BorrowerPasswordRecovery')->create(
     {
         borrowernumber => $borrowernumber2,
         uuid           => $uuid2,
-        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 2 )->datetime()
+        valid_until    => dt_from_string()->subtract( days => 2 )->datetime()
     }
 );
 $schema->resultset('BorrowerPasswordRecovery')->create(
     {
         borrowernumber => $borrowernumber3,
         uuid           => $uuid3,
-        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 3 )->datetime()
+        valid_until    => dt_from_string()->subtract( days => 3 )->datetime()
     }
 );
 
@@ -164,7 +165,7 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
     {
         borrowernumber => $borrowernumber2,
         uuid           => $uuid2,
-        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 2 )->datetime()
+        valid_until    => dt_from_string()->subtract( days => 2 )->datetime()
     }
 );
 
@@ -179,7 +180,7 @@ $schema->resultset('BorrowerPasswordRecovery')->create(
     {
         borrowernumber => $borrowernumber3,
         uuid           => $uuid3,
-        valid_until    => DateTime->now( time_zone => C4::Context->tz() )->subtract( days => 3 )->datetime()
+        valid_until    => dt_from_string()->subtract( days => 3 )->datetime()
     }
 );
 

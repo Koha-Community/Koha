@@ -21,6 +21,7 @@
 use Modern::Perl;
 
 use DateTime;
+use Koha::DateUtils;
 use Test::More tests => 8;
 use Test::Warn;
 
@@ -39,7 +40,7 @@ is ( C4::Circulation::GetAgeRestriction('K16'), '16', 'K16 returns 16' );
 subtest 'Patron tests - 15 years old' => sub {
     plan tests => 5;
     ##Testing age restriction for a borrower.
-    my $now = DateTime->now();
+    my $now = dt_from_string();
     my $borrower = { dateofbirth => $now->add( years => -15 )->strftime("%Y-%m-%d") };
     TestPatron($borrower,0);
 };
@@ -56,7 +57,7 @@ subtest 'Patron tests - 15 years old (Time Zone shifts)' => sub {
             Time::Fake->offset("+${offset}h");
 
             ##Testing age restriction for a borrower.
-            my $now = DateTime->now();
+            my $now = dt_from_string();
             my $borrower = { dateofbirth => $now->add( years => -15 )->strftime("%Y-%m-%d") };
             TestPatron($borrower,$offset);
 
