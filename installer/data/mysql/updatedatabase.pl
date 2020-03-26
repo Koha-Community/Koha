@@ -16533,7 +16533,7 @@ $DBversion = '18.06.00.037';
 if( CheckVersion( $DBversion ) ) {
     unless (TableExists('branches_overdrive')){
         $dbh->do( q|
-            CREATE TABLE IF NOT EXISTS branches_overdrive (
+            CREATE TABLE branches_overdrive (
                 `branchcode` VARCHAR( 10 ) NOT NULL ,
                 `authname` VARCHAR( 255 ) NOT NULL ,
                 PRIMARY KEY (`branchcode`) ,
@@ -19527,40 +19527,44 @@ if ( CheckVersion($DBversion) ) {
 $DBversion = '19.06.00.030';
 if( CheckVersion( $DBversion ) ) {
 
-    $dbh->do(q|
-        CREATE TABLE IF NOT EXISTS club_holds (
-            id        INT(11) NOT NULL AUTO_INCREMENT,
-            club_id   INT(11) NOT NULL, -- id for the club the hold was generated for
-            biblio_id INT(11) NOT NULL, -- id for the bibliographic record the hold has been placed against
-            item_id   INT(11) NULL DEFAULT NULL, -- If item-level, the id for the item the hold has been placed agains
-            date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Timestamp for the placed hold
-            PRIMARY KEY (id),
-            -- KEY club_id (club_id),
-            CONSTRAINT clubs_holds_ibfk_1 FOREIGN KEY (club_id)   REFERENCES clubs  (id) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT clubs_holds_ibfk_2 FOREIGN KEY (biblio_id) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT clubs_holds_ibfk_3 FOREIGN KEY (item_id)   REFERENCES items  (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    |);
+    if ( !TableExists('club_holds') ) {
+        $dbh->do(q|
+            CREATE TABLE club_holds (
+                id        INT(11) NOT NULL AUTO_INCREMENT,
+                club_id   INT(11) NOT NULL, -- id for the club the hold was generated for
+                biblio_id INT(11) NOT NULL, -- id for the bibliographic record the hold has been placed against
+                item_id   INT(11) NULL DEFAULT NULL, -- If item-level, the id for the item the hold has been placed agains
+                date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Timestamp for the placed hold
+                PRIMARY KEY (id),
+                -- KEY club_id (club_id),
+                CONSTRAINT clubs_holds_ibfk_1 FOREIGN KEY (club_id)   REFERENCES clubs  (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT clubs_holds_ibfk_2 FOREIGN KEY (biblio_id) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT clubs_holds_ibfk_3 FOREIGN KEY (item_id)   REFERENCES items  (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        |);
+    }
 
-    $dbh->do(q|
-        CREATE TABLE IF NOT EXISTS club_holds_to_patron_holds (
-            id              INT(11) NOT NULL AUTO_INCREMENT,
-            club_hold_id    INT(11) NOT NULL,
-            patron_id       INT(11) NOT NULL,
-            hold_id         INT(11),
-            error_code      ENUM ( 'damaged', 'ageRestricted', 'itemAlreadyOnHold',
-                                'tooManyHoldsForThisRecord', 'tooManyReservesToday',
-                                'tooManyReserves', 'notReservable', 'cannotReserveFromOtherBranches',
-                                'libraryNotFound', 'libraryNotPickupLocation', 'cannotBeTransferred'
-                            ) NULL DEFAULT NULL,
-            error_message   varchar(100) NULL DEFAULT NULL,
-            PRIMARY KEY (id),
-            -- KEY club_hold_id (club_hold_id),
-            CONSTRAINT clubs_holds_paton_holds_ibfk_1 FOREIGN KEY (club_hold_id) REFERENCES club_holds (id) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT clubs_holds_paton_holds_ibfk_2 FOREIGN KEY (patron_id) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT clubs_holds_paton_holds_ibfk_3 FOREIGN KEY (hold_id) REFERENCES reserves (reserve_id) ON DELETE CASCADE ON UPDATE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    |);
+    if ( !TableExists('club_holds_to_patron_holds') ) {
+        $dbh->do(q|
+            CREATE TABLE club_holds_to_patron_holds (
+                id              INT(11) NOT NULL AUTO_INCREMENT,
+                club_hold_id    INT(11) NOT NULL,
+                patron_id       INT(11) NOT NULL,
+                hold_id         INT(11),
+                error_code      ENUM ( 'damaged', 'ageRestricted', 'itemAlreadyOnHold',
+                                    'tooManyHoldsForThisRecord', 'tooManyReservesToday',
+                                    'tooManyReserves', 'notReservable', 'cannotReserveFromOtherBranches',
+                                    'libraryNotFound', 'libraryNotPickupLocation', 'cannotBeTransferred'
+                                ) NULL DEFAULT NULL,
+                error_message   varchar(100) NULL DEFAULT NULL,
+                PRIMARY KEY (id),
+                -- KEY club_hold_id (club_hold_id),
+                CONSTRAINT clubs_holds_paton_holds_ibfk_1 FOREIGN KEY (club_hold_id) REFERENCES club_holds (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT clubs_holds_paton_holds_ibfk_2 FOREIGN KEY (patron_id) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT clubs_holds_paton_holds_ibfk_3 FOREIGN KEY (hold_id) REFERENCES reserves (reserve_id) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        |);
+    }
 
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
@@ -19733,31 +19737,35 @@ $DBversion = '19.06.00.043';
 if ( CheckVersion($DBversion) ) {
 
     # Adding account_debit_types
-    $dbh->do(
-        qq{
-            CREATE TABLE IF NOT EXISTS account_debit_types (
-              code varchar(80) NOT NULL,
-              description varchar(200) NULL,
-              can_be_added_manually tinyint(4) NOT NULL DEFAULT 1,
-              default_amount decimal(28, 6) NULL,
-              is_system tinyint(1) NOT NULL DEFAULT 0,
-              archived tinyint(1) NOT NULL DEFAULT 0,
-              PRIMARY KEY (code)
-            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci
-          }
-    );
+    if ( !TableExists('account_debit_types') ) {
+        $dbh->do(
+            qq{
+                CREATE TABLE account_debit_types (
+                  code varchar(80) NOT NULL,
+                  description varchar(200) NULL,
+                  can_be_added_manually tinyint(4) NOT NULL DEFAULT 1,
+                  default_amount decimal(28, 6) NULL,
+                  is_system tinyint(1) NOT NULL DEFAULT 0,
+                  archived tinyint(1) NOT NULL DEFAULT 0,
+                  PRIMARY KEY (code)
+                ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci
+              }
+        );
+    }
 
     # Adding account_debit_types_branches
-    $dbh->do(
-        qq{
-            CREATE TABLE IF NOT EXISTS account_debit_types_branches (
-                debit_type_code VARCHAR(80),
-                branchcode VARCHAR(10),
-                FOREIGN KEY (debit_type_code) REFERENCES account_debit_types(code) ON DELETE CASCADE,
-                FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        }
-    );
+    if ( !TableExists('account_debit_types_branches') ) {
+        $dbh->do(
+            qq{
+                CREATE TABLE account_debit_types_branches (
+                    debit_type_code VARCHAR(80),
+                    branchcode VARCHAR(10),
+                    FOREIGN KEY (debit_type_code) REFERENCES account_debit_types(code) ON DELETE CASCADE,
+                    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            }
+        );
+    }
 
     # Populating account_debit_types
     $dbh->do(
@@ -19956,29 +19964,33 @@ $DBversion = '19.06.00.044';
 if ( CheckVersion($DBversion) ) {
 
     # Adding account_credit_types
-    $dbh->do(
-        qq{
-            CREATE TABLE IF NOT EXISTS account_credit_types (
-              code varchar(80) NOT NULL,
-              description varchar(200) NULL,
-              can_be_added_manually tinyint(4) NOT NULL DEFAULT 1,
-              is_system tinyint(1) NOT NULL DEFAULT 0,
-              PRIMARY KEY (code)
-            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci
-          }
-    );
+    if ( !TableExists('account_credit_types') ) {
+        $dbh->do(
+            qq{
+                CREATE TABLE account_credit_types (
+                  code varchar(80) NOT NULL,
+                  description varchar(200) NULL,
+                  can_be_added_manually tinyint(4) NOT NULL DEFAULT 1,
+                  is_system tinyint(1) NOT NULL DEFAULT 0,
+                  PRIMARY KEY (code)
+                ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci
+              }
+        );
+    }
 
     # Adding account_credit_types_branches
-    $dbh->do(
-        qq{
-            CREATE TABLE IF NOT EXISTS account_credit_types_branches (
-                credit_type_code VARCHAR(80),
-                branchcode VARCHAR(10),
-                FOREIGN KEY (credit_type_code) REFERENCES account_credit_types(code) ON DELETE CASCADE,
-                FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-        }
-    );
+    if ( !TableExists('account_credit_types_branches') ) {
+        $dbh->do(
+            qq{
+                CREATE TABLE account_credit_types_branches (
+                    credit_type_code VARCHAR(80),
+                    branchcode VARCHAR(10),
+                    FOREIGN KEY (credit_type_code) REFERENCES account_credit_types(code) ON DELETE CASCADE,
+                    FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            }
+        );
+    }
 
     # Populating account_credit_types
     $dbh->do(
@@ -20959,19 +20971,21 @@ $DBversion = '19.12.00.033';
 if ( CheckVersion($DBversion) ) {
 
     # Add cash_register_actions table
-    $dbh->do(qq{
-        CREATE TABLE  IF NOT EXISTS `cash_register_actions` (
-          `id` int(11) NOT NULL auto_increment, -- unique identifier for each account register action
-          `code` varchar(24) NOT NULL, -- action code denoting the type of action recorded (enum),
-          `register_id` int(11) NOT NULL, -- id of cash_register this action belongs to,
-          `manager_id` int(11) NOT NULL, -- staff member performing the action
-          `amount` decimal(28,6) DEFAULT NULL, -- amount recorded in action (signed)
-          `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-          PRIMARY KEY (`id`),
-          CONSTRAINT `cash_register_actions_manager` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-          CONSTRAINT `cash_register_actions_register` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-        ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-    });
+    if ( !TableExists('cash_register_actions') ) {
+        $dbh->do(qq{
+            CREATE TABLE `cash_register_actions` (
+              `id` int(11) NOT NULL auto_increment, -- unique identifier for each account register action
+              `code` varchar(24) NOT NULL, -- action code denoting the type of action recorded (enum),
+              `register_id` int(11) NOT NULL, -- id of cash_register this action belongs to,
+              `manager_id` int(11) NOT NULL, -- staff member performing the action
+              `amount` decimal(28,6) DEFAULT NULL, -- amount recorded in action (signed)
+              `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              CONSTRAINT `cash_register_actions_manager` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `cash_register_actions_register` FOREIGN KEY (`register_id`) REFERENCES `cash_registers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+        });
+    }
 
     # Add cashup permission
     $dbh->do(qq{
