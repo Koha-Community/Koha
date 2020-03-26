@@ -89,10 +89,10 @@
                         [% IF (Desks.defined) %]
                             <span class="separator">|</span>
                             <strong>
-                                [% IF ( LoginDeskname == '') %]
+                                [% IF ( Desks.GetLoggedInDeskName == '' ) %]
                                    <span class="logged-in-desk-name">NO DESK SET</span>
                                 [% ELSE %]
-                                    <span class="logged-in-desk-name">[% LoginDeskname | html %]</span>
+                                    <span class="logged-in-desk-name">[% Desks.GetLoggedInDeskName | html %]</span>
                                     <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
                                 [% END %]
                             </strong>
@@ -119,10 +119,10 @@
                     </li>
                     <li class="loggedin-menu-label">
                         Desk: <br />
-                        [% IF ( LoginDeskname == '' AND Desks.defined ) %]
+                        [% IF ( Desks.GetLoggedInDeskName == '' AND Desks.defined ) %]
                            <span class="logged-in-desk-name">NO DESK SET</span>
-                        [% ELSIF ( LoginDeskname != '' ) %]
-                            <span class="logged-in-desk-name">[% LoginDeskname | html %]</span>
+                        [% ELSIF ( Desks.GetLoggedInDeskName != '' ) %]
+                            <span class="logged-in-desk-name">[% Desks.GetLoggedInDeskName | html %]</span>
                             <span class="logged-in-desk-id content_hidden">[% Desks.GetLoggedInDeskId | html %]</span>
                         [% END %]
                     </li>

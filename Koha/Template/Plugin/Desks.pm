@@ -67,6 +67,22 @@ sub GetLoggedInDeskId {
         '';
 }
 
+=head3 GetLoggedInDeskName
+
+[% Desks.GetLoggedInDeskName %]
+
+Return the desk name that is attached to the session or empty string
+
+=cut
+
+sub GetLoggedInDeskName {
+    my ($self) = @_;
+
+    return C4::Context->userenv ?
+        C4::Context->userenv->{'desk_name'} :
+        '';
+}
+
 =head3 all
 
 [% Desks.all %]
