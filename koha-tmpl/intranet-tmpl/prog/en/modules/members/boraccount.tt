@@ -50,6 +50,7 @@
           <th>Barcode</th>
           <th>Due date</th>
           <th>Return date</th>
+          <th>Issue date</th>
           <th>Home library</th>
           <th>Note</th>
           <th>Amount</th>
@@ -71,6 +72,7 @@
       <td>[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% account.itemnumber | uri %]&amp;biblionumber=[% account.item.biblionumber | uri %]#item[% account.itemnumber | uri %]">[% account.item.barcode | html %]</a>[% END %]</td>
       <td>[% IF ( account.issue_id ) %][% account.checkout.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
       <td>[% IF ( account.issue_id ) %][% account.checkout.returndate | $KohaDates with_hours => 1 %][% END %]</td>
+      <td>[% IF ( account.issue_id ) %][% account.checkout.issuedate | $KohaDates %][% END %]</td>
       <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
       [% IF account.amount <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
@@ -103,7 +105,7 @@
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="9">Total due</td>
+    <td colspan="10">Total due</td>
     [% IF ( totalcredit ) %]
         <td class="credit" style="text-align: right;">[% total | $Price %]</td>
     [% ELSE %]
@@ -331,7 +333,7 @@
                     var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
                     $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
                 }
-                table_account_fines.fnFilter(filteredValue, 9, true, false);
+                table_account_fines.fnFilter(filteredValue, 10, true, false);
                 $(this).toggleClass('filtered');
             });
 
