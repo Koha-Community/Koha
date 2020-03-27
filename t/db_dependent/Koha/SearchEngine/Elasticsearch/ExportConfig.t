@@ -95,19 +95,19 @@ is( $mappings->{biblios}{title}{facet_order}, undef, 'Facet order is undef');
 
 is(scalar(@{ $mappings->{biblios}{title}{mappings} }), 3, 'Title has 3 mappings');
 
-my $f247_map = $mappings->{biblios}{title}{mappings}[0];
-is( $f247_map->{marc_field}, 247, 'First mapping is on field 247');
-is( $f247_map->{marc_type}, 'marc21', 'First mapping is for marc21');
-is( $f247_map->{facet}, '', 'First mapping facet is empty');
-is( $f247_map->{suggestible}, '', 'First mapping is not suggestible');
-is( $f247_map->{sort}, undef, 'First mapping is not sortable');
+my $f212_map = $mappings->{biblios}{title}{mappings}[0];
+is( $f212_map->{marc_field}, 212, 'First mapping is on field 212');
+is( $f212_map->{marc_type}, 'marc21', 'First mapping is for marc21');
+is( $f212_map->{facet}, '', 'First mapping facet is empty');
+is( $f212_map->{suggestible}, '', 'First mapping is not suggestible');
+is( $f212_map->{sort}, undef, 'First mapping is not sortable');
 
-my $f212_map = $mappings->{biblios}{title}{mappings}[1];
-is( $f212_map->{marc_field}, 212, 'Second mapping is on field 247');
-is( $f212_map->{marc_type}, 'marc21', 'Second mapping is for marc21');
-is( $f212_map->{facet}, '', 'Second mapping facet is empty');
-is( $f212_map->{suggestible}, '', 'Second mapping is not suggestible');
-is( $f212_map->{sort}, undef, 'Second mapping is not sortable');
+my $f247_map = $mappings->{biblios}{title}{mappings}[1];
+is( $f247_map->{marc_field}, 247, 'Second mapping is on field 247');
+is( $f247_map->{marc_type}, 'marc21', 'Second mapping is for marc21');
+is( $f247_map->{facet}, '', 'Second mapping facet is empty');
+is( $f247_map->{suggestible}, '', 'Second mapping is not suggestible');
+is( $f247_map->{sort}, undef, 'Second mapping is not sortable');
 
 $mappings = Koha::SearchEngine::Elasticsearch::raw_elasticsearch_mappings('unimarc');
 
