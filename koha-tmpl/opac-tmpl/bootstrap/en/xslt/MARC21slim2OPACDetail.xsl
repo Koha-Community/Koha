@@ -1102,17 +1102,17 @@
         </xsl:if>
 
         <!-- 508 -->
-            <xsl:if test="marc:datafield[@tag=508]">
-                <div class="results_summary prod_credits">
-                    <span class="label">Production Credits: </span>
-                    <xsl:for-each select="marc:datafield[@tag=508]">
-                        <xsl:call-template name="subfieldSelectSpan">
-                            <xsl:with-param name="codes">a</xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
-                    </xsl:for-each>
-                </div>
-            </xsl:if>
+        <xsl:if test="marc:datafield[@tag=508]">
+            <span class="results_summary prod_credits">
+                <span class="label">Production credits: </span>
+                <xsl:for-each select="marc:datafield[@tag=508]">
+                    <xsl:call-template name="subfieldSelectSpan">
+                        <xsl:with-param name="codes">a</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:if test="position()!=last()"><span class="separator"><xsl:text> | </xsl:text></span></xsl:if>
+                </xsl:for-each>
+            </span>
+        </xsl:if>
 
         <!-- 586 -->
         <xsl:if test="marc:datafield[@tag=586]">
