@@ -135,7 +135,7 @@
         [% IF ( AdlibrisEnabled && normalized_isbn ) %]
             <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" /></a>
         [% END %]
-        [% IF ( AmazonCoverImages ) %]
+        [% IF ( AmazonCoverImages && normalized_isbn) %]
             <div id="amazon-bookcoverimg">
             <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
                 <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="" />
