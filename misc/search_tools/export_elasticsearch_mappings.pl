@@ -53,6 +53,7 @@ Full documentation.
 
 use Modern::Perl;
 
+use Koha::Script;
 use Koha::Database;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
