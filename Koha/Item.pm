@@ -412,7 +412,8 @@ sub as_marc_field {
         next if !$tagfield; # TODO: Should we raise an exception instead?
                             # Feels like safe fallback is better
 
-        push @subfields, $tagsubfield => $self->$item_field;
+        push @subfields, $tagsubfield => $self->$item_field
+            if defined $self->$item_field and $item_field ne '';
     }
 
     my $unlinked_item_subfields = C4::Items::_parse_unlinked_item_subfields_from_xml($self->more_subfields_xml);
