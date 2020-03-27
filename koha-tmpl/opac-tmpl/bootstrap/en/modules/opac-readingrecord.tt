@@ -166,7 +166,7 @@
 
                                                 </td>
                                                 <td>
-                                                [% UNLESS ( noItemTypeImages ) %]
+                                                [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                     [% IF ( issue.imageurl ) %]
                                                         <img src="[% issue.imageurl | html %]" alt="" />
                                                     [% END %]

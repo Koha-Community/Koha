@@ -140,13 +140,13 @@ Item types administration
                     </select>
                     <span class="hint">Options are defined as the authorized values for the ITEMTYPECAT category.</span>
                 </li>
-                [% IF Koha.Preference('noItemTypeImages') %]
+                [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
                     <li>
-                        <span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages system preference</a>
+                        <span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=noItemTypeImages">noItemTypeImages or OpacNoItemTypeImages system preferences</a>
                     </li>
                 [% END %]
             </ol>
-            [% UNLESS Koha.Preference('noItemTypeImages') %]
+            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
                 <div id="icons" class="toptabs" style="clear:both">
                     <h5 style="margin-left:10px;">Choose an icon:</h5>
                     <ul>
@@ -342,7 +342,7 @@ Item types administration
                 <td>[% itemtype.itemtype | html %]</td>
             </tr>
             <tr><th scope="row">Description</th><td>[% itemtype.translated_description | html %]</td></tr>
-            [% UNLESS Koha.Preference('noItemTypeImages') %]
+            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
                 <tr>
                     <th scope="row">Image</th>
                     <td>
@@ -368,7 +368,7 @@ Item types administration
     [% IF itemtypes %]
         <table id="table_item_type">
           <thead>
-            [% UNLESS Koha.Preference('noItemTypeImages') %]<th class="noExport">Image</th>[% END %]
+            [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="noExport">Image</th>[% END %]
             <th>Code</th>
             <th>Description</th>
             <th>Search category</th>
@@ -385,7 +385,7 @@ Item types administration
           </thead>
           [% FOREACH itemtype IN itemtypes %]
             <tr>
-                [% UNLESS Koha.Preference('noItemTypeImages') %]
+                [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]
                     <td>
                         [% SET image_location = itemtype.image_location('intranet') %]
                         [% IF image_location %]<img src="[% image_location | html %]" alt="" />[% ELSE %]&nbsp;[% END %]
@@ -484,7 +484,7 @@ Item types administration
          $(document).ready(function() {
             $('#icons').tabs();
             var columns_settings = [% ColumnsSettings.GetColumns( 'admin', 'itemtypes', 'table_item_type', 'json' ) | $raw %];
-            [% IF Koha.Preference('noItemTypeImages') %]
+            [% IF ( Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') ) %]
                 columns_settings.shift(); // Remove item type image column from configuration
             [% END %]
 

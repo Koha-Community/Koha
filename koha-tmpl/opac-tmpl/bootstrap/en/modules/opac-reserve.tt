@@ -375,7 +375,7 @@
 
                                                             [% IF ( item_level_itypes ) %]
                                                                 <td class="itype">
-                                                                    [% UNLESS ( noItemTypeImages ) %]
+                                                                    [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                                         [% IF ( itemLoo.imageurl ) %]
                                                                             <img src="[% itemLoo.imageurl | html %]" alt="" />
                                                                         [% END %]

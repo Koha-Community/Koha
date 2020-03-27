@@ -253,7 +253,7 @@
                                                 [% END %]
                                             </td>
 
-                                            [% IF ( !item_level_itypes && !noItemTypeImages ) %]
+                                            [% IF ( !item_level_itypes && !Koha.Preference('OpacNoItemTypeImages') ) %]
                                                 [% # Cell 3: Show item type image %]
                                                 <td class="itypecol">
                                                     [% IF ( SEARCH_RESULT.imageurl ) %]

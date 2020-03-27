@@ -148,7 +148,7 @@
                                                         value="[% IF ( itemtypeloo.cat == 1 ) %][% itemtypeloo.code | html %][% ELSE %]mc-[% itemtypeloo.ccl | html %]:[% itemtypeloo.code | html %][% END %]"
                                                     />
                                                     <label for="[% itemtypeloo.ccl FILTER remove(',') | html %]-[% itemtypeloo.number | html %]">
-                                                        [% UNLESS ( noItemTypeImages ) %]
+                                                        [% UNLESS ( Koha.Preference('OpacNoItemTypeImages')) %]
                                                             [% IF ( itemtypeloo.imageurl ) %]
                                                                 <img src="[% itemtypeloo.imageurl | html %]" alt="[% itemtypeloo.description | html %]" />
                                                             [% END %]

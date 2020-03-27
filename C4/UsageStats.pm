@@ -100,6 +100,7 @@ sub BuildReport {
         DebugLevel
         delimiter
         noItemTypeImages
+        OpacNoItemTypeImages
         virtualshelves
         AutoLocation
         IndependentBranches

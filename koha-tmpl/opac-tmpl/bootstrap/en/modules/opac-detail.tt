@@ -247,7 +247,7 @@
                         [% END %]
 
                         [% UNLESS ( item_level_itypes ) %]
-                            [% IF ( imgeurl ) %]
+                            [% IF ( imgeurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
                                 <img src="[% imageurl | html %]" alt="" />
                             [% END %]
                             <span class="results_summary itemtype"><span class="label">Item type: </span>
@@ -1166,7 +1166,7 @@
                 [% END %]
                     [% IF ( item_level_itypes ) %]
                         <td class="itype">
-                            [% UNLESS ( noItemTypeImages ) %]
+                            [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                 [% IF ( ITEM_RESULT.imageurl ) %]
                                     <img src="[% ITEM_RESULT.imageurl | html %]" title="[% ITEM_RESULT.description | html %]" alt="[% ITEM_RESULT.description | html %]" />
                                 [% END %]

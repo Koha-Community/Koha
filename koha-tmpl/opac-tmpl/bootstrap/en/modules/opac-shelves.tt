@@ -314,7 +314,7 @@
                                                 <td class="select selectcol"><input type="checkbox" class="cb" name="biblionumber" value="[% itemsloo.biblionumber | html %]" /></td>
                                                 [% UNLESS ( item_level_itypes ) %]
                                                     <td>
-                                                        [% UNLESS ( noItemTypeImages ) %]
+                                                        [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                             <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
                                                         [% END %]
                                                         [% itemsloo.description | html %]
