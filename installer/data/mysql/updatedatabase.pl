@@ -21365,6 +21365,30 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 14715, "Add sysprefs numSearchResultsDropdown and OPACnumSearchResultsDropdown");
 }
 
+$DBversion = '19.12.00.059';
+if( CheckVersion( $DBversion ) ) {
+
+    for my $column ( qw(othersupplier booksellerfax booksellerurl bookselleremail currency) ) {
+        if( column_exists( 'aqbooksellers', $column ) ) {
+            my ($count) = $dbh->selectrow_array(qq|
+                SELECT COUNT(*)
+                FROM aqbooksellers
+                WHERE $column IS NOT NULL AND $column <> ""
+            |);
+            if ( $count ) {
+                warn "Warning - Cannot remove column aqbooksellers.$column. At least one value exists";
+            } else {
+                $dbh->do(qq|
+                    ALTER TABLE aqbooksellers
+                    DROP COLUMN $column
+                |);
+            }
+        }
+    }
+
+    NewVersion( $DBversion, 18177, "Remove some unused columns from aqbooksellers");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
