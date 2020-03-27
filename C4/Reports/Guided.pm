@@ -626,6 +626,7 @@ sub update_sql {
     $report->report_subgroup($subgroup);
     $report->cache_expiry($cache_expiry) if defined $cache_expiry;
     $report->public($public);
+    $report->store();
     if( $cache_expiry >= 2592000 ){
       die "Please specify a cache expiry less than 30 days\n"; # That's a bit harsh
     }
