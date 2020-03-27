@@ -21299,7 +21299,6 @@ if( CheckVersion( $DBversion ) ) {
 
         $dbh->do(q|
             ALTER TABLE suggestions ADD CONSTRAINT `suggestions_ibfk_lastmodificationby` FOREIGN KEY (`lastmodificationby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
-            A
         |);
     }
 
