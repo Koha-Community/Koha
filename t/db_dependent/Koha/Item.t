@@ -26,6 +26,8 @@ use C4::Biblio;
 use Koha::Items;
 use Koha::Database;
 
+use List::MoreUtils qw(all);
+
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -89,11 +91,13 @@ subtest "as_marc_field() tests" => sub {
     my @schema_columns = $schema->resultset('Item')->result_source->columns;
     my @mapped_columns = grep { exists $mss->{'items.'.$_} } @schema_columns;
 
-    plan tests => 2 * (scalar @mapped_columns + 1) + 1;
+    plan tests => 2 * (scalar @mapped_columns + 1) + 2;
 
     $schema->storage->txn_begin;
 
     my $item = $builder->build_sample_item;
+    # Make sure it has at least one undefined attribute
+    $item->set({ replacementprice => undef })->store->discard_changes;
 
     # Tests with the mss parameter
     my $marc_field = $item->as_marc_field({ mss => $mss });
@@ -139,6 +143,11 @@ subtest "as_marc_field() tests" => sub {
     $item->more_subfields_xml( C4::Items::_get_unlinked_subfields_xml( \@unlinked_subfields ) )->store;
 
     $marc_field = $item->as_marc_field;
+
+    my @subfields = $marc_field->subfields;
+    my $result = all { defined $_->[1] } @subfields;
+    ok( $result, 'There are no undef subfields' );
+
     is( scalar $marc_field->subfield('X'), 'Something weird', 'more_subfield_xml is considered' );
 
     $schema->storage->txn_rollback;
