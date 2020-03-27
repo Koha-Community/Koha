@@ -217,7 +217,7 @@ subtest 'get_saved_reports' => sub {
     ok( 0 < scalar @{ get_saved_reports( $report_ids[0] ) }, "filter takes report id" );
 
     my $r1 = Koha::Reports->find($report_ids[0]);
-    $r1 = update_sql($r1->id, { borrowernumber => $r1->borrowernumber, name => 'Just another report' });
+    $r1 = update_sql($r1->id, { %{$r1->unblessed}, borrowernumber => $r1->borrowernumber, name => 'Just another report' });
     is( $r1->cache_expiry, 300, 'cache_expiry has the correct default value, from DBMS' );
 
     #Test delete_report
