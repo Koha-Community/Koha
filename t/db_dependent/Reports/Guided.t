@@ -253,9 +253,8 @@ subtest 'get_saved_reports' => sub {
     );
 
     # for next test, we want to let execute_query capture any SQL errors
-    $dbh->{RaiseError} = 0;
     my $errors;
-    warning_like { ($sth, $errors) = execute_query(
+    warning_like {local $dbh->{RaiseError} = 0; ($sth, $errors) = execute_query(
             'SELECT surname FRM borrowers',  # error in the query is intentional
             0, 10 ) }
             qr/^DBD::mysql::st execute failed: You have an error in your SQL syntax;/,
@@ -264,7 +263,6 @@ subtest 'get_saved_reports' => sub {
         defined($errors) && exists($errors->{queryerr}),
         'attempting to run a report with an SQL syntax error returns error message (Bug 12214)'
     );
-    $dbh->{RaiseError} = 1;
 
     is_deeply( get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ],
         "get_report_areas returns the correct array of report areas");
@@ -367,6 +365,7 @@ count(h.reservedate) AS 'holds'
 subtest 'Email report test' => sub {
 
     plan tests => 12;
+    my $dbh = C4::Context->dbh;
 
     my $id1 = $builder->build({ source => 'Borrower',value => { surname => 'mailer', email => 'a@b.com', emailpro => 'b@c.com' } })->{ borrowernumber };
     my $id2 = $builder->build({ source => 'Borrower',value => { surname => 'nomailer', email => undef, emailpro => 'd@e.com' } })->{ borrowernumber };
@@ -399,7 +398,8 @@ subtest 'Email report test' => sub {
     ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report1, module => $letter1->{module}, code => $letter2->{code}});
     is( $errors->[0]{FATAL}, 'NO_LETTER', "Must have a letter that exists");
 
-    warning_like { ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report2, module => $letter1->{module} , code => $letter1->{code} }) }
+    # for next test, we want to let execute_query capture any SQL errors
+    warning_like { local $dbh->{RaiseError} = 0; ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report2, module => $letter1->{module} , code => $letter1->{code} }) }
         qr/^DBD::mysql::st execute failed/,
         'Error from bad report';
     is( $errors->[0]{FATAL}, 'REPORT_FAIL', "Bad report returns failure");
@@ -429,6 +429,7 @@ subtest 'nb_rows() tests' => sub {
 
     plan tests => 3;
 
+    my $dbh = C4::Context->dbh;
     $schema->storage->txn_begin;
 
     my $items_count = Koha::Items->search->count;
@@ -448,8 +449,10 @@ subtest 'nb_rows() tests' => sub {
         SELECT * items xxx
     };
 
+    # for next test, we want to let execute_query capture any SQL errors
+    
     warning_like
-        { $nb_rows = nb_rows( $bad_query ) }
+        { local $dbh->{RaiseError} = 0; $nb_rows = nb_rows( $bad_query ) }
         qr/^DBD::mysql::st execute failed:/,
         'Bad queries raise a warning';
 
