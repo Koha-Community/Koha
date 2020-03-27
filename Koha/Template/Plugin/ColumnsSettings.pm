@@ -52,4 +52,15 @@ sub GetColumns {
         : $columns
 }
 
+sub is_hidden {
+    my ( $self, $module, $page, $table, $column_name ) = @_;
+    my $columns = C4::Utils::DataTables::ColumnsSettings::get_columns( $module, $page, $table );
+    foreach my $keys(@$columns){
+        if($keys->{'columnname'} eq $column_name){
+            return $keys->{'is_hidden'};
+        }
+    }
+    return 0;
+}
+
 1;

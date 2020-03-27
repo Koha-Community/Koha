@@ -1143,7 +1143,7 @@
         [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
                 <th id="item_shelving_location" data-colname="item_shelving_location" class="shelving_location">Shelving location</th>[% END %]
                 <th id="item_callnumber" data-colname="item_callnumber" class="call_no">Call number</th>
-        [% IF ( itemdata_materials ) %]
+        [% UNLESS ColumnsSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
                 <th id="item_materials" data-colname="item_materials" class="materials">Materials specified</th>[% END %]
         [% IF ( itemdata_enumchron ) %]
                 <th id="item_enumchron" data-colname="item_enumchron" class="vol_info">Vol info</th>[% END %]
@@ -1247,7 +1247,7 @@
                             [% END %]
                         [% END %]
                     </td>
-                    [% IF ( itemdata_materials) %]
+                    [% UNLESS ColumnsSettings.is_hidden( 'opac', 'biblio-detail', 'holdingst', 'item_materials') %]
                         <td class="materials">[% ITEM_RESULT.materials | html %]</td>
                     [% END %]
                     [% IF ( itemdata_enumchron ) %]
