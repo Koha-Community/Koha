@@ -97,6 +97,12 @@ __PACKAGE__->table("suggestions");
   is_nullable: 0
   size: 10
 
+=head2 archived
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =head2 note
 
   data_type: 'longtext'
@@ -252,6 +258,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 10,
   },
+  "archived",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
   "note",
   { data_type => "longtext", is_nullable => 1 },
   "author",
@@ -476,8 +484,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-24 12:04:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2j+YaHKq7Jq1ku10CGlynA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-27 06:55:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:shHAnURjxdagQdgu90WQuw
 
 __PACKAGE__->belongs_to(
   "suggester",
