@@ -715,7 +715,15 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 showSavedMacros();
             })
             .fail(function(err) {
-                humanMsg.displayAlert( _("Failed to delete macro:") + err.responseText, { className: 'humanError' } );
+                var err_message;
+                if( err.status == "404" ){
+                    err_message = "Macro not found";
+                } else if ( err.status == "403" ){
+                    err_message = _("You do not have permission to delete this macro");
+                } else {
+                    err_message = _("There was a problem, please check the logs");
+                }
+                humanMsg.displayAlert( _("Failed to delete macro: " + err_message), { className: 'humanError' } );
             });
     }
 
@@ -761,7 +769,15 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 macroEditor.activeMacroShared = result.shared;
             })
             .fail(function(err) {
-                humanMsg.displayAlert( _("Failed to load macros:") + err.responseText, { className: 'humanError' } );
+                var err_message;
+                if( err.status == "404" ){
+                    err_message = "Macro not found";
+                } else if ( err.status == "403" ){
+                    err_message = _("You do not have permission to access this macro");
+                } else {
+                    err_message = _("There was a problem, please check the logs");
+                }
+                humanMsg.displayAlert( _("Failed to load macros: ") + err_message, { className: 'humanError' } );
             });
 
     }
@@ -796,7 +812,13 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
                 })
                 .fail(function(err) {
-                    humanMsg.displayAlert( _("Failed to create macro:") + err.responseText, { className: 'humanError' } );
+                    var err_message;
+                    if( err.status == "403" ){
+                        err_message = _("You do not have permission to create this macro");
+                    } else {
+                        err_message = _("There was a problem, please check the logs");
+                    }
+                    humanMsg.displayAlert( _("Failed to create macro: ") + err_message, { className: 'humanError' } );
                 });
         } );
     }
@@ -833,7 +855,8 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     });
             })
             .fail(function(err) {
-                humanMsg.displayAlert( _("Failed to load macros:") + err.responseText, { className: 'humanError' } );
+                var err_message = _("There was a problem, please check the logs");
+                humanMsg.displayAlert( _("Failed to load macros: ") + err_message, { className: 'humanError' } );
             });
         var $new_li = $( '<li class="new-macro"><a href="#">' + _("New macro...") + '</a></li>' );
         $new_li.click( function() {
@@ -859,7 +882,13 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                     loadMacro( result.name, result.macro_id );
                 })
                 .fail(function(err) {
-                    humanMsg.displayAlert( _("Failed to create macro:") + err.responseText, { className: 'humanError' } );
+                    var err_message;
+                    if( err.status == "403" ){
+                        err_message = _("You do not have permission to access this macro");
+                    } else {
+                        err_message = _("There was a problem, please check the logs");
+                    }
+                    humanMsg.displayAlert( _("Failed to create macro: ") + err_message, { className: 'humanError' } );
                 });
         } );
         $('#macro-list').append($new_li);
@@ -895,7 +924,15 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 showSavedMacros();
             })
             .fail(function(err) {
-                humanMsg.displayAlert( _("Failed to save macro:") + err.responseText, { className: 'humanError' } );
+                var err_message;
+                if( err.status == "404" ){
+                    err_message = _("Macro not found");
+                } else if ( err.status ="403" ){
+                    err_message = _("You do not have permission to access this macro");
+                } else {
+                    err_message = _("There was a problem, please check the logs");
+                }
+                humanMsg.displayAlert( _("Failed to save macro: ") + err_message, { className: 'humanError' } );
             });
     }
 

@@ -24,7 +24,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::AdvancedEditorMacro - Koha Advanced Editor Macro Object class
+Koha::AdvancedEditorMacro - Koha Advanced editor macro object class
 
 =head1 API
 

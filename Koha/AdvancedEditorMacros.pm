@@ -26,7 +26,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::AdvancedEditorMacros - Koha Advanced Editor Macro Object set class
+Koha::AdvancedEditorMacros - Koha Advanced editor macro object set class
 
 =head1 API
 
@@ -41,6 +41,10 @@ Koha::AdvancedEditorMacros - Koha Advanced Editor Macro Object set class
 sub _type {
     return 'AdvancedEditorMacro';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::AdvancedEditorMacro';
