@@ -41,26 +41,35 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     debug           => 1,
 });
+
 my $biblionumber = $input->param('id');
-$biblionumber   = int($biblionumber);
-my $importid= $input->param('importid');
+
+unless ( $biblionumber ) {
+    print $input->redirect("/cgi-bin/koha/errors/400.pl");
+    exit;
+}
+
+my $biblio;
+$biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata' ] } );
+
+unless ( $biblio ) {
+    print $input->redirect('/cgi-bin/koha/errors/404.pl');
+    exit;
+}
+
 my $view= $input->param('viewas') || 'marc';
 
-my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });
+my $record_processor = Koha::RecordProcessor->new(
+    {
+        filters => 'ViewPolicy',
+        options => {
+            interface     => 'opac',
+            frameworkcode => $biblio->frameworkcode
+        }
+    }
+);
 
-my $record;
-if ($importid) {
-    my ($marc) = GetImportRecordMarc($importid);
-    $record = MARC::Record->new_from_usmarc($marc);
-}
-else {
-    $record = GetMarcBiblio({ biblionumber => $biblionumber });
-    my $framework = GetFrameworkCode($biblionumber);
-    $record_processor->options({
-        interface => 'opac',
-        frameworkcode => $framework
-    });
-}
+my $record = $biblio->metadata->record;
 
 if(!ref $record) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
