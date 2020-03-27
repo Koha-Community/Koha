@@ -1,3 +1,4 @@
+<!-- validator-strings.inc -->
 <script>
     $(document).ready(function(){
         jQuery.extend(jQuery.validator.messages, {
@@ -20,3 +21,4 @@
         });
     });
 </script>
+<!-- / validator-strings.inc -->

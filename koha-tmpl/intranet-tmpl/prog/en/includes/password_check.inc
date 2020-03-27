@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% BLOCK add_password_check %]
+<!-- password_check.inc -->
 <script>
     var pwd_title = "";
     var pattern_title = "";
@@ -22,4 +23,5 @@
         return value == $(new_password_node).val();
     }, _("Please enter the same password as above"));
 </script>
+<!-- / password_check.inc -->
 [% END %]

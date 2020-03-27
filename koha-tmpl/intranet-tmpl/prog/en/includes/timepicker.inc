@@ -1,3 +1,4 @@
+<!-- timepicker.inc -->
 <script>
     /* Localization of the timepicker plugin */
     jQuery(function($){
@@ -20,3 +21,4 @@
         $.timepicker.setDefaults($.timepicker.regional['']);
     });
 </script>
+<!-- / timepicker.inc -->

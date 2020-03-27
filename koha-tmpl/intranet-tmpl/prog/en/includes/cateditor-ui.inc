@@ -8,6 +8,7 @@
 [% Asset.js("lib/keyboard/layouts/all.min.js") | $raw %]
 [% Asset.js("lib/koha/cateditor/marc-mode.js") | $raw %]
 [% Asset.js("lib/require.js") | $raw %]
+<!-- cateditor-ui.inc -->
 <script>
 [% FOREACH shortcut IN shortcuts -%]
     var [% shortcut.shortcut_name | html %] = "[% shortcut.shortcut_keys | html %]";
@@ -1165,3 +1166,4 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 } )();
 
 </script>
+<!-- / cateditor-ui.inc -->

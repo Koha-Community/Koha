@@ -1,3 +1,4 @@
+<!-- authorities_js.inc -->
 <script>
 
 function mergeAuth(authid, summary) {
@@ -89,3 +90,4 @@ $(document).ready(function () {
 });
 
 </script>
+<!-- / authorities_js.inc -->

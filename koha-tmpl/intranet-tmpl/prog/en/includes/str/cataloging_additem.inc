@@ -1,4 +1,5 @@
 [% USE raw %]
+<!-- str/cataloging_additem.inc -->
 <script>
     var searchid = '[% searchid | html %]';
     var biblionumber = '[% biblionumber | html %]';
@@ -21,3 +22,4 @@
     var MSG_CONFIRM_SAVE = _("Are you sure you want to save?");
     var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) | $raw %];
 </script>
+<!-- / str/cataloging_additem.inc -->

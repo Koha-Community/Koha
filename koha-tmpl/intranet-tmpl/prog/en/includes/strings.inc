@@ -1,3 +1,4 @@
+<!-- strings.inc -->
 <script>
     var CIRCULATION_RETURNED = _("Checked in");
     var CIRCULATION_NOT_RETURNED = _("Unable to check in");
@@ -57,3 +58,4 @@
     var BROWSER_PREVIOUS = _("Previous");
     var BROWSER_NEXT = _("Next");
 </script>
+<!-- / strings.inc -->

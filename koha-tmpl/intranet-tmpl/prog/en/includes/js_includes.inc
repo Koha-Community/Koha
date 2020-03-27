@@ -29,13 +29,17 @@
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
+    <!-- js_includes.inc: IntranetUserJS -->
     <script>
     [% IntranetUserJS | $raw %]
     </script>
+    <!-- / js_includes.inc: IntranetUserJS -->
 [% END %]
 
+<!-- js_includes.inc -->
 [% IF ( virtualshelves || intranetbookbag ) %]
     <script>
+        // virtualshelves || intranetbookbag
         var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
         var MSG_RECORD_ADDED = _("This item has been added to your cart");
@@ -58,12 +62,14 @@
 [% IF LocalCoverImages %]
     [% Asset.js("js/localcovers.js") | $raw %]
     <script>
+        // LocalCoverImages
         var NO_LOCAL_JACKET = _("No cover image available");
     </script>
 [% END %]
 
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script>
+        // AudioAlerts
         var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
         var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
 
@@ -84,6 +90,7 @@
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
     [% IF ( PatronAutoComplete ) %]
         <script>
+            // PatronAutoComplete && CAN_user_circulate_circulate_remaining_permissions
             $(document).ready(function(){
                 var obj = $( "#findborrower" ).autocomplete({
                     source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -112,6 +119,7 @@
 [% END %]
 [% IF ( PatronAutoComplete ) %]
     <script>
+    // PatronAutoComplete
     $(document).ready(function(){
         var obj = $( "#searchmember" ).autocomplete({
             source: "/cgi-bin/koha/circ/ysearch.pl",
@@ -137,3 +145,4 @@
     });
     </script>
 [% END %]
+<!-- / js_includes.inc -->

@@ -1,4 +1,5 @@
 [% USE raw %]
+<!-- slip-print.inc -->
 <script>
 [% IF ( Koha.Preference('IntranetSlipPrinterJS') ) %]
     [% Koha.Preference('IntranetSlipPrinterJS') | $raw %]
@@ -9,3 +10,4 @@
     });
 [% END %]
 </script>
+<!-- / slip-print.inc -->

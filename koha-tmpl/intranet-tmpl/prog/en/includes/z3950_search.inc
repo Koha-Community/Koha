@@ -1,3 +1,4 @@
+<!-- z3950_search.inc -->
 <script>
 
     var MSG_CHOOSE_Z3950 = _("Please choose at least one external target");
@@ -24,3 +25,4 @@ function validate_goto_page(){
 [% END %]
 
 </script>
+<!-- / z3950_search.inc -->

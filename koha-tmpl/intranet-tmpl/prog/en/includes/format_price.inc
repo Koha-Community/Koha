@@ -1,4 +1,5 @@
 [% USE Koha %]
+<!-- format-price.inc -->
 <script>
     [%# This should use the Format template plugin, but not pushed yet %]
     [% IF Koha.Preference("CurrencyFormat") == 'FR' %]
@@ -32,3 +33,4 @@
             return value.replace('.', decimal_point).replace(new RegExp(re, 'g'), '$&' + thousands_sep);
     }
 </script>
+<!-- / format-price.inc -->

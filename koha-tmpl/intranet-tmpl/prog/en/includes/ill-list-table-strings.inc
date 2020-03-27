@@ -1,3 +1,4 @@
+<!-- ill-list-table-strings.inc -->
 <script>
     var ill_borrower_details = _("View borrower details");
     var ill_biblio_details = _("View biblio details");
@@ -17,3 +18,4 @@
         updated: _("Updated on")
     };
 </script>
+<!-- / ill-list-table-strings.inc -->

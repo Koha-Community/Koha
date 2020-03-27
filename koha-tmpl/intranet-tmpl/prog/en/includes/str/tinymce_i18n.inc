@@ -1,3 +1,4 @@
+<!-- str/tinymce_i18n.inc -->
 <script>
     /* tinymce considers 'en' to be the default translation.
        Translating this file will allow us to load the correct language
@@ -398,3 +399,4 @@
         "{0} words": _("{0} words"),
     });
 </script>
+<!-- / str/tinymce_i18n.inc -->

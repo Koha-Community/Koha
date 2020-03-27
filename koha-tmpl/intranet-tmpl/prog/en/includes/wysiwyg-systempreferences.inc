@@ -3,7 +3,7 @@
 [% #Enable tinymce for system preferences %]
 [% Asset.js("lib/tiny_mce/tinymce.min.js") | $raw %]
 [% INCLUDE 'str/tinymce_i18n.inc' %]
-
+<!-- wysiwyg-systempreferences.inc -->
 <script>
     // Save TinyMCE content and trigger an event on the original element
     function wysiwyg_change (ed){
@@ -32,3 +32,4 @@
         }
     });
 </script>
+<!-- / wysiwyg-systempreferences.inc -->

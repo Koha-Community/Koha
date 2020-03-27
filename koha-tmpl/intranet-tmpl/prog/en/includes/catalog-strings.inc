@@ -1,3 +1,4 @@
+<!-- catalog-strings.inc -->
 <script>
     /* Strings for translation */
     var MSG_REPLACE_RECORD = _("Please note that this external search could replace the current record.");
@@ -28,3 +29,4 @@
         return strQuery;
     }
 </script>
+<!-- / catalog-strings.inc -->

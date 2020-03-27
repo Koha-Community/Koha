@@ -69,7 +69,7 @@
         <span title="Length of directory elements">4500</span>
     </div>
 </div>
-
+<!-- cateditor-widgets-marc21.inc -->
 <script>
 
 /**
@@ -300,3 +300,4 @@ require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widge
 } );
 
 </script>
+<!-- / cateditor-widgets-marc21.inc -->

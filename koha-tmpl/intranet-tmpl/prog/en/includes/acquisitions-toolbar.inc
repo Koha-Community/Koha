@@ -1,4 +1,5 @@
 [% INCLUDE 'blocking_errors.inc' %]
+<!-- acquisitions-toolbar.inc -->
 <script>
     function confirm_deletion() {
         if (confirm(_("Are you sure you want to delete this vendor?"))) {
@@ -37,3 +38,4 @@
             <div class="btn-group"><a class="btn btn-default" href="/cgi-bin/koha/acqui/supplier.pl?op=enter"><i class="fa fa-plus"></i> New vendor</a></div>
         [% END %]
 </div>
+<!-- / acquisitions-toolbar.inc -->

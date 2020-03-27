@@ -1,7 +1,7 @@
 [% USE scalar %]
 [% USE Koha %]
 [% USE Categories %]
-
+<!-- str/members-menu.inc -->
 <script>
     var MSG_CONFIRM_RENEW_PATRON = _("Are you sure you want to renew this patron's registration?");
     var MSG_CONFIRM_UPDATE_CHILD = _("Are you sure you want to update this child to an Adult category? This cannot be undone.");
@@ -41,3 +41,4 @@
         });
     [% END %]
 </script>
+<!-- / str/members-menu.inc -->

@@ -4,6 +4,7 @@
 [% USE KohaDates %]
 [% Asset.js("lib/moment/moment.min.js") | $raw %]
 [% Asset.js("lib/moment/moment-timezone-with-data-10-year-range.min.js") | $raw %]
+<!-- js-date-format.inc -->
 <script>
     (function() {
         var def_date_format = '[% Koha.Preference('dateformat') | html %]';
@@ -66,3 +67,4 @@
 
     })();
 </script>
+<!-- / js-date-format.inc -->

@@ -1,4 +1,5 @@
 [% USE Koha %]
+<!-- calendar.inc -->
 <script>
 
 var debug    = "[% debug | html %]";
@@ -208,3 +209,4 @@ $("#dateofbirth").datepicker({
     });
 });
 </script>
+<!-- / calendar.inc -->

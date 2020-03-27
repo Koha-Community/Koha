@@ -1,3 +1,4 @@
+<!-- additem.js.inc -->
 <script>
     var MSG_ADDITEM_JS_ADDITEM = _("Add item");
     var MSG_ADDITEM_JS_ADDMULTI = _("Add multiple items");
@@ -12,3 +13,4 @@
     var MSG_ADDITEM_JS_IS_DUPLICATE = _("is duplicated");
     var MSG_ADDITEM_JS_ALREADY_EXISTS_IN_DB = _("already exists in database");
 </script>
+<!-- / additem.js.inc -->
