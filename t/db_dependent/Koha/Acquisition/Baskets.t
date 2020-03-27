@@ -36,7 +36,6 @@ my $num_of_baskets = Koha::Acquisition::Baskets->search->count;
 
 my $bookseller = Koha::Acquisition::Bookseller->new({
     name => 'Bookseller1',
-    currency => 'USD',
 })->store;
 
 my $basket = Koha::Acquisition::Basket->new({
