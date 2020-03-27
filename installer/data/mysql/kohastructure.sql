@@ -1394,7 +1394,7 @@ DROP TABLE IF EXISTS search_marc_map;
 CREATE TABLE `search_marc_map` (
   id int(11) NOT NULL AUTO_INCREMENT,
   index_name ENUM('biblios','authorities') NOT NULL COMMENT 'what storage index this map is for',
-  marc_type ENUM('marc21', 'unimarc', 'normarc') NOT NULL COMMENT 'what MARC type this map is for',
+  marc_type ENUM('marc21', 'unimarc', 'normarc') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'what MARC type this map is for',
   marc_field VARCHAR(255) NOT NULL COLLATE utf8mb4_bin COMMENT 'the MARC specifier for this field',
   PRIMARY KEY(`id`),
   UNIQUE key `index_name` (`index_name`, `marc_field` (191), `marc_type`),
