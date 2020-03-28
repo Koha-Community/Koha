@@ -23,7 +23,7 @@
         <option value="author_za">Author (Z-A)</option>
     [% END %]
 </optgroup>
-<optgroup label="Call Number">
+<optgroup label="Call number">
     [% IF ( sort_by == "call_number_asc" ) %]
         <option value="call_number_asc" selected="selected">Call number (0-9 to A-Z)</option>
     [% ELSE %]
