@@ -1302,21 +1302,21 @@ INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable,
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '440', '6', 0, 0, 'Элемент связи', '',                        4, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '440', '8', 0, 1, 'Связь полей и номер последовательности', '', 4, -6, '', '', '', NULL, '', '', NULL),
- ('', 'UNIF_TITLE', '440', 'a', 0, 0, 'Серия', '',                      4, 0, 'biblio.seriestitle', '', '', NULL, '\'440n\',\'440p\',\'490a\',\'830a\',\'830n\',\'830p\',\'899a\'', '', NULL),
- ('', '', '440', 'n', 0, 1, 'Номер части', '',                          4, 0, 'biblioitems.number', '', '', NULL, '', '', NULL),
- ('', '', '440', 'p', 0, 1, 'Название части', '',                       4, 0, '', '', '', NULL, '', '', NULL),
- ('', '', '440', 'v', 0, 0, '№ тома', '',                               4, 0, 'biblioitems.volume', '', '', NULL, '', '', NULL),
- ('', '', '440', 'x', 0, 0, 'ISSN серии', '',                           4, 0, '', '', '', NULL, '', '', NULL);
+ ('', 'UNIF_TITLE', '440', 'a', 0, 0, 'Серия', '',                      4, -6, 'biblio.seriestitle', '', '', NULL, '\'440n\',\'440p\',\'490a\',\'830a\',\'830n\',\'830p\',\'899a\'', '', NULL),
+ ('', '', '440', 'n', 0, 1, 'Номер части', '',                          4, -6, 'biblioitems.number', '', '', NULL, '', '', NULL),
+ ('', '', '440', 'p', 0, 1, 'Название части', '',                       4, -6, '', '', '', NULL, '', '', NULL),
+ ('', '', '440', 'v', 0, 0, '№ тома', '',                               4, -6, 'biblioitems.volume', '', '', NULL, '', '', NULL),
+ ('', '', '440', 'x', 0, 0, 'ISSN серии', '',                           4, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '490', 0, 1, 'Серия', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
  ('', '', '490', '6', 0, 0, 'Элемент связи', '',                        4, -6, '', '', '', NULL, '', '', NULL),
  ('', '', '490', '8', 0, 1, 'Связь полей и номер последовательности', '', 4, -6, '', '', NULL, NULL, '', '', NULL),
- ('', '', '490', 'a', 0, 1, 'Заглавие серии', '',                       4, -1, '', '', '', NULL, '', '', NULL),
+ ('', '', '490', 'a', 0, 1, 'Заглавие серии', '',                       4, 0, 'biblioitems.seriestitle', '', '', NULL, '', '', NULL),
  ('', '', '490', 'l', 0, 0, 'Library of Congress call number', 'Library of Congress call number', 4, -6, '', '', '', NULL, '', '', NULL),
- ('', '', '490', 'v', 0, 1, '№ тома', '',                               4, -1, '', '', '', NULL, '', '', NULL),
- ('', '', '490', 'x', 0, 0, 'ISSN серии', '',                           4, -1, '', '', '', NULL, '', '', NULL);
+ ('', '', '490', 'v', 0, 1, '№ тома', '',                               4, 0, 'biblioitems.volume', '', '', NULL, '', '', NULL),
+ ('', '', '490', 'x', 0, 0, 'ISSN серии', '',                           4, 0, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('', '500', 0, 1, 'Примечания', '', NULL);
