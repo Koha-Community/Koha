@@ -1276,25 +1276,25 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('VR', '', '411', 'x', 0, 0, 'International Standard Serial Number', 'International Standard Serial Number', 4, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('VR', '440', '', 1, 'Серія', '', NULL);
+ ('VR', '440', 0, 1, 'Серія', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('VR', '', '440', '6', 0, 0, 'Елемент зв’язку', '',                    4, -6, '', '', '', NULL, '', '', NULL),
+ ('VR', '', '440', '6', 0, 0, 'Елемент зв’язку', '',                      4, -6, '', '', '', NULL, '', '', NULL),
  ('VR', '', '440', '8', 0, 1, 'Зв’язок полів та номер послідовності', '', 4, -6, '', '', '', NULL, '', '', NULL),
- ('VR', 'UNIF_TITLE', '440', 'a', 0, 0, 'Серія', '',                    4, 0, 'biblio.seriestitle', '', '', NULL, '\'440n\',\'440p\',\'490a\',\'830a\',\'830n\',\'830p\',\'899a\'', '', NULL),
- ('VR', '', '440', 'n', 0, 1, 'Номер частини', '',                      4, 0, 'biblioitems.number', '', '', NULL, '', '', NULL),
- ('VR', '', '440', 'p', 0, 1, 'Назва частини', '',                      4, 0, '', '', '', NULL, '', '', NULL),
- ('VR', '', '440', 'v', 0, 0, '№ тому', '',                             4, 0, 'biblioitems.volume', '', '', NULL, '', '', NULL),
- ('VR', '', '440', 'x', 0, 0, 'ISSN серії', '',                         4, 0, '', '', '', NULL, '', '', NULL);
+ ('VR', 'UNIF_TITLE', '440', 'a', 0, 0, 'Серія', '',                      4, -6, 'biblio.seriestitle', '', '', NULL, '\'440n\',\'440p\',\'490a\',\'830a\',\'830n\',\'830p\',\'899a\'', '', NULL),
+ ('VR', '', '440', 'n', 0, 1, 'Номер частини', '',                        4, -6, 'biblioitems.number', '', '', NULL, '', '', NULL),
+ ('VR', '', '440', 'p', 0, 1, 'Назва частини', '',                        4, -6, '', '', '', NULL, '', '', NULL),
+ ('VR', '', '440', 'v', 0, 0, '№ тому', '',                               4, -6, 'biblioitems.volume', '', '', NULL, '', '', NULL),
+ ('VR', '', '440', 'x', 0, 0, 'ISSN серії', '',                           4, -6, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
- ('VR', '490', '', 1, 'Серія', '', '');
+ ('VR', '490', 0, 1, 'Серія', '', '');
 INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tagsubfield, mandatory, repeatable, liblibrarian, libopac, tab, hidden, kohafield, authorised_value, value_builder, isurl, seealso, link, defaultvalue) VALUES
- ('VR', '', '490', '6', 0, 0, 'Елемент зв’язку', '',                    4, -6, '', '', '', NULL, '', '', NULL),
- ('VR', '', '490', '8', 0, 1, 'Зв’язок полів і номер послідовності', '', 4, -6, '', '', NULL, NULL, '', '', NULL),
- ('VR', '', '490', 'a', 0, 1, 'Назва серії', '',                        4, -6, '', '', '', NULL, '', '', NULL),
+ ('VR', '', '490', '6', 0, 0, 'Елемент зв’язку', '',                      4, -6, '', '', '', NULL, '', '', NULL),
+ ('VR', '', '490', '8', 0, 1, 'Зв’язок полів і номер послідовності', '',  4, -6, '', '', NULL, NULL, '', '', NULL),
+ ('VR', '', '490', 'a', 0, 1, 'Назва серії', '',                          4, 0, 'biblioitems.seriestitle', '', '', NULL, '', '', NULL),
  ('VR', '', '490', 'l', 0, 0, 'Library of Congress call number', 'Library of Congress call number', 4, -6, '', '', '', NULL, '', '', NULL),
- ('VR', '', '490', 'v', 0, 1, '№ тому', '',                             4, -6, '', '', '', NULL, '', '', NULL),
- ('VR', '', '490', 'x', 0, 0, 'ISSN серії', '',                         4, -6, '', '', '', NULL, '', '', NULL);
+ ('VR', '', '490', 'v', 0, 1, '№ тому', '',                               4, 0, 'biblioitems.volume', '', '', NULL, '', '', NULL),
+ ('VR', '', '490', 'x', 0, 0, 'ISSN серії', '',                           4, 0, '', '', '', NULL, '', '', NULL);
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
  ('VR', '500', '', 1, 'Примітка', '', NULL);
