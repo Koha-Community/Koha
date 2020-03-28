@@ -217,9 +217,9 @@
                                     <li class="dropdown-header">Call number</li>
 
                                     [% IF ( sort_by == "call_number_asc" ) %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=call_number_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Call Number (0-9 to A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=call_number_asc[% PROCESS sort_search_query %]"><i class="fa fa-check"></i> Call number (0-9 to A-Z)</a></li>
                                     [% ELSE %]
-                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?sort_by=call_number_asc[% PROCESS sort_search_query %]">Call Number (0-9 to A-Z)</a></li>
+                                        <li><a href="/cgi-bin/koha/catalogue/search.pl?count=[% results_per_page | uri %]&sort_by=call_number_asc[% PROCESS sort_search_query %]">Call number (0-9 to A-Z)</a></li>
                                     [% END %]
 
                                     [% IF ( sort_by == "call_number_dsc" ) %]
