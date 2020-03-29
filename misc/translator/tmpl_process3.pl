@@ -204,11 +204,9 @@ sub usage {
     my($exitcode) = @_;
     my $h = $exitcode? *STDERR: *STDOUT;
     print $h <<EOF;
-Usage: $0 create [OPTION]
-  or:  $0 update [OPTION]
-  or:  $0 install [OPTION]
+Usage: $0 install [OPTION]
   or:  $0 --help
-Create or update PO files from templates, or install translated templates.
+Install translated templates.
 
   -i, --input=SOURCE          Get or update strings from SOURCE directory(s).
                               On create or update can have multiple values.
@@ -230,7 +228,6 @@ Create or update PO files from templates, or install translated templates.
       --help                  Display this help and exit
   -q, --quiet                 no output to screen (except for errors)
 
-The -o option is ignored for the "create" and "update" actions.
 Try `perldoc $0` for perhaps more information.
 EOF
     exit($exitcode);
@@ -264,12 +261,6 @@ GetOptions(
 
 VerboseWarnings::set_application_name($0);
 VerboseWarnings::set_pedantic_mode($pedantic_p);
-
-# keep the buggy Locale::PO quiet if it says stupid things
-$SIG{__WARN__} = sub {
-    my($s) = @_;
-    print STDERR $s unless $s =~ /^Strange line in [^:]+: #~/s
-    };
 
 my $action = shift or usage_error('You must specify an ACTION.');
 usage_error('You must at least specify input and string list filenames.')
@@ -344,89 +335,9 @@ if (!defined $charset_out) {
     $charset_out = TmplTokenizer::charset_canon('UTF-8');
     warn "Warning: Charset Out defaulting to $charset_out\n" unless ( $quiet );
 }
-my $xgettext = './xgettext.pl'; # actual text extractor script
 my $st;
 
-if ($action eq 'create')  {
-    # updates the list. As the list is empty, every entry will be added
-    if (!-s $str_file) {
-    warn "Removing empty file $str_file\n" unless ( $quiet );
-    unlink $str_file || die "$str_file: $!\n";
-    }
-    die "$str_file: Output file already exists\n" if -f $str_file;
-    my($tmph1, $tmpfile1) = tmpnam();
-    my($tmph2, $tmpfile2) = tmpnam();
-    close $tmph2; # We just want a name
-    # Generate the temporary file that acts as <MODULE>/POTFILES.in
-    for my $input (@in_files) {
-    print $tmph1 "$input\n";
-    }
-    close $tmph1;
-    warn "I $charset_in O $charset_out" unless ( $quiet );
-    # Generate the specified po file ($str_file)
-    $st = system ($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
-            (defined $charset_in? ('-I', $charset_in): ()),
-            (defined $charset_out? ('-O', $charset_out): ())
-    );
-    # Run msgmerge so that the pot file looks like a real pot file
-    # We need to help msgmerge a bit by pre-creating a dummy po file that has
-    # the headers and the "" msgid & msgstr. It will fill in the rest.
-    if ($st == 0) {
-    # Merge the temporary "pot file" with the specified po file ($str_file)
-    # FIXME: msgmerge(1) is a Unix dependency
-    # FIXME: need to check the return value
-    unless (-f $str_file) {
-        open(my $infh, '<', $tmpfile2);
-        open(my $outfh, '>', $str_file);
-        while (<$infh>) {
-        print $outfh $_;
-        last if /^\n/s;
-        }
-        close $infh;
-        close $outfh;
-    }
-    $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile2 -o - | msgattrib --no-obsolete -o $str_file");
-    } else {
-    error_normal("Text extraction failed: $xgettext: $!\n", undef);
-    error_additional("Will not run msgmerge\n", undef);
-    }
-    unlink $tmpfile1 || warn_normal("$tmpfile1: unlink failed: $!\n", undef);
-    unlink $tmpfile2 || warn_normal("$tmpfile2: unlink failed: $!\n", undef);
-
-} elsif ($action eq 'update') {
-    my($tmph1, $tmpfile1) = tmpnam();
-    my($tmph2, $tmpfile2) = tmpnam();
-    close $tmph2; # We just want a name
-    # Generate the temporary file that acts as <MODULE>/POTFILES.in
-    for my $input (@in_files) {
-    print $tmph1 "$input\n";
-    }
-    close $tmph1;
-    # Generate the temporary file that acts as <MODULE>/<LANG>.pot
-    $st = system($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
-        '--po-mode',
-        (defined $charset_in? ('-I', $charset_in): ()),
-        (defined $charset_out? ('-O', $charset_out): ()));
-    if ($st == 0) {
-        # Merge the temporary "pot file" with the specified po file ($str_file)
-        # FIXME: msgmerge(1) is a Unix dependency
-        # FIXME: need to check the return value
-        if ( @filenames ) {
-            my ($tmph3, $tmpfile3) = tmpnam();
-            $st = system("msgcat $str_file $tmpfile2 > $tmpfile3");
-            $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile3 -o - | msgattrib --no-obsolete -o $str_file")
-                unless $st;
-        } else {
-            $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile2 -o - | msgattrib --no-obsolete -o $str_file");
-        }
-    } else {
-        error_normal("Text extraction failed: $xgettext: $!\n", undef);
-        error_additional("Will not run msgmerge\n", undef);
-    }
-    unlink $tmpfile1 || warn_normal("$tmpfile1: unlink failed: $!\n", undef);
-    unlink $tmpfile2 || warn_normal("$tmpfile2: unlink failed: $!\n", undef);
-
-} elsif ($action eq 'install') {
+if ($action eq 'install') {
     if(!defined($out_dir)) {
     usage_error("You must specify an output directory when using the install method.");
     }
@@ -554,14 +465,6 @@ translation, it can be suppressed with the %0.0s notation.
 Using the PO format also means translators can add their
 own comments in the translation files, if necessary.
 
-=item -
-
-Create, update, and install actions are all based on the
-same scanner module. This ensures that update and install
-have the same idea of what is a translatable string;
-attribute names in tags, for example, will not be
-accidentally translated.
-
 =back
 
 =head1 NOTES
@@ -569,21 +472,7 @@ accidentally translated.
 Anchors are represented by an <AI<n>> notation.
 The meaning of this non-standard notation might not be obvious.
 
-The create action calls xgettext.pl to do the actual work;
-the update action calls xgettext.pl, msgmerge(1) and msgattrib(1)
-to do the actual work.
-
 =head1 BUGS
-
-xgettext.pl must be present in the current directory; both
-msgmerge(1) and msgattrib(1) must also be present in the search path.
-The script currently does not check carefully whether these
-dependent commands are present.
-
-Locale::PO(3) has a lot of bugs. It can neither parse nor
-generate GNU PO files properly; a couple of workarounds have
-been written in TmplTokenizer and more is likely to be needed
-(e.g., to get rid of the "Strange line" warning for #~).
 
 This script may not work in Windows.
 
@@ -592,12 +481,7 @@ tested very much.
 
 =head1 SEE ALSO
 
-xgettext.pl,
 TmplTokenizer.pm,
-msgmerge(1),
 Locale::PO(3),
-translator_doc.txt
-
-http://www.saas.nsw.edu.au/koha_wiki/index.php?page=DifficultTerms
 
 =cut

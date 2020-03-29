@@ -1,0 +1,151 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+=head1 NAME
+
+xgettext-pref - extract translatable strings from system preferences YAML files
+
+=head1 SYNOPSIS
+
+xgettext-pref [OPTION] [INPUTFILE]...
+
+=head1 OPTIONS
+
+=over
+
+=item B<-f, --files-from=FILE>
+
+get list of input files from FILE
+
+=item B<-o, --output=FILE>
+
+write output to the specified file
+
+=item B<-h, --help>
+
+display this help and exit
+
+=back
+
+=cut
+
+use Modern::Perl;
+
+use File::Basename;
+use Getopt::Long;
+use Locale::PO;
+use Pod::Usage;
+use YAML::Syck qw(LoadFile);
+
+$YAML::Syck::ImplicitTyping = 1;
+
+my $output = 'messages.pot';
+my $files_from;
+my $help;
+
+GetOptions(
+    'output=s' => \$output,
+    'files-from=s' => \$files_from,
+    'help' => \$help,
+) or pod2usage(-verbose => 1, -exitval => 2);
+
+if ($help) {
+    pod2usage(-verbose => 1, -exitval => 0);
+}
+
+my @files = @ARGV;
+if ($files_from) {
+    open(my $fh, '<', $files_from) or die "Cannot open $files_from: $!";
+    push @files, <$fh>;
+    chomp @files;
+    close $fh;
+}
+
+my $pot = {
+    '' => Locale::PO->new(
+        -msgid  => '',
+        -msgstr => "Project-Id-Version: Koha\n"
+          . "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+          . "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\n"
+          . "Language-Team: Koha Translate List <koha-translate\@lists.koha-community.org>\n"
+          . "MIME-Version: 1.0\n"
+          . "Content-Type: text/plain; charset=UTF-8\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+    ),
+};
+
+for my $file (@files) {
+    my $pref = LoadFile($file);
+    while ( my ($tab, $tab_content) = each %$pref ) {
+        add_po(undef, basename($file));
+
+        if ( ref($tab_content) eq 'ARRAY' ) {
+            add_prefs( $file, $tab, $tab_content );
+        } else {
+            while ( my ($section, $sysprefs) = each %$tab_content ) {
+                my $context = "$tab > $section";
+                my $msgid = sprintf('%s %s', basename($file), $section);
+                add_po($tab, $msgid);
+                add_prefs( $file, $context, $sysprefs );
+            }
+        }
+    }
+}
+
+Locale::PO->save_file_fromhash($output, $pot);
+
+sub add_prefs {
+    my ($file, $context, $prefs) = @_;
+
+    for my $pref (@$prefs) {
+        my $pref_name = '';
+        for my $element (@$pref) {
+            if ( ref($element) eq 'HASH' ) {
+                $pref_name = $element->{pref};
+                last;
+            }
+        }
+        for my $element (@$pref) {
+            if ( ref($element) eq 'HASH' ) {
+                while ( my ( $key, $value ) = each(%$element) ) {
+                    next unless $key eq 'choices' or $key eq 'multiple';
+                    next unless ref($value) eq 'HASH';
+                    for my $ckey ( keys %$value ) {
+                        my $msgid = sprintf('%s#%s# %s', basename($file), $pref_name, $value->{$ckey});
+                        add_po( "$context > $pref_name", $msgid );
+                    }
+                }
+            }
+            elsif ($element) {
+                my $msgid = sprintf('%s#%s# %s', basename($file), $pref_name, $element);
+                add_po( "$context > $pref_name", $msgid );
+            }
+        }
+    }
+}
+
+sub add_po {
+    my ($comment, $msgid ) = @_;
+
+    return unless $msgid;
+
+    $pot->{$msgid} = Locale::PO->new(
+        -comment   => $comment,
+        -msgid     => $msgid,
+        -msgstr    => '',
+    );
+}

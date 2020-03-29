@@ -1,0 +1,158 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+=head1 NAME
+
+xgettext-installer - extract translatable strings from installer YAML files
+
+=head1 SYNOPSIS
+
+xgettext-installer [OPTION] [INPUTFILE]...
+
+=head1 OPTIONS
+
+=over
+
+=item B<-f, --files-from=FILE>
+
+get list of input files from FILE
+
+=item B<-o, --output=FILE>
+
+write output to the specified file
+
+=item B<-h, --help>
+
+display this help and exit
+
+=back
+
+=cut
+
+use Modern::Perl;
+
+use Getopt::Long;
+use Locale::PO;
+use Pod::Usage;
+use YAML::Syck qw(LoadFile);
+
+$YAML::Syck::ImplicitTyping = 1;
+
+my $output = 'messages.pot';
+my $files_from;
+my $help;
+
+GetOptions(
+    'output=s' => \$output,
+    'files-from=s' => \$files_from,
+    'help' => \$help,
+) or pod2usage(-verbose => 1, -exitval => 2);
+
+if ($help) {
+    pod2usage(-verbose => 1, -exitval => 0);
+}
+
+my @files = @ARGV;
+if ($files_from) {
+    open(my $fh, '<', $files_from) or die "Cannot open $files_from: $!";
+    push @files, <$fh>;
+    chomp @files;
+    close $fh;
+}
+
+my $pot = {
+    '' => Locale::PO->new(
+        -msgid  => '',
+        -msgstr =>
+            "Project-Id-Version: Koha\n"
+          . "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+          . "Last-Translator: FULL NAME <EMAIL\@ADDRESS>\n"
+          . "Language-Team: Koha Translate List <koha-translate\@lists.koha-community.org>\n"
+          . "MIME-Version: 1.0\n"
+          . "Content-Type: text/plain; charset=UTF-8\n"
+          . "Content-Transfer-Encoding: 8bit\n"
+    ),
+};
+
+for my $file (@files) {
+    my $yaml = LoadFile($file);
+    my @tables = @{ $yaml->{'tables'} };
+
+    my $tablec = 0;
+    for my $table (@tables) {
+        $tablec++;
+
+        my $table_name = ( keys %$table )[0];
+        my @translatable = @{ $table->{$table_name}->{translatable} };
+        my @rows = @{ $table->{$table_name}->{rows} };
+        my @multiline = @{ $table->{$table_name}->{'multiline'} };
+
+        my $rowc = 0;
+        for my $row (@rows) {
+            $rowc++;
+
+            for my $field (@translatable) {
+                if ( @multiline and grep { $_ eq $field } @multiline ) {
+                    # multiline fields, only notices ATM
+                    my $mulc;
+                    foreach my $line ( @{ $row->{$field} } ) {
+                        $mulc++;
+
+                        # discard pure html, TT, empty
+                        next if ( $line =~ /^(\s*<.*?>\s*$|^\s*\[.*?\]\s*|\s*)$/ );
+
+                        # put placeholders
+                        $line =~ s/(<<.*?>>|\[\%.*?\%\]|<.*?>)/\%s/g;
+
+                        # discard non strings
+                        next if ( $line =~ /^(\s|%s|-|[[:punct:]]|\(|\))*$/ or length($line) < 2 );
+                        if ( not $pot->{$line} ) {
+                            my $msg = new Locale::PO(
+                                -msgid  => $line,
+                                -msgstr => '',
+                                -reference => "$file:$table_name:$tablec:row:$rowc:mul:$mulc"
+                            );
+                            $pot->{$line} = $msg;
+                        }
+                    }
+                } elsif (defined $row->{$field} && length($row->{$field}) > 1 && !$pot->{ $row->{$field} }) {
+                    my $msg = new Locale::PO(
+                        -msgid     => $row->{$field},
+                        -msgstr    => '',
+                        -reference => "$file:$table_name:$tablec:row:$rowc"
+                    );
+                    $pot->{ $row->{$field} } = $msg;
+                }
+            }
+        }
+    }
+
+    my $desccount = 0;
+    for my $description ( @{ $yaml->{'description'} } ) {
+        $desccount++;
+        if ( length($description) > 1 and not $pot->{$description} ) {
+            my $msg = new Locale::PO(
+                -msgid     => $description,
+                -msgstr    => '',
+                -reference => "$file:description:$desccount"
+            );
+            $pot->{$description} = $msg;
+        }
+    }
+}
+
+Locale::PO->save_file_fromhash($output, $pot);

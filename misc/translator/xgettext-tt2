@@ -1,0 +1,56 @@
+#!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+
+my $xgettext = Locale::XGettext::TT2::Koha->newFromArgv(\@ARGV);
+$xgettext->setOption('plug_in', '');
+$xgettext->run;
+$xgettext->output;
+
+package Locale::XGettext::TT2::Koha;
+
+use parent 'Locale::XGettext::TT2';
+
+sub defaultKeywords {
+    return [
+        't:1',
+        'tx:1',
+        'tn:1,2',
+        'tnx:1,2',
+        'txn:1,2',
+        'tp:1c,2',
+        'tpx:1c,2',
+        'tnp:1c,2,3',
+        'tnpx:1c,2,3',
+    ];
+}
+
+sub defaultFlags {
+    return [
+        'tx:1:perl-brace-format',
+        'tnx:1:perl-brace-format',
+        'tnx:2:perl-brace-format',
+        'txn:1:perl-brace-format',
+        'txn:2:perl-brace-format',
+        'tpx:2:perl-brace-format',
+        'tnpx:2:perl-brace-format',
+        'tnpx:3:perl-brace-format',
+    ],
+}
+
+1;
