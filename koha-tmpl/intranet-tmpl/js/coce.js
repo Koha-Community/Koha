@@ -33,7 +33,13 @@ KOHA.coce = {
             var img = document.createElement("img");
             img.src = url;
             img.classList.add("thumbnail");
-            img.title = url; //FIXME: to delete
+            img.alt = "Cover image";
+            img.onload = function(){
+                // image dimensions can't be known until image has loaded
+                if( img.height == 1 && img.width == 1 ){
+                    $(this).remove();
+                }
+            }
             $(this).html(img);
          });
         }
