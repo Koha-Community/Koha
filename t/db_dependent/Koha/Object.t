@@ -610,50 +610,51 @@ subtest 'store() tests' => sub {
 
     my $api_key = Koha::ApiKey->new({ patron_id => $patron_id, secret => 'a secret', description => 'a description' });
 
-    my $print_error = $schema->storage->dbh->{PrintError};
-    $schema->storage->dbh->{PrintError} = 0;
-    throws_ok
-        { $api_key->store }
-        'Koha::Exceptions::Object::FKConstraint',
-        'Exception is thrown correctly';
-    is(
-        $@->message,
-        "Broken FK constraint",
-        'Exception message is correct'
-    );
-    is(
-        $@->broken_fk,
-        'patron_id',
-        'Exception field is correct'
-    );
+    my $dbh = $schema->storage->dbh;
+    {
+        local $dbh->{PrintError} = 0;
+        local $dbh->{RaiseError} = 0;
+        throws_ok
+            { $api_key->store }
+            'Koha::Exceptions::Object::FKConstraint',
+            'Exception is thrown correctly';
+        is(
+            $@->message,
+            "Broken FK constraint",
+            'Exception message is correct'
+        );
+        is(
+            $@->broken_fk,
+            'patron_id',
+            'Exception field is correct'
+        );
 
-    $patron = $builder->build_object({ class => 'Koha::Patrons' });
-    $api_key = $builder->build_object({ class => 'Koha::ApiKeys' });
+        $patron = $builder->build_object({ class => 'Koha::Patrons' });
+        $api_key = $builder->build_object({ class => 'Koha::ApiKeys' });
 
-    my $new_api_key = Koha::ApiKey->new({
-        patron_id => $patron_id,
-        secret => $api_key->secret,
-        description => 'a description',
-    });
+        my $new_api_key = Koha::ApiKey->new({
+            patron_id => $patron_id,
+            secret => $api_key->secret,
+            description => 'a description',
+        });
 
-    throws_ok
-        { $new_api_key->store }
-        'Koha::Exceptions::Object::DuplicateID',
-        'Exception is thrown correctly';
+        throws_ok
+            { $new_api_key->store }
+            'Koha::Exceptions::Object::DuplicateID',
+            'Exception is thrown correctly';
 
-    is(
-        $@->message,
-        'Duplicate ID',
-        'Exception message is correct'
-    );
+        is(
+            $@->message,
+            'Duplicate ID',
+            'Exception message is correct'
+        );
 
-    like(
-       $@->duplicate_id,
-       qr/(api_keys\.)?secret/,
-       'Exception field is correct (note that MySQL 8 is displaying the tablename)'
-    );
-
-    $schema->storage->dbh->{PrintError} = $print_error;
+        like(
+           $@->duplicate_id,
+           qr/(api_keys\.)?secret/,
+           'Exception field is correct (note that MySQL 8 is displaying the tablename)'
+        );
+    }
 
     # Successful test
     $api_key->set({ secret => 'Manuel' });
@@ -705,18 +706,15 @@ subtest 'store() tests' => sub {
 
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
-        my $print_error = $schema->storage->dbh->{PrintError};
-        $schema->storage->dbh->{PrintError} = 0;
-
         try {
+            local $schema->storage->dbh->{RaiseError} = 0;
+            local $schema->storage->dbh->{PrintError} = 0;
             $patron->lastseen('wrong_value')->store;
         } catch {
             ok( $_->isa('Koha::Exceptions::Object::BadValue'), 'Exception thrown correctly' );
             like( $_->property, qr/(borrowers\.)?lastseen/, 'Column should be the expected one' ); # The table name is not always displayed, it depends on the DBMS version
             is( $_->value, 'wrong_value', 'Value should be the expected one' );
         };
-
-        $schema->storage->dbh->{PrintError} = $print_error;
     };
 
     $schema->storage->txn_rollback;
