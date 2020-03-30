@@ -134,11 +134,7 @@
                                                 <td>[% checkout.issuedate | $KohaDates %]</td>
                                                 <td>[% Branches.GetName( checkout.branchcode ) | html %]</td>
                                                 <td>
-                                                    [% IF new_hard_due_date %]
-                                                        [% new_hard_due_date | $KohaDates %]
-                                                    [% ELSE %]
-                                                        [% new_due_dates.shift | $KohaDates %]
-                                                    [% END %]
+                                                    [% new_due_dates.shift | $KohaDates as_due_date => 1 %]
                                                 </td>
                                             </tr>
                                         [% END %]
