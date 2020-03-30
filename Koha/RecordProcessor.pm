@@ -121,6 +121,29 @@ sub new {
     return $self;
 }
 
+=head3 options
+
+    $processor->options( $new_options );
+
+Overloaded accessor, that spreads the new options to the filter objects when set
+
+=cut
+
+sub options {
+    my ( $self, $options ) = @_;
+
+    if ( $options ) {  # Set
+        foreach my $filter ( @{$self->filters} ) {
+            $filter->params->{options} = $options;
+        }
+
+        $self->{options} = $options;
+        return $self;
+    }
+
+    return $self->{options};
+}
+
 =head2 bind
 
     $normalizer->bind($record)
