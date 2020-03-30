@@ -38,6 +38,10 @@
                     "item_type": {
                       "description": "Limit hold on one itemtype (ignored for item-level holds)",
                       "type": [ "string", "null" ]
+                    },
+                    "default_patron_home": {
+                      "description": "For each patron, set pickup location to patron's home library if possible",
+                      "type": "integer"
                     }
                   },
                   "required": [ "pickup_library_id" ]

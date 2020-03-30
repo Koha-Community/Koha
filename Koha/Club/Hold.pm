@@ -29,6 +29,7 @@ use base qw(Koha::Object);
 use Koha::Exceptions::ClubHold;
 use Koha::Club::Hold::PatronHold;
 use Koha::Clubs;
+use Koha::Patrons;
 
 use List::Util 'shuffle';
 
@@ -72,11 +73,26 @@ sub add {
 
     foreach my $enrollment (@enrollments) {
         my $patron_id = $enrollment->borrowernumber;
+        my $pickup_id = $params->{pickup_library_id};
 
-        my $can_place_hold
-        = $params->{item_id}
-        ? C4::Reserves::CanItemBeReserved( $patron_id, $params->{club_id} )
-        : C4::Reserves::CanBookBeReserved( $patron_id, $params->{biblio_id} );
+        my $can_place_hold;
+        if($params->{default_patron_home}) {
+            my $patron = Koha::Patrons->find($patron_id);
+            my $patron_home = $patron->branchcode;
+            $can_place_hold = $params->{item_id}
+                ? C4::Reserves::CanItemBeReserved( $patron_id, $params->{item_id}, $patron_home )
+                : C4::Reserves::CanBookBeReserved( $patron_id, $params->{biblio_id}, $patron_home );
+            $pickup_id = $patron_home if $can_place_hold->{status} eq 'OK';
+            unless ( $can_place_hold->{status} eq 'OK' ) {
+                warn "Patron(".$patron_id.") Hold cannot be placed with patron's homebranch ($patron_home). Reason: " . $can_place_hold->{status};
+            }
+        }
+
+        unless ( defined $can_place_hold && $can_place_hold->{status} eq 'OK' ) {
+            $can_place_hold = $params->{item_id}
+                ? C4::Reserves::CanItemBeReserved( $patron_id, $params->{item_id}, $pickup_id )
+                : C4::Reserves::CanBookBeReserved( $patron_id, $params->{biblio_id}, $pickup_id );
+        }
 
         unless ( $can_place_hold->{status} eq 'OK' ) {
             warn "Patron(".$patron_id.") Hold cannot be placed. Reason: " . $can_place_hold->{status};
@@ -92,7 +108,7 @@ sub add {
 
         my $hold_id = C4::Reserves::AddReserve(
             {
-                branchcode      => $params->{pickup_library_id},
+                branchcode      => $pickup_id,
                 borrowernumber  => $patron_id,
                 biblionumber    => $params->{biblio_id},
                 priority        => $priority,
@@ -118,7 +134,6 @@ sub add {
                 error_message => "Could not create hold for Patron(".$patron_id.")"
             })->store();
         }
-
     }
 
     return $club_hold;
