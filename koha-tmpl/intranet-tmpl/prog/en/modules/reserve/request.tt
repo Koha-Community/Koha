@@ -162,6 +162,10 @@
                                     [% PROCESS options_for_libraries libraries => Branches.all({ selected => club.branchcode, search_params => { pickup_location => 1 } }) %]
                                 </select>
                             </li>
+                            <li>
+                                <label for="default_patron_home">Pickup at patron's home library when possible</label>
+                                <input type="checkbox" name="default_patron_home"/>
+                            </li>
                         </ol>
                         <h2 style="padding: 0 1em;">Members</h2>
                         <ol>
@@ -1038,6 +1042,9 @@
                     data.hold_date = $('.datepickerfrom_hidden').val()||null;
                 if($('input[name="itemtype"]').length) {
                     data.item_type = $('input[name="itemtype"]').val()||null;
+                }
+                if($('input[name="default_patron_home"]:checked').length) {
+                    data.default_patron_home = 1;
                 }
                 if($('input[name="biblionumbers"]').length) {
                     biblionumbers_text = $('input[name="biblionumbers"]').val();

@@ -58,6 +58,7 @@ sub add {
         my $item_type         = $body->{item_type};
         my $expiration_date   = $body->{expiration_date};
         my $notes             = $body->{notes};
+        my $default_patron_home = $body->{default_patron_home};
 
         if ( $item_id and $biblio_id ) {
 
@@ -116,7 +117,8 @@ sub add {
             pickup_library_id => $pickup_library_id,
             expiration_date => $expiration_date,
             notes => $notes,
-            item_type => $item_type
+            item_type => $item_type,
+            default_patron_home => $default_patron_home
         });
 
         return $c->render(
