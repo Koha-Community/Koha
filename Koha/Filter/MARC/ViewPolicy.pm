@@ -78,10 +78,12 @@ sub filter {
         push @records, $precord;
     }
 
+    my $params = $self->params;
+    my $interface     = $params->{options}->{interface} // 'opac';
+    my $frameworkcode = $params->{options}->{frameworkcode} // q{};
+
     foreach my $current_record (@records) {
         my $result        = $current_record;
-        my $interface     = $self->{options}->{interface} // 'opac';
-        my $frameworkcode = $self->{options}->{frameworkcode} // q{};
         my $hide          = _should_hide_on_interface();
 
         my $marcsubfieldstructure = GetMarcStructure( 0, $frameworkcode, { unsafe => 1 } );
@@ -150,16 +152,6 @@ sub _filter_field {
         }
 
     }
-    return;
-}
-
-sub initialize {
-    my $self  = shift;
-    my $param = shift;
-
-    my $options = $param->{options};
-    $self->{options} = $options;
-    $self->Koha::RecordProcessor::Base::initialize($param);
     return;
 }
 
