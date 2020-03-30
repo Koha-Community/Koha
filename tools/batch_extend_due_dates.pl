@@ -26,7 +26,7 @@ use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::Items qw( ModItem );
 use Koha::Checkouts;
-use Koha::DateUtils qw( dt_from_string );
+use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $input = new CGI;
 my $op = $input->param('op') // q|form|;
@@ -52,6 +52,8 @@ elsif ( $op eq 'list' ) {
     my $to_due_date       = $input->param('to_due_date');
     my $new_hard_due_date = $input->param('new_hard_due_date');
     my $due_date_days     = $input->param('due_date_days');
+
+    $new_hard_due_date &&= dt_from_string($new_hard_due_date);
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $search_params;
@@ -100,12 +102,17 @@ elsif ( $op eq 'list' ) {
     );
 
     my @new_due_dates;
-    if ( not $new_hard_due_date && $due_date_days ) {
-        while ( my $checkout = $checkouts->next ) {
-            my $due_date = dt_from_string( $checkout->date_due );
-            push @new_due_dates, $due_date->add( days => $due_date_days );
-        }
+    while ( my $checkout = $checkouts->next ) {
+        push @new_due_dates,
+          output_pref({ dt => calc_new_due_date(
+            {
+                due_date          => dt_from_string($checkout->date_due),
+                new_hard_due_date => $new_hard_due_date,
+                add_days          => $due_date_days
+            }
+          ), dateformat => 'iso' });
     }
+
     $template->param(
         checkouts         => $checkouts,
         new_hard_due_date => $new_hard_due_date
@@ -127,8 +134,13 @@ elsif ( $op eq 'modify' ) {
     my $checkouts =
       Koha::Checkouts->search( { issue_id => { -in => \@issue_ids } } );
     while ( my $checkout = $checkouts->next ) {
-        my $new_due_date = $new_hard_due_date
-          || dt_from_string( $checkout->date_due )->add( days => $due_date_days );
+        my $new_due_date = calc_new_due_date(
+            {
+                due_date          => dt_from_string($checkout->date_due),
+                new_hard_due_date => $new_hard_due_date,
+                add_days          => $due_date_days
+            }
+        );
 
         # Update checkout's due date
         $checkout->date_due($new_due_date)->store;
@@ -142,6 +154,25 @@ elsif ( $op eq 'modify' ) {
         view      => 'report',
         checkouts => $checkouts,
     );
+}
+
+sub calc_new_due_date {
+    my ($params)          = @_;
+    my $due_date          = $params->{due_date};
+    my $new_hard_due_date = $params->{new_hard_due_date};
+    my $add_days          = $params->{add_days};
+
+    my $new;
+    if ( $new_hard_due_date ) {
+      $new = $new_hard_due_date->clone->set(
+        hour   => $due_date->hour,
+        minute => $due_date->minute,
+        second => $due_date->second,
+      )
+  } else {
+      $new = $due_date->clone->add( days => $add_days );
+  }
+  return $new;
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
