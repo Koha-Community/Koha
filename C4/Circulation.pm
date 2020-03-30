@@ -3498,7 +3498,7 @@ sub SendCirculationAlert {
     # LOCK TABLES is not transaction-safe and implicitly commits any active transaction before attempting to lock the tables.
     # If the LOCK/UNLOCK statements are executed from tests, the current transaction will be committed.
     # To avoid that we need to guess if this code is execute from tests or not (yes it is a bit hacky)
-    my $do_not_lock = ( exists $ENV{_} && $ENV{_} =~ m|prove| ) || $ENV{KOHA_NO_TABLE_LOCKS};
+    my $do_not_lock = ( exists $ENV{_} && $ENV{_} =~ m|prove| ) || $ENV{KOHA_TESTING};
 
     for my $mtt (@transports) {
         my $letter =  C4::Letters::GetPreparedLetter (

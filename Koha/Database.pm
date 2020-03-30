@@ -76,7 +76,10 @@ sub _new_schema {
         %encoding_attr = ( mysql_enable_utf8 => 1 );
         $encoding_query = "set NAMES 'utf8mb4'";
         $tz_query = qq(SET time_zone = "$tz") if $tz;
-        if ( ( exists $ENV{_} && $ENV{_} =~ m|prove| ) or C4::Context->config('strict_sql_modes') ) {
+        if (   C4::Context->config('strict_sql_modes')
+            || ( exists $ENV{_} && $ENV{_} =~ m|prove| )
+            || $ENV{KOHA_TESTING}
+        ) {
             $sql_mode_query = q{SET sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'};
         } else {
             $sql_mode_query = q{SET sql_mode = 'IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'};
@@ -87,7 +90,11 @@ sub _new_schema {
         $tz_query = qq(SET TIME ZONE = "$tz") if $tz;
     }
 
-    my $RaiseError = ( $ENV{DEBUG} || exists $ENV{_} && $ENV{_} =~ m|prove| ) ? 1 : 0;
+    my $RaiseError = (
+           $ENV{DEBUG}
+        || $ENV{KOHA_TESTING}
+        ||  exists $ENV{_} && $ENV{_} =~ m|prove|
+    ) ? 1 : 0;
     my $schema = Koha::Schema->connect(
         {
             dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port".($tls_options? $tls_options : ""),
