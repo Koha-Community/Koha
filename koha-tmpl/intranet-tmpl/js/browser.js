@@ -65,7 +65,7 @@ KOHA.browser = function (searchid, biblionumber) {
         sessionStorage.setItem('searches', JSON.stringify(searches));
         $(document).ready(function () {
             //FIXME It's not a good idea to modify the click events
-            $('#searchresults table tr a[href*="/detail.pl"]').on('click', function (ev) {
+            $('#searchresults table tr a[href*="/detail.pl"]').on('click auxclick', function (ev) {
                 ev.preventDefault();
             });
             $('#searchresults table tr a[href*="/detail.pl"]').on('mousedown', function (ev) {
