@@ -151,7 +151,7 @@ subtest 'new() tests' => sub {
 
 subtest 'options() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 6;
 
     # Create a processor with some options
     my $record_processor = Koha::RecordProcessor->new(
@@ -178,11 +178,14 @@ subtest 'options() tests' => sub {
     );
 
     # Update the chosen options
-    $record_processor->options(
+    my $ret = $record_processor->options(
         {
             dummy => 'something else'
         }
     );
+
+    is( ref($ret), 'Koha::RecordProcessor', 'The setter return the object for chaining calls' );
+    is_deeply( $record_processor->options, { dummy => 'something else' }, 'The getter works as expected' );
 
     # Re-fetch the filter
     $filter = $record_processor->filters->[0];
