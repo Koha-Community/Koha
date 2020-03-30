@@ -318,3 +318,6 @@ subtest 'copy_to_branch' => sub {
     $schema->storage->txn_rollback;
 
 };
+
+# Clear cache
+Koha::Caches->get_instance->flush_all;
