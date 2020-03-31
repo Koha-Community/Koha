@@ -2095,12 +2095,9 @@ subtest 'extended_attributes' => sub {
     $patron_2->extended_attributes->filter_by_branch_limitations->delete;
     $patron_1->extended_attributes($attributes_for_1);
 
-    my $print_error = $schema->storage->dbh->{PrintError};
-    $schema->storage->dbh->{PrintError} = 0;
     warning_like {
         $patron_2->extended_attributes($attributes_for_2);
-    } [ qr/a foreign key constraint fails/, qr/a foreign key constraint fails/ ], 'nonexistent attribute should have not exploded but print a warning';
-    $schema->storage->dbh->{PrintError} = $print_error;
+    } [ qr/a foreign key constraint fails/ ], 'nonexistent attribute should have not exploded but print a warning';
 
     my $extended_attributes_for_1 = $patron_1->extended_attributes;
     is( $extended_attributes_for_1->count, 3, 'There should be 3 attributes now for patron 1');
