@@ -11,7 +11,7 @@ KOHA.browser = function (searchid, biblionumber) {
     }
     me.searchid = searchid;
 
-    var searches_stored = sessionStorage.getItem('searches');
+    var searches_stored = localStorage.getItem('searches');
     var current_search;
     var searches = {};
     if ( searches_stored ) {
@@ -62,24 +62,10 @@ KOHA.browser = function (searchid, biblionumber) {
             };
         }
         searches[me.searchid] = current_search;
-        sessionStorage.setItem('searches', JSON.stringify(searches));
+        localStorage.setItem('searches', JSON.stringify(searches));
         $(document).ready(function () {
-            //FIXME It's not a good idea to modify the click events
-            $('#searchresults table tr a[href*="/detail.pl"]').on('click auxclick', function (ev) {
-                ev.preventDefault();
-            });
-            $('#searchresults table tr a[href*="/detail.pl"]').on('mousedown', function (ev) {
-                if ( ev.which == 2 || ev.which == 1 && ev.ctrlKey ) {
-                    // Middle click or ctrl + click
-                    ev.preventDefault();
-                    var newwindow = window.open( $(this).attr('href') + '&searchid=' + me.searchid, '_blank' );
-                    newwindow.blur();
-                    window.focus();
-                } else if ( ev.which == 1 ) {
-                    // Left click
-                    ev.preventDefault();
-                    window.location = $(this).attr('href') + '&searchid=' + me.searchid;
-                }
+            $('#searchresults table tr a[href*="/detail.pl"]').each(function(){
+                $(this).attr('href', $(this).attr('href') + '&searchid=' + me.searchid );
             });
         });
     };
