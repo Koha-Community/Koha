@@ -166,6 +166,7 @@ sub store {
     catch {
         # Catch problems and raise relevant exceptions
         if (ref($_) eq 'DBIx::Class::Exception') {
+            warn $_->{msg};
             if ( $_->{msg} =~ /Cannot add or update a child row: a foreign key constraint fails/ ) {
                 # FK constraints
                 # FIXME: MySQL error, if we support more DB engines we should implement this for each
