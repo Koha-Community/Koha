@@ -203,7 +203,7 @@ subtest 'add() tests' => sub {
           ->status_is(409)
           ->json_has( '/error' => "Fails when trying to add an existing library_id")
           ->json_like( '/conflict' => qr/(branches\.)?PRIMARY/ ); }
-        qr/^DBD::mysql::st execute failed: Duplicate entry '(.*)' for key '(branches\.)?PRIMARY'/;
+        qr/DBD::mysql::st execute failed: Duplicate entry '(.*)' for key '(branches\.)?PRIMARY'/;
 
     $schema->storage->txn_rollback;
 };

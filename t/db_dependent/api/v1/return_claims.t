@@ -93,7 +93,7 @@ subtest 'claim_returned() tests' => sub {
             }
         )->status_is(409)
     }
-    qr/^DBD::mysql::st execute failed: Duplicate entry/;
+    qr/DBD::mysql::st execute failed: Duplicate entry/;
 
     $issue->delete;
 

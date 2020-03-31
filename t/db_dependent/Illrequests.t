@@ -893,7 +893,7 @@ subtest 'Checking out' => sub {
             item_type => $itemtype->itemtype,
             branchcode => '---'
         });
-    } qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/,
+    } qr/DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/,
     "Item creation fails on bad parameters";
 
     is_deeply($form_stage_bad_branchcode->{value}->{errors}, {

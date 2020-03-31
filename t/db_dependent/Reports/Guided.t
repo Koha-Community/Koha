@@ -257,7 +257,7 @@ subtest 'get_saved_reports' => sub {
     warning_like {local $dbh->{RaiseError} = 0; ($sth, $errors) = execute_query(
             'SELECT surname FRM borrowers',  # error in the query is intentional
             0, 10 ) }
-            qr/^DBD::mysql::st execute failed: You have an error in your SQL syntax;/,
+            qr/DBD::mysql::st execute failed: You have an error in your SQL syntax;/,
             "Wrong SQL syntax raises warning";
     ok(
         defined($errors) && exists($errors->{queryerr}),
@@ -400,7 +400,7 @@ subtest 'Email report test' => sub {
 
     # for next test, we want to let execute_query capture any SQL errors
     warning_like { local $dbh->{RaiseError} = 0; ($emails, $errors ) = C4::Reports::Guided::EmailReport({report_id => $report2, module => $letter1->{module} , code => $letter1->{code} }) }
-        qr/^DBD::mysql::st execute failed/,
+        qr/DBD::mysql::st execute failed/,
         'Error from bad report';
     is( $errors->[0]{FATAL}, 'REPORT_FAIL', "Bad report returns failure");
 
@@ -452,8 +452,8 @@ subtest 'nb_rows() tests' => sub {
     # for next test, we want to let execute_query capture any SQL errors
     
     warning_like
-        { local $dbh->{RaiseError} = 0; $nb_rows = nb_rows( $bad_query ) }
-        qr/^DBD::mysql::st execute failed:/,
+        { $nb_rows = nb_rows( $bad_query ) }
+        qr/DBD::mysql::st execute failed:/,
         'Bad queries raise a warning';
 
     is( $nb_rows, 0, 'nb_rows returns 0 on bad queries' );
