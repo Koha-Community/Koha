@@ -445,8 +445,11 @@ sub nb_rows {
     $dbh->{RaiseError} = $RaiseError;
     $dbh->{PrintError} = $PrintError;
     if ($@) { # To catch "Duplicate column name" caused by the derived table, or any other syntax error
-        $sth = $dbh->prepare($sql);
-        $sth->execute;
+        eval {
+            $sth = $dbh->prepare($sql);
+            $sth->execute;
+        };
+        warn $@ if $@;
         # Loop through the complete results, fetching 1,000 rows at a time.  This
         # lowers memory requirements but increases execution time.
         while (my $rows = $sth->fetchall_arrayref(undef, 1000)) {
@@ -576,7 +579,10 @@ sub execute_query {
     $dbh->do( 'UPDATE saved_sql SET last_run = NOW() WHERE id = ?', undef, $report_id ) if $report_id;
 
     my $sth = $dbh->prepare($sql);
-    $sth->execute(@$sql_params, $offset, $limit);
+    eval {
+        $sth->execute(@$sql_params, $offset, $limit);
+    };
+    warn $@ if $@;
 
     return ( $sth, { queryerr => $sth->errstr } ) if ($sth->err);
     return ( $sth );
