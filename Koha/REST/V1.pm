@@ -40,6 +40,8 @@ Overloaded Mojolicious->startup method. It is called at application startup.
 sub startup {
     my $self = shift;
 
+    $self->log( Koha::Logger->get({ interface => 'api' }) );
+
     $self->hook(
         before_dispatch => sub {
             my $c = shift;
@@ -132,6 +134,7 @@ sub startup {
     $self->plugin( 'Koha::REST::Plugin::Pagination' );
     $self->plugin( 'Koha::REST::Plugin::Query' );
     $self->plugin( 'Koha::REST::Plugin::Objects' );
+    $self->plugin( 'Koha::REST::Plugin::Exceptions' );
 }
 
 1;
