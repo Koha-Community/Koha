@@ -2337,6 +2337,7 @@ subtest 'CanBookBeIssued + AutoReturnCheckedOutItems' => sub {
 subtest 'AddReturn | is_overdue' => sub {
     plan tests => 5;
 
+    t::lib::Mocks::mock_preference('MarkLostItemsAsReturned', 'batchmod|moredetail|cronjob|additem|pendingreserves|onpayment');
     t::lib::Mocks::mock_preference('CalculateFinesOnReturn', 1);
     t::lib::Mocks::mock_preference('finesMode', 'production');
     t::lib::Mocks::mock_preference('MaxFine', '100');
