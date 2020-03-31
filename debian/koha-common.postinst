@@ -158,6 +158,18 @@ log4perl.appender.Z3950.utf8=1
 
 EOF
     fi
+
+    if [ !log4perl_component $log4perl_config "api" ]; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.api = WARN, API
+log4perl.appender.API=Log::Log4perl::Appender::File
+log4perl.appender.API.filename=/var/log/koha/$site/api-error.log
+log4perl.appender.API.mode=append
+log4perl.appender.API.layout=PatternLayout
+log4perl.appender.API.layout.ConversionPattern=[%d] [%p] %m %l %n
+
+EOF
+    fi
 done
 
 # Bug 14106 - fix the modulePath of existing koha instances so that it'll
