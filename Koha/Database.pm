@@ -103,7 +103,7 @@ sub _new_schema {
             %encoding_attr,
             RaiseError => $RaiseError,
             PrintError => 1,
-            unsafe => 1,
+            unsafe => !$RaiseError,
             quote_names => 1,
             on_connect_do => [
                 $encoding_query || (),
