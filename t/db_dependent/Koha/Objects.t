@@ -579,7 +579,7 @@ subtest 'Return same values as DBIx::Class' => sub {
 
             subtest 'Koha::Objects->delete' => sub {
 
-                plan tests => 9;
+                plan tests => 7;
 
                 my ( $r_us, $e_us, $r_them, $e_them );
 
@@ -687,11 +687,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     }
                 );
 
-                warning_like {
-                    try { $r_us = $patrons->delete; } catch { $e_us = $_ };
-                }
-                qr{DBD::mysql::st execute failed: Cannot delete or update a parent row: a foreign key constraint fails},
-                  "Foreign key constraint DBI error should be logged";
+                try { $r_us = $patrons->delete; } catch { $e_us = $_ };
                 my $not_deleted_us = $patron_1->in_storage + $patron_2->in_storage + $patron_3->in_storage;
 
                 $patron_1 = $builder->build_object({ class => 'Koha::Patrons' });
@@ -717,11 +713,7 @@ subtest 'Return same values as DBIx::Class' => sub {
                     }
                 );
 
-                warning_like {
-                    try { $r_them = $patrons->delete; } catch { $e_them = $_ };
-                }
-                qr{DBD::mysql::st execute failed: Cannot delete or update a parent row: a foreign key constraint fails},
-                  "Foreign key constraint DBI error should be logged";
+                try { $r_them = $patrons->delete; } catch { $e_them = $_ };
 
                 my $not_deleted_them = $patron_1->in_storage + $patron_2->in_storage + $patron_3->in_storage;
                 ok(
