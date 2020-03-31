@@ -60,10 +60,6 @@
 
 [% IF LocalCoverImages %]
     [% Asset.js("js/localcovers.js") | $raw %]
-    <script>
-        // LocalCoverImages
-        var NO_LOCAL_JACKET = _("No cover image available");
-    </script>
 [% END %]
 
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]

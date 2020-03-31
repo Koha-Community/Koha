@@ -1,3 +1,5 @@
+/* global _ */
+
 if (typeof KOHA == "undefined" || !KOHA) {
     var KOHA = {};
 }
@@ -18,42 +20,30 @@ KOHA.LocalCover = {
      * olCallBack().
      */
     GetCoverFromBibnumber: function(uselink) {
-        $("div [id^=local-thumbnail]").each(function(i) {
-            var mydiv = this;
-            var message = document.createElement("span");
-            $(message).attr("class","no-image");
-            $(message).html(NO_LOCAL_JACKET);
-            $(mydiv).parent().find('.no-image').remove();
-            $(mydiv).append(message);
-            var img = $("<img />").attr('src',
-                '/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))
-                .load(function () {
-                    if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth <= 1) {
-                        //IE HACK
-                        try {
-                            $(mydiv).remove();
-                        }
-                        catch(err){
-                        }
-                    } else {
-                        if (uselink) {
-                            var a = $("<a />").attr('href', '/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
-                            $(a).append(img);
-                            $(mydiv).append(a);
-                        } else {
-                            $(mydiv).append(img);
-                        }
-                        $(mydiv).children('.no-image').remove();
-                    }
-                });
-        });
+        var mydiv = $("#local-thumbnail-preview");
+        var biblionumber = mydiv.data("biblionumber");
+        var img = document.createElement("img");
+        img.src = "/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=" + biblionumber;
+        img.onload = function() {
+            // image dimensions can't be known until image has loaded
+            if ( (img.complete != null) && (!img.complete) ) {
+                mydiv.remove();
+            }
+        };
+        if (uselink) {
+            var a = $("<a />").attr('href', '/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=' + $(mydiv).attr("class"));
+            $(a).append(img);
+            mydiv.append(a);
+        } else {
+            mydiv.append(img);
+        }
     },
     LoadResultsCovers: function(){
         $("div [id^=local-thumbnail]").each(function(i) {
             var mydiv = this;
             var message = document.createElement("span");
             $(message).attr("class","no-image thumbnail");
-            $(message).html(NO_LOCAL_JACKET);
+            $(message).html( _("No cover image available") );
             $(mydiv).append(message);
             var img = $("<img />");
             img.attr('src','/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))

@@ -2095,6 +2095,43 @@ li {
     }
 }
 
+#cover-slides {
+    background: #FFF url("[% interface | html %]/[% theme | html %]/img/spinner-small.gif") center center no-repeat;
+    border: 1px solid #b9d8d9;
+    border-radius: 3px;
+    margin: 5px;
+    padding: 10px 5px 5px 5px;
+    min-height: 175px;
+
+    .hint {
+        font-size: 90%;
+        padding: .5em 0;
+    }
+
+    a {
+        &.nav-active {
+            &:link,
+            &:visited {
+                color: #85ca11;
+            }
+        }
+    }
+}
+
+.cover-image {
+    display: none;
+
+    img {
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+.cover-nav {
+    display: inline-block;
+    padding: 3px 4px;
+}
+
 .searchhighlightblob {
     font-size: 75%;
     font-style: italic;

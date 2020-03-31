@@ -138,36 +138,63 @@
         [% END %]
 
         [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
-        </div><div class="col-xs-3" id="bookcoverimg">
-        [% IF ( LocalCoverImages ) %]
-            <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
-        [% END %]
-        [% IF ( AdlibrisEnabled && normalized_isbn ) %]
-            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" /></a>
-        [% END %]
-        [% IF ( AmazonCoverImages && normalized_isbn) %]
-            <div id="amazon-bookcoverimg">
-            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
-                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="" />
-        </a></div>
-        [% END %]
-        [% IF ( IntranetCoce && CoceProviders ) %]
-          [% coce_id = normalized_ean || normalized_isbn %]
-            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% biblionumber | url %]">
-          [% IF ( coce_id ) %]
-            <span style="block" title="[% biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></span>
-          [% ELSE %]
-            <span class="no-image">No cover image available</span>
-          [% END %]
-            </a>
-        [% END %]
+            </div>
+            <div class="col-xs-3" id="bookcoverimg">
+                <div id="cover-slides">
+                    [% IF ( LocalCoverImages ) %]
+                        [% IF ( localimages.0 ) %]
+                            [% FOREACH image IN localimages %]
+                                [% IF image %]
+                                    <div class="cover-image local-coverimg">
+                                        <a href="/cgi-bin/koha/catalogue/imageviewer.pl?biblionumber=[% biblionumber | uri %]&amp;imagenumber=[% image | uri %]">
+                                            <img src="/cgi-bin/koha/catalogue/image.pl?thumbnail=1&amp;imagenumber=[% image | uri %]" alt="Local cover image" />
+                                        </a>
+                                        <div class="hint">Local cover image</div>
+                                    </div>
+                                [% END %]
+                            [% END %]
+                        [% END %]
+                    [% END %]
 
-        [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
-            <a class="custom_cover_image" href="[% biblio.custom_cover_image_url | url %]"><img alt="Cover image" src="[% biblio.custom_cover_image_url | url %]" /></a>
-        [% END %]
-        [% END %]
+                    [% IF ( AdlibrisEnabled && normalized_isbn ) %]
+                        <div class="cover-image" id="adlibris-coverimg">
+                            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]">
+                                <img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" />
+                            </a>
+                            <div class="hint">Image from Adlibris</div>
+                        </div>
+                    [% END %]
+                    [% IF ( AmazonCoverImages && normalized_isbn) %]
+                        <div class="cover-image" id="amazon-bookcoverimg">
+                            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
+                                <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="Amazon cover image" />
+                            </a>
+                            <div class="hint">Image from Amazon.com</div>
+                        </div>
+                    [% END %]
+                    [% IF ( IntranetCoce && CoceProviders && normalized_isbn ) %]
+                        [% coce_id = normalized_ean || normalized_isbn %]
+                        <div class="cover-image" id="coce-coverimg">
+                            [% IF ( coce_id ) %]
+                                <span title="[% biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></span>
+                            [% ELSE %]
+                                <span class="no-image">No cover image available</span>
+                            [% END %]
+                            <div class="hint">Image from Coce</div>
+                        </div>
+                    [% END %]
 
-</div>
+                    [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
+                        <div class="cover-image" id="custom-coverimg">
+                            <a class="custom_cover_image" href="[% biblio.custom_cover_image_url | url %]">
+                                <img id="custom-img" alt="Custom cover image" src="[% biblio.custom_cover_image_url | url %]" />
+                            </a>
+                            <div class="hint">Custom cover image</div>
+                        </div>
+                    [% END %]
+                </div>
+            </div> <!-- /#bookcoverimg -->
+        [% END %]
 </div>
 <div id="bibliodetails" class="toptabs">
 
@@ -908,30 +935,73 @@ Note that permanent location is a code, and location may be an authval.
         var theme = "[% theme | html %]";
         // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
         function verify_images() {
-            $("#bookcoverimg").each(function(i){
-                $(this).find('img').each(function(i){
-                   if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0) || (this.src.indexOf('images-na.ssl-images-amazon.com'))) {
-                        w = this.width;
-                        h = this.height;
-                        if ((w == 1) || (h == 1)) {
-                            $("#amazon-bookcoverimg").remove();
-                        } else if ((this.complete != null) && (!this.complete)) {
-                            $("#amazon-bookcoverimg").remove();
+            // Loop over each container in the template which contains covers
+            var coverSlides = $(".cover-image");
+            coverSlides.each( function( index ){
+                var div = $(this);
+                // Find the image in the container
+                var img = div.find("img")[0];
+                if( $(img).length > 0 ){
+                    if( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ){
+                        // No image loaded in the container. Remove the slide
+                        div.remove();
+                    } else {
+                        // All slides start hidden. If this is the first one, show it.
+                        if( index == 0 ){
+                            div.show();
+                        }
+                        // Check if Amazon image is present
+                        if ( div.attr("id") == "amazon-bookcoverimg"  ) {
+                            w = img.width;
+                            h = img.height;
+                            if ((w == 1) || (h == 1)) {
+                                // Amazon returned single-pixel placeholder
+                                // Remove the container
+                                div.remove();
+                            }
+                        }
+                        if( div.attr("id") == "custom-img" ){
+                            if ( (img.complete != null) && (!img.complete) || img.naturalHeight == 0 ) {
+                                // No image was loaded via the CustomCoverImages system preference
+                                // Remove the container
+                                div.remove();
+                            }
+                        }
+                        if( div.attr("id") == "coce-coverimg" ){
+                            // Identify which service's image is being loaded by Coce
+                            if( $(img).attr("src").indexOf('amazon.com') >= 0 ){
+                                div.find(".hint").html(_("Coce image from Amazon.com"));
+                            } else if( $(img).attr("src").indexOf('google.com') >= 0 ){
+                                div.find(".hint").html(_("Coce image from Google Books"));
+                            } else if( $(img).attr("src").indexOf('openlibrary.org') >= 0 ){
+                                div.find(".hint").html(_("Coce image from Open Library"));
+                            }
+                        }
+                        // If more that one slide is present, add a navigation link
+                        // for activating the slide
+                        if( coverSlides.length > 1 ){
+                            var covernav = $("<a href=\"#\" data-num=\"" + index + "\" class=\"cover-nav\"></a>");
+                            if( index == 0 ){
+                                // Set the first navigation link as active
+                                $(covernav).addClass("nav-active");
+                            }
+                            $(covernav).html("<i class=\"fa fa-circle\"></i>");
+                            $("#cover-slides").append( covernav );
                         }
                     }
-                });
-                if( $(this).find('img').length < 1 ){
-                    $(this).remove();
-                    $("#catalogue_detail_biblio").attr("class","col-xs-12");
                 }
             });
+            if( $(".cover-image:visible").length < 1 ){
+                $("#cover-slides").remove();
+            }
+
             $("#editions img").each(function(i){
-                if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0) || (this.src.indexOf('images-na.ssl-images-amazon.com'))) {
+                if ( this.src.indexOf('amazon.com') >= 0 ) {
                     w = this.width;
                     h = this.height;
                     if ((w == 1) || (h == 1)) {
                         this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
-                    } else if ((this.complete != null) && (!this.complete)) {
+                    } else if ( (this.complete != null) && (!this.complete) || this.naturalHeight == 0 ) {
                         this.src = 'https://images-na.ssl-images-amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
                     }
                 }
@@ -1064,10 +1134,6 @@ Note that permanent location is a code, and location may be an authval.
 
                 return false;
             });
-            [%# inject no images message %]
-            [% IF LocalCoverImages %]
-                KOHA.LocalCover.GetCoverFromBibnumber(true);
-            [% END %]
             [% IF ( IntranetCoce && CoceProviders ) %]
                 KOHA.coce.getURL('[% CoceHost | html %]', '[% CoceProviders | html %]');
             [% END %]
@@ -1100,11 +1166,19 @@ Note that permanent location is a code, and location may be an authval.
                 link = $(this).attr("href");
                 openWindow(link,"Print spine label",400,400);
              });
+             $("#cover-slides").on("click",".cover-nav", function(){
+                // Adding click handler for cover image navigation links
+                var num = $(this).data("num");
+                $(".cover-nav").removeClass("nav-active");
+                $(this).addClass("nav-active");
+                $(".cover-image").hide();
+                $(".cover-image").eq( num ).show();
+             });
         });
 
-        [% IF ( AmazonCoverImages || LocalCoverImages ) %]$(window).load(function() {
+        $(window).load(function() {
             verify_images();
-        });[% END %]
+        });
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
         <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
