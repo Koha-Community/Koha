@@ -31,6 +31,7 @@
          * as well as a 'withtime' boolean denoting whether to include time or not in the output string.
          */
         window.$date = function(value, options) {
+            if(!value) return '';
             var tz = (options&&options.tz)||def_tz;
             var m = moment(value);
             if((m.creationData().format !== 'YYYY-MM-DD')&&tz) m.tz(tz);
@@ -54,6 +55,7 @@
         };
 
         window.$time = function(value, options) {
+            if(!value) return '';
             var tz = (opitons&&options.tz)||def_tz;
             var m = moment(value);
             if(tz) m.tz(tz);
