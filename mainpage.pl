@@ -25,7 +25,6 @@ use C4::Output;
 use C4::Auth;
 use C4::Koha;
 use C4::NewsChannels; # GetNewsToDisplay
-use C4::Suggestions qw/CountSuggestion/;
 use C4::Tags qw/get_count_by_tag_status/;
 use Koha::Patron::Modifications;
 use Koha::Patron::Discharge;
@@ -33,6 +32,7 @@ use Koha::Reviews;
 use Koha::ArticleRequests;
 use Koha::ProblemReports;
 use Koha::Quotes;
+use Koha::Suggestions;
 
 my $query = new CGI;
 
@@ -68,7 +68,23 @@ my $branch =
 
 my $pendingcomments    = Koha::Reviews->search_limited({ approved => 0 })->count;
 my $pendingtags        = get_count_by_tag_status(0);
-my $pendingsuggestions = CountSuggestion("ASKED");
+
+# Get current branch count and total viewable count, if they don't match then pass
+# both to template
+
+if( C4::Context->only_my_library ){
+    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'} })->count();
+    $template->param( pendingsuggestions => $local_pendingsuggestions_count );
+} else {
+    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED" });
+    my $local_pendingsuggestions_count = $pendingsuggestions->search({ 'me.branchcode' => C4::Context->userenv()->{'branch'} })->count();
+    my $pendingsuggestions_count = $pendingsuggestions->count();
+    $template->param(
+        all_pendingsuggestions => $pendingsuggestions_count != $local_pendingsuggestions_count ? $pendingsuggestions_count : 0,
+        pendingsuggestions => $local_pendingsuggestions_count
+    );
+}
+
 my $pending_borrower_modifications = Koha::Patron::Modifications->pending_count( $branch );
 my $pending_discharge_requests = Koha::Patron::Discharge::count({ pending => 1 });
 my $pending_article_requests = Koha::ArticleRequests->search_limited(
@@ -82,7 +98,6 @@ my $pending_problem_reports = Koha::ProblemReports->search({ status => 'New' });
 $template->param(
     pendingcomments                => $pendingcomments,
     pendingtags                    => $pendingtags,
-    pendingsuggestions             => $pendingsuggestions,
     pending_borrower_modifications => $pending_borrower_modifications,
     pending_discharge_requests     => $pending_discharge_requests,
     pending_article_requests       => $pending_article_requests,

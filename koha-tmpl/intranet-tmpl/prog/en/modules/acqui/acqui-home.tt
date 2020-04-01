@@ -54,7 +54,18 @@
     <div id="acqui_acqui_home_suggestions">
         <fieldset>
         <legend>Pending suggestions</legend>
-            <p>[% suggestions_count | html %] suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Manage suggestions</a>.</p>
+        <p>
+            Manage suggestions:
+            <a href="/cgi-bin/koha/suggestion/suggestion.pl?branchcode=[% Branches.GetLoggedInBranchcode | url %]#ASKED">
+                <span id="pendingsuggestions" class="pending-number-link">[% LoginBranchname | html %]: [% suggestions_count | html %]</span>
+            </a>
+            [% IF (all_pendingsuggestions > 0) %]
+                /
+                <a href="/cgi-bin/koha/suggestion/suggestion.pl?branchcode=__ANY__#ASKED">
+                    <span id="all_pendingsuggestions" class="pending-number-link">All libraries: [% all_pendingsuggestions | html %]</span>
+                </a>
+            [% END %]
+        </p>
         </fieldset>
     </div>
 </div>

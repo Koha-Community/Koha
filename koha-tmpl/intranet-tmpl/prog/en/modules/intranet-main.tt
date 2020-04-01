@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
+[% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha staff client</title>
@@ -155,8 +156,16 @@
                                 [% IF ( CAN_user_suggestions_suggestions_manage && pendingsuggestions ) %]
                                 <div class="pending-info" id="suggestions_pending">
 
-                                    <a href="/cgi-bin/koha/suggestion/suggestion.pl#ASKED">Suggestions pending approval</a>:
-                                    <span class="pending-number-link">[% pendingsuggestions | html %]</span>
+                                    Suggestions pending approval:
+                                    <a href="/cgi-bin/koha/suggestion/suggestion.pl?branchcode=[% Branches.GetLoggedInBranchcode | url %]#ASKED">
+                                    <span id="pendingsuggestions" class="pending-number-link">[% LoginBranchname | html %]: [% pendingsuggestions | html %]</span>
+                                    </a>
+                                    [% IF (all_pendingsuggestions > 0) %]
+                                        /
+                                        <a href="/cgi-bin/koha/suggestion/suggestion.pl?branchcode=__ANY__#ASKED">
+                                            <span id="all_pendingsuggestions" class="pending-number-link">All libraries: [% all_pendingsuggestions | html %]</span>
+                                        </a>
+                                    [% END %]
                                 </div>
                                 [% END %]
 

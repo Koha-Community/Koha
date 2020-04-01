@@ -35,9 +35,9 @@ use C4::Acquisition;
 use C4::Budgets;
 use C4::Members;
 use C4::Debug;
-use C4::Suggestions;
 use Koha::Acquisition::Currencies;
 use Koha::Patrons;
+use Koha::Suggestions;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
@@ -51,7 +51,20 @@ my ( $template, $loggedinuser, $cookie, $userflags ) = get_template_and_user(
 );
 
 my $status           = $query->param('status') || "ASKED";
-my $suggestions_count       = CountSuggestion($status);
+# Get current branch count and total viewable count, if they don't match then pass
+# both to template
+if( C4::Context->only_my_library ){
+    my $local_pendingsuggestions_count = Koha::Suggestions->search({ status => "ASKED", branchcode => C4::Context->userenv()->{'branch'} })->count();
+    $template->param( suggestions_count => $local_pendingsuggestions_count );
+} else {
+    my $pendingsuggestions = Koha::Suggestions->search({ status => "ASKED" });
+    my $local_pendingsuggestions_count = $pendingsuggestions->search({ 'me.branchcode' => C4::Context->userenv()->{'branch'} })->count();
+    my $pendingsuggestions_count = $pendingsuggestions->count();
+    $template->param(
+        all_pendingsuggestions => $pendingsuggestions_count != $local_pendingsuggestions_count ? $pendingsuggestions_count : 0,
+        suggestions_count => $local_pendingsuggestions_count
+    );
+}
 
 my $budget_arr = GetBudgetHierarchy;
 
@@ -114,7 +127,6 @@ $template->param(
     totspent_active     => $totspent_active,
     totordered_active   => $totordered_active,
     totavail_active     => $totavail_active,
-    suggestions_count   => $suggestions_count,
 );
 
 my $cur = Koha::Acquisition::Currencies->get_active;
