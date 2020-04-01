@@ -86,14 +86,11 @@ if ( $backends_available ) {
         # Does this backend enable us to insert an availability stage and should
         # we? If not, proceed as normal.
         if (
-            C4::Context->preference("ILLCheckAvailability") &&
-            $request->_backend_capability(
-                'should_display_availability',
-                $params
-            ) &&
             # If the user has elected to continue with the request despite
             # having viewed availability info, this flag will be set
-            !$params->{checked_availability}
+            C4::Context->preference("ILLCheckAvailability")
+              && !$params->{checked_availability}
+              && $request->_backend_capability( 'should_display_availability', $params )
         ) {
             # Establish which of the installed availability providers
             # can service our metadata
@@ -292,25 +289,24 @@ if ( $backends_available ) {
 
             # Prepare availability searching, if required
             # Get the definition for the z39.50 plugin
-            my $availability = Koha::Illrequest::Availability->new($request->metadata);
-            my $services = $availability->get_services({
-                ui_context => 'partners',
-                metadata => {
-                    name => 'ILL availability - z39.50'
+            if ( C4::Context->preference('ILLCheckAvailability') ) {
+                my $availability = Koha::Illrequest::Availability->new($request->metadata);
+                my $services = $availability->get_services({
+                    ui_context => 'partners',
+                    metadata => {
+                        name => 'ILL availability - z39.50'
+                    }
+                });
+                # Only pass availability searching stuff to the template if
+                # appropriate
+                if ( scalar @{$services} > 0 ) {
+                    my $metadata = $availability->prep_metadata($request->metadata);
+                    $template->param( metadata => $metadata );
+                    $template->param(
+                        services_json => scalar encode_json($services)
+                    );
+                    $template->param( services => $services );
                 }
-            });
-            # Only pass availability searching stuff to the template if
-            # appropriate
-            if (
-                C4::Context->preference('ILLCheckAvailability') &&
-                scalar @{$services} > 0
-            ) {
-                my $metadata = $availability->prep_metadata($request->metadata);
-                $template->param( metadata => $metadata );
-                $template->param(
-                    services_json => scalar encode_json($services)
-                );
-                $template->param( services => $services );
             }
 
             $template->param( error => $params->{error} )
