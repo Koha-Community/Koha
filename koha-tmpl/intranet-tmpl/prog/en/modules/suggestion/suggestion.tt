@@ -510,6 +510,16 @@
 
 <h1>Suggestions management</h1>
 
+<label for="branchcode">Viewing suggestions for library:</label>
+<select name="branchcode" id="branchcode">
+    <option value="">Any</option>
+    [% IF branchfilter %]
+        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
+    [% ELSE %]
+        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+    [% END %]
+</select>
+
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
@@ -769,6 +779,7 @@
             <aside>
 
 <form name="suggestionfilter" action="suggestion.pl" method="get">
+    <input type="hidden" name="branchcode" value="[% branchfilter | html %]" />
 <fieldset class="brief"><ol style="display:block;"><li><label for="displayby">Organize by: </label>
                 <select name="displayby" id="displayby" style="width:auto;">
                     [% IF ( displayby == "STATUS" ) %]
@@ -921,15 +932,6 @@
                         [% IF ( budgetsloo.selected ) %]<option value="[% budgetsloo.budget_id | html %]" selected="selected">[% budgetsloo.budget_name | html %]</option>[% ELSE %]<option value="[% budgetsloo.budget_id | html %]">[% budgetsloo.budget_name | html %]</option>[% END %]
                         [% END %]
                     </select></li>
-                    <li><label for="branchcode">Library:</label>
-                    <select name="branchcode" id="branchcode">
-                        <option value="__ANY__">Any</option>
-                        [% IF branchfilter %]
-                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchfilter ) %]
-                        [% ELSE %]
-                            [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
-                        [% END %]
-                    </select></li>
                     <li>
                         <input type="submit" value="Go" />
                     </li>
@@ -1032,6 +1034,12 @@
                     [% END %]
                 [% END %]
 
+                $("#branchcode").on('change',function(){
+                    let branchcode = $(this).val();
+                    if( branchcode == '' ){ branchcode = "__ANY__" }
+                    $('input[name="branchcode"]').val( branchcode );
+                    $('form[name="suggestionfilter"]').submit();
+                });
                 $(".checkall").click(function(e){
                     e.preventDefault();
                     $(this).parents('form').checkCheckboxes();
