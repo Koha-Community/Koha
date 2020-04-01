@@ -159,12 +159,6 @@ my $my_suggestion_without_suggestedby = {
     quantity      => '', # Insert an empty string into int to catch strict SQL modes errors
 };
 
-is( CountSuggestion(), 0, 'CountSuggestion without the status returns 0' );
-is( CountSuggestion('ASKED'), 0, 'CountSuggestion returns the correct number of suggestions' );
-is( CountSuggestion('CHECKED'), 0, 'CountSuggestion returns the correct number of suggestions' );
-is( CountSuggestion('ACCEPTED'), 0, 'CountSuggestion returns the correct number of suggestions' );
-is( CountSuggestion('REJECTED'), 0, 'CountSuggestion returns the correct number of suggestions' );
-
 my $my_suggestionid = NewSuggestion($my_suggestion);
 isnt( $my_suggestionid, 0, 'NewSuggestion returns an not null id' );
 my $my_suggestionid_with_budget = NewSuggestion($my_suggestion_with_budget);
@@ -180,9 +174,6 @@ is( $suggestion->{STATUS}, 'ASKED', 'NewSuggestion stores a suggestion with the 
 is( $suggestion->{managedby}, undef, 'NewSuggestion stores empty string as undef for non existent foreign key (integer)' );
 is( $suggestion->{manageddate}, undef, 'NewSuggestion stores empty string as undef for date' );
 is( $suggestion->{budgetid}, undef, 'NewSuggestion should set budgetid to NULL if not given' );
-
-is( CountSuggestion('ASKED'), 2, 'CountSuggestion returns the correct number of suggestions' );
-
 
 is( ModSuggestion(), undef, 'ModSuggestion without the suggestion returns undef' );
 my $mod_suggestion1 = {
@@ -239,7 +230,6 @@ $messages = C4::Letters::GetQueuedMessages({
 });
 is( @$messages, 1, 'ModSuggestion sends an email if the status is updated' );
 is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is disabled the suggestion message_transport_type is always email');
-is( CountSuggestion('CHECKED'), 1, 'CountSuggestion returns the correct number of suggestions' );
 
 #Check the message_transport_type when the 'FallbackToSMSIfNoEmail' syspref is enabled and the borrower has a smsalertnumber and no email
 t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
@@ -412,8 +402,6 @@ my $del_suggestion = {
     suggestedby => $borrowernumber,
 };
 my $del_suggestionid = NewSuggestion($del_suggestion);
-
-is( CountSuggestion('CHECKED'), 3, 'CountSuggestion returns the correct number of suggestions' );
 
 is( DelSuggestion(), '0E0', 'DelSuggestion without arguments returns 0E0' );
 is( DelSuggestion($borrowernumber), '', 'DelSuggestion without the suggestion id returns an empty string' );

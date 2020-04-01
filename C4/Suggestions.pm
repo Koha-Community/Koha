@@ -34,7 +34,6 @@ use base qw(Exporter);
 
 our @EXPORT  = qw(
   ConnectSuggestionAndBiblio
-  CountSuggestion
   DelSuggestion
   GetSuggestion
   GetSuggestionByStatus
@@ -384,61 +383,6 @@ sub GetSuggestionByStatus {
     my $results;
     $results = $sth->fetchall_arrayref( {} );
     return $results;
-}
-
-=head2 CountSuggestion
-
-&CountSuggestion($status)
-
-Count the number of aqorders with the status given on input argument.
-the arg status can be :
-
-=over 2
-
-=item * ASKED : asked by the user, not dealed by the librarian
-
-=item * ACCEPTED : accepted by the librarian, but not yet ordered
-
-=item * REJECTED : rejected by the librarian (definitive status)
-
-=item * ORDERED : ordered by the librarian (acquisition module)
-
-=back
-
-return :
-the number of suggestion with this status.
-
-=cut
-
-sub CountSuggestion {
-    my ($status) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    my $userenv = C4::Context->userenv;
-    if ( C4::Context->preference("IndependentBranches")
-        && !C4::Context->IsSuperLibrarian() )
-    {
-        my $query = q{
-            SELECT count(*)
-            FROM suggestions
-                LEFT JOIN borrowers ON borrowers.borrowernumber=suggestions.suggestedby
-            WHERE STATUS=?
-                AND (suggestions.branchcode='' OR suggestions.branchcode=?)
-        };
-        $sth = $dbh->prepare($query);
-        $sth->execute( $status, $userenv->{branch} );
-    }
-    else {
-        my $query = q{
-            SELECT count(*)
-            FROM suggestions
-            WHERE STATUS=?
-        };
-        $sth = $dbh->prepare($query);
-        $sth->execute($status);
-    }
-    my ($result) = $sth->fetchrow;
-    return $result;
 }
 
 =head2 NewSuggestion
