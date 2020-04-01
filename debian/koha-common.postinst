@@ -173,6 +173,22 @@ EOF
     fi
 done
 
+for site in $(koha-list); do
+    log4perl_config="/etc/koha/sites/$site/log4perl.conf"
+    if [ !log4perl_component $log4perl_config "sip" ]; then
+        cat <<EOF >> $log4perl_config
+log4perl.logger.sip = DEBUG, SIP
+log4perl.appender.SIP=Log::Log4perl::Appender::File
+log4perl.appender.SIP.filename=/var/log/koha/$site/sip.log
+log4perl.appender.SIP.mode=append
+log4perl.appender.SIP.layout=PatternLayout
+log4perl.appender.SIP.layout.ConversionPattern=[%d] [%p] %X{accountid}@%X{peeraddr}: %m %l %n
+log4perl.appender.SIP.utf8=1
+
+EOF
+    fi
+done
+
 # Bug 14106 - fix the modulePath of existing koha instances so that it'll
 # continue to work. This will only patch the files if the exact original string
 # that we're fixing them from is there, so we just run it every time. Maybe

@@ -29,3 +29,11 @@ log4perl.appender.API.mode=append
 log4perl.appender.API.layout=PatternLayout
 log4perl.appender.API.layout.ConversionPattern=[%d] [%p] %m %l %n
 log4perl.appender.API.utf8=1
+
+log4perl.logger.sip = DEBUG, SIP
+log4perl.appender.SIP=Log::Log4perl::Appender::File
+log4perl.appender.SIP.filename=__LOG_DIR__/sip.log
+log4perl.appender.SIP.mode=append
+log4perl.appender.SIP.layout=PatternLayout
+log4perl.appender.SIP.layout.ConversionPattern=[%d] [%p] %X{accountid}@%X{peeraddr}: %m %l %n
+log4perl.appender.SIP.utf8=1
