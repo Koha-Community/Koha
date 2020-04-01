@@ -99,34 +99,32 @@ $.fn.selectTabByID = function (tabID) {
         $("#catalog-search-dropdown a").toggleClass("catalog-search-dropdown-hover");
     });
 
-    if (typeof $.cookie("lastborrowernumber") !== "undefined" && $("#hiddenborrowernumber").val() != $.cookie("lastborrowernumber")) {
-        $("#lastborrower-window").detach().appendTo("#breadcrumbs");
-        $("#lastborrowerlink").show();
-        $("#lastborrowerlink").prop("title", $.cookie("lastborrowername") + " (" + $.cookie("lastborrowercard") + ")");
-        $("#lastborrowerlink").prop("href", "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + $.cookie("lastborrowernumber"));
-        $("#lastborrower-window").css("display", "inline-block");
+    if ( localStorage.getItem("lastborrowernumber") ){
+        if( $("#hiddenborrowernumber").val() != localStorage.getItem("lastborrowernumber") ) {
+            $("#lastborrower-window").detach().appendTo("#breadcrumbs");
+            $("#lastborrowerlink").show();
+            $("#lastborrowerlink").prop("title", localStorage.getItem("lastborrowername") + " (" + localStorage.getItem("lastborrowercard") + ")");
+            $("#lastborrowerlink").prop("href", "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + localStorage.getItem("lastborrowernumber"));
+            $("#lastborrower-window").css("display", "inline-block");
+        }
     }
-    if ($("a#logout").length > 0) {
-        $("a#logout").click(function() {
-            delCookie("lastborrowernumber");
-            delCookie("lastborrowername");
-            delCookie("lastborrowercard");
-            delCookie("currentborrowernumber");
-        });
+
+    if( !localStorage.getItem("lastborrowernumber") || ( $("#hiddenborrowernumber").val() != localStorage.getItem("lastborrowernumber") && localStorage.getItem("currentborrowernumber") != $("#hiddenborrowernumber").val())) {
+        if( $("#hiddenborrowernumber").val() ){
+            localStorage.setItem("lastborrowernumber", $("#hiddenborrowernumber").val() );
+            localStorage.setItem("lastborrowername", $("#hiddenborrowername").val() );
+            localStorage.setItem("lastborrowercard", $("#hiddenborrowercard").val() );
+        }
     }
+
+    if( $("#hiddenborrowernumber").val() ){
+        localStorage.setItem("currentborrowernumber", $("#hiddenborrowernumber").val() );
+    }
+
     $("#lastborrower-remove").click(function() {
-        delCookie("lastborrowernumber");
-        delCookie("lastborrowername");
-        delCookie("lastborrowercard");
-        delCookie("currentborrowernumber");
+        removeLastBorrower();
         $("#lastborrower-window").hide();
     });
-    if (typeof $.cookie("lastborrowernumber") === "undefined" || ($("#hiddenborrowernumber").val() != $.cookie("lastborrowernumber") && $.cookie("currentborrowernumber") != $("#hiddenborrowernumber").val())) {
-        $.cookie("lastborrowernumber", $("#hiddenborrowernumber").val(), { path: "/" });
-        $.cookie("lastborrowername", $("#hiddenborrowername").val(), { path: "/" });
-        $.cookie("lastborrowercard", $("#hiddenborrowercard").val(), { path: "/" });
-    }
-    $.cookie("currentborrowernumber", $("#hiddenborrowernumber").val(), { path: "/" });
 
     /* Search results browsing */
     /* forms with action leading to search */
@@ -143,6 +141,13 @@ $.fn.selectTabByID = function (tabID) {
     });
 
 });
+
+function removeLastBorrower(){
+    localStorage.removeItem("lastborrowernumber");
+    localStorage.removeItem("lastborrowername");
+    localStorage.removeItem("lastborrowercard");
+    localStorage.removeItem("currentborrowernumber");
+}
 
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html
 function checkEnter(e){ //e is event object passed from function invocation
@@ -171,6 +176,7 @@ function logOut(){
         delBasket('main', true);
     }
     clearHoldFor();
+    removeLastBorrower();
 }
 
 function openHelp(){
