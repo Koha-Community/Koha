@@ -126,6 +126,8 @@
             if ( document.location.hash ) {
                 $( '#loginform' ).append( '<input name="auth_forwarded_hash" type="hidden" value="' + document.location.hash + '"/>' );
             }
+            // if showLastPatron information was not cleared during logout, clear it now
+            removeLastBorrower();
         });
     </script>
 [% END %]
