@@ -332,7 +332,7 @@
                                         </div>
                                         <div class="modal-body">
                                             [% FOR service IN services %]
-                                                <h4 class="ill_availability_sourcename">[% service.name %]</h4>
+                                                <h4 class="ill_availability_sourcename">[% service.name | html %]</h4>
                                                 [% INCLUDE 'ill-availability-table.inc' service=service %]
                                             [% END %]
                                             <span id="service_id_restrict" data-service_id_restrict_plugin="ILL availability - z39.50" data-service_id_restrict_ids=""></span>
@@ -733,8 +733,8 @@
                             [% custom_values = whole.custom_value.split('\0') %]
                             [% i = 0 %]
                             [% FOREACH custom_key IN custom_keys %]
-                                <input type="hidden" name="custom_key" value="[% custom_key %]">
-                                <input type="hidden" name="custom_value" value="[% custom_values.$i %]">
+                                <input type="hidden" name="custom_key" value="[% custom_key | html %]">
+                                <input type="hidden" name="custom_value" value="[% custom_values.$i | html %]">
                             [% i = i + 1 %]
                             [% END %]
                             <input type="hidden" name="method" value="create">
@@ -747,7 +747,7 @@
                             </div>
                         </form>
                         [% FOR service IN services %]
-                            <h4 class="ill_availability_sourcename">[% service.name %]</h4>
+                            <h4 class="ill_availability_sourcename">[% service.name | html %]</h4>
                             [% INCLUDE 'ill-availability-table.inc' service=service %]
                         [% END %]
                     </div>
