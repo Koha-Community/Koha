@@ -342,7 +342,7 @@ subtest 'delete() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access test' => sub {
-        plan tests => 4;
+        plan tests => 5;
 
         $schema->storage->txn_begin;
 
@@ -363,7 +363,8 @@ subtest 'delete() tests' => sub {
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
         $t->delete_ok("//$userid:$password@/api/v1/patrons/" . $patron->borrowernumber)
-          ->status_is(200, 'Patron deleted successfully');
+          ->status_is(204, 'SWAGGER3.2.4')
+          ->content_is('', 'SWAGGER3.3.4');
 
         $schema->storage->txn_rollback;
     };

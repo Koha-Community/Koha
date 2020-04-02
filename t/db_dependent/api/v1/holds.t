@@ -199,7 +199,7 @@ subtest "Test endpoints without permission" => sub {
 
 subtest "Test endpoints with permission" => sub {
 
-    plan tests => 57;
+    plan tests => 59;
 
     $t->get_ok( "//$userid_1:$password@/api/v1/holds" )
       ->status_is(200)
@@ -240,7 +240,8 @@ subtest "Test endpoints with permission" => sub {
       ->json_is( '/pickup_library_id', $branchcode2 );
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
-      ->status_is(200);
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $t->put_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" => json => $put_data )
       ->status_is(404)
@@ -260,7 +261,8 @@ subtest "Test endpoints with permission" => sub {
       ->json_is([]);
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id2" )
-      ->status_is(200);
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
@@ -287,7 +289,7 @@ subtest "Test endpoints with permission" => sub {
 };
 
 subtest 'Reserves with itemtype' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     my $post_data = {
         patron_id => int($patron_1->borrowernumber),
@@ -297,7 +299,8 @@ subtest 'Reserves with itemtype' => sub {
     };
 
     $t->delete_ok( "//$userid_3:$password@/api/v1/holds/$reserve_id" )
-      ->status_is(200);
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $t->post_ok( "//$userid_3:$password@/api/v1/holds" => json => $post_data )
       ->status_is(201)
@@ -427,8 +430,8 @@ subtest 'suspend and resume tests' => sub {
     );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
-      ->status_is( 204, "Correct status when deleting a resource" )
-      ->json_is( undef );
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     # Pass a an expiration date for the suspension
     my $date = dt_from_string()->add( days => 5 );
@@ -445,8 +448,8 @@ subtest 'suspend and resume tests' => sub {
         ->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
-      ->status_is( 204, "Correct status when deleting a resource" )
-      ->json_is( undef );
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $hold->set_waiting->discard_changes;
 

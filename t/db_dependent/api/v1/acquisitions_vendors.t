@@ -113,8 +113,8 @@ subtest 'list() and delete() tests | authorized user' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(200)
-      ->content_is(q{""});
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
@@ -128,8 +128,8 @@ subtest 'list() and delete() tests | authorized user' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(200)
-      ->content_is(q{""});
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $tx = $t->ua->build_tx( GET => '/api/v1/acquisitions/vendors' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
@@ -364,8 +364,8 @@ subtest 'delete() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(200)
-      ->content_is(q{""});
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $tx = $t->ua->build_tx( DELETE => "/api/v1/acquisitions/vendors/$vendor_id" );
     $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );

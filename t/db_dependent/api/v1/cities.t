@@ -370,8 +370,8 @@ subtest 'delete() tests' => sub {
       ->status_is(403);
 
     $t->delete_ok("//$userid:$password@/api/v1/cities/$city_id")
-      ->status_is(200)
-      ->content_is('""');
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $t->delete_ok("//$userid:$password@/api/v1/cities/$city_id")
       ->status_is(404);
