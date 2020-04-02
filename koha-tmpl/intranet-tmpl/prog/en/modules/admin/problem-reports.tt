@@ -79,7 +79,7 @@
                                         <b>[% report.title | html %]</b><br>
                                         [% report.content | html %]
                                     </td>
-                                    <td><a href="[% report.problempage | uri %]">[% report.problempage | html %]</a></td>
+                                    <td><a href="[% report.problempage | url %]">[% report.problempage | html %]</a></td>
                                     <td>[% report.recipient %]</td>
                                     <td><span title="[% report.created_on | html %]">[% report.created_on | $KohaDates with_hours => 1 %]</span></td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => report.patron hide_patron_infos_if_needed=1 %]</td>
