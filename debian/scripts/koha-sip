@@ -149,6 +149,9 @@ restart_sip()
         local noLF="-n"
         [ "$verbose" != "no" ] && noLF=""
         echo $noLF `stop_sip ${name}`
+        while is_sip_running ${name}; do
+            sleep 1;
+        done
         echo $noLF `start_sip ${name}`
     else
         if [ "$verbose" != "no" ]; then
