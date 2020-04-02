@@ -51,14 +51,7 @@ sub list {
         );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status  => 500,
-                               openapi => { error => "Something went wrong, check the logs. $_" } );
-        }
+        $c->unhandled_exception($_);
     };
 }
 

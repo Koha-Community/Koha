@@ -48,18 +48,7 @@ sub list {
         return $c->render( status => 200, openapi => $holds );
     }
     catch {
-        if ( blessed $_ && $_->isa('Koha::Exceptions') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "$_" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -201,26 +190,10 @@ sub add {
                         openapi => Koha::Holds->new->to_api_mapping->{$broken_fk} . ' not found.'
                     );
                 }
-                else {
-                    return $c->render(
-                        status  => 500,
-                        openapi => { error => "Uncaught exception: $_" }
-                    );
-                }
-            }
-            else {
-                return $c->render(
-                    status  => 500,
-                    openapi => { error => "$_" }
-                );
             }
         }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong. check the logs." }
-            );
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
@@ -233,36 +206,41 @@ Method that handles modifying a Koha::Hold object
 sub edit {
     my $c = shift->openapi->valid_input or return;
 
-    my $hold_id = $c->validation->param('hold_id');
-    my $hold = Koha::Holds->find( $hold_id );
+    return try {
+        my $hold_id = $c->validation->param('hold_id');
+        my $hold = Koha::Holds->find( $hold_id );
 
-    unless ($hold) {
-        return $c->render( status  => 404,
-                           openapi => {error => "Hold not found"} );
+        unless ($hold) {
+            return $c->render( status  => 404,
+                            openapi => {error => "Hold not found"} );
+        }
+
+        my $body = $c->req->json;
+
+        my $pickup_library_id = $body->{pickup_library_id} // $hold->branchcode;
+        my $priority          = $body->{priority} // $hold->priority;
+        # suspended_until can also be set to undef
+        my $suspended_until   = exists $body->{suspended_until} ? $body->{suspended_until} : $hold->suspend_until;
+
+        my $params = {
+            reserve_id    => $hold_id,
+            branchcode    => $pickup_library_id,
+            rank          => $priority,
+            suspend_until => $suspended_until ? output_pref(dt_from_string($suspended_until, 'rfc3339')) : '',
+            itemnumber    => $hold->itemnumber
+        };
+
+        C4::Reserves::ModReserve($params);
+        $hold->discard_changes; # refresh
+
+        return $c->render(
+            status  => 200,
+            openapi => $hold->to_api
+        );
     }
-
-    my $body = $c->req->json;
-
-    my $pickup_library_id = $body->{pickup_library_id} // $hold->branchcode;
-    my $priority          = $body->{priority} // $hold->priority;
-    # suspended_until can also be set to undef
-    my $suspended_until   = exists $body->{suspended_until} ? $body->{suspended_until} : $hold->suspend_until;
-
-    my $params = {
-        reserve_id    => $hold_id,
-        branchcode    => $pickup_library_id,
-        rank          => $priority,
-        suspend_until => $suspended_until ? output_pref(dt_from_string($suspended_until, 'rfc3339')) : '',
-        itemnumber    => $hold->itemnumber
+    catch {
+        $c->unhandled_exception($_);
     };
-
-    C4::Reserves::ModReserve($params);
-    $hold->discard_changes; # refresh
-
-    return $c->render(
-        status  => 200,
-        openapi => $hold->to_api
-    );
 }
 
 =head3 delete
@@ -281,9 +259,14 @@ sub delete {
         return $c->render( status => 404, openapi => { error => "Hold not found." } );
     }
 
-    $hold->cancel;
+    return try {
+        $hold->cancel;
 
-    return $c->render( status => 200, openapi => {} );
+        return $c->render( status => 200, openapi => {} );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 suspend
@@ -329,12 +312,8 @@ sub suspend {
         if ( blessed $_ and $_->isa('Koha::Exceptions::Hold::CannotSuspendFound') ) {
             return $c->render( status => 400, openapi => { error => "$_" } );
         }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong. check the logs." }
-            );
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
@@ -360,10 +339,7 @@ sub resume {
         return $c->render( status => 204, openapi => {} );
     }
     catch {
-        return $c->render(
-            status  => 500,
-            openapi => { error => "Something went wrong. check the logs." }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
@@ -398,10 +374,7 @@ sub update_priority {
         return $c->render( status => 200, openapi => $priority );
     }
     catch {
-        return $c->render(
-            status  => 500,
-            openapi => { error => "Something went wrong. check the logs." }
-        );
+        $c->unhandled_exception($_);
     };
 }
 

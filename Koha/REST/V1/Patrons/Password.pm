@@ -66,12 +66,14 @@ sub set {
         return $c->render( status => 200, openapi => "" );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render( status => 500, openapi => { error => "$_" } );
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Password') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "$_" }
+            );
         }
 
-        # an exception was raised. return 400 with the stringified exception
-        return $c->render( status => 400, openapi => { error => "$_" } );
+        $c->unhandled_exception($_);
     };
 }
 
@@ -117,7 +119,10 @@ sub set_public {
     return try {
         my $dbh = C4::Context->dbh;
         unless ( checkpw_internal($dbh, $user->userid, $old_password ) ) {
-            Koha::Exceptions::Authorization::Unauthorized->throw("Invalid password");
+            return $c->render(
+                status  => 400,
+                openapi => { error => "Invalid password" }
+            );
         }
 
         ## Change password
@@ -126,12 +131,14 @@ sub set_public {
         return $c->render( status => 200, openapi => "" );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render( status => 500, openapi => { error => "$_" } );
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Password') ) {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "$_" }
+            );
         }
 
-        # an exception was raised. return 400 with the stringified exception
-        return $c->render( status => 400, openapi => { error => "$_" } );
+        $c->unhandled_exception($_);
     };
 }
 

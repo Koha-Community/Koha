@@ -49,16 +49,7 @@ sub list {
         return $c->render( status => 200, openapi => $libraries );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
-        }
-        return $c->render(
-            status  => 500,
-            openapi => { error => "$_" }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
@@ -71,18 +62,23 @@ Controller function that handles retrieving a single Koha::Library
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $library_id = $c->validation->param('library_id');
-    my $library = Koha::Libraries->find( $library_id );
+    return try {
+        my $library_id = $c->validation->param('library_id');
+        my $library = Koha::Libraries->find( $library_id );
 
-    unless ($library) {
-        return $c->render( status  => 404,
-                           openapi => { error => "Library not found" } );
+        unless ($library) {
+            return $c->render( status  => 404,
+                            openapi => { error => "Library not found" } );
+        }
+
+        return $c->render(
+            status  => 200,
+            openapi => $library->to_api
+        );
     }
-
-    return $c->render(
-        status  => 200,
-        openapi => $library->to_api
-    );
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add
@@ -105,24 +101,14 @@ sub add {
         );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
-        }
-        if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+        if ( blessed $_ && $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
                 openapi => { error => $_->error, conflict => $_->duplicate_id }
             );
         }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "$_" }
-            );
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
@@ -154,17 +140,7 @@ sub update {
         );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
-        }
-
-        return $c->render(
-            status  => 500,
-            openapi => { error => "$_" }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
@@ -189,17 +165,7 @@ sub delete {
         return $c->render( status => 204, openapi => '');
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
-        }
-
-        return $c->render(
-            status  => 500,
-            openapi => { error => "$_" }
-        );
+        $c->unhandled_exception($_);
     };
 }
 

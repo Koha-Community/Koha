@@ -100,17 +100,7 @@ sub list {
 
         return $c->render( status => 200, openapi => $checkouts->to_api );
     } catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render(
-                status => 500,
-                openapi => { error => $_->{msg} }
-            );
-        } else {
-            return $c->render(
-                status => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -135,10 +125,15 @@ sub get {
         );
     }
 
-    return $c->render(
-        status  => 200,
-        openapi => $checkout->to_api
-    );
+    return try {
+        return $c->render(
+            status  => 200,
+            openapi => $checkout->to_api
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 renew
@@ -160,27 +155,32 @@ sub renew {
         );
     }
 
-    my $borrowernumber = $checkout->borrowernumber;
-    my $itemnumber = $checkout->itemnumber;
+    return try {
+        my $borrowernumber = $checkout->borrowernumber;
+        my $itemnumber = $checkout->itemnumber;
 
-    my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
-        $borrowernumber, $itemnumber);
+        my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
+            $borrowernumber, $itemnumber);
 
-    if (!$can_renew) {
+        if (!$can_renew) {
+            return $c->render(
+                status => 403,
+                openapi => { error => "Renewal not authorized ($error)" }
+            );
+        }
+
+        AddRenewal($borrowernumber, $itemnumber, $checkout->branchcode);
+        $checkout = Koha::Checkouts->find($checkout_id);
+
+        $c->res->headers->location( $c->req->url->to_string );
         return $c->render(
-            status => 403,
-            openapi => { error => "Renewal not authorized ($error)" }
+            status  => 201,
+            openapi => $checkout->to_api
         );
     }
-
-    AddRenewal($borrowernumber, $itemnumber, $checkout->branchcode);
-    $checkout = Koha::Checkouts->find($checkout_id);
-
-    $c->res->headers->location( $c->req->url->to_string );
-    return $c->render(
-        status  => 201,
-        openapi => $checkout->to_api
-    );
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 allows_renewal
@@ -202,29 +202,34 @@ sub allows_renewal {
         );
     }
 
-    my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
-        $checkout->borrowernumber, $checkout->itemnumber);
+    return try {
+        my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
+            $checkout->borrowernumber, $checkout->itemnumber);
 
-    my $renewable = Mojo::JSON->false;
-    $renewable = Mojo::JSON->true if $can_renew;
+        my $renewable = Mojo::JSON->false;
+        $renewable = Mojo::JSON->true if $can_renew;
 
-    my $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            categorycode => $checkout->patron->categorycode,
-            itemtype     => $checkout->item->effective_itemtype,
-            branchcode   => $checkout->branchcode,
-            rule_name    => 'renewalsallowed',
-        }
-    );
-    return $c->render(
-        status => 200,
-        openapi => {
-            allows_renewal => $renewable,
-            max_renewals => $rule->rule_value,
-            current_renewals => $checkout->renewals,
-            error => $error
-        }
-    );
+        my $rule = Koha::CirculationRules->get_effective_rule(
+            {
+                categorycode => $checkout->patron->categorycode,
+                itemtype     => $checkout->item->effective_itemtype,
+                branchcode   => $checkout->branchcode,
+                rule_name    => 'renewalsallowed',
+            }
+        );
+        return $c->render(
+            status => 200,
+            openapi => {
+                allows_renewal => $renewable,
+                max_renewals => $rule->rule_value,
+                current_renewals => $checkout->renewals,
+                error => $error
+            }
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 1;

@@ -86,12 +86,8 @@ sub claim_returned {
                 openapi => { error => "Mandatory attribute created_by missing" }
             );
         }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
@@ -137,18 +133,7 @@ sub update_notes {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "$_" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -196,18 +181,7 @@ sub resolve_claim {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "$_" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -237,18 +211,7 @@ sub delete_claim {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "$_" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 

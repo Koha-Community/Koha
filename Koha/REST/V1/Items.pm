@@ -51,19 +51,7 @@ sub list {
         );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => {
-                    error =>
-                      "Something went wrong, check Koha logs for details."
-                }
-            );
-        }
-        return $c->render(
-            status  => 500,
-            openapi => { error => "$_" }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
@@ -77,24 +65,18 @@ Controller function that handles retrieving a single Koha::Item
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $item;
     try {
-        $item = Koha::Items->find($c->validation->param('item_id'));
+        my $item = Koha::Items->find($c->validation->param('item_id'));
+        unless ( $item ) {
+            return $c->render(
+                status => 404,
+                openapi => { error => 'Item not found'}
+            );
+        }
         return $c->render( status => 200, openapi => $item->to_api );
     }
     catch {
-        unless ( defined $item ) {
-            return $c->render( status => 404,
-                               openapi => { error => 'Item not found'} );
-        }
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        $c->unhandled_exception($_);
     };
 }
 

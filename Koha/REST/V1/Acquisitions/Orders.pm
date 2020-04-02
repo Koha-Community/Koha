@@ -52,18 +52,7 @@ sub list {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Unhandled exception ($_)" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs. ($_)" }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -85,12 +74,17 @@ sub get {
         );
     }
 
-    my $embed = $c->stash('koha.embed');
+    return try {
+        my $embed = $c->stash('koha.embed');
 
-    return $c->render(
-        status  => 200,
-        openapi => $order->to_api({ embed => $embed })
-    );
+        return $c->render(
+            status  => 200,
+            openapi => $order->to_api({ embed => $embed })
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add
@@ -116,27 +110,14 @@ sub add {
         );
     }
     catch {
-        unless ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 500,
-                openapi => {
-                    error =>
-                      "Something went wrong, check Koha logs for details."
-                }
-            );
-        }
-        if ( $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Object::DuplicateID') ) {
             return $c->render(
                 status  => 409,
                 openapi => { error => $_->error, conflict => $_->duplicate_id }
             );
         }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "$_" }
-            );
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 
@@ -168,18 +149,7 @@ sub update {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Unhandled exception ($_)" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -211,18 +181,7 @@ sub delete {
         );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Unhandled exception ($_)" }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 

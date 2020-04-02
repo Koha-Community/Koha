@@ -49,14 +49,7 @@ sub list {
         );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status  => 500,
-                               openapi => { error => "Something went wrong, check the logs." } );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -75,10 +68,15 @@ sub get {
                            openapi => { error => "Vendor not found" } );
     }
 
-    return $c->render(
-        status  => 200,
-        openapi => $vendor->to_api
-    );
+    return try {
+        return $c->render(
+            status  => 200,
+            openapi => $vendor->to_api
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add
@@ -101,14 +99,7 @@ sub add {
         );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->msg } );
-        }
-        else {
-            return $c->render( status  => 500,
-                               openapi => { error => "Something went wrong, check the logs." } );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -134,17 +125,14 @@ sub update {
     }
     catch {
         if ( not defined $vendor ) {
-            return $c->render( status  => 404,
-                               openapi => { error => "Object not found" } );
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Object not found" }
+            );
         }
-        elsif ( $_->isa('Koha::Exceptions::Object') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->message } );
-        }
-        else {
-            return $c->render( status  => 500,
-                               openapi => { error => "Something went wrong, check the logs." } );
-        }
+
+        $c->unhandled_exception($_);
+
     };
 
 }
@@ -158,29 +146,26 @@ Controller function that handles deleting a Koha::Acquisition::Bookseller object
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $vendor;
-
     return try {
-        $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
+        my $vendor = Koha::Acquisition::Booksellers->find( $c->validation->param('vendor_id') );
+
+        unless ( $vendor ) {
+            return $c->render(
+                status  => 404,
+                openapi => { error => "Object not found" }
+            );
+        }
+
         $vendor->delete;
-        return $c->render( status => 200,
-                           openapi => q{} );
+
+        return $c->render(
+            status  => 200,
+            openapi => q{}
+        );
     }
     catch {
-        if ( not defined $vendor ) {
-            return $c->render( status  => 404,
-                               openapi => { error => "Object not found" } );
-        }
-        elsif ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->msg } );
-        }
-        else {
-            return $c->render( status  => 500,
-                               openapi => { error => "Something went wrong, check the logs." } );
-        }
+        $c->unhandled_exception($_);
     };
-
 }
 
 1;

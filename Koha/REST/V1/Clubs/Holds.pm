@@ -125,7 +125,7 @@ sub add {
         );
     }
     catch {
-        if ( blessed $_ and $_->isa('Koha::Exceptions::Object') ) {
+        if ( blessed $_ ) {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 my $broken_fk = $_->broken_fk;
 
@@ -135,32 +135,16 @@ sub add {
                         openapi => $Koha::REST::V1::Clubs::Holds::to_api_mapping->{$broken_fk} . ' not found.'
                     );
                 }
-                else {
-                    return $c->render(
-                        status  => 500,
-                        openapi => { error => "Uncaught exception: $_" }
-                    );
-                }
             }
-            else {
+            elsif ($_->isa('Koha::Exceptions::ClubHold')) {
                 return $c->render(
                     status  => 500,
-                    openapi => { error => "$_" }
+                    openapi => { error => $_->description }
                 );
             }
         }
-        elsif (blessed $_ and $_->isa('Koha::Exceptions::ClubHold')) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => $_->description }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong. check the logs." }
-            );
-        }
+
+        $c->unhandled_exception($_);
     };
 }
 

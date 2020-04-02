@@ -40,14 +40,7 @@ sub list {
         return $c->render( status => 200, openapi => $cities );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        $c->unhandled_exception($_);
     };
 
 }
@@ -59,13 +52,18 @@ sub list {
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $city = Koha::Cities->find( $c->validation->param('city_id') );
-    unless ($city) {
-        return $c->render( status  => 404,
-                           openapi => { error => "City not found" } );
-    }
+    return try {
+        my $city = Koha::Cities->find( $c->validation->param('city_id') );
+        unless ($city) {
+            return $c->render( status  => 404,
+                            openapi => { error => "City not found" } );
+        }
 
-    return $c->render( status => 200, openapi => $city->to_api );
+        return $c->render( status => 200, openapi => $city->to_api );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    }
 }
 
 =head3 add
@@ -85,18 +83,7 @@ sub add {
         );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => $_->{msg} }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -120,14 +107,7 @@ sub update {
         return $c->render( status => 200, openapi => $city->to_api );
     }
     catch {
-        if ( $_->isa('Koha::Exceptions::Object') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->message } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -149,14 +129,7 @@ sub delete {
         return $c->render( status => 200, openapi => "" );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render( status  => 500,
-                               openapi => { error => $_->{msg} } );
-        }
-        else {
-            return $c->render( status => 500,
-                openapi => { error => "Something went wrong, check the logs."} );
-        }
+        $c->unhandled_exception($_);
     };
 }
 

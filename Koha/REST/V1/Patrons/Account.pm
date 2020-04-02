@@ -48,26 +48,31 @@ sub get {
         return $c->render( status => 404, openapi => { error => "Patron not found." } );
     }
 
-    my $account = $patron->account;
+    return try {
+        my $account = $patron->account;
 
-    # get outstanding debits and credits
-    my $debits  = $account->outstanding_debits;
-    my $credits = $account->outstanding_credits;
+        # get outstanding debits and credits
+        my $debits  = $account->outstanding_debits;
+        my $credits = $account->outstanding_credits;
 
-    return $c->render(
-        status  => 200,
-        openapi => {
-            balance => $account->balance,
-            outstanding_debits => {
-                total => $debits->total_outstanding,
-                lines => $debits->to_api
-            },
-            outstanding_credits => {
-                total => $credits->total_outstanding,
-                lines => $credits->to_api
-              }
-        }
-    );
+        return $c->render(
+            status  => 200,
+            openapi => {
+                balance => $account->balance,
+                outstanding_debits => {
+                    total => $debits->total_outstanding,
+                    lines => $debits->to_api
+                },
+                outstanding_credits => {
+                    total => $credits->total_outstanding,
+                    lines => $credits->to_api
+                }
+            }
+        );
+    }
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add_credit
@@ -141,19 +146,7 @@ sub add_credit {
         return $c->render( status => 200, openapi => { account_line_id => $credit->id } );
     }
     catch {
-        if ( blessed $_ && $_->can('rethrow') ) {
-            return $c->render(
-                status  => 400,
-                openapi => { error => "$_" }
-            );
-        }
-        else {
-            # Exception, rely on the stringified exception
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs" }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 

@@ -94,18 +94,7 @@ sub list {
         return $c->render( status => 200, openapi => $patrons->to_api );
     }
     catch {
-        if ( $_->isa('DBIx::Class::Exception') ) {
-            return $c->render(
-                status  => 500,
-                openapi => { error => $_->{msg} }
-            );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check the logs." }
-            );
-        }
+        $c->unhandled_exception($_);
     };
 }
 
@@ -119,14 +108,19 @@ Controller function that handles retrieving a single Koha::Patron object
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $patron_id = $c->validation->param('patron_id');
-    my $patron    = Koha::Patrons->find($patron_id);
+    return try {
+        my $patron_id = $c->validation->param('patron_id');
+        my $patron    = Koha::Patrons->find($patron_id);
 
-    unless ($patron) {
-        return $c->render( status => 404, openapi => { error => "Patron not found." } );
+        unless ($patron) {
+            return $c->render( status => 404, openapi => { error => "Patron not found." } );
+        }
+
+        return $c->render( status => 200, openapi => $patron->to_api );
     }
-
-    return $c->render( status => 200, openapi => $patron->to_api );
+    catch {
+        $c->unhandled_exception($_);
+    };
 }
 
 =head3 add
@@ -185,10 +179,7 @@ sub add {
             );
         }
         else {
-            return $c->render(
-                status  => 500,
-                openapi => { error => "Something went wrong, check Koha logs for details." }
-            );
+            $c->unhandled_exception($_);
         }
     };
 }
@@ -267,13 +258,7 @@ sub update {
             );
         }
         else {
-            return $c->render(
-                status  => 500,
-                openapi => {
-                    error =>
-                      "Something went wrong, check Koha logs for details."
-                }
-            );
+            $c->unhandled_exception($_);
         }
     };
 }
@@ -304,13 +289,7 @@ sub delete {
             );
         }
         else {
-            return $c->render(
-                status  => 500,
-                openapi => {
-                    error =>
-                      "Something went wrong, check Koha logs for details."
-                }
-            );
+            $c->unhandled_exception($_);
         }
     };
 }
@@ -347,13 +326,7 @@ sub guarantors_can_see_charges {
         }
     }
     catch {
-        return $c->render(
-            status  => 500,
-            openapi => {
-                error =>
-                  "Something went wrong, check Koha logs for details. $_"
-            }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
@@ -389,13 +362,7 @@ sub guarantors_can_see_checkouts {
         }
     }
     catch {
-        return $c->render(
-            status  => 500,
-            openapi => {
-                error =>
-                  "Something went wrong, check Koha logs for details. $_"
-            }
-        );
+        $c->unhandled_exception($_);
     };
 }
 
