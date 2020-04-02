@@ -279,7 +279,10 @@ sub delete {
 
         # check if loans, reservations, debarrment, etc. before deletion!
         $patron->delete;
-        return $c->render( status => 200, openapi => {} );
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
     }
     catch {
         unless ($patron) {

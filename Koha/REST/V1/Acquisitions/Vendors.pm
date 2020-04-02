@@ -159,7 +159,7 @@ sub delete {
         $vendor->delete;
 
         return $c->render(
-            status  => 200,
+            status  => 204,
             openapi => q{}
         );
     }

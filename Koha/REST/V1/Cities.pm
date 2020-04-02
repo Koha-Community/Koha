@@ -126,7 +126,10 @@ sub delete {
 
     return try {
         $city->delete;
-        return $c->render( status => 200, openapi => "" );
+        return $c->render(
+            status  => 204,
+            openapi => q{}
+        );
     }
     catch {
         $c->unhandled_exception($_);
