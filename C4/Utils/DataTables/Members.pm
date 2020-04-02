@@ -78,6 +78,7 @@ sub search {
 
     my $select = "SELECT
         borrowers.borrowernumber, borrowers.surname, borrowers.firstname,
+        borrowers.othernames,
         borrowers.flags,
         borrowers.streetnumber, borrowers.streettype, borrowers.address,
         borrowers.address2, borrowers.city, borrowers.state, borrowers.zipcode,
