@@ -436,7 +436,7 @@ sub prefetch_whitelist {
             my $result_class = $relations->{$key}->{class};
             my $obj = $result_class->new;
             try {
-                $whitelist->{$key} = $obj->koha_object_class;
+                $whitelist->{$key} = Koha::Object::_get_object_class( $obj->result_class );
             } catch {
                 $whitelist->{$key} = undef;
             }

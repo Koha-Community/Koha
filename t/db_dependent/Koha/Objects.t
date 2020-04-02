@@ -773,7 +773,7 @@ subtest "from_api_mapping() tests" => sub {
 
 subtest 'prefetch_whitelist() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -788,7 +788,13 @@ subtest 'prefetch_whitelist() tests' => sub {
     is(
         $prefetch_whitelist->{orders},
         'Koha::Acquisition::Order',
-        'Guessed the object class correctly'
+        'Guessed the non-standard object class correctly'
+    );
+
+    is(
+        $prefetch_whitelist->{items},
+        'Koha::Item',
+        'Guessed the standard object class correctly'
     );
 
     $schema->storage->txn_rollback;
