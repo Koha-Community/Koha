@@ -51,7 +51,7 @@
                                 <ol>
                                     <li>
                                         <label for="recipient">Send problem report to: </label>
-                                        [% IF library.branchemail %]
+                                        [% IF library.inbound_email_address && library.inbound_email_address != Koha.Preference('KohaAdminEmailAddress') %]
                                             <select name="recipient" id="recipient">
                                                 <option value="library">A librarian</option>
                                                 <option value="admin">Koha administrator</option>

@@ -52,9 +52,8 @@ my $referer = Koha::Util::Navigation::local_referer($input );
 $referer = Encode::decode_utf8 uri_unescape $referer,
 
 my $patron = Koha::Patrons->find($borrowernumber);
+my $library = $patron->library;
 my $username = $patron->userid;
-my $branchcode = $patron->branchcode;
-my $library = Koha::Libraries->find($branchcode);
 my @messages;
 
 $template->param(
@@ -81,7 +80,7 @@ if ( $op eq 'addreport' ) {
                         title          => $subject,
                         content        => $message,
                         borrowernumber => $borrowernumber,
-                        branchcode     => $branchcode,
+                        branchcode     => $patron->branchcode,
                         username       => $username,
                         problempage    => $problempage,
                         recipient      => $recipient,
