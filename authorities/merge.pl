@@ -25,6 +25,7 @@ use C4::AuthoritiesMarc;
 use C4::Koha;
 use C4::Biblio;
 
+use Koha::Authority::MergeRequests;
 use Koha::Authority::Types;
 use Koha::MetadataRecord::Authority;
 
@@ -84,6 +85,9 @@ if ($merge) {
 
     # Delete the other record. Do not merge. It is unneeded and could under
     # special circumstances have unwanted side-effects.
+    # Remove older pending merge requests for $recordid2 to itself. The above merge did the job already or will do. (See bug 22437)
+    my $condition = { authid => $recordid2, authid_new => [undef, 0, $recordid2], done => 0 };
+    Koha::Authority::MergeRequests->search($condition)->delete;
     DelAuthority({ authid => $recordid2, skip_merge => 1 });
 
     # Parameters
