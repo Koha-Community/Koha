@@ -66,9 +66,8 @@ __PACKAGE__->table("problem_reports");
 
 =head2 problempage
 
-  data_type: 'varchar'
+  data_type: 'text'
   is_nullable: 1
-  size: 255
 
 =head2 recipient
 
@@ -87,7 +86,7 @@ __PACKAGE__->table("problem_reports");
 =head2 status
 
   data_type: 'varchar'
-  default_value: 'NEW'
+  default_value: 'New'
   is_nullable: 0
   size: 6
 
@@ -118,7 +117,7 @@ __PACKAGE__->add_columns(
   "username",
   { data_type => "varchar", is_nullable => 1, size => 75 },
   "problempage",
-  { data_type => "varchar", is_nullable => 1, size => 255 },
+  { data_type => "text", is_nullable => 1 },
   "recipient",
   {
     data_type => "enum",
@@ -134,7 +133,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
   },
   "status",
-  { data_type => "varchar", default_value => "NEW", is_nullable => 0, size => 6 },
+  { data_type => "varchar", default_value => "New", is_nullable => 0, size => 6 },
 );
 
 =head1 PRIMARY KEY
@@ -182,8 +181,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2020-03-18 22:36:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XQn+sJwh4s+EK9vf2gQ7Qw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-03 12:13:26
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ho9ENAxH51/ZlZO9KD4KOQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
