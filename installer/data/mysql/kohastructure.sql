@@ -4448,7 +4448,7 @@ CREATE TABLE `problem_reports` (
     `borrowernumber` int(11) NOT NULL default 0, -- the user who created the problem report
     `branchcode` varchar(10) NOT NULL default '', -- borrower's branch
     `username` varchar(75) default NULL, -- OPAC username
-    `problempage` varchar(255) default NULL, -- page the user triggered the problem report form from
+    `problempage` TEXT default NULL, -- page the user triggered the problem report form from
     `recipient` enum('admin','library') NOT NULL default 'library', -- the 'to-address' of the problem report
     `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- timestamp of report submission
     `status` varchar(6) NOT NULL default 'New', -- status of the report. New, Viewed, Closed
