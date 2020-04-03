@@ -21397,6 +21397,34 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23204, "Change enum order for marc_type in search_marc_map to fix sorting");
 }
 
+$DBversion = '19.12.00.061';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        UPDATE
+          systempreferences
+        SET
+          options = "batchmod|moredetail|cronjob|additem|pendingreserves|onpayment"
+        WHERE
+          variable = "MarkLostItemsAsReturned"
+    });
+
+    my $lost_item_returned = C4::Context->preference("MarkLostItemsAsReturned");
+    my @set = split( ",", $lost_item_returned );
+    push @set, 'onpayment';
+    $lost_item_returned = join( ",", @set );
+
+    $dbh->do(qq{
+        UPDATE
+          systempreferences
+        SET
+          value = "$lost_item_returned"
+        WHERE
+          variable = "MarkLostItemsAsReturned"
+    });
+
+    NewVersion( $DBversion, 24474, "Add `onpayment` option to MarkLostItemsAsReturned");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
