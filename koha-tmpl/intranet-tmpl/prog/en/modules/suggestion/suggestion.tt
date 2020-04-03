@@ -514,7 +514,7 @@
     <ul class="ui-tabs-nav">
         [% FOREACH suggestion IN suggestions %]
                 <li>
-            <a href="#tab_[% loop.count | uri %]">
+            <a href="#[% suggestion.suggestiontype | uri %]">
             [% IF ( suggestion.suggestiontypelabel ) %]
                 [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending
                 [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]Accepted
@@ -538,8 +538,8 @@
 [% END %]
 
 [% FOREACH suggestion IN suggestions %]
-<div id="tab_[% loop.count | html %]">
-<form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#tab_[% loop.count | html %]">
+<div id="[% suggestion.suggestiontype | html %]">
+<form class="update_suggestions" name="f" method="post" action="/cgi-bin/koha/suggestion/suggestion.pl#[% suggestion.suggestiontype| uri %]">
 
 [% IF ( suggestion.suggestions_loop ) %]
 <p><a class="checkall" href="#">Check all</a> | <a class="uncheckall" href="#">Uncheck all</a></p>
