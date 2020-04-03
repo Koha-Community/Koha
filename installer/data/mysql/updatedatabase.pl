@@ -21425,6 +21425,13 @@ if ( CheckVersion($DBversion) ) {
     NewVersion( $DBversion, 24474, "Add `onpayment` option to MarkLostItemsAsReturned");
 }
 
+$DBversion = '19.12.00.062';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE account_debit_types SET description = REPLACE(description,'Rewewal','Renewal') WHERE description like '%Rewewal%'" );
+
+    NewVersion( $DBversion, 25010, "Fix typo in account_debit_type description");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
