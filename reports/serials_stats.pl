@@ -138,7 +138,7 @@ if($do_it){
     my $sth = $dbh->prepare("SELECT aqbooksellerid, aqbooksellers.name 
                                 FROM subscription 
                                   LEFT JOIN aqbooksellers ON (subscription.aqbooksellerid=aqbooksellers.id ) 
-                                GROUP BY aqbooksellerid");
+                                ORDER BY aqbooksellers.name ASC");
     $sth->execute();
     
     while(my $row = $sth->fetchrow_hashref){
