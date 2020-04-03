@@ -28,6 +28,8 @@ use Koha::ProblemReport;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Util::Navigation;
+use URI::Escape;
+use Encode;
 
 my $input = new CGI;
 
@@ -46,7 +48,8 @@ if (   !C4::Context->preference('OPACReportProblem')
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
 }
 
-my $problempage = C4::Context->preference('OPACBaseURL') . Koha::Util::Navigation::local_referer($input );
+my $referer = Koha::Util::Navigation::local_referer($input );
+$referer = Encode::decode_utf8 uri_unescape $referer,
 
 my $patron = Koha::Patrons->find($borrowernumber);
 my $username = $patron->userid;
@@ -56,7 +59,7 @@ my @messages;
 
 $template->param(
     username    => $username,
-    problempage => $problempage,
+    problempage => $referer,
     library     => $library,
 );
 
@@ -66,6 +69,7 @@ if ( $op eq 'addreport' ) {
     my $subject = $input->param('subject');
     my $message = $input->param('message');
     my $problempage = $input->param('problempage');
+    $problempage = Encode::decode_utf8 uri_unescape $problempage;
     my $recipient = $input->param('recipient') || 'admin';
 
     try {

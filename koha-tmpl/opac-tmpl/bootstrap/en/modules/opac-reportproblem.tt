@@ -37,7 +37,7 @@
                                 [% ELSE %]
                                     Your problem report has been sent to the library.
                                 [% END %]
-                            [% CASE 'error_on_send' %][#% We really should avoid reaching this! %]
+                            [% CASE 'error_on_send' #We really should avoid reaching this! %]
                                 Something wrong happened when sending the report. Please contact your library.
                             [% END %]
                         </div>
@@ -62,8 +62,8 @@
                                     </li>
                                     <li>
                                         <label for="problempage">Problem found on page: </label>
-                                        <input type="hidden" name="problempage" id="problempage" value="[% problempage | html %]">
-                                        [% problempage | html %]
+                                        <input type="hidden" name="problempage" id="problempage" value="[% problempage | url %]">
+                                         [% problempage | html %]<br/>
                                     </li>
                                     <li>
                                         <label for="user">Username: </label>
