@@ -16,11 +16,11 @@
         </div>
     [% END #/ opaccredits %]
 
-    [% IF ( Koha.Preference('OPACReportProblem') || OpacKohaUrl ) %]
+    [% IF ( Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') ) || OpacKohaUrl %]
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span12">
-                    [% IF Koha.Preference('OPACReportProblem') %]
+                    [% IF Koha.Preference('OPACReportProblem') && Koha.Preference('KohaAdminEmailAddress') %]
                     <div id="report_a_problem" class="noprint" style="float:left;">
                         <a class="koha-url" href="/cgi-bin/koha/opac-reportproblem.pl">Report a problem</a>
                     </div>
