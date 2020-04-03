@@ -19,7 +19,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
 use DBIx::Class::Schema::Loader qw/ make_schema_at /;
 
 use Getopt::Long;
@@ -56,7 +55,12 @@ if (! defined $db_name ) {
     make_schema_at(
         "Koha::Schema",
         { debug => 1, dump_directory => $path, preserve_case => 1 },
-        ["DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",$db_user, $db_passwd ]
+        [
+            "DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
+            $db_user,
+            $db_passwd,
+            { loader_class => 'Koha::Schema::Loader::mysql' }
+        ]
     );
 }
 
