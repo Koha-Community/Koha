@@ -33,7 +33,7 @@ my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'set_rule + get_effective_rule' => sub {
-    plan tests => 14;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -91,27 +91,6 @@ subtest 'set_rule + get_effective_rule' => sub {
 
     is( $rule->rule_value, $default_rule_value, '* means default' );
 
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => '*',
-            categorycode => '*',
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-            rule_value   => 2,
-        }
-    );
-
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 2,
-        'More specific rule is returned when itemtype is given' );
-
     $rule = Koha::CirculationRules->get_effective_rule(
         {
             branchcode   => $branchcode_2,
@@ -123,129 +102,44 @@ subtest 'set_rule + get_effective_rule' => sub {
     is( $rule->rule_value, 1,
         'Default rule is returned if there is no rule for this branchcode' );
 
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => '*',
-            categorycode => $categorycode,
-            itemtype     => '*',
-            rule_name    => $rule_name,
-            rule_value   => 3,
-        }
-    );
+    subtest 'test rule matching with different combinations of rule scopes' => sub {
+        my ( $tests, $order ) = prepare_tests_for_rule_scope_combinations(
+            {
+                branchcode   => $branchcode,
+                categorycode => $categorycode,
+                itemtype     => $itemtype,
+            },
+            'maxissueqty'
+        );
 
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
+        plan tests => 2**scalar @$order;
 
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 3,
-        'More specific rule is returned when categorycode exists' );
+        foreach my $test (@$tests) {
+            my $rule_params = {%$test};
+            $rule_params->{rule_name} = $rule_name;
+            my $rule_value = $rule_params->{rule_value} = int( rand(10) );
 
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => '*',
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-            rule_value   => 4,
-        }
-    );
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 4,
-        'More specific rule is returned when categorycode and itemtype exist' );
+            Koha::CirculationRules->set_rule($rule_params);
 
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => '*',
-            itemtype     => '*',
-            rule_name    => $rule_name,
-            rule_value   => 5,
-        }
-    );
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 5,
-        'More specific rule is returned when branchcode exists' );
+            my $rule = Koha::CirculationRules->get_effective_rule(
+                {
+                    branchcode   => $branchcode,
+                    categorycode => $categorycode,
+                    itemtype     => $itemtype,
+                    rule_name    => $rule_name,
+                }
+            );
 
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => '*',
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-            rule_value   => 6,
-        }
-    );
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 6,
-        'More specific rule is returned when branchcode and itemtype exists' );
+            my $scope_output = '';
+            foreach my $key ( values @$order ) {
+                $scope_output .= " $key" if $test->{$key} ne '*';
+            }
 
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => '*',
-            rule_name    => $rule_name,
-            rule_value   => 7,
+            is( $rule->rule_value, $rule_value,
+                'Explicitly scoped'
+                  . ( $scope_output ? $scope_output : ' nothing' ) );
         }
-    );
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 7,
-        'More specific rule is returned when branchcode and categorycode exist'
-    );
-
-    Koha::CirculationRules->set_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-            rule_value   => 8,
-        }
-    );
-    $rule = Koha::CirculationRules->get_effective_rule(
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            rule_name    => $rule_name,
-        }
-    );
-    is( $rule->rule_value, 8,
-        'More specific rule is returned when branchcode, categorycode and itemtype exist'
-    );
+    };
 
     my $our_branch_rules = Koha::CirculationRules->search({branchcode => $branchcode});
     is( $our_branch_rules->count, 4, "We added 8 rules");
@@ -506,3 +400,47 @@ subtest 'get_lostreturn_policy() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+sub prepare_tests_for_rule_scope_combinations {
+    my ( $scope, $rule_name ) = @_;
+
+    # Here we create a combinations of 1s and 0s the following way
+    #
+    # 000...
+    # 001...
+    # 010...
+    # 011...
+    # 100...
+    # 101...
+    # 110...
+    # 111...
+    #
+    # (the number of columns equals to the amount of rule scopes)
+    # The ... symbolizes possible future scopes.
+    #
+    # - 0 equals to circulation rule scope with any value (aka. *)
+    # - 1 equals to circulation rule scope exact value, e.g.
+    #     "CPL" (for branchcode).
+    #
+    # The order is the same as the weight of scopes when sorting circulation
+    # rules. So the first column of numbers is the scope with most weight.
+    # This is defined by C<$order> which will be assigned next.
+    #
+    # We must maintain the order in order to keep the test valid. This should be
+    # equal to Koha/CirculationRules.pm "order_by" of C<get_effective_rule> sub.
+    # Let's explicitly define the order and fail test if we are missing a scope:
+    my $order = [ 'branchcode', 'categorycode', 'itemtype' ];
+    is( join(", ", sort keys %$scope),
+       join(", ", sort @$order), 'Missing a scope!' ) if keys %$scope ne scalar @$order;
+
+    my @tests = ();
+    foreach my $value ( glob( "{0,1}" x keys %$scope || 1 ) ) {
+        my $test = { %$scope };
+        for ( my $i=0; $i < keys %$scope; $i++ ) {
+            $test->{$order->[$i]} = '*' unless substr( $value, $i, 1 );
+        }
+        push @tests, $test;
+    }
+
+    return \@tests, $order;
+}
