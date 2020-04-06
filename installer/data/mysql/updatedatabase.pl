@@ -21464,6 +21464,52 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23173, "Add ILLCheckAvailability syspref");
 }
 
+$DBversion = '19.12.00.066';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(
+q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('OPACReportProblem', 0, NULL, 'Allow patrons to submit problem reports for OPAC pages to the library or Koha Administrator', 'YesNo') }
+    );
+    $dbh->do(
+q{INSERT IGNORE INTO letter (module, code, name, title, content, message_transport_type) VALUES ('members', 'PROBLEM_REPORT','OPAC Problem Report','OPAC Problem Report','Username: <<problem_reports.username>>\n\nProblem page: <<problem_reports.problempage>>\n\nTitle: <<problem_reports.title>>\n\nMessage: <<problem_reports.content>>','email') }
+    );
+    if ( !TableExists('problem_reports') ) {
+        $dbh->do(
+            q{ CREATE TABLE problem_reports (
+            reportid int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+            title varchar(40) NOT NULL default '', -- report subject line
+            content varchar(255) NOT NULL default '', -- report message content
+            borrowernumber int(11) NOT NULL default 0, -- the user who created the problem report
+            branchcode varchar(10) NOT NULL default '', -- borrower's branch
+            username varchar(75) default NULL, -- OPAC username
+            problempage TEXT default NULL, -- page the user triggered the problem report form from
+            recipient enum('admin','library') NOT NULL default 'library', -- the 'to-address' of the problem report
+            created_on timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, -- timestamp of report submission
+            status varchar(6) NOT NULL default 'New', -- status of the report. New, Viewed, Closed
+            PRIMARY KEY (reportid),
+            CONSTRAINT problem_reports_ibfk1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT problem_reports_ibfk2 FOREIGN KEY (branchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci }
+        );
+    }
+    $dbh->do(
+q{INSERT IGNORE INTO userflags (bit, flag, flagdesc, defaulton) VALUES (26, 'problem_reports', 'Manage problem reports', 0) }
+    );
+    $dbh->do(
+q{INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (26, 'manage_problem_reports', 'Manage OPAC problem reports') }
+    );
+
+    NewVersion(
+        $DBversion,
+        4461,
+        [
+            "Add OPACReportProblem system preference",
+            "Adding PROBLEM_REPORT notice",
+            "Add problem reports table",
+            "Add user permissions for managing OPAC problem reports"
+        ]
+    );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
