@@ -556,6 +556,12 @@
         <xsl:if test="marc:datafield[@tag=246]">
             <span class="results_summary other_title"><span class="label">Other title: </span>
                 <xsl:for-each select="marc:datafield[@tag=246]">
+                    <xsl:if test="marc:subfield[@code='i']">
+                            <xsl:call-template name="subfieldSelect">
+				    <xsl:with-param name="codes">i</xsl:with-param>
+			    </xsl:call-template>
+                    </xsl:if>
+                       <xsl:text> </xsl:text>
                     <xsl:call-template name="chopPunctuation">
                         <xsl:with-param name="chopString">
                             <xsl:call-template name="subfieldSelect">
@@ -575,9 +581,6 @@
                             <xsl:when test="@ind2=7"> [Running title]</xsl:when>
                             <xsl:when test="@ind2=8"> [Spine title]</xsl:when>
                         </xsl:choose>
-                    </xsl:if>
-                    <xsl:if test="marc:subfield[@code='i']">
-                        <xsl:value-of select="concat(' [',marc:subfield[@code='i'],']')"/>
                     </xsl:if>
                     <!-- #13386 added separator | -->
                     <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><span class="separator"><xsl:text> | </xsl:text></span></xsl:otherwise></xsl:choose>
@@ -613,6 +616,12 @@
         <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
             <span class="results_summary uniform_title"><span class="label">Uniform titles: </span>
                 <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
+                    <xsl:if test="marc:subfield[@code='i']">
+			    <xsl:call-template name="subfieldSelect">
+				    <xsl:with-param name="codes">i</xsl:with-param>
+			    </xsl:call-template>
+		    </xsl:if>
+		    <xsl:text> </xsl:text>
                     <xsl:for-each select="marc:subfield">
                         <xsl:if test="contains('adfghklmnoprst',@code)">
                             <xsl:value-of select="text()"/>
