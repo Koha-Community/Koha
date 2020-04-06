@@ -192,12 +192,8 @@
                     [% END %]
                 ],
                 'bAutoWidth': false,
-                [% IF patrons_with_acq_perm_only %]
-                    'bPaginate': false,
-                [% ELSE %]
-                    'sPaginationType': 'full_numbers',
-                    "iDisplayLength": [% Koha.Preference('PatronsPerPage') | html %],
-                [% END %]
+                'sPaginationType': 'full_numbers',
+                "iDisplayLength": [% Koha.Preference('PatronsPerPage') | html %],
                 'aaSorting': [[[% aaSorting || 0 | html %], 'asc']],
                 'bFilter': false,
                 'bProcessing': true,
