@@ -369,22 +369,26 @@
                 <select id="budget_id" name="budget_id">
                     <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
+                   [% level_indent_cnt = 0 %]
+                    [% level_indent = "" %]
+                    [% WHILE level_indent_cnt < budget_loo.b_level %]
+                        [% level_indent = level_indent _ "&emsp;" %]
+                        [% level_indent_cnt = level_indent_cnt +1 %]
+                    [% END %]
+
                     [% IF ( budget_loo.b_sel ) %]
                         [% active_count = 0 #select no other fund %]
                         <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
-                                style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% ELSIF active_count==1 && budget_loo.b_active %]
                         <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
-                                style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% ELSE %]
                         [% bdgclass=budget_loo.b_active? "": "b_inactive" | html %]
                         <option value="[% budget_loo.b_id | html %]" class="[% bdgclass | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
-                                style="padding-left:[% budget_loo.b_level | html %]em;"
                         >
                     [% END %]
-                        [% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
+                        [% level_indent | $raw %][% budget_loo.b_txt | html %][% IF !budget_loo.b_active %] (inactive)[% END %]
                     </option>
                 [% END %]
                 </select>
