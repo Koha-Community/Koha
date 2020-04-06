@@ -27,11 +27,10 @@
 
 <ul class="patronbriefinfo">
     [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
-        [% SWITCH Koha.Preference( 'AddressFormat' ) %]
-            [% CASE 'de' %]
-                [% INCLUDE 'member-display-address-style-de.inc' %]
-            [% CASE # us %]
-                [% INCLUDE 'member-display-address-style-us.inc' %]
+        [% IF Koha.Preference( 'AddressFormat' ) %]
+            [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+        [% ELSE %]
+            [% INCLUDE 'member-display-address-style-us.inc' %]
         [% END %]
 
         [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]<li class="patronphone">
