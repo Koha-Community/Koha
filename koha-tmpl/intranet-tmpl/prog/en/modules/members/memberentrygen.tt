@@ -6,6 +6,7 @@
 [% USE KohaDates %]
 [% USE Branches %]
 [% PROCESS 'member-alt-address-style.inc' %]
+[% PROCESS 'member-alt-contact-style.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Patrons &rsaquo;
@@ -746,11 +747,7 @@ legend:hover {
 
                             [% IF ( step_2 ) %]
                                 [% UNLESS noaltcontactsurname && noaltcontactfirstname && noaltcontactaddress1 && noaltcontactaddress2 && noaltcontactaddress3 && noaltcontactstate && noaltcontactzipcode && noaltcontactcountry && noaltcontactphone %]
-                                    [% IF Koha.Preference( 'AddressFormat' ) %]
-                                        [% INCLUDE "member-alt-contact-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-                                    [% ELSE %]
-                                        [% INCLUDE 'member-alt-contact-style-us.inc' %]
-                                    [% END %]
+                                    [% PROCESS 'alt-contact-style' %]
                                 [% END # UNLESS noaltcontactsurname && noaltcontactfirstname etc %]
                             [% END # /IF ( step_2 ) %]
 
