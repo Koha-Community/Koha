@@ -7,6 +7,7 @@
 [% USE ColumnsSettings %]
 [% USE Price %]
 [% PROCESS 'member-display-address-style.inc' %]
+[% PROCESS 'member-display-alt-address-style.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% Asset.css("lib/jquery/plugins/rowGroup/stylesheets/rowGroup.dataTables.min.css") | $raw %]
@@ -592,11 +593,7 @@
                                     </div>
                                     <div class="address">
                                         <ul>
-                                            [% IF Koha.Preference( 'AddressFormat' ) %]
-                                                [% INCLUDE "member-display-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-                                            [% ELSE %]
-                                                [% INCLUDE 'member-display-alt-address-style-us.inc' %]
-                                            [% END %]
+                                            [% PROCESS 'display-alt-address-style' %]
                                         </ul>
                                     </div>
                                     <div class="rows">
