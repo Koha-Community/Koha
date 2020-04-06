@@ -21453,6 +21453,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 4944, "Add new system preference OpacNoItemTypeImages");
 }
 
+$DBversion = '19.12.00.065';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q| 
+        INSERT IGNORE INTO systempreferences (variable, value, explanation, options, type) 
+        VALUES ('ILLCheckAvailability', '0', 'If enabled, during the ILL request process third party sources will be checked for current availability', '', 'YesNo')
+    | );
+
+    NewVersion( $DBversion, 23173, "Add ILLCheckAvailability syspref");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
