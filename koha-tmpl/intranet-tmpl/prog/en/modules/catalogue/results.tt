@@ -165,6 +165,16 @@
                                 <div class="btn-group">
                                     <a class="btn btn-default btn-xs" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50/SRU search</a>
                                 </div>
+                                <div class="btn-group">
+                                    <button type="button" id="results_batch_ops" class="btn btn-default btn-xs dropdown-toggle disabled" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="results_batch_op" data-op="edit" href="#">Batch edit</a></li>
+                                        <li><a class="results_batch_op" data-op="delete" href="#">Batch delete</a></li>
+                                        <li><a class="results_batch_op" data-op="merge" href="#">Merge records</a></li>
+                                    </ul>
+                                </div>
                             [% END %]
 
                             [% IF ( searchdesc ) %]

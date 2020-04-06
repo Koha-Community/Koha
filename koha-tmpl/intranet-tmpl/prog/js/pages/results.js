@@ -1,4 +1,4 @@
-/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers MSG_NO_ITEM_SELECTED MSG_NO_ITEM_SELECTED holdfor_cardnumber holdforclub strQuery MSG_NON_RESERVES_SELECTED PREF_NotHighlightedWords PLACE_HOLD */
+/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers MSG_NO_ITEM_SELECTED MSG_NO_ITEM_SELECTED holdfor_cardnumber holdforclub strQuery MSG_NON_RESERVES_SELECTED PREF_NotHighlightedWords PLACE_HOLD _ */
 
 if( PREF_AmazonCoverImages ){
     $(window).load(function() {
@@ -152,6 +152,11 @@ $(document).ready(function() {
     }
 
     $(".selection").change(function(){
+        if( $(".selection:checked").length > 0 ){
+            toggleBatchOp( true );
+        } else {
+            toggleBatchOp( false );
+        }
         if ( $(this).is(':checked') == true ) {
             addBibToContext( $(this).val() );
         } else {
@@ -169,6 +174,16 @@ $(document).ready(function() {
                 }
             }
         }
+    });
+
+    if( $(".selection:checked") > 0 ){
+        toggleBatchOp( true );
+    }
+
+    $(".results_batch_op").on("click", function(e){
+        e.preventDefault();
+        var op = $(this).data("op");
+        resultsBatchProcess( op );
     });
 });
 
@@ -305,4 +320,55 @@ function verify_images() {
             }
         }
     });
+}
+
+function toggleBatchOp( b ){
+    var results_batch_ops = $("#results_batch_ops");
+    if( b ){
+        results_batch_ops.removeClass("disabled");
+    } else {
+        results_batch_ops.addClass("disabled");
+    }
+}
+
+function resultsBatchProcess( op ){
+    var selected = $(".selection:checked");
+    var params = [];
+    var url = "";
+    if( op == "edit" ){
+        // batch edit selected records
+        if ( selected.length < 1 ){
+            alert( _("You must select at least one record") );
+        } else {
+            selected.each(function() {
+                params.push( $(this).val() );
+            });
+            url = "/cgi-bin/koha/tools/batch_record_modification.pl?op=list&amp;bib_list=" + params.join("/");
+            location.href = url;
+        }
+    } else if( op == "delete" ){
+        // batch delete selected records
+        if ( selected.length < 1) {
+            alert( _("You must select at least one record") );
+        } else {
+            selected.each(function() {
+                params.push( $(this).val() );
+            });
+            url = "/cgi-bin/koha/tools/batch_delete_records.pl?op=list&type=biblio&bib_list=" + params.join("/");
+            location.href = url;
+        }
+    } else if( op == "merge" ){
+        // merge selected records
+        if ( selected.length < 2) {
+            alert( _("At least two records must be selected for merging") );
+        } else {
+            selected.each(function() {
+                params.push('biblionumber=' + $(this).val());
+            });
+            url = "/cgi-bin/koha/cataloguing/merge.pl?" + params.join("&");
+            location.href = url;
+        }
+    } else {
+        return false;
+    }
 }
