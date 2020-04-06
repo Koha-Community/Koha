@@ -1,5 +1,7 @@
 [%~ USE Koha ~%]
 [%~ BLOCK 'display-address-style' ~%]
+    [%~ SET line_break = "<br/>" ~%]
+    [%~ IF no_line_break %][% SET line_break = " " %][% END ~%]
     [%~ IF Koha.Preference( 'AddressFormat' ) ~%]
         [%~ PROCESS "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }" ~%]
     [%~ ELSE ~%]
@@ -43,8 +45,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city ) ~%]
         <li class="patroncity">
-            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%]</br>[%~ patron.state | html ~%][%~ END ~%]
-            [%~ IF ( patron.country ) ~%]<br />[%~ patron.country | html ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break %][%~ patron.state | html ~%][%~ END ~%]
+            [%~ IF ( patron.country ) ~%][% line_break %][%~ patron.country | html ~%][%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
@@ -67,8 +69,8 @@
     [%~ END ~%]
     [%~ IF ( patron.city ) ~%]
         <li class="patroncity">
-            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%]</br>[%~ patron.state | html ~%][%~ END ~%]
-            [%~ IF ( patron.country ) ~%]<br />[%~ patron.country | html ~%][%~ END ~%]
+            [%~ IF ( patron.zipcode ) ~%][%~ patron.zipcode | html %] [% END ~%][%~ patron.city | html ~%][%~ IF ( patron.state ) ~%][% line_break %][%~ patron.state | html ~%][%~ END ~%]
+            [%~ IF ( patron.country ) ~%][% line_break %][%~ patron.country | html ~%][%~ END ~%]
         </li>
     [%~ END ~%]
 [%~ END ~%]
