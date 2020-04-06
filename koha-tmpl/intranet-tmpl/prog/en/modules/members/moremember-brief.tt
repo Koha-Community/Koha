@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% PROCESS 'member-display-address-style.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Check duplicate patron</title>
@@ -21,11 +22,7 @@
         [% IF ( patron.othernames ) %]&ldquo;[% patron.othernames | html %]&rdquo;[% END %]
         <div class = "address">
             <ul>
-                [% IF Koha.Preference( 'AddressFormat' ) %]
-                    [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-                [% ELSE %]
-                    [% INCLUDE 'member-display-address-style-us.inc' %]
-                [% END %]
+                [% PROCESS 'display-address-style' %]
             </ul>
         </div>
     <div class="rows">

@@ -1,5 +1,6 @@
 [% USE Koha %]
 [% USE KohaDates %]
+[% PROCESS 'member-display-address-style.inc' %]
 [% IF ( patron.borrowernumber ) %]
 <div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
 
@@ -29,11 +30,7 @@
 
 <ul class="patronbriefinfo">
     [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
-        [% IF Koha.Preference( 'AddressFormat' ) %]
-            [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-        [% ELSE %]
-            [% INCLUDE 'member-display-address-style-us.inc' %]
-        [% END %]
+        [% PROCESS 'display-address-style' %]
 
         [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]<li class="patronphone">
         [% IF ( patron.phone ) %]
