@@ -360,6 +360,7 @@ sub mocking_systempreferences_to_a_set_value {
         DebugLevel
         delimiter
         noItemTypeImages
+        OpacNoItemTypeImages
         virtualshelves
         AutoLocation
         IndependentBranches
