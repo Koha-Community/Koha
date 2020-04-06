@@ -21439,6 +21439,20 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22534, "Add PreFillGuaranteeField syspref");
 }
 
+$DBversion = '19.12.00.064';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q|
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+            SELECT 'OpacNoItemTypeImages', value, NULL, 'If ON, disables itemtype images in the OPAC','YesNo'
+            FROM (SELECT value FROM systempreferences WHERE variable="NoItemTypeImages") tmp
+    | );
+    $dbh->do( "UPDATE systempreferences SET explanation = 'If ON, disables itemtype images in the staff interface'
+        WHERE variable = 'noItemTypeImages' ");
+
+    NewVersion( $DBversion, 4944, "Add new system preference OpacNoItemTypeImages");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
