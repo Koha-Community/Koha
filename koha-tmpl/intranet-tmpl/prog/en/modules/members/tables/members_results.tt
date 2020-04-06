@@ -3,6 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE KohaDates %]
 [% USE Price %]
+[% PROCESS 'member-display-address-style.inc' %]
 {
     "sEcho": [% sEcho | html %],
     "iTotalRecords": [% iTotalRecords | html %],
@@ -17,7 +18,7 @@
                 "dt_cardnumber":
                     "[% data.cardnumber | html | $To %]",
                 "dt_name":
-                    "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]\" class=\"patron_preview\" data-borrowernumber=\"[% data.borrowernumber | html %]\" style='white-space:nowrap'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 | $To %]</a><br />[% INCLUDE escape_address data = data %][% IF data.email %]<br/>Email: <a href='mailto:[% data.email | html | $To %]'>[% data.email | html | $To %]</a>[% END %]",
+                    "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]\" class=\"patron_preview\" data-borrowernumber=\"[% data.borrowernumber | html %]\" style='white-space:nowrap'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 | $To %]</a><br /><div class='address'><ul>[%~ PROCESS 'display-address-style' patron=data| $To ~%]</ul></div>[% IF data.email %]<br/>Email: <a href='mailto:[% data.email | html | $To %]'>[% data.email | html | $To %]</a>[% END %]",
     "dt_dateofbirth":
         "[% INCLUDE 'patron-age.inc' patron = data %]",
                 "dt_category":
@@ -40,10 +41,3 @@
         [% END %]
     ]
 }
-[% BLOCK escape_address %]
-[%~ SET address = data.streetnumber _ ' ' %]
-[%~ IF data.streettype %][% SET address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' %][% END %]
-[%~ IF data.address %][% SET address = address _ data.address _ ' ' %][% END %]
-[%~ IF data.address2 %][% SET address = address _ data.address2 _ ' ' %][% END %]
-[%~ address | html | $To ~%]
-[% END %]
