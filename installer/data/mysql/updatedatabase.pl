@@ -21432,6 +21432,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25010, "Fix typo in account_debit_type description");
 }
 
+$DBversion = '19.12.00.063';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('PrefillGuaranteeField', 'phone,email,streetnumber,address,city,state,zipcode,country', NULL, 'Prefill these fields in guarantee member entry form from guarantor patron record', 'Multiple') });
+
+    NewVersion( $DBversion, 22534, "Add PreFillGuaranteeField syspref");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
