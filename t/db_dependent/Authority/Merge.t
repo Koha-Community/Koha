@@ -288,7 +288,7 @@ subtest 'Merging authorities should handle deletes (BZ 18070)' => sub {
 };
 
 subtest "Test some specific postponed merge issues" => sub {
-    plan tests => 4;
+    plan tests => 6;
 
     my $authmarc = MARC::Record->new;
     $authmarc->append_fields( MARC::Field->new( '109', '', '', 'a' => 'aa', b => 'bb' ));
@@ -328,6 +328,19 @@ subtest "Test some specific postponed merge issues" => sub {
     $restored_mocks->{auth_mod}->unmock_all;
     $biblio = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     is( $biblio->subfield('109', '9'), $id, 'If the 109 is no longer present, another modify merge would not bring it back' );
+
+    # Bug 22437 now removes older postponed A->A merges in DelAuthority
+    $id = AddAuthority( $authmarc, undef, $authtype1 );
+    my $merge = Koha::Authority::MergeRequest->new({ authid => $id })->store;
+    DelAuthority({ authid => $id, skip_merge => 1 });
+    $merge->discard_changes;
+    is( $merge->in_storage, 0, 'Older merge should be removed' );
+    # And even if we don't pass skip_merge
+    $id = AddAuthority( $authmarc, undef, $authtype1 );
+    $merge = Koha::Authority::MergeRequest->new({ authid => $id })->store;
+    DelAuthority({ authid => $id });
+    $merge->discard_changes;
+    is( $merge->in_storage, 0, 'Older merge should be removed again' );
 };
 
 subtest "Graceful resolution of missing reporting tag" => sub {
