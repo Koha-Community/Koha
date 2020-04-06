@@ -5,6 +5,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% PROCESS 'member-main-address-style.inc' %]
 [% PROCESS 'member-alt-address-style.inc' %]
 [% PROCESS 'member-alt-contact-style.inc' %]
 [% SET footerjs = 1 %]
@@ -572,11 +573,7 @@ legend:hover {
                                 [% END # /IF show_guarantor || guarantor  %]
 
                                 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
-                                    [% IF Koha.Preference( 'AddressFormat' ) %]
-                                        [% INCLUDE "member-main-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-                                    [% ELSE %]
-                                        [% INCLUDE 'member-main-address-style-us.inc' %]
-                                    [% END %]
+                                    [% PROCESS 'main-address-style' %]
                                 [% END # /UNLESS nostreet && nocity etc group%]
 
                                 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]
