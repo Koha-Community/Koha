@@ -596,7 +596,8 @@ if ($op eq "additem") {
 
 		# Adding the item
         if (!$exist_itemnumber) {
-            my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber);
+            my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) =
+                AddItemFromMarc( $record, $biblionumber, { skip_modzebra_update => 1 } );
             set_item_default_location($oldbibitemnum);
 
             # We count the item only if it was really added
@@ -610,6 +611,9 @@ if ($op eq "additem") {
 		# Preparing the next iteration
 		$oldbarcode = $barcodevalue;
 	    }
+
+        C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+
 	    undef($itemrecord);
 	}
     }	
@@ -682,10 +686,11 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     my $items = Koha::Items->search({ biblionumber => $biblionumber });
     while ( my $item = $items->next ) {
-        $error = $item->safe_delete;
+        $error = $item->safe_delete({ skip_modzebra_update => 1 });
         next if $error eq '1'; # Means ok
         push @errors,$error;
     }
+    C4::Biblio::ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
     if ( @errors ) {
         $nextop="additem";
     } else {

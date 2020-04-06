@@ -137,15 +137,26 @@ sub CartToShelf {
 =head2 AddItemFromMarc
 
   my ($biblionumber, $biblioitemnumber, $itemnumber) 
-      = AddItemFromMarc($source_item_marc, $biblionumber);
+      = AddItemFromMarc($source_item_marc, $biblionumber[, $params]);
 
 Given a MARC::Record object containing an embedded item
 record and a biblionumber, create a new item record.
 
+The final optional parameter, C<$params>, expected to contain
+'skip_modzebra_update' key, which relayed down to Koha::Item/store,
+there it prevents calling of ModZebra (and Elasticsearch update),
+which takes most of the time in batch adds/deletes: ModZebra better
+to be called later in C<additem.pl> after the whole loop.
+
+$params:
+    skip_modzebra_update => true / false
 =cut
 
 sub AddItemFromMarc {
-    my ( $source_item_marc, $biblionumber ) = @_;
+    my $source_item_marc = shift;
+    my $biblionumber     = shift;
+    my $params           = @_ ? shift : {};
+
     my $dbh = C4::Context->dbh;
 
     # parse item hash from MARC
@@ -161,7 +172,7 @@ sub AddItemFromMarc {
     $item_values->{biblionumber} = $biblionumber;
     $item_values->{cn_source} = delete $item_values->{'items.cn_source'}; # Because of C4::Biblio::_disambiguate
     $item_values->{cn_sort}   = delete $item_values->{'items.cn_sort'};   # Because of C4::Biblio::_disambiguate
-    my $item = Koha::Item->new( $item_values )->store;
+    my $item = Koha::Item->new( $item_values )->store({ skip_modzebra_update => $params->{skip_modzebra_update} });
     return ( $item->biblionumber, $item->biblioitemnumber, $item->itemnumber );
 }
 

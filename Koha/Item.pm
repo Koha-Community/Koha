@@ -61,7 +61,8 @@ Koha::Item - Koha Item object class
 =cut
 
 sub store {
-    my ($self, $params) = @_;
+    my $self = shift;
+    my $params = @_ ? shift : {};
 
     my $log_action = $params->{log_action} // 1;
 
@@ -99,7 +100,8 @@ sub store {
             $self->cn_sort($cn_sort);
         }
 
-        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
+        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+            unless $params->{skip_modzebra_update};
 
         logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
           if $log_action && C4::Context->preference("CataloguingLog");
@@ -156,7 +158,8 @@ sub store {
             $self->permanent_location( $self->location );
         }
 
-        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
+        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+            unless $params->{skip_modzebra_update};
 
         $self->_after_item_action_hooks({ action => 'modify' });
 
@@ -176,12 +179,14 @@ sub store {
 =cut
 
 sub delete {
-    my ( $self ) = @_;
+    my $self = shift;
+    my $params = @_ ? shift : {};
 
     # FIXME check the item has no current issues
     # i.e. raise the appropriate exception
 
-    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
+    C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" )
+        unless $params->{skip_modzebra_update};
 
     $self->_after_item_action_hooks({ action => 'delete' });
 
@@ -196,14 +201,15 @@ sub delete {
 =cut
 
 sub safe_delete {
-    my ($self) = @_;
+    my $self = shift;
+    my $params = @_ ? shift : {};
 
     my $safe_to_delete = $self->safe_to_delete;
     return $safe_to_delete unless $safe_to_delete eq '1';
 
     $self->move_to_deleted;
 
-    return $self->delete;
+    return $self->delete($params);
 }
 
 =head3 safe_to_delete
