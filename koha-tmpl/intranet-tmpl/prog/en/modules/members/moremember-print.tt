@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
+[% PROCESS 'member-display-address-style.inc' %]
 [% SET footerjs = 1 %]
 
 [% PROCESS 'accounts.inc' %]
@@ -17,11 +18,7 @@
         <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | uri %]">Account summary: [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a></h3>
 
         <ul>
-            [% IF Koha.Preference( 'AddressFormat' ) %]
-                [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-            [% ELSE %]
-                [% INCLUDE 'member-display-address-style-us.inc' %]
-            [% END %]
+            [% PROCESS 'display-address-style' %]
             <li>[% IF ( patron.phone ) %][% patron.phone | html %][% ELSE %](no phone number on file)[% END %]</li>
             <li>[% IF ( patron.email ) %][% patron.email | html %][% ELSE %](no primary email on file)[% END %]</li>
             [% IF ( patron.emailpro ) %]
