@@ -103,12 +103,11 @@ subtest cancel_hold => sub {
     );
 
     my $reserve1 = AddReserve(
-        {
-            branchcode     => $library->branchcode,
-            borrowernumber => $patron->borrowernumber,
-            biblionumber   => $item->biblio->biblionumber,
-            itemnumber     => $item->itemnumber,
-        }
+        $library->branchcode,
+        $patron->borrowernumber,
+        $item->biblio->biblionumber,
+        undef, undef, undef, undef, undef, undef,
+        $item->itemnumber,
     );
     is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
     is( $item->holds->count(),1,"Hold was placed on specific item");
