@@ -66,9 +66,9 @@
                             [% IF Koha.Preference( 'OnSiteCheckouts' ) == 1 %]
                             <div id="tabs" class="toptabs">
                                 <ul>
-                                    <li><a href="#tabs-container" id="tab_all">All</a></li>
-                                    <li><a href="#tabs-container" id="tab_checkout">Checkouts</a></li>
-                                    <li><a href="#tabs-container" id="tab_onsite_checkout">On-site checkouts</a></li>
+                                    <li id="tab_all"><a href="#tabs-container">All</a></li>
+                                    <li id="tab_checkout"><a href="#tabs-container">Checkouts</a></li>
+                                    <li id="tab_onsite_checkout"><a href="#tabs-container">On-site checkouts</a></li>
                                 </ul>
                             [% END %]
                                 <div id="tabs-container" style="overflow:hidden">
@@ -223,8 +223,8 @@
             ]
         }));
         var tabs = $("#tabs").tabs({
-            select: function(e, ui) {
-                var id = $(ui.tab).attr("id");
+            activate: function(e, ui) {
+                var id = $(ui.newTab).attr("id");
                 if ( id == "tab_checkout" ) {
                     table.fnFilter("standard_checkout", 0);
                 } else if ( id == "tab_onsite_checkout" ) {
