@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 4;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -81,12 +81,13 @@ subtest 'transfer already at destination' => sub {
     # We are making sure there is no regression, feel free to change the behavior if needed.
     # * Contrary to the POD, if ignore_reserves is not passed (or is false), any item reserve
     #   found will override all other measures that may prevent transfer and force a transfer.
-    AddReserve({
-        branchcode     => $item->homebranch,
-        borrowernumber => $patron->borrowernumber,
-        biblionumber   => $item->biblionumber,
-        itemnumber     => $item->itemnumber,
-    });
+    AddReserve(
+        $item->homebranch,
+        $patron->borrowernumber,
+        $item->biblionumber,
+        undef, undef, undef, undef, undef, undef,
+        $item->itemnumber,
+    );
 
     ($dotransfer, $messages ) = transferbook( $library->branchcode, $item->barcode );
     is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
@@ -128,12 +129,13 @@ subtest 'transfer an issued item' => sub {
     # We are making sure there is no regression, feel free to change the behavior if needed.
     # * Contrary to the POD, if ignore_reserves is not passed (or is false), any item reserve
     #   found will override all other measures that may prevent transfer and force a transfer.
-    AddReserve({
-        branchcode     => $item->homebranch,
-        borrowernumber => $patron->borrowernumber,
-        biblionumber   => $item->biblionumber,
-        itemnumber     => $item->itemnumber,
-    });
+    AddReserve(
+        $item->homebranch,
+        $patron->borrowernumber,
+        $item->biblionumber,
+        undef, undef, undef, undef, undef, undef,
+        $item->itemnumber,
+    );
 
     ($dotransfer, $messages ) = transferbook( $library->branchcode, $item->barcode );
     is( $dotransfer, 1, 'Transfer of reserved item succeeded without ignore reserves' );
@@ -160,12 +162,13 @@ subtest 'ignore_reserves flag' => sub {
         }
     );
 
-    AddReserve({
-        branchcode     => $item->homebranch,
-        borrowernumber => $patron->borrowernumber,
-        biblionumber   => $item->biblionumber,
-        itemnumber     => $item->itemnumber,
-    });
+    AddReserve(
+        $item->homebranch,
+        $patron->borrowernumber,
+        $item->biblionumber,
+        undef, undef, undef, undef, undef, undef,
+        $item->itemnumber,
+    );
 
     # We are making sure there is no regression, feel free to change the behavior if needed.
     # * Contrary to the POD, if ignore_reserves is not passed (or is false), any item reserve
