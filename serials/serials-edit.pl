@@ -289,7 +289,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
         #Rebuilding ALL the data for items into a hash
         # parting them on $itemid.
         my %itemhash;
-        my $countdistinct;
+        my $countdistinct = 0;
         my $range = scalar(@itemid);
         for ( my $i = 0 ; $i < $range ; $i++ ) {
             unless ( $itemhash{ $itemid[$i] } ) {
@@ -303,6 +303,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     $itemhash{ $itemid[$i] }->{'serial'} = $newserial;
                 }
                 $itemhash{ $itemid[$i] }->{'bibnum'} = $bibnums[$countdistinct];
+                $itemhash{ $itemid[$i] }->{'num_copies'} = $num_copies[$countdistinct];
                 $countdistinct++;
             }
             push @{ $itemhash{ $itemid[$i] }->{'tags'} },      $tags[$i];
@@ -311,7 +312,6 @@ if ( $op and $op eq 'serialchangestatus' ) {
               $field_values[$i];
             push @{ $itemhash{ $itemid[$i] }->{'ind_tag'} },   $ind_tag[$i];
             push @{ $itemhash{ $itemid[$i] }->{'indicator'} }, $indicator[$i];
-            push @{ $itemhash{ $itemid[$i] }->{'num_copies'} }, $num_copies[$i];
         }
         foreach my $item ( keys %itemhash ) {
 
@@ -341,7 +341,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
 
                 $itemhash{$item}->{'num_copies'} //= 1;
 
-                for (my $copy = 0; $copy < $itemhash{$item}->{'num_copies'}[$index];){
+                for (my $copy = 0; $copy < $itemhash{$item}->{'num_copies'};){
 
                 # New Item
 
