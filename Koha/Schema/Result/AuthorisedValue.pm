@@ -97,6 +97,22 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<av_uniq>
+
+=over 4
+
+=item * L</category>
+
+=item * L</authorised_value>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("av_uniq", ["category", "authorised_value"]);
+
 =head1 RELATIONS
 
 =head2 authorised_values_branches
@@ -145,8 +161,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-02-22 14:32:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hDlebhEn+f+thqwBo/LOqQ
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2020-04-07 11:23:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6MjWlDqdpIOwsJlyjQawAg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
