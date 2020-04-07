@@ -30,7 +30,7 @@
 
             [% IF ( CAN_user_cash_management_cashup ) %]
             <div id="toolbar" class="btn-toolbar">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa fa-money"></i> Record cashup</button>
+                <button id="pos_cashup" type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmCashupModal" ><i class="fa fa-money"></i> Record cashup</button>
             </div>
             [% END %]
 
@@ -169,7 +169,7 @@
                                 <td></td>
                                 <td>
                                     [% IF CAN_user_cash_management_refund_cash_registers && !(credit.debit.status == 'REFUNDED' ) %]
-                                    <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-quantity="[% credit.debit.note | html %]"><i class="fa fa-money"></i> Issue refund</button>
+                                    <button type="button" class="btn btn-default btn-xs pos_refund" data-toggle="modal" data-target="#issueRefundModal" data-item="[%- PROCESS account_type_description account=credit.debit -%]" data-accountline="[% credit.debit.accountlines_id | html %]" data-amount="[% credit.debit.amount | $Price %]" data-quantity="[% credit.debit.note | html %]"><i class="fa fa-money"></i> Issue refund</button>
                                     [% END %]
                                 </td>
                             </tr>
@@ -225,7 +225,7 @@
                     Please confirm that you have removed [% accountlines.total( payment_type => 'CASH') * -1 | $Price %] from the cash register and left a float of [% register.starting_float | $Price %].
                 </div> <!-- /.modal-body -->
                 <div class="modal-footer">
-                    <a href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-default">Confirm</a>
+                    <a href="/cgi-bin/koha/pos/register.pl?op=cashup" class="btn btn-default" id="pos_cashup_confirm">Confirm</a>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div> <!-- /.modal-footer -->
             </div> <!-- /.modal-content -->
