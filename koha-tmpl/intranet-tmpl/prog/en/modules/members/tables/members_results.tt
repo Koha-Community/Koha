@@ -18,7 +18,7 @@
                 "dt_cardnumber":
                     "[% data.cardnumber | html | $To %]",
                 "dt_name":
-                    "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]\" class=\"patron_preview\" data-borrowernumber=\"[% data.borrowernumber | html %]\" style='white-space:nowrap'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 | $To %]</a><br /><div class='address'><ul>[%~ PROCESS 'display-address-style' patron=data no_line_break=1 | $To ~%]</ul></div>[% IF data.email %]<br/>Email: <a href='mailto:[% data.email | html | $To %]'>[% data.email | html | $To %]</a>[% END %]",
+                    "<a href=\"/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.borrowernumber | html %]\" class=\"patron_preview\" data-borrowernumber=\"[% data.borrowernumber | html %]\" style='white-space:nowrap'>[% INCLUDE 'patron-title.inc' borrowernumber = data.borrowernumber category_type = data.category_type firstname = data.firstname surname = data.surname othernames = data.othernames invert_name = 1 | $To %]</a><br /><div class='address'><ul>[%~ INCLUDE 'display-address-style' patron=data no_line_break=1 | $To ~%]</ul></div>[% IF data.email %]<br/>Email: <a href='mailto:[% data.email | html | $To %]'>[% data.email | html | $To %]</a>[% END %]",
     "dt_dateofbirth":
         "[% INCLUDE 'patron-age.inc' patron = data %]",
                 "dt_category":
