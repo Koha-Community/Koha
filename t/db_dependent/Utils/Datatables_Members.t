@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 52;
 
 use C4::Context;
 use C4::Members;
@@ -515,6 +515,16 @@ subtest 'Search with permissions' => sub {
         ],
         'We got the 3 patrons we expected'
     );
+};
+
+subtest 'return values' => sub {
+    plan tests => 1;
+    my $search_results = C4::Utils::DataTables::Members::search({
+        searchmember     => "John Doe",
+        searchfieldstype => 'standard',
+        searchtype       => 'contain',
+    });
+    ok(exists $search_results->{patrons}->[0]->{othernames}, 'othernames should have been retrieved' );
 };
 
 # End
