@@ -119,6 +119,13 @@ for my $authvfield (@$statuses) {
     }
 }
 
+# if there's a list of not for loans types selected use it rather than
+# the full set.
+if ($staton->{'items.notforloan'}) {
+    my @l = @{$staton->{'items.notforloan'}};
+    @notforloans = @l if scalar @l > 0;
+}
+
 my @class_sources = Koha::ClassSources->search({ used => 1 });
 my $pref_class = C4::Context->preference("DefaultClassificationSource");
 
