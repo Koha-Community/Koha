@@ -136,6 +136,9 @@ SKIP: {
         );     # Edit
         $s->fill_form( { branchname => 'another branchname' } );
         $s->submit_form;
+
+        # Select "Show all" in the datatable "Show x entries" dropdown list to make sure our library is not hidden
+        $driver->find_element('//select[@name="libraries_length"]/option[@value="-1"]')->click;
         $s->click(
             {
                 id => 'delete_library_'.$branchcode,
