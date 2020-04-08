@@ -149,7 +149,8 @@ which takes most of the time in batch adds/deletes: ModZebra better
 to be called later in C<additem.pl> after the whole loop.
 
 $params:
-    skip_modzebra_update => true / false
+    skip_modzebra_update => 1|0
+
 =cut
 
 sub AddItemFromMarc {
