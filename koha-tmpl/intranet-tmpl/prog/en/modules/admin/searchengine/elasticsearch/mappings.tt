@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Search engine configuration</title>
+<title>Koha &rsaquo; Administration &rsaquo; Search engine configuration (Elasticsearch)</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
 <script>
@@ -68,7 +68,7 @@ a.add, a.delete {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Search engine configuration</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Search engine configuration (Elasticsearch)</div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -101,7 +101,7 @@ a.add, a.delete {
       </div>
     [% END %]
 
-    <h1>Search engine configuration</h1>
+    <h1>Search engine configuration (Elasticsearch)</h1>
     <div class="dialog message">
         Warning: Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
 
