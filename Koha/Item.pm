@@ -58,6 +58,16 @@ Koha::Item - Koha Item object class
 
 =head3 store
 
+    $item->store;
+
+$params can take an optional 'skip_modzebra_update' parameter.
+If set, the reindexation process will not happen (ModZebra not called)
+
+NOTE: This is a temporary fix to answer a performance issue when lot of items
+are added (or modified) at the same time.
+The correct way to fix this is to make the ES reindexation process async.
+You should not turn it on if you do not understand what it is doing exactly.
+
 =cut
 
 sub store {
