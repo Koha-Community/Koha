@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 113;
+use Test::More tests => 114;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -144,6 +144,19 @@ my $my_suggestion_with_budget2 = {
     accepteddate  => dt_from_string,
     note          => 'my note',
     budgetid      => $budget_id,
+};
+my $my_suggestion_without_suggestedby = {
+    title         => 'my title',
+    author        => 'my author',
+    publishercode => 'my publishercode',
+    suggestedby   => undef,
+    biblionumber  => $biblio_1->biblionumber,
+    branchcode    => 'CPL',
+    managedby     => '',
+    manageddate   => '',
+    accepteddate  => dt_from_string,
+    note          => 'my note',
+    quantity      => '', # Insert an empty string into int to catch strict SQL modes errors
 };
 
 is( CountSuggestion(), 0, 'CountSuggestion without the status returns 0' );
@@ -625,6 +638,26 @@ subtest 'EmailPurchaseSuggestions' => sub {
       C4::Letters::GetMessage( $newsuggestions_messages->[8]->{message_id} );
     is( $message9->{to_address},
         'suggestions@b.c', 'EmailAddressForSuggestions uses EmailAddressForSuggestions when set' );
+};
+
+subtest 'ModSuggestion should work on suggestions without a suggester' => sub {
+    plan tests => 2;
+
+    $dbh->do(q|DELETE FROM suggestions|);
+    my $my_suggestionid = NewSuggestion($my_suggestion_without_suggestedby);
+    $suggestion = GetSuggestion($my_suggestionid);
+    is( $suggestion->{suggestedby}, undef, "Suggestedby is undef" );
+
+    ModSuggestion(
+        {
+            suggestionid => $my_suggestionid,
+            STATUS       => 'CHECKED',
+            note         => "Test note"
+        }
+    );
+    $suggestion = GetSuggestion($my_suggestionid);
+
+    is( $suggestion->{note}, "Test note", "ModSuggestion works on suggestions without a suggester" );
 };
 
 $schema->storage->txn_rollback;
