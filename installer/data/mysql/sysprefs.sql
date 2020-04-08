@@ -110,6 +110,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('BranchTransferLimitsType','ccode','itemtype|ccode','When using branch transfer limits, choose whether to limit by itemtype or collection code.','Choice'),
 ('BrowseResultSelection','0',NULL,'Enable/Disable browsing search results fromt the bibliographic record detail page in staff client','YesNo'),
 ('CalculateFinesOnReturn','1','','Switch to control if overdue fines are calculated on return or not','YesNo'),
+('CalculateFinesOnBackdate','1','','Switch to control if overdue fines are calculated on return when backdating','YesNo'),
 ('CalendarFirstDayOfWeek','0','0|1|2|3|4|5|6','Select the first day of week to use in the calendar.','Choice'),
 ('CanMarkHoldsToPullAsLost','do_not_allow','do_not_allow|allow|allow_and_notify','Add a button to the "Holds to pull" screen to mark an item as lost and notify the patron.','Choice'),
 ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library place a hold on an item from another library','YesNo'),

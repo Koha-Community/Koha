@@ -547,6 +547,12 @@ Circulation:
             - "<br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
             - "<br /><strong>NOTE: This system preference requires FinesMode to be set to 'Calculate and charge.'</strong>"
         -
+            - pref: CalculateFinesOnBackdate
+              choices:
+                  yes: Do
+                  no: "Don't"
+            - calculate and update overdue charges when an item is returned with a backdated return date.
+        -
             - pref: UpdateItemLocationOnCheckin
               type: textarea
               syntax: text/x-yaml

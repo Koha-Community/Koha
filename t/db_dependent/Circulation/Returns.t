@@ -402,7 +402,8 @@ subtest 'BranchTransferLimitsType' => sub {
 subtest 'Backdated returns should reduce fine if needed' => sub {
     plan tests => 1;
 
-    t::lib::Mocks::mock_preference( "CalculateFinesOnReturn", 0 );
+    t::lib::Mocks::mock_preference( "CalculateFinesOnReturn",   0 );
+    t::lib::Mocks::mock_preference( "CalculateFinesOnBackdate", 1 );
 
     my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
     my $item = $builder->build_object(
