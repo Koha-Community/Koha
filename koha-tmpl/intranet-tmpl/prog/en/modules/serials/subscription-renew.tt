@@ -38,35 +38,23 @@
     <li>
     <label>Subscription length:</label>
     <select name="subtype" id="subtype">
-        [% FOREACH st IN subtypes %]
-            [% SWITCH st %]
-                [% CASE 'numberlength'%]
-                    [% IF st == subtype %]
-                        <option value="issues" selected="selected">
-                    [% ELSE %]
-                        <option value="issues">
-                    [% END %]
-                    issues
-                [% CASE 'weeklength' %]
-                    [% IF st == subtype %]
-                        <option value="weeks" selected="selected">
-                    [% ELSE %]
-                        <option value="weeks">
-                    [% END %]
-                    weeks
-                [% CASE 'monthlength' %]
-                    [% IF st == subtype %]
-                        <option value="months" selected="selected">
-                    [% ELSE %]
-                        <option value="months">
-                    [% END %]
-                    months
-                [% CASE %][% st | html %]
+        [% FOREACH st IN [['numberlength', 'issues'], ['weeklength', 'weeks'], ['monthlength', 'months']] %]
+            [% SET subtype = st.0 %]
+            [% SET value = st.1 %]
+            [% IF subscription.$subtype %]
+                <option value="[% value %]" selected="selected">
+            [% ELSE %]
+                <option value="[% value %]">
+            [% END %]
+            [% SWITCH subtype %]
+                [% CASE 'numberlength'%]issues
+                [% CASE 'weeklength'  %]weeks
+                [% CASE 'monthlength' %]months
             [% END %]
             </option>
         [% END %]
     </select>
-    <input type="text" name="sublength" id="sublength" size="3" />(enter amount in numerals)
+    <input type="text" name="sublength" id="sublength" size="3" value="[% subscription.numberlength || subscription.weeklength || subscription.monthlength %]" />(enter amount in numerals)
     <input type="hidden" name="issuelengthcount">
     </li>
 

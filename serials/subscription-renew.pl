@@ -135,7 +135,6 @@ my $libraries = Koha::Libraries->search( {}, { order_by => ['branchcode'] }, );
 $template->param(
     op => $op,
     libraries      => $libraries,
-    subtypes => [ qw( numberlength weeklength monthlength ) ],
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

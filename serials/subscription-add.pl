@@ -434,7 +434,6 @@ sub redirect_mod_subscription {
     my $subtype = $query->param('subtype');
     my $sublength = $query->param('sublength');
     my ($numberlength, $weeklength, $monthlength) = GetSubscriptionLength( $subtype, $sublength );
-    my $numberpattern = $query->param('numbering_pattern');
     my $locale = $query->param('locale');
     my $lastvalue1 = $query->param('lastvalue1');
     my $innerloop1 = $query->param('innerloop1');
