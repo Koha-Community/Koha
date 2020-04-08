@@ -27,6 +27,7 @@ use Try::Tiny;
 use DateTime;
 
 use Koha::Database;
+use Koha::DateUtils qw/ dt_from_string /;
 use Koha::Email;
 use Koha::Exceptions::Ill;
 use Koha::Illcomments;
@@ -688,7 +689,7 @@ Mark a request as completed (status = COMP).
 sub mark_completed {
     my ( $self ) = @_;
     $self->status('COMP')->store;
-    $self->completed(DateTime->now)->store;
+    $self->completed(dt_from_string())->store;
     return {
         error   => 0,
         status  => '',
