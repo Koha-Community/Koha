@@ -42,9 +42,9 @@
             [% SET subtype = st.0 %]
             [% SET value = st.1 %]
             [% IF subscription.$subtype %]
-                <option value="[% value %]" selected="selected">
+                <option value="[% value | html %]" selected="selected">
             [% ELSE %]
-                <option value="[% value %]">
+                <option value="[% value | html %]">
             [% END %]
             [% SWITCH subtype %]
                 [% CASE 'numberlength'%]issues
@@ -54,7 +54,7 @@
             </option>
         [% END %]
     </select>
-    <input type="text" name="sublength" id="sublength" size="3" value="[% subscription.numberlength || subscription.weeklength || subscription.monthlength %]" />(enter amount in numerals)
+    <input type="text" name="sublength" id="sublength" size="3" value="[% subscription.numberlength || subscription.weeklength || subscription.monthlength | html %]" />(enter amount in numerals)
     <input type="hidden" name="issuelengthcount">
     </li>
 
