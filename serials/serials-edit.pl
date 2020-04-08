@@ -404,7 +404,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     $copy++;
                 }
 
-                } # num_copies for loop
+                } # if ( $item =~ /^N/ ) {
 
                 else {
 
