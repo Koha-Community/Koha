@@ -154,8 +154,15 @@ restart_sip()
         local noLF="-n"
         [ "$verbose" != "no" ] && noLF=""
         echo $noLF `stop_sip ${name}`
+
+        MAX_ITERATION=10
         while is_sip_running ${name}; do
+            ((i++))
+            if [ $MAX_ITERATION -lt $i ]; then
+                break
+            fi
             sleep 1;
+
         done
         echo $noLF `start_sip ${name}`
     else
