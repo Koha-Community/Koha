@@ -96,7 +96,7 @@
                             <li><a href="#holds_clubsearch_pane">Clubs</a></li>
                         </ul>
                         <div id="holds_patronsearch_pane">
-                            <form id="holds_patronsearch" action="request.pl?biblionumber=[% biblionumber | html %]" method="post">
+                            <form id="holds_patronsearch" action="request.pl?biblionumbers=[% biblionumbers | html %]" method="post">
                                 <div class="hint">Enter patron card number or partial name:</div>
                                 <input type="text" size="40" id="patron" class="focus" name="findborrower" autocomplete="off" />
                                 <input type="submit" value="Search" />
@@ -791,7 +791,6 @@
                 [% IF ( reserveloop ) %]
                     <form name="T[% time | html %]" action="modrequest.pl" method="post">
                         [% IF ( multi_hold ) %]
-                            <input type = "hidden" name="multi_hold" value="1"/>
                             <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
                         [% END %]
 
@@ -1059,7 +1058,7 @@
                         .then(function(result) {
                             let url = 'request.pl?biblionumber='+biblionumber;
                             if(biblionumbers_text) {
-                                url = 'request.pl?biblionumbers='+biblionumbers_text+'&multi_hold=1';
+                                url = 'request.pl?biblionumbers='+biblionumbers_text;
                             }
                             document.location = url;
                         })

@@ -24,6 +24,7 @@
 
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use List::MoreUtils qw( uniq );
 use C4::Output;
 use C4::Reserves;
 use C4::Auth;
@@ -43,14 +44,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my @reserve_id = $query->multi_param('reserve_id');
 my @rank = $query->multi_param('rank-request');
-my @biblionumber = $query->multi_param('biblionumber');
 my @borrower = $query->multi_param('borrowernumber');
 my @reservedates = $query->multi_param('reservedate');
 my @expirationdates = $query->multi_param('expirationdate');
 my @branch = $query->multi_param('pickup');
 my @itemnumber = $query->multi_param('itemnumber');
-my $biblionumbers = $query->param('biblionumbers');
+my @biblionumber = $query->multi_param('biblionumber');
 my $count=@rank;
+
+@biblionumber = uniq @biblionumber;
 
 my $CancelBiblioNumber = $query->param('CancelBiblioNumber');
 my $CancelBorrowerNumber = $query->param('CancelBorrowerNumber');
@@ -93,10 +95,6 @@ if ( $from eq 'borrower'){
     print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
 } else {
      my $url = "/cgi-bin/koha/reserve/request.pl?";
-     if (@biblionumber > 1) {
-         $url .= "multi_hold=1&biblionumbers=$biblionumbers";
-     } else {
-         $url .= "biblionumber=$biblionumber[0]";
-     }
+     $url .= "biblionumbers=" . join('/', @biblionumber);
      print $query->redirect($url);
 }

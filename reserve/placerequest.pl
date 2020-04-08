@@ -165,7 +165,7 @@ if ( $type eq 'str8' && $borrower ) {
     if ($bad_bibs) {
         $biblionumbers .= $bad_bibs;
     }
-    print $input->redirect("request.pl?biblionumber=$biblionumber");
+    print $input->redirect("request.pl?biblionumbers=$biblionumbers");
 }
 elsif ( $borrowernumber eq '' ) {
     print $input->header();
