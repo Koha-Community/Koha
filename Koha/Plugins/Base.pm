@@ -163,12 +163,12 @@ sub get_template {
             authnotrequired => 1,
         }
     );
-
     $template->param(
         CLASS       => $self->{'class'},
         METHOD      => scalar $self->{'cgi'}->param('method'),
         PLUGIN_PATH => $self->get_plugin_http_path(),
         PLUGIN_DIR  => $self->get_plugin_dir(),
+        LANG        => C4::Languages::getlanguage($self->{'cgi'}),
     );
 
     return $template;
