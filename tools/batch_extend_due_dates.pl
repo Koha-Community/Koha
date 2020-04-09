@@ -29,6 +29,7 @@ use Koha::DateUtils qw( dt_from_string output_pref );
 
 my $input = new CGI;
 my $op = $input->param('op') // q|form|;
+my $preview_results = $input->param('preview_results');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -39,6 +40,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { tools => 'batch_extend_due_dates' },
     }
 );
+
+my @issue_ids;
 
 if ( $op eq 'form' ) {
     $template->param( view => 'form', );
@@ -102,32 +105,51 @@ elsif ( $op eq 'list' ) {
 
     my @new_due_dates;
     while ( my $checkout = $checkouts->next ) {
-        push @new_due_dates,
-          output_pref({ dt => calc_new_due_date(
-            {
-                due_date          => dt_from_string($checkout->date_due),
-                new_hard_due_date => $new_hard_due_date,
-                add_days          => $due_date_days
-            }
-          ), dateformat => 'iso' });
+        if ($preview_results) {
+            push(
+                @new_due_dates,
+                output_pref(
+                    {
+                        dt => calc_new_due_date(
+                            {
+                                due_date =>
+                                  dt_from_string( $checkout->date_due ),
+                                new_hard_due_date => $new_hard_due_date,
+                                add_days          => $due_date_days
+                            }
+                        ),
+                        dateformat => 'iso'
+                    }
+                )
+            );
+        } else {
+            push( @issue_ids, $checkout->id );
+        }
     }
 
-    $template->param(
-        checkouts         => $checkouts,
-        new_hard_due_date => $new_hard_due_date
-        ? dt_from_string($new_hard_due_date)
-        : undef,
-        due_date_days => $due_date_days,
-        new_due_dates => \@new_due_dates,
-        view          => 'list',
-    );
+    if ( $preview_results ) {
+        $template->param(
+            checkouts         => $checkouts,
+            new_hard_due_date => $new_hard_due_date
+            ? dt_from_string($new_hard_due_date)
+            : undef,
+            due_date_days => $due_date_days,
+            new_due_dates => \@new_due_dates,
+            view          => 'list',
+        );
+    } else {
+        $op = 'modify';
+    }
 }
-elsif ( $op eq 'modify' ) {
+
+if ( $op eq 'modify' ) {
 
     # We want to modify selected checkouts!
-    my @issue_ids         = $input->multi_param('issue_id');
     my $new_hard_due_date = $input->param('new_hard_due_date');
     my $due_date_days     = $input->param('due_date_days');
+
+    # @issue_ids will already be populated if we are skipping the results display
+    @issue_ids = $input->multi_param('issue_id') unless @issue_ids;
 
     $new_hard_due_date &&= dt_from_string($new_hard_due_date);
     my $checkouts =
