@@ -152,7 +152,7 @@ restart_sip()
 
         MAX_ITERATION=10
         while is_sip_running ${name}; do
-            ((i++))
+            i=$((i+1))
             if [ $MAX_ITERATION -lt $i ]; then
                 break
             fi
