@@ -52,8 +52,6 @@ sub pay {
 
     my $type = $is_writeoff ? 'WRITEOFF' : 'PAYMENT';
 
-    warn("RECORD:$borrowernumber::$amt");
-
     my $account = Koha::Account->new( { patron_id => $borrowernumber } );
 
     if ($disallow_overpayment) {
