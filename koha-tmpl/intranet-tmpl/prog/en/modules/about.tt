@@ -359,6 +359,13 @@
                         add it, pointing to the log4perl.conf file for your Koha instance.
                     </td>
                 </tr>
+                [% ELSIF config_entry.error == 'lockdir_entry_missing' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>You are missing the &lt;lockdir&gt; entry in your koha-conf.xml file. Please
+                        add it, pointing to your Koha instance's lock dir.
+                    </td>
+                </tr>
                 [% ELSIF config_entry.error == 'uploadpath_entry_missing' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>

@@ -209,6 +209,12 @@ if ( ! defined C4::Context->config('log4perl_conf') ) {
     }
 }
 
+if ( ! defined C4::Context->config('lockdir') ) {
+    push @xml_config_warnings, {
+        error => 'lockdir_entry_missing'
+    }
+}
+
 if ( ! defined C4::Context->config('upload_path') ) {
     if ( Koha::Config::SysPrefs->find('OPACBaseURL')->value ) {
         # OPACBaseURL seems to be set
