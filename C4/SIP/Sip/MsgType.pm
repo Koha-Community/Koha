@@ -458,7 +458,7 @@ sub build_patron_status {
 
         my $msg = $patron->screen_msg;
         $msg .= ' -- '. INVALID_PW if $patron_pwd && !$password_rc;
-        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server );
 
         $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server )
           if ( $server->{account}->{send_patron_home_library_in_af} );
@@ -482,7 +482,7 @@ sub build_patron_status {
         ( $protocol_version >= 2 )
           and $resp .= add_field( FID_VALID_PATRON, 'N', $server );
 
-        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
     }
 
     $resp .= add_field( FID_INST_ID, $fields->{ (FID_INST_ID) }, $server );
@@ -567,7 +567,7 @@ sub handle_checkout {
             $resp .= add_field( FID_DUE_DATE, q{}, $server );
         }
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
         $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
         if ( $protocol_version >= 2 ) {
@@ -598,7 +598,7 @@ sub handle_checkout {
         # it's not due, so leave the date blank
         $resp .= add_field( FID_DUE_DATE, '', $server );
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
         $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
         if ( $protocol_version >= 2 ) {
@@ -1031,7 +1031,7 @@ sub handle_patron_info {
         if( defined( $patron_pwd ) && !$password_rc ) {
             $msg .= ' -- ' . INVALID_PW;
         }
-        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server );
         if ( $server->{account}->{send_patron_home_library_in_af} ) {
             $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server);
         }
@@ -1056,7 +1056,7 @@ sub handle_patron_info {
         if ( $protocol_version >= 2 ) {
             $resp .= add_field( FID_VALID_PATRON, 'N', $server );
         }
-        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
     }
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1083,7 +1083,7 @@ sub handle_end_patron_session {
     $resp .= add_field( FID_INST_ID, $server->{ils}->institution, $server );
     $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) }, $server );
 
-    $resp .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1161,7 +1161,7 @@ sub handle_fee_paid {
     $resp .= add_field( FID_INST_ID,   $inst_id, $server );
     $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
     $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id, $server );
-    $resp .= maybe_add( FID_SCREEN_MSG,     $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG,     $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE,     $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1231,7 +1231,7 @@ sub handle_item_information {
             $resp .= add_field( FID_HOLD_PICKUP_DATE, timestamp($i), $server );
         }
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $item->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $item->screen_msg, $server );
         $resp .= maybe_add( FID_PRINT_LINE, $item->print_line, $server );
     }
 
@@ -1282,7 +1282,7 @@ sub handle_item_status_update {
         $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties, $server );
     }
 
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1331,7 +1331,7 @@ sub handle_patron_enable {
             $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ), $server );
         }
         $resp .= add_field( FID_VALID_PATRON, 'Y', $server );
-        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg, $server );
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line, $server );
     }
 
@@ -1397,7 +1397,7 @@ sub handle_hold {
     }
 
     $resp .= add_field( FID_INST_ID, $ils->institution, $server );
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1482,7 +1482,7 @@ sub handle_renew {
     }
 
     $resp .= add_field( FID_INST_ID, $ils->institution, $server );
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1533,7 +1533,7 @@ sub handle_renew_all {
     $resp .= join( '', map( add_field( FID_RENEWED_ITEMS,   $_ ), @renewed ), $server );
     $resp .= join( '', map( add_field( FID_UNRENEWED_ITEMS, $_ ), @unrenewed ), $server );
 
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1625,7 +1625,7 @@ sub send_acs_status {
         $msg .= add_field( FID_SUPPORTED_MSGS, $supported_msgs, $server );
     }
 
-    $msg .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server, $server );
+    $msg .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server );
 
     if (   defined( $account->{print_width} )
         && defined($print_line)
