@@ -17,9 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::Exception;
 
 BEGIN { use_ok('Koha::Script') }
+
+use File::Basename;
 
 use C4::Context;
 
@@ -43,5 +46,27 @@ is_deeply(
 
 my $interface = C4::Context->interface;
 is( $interface, 'commandline', "Context interface set correctly with no flags" );
+
+subtest 'lock_exec() tests' => sub {
+    plan tests => 2;
+
+    # Launch the sleep script
+    my $pid = fork();
+    if ( $pid == 0 ) {
+        system( dirname(__FILE__) . '/sleep.pl 2>&1' );
+        exit;
+    }
+
+    sleep 1; # Make sure we start after the fork
+    my $command = dirname(__FILE__) . '/sleep.pl';
+    my $result  = `$command 2>&1`;
+
+    like( $result, qr{Unable to acquire the lock.*}, 'Exception found' );
+
+    throws_ok
+        { Koha::Script->new({ lock_name => 'blah' }); }
+        'Koha::Exceptions::MissingParameter',
+        'Not passing the "script" parameter makes it raise an exception';
+};
 
 1;
