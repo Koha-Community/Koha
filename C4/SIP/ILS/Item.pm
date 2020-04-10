@@ -196,12 +196,12 @@ sub hold_patron_name {
 
 sub hold_patron_bcode {
     my $self = shift;
-    my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
+    my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return q{};
     my $holder = Koha::Patrons->find( $borrowernumber );
     if ($holder and $holder->cardnumber ) {
         return $holder->cardnumber;
     }
-    return;
+    return q();
 }
 
 sub destination_loc {
