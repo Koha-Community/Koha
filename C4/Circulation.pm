@@ -1622,50 +1622,6 @@ Get loan length for an itemtype, a borrower type and a branch
 sub GetLoanLength {
     my ( $categorycode, $itemtype, $branchcode ) = @_;
 
-    # Set search precedences
-    my @params = (
-        {
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            branchcode   => $branchcode,
-        },
-        {
-            categorycode => $categorycode,
-            itemtype     => undef,
-            branchcode   => $branchcode,
-        },
-        {
-            categorycode => undef,
-            itemtype     => $itemtype,
-            branchcode   => $branchcode,
-        },
-        {
-            categorycode => undef,
-            itemtype     => undef,
-            branchcode   => $branchcode,
-        },
-        {
-            categorycode => $categorycode,
-            itemtype     => $itemtype,
-            branchcode   => undef,
-        },
-        {
-            categorycode => $categorycode,
-            itemtype     => undef,
-            branchcode   => undef,
-        },
-        {
-            categorycode => undef,
-            itemtype     => $itemtype,
-            branchcode   => undef,
-        },
-        {
-            categorycode => undef,
-            itemtype     => undef,
-            branchcode   => undef,
-        },
-    );
-
     # Initialize default values
     my $rules = {
         issuelength   => 0,
@@ -1673,21 +1629,20 @@ sub GetLoanLength {
         lengthunit    => 'days',
     };
 
-    # Search for rules!
-    foreach my $rule_name (qw( issuelength renewalperiod lengthunit )) {
-        foreach my $params (@params) {
-            my $rule = Koha::CirculationRules->search(
-                {
-                    rule_name => $rule_name,
-                    %$params,
-                }
-            )->next();
+    my $found = Koha::CirculationRules->get_effective_rules( {
+        branchcode => $branchcode,
+        categorycode => $categorycode,
+        itemtype => $itemtype,
+        rules => [
+            'issuelength',
+            'renewalperiod',
+            'lengthunit'
+        ],
+    } );
 
-            if ($rule) {
-                $rules->{$rule_name} = $rule->rule_value;
-                last;
-            }
-        }
+    # Search for rules!
+    foreach my $rule_name (keys %$found) {
+        $rules->{$rule_name} = $found->{$rule_name};
     }
 
     return $rules;
