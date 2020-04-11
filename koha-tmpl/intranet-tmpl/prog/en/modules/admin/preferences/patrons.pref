@@ -1,81 +1,6 @@
 Patrons:
     General:
      -
-         - When adding new patrons or editing existing patrons, collapse the following fields from the full form (can still be expanded later)
-         - pref: CollapseFieldsPatronAddForm
-           multiple:
-               identity: "Organization/Patron identity"
-               guarantor: "Guarantor information"
-               primary_address: "Main address"
-               primary_contact: "Contact information"
-               alt_address: "Alternate address"
-               alt_contact: "Alternate contact"
-               lib_mgmt: "Library management"
-               lib_setup: "Library setup"
-               login: "OPAC/Staff login"
-               flags: "Patron account flags (existing patrons)"
-               debarments: "Patron restrictions (existing patrons)"
-               housebound: "Housebound roles"
-               additional: "Additional attributes and identifiers"
-               messaging: "Patron messaging preferences"
-     -
-         - pref: AutoEmailOpacUser
-           choices:
-               yes: Send
-               no: "Don't send"
-         - an email to newly created patrons with their account details.
-     -
-         - pref: FallbackToSMSIfNoEmail
-           choices:
-               yes: Enable
-               no: Disable
-         - Send purchase suggestion messages by SMS if no patron email is defined.
-     -
-         - pref: UseEmailReceipts
-           choices:
-               yes: Send
-               no: "Don't send"
-         - email receipts to patrons for payments and writeoffs.
-     -
-         - "Use"
-         - pref: AutoEmailPrimaryAddress
-           default: "OFF"
-           choices:
-               email: home
-               emailpro: work
-               B_email: alternate
-               cardnumber: cardnumber as
-               "OFF": first valid
-         - "patron email address for sending out emails."
-     -
-         - pref: autoMemberNum
-           choices:
-               yes: Do
-               no: "Don't"
-         - default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942).
-         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-     -
-         - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
-         - pref: BorrowerMandatoryField
-           class: multi
-         - (separate columns with |)
-         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-     -
-         - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
-         - pref: BorrowerUnwantedField
-           class: multi
-         - (separate columns with |)
-     -
-         - "Guarantors can be the following of those they guarantee:"
-         - pref: borrowerRelationship
-           class: multi
-         - (input multiple choices separated by |). Leave empty to deactivate
-     -
-         - "Borrowers can have the following titles:"
-         - pref: BorrowersTitles
-           class: multi
-         - (separate multiple choices with |)
-     -
          - pref: CheckPrevCheckout
            default: no
            choices:
@@ -84,14 +9,6 @@ Patrons:
                softno: "Unless overridden by patron category, do not"
                hardno: "Do not"
          - " check borrower checkout history to see if the current item has been checked out before."
-     -
-         - pref: EnhancedMessagingPreferences
-           choices:
-               yes: Allow
-               no: "Don't allow"
-         - "Staff to manage which notices patrons will receive and when they will receive them."
-         - "<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
-         - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
      -
          - pref: ExtendedPatronAttributes
            choices:
@@ -111,17 +28,71 @@ Patrons:
          - '[% local_currency %].'
          - Empty value means no limit. Single item caps are specified in the circulation rules matrix.
      -
-         - Login passwords for staff and patrons must be at least
-         - pref: minPasswordLength
-           class: integer
-         - characters long.
-     -
-         - pref: RequireStrongPassword
+         - pref: patronimages
            choices:
-               yes: "Require"
-               no: "Don't require"
-         - a strong password for staff and patrons
-         - (Must contain at least one digit, one lowercase and one uppercase).
+               yes: Allow
+               no: "Don't allow"
+         - images to be uploaded and shown for patrons on the staff client.
+     -
+         - By default, show
+         - pref: PatronsPerPage
+           class: integer
+         - results per page in the staff client.
+     -
+         - pref: DefaultPatronSearchFields
+           class: multi
+         - "Comma separated list defining the default fields to be used during a patron search using the \"standard\" option. If empty Koha will default to \"surname,firstname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
+     -
+         - "Show the following fields from the items database table as columns on the statistics tab on the patron record: "
+         - pref: StatisticsFields
+           class: multi
+         - "(separate fields with |, without trailing |). Default if empty: location|itype|ccode"
+     -
+         - pref: EnableBorrowerFiles
+           choices:
+               yes: Do
+               no: "Don't"
+         - enable the ability to upload and attach arbitrary files to a borrower record.
+     -
+         - pref: useDischarge
+           choices:
+               yes: Allow
+               no: "Don't allow"
+         - librarians to discharge borrowers and borrowers to request a discharge.
+     -
+         - pref: FeeOnChangePatronCategory
+           choices:
+               yes: Do
+               no: "Don't"
+         - charge a fee when a patron changes to a category with an enrollment fee.
+     -
+         - pref: TrackLastPatronActivity
+           choices:
+               yes: Do
+               no: "Don't"
+         - track last patron activity.
+         - Every time a patron will connect, the borrowers.lastseen will be updated with the current time.
+     -
+         - pref: ProtectSuperlibrarianPrivileges
+           choices:
+               yes: Allow only superlibrarians
+               no: Allow all permitted users
+         - "to access/change superlibrarian privileges."
+         - "<br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
+     -
+         - pref: AllowPatronToControlAutorenewal
+           choices:
+               yes: Allow patrons
+               no: Allow only staff
+         - "to allow/disallow auto renewal for account. If allowed a patron will be able to update their own account to allow/disallow auto renewals"
+    Membership expiry:
+     -
+         - When renewing borrowers, base the new expiry date on
+         - pref: BorrowerRenewalPeriodBase
+           choices:
+               now: current date.
+               dateexpiry: current membership expiry date.
+               combination: the latter of the current and expiry date.
      -
          - Show a notice if the patron is about to expire or has expired
          - pref: NotifyBorrowerDeparture
@@ -133,12 +104,134 @@ Patrons:
            class: integer
          - days.
          - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/membership_expiry.pl</code> cronjob. Ask your system administrator to schedule it."
+    Notices and notifications:
      -
-         - pref: patronimages
+         - pref: EnhancedMessagingPreferences
            choices:
                yes: Allow
                no: "Don't allow"
-         - images to be uploaded and shown for patrons on the staff client.
+         - "Staff to manage which notices patrons will receive and when they will receive them."
+         - "<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+         - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
+     -
+         - pref: EnhancedMessagingPreferencesOPAC
+           choices:
+               yes: Show
+               no: "Don't show"
+         - "patron messaging setting on the OPAC."
+         - "<br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
+     -
+         - pref: AutoEmailOpacUser
+           choices:
+               yes: Send
+               no: "Don't send"
+         - an email to newly created patrons with their account details.
+     -
+         - pref: UseEmailReceipts
+           choices:
+               yes: Send
+               no: "Don't send"
+         - email receipts to patrons for payments and writeoffs.
+     -
+         - "Use"
+         - pref: AutoEmailPrimaryAddress
+           default: "OFF"
+           choices:
+               email: home
+               emailpro: work
+               B_email: alternate
+               cardnumber: cardnumber as
+               "OFF": first valid
+         - "patron email address for sending out emails."
+     -
+         - pref: TalkingTechItivaPhoneNotification
+           choices:
+               yes: Enable
+               no: Disable
+         - patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported).
+     -
+         - "Use the SMS::Send::"
+         - pref: SMSSendDriver
+         - driver to send SMS messages.
+         - "<br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
+     -
+         - "Define a username/login"
+         - pref: SMSSendUsername
+         - "and a password"
+         - pref: SMSSendPassword
+         - ". Override from address with"
+         - pref: EmailSMSSendDriverFromAddress
+         - "for emails sent using \"Email\" send driver."
+     -
+         - pref: FallbackToSMSIfNoEmail
+           choices:
+               yes: Enable
+               no: Disable
+         - Send purchase suggestion messages by SMS if no patron email is defined.
+    Patron forms:
+     -
+         - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
+         - pref: BorrowerMandatoryField
+           class: multi
+         - (separate columns with |)
+         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+     -
+         - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+         - pref: BorrowerUnwantedField
+           class: multi
+         - (separate columns with |)
+     -
+         - "Borrowers can have the following titles:"
+         - pref: BorrowersTitles
+           class: multi
+         - (separate multiple choices with |)
+     -
+         - pref: autoMemberNum
+           choices:
+               yes: Do
+               no: "Don't"
+         - default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942).
+         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+     -
+         - Card numbers for patrons must be
+         - pref: CardnumberLength
+         - "characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
+         - "If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one. Maximum cannot be bigger than the database field size of 32."
+     -
+         - pref: uppercasesurnames
+           choices:
+               yes: Do
+               no: "Don't"
+         - store and display surnames in upper case.
+     -
+         - pref: PatronQuickAddFields
+           class: multi
+         - (separate columns with |)
+         - "add these fields to the patron quick add form when entering a new patron. Displays only mandatory fields and fields specified here. If applicable the guarantor form will be shown as well, individual fields in that form will be ignored."
+     -
+         - When adding new patrons or editing existing patrons, collapse the following fields from the full form (can still be expanded later)
+         - pref: CollapseFieldsPatronAddForm
+           multiple:
+               identity: "Organization/Patron identity"
+               guarantor: "Guarantor information"
+               primary_address: "Main address"
+               primary_contact: "Contact information"
+               alt_address: "Alternate address"
+               alt_contact: "Alternate contact"
+               lib_mgmt: "Library management"
+               lib_setup: "Library setup"
+               login: "OPAC/Staff login"
+               flags: "Patron account flags (existing patrons)"
+               debarments: "Patron restrictions (existing patrons)"
+               housebound: "Housebound roles"
+               additional: "Additional attributes and identifiers"
+               messaging: "Patron messaging preferences"
+    Patron relationships:
+     -
+         - "Guarantors can be the following of those they guarantee:"
+         - pref: borrowerRelationship
+           class: multi
+         - (input multiple choices separated by |). Leave empty to deactivate
      -
          - "When adding a guarantee to a guarantor patron fill the following fields in the guarantee's member entry form from the guarantors record:"
          - pref: PrefillGuaranteeField
@@ -176,63 +269,6 @@ Patrons:
                zipcode: "Main address - ZIP/Postal code"
                streetnumber: "Main address - street number"
      -
-         - By default, show
-         - pref: PatronsPerPage
-           class: integer
-         - results per page in the staff client.
-     -
-         - pref: DefaultPatronSearchFields
-           class: multi
-         - "Comma separated list defining the default fields to be used during a patron search using the \"standard\" option. If empty Koha will default to \"surname,firstname,othernames,cardnumber,userid\". Additional fields added to this preference will be added as search options in the dropdown menu on the patron search page."
-     -
-         - pref: PatronQuickAddFields
-           class: multi
-         - (separate columns with |)
-         - "add these fields to the patron quick add form when entering a new patron. Displays only mandatory fields and fields specified here. If applicable the guarantor form will be shown as well, individual fields in that form will be ignored."
-     -
-         - "Use the SMS::Send::"
-         - pref: SMSSendDriver
-         - driver to send SMS messages.
-         - "<br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
-     -
-         - "Define a username/login"
-         - pref: SMSSendUsername
-         - "and a password"
-         - pref: SMSSendPassword
-         - ". Override from address with"
-         - pref: EmailSMSSendDriverFromAddress
-         - "for emails sent using \"Email\" send driver."
-     -
-         - pref: uppercasesurnames
-           choices:
-               yes: Do
-               no: "Don't"
-         - store and display surnames in upper case.
-     -
-         - When renewing borrowers, base the new expiry date on
-         - pref: BorrowerRenewalPeriodBase
-           choices:
-               now: current date.
-               dateexpiry: current membership expiry date.
-               combination: the latter of the current and expiry date.
-     -
-         - pref: TalkingTechItivaPhoneNotification
-           choices:
-               yes: Enable
-               no: Disable
-         - patron phone notifications using Talking Tech i-tiva (overdues, predues and holds notices currently supported).
-     -
-         - "Show the following fields from the items database table as columns on the statistics tab on the patron record: "
-         - pref: StatisticsFields
-           class: multi
-         - "(separate fields with |, without trailing |). Default if empty: location|itype|ccode"
-     -
-         - pref: EnableBorrowerFiles
-           choices:
-               yes: Do
-               no: "Don't"
-         - enable the ability to upload and attach arbitrary files to a borrower record.
-     -
          - pref: AllowStaffToSetCheckoutsVisibilityForGuarantor
            choices:
                yes: Allow
@@ -244,56 +280,6 @@ Patrons:
                yes: Allow
                no: "Don't allow"
          - staff to set the ability for a patron's fines to be viewed by linked patrons in the OPAC.
-     -
-         - Card numbers for patrons must be
-         - pref: CardnumberLength
-         - "characters long. The length can be a single number to specify an exact length, a range separated by a comma (i.e., 'Min,Max'), or a maximum with no minimum (i.e., ',Max')."
-         - "If 'cardnumber' is included in the BorrowerMandatoryField list, the minimum length, if not specified here, defaults to one. Maximum cannot be bigger than the database field size of 32."
-     -
-         - pref: useDischarge
-           choices:
-               yes: Allow
-               no: "Don't allow"
-         - librarians to discharge borrowers and borrowers to request a discharge.
-     -
-         - pref: FeeOnChangePatronCategory
-           choices:
-               yes: Do
-               no: "Don't"
-         - charge a fee when a patron changes to a category with an enrollment fee.
-     -
-         - pref: EnhancedMessagingPreferencesOPAC
-           choices:
-               yes: Show
-               no: "Don't show"
-         - "patron messaging setting on the OPAC."
-         - "<br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
-     -
-         - pref: TrackLastPatronActivity
-           choices:
-               yes: Do
-               no: "Don't"
-         - track last patron activity.
-         - Every time a patron will connect, the borrowers.lastseen will be updated with the current time.
-     -
-         - Block a patron's account if it reaches
-         - pref: FailedLoginAttempts
-           class: integer
-         - failed login attempts.
-     -
-         - pref: ProtectSuperlibrarianPrivileges
-           choices:
-               yes: Allow only superlibrarians
-               no: Allow all permitted users
-         - "to access/change superlibrarian privileges."
-         - "<br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
-     -
-         - pref: AllowPatronToControlAutorenewal
-           choices:
-               yes: Allow patrons
-               no: Allow only staff
-         - "to allow/disallow auto renewal for account. If allowed a patron will be able to update their own account to allow/disallow auto renewals"
-
     Privacy:
      -
          - Use the following URL
@@ -317,3 +303,21 @@ Patrons:
          - days and remove anonymized patron accounts after
          - pref: PatronRemovalDelay
          - "days.<br>IMPORTANT: No action is performed when these delays are empty (no text). But a zero value ('0') is interpreted as no delay (do it now)! The actions are performed by the cleanup database cron job."
+    Security:
+     -
+         - Login passwords for staff and patrons must be at least
+         - pref: minPasswordLength
+           class: integer
+         - characters long.
+     -
+         - pref: RequireStrongPassword
+           choices:
+               yes: "Require"
+               no: "Don't require"
+         - a strong password for staff and patrons
+         - (Must contain at least one digit, one lowercase and one uppercase).
+     -
+         - Block a patron's account if it reaches
+         - pref: FailedLoginAttempts
+           class: integer
+         - failed login attempts.
