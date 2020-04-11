@@ -309,7 +309,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $op = $input->param( 'op' ) || '';
 my $tab = $input->param( 'tab' );
-$tab ||= 'acquisitions'; # Ideally this should be "local-use" but preferences.pl
+$tab ||= 'accounting'; # Ideally this should be "local-use" but preferences.pl
                          # does not presently support local use preferences
 
 my $highlighted;
