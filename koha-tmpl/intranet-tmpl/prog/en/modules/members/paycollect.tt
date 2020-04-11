@@ -5,6 +5,7 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% PROCESS 'payments.inc' %]
+[% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
     [% IF type == 'WRITEOFF' %]
@@ -83,7 +84,7 @@
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
-    <input type="hidden" name="description" id="description" value="[% description | html %]" />
+    <input type="hidden" name="description" id="description" value="[% individual_description | html %]" />
     <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
     <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding | html %]" />
@@ -108,7 +109,8 @@
             <td>
                 [% individual_description | html %]
             </td>
-            <td>[% debit_type_code | html %]</td>
+            [% line.debit_type_code = debit_type_code %]
+            <td>[% PROCESS account_type_description account=line %]</td>
             <td class="debit">[% amount | format('%.2f') %]</td>
             <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
         </tr></tbody>
@@ -162,7 +164,7 @@
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber | html %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual | html %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber | html %]" />
-    <input type="hidden" name="description" id="description" value="[% description | html %]" />
+    <input type="hidden" name="description" id="description" value="[% individual_description | html %]" />
     <input type="hidden" name="debit_type_code" id="debit_type_code" value="[% debit_type_code | html %]" />
     <input type="hidden" name="amount" id="amount" value="[% amount | html %]" />
     <input type="hidden" name="accountlines_id" id="accountlines_id" value="[% accountlines_id | html %]" />
@@ -181,7 +183,8 @@
     <tfoot><tr><td colspan="3">Total amount outstanding:</td><td>[% amountoutstanding | format('%.2f') %]</td></tr></tfoot>
     <tbody><tr>
             <td>[% individual_description | html %]</td>
-            <td>[% debit_type_code | html %]</td>
+            [% line.debit_type_code = debit_type_code %]
+            <td>[% PROCESS account_type_description account=line %]</td>
             <td class="debit">[% amount | format('%.2f') %]</td>
             <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
         </tr></tbody>
