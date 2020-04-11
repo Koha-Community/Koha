@@ -573,7 +573,7 @@
                     [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
                         [% IF ( suggestions_loo.volumedesc ) %]; Volume:<i>[% suggestions_loo.volumedesc | html %]</i> [% END %]
                         [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn | html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode | html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle | html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<div class="note"><i class="fa fa-comment"></i> [% suggestions_loo.note | html %]</div>[% END %]
-                        [% IF suggestions_loo.archived %]<br /><i class="fa fa-archive"> Archived[% END %]
+                        [% IF suggestions_loo.archived %]<br /><i class="fa fa-archive"></i> Archived[% END %]
                 </td>
                 <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby | html %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby | html %])[% END %]</a>
