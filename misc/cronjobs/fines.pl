@@ -36,6 +36,7 @@ use C4::Overdues;
 use Getopt::Long;
 use Carp;
 use File::Spec;
+use Try::Tiny;
 
 use Koha::Calendar;
 use Koha::DateUtils;
@@ -75,6 +76,19 @@ if ($help) {
     print $usage;
     exit;
 }
+
+my $script_handler = Koha::Script->new({ script => $0 });
+
+try {
+    $script_handler->lock_exec;
+}
+catch {
+    my $message = "Skipping execution of $0 ($_)";
+    print STDERR $message
+        if $verbose;
+    cronlogaction( $message );
+    exit;
+};
 
 cronlogaction();
 
