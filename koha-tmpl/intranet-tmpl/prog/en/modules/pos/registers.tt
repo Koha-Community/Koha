@@ -21,7 +21,7 @@
                 <main>
                     [% IF ( error_registers ) %]
                     <div id="error_message" class="dialog alert">
-                        You must have at least one cash register associated with this branch before you
+                        You must have at least one cash register associated with this library before you
                         can record payments.
                     </div>
                     [% ELSE %]
@@ -29,7 +29,7 @@
                         <button type="button" class="cashup_all btn btn-default" data-toggle="modal" data-target="#confirmCashupAllModal"><i class="fa fa-money"></i> Cashup all</button>
                     </div>
 
-                    <h1>Branch transaction details for [% library.branchname | html %]</h1>
+                    <h1>Library transaction details for [% library.branchname | html %]</h1>
 
                     <h2>Summary</h2>
                     <ul>
