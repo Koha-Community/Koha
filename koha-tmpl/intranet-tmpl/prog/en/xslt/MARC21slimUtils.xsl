@@ -383,9 +383,9 @@
 	  <span class="label"><xsl:value-of select="$langLabel"/></span>
 	  <xsl:for-each select="$langNode">
 	    <span>
-	      <xsl:attribute name="class">lang_code-<xsl:value-of select="substring(translate(., ' .-;|#', '_'),1,3)"/></xsl:attribute>
+	      <xsl:attribute name="class">lang_code-<xsl:value-of select="translate(., ' .-;|#', '_')"/></xsl:attribute>
 	      <xsl:call-template name="languageCodeText">
-		<xsl:with-param name="code" select="substring(.,1,3)"/>
+		<xsl:with-param name="code" select="translate(., ' .-;|#', '')"/>
 	      </xsl:call-template>
 	      <xsl:if test="position() != last()">
 	        <span class="sep"><xsl:text>, </xsl:text></span>
