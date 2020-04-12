@@ -101,7 +101,8 @@ sub generate_footer {
     my ($file_handle) = @_;
     print {$file_handle} <<"FOOTER";
             <xsl:otherwise>
-                <xsl:text>Unknown language code</xsl:text>
+                <!-- when 041\$a is mapped to an authorised value list, this will show the description -->
+                <xsl:value-of select="\$code" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
