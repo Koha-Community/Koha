@@ -2841,7 +2841,8 @@ CREATE TABLE `alert` (
   `externalid` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`alertid`),
   KEY `borrowernumber` (`borrowernumber`),
-  KEY `type` (`type`,`externalid`)
+  KEY `type` (`type`,`externalid`),
+  CONSTRAINT alert_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
