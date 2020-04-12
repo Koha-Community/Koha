@@ -45,7 +45,13 @@
                         [% ELSE %]
                             <div class="dialog message">
                         [% END %]
-                            <b><p>[% label_batch_msg | html %]</p></b>
+                            <p><b>
+                                [% IF ( label_batch_msg == "error" ) %]
+                                    Error attempting to create label batch. Please ask your system administrator to check the log for more details.
+                                [% ELSE %]
+                                    Label <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% label_batch_msg | uri %]" >batch #[% label_batch_msg | html %]</a> created.
+                                [% END %]
+                            </b></p>
                         </div>
                     [% END %]
 
@@ -353,7 +359,11 @@
                                     </td>
                                     <td>[% batch_lis.upload_timestamp | html %]</td>
                                     <td>[% batch_lis.num_records | html %]</td>
-                                    <td>[% batch_lis.num_items | html %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
+                                    <td>[% batch_lis.num_items | html %]
+                                        [% IF ( batch_lis.num_items && batch_lis.import_status == 'imported' ) %]
+                                            (<a href="[% batch_lis.script_name | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">Create label batch</a>)
+                                        [% END %]
+                                    </td>
                                     <td class="actions">
                                         [% IF ( batch_lis.can_clean ) %]
                                             <form method="post" action="[% batch_lis.script_name | html %]" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean">

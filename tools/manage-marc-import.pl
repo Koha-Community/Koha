@@ -69,12 +69,12 @@ if ($op eq "create_labels") {
 	#create a batch of labels, then lose $op & $import_batch_id so we get back to import batch list.
 	my $label_batch_id = create_labelbatch_from_importbatch($import_batch_id);
         if ($label_batch_id == -1) {
-            $template->param(   label_batch_msg => "Error attempting to create label batch. Please ask your system administrator to check the log for more details.",
+            $template->param(   label_batch_msg => "error",
                                 message_type    => 'alert',
             );
         }
         else {
-            $template->param(   label_batch_msg => "Label batch #$label_batch_id created.",
+            $template->param(   label_batch_msg => $label_batch_id,
                                 message_type    => 'dialog',
             );
         }
