@@ -2473,8 +2473,7 @@ sub PrepareItemrecordDisplay {
                         #----- itemtypes
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
                         my $itemtypes = Koha::ItemTypes->search_with_localization;
-                        push @authorised_values, ""
-                          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                        push @authorised_values, "";
                         while ( my $itemtype = $itemtypes->next ) {
                             push @authorised_values, $itemtype->itemtype;
                             $authorised_lib{$itemtype->itemtype} = $itemtype->translated_description;
@@ -2485,7 +2484,7 @@ sub PrepareItemrecordDisplay {
 
                         #---- class_sources
                     } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
-                        push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                        push @authorised_values, "";
 
                         my $class_sources = GetClassSources();
                         my $default_source = C4::Context->preference("DefaultClassificationSource");
@@ -2505,8 +2504,7 @@ sub PrepareItemrecordDisplay {
                             $tagslib->{$tag}->{$subfield}->{authorised_value},
                             $branch_limit ? $branch_limit : ()
                         );
-                        push @authorised_values, ""
-                          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                        push @authorised_values, "";
                         while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
                             push @authorised_values, $value;
                             $authorised_lib{$value} = $lib;
