@@ -33,10 +33,10 @@
                         [% IF ( op_add ) %]
                             [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
                                     <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
-                                    <h2 class="TooManySuggestionsText">You may have only [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in last [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</h2>
+                                    <h2 class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</h2>
                             [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
                                     <h1 class="TooManySuggestions">You cannot place any more suggestions</h1>
-                                    <h2 class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</h2>
+                                    <h2 class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.</h2>
                             [% ELSE %]
                             <h1>Enter a new purchase suggestion</h1>
 
@@ -240,9 +240,9 @@
                                 <div class="alert alert-[% m.type | html %]">
                                     [% SWITCH m.code %]
                                     [% CASE 'total_suggestions' %]
-                                        The suggestion has not been added. You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxTotalSuggestions') | html %] last [% Koha.Preference('NumberOfSuggestionDays') | html %] days).
+                                        The suggestion has not been added. You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxTotalSuggestions') | html %] in [% Koha.Preference('NumberOfSuggestionDays') | html %] days).
                                     [% CASE 'too_many' %]
-                                        The suggestion has not been added. You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.
+                                        The suggestion has not been added. You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]). Once the library has processed those suggestions you will be able to place more.
                                     [% CASE 'already_exists' %]
                                         The suggestion has not been added. A suggestion with this title already exists.
                                     [% CASE 'success_on_inserted' %]
@@ -284,9 +284,9 @@
                                     [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                         <div id="toolbar" class="toolbar clearfix">
                                         [% IF ( Koha.Preference('MaxTotalSuggestions') != '' && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
-                                                <p class="TooManySuggestionsText">You may have only <b>[% Koha.Preference('MaxTotalSuggestions') | html %]</b> suggestions in last <b>[% Koha.Preference('NumberOfSuggestionDays') | html %]</b> days.</p>
+                                                <p class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</p>
                                         [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                                <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
+                                                <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
                                         [% ELSE %]
                                                 <a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a>
                                         [% END %]
@@ -400,9 +400,9 @@
                                 [% END %]
                                 [% IF ( loggedinusername || ( Koha.Preference( 'AnonSuggestions' ) == 1 ) ) %]
                                     [% IF ( Koha.Preference('MaxTotalSuggestions') != ''  && patrons_total_suggestions_count >= Koha.Preference('MaxTotalSuggestions') ) %]
-                                        <p class="TooManySuggestionsText">You may have only <b>[% Koha.Preference('MaxTotalSuggestions') | html %]</b> suggestions in last <b>[% Koha.Preference('NumberOfSuggestionDays') | html %]</b> days.</p>
+                                        <p class="TooManySuggestionsText">You may only add up to [% Koha.Preference('MaxTotalSuggestions') | html %] suggestions in [% Koha.Preference('NumberOfSuggestionDays') | html %] days.</p>
                                     [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != ''  && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
-                                        <p class="TooManySuggestionsText">You have reached your limit of suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more.</p>
+                                        <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more.</p>
                                     [% ELSE %]
                                         <p><a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a></p>
                                     [% END %]
