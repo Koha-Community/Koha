@@ -3028,7 +3028,7 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    accepteddate date default NULL, -- date the suggestion was marked as accepted
    rejectedby INT(11) default NULL, -- borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
    rejecteddate date default NULL, -- date the suggestion was marked as rejected
-  `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)
+  `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, REJECTED, or a value from the SUGGEST_STATUS authorised value category)
   `note` LONGTEXT, -- note entered on the suggestion
   `author` varchar(80) default NULL, -- author of the suggested item
   `title` varchar(255) default NULL, -- title of the suggested item
