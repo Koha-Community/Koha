@@ -252,6 +252,7 @@
                                                 <td class="title">
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% ISSUE.title | html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield | html %][% END %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
+                                                    [% IF ( ISSUE.onsite_checkout ) %] <i class="onsite_checkout">(On-site checkout)</i>[% END %]
                                                 </td>
 
                                                 <td class="author">[% ISSUE.author | html %]</td>
