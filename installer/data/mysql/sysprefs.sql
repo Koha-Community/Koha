@@ -530,6 +530,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RESTBasicAuth','0',NULL,'If enabled, Basic authentication is enabled for the REST API.','YesNo'),
 ('RESTdefaultPageSize','20','','Default page size for endpoints listing objects','Integer'),
 ('RESTOAuth2ClientCredentials','0',NULL,'If enabled, the OAuth2 client credentials flow is enabled for the REST API.','YesNo'),
+('RESTPublicAnonymousRequests','1',NULL,'If enabled, the API will allow anonymous access to public routes that don\'t require authenticated access'.','YesNo'),
 ('RESTPublicAPI','1',NULL,'If enabled, the REST API will expose the /public endpoints.','YesNo'),
 ('RestrictedPageLocalIPs','',NULL,'Beginning of IP addresses considered as local (comma separated ex: "127.0.0,127.0.2")','Free'),
 ('RestrictedPageContent','',NULL,'HTML content of the restricted page','TextArea'),

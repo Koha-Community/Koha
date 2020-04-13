@@ -18,6 +18,12 @@ Web services:
                   no: "Disable"
             - "the OAuth2 client credentials grant for the REST API. Requires Net::OAuth2::AuthorizationServer installed. [EXPERIMENTAL]"
         -
+            - pref: RESTPublicAnonymousRequests
+              choices:
+                yes: "Enable"
+                no: "Disable"
+            - anonymous access to public routes (that don't require authenticated access)
+        -
             - pref: RESTPublicAPI
               choices:
                   yes: Enable
