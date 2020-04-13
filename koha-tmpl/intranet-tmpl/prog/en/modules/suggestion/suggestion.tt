@@ -378,7 +378,7 @@
                 <td><input type="text" id="suggesteddate" name="suggesteddate" class="datepicker" size="10" maxlength="10" value="[% suggesteddate | $KohaDates %]"/>[% INCLUDE 'date-format.inc' %]</td>
                 <td id="tdsuggestedby"><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby | html %]"/>[% IF ( suggestedby_patron.borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_patron.borrowernumber | uri %]">[% suggestedby_patron.surname | html %], [% suggestedby_patron.firstname | html %] ([% suggestedby_patron.cardnumber | html %])</a>  [% Branches.GetName( suggestedby_patron.branchcode ) | html %] ([% suggestedby_patron.category.description | html %])[% END %]
                 </td>
-                <td><a href="#" id="suggestor_search" class="btn btn-default">Set to patron</a></td>
+                <td><a href="#" id="suggester_search" class="btn btn-default">Set to patron</a></td>
             </tr>
             <tr>
                 <th><label for="accepteddate">Accepted on:</label> </th>
