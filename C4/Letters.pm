@@ -1517,7 +1517,7 @@ sub _get_tt_params {
             module   => 'Koha::Holds',
             singular => 'hold',
             plural   => 'holds',
-            fk       => [ 'borrowernumber', 'biblionumber' ],
+            pk       => 'reserve_id',
         },
         serial => {
             module   => 'Koha::Serials',
