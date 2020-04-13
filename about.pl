@@ -214,6 +214,14 @@ if ( ! defined C4::Context->config('lockdir') ) {
         error => 'lockdir_entry_missing'
     }
 }
+else {
+    unless ( -w C4::Context->config('lockdir') ) {
+        push @xml_config_warnings, {
+            error   => 'lockdir_not_writable',
+            lockdir => C4::Context->config('lockdir')
+        }
+    }
+}
 
 if ( ! defined C4::Context->config('upload_path') ) {
     if ( Koha::Config::SysPrefs->find('OPACBaseURL')->value ) {

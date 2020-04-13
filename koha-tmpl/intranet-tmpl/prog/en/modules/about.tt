@@ -366,6 +366,13 @@
                         add it, pointing to your Koha instance's lock dir.
                     </td>
                 </tr>
+                [% ELSIF config_entry.error == 'lockdir_not_writable' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>The configured &lt;lockdir&gt; entry in your koha-conf.xml file points to a
+                        non-writable directory ([% config_entry.lockdir | html %]).
+                    </td>
+                </tr>
                 [% ELSIF config_entry.error == 'uploadpath_entry_missing' %]
                 <tr>
                     <th scope="row"><b>Warning</b></th>
