@@ -132,7 +132,7 @@ $schema->storage->txn_rollback;
 
 subtest 'UpdateFine tests' => sub {
 
-    plan tests => 68;
+    plan tests => 70;
 
     $schema->storage->txn_begin;
 
@@ -429,6 +429,37 @@ subtest 'UpdateFine tests' => sub {
     $fine3 = $fines->next;
     is( $fine3->amount+0, 30, "Third fine reduced" );
     is( $fine3->amountoutstanding+0, 10, "Third fine amount outstanding is reduced" );
+
+    t::lib::Mocks::mock_preference( 'MaxFine', '7.2' );
+    my $patron_1    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account   = $patron_1->account;
+    $account->add_debit({ type => 'OVERDUE', amount => '6.99', interface => 'TEST'});
+    $account->add_debit({ type => 'OVERDUE', amount => '.10', interface => 'TEST'});
+    $account->add_debit({ type => 'OVERDUE', amount => '.10', interface => 'TEST'});
+    $account->add_debit({ type => 'OVERDUE', amount => '.01', interface => 'TEST'});
+    my $item_1     = $builder->build_sample_item();
+    my $checkout_1 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { itemnumber => $item_1->itemnumber, borrowernumber => $patron_1->id }
+        }
+    );
+    UpdateFine(
+        {
+            issue_id       => $checkout_1->issue_id,
+            itemnumber     => $item_1->itemnumber,
+            borrowernumber => $patron_1->borrowernumber,
+            amount         => '.1',
+            due            => $checkout_1->date_due
+        }
+    );
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron_1->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        4,    "New amount should be 0 so no fine added" );
+    ok( C4::Circulation::AddReturn( $item_1->barcode, $item_1->homebranch, 1), "Returning the item and forgiving fines succeeds");
+
 
     $schema->storage->txn_rollback;
 };
