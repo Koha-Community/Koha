@@ -64,7 +64,7 @@ sub hash_password {
     # Set the cost to 8 and append a NULL
         $settings = '$2a$08$'.en_base64(generate_salt('weak', 16));
     }
-    # Encrypt it
+    # Hash it
     return bcrypt($password, $settings);
 }
 
