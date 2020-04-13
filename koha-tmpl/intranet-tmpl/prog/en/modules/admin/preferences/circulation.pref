@@ -157,7 +157,7 @@ Circulation:
                   no: "Don't allow"
             - patrons to submit notes about checked out items.
 
-    Checkout Policy:
+    Checkout policy:
         -
             - pref: OnSiteCheckoutAutoCheck
               choices:
@@ -513,7 +513,7 @@ Circulation:
             - "<br />ccode: [NEWFIC,NULL,DVD]"
             - "<br />itype: [NEWBK,\"\"]"
             - "<br /> Note: the word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
-    Checkin Policy:
+    Checkin policy:
         -
             - pref: HoldsAutoFill
               choices:
@@ -602,7 +602,7 @@ Circulation:
                   yes: Store
                   no: "Don't store"
             - the last patron to return an item. This setting is independent of opacreadinghistory/AnonymousPatron.
-    Holds Policy:
+    Holds policy:
         -
             - In the staff client, split the holds queue into separate tables by
             - pref: HoldsSplitQueue
@@ -836,7 +836,7 @@ Circulation:
             - pref: UpdateItemWhenLostFromHoldList
               type: textarea
               syntax: text/x-yaml
-    Interlibrary Loans:
+    Interlibrary loans:
         -
             - pref: ILLModule
               default: 0
@@ -876,7 +876,7 @@ Circulation:
                   yes: Check
                   no: Don't check
             - external sources for availability during the request process
-    Fines Policy:
+    Fines policy:
         -
             - pref: finesCalendar
               type: choice
@@ -972,7 +972,7 @@ Circulation:
               type: textarea
               syntax: javascript
               class: code
-    Self Checkout:
+    Self checkout:
         -
             - "Include the following JavaScript on all pages in the web-based self checkout:"
             - pref: SCOUserJS
@@ -1047,7 +1047,7 @@ Circulation:
             - pref: SelfCheckAllowByIPRanges
               class: short
             - (Leave blank if not used. Use ranges or simple ip addresses separated by spaces, like <code>192.168.1.1 192.168.0.0/24</code>.)
-    Course Reserves:
+    Course reserves:
         -
             - pref: UseCourseReserves
               choices:
@@ -1072,14 +1072,14 @@ Circulation:
                   yes: Enable
                   no: Disable
             - "housebound module"
-    Stockrotation module:
+    Stock rotation module:
         -
             - pref: StockRotation
               choices:
                   yes: Enable
                   no: Disable
             - "the stock rotation module"
-    Article Requests:
+    Article requests:
         -
             - pref: ArticleRequests
               choices:
@@ -1128,7 +1128,7 @@ Circulation:
                 pages: Pages
                 chapters: Chapters
             -
-    Return Claims:
+    Return claims:
         -
             - When marking a checkout as "claims returned",
             - pref: ClaimReturnedChargeFee
