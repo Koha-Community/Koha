@@ -147,8 +147,8 @@ sub checkout {
     elsif ( !$item ) {
         $circ->screen_msg("Invalid Item");
     }
-    elsif ( $item->{patron}
-        && !_ci_cardnumber_cmp( $item->{patron}, $patron_id ) )
+    elsif ( $item->{borrowernumber}
+        && !_ci_cardnumber_cmp( $item->{borrowernumber}, $patron_id ) )
     {
         $circ->screen_msg("Item checked out to another patron");
     }
@@ -159,10 +159,10 @@ sub checkout {
 
             # If the item is already associated with this patron, then
             # we're renewing it.
-            $circ->renew_ok( $item->{patron}
-                  && _ci_cardnumber_cmp( $item->{patron}, $patron_id ) );
+            $circ->renew_ok( $item->{borrowernumber}
+                  && _ci_cardnumber_cmp( $item->{borrowernumber}, $patron_id ) );
 
-            $item->{patron}   = $patron_id;
+            $item->{borrowernumber}   = $patron_id;
             $item->{due_date} = $circ->{due};
             push( @{ $patron->{items} }, $item_id );
             $circ->desensitize( !$item->magnetic_media );
@@ -226,7 +226,7 @@ sub checkin {
     } elsif ( $data->{messages}->{WasLost} && !$circ->ok && C4::Context->preference("BlockReturnOfLostItems") ) {
             $circ->screen_msg("Item lost, return not allowed");
             syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item lost");
-    } elsif ( !$item->{patron} ) {
+    } elsif ( !$item->{borrowernumber} ) {
         if ( $checked_in_ok ) { # Mark checkin ok although book not checked out
             $circ->ok( 1 );
             syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - using checked_in_ok");
@@ -235,8 +235,8 @@ sub checkin {
             syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item not checked out");
         }
     } elsif ( $circ->ok ) {
-        $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{patron} ) );
-        delete $item->{patron};
+        $circ->patron( $patron = C4::SIP::ILS::Patron->new( $item->{borrowernumber} ) );
+        delete $item->{borrowernumber};
         delete $item->{due_date};
         $patron->{items} = [ grep { $_ ne $item_id } @{ $patron->{items} } ];
     } else {
