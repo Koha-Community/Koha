@@ -84,7 +84,7 @@ try {
 }
 catch {
     my $message = "Skipping execution of $0 ($_)";
-    print STDERR $message
+    print STDERR "$message\n"
         if $verbose;
     cronlogaction( $message );
     exit;
