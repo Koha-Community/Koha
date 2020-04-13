@@ -522,17 +522,25 @@ You have [% count %] items due
 
         my $code = 'HOLD_SLIP';
 
-        C4::Reserves::AddReserve(
+        my $reserve_id1 = C4::Reserves::AddReserve(
             {
                 branchcode     => $library->{branchcode},
                 borrowernumber => $patron->{borrowernumber},
                 biblionumber   => $biblio1->{biblionumber},
                 notes          => "a note",
                 itemnumber     => $item1->{itemnumber},
-                found          => 'W'
             }
         );
-        C4::Reserves::AddReserve(
+        my $reserve_id2 = C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->{branchcode},
+                borrowernumber => $patron->{borrowernumber},
+                biblionumber   => $biblio1->{biblionumber},
+                notes          => "a note",
+                itemnumber     => $item1->{itemnumber},
+            }
+        );
+        my $reserve_id3 = C4::Reserves::AddReserve(
             {
                 branchcode     => $library->{branchcode},
                 borrowernumber => $patron->{borrowernumber},
@@ -568,13 +576,13 @@ You have [% count %] items due
    <li><<reserves.waitingdate>></li>
 </ul>
 <p>Notes:
-<pre><<reserves.reservenotes>></pre>
+<pre><<reserves.reserve_id>>=<<reserves.reservenotes>></pre>
 </p>
 EOF
 
         reset_template( { template => $template, code => $code, module => 'circulation' } );
-        my $letter_for_item1 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio1->{biblionumber} } );
-        my $letter_for_item2 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio2->{biblionumber} } );
+        my $letter_for_item1 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, reserve_id => $reserve_id1 } );
+        my $letter_for_item2 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, reserve_id => $reserve_id3 } );
 
         my $tt_template = <<EOF;
 <h5>Date: [% today | \$KohaDates with_hours => 1 %]</h5>
@@ -602,13 +610,13 @@ EOF
    <li>[% hold.waitingdate | \$KohaDates %]</li>
 </ul>
 <p>Notes:
-<pre>[% hold.reservenotes %]</pre>
+<pre>[% hold.reserve_id %]=[% hold.reservenotes %]</pre>
 </p>
 EOF
 
         reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
-        my $tt_letter_for_item1 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio1->{biblionumber} } );
-        my $tt_letter_for_item2 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio2->{biblionumber} } );
+        my $tt_letter_for_item1 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, reserve_id => $reserve_id1 } );
+        my $tt_letter_for_item2 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, reserve_id => $reserve_id3 } );
 
         is( $tt_letter_for_item1->{content}, $letter_for_item1->{content}, );
         is( $tt_letter_for_item2->{content}, $letter_for_item2->{content}, );
