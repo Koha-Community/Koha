@@ -155,7 +155,7 @@ This method initializes the locking configuration.
 sub _initialize_locking {
     my ($self) = @_;
 
-    my $lock_dir = C4::Context->config('lock_dir')
+    my $lock_dir = C4::Context->config('lockdir')
         // C4::Context->temporary_directory();
 
     my $lock_name = $self->{lock_name} // fileparse( $self->{script} );
