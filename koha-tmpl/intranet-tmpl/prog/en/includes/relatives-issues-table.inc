@@ -8,7 +8,7 @@
                     <th scope="col">Due date</th>
                     <th scope="col">Title</th>
                     <th scope="col">Item type</th>
-                    <th scope="col">Collection code</th>
+                    <th scope="col">Collection</th>
                     <th scope="col">Location</th>
                     <th scope="col">Checked out on (hidden, unformatted)</th>
                     <th scope="col">Checked out on</th>

@@ -125,7 +125,7 @@
                                           [% IF ( Koha.Preference('BranchTransferLimitsType') == 'itemtype' ) %]
                                               <li>Item type: <b>[% ItemTypes.GetDescription( errmsgloo.code ) | html %]</b></li>
                                           [% ELSE %]
-                                              <li>Collection code: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) | html %]</b></li>
+                                              <li>Collection: <b>[% AuthorisedValues.GetByCode( 'CCODE', errmsgloo.code ) | html %]</b></li>
                                           [% END %]
                                           <li>Destination library: <b>[% Branches.GetName( errmsgloo.tbr ) | html %]</b></li>
                                       </ol>
@@ -180,7 +180,7 @@
                 <th class="tf-location">Shelving location</th>
                 <th class="tf-itemcallnumber">Call number</th>
                 <th class="tf-itemtype">Item type</th>
-                <th class="tf-ccode">Collection code</th>
+                <th class="tf-ccode">Collection</th>
                 <th class="tf-destination">Destination</th>
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
