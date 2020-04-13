@@ -63,8 +63,9 @@ sub under {
 
         # /api/v1/{namespace}
         my $namespace = $c->req->url->to_abs->path->[2] // '';
+        my $is_public = ($namespace eq 'public') ? 1 : 0;
 
-        if ( $namespace eq 'public'
+        if ( $is_public
             and !C4::Context->preference('RESTPublicAPI') )
         {
             Koha::Exceptions::Authorization->throw(
@@ -76,7 +77,7 @@ sub under {
             $status = 1;
         }
         else {
-            $status = authenticate_api_request($c);
+            $status = authenticate_api_request($c, { is_public => $is_public });
         }
 
     } catch {
@@ -132,7 +133,7 @@ if authorization is required and user has required permissions to access.
 =cut
 
 sub authenticate_api_request {
-    my ( $c ) = @_;
+    my ( $c, $params ) = @_;
 
     my $user;
 
@@ -233,7 +234,10 @@ sub authenticate_api_request {
 
     $c->stash('koha.user' => $user);
 
-    if ( !$authorization ) {
+    if ( !$authorization and
+         ( $params->{is_public} and
+          ( C4::Context->preference('RESTPublicAnonymousRequests') or
+            $user) ) ) {
         # We do not need any authorization
         # Check the parameters
         validate_query_parameters( $c, $spec );
