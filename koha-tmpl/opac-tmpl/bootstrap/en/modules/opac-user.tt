@@ -263,6 +263,7 @@
                                                 <td class="title">
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=ISSUE %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
+                                                    [% IF ( ISSUE.onsite_checkout ) %] <i class="onsite_checkout">(On-site checkout)</i>[% END %]
                                                 </td>
 
                                                 <td class="author">[% ISSUE.author | html %]</td>
