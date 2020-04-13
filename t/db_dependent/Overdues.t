@@ -132,7 +132,7 @@ $schema->storage->txn_rollback;
 
 subtest 'UpdateFine tests' => sub {
 
-    plan tests => 59;
+    plan tests => 68;
 
     $schema->storage->txn_begin;
 
@@ -229,6 +229,36 @@ subtest 'UpdateFine tests' => sub {
         { order_by       => { '-asc' => 'accountlines_id' } }
     );
     is( $fines->count,        2,    "New fine added for second checkout" );
+    $fine = $fines->next;
+    is( $fine->amount+0, 80, "First fine amount unchanged" );
+    is( $fine->amountoutstanding+0, 80, "First fine amountoutstanding unchanged" );
+    my $fine2 = $fines->next;
+    is( $fine2->amount+0, 20, "Second fine capped at '20' by MaxFine" );
+    is( $fine2->amountoutstanding+0, 20, "Second fine amountoutstanding capped at '20' by MaxFine" );
+    is( $fine2->issue_id, $checkout2->issue_id, "Second fine is associated with the correct issue" );
+    is( $fine2->itemnumber, $checkout2->itemnumber, "Second fine is associated with the correct item" );
+    is( $fine->amount + $fine2->amount, '100', "Total fines = 100" );
+    is( $fine->amountoutstanding + $fine2->amountoutstanding, '100', "Total outstanding = 100" );
+    # Total : Outstanding : MaxFine
+    #  100  :     100     :   100
+
+    # A day passes, the item is still overdue, update fine is called again
+    # we don't expect to increase above MaxFine of 100
+    UpdateFine(
+        {
+            issue_id       => $checkout2->issue_id,
+            itemnumber     => $item2->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '40',
+            due            => $checkout2->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        2,    "Existing fine updated for second checkout, no new fine added" );
     $fine = $fines->next;
     is( $fine->amount+0, 80, "First fine amount unchanged" );
     is( $fine->amountoutstanding+0, 80, "First fine amountoutstanding unchanged" );
