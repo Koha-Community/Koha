@@ -546,7 +546,6 @@ sub UpdateFine {
             }
             else {
                 $accountline = $overdue;
-                next;
             }
         }
         $total_amount_other += $overdue->amountoutstanding;
