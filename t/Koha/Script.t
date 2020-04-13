@@ -48,7 +48,8 @@ my $interface = C4::Context->interface;
 is( $interface, 'commandline', "Context interface set correctly with no flags" );
 
 subtest 'lock_exec() tests' => sub {
-    plan tests => 2;
+
+    plan tests => 3;
 
     # Launch the sleep script
     my $pid = fork();
@@ -62,6 +63,18 @@ subtest 'lock_exec() tests' => sub {
     my $result  = `$command 2>&1`;
 
     like( $result, qr{Unable to acquire the lock.*}, 'Exception found' );
+
+    $pid = fork();
+    if ( $pid == 0 ) {
+        system( dirname(__FILE__) . '/sleep.pl 2>&1' );
+        exit;
+    }
+
+    sleep 1; # Make sure we start after the fork
+    $command = dirname(__FILE__) . '/wait.pl';
+    $result  = `$command 2>&1`;
+
+    is( $result, 'YAY!', 'wait.pl successfully waits for the lock' );
 
     throws_ok
         { Koha::Script->new({ lock_name => 'blah' }); }
