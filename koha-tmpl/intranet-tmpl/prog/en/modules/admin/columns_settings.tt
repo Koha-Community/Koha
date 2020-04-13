@@ -3,6 +3,13 @@
 [% SET footerjs = 1 %]
 [% SET panel_id = 0 %]
 [% BLOCK pagelist %]
+    [% IF module.keys and module.keys.size > 0 %]
+        Jump to:
+        [% FOR pagename IN module.keys %]
+            <a href="#[% pagename | url %]">[% pagename | html %]</a>
+            [% UNLESS loop.last %]<span class="separator"> | </span>[% END %]
+        [% END %]
+    [% END %]
     <div class="pagelist">
         <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
             <input type="hidden" name="action" value="save" />
@@ -11,7 +18,7 @@
             [% SET panel_id = panel_id + 1 %]
             [% IF module.keys and module.keys.size > 0 %]
                 [% FOR pagename IN module.keys %]
-                    <h5>[% pagename | html %]</h5>
+                    <h4 class="page_name" id="[% pagename | html %]">Page: [% pagename | html %]</h4>
                     [% SET tables = module %]
                     [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
                         [% FOR tablename IN tables.$pagename.keys.sort %]
@@ -24,8 +31,9 @@
                                         Currency
                                     [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
                                         Items Editor
+                                    [% ELSE %]
+                                        Table id: [% tablename | html %]
                                     [% END %]
-                                    (id=[% tablename | html %])
                                 </caption>
                                 <thead>
                                     <tr>
@@ -81,7 +89,9 @@
                                 </tbody>
                             </table>
                         [% END %]
-                        <input type="submit" value="Save" />
+                        <fieldset class="action">
+                            <input type="submit" value="Save" />
+                        </fieldset>
                     [% ELSE %]
                         There is no table to configure for this module.
                     [% END %]
@@ -96,6 +106,16 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Columns settings</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<style>
+    caption {
+        font-size: 115%;
+    }
+    .page_name {
+        border-top: 1px solid #b9d8d9;
+        margin-top: 1em;
+        padding-top: 1em;
+    }
+</style>
 </head>
 
 <body id="admin_tables" class="admin">
@@ -111,81 +131,81 @@
 
                             <h2>Columns settings</h2>
                             <div id="modules">
-                                <h3><a href="#acqui">Acquisition</a></h3>
+                                <div class="panel_header"><a href="#acqui">Acquisition</a></div>
                                 <div id="acqui">
-                                    <h4>Acquisition tables</h4>
+                                    <h3>Acquisition tables</h3>
                                     [% PROCESS pagelist module=modules.acqui modulename="acqui" %]
                                 </div>
 
-                                <h3><a href="#admin">Administration</a></h3>
+                                <div class="panel_header"><a href="#admin">Administration</a></div>
                                 <div id="admin">
-                                    <h4>Administration tables</h4>
+                                    <h3>Administration tables</h3>
                                     [% PROCESS pagelist module=modules.admin modulename="admin" %]
                                 </div>
 
-                                <h3><a href="#authorities">Authorities</a></h3>
+                                <div class="panel_header"><a href="#authorities">Authorities</a></div>
                                 <div id="authorities">
-                                    <h4>Authorities tables</h4>
+                                    <h3>Authorities tables</h3>
                                     [% PROCESS pagelist module=modules.authorities modulename="authorities" %]
                                 </div>
 
-                                <h3><a href="#catalog">Catalog</a></h3>
+                                <div class="panel_header"><a href="#catalog">Catalog</a></div>
                                 <div id="catalogue">
-                                    <h4>Catalogue tables</h4>
+                                    <h3>Catalogue tables</h3>
                                     [% PROCESS pagelist module=modules.catalogue modulename="catalogue" %]
                                 </div>
 
-                                <h3><a href="#cataloguing">Cataloging</a></h3>
+                                <div class="panel_header"><a href="#cataloguing">Cataloging</a></div>
                                 <div id="cataloguing">
-                                    <h4>Cataloguing tables</h4>
+                                    <h3>Cataloguing tables</h3>
                                     [% PROCESS pagelist module=modules.cataloguing modulename="cataloguing" %]
                                 </div>
 
-                                <h3><a href="#circulation">Circulation</a></h3>
+                                <div class="panel_header"><a href="#circulation">Circulation</a></div>
                                 <div id="circulation">
-                                    <h4>Circulation tables</h4>
+                                    <h3>Circulation tables</h3>
                                     [% PROCESS pagelist module=modules.circ modulename="circ" %]
                                 </div>
 
-                                <h3><a href="#coursereserves">Course reserves</a></h3>
+                                <div class="panel_header"><a href="#coursereserves">Course reserves</a></div>
                                 <div id="coursereserves">
-                                    <h4>Course reserves tables</h4>
+                                    <h3>Course reserves tables</h3>
                                     [% PROCESS pagelist module=modules.coursereserves modulename="coursereserves" %]
                                 </div>
 
-                                <h3><a href="#ill">Interlibrary loans</a></h3>
+                                <div class="panel_header"><a href="#ill">Interlibrary loans</a></div>
                                 <div id="ill">
-                                    <h4>Interlibrary loans tables</h4>
+                                    <h3>Interlibrary loans tables</h3>
                                     [% PROCESS pagelist module=modules.illrequests modulename="illrequests" %]
                                 </div>
 
-                                <h3><a href="#members">Patrons</a></h3>
+                                <div class="panel_header"><a href="#members">Patrons</a></div>
                                 <div id="members">
-                                    <h4>Patrons tables</h4>
+                                    <h3>Patrons tables</h3>
                                     [% PROCESS pagelist module=modules.members modulename="members" %]
                                 </div>
 
-                                <h3><a href="#tools">Tools</a></h3>
+                                <div class="panel_header"><a href="#tools">Tools</a></div>
                                 <div id="tools">
-                                    <h4>Tools tables</h4>
+                                    <h3>Tools tables</h3>
                                     [% PROCESS pagelist module=modules.tools modulename="tools" %]
                                 </div>
 
-                                <h3><a href="#opac">OPAC</a></h3>
+                                <div class="panel_header"><a href="#opac">OPAC</a></div>
                                 <div id="opac">
-                                    <h4>OPAC tables</h4>
+                                    <h3>OPAC tables</h3>
                                     [% PROCESS pagelist module=modules.opac modulename="opac" %]
                                 </div>
 
-                                <h3><a href="#reports">Reports</a></h3>
+                                <div class="panel_header"><a href="#reports">Reports</a></div>
                                 <div id="reports">
-                                    <h4>Reports tables</h4>
+                                    <h3>Reports tables</h3>
                                     [% PROCESS pagelist module=modules.reports modulename="reports" %]
                                 </div>
 
-                                <h3><a href="#serials">Serials</a></h3>
+                                <div class="panel_header"><a href="#serials">Serials</a></div>
                                 <div id="serials">
-                                    <h4>Serials tables</h4>
+                                    <h3>Serials tables</h3>
                                     [% PROCESS pagelist module=modules.serials modulename="serials" %]
                                 </div>
 
@@ -207,7 +227,7 @@
             var accordion = $( "#modules" ).accordion({
                     collapsible: true,
                     autoHeight: false,
-                    header: "h3",
+                    header: ".panel_header",
                 [%- IF panel -%]
                     [%# we were asked to show a specific panel, usually on update %]
                     active: [%- panel | html -%]
