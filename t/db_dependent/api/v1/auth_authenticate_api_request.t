@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 
 use Module::Load::Conditional qw(can_load);
@@ -134,6 +134,39 @@ subtest 'cookie-based tests' => sub {
           ->status_is( 401, 'Anonymous session on permission protected resource returns 401' )
           ->json_is( { error => 'Authentication failure.' } );
     };
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'anonymous requests to public API' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $password = 'AbcdEFG123';
+    my $userid   = 'tomasito';
+    # Add a patron
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $patron->set_password({ password => $password });
+    # Add a biblio
+    my $biblio_id = $builder->build_sample_biblio()->biblionumber;
+
+    # Enable the public API
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
+    # Disable anonymous requests on the public namespace
+    t::lib::Mocks::mock_preference( 'RESTPublicAnonymousRequests', 0 );
+
+    $t->get_ok("/api/v1/public/biblios/" . $biblio_id => { Accept => 'application/marc' })
+      ->status_is( 401, 'Unauthorized anonymous attempt to access a resource' );
+
+    # Disable anonymous requests on the public namespace
+    t::lib::Mocks::mock_preference( 'RESTPublicAnonymousRequests', 1 );
+
+    $t->get_ok("/api/v1/public/biblios/" . $biblio_id => { Accept => 'application/marc' })
+      ->status_is( 200, 'Successfull anonymous access to a resource' );
 
     $schema->storage->txn_rollback;
 };
