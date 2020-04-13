@@ -378,3 +378,24 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
     </tr>
 </tfoot>
 </table>', 'print', 'default');
+
+INSERT INTO letter (module, code, name, title, content, message_transport_type) VALUES ('circulation', 'AUTO_RENEWALS', 'Notification of automatic renewal', 'Automatic renewal notice',
+"Dear [% borrower.firstname %] [% borrower.surname %],
+[% IF checkout.auto_renew_error %]
+The following item, [% biblio.title %], has not been renewed because:
+[% IF checkout.auto_renew_error == 'too_many' %]
+You have reached the maximum number of checkouts possible.
+[% ELSIF checkout.auto_renew_error == 'on_reserve' %]
+This item is on hold for another patron.
+[% ELSIF checkout.auto_renew_error == 'restriction' %]
+You are currently restricted.
+[% ELSIF checkout.auto_renew_error == 'overdue' %]
+You have overdue items.
+[% ELSIF checkout.auto_renew_error == 'auto_too_late' %]
+It\'s too late to renew this item.
+[% ELSIF checkout.auto_renew_error == 'auto_too_much_oweing' %]
+Your total unpaid fines are too high.
+[% END %]
+[% ELSE %]
+The following item, [% biblio.title %], has correctly been renewed and is now due on [% checkout.date_due %]
+[% END %]", 'email');
