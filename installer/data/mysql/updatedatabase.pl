@@ -21529,6 +21529,19 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 20754, "Remove double accepted list shares" );
 }
 
+$DBversion = '19.12.00.068';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences
+          (variable,value,explanation,options,type)
+        VALUES
+          ('AuthFailureLog','','If enabled, log authentication failures',NULL,'YesNo'),
+          ('AuthSuccessLog','','If enabled, log successful authentications',NULL,'YesNo')
+    |);
+
+    NewVersion( $DBversion, 21190, "Add prefs AuthFailureLog and AuthSuccessLog");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
