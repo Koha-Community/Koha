@@ -348,7 +348,7 @@ subtest '/dbic_merge_prefetch' => sub {
     my $t = Test::Mojo->new;
 
     $t->get_ok('/dbic_merge_prefetch')->status_is(200)
-      ->json_is( '/prefetch/0' => 'biblio' )
+      ->json_is( '/prefetch/0' => { 'biblio' => 'orders' } )
       ->json_is( '/prefetch/1' => 'item' );
 
     $t->get_ok('/dbic_merge_prefetch_recursive')->status_is(200)
