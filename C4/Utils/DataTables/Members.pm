@@ -57,7 +57,7 @@ sub search {
     # Do that after iTotalQuery!
     if ( defined $branchcode and $branchcode ) {
         @restricted_branchcodes = @restricted_branchcodes
-            ? grep { $_ eq $branchcode } @restricted_branchcodes
+            ? grep ({ $_ eq $branchcode } @restricted_branchcodes)
                 ? ($branchcode)
                 : (undef) # Do not return any results
             : ($branchcode);
