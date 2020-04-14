@@ -93,6 +93,9 @@
                                 [% IF field == "duplicate_email" %]
                                     <li>This email address already exists in our database.</li>
                                 [% END %]
+                                [% IF field == "email_match" %]
+                                    <li>Emails do not match! <a href="#borrower_repeat_email">confirm email address</a></li>
+                                [% END %]
                             [% END %]
                         </ul>
                         <span>Please correct and resubmit.</span>
@@ -554,6 +557,19 @@
                                     <input type="text" id="borrower_email" name="borrower_email" value="[% borrower.email | html %]" />
                                     [% IF mandatory.defined('email') %]<span class="required">Required</span>[% END %]
                                 </li>
+
+                                [% IF action != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
+                                    <li>
+                                        [% IF mandatory.defined('email') %]
+                                            <label for="borrower_repeat_email" class="required">Confirm primary email:</label>
+                                        [% ELSE %]
+                                            <label for="borrower_repeat_email">Confirm primary email:</label>
+                                        [% END %]
+
+                                        <input type="text" id="borrower_repeat_email" name="borrower_repeat_email" autocomplete=off>
+                                        [% IF mandatory.defined('email') %]<span class="required">Required</span>[% END %]
+                                    </li>
+                                [% END %]
                             [% END %]
 
                             [% UNLESS hidden.defined('emailpro') %]
@@ -1004,6 +1020,9 @@
                     borrower_email: {
                         email: true
                     },
+                    borrower_repeat_email: {
+                        equalTo: '#borrower_email'
+                    },
                     borrower_emailpro: {
                         email: true
                     },
@@ -1129,6 +1148,21 @@
         $('#borrower_dateofbirth').val('');
         return false;
     });
+
+    [% IF action != 'edit' and Koha.Preference('PatronSelfRegistrationConfirmEmail') %]
+        $("#borrower_email").bind("cut copy paste", function(e){
+            e.preventDefault();
+            $("#borrower_email").bind("contextmenu", function(e){
+                e.preventDefault();
+            });
+        });
+        $("#borrower_repeat_email").bind("cut copy paste", function(e){
+            e.preventDefault();
+            $("#borrower_repeat_email").bind("contextmenu", function(e){
+                e.preventDefault();
+            });
+        });
+    [% END %]
     //]]>
     </script>
 [% INCLUDE 'calendar.inc' %]

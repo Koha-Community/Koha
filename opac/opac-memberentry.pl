@@ -433,7 +433,13 @@ sub CheckForInvalidFields {
             if ( $patrons_with_same_email ) {
                 push @invalidFields, "duplicate_email";
             }
+        } elsif ( C4::Context->preference("PatronSelfRegistrationConfirmEmail")
+            && $borrower->{'email'} ne $borrower->{'repeat_email'}
+            && !defined $borrower->{borrowernumber} ) {
+            push @invalidFields, "email_match";
         }
+        # email passed all tests, so prevent attempting to store repeat_email
+        delete $borrower->{'repeat_email'};
     }
     if ($borrower->{'emailpro'}) {
         push(@invalidFields, "emailpro") if (!Email::Valid->address($borrower->{'emailpro'}));
