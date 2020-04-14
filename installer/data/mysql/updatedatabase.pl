@@ -21526,8 +21526,7 @@ if( CheckVersion( $DBversion ) ) {
           a.shelfnumber=b.shelfnumber
     |);
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 20754: Remove double accepted list shares)\n";
+    NewVersion( $DBversion, 20754, "Remove double accepted list shares" );
 }
 
 # SEE bug 13068
