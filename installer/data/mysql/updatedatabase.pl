@@ -21542,6 +21542,17 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 21190, "Add prefs AuthFailureLog and AuthSuccessLog");
 }
 
+$DBversion = '19.12.00.069';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'suggestions', 'archived' ) ) {
+        $dbh->do(q|
+            ALTER TABLE suggestions ADD COLUMN archived INT(1) NOT NULL DEFAULT 0 AFTER `STATUS`;
+        |);
+    }
+
+    NewVersion( $DBversion, 22784, "Add a new suggestions.archived column");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
