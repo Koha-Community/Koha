@@ -45,7 +45,8 @@ sub register {
 
     my @plugins;
 
-    if ( C4::Context->config("enable_plugins") )
+    if ( C4::Context->config("enable_plugins") and
+         ! C4::Context->needs_install ) # Koha is installed
     {
         # plugin needs to define a namespace
         @plugins = Koha::Plugins->new()->GetPlugins(
@@ -53,10 +54,11 @@ sub register {
                 method => 'api_namespace',
             }
         );
-    }
 
-    foreach my $plugin ( @plugins ) {
-        $spec = inject_routes( $spec, $plugin, $validator );
+        foreach my $plugin ( @plugins ) {
+            $spec = inject_routes( $spec, $plugin, $validator );
+        }
+
     }
 
     return $spec;
