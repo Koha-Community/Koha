@@ -42,6 +42,8 @@ $(document).ready(function(){
         window.close();
     });
     $(".focus").focus();
+    $(".js-show").show();
+    $(".js-hide").hide();
 
     if( $(window).width() < 768 ){
         facetMenu("hide");

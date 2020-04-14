@@ -294,7 +294,12 @@
                                                 <td class="title">
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=ISSUE %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
+
                                                     [% IF ( ISSUE.onsite_checkout ) %] <i class="onsite_checkout">(On-site checkout)</i>[% END %]
+
+                                                    [% IF ( Koha.Preference('OpacStarRatings') == 'all' ) %]
+                                                        [% INCLUDE 'user-star-ratings.inc' item=ISSUE %]
+                                                    [% END %]
                                                 </td>
 
                                                 <td class="author">[% ISSUE.author | html %]</td>
@@ -779,8 +784,6 @@
 
         $(document).ready(function(){
             $('#opac-user-views').tabs();
-            $(".js-show").show();
-            $(".js-hide").hide();
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
             $(".suspend-until").prop("readonly",1);
 
@@ -964,7 +967,14 @@
             }
         });
         //]]>
+        var borrowernumber = "[% borrowernumber | html %]";
+        var MSG_YOUR_RATING = _("Your rating: %s, ");
+        var MSG_AVERAGE_RATING = _("Average rating: %s (%s votes)");
     </script>
+    [% IF ( Koha.Preference('OpacStarRatings') == 'all' ) %]
+        [% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %]
+        [% Asset.js("js/ratings.js") | $raw %]
+    [% END %]
     [% IF Koha.Preference('OverDriveCirculation') %]
     [% Asset.js("js/overdrive.js") | $raw %]
     <script>

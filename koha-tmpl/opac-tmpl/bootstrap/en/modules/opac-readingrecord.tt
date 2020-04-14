@@ -145,24 +145,9 @@
                                                 [% END %]
                                                 <p class="results-summary item-details">[% issue.author | html %]</p>
 
-                                                    [% IF ( Koha.Preference( 'OpacStarRatings' ) == 'all' && issue.my_rating ) %]
-                                                        <div class="results_summary ratings">
-                                                            <div class="br-wrapper br-theme-fontawesome-stars">
-                                                                <div class="br-widget br-readonly">
-                                                                    [% FOREACH i IN [ 1 2 3 4 5  ] %]
-                                                                        [% IF issue.my_rating.rating_value == i %]
-                                                                            <a href="#" class="br-selected br-current"></a>
-                                                                        [% ELSIF issue.my_rating.rating_value > i %]
-                                                                            <a href="#" class="br-selected"></a>
-                                                                        [% ELSE %]
-                                                                            <a href="#"></a>
-                                                                        [% END %]
-                                                                    [% END %]
-                                                                </div>
-                                                            </div>
-                                                            Rated on [% issue.my_rating.timestamp | $KohaDates %]
-                                                        </div> <!-- / .results_summary -->
-                                                    [% END # / IF OpacStarRatings %]
+                                                    [% IF ( Koha.Preference( 'OpacStarRatings' ) == 'all' ) %]
+                                                        [% INCLUDE 'user-star-ratings.inc' item=issue %]
+                                                    [% END %]
 
                                                 </td>
                                                 <td>
@@ -235,5 +220,12 @@
             }
         });
     });
+    var borrowernumber = "[% borrowernumber | html %]";
+    var MSG_YOUR_RATING = _("Your rating: %s, ");
+    var MSG_AVERAGE_RATING = _("Average rating: %s (%s votes)");
 </script>
+    [% IF ( Koha.Preference('OpacStarRatings') == 'all' ) %]
+        [% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %]
+        [% Asset.js("js/ratings.js") | $raw %]
+    [% END %]
 [% END %]

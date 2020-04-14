@@ -43,6 +43,7 @@ use Koha::Patrons;
 use Koha::Patron::Messages;
 use Koha::Patron::Discharge;
 use Koha::Patrons;
+use Koha::Ratings;
 use Koha::Token;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
@@ -265,6 +266,12 @@ if ( $pending_checkouts->count ) { # Useless test
         if ( $itemtype ) {
             $issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
             $issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
+        }
+
+        if ( C4::Context->preference('OpacStarRatings') eq 'all' ) {
+            my $ratings = Koha::Ratings->search({ biblionumber => $issue->{biblionumber} });
+            $issue->{ratings} = $ratings;
+            $issue->{my_rating} = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
         }
 
         $issue->{biblio_object} = Koha::Biblios->find($issue->{biblionumber});
