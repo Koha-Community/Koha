@@ -23,11 +23,13 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
 
-<h3>Discharge</h3>
+[% INCLUDE 'members-toolbar.inc' %]
+
+<h1>Discharge</h1>
 [% FOR message IN messages %]
     <div class="dialog [% message.type | html %]">
     [% IF message.code == "unable_to_generate_pdf" %]
-        An error occurs when generating the pdf file.
+        An error occurs when generating the PDF file.
         Please contact the administrator to resolve this problem.
     [% END %]
     </div>

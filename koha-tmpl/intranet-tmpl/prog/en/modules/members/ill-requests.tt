@@ -27,7 +27,8 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
-                <h2>ILL requests history</h2>
+                [% INCLUDE 'members-toolbar.inc' %]
+                <h1>ILL requests history</h1>
                 [% INCLUDE 'ill-list-table.inc' %]
             </main>
         </div> <!-- .col-sm-10.col-sm-push-2 -->
@@ -40,6 +41,8 @@
     </div> <!-- .row -->
 
     [% MACRO jsinclude BLOCK %]
+        [% INCLUDE 'str/members-menu.inc' %]
+        [% Asset.js("js/members-menu.js") | $raw %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'columns_settings.inc' %]
         [% INCLUDE 'calendar.inc' %]
