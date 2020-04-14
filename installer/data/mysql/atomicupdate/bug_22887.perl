@@ -1,6 +1,10 @@
 $DBversion = 'XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
     unless ( index_exists('authorised_values', 'av_uniq') ) {
+        $dbh->do(q|
+            DELETE FROM authorised_values
+            WHERE category="COUNTRY" AND authorised_value="CC" AND lib="Keeling"
+        |);
         my $duplicates = $dbh->selectall_arrayref(q|
             SELECT category, authorised_value, COUNT(concat(category, ':', authorised_value)) AS c
             FROM authorised_values
