@@ -76,7 +76,11 @@ my $mandatory = GetMandatoryFields($action);
 
 my @libraries = Koha::Libraries->search;
 if ( my @libraries_to_display = split '\|', C4::Context->preference('PatronSelfRegistrationLibraryList') ) {
-    @libraries = map { my $b = $_; my $branchcode = $_->branchcode; grep { $_ eq $branchcode } @libraries_to_display ? $b : () } @libraries;
+    @libraries = map {
+        my $b          = $_;
+        my $branchcode = $_->branchcode;
+        ( grep { $_ eq $branchcode } @libraries_to_display ) ? $b : ()
+    } @libraries;
 }
 my ( $min, $max ) = C4::Members::get_cardnumber_length();
 if ( defined $min ) {
