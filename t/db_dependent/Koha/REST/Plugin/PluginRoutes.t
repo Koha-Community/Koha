@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Mojo;
 use Test::Warn;
 
@@ -114,6 +114,56 @@ subtest 'Disabled plugins tests' => sub {
     # TODO: remove () if minimum version is bumped to at least 1.28.
     ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'} || exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'},
         'Plugin enabled, route defined' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'needs_install use case tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # enable plugins
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+
+    my $good_plugin;
+
+    my $plugins = Koha::Plugins->new;
+    $plugins->InstallPlugins;
+
+    my @plugins = $plugins->GetPlugins( { all => 1 } );
+    foreach my $plugin (@plugins) {
+        $good_plugin = $plugin
+            if $plugin->{metadata}->{description} eq 'Test plugin';
+    }
+
+    # mock Version before initializing the API class
+    t::lib::Mocks::mock_preference('Version', undef);
+    # initialize Koha::REST::V1 after mocking
+    my $t      = Test::Mojo->new('Koha::REST::V1');
+    my $routes = get_defined_routes($t);
+
+    # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
+    # TODO: remove () if minimum version is bumped to at least 1.28.
+    ok(
+        !exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'}
+          && !exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'},
+        'Plugin enabled, route not defined as C4::Context->needs_install is true'
+    );
+
+    t::lib::Mocks::mock_preference('Version', '3.0.0');
+    # re-initialize Koha::REST::V1 after mocking
+    $t      = Test::Mojo->new('Koha::REST::V1');
+    $routes = get_defined_routes($t);
+
+    # Support placeholders () and <>  (latter style used starting with Mojolicious::Plugin::OpenAPI@1.28)
+    # TODO: remove () if minimum version is bumped to at least 1.28.
+    ok(
+        exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'}
+          || exists $routes->{'/contrib/testplugin/patrons/<:patron_id>/bother'},
+        'Plugin enabled, route defined as C4::Context->needs_install is false'
+    );
 
     $schema->storage->txn_rollback;
 };
