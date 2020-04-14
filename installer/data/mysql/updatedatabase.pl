@@ -21553,6 +21553,18 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22784, "Add a new suggestions.archived column");
 }
 
+$DBversion = '19.12.00.070';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+            INSERT IGNORE INTO systempreferences (variable,value,explanation,type) VALUES
+                ('MaxTotalSuggestions','','Number of total suggestions used for time limit with NumberOfSuggestionDays','Free'),
+                ('NumberOfSuggestionDays','','Number of days that will be used to determine the MaxTotalSuggestions limit','Free')
+            });
+
+    NewVersion( $DBversion, 22774, "Limit purchase suggestion in a specified time period");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
