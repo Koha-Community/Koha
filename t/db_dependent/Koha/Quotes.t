@@ -98,7 +98,7 @@ subtest "get_daily_quote_for_interface" => sub {
         timestamp   => DateTime::Format::MySQL->format_datetime(dt_from_string),
     };
 
-    t::lib::Mocks::mock_preference('QuoteOfTheDay', '');
+    t::lib::Mocks::mock_preference('QuoteOfTheDay', 0);
 
     ##Set interface and get nothing because syspref is not set.
     C4::Context->interface('opac');
@@ -106,12 +106,12 @@ subtest "get_daily_quote_for_interface" => sub {
     ok(not($quote), "'QuoteOfTheDay'-syspref not set so nothing returned");
 
     ##Set 'QuoteOfTheDay'-syspref to not include current interface 'opac'
-    t::lib::Mocks::mock_preference('QuoteOfTheDay', 'intra commandline sip2 api yo-mama');
+    t::lib::Mocks::mock_preference('QuoteOfTheDay', 'intranet');
     $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id);
     ok(not($quote), "'QuoteOfTheDay'-syspref doesn't include 'opac'");
 
     ##Set 'QuoteOfTheDay'-syspref to include current interface 'opac'
-    t::lib::Mocks::mock_preference('QuoteOfTheDay', 'intraopaccommandline');
+    t::lib::Mocks::mock_preference('QuoteOfTheDay', 'opac,intranet');
     $quote = Koha::Quote->get_daily_quote_for_interface(id => $quote_1->id);
     is_deeply($quote, $expected_quote, "Got the expected quote");
 
