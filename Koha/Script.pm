@@ -135,7 +135,7 @@ sub lock_exec {
 
     my $lock_params = ($params->{wait}) ? LOCK_EX : LOCK_EX | LOCK_NB;
 
-    open our $lock_handle, '>', $self->{lock_file}
+    open my $lock_handle, '>', $self->{lock_file}
         or Koha::Exceptions::Exception->throw("Unable to open the lock file ".$self->{lock_file}.": $!");
     $self->{lock_handle} = $lock_handle;
     flock( $lock_handle, $lock_params )
