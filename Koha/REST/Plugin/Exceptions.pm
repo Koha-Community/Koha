@@ -64,7 +64,10 @@ sub register {
                 $type = "(" . ref($exception) . ")";
             }
 
-            my $message = "$method $path: unhandled exception $type\<\<$exception\>\>";
+            my $exception_string = "$exception";
+            chomp($exception_string);
+
+            my $message = "$method $path: unhandled exception $type\<\<$exception_string\>\>";
 
             $c->app->log->error("$message");
 
