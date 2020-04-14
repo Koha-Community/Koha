@@ -78,13 +78,12 @@ else {
         $input->param('trange_t') ? $input->param('trange_t')
       : $last_cashup              ? $last_cashup->timestamp
       :                             '';
-    $template->param( trange_t => $transactions_range_to );
+    my $end               = dt_from_string($transactions_range_to);
+
     if ($transactions_range_from) {
-        $template->param( trange_f => $transactions_range_from );
 
         my $dtf               = $schema->storage->datetime_parser;
         my $start             = dt_from_string($transactions_range_from);
-        my $end               = dt_from_string($transactions_range_to);
         my $past_accountlines = Koha::Account::Lines->search(
             {
                 register_id => $registerid,
@@ -97,7 +96,9 @@ else {
             }
         );
         $template->param( past_accountlines => $past_accountlines );
+        $template->param( trange_f => output_pref({dt => $start, dateonly => 1}));
     }
+    $template->param( trange_t => output_pref({dt => $end, dateonly => 1}));
 
     my $op = $input->param('op') // '';
     if ( $op eq 'cashup' ) {
