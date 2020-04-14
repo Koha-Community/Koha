@@ -847,7 +847,7 @@ legend:hover {
                                                 [% END %]
                                                     Sort 1:
                                                 </label>
-                                                [% PROCESS 'av-build-dropbox.inc' name="sort1", category="Bsort1", default=sort1, size = 20 %]
+                                                [% PROCESS 'av-build-dropbox.inc' name="sort1", category="Bsort1", default=sort1, empty=1, size = 20 %]
                                                 [% IF ( mandatorysort1 ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
@@ -863,7 +863,7 @@ legend:hover {
                                                 [% END %]
                                                     Sort 2:
                                                 </label>
-                                                [% PROCESS 'av-build-dropbox.inc' name="sort2", category="Bsort2", default=sort2, size = 20 %]
+                                                [% PROCESS 'av-build-dropbox.inc' name="sort2", category="Bsort2", default=sort2, empty=1, size = 20 %]
                                                 [% IF ( mandatorysort2 ) %]
                                                     <span class="required">Required</span>
                                                 [% END %]
