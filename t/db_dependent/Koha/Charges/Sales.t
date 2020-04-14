@@ -194,15 +194,6 @@ subtest 'purchase tests' => sub {
         }
     );
 
-    my $payment_type = Koha::AuthorisedValue->new(
-        {
-            category         => 'PAYMENT_TYPE',
-            authorised_value => 'CASH',
-            lib              => 'Cash transaction',
-            lib_opac         => 'Cash transaction',
-        }
-    )->store;
-
     my $item1 = Koha::Account::DebitType->new(
         {
             code        => 'COPYRANDOM',
