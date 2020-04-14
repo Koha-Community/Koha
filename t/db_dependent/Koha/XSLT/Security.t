@@ -121,7 +121,7 @@ EOT
 $xslt_file = mytempfile($xslt);
 $engine->print_warns(1);
 warning_like { $output= $engine->transform( "<ignored/>", $xslt_file ); }
-    qr/I\/O warning : failed to load external entity/,
+    qr/I\/O warning : failed to load (external entity|HTTP resource)/,
     'Remote import does not fail on read_net';
 
 sub mytempfile {
