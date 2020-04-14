@@ -3014,7 +3014,7 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
    lastmodificationby INT(11) default NULL, -- borrowernumber for the librarian who edit the suggestion for the last time
    lastmodificationdate date default NULL, -- date of the last modification
   `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)
-  `archived` INT(1) NOT NULL DEFAULT 0, -- is the suggestion archived?
+  `archived` TINYINT(1) NOT NULL DEFAULT 0, -- is the suggestion archived?
   `note` LONGTEXT, -- note entered on the suggestion
   `author` varchar(80) default NULL, -- author of the suggested item
   `title` varchar(255) default NULL, -- title of the suggested item

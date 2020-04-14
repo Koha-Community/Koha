@@ -21546,7 +21546,7 @@ $DBversion = '19.12.00.069';
 if( CheckVersion( $DBversion ) ) {
     if( !column_exists( 'suggestions', 'archived' ) ) {
         $dbh->do(q|
-            ALTER TABLE suggestions ADD COLUMN archived INT(1) NOT NULL DEFAULT 0 AFTER `STATUS`;
+            ALTER TABLE suggestions ADD COLUMN archived TINYINT(1) NOT NULL DEFAULT 0 AFTER `STATUS`;
         |);
     }
 

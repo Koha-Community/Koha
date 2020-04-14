@@ -99,7 +99,7 @@ __PACKAGE__->table("suggestions");
 
 =head2 archived
 
-  data_type: 'integer'
+  data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
@@ -259,7 +259,7 @@ __PACKAGE__->add_columns(
     size => 10,
   },
   "archived",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "note",
   { data_type => "longtext", is_nullable => 1 },
   "author",
@@ -484,8 +484,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-27 06:55:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:shHAnURjxdagQdgu90WQuw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-14 20:04:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BrvQGdgqpODl23IfwbqdUw
 
 __PACKAGE__->belongs_to(
   "suggester",
