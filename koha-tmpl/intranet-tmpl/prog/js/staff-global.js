@@ -179,6 +179,7 @@ function logOut(){
     }
     clearHoldFor();
     removeLastBorrower();
+    localStorage.removeItem("sql_reports_activetab");
 }
 
 function openHelp(){

@@ -1374,6 +1374,9 @@
         }
 
         $(document).ready(function(){
+
+            var activeTab = localStorage.getItem("sql_reports_activetab");
+
             $("body").on('click',".fetch_chart_data",function(){
                 if( [% unlimited_total || 0 | $raw %] > 1000 ){
                     if( confirm("Fetching full chart data for reports with many rows can cause performance issues. Are you sure you with to chart this report?") ){
@@ -1559,39 +1562,17 @@
                     },
                 }, columns_settings);
 
-                var rtabs = $("#tabs").tabs();
-                rtabs.on("tabsactivate", function(e, ui) {
-                    $("#subgroup_filter option").each(function() {
-                        if($(this).val().length > 0) {
-                            $(this).remove();
-                        }
-                    });
-                    rtable.fnFilter('', 4);
-                    rtable.fnFilter('', 5);
-                    rtable.fnSetColumnVis(4, true);
-                    rtable.fnSetColumnVis(5, true);
-
-                    var g_id = $(ui.newTab).children().attr('id');
-                    var g_name = $(ui.newTab).text();
-                    if ( g_name == _("All") ) {
-                        g_id = "";
-                        g_name = "";
-                    }
-
-                    if (g_id && g_id.length > 0) {
-                        rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
-                        rtable.fnSetColumnVis(4, false);
-                        for(var i in group_subgroups[g_id]) {
-                            $("#subgroup_filter").append(
-                                '<option value="' + group_subgroups[g_id][i][0] + '">'
-                                + group_subgroups[g_id][i][1] + '</option>'
-                            );
-                        }
-                        $("#subgroup_filter_block").show();
-                    } else {
-                        $("#subgroup_filter_block").hide();
+                var rtabs = $("#tabs").tabs({
+                    create: function( e, ui ){
+                        tabsInit( ui, rtable );
+                    },
+                    activate: function( e, ui ){
+                        tabsInit( ui, rtable );
                     }
                 });
+                if( activeTab ){
+                    $("#tabs").tabs("option","active", activeTab );
+                }
                 $("#subgroup_filter_block").hide();
 
                 $("#subgroup_filter").change(function() {
@@ -1803,6 +1784,43 @@
                 addToList();
             });
         });
+
+        function tabsInit( ui, rtable ){
+            var thisTab = ui.newTab ? ui.newTab : ui.tab;
+            var activeTab = thisTab.index();
+            localStorage.setItem("sql_reports_activetab", activeTab );
+
+            $("#subgroup_filter option").each(function() {
+                if($(this).val().length > 0) {
+                    $(this).remove();
+                }
+            });
+            rtable.fnFilter('', 4);
+            rtable.fnFilter('', 5);
+            rtable.fnSetColumnVis(4, true);
+            rtable.fnSetColumnVis(5, true);
+
+            var g_id = $(ui.newTab).children().attr('id');
+            var g_name = $(ui.newTab).text();
+            if ( g_name == _("All") ) {
+                g_id = "";
+                g_name = "";
+            }
+
+            if (g_id && g_id.length > 0) {
+                rtable.fnFilter('^' + g_name + '$', 4, true, true, true, false);
+                rtable.fnSetColumnVis(4, false);
+                for(var i in group_subgroups[g_id]) {
+                    $("#subgroup_filter").append(
+                        '<option value="' + group_subgroups[g_id][i][0] + '">'
+                        + group_subgroups[g_id][i][1] + '</option>'
+                    );
+                }
+                $("#subgroup_filter_block").show();
+            } else {
+                $("#subgroup_filter_block").hide();
+            }
+        }
 
         function addColumn() {
             $("#availableColumns option:selected").clone().appendTo("#selectedColumns").attr("selected", "selected");
