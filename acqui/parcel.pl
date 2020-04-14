@@ -283,7 +283,7 @@ $template->param(
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
     invoiceclosedate      => $invoice->{closedate},
-    datereceived          => dt_from_string,
+    shipmentdate         => $invoice->{shipmentdate},
     name                  => $bookseller->name,
     booksellerid          => $bookseller->id,
     loop_received         => \@loop_received,
@@ -293,6 +293,6 @@ $template->param(
     total_tax_excluded    => $total_tax_excluded,
     total_tax_included    => $total_tax_included,
     subtotal_for_funds    => $subtotal_for_funds,
-    sticky_filters       => $sticky_filters,
+    sticky_filters        => $sticky_filters,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

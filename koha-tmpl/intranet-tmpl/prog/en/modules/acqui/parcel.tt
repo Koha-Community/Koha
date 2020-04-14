@@ -7,8 +7,14 @@
 [% PROCESS 'i18n.inc' %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
-            Receipt summary for [% name | html %] [% IF ( invoice ) %]invoice [% invoice | html %][% END %] on [% datereceived | $KohaDates %][% ELSE %]Receive orders from [% name | html %][% END %]</title>
+<title>
+    Koha &rsaquo; Acquisitions &rsaquo;
+    [% IF ( invoiceclosedate ) %]
+        Receipt summary for [% name | html %] [% IF ( invoice ) %]invoice [% invoice | html %][% END %]
+    [% ELSE %]
+        Receive orders from [% name | html %]
+    [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -17,12 +23,11 @@
 [% INCLUDE 'acquisitions-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    [% IF datereceived %]
+    [% IF invoiceclosedate %]
         Receipt summary for <em>[% name | html %]</em>
         [% IF ( invoice ) %]
             <em>[ [% invoice | html %] ]</em>
         [% END %]
-        on <em>[% datereceived | $KohaDates %]</em>
     [% ELSE %]
         Receive orders from [% name | html %]
     [% END %]
@@ -45,8 +50,8 @@
 	</div>
 	[% END %]
     <h1>
-        [% IF datereceived %]
-            Receipt summary for <em>[% name | html %]</em> [% IF ( invoice ) %] <em> [ [% invoice | html %] ] </em>[% END %] on <em>[% datereceived | $KohaDates %]</em>
+        [% IF ( invoiceclosedate ) %]
+        Receipt summary for <em>[% name | html %]</em> [% IF ( invoice ) %] <em> [ [% invoice | html %] ] </em>[% END %]
         [% ELSE %]
             Receive orders from [% name | html %]
         [% END %]
@@ -89,7 +94,7 @@
 
 [% UNLESS no_orders_to_display %]
 <div id="acqui_receive_summary">
-<p><strong>Invoice number:</strong> [% invoice | html %] <strong>Received by:</strong> [% logged_in_user.userid | html %] <strong>On:</strong> [% datereceived | $KohaDates %]</p>
+<p><strong>Invoice number:</strong> [% invoice | html %] <strong>Shipment date:</strong> [% shipmentdate | $KohaDates %]</p>
 </div>
 [% UNLESS (invoiceclosedate) %]
   <div id="acqui_receive_search">
