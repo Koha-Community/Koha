@@ -917,7 +917,7 @@ $(document).ready(function() {
                         "sClass": "return-claim-notes-td",
                         "mDataProp": function ( oObj ) {
                             return '<span id="return-claim-notes-static-' + oObj.id + '" class="return-claim-notes" data-return-claim-id="' + oObj.id + '">' + oObj.notes + '</span>'
-                                + '<i style="float:right" class="fa fa-pencil-square-o" title="Double click to edit"></i>';
+                                + '<i style="float:right" class="fa fa-pencil-square-o" title="' + __("Double click to edit") + '"></i>';
                         }
                     },
                     {
@@ -940,26 +940,27 @@ $(document).ready(function() {
                         "mDataProp": function ( oObj ) {
                             if ( ! oObj.resolution ) return "";
 
-                            let desc = '<strong>' + oObj.resolution_data.lib + '</strong> on <i>' + oObj.resolved_on + '</i>';
-                            if (oObj.resolved_by_data) desc += ' by <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + oObj.resolved_by_data.borrowernumber + '">' + ( oObj.resolved_by_data.firstname || "" ) + ( oObj.resolved_by_data.surname || "" ) + '</a>';
+                            let desc = '<strong>' + oObj.resolution_data.lib + '</strong> <i>(';
+                            if (oObj.resolved_by_data) desc += '<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + oObj.resolved_by_data.borrowernumber + '">' + ( oObj.resolved_by_data.firstname || "" ) + " " + ( oObj.resolved_by_data.surname || "" ) + '</a>';
+                            desc += ', ' + oObj.resolved_on + ')</i>';
                             return desc;
                         }
                     },
                     {
                         "mDataProp": function ( oObj ) {
                             let delete_html = oObj.resolved_on
-                                ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash"></i> Delete</a></li>'
+                                ? '<li><a href="#" class="return-claim-tools-delete" data-return-claim-id="' + oObj.id + '"><i class="fa fa-trash"></i> ' + __("Delete") + '</a></li>'
                                 : "";
                             let resolve_html = ! oObj.resolution
-                                ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '"><i class="fa fa-check-square"></i> Resolve</a></li>'
+                                ? '<li><a href="#" class="return-claim-tools-resolve" data-return-claim-id="' + oObj.id + '"><i class="fa fa-check-square"></i> ' + __("Resolve") + '</a></li>'
                                 : "";
 
                             return  '<div class="btn-group">'
-                                  + ' <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
-                                  + '  Actions <span class="caret"></span>'
+                                  + ' <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+                                  + __("Actions") + ' <span class="caret"></span>'
                                   + ' </button>'
                                   + ' <ul class="dropdown-menu">'
-                                  + '  <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="' + oObj.id + '"><i class="fa fa-edit"></i> Edit notes</a></li>'
+                                  + '  <li><a href="#" class="return-claim-tools-editnotes" data-return-claim-id="' + oObj.id + '"><i class="fa fa-edit"></i> ' + __("Edit notes") + '</a></li>'
                                   + resolve_html
                                   + delete_html
                                   + ' </ul>'
@@ -1001,8 +1002,8 @@ $(document).ready(function() {
                 '  <span id="return-claim-notes-editor-' + id + '">'
                 + ' <textarea id="return-claim-notes-editor-textarea-' + id + '">' + note + '</textarea>'
                 + ' <br/>'
-                + ' <a class="btn btn-default btn-xs claim-returned-notes-editor-submit" data-return-claim-id="' + id + '"><i class="fa fa-save"></i> Update</a>'
-                + ' <a class="claim-returned-notes-editor-cancel" data-return-claim-id="' + id + '" href="#">Cancel</a>'
+                + ' <a class="btn btn-default btn-xs claim-returned-notes-editor-submit" data-return-claim-id="' + id + '"><i class="fa fa-save"></i> ' + __("Update") + '</a>'
+                + ' <a class="claim-returned-notes-editor-cancel" data-return-claim-id="' + id + '" href="#">' + __("Cancel") + '</a>'
                 + '</span>';
             elt.hide();
             $(editor).insertAfter( elt );
