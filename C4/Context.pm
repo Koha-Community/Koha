@@ -1073,6 +1073,19 @@ sub set_remote_address {
 
 1;
 
+=head3 needs_install
+
+    if ( $context->needs_install ) { ... }
+
+This method returns a boolean representing the install status of the Koha instance.
+
+=cut
+
+sub needs_install {
+    my ($self) = @_;
+    return ($self->preference('Version')) ? 0 : 1;
+}
+
 __END__
 
 =head1 ENVIRONMENT

@@ -18,10 +18,12 @@
 use Modern::Perl;
 
 use DBI;
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::MockModule;
 use Test::Warn;
 use YAML;
+
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('C4::Context');
@@ -48,6 +50,17 @@ subtest 'yaml_preference() tests' => sub {
     is( $pref, undef, 'Invalid YAML on syspref makes it return undef' );
 
     $context->unmock( 'preference' );
+};
+
+subtest 'needs_install() tests' => sub {
+
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference( 'Version', '3.0.0' );
+    is( C4::Context->needs_install, 0, 'Preference is defined, no need to install' );
+
+    t::lib::Mocks::mock_preference( 'Version', undef ); # the behaviour when ->preference fails to fetch
+    is( C4::Context->needs_install, 1, "->preference(Version) is not defined, need to install" );
 };
 
 my $context = new Test::MockModule('C4::Context');
