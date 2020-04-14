@@ -30,6 +30,8 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>koha-elasticsearch --rebuild</command>
+      <arg>-d|--delete</arg>
+      <arg>-r|--reset</arg>
       <arg>-b|--biblios</arg>
       <arg>-a|--authorities</arg>
       <arg>-v|--verbose</arg>
@@ -55,6 +57,19 @@
 
   <refsect1><title>Options</title>
   <variablelist>
+    <varlistentry>
+      <term><option>-d</option></term>
+      <listitem>
+        <para>In conjunction with <option>--rebuild</option>, it deletes existing indexes before reindexing.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-r</option></term>
+      <listitem>
+        <para>In conjunction with <option>--rebuild</option>, it reloads the settings from the Elasticsearch
+              files set in koha-conf.xml . This option implies delete.</para>
+      </listitem>
+    </varlistentry>
     <varlistentry>
       <term><option>-a</option></term>
       <listitem>
