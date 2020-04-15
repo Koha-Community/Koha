@@ -249,7 +249,7 @@ __PACKAGE__->table("subscription");
 
 =head2 closed
 
-  data_type: 'integer'
+  data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
 
@@ -356,7 +356,7 @@ __PACKAGE__->add_columns(
   "enddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "closed",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "reneweddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "itemtype",
@@ -452,8 +452,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-23 12:56:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dTb/JOO3KQ3NZGypFbRiEw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-15 11:35:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5zW2XKZNcvytO8svTJ4ijQ
 
 __PACKAGE__->has_many(
   "additional_field_values",
@@ -469,6 +469,10 @@ __PACKAGE__->has_many(
     };
   },
   { cascade_copy => 0, cascade_delete => 0 },
+);
+
+__PACKAGE__->add_columns(
+    '+closed' => { is_boolean => 1 },
 );
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -21609,6 +21609,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 24380, "Add syspref CalculateFinesOnBackdate");
 }
 
+$DBversion = '19.12.00.073';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE subscription MODIFY COLUMN closed tinyint(1) not null default 0" );
+
+    NewVersion( $DBversion, 25152, "Description");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
