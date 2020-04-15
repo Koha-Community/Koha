@@ -27,6 +27,7 @@ use Koha::AuthUtils;
 use Koha::Patrons;
 use Koha::Patron::Consent;
 use Koha::Patron::Modifications;
+use Koha::Patron::Categories;
 
 my $cgi = new CGI;
 my $dbh = C4::Context->dbh;
@@ -59,7 +60,7 @@ if (
     );
 
     my $patron_attrs = $m->unblessed;
-    $patron_attrs->{password} ||= Koha::AuthUtils::generate_password;
+    $patron_attrs->{password} ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($patron_attrs->{categorycode}));
     my $consent_dt = delete $patron_attrs->{gdpr_proc_consent};
     $patron_attrs->{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
     delete $patron_attrs->{timestamp};

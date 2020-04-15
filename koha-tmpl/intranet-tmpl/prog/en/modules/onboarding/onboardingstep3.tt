@@ -61,7 +61,7 @@
                                 <label for="categorycode_entry" class="required"> Patron category</label>
                                 <select id="categorycode_entry" name="categorycode_entry">
                                     [% FOREACH category IN categories %]
-                                        <option value = "[% category.categorycode | html %]">[% category.description | html %]</option>
+                                        <option value = "[% category.categorycode | html %]" data-pwd-length="[% category.effective_min_password_length | html %]" data-pwd-strong="[% category.effective_require_strong_password | html %]">[% category.description | html %]</option>
                                     [% END %]
                                 </select>
                                 <span class="required">Required</span><br><br>
@@ -116,8 +116,7 @@
     [% INCLUDE 'validator-strings.inc' %]
     [% INCLUDE 'installer-strings.inc' %]
     [% Asset.js("js/onboarding.js") | $raw %]
-    [% PROCESS 'password_check.inc' %]
-    [% PROCESS 'add_password_check' new_password => 'password' %]
+    [% PROCESS 'password_check.inc' new_password => 'password', category_selector => '#categorycode_entry', RequireStrongPassword => Koha.Preference('RequireStrongPassword') %]
 [% END %]
 
 [% INCLUDE 'installer-intranet-bottom.inc' %]

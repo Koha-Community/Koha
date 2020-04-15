@@ -838,9 +838,9 @@ legend:hover {
                                                             [% IF ( typeloo.typename_X ) %]<optgroup label="Statistical">[% END %]
                                                         [% END %]
                                                         [% IF ( categoryloo.categorycodeselected ) %]
-                                                            <option value="[% categoryloo.categorycode | html %]" selected="selected" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
+                                                            <option value="[% categoryloo.categorycode | html %]" selected="selected" data-pwd-length="[% categoryloo.effective_min_password_length | html %]" data-pwd-strong="[% categoryloo.effective_require_strong_password | html %]" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
                                                         [% ELSE %]
-                                                            <option value="[% categoryloo.categorycode | html %]" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
+                                                            <option value="[% categoryloo.categorycode | html %]" data-pwd-length="[% categoryloo.effective_min_password_length | html %]" data-pwd-strong="[% categoryloo.effective_require_strong_password | html %]" data-typename="[% typeloo.typename | html %]">[% categoryloo.categoryname | html %]</option>
                                                         [% END %]
                                                         [% IF ( loop.last ) %]
                                                             </optgroup>
@@ -1738,8 +1738,7 @@ legend:hover {
     </script>
     [% Asset.js("js/members.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
-    [% PROCESS 'password_check.inc' %]
-    [% PROCESS 'add_password_check' new_password => 'password' %]
+    [% PROCESS 'password_check.inc' new_password => 'password', category_selector => '#categorycode_entry', minPasswordLength => patron.category.effective_min_password_length, RequireStrongPassword => patron.category.effective_require_strong_password %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -42,7 +42,7 @@ use Koha::Patron::Attributes;
 use Koha::Patron::Images;
 use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
-use Koha::Patrons;
+use Koha::Patron::Categories;
 use Koha::Token;
 
 my $cgi = new CGI;
@@ -178,7 +178,7 @@ if ( $action eq 'create' ) {
                 $verification_token = md5_hex( time().{}.rand().{}.$$ );
             }
 
-            $borrower{password}          = Koha::AuthUtils::generate_password unless $borrower{password};
+            $borrower{password}          = Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode})) unless $borrower{password};
             $borrower{verification_token} = $verification_token;
 
             Koha::Patron::Modification->new( \%borrower )->store();
@@ -217,7 +217,7 @@ if ( $action eq 'create' ) {
             );
 
             $borrower{categorycode}     ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
-            $borrower{password}         ||= Koha::AuthUtils::generate_password;
+            $borrower{password}         ||= Koha::AuthUtils::generate_password(Koha::Patron::Categories->find($borrower{categorycode}));
             my $consent_dt = delete $borrower{gdpr_proc_consent};
             my $patron = Koha::Patron->new( \%borrower )->store;
             Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
@@ -476,7 +476,7 @@ sub CheckForInvalidFields {
         push( @invalidFields, "password_match" );
     }
     if ( $borrower->{'password'} ) {
-        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $borrower->{password} );
+        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $borrower->{password}, Koha::Patron::Categories->find($borrower->{categorycode}) );
           unless ( $is_valid ) {
               push @invalidFields, 'password_too_short' if $error eq 'too_short';
               push @invalidFields, 'password_too_weak' if $error eq 'too_weak';

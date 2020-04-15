@@ -229,6 +229,43 @@
                       [% END %]
                     </select>
                 </li>
+                <li>
+                    <label for="min_password_length">Minimum password length:</label>
+                    <input id="min_password_length" type="number" name="min_password_length" value="[% category.min_password_length | html %]"/>
+                    <span>Leave blank to use system default ([% Koha.Preference('minPasswordLength') | html %])</span>
+                </li>
+                <li class="pwd_setting_wrapper">
+                    <label for="require_strong_password">Require strong password:</label>
+                    <select id="require_strong_password" name="require_strong_password">
+                    [% IF category.require_strong_password.defined %]
+                        [% IF category.require_strong_password %]
+                          [% IF Koha.Preference('RequireStrongPassword') %]
+                            <option value="-1">Follow system preference RequireStrongPassword (yes)</option>
+                          [% ELSE %]
+                            <option value="-1">Follow system preference RequireStrongPassword (no)</option>
+                          [% END %]
+                            <option value="1" selected="selected">Yes</option>
+                            <option value="0">No</option>
+                        [% ELSE %]
+                          [% IF Koha.Preference('RequireStrongPassword') %]
+                            <option value="-1">Follow system preference RequireStrongPassword (yes)</option>
+                          [% ELSE %]
+                            <option value="-1">Follow system preference RequireStrongPassword (no)</option>
+                          [% END %]
+                            <option value="1">Yes</option>
+                            <option value="0" selected="selected">No</option>
+                        [% END %]
+                      [% ELSE %]
+                          [% IF Koha.Preference('RequireStrongPassword') %]
+                            <option value="-1">Follow system preference RequireStrongPassword (yes)</option>
+                          [% ELSE %]
+                            <option value="-1">Follow system preference RequireStrongPassword (no)</option>
+                          [% END %]
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                      [% END %]
+                    </select>
+                </li>
                 <li><label for="block_expired">Block expired patrons:</label>
                     <select name="BlockExpiredPatronOpacActions" id="block_expired">
                         [% IF not category or category.BlockExpiredPatronOpacActions == -1%]

@@ -92,7 +92,7 @@
                                 [% IF field == "B_email" %]<li>Alternate address information: <a href="#borrower_B_email">email address</a></li>[% END %]
                                 [% IF field == "password_match" %]<li>Passwords do not match! <a href="#password">password</a></li>[% END %]
                                 [% IF field == "password_too_short" %]
-                                    <li>Password must be at least [% minPasswordLength | html %] characters long.</li>
+                                    <li>Password must be at least [% patron.category.effective_min_password_length | html %] characters long.</li>
                                 [% END %]
                                 [% IF field == "password_too_weak" %]
                                     <li>Password must contain at least one digit, one lowercase and one uppercase.</li>
@@ -269,9 +269,9 @@
                                                         <select id="borrower_categorycode" name="borrower_categorycode">
                                                             [% FOREACH c IN Categories.all() %]
                                                                 [% IF c.categorycode == Koha.Preference('PatronSelfRegistrationDefaultCategory') %]
-                                                                    <option value="[% c.categorycode | html %]" selected="selected">[% c.description | html %]</option>
+                                                                    <option value="[% c.categorycode | html %]" data-pwd-length="[% c.effective_min_password_length | html %]" data-pwd-strong="[% c.effective_require_strong_password | html %]" selected="selected">[% c.description | html %]</option>
                                                                 [% ELSE %]
-                                                                    <option value="[% c.categorycode | html %]">[% c.description | html %]</option>
+                                                                    <option value="[% c.categorycode | html %]" data-pwd-length="[% c.effective_min_password_length | html %]" data-pwd-strong="[% c.effective_require_strong_password | html %]">[% c.description | html %]</option>
                                                                 [% END %]
                                                             [% END %]
                                                         </select>
@@ -896,10 +896,14 @@
                                 <fieldset class="rows" id="memberentry_password">
                                     <legend id="contact_legend">Password</legend>
                                     <div class="alert alert-info">
-                                        [% IF ( Koha.Preference('RequireStrongPassword') ) %]
-                                            <p>Your password must contain at least [% Koha.Preference('minPasswordLength') | html %] characters, including UPPERCASE, lowercase and numbers.</p>
+                                        [% IF patron %]
+                                            [% IF ( patron.category.effective_require_strong_password ) %]
+                                                <p>Your password must contain at least [% patron.category.effective_min_password_length | html %] characters, including UPPERCASE, lowercase and numbers.</p>
+                                            [% ELSE %]
+                                                <p>Your password must be at least [% patron.category.effective_min_password_length | html %] characters long.</p>
+                                            [% END %]
                                         [% ELSE %]
-                                            <p>Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</p>
+                                            <p id="password_alert"></p>
                                         [% END %]
                                         [% UNLESS mandatory.defined('password') %]
                                             <p>If you do not enter a password a system generated password will be created.</p>
@@ -1064,9 +1068,8 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
-    [% PROCESS 'password_check.inc' %]
-    [% PROCESS 'add_password_check' new_password => 'borrower_password' %]
     [% INCLUDE 'calendar.inc' %]
+
     <script>
 
         $(document).ready(function() {
@@ -1228,5 +1231,21 @@
         });
     [% END %]
 
+    [% UNLESS patron %]
+        var PWD_STRONG_MSG = _("Password must contain at least %s characters, including UPPERCASE, lowercase and numbers");
+        var PWD_WEAK_MSG = _("Password must contain at least %s characters");
+        $(document).ready(function() {
+            var setPwdMessage = function() {
+                var require_strong = $('select#borrower_categorycode option:selected').data('pwdStrong');
+                var min_lenght = $('select#borrower_categorycode option:selected').data('pwdLength');
+                $('#password_alert').html((require_strong?PWD_STRONG_MSG:PWD_WEAK_MSG).format(min_lenght));
+            };
+            setPwdMessage();
+            $('select#borrower_categorycode').change(setPwdMessage);
+        });
+    [% END %]
+    //]]>
     </script>
+    [% PROCESS 'password_check.inc' new_password => 'borrower_password', category_selector => '#borrower_categorycode', RequireStrongPassword => patron.category.effective_require_strong_password, minPasswordLength => patron.category.effective_min_password_length %]
+
 [% END %]

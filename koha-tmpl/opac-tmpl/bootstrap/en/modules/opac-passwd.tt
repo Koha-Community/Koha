@@ -63,10 +63,10 @@
                         [% IF ( Ask_data ) %]
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
                                 <fieldset>
-                                    [% IF ( Koha.Preference('RequireStrongPassword') ) %]
-                                        <div class="alert alert-info">Your password must contain at least [% Koha.Preference('minPasswordLength') | html %] characters, including UPPERCASE, lowercase and numbers.</div>
+                                    [% IF ( logged_in_user.category.effective_require_strong_password ) %]
+                                        <div class="alert alert-info">Your password must contain at least [% logged_in_user.category.effective_min_password_length | html %] characters, including UPPERCASE, lowercase and numbers.</div>
                                     [% ELSE %]
-                                        <div class="alert alert-info">Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</div>
+                                        <div class="alert alert-info">Your password must be at least [% logged_in_user.category.effective_min_password_length | html %] characters long.</div>
                                     [% END %]
                                     <div class="form-group">
                                         <label for="Oldkey">Current password:</label>
@@ -112,8 +112,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
-    [% PROCESS 'password_check.inc' %]
-    [% PROCESS 'add_password_check' new_password => 'Newkey' %]
+    [% PROCESS 'password_check.inc' new_password => 'Newkey', minPasswordLength => logged_in_user.category.effective_min_password_length, RequireStrongPassword => logged_in_user.category.effective_require_strong_password %]
     <script>
         $(document).ready(function() {
             $("#mainform").validate({

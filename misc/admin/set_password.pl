@@ -44,11 +44,6 @@ unless ( $userid or $patron_id or $cardnumber ) {
     pod2usage("cardnumber is mandatory")   unless $cardnumber;
 }
 
-unless ($password) {
-    my $generator  = String::Random->new( rand_gen => \&alt_rand );
-    $password      = $generator->randregex('[A-Za-z][A-Za-z0-9_]{6}.[A-Za-z][A-Za-z0-9_]{6}\d');
-}
-
 my $filter;
 
 if ( $userid ) {
@@ -70,6 +65,14 @@ unless ( $patrons->count > 0 ) {
 }
 
 my $patron = $patrons->next;
+
+unless ($password) {
+    my $generator  = String::Random->new( rand_gen => \&alt_rand );
+    my $n = $patron->category->effective_min_password_length;
+    $n = $n<6?6:$n;
+    $password      = $generator->randregex('[A-Za-z][A-Za-z0-9_]{6}.[A-Za-z][A-Za-z0-9_]{'.$n.'}\d');
+}
+
 $patron->set_password({ password => $password, skip_validation => 1 });
 
 print $patron->userid . " " . $password . "\n";

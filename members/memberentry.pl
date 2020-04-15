@@ -373,7 +373,7 @@ if ($op eq 'save' || $op eq 'insert'){
   # the edited values list when editing certain sub-forms. Get it straight
   # from the DB if absent.
   my $userid = $newdata{ userid } // $borrower_data->{ userid };
-  my $p = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : Koha::Patron->new;
+  my $p = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : Koha::Patron->new();
   $p->userid( $userid );
   unless ( $p->has_valid_userid ) {
     push @errors, "ERROR_login_exist";
@@ -384,7 +384,7 @@ if ($op eq 'save' || $op eq 'insert'){
   push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
 
   if ( $password and $password ne '****' ) {
-      my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password );
+      my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, Koha::Patron::Categories->find($categorycode) );
       unless ( $is_valid ) {
           push @errors, 'ERROR_password_too_short' if $error eq 'too_short';
           push @errors, 'ERROR_password_too_weak' if $error eq 'too_weak';
@@ -682,6 +682,8 @@ foreach my $category_type (qw(C A S P I X)) {
         push @categoryloop,
           { 'categorycode' => $patron_category->categorycode,
             'categoryname' => $patron_category->description,
+            'effective_min_password_length' => $patron_category->effective_min_password_length,
+            'effective_require_strong_password' => $patron_category->effective_require_strong_password,
             'categorycodeselected' =>
               ( defined($categorycode) && $patron_category->categorycode eq $categorycode ),
           };

@@ -744,11 +744,11 @@ sub set_password {
     my $password = $args->{password};
 
     unless ( $args->{skip_validation} ) {
-        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password );
+        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password, $self->category );
 
         if ( !$is_valid ) {
             if ( $error eq 'too_short' ) {
-                my $min_length = C4::Context->preference('minPasswordLength');
+                my $min_length = $self->category->effective_min_password_length;
                 $min_length = 3 if not $min_length or $min_length < 3;
 
                 my $password_length = length($password);

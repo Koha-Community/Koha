@@ -54,7 +54,6 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     #try with the main email
     my $borrower;
     my $search_results;
-
     # Find the borrower by userid, card number, or email
     if ($username) {
         $search_results = Koha::Patrons->search( { -or => { userid => $username, cardnumber => $username }, login_attempts => { '!=', Koha::Patron::ADMINISTRATIVE_LOCKOUT } } );
@@ -124,6 +123,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     if ($hasError) {
         $template->param(
             hasError                => 1,
+
             errNoBorrowerFound      => $errNoBorrowerFound,
             errTooManyEmailFound    => $errTooManyEmailFound,
             errAlreadyStartRecovery => $errAlreadyStartRecovery,
@@ -154,13 +154,18 @@ elsif ( $query->param('passwordReset') ) {
     ( $borrower_number, $username ) = GetValidLinkInfo($uniqueKey);
 
     my $error;
+    my $min_password_length = C4::Context->preference('minPasswordPreference');
+    my $require_strong_password = C4::Context->preference('RequireStrongPassword');
     if ( not $borrower_number ) {
         $error = 'errLinkNotValid';
     } elsif ( $password ne $repeatPassword ) {
         $error = 'errPassNotMatch';
     } else {
+        my $borrower = Koha::Patrons->find($borrower_number);
+        $min_password_length = $borrower->category->effective_min_password_length;
+        $require_strong_password = $borrower->category->effective_require_strong_password;
         try {
-            Koha::Patrons->find($borrower_number)->set_password({ password => $password });
+            $borrower->set_password({ password => $password });
 
             CompletePasswordRecovery($uniqueKey);
             $template->param(
@@ -187,6 +192,8 @@ elsif ( $query->param('passwordReset') ) {
             uniqueKey    => $uniqueKey,
             hasError     => 1,
             $error       => 1,
+            minPasswordLength => $min_password_length,
+            RequireStrongPassword => $require_strong_password
         );
     }
 }
@@ -198,6 +205,8 @@ elsif ($uniqueKey) {    #reset password form
         $errLinkNotValid = 1;
     }
 
+    my $borrower = Koha::Patrons->find($borrower_number);
+
     $template->param(
         new_password    => 1,
         email           => $email,
@@ -205,6 +214,8 @@ elsif ($uniqueKey) {    #reset password form
         username        => $username,
         errLinkNotValid => $errLinkNotValid,
         hasError        => ( $errLinkNotValid ? 1 : 0 ),
+        minPasswordLength => $borrower->category->effective_min_password_length,
+        RequireStrongPassword => $borrower->category->effective_require_strong_password
     );
 }
 else {    #password recovery form (to send email)
