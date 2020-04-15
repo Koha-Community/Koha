@@ -437,6 +437,11 @@ sub GetBorrowersToExpunge {
         push @query_params,$filterdate;
     }
 
+    if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
+        $query .= q{ AND borrowernumber != ? };
+        push( @query_params, $anonymous_patron );
+    }
+
     warn $query if $debug;
 
     my $sth = $dbh->prepare($query);
