@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -165,4 +165,40 @@ subtest 'override_hidden_items() tests' => sub {
     ok( $category_2->override_hidden_items, 'Category configured to override' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'effective_min_password_length' => sub {
+  plan tests => 2;
+
+  $schema->storage->txn_begin;
+
+  t::lib::Mocks::mock_preference('minPasswordLength', 3);
+
+  my $category = $builder->build_object({class => 'Koha::Patron::Categories', value => {min_password_length => undef}});
+
+  is($category->effective_min_password_length, 3, 'Patron should have minimum password length from preference');
+
+  $category->min_password_length(10)->store;
+
+  is($category->effective_min_password_length, 10, 'Patron should have minimum password length from category');
+
+  $schema->storage->txn_rollback;
+};
+
+subtest 'effective_require_strong_password' => sub {
+  plan tests => 2;
+
+  $schema->storage->txn_begin;
+
+  t::lib::Mocks::mock_preference('RequireStrongPassword', 0);
+
+  my $category = $builder->build_object({class => 'Koha::Patron::Categories', value => {require_strong_password => undef}});
+
+  is($category->effective_require_strong_password, 0, 'Patron should be required strong password from preference');
+
+  $category->require_strong_password(1)->store;
+
+  is($category->effective_require_strong_password, 1, 'Patron should be required strong password from category');
+
+  $schema->storage->txn_rollback;
 };
