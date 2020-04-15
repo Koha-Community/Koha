@@ -21599,6 +21599,16 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 22887, \@description );
 }
 
+$DBversion = '19.12.00.072';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('CalculateFinesOnBackdate','1','','Switch to control if overdue fines are calculated on return when backdating','YesNo');
+    });
+
+    NewVersion( $DBversion, 24380, "Add syspref CalculateFinesOnBackdate");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
