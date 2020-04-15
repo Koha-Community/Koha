@@ -45,8 +45,7 @@ sub register {
 
     my @plugins;
 
-    if ( C4::Context->config("enable_plugins") and
-         ! C4::Context->needs_install ) # Koha is installed
+    if ( C4::Context->config("enable_plugins") )
     {
         # plugin needs to define a namespace
         @plugins = Koha::Plugins->new()->GetPlugins(

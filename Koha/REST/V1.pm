@@ -86,7 +86,7 @@ sub startup {
                 spec               => $spec,
                 validator          => undef
             }
-        );
+        ) unless C4::Context->needs_install; # load only if Koha is installed
 
         $self->plugin(
             OpenAPI => {
@@ -115,7 +115,7 @@ sub startup {
                 spec      => $spec,
                 validator => $validator
             }
-        );
+        )  unless C4::Context->needs_install; # load only if Koha is installed
 
         $self->plugin(
             OpenAPI => {
