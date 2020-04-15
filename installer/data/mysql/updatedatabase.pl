@@ -21577,7 +21577,7 @@ if( CheckVersion( $DBversion ) ) {
             SELECT category, authorised_value, COUNT(concat(category, ':', authorised_value)) AS c
             FROM authorised_values
             GROUP BY category, authorised_value
-            HAVING c > 1
+            HAVING COUNT(concat(category, ':', authorised_value)) > 1
         |, { Slice => {} });
         if ( @$duplicates ) {
             push @description, "WARNING - Cannot create unique constraint on authorised_value(category, authorised_value)";
