@@ -1973,11 +1973,14 @@ sub AddReturn {
                 MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy );
             };
             unless ( $@ ) {
-                my $calc_fine = C4::Context->preference('CalculateFinesOnReturn');
-                $calc_fine ||= $return_date_specified && C4::Context->preference('CalculateFinesOnBackdate');
-                $calc_fine &&= !$item->itemlost;
-
-                if ( $calc_fine ) {
+                if (
+                    (
+                        C4::Context->preference('CalculateFinesOnReturn')
+                        || ( $return_date_specified && C4::Context->preference('CalculateFinesOnBackdate') )
+                    )
+                    && !$item->itemlost
+                  )
+                {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item->unblessed, borrower => $patron_unblessed, return_date => $return_date } );
                 }
             } else {
