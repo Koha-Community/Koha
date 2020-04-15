@@ -28,7 +28,7 @@
                         [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
                             <li>
                                 <a href="#" title="Collect items you are interested in" id="cartmenulink" role="button">
-                                    <i id="carticon" class="fa fa-shopping-cart fa-icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
+                                    <i id="carticon" class="fa fa-shopping-cart fa-icon-white" aria-hidden="true"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
                                 </a>
                             </li>
                         [% END %]
@@ -37,7 +37,7 @@
                         [% END %]
                         [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
                             <li class="dropdown">
-                                <a href="#" title="Show lists" class="dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button"><i class="fa fa-list fa-icon-white"></i> <span class="listslabel">Lists</span> <b class="caret"></b></a>
+                                <a href="#" title="Show lists" class="dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button"><i class="fa fa-list fa-icon-white" aria-hidden="true"></i> <span class="listslabel">Lists</span> <b class="caret"></b></a>
                                 <ul aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
                                 [% IF some_public_shelves.count %]
                                     <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem"><strong>Public lists</strong></a></li>
@@ -91,18 +91,18 @@
                                     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                         [% IF ( loggedinusername ) %]
                                             <a href="#" class="dropdown-toggle" id="user-menu" data-toggle="dropdown" role="button">
-                                                <i class="fa fa-user fa-icon-white fa-fw"></i>
+                                                <i class="fa fa-user fa-icon-white fa-fw" aria-hidden="true"></i>
                                                 <span class="userlabel">Welcome, [% INCLUDE 'patron-title.inc' patron = logged_in_user no_html = 1 %]</span>
                                                 <b class="caret"></b>
                                             </a>
                                         [% ELSE %]
                                             [% IF Koha.Preference('casAuthentication') %]
                                                 [%# CAS authentication is too complicated for modal window %]
-                                                    <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                                    <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><i class="fa fa-user fa-icon-white fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                             [% ELSIF ( Koha.Preference('GoogleOpenIDConnect') == 1 ) %]
-                                                <a class="login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                                <a class="login-link" href="/cgi-bin/koha/svc/auth/googleopenidconnect" role="button" data-toggle="modal"><i class="fa fa-user fa-icon-white fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                             [% ELSE %]
-                                                <a href="/cgi-bin/koha/opac-user.pl" class="login-link loginModal-trigger"><i class="fa fa-user fa-icon-white fa-fw"></i> <span class="userlabel">Log in to your account</span></a>
+                                                <a href="/cgi-bin/koha/opac-user.pl" class="login-link loginModal-trigger"><i class="fa fa-user fa-icon-white fa-fw" aria-hidden="true"></i> <span class="userlabel">Log in to your account</span></a>
                                             [% END %]
                                         [% END %]
                                     [% END %]
@@ -118,7 +118,7 @@
                                                         <p class="search_history">
                                                             <a tabindex="-1" role="menuitem" class="login-link" href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
                                                             <span class="divider-vertical"></span>
-                                                            <a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash"></i> Clear</a>
+                                                            <a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash" aria-hidden="true"></i> Clear</a>
                                                         </p>
                                                     [% END %]
                                                     <p>
@@ -135,7 +135,7 @@
                                         <li class="search_history">
                                             <a href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a>
                                             <span class="divider-vertical"></span>
-                                            <a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash"></i> Clear</a>
+                                            <a class="logout clearsh" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history"><i class="fa fa-trash" aria-hidden="true"></i> Clear</a>
                                         </li>
                                     [% END %]
                                 [% END %]

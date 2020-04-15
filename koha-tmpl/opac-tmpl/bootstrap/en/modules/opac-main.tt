@@ -107,7 +107,7 @@
                         <div id="rssnews-container">
                             <!-- Logged in users have a branch code or it could be explicitly set -->
                             <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | uri %]">
-                                <i class="fa fa-rss"></i>
+                                <i class="fa fa-rss" aria-hidden="true"></i>
                                 [% IF Branches.all.size == 1 %]
                                     [% IF branchcode %]
                                         RSS feed for [% Branches.GetName( branchcode ) | html %] library news

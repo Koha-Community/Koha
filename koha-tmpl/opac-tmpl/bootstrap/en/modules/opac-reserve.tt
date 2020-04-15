@@ -363,9 +363,9 @@
                                                                 [% IF ( itemLoo.available ) %]
                                                                     <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber | html %]" name="checkitem_[% bibitemloo.biblionumber | html %]" value="[% itemLoo.itemnumber | html %]" />
                                                                 [% ELSE %]
-                                                                    <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber | html %]"
+                                                                    <input disabled="disabled" type="radio" aria-label="Cannot be put on hold" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber | html %]"
                                                                            style="display:none;" />
-                                                                    <i class="fa fa-remove danger" title="Cannot be put on hold"></i>
+                                                                    <i class="fa fa-remove danger" aria-hidden="true" title="Cannot be put on hold"></i>
                                                                 [% END %]
 
                                                                 [% IF ( itemLoo.copynumber ) %]

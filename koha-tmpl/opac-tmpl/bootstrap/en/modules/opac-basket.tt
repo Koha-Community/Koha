@@ -19,18 +19,18 @@
                         <h2>Your cart</h2>
                             <div id="toolbar" class="toolbar noprint">
                                 [% IF ( verbose ) %]
-                                    <a href="opac-basket.pl" class="btn btn-link brief"><i class="fa fa-fw fa-search-minus"></i> Brief display</a>
+                                    <a href="opac-basket.pl" class="btn btn-link brief"><i class="fa fa-fw fa-search-minus" aria-hidden="true"></i> Brief display</a>
                                 [% ELSE %]
-                                    <a href="opac-basket.pl" class="btn btn-link detail"><i class="fa fa-fw fa-search-plus"></i> More details</a>
+                                    <a href="opac-basket.pl" class="btn btn-link detail"><i class="fa fa-fw fa-search-plus" aria-hidden="true"></i> More details</a>
                                 [% END %]
                                 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                    <a class="btn btn-link send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope"></i> Send</a>
+                                    <a class="btn btn-link send" href="opac-basket.pl"><i class="fa fa-fw fa-envelope" aria-hidden="true"></i> Send</a>
                                 [% END %]
-                                <a class="btn btn-link download" href="opac-basket.pl"><i class="fa fa-fw fa-download"></i> Download</a>
-                                <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash"></i> Empty and close</a>
-                                <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle"></i> Hide window</a>
+                                <a class="btn btn-link download" href="opac-basket.pl"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Download</a>
+                                <a class="btn btn-link remove empty" href="opac-basket.pl"><i class="fa fa-fw fa-trash" aria-hidden="true"></i> Empty and close</a>
+                                <a class="btn btn-link close" href="opac-basket.pl"><i class="fa fa-fw fa-times-circle" aria-hidden="true"></i> Hide window</a>
                                 [% IF ( verbose ) %]
-                                    <a class="btn btn-link print-large" href="#"><i class="fa fa-fw fa-print"></i> Print</a>
+                                    <a class="btn btn-link print-large" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a>
                                 [% END %]
                             </div>
 
@@ -40,16 +40,16 @@
                                 <span class="sep">|</span>
                                 <span class="links" id="tag_hides">
                                     <span id="selections">Select titles to: </span>
-                                    <a href="#" class="btn btn-link remove deleteshelf disabled"><i class="fa fa-remove"></i> Remove</a>
+                                    <a href="#" class="btn btn-link remove deleteshelf disabled"><i class="fa fa-remove" aria-hidden="true"></i> Remove</a>
                                     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) %]
                                         [% IF ( ( Koha.Preference( 'virtualshelves' ) == 1 ) && loggedinusername ) %]
-                                            <a href="#" class="btn btn-link newshelf disabled"><i class="fa fa-fw fa-list"></i> Add to a list</a>
+                                            <a href="#" class="btn btn-link newshelf disabled"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Add to a list</a>
                                         [% END %]
                                         [% IF ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
-                                            <a href="#" class="btn btn-link hold disabled"><i class="fa fa-fw fa-bookmark"></i> Place hold</a>
+                                            <a href="#" class="btn btn-link hold disabled"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a>
                                         [% END %]
                                         [% IF ( TagsInputEnabled && loggedinusername ) %]
-                                            <a href="#" id="tagsel_tag" class="btn btn-link disabled"><i class="fa fa-fw fa-tag"></i> Tag</a>
+                                            <a href="#" id="tagsel_tag" class="btn btn-link disabled"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</a>
                                         [% END %]
                                     [% END # / IF opacuserlogin %]
                                 </span>

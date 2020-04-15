@@ -289,7 +289,7 @@
                                         [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != '' && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
                                                 <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time ([% Koha.Preference('MaxOpenSuggestions') | html %]).</br>Once the library has processed those suggestions you will be able to place more.</p>
                                         [% ELSE %]
-                                                <a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a>
+                                                <a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"  aria-hidden="true"></i> New purchase suggestion</a>
                                         [% END %]
                                         </div>
                                     [% END %]
@@ -406,7 +406,7 @@
                                     [% ELSIF ( Koha.Preference('MaxOpenSuggestions') != ''  && patrons_pending_suggestions_count >= Koha.Preference('MaxOpenSuggestions') ) %]
                                         <p class="TooManySuggestionsText">You have reached your limit for suggestions you can place at this time.</br>Once the library has processed those suggestions you will be able to place more.</p>
                                     [% ELSE %]
-                                        <p><a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a></p>
+                                        <p><a class="btn btn-link new" href="/cgi-bin/koha/opac-suggestions.pl?op=add"><i class="fa fa-plus" aria-hidden="true"></i> New purchase suggestion</a></p>
                                     [% END %]
                                 [% END %]
                             [% END # / IF suggestions_loop %]
@@ -468,7 +468,7 @@
         $(".cb").click(function(){
           enableCheckboxActions();
         });
-        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link removeitems tag_hides btn-disabled\"><i class=\"fa fa-trash\"></i> "+_("Delete")+"</a>");
+        $("#removeitems").html("<a href=\"#\" class=\"btn btn-link removeitems tag_hides btn-disabled\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i> "+_("Delete")+"</a>");
 
         enableCheckboxActions();
 

@@ -64,9 +64,9 @@
                             </p>
                             [% USE link_url = url('/cgi-bin/koha/opac-illrequests.pl', whole.value.other) %]
                             <a href="[% link_url _ '&amp;stage=copyrightclearance' | $raw %]"
-                               class="btn btn-sm btn-default"><i class="fa fa-check"></i> Yes</a>
+                               class="btn btn-sm btn-default"><i class="fa fa-check" aria-hidden="true"></i> Yes</a>
                             <a href="/cgi-bin/koha/opac-illrequests.pl"
-                               class="btn btn-sm btn-default"><i class="fa fa-times"></i> No</a>
+                               class="btn btn-sm btn-default"><i class="fa fa-times" aria-hidden="true"></i> No</a>
                         </div>
                     [% ELSE %]
                         [% INCLUDE messages %]
@@ -96,7 +96,7 @@
                     <div id="illrequests-create-button" class="dropdown btn-group">
                         [% IF backends.size > 1 %]
                                 <button class="btn btn-default dropdown-toggle" type="button" id="ill-backend-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    <i class="fa fa-plus"></i> Create a new request <span class="caret"></span>
+                                    <i class="fa fa-plus" aria-hidden="true"></i> Create a new request <span class="caret"></span>
                                 </button>
                                 <ul id="backend-dropdown-options" class="dropdown-menu nojs" aria-labelledby="ill-backend-dropdown">
                                     [% FOREACH backend IN backends %]
@@ -105,7 +105,7 @@
                                 </ul>
                         [% ELSE %]
                             <a id="ill-new" class="btn btn-default" href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backends.0 | html %]">
-                                <i class="fa fa-plus"></i> Create a new request
+                                <i class="fa fa-plus" aria-hidden="true"></i> Create a new request
                             </a>
                         [% END %]
                     </div>

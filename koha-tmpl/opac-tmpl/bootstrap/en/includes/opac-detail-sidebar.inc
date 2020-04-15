@@ -5,49 +5,49 @@
         [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
             [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
                 [% IF ( ReservableItems ) %]
-                    <li><a class="reserve btn btn-link btn-lg" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-bookmark"></i> Place hold</a></li>
+                    <li><a class="reserve btn btn-link btn-lg" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-bookmark" aria-hidden="true"></i> Place hold</a></li>
                 [% END %]
             [% END %]
         [% END %]
     [% END %]
 
-    <li><a class="print-large btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-print"></i> Print</a></li>
+    <li><a class="print-large btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-print" aria-hidden="true"></i> Print</a></li>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
         [% IF artreqpossible %]
-            <li><a class="article_request btn btn-link btn-lg" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-file-text"></i> Request article</a></li>
+            <li><a class="article_request btn btn-link btn-lg" href="/cgi-bin/koha/opac-request-article.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-file-text" aria-hidden="true"></i> Request article</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && loggedinusername ) %]
-            <li><a class="addtoshelf btn btn-link btn-lg" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-list"></i> Save to your lists</a></li>
+            <li><a class="addtoshelf btn btn-link btn-lg" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-fw fa-list" aria-hidden="true"></i> Save to your lists</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
         [% IF ( incart ) %]
-            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart incart cart[% biblio.biblionumber | html %] addrecord btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-shopping-cart"></i> In your cart</a> <a data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart incart cart[% biblio.biblionumber | html %] addrecord btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-shopping-cart" aria-hidden="true"></i> In your cart</a> <a data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
         [% ELSE %]
-            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart cart[% biblio.biblionumber | html %] addrecord btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-shopping-cart"></i> Add to your cart</a>  <a style="display:none;" data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart cart[% biblio.biblionumber | html %] addrecord btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-shopping-cart" aria-hidden="true"></i> Add to your cart</a>  <a style="display:none;" data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
         [% END %]
     [% END %]
 
     [% IF Koha.Preference('suggestion') %]
-        <li><a class="btn btn-link btn-lg" href="/cgi-bin/koha/opac-suggestions.pl?op=add&biblionumber=[% biblio.biblionumber | url %]"><i class="fa fa-fw fa-gift"></i> Suggest for purchase</a></li>
+        <li><a class="btn btn-link btn-lg" href="/cgi-bin/koha/opac-suggestions.pl?op=add&biblionumber=[% biblio.biblionumber | url %]"><i class="fa fa-fw fa-gift" aria-hidden="true"></i> Suggest for purchase</a></li>
     [% END %]
 
     [% IF ( OpacHighlightedWords && query_desc ) %]
     <li>
-        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil"></i> Unhighlight</a>
-        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil"></i> Highlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Unhighlight</a>
+        <a href="#" class="highlight_toggle btn btn-link btn-lg" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Highlight</a>
     </li>
     [% END %]
 
 
     [% IF ( Koha.Preference('OPACDetailQRCode' ) ) %]
         <li>
-            <a class="show_qrcode btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-qrcode"></i> Send to device</a>
+            <a class="show_qrcode btn btn-link btn-lg" href="#"><i class="fa fa-fw fa-qrcode" aria-hidden="true"></i> Send to device</a>
             <div id="qrcode" class="hidden"></div>
         </li>
     [% END %]
@@ -57,7 +57,7 @@
         <li>
             <div id="export">
                 <div class="dropdown">
-                    <a id="format" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-download"></i> Save record <b class="caret"></b></a>
+                    <a id="format" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-download" aria-hidden="true"></i> Save record <b class="caret"></b></a>
                         <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="format">
                             [% FOREACH option IN export_options %]
                                 [% IF option == 'dc' %]
@@ -90,7 +90,7 @@
         <li>
             <div id="moresearches_menu">
                 <div class="dropdown">
-                    <a id="furthersearches" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-search"></i> More searches <b class="caret"></b></a>
+                    <a id="furthersearches" class="btn btn-link btn-lg dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-fw fa-search" aria-hidden="true"></i> More searches <b class="caret"></b></a>
                         <ul class="dropdown-menu pull-left" role="menu" aria-labelledby="furthersearches">
                             <li><a href="#" class="menu-inactive">Search for this title in:</a></li>
                             [% OPACSearchForTitleIn | $raw %]

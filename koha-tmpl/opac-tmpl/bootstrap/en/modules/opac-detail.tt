@@ -115,11 +115,11 @@
                     [% END %]
 
                     <div id="views">
-                        <span class="view current-view"><span id="Normalview"><i class="fa fa-file-text-o"></i> Normal view</span></span>
+                        <span class="view current-view"><span id="Normalview"><i class="fa fa-file-text-o" aria-hidden="true"></i> Normal view</span></span>
                         <span class="view">
-                            <a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-alt"></i> MARC view</a>
+                            <a id="MARCview" class="btn btn-link" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-alt" aria-hidden="true"></i> MARC view</a>
                         </span>
-                        [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul"></i> ISBD view</a></span>[% END %]
+                        [% IF ( ISBD ) %]<span class="view"><a id="ISBDview" class="btn btn-link" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblio.biblionumber | html %]"><i class="fa fa-list-ul" aria-hidden="true"></i> ISBD view</a></span>[% END %]
                     </div>
                     [% IF ( OPACXSLTDetailsDisplay ) %]
                         [% XSLTBloc | $raw %]
@@ -152,7 +152,7 @@
                                         [% MARCAUTHOR_SUBFIELDS_LOO.value | html %]</a>
                                     [% END %]
                                     [% IF (MARCAUTHOR.authoritylink) %]
-                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink | html %]"><i class="fa fa-search"></i></a>
+                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink | html %]"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     [% END %]
                                     [% IF IDREF and MARCAUTHOR.unimarc3 %]
                                         <a href="/cgi-bin/koha/opac-idref.pl?unimarc3=[% MARCAUTHOR.unimarc3 | uri %]" title="IdRef" rel="gb_page_center[600,500]">IdRef</a>
@@ -233,7 +233,7 @@
                                         <a title="[% '$' _ SUBFIELD.code _ ' ' _ SUBFIELD.value | html %]" class="subject" href="/cgi-bin/koha/opac-search.pl?q=[% FOREACH link_loo IN SUBFIELD.link_loop %][% link_loo.operator |url %][% link_loo.limit |url %]:[% link_loo.link |url %][% END %]">[% SUBFIELD.value | html %]</a>
                                     [% END %]
                                     [% IF (MARCSUBJCT.authoritylink) %]
-                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCSUBJCT.authoritylink | html %]"><i class="fa fa-search"></i></a>
+                                        <a class="authlink" href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCSUBJCT.authoritylink | html %]"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     [% END %]
                                     [% UNLESS ( loop.last ) %] | [% END %]
                                 [% END # / FOREACH MARCSUBJCTS %]
@@ -428,10 +428,10 @@
 
                                 [% IF my_rating %]
                                     <span id="rating_value_text">Your rating: [% my_rating.rating_value | html %].</span>
-                                    <span id="cancel_rating_text"><a href="#"><i class="fa fa-remove"></i> Cancel rating</a>.</span>
+                                    <span id="cancel_rating_text"><a href="#"><i class="fa fa-remove" aria-hidden="true"></i> Cancel rating</a>.</span>
                                 [% ELSE %]
                                     <span id="rating_value_text"></span>
-                                    <span id="cancel_rating_text" style="display:none;"><a href="#"><i class="fa fa-remove"></i> Cancel rating</a>.</span>
+                                    <span id="cancel_rating_text" style="display:none;"><a href="#"><i class="fa fa-remove" aria-hidden="true"></i> Cancel rating</a>.</span>
                                 [% END %]
 
                                 <span id="rating_text">Average rating: [% rating_avg | html %] ([% ratings.count | html %] votes)</span>
@@ -1006,16 +1006,16 @@
                     <div class="nav_results">
                         <div class="l_Results" style="display:none;">
                             [% IF ( listResults ) %]
-                                <a href="#" id="a_listResults"><i class="fa fa-bars"></i> Browse results</a>
+                                <a href="#" id="a_listResults"><i class="fa fa-bars" aria-hidden="true"></i> Browse results</a>
                             [% ELSE %]
-                                <span><i class="fa fa-bars"></i> Browse results</span>
+                                <span><i class="fa fa-bars" aria-hidden="true"></i> Browse results</span>
                             [% END %]
-                            <a href="#" class="close_pagination"><i class="fa fa-remove"></i> Close</a>
+                            <a href="#" class="close_pagination"><i class="fa fa-remove" aria-hidden="true"></i> Close</a>
                         </div>
                         <ul class="pg_menu clearfix">
                             <li class="left_results">
                                 [% IF ( previousBiblionumber ) %]
-                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous biblio[% END %]"><i class="fa fa-angle-double-left"></i> Previous</a>
+                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous biblio[% END %]"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Previous</a>
                                 [% ELSE %]
                                     <span>Previous</span>
                                 [% END %]
@@ -1024,7 +1024,7 @@
                             <li class="back_results"><a href="opac-search.pl?[% busc | $raw %]" title="Back to the results search list">Back to results</a></li>
                             <li class="right_results">
                                 [% IF ( nextBiblionumber ) %]
-                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next <i class="fa fa-angle-double-right"></i></a>
+                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
                                 [% ELSE %]
                                     <span>Next</span>
                                 [% END %]
@@ -1048,7 +1048,7 @@
                                 <ul id="ul_pagination_lists">
                                     [% FOREACH listitem IN listResults %]
                                         [% IF ( listitem.biblionumber == biblionumber ) %]
-                                            <li id="li_pag_[% loop.count | html %]" class="highlight" title="Go to detail"><span class="li_pag_index"><i class="fa fa-arrow-left"></i> [% loop.count  + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]by [% author | html %][% END %]</li>
+                                            <li id="li_pag_[% loop.count | html %]" class="highlight" title="Go to detail"><span class="li_pag_index"><i class="fa fa-arrow-left" aria-hidden="true"></i> [% loop.count  + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]by [% author | html %][% END %]</li>
                                         [% ELSE %]
                                             <li id="li_pag_[% loop.count | html %]" title="Go to detail"><span class="li_pag_index">[% loop.count + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %]</a><br> [% IF ( listitem.author ) %]by [% listitem.author | html %][% END %]</li>
                                         [% END %]
@@ -1058,7 +1058,7 @@
                         </div>
                         [% END %]
                         <div class="pagination_footer">
-                            <a href="#" class="close_pagination"><i class="fa fa-remove"></i> Close</a>
+                            <a href="#" class="close_pagination"><i class="fa fa-remove" aria-hidden="true"></i> Close</a>
                         </div>
                     </div>
                 [% END # / IF OpacBrowseResults && busc %]
@@ -1086,13 +1086,13 @@
                         [% FOREACH network IN SocialNetworks.split(",") %]
                             [% SWITCH network -%]
                                 [% CASE "facebook" -%]
-                                    <div><a id="facebook" href="https://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook"><i class="fa fa-facebook"></i></a></div>
+                                    <div><a id="facebook" href="https://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></div>
                                 [% CASE "linkedin" -%]
-                                    <div><a id="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn"><i class="fa fa-linkedin"></i></a></div>
+                                    <div><a id="linkedin" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a></div>
                                 [% CASE "email" -%]
-                                    <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %]%20([% current_url |url %])" title="Share by email"><i class="fa fa-envelope-o"></i></a></div>
+                                    <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %]%20([% current_url |url %])" title="Share by email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a></div>
                                 [% CASE "twitter" -%]
-                                    <div><a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-text="[% title |url %]" data-lang="[% lang | html %]" title="Share on Twitter"><i class="fa fa-twitter"></i></a></div>
+                                    <div><a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-text="[% title |url %]" data-lang="[% lang | html %]" title="Share on Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></div>
                             [% END -%]
                         [% END %]
                     </div>
@@ -1328,8 +1328,8 @@
                     <h3 id="multiSearchLabel">Select the item(s) to search</h3>
                 </div>
                 <div class="modal-body">
-                    <a href="#" class="check_all"><i class="fa fa-check"></i> Select all</a> <span class="sep">|</span>
-                    <a href="#" class="check_none"><i class="fa fa-remove"></i> Select none</a>
+                    <a href="#" class="check_all"><i class="fa fa-check" aria-hidden="true"></i> Select all</a> <span class="sep">|</span>
+                    <a href="#" class="check_none"><i class="fa fa-remove" aria-hidden="true"></i> Select none</a>
                     <ul id="termsList">
                     </ul>
                 </div>

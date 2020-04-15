@@ -744,7 +744,7 @@
                                                     <span class="tdlabel">Cancel:</span>
                                                     <form action="/cgi-bin/koha/opac-article-request-cancel.pl" id="delete_article_request_[% ar.id | html %]">
                                                         <input type="hidden" name="id" value="[% ar.id | html %]" />
-                                                        <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove"></i> Cancel</button>
+                                                        <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove" aria-hidden="true"></i> Cancel</button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -871,7 +871,7 @@
                     $("#renewall").submit();
                 });
                 [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
-                    $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" class=\"btn btn-link\" href=\"#\"><i class=\"fa fa-check\"></i> "+_("Renew selected")+"</a> <a id=\"renewall_link\" class=\"btn btn-link\" href=\"#\"><span class=\"fa-stack\"><i class=\"fa fa-check fa-stack-1x\"></i><i class=\"fa fa-check fa-stack-1x\"></i></span> "+_("Renew all")+"</a></div>");
+                    $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" class=\"btn btn-link\" href=\"#\"><i class=\"fa fa-check\" aria-hidden=\"true\"></i> "+_("Renew selected")+"</a> <a id=\"renewall_link\" class=\"btn btn-link\" href=\"#\"><span class=\"fa-stack\"><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i><i class=\"fa fa-check fa-stack-1x\" aria-hidden=\"true\"></i></span> "+_("Renew all")+"</a></div>");
                 [% END %]
             [% END %]
 

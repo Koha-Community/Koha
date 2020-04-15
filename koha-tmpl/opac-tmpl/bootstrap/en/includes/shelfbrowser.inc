@@ -15,7 +15,7 @@
                     <td class="nav-cell" rowspan="2">
                       [% IF shelfbrowser_prev_item %]
                         <div id="browser_previous">
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_prev_item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_item.itemnumber | uri %]#shelfbrowser" data-prev-itemnumber="[% shelfbrowser_prev_item.itemnumber | html %]"><i class="fa fa-caret-up"></i> Previous</a>
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_prev_item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_item.itemnumber | uri %]#shelfbrowser" data-prev-itemnumber="[% shelfbrowser_prev_item.itemnumber | html %]"><i class="fa fa-caret-up" aria-hidden="true"></i> Previous</a>
                         </div>
                       [% END %]
                     </td>
@@ -75,7 +75,7 @@
                     <td class="nav-cell" rowspan="2">
                         [% IF shelfbrowser_next_item %]
                             <div id="browser_next">
-                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_next_item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_item.itemnumber | uri %]#shelfbrowser" data-next-itemnumber="[% shelfbrowser_next_item.itemnumber | html %]">Next <i class="fa fa-caret-up"></i></a>
+                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_next_item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_item.itemnumber | uri %]#shelfbrowser" data-next-itemnumber="[% shelfbrowser_next_item.itemnumber | html %]">Next <i class="fa fa-caret-up" aria-hidden="true"></i></a>
                             </div>
                         [% END %]
                     </td>

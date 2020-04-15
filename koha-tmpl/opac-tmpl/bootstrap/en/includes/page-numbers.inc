@@ -7,10 +7,10 @@
         <ul>
             [% IF ( previous_page_offset.defined ) %]
                 <li class="page-first">
-                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the first page"><i class="fa fa-fw fa-angle-double-left"></i>  First</a>
+                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the first page"><i class="fa fa-fw fa-angle-double-left" aria-hidden="true"></i>  First</a>
                 </li>
                 <li class="page-prev">
-                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% previous_page_offset | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the previous page"> <i class="fa fa-fw fa-angle-left"></i>  Previous</a>
+                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% previous_page_offset | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the previous page"> <i class="fa fa-fw fa-angle-left" aria-hidden="true"></i>  Previous</a>
                 </li>
             [% END %]
             [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %]
@@ -26,10 +26,10 @@
             [% END %]
             [% IF ( next_page_offset ) %]
                 <li class="page-next">
-                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% next_page_offset | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the next page">Next <i class="fa fa-fw fa-angle-double-right"></i></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% next_page_offset | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the next page">Next <i class="fa fa-fw fa-angle-double-right" aria-hidden="true"></i></a>
                 </li>
                 <li class="page-last">
-                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% last_page_offset | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the last page">Last <i class="fa fa-fw fa-angle-double-right"></i></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;offset=[% last_page_offset | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by | uri %][% END %][% IF results_per_page %]&amp;count=[% results_per_page | uri %][% END %]" aria-label="Go to the last page">Last <i class="fa fa-fw fa-angle-double-right" aria-hidden="true"></i></a>
                 </li>
             [% END %]
         </ul>

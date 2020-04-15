@@ -61,8 +61,8 @@
                         <p>
                             [% IF ( searchdesc ) %]
                                 No results found for that in [% LibraryName | html %] catalog.
-                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="btn btn-link rsssearchlink noprint">
-                                    <i class="fa fa-rss rsssearchicon" title="Subscribe to this search"></i>
+                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" aria-label="Subscribe to this search" class="btn btn-link rsssearchlink noprint">
+                                    <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
                                 </a>
                             [% ELSE %]
                                 You did not specify any search criteria.
@@ -107,8 +107,8 @@
                                 [% END %]
                             ).
                         [% END %]
-                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="btn btn-link rsssearchlink noprint">
-                            <i class="fa fa-rss rsssearchicon" title="Subscribe to this search"></i>
+                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="btn btn-link rsssearchlink noprint" aria-label="Subscribe to this search">
+                            <i class="fa fa-rss rsssearchicon" aria-hidden="true" title="Subscribe to this search"></i>
                         </a>
                     [% END # / IF total %]
                     </p>
@@ -190,8 +190,8 @@
                                     <div id="selections-toolbar" class="toolbar noprint">
                                         [% IF ( OpacHighlightedWords ) %]
                                             <div class="highlight_controls noprint">
-                                                <a href="#" class="btn btn-link highlight_toggle" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil"></i> Unhighlight</a>
-                                                <a href="#" class="btn btn-link highlight_toggle" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil"></i> Highlight</a>
+                                                <a href="#" class="btn btn-link highlight_toggle" id="highlight_toggle_off"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Unhighlight</a>
+                                                <a href="#" class="btn btn-link highlight_toggle" id="highlight_toggle_on"><i class="fa fa-fw fa-pencil" aria-hidden="true"></i> Highlight</a>
                                             </div>
                                             <span class="sep">|</span>
                                         [% END %]
@@ -207,7 +207,7 @@
 
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]
                                                     <span id="tagsel_span">
-                                                        <button id="tagsel_tag" class="btn btn-link disabled" type="submit" style="display:none"><i class="fa fa-fw fa-tag"></i> Tag</button>
+                                                        <button id="tagsel_tag" class="btn btn-link disabled" type="submit" style="display:none"><i class="fa fa-fw fa-tag" aria-hidden="true"></i> Tag</button>
                                                     </span>
                                                     <div id="tagsel_form" style="display:none">
                                                         <label for="tagsel_new">New tag:</label>
@@ -853,7 +853,7 @@ $(document).ready(function(){
     });
 
 [% IF ( ( Koha.Preference( 'RequestOnOpac' ) == 1 ) && ( Koha.Preference( 'opacuserlogin' ) == 1 ) && DisplayMultiPlaceHold ) %]
-    $("#placehold").html("<button class=\"btn btn-link hold disabled\" type=\"submit\"><i class=\"fa fa-fw fa-bookmark\"></i>" + _("Place hold") + "</button>");
+    $("#placehold").html("<button class=\"btn btn-link hold disabled\" type=\"submit\"><i class=\"fa fa-fw fa-bookmark\" aria-hidden=\"true\"></i>" + _("Place hold") + "</button>");
     $("#placehold").find("button.hold").click(function(){
         holdMultiple();
         return false;

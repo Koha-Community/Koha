@@ -96,15 +96,15 @@ $( document ).ready(function() {
          "dom": '<"#filter_p">',
     } ));
 
-    $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter"></i> '+txtActivefilter+'</a>');
+    $("#filter_p").html('<p><a href="#" id="filter_paid"><i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter+'</a>');
     $('#filter_paid').click(function(e) {
         e.preventDefault();
         if ($(this).hasClass('filtered')) {
             var filteredValue = '';
-            $(this).html('<i class="fa fa-filter"></i> '+txtActivefilter);
+            $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtActivefilter);
         } else { //Not filtered. Let's do it!
             var filteredValue = '^((?!0.00).*)$'; //Filter not matching 0.00 http://stackoverflow.com/a/406408
-            $(this).html('<i class="fa fa-filter"></i> '+txtInactivefilter);
+            $(this).html('<i class="fa fa-filter" aria-hidden="true"></i> '+txtInactivefilter);
         }
         fines_table.fnFilter(filteredValue, -1, true, false);
         $(this).toggleClass('filtered');

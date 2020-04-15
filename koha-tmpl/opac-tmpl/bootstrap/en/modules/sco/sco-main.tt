@@ -92,7 +92,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" name="returnbook" class="btn"><i class="fa fa-undo"></i> Return this item</button>
+                                    <button type="submit" name="returnbook" class="btn"><i class="fa fa-undo" aria-hidden="true"></i> Return this item</button>
                                 </form>
                             [% END %]
 
@@ -120,7 +120,7 @@
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" name="returnbook" class="btn"><i class="fa fa-undo"></i> Return this item</button>
+                                    <button type="submit" name="returnbook" class="btn"><i class="fa fa-undo" aria-hidden="true"></i> Return this item</button>
                                 </form>
                             [% END %]
 
@@ -131,7 +131,7 @@
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" name="confirm" class="btn"><i class="fa fa-refresh"></i> Renew item</button>
+                                    <button type="submit" name="confirm" class="btn"><i class="fa fa-refresh" aria-hidden="true"></i> Renew item</button>
                                   </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
@@ -140,7 +140,7 @@
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" class="btn"><i class="fa fa-refresh"></i> Renew item</button>
+                                    <button type="submit" class="btn"><i class="fa fa-refresh" aria-hidden="true"></i> Renew item</button>
                                 </form>
                             [% END %]
 
@@ -148,7 +148,7 @@
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                <button type="submit" class="btn"><i class="fa fa-cancel"></i> Cancel</button>
+                                <button type="submit" class="btn"><i class="fa fa-cancel" aria-hidden="true"></i> Cancel</button>
                             </form>
                         </div>
                     [% END # / IF confirm %]
@@ -240,7 +240,7 @@
 
                                 <div>
                                     <form method="post" action="#" id="logout_form">
-                                        <button type="submit" class="btn"><i class="fa fa-check"></i> Finish</button>
+                                        <button type="submit" class="btn"><i class="fa fa-check" aria-hidden="true"></i> Finish</button>
                                     </form>
                                 </div>
                             </div> <!-- / #newcheckout -->
@@ -262,7 +262,7 @@
                                 <li>
                                     <a href="#holds-tab" data-toggle="tab">
                                         [% IF waiting_holds_count %]
-                                            <i class="fa fa-exclamation"></i>
+                                            <i class="fa fa-exclamation" aria-hidden="true"></i>
                                         [% END %]
                                         Holds ([% HOLDS.count | html %])
                                     </a>
