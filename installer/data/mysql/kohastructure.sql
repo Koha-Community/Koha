@@ -1994,7 +1994,7 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `opacdisplaycount` VARCHAR(10) NULL, -- how many issues to show to the public
   `graceperiod` int(11) NOT NULL default '0', -- grace period in days
   `enddate` date default NULL, -- subscription end date
-  `closed` INT(1) NOT NULL DEFAULT 0, -- yes / no if the subscription is closed
+  `closed` TINYINT(1) NOT NULL DEFAULT 0, -- yes / no if the subscription is closed
   `reneweddate` date default NULL, -- date of last renewal for the subscription
   `itemtype` VARCHAR( 10 ) NULL,
   `previousitemtype` VARCHAR( 10 ) NULL,
