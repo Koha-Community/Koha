@@ -78,12 +78,6 @@ my $update_mappings = sub {
     }
 };
 
-my $cache = Koha::Caches->get_instance();
-my $clear_cache = sub {
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac');
-};
-
 if ( $op eq 'edit' ) {
 
     $schema->storage->txn_begin;
@@ -170,13 +164,16 @@ if ( $op eq 'edit' ) {
     } else {
         push @messages, { type => 'message', code => 'success_on_update' };
         $schema->storage->txn_commit;
-        $clear_cache->();
+
+        my $cache = Koha::Caches->get_instance();
+        $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
+        $cache->clear_from_cache('elasticsearch_search_fields_opac');
+
         $update_mappings->();
     }
 }
 elsif( $op eq 'reset_confirmed' ) {
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
-    $clear_cache->();
     push @messages, { type => 'message', code => 'success_on_reset' };
 }
 elsif( $op eq 'reset_confirm' ) {

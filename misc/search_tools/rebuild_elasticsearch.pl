@@ -112,7 +112,6 @@ use Koha::MetadataRecord::Authority;
 use Koha::BiblioUtils;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchEngine::Elasticsearch::Indexer;
-use Koha::Caches;
 use MARC::Field;
 use MARC::Record;
 use Modern::Perl;
@@ -156,9 +155,6 @@ _sanity_check();
 
 if ($reset){
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
-    my $cache = Koha::Caches->get_instance();
-    $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
-    $cache->clear_from_cache('elasticsearch_search_fields_opac');
     $delete = 1;
 }
 
