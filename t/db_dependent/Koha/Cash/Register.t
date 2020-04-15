@@ -206,13 +206,13 @@ subtest 'cashup' => sub {
         my $accountline1 = $builder->build_object(
             {
                 class => 'Koha::Account::Lines',
-                value => { register_id => $register->id, timestamp => \'NOW() - INTERVAL 5 MINUTE' },
+                value => { register_id => $register->id, date => \'NOW() - INTERVAL 5 MINUTE' },
             }
         );
         my $accountline2 = $builder->build_object(
             {
                 class => 'Koha::Account::Lines',
-                value => { register_id => $register->id, timestamp => \'NOW() - INTERVAL 5 MINUTE'},
+                value => { register_id => $register->id, date => \'NOW() - INTERVAL 5 MINUTE'},
             }
         );
 
