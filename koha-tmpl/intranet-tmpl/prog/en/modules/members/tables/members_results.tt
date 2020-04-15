@@ -29,7 +29,7 @@
                 "dt_od_checkouts":
                     "[% IF data.overdues %]<span class='overdue'><strong>[% data.overdues | html %]</strong></span>[% ELSE %][% data.overdues | html %][% END %] / [% data.issues | html %]",
                 "dt_fines":
-                    "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines | $Price %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines | $Price %]</strong></span> [% ELSE %] [% data.fines | $Price %] [% END %]</span>",
+                    "<span style='text-align: right; display: block;'><a href=\"/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% data.borrowernumber | html %]\">[% IF data.fines < 0 %] <span class='credit'>[% data.fines | $Price %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines | $Price %]</strong></span> [% ELSE %] [% data.fines | $Price %] [% END %]</a></span>",
                 "dt_borrowernotes":
                     "[% data.borrowernotes | html_line_break | collapse | $To %]",
                 "dt_action":
