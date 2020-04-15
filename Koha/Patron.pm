@@ -614,6 +614,11 @@ sub merge_with {
 
     $self->_result->result_source->schema->txn_do( sub {
         foreach my $patron_id (@patron_ids) {
+
+            if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
+                next if $patron_id eq $anonymous_patron;
+            }
+
             my $patron = Koha::Patrons->find( $patron_id );
 
             next unless $patron;
