@@ -944,6 +944,12 @@ Circulation:
               class: code
     Self check-in module:
         -
+            - pref: AllowSelfCheckReturns
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to return items through web-based self checkout system.
+        -
             - "Include the following HTML on the self check-in screen:"
             - pref: SelfCheckInMainUserBlock
               type: textarea
@@ -1014,12 +1020,6 @@ Circulation:
             - pref: SelfCheckTimeout
               class: integer
             - seconds.
-        -
-            - pref: AllowSelfCheckReturns
-              choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - patrons to return items through web-based self checkout system. 
         -
             - "Include the following HTML in the Help page of the web-based self checkout system:"
             - pref: SelfCheckHelpMessage
