@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 47;
+use Test::More tests => 48;
 use Test::MockModule;
 use Test::Exception;
 
@@ -248,11 +248,19 @@ $builder->build({
 # IndependentBranches is off.
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 
+my $anonymous_patron = Koha::Patron->new({ categorycode => 'CIVILIAN', branchcode => $library2->{branchcode} })->store->borrowernumber;
+t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_patron);
+
 my $owner = Koha::Patron->new({ categorycode => 'STAFFER', branchcode => $library2->{branchcode} })->store->borrowernumber;
 my $list1 = AddPatronList( { name => 'Test List 1', owner => $owner } );
+
+AddPatronsToList( { list => $list1, borrowernumbers => [$anonymous_patron] } );
+my $patstodel = GetBorrowersToExpunge( { patron_list_id => $list1->patron_list_id() } );
+is( scalar(@$patstodel), 0, 'Anonymous Patron not deleted from list' );
+
 my @listpatrons = ($bor1inlist, $bor2inlist);
 AddPatronsToList(  { list => $list1, borrowernumbers => \@listpatrons });
-my $patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id() } );
+$patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id() } );
 is( scalar(@$patstodel),0,'No staff deleted from list of all staff');
 Koha::Patrons->find($bor2inlist)->set({ categorycode => 'CIVILIAN' })->store;
 $patstodel = GetBorrowersToExpunge( {patron_list_id => $list1->patron_list_id()} );
