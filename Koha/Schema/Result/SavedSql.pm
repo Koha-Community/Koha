@@ -173,6 +173,10 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-23 12:56:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f7wxGGnBk3z6mw2CkaeD9A
 
+__PACKAGE__->add_columns(
+    '+public' => { is_boolean => 1 }
+);
+
 sub koha_object_class {
     'Koha::Report';
 }

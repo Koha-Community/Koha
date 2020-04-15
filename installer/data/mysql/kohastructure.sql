@@ -1326,7 +1326,7 @@ CREATE TABLE saved_sql ( -- saved sql reports
    `type` varchar(255) default NULL, -- always 1 for tabular
    `notes` MEDIUMTEXT, -- the notes or description given to this report
    `cache_expiry` int NOT NULL default 300,
-   `public` boolean NOT NULL default FALSE,
+   `public` tinyint(1) NOT NULL default FALSE,
     report_area varchar(6) default NULL,
     report_group varchar(80) default NULL,
     report_subgroup varchar(80) default NULL,
@@ -1411,9 +1411,9 @@ CREATE TABLE `search_marc_to_field` (
   search tinyint(1) NOT NULL DEFAULT 1,
   search_marc_map_id int(11) NOT NULL,
   search_field_id int(11) NOT NULL,
-  facet boolean DEFAULT FALSE COMMENT 'true if a facet field should be generated for this',
-  suggestible boolean DEFAULT FALSE COMMENT 'true if this field can be used to generate suggestions for browse',
-  sort boolean DEFAULT NULL COMMENT 'true/false creates special sort handling, null doesn''t',
+  facet tinyint(1) DEFAULT FALSE COMMENT 'true if a facet field should be generated for this',
+  suggestible tinyint(1) DEFAULT FALSE COMMENT 'true if this field can be used to generate suggestions for browse',
+  sort tinyint(1) DEFAULT NULL COMMENT 'true/false creates special sort handling, null doesn''t',
   PRIMARY KEY(search_marc_map_id, search_field_id),
   FOREIGN KEY(search_marc_map_id) REFERENCES search_marc_map(id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY(search_field_id) REFERENCES search_field(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1611,7 +1611,7 @@ CREATE TABLE `issues` ( -- information related to check outs or issues
   `returndate` datetime default NULL, -- date the item was returned, will be NULL until moved to old_issues
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `renewals` tinyint(4) NOT NULL default 0, -- lists the number of times the item was renewed
-  `auto_renew` BOOLEAN default FALSE, -- automatic renewal
+  `auto_renew` tinyint(1) default FALSE, -- automatic renewal
   `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL, -- automatic renewal error
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
@@ -1643,7 +1643,7 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
   `returndate` datetime default NULL, -- date the item was returned
   `lastreneweddate` datetime default NULL, -- date the item was last renewed
   `renewals` tinyint(4) NOT NULL default 0, -- lists the number of times the item was renewed
-  `auto_renew` BOOLEAN default FALSE, -- automatic renewal
+  `auto_renew` tinyint(1) default FALSE, -- automatic renewal
   `auto_renew_error` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL, -- automatic renewal error
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
   `issuedate` datetime default NULL, -- date the item was checked out or issued
@@ -1759,10 +1759,10 @@ CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
   `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL DEFAULT 0,
-  `suspend` BOOLEAN NOT NULL DEFAULT 0,
+  `suspend` tinyint(1) NOT NULL DEFAULT 0,
   `suspend_until` DATETIME NULL DEFAULT NULL,
   `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
-  `item_level_hold` BOOLEAN NOT NULL DEFAULT 0, -- Is the hpld placed at item level
+  `item_level_hold` tinyint(1) NOT NULL DEFAULT 0, -- Is the hpld placed at item level
   PRIMARY KEY (`reserve_id`),
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
@@ -1799,10 +1799,10 @@ CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have b
   `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
   `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL DEFAULT 0, -- has this hold been pinned to the lowest priority in the holds queue (1 for yes, 0 for no)
-  `suspend` BOOLEAN NOT NULL DEFAULT 0, -- in this hold suspended (1 for yes, 0 for no)
+  `suspend` tinyint(1) NOT NULL DEFAULT 0, -- in this hold suspended (1 for yes, 0 for no)
   `suspend_until` DATETIME NULL DEFAULT NULL, -- the date this hold is suspended until (NULL for infinitely)
   `itemtype` VARCHAR(10) NULL DEFAULT NULL, -- If record level hold, the optional itemtype of the item the patron is requesting
-  `item_level_hold` BOOLEAN NOT NULL DEFAULT 0, -- Is the hpld placed at item level
+  `item_level_hold` tinyint(1) NOT NULL DEFAULT 0, -- Is the hpld placed at item level
   PRIMARY KEY (`reserve_id`),
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
@@ -1955,7 +1955,7 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `firstacquidate` date default NULL, -- first issue received date
   `manualhistory` tinyint(1) NOT NULL default 0, -- yes or no to managing the history manually
   `irregularity` MEDIUMTEXT, -- any irregularities in the subscription
-  skip_serialseq BOOLEAN NOT NULL DEFAULT 0,
+  skip_serialseq tinyint(1) NOT NULL DEFAULT 0,
   `letter` varchar(20) default NULL,
   `numberpattern` integer default null, -- the numbering pattern used links to subscription_numberpatterns.id
   locale VARCHAR(80) DEFAULT NULL, -- for foreign language subscriptions to display months, seasons, etc correctly
@@ -2925,11 +2925,11 @@ CREATE TABLE aqcontacts (
   fax varchar(100) default NULL,  -- contact's fax number
   email varchar(100) default NULL, -- contact's email address
   notes LONGTEXT, -- notes related to the contact
-  orderacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisition orders
-  claimacquisition BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive acquisitions claims
-  claimissues BOOLEAN NOT NULL DEFAULT 0, -- should this contact receive serial claims
-  acqprimary BOOLEAN NOT NULL DEFAULT 0, -- is this the primary contact for acquisitions messages
-  serialsprimary BOOLEAN NOT NULL DEFAULT 0, -- is this the primary contact for serials messages
+  orderacquisition tinyint(1) NOT NULL DEFAULT 0, -- should this contact receive acquisition orders
+  claimacquisition tinyint(1) NOT NULL DEFAULT 0, -- should this contact receive acquisitions claims
+  claimissues tinyint(1) NOT NULL DEFAULT 0, -- should this contact receive serial claims
+  acqprimary tinyint(1) NOT NULL DEFAULT 0, -- is this the primary contact for acquisitions messages
+  serialsprimary tinyint(1) NOT NULL DEFAULT 0, -- is this the primary contact for serials messages
   booksellerid int(11) not NULL,
   PRIMARY KEY  (id),
   CONSTRAINT booksellerid_aqcontacts_fk FOREIGN KEY (booksellerid)
@@ -3105,7 +3105,7 @@ CREATE TABLE IF NOT EXISTS edifact_messages (
   basketno INT(11) REFERENCES aqbasket( basketno),
   raw_msg LONGTEXT,
   filename MEDIUMTEXT,
-  deleted BOOLEAN NOT NULL DEFAULT 0,
+  deleted tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY  (id),
   KEY vendorid ( vendor_id),
   KEY ediacct (edi_acct),

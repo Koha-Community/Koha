@@ -517,7 +517,8 @@ __PACKAGE__->has_many(
 );
 
 __PACKAGE__->add_columns(
-    '+closed' => { is_boolean => 1 },
+    '+closed'         => { is_boolean => 1 },
+    '+skip_serialseq' => { is_boolean => 1 },
 );
 
 # You can replace this text with custom content, and it will be preserved on regeneration

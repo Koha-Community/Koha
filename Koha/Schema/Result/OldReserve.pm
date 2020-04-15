@@ -301,6 +301,12 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-03-18 12:43:15
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4vMUC/1kSr3vgQ7n0Pmuug
 
+__PACKAGE__->add_columns(
+    '+item_level_hold' => { is_boolean => 1 },
+    '+lowestPriority'  => { is_boolean => 1 },
+    '+suspend'         => { is_boolean => 1 }
+);
+
 sub koha_object_class {
     'Koha::Old::Hold';
 }

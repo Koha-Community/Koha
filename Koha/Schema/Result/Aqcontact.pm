@@ -172,6 +172,14 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:R2x8Z9Db2oDULEODgLuw8Q
 
+__PACKAGE__->add_columns(
+    '+orderacquisition' => { is_boolean => 1 },
+    '+claimacquisition' => { is_boolean => 1 },
+    '+claimissues'      => { is_boolean => 1 },
+    '+acqprimary'       => { is_boolean => 1 },
+    '+serialsprimary'   => { is_boolean => 1 },
+);
+
 sub koha_object_class {
     'Koha::Acquisition::Bookseller::Contact';
 }
