@@ -1063,7 +1063,7 @@ subtest 'notice_email_address' => sub {
 };
 
 subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
-    plan tests => 4;
+    plan tests => 5;
 
     # TODO create a subroutine in t::lib::Mocks
     my $branch = $builder->build({ source => 'Branch' });
@@ -1076,6 +1076,15 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
     my $anonymous = $builder->build( { source => 'Borrower', }, );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} );
+
+    subtest 'Anonymous Patron should be undeleteable' => sub {
+        plan tests => 1;
+
+        my $anonymous_patron = Koha::Patrons->find( $anonymous->{borrowernumber} );
+        $anonymous_patron->delete();
+        $anonymous_patron = Koha::Patrons->find( $anonymous->{borrowernumber} );
+        is( $anonymous_patron->id, $anonymous->{borrowernumber}, "Anonymous Patron was not deleted" );
+    };
 
     subtest 'patron privacy is 1 (default)' => sub {
         plan tests => 9;
