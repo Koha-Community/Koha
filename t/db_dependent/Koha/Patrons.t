@@ -1692,7 +1692,7 @@ subtest 'BorrowersLog tests' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
-    plan tests => 110;
+    plan tests => 111;
 
     my $schema = Koha::Database->new()->schema();
 
@@ -1703,6 +1703,10 @@ subtest 'Test Koha::Patrons::merge' => sub {
     my $keeper  = $builder->build_object({ class => 'Koha::Patrons' });
     my $loser_1 = $builder->build({ source => 'Borrower' })->{borrowernumber};
     my $loser_2 = $builder->build({ source => 'Borrower' })->{borrowernumber};
+
+    my $anonymous_patron_orig = C4::Context->preference('AnonymousPatron');
+    my $anonymous_patron = $builder->build({ source => 'Borrower' })->{borrowernumber};
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous_patron );
 
     while (my ($r, $field) = each(%$resultsets)) {
         $builder->build({ source => $r, value => { $field => $keeper->id } });
@@ -1732,7 +1736,9 @@ subtest 'Test Koha::Patrons::merge' => sub {
 
     is( Koha::Patrons->find($loser_1), undef, 'Loser 1 has been deleted' );
     is( Koha::Patrons->find($loser_2), undef, 'Loser 2 has been deleted' );
+    is( ref Koha::Patrons->find($anonymous_patron), 'Koha::Patron', 'Anonymous Patron was not deleted' );
 
+    t::lib::Mocks::mock_preference( 'AnonymousPatron', '' );
     $schema->storage->txn_rollback;
 };
 
