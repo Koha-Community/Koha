@@ -26,6 +26,7 @@ use Koha::Exceptions::Config;
 use Koha::Exceptions::Elasticsearch;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
+use Koha::Caches;
 use C4::Heading;
 
 use Carp;
@@ -382,6 +383,12 @@ sub reset_elasticsearch_mappings {
             }
         }
     }
+
+    my $cache = Koha::Caches->get_instance();
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac');
+
+    # FIXME return the mappings?
 }
 
 # This overrides the accessor provided by Class::Accessor so that if

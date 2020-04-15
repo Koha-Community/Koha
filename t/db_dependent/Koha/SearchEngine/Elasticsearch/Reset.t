@@ -17,10 +17,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 
 use Koha::Database;
+use Koha::Caches;
 
 my $indexes = {
     'authorities' => {
@@ -54,7 +55,11 @@ Koha::SearchFields->search->delete;
 Koha::SearchMarcMaps->search->delete;
 $schema->resultset('SearchMarcToField')->search->delete;
 
+
 Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
+
+my $cache = Koha::Caches->get_instance();
+is( $cache->get_from_cache('elasticsearch_search_fields_staff_client'), undef, 'Cache has been flushed by reset_elasticsearch_mappings' );
 
 my $search_fields = Koha::SearchFields->search({});
 is($search_fields->count, 2, 'There is 2 search fields after reset');
@@ -66,3 +71,7 @@ my $title_sf = Koha::SearchFields->search({ name => 'title' })->next;
 is($title_sf->weight, '20.00', 'Title search field is weighted with 20');
 
 $schema->storage->txn_rollback;
+
+$cache = Koha::Caches->get_instance();
+$cache->clear_from_cache('elasticsearch_search_fields_staff_client');
+$cache->clear_from_cache('elasticsearch_search_fields_opac');
