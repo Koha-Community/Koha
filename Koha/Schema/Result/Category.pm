@@ -138,6 +138,16 @@ __PACKAGE__->table("categories");
   data_type: 'tinyint'
   is_nullable: 1
 
+=head2 min_password_length
+
+  data_type: 'smallint'
+  is_nullable: 1
+
+=head2 require_strong_password
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -195,6 +205,10 @@ __PACKAGE__->add_columns(
   "change_password",
   { data_type => "tinyint", is_nullable => 1 },
   "exclude_from_local_holds_priority",
+  { data_type => "tinyint", is_nullable => 1 },
+  "min_password_length",
+  { data_type => "smallint", is_nullable => 1 },
+  "require_strong_password",
   { data_type => "tinyint", is_nullable => 1 },
 );
 
@@ -288,8 +302,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-07-22 17:36:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p5Jzm0gHhk42fcLikwUnWw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2020-09-02 12:50:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JOzFLxLwouaTl5dQJrOdZA
 
 __PACKAGE__->add_columns(
     '+exclude_from_local_holds_priority' => { is_boolean => 1 },
