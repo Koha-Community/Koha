@@ -437,7 +437,7 @@ subtest 'Backdated returns should reduce fine if needed' => sub {
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode, undef, undef, dt_from_string('1999-01-01') );
 
     $fine->discard_changes;
-    is( $fine->amountoutstanding, '0.000000', "Fine was reduced correctly with a backdated return" );
+    is( $fine->amountoutstanding+0, 0, "Fine was reduced correctly with a backdated return" );
 };
 
 $schema->storage->txn_rollback;
