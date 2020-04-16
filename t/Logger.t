@@ -19,30 +19,23 @@ use Modern::Perl;
 
 use C4::Context;
 use Koha::Logger;
+use t::lib::Mocks;
 
 use File::Temp qw/tempfile/;
-use Test::MockModule;
 use Test::More tests => 1;
 use Test::Warn;
 
 subtest 'Test01 -- Simple tests for Koha::Logger' => sub {
-    plan tests => 8;
-    test01();
-};
-
-sub test01 {
+    plan tests => 6;
 
     my $ret;
-    my $mContext = new Test::MockModule('C4::Context');
-    $mContext->mock( 'config', sub { return; } );
+    t::lib::Mocks::mock_config('log4perl_conf', undef);
 
-    my $logger= Koha::Logger->get;
-    is( exists $logger->{logger}, '', 'No log4perl config');
-    my $d= $logger->debug('Message 1');
-    is( $d, undef, 'No return value for debug call');
+    eval { Koha::Logger->get };
+    ok( $@, 'Logger did not init correctly without config');
 
     my $log = mytempfile();
-    my $conf = mytempfile( <<"HERE"
+    my $config_file = mytempfile( <<"HERE"
 log4perl.logger.intranet = WARN, INTRANET
 log4perl.appender.INTRANET=Log::Log4perl::Appender::File
 log4perl.appender.INTRANET.filename=$log
@@ -51,21 +44,23 @@ log4perl.appender.INTRANET.layout=PatternLayout
 log4perl.appender.INTRANET.layout.ConversionPattern=[%d] [%p] %m %l %n
 HERE
     );
-    $mContext->mock( 'config', sub { return $conf; } );
-    $logger= Koha::Logger->get({ interface => 'intranet' });
+
+    t::lib::Mocks::mock_config('log4perl_conf', $config_file);
+
+    system("chmod 400 $log");
+    eval { Koha::Logger->get };
+    ok( $@, 'Logger did not init correctly without permission');
+
+    system("chmod 700 $log");
+    my $logger= Koha::Logger->get({ interface => 'intranet' });
     is( exists $logger->{logger}, 1, 'Log4perl config found');
-    is( $logger->warn('Message 2'), 1, 'Message 2 returned a value' );
+    is( $logger->warn('Message 1'), 1, '->warn returned a value' );
     warning_is { $ret = $logger->catastrophe }
                "ERROR: Unsupported method catastrophe",
                "Undefined method raises warning";
     is( $ret, undef, "'catastrophe' method undefined");
-    system("chmod 400 $log");
-    warnings_are { $ret = $logger->warn('Message 3') }
-                 [ "Log file not writable for log4perl",
-                   "warn: Message 3" ],
-                 "Warnings raised if log file is not writeable";
-    is( $ret, undef, 'Message 3 returned undef' );
-}
+
+};
 
 sub mytempfile {
     my ( $fh, $fn ) = tempfile( SUFFIX => '.logger.test', UNLINK => 1 );
