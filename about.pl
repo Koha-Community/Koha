@@ -25,6 +25,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use DateTime::TimeZone;
 use File::Spec;
+use File::Slurp;
 use List::MoreUtils qw/ any /;
 use LWP::Simple;
 use Module::Load::Conditional qw(can_load);
@@ -48,6 +49,7 @@ use Koha::Caches;
 use Koha::Config::SysPrefs;
 use Koha::Illrequest::Config;
 use Koha::SearchEngine::Elasticsearch;
+use Koha::Logger;
 
 use C4::Members::Statistics;
 
@@ -92,6 +94,24 @@ my $time_zone = {
     environment            => $env_timezone,
     environment_invalid    => $env_invalid
 };
+
+{ # Logger checks
+    my $log4perl_config = C4::Context->config("log4perl_conf");
+    my @log4perl_errors;
+    if ( ! $log4perl_config ) {
+        push @log4perl_errors, 'missing_config_entry'
+    }
+    else {
+        my @lines = read_file($log4perl_config) or push @log4perl_errors, 'cannot_read_config_file';
+        for my $line ( @lines ) {
+            next unless $line =~ m|log4perl.appender.\w+.filename=(.*)|;
+            push @log4perl_errors, 'logfile_not_writable' unless -w $1;
+        }
+    }
+    eval {Koha::Logger->get};
+    push @log4perl_errors, 'cannot_init_module' and warn $@ if $@;
+    $template->param( log4perl_errors => @log4perl_errors );
+}
 
 $template->param(
     time_zone              => $time_zone,
