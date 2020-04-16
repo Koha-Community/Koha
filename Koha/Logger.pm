@@ -86,17 +86,8 @@ sub AUTOLOAD {
     my $method = $Koha::Logger::AUTOLOAD;
     $method =~ s/^Koha::Logger:://;
 
-    if ( !exists $self->{logger} ) {
-
-        #do not use log4perl; no print to stderr
-    }
-    elsif ( !$self->_recheck_logfile ) {
-        warn "Log file not writable for log4perl";
-        warn "$method: $line" if $line;
-    }
-    elsif ( $self->{logger}->can($method) ) {    #use log4perl
-        $self->{logger}->$method($line);
-        return 1;
+    if ( $self->{logger}->can($method) ) {    #use log4perl
+        return $self->{logger}->$method($line);
     }
     else {                                       # we should not really get here
         warn "ERROR: Unsupported method $method";
@@ -112,7 +103,7 @@ sub AUTOLOAD {
 
 sub DESTROY { }
 
-=head2 _init, _recheck_logfile
+=head2 _init
 
 =cut
 
@@ -130,20 +121,6 @@ sub _init {
 
     # This will explode with the relevant error message if something is wrong in the config file
     return Log::Log4perl->init_once($log4perl_config);
-}
-
-sub _recheck_logfile {    # recheck saved logfile when logging message
-    my $self = shift;
-
-    return 1 if !exists $self->{logs};    # remember? your own responsibility
-    my $opac = $self->{cat} =~ /^OPAC/;
-    my $log;
-    foreach ( @{ $self->{logs} } ) {
-        $log = $_ if $opac && /^OPAC:/ || !$opac && /^INTRANET:/;
-        last if $log;
-    }
-    $log =~ s/^(OPAC|INTRANET)://;
-    return -w $log;
 }
 
 =head2 debug_to_screen
