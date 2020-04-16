@@ -132,7 +132,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 56;
+    plan tests => 58;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
@@ -297,8 +297,18 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => 1,
             marc_type => 'marc21',
             marc_field => '952l',
-        },
-        {
+          },
+          {
+            name => 'copydate',
+            type => 'year',
+            facet => 0,
+            suggestible => 0,
+            searchable => 1,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '260c',
+          },
+          {
             name => 'date-of-publication',
             type => 'year',
             facet => 0,
@@ -347,6 +357,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('210', '', '', a => 'Title 1'),
         MARC::Field->new('240', '', '4', a => 'The uniform title with nonfiling indicator'),
         MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => 'c1962'),
         MARC::Field->new('999', '', '', c => '1234567'),
         # '  ' for testing trimming of white space in boolean value callback:
         MARC::Field->new('952', '', '', 0 => '  ', g => '123.30', o => $callno, l => 3),
@@ -483,9 +494,15 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'First document uniform_title__sort field should contain the title with the first four initial characters removed'
     );
 
-    # Tests for 'year' type and 'filter_callbacks'
+    # Tests for 'year' type
     is(scalar @{$docs->[0]->{'date-of-publication'}}, 1, 'First document date-of-publication field should contain one value');
     is_deeply($docs->[0]->{'date-of-publication'}, ['1962'], 'First document date-of-publication field should be set correctly');
+
+    is_deeply(
+      $docs->[0]->{'copydate'},
+      ['1962'],
+      'First document copydate field should be set correctly'
+    );
 
     # Second record:
 
@@ -511,8 +528,17 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'Second document local_classification__sort field should be set correctly'
     );
 
-    # Tests for 'year' type and 'filter_callbacks'
-    ok(!(defined $docs->[1]->{'date-of-publication'}), "Second document invalid date-of-publication value should have been removed");
+    # Tests for 'year' type
+    is_deeply(
+      $docs->[1]->{'copydate'},
+      ['1963','2003'],
+      'Second document copydate field should be set correctly'
+    );
+    is_deeply(
+      $docs->[1]->{'date-of-publication'},
+      ['1900'],
+      'Second document date-of-publication field should be set correctly'
+    );
 
     # Mappings marc_type:
 
@@ -647,6 +673,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
         MARC::Field->new('100', '', '', a => 'Author 2'),
         # MARC::Field->new('210', '', '', a => 'Title 2'),
         # MARC::Field->new('245', '', '', a => 'Title: second record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => '1963-2003'),
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric'),
     );
