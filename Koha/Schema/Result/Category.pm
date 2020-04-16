@@ -316,4 +316,8 @@ sub koha_objects_class {
     'Koha::Patron::Categories';
 }
 
+__PACKAGE__->add_columns(
+    '+require_strong_password' => { is_boolean => 1 }
+);
+
 1;
