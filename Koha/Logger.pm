@@ -112,59 +112,24 @@ sub AUTOLOAD {
 
 sub DESTROY { }
 
-=head2 _init, _check_conf and _recheck_logfile
+=head2 _init, _recheck_logfile
 
 =cut
 
 sub _init {
-    my $rv;
-    if ( exists $ENV{"LOG4PERL_CONF"} and $ENV{'LOG4PERL_CONF'} and -s $ENV{"LOG4PERL_CONF"} ) {
 
-        # Check for web server level configuration first
-        # In this case we ASSUME that you correctly arranged logfile
-        # permissions. If not, log4perl will crash on you.
-        # We will not parse apache files here.
-        Log::Log4perl->init_once( $ENV{"LOG4PERL_CONF"} );
-    }
-    elsif ( C4::Context->config("log4perl_conf") ) {
+    my $log4perl_config =
+          exists $ENV{"LOG4PERL_CONF"}
+              && $ENV{'LOG4PERL_CONF'}
+           && -s $ENV{"LOG4PERL_CONF"}
+      # Check for web server level configuration first
+      # In this case we ASSUME that you correctly arranged logfile
+      # permissions. If not, log4perl will crash on you.
+      ? $ENV{"LOG4PERL_CONF"}
+      : C4::Context->config("log4perl_conf");
 
-        # Now look in the koha conf file. We only check the permissions of
-        # the default logfiles. For the rest, we again ASSUME that
-        # you arranged file permissions.
-        my $conf = C4::Context->config("log4perl_conf");
-        if ( $rv = _check_conf($conf) ) {
-            Log::Log4perl->init_once($conf);
-            return $rv;
-        }
-        else {
-            return 0;
-        }
-    }
-    else {
-        # This means that you do not use log4perl currently.
-        # We will not be forcing it.
-        return 0;
-    }
-    return 1;    # if we make it here, log4perl did not crash :)
-}
-
-sub _check_conf {    # check logfiles in log4perl config (at initialization)
-    my $file = shift;
-    return if !-r $file;
-    open my $fh, '<', $file;
-    my @lines = <$fh>;
-    close $fh;
-    my @logs;
-    foreach my $l (@lines) {
-        if ( $l =~ /(OPAC|INTRANET)\.filename\s*=\s*(.*)\s*$/i ) {
-
-            # we only check the two default logfiles, skipping additional ones
-            return if !-w $2;
-            push @logs, $1 . ':' . $2;
-        }
-    }
-    return if !@logs;    # we should find one
-    return \@logs;
+    # This will explode with the relevant error message if something is wrong in the config file
+    return Log::Log4perl->init_once($log4perl_config);
 }
 
 sub _recheck_logfile {    # recheck saved logfile when logging message
