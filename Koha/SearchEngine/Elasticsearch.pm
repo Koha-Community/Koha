@@ -471,37 +471,56 @@ sub _process_mappings {
         # Copy (scalar) data since can have multiple targets
         # with differing options for (possibly) mutating data
         # so need a different copy for each
-        my $_data = $data;
+        my $data_copy = $data;
         if (defined $options->{substr}) {
             my ($start, $length) = @{$options->{substr}};
-            $_data = length($data) > $start ? substr $data, $start, $length : '';
+            $data_copy = length($data) > $start ? substr $data_copy, $start, $length : '';
+        }
+
+        # Add data to tokens array for callbacks processing
+        my $tokens = [$data_copy];
+
+        # Tokenize callbacks takes as token (possibly tokenized subfield data)
+        # as argument, and returns a possibly different list of tokens.
+        # Note that this list also might be empty.
+        if (defined $options->{tokenize_callbacks}) {
+            foreach my $callback (@{$options->{tokenize_callbacks}}) {
+                # Pass each token to current callback which returns a list
+                # (scalar is fine too) resulting either in a list or
+                # a list of lists that will be flattened by perl.
+                # The next callback will recieve the possibly expanded list of tokens.
+                $tokens = [ map { $callback->($_) } @{$tokens} ];
+            }
         }
         if (defined $options->{value_callbacks}) {
-            $_data = reduce { $b->($a) } ($_data, @{$options->{value_callbacks}});
+            $tokens = [ map { reduce { $b->($a) } ($_, @{$options->{value_callbacks}}) } @{$tokens} ];
         }
         if (defined $options->{filter_callbacks}) {
-            # Skip mapping unless all filter callbacks return true
-            next unless all { $_data = $_->($_data) } @{$options->{filter_callbacks}};
-        }
-        if (defined $options->{property}) {
-            $_data = {
-                $options->{property} => $_data
+            my @tokens_filtered;
+            foreach my $_data (@{$tokens}) {
+                if ( all { $_->($_data) } @{$options->{filter_callbacks}} ) {
+                    push @tokens_filtered, $_data;
+                }
             }
+            # Overwrite $tokens with filtered values
+            $tokens = \@tokens_filtered;
+        }
+        # Skip mapping if all values has been removed
+        next unless @{$tokens};
+
+        if (defined $options->{property}) {
+            $tokens = [ map { { $options->{property} => $_ } } @{$tokens} ];
         }
         if (defined $options->{nonfiling_characters_indicator}) {
             my $nonfiling_chars = $meta->{field}->indicator($options->{nonfiling_characters_indicator});
             $nonfiling_chars = looks_like_number($nonfiling_chars) ? int($nonfiling_chars) : 0;
-            if ($nonfiling_chars) {
-                $_data = substr $_data, $nonfiling_chars;
-            }
+            # Nonfiling chars does not make sense for multiple tokens
+            # Only apply on first element
+            $tokens->[0] = substr $tokens->[0], $nonfiling_chars;
         }
 
         $record_document->{$target} //= [];
-        if( ref $_data eq 'ARRAY' ){
-            push @{$record_document->{$target}}, @{$_data};
-        } else {
-            push @{$record_document->{$target}}, $_data;
-        }
+        push @{$record_document->{$target}}, @{$tokens};
     }
 }
 
@@ -897,16 +916,20 @@ sub _field_mappings {
         };
     }
     elsif ($target_type eq 'year') {
-        $default_options->{filter_callbacks} //= [];
-        push @{$default_options->{filter_callbacks}}, sub {
+        $default_options->{tokenize_callbacks} //= [];
+        # Only accept years containing digits and "u"
+        push @{$default_options->{tokenize_callbacks}}, sub {
             my ($value) = @_;
-            my @years = ();
-            my @field_years = ( $value =~ /[0-9u]{4}/g );
-            foreach my $year (@field_years){
-                $year =~ s/[u]/0/g;
-                push @years, $year;
-            }
-            return \@years;
+            my @years = ( $value =~ /[0-9u]{4}/g );
+            return @years;
+        };
+
+        $default_options->{value_callbacks} //= [];
+        # Replace "u" with "0" for sorting
+        push @{$default_options->{value_callbacks}}, sub {
+            my ($value) = @_;
+            $value =~ s/[u]/0/g;
+            return $value;
         };
     }
 

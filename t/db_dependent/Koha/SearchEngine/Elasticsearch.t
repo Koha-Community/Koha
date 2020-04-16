@@ -371,6 +371,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('100', '', '', a => 'Author 2'),
         # MARC::Field->new('210', '', '', a => 'Title 2'),
         # MARC::Field->new('245', '', '', a => 'Title: second record'),
+        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => '1963-2003'),
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
     );
@@ -531,7 +532,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     # Tests for 'year' type
     is_deeply(
       $docs->[1]->{'copydate'},
-      ['1963','2003'],
+      ['1963', '2003'],
       'Second document copydate field should be set correctly'
     );
     is_deeply(
@@ -673,7 +674,6 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () t
         MARC::Field->new('100', '', '', a => 'Author 2'),
         # MARC::Field->new('210', '', '', a => 'Title 2'),
         # MARC::Field->new('245', '', '', a => 'Title: second record'),
-        MARC::Field->new('260', '', '', a => 'New York :', b => 'Ace ,', c => '1963-2003'),
         MARC::Field->new('999', '', '', c => '1234568'),
         MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric'),
     );
