@@ -57,9 +57,10 @@ my $members = GetBorrowersToExpunge(
 unless ($confirm) {
     say "Doing a dry run; no patron records will actually be deleted.";
     say "Run again with --confirm to delete the records.";
+    $verbose ||= 1;
 }
 
-say scalar(@$members) . " patrons to delete";
+say scalar(@$members) . " patrons to delete" if $verbose;;
 
 my $deleted = 0;
 for my $member (@$members) {
@@ -73,14 +74,14 @@ for my $member (@$members) {
         next;
     }
     if ( my $charges = $patron->account->non_issues_charges ) { # And what if we owe to this patron?
-        say "Failed to delete patron $borrowernumber: patron has $charges in fines";
+        say "Failed to delete patron $borrowernumber: patron has $charges in fines" if $verbose;
         next;
     }
 
     if ( $confirm ) {
         my $deleted = eval { $patron->move_to_deleted; };
         if ($@ or not $deleted) {
-            say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" );
+            say "Failed to delete patron $borrowernumber, cannot move it" . ( $@ ? ": ($@)" : "" ) if $verbose;
             next;
         }
 
@@ -94,7 +95,7 @@ for my $member (@$members) {
     say "OK" if $verbose;
 }
 
-say "$deleted patrons deleted";
+say "$deleted patrons deleted" if $verbose;
 
 =head1 NAME
 
