@@ -21610,7 +21610,7 @@ $DBversion = '19.12.00.073';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "ALTER TABLE subscription MODIFY COLUMN closed tinyint(1) not null default 0" );
 
-    NewVersion( $DBversion, 25152, "Description");
+    NewVersion( $DBversion, 25152, "Update subscription.closed to tinyint(1) as per guidelines");
 }
 
 # SEE bug 13068
