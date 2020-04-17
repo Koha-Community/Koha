@@ -42,6 +42,7 @@ use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
+use Koha::Patron::Modifications;
 use Koha::Patron::Relationships;
 use Koha::Patrons;
 use Koha::Plugins;
@@ -382,6 +383,10 @@ sub delete {
             # Koha::Virtualshelf->new->delete too.
             # FIXME Could be $patron->get_lists
             $_->delete for Koha::Virtualshelves->search( { owner => $self->borrowernumber } );
+
+            # We cannot have a FK on borrower_modifications.borrowernumber, the table is also used
+            # for patron selfreg
+            $_->delete for Koha::Patron::Modifications->search( { borrowernumber => $self->borrowernumber } );
 
             $self->SUPER::delete;
 

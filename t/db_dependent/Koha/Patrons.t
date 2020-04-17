@@ -466,7 +466,7 @@ subtest "move_to_deleted" => sub {
 };
 
 subtest "delete" => sub {
-    plan tests => 6;
+    plan tests => 7;
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     my $patron           = $builder->build( { source => 'Borrower' } );
     my $retrieved_patron = Koha::Patrons->find( $patron->{borrowernumber} );
@@ -480,6 +480,7 @@ subtest "delete" => sub {
             value  => { owner => $patron->{borrowernumber} }
         }
     );
+    my $modification = $builder->build_object({ class => 'Koha::Patron::Modifications', value => { borrowernumber => $patron->{borrowernumber} } });
 
     my $deleted = $retrieved_patron->delete;
     is( ref($deleted), 'Koha::Patron', 'Koha::Patron->delete should return the deleted patron object if the patron has been correctly deleted' );
@@ -491,6 +492,8 @@ subtest "delete" => sub {
     is( Koha::Holds->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have cancelled patron's holds 2| );
 
     is( Koha::Virtualshelves->search( { owner => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's lists| );
+
+    is( Koha::Patron::Modifications->search( { borrowernumber => $patron->{borrowernumber} } )->count, 0, q|Koha::Patron->delete should have deleted patron's modifications| );
 
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'DELETE', object => $retrieved_patron->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->delete should have logged' );
