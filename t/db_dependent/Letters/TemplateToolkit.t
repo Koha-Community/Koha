@@ -65,38 +65,37 @@ my $library = $builder->build( { source => 'Branch' } );
 my $patron  = $builder->build( { source => 'Borrower' } );
 my $patron2 = $builder->build( { source => 'Borrower' } );
 
-my $biblio = Koha::Biblio->new(
+my $item = $builder->build_sample_item();
+my $hold = $builder->build_object(
     {
-        title => 'Test Biblio'
+        class => 'Koha::Holds',
+        value => {
+            borrowernumber => $patron->{borrowernumber},
+            biblionumber   => $item->biblionumber
+        }
     }
-)->store();
+);
 
-my $biblioitem = Koha::Biblioitem->new(
+my $news = $builder->build_object(
     {
-        biblionumber => $biblio->id()
+        class => 'Koha::News',
+        value => { title => 'a news title', content => 'a news content' }
     }
-)->store();
-
-my $item = Koha::Item->new(
+);
+my $serial       = $builder->build_object( { class => 'Koha::Serials' } );
+my $subscription = $builder->build_object( { class => 'Koha::Subscriptions' } );
+my $suggestion   = $builder->build_object( { class => 'Koha::Suggestions' } );
+my $checkout     = $builder->build_object(
+    { class => 'Koha::Checkouts', value => { itemnumber => $item->id } } );
+my $modification = $builder->build_object(
     {
-        biblionumber     => $biblio->id(),
-        biblioitemnumber => $biblioitem->id()
+        class => 'Koha::Patron::Modifications',
+        value => {
+            verification_token => "TEST",
+            changed_fields     => 'firstname,surname'
+        }
     }
-)->store();
-
-my $hold = Koha::Hold->new(
-    {
-        borrowernumber => $patron->{borrowernumber},
-        biblionumber   => $biblio->id()
-    }
-)->store();
-
-my $news         = Koha::NewsItem->new({ title => 'a news title', content => 'a news content'})->store();
-my $serial       = Koha::Serial->new()->store();
-my $subscription = Koha::Subscription->new()->store();
-my $suggestion   = Koha::Suggestion->new()->store();
-my $checkout     = Koha::Checkout->new( { itemnumber => $item->id() } )->store();
-my $modification = Koha::Patron::Modification->new( { verification_token => "TEST", changed_fields => 'firstname,surname' } )->store();
+);
 
 my $prepared_letter;
 
@@ -143,11 +142,11 @@ $prepared_letter = GetPreparedLetter(
         module      => 'test',
         letter_code => 'TEST_BIBLIO',
         tables      => {
-            biblio => $biblio->id(),
+            biblio => $item->biblionumber,
         },
     )
 );
-is( $prepared_letter->{content}, $biblio->id, 'Biblio object used correctly' );
+is( $prepared_letter->{content}, $item->biblionumber, 'Biblio object used correctly' );
 
 $sth->execute( "TEST_LIBRARY", "[% branch.id %]" );
 $prepared_letter = GetPreparedLetter(
@@ -191,7 +190,7 @@ $prepared_letter = GetPreparedLetter(
         module      => 'test',
         letter_code => 'TEST_HOLD',
         tables      => {
-            reserves => { borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio->id() },
+            reserves => { borrowernumber => $patron->{borrowernumber}, biblionumber => $item->biblionumber },
         },
     )
 );
@@ -203,7 +202,7 @@ eval {
             module      => 'test',
             letter_code => 'TEST_HOLD',
             tables      => {
-                reserves => [ $patron->{borrowernumber}, $biblio->id() ],
+                reserves => [ $patron->{borrowernumber}, $item->biblionumber ],
             },
         )
     )
@@ -219,8 +218,8 @@ $prepared_letter = GetPreparedLetter(
         tables      => {
             'branches'    => $library,
             'borrowers'   => $patron,
-            'biblio'      => $biblio->id,
-            'biblioitems' => $biblioitem->id,
+            'biblio'      => $item->biblionumber,
+            'biblioitems' => $item->biblioitemnumber,
             'reserves'    => $hold->unblessed,
             'items'       => $hold->itemnumber,
         }
