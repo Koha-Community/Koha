@@ -300,7 +300,7 @@ sub ModItemFromMarc {
     $item->{biblionumber} = $biblionumber;
     $item_object = $item_object->set_or_blank($item);
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
-    $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
+    $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields));
     $item_object->store;
 
     return $item_object->unblessed;
