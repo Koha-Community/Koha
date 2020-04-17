@@ -94,6 +94,11 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7vP3bJ0YA6LEepYOaNg++A
 
+sub koha_objects_class {
+    'Koha::Course::Instructors';
+}
+sub koha_object_class {
+    'Koha::Course::Instructor';
+}
 
-# You can replace this text with custom content, and it will be preserved on regeneration
 1;
