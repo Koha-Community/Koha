@@ -793,7 +793,7 @@ sub CheckReserves {
     return unless $itemnumber; # bail if we got nothing.
     # if item is not for loan it cannot be reserved either.....
     # except where items.notforloan < 0 :  This indicates the item is holdable.
-    return if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
+    return if $notforloan_per_item or $notforloan_per_itemtype;
 
     # Find this item in the reserves
     my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days, $ignore_borrowers);
