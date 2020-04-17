@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 59;
+use Test::More tests => 60;
 use MARC::Record;
 
 use C4::Biblio;
@@ -319,6 +319,20 @@ $hold->delete();
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
 ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
+
+# Items that are not for loan, but holdable should not be trapped until they are available for loan
+Koha::Items->find($itemnumber)->damaged(0)->notforloan(-1)->store;
+Koha::Holds->search({ biblionumber => $biblio->id })->delete();
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'OK', "Patron can place hold on item that is not for loan but holdable ( notforloan < 0 )" );
+$hold = Koha::Hold->new(
+    {
+        borrowernumber => $borrowernumbers[0],
+        itemnumber     => $itemnumber,
+        biblionumber   => $biblio->biblionumber,
+    }
+)->store();
+ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item that is not for loan but holdable ( notforloan < 0 )" );
+$hold->delete();
 
 # Regression test for bug 9532
 $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
