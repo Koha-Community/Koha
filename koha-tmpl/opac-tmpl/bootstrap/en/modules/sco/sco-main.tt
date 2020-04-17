@@ -86,7 +86,7 @@
                                 Please see a member of the library staff.
                             </p>
 
-                            [% IF ( returnitem && Koha.Preference('AllowSelfCheckReturns') ) %]
+                            [% IF ( returnitem && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" class="inline" method="post">
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -113,7 +113,7 @@
                                 <p>This item is already checked out to you.</p>
                             [% END %]
 
-                            [% IF ( renew && Koha.Preference('AllowSelfCheckReturns') ) %]
+                            [% IF ( renew && Koha.Preference('SCOAllowCheckin') ) %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
@@ -226,7 +226,7 @@
                             <div id="newcheckout" class="sco_entry">
                                 <form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('[% patronid | html %]');">
                                     <fieldset>
-                                        <legend>Check out[% IF ( Koha.Preference('AllowSelfCheckReturns') ) %], return[% END %] or renew an item: </legend>
+                                        <legend>Check out[% IF ( Koha.Preference('SCOAllowCheckin') ) %], return[% END %] or renew an item: </legend>
                                         <div class="input-append">
                                             <label for="barcode">Scan a new item or enter its barcode:</label>
                                             <input id="barcode" name="barcode" size="20" type="text" class="focus" autocomplete="off" />
@@ -331,7 +331,7 @@
                                                                         [% ELSE %]
                                                                             <span>No renewals allowed</span>
                                                                         [% END %]
-                                                                        [% IF Koha.Preference('AllowSelfCheckReturns') %]
+                                                                        [% IF Koha.Preference('SCOAllowCheckin') %]
                                                                             <input type="submit" value="Check in item" name="confirm" class="btn return" />
                                                                             <input type="hidden" name="op" value="returnbook" />
                                                                             <input type="hidden" name="confirmed" value=""  />

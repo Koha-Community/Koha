@@ -93,10 +93,10 @@ if (C4::Context->preference('SelfCheckTimeout')) {
 }
 $template->param( SelfCheckTimeout => $selfchecktimeout );
 
-# Checks policy laid out by AllowSelfCheckReturns, defaults to 'on' if preference is undefined
+# Checks policy laid out by SCOAllowCheckin, defaults to 'on' if preference is undefined
 my $allowselfcheckreturns = 1;
-if (defined C4::Context->preference('AllowSelfCheckReturns')) {
-    $allowselfcheckreturns = C4::Context->preference('AllowSelfCheckReturns');
+if (defined C4::Context->preference('SCOAllowCheckin')) {
+    $allowselfcheckreturns = C4::Context->preference('SCOAllowCheckin');
 }
 
 my $issuerid = $loggedinuser;

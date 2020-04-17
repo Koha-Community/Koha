@@ -459,7 +459,7 @@ sub mocking_systempreferences_to_a_set_value {
         UpdateTotalIssuesOnCirc
         UseTablesortForCirc
         WaitingNotifyAtCheckin
-        AllowSelfCheckReturns
+        SCOAllowCheckin
         AutoSelfCheckAllowed
         FRBRizeEditions
         OPACFRBRizeEditions

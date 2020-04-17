@@ -198,7 +198,7 @@ sub BuildReport {
         UpdateTotalIssuesOnCirc
         UseTablesortForCirc
         WaitingNotifyAtCheckin
-        AllowSelfCheckReturns
+        SCOAllowCheckin
         AutoSelfCheckAllowed
         FRBRizeEditions
         OPACFRBRizeEditions
