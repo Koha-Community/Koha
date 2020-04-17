@@ -24,7 +24,7 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
-use C4::Koha qw( GetDailyQuote );
+use Koha::Quote;
 use C4::Members;
 use C4::Overdues;
 use Koha::Checkouts;
@@ -73,7 +73,7 @@ if (defined $news_id){
     @all_koha_news   = &GetNewsToDisplay( $template->lang, $homebranch);
 }
 
-my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
+my $quote = Koha::Quote->get_daily_quote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
 
 # For dashboard
 my $patron = Koha::Patrons->find( $borrowernumber );

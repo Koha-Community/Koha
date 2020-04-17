@@ -16,34 +16,32 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
+use DateTime::Format::MySQL;
 use Test::More tests => 12;
 
-use C4::Koha qw( GetDailyQuote );
-use DateTime::Format::MySQL;
 use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
+use Koha::Quote;
+use Koha::Quotes;
 
 BEGIN {
-    use_ok('C4::Koha');
+    use_ok('Koha::Quote');
 }
 
-can_ok('C4::Koha', qw( GetDailyQuote ));
+my $quote = Koha::Quote->new();
+isa_ok( $quote, 'Koha::Quote', 'Quote class returned' );
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
-# Setup stage
-$dbh->do("DELETE FROM quotes");
-
 # Ids not starting with 1 to reflect possible deletes, this acts as a regression test for bug 11297
-$dbh->do("INSERT INTO `quotes` VALUES
-(6,'George Washington','To be prepared for war is one of the most effectual means of preserving peace.',NOW()),
-(7,'Thomas Jefferson','When angry, count ten, before you speak; if very angry, an hundred.',NOW()),
-(8,'Abraham Lincoln','Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.',NOW()),
-(9,'Abraham Lincoln','I have always found that mercy bears richer fruits than strict justice.',NOW()),
-(10,'Andrew Johnson','I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.',NOW());");
+my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string()); #???
+my $quote_1 = Koha::Quote->new({ id => 6, source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  $timestamp })->store;
+my $quote_2 = Koha::Quote->new({ id => 7, source => 'Thomas Jefferson', text => 'When angry, count ten, before you speak; if very angry, an hundred.', timestamp =>  $timestamp })->store;
+my $quote_3 = Koha::Quote->new({ id => 8, source => 'Abraham Lincoln', text => 'Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal', timestamp =>  $timestamp })->store;
+my $quote_4 = Koha::Quote->new({ id => 9, source => 'Abraham Lincoln', text => 'I have always found that mercy bears richer fruits than strict justice.', timestamp =>  $timestamp })->store;
+my $quote_5 = Koha::Quote->new({ id => 10, source => 'Andrew Johnson', text => 'I feel incompetent to perform duties...which have been so unexpectedly thrown upon me.', timestamp =>  $timestamp })->store;
 
 my $expected_quote = {
     id          => 8,
@@ -52,33 +50,29 @@ my $expected_quote = {
     timestamp   => dt_from_string,
 };
 
-my $quote = GetDailyQuote('id'=>8);
+$quote = Koha::Quote->get_daily_quote('id'=>$quote_3->id);
 cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Correctly got quote by ID");
 is($quote->{'quote'}, $expected_quote->{'quote'}, "Quote is correct");
 
-$quote = GetDailyQuote('random'=>1);
+$quote = Koha::Quote->get_daily_quote('random'=>1);
 ok($quote, "Got a random quote.");
 cmp_ok($quote->{'id'}, '>', 0, 'Id is greater than 0');
 
-my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string->add( seconds => 1 )); # To make it the last one
-my $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
-my $sth = C4::Context->dbh->prepare($query);
-$sth->execute( $timestamp , $expected_quote->{'id'});
-
+$timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string->add( seconds => 1 )); # To make it the last one
+Koha::Quotes->search({ id => $expected_quote->{'id'} })->update({ timestamp => $timestamp });
 $expected_quote->{'timestamp'} = $timestamp;
 
-$quote = GetDailyQuote(); # this is the "default" mode of selection
+$quote = Koha::Quote->get_daily_quote(); # this is the "default" mode of selection
 cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Id is correct");
 is($quote->{'source'}, $expected_quote->{'source'}, "Source is correct");
 is($quote->{'timestamp'}, $expected_quote->{'timestamp'}, "Timestamp $timestamp is correct");
 
 $dbh->do(q|DELETE FROM quotes|);
-$quote = eval {GetDailyQuote();};
-is( $@, '', 'GetDailyQuote does not die if no quote exist' );
-is_deeply( $quote, {}, 'GetDailyQuote return an empty hashref is no quote exist'); # Is it what we expect?
-$dbh->do(q|INSERT INTO `quotes` VALUES
-    (6,'George Washington','To be prepared for war is one of the most effectual means of preserving peace.',NOW())
-|);
+$quote = eval {Koha::Quote->get_daily_quote();};
+is( $@, '', 'get_daily_quote does not die if no quote exist' );
+is_deeply( $quote, {}, 'get_daily_quote return an empty hashref is no quote exist'); # Is it what we expect?
 
-$quote = GetDailyQuote();
-is( $quote->{id}, 6, ' GetDailyQuote returns the only existing quote' );
+my $quote_6 = Koha::Quote->new({ id => 6, source => 'George Washington', text => 'To be prepared for war is one of the most effectual means of preserving peace.', timestamp =>  dt_from_string() })->store;
+
+$quote = Koha::Quote->get_daily_quote();
+is( $quote->{id}, 6, ' get_daily_quote returns the only existing quote' );
