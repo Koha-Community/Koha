@@ -21588,6 +21588,9 @@ if( CheckVersion( $DBversion ) ) {
                       $_->{authorised_value}, $_->{c}
                 } @$duplicates
             );
+            for my $warning (@description) {
+                warn $warning;
+            }
         } else {
             $dbh->do( q{ALTER TABLE `authorised_values` ADD CONSTRAINT `av_uniq` UNIQUE (category, authorised_value)} );
         }
