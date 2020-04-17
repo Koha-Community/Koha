@@ -21613,6 +21613,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25152, "Update subscription.closed to tinyint(1) as per guidelines");
 }
 
+$DBversion = '19.12.00.074';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET variable = 'SCOAllowCheckin' WHERE variable = 'AllowSelfCheckReturns'" );
+
+    # Always end with this (adjust the bug info)
+    NewVersion( $DBversion, 25147, "Rename AllowSelfCheckReturns to SCOAllowCheckin for consistency");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
