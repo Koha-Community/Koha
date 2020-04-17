@@ -188,5 +188,11 @@ __PACKAGE__->belongs_to(
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0hBp2R7AMxgHLLZcG/676w
 
 
-# You can replace this text with custom content, and it will be preserved on regeneration
+sub koha_objects_class {
+    'Koha::Course::Items';
+}
+sub koha_object_class {
+    'Koha::Course::Item';
+}
+
 1;
