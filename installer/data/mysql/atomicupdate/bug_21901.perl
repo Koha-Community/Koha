@@ -72,8 +72,8 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q|
         ALTER TABLE subscriptionhistory
-        MODIFY COLUMN biblionumber int(11),
-        MODIFY COLUMN subscriptionid int(11)
+        MODIFY COLUMN biblionumber int(11) NOT NULL,
+        MODIFY COLUMN subscriptionid int(11) NOT NULL
     |);
 
     unless ( foreign_key_exists( 'subscriptionhistory', 'subscription_history_ibfk_1' ) ) {
@@ -98,7 +98,7 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q|
         ALTER TABLE subscription
-        MODIFY COLUMN biblionumber int(11)
+        MODIFY COLUMN biblionumber int(11) NOT NULL
     |);
 
     unless ( foreign_key_exists( 'subscription', 'subscription_ibfk_3' ) ) {
