@@ -217,6 +217,14 @@
                                                 <label for="override_high_holds_tmp">Don't decrease loan length based on holds</label>
                                             </p>
                                         [% END %]
+                                    [% IF ( INVALID_DATE ) %]
+                                        <p>
+                                          <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | $KohaDates as_due_date => 1 %]" />
+                                            <label for="duedatespec">Due date</label>
+                                        </p>
+                                    [% ELSE %]
+                                        <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
+                                    [% END %]
 
                                         [% IF ( RESERVED ) %]
                                             <p>
