@@ -345,6 +345,51 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 serials
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Serial>
+
+=cut
+
+__PACKAGE__->has_many(
+  "serials",
+  "Koha::Schema::Result::Serial",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 subscriptionhistories
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Subscriptionhistory>
+
+=cut
+
+__PACKAGE__->has_many(
+  "subscriptionhistories",
+  "Koha::Schema::Result::Subscriptionhistory",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 subscriptions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Subscription>
+
+=cut
+
+__PACKAGE__->has_many(
+  "subscriptions",
+  "Koha::Schema::Result::Subscription",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 suggestions
 
 Type: has_many
@@ -406,8 +451,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-01 07:08:47
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:otCex8qzJmZyc+JXpKNdpQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-17 09:15:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:p2SIq565zPyE3ZUkSuXyBA
 
 
 __PACKAGE__->has_one(

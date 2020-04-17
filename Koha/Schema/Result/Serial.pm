@@ -31,17 +31,15 @@ __PACKAGE__->table("serial");
 
 =head2 biblionumber
 
-  data_type: 'varchar'
-  default_value: (empty string)
+  data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
-  size: 100
 
 =head2 subscriptionid
 
-  data_type: 'varchar'
-  default_value: (empty string)
+  data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
-  size: 100
 
 =head2 serialseq
 
@@ -120,9 +118,9 @@ __PACKAGE__->add_columns(
   "serialid",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "biblionumber",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "subscriptionid",
-  { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "serialseq",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 100 },
   "serialseq_x",
@@ -163,6 +161,21 @@ __PACKAGE__->set_primary_key("serialid");
 
 =head1 RELATIONS
 
+=head2 biblionumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 =head2 serialitems
 
 Type: has_many
@@ -178,9 +191,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 subscriptionid
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sRygXoIOnqpdk0lqVMcBdA
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Subscription>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "subscriptionid",
+  "Koha::Schema::Result::Subscription",
+  { subscriptionid => "subscriptionid" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-17 09:15:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ktCCJzkgRUFpYu857WQONA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

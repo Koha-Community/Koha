@@ -26,7 +26,7 @@ __PACKAGE__->table("subscription");
 =head2 biblionumber
 
   data_type: 'integer'
-  default_value: 0
+  is_foreign_key: 1
   is_nullable: 0
 
 =head2 subscriptionid
@@ -280,7 +280,7 @@ __PACKAGE__->table("subscription");
 
 __PACKAGE__->add_columns(
   "biblionumber",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "subscriptionid",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "librarian",
@@ -396,6 +396,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 biblionumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
 =head2 numberpattern
 
 Type: belongs_to
@@ -436,6 +451,36 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 serials
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Serial>
+
+=cut
+
+__PACKAGE__->has_many(
+  "serials",
+  "Koha::Schema::Result::Serial",
+  { "foreign.subscriptionid" => "self.subscriptionid" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 subscriptionhistory
+
+Type: might_have
+
+Related object: L<Koha::Schema::Result::Subscriptionhistory>
+
+=cut
+
+__PACKAGE__->might_have(
+  "subscriptionhistory",
+  "Koha::Schema::Result::Subscriptionhistory",
+  { "foreign.subscriptionid" => "self.subscriptionid" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 subscriptionroutinglists
 
 Type: has_many
@@ -452,8 +497,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-15 11:35:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5zW2XKZNcvytO8svTJ4ijQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2020-04-17 09:15:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Bw7XzPSvv9fjc9F6+uIBUw
 
 __PACKAGE__->has_many(
   "additional_field_values",
