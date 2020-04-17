@@ -1,4 +1,4 @@
-/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers MSG_NO_ITEM_SELECTED MSG_NO_ITEM_SELECTED holdfor_cardnumber holdforclub strQuery MSG_NON_RESERVES_SELECTED PREF_NotHighlightedWords PLACE_HOLD _ */
+/* global KOHA biblionumber new_results_browser addMultiple vShelfAdd openWindow search_result SEARCH_RESULTS PREF_AmazonCoverImages PREF_LocalCoverImages PREF_IntranetCoce PREF_CoceProviders CoceHost CoceProviders addRecord delSingleRecord PREF_BrowseResultSelection resetSearchContext addBibToContext delBibToContext getContextBiblioNumbers MSG_NO_ITEM_SELECTED MSG_NO_ITEM_SELECTED holdfor_cardnumber holdforclub strQuery MSG_NON_RESERVES_SELECTED PREF_NotHighlightedWords PLACE_HOLD __ */
 
 if( PREF_AmazonCoverImages ){
     $(window).load(function() {
@@ -338,7 +338,7 @@ function resultsBatchProcess( op ){
     if( op == "edit" ){
         // batch edit selected records
         if ( selected.length < 1 ){
-            alert( _("You must select at least one record") );
+            alert( __("You must select at least one record") );
         } else {
             selected.each(function() {
                 params.push( $(this).val() );
@@ -349,7 +349,7 @@ function resultsBatchProcess( op ){
     } else if( op == "delete" ){
         // batch delete selected records
         if ( selected.length < 1) {
-            alert( _("You must select at least one record") );
+            alert( __("You must select at least one record") );
         } else {
             selected.each(function() {
                 params.push( $(this).val() );
@@ -360,7 +360,7 @@ function resultsBatchProcess( op ){
     } else if( op == "merge" ){
         // merge selected records
         if ( selected.length < 2) {
-            alert( _("At least two records must be selected for merging") );
+            alert( __("At least two records must be selected for merging") );
         } else {
             selected.each(function() {
                 params.push('biblionumber=' + $(this).val());
