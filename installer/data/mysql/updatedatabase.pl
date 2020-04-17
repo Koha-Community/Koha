@@ -21621,6 +21621,14 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 25147, "Rename AllowSelfCheckReturns to SCOAllowCheckin for consistency");
 }
 
+$DBversion = '19.12.00.075';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "ALTER TABLE borrower_modifications MODIFY changed_fields MEDIUMTEXT DEFAULT NULL" );
+
+    NewVersion( $DBversion, 25086, "Set changed_fields column of borrower_modifications as nullable");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
