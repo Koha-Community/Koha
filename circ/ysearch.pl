@@ -52,7 +52,7 @@ if (   C4::Context->preference("IndependentBranches")
     $limit_on_branch = 1;
 }
 
-my @parts = split( / /, $query );
+my @parts = split( /,\s|\s/, $query );
 my @params;
 foreach my $p (@parts) {
     push(
