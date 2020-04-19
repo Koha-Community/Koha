@@ -44,10 +44,6 @@ jQuery.fn.highlight = function(pat) {
 
 jQuery.fn.removeHighlight = function() {
  return this.find("span.term").each(function() {
-  this.parentNode.firstChild.nodeName;
-  with (this.parentNode) {
-   replaceChild(this.firstChild, this);
-   normalize();
-  }
- }).end();
+  $(this).contents().unwrap();
+ });
 };
