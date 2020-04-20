@@ -170,7 +170,7 @@ for my $barcode ( @$barcodes ) {
 
 my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');
 my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
-$duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso', timeformat => '24hr' }); }
+$duedatespec = eval { output_pref( { dt => dt_from_string( $duedatespec ), dateformat => 'iso' }); }
     if ( $duedatespec );
 my $restoreduedatespec  = $query->param('restoreduedatespec') || $duedatespec || $session->param('stickyduedate');
 if ( $restoreduedatespec && $restoreduedatespec eq "highholds_empty" ) {

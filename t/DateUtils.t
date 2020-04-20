@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 72;
+use Test::More tests => 76;
 
 use Test::MockModule;
 use Test::Warn;
@@ -248,6 +248,17 @@ is( output_pref( { dt => $dt, dateonly => 1 } ), '01/01/1900', 'dt_from_string s
 # fallback
 $dt = dt_from_string('2015-01-31 01:02:03');
 is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string should fallback to sql format' );
+
+# 12hr format
+$dt = dt_from_string('2015-01-31 01:02 AM');
+is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string ' );
+$dt = dt_from_string('2015-01-31 01:02:03 AM');
+is( output_pref( {dt => $dt} ), '31/01/2015 01:02', 'dt_from_string ' );
+$dt = dt_from_string('2015-01-31 01:02 PM');
+is( output_pref( {dt => $dt} ), '31/01/2015 13:02', 'dt_from_string ' );
+$dt = dt_from_string('2015-01-31 01:02:03 PM');
+is( output_pref( {dt => $dt} ), '31/01/2015 13:02', 'dt_from_string ' );
+
 
 # output_pref with no parameters, single parameter (no hash)
 is( output_pref(), undef, 'Call output_pref without parameters' );
