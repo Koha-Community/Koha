@@ -226,7 +226,7 @@
         $(document).ready( function() {
             var accordion = $( "#modules" ).accordion({
                     collapsible: true,
-                    autoHeight: false,
+                    heightStyle: "content",
                     header: ".panel_header",
                 [%- IF panel -%]
                     [%# we were asked to show a specific panel, usually on update %]
