@@ -477,50 +477,38 @@ sub _process_mappings {
             $data_copy = length($data) > $start ? substr $data_copy, $start, $length : '';
         }
 
-        # Add data to tokens array for callbacks processing
-        my $tokens = [$data_copy];
+        # Add data to values array for callbacks processing
+        my $values = [$data_copy];
 
-        # Tokenize callbacks takes as token (possibly tokenized subfield data)
-        # as argument, and returns a possibly different list of tokens.
-        # Note that this list also might be empty.
-        if (defined $options->{tokenize_callbacks}) {
-            foreach my $callback (@{$options->{tokenize_callbacks}}) {
-                # Pass each token to current callback which returns a list
+        # Value callbacks takes subfield data (or values from previous
+        # callbacks) as argument, and returns a possibly different list of values.
+        # Note that the returned list may also be empty.
+        if (defined $options->{value_callbacks}) {
+            foreach my $callback (@{$options->{value_callbacks}}) {
+                # Pass each value to current callback which returns a list
                 # (scalar is fine too) resulting either in a list or
                 # a list of lists that will be flattened by perl.
-                # The next callback will recieve the possibly expanded list of tokens.
-                $tokens = [ map { $callback->($_) } @{$tokens} ];
+                # The next callback will recieve the possibly expanded list of values.
+                $values = [ map { $callback->($_) } @{$values} ];
             }
         }
-        if (defined $options->{value_callbacks}) {
-            $tokens = [ map { reduce { $b->($a) } ($_, @{$options->{value_callbacks}}) } @{$tokens} ];
-        }
-        if (defined $options->{filter_callbacks}) {
-            my @tokens_filtered;
-            foreach my $_data (@{$tokens}) {
-                if ( all { $_->($_data) } @{$options->{filter_callbacks}} ) {
-                    push @tokens_filtered, $_data;
-                }
-            }
-            # Overwrite $tokens with filtered values
-            $tokens = \@tokens_filtered;
-        }
+
         # Skip mapping if all values has been removed
-        next unless @{$tokens};
+        next unless @{$values};
 
         if (defined $options->{property}) {
-            $tokens = [ map { { $options->{property} => $_ } } @{$tokens} ];
+            $values = [ map { { $options->{property} => $_ } } @{$values} ];
         }
         if (defined $options->{nonfiling_characters_indicator}) {
             my $nonfiling_chars = $meta->{field}->indicator($options->{nonfiling_characters_indicator});
             $nonfiling_chars = looks_like_number($nonfiling_chars) ? int($nonfiling_chars) : 0;
-            # Nonfiling chars does not make sense for multiple tokens
+            # Nonfiling chars does not make sense for multiple values
             # Only apply on first element
-            $tokens->[0] = substr $tokens->[0], $nonfiling_chars;
+            $values->[0] = substr $values->[0], $nonfiling_chars;
         }
 
         $record_document->{$target} //= [];
-        push @{$record_document->{$target}}, @{$tokens};
+        push @{$record_document->{$target}}, @{$values};
     }
 }
 
@@ -916,20 +904,12 @@ sub _field_mappings {
         };
     }
     elsif ($target_type eq 'year') {
-        $default_options->{tokenize_callbacks} //= [];
-        # Only accept years containing digits and "u"
-        push @{$default_options->{tokenize_callbacks}}, sub {
-            my ($value) = @_;
-            my @years = ( $value =~ /[0-9u]{4}/g );
-            return @years;
-        };
-
         $default_options->{value_callbacks} //= [];
-        # Replace "u" with "0" for sorting
+        # Only accept years containing digits and "u"
         push @{$default_options->{value_callbacks}}, sub {
             my ($value) = @_;
-            $value =~ s/[u]/0/g;
-            return $value;
+            # Replace "u" with "0" for sorting
+            return map { s/[u]/0/gr } ( $value =~ /[0-9u]{4}/g );
         };
     }
 
