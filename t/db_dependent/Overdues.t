@@ -144,13 +144,13 @@ subtest 'UpdateFine tests' => sub {
     my $checkout1 = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => { itemnumber => $item1->itemnumber }
+            value => { itemnumber => $item1->itemnumber, borrowernumber => $patron->id }
         }
     );
     my $checkout2 = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => { itemnumber => $item2->itemnumber }
+            value => { itemnumber => $item2->itemnumber, borrowernumber => $patron->id }
         }
     );
 
@@ -430,27 +430,70 @@ subtest 'UpdateFine tests' => sub {
     is( $fine3->amount+0, 30, "Third fine reduced" );
     is( $fine3->amountoutstanding+0, 10, "Third fine amount outstanding is reduced" );
 
+    # Ensure calculations work correctly for floats (bug #25127)
+    # 7.2 (maxfine) - 7.2 (total_amount_other) != 8.88178419700125e-16 (😢)
     t::lib::Mocks::mock_preference( 'MaxFine', '7.2' );
-    my $patron_1    = $builder->build_object( { class => 'Koha::Patrons' } );
-    my $account   = $patron_1->account;
-    $account->add_debit({ type => 'OVERDUE', amount => '6.99', interface => 'TEST'});
-    $account->add_debit({ type => 'OVERDUE', amount => '.10', interface => 'TEST'});
-    $account->add_debit({ type => 'OVERDUE', amount => '.10', interface => 'TEST'});
-    $account->add_debit({ type => 'OVERDUE', amount => '.01', interface => 'TEST'});
+    my $patron_1   = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item_1     = $builder->build_sample_item();
+    my $item_2     = $builder->build_sample_item();
     my $checkout_1 = $builder->build_object(
         {
             class => 'Koha::Checkouts',
-            value => { itemnumber => $item_1->itemnumber, borrowernumber => $patron_1->id }
+            value => {
+                itemnumber     => $item_1->itemnumber,
+                borrowernumber => $patron_1->id
+            }
+        }
+    );
+    my $checkout_2 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => {
+                itemnumber     => $item_2->itemnumber,
+                borrowernumber => $patron->id
+            }
+        }
+    );
+    my $account = $patron_1->account;
+    $account->add_debit(
+        {
+            type      => 'OVERDUE',
+            amount    => '6.99',
+            issue_id  => $checkout_1->issue_id,
+            interface => 'TEST'
+        }
+    );
+    $account->add_debit(
+        {
+            type      => 'OVERDUE',
+            amount    => '.10',
+            issue_id  => $checkout_1->issue_id,
+            interface => 'TEST'
+        }
+    );
+    $account->add_debit(
+        {
+            type      => 'OVERDUE',
+            amount    => '.10',
+            issue_id  => $checkout_1->issue_id,
+            interface => 'TEST'
+        }
+    );
+    $account->add_debit(
+        {
+            type      => 'OVERDUE',
+            amount    => '.01',
+            issue_id  => $checkout_1->issue_id,
+            interface => 'TEST'
         }
     );
     UpdateFine(
         {
-            issue_id       => $checkout_1->issue_id,
-            itemnumber     => $item_1->itemnumber,
+            issue_id       => $checkout_2->issue_id,
+            itemnumber     => $item_2->itemnumber,
             borrowernumber => $patron_1->borrowernumber,
             amount         => '.1',
-            due            => $checkout_1->date_due
+            due            => $checkout_2->date_due
         }
     );
     $fines = Koha::Account::Lines->search(
@@ -459,7 +502,6 @@ subtest 'UpdateFine tests' => sub {
     );
     is( $fines->count,        4,    "New amount should be 0 so no fine added" );
     ok( C4::Circulation::AddReturn( $item_1->barcode, $item_1->homebranch, 1), "Returning the item and forgiving fines succeeds");
-
 
     $schema->storage->txn_rollback;
 };
