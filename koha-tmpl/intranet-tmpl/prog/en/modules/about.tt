@@ -254,7 +254,7 @@
                     [% CASE 'cannot_read_config_file' %]The log4perl config file cannot be opened.
                     [% CASE 'logfile_not_writable' %]One of the logfiles listed in the config file is not writable.
                     [% CASE 'cannot_init_module' %]The Koha::Logger module cannot be initiated correctly (check the log file).
-                    [% CASE %]Unknown error "[% e %]"
+                    [% CASE %]Unknown error "[% e | html %]"
                 [% END %]
             [% END %]
         [% END %]
