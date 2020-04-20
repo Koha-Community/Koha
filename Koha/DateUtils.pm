@@ -139,12 +139,17 @@ sub dt_from_string {
                     :
                     (?<second>\d{2})
                 )?
+                (
+                    \s
+                    (?<ampm>\w{2})
+                )?
             )?
     |xms;
     $regex .= $time_re;
     $fallback_re .= $time_re;
 
     my %dt_params;
+    my $ampm;
     if ( $date_string =~ $regex ) {
         %dt_params = (
             year   => $+{year},
@@ -154,6 +159,7 @@ sub dt_from_string {
             minute => $+{minute},
             second => $+{second},
         );
+        $ampm = $+{ampm};
     } elsif ( $date_string =~ $fallback_re ) {
         %dt_params = (
             year   => $+{year},
@@ -163,6 +169,7 @@ sub dt_from_string {
             minute => $+{minute},
             second => $+{second},
         );
+        $ampm = $+{ampm};
     }
     else {
         die "The given date ($date_string) does not match the date format ($date_format)";
@@ -175,6 +182,8 @@ sub dt_from_string {
     $dt_params{hour}   = 00 unless defined $dt_params{hour};
     $dt_params{minute} = 00 unless defined $dt_params{minute};
     $dt_params{second} = 00 unless defined $dt_params{second};
+
+    $dt_params{hour} += 12 if $ampm && $ampm eq 'PM';
 
     my $dt = eval {
         DateTime->new(
