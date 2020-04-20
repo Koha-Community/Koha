@@ -287,6 +287,7 @@ elsif ($op eq 'add') {
     my $overduefinescap = $input->param('overduefinescap') || '';
     my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || '') eq 'on';
     my $note = $input->param('note');
+    my $decreaseloanholds = $input->param('decreaseloanholds') || undef;
     $debug and warn "Adding $br, $bor, $itemtype, $fine, $maxissueqty, $maxonsiteissueqty, $cap_fine_to_replacement_price";
 
     my $rules = {
@@ -320,6 +321,7 @@ elsif ($op eq 'add') {
         cap_fine_to_replacement_price => $cap_fine_to_replacement_price,
         article_requests              => $article_requests,
         note                          => $note,
+        decreaseloanholds             => $decreaseloanholds,
     };
 
     Koha::CirculationRules->set_rules(

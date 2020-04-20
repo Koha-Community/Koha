@@ -30,7 +30,7 @@ use Koha::CirculationRules;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 
 my $dbh    = C4::Context->dbh;
 my $schema = Koha::Database->new()->schema();
@@ -109,10 +109,10 @@ Koha::CirculationRules->set_rules(
             lengthunit      => 'days',
             reservesallowed => '99',
             holds_per_record => '99',
+            decreaseloanholds => 0,
         }
     }
 );
-
 
 my $orig_due = C4::Circulation::CalcDateDue(
     dt_from_string(),
@@ -133,8 +133,26 @@ my $patron_hr = { borrowernumber => $patron->id, branchcode => $library->{branch
 my $data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
 is( $data->{exceeded},        1,          "Static mode should exceed threshold" );
 is( $data->{outstanding},     6,          "Should have 6 outstanding holds" );
-is( $data->{duration},        1,          "Should have duration of 1" );
+is( $data->{duration},        0,          "Should have duration of 0 because of specific circulation rules" );
 is( ref( $data->{due_date} ), 'DateTime', "due_date should be a DateTime object" );
+
+Koha::CirculationRules->set_rules(
+    {
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => $item->itype,
+        rules        => {
+            issuelength     => '14',
+            lengthunit      => 'days',
+            reservesallowed => '99',
+            holds_per_record => '99',
+            decreaseloanholds => undef,
+        }
+    }
+);
+
+$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+is( $data->{duration}, 1, "Should have a duration of 1 because no specific circulation rules so defaults to system preference" );
 
 my $duedate = $data->{due_date};
 is($duedate->hour, $orig_due->hour, 'New due hour is equal to original due hour.');
@@ -214,5 +232,18 @@ ok( $needsconfirmation->{HIGHHOLDS}, "High holds checkout needs confirmation" );
 
 ( undef, $needsconfirmation ) = CanBookBeIssued( $patron_object, $item->barcode, undef, undef, undef, { override_high_holds => 1 } );
 ok( !$needsconfirmation->{HIGHHOLDS}, "High holds checkout does not need confirmation" );
+
+Koha::CirculationRules->set_rule(
+    {
+        branchcode   => undef,
+        categorycode => undef,
+        itemtype     => $item->itype,
+        rule_name    => 'decreaseloanholds',
+        rule_value   => 2,
+    }
+);
+
+$data = C4::Circulation::checkHighHolds( $item_hr, $patron_hr );
+is( $data->{duration}, 2, "Circulation rules override system preferences" );
 
 $schema->storage->txn_rollback();

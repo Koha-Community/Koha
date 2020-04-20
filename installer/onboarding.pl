@@ -287,6 +287,7 @@ if ( $step == 5 ) {
                 rentaldiscount                   => 0,
                 reservesallowed                  => $reservesallowed,
                 suspension_chargeperiod          => undef,
+                decreaseloanholds                => undef,
               }
         };
 

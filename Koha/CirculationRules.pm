@@ -163,6 +163,9 @@ our $RULE_KINDS = {
     note => { # This is not really a rule. Maybe we will want to separate this later.
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    decreaseloanholds => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     # Not included (deprecated?):
     #   * accountsent
     #   * reservecharge

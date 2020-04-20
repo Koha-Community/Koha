@@ -102,6 +102,7 @@
                 <th>Days mode</th>
                 <th>Unit</th>
                 <th>Hard due date</th>
+                <th>Decreased loan period for high holds (day)</th>
                 <th>Fine amount</th>
                 <th>Fine charging interval</th>
                 <th>When to charge</th>
@@ -163,8 +164,9 @@
                         [% SET opacitemholds = all_rules.$c.$i.opacitemholds %]
                         [% SET article_requests = all_rules.$c.$i.article_requests %]
                         [% SET rentaldiscount = all_rules.$c.$i.rentaldiscount %]
+                        [% SET decreaseloanholds = all_rules.$c.$i.decreaseloanholds %]
 
-                        [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount %]
+                        [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds %]
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count | html %]">
@@ -242,6 +244,7 @@
                                         <span>None defined</span>
                                       [% END %]
                                     </td>
+                                    <td>[% decreaseloanholds | html %]</td>
                                     <td>[% fine | html %]</td>
                                     <td>[% chargeperiod | html %]</td>
                                     <td>[% IF chargeperiod_charge_at %]Start of interval[% ELSE %]End of interval[% END %]</td>
@@ -391,6 +394,7 @@
                         <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate | html %]" class="datepicker" />
                         <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
                     </td>
+                    <td><input type="text" name="decreaseloanholds" id="decreaseloanholds" size="2" /></td>
                     <td><input type="text" name="fine" id="fine" size="4" /></td>
                     <td><input type="text" name="chargeperiod" id="chargeperiod" size="2" /></td>
                     <td>
@@ -465,6 +469,7 @@
                       <th>Days mode</th>
                       <th>Unit</th>
                       <th>Hard due date</th>
+                      <th>Decreased loan period for high holds (day)</th>
                       <th>Fine amount</th>
                       <th>Fine charging interval</th>
                       <th>Charge when?</th>
