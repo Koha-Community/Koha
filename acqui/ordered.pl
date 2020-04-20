@@ -60,7 +60,8 @@ SELECT
     aqbooksellers.name as vendorname,
     GROUP_CONCAT(DISTINCT itype SEPARATOR '|') AS itypes,
     title
-FROM (aqorders, aqbasket)
+FROM aqorders
+JOIN aqbasket USING (basketno)
 LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
 LEFT JOIN aqorders_items ON
@@ -70,7 +71,6 @@ LEFT JOIN items ON
 LEFT JOIN aqbooksellers ON
     aqbasket.booksellerid = aqbooksellers.id
 WHERE
-    aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
     (datecancellationprinted IS NULL OR
         datecancellationprinted='0000-00-00') AND
