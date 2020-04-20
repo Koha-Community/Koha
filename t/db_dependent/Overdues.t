@@ -262,7 +262,7 @@ subtest 'UpdateFine tests' => sub {
     $fine = $fines->next;
     is( $fine->amount+0, 80, "First fine amount unchanged" );
     is( $fine->amountoutstanding+0, 80, "First fine amountoutstanding unchanged" );
-    my $fine2 = $fines->next;
+    $fine2 = $fines->next;
     is( $fine2->amount+0, 20, "Second fine capped at '20' by MaxFine" );
     is( $fine2->amountoutstanding+0, 20, "Second fine amountoutstanding capped at '20' by MaxFine" );
     is( $fine2->issue_id, $checkout2->issue_id, "Second fine is associated with the correct issue" );
