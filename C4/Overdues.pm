@@ -553,7 +553,7 @@ sub UpdateFine {
 
     if ( my $maxfine = C4::Context->preference('MaxFine') ) {
         my $maxIncrease = $maxfine - $total_amount_other;
-        return if $maxIncrease <= 0.00;
+        return if Koha::Number::Price->new($maxIncrease)->round <= 0.00;
         if ($accountline) {
             if ( ( $amount - $accountline->amount ) > $maxIncrease ) {
                 my $new_amount = $accountline->amount + $maxIncrease;
