@@ -287,6 +287,7 @@ if ( $step == 5 ) {
                 recall_due_date_interval         => undef,
                 recall_overdue_fine              => undef,
                 recall_shelf_time                => undef,
+                holds_pickup_period              => undef,
               }
         };
 

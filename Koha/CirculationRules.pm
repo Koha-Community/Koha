@@ -213,6 +213,9 @@ our $RULE_KINDS = {
     recall_shelf_time => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    holds_pickup_period => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     # Not included (deprecated?):
     #   * accountsent
     #   * reservecharge

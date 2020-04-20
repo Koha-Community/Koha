@@ -233,6 +233,17 @@ sub set_waiting {
 
     my $new_expiration_date = dt_from_string($self->waitingdate)->clone->add( days => $max_pickup_delay );
 
+    my $rule = Koha::CirculationRules->get_effective_rule({
+        categorycode => $self->borrower->categorycode,
+        itemtype => $self->item->effective_itemtype,
+        branchcode => $self->branchcode,
+        rule_name => 'holds_pickup_period',
+    });
+    if ( defined($rule) and $rule->rule_value ne '' ){
+        # circulation rule overrides ReservesMaxPickUpDelay
+        $max_pickup_delay = $rule->rule_value;
+    }
+
     if ( C4::Context->preference("ExcludeHolidaysFromMaxPickUpDelay") ) {
         my $itemtype = $self->item ? $self->item->effective_itemtype : $self->biblio->itemtype;
         my $daysmode = Koha::CirculationRules->get_effective_daysmode(
