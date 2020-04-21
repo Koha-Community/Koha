@@ -21,6 +21,12 @@ Administration:
               class: email
             - "(Leave this field empty to send messages to their normal recipient.)"
         -
+            - "Email address failed overdue notices are sent to: "
+            - pref: RedirectAddressForFailedOverdueNotices
+              class: email
+            - "If left empty then the branch email or KohaAdminEmailAddress will be set as the destination address for failed overdue notices"
+        -
+
             - "How much debugging information to show in the browser when an internal error occurs: "
             - pref: DebugLevel
               default: 0

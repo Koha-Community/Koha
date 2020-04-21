@@ -1,0 +1,1 @@
+INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('RedirectAddressForFailedOverdueNotices', '', NULL, 'Destination email for failed overdue notices. If left empty then the branch email or KohaAdminEmailAddress syspref will be the email address that failed overdue notices are sent to', 'free');
