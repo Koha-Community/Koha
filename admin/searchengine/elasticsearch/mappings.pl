@@ -24,12 +24,13 @@ use C4::Output;
 use C4::Auth;
 
 use Koha::SearchEngine::Elasticsearch;
-use Koha::SearchEngine::Elasticsearch::Indexer;
 use Koha::SearchMarcMaps;
 use Koha::SearchFields;
 use Koha::Caches;
 
 use Try::Tiny;
+use Module::Load::Conditional qw(can_load);
+
 
 my $input = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -40,6 +41,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired   => { parameters => 'manage_search_engine_config' },
     }
 );
+
+unless ( can_load( modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => undef } ) ) {
+    output_and_exit( $input, $cookie, $template, 'missing_es_modules');
+}
+
 
 my $index = $input->param('index') || 'biblios';
 my $op    = $input->param('op')    || 'list';
