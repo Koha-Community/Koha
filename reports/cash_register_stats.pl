@@ -106,7 +106,7 @@ if ($do_it) {
     SELECT round(amount,2) AS amount, description,
         bo.surname AS bsurname, bo.firstname AS bfirstname, m.surname AS msurname, m.firstname AS mfirstname,
         bo.cardnumber, br.branchname, bo.borrowernumber,
-        al.borrowernumber, DATE(al.date) as date, al.credit_type_code, al.debit_type_code, al.amountoutstanding, al.note,
+        al.borrowernumber, DATE(al.date) as date, al.credit_type_code, al.debit_type_code, al.amountoutstanding, al.note, al.timestamp,
         bi.title, bi.biblionumber, i.barcode, i.itype
         FROM accountlines al
         LEFT JOIN borrowers bo ON (al.borrowernumber = bo.borrowernumber)
@@ -166,6 +166,7 @@ if ($do_it) {
                         $row->{bfirstname} . ' ' . $row->{bsurname},
                         $row->{branchname},
                         $row->{date},
+                        $row->{timestamp},
                         $row->{credit_type},
                         $row->{debit_type},
                         $row->{note},

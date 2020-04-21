@@ -246,29 +246,30 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 <table>
 [% IF ( LibraryName ) %]
  <tr>
-    <th colspan=\"4\" class=\"centerednames\">
+    <th colspan=\"5\" class=\"centerednames\">
         <h3>[% LibraryName | html %]</h3>
     </th>
  </tr>
 [% END %]
  <tr>
-    <th colspan=\"4\" class=\"centerednames\">
+    <th colspan=\"5\" class=\"centerednames\">
         <h2><u>Fee receipt</u></h2>
     </th>
  </tr>
  <tr>
-    <th colspan=\"4\" class=\"centerednames\">
+    <th colspan=\"5\" class=\"centerednames\">
         <h2>[% Branches.GetName( credit.patron.branchcode ) | html %]</h2>
     </th>
  </tr>
  <tr>
-    <th colspan=\"4\">
+    <th colspan=\"5\">
         Received with thanks from  [% credit.patron.firstname | html %] [% credit.patron.surname | html %] <br />
         Card number: [% credit.patron.cardnumber | html %]<br />
     </th>
  </tr>
   <tr>
-    <th>Date</th>
+    <th>Created</th>
+    <th>Updated</th>
     <th>Description of charges</th>
     <th>Note</th>
     <th>Amount</th>
@@ -276,6 +277,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 
  <tr class=\"highlight\">
     <td>[% credit.date | $KohaDates %]</td>
+    <td>[% credit.timestamp | $KohaDates with_hours = 1 %]</td>
     <td>
       [% PROCESS account_type_description account=credit %]
       [%- IF credit.description %], [% credit.description | html %][% END %]
@@ -297,7 +299,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 
 <tfoot>
   <tr>
-    <td colspan=\"3\">Total outstanding dues as on date: </td>
+    <td colspan=\"4\">Total outstanding dues as on date: </td>
     [% IF ( credit.patron.account.balance >= 0 ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% credit.patron.account.balance | $Price %]</td>
   </tr>
 </tfoot>
@@ -309,30 +311,31 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 <table>
   [% IF ( LibraryName ) %]
     <tr>
-      <th colspan=\"5\" class=\"centerednames\">
+      <th colspan=\"6\" class=\"centerednames\">
         <h3>[% LibraryName | html %]</h3>
       </th>
     </tr>
   [% END %]
 
   <tr>
-    <th colspan=\"5\" class=\"centerednames\">
+    <th colspan=\"6\" class=\"centerednames\">
       <h2><u>INVOICE</u></h2>
     </th>
   </tr>
   <tr>
-    <th colspan=\"5\" class=\"centerednames\">
+    <th colspan=\"6\" class=\"centerednames\">
       <h2>[% Branches.GetName( debit.patron.branchcode ) | html %]</h2>
     </th>
   </tr>
   <tr>
-    <th colspan=\"5\" >
+    <th colspan=\"6\" >
       Bill to: [% debit.patron.firstname | html %] [% debit.patron.surname | html %] <br />
       Card number: [% debit.patron.cardnumber | html %]<br />
     </th>
   </tr>
   <tr>
-    <th>Date</th>
+    <th>Created</th>
+    <th>Updated</th>
     <th>Description of charges</th>
     <th>Note</th>
     <th style=\"text-align:right;\">Amount</th>
@@ -341,6 +344,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   <tr class=\"highlight\">
     <td>[% debit.date | $KohaDates%]</td>
+    <td>[% debit.timestamp | $KohaDates with_hours = 1 %]</td>
     <td>
       [% PROCESS account_type_description account=debit %]
       [%- IF debit.description %], [% debit.description | html %][% END %]
@@ -352,7 +356,7 @@ INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, 
 
   <tfoot>
     <tr>
-      <td colspan=\"4\">Total outstanding dues as on date: </td>
+      <td colspan=\"5\">Total outstanding dues as on date: </td>
       [% IF ( debit.patron.account.balance <= 0 ) %]<td class=\"credit\">[% ELSE %]<td class=\"debit\">[% END %][% debit.patron.account.balance | $Price %]</td>
     </tr>
   </tfoot>

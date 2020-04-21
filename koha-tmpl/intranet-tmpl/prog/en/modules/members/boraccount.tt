@@ -60,7 +60,8 @@
 <table id="table_account_fines">
     <thead>
       <tr>
-          <th>Date</th>
+          <th>Created</th>
+          <th>Updated</th>
           <th>Credit number</th>
           <th>Account type</th>
           <th>Description of charges</th>
@@ -81,7 +82,8 @@
   [% FOREACH account IN accounts %]
 
    <tr>
-   <td data-order="[% account.date | html %]">[% account.date |$KohaDates %]</td>
+   <td data-order="[% account.date | html %]">[% account.date | $KohaDates %]</td>
+   <td data-order="[% account.timestamp | html %]">[% account.timestamp | $KohaDates with_hours = 1 %]</td>
         <td>[% account.credit_number | html %]</td>
         <td>[% PROCESS account_type_description account=account %]</td>
       <td>
@@ -140,7 +142,7 @@
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="12">Total due</td>
+    <td colspan="13">Total due</td>
     [% IF ( totalcredit ) %]
         <td class="credit" style="text-align: right;">[% total | $Price %]</td>
         <td>

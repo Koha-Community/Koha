@@ -6,7 +6,8 @@
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
-                    <th>Date</th>
+                    <th>Created</th>
+                    <th>Updated</th>
                     <th>Type</th>
                     <th>Description</th>
                     <th>Amount</th>
@@ -27,6 +28,7 @@
                             </td>
                         [% END %]
                         <td data-order="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</td>
+                        <td data-order="[% ACCOUNT_LINE.timestamp | html %]">[% ACCOUNT_LINE.timestamp | $KohaDates with_hours = 1 %]</td>
                         <td>
                             [% PROCESS account_type_description account=ACCOUNT_LINE %]
                         </td>
@@ -44,9 +46,9 @@
             <tfoot>
                 <tr>
                     [%- IF ENABLE_OPAC_PAYMENTS -%]
-                        [%- SET COLSPAN = 5 -%]
+                        [%- SET COLSPAN = 6 -%]
                     [%- ELSE -%]
-                        [%- SET COLSPAN = 4 -%]
+                        [%- SET COLSPAN = 5 -%]
                     [%- END -%]
                     <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
                     <td class="sum">[% total | $Price %]</td>
@@ -56,6 +58,7 @@
                     [% IF outstanding_credit.amountoutstanding < 0 %]<tr class="outstanding">[% ELSE %]<tr>[% END%]
                         [% IF ENABLE_OPAC_PAYMENTS %]<td></td>[% END %]
                         <td><span title="[% outstanding_credit.date | html %]">[% outstanding_credit.date | $KohaDates %]</span></td>
+                        <td><span title="[% outstanding_credit.timestamp | html %]">[% outstanding_credit.date | $KohaDates with_hours = 1 %]</span></td>
                         <td>
                             [% PROCESS account_type_description account=outstanding_credit %]
                         </td>
@@ -89,7 +92,8 @@
             <thead>
                 <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
-                    <th>Date</th>
+                    <th>Created</th>
+                    <th>Updated</th>
                     <th>Description</th>
                     <th>Fine amount</th>
                     <th>Amount outstanding</th>
@@ -111,6 +115,7 @@
                             </td>
                         [% END %]
                         <td data-order="[% a.date | html %]">[% a.date | $KohaDates %]</td>
+                        <td data-order="[% a.timestamp | html %]">[% a.timestamp | $KohaDates with_hours = 1 %]</td>
                         <td>
                             [% PROCESS account_type_description account=a %]
                             [%- IF a.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', a.payment_type, 1) | html %][% END %]
@@ -125,7 +130,7 @@
 
             <tfoot>
                 <tr>
-                    <th class="sum" colspan="3">Total due</th>
+                    <th class="sum" colspan="4">Total due</th>
                     <td class="sum">[% account_sum | $Price %]</td>
                 </tr>
             </tfoot>
