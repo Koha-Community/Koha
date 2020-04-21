@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 use MARC::Record;
 
 use C4::Biblio;
@@ -363,6 +363,8 @@ $hold = Koha::Hold->new(
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item that is not for loan but holdable ( notforloan < 0 )" );
 t::lib::Mocks::mock_preference( 'TrapHoldsOnOrder', 1 );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold is trapped for item that is not for loan but holdable ( notforloan < 0 )" );
+t::lib::Mocks::mock_preference( 'SkipHoldTrapOnNotForLoanValue', '-1' );
+ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for item with notforloan value matching SkipHoldTrapOnNotForLoanValue" );
 $hold->delete();
 
 # Regression test for bug 9532

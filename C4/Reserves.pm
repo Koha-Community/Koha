@@ -794,6 +794,9 @@ sub CheckReserves {
     # if item is not for loan it cannot be reserved either.....
     # except where items.notforloan < 0 :  This indicates the item is holdable.
 
+    my $SkipHoldTrapOnNotForLoanValue = C4::Context->preference('SkipHoldTrapOnNotForLoanValue');
+    return if $SkipHoldTrapOnNotForLoanValue && $notforloan_per_item eq $SkipHoldTrapOnNotForLoanValue;
+
     my $dont_trap = C4::Context->preference('TrapHoldsOnOrder') ? ($notforloan_per_item > 0) : ($notforloan_per_item && 1 );
     return if $dont_trap or $notforloan_per_itemtype;
 
