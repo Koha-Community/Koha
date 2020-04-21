@@ -109,6 +109,7 @@ if ($add) {
     # If barcode is passed, attempt to find the associated item
     my $failed;
     my $item_id;
+    my $olditem; # FIXME: When items and deleted_items are merged, we can remove this
     my $issue_id;
     if ($barcode) {
         my $item = Koha::Items->find( { barcode => $barcode } );
@@ -116,9 +117,11 @@ if ($add) {
             $item_id = $item->itemnumber;
         }
         else {
-            $item = Koha::Old::Items->find( { barcode => $barcode } );
-            if ($item) {
-                $item_id = $item->itemnumber;
+            $item = Koha::Old::Items->search( { barcode => $barcode },
+                { order_by => { -desc => 'timestamp' }, rows => 1 } );
+            if ($item->count) {
+                $item_id = $item->next->itemnumber;
+                $olditem = 1;
             }
             else {
                 $template->param( error => 'itemnumber' );
@@ -158,7 +161,7 @@ if ($add) {
                     interface   => 'intranet',
                     library_id  => $library_id,
                     type        => $debit_type,
-                    item_id     => $item_id,
+                    ( $olditem ? () : ( item_id => $item_id ) ),
                     issue_id    => $issue_id
                 }
             );

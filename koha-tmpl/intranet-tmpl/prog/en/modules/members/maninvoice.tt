@@ -104,8 +104,10 @@
                 this.form.desc.value = this.options[this.selectedIndex].value;
                 this.form.amount.value = type_fees[this.options[this.selectedIndex].value];
             });
+            [% UNLESS amount.defined %]
             $("#maninvoice #desc").val($("#maninvoice #type option:selected").text());
             $("#maninvoice #amount").val(type_fees[$("#maninvoice #type option:selected").val()]);
+            [% END %]
             $("#maninvoice #type").change(function(){
                 $("#maninvoice #desc").val($(this).find("option:selected").text());
                 $("#maninvoice #amount").val(type_fees[$(this).val()]);
