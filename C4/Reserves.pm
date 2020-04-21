@@ -740,7 +740,9 @@ sub CheckReserves {
     return unless $itemnumber; # bail if we got nothing.
     # if item is not for loan it cannot be reserved either.....
     # except where items.notforloan < 0 :  This indicates the item is holdable.
-    return if $notforloan_per_item or $notforloan_per_itemtype;
+
+    my $dont_trap = C4::Context->preference('TrapHoldsOnOrder') ? ($notforloan_per_item > 0) : ($notforloan_per_item && 1 );
+    return if $dont_trap or $notforloan_per_itemtype;
 
     # Find this item in the reserves
     my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber, $lookahead_days, $ignore_borrowers);
@@ -750,6 +752,7 @@ sub CheckReserves {
     # the more important the item.)
     # $highest is the most important item we've seen so far.
     my $highest;
+
     if (scalar @reserves) {
         my $LocalHoldsPriority = C4::Context->preference('LocalHoldsPriority');
         my $LocalHoldsPriorityPatronControl = C4::Context->preference('LocalHoldsPriorityPatronControl');
