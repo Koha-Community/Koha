@@ -21830,6 +21830,13 @@ if( CheckVersion( $DBversion ) ) {
     NewVersion( $DBversion, 23727, "Editing course reserve items is broken");
 }
 
+$DBversion = '19.12.00.078';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('PatronSelfRegistrationConfirmEmail', '0', NULL, 'Require users to confirm their email address by entering it twice.', 'YesNo') });
+
+    NewVersion( $DBversion, 24913, "Add PatronSelfRegistrationConfirmEmail syspref");
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 my $update_dir = C4::Context->config('intranetdir') . '/installer/data/mysql/atomicupdate/';
