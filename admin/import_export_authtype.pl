@@ -61,10 +61,6 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
         binmode(STDOUT,':encoding(UTF-8)');
         print $input->header(-type => 'application/vnd.ms-excel', -attachment => 'export_' . $authtypecode . '.csv');
         print $strXml;
-    } elsif ($format eq 'excel') {
-        # Excel-xml file
-        print $input->header(-type => 'application/excel', -attachment => 'export_' . $authtypecode . '.xml');
-        print $strXml;
     } else {
         # ODS file
         my $strODS = '';
@@ -81,7 +77,7 @@ if ($action eq 'export' && $input->request_method() eq 'GET') {
     }
     my $filename = $input->param($fieldname);
     # upload the input file
-    if ($filename && $filename =~ /\.(csv|ods|xml)$/i) {
+    if ($filename && $filename =~ /\.(csv|ods)$/i) {
         my $extension = $1;
         my $uploadFd = $input->upload($fieldname);
         if ($uploadFd && !$input->cgi_error) {

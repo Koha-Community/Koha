@@ -39,9 +39,9 @@ $(document).ready(function() {
 
     $('input.input_import').change( function() {
         var filename = $(this).val();
-        if ( ! /(?:\.csv|\.ods|\.xml)$/.test(filename)) {
+        if ( ! /(?:\.csv|\.ods)$/.test(filename)) {
             $(this).css("background-color","yellow");
-            alert(_("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."));
+            alert(_("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
             $(this).val("");
             $(this).css("background-color","white");
         }
@@ -55,7 +55,7 @@ $(document).ready(function() {
     $('form.form_import').submit(function() {
         var id = $(this).attr('id');
         var obj = $('#' + id + ' input:file');
-        if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
+        if (/(?:\.csv|\.ods)$/.test(obj.val())) {
             if (confirm(_("Do you really want to import the authority type fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup"))) {
                 var authtypecode = $('#' + id + ' input:hidden[name=authtypecode]').val();
                 $('#importing_' + authtypecode).find("span").html(_("Importing to authority type: %s. Importing from file: %s").format("<strong>" + authtypecode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
@@ -73,7 +73,7 @@ $(document).ready(function() {
             }
         }
         obj.css("background-color","yellow");
-        alert(_("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file."));
+        alert(_("Please select a CSV (.csv) or ODS (.ods) spreadsheet file."));
         obj.val("");
         bj.css("background-color","white");
         return false;
