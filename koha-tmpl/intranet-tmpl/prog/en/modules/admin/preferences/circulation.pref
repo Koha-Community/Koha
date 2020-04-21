@@ -501,6 +501,12 @@ Circulation:
             - "<br /> Note: the word 'NULL' can be used to block renewal on undefined fields, while an empty string \"\" will block on an empty (but defined) field."
     Checkin Policy:
         -
+            - pref: TrapHoldsOnOrder
+              choices:
+                  yes: Trap
+                  no: "Don't trap"
+            - items that are not for loan but holdable ( notforloan < 0 ) to fill holds.
+        -
             - pref: HoldsAutoFill
               choices:
                   yes: Do
