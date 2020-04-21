@@ -97,6 +97,8 @@ a.add, a.delete {
           [% t("Mappings updated successfully.") | $raw %]
         [% CASE 'success_on_reset' %]
           [% t("Mappings have been reset successfully.") | $raw %]
+        [% CASE 'elasticsearch_disabled' %]
+          [% t("Elasticsearch is currently disabled.") | $raw %]
         [% CASE %]
           [% m.code | html %]
         [% END %]
