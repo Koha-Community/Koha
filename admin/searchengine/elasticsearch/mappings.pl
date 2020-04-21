@@ -34,7 +34,8 @@ use Module::Load::Conditional qw(can_load);
 
 my $input = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {   template_name   => 'admin/searchengine/elasticsearch/mappings.tt',
+    {
+        template_name   => 'admin/searchengine/elasticsearch/mappings.tt',
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
@@ -50,6 +51,8 @@ unless ( can_load( modules => { 'Koha::SearchEngine::Elasticsearch::Indexer' => 
 my $index = $input->param('index') || 'biblios';
 my $op    = $input->param('op')    || 'list';
 my @messages;
+push @messages, { type => 'message', code => 'elasticsearch_disabled' }
+  if ( C4::Context->preference('SearchEngine') ne 'Elasticsearch' );
 
 my $database = Koha::Database->new();
 my $schema   = $database->schema;
