@@ -124,8 +124,6 @@ jQuery(function($){
     $.datepicker.setDefaults($.datepicker.regional['']);
     $.timepicker.regional[''] = {
         timeFormat: "[% IF Koha.Preference('TimeFormat') == '12hr' %]hh:mm TT[% ELSE %]HH:mm[% END %]",
-        amNames: ['AM', 'A'],
-        pmNames: ['PM', 'P'],
     };
     $.timepicker.setDefaults($.timepicker.regional['']);
 });
