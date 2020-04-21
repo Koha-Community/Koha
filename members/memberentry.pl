@@ -415,6 +415,9 @@ if ($op eq 'save' || $op eq 'insert'){
       }
   }
 }
+elsif ( $borrowernumber ) {
+    $extended_patron_attributes = Koha::Patrons->find($borrowernumber)->extended_attributes->unblessed;
+}
 
 if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
     unless ($newdata{'dateexpiry'}){
@@ -767,8 +770,8 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
     $template->param( $_ => $data{$_});
 }
 
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    patron_attributes_form($template, $borrowernumber, $op);
+if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+    patron_attributes_form( $template, $extended_patron_attributes, $op );
 }
 
 if (C4::Context->preference('EnhancedMessagingPreferences')) {
@@ -861,7 +864,7 @@ sub parse_extended_patron_attributes {
 
 sub patron_attributes_form {
     my $template = shift;
-    my $borrowernumber = shift;
+    my $attributes = shift;
     my $op = shift;
 
     my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
@@ -870,16 +873,11 @@ sub patron_attributes_form {
         $template->param(no_patron_attribute_types => 1);
         return;
     }
-    my @attributes;
-    if ( $borrowernumber ) {
-        my $patron = Koha::Patrons->find($borrowernumber); # Already fetched but outside of this sub
-        @attributes = $patron->extended_attributes->as_list; # FIXME Must be improved!
-    }
 
     # map patron's attributes into a more convenient structure
     my %attr_hash = ();
-    foreach my $attr (@attributes) {
-        push @{ $attr_hash{$attr->code} }, $attr;
+    foreach my $attr (@$attributes) {
+        push @{ $attr_hash{$attr->{code}} }, $attr;
     }
 
     my @attribute_loop = ();
@@ -897,16 +895,16 @@ sub patron_attributes_form {
         if (exists $attr_hash{$attr_type->code()}) {
             foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {
                 my $newentry = { %$entry };
-                $newentry->{value} = $attr->attribute;
+                $newentry->{value} = $attr->{attribute};
                 $newentry->{use_dropdown} = 0;
                 if ($attr_type->authorised_value_category()) {
                     $newentry->{use_dropdown} = 1;
-                    $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category(), $attr->attribute);
+                    $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category(), $attr->{attribute});
                 }
                 $i++;
                 undef $newentry->{value} if ($attr_type->unique_id() && $op eq 'duplicate');
                 $newentry->{form_id} = "patron_attr_$i";
-                push @{$items_by_class{$attr_type->class()}}, $newentry;
+                push @{$items_by_class{$attr_type->{class}}}, $newentry;
             }
         } else {
             $i++;
