@@ -380,7 +380,7 @@ my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
 
 if ( $params->{'multibranchlimit'} ) {
-    my $branchfield  = C4::Context->preference('AdvancedSearchBranchFieldToUse');
+    my $branchfield  = C4::Context->preference('SearchLimitLibrary');
     my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
     my @branchcodes  = map { $_->branchcode } $search_group->all_libraries;
 

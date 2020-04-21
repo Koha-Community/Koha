@@ -484,10 +484,8 @@ if (@searchCategories > 0) {
 
 @limits = map { uri_unescape($_) } @limits;
 
-my $branchfield = C4::Context->preference('AdvancedSearchBranchFieldToUse');
-
-if ( $params->{'multibranchlimit'} ) {
-    my $branchfield  = C4::Context->preference('AdvancedSearchBranchFieldToUse');
+if ( $params->{'multibranchlimit'} || ( $branch_group_limit && $branch_group_limit =~ /^multibranchlimit-/ ) ) {
+    my $branchfield  = C4::Context->preference('SearchLimitLibrary');
     my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
 
     my @branchcodes  = map { $_->branchcode } $search_group->all_libraries;

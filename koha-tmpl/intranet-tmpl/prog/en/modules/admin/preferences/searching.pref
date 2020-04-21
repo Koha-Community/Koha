@@ -168,13 +168,12 @@ Searching:
                   az: from A to Z.
                   za: from Z to A.
         -
-            - pref: AdvancedSearchBranchFieldToUse
-              default: homebranch and holdingbranch
+            - When limiting search results with a library or library group, limit by the item's
+            - pref: SearchLimitLibrary
               choices:
-                  homebranch: homebranch
-                  holdingbranch: holdingbranch
-                  homebranch and holdingbranch: homebranch and holdingbranch
-            - When a library or group of libraries is selected from the advanced search compare the selected branch value against this branch field(s) selected
+                  homebranch: "home library."
+                  holdingbranch: "holding library."
+                  both: "home library and holding library."
         -
             - pref: displayFacetCount
               type: boolean
