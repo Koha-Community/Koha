@@ -83,15 +83,8 @@
             }
         });
 
-        [%# Only ask for a confirmation if it is an edit %]
         $("#z3950search").click(function(){
-            [% IF biblionumber %]
-                if (confirm(_("Please note that this external search could replace the current record."))){
-                    PopupZ3950();
-                }
-            [% ELSE %]
-                PopupZ3950();
-            [% END %]
+            PopupZ3950();
         });
 
         $("#saverecord").click(function(){
@@ -550,7 +543,11 @@
                     [% END # /IF CAN_user_editcatalogue_edit_items %]
 
                     [% UNLESS (circborrowernumber) %][%# Hide in fast cataloging %]
-                        <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
+                        [% IF biblionumber %]
+                            <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Replace record via Z39.50/SRU search</a></div>
+                        [% ELSE %]
+                            <div class="btn-group"><a class="btn btn-default" href="#" id="z3950search"><i class="fa fa-search"></i> Z39.50/SRU search</a></div>
+                        [% END %]
                     [% END %]
 
                     <div class="btn-group">
