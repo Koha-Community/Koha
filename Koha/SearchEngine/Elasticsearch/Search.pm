@@ -207,12 +207,10 @@ sub search_auth_compat {
         my $record = $es_record->{'_source'};
         my %result;
 
-        # I wonder if these should be real values defined in the mapping
-        # rather than hard-coded conversions.
-        #my $record    = $_[0];
-        # Handle legacy nested arrays indexed with splitting enabled.
-        my $authid = $record->{ 'local-number' }[0];
-        $authid = @$authid[0] if (ref $authid eq 'ARRAY');
+        # We are using the authid to create links, we should honor the authid as stored in the db, not
+        # the 001 which, in some circumstances, can contain other data
+        my $authid = $es_record->{_id};
+
 
         $result{authid} = $authid;
 
