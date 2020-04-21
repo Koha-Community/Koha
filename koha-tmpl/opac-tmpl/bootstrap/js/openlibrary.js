@@ -178,6 +178,8 @@ function default_decorate_el_fn(el, bookdata) {
     }
     if (decoration) {
         el.innerHTML += decoration;
+    } else {
+        el.style.visibility = 'hidden';
     }
 }
 
