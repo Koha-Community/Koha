@@ -107,6 +107,9 @@
                 <xsl:when test="($check008-23 and $controlField008-23='a') or ($check008-29 and $controlField008-29='a')">
                     microfilm
                 </xsl:when>
+                <xsl:when test="($controlField008-23='d' and ($typeOf008='BK' or $typeOf008='CR'))">
+                    large print
+                </xsl:when>
             </xsl:choose>
 <!--
             <xsl:if test="marc:datafield[@tag=130]/marc:subfield[@code='h']">
