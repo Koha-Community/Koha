@@ -245,15 +245,15 @@ value="[% f5 | html %]" /></td>
 			[% ELSE %]
 				<option value="c">vesicular</option>
 			[% END %]
-			[% IF ( f7d ) %]
-				<option value="d" selected="selected">unknown</option>
-			[% ELSE %]
-				<option value="d">unknown</option>
-			[% END %]
 			[% IF ( f7u ) %]
-				<option value="u" selected="selected">mixed emulsion</option>
+				<option value="u" selected="selected">unknown</option>
 			[% ELSE %]
-				<option value="u">mixed emulsion</option>
+				<option value="u">unknown</option>
+			[% END %]
+			[% IF ( f7v ) %]
+				<option value="v" selected="selected">mixed emulsion</option>
+			[% ELSE %]
+				<option value="v">mixed emulsion</option>
 			[% END %]
 			[% IF ( f7x ) %]
 				<option value="x" selected="selected">not applicable</option>
