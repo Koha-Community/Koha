@@ -72,7 +72,7 @@ sub get {
     }
     if( $macro->shared ){
         return $c->render( status => 403, openapi => {
-            error => "This macro is shared, you must access it via advancededitormacros/shared"
+            error => "This macro is shared, you must access it via advanced_editor/macros/shared"
         });
     }
     warn $macro->borrowernumber;
@@ -104,7 +104,7 @@ sub get_shared {
     }
     unless( $macro->shared ){
         return $c->render( status => 403, openapi => {
-            error => "This macro is not shared, you must access it via advancededitormacros"
+            error => "This macro is not shared, you must access it via advanced_editor/macros"
         });
     }
     return $c->render( status => 200, openapi => $macro->to_api );
@@ -180,7 +180,7 @@ sub update {
 
     if( $macro->shared == 1 || defined $c->validation->param('body')->{shared} && $c->validation->param('body')->{shared} == 1 ){
         return $c->render( status  => 403,
-                           openapi => { error => "To update a macro as shared you must use the advancededitormacros/shared endpoint" } );
+                           openapi => { error => "To update a macro as shared you must use the advanced_editor/macros/shared endpoint" } );
     } else {
         unless ( $macro->borrowernumber == $patron->borrowernumber ){
             return $c->render( status  => 403,

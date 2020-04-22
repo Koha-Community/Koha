@@ -85,7 +85,7 @@ subtest 'list() tests' => sub {
     my $macros_index = Koha::AdvancedEditorMacros->search({ -or => { shared => 1, borrowernumber => $patron_1->borrowernumber } })->count-1;
     ## Authorized user tests
     # Make sure we are returned with the correct amount of macros
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros" )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros" )
       ->status_is( 200, 'SWAGGER3.2.2' )
       ->json_has('/' . $macros_index . '/macro_id')
       ->json_hasnt('/' . ($macros_index + 1) . '/macro_id');
@@ -93,25 +93,25 @@ subtest 'list() tests' => sub {
     subtest 'query parameters' => sub {
 
         plan tests => 15;
-        $t->get_ok("//$userid:$password@/api/v1/advancededitormacros?name=" . $macro_2->name)
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_2->name)
           ->status_is(200)
           ->json_has( [ $macro_2 ] );
-        $t->get_ok("//$userid:$password@/api/v1/advancededitormacros?name=" . $macro_3->name)
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?name=" . $macro_3->name)
           ->status_is(200)
           ->json_has( [ ] );
-        $t->get_ok("//$userid:$password@/api/v1/advancededitormacros?macro_text=delete 100")
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?macro_text=delete 100")
           ->status_is(200)
           ->json_has( [ $macro_1, $macro_2, $macro_4 ] );
-        $t->get_ok("//$userid:$password@/api/v1/advancededitormacros?patron_id=" . $patron_1->borrowernumber)
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?patron_id=" . $patron_1->borrowernumber)
           ->status_is(200)
           ->json_has( [ $macro_1, $macro_2 ] );
-        $t->get_ok("//$userid:$password@/api/v1/advancededitormacros?shared=1")
+        $t->get_ok("//$userid:$password@/api/v1/advanced_editor/macros?shared=1")
           ->status_is(200)
           ->json_has( [ $macro_2, $macro_4 ] );
     };
 
     # Warn on unsupported query parameter
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros?macro_blah=blah" )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros?macro_blah=blah" )
       ->status_is(400)
       ->json_is( [{ path => '/query/macro_blah', message => 'Malformed query string'}] );
 
@@ -143,26 +143,26 @@ subtest 'get() tests' => sub {
         }
     });
 
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros/" . $macro_1->id )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_1->id )
       ->status_is( 403, 'Cannot get a shared macro via regular endpoint' )
-      ->json_is( '/error' => 'This macro is shared, you must access it via advancededitormacros/shared' );
+      ->json_is( '/error' => 'This macro is shared, you must access it via advanced_editor/macros/shared' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros/shared/" . $macro_1->id )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/shared/" . $macro_1->id )
       ->status_is( 200, 'Can get a shared macro via shared endpoint' )
       ->json_is( '' => Koha::REST::V1::AdvancedEditorMacro::_to_api( $macro_1->TO_JSON ), 'Macro correctly retrieved' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros/" . $macro_2->id )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_2->id )
       ->status_is( 403, 'Cannot access another users macro' )
       ->json_is( '/error' => 'You do not have permission to access this macro' );
 
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros/" . $macro_3->id )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $macro_3->id )
       ->status_is( 200, 'Can get your own private macro' )
       ->json_is( '' => Koha::REST::V1::AdvancedEditorMacro::_to_api( $macro_3->TO_JSON ), 'Macro correctly retrieved' );
 
     my $non_existent_code = $macro_1->id;
     $macro_1->delete;
 
-    $t->get_ok( "//$userid:$password@/api/v1/advancededitormacros/" . $non_existent_code )
+    $t->get_ok( "//$userid:$password@/api/v1/advanced_editor/macros/" . $non_existent_code )
       ->status_is(404)
       ->json_is( '/error' => 'Macro not found' );
 
@@ -205,14 +205,14 @@ subtest 'add() tests' => sub {
     $macro->delete;
 
     # Unauthorized attempt to write
-    $t->post_ok( "//$unauth_userid:$password@/api/v1/advancededitormacros" => json => $macro_values )
+    $t->post_ok( "//$unauth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
       ->status_is(403);
 
     # Authorized attempt to write invalid data
     my $macro_with_invalid_field = { %$macro_values };
     $macro_with_invalid_field->{'big_mac_ro'} = 'Mac attack';
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros" => json => $macro_with_invalid_field )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_with_invalid_field )
       ->status_is(400)
       ->json_is(
         "/errors" => [
@@ -224,14 +224,14 @@ subtest 'add() tests' => sub {
     );
 
     # Authorized attempt to write
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros" => json => $macro_values )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
       ->status_is( 201, 'SWAGGER3.2.1' )
       ->json_has( '/macro_id', 'We generated a new id' )
       ->json_is( '/name' => $macro_values->{name}, 'The name matches what we supplied' )
       ->json_is( '/macro_text' => $macro_values->{macro_text}, 'The text matches what we supplied' )
       ->json_is( '/patron_id' => $macro_values->{patron_id}, 'The borrower matches the borrower who submitted' )
-      ->json_is( '/shared' => 0, 'The macro is not shared' )
-      ->header_like( Location => qr|^\/api\/v1\/advancededitormacros\/d*|, 'Correct location' );
+      ->json_is( '/shared' => Mojo::JSON->false, 'The macro is not shared' )
+      ->header_like( Location => qr|^\/api\/v1\/advanced_editor/macros\/d*|, 'Correct location' );
 
     # save the library_id
     my $macro_id = 999;
@@ -239,7 +239,7 @@ subtest 'add() tests' => sub {
     # Authorized attempt to create with existing id
     $macro_values->{macro_id} = $macro_id;
 
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros" => json => $macro_values )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
       ->status_is(400)
       ->json_is( '/errors' => [
             {
@@ -249,14 +249,14 @@ subtest 'add() tests' => sub {
         ]
     );
 
-    $macro_values->{shared} = 1;
+    $macro_values->{shared} = Mojo::JSON->true;
     delete $macro_values->{macro_id};
 
     # Unauthorized attempt to write a shared macro on private endpoint
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros" => json => $macro_values )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
       ->status_is(403);
     # Unauthorized attempt to write a private macro on shared endpoint
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared" => json => $macro_values )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared" => json => $macro_values )
       ->status_is(403);
 
     $builder->build({
@@ -269,11 +269,11 @@ subtest 'add() tests' => sub {
     });
 
     # Authorized attempt to write a shared macro on private endpoint
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros" => json => $macro_values )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros" => json => $macro_values )
       ->status_is(403);
 
     # Authorized attempt to write a shared macro on shared endpoint
-    $t->post_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared" => json => $macro_values )
+    $t->post_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared" => json => $macro_values )
       ->status_is(201);
 
 };
@@ -319,7 +319,7 @@ subtest 'update() tests' => sub {
     delete $macro_values->{macro_id};
 
     # Unauthorized attempt to update
-    $t->put_ok( "//$unauth_userid:$password@/api/v1/advancededitormacros/$macro_id"
+    $t->put_ok( "//$unauth_userid:$password@/api/v1/advanced_editor/macros/$macro_id"
                     => json => { name => 'New unauthorized name change' } )
       ->status_is(403);
 
@@ -328,7 +328,7 @@ subtest 'update() tests' => sub {
         name => "Call it macro-roni",
     };
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_id" => json => $macro_with_missing_field )
+    $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id" => json => $macro_with_missing_field )
       ->status_is(400)
       ->json_has( "/errors" =>
           [ { message => "Missing property.", path => "/body/macro_text" } ]
@@ -338,10 +338,10 @@ subtest 'update() tests' => sub {
         name => "Macro-update",
         macro_text => "delete 100",
         patron_id => $authorized_patron->borrowernumber,
-        shared => 0,
+        shared => Mojo::JSON->false,
     };
 
-    my $test = $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_id" => json => $macro_update )
+    my $test = $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id" => json => $macro_update )
       ->status_is(200, 'Authorized user can update a macro')
       ->json_is( '/macro_id' => $macro_id, 'We get the id back' )
       ->json_is( '/name' => $macro_update->{name}, 'We get the name back' )
@@ -350,11 +350,11 @@ subtest 'update() tests' => sub {
       ->json_is( '/shared' => $macro_update->{shared}, 'It should still not be shared' );
 
     # Now try to make the macro shared
-    $macro_update->{shared} = 1;
+    $macro_update->{shared} = Mojo::JSON->true;
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared/$macro_id" => json => $macro_update )
+    $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared/$macro_id" => json => $macro_update )
       ->status_is(403, 'Cannot make your macro shared on private endpoint');
-    $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared/$macro_id" => json => $macro_update )
+    $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared/$macro_id" => json => $macro_update )
       ->status_is(403, 'Cannot make your macro shared without permission');
 
     $builder->build({
@@ -366,22 +366,22 @@ subtest 'update() tests' => sub {
         },
     });
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_id" => json => $macro_update )
+    $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id" => json => $macro_update )
       ->status_is(403, 'Cannot make your macro shared on the private endpoint');
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared/$macro_id" => json => $macro_update )
+    $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared/$macro_id" => json => $macro_update )
       ->status_is(200, 'Can update macro to shared with permission')
       ->json_is( '/macro_id' => $macro_id, 'We get back the id' )
       ->json_is( '/name' => $macro_update->{name}, 'We get back the name' )
       ->json_is( '/macro_text' => $macro_update->{macro_text}, 'We get back the text' )
       ->json_is( '/patron_id' => $macro_update->{patron_id}, 'We get back our patron id' )
-      ->json_is( '/shared' => 1, 'It is shared' );
+      ->json_is( '/shared' => Mojo::JSON->true, 'It is shared' );
 
     # Authorized attempt to write invalid data
     my $macro_with_invalid_field = { %$macro_update };
     $macro_with_invalid_field->{'big_mac_ro'} = 'Mac attack';
 
-    $t->put_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_id" => json => $macro_with_invalid_field )
+    $t->put_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id" => json => $macro_with_invalid_field )
       ->status_is(400)
       ->json_is(
         "/errors" => [
@@ -396,10 +396,10 @@ subtest 'update() tests' => sub {
     my $non_existent_code = $non_existent_macro->id;
     $non_existent_macro->delete;
 
-    $t->put_ok("//$auth_userid:$password@/api/v1/advancededitormacros/$non_existent_code" => json => $macro_update)
+    $t->put_ok("//$auth_userid:$password@/api/v1/advanced_editor/macros/$non_existent_code" => json => $macro_update)
       ->status_is(404);
 
-    $t->put_ok("//$auth_userid:$password@/api/v1/advancededitormacros/$macro_2_id" => json => $macro_update)
+    $t->put_ok("//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_2_id" => json => $macro_update)
       ->status_is(403, "Cannot update other borrowers private macro");
 };
 
@@ -442,18 +442,18 @@ subtest 'delete() tests' => sub {
     my $macro_2_id = $macro_2->id;
 
     # Unauthorized attempt to delete
-    $t->delete_ok( "//$unauth_userid:$password@/api/v1/advancededitormacros/$macro_2_id")
+    $t->delete_ok( "//$unauth_userid:$password@/api/v1/advanced_editor/macros/$macro_2_id")
       ->status_is(403, "Cannot delete macro without permission");
 
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_id")
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_id")
       ->status_is(200, 'Can delete macro with permission');
 
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_2_id")
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_2_id")
       ->status_is(403, 'Cannot delete other users macro with permission');
 
     $macro_2->shared(1)->store();
 
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared/$macro_2_id")
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared/$macro_2_id")
       ->status_is(403, 'Cannot delete other users shared macro without permission');
 
     $builder->build({
@@ -464,9 +464,9 @@ subtest 'delete() tests' => sub {
             code           => 'delete_shared_macros',
         },
     });
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/$macro_2_id")
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/$macro_2_id")
       ->status_is(403, 'Cannot delete other users shared macro with permission on private endpoint');
-    $t->delete_ok( "//$auth_userid:$password@/api/v1/advancededitormacros/shared/$macro_2_id")
+    $t->delete_ok( "//$auth_userid:$password@/api/v1/advanced_editor/macros/shared/$macro_2_id")
       ->status_is(200, 'Can delete other users shared macro with permission');
 
 };

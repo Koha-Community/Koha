@@ -702,7 +702,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         var shared = macroEditor.activeMacroShared;
         var id = macroEditor.activeMacroId;
         macroEditor.activeMacroId = null;
-        api_url = "/api/v1/advancededitormacros/";
+        api_url = "/api/v1/advanced_editor/macros/";
         if( shared ) { api_url += "shared/" }
         let options = {
             url: api_url + id,
@@ -741,7 +741,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             return;
         }
         $( '#macro-list li[data-name="' + name + '"][data-id="' + id + '"]' ).addClass( 'active' );
-        api_url = "/api/v1/advancededitormacros/";
+        api_url = "/api/v1/advanced_editor/macros/";
         if( shared ) { api_url += "shared/" }
         let options = {
             url: api_url + id,
@@ -792,7 +792,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
         $.each( macro_list, function( index, macro ) {
             let options = {
-                url: "/api/v1/advancededitormacros/",
+                url: "/api/v1/advanced_editor/macros/",
                 method: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -838,7 +838,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             $("#macro-toolbar").prepend($convert);
         }
         let options = {
-            url: "/api/v1/advancededitormacros/",
+            url: "/api/v1/advanced_editor/macros/",
             method: "GET",
             contentType: "application/json",
         };
@@ -866,7 +866,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
 //            if ( !Preferences.user.macros[name] ) storeMacro( name, { format: "rancor", contents: "" } );
             let options = {
-                url: "/api/v1/advancededitormacros/",
+                url: "/api/v1/advanced_editor/macros/",
                 method: "POST",
                 contentType: "application/json",
                 data: JSON.stringify({
@@ -903,7 +903,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         if ( !name || macroEditor.savedGeneration == macroEditor.changeGeneration() && was_shared == shared ) return;
 
         macroEditor.savedGeneration = macroEditor.changeGeneration();
-        api_url = "/api/v1/advancededitormacros/";
+        api_url = "/api/v1/advanced_editor/macros/";
         if( shared || was_shared ) { api_url += "shared/" }
 
         let options = {
