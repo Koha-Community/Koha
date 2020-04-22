@@ -19023,6 +19023,12 @@ if ( CheckVersion($DBversion) ) {
             SetVersion ($DBversion);
 }
 
+$DBversion = "19.05.10.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (19.05.10 release)\n";
+            SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
