@@ -174,7 +174,7 @@ if ($do_it) {
         #always add firstname and surname for librarian/user
         if ( $log->user ) {
             my $patron = Koha::Patrons->find( $log->user );
-            if ($patron) {
+            if ($patron && $output eq 'screen') {
                 $result->{librarian} = $patron;
             }
         }
@@ -183,7 +183,7 @@ if ($do_it) {
         if ( $log->module eq "CIRCULATION" || $log->module eq "MEMBERS" || $log->module eq "FINES" ) {
             if ( $log->object ) {
                 my $patron = Koha::Patrons->find( $log->object );
-                if ($patron) {
+                if ($patron && $output eq 'screen') {
                     $result->{patron} = $patron;
                 }
             }
