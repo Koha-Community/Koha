@@ -75,6 +75,9 @@
     [%- CASE 'problem_reports' -%]
         <span class="main_permission problem_reports_permission">OPAC problem reports management</span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'recalls' -%]
+        <span class="main_permission recalls_permission">Recalls</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
@@ -781,6 +784,12 @@
     [%- CASE 'manage_problem_reports' -%]
         <span class="sub_permission manage_problem_reports_subpermission">
             Manage OPAC problem reports
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+  [%# recalls %]
+    [%- CASE 'manage_recalls' -%]
+        <span class="sub_permission place_recalls_subpermission">
+            Manage recalls for patrons
         </span>
         <span class="permissioncode">([% name | html %])</span>
   [%- END -%]

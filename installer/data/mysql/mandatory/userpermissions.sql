@@ -137,5 +137,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (25, 'anonymous_refund', 'Perform refund actions from cash registers'),
    (25, 'cashup', 'Perform cash register cashup action'),
    (25, 'takepayment', 'Access the point of sale page and take payments'),
-   (26, 'manage_problem_reports', 'Manage OPAC problem reports')
+   (26, 'manage_problem_reports', 'Manage OPAC problem reports'),
+   (27, 'manage_recalls', 'Manage recalls for patrons')
 ;

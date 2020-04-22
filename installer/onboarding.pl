@@ -288,6 +288,12 @@ if ( $step == 5 ) {
                 reservesallowed                  => $reservesallowed,
                 suspension_chargeperiod          => undef,
                 decreaseloanholds                => undef,
+                recalls_allowed                  => undef,
+                recalls_per_record               => undef,
+                on_shelf_recalls                 => undef,
+                recall_due_date_interval         => undef,
+                recall_overdue_fine              => undef,
+                recall_shelf_time                => undef,
               }
         };
 

@@ -1576,3 +1576,61 @@ tables:
             - "This item must be renewed at the library."
             - "[% END %]"
             - "[% END %]"
+
+        - module: circulation
+          code: RETURN_RECALLED_ITEM
+          branchcode: ""
+          name: "Notification to return a recalled item"
+          is_html: 0
+          title: "Notification to return a recalled item"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Date: <<today>>"
+            - ""
+            - "<<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "A recall has been placed on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>). The due date has been updated, and is now <<issues.date_due>>. Please return the item before the due date."
+            - ""
+            - "Thank you!"
+
+        - module: circulation
+          code: PICKUP_RECALLED_ITEM
+          branchcode: ""
+          name: "Recalled item awaiting pickup"
+          is_html: 0
+          title: "Recalled item awaiting pickup"
+          message_transport_type: email
+          lang: default
+          content:
+            - "Date: <<today>>"
+            - ""
+            - "<<borrowers.firstname>> <<borrowers.surname>>,"
+            - ""
+            - "A recall that you requested on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>) is now ready for you to pick up at <<recalls.branchcode>>. Please pick up your item by <<recalls.expirationdate>>."
+            - ""
+            - "Thank you!"
+
+        - module: circulation
+          code: RECALL_REQUESTER_DET
+          branchcode: ""
+          name: "Details of patron who recalled item"
+          is_html: 0
+          title: "Details of patron who recalled item"
+          message_transport_type: print
+          lang: default
+          content:
+            - "Date: <<today>>"
+            - ""
+            - "Recall for pickup at <<branches.branchname>>"
+            - "<<borrowers.surname>>, <<borrowers.firstname>> (<<borrowers.cardnumber>>)"
+            - "<<borrowers.phone>>"
+            - "<<borrowers.streetnumber>> <<borrowers.address>>, <<borrowers.address2>>, <<borrowers.city>> <<borrowers.zipcode>>"
+            - "<<borrowers.email>>"
+            - ""
+            - "ITEM RECALLED"
+            - "<<biblio.title>> by <<biblio.author>>"
+            - "Barcode: <<items.barcode>>"
+            - "Callnumber: <<items.itemcallnumber>>"
+            - "Waiting since: <<recalls.waitingdate>>"
+            - "Notes: <<recalls.recallnotes>>"

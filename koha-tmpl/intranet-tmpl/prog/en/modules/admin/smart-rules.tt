@@ -142,6 +142,14 @@
                 <th>OPAC item level holds</th>
                 <th>Article requests</th>
                 <th>Rental discount (%)</th>
+                [% IF Koha.Preference('UseRecalls') %]
+                    <th>Recalls allowed (total)</th>
+                    <th>Recalls per record (count)</th>
+                    <th>On shelf recalls allowed</th>
+                    <th>Recall due date interval (day)</th>
+                    <th>Recall overdue fine amount</th>
+                    <th>Recall pickup period (day)</th>
+                [% END %]
                 <th class="noExport">Actions</th>
             </tr>
             </thead>
@@ -183,8 +191,14 @@
                         [% SET article_requests = all_rules.$c.$i.article_requests %]
                         [% SET rentaldiscount = all_rules.$c.$i.rentaldiscount %]
                         [% SET decreaseloanholds = all_rules.$c.$i.decreaseloanholds %]
+                        [% SET recalls_allowed = all_rules.$c.$i.recalls_allowed %]
+                        [% SET recalls_per_record = all_rules.$c.$i.recalls_per_record %]
+                        [% SET on_shelf_recalls = all_rules.$c.$i.on_shelf_recalls %]
+                        [% SET recall_due_date_interval = all_rules.$c.$i.recall_due_date_interval %]
+                        [% SET recall_overdue_fine = all_rules.$c.$i.recall_overdue_fine %]
+                        [% SET recall_shelf_time = all_rules.$c.$i.recall_shelf_time %]
 
-                        [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds %]
+                        [% SET show_rule = note || maxissueqty || maxonsiteissueqty || issuelength || daysmode || lengthunit || hardduedate || hardduedatecompare || fine || chargeperiod || chargeperiod_charge_at || firstremind || overduefinescap || cap_fine_to_replacement_price || finedays || maxsuspensiondays || suspension_chargeperiod || renewalsallowed || unseenrenewalsallowed || renewalperiod || norenewalbefore || auto_renew || no_auto_renewal_after || no_auto_renewal_after_hard_limit || reservesallowed || holds_per_day || holds_per_record || onshelfholds || opacitemholds || article_requests || rentaldiscount || decreaseloanholds || recalls_allowed || recalls_per_record || on_shelf_recalls || recall_due_date_interval || recall_overdue_fine || recall_shelf_time %]
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count | html %]">
@@ -344,6 +358,20 @@
                                         [% END %]
                                     </td>
                                     <td>[% rentaldiscount | html %]</td>
+                                    [% IF Koha.Preference('UseRecalls') %]
+                                        <td>[% recalls_allowed | html %]</td>
+                                        <td>[% recalls_per_record | html %]</td>
+                                        <td>
+                                            [% IF on_shelf_recalls == 'all' %]
+                                                <span>If all unavailable</span>
+                                            [% ELSE %]
+                                                <span>If any unavailable</span>
+                                            [% END %]
+                                        </td>
+                                        <td>[% recall_due_date_interval | html %]</td>
+                                        <td>[% recall_overdue_fine FILTER format("%.2f") %]</td>
+                                        <td>[% recall_shelf_time | html %]</td>
+                                    [% END %]
                                     <td class="actions">
                                       <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                                       <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% i || '*' | uri %]&amp;categorycode=[% c || '*' | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
@@ -473,6 +501,19 @@
                         </select>
                     </td>
                     <td><input type="text" name="rentaldiscount" id="rentaldiscount" size="2" /></td>
+                    [% IF Koha.Preference('UseRecalls') %]
+                        <td><input type="text" name="recalls_allowed" id="recalls_allowed" size="3"></td>
+                        <td><input type="text" name="recalls_per_record" id="recalls_per_record" size="3"></td>
+                        <td>
+                            <select name="on_shelf_recalls" id="on_shelf_recalls">
+                                <option value="any">If any unavailable</option>
+                                <option value="all">If all unavailable</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="recall_due_date_interval" id="recall_due_date_interval" size="3"></td>
+                        <td><input type="text" name="recall_overdue_fine" id="recall_overdue_fine" size="6"></td>
+                        <td><input type="text" name="recall_shelf_time" id="recall_shelf_time" size="3"></td>
+                    [% END %]
                     <td class="actions">
                         <input type="hidden" name="branch" value="[% current_branch | html %]"/>
                         <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-save"></i> Save</button>
@@ -519,6 +560,14 @@
                       <th>OPAC item level holds</th>
                       <th>Article requests</th>
                       <th>Rental discount (%)</th>
+                      [% IF Koha.Preference('UseRecalls') %]
+                        <th>Recalls allowed (total)</th>
+                        <th>Recalls per record (count)</th>
+                        <th>On shelf recalls allowed</th>
+                        <th>Recall due date interval (day)</th>
+                        <th>Recall overdue fine amount</th>
+                        <th>Recall pickup period (day)</th>
+                      [% END %]
                       <th>&nbsp;</th>
                     </tr>
                   </tfoot>

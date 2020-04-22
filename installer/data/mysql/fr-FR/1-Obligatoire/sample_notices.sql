@@ -217,7 +217,35 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'AR_SLIP', '', 'Article request - print slip', 0, 'Article request', 'Article request:\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),\r\n\r\nTitle: <<biblio.title>>\r\nBarcode: <<items.barcode>>\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\nFormat: [% IF article_request.format == \'PHOTOCOPY\' %]Copy[% ELSIF article_request.format == \'SCAN\' %]Scan[% END %]\r\n', 'print'),
 ('circulation', 'AR_PROCESSING', '', 'Article request - processing', 0, 'Article request processing', 'Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),\r\n\r\nWe are now processing your request for an article from <<biblio.title>> (<<items.barcode>>).\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\nFormat: [% IF article_request.format == \'PHOTOCOPY\' %]Copy[% ELSIF article_request.format == \'SCAN\' %]Scan[% END %]\r\n\r\nThank you!', 'email'),
 ('circulation', 'AR_REQUESTED', '', 'Article request - new', 0, 'Article request received', 'Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),\r\n\r\nWe have received your request for an article from <<biblio.title>> (<<items.barcode>>)..\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\nFormat: [% IF article_request.format == \'PHOTOCOPY\' %]Copy[% ELSIF article_request.format == \'SCAN\' %]Scan[% END %]\r\n\r\nThank you!', 'email'),
-('circulation', 'CHECKOUT_NOTE', '', 'Checkout note on item set by patron', '0', 'Checkout note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
+('circulation', 'CHECKOUT_NOTE', '', 'Checkout note on item set by patron', '0', 'Checkout note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email'),
+('circulation','RETURN_RECALLED_ITEM','','Notification to return a recalled item','0','Notification to return a recalled item','Date: <<today>>
+
+<<borrowers.firstname>> <<borrowers.surname>>,
+
+A recall has been placed on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>). The due date has been updated, and is now <<issues.date_due>>. Please return the item before the due date.
+
+Thank you!','email'),
+('circulation','PICKUP_RECALLED_ITEM','','Recalled item awaiting pickup','0','Recalled item awaiting pickup','Date: <<today>>
+
+<<borrowers.firstname>> <<borrowers.surname>>,
+
+A recall that you requested on the following item: <<biblio.title>> / <<biblio.author>> (<<items.barcode>>) is now ready for you to pick up at <<recalls.branchcode>>. Please pick up your item by <<recalls.expirationdate>>.
+
+Thank you!','email'),
+('circulation','RECALL_REQUESTER_DET','','Details of patron who recalled item',0,'Date: <<today>>
+
+Recall for pickup at <<branches.branchname>>
+<<borrowers.surname>>, <<borrowers.firstname>> (<<borrowers.cardnumber>>)
+<<borrowers.phone>>
+<<borrowers.streetnumber>> <<borrowers.address>>, <<borrowers.address2>>, <<borrowers.city>> <<borrowers.zipcode>>
+<<borrowers.email>>
+
+ITEM RECALLED
+<<biblio.title>> by <<biblio.author>>
+Barcode: <<items.barcode>>
+Callnumber: <<items.itemcallnumber>>
+Waiting since: <<recalls.waitingdate>>
+Notes: <<recalls.recallnotes>>', 'print');
 
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`) VALUES
 ('circulation', 'ACCOUNT_PAYMENT', '', 'Account payment', 0, 'Account payment', '[%- USE Price -%]\r\nA payment of [% credit.amount * -1 | $Price %] has been applied to your account.\r\n\r\nThis payment affected the following fees:\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nAmount paid: [% o.amount * -1 | $Price %]\r\nAmount remaining: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),

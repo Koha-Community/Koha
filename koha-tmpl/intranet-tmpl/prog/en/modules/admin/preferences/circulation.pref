@@ -1271,3 +1271,16 @@ Circulation:
               class: integer
             - days.
             - <span class="hint">This system preference is used by the cleanup_database.pl cronjob.</span>
+
+    Recalls:
+        -
+            - Mark a recall as problematic if it has been waiting to be picked up for
+            - pref: RecallsMaxPickUpDelay
+            - class: integer
+            - days.
+        -
+            - pref: UseRecalls
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - recalls. Make sure you configure <a href="/cgi-bin/koha/admin/smart-rules.pl">circulation and fines rules</a> for recalls once enabled.

@@ -177,6 +177,24 @@ our $RULE_KINDS = {
     decreaseloanholds => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    recalls_allowed => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
+    recalls_per_record => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
+    on_shelf_recalls => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
+    recall_due_date_interval => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
+    recall_overdue_fine => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
+    recall_shelf_time => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     # Not included (deprecated?):
     #   * accountsent
     #   * reservecharge

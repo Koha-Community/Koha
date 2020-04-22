@@ -109,6 +109,12 @@ if ($op eq 'delete') {
                 cap_fine_to_replacement_price    => undef,
                 article_requests                 => undef,
                 note                             => undef,
+                recalls_allowed                  => undef,
+                recalls_per_record               => undef,
+                on_shelf_recalls                 => undef,
+                recall_due_date_interval         => undef,
+                recall_overdue_fine              => undef,
+                recall_shelf_time                => undef,
             }
         }
     );
@@ -287,6 +293,12 @@ elsif ($op eq 'add') {
     my $cap_fine_to_replacement_price = ($input->param('cap_fine_to_replacement_price') || '') eq 'on';
     my $note = $input->param('note');
     my $decreaseloanholds = $input->param('decreaseloanholds') || undef;
+    my $recalls_allowed = $input->param('recalls_allowed');
+    my $recalls_per_record = $input->param('recalls_per_record');
+    my $on_shelf_recalls = $input->param('on_shelf_recalls');
+    my $recall_due_date_interval = $input->param('recall_due_date_interval');
+    my $recall_overdue_fine = $input->param('recall_overdue_fine');
+    my $recall_shelf_time = $input->param('recall_shelf_time');
 
     my $rules = {
         maxissueqty                   => $maxissueqty,
@@ -321,6 +333,12 @@ elsif ($op eq 'add') {
         article_requests              => $article_requests,
         note                          => $note,
         decreaseloanholds             => $decreaseloanholds,
+        recalls_allowed               => $recalls_allowed,
+        recalls_per_record            => $recalls_per_record,
+        on_shelf_recalls              => $on_shelf_recalls,
+        recall_due_date_interval      => $recall_due_date_interval,
+        recall_overdue_fine           => $recall_overdue_fine,
+        recall_shelf_time             => $recall_shelf_time,
     };
 
     Koha::CirculationRules->set_rules(

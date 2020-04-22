@@ -1554,8 +1554,8 @@ CREATE TABLE `branchtransfers` (
   `datecancelled` datetime DEFAULT NULL COMMENT 'the date the transfer was cancelled',
   `tobranch` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the branch the transfer was going to',
   `comments` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'any comments related to the transfer',
-  `reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','TransferCancellation') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer',
-  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost','WrongTransfer') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
+  `reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','TransferCancellation','Recall','CancelRecall') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer',
+  `cancellation_reason` enum('Manual','StockrotationAdvance','StockrotationRepatriation','ReturnToHome','ReturnToHolding','RotatingCollection','Reserve','LostReserve','CancelReserve','ItemLost', 'WrongTransfer','Recall','CancelRecall') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'what triggered the transfer cancellation',
   PRIMARY KEY (`branchtransfer_id`),
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
@@ -4276,6 +4276,38 @@ CREATE TABLE `ratings` (
   CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `recalls`
+--
+
+DROP TABLE IF EXISTS recalls;
+CREATE TABLE recalls ( -- information related to recalls in Koha
+    recall_id int(11) NOT NULL auto_increment, -- primary key
+    borrowernumber int(11) NOT NULL DEFAULT 0, -- foreign key from the borrowers table defining which patron requested a recall
+    recalldate datetime DEFAULT NULL, -- the date the recall request was placed
+    biblionumber int(11) NOT NULL DEFAULT 0, -- foreign key from the biblio table defining which bib record this request is for
+    branchcode varchar(10) DEFAULT NULL, -- foreign key from the branches table defining which branch the patron wishes to pick up their recall from
+    cancellationdate datetime DEFAULT NULL, -- the date this recall was cancelled
+    recallnotes mediumtext, -- notes related to this recall
+    priority smallint(6) DEFAULT NULL, -- where in the queue the patron sits
+    status varchar(1) DEFAULT NULL, -- a one letter code defining the status of the recall. R=requested, O=overdue, W=awaiting pickup, T=in transit, E=expired, C=cancelled, F=finished/completed
+    timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- the date and time this recall was last updated
+    itemnumber int(11) DEFAULT NULL, -- foreign key from the items table defining the specific item the recall request was placed on
+    waitingdate datetime DEFAULT NULL, -- the date the item was marked as waiting for the patron at the library
+    expirationdate datetime DEFAULT NULL, -- the date the recall expires
+    old TINYINT(1) DEFAULT NULL, -- flag if the recall is old and no longer active, i.e. expired, cancelled or completed
+    item_level_recall TINYINT(1) NOT NULL DEFAULT 0, -- flag if item-level recall
+     PRIMARY KEY (recall_id),
+     KEY borrowernumber (borrowernumber),
+     KEY biblionumber (biblionumber),
+     KEY itemnumber (itemnumber),
+     KEY branchcode (branchcode),
+     CONSTRAINT recalls_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE,
+     CONSTRAINT recalls_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE,
+     CONSTRAINT recalls_ibfk_3 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE,
+     CONSTRAINT recalls_ibfk_4 FOREIGN KEY (branchcode) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `repeatable_holidays`

@@ -347,6 +347,7 @@ sub get_template_and_user {
             $template->param( CAN_user_stockrotation    => 1 );
             $template->param( CAN_user_cash_management  => 1 );
             $template->param( CAN_user_problem_reports  => 1 );
+            $template->param( CAN_user_recalls          => 1 );
 
             foreach my $module ( keys %$all_perms ) {
                 foreach my $subperm ( keys %{ $all_perms->{$module} } ) {
